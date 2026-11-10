@@ -5,6 +5,7 @@
 #include <SolverUtils/Turbulence/WJEARSM.h>
 #include <SolverUtils/Turbulence/EquilibriumAWFProfiles.h>
 #include <SolverUtils/Turbulence/RANSRobustVariant.h>
+#include <SolverUtils/Turbulence/RANSWallInnerStress.h>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -75,6 +76,11 @@ void SelfTest()
     Reject([&]{ RANSClosureKernel::WJ(p); });
     p=WJParameters::Defaults(); p.c2=.5;
     Reject([&]{ RANSClosureKernel::WJ(p); });
+    p=WJParameters::Defaults(); p.cd=.12; p.sigmaK=1.7; p.sigmaEpsilon=1.8;
+    auto custom=RANSClosureKernel::WJ(p).Evaluate(1,1,g);
+    Check(std::abs(custom.kDiffusion-.12/1.7)<1e-15 && std::abs(custom.epsilonDiffusion-.12/1.8)<1e-15);
+    p.cEpsilon2=p.cEpsilon1;
+    Reject([&]{ RANSNeutralReference::WJ(p); });
     p=WJParameters::Defaults(); p.cd=0;
     Reject([&]{ RANSClosureKernel::WJ(p); });
     Reject([&]{ RANSClosureKernel::WJ({},static_cast<WJGradientPolicy>(99)); });
@@ -100,6 +106,15 @@ void SelfTest()
     opt={}; opt.formulation=AWFProfileFormulation::WJCalibratedEPAWF;
     Reject([&]{ EquilibriumAWFProfiles(geom,K,ref,{},opt); }); // no silent legacy coefficients
     Reject([&]{ EquilibriumAWFProfiles::WJ(geom,K,RANSNeutralReference::CLS(),opt); });
+    auto ep=EquilibriumAWFProfiles::WJ(geom,K,ref,opt);
+    for (const auto &q:ep.Quadrature())
+        Check(ep.Evaluate(q.r,{ep.Reference().matchingVelocity,0},{0,0}).kSource==0);
+    auto budgetOptions=opt; budgetOptions.formulation=AWFProfileFormulation::WJCalibratedBudgetAWF;
+    budgetOptions.minimumReynolds=200;
+    Reject([&]{ EquilibriumAWFProfiles::WJ(geom,K,ref,budgetOptions); });
+    budgetOptions.minimumReynolds=100;
+    auto lowGeometry=geom; lowGeometry.molecularNu=1; lowGeometry.roughness=0;
+    Reject([&]{ EquilibriumAWFProfiles::WJ(lowGeometry,K,ref,budgetOptions); });
     geom.molecularNu=1; geom.roughness=0;
     Reject([&]{ EquilibriumAWFProfiles::WJ(geom,K,ref,opt); }); // gate failure
     opt.failurePolicy=AWFFailurePolicy::UseOriginal;
@@ -115,6 +130,13 @@ void SelfTest()
         Reject([&]{ EquilibriumAWFProfiles::WJ(invalid,K,ref,opt); });
     }
     Reject([&]{ EquilibriumAWFProfiles::WJ(geom,K,ref,opt,{-2,0,.1}); });
+    // WJ does not project the AWF full-strain completion.
+    RANSTensor isotropic{}; for (int i=0;i<3;++i) isotropic[i][i]=1;
+    const auto inner=EvaluateRANSWallInnerStress(1,.2,isotropic);
+    Check(std::abs(inner.reynoldsStress[0][0]-(2./3-.4))<1e-14);
+    Reject([&]{ WJOuterTraction(c.reynoldsStress,0,{1,1,0}); });
+    Reject([&]{ WJInterfacePressureJump(1,0,{},c.reynoldsStress,{0,0,1}); });
+    Check(std::abs(WJMechanicalPressure(3,1,.5)-(3-2./3-.5))<1e-14);
     std::cout << "{\"compiled_contract\":\"PASS\"}\n";
 }
 void Wall(std::istream &in)
@@ -160,9 +182,10 @@ void Wall(std::istream &in)
         first=false;
         const double kw=wall.ReferenceK(z), gz=9.81*z;
         // p_o(H)/rho=0 gauge; normal balance uses the actual local kw.
-        const double pressure=-K/(81./20)+9.81*(H-z)+2*(K-kw)/3;
+        const bool flat=k1==0 && k2==0;
+        const double pressure=flat ? wall.WJReferenceMechanicalPressure(z,0,9.81) : 0;
         Array(std::array<double,6>{z,kw,wall.ReferenceKFlux(z),pressure,
-            pressure+gz+2*kw/3,wall.Dissipation(z)});
+            flat ? pressure+gz+2*kw/3 : 0,wall.Dissipation(z)});
     }
     std::cout<<"]}";
 }
@@ -188,6 +211,18 @@ int main(int argc,char **argv)
                 else { double dk,de; in>>dk>>de; for(auto &row:dg)for(auto &x:row)in>>x; Values(kernel.Direction(k,e,g,dk,de,dg,nu)); }
             }
             else if (command=='W') Wall(in);
+            else if (command=='T')
+            {
+                double k,d,p,pi,potential; RANSTensor m{},r{}; RANSVector n{};
+                in>>k>>d>>p>>pi>>potential;
+                for (auto &row:m) for (auto &x:row) in>>x;
+                for (auto &row:r) for (auto &x:row) in>>x;
+                for (auto &x:n) in>>x;
+                auto t=WJOuterTraction(r,p,n);
+                std::cout<<"{\"traction\":"; Array(t);
+                std::cout<<",\"pressure_jump\":"<<WJInterfacePressureJump(k,d,m,r,n)
+                    <<",\"mechanical_pressure\":"<<WJMechanicalPressure(pi,k,potential)<<'}';
+            }
             else if (command=='N')
             {
                 double cd,z,u,H,U; in>>cd>>z>>u>>H>>U;

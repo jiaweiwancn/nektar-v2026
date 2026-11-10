@@ -45,6 +45,23 @@ SOLVER_UTILS_EXPORT RANSClosureValues ApplyWJClosureDirection(double k, double e
     const WJParameters &parameters = WJParameters::Defaults(),
     WJGradientPolicy policy = WJGradientPolicy::Incompressible, double outerNu = 0);
 
+/** Actual outer high-Re total traction (-p/rho I-R)n, in Cartesian components. */
+SOLVER_UTILS_EXPORT RANSVector WJOuterTraction(const RANSTensor &covariance,
+    double mechanicalPressureOverDensity, const RANSVector &unitNormal);
+/** Normal-traction matching: D_A n.M_w.n - 2k_w/3 + n.R_o.n.
+ * M_w is the full physical strain G_w+G_w^T, without a dev projection.
+ * At the flat reference this is -K/Ne. Tangential matching must also use the
+ * full traction; this scalar helper supplies only the pressure difference.
+ */
+SOLVER_UTILS_EXPORT double WJInterfacePressureJump(double localK, double totalWallNu,
+    const RANSTensor &innerFullStrain, const RANSTensor &outerCovariance,
+    const RANSVector &unitNormal);
+/** Explicit storage convention pi=p/rho+2k/3+gravitationalPotential.
+ * Recover mechanical pressure before differentiating sampled wall forcing.
+ */
+SOLVER_UTILS_EXPORT double WJMechanicalPressure(double pi, double localK,
+    double gravitationalPotential);
+
 /** Kernel-level factory/adapter only. Native PDE selection remains disabled. */
 class SOLVER_UTILS_EXPORT RANSClosureKernel
 {

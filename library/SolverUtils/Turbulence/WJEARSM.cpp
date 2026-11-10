@@ -167,6 +167,43 @@ RANSClosureValues ApplyWJClosureDirection(double k, double e, const RANSTensor &
     double dk, double de, const RANSTensor &dg, const WJParameters &p,
     WJGradientPolicy policy, double nu)
 { return Compute(k,e,g,dk,de,dg,p,policy,nu,true); }
+
+RANSVector WJOuterTraction(const RANSTensor &r, double p, const RANSVector &n)
+{
+    Finite(p);
+    Real norm=0;
+    for (double x:n) { Finite(x); norm+=Real(x)*x; }
+    if (std::abs(norm-1)>64*std::numeric_limits<double>::epsilon())
+        throw std::invalid_argument("WJ traction requires a unit normal");
+    RANSVector t{};
+    for (int i=0; i<3; ++i)
+    {
+        Real component=-Real(p)*n[i];
+        for (int j=0; j<3; ++j) { Finite(r[i][j]); component-=Real(r[i][j])*n[j]; }
+        t[i]=Cast(component);
+    }
+    return t;
+}
+double WJInterfacePressureJump(double k, double d, const RANSTensor &m,
+    const RANSTensor &r, const RANSVector &n)
+{
+    Finite(k); Positive(d);
+    if (k<0) throw std::invalid_argument("WJ wall pressure requires nonnegative local k");
+    const auto outer=WJOuterTraction(r,0,n); // Also validates R and n.
+    Real jump=-2*Real(k)/3;
+    for (int i=0; i<3; ++i)
+    {
+        jump-=Real(n[i])*outer[i];
+        for (int j=0; j<3; ++j) { Finite(m[i][j]); jump+=Real(d)*n[i]*m[i][j]*n[j]; }
+    }
+    return Cast(jump);
+}
+double WJMechanicalPressure(double pi, double k, double potential)
+{
+    Finite(pi); Finite(k); Finite(potential);
+    if (k<0) throw std::invalid_argument("WJ pressure recovery requires nonnegative local k");
+    return Cast(Real(pi)-2*Real(k)/3-potential);
+}
 RANSClosureKernel::RANSClosureKernel(const WJParameters &p, WJGradientPolicy policy)
     : m_parameters(p), m_policy(policy) {}
 RANSClosureKernel RANSClosureKernel::WJ(const WJParameters &p, WJGradientPolicy policy)

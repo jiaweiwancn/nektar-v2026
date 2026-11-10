@@ -139,6 +139,10 @@ public:
     double ReferenceKGradient(double r) const;
     double ReferenceKFlux(double r) const;
     double ReferenceKDiffusivity(double r) const;
+    // Flat WJ stationary reference, p_o(H)/rho supplied as the pressure gauge.
+    // Balances p_w/rho + g*r + 2*k_ref/3; not a general curved pressure solve.
+    double WJReferenceMechanicalPressure(double r, double outerPressureH,
+                                         double gravity) const;
     // Metric-weighted corrected-dissipation integral at an independent cutoff.
     double DissipationBudget(double cutoff) const;
     // Reuse an already qualified cutoff when only the ray-constant weight

@@ -147,6 +147,8 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
         throw std::invalid_argument("Unknown EP-AWF failure policy");
     if (options.formulation != AWFProfileFormulation::LegacyEPAWF && !AcceptedAWF() && !WJCalibrated())
         throw std::invalid_argument("Unknown AWF profile formulation");
+    if (Formulation()==AWFProfileFormulation::WJCalibratedBudgetAWF && options.minimumReynolds!=100)
+        throw std::invalid_argument("WJ budget cutoff has no additional Reynolds gate knob");
     if ((model.Model()==RANSModel::WJHighRe)!=WJCalibrated())
         throw std::invalid_argument("WJ outer reference requires an explicit WJ wall selection");
     if (AcceptedAWF() || WJCalibrated())
@@ -557,6 +559,15 @@ double EquilibriumAWFProfiles::ReferenceK(double r) const
     for (const auto &q : MakeQuadrature(m_geometry.height, m_reference.cutoff, r))
         integral += static_cast<long double>(q.weight)*ReferenceKGradient(q.r);
     return Cast(static_cast<long double>(K())-integral);
+}
+double EquilibriumAWFProfiles::WJReferenceMechanicalPressure(double r, double pH, double g) const
+{
+    CheckHeight(r); Finite(pH); Finite(g);
+    if (!WJCalibrated() || m_metric.kappa1!=0 || m_metric.kappa2!=0)
+        throw std::invalid_argument("Flat WJ pressure reference requires a flat WJ wall");
+    return Cast(static_cast<long double>(pH)-K()/(81.0L/20)+
+                g*(static_cast<long double>(m_geometry.height)-r)+
+                2*(static_cast<long double>(K())-ReferenceK(r))/3);
 }
 std::vector<double> EquilibriumAWFProfiles::RayLoads(
     const std::vector<std::vector<double>> &basis, const std::vector<double> &samples) const
