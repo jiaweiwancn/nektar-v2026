@@ -1,0 +1,33 @@
+{
+  "version": "AcceptedAWFNeutralQualificationV1",
+  "declared_date_Asia_Shanghai": "2026-11-10",
+  "baseline_revision": "303b7121831f5a8fb2fa7d3a42b6837fd2f3aae9",
+  "spatial": {
+    "case": "Accepted-AWF-05G",
+    "companion": "regularized",
+    "inner_stress": "Linear",
+    "inner_refinement": "cutoff-v1",
+    "outer_refinement": "none",
+    "dt": 0.000625,
+    "observation_times": [0, 0.02, 0.05, 0.1, 0.5],
+    "pilot_maximum_wall_hours": 8,
+    "pilot_maximum_RSS_GiB_per_process": 16,
+    "decision": "Run through .5 unless a hard rejection, resource limit or clearly growing invalid mode intervenes. Continue towards at most 6 if hard admissible, affordable and gradient/traction/profile/balance changes are interpretable; improvement in every error is not required. No automatic extension beyond 6.",
+    "usefulness": "Compare initial and evolved traction, physical profiles and gradients, full weak component loads, interface/divergence, common normalized selected residuals, and signed/absolute bound supply. Reference traction discrepancy .00734465 is the baseline scale; a change >1e-5 in mean traction and >1e-8 common-normalized field norms is resolved. Two meshes show sensitivity, not an order.",
+    "correction_caution": "Supply normalized by K0*24/(2/.4) above 1e-3 over a .1 window calls for diagnosis, not silent acceptance as uncorrected dynamics. Existing hard gates remain authoritative."
+  },
+  "late_temporal": {
+    "parent": "H=.5 graded Regularized/Linear accepted T=6 native checkpoint",
+    "dt": [0.000625, 0.0003125, 0.00015625],
+    "elapsed_observations": [0.05, 0.1],
+    "expected_smooth_order": 1,
+    "coherent_order_interval": [0.8, 1.2],
+    "near_zero_normalized_difference": 1e-11,
+    "common_normalization": {"velocity": 0.4, "k": 0.5105080130598861, "epsilon": 0.07263583326186134, "pressure": 0.16, "volume": 24, "outer_epsilon_volume": 12},
+    "middle_step_accuracy_targets": {"u": 1e-4, "v": 1e-4, "k": 1e-4, "epsilon": 1e-3, "pressure": 1e-3, "relative_mean_traction": 1e-4},
+    "domains": "U/k all physical domain; complete transported epsilon .5<=z<=4. Common quadrature resolves union of interfaces. One common pressure mean over both regions retains relative offset.",
+    "limits": "Maximum 8 wall hours per triplet; at most two concurrent IVPs, one rank/thread each, <=16GiB RSS each. Extend elapsed horizon only up to .5 if a resolved response exceeds targets or slow adjustment prevents interpretation. Ordinary changed-dt restart remains invalid.",
+    "estimates": "D_c=norm(q_dt-q_dt/2), D_f=norm(q_dt/2-q_dt/4). Assign p and Richardson only above floor with coherent scaling. Report estimates for original coarse and middle dt explicitly. Otherwise absolute sensitivity and unresolved order. This local IVP does not estimate accumulated 0-to-6 error."
+  },
+  "unchanged": "CLSCalibratedBudgetAWF, endpoint K, zK=zm=H, physical parameters, production quadrature, one U/p/epsilon/k solve and one logical bound per step, retained epsilon, NativeElementSideV2, ExactStepV1, all hard gates and existing steady policy."
+}
