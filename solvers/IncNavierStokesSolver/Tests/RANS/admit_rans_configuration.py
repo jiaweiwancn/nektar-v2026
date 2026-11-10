@@ -57,7 +57,9 @@ def main():
             endpoint=folder/('T-'+format(t,'.4f'));require(manifest.completed(endpoint),'missing_short_companion:'+member)
             metric=load(endpoint/'metrics.json');require(metric['status']=='pass' and abs(metric['time']-t)<1e-13,'short_endpoint_failed')
             reports.append(load(endpoint/'case.evolution.json'))
-        obs_path=folder/'scalar-observations/results.json';obs=load(obs_path)
+        obs_path=folder/'scalar-observations/results.json'
+        if not obs_path.exists():obs_path=r/'reused-short-observers'/(tag+'-'+member)/'results.json'
+        obs=load(obs_path)
         with gzip.open(obs_path.parent/'native-basis.json.gz','rb') as stream:basis_bytes=stream.read()
         require(__import__('hashlib').sha256(basis_bytes).hexdigest()==obs['source_packet_sha256'],'scalar_basis_identity_mismatch')
         require(json.loads(basis_bytes)['observation']['resolved_descriptor']==config['descriptor'],'scalar_configuration_mismatch')

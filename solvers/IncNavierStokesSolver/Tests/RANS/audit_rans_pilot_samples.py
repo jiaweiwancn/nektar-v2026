@@ -23,9 +23,9 @@ def matrix(rows,n):
  return csr_matrix((data,ids,offset),shape=(len(rows),n))
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--label',required=True);p.add_argument('--through-time',type=float);p.add_argument('--output-label',default='scalar-observations');a=p.parse_args();r=a.root.resolve();folder=r/'campaigns'/a.label;req=load(folder/'request-manifest.json')['request'];admission=RequestManifest(folder,req,True)
- os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
- out=folder/a.output_label;out.mkdir(exist_ok=False);seed=load(folder/'initial-packet.json')
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--label',required=True);p.add_argument('--through-time',type=float);p.add_argument('--output-label',default='scalar-observations');p.add_argument('--output-directory',type=Path);p.add_argument('--tmp-directory',type=Path);a=p.parse_args();r=a.root.resolve();folder=r/'campaigns'/a.label;req=load(folder/'request-manifest.json')['request'];admission=RequestManifest(folder,req,True)
+ os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(a.tmp_directory or r/'tmp'))
+ out=a.output_directory or folder/a.output_label;out.mkdir(parents=True,exist_ok=False);seed=load(folder/'initial-packet.json')
  # Use an unchanged session; no solver action or checkpoint mutation.
  import shutil
  shutil.copy2(folder/('T-'+format(req['horizons'][0],'.4f'))/'case.xml',out/'case.xml')
