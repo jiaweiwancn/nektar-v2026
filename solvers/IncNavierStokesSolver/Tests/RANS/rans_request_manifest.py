@@ -9,6 +9,13 @@ from rans_qualification import write_json
 def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
+def runtime_identity(path):
+    # Loader addresses in ldd output vary with ASLR. Bind actual executable
+    # and resolved library bytes/paths; keep raw ldd in runtime provenance.
+    from run_cls_epawf_pimple import identity
+    r=identity(path)
+    return {k:r[k] for k in ('path','sha256','libraries')}
+
 class RequestManifest:
     def __init__(self,directory,request,resume=False):
         self.directory=Path(directory);self.path=self.directory/'request-manifest.json'

@@ -10,7 +10,7 @@ import argparse,gzip,json,math,os,subprocess,sys,tempfile,time,xml.etree.Element
 from pathlib import Path
 import numpy as np
 from rans_qualification import THREADS,write_json,exact_vector_hash,compare_samples,audited_extrema
-from rans_request_manifest import RequestManifest
+from rans_request_manifest import RequestManifest,runtime_identity
 from rans_preservation_oracle import Reference,physical_grid,representation
 from qualify_rans_preservation import load,probe,replay_request,nested,Q,residual_metrics
 from run_a93_a95_e94e95_matrix import case_xml
@@ -57,7 +57,7 @@ def main():
    dt=a.dt,horizons=TARGETS,integration='native IMEX1 PimpleSingleSweep',history='native same-method restart; independently initialized for each dt',
    initialization='constrained neutral projection plus declared divergence-free streamfunction',velocity_amplitude=a.velocity_amplitude,perturbation='StreamfunctionPolyV1',
    raw_neutral_sha256=exact_vector_hash(initial['state']),reference_sha256=exact_vector_hash(seed['reference']),boundary_policy='FrozenReferenceV1',boundary=seed['fixed_boundary'],
-   runtime={n:identity(r/'runtime'/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},
+   runtime={n:runtime_identity(r/'runtime'/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},
    evaluation=dict(grid=grid,weights=weights,sides=[0]*len(grid),export_basis=False,metric='physical weighted RMS and true L2; common global pressure gauge'),
    gates=dict(field_RMS=1e-3,vertical_RMS=1e-4,wall_traction=1e-3,interface_traction=1e-3,spatial_ratio=.85,temporal_fraction=.1,comparison_floor=1e-7),cache=a.cache,accuracy_policy='NeutralV1')
   admission=RequestManifest(out,request,a.resume)

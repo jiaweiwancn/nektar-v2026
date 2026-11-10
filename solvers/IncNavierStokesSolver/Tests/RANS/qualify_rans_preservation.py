@@ -21,7 +21,7 @@ import numpy as np
 from rans_preservation_oracle import Reference,physical_grid,weak_balance,representation
 from run_a93_a95_e94e95_matrix import case_xml,run_case
 from run_cls_epawf_picard import sha
-from rans_request_manifest import RequestManifest
+from rans_request_manifest import RequestManifest,runtime_identity
 from run_cls_epawf_pimple import identity
 import tempfile
 
@@ -69,19 +69,22 @@ def series_gate(values,uncertainty=1e-10):
     ok=all(r is not None and r<=.85 for r in ratios) and all(abs(values[i]-values[i+1])>5*uncertainty for i in (0,1))
     return dict(status='pass' if ok else 'fail',values=values,uncertainty=uncertainty,ratios=ratios)
 
+class IncompleteCampaign(Exception):pass
+
 class Campaign:
     def __init__(self,args):
         self.r=args.root.resolve();self.phase=args.phase;self.models=tuple(args.models);self.policies=tuple(args.policies);self.walls=tuple(args.walls);self.epsilon_perturbation=args.epsilon_perturbation;self.temporal_quadrature=Q[args.quadrature_index];self.output=self.r/('preservation-'+args.phase+('-'+args.label if args.label else ''));self.horizon=args.horizon;self.boundary_policy=args.boundary_policy
-        self.solver=self.r/'runtime/IncNavierStokesSolver';self.descriptor=self.r/'runtime/RANSNewModelsProbe';self.sampler=self.r/'runtime/RANSPreservationProbe'
-        self.manifest=load(self.r/'runtime/source-build.json');self.result=dict(schema=1,phase=self.phase,checks=[],status='running',
-            runtime_manifest_sha256=sha(self.r/'runtime/source-build.json'),runtime_source=self.manifest['revision'],ranks=1,threads=THREADS,
+        runtime=args.runtime_directory.resolve() if args.runtime_directory else self.r/'runtime'
+        self.solver=runtime/'IncNavierStokesSolver';self.descriptor=runtime/'RANSNewModelsProbe';self.sampler=runtime/'RANSPreservationProbe'
+        self.manifest=load(runtime/'source-build.json');self.result=dict(schema=1,phase=self.phase,checks=[],status='running',
+            runtime_manifest_sha256=sha(runtime/'source-build.json'),runtime_source=self.manifest['revision'],ranks=1,threads=THREADS,
             source=subprocess.check_output(['git','-C',str(Path(__file__).resolve().parents[4]),'rev-parse','HEAD'],text=True).strip())
         if sha(self.solver)!=self.manifest['solver']['sha256']:raise RuntimeError('frozen solver identity changed')
-        os.environ.update(THREADS,LD_LIBRARY_PATH=str(self.r/'runtime/lib'),TMPDIR=str(self.r/'tmp'))
+        os.environ.update(THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(self.r/'tmp'))
         request=dict(verification_schema='PreservationCampaignV2',phase=self.phase,models=self.models,policies=self.policies,walls=self.walls,
             quadrature=list(self.temporal_quadrature),horizon=self.horizon,timesteps=[1e-4,5e-5,2.5e-5],integration='native IMEX1 PimpleSingleSweep consistent histories',
             epsilon_perturbation=self.epsilon_perturbation,boundary_policy=args.boundary_policy,boundary_identity=args.boundary_identity,
-            runtime={name:identity(path) for name,path in [('solver',self.solver),('sampler',self.sampler),('descriptor',self.descriptor)]},initial_data=[])
+            runtime={name:runtime_identity(path) for name,path in [('solver',self.solver),('sampler',self.sampler),('descriptor',self.descriptor)]},initial_data=[])
         if self.output.exists() and not args.resume:raise FileExistsError('destination exists: explicit identical --resume required')
         if self.phase=='temporal':
             evaluation=load(self.r/'preservation-spatial/evaluation-grid.json')
@@ -103,13 +106,15 @@ class Campaign:
                             reference_sha256=exact_vector_hash(full['reference']),boundary=full['fixed_boundary'],representation='native constrained neutral projection'))
         self.admission=RequestManifest(self.output,request,args.resume)
         if args.resume and (self.output/'results.json').exists():self.result=load(self.output/'results.json')
-        self.resume=args.resume
+        self.resume=args.resume;self.new_check_limit=args.new_check_limit;self.new_checks=0
         self.save()
     def save(self):write_json(self.output/'results.json',self.result)
     def check(self,name,fn):
         if self.resume and any(x['name']==name and x['status']=='pass' for x in self.result['checks']):
             folder=self.output/name.replace('-reference','-h0')
             if self.admission.completed(folder):return
+        if self.new_check_limit is not None and self.new_checks>=self.new_check_limit:raise IncompleteCampaign('explicit new-check budget reached; identical resume required')
+        self.new_checks+=1
         self.result['checks']=[x for x in self.result['checks'] if x['name']!=name]
         start=time.monotonic()
         try:
@@ -284,9 +289,11 @@ class Campaign:
         self.save();return 0 if self.result['status']=='pass' else 2 if self.result['status']=='unresolved' else 1
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--resume',action='store_true');p.add_argument('--horizon',type=float,default=.0016);p.add_argument('--boundary-policy',default='Legacy',choices=('Legacy','FrozenReferenceV1'));p.add_argument('--boundary-identity',default='native-neutral-reference');p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');p.add_argument('--policies',nargs='+',choices=POLICIES,default=list(POLICIES));p.add_argument('--walls',nargs='+',choices=WALLS,default=list(WALLS));p.add_argument('--epsilon-perturbation',type=float,default=0.);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=2);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--resume',action='store_true');p.add_argument('--new-check-limit',type=int);p.add_argument('--runtime-directory',type=Path);p.add_argument('--horizon',type=float,default=.0016);p.add_argument('--boundary-policy',default='Legacy',choices=('Legacy','FrozenReferenceV1'));p.add_argument('--boundary-identity',default='native-neutral-reference');p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');p.add_argument('--policies',nargs='+',choices=POLICIES,default=list(POLICIES));p.add_argument('--walls',nargs='+',choices=WALLS,default=list(WALLS));p.add_argument('--epsilon-perturbation',type=float,default=0.);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=2);a=p.parse_args()
     c=Campaign(a)
     try:getattr(c,a.phase)()
+    except IncompleteCampaign as error:
+        c.result['status']='incomplete';c.result['execution_status']='incomplete';c.result['reason']=str(error);c.save();return 2
     except Exception as error:c.result['checks'].append(dict(name='orchestration',status='fail',failure=repr(error)));c.save()
     return c.finish()
 if __name__=='__main__':sys.exit(main())
