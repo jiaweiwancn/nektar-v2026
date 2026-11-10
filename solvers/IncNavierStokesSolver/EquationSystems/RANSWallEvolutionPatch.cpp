@@ -220,7 +220,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(!WJ() || comparison=="Off","WJ uses its native read-only audit, not CLS comparison families");
     Require(!m_acceptedComparison || AcceptedAWF(),"AcceptedAWFV1 requires its explicit wall formulation");
     Require(m_kSampling=="Point" || m_kSampling=="ColumnAverage" || ((AcceptedAWF() || WJ()) && m_kSampling=="InterfaceTrace"),"unknown representative K functional");
-    Require(!(AcceptedAWF() || WJ()) || m_kSampling=="InterfaceTrace","CLSCalibratedBudgetAWF requires InterfaceTrace sampling");
+    Require(!(AcceptedAWF() || WJ()) || m_kSampling=="InterfaceTrace",WJ()?"WJ requires InterfaceTrace sampling":"CLSCalibratedBudgetAWF requires InterfaceTrace sampling");
     if(ColumnAverageK())
     {
         Require(m_dimension==2 && !Mapped() && m_comm->GetSize()==1,"ColumnAverage K is a serial flat2D pilot");
@@ -250,6 +250,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             "PimpleSingleSweep pilot requires Legacy policy, serial flat 2D and the inherited transition implementation");
         std::string verify;session->LoadSolverInfo("RANSWallPimpleVerify",verify,"Off");
         Require(verify=="Off" || verify=="On","invalid PIMPLE verification selector");m_pimpleVerify=verify=="On";
+        Require(!WJ() || !m_pimpleVerify,
+            "WJ production route forbids RANSWallPimpleVerify=On: additional governing verification solves");
         for(const std::string key:{"FlowRelaxation","KRelaxation","EpsilonRelaxation","PseudoAlpha","GuessPerturbation","NonKTolerance","ContinuationEta"})
         {
             const double expected=key.find("Relaxation")!=std::string::npos?1.:0.;double value;

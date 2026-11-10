@@ -494,12 +494,15 @@ std::string RANSWallEvolutionPatch::ScalarDomainJSON(const ScalarDomainResult &d
     std::vector<std::pair<std::string,std::string>> counts;
     for(auto [name,count]:d.counts)counts.push_back({name,J::Number(count)});
     std::vector<std::pair<std::string,std::string>> fields{
-        {"admissible",J::Boolean(d.admissible)},{"scope",J::Quote("declared finite scalar evaluation sets only")},
+        {"admissible",J::Boolean(d.admissible)},
+        {"scope",J::Quote(d.phase=="complete"?"full declared finite scalar domain including dependent epsilon trace":
+            d.phase=="k_inventory_complete"?"fixed scalars and moving k inventory; dependent epsilon trace not evaluated":"partial declared scalar domain")},
         {"phase",J::Quote(d.phase)},{"failure",J::Quote(d.failure)},{"minimum_dimensionless_margin",J::Number(d.minimumMargin)},
         {"limiting_functional_kind",J::Quote(d.limitingFunctional?"ColumnAverage":"Point")},{"limiting_inventory",J::Quote(d.limitingInventory)},{"limiting_point",J::Numbers(d.limitingPoint)},
         {"minimum_inner_k",J::Number(d.minimumInnerK)},{"minimum_outer_k",J::Number(d.minimumOuterK)},
         {"minimum_outer_epsilon",J::Number(d.minimumOuterEpsilon)},{"minimum_sampled_K",J::Number(d.minimumSampledK)},
-        {"minimum_projected_trace_epsilon",J::Number(d.minimumTraceEpsilon)},
+        {"minimum_projected_trace_epsilon",d.minimumTraceEpsilon<1e299?J::Number(d.minimumTraceEpsilon):"null"},
+        {"dependent_trace_evaluation",J::Quote(d.minimumTraceEpsilon<1e299?"evaluated":"not_evaluated")},
         {"minimum_b",d.normalizationApplicable?J::Number(d.minimumB):"null"},{"minimum_lambda",d.normalizationApplicable?J::Number(d.minimumLambda):"null"},
         {"normalization_applicable",J::Boolean(d.normalizationApplicable)},
         {"minimum_budget_ratio",J::Number(d.minimumBudgetRatio)},{"maximum_budget_relative_defect",J::Number(d.maximumBudgetRelativeDefect)},

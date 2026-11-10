@@ -198,6 +198,17 @@ def main():
         require(report['turbulence_model']=='WJHighRe' and report['epsilon_semantics']=='epsilon','wrong native model/epsilon semantics')
         require(report['eta']==0 and report['order']==1 and report['audit_revision']=='NativeElementSideV2','wrong native configuration/provenance')
         require(report['initial_k_bound_check']['activations']==0,'startup projection changed represented reference')
+        def domain_packets(value):
+            if isinstance(value,dict):
+                if 'dependent_trace_evaluation' in value:
+                    evaluated=value['dependent_trace_evaluation']=='evaluated'
+                    require((value['minimum_projected_trace_epsilon'] is not None)==evaluated,
+                        'unevaluated dependent trace leaked a numeric sentinel')
+                    if not evaluated:require('full declared' not in value['scope'],'partial domain labelled full')
+                for child in value.values():domain_packets(child)
+            elif isinstance(value,list):
+                for child in value:domain_packets(child)
+        domain_packets(report)
         for audit in report['state_audits']:
             require(audit['wj_hard_admissible']==[1.],'WJ hard audit failed')
             require(audit['wj_cls_max_beta04_R1_R2_cap_applicable']==[0.]*5,'CLS qualification leaked into WJ')
@@ -285,24 +296,26 @@ def main():
             set_info(t,'RANSWallTransition','UniformEPFlat' if other=='EP' else 'Fixed')
             set_parameter(t,'RANSWallChi',1 if other=='EP' else 0);set_parameter(t,'RANSWallTailStart',.5 if other=='EP' else 1)
         failures={}
-        for name,mutate,signature,options in [
-            ('positive-wall-nu',lambda t:set_parameter(t,'Kinvis',1.5001e-5),True,{}),
-            ('valid-other-wall-policy',other_policy,True,{}),
-            ('valid-refined-mesh',None,False,dict(refined=True)),
-            ('unsupported-Cd',lambda t:set_parameter(t,'RANSWJCd',.12),False,{}),
-            ('gradient-policy',lambda t:set_info(t,'RANSWJGradientPolicy','Incompressible'),False,{}),
-            ('epsilon-semantics',eps_semantics,False,{}),
-            ('legacy-model',lambda t:set_info(t,'TurbulenceModel','CLSHighRe'),False,{}),
-            ('sampling',lambda t:set_info(t,'RANSWallKSampling','Point'),False,{}),
-            ('physical-cap',lambda t:set_info(t,'RANSWallDestruction','Capped'),False,{}),
-            ('transition',lambda t:set_info(t,'RANSWallTransition','Upstream'),False,{}),
-            ('curved',lambda t:set_info(t,'RANSWallMap','Cylinder'),False,{}),
-            ('evaluation-reuse',lambda t:set_info(t,'RANSWallEvaluationReuse','ExactStepV1'),False,{})]:
+        for name,mutate,expected,options in [
+            ('positive-wall-nu',lambda t:set_parameter(t,'Kinvis',1.5001e-5),'signature mismatch',{}),
+            ('valid-other-wall-policy',other_policy,'signature mismatch',{}),
+            ('valid-refined-mesh',None,'signature mismatch',dict(refined=True)),
+            ('changed-dt',None,'signature mismatch',dict(dt=2e-6)),
+            ('unsupported-Cd',lambda t:set_parameter(t,'RANSWJCd',.12),'only the reviewed default coefficients',{}),
+            ('gradient-policy',lambda t:set_info(t,'RANSWJGradientPolicy','Incompressible'),'requires explicit DevStrainRawWorkV1',{}),
+            ('epsilon-semantics',eps_semantics,'WJ evolution variables must',{}),
+            ('legacy-model',lambda t:set_info(t,'TurbulenceModel','CLSHighRe'),'legacy evolution variables must',{}),
+            ('sampling',lambda t:set_info(t,'RANSWallKSampling','Point'),'WJ requires InterfaceTrace sampling',{}),
+            ('physical-cap',lambda t:set_info(t,'RANSWallDestruction','Capped'),'WJ requires Original outer, Linear full-strain inner and uncapped destruction',{}),
+            ('transition',lambda t:set_info(t,'RANSWallTransition','Upstream'),'WJ transitions are unsupported',{}),
+            ('curved',lambda t:set_info(t,'RANSWallMap','Cylinder'),'WJ native supports serial flat 2D only',{}),
+            ('evaluation-reuse',lambda t:set_info(t,'RANSWallEvaluationReuse','ExactStepV1'),'WJ requires explicit WJNativeV1 MassProjection and evaluation reuse Off',{}),
+            ('extra-verification-solves',lambda t:set_info(t,'RANSWallPimpleVerify','On'),'WJ production route forbids RANSWallPimpleVerify=On',{})]:
             report,rc,folder=native('incompatible-'+name,0,cp1,mutate=mutate,**options)
             text=(folder/'solver.log').read_text()
             require(rc!=0 or (report and report.get('failure')),'incompatible input accepted '+name)
-            if signature:require('signature mismatch' in text,'valid changed configuration did not reach signature validation: '+name)
-            failures[name]=dict(exit_code=rc,signature_mismatch='signature mismatch' in text,log_sha256=sha(folder/'solver.log'))
+            require(expected in text,'wrong incompatible-input failure reason: '+name+' expected '+expected)
+            failures[name]=dict(exit_code=rc,expected_reason=expected,signature_mismatch='signature mismatch' in text,log_sha256=sha(folder/'solver.log'))
         summary['incompatible']=failures
         if a.policy=='Budget':
             report,rc,folder=native('smooth-negative-reference',mutate=lambda t:set_parameter(t,'RANSWallRoughness',0))
@@ -311,8 +324,9 @@ def main():
             summary['smooth_reference_nonpositive']=dict(log=str(folder/'solver.log'),sha256=sha(folder/'solver.log'))
         for name,nu in [('cutoff-failure',1.),('invalid-nu',0.)]:
             report,rc,folder=native(name,mutate=lambda t,nu=nu:set_parameter(t,'Kinvis',nu))
-            require(rc!=0,'invalid cutoff/scalar case accepted')
-            summary[name]=dict(log=str(folder/'solver.log'),sha256=sha(folder/'solver.log'))
+            expected='Calibrated AWF cutoff/regime inadmissible' if nu else 'EP-AWF requires positive input'
+            require(rc!=0 and expected in (folder/'solver.log').read_text(),'wrong cutoff/scalar failure reason: '+name)
+            summary[name]=dict(expected_reason=expected,log=str(folder/'solver.log'),sha256=sha(folder/'solver.log'))
         require(immutable0=={str(f.relative_to(cp0)):sha(f) for f in cp0.rglob('*') if f.is_file()} and sha(cp1/'State.bin')==immutable1,
                 'saved checkpoint bytes changed')
         summary.update(status='PASS',reference_unchanged=True,source_revision=subprocess.check_output(

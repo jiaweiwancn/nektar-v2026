@@ -8,7 +8,14 @@ from cls_epawf_m3_cases import set_info,set_parameter,write
 KN=[0.,.0025,.005,.01,.02,.04,.08,.1,.2,.4,.7,1.,1.15,1.35,1.6,2.]
 
 
-def case_xml(folder,policy='EP',steps=0,restart=None,refined=False,normal=16,dt=1e-6,hard_reject=0):
+def normal_knots(level=0):
+    if level not in (0,1,2):raise ValueError('WJ normal refinement level must be 0, 1 or 2')
+    knots=KN
+    for _ in range(level):knots=sorted(set(knots+[.5*(a+b) for a,b in zip(knots[:-1],knots[1:])]))
+    return knots
+
+
+def case_xml(folder,policy='EP',steps=0,restart=None,refined=False,normal=16,dt=1e-6,hard_reject=0,level=None):
     folder=Path(folder);folder.mkdir(parents=True,exist_ok=False)
     root=ET.parse(Path(__file__).with_name('EquilibriumWallFlat.xml')).getroot()
     conditions=root.find('CONDITIONS')
@@ -17,7 +24,9 @@ def case_xml(folder,policy='EP',steps=0,restart=None,refined=False,normal=16,dt=
     ET.SubElement(conditions,'SOLVERINFO');ET.SubElement(conditions,'PARAMETERS')
     scheme=ET.SubElement(conditions,'TIMEINTEGRATIONSCHEME')
     ET.SubElement(scheme,'METHOD').text='IMEX';ET.SubElement(scheme,'ORDER').text='1'
-    knots=sorted(set(KN+[.5*(a+b) for a,b in zip(KN[:-1],KN[1:])])) if refined else KN
+    if level is None:level=int(refined)
+    if refined and level!=1:raise ValueError('refined=True is the level-1 compatibility spelling')
+    knots=normal_knots(level)
     tensor_mesh(root,knots,3,2,1.,1.,points=[8,8],xknots=[0.,1.])
     for e in root.findall('./EXPANSIONS/E'):e.set('FIELDS',e.get('FIELDS').replace('eps_tilde','epsilon'))
     for v in conditions.findall('./VARIABLES/V'):
