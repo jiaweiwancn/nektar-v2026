@@ -37,6 +37,13 @@ class DurationContract(unittest.TestCase):
     def test_both_short_times(self):
         with self.assertRaisesRegex(ValueError,'missing_required_time'):required_times([dict(time=.016)],(.0016,.016))
         required_times([dict(time=.0016+1e-17),dict(time=.016-1e-17)],(.0016,.016))
+    def test_common_inner_cannot_be_replaced_by_global_k(self):
+        from qualify_rans_duration_inner_k import reduction
+        self.assertEqual(aggregate(self.config,self.good)['status'],'pass')
+        self.assertEqual(reduction(1e-5,1.01e-5)['status'],'fail')
+        self.assertEqual(reduction(1e-5,1e-6)['status'],'pass')
+        self.assertEqual(reduction(1e-10,2e-10)['status'],'unresolved_floor')
+        with self.assertRaisesRegex(ValueError,'invalid_common_inner_norm'):reduction(1e-5,float('nan'))
     def test_each_scalar_state_identity(self):
         from rans_qualification import exact_vector_hash
         report=dict(audit_times=[0.,.001,.002],accepted_states=[[0.],[1.],[2.]],time=.002,

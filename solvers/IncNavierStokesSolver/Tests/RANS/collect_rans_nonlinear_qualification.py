@@ -36,6 +36,7 @@ def main():
             row['logs'].append(dict(source=str(path),sha256=sha(path),tail=text[-5000:]))
         result['execution_schedules'].append(row)
     result['common_scalar_partitions']={p.parent.name:receipt(p) for p in (r/'common-scalar-partitions').glob('*/results.json')}
+    result['common_inner_qualification']={p.parent.name:receipt(p) for p in (r/'common-inner-qualification').glob('*/results.json')}
     result['residual_failure_diagnoses']={p.parent.name:receipt(p) for p in (r/'residual-diagnosis').glob('*/results.json')}
     result['physical_budget_diagnostic_controls']={p.parent.name:receipt(p) for p in (r/'physical-budgets').glob('test-*/results.json')}
     for name in ('runtime','runtime-resolution-v2','runtime-resolution-v3','runtime-budget-v4','runtime-budget-v5','runtime-probe-v6','runtime-probe-v7'):
@@ -90,7 +91,19 @@ def main():
                 if 'spatial_audits' in audit:
                     audit['spatial_audits']={m:dict(value,checks=[compact_analysis(c) for c in value['checks']]) for m,value in audit['spatial_audits'].items()}
                 row['audits'][str(T)]=audit
-            final=row['audits']['0.5'];complete=all(x.get('status')=='pass' for x in row['comparisons'].values()) and final.get('status')=='pass'
+            inner=receipt(r/'common-inner-qualification'/cohort/'results.json');row['fixed_common_inner_k']=inner
+            if inner.get('status')=='pass':
+                from qualify_rans_duration_inner_k import reduction
+                identity(inner['configuration'],cfg);required_times(inner['checks'],ad['milestones'])
+                required_times(inner['short_checks'],(.0016,.016))
+                require(inner['common_packet_sha256']==ad['common_packet_sha256'],'inner_common_packet_changed')
+                iq=load(Path(inner['source']).parent/'request-manifest.json')['request']
+                require(RequestManifest(Path(inner['source']).parent,iq,True).completed(Path(inner['source']).parent),'inner_common_receipt_unsealed')
+                for check in inner['checks']:
+                    require(reduction(*[check['groups'][m]['inner']['mass_dual'] for m in MEMBERS[:2]])['status'] in ('pass','unresolved_floor'),'common_inner_reduction_failed')
+                    for m in MEMBERS[:2]:require(inner['source_audit_sha256'][str(check['time'])][m]==sha(r/'evolved-audits'/(cohort+'-'+str(check['time'])+'-'+m)/'results.json'),'inner_common_source_audit_changed')
+                for check in inner['short_checks']:require(reduction(*[check['groups'][m]['inner']['mass_dual'] for m in MEMBERS[:2]])['status'] in ('pass','unresolved_floor'),'short_common_inner_reduction_failed')
+            final=row['audits']['0.5'];complete=all(x.get('status')=='pass' for x in row['comparisons'].values()) and final.get('status')=='pass' and inner.get('status')=='pass'
             failed_reductions=[v for v in final.get('evolved_reductions',[]) if v['status']!='pass']
             if failed_reductions:
                 first=min(failed_reductions,key=lambda v:v['time']);time=first['time']
