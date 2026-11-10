@@ -61,7 +61,7 @@ def audited_extrema(report):
     winners={}
     def offer(name,value,time,phase,location=None,side=None,geometry=None):
         if value is None or not math.isfinite(value):return
-        if name not in winners or value<winners[name]['value']:
+        if name not in winners or (value<winners[name]['value'] or (value==winners[name]['value'] and winners[name]['location'] is None and location is not None)):
             winners[name]=dict(value=value,time=time,stage=phase,location=location,side=side,geometry=geometry)
     times=report.get('audit_times',[])
     states=report.get('state_audits',[])
@@ -70,7 +70,7 @@ def audited_extrema(report):
         t=times[n] if len(times)==len(states) else (report.get('time',0.)-dt*(len(states)-1-n))
         domain=a.get('accepted_awf_scalar_domain',[])
         for index,name in ((2,'inner_k'),(3,'outer_k'),(4,'outer_epsilon')):
-            if len(domain)>index:offer(name,domain[index],t,'accepted')
+            if len(domain)>index:offer(name,domain[index],t,'accepted',a.get('scalar_minimum_point_'+str(index-2)))
         for side,name in enumerate(('inner_covariance','outer_covariance')):
             v=a.get('accepted_awf_covariance',[])
             if len(v)>side:

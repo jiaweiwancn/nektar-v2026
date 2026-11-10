@@ -2288,6 +2288,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         audit["accepted_awf_inner_minimum_point"]=audit.at("r2_inner_minimum_point");audit.erase("r2_inner_minimum_point");
         audit["accepted_awf_outer_minimum_point"]=audit.at("r2_outer_minimum_point");audit.erase("r2_outer_minimum_point");
         audit["accepted_awf_reference_departure"]=audit.at("r2_outer_range");audit.erase("r2_outer_range");
+        for(int i=0;i<3;++i)audit["scalar_minimum_point_"+std::to_string(i)]=Vector(domain.scalarMinimumPoints[i].begin(),domain.scalarMinimumPoints[i].end());
         audit["wall_cutoff_activity"]={double(domain.requiredCutoffs),double(domain.activeCorrections),double(domain.inactiveProfiles),double(domain.fallbackProfiles)};
         audit["wall_cutoff_required_budget"]={domain.RequiredBudgetAdmissible()?1.:0.,
             domain.requiredCutoffs?domain.minimumRequiredBudgetRatio:0.,domain.maximumBudgetRelativeDefect};

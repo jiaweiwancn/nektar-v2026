@@ -834,7 +834,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
     Require(state.size()==static_cast<size_t>(Size()) && history.size()==state.size() && alpha>=0,"invalid evolution stage state/history");
     const auto constraints=Constraints(state,time,data);auto s=MatchingEnabled()?ExternalLift(state,time,data):state;
     if(!MatchingEnabled() && !PimpleSingleSweep())for(auto [row,value]:constraints)s[row]=value;
-    Vector r(Size());int bad=0;
+    Vector r(Size());int bad=0;std::string physicalFailure;
     try
     {
         Refresh(s,time,&data);
@@ -890,12 +890,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
     }
     catch(const std::exception &error)
     {
-        bad=1;
+        bad=1;if(NewModels())physicalFailure=error.what();
         if(m_solveDiagnostics)m_solveResidualException=RANSWallSolveJson::Object({
             {"type",RANSWallSolveJson::Quote(RANSWallSolveJson::ExceptionType(error))},
             {"message",RANSWallSolveJson::Quote(error.what())}});
     }
-    m_comm->AllReduce(bad,LibUtilities::ReduceMax);Require(!bad,"inadmissible evolution volume/sampler state on a collective rank");
+    m_comm->AllReduce(bad,LibUtilities::ReduceMax);Require(!bad,"inadmissible evolution volume/sampler state on a collective rank"+(physicalFailure.empty()?std::string{}:": "+physicalFailure));
     m_comm->AllReduce(r,LibUtilities::ReduceSum);
     if(alpha)for(int b=0;b<InnerPressure();++b)
     {

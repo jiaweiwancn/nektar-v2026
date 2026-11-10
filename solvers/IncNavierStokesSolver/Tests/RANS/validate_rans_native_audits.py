@@ -53,7 +53,11 @@ def main():
             success=completed.returncode==0 and not r.get('failure') and r.get('steps')==0
             if success:
                 audit=r['state_audits'][0];success=audit['wall_cutoff_activity'][0]==0 and audit['wall_cutoff_required_budget'][0]==1 and audit['accepted_awf_scalar_domain'][7]<1
-        else:success=completed.returncode!=0 and expected_reason.lower() in log.lower()
+        else:
+            success=completed.returncode!=0 and expected_reason.lower() in log.lower()
+            if a.before and label in ('inactive_invalid_scalar','inactive_invalid_constitutive'):
+                success=completed.returncode!=0 and 'inadmissible evolution volume/sampler' in log
+                expected_reason='legacy collective physical-state rejection (specific cause masked)'
         result['checks'].append(dict(name=label,status='pass' if success else 'fail',execution_exit=completed.returncode,
             intended_outcome='before_defect_rejection' if a.before and baseline else 'baseline_defined' if baseline else 'expected_rejection',
             expected_reason=None if baseline and not a.before else expected_reason,xml_sha256=sha(folder/'case.xml'),log=str(folder/'solver.log'),failure=r.get('failure')))
