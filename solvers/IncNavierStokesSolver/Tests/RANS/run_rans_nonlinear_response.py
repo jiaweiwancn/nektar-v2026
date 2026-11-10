@@ -43,7 +43,10 @@ def main():
     for i,j in ((0,2),(1,3)):
         require(initial[i]['actual_initial']['state_sha256']==initial[j]['actual_initial']['state_sha256'],'same_space_actual_initial_coefficients_differ')
         for key in ('reference_sha256','raw_neutral_sha256','boundary'):require(initial[i][key]==initial[j][key],'same_space_reference_boundary_differ:'+key)
-    write_json(out/'actual-initial-comparison.json',dict(status='pass',cases=[dict(label=label,actual_initial=q['actual_initial'],neutral_reference_sha256=q['reference_sha256']) for label,q in zip(labels,initial,strict=True)],execution=prepared))
+    initial_receipt=dict(status='pass',cases=[dict(label=label,actual_initial=q['actual_initial'],neutral_reference_sha256=q['reference_sha256']) for label,q in zip(labels,initial,strict=True)],execution=prepared)
+    initial_path=out/'actual-initial-comparison.json'
+    if initial_path.exists():require(load(initial_path)['cases']==initial_receipt['cases'],'sealed_actual_initial_comparison_changed')
+    else:write_json(initial_path,initial_receipt)
     for T in (.016,.1):
         if T>a.max_time+1e-13:break
         for label in baseline:
@@ -61,6 +64,13 @@ def main():
                 require((destination/'results.json').exists(),'response_comparison_missing');manifest.seal(destination,['results.json',*(['response-vectors.npz'] if (destination/'response-vectors.npz').exists() else []),*map(str,destination.glob('*/packet.json.gz'))])
             result=load(destination/'results.json');status=result['status']
             if status=='pass' and not result['eligible_for_extension']:status='unresolved_response_signal'
+            if status=='pass':
+                audit=r/'response-audits'/(name+'-'+str(T))/'results.json'
+                cmd=[sys.executable,'-B',str(source/'audit_rans_response.py'),'--root',str(r),'--admission',str(a.admission),'--cohort-prefix',name,'--time',str(T)]
+                if audit.parent.exists():cmd+=['--resume']
+                with (out/('audit-'+str(T)+'-'+str(time.time_ns())+'.log')).open('x') as f:
+                    code=subprocess.run(cmd,env=env,stdout=f,stderr=subprocess.STDOUT).returncode
+                status='pass' if code==0 and audit.exists() and load(audit)['status']=='pass' else 'failed_response_audit'
         events.append(dict(time=T,status=status,execution=execution,comparison=str(destination/'results.json')));write_json(out/'results.json',dict(status=status,configuration=cfg,milestones=events))
         if status!='pass':return 1
     return 0

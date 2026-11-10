@@ -12,7 +12,10 @@ from rans_worker_budget import spawn
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--admission',type=Path,required=True);p.add_argument('--cohort-prefix',required=True);p.add_argument('--time',type=float,required=True);a=p.parse_args();r=a.root.resolve();ad=load(a.admission);cfg=ad['configuration'];source=Path(__file__).parent;out=r/'response-audits'/(a.cohort_prefix+'-'+str(a.time));out.mkdir(parents=True,exist_ok=False);env=dict(os.environ,**THREADS);checks=[];spatial={};scalars={};labels=[a.cohort_prefix+'-'+m for m in MEMBERS]
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--admission',type=Path,required=True);p.add_argument('--cohort-prefix',required=True);p.add_argument('--time',type=float,required=True);p.add_argument('--resume',action='store_true');a=p.parse_args();r=a.root.resolve();ad=load(a.admission);cfg=ad['configuration'];source=Path(__file__).parent;out=r/'response-audits'/(a.cohort_prefix+'-'+str(a.time));env=dict(os.environ,**THREADS);checks=[];spatial={};scalars={};labels=[a.cohort_prefix+'-'+m for m in MEMBERS]
+    request=dict(schema='ResponseFinalAuditV1',configuration=cfg,time=a.time,admission_sha256=sha(a.admission),meshes=ad['meshes'],common_packet_sha256=ad['common_packet_sha256'],diagnostic_runtime=ad['duration_diagnostic_runtime'],trajectory_requests={m:sha(r/'campaigns'/label/'request-manifest.json') for m,label in zip(MEMBERS,labels,strict=True)})
+    seal=RequestManifest(out,request,a.resume)
+    if seal.completed(out):return 0 if load(out/'results.json')['status']=='pass' else 1
     def run(name,cmd):
         with (out/(name+'.log')).open('x') as f:
             proc=None
@@ -35,7 +38,7 @@ def main():
         qlabel='response-quadrature-'+a.cohort_prefix+'-'+str(a.time);run('quadrature',[source/'check_rans_balanced_state_quadrature.py','--root',r,'--analysis-runtime',r/'runtime-resolution-v3','--model',cfg['model'],'--policy',cfg['policy'],'--walls',cfg['wall'],'--label-prefix',a.cohort_prefix,'--time',str(a.time),'--output-label',qlabel]);quad=load(r/qlabel/'results.json');require(quad['status']=='pass','response_quadrature_failed')
         result=dict(status='pass',configuration=cfg,time=a.time,spatial=spatial,scalars=scalars,quadrature=quad,execution=checks,neutral_residual_reduction='not_applicable_to_departure_from_equilibrium',scope='actual alpha-zero native/common residuals and nonsteady response checks; no steady-error reduction imposed')
     except Exception as e:result=dict(status='fail',configuration=cfg,time=a.time,failure=repr(e),execution=checks)
-    write_json(out/'results.json',result);return 0 if result['status']=='pass' else 1
+    write_json(out/'results.json',result);seal.seal(out,['results.json']);return 0 if result['status']=='pass' else 1
 
 
 if __name__=='__main__':raise SystemExit(main())
