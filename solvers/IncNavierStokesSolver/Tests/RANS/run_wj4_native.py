@@ -382,7 +382,7 @@ class Study:
         complete=wj4_gates(self.s,self.design,self.ledger.totals())
         self.s['components'].update({k:complete['components'][k] for k in ('horizontal','longer') if k in complete.get('components',{})})
         self.s['qualification']=complete
-        self.s['longer_interpretation']='CONDITIONAL finite reference-Dirichlet strip evidence' if required['horizontal']['status']!='PASS' else 'finite reference-Dirichlet strip evidence'
+        self.s['longer_interpretation']='CONDITIONAL finite reference-Dirichlet strip evidence' if complete.get('components',{}).get('horizontal',{}).get('status')!='PASS' else 'finite reference-Dirichlet strip evidence'
         self.save()
 
 def main():

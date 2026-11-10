@@ -129,7 +129,7 @@ def main():
                 if file_hash(path)!=h:raise ValueError('recorded dependency changed')
     write_once(meta/'manifest.json',manifest);write_once(out/'manifest.json',manifest)
     rows=[];interfaces=[];windows=[];differences=[];residuals=[];horizontal=[];audits=[];witnesses={};policies={};runs=[];stages={}
-    loads=[];weak=[];regional=[];trace=[];arithmetic=[];hypotheses={}
+    loads=[];weak=[];regional=[];trace=[];arithmetic=[];hypotheses={};sensitivity=[]
     for policy in ('EP','Budget'):
         path=study/policy/'summary.json'
         if not path.exists():continue
@@ -137,6 +137,11 @@ def main():
         certificate=read(root/('terminal-gates-'+policy+'.json'));verify_artifacts(certificate['inputs'])
         policies[policy]['qualification']=certificate['qualification'];policies[policy]['components']=certificate['qualification']['components']
         policies[policy]['complete_gate_receipt']=artifacts([root/('terminal-gates-'+policy+'.json')])
+        def flatten_gate(packet,path=''):
+            if all(k in packet for k in ('value','uncertainty','limit')):
+                sensitivity.append(dict(policy=policy,component=path,status=packet['status'],value=packet['value'],uncertainty=packet['uncertainty'],limit=packet['limit'],resolved=packet['resolved']))
+            for key,value in packet.get('components',{}).items():flatten_gate(value,path+'/'+str(key))
+        flatten_gate(certificate['qualification'])
         # Cost scouts are inherited, not re-executed during observer replay.
         # Account the complete original producer inventory, including scouts.
         accounting,packets=native_accounting(read(root/'study'/policy/'summary.json'),policy);runs.extend(accounting);stages.update(packets)
@@ -192,7 +197,7 @@ def main():
         for r in s.get('stationarity',{}).get('windows',[]):windows.append(dict(policy=policy,trajectory=r['trajectory'],steps=json.dumps(r['steps']),times=json.dumps(r['times']),status=r['status'],**r['V']))
         write_once(out/(policy+'.json'),policies[policy])
     for name,data in (('fields',rows),('interfaces',interfaces),('windows',windows),('differences',differences),('residuals',residuals),('horizontal-spread',horizontal),('audit-margins',audits),
-        ('independent-loads',loads),('weak-loads',weak),('regional-residuals',regional),('trace-moments',trace),('arithmetic',arithmetic)):csv_file(out/(name+'.csv'),data)
+        ('independent-loads',loads),('weak-loads',weak),('regional-residuals',regional),('trace-moments',trace),('arithmetic',arithmetic),('sensitivity-gates',sensitivity)):csv_file(out/(name+'.csv'),data)
     write_once(out/'startup-hypotheses.json',hypotheses)
     csv_file(out/'run-accounting.csv',runs);write_once(out/'accepted-stage-lineage.json',stages)
     write_once(out/'audit-witnesses.json',witnesses)
