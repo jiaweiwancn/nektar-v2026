@@ -122,4 +122,7 @@ def main():
  witness=r/'portable-sampling-witness/witness.json'
  if witness.exists():(out/'portable-sampling-witness.json').write_bytes(witness.read_bytes())
  write_json(out/'summary.json',light);print(result['status']);return 0 if result['status']=='pass' else 1
-if __name__=='__main__':raise SystemExit(main())
+if __name__=='__main__':
+ if '--admissions' in sys.argv:
+  from collect_rans_nonlinear_qualification import main
+ raise SystemExit(main())

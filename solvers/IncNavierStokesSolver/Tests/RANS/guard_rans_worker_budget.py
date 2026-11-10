@@ -14,7 +14,8 @@ while not (r/'worker-guard.stop').exists():
   p=line.split(None,5)
   if len(p)==6:rows[int(p[0])]=dict(parent=int(p[1]),threads=int(p[2]),state=p[3],name=p[4],args=p[5])
  relevant=lambda d:d['name'].startswith(('IncNavier','RANS','Nek','cc1plus','f951','orted','mpiexec')) or (d['name'].startswith('python') and 'nektar' in d['args'])
- leases=json.loads((r/'worker-leases.json').read_text()) if (r/'worker-leases.json').exists() else []
+ try:leases=json.loads((r/'worker-leases.json').read_text()) if (r/'worker-leases.json').exists() else []
+ except (json.JSONDecodeError,FileNotFoundError):time.sleep(.05);continue
  families=[];covered=set()
  for root in leases:
   if root not in rows or str(r) not in rows[root]['args']:continue

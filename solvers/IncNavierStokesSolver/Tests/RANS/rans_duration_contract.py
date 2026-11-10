@@ -72,9 +72,21 @@ def scalar_coverage(observer, reports, config, horizon):
     require(observer['status'] == 'pass', 'scalar_observer_failed')
     accepted = [x for x in observer['observations'] if x['stage'] == 'accepted']
     expected = []
+    previous_endpoint = None
     for report in reports:
         ts, states = report['audit_times'], report['accepted_states']
         require(len(ts) == len(states) and len(ts) > 0, 'native_accepted_shape')
+        if previous_endpoint is None:
+            require(abs(ts[0]) <= TIME_TOL, 'scalar_initial_time_missing')
+        else:
+            require(abs(ts[0]-previous_endpoint) <= TIME_TOL, 'scalar_restart_interval_gap')
+        require(abs(ts[-1]-report['time']) <= TIME_TOL, 'scalar_native_terminal_time_mismatch')
+        attempts=report.get('pimple_attempts',[])
+        require(len(attempts)==len(states)-1, 'scalar_native_accepted_stage_count')
+        for first,last,attempt in zip(ts[:-1],ts[1:],attempts,strict=True):
+            require(attempt['alpha']>0 and abs(last-first-1/attempt['alpha'])<=TIME_TOL,
+                    'scalar_native_accepted_time_grid')
+        previous_endpoint=ts[-1]
         expected.extend(zip(ts, states, strict=True))
     require(expected and abs(max(x[0] for x in expected)-horizon) <= TIME_TOL,
             'scalar_native_horizon_incomplete')

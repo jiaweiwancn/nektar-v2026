@@ -51,8 +51,15 @@ def main():
             d=m['source_and_constraint_maxima'];conservation.append(dict(defects=d,status='pass' if all(abs(v)<=(0 if k=='bound_calls' else 1e-10 if k=='corrected_continuity_gauge' else 1e-9) for k,v in d.items() if k!='refreshed_trace_defect') else 'fail'))
     status='pass' if all(x['spatial_status']=='pass' and x['temporal_status']=='pass' for x in fields.values()) and all(x['status']=='pass' for x in conservation) else 'failed_or_unresolved'
     resolved=all(fields[n]['signal_status']=='resolved' for n in ('Pi','w','Qxz','P'))
-    result=dict(status=status,configuration=config,time=a.time,theta=a.time*ref.us/ref.H,fields=fields,core_pressure_velocity_nonlinear_production_response_resolved=resolved,eligible_for_extension=status=='pass' and resolved,initialization=initial,provenance=provenance,independent_constitutive=checks,conservation=conservation,analytical_reference_errors=[m['reference_error'] for m in pert['metrics']],actual_initial_drifts=[m['change_from_initial'] for m in pert['metrics']],diagnostic_runtime=runtime_identity(runtime/'RANSPreservationProbe'),scope='departure from matched numerical baselines; no neutral spatial-error ratio, monotone-decay or temporal-order claim')
+    np.savez_compressed(out/'response-vectors.npz',**{str(i)+'_'+name:values[0] for i,row in enumerate(arrays) for name,values in row.items()},**{name+'_weights':value[1] for name,value in arrays[0].items()})
+    result=dict(status=status,configuration=config,time=a.time,theta=a.time*ref.us/ref.H,fields=fields,core_pressure_velocity_nonlinear_production_response_resolved=resolved,eligible_for_extension=status=='pass' and resolved,initialization=initial,provenance=provenance,independent_constitutive=checks,conservation=conservation,analytical_reference_errors=[m['reference_error'] for m in pert['metrics']],actual_initial_drifts=[m['change_from_initial'] for m in pert['metrics']],diagnostic_runtime=runtime_identity(runtime/'RANSPreservationProbe'),response_vectors_sha256=sha(out/'response-vectors.npz'),scope='departure from matched numerical baselines; no neutral spatial-error ratio, monotone-decay or temporal-order claim')
     write_json(out/'results.json',result);print(status);return 0 if status=='pass' else 1
 
 
-if __name__=='__main__':raise SystemExit(main())
+if __name__=='__main__':
+ import sys
+ try:raise SystemExit(main())
+ except Exception as e:
+  destination=Path(sys.argv[sys.argv.index('--output-directory')+1]);destination.mkdir(parents=True,exist_ok=True)
+  if not (destination/'results.json').exists():write_json(destination/'results.json',dict(status='fail',failure=repr(e),scope='preserved incomplete response analysis; native packets and logs retained'))
+  raise SystemExit(1)

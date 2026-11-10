@@ -1,6 +1,11 @@
 # SPDX-License-Identifier: MIT
 """Reserve complete serial native process families, including startup and MPI helpers."""
-import fcntl,json,subprocess
+import fcntl,json,os,subprocess
+
+
+def write_leases(path, leases):
+    temporary=path.with_name(path.name+'.'+str(os.getpid())+'.tmp')
+    temporary.write_text(json.dumps(leases)+'\n');os.replace(temporary,path)
 
 
 def spawn(root, command, **kwargs):
@@ -22,7 +27,7 @@ def spawn(root, command, **kwargs):
         # Keep sixteen threads unallocated for unrelated campaign startup.
         booked=other+8*len(leases)
         if booked+8+16>72:
-            path.write_text(json.dumps(leases)+'\n');return None
-        process=subprocess.Popen(command,**kwargs);leases.append(process.pid);path.write_text(json.dumps(leases)+'\n')
+            write_leases(path,leases);return None
+        process=subprocess.Popen(command,**kwargs);leases.append(process.pid);write_leases(path,leases)
         with (root/'worker-bookings.jsonl').open('a') as out:out.write(json.dumps(dict(pid=process.pid,external_threads=other,reserved_families=len(leases),booked_threads=other+8*len(leases),unallocated_reserve=16,limit=72))+'\n')
         return process

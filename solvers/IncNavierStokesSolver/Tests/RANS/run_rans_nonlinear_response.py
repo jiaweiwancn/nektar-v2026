@@ -58,10 +58,11 @@ def main():
                         proc=spawn(r,cmd,env=env,stdout=f,stderr=subprocess.STDOUT)
                         if proc is None:time.sleep(5)
                     code=proc.wait()
-                require((destination/'results.json').exists(),'response_comparison_missing');manifest.seal(destination,['results.json',*map(str,destination.glob('*/packet.json.gz'))])
+                require((destination/'results.json').exists(),'response_comparison_missing');manifest.seal(destination,['results.json',*(['response-vectors.npz'] if (destination/'response-vectors.npz').exists() else []),*map(str,destination.glob('*/packet.json.gz'))])
             result=load(destination/'results.json');status=result['status']
+            if status=='pass' and not result['eligible_for_extension']:status='unresolved_response_signal'
         events.append(dict(time=T,status=status,execution=execution,comparison=str(destination/'results.json')));write_json(out/'results.json',dict(status=status,configuration=cfg,milestones=events))
-        if status!='pass' or not result['eligible_for_extension']:return 1
+        if status!='pass':return 1
     return 0
 
 
