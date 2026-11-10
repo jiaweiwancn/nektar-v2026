@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-"""Production forward probe: declared sides override the interface tolerance."""
+"""Production forward probe: exact interface sides and explicit near-H scope."""
 import argparse
 import json
 import os
@@ -36,7 +36,7 @@ def main():
             case_xml(folder,model,'Natural',wall,steps=0,degree=3,radial_knots=ref.knots(),
                      descriptor_probe=a.descriptor_probe,boundary_policy='FrozenReferenceV1')
             near=[[0.,0.,ref.H+sign*5e-13] for sign in (-1,1) for side in (-1,1)]
-            request=dict(operation='neutral',grid=near,grid_sides=[-1,1,-1,1],
+            request=dict(operation='neutral',grid=[[0.,0.,ref.H],[0.,0.,ref.H],[0.,0.,1.5],[0.,0.,2.5]],grid_sides=[-1,1,0,0],
                          export_constitutive=True,export_test_basis=True)
             code,data=run(folder,a.probe,request)
             assert code==0 and data['status']=='pass' and data['performed_time_steps']==0
@@ -49,12 +49,18 @@ def main():
                 assert row['pressure']['geometry']==geometry[4]
                 assert (row['epsilon'] is None) == (j in (0,2))
                 if row['epsilon'] is not None:assert row['epsilon']['geometry']==geometry[3]==geometry[0]
-            trace=max(max(abs(x-y) for x,y in zip(obs['grid_values'][0][:3],v[:3],strict=True)) for v in obs['grid_values'][1:])
+            trace=max(abs(x-y) for x,y in zip(obs['grid_values'][0][:3],obs['grid_values'][1][:3],strict=True))
             assert trace<1e-10
             rows.append(dict(model=model,wall=wall,status='pass',grid_regions=obs['grid_regions'],
                 tensor_sample_indices=[s['sample_index'] for s in samples],maximum_common_velocity_k_trace_difference=trace,
                 one_sided_velocity_gradients=[obs['grid_gradients'][j][0][2] for j in (0,1)],
                 packet_sha256=sha(folder/'packet.json'),configuration_sha256=sha(folder/'case.xml')))
+            target=folder/'near-rejected';target.mkdir();shutil.copy2(folder/'case.xml',target/'case.xml')
+            ambiguous=dict(request,grid=near,grid_sides=[-1,1,-1,1])
+            code,body=run(target,a.probe,ambiguous)
+            reason='unsupported diagnostic sample: near-interface coordinates require exact H and an explicit side'
+            assert code!=0 and reason in (target/'probe.log').read_text()
+            rows[-1]['near_coordinate_scope_rejection']=dict(exit_code=code,reason=reason,physical_state_valid_on_supported_grid=True)
             if a.legacy_probe:
                 ordinary=dict(request,grid=[[0.,0.,1.5],[0.,0.,ref.H],[0.,0.,ref.H],[0.,0.,2.5]],grid_sides=[0,-1,1,0])
                 packets=[]
@@ -70,12 +76,12 @@ def main():
                 rows[-1]['ordinary_native_coefficient_hashes_equal']=True
                 if model=='A95' and wall=='Accepted':
                     target=folder/'legacy-near';target.mkdir();shutil.copy2(folder/'case.xml',target/'case.xml')
-                    code,body=run(target,a.legacy_probe,request)
-                    assert code!=0 and 'physical sample not found on requested radial side' in (target/'probe.log').read_text()
-                    rows[-1]['before_reproduction']=dict(exit_code=code,reason='physical sample not found on requested radial side',
+                    code,body=run(target,a.legacy_probe,ambiguous)
+                    assert code!=0 and 'Auxiliary height outside [0,H]' in (target/'probe.log').read_text()
+                    rows[-1]['before_reproduction']=dict(exit_code=code,reason='Auxiliary height outside [0,H]',
                         ordinary_physical_state_valid=True,scope='diagnostic selector failure, not a constitutive-domain failure')
     result=dict(status='pass',checks=rows,probe=runtime_identity(a.probe),legacy_probe=runtime_identity(a.legacy_probe) if a.legacy_probe else None,
-                scope='six natural model/wall initialization audits only; no timestep or governing solve, exact/interior samples unchanged')
+                scope='six natural model/wall initialization audits only; exact interface sides supported, ambiguous near-H observations rejected; no timestep or governing solve, exact/interior samples unchanged')
     write_json(out/'results.json',result);print(str(out));return 0
 
 

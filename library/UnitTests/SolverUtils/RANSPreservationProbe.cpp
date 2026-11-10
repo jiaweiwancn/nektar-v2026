@@ -191,6 +191,9 @@ int main(int argc,char **argv)
         if(auto points=request.get_child_optional("grid"))for(const auto &item:*points)
         {RANSWallCoordinate q{};int i=0;for(const auto &v:item.second){Require(i<3,"invalid verification coordinate");q[i++]=v.second.get_value<double>();}Require(i==3,"invalid verification coordinate");grid.push_back(q);}
         std::vector<int> sides;if(auto selected=request.get_child_optional("grid_sides"))for(const auto &v:*selected)sides.push_back(v.second.get_value<int>());
+        for(const auto &q:grid)
+            Require(q[2]==p.geometry.height || std::abs(q[2]-p.geometry.height)>=1e-12,
+                "unsupported diagnostic sample: near-interface coordinates require exact H and an explicit side");
         double receiptUs,receiptDx,receiptDy;session->LoadParameter("RANSWallFrictionVelocity",receiptUs,.4);session->LoadParameter("RANSWallDirectionX",receiptDx,1.);session->LoadParameter("RANSWallDirectionY",receiptDy,0.);
         const auto targetReference=patch.NeutralReference(receiptUs,{receiptDx,receiptDy});
         const auto receipt=patch.InitializationReceipt(state,reference,time,data,data,patch.FixedReferenceBoundary(targetReference));

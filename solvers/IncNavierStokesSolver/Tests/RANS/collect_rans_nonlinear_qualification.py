@@ -18,7 +18,7 @@ def receipt(path):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--admissions',type=Path,nargs='+',required=True);p.add_argument('--regression-receipt',type=Path);p.add_argument('--output',type=Path,required=True);a=p.parse_args();r=a.root.resolve();out=a.output;out.mkdir(parents=True,exist_ok=False);result=dict(schema='NonlinearDurationResponseEvidenceV1',starting_revision='dfd94161fd9d97f7f1a8ce2966e9cc9461b6d686',source_report=subprocess.check_output(['git','-C',str(r/'source'),'rev-parse','HEAD'],text=True).strip(),environment=dict(platform=platform.platform(),python=sys.version,threads=THREADS,ranks=1,worker_limit=72),admissions={},cohorts={},cases=[],responses={},failures=[],verification={})
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--admissions',type=Path,nargs='+',required=True);p.add_argument('--regression-receipt',type=Path);p.add_argument('--forward-interface-receipt',type=Path);p.add_argument('--output',type=Path,required=True);a=p.parse_args();r=a.root.resolve();out=a.output;out.mkdir(parents=True,exist_ok=False);result=dict(schema='NonlinearDurationResponseEvidenceV1',starting_revision='dfd94161fd9d97f7f1a8ce2966e9cc9461b6d686',source_report=subprocess.check_output(['git','-C',str(r/'source'),'rev-parse','HEAD'],text=True).strip(),environment=dict(platform=platform.platform(),python=sys.version,threads=THREADS,ranks=1,worker_limit=72),admissions={},cohorts={},cases=[],responses={},failures=[],verification={})
     for name in ('workspace.json','historical-receipt-byte-verification.json','actual-initial-regression.json','resource-census-exception.json','worker-guard-status.json'):
         result['verification'][name]=receipt(r/name)
     result['verification']['aggregate-negative-controls']=receipt(r/'aggregate-negative-controls/results.json')
@@ -37,7 +37,7 @@ def main():
         result['execution_schedules'].append(row)
     result['common_scalar_partitions']={p.parent.name:receipt(p) for p in (r/'common-scalar-partitions').glob('*/results.json')}
     result['physical_budget_diagnostic_controls']={p.parent.name:receipt(p) for p in (r/'physical-budgets').glob('test-*/results.json')}
-    for name in ('runtime','runtime-resolution-v2','runtime-resolution-v3','runtime-budget-v4','runtime-budget-v5','runtime-probe-v6'):
+    for name in ('runtime','runtime-resolution-v2','runtime-resolution-v3','runtime-budget-v4','runtime-budget-v5','runtime-probe-v6','runtime-probe-v7'):
         for leaf in ('source-build.json','actual-loaded-libraries.json','actual-loaded-libraries-current.json','lineage.json'):
             path=r/name/leaf
             if path.exists():shutil.copy2(path,out/(name+'-'+leaf))
@@ -48,7 +48,7 @@ def main():
                       ('actual_initial_binding',r/'actual-initial-regression.json'),
                       ('historical_receipt_bytes',r/'historical-receipt-byte-verification.json'),
                       ('targeted_regressions',a.regression_receipt or r/'targeted-regressions-current.json'),
-                      ('forward_interface_tolerance',r/'forward-interface-tolerance-status.json'),
+                      ('forward_interface_tolerance',a.forward_interface_receipt or r/'forward-interface-tolerance-status.json'),
                       ('physical_budget_controls',r/'physical-budget-face-regression.json')):
         scope_input['verification'][name]=receipt(path)
     accounting=receipt(r/'build-probe-side-control.json');scope_input['verification']['physical_budget_accounting']=dict(status='pass' if accounting.get('accounting_unit_exit_code')==0 else 'fail',receipt=accounting)

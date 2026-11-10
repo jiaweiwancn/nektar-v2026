@@ -109,6 +109,74 @@ remain separate from the established field-response gates; unresolved physical
 flux or temporal contributions are reported explicitly, without forcing a zero
 budget or identifying prescribed-row reactions with physical face fluxes.
 
+## Boundary configuration and interpretation
+
+The physical patch is `-1 <= x <= 1`, `0 <= z <= 4`, with interface `H=2`,
+roughness `.1`, `u_star=.4` and physical molecular viscosity `1.5e-5`.
+Velocity is prescribed on the two streamwise sides and top, and vanishes at
+the wall. Scalars have prescribed side/top traces; the wall k condition is
+natural. The outer epsilon trace at H is dependent and frozen during its
+declared scalar stage. Pressure uses one global mean gauge. The common velocity
+and k spaces couple the interface weakly; reconstructed one-sided traction and
+flux jumps are additional diagnostics rather than extra interface equations.
+
+`FrozenReferenceV1` binds the external map to the stored neutral reference.
+Actual perturbed initial coefficients and their native zero-step history are
+bound separately. Across a restart, repeated endpoint observations must have
+the same full state hash, including the retained epsilon trace. Native legacy
+D entries remain differences from the fixed neutral polynomial reference;
+the Python physical comparisons additionally measure drift from the actual
+perturbed initial field. Neither quantity replaces analytical-reference error.
+
+The whole-patch physical k budget subtracts the outward sum of the two internal
+H-face fluxes from the regional face totals before forming the external-boundary
+budget. The internal flux mismatch remains visible separately. Independent
+integral fixtures verify this accounting and verify that changing a prescribed
+row reaction cannot change the physical budget. In this one-column patch the
+epsilon constant-test coefficients that are nonzero are all constrained: its
+native load/reaction identity is not an independent conservation theorem.
+
+## Verification changes
+
+Admission and finishing now bind model/policy/wall, the effective descriptor,
+both exact meshes, both timesteps, required time sets, the model-specific common
+packet, runtime/library identities, and sealed state/history/boundary artifacts.
+Every accepted scalar observation must carry the matching state hash. Native
+report intervals, step counts and timestep increments are checked, with unique
+accepted states distinguished from duplicated restart endpoints.
+
+Required CLI negative controls cover missing times, foreign model/wall receipts,
+missing spatial/timestep companions, truncated scalar observers, and failed
+dominant residual reduction despite passing analytical/reconstruction checks.
+A real partial export also preserves a complete report and exits 1. Passing
+mock receipts do not qualify actual numerical cases. A separate real control
+rejects unperturbed neutral trajectories presented as perturbed inputs.
+
+The final collector also requires conditional response/audit/physical-budget
+coverage, the selected EP and half-amplitude results, and current loaded-library
+maps rather than inherited maps. Exact-request resume checks completed hashes;
+changed requests reject before replacing results. Completed earlier evidence is
+not overwritten by operational recovery or supplemented exports.
+
+The added forward-tensor probe initially used an exact H comparison whereas
+the observation path uses a 1e-12 interface tolerance. A first fixture attempted
+to sample both sides at H +/- 5e-13. It failed because an inner wall profile is
+only defined on [0,H]; that failed fixture and runtime are preserved. The final
+probe scope requires exact H with an explicit side for interface observations,
+and rejects nearby ambiguous coordinates without extending or clipping the
+wall profile. Tensor and test-basis exports use consistent side selection.
+Separate before/after regressions exercise all six natural model/wall
+initializations and unchanged exact/interior sample values. The primary
+campaign grids use exact H or interior points and retain their frozen runtime.
+
+The old A95 B11 initialization sampler hit its legacy 600-second wall deadline
+while resource suspensions were in use, before any T=.1 advancement. The failed
+comparison/log remain immutable. `init-timeout-recovery-v1` uses the same
+trajectory requests and native histories with a separately recorded operational
+deadline and new comparison receipts. It does not change timestep or accuracy
+criteria. Required Linux Python is 3.10 or later; the Mac's default Python 3.9
+cannot execute `zip(strict=True)` and supplies no numerical qualification claim.
+
 ## Completed preparation and first milestone
 
 The stronger admission initially found missing scalar observers on the old dt/2
