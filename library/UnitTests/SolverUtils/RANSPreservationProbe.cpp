@@ -3,6 +3,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallPhysicsSignature.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <cstring>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <SpatialDomains/MeshGraphIO.h>
@@ -10,6 +11,7 @@
 #include <chrono>
 #include <fstream>
 #include <iostream>
+#include <set>
 using namespace Nektar;
 using namespace Nektar::SolverUtils;
 namespace J=Nektar::RANSWallSolveJson;
@@ -20,6 +22,11 @@ namespace
 Vector Values(const Tree &p,const std::string &key)
 {Vector v;for(const auto &x:p.get_child(key))v.push_back(x.second.get_value<double>());return v;}
 void Require(bool ok,const std::string &message){if(!ok)throw std::runtime_error(message);}
+std::string Maps(const RANSWallEvolutionPatch::Diagnostic &values)
+{std::vector<std::pair<std::string,std::string>> r;for(const auto &[name,v]:values)r.push_back({name,J::Numbers(v)});return J::Object(r);}
+std::string Row(const RANSWallGlobalPoint &p)
+{return J::Object({{"ids",J::Numbers(p.ids)},{"phi",J::Numbers(p.phi)},
+    {"derivative",J::Rows(p.derivative)},{"geometry",J::Number(p.geometry)}});}
 }
 int main(int argc,char **argv)
 {
@@ -85,6 +92,77 @@ int main(int argc,char **argv)
         const auto receipt=patch.InitializationReceipt(state,reference,time,data,data,patch.FixedReferenceBoundary(targetReference));
         const auto stateCopy=state;
         const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid,sides);
+        std::string resolution="null",testBasis="null";
+        if(request.get<bool>("export_resolution",false))
+        {
+            const auto r=patch.ResidualResolution(state,state,0.,time,data,false,true);
+            std::vector<std::pair<std::string,std::string>> local;
+            for(const auto &[key,terms]:r.elementTerms)local.push_back({key,Maps(terms)});
+            std::vector<std::string> masses;
+            for(int b=0;b<patch.Gauge();++b)masses.push_back(J::Rows(patch.fields[b]->Mass()));
+            std::vector<std::string> keys;for(const auto &key:RANSWallResolutionSpatialTerms())keys.push_back(J::Quote(key));
+            std::set<double> cuts;for(const auto &e:patch.fields[0]->Elements())
+            {cuts.insert(e.lower[2]);cuts.insert(e.upper[2]);}
+            std::vector<std::string> fluxes;
+            for(double z:cuts)for(int side:{-1,1})for(const auto &f:patch.Surface(0,2,z,side,12))
+            {
+                const auto &q=f.test;const auto &element=patch.fields[0]->Elements().at(q.element);
+                const bool outer=element.lower[2]>=p.geometry.height;
+                const double k=q.Value(state,patch.offset[patch.K()]);
+                const double pi=patch.GeometryPoint(patch.InnerPressure()+outer,q.geometry,q.coordinate).Value(state,patch.offset[patch.InnerPressure()+outer]);
+                RANSTensor g{},stress{};for(int a=0;a<2;++a)g[a==0?0:2]=q.Gradient(state,patch.offset[a]);
+                double dk=0,de=0,epsilon=0,epsilonFlux=0;
+                if(outer)
+                {
+                    const auto erow=patch.GeometryPoint(patch.Epsilon(),q.geometry,q.coordinate);
+                    epsilon=erow.Value(state,patch.offset[patch.Epsilon()]);
+                    const auto c=patch.OuterClosure(k,epsilon,g,q.coordinate);dk=c.kDiffusion;de=c.epsilonDiffusion;
+                    epsilonFlux=de*erow.Gradient(state,patch.offset[patch.Epsilon()])[2];
+                    for(int a=0;a<3;++a)for(int b=0;b<3;++b)stress[a][b]=-c.reynoldsStress[a][b]+(a==b?2*k/3-pi:0.);
+                }
+                else
+                {
+                    const auto profile=patch.StateProfile(state,q.coordinate,time,data);
+                    const double nt=profile->Original().EddyViscosity(z);
+                    dk=p.geometry.molecularNu+nt/p.model.Parameters().sigmaK;
+                    stress=RANSWallInnerMeanStress(patch.InnerStress(k,nt,g),p.geometry.molecularNu,pi);
+                }
+                const Vector traction{stress[0][2],stress[1][2],stress[2][2]};
+                const double vertical=q.Value(state,patch.offset[1]);
+                fluxes.push_back(J::Object({{"coordinate",J::Numbers(q.coordinate)},
+                    {"weight",J::Number(f.weight)},{"geometry",J::Number(q.geometry)},
+                    {"region",outer?"1":"0"},{"side",J::Number(side)},
+                    {"velocity",J::Numbers(Vector{q.Value(state,patch.offset[0]),vertical})},
+                    {"k",J::Number(k)},{"epsilon",outer?J::Number(epsilon):"null"},
+                    {"Pi",J::Number(pi)},{"velocity_gradient",J::Rows(g)},
+                    {"k_gradient",J::Numbers(q.Gradient(state,patch.offset[patch.K()]))},
+                    {"full_traction",J::Numbers(traction)},
+                    {"k_diffusive_flux",J::Number(dk*q.Gradient(state,patch.offset[patch.K()])[2])},
+                    {"k_conservative_flux",J::Number(dk*q.Gradient(state,patch.offset[patch.K()])[2]-vertical*k)},
+                    {"epsilon_diffusive_flux",outer?J::Number(epsilonFlux):"null"},
+                    {"epsilon_conservative_flux",outer?J::Number(epsilonFlux-vertical*epsilon):"null"},
+                    {"test",Row(q)}}));
+            }
+            resolution=J::Object({{"schema",J::Quote("ModelAwareSpatialResolutionV1")},
+                {"terms",Maps(r.terms)},{"native",Maps(r.native)},{"norms",Maps(r.norms)},
+                {"constraints",J::Constraints(r.constraints)},{"effective_state",J::Numbers(r.effectiveState)},
+                {"physical_term_names",J::List(keys)},{"element_terms",J::Object(local)},
+                {"one_sided_faces",J::List(fluxes)},
+                {"mass",J::List(masses)},{"alpha","0"},{"scope",J::Quote(r.scope)}});
+        }
+        if(request.get<bool>("export_test_basis",false))
+        {
+            std::vector<std::string> rows;
+            for(int i=0;i<grid.size();++i)
+            {
+                const auto &q=grid[i];const int side=sides.empty()?0:sides[i];
+                const bool outer=q[2]>p.geometry.height || (q[2]==p.geometry.height && side==1);
+                rows.push_back(J::Object({{"velocity_k",Row(patch.Point(0,q,side))},
+                    {"pressure",Row(patch.Point(patch.InnerPressure()+outer,q,side))},
+                    {"epsilon",outer?Row(patch.Point(patch.Epsilon(),q,side)):"null"}}));
+            }
+            testBasis=J::List(rows);
+        }
         Require(state==stateCopy,"read-only verification modified coefficients");
         const auto elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
         Tree observed;std::istringstream input(observation);boost::property_tree::read_json(input,observed);
@@ -120,7 +198,8 @@ int main(int argc,char **argv)
             {"physical_admissibility",J::Quote(physical?"pass":"fail")},
             {"accuracy",J::Quote("not_assessed_by_sampling_adapter")},{"performed_time_steps","0"},{"initial_history",initialHistory.empty()?"null":J::Quote(initialHistory)},
             {"initialization_receipt",receipt},{"reference",J::Numbers(reference)},{"fixed_boundary",J::Constraints(data.fixedBoundary)},
-            {"elapsed_seconds",J::Number(elapsed)},{"observation",observation}});
+            {"elapsed_seconds",J::Number(elapsed)},{"observation",observation},
+            {"resolution",resolution},{"test_basis",testBasis}});
         std::ofstream file(argv[3]);Require(bool(file),"cannot write verification output");file<<output<<'\n';
         return physical?0:1;
     }

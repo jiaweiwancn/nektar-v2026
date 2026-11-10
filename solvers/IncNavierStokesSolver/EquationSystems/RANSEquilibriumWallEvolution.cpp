@@ -216,6 +216,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         Require(m_neutralBoundaryPolicy=="Legacy" || (m_neutralBoundaryPolicy=="FrozenReferenceV1" && m_neutral && m_eta==0 && m_patch->NewModels() && m_patch->PimpleSingleSweep()),"unsupported neutral boundary policy");
         m_session->LoadSolverInfo("RANSWallPilotAccuracy",m_pilotAccuracy,"Off");
         Require(m_pilotAccuracy=="Off" || (m_pilotAccuracy=="NeutralV1" && m_neutral && m_eta==0 && m_patch->NewModels() && m_patch->PimpleSingleSweep()),"unsupported pilot accuracy policy");
+        Require(m_pilotAccuracy!="NeutralV1" || (m_direction[0]>0 && m_direction[1]==0),
+            "NeutralV1 accuracy observer requires canonical positive-x reference direction");
         m_session->LoadSolverInfo("RANSWallRestart",m_restart,"None");m_session->LoadSolverInfo("RANSWallCheckpoint",m_checkpointBase,"None");
         Require(m_timestep>0,"evolution requires positive fixed TimeStep");m_data=RANSWallEvolutionData(dim);
         for(int a=0;a<dim;++a)
@@ -986,6 +988,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
         p.geometry.tailStart,p.model.Q()*m_ustar*m_ustar,p.model.Q(),p.model.Kappa()});
     out<<",\"quadrature_orders\":";Write(out,{static_cast<double>(p.tangentialOrder),static_cast<double>(p.normalOrder)});
     out<<",\"ustar\":"<<m_ustar<<",\"direction\":";Write(out,{m_direction[0],m_direction[1]});
+    out<<",\"pilot_accuracy_semantics\":"<<Quoted("NeutralV1 canonical positive-x; E is analytical-reference error; legacy D entries 5..9 measure change from fixed neutral polynomial reference, not drift from a perturbed initial state");
     out<<",\"cell_ownership\":[";int ownerCount=0;
     for(const auto &e:m_patch->fields[0]->Elements())
     {if(ownerCount++)out<<',';Write(out,{static_cast<double>(e.geometry),static_cast<double>(m_patch->Owner(e.geometry))});}out<<']';

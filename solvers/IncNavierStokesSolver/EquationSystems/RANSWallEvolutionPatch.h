@@ -327,14 +327,15 @@ public:
         Vector effectiveState;
         std::map<int,double> constraints;
         Diagnostic native,terms,compensated,absoluteAccumulation,additionCounts,norms;
+        std::map<std::string,Diagnostic> elementTerms;
         std::map<std::string,std::vector<long double>> extended;
         std::string scope;
     };
     ResidualResolutionResult ResidualResolution(const Vector &state,const Vector &history,
-        double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false) const;
+        double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false,bool localize=false) const;
     ResidualResolutionResult ResidualResolutionComponents(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false,
-        bool originalOuterCounterfactual=false) const;
+        bool originalOuterCounterfactual=false,bool localize=false) const;
     /** Read-only constitutive inventory and one-sided tensor witnesses. No
      * lift, correction, governing solve or change to the selected model. */
     std::string ConstitutiveStateDiagnostic(const Vector &state,double time,

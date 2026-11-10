@@ -27,6 +27,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::NeutralAccuracy(const Vec
 {
     RANSWallTiming::Scope timing("audit.neutral_accuracy");
     Require(NewModels() && m_dimension==2 && !Mapped() && m_comm->GetSize()==1,"neutral accuracy requires serial flat 2D new models");
+    Require(m_referenceFlow==RANSVector{1,0,0} && m_referenceNormal==RANSVector{0,0,1},
+        "NeutralV1 accuracy observer requires canonical positive-x reference direction");
     const double us=m_robustUstar,H=m_parameters.geometry.height,Z=upper[2],K0=m_parameters.model.Q()*us*us;
     const double A=us*us*us/m_parameters.model.Kappa();const auto profile=Profile(K0);
     const double UH=profile->Reference().matchingVelocity;

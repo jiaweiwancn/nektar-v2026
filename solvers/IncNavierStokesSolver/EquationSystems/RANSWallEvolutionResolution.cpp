@@ -86,7 +86,7 @@ const std::vector<std::string> &RANSWallResolutionSpatialTerms()
 
 RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::ResidualResolutionComponents(
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored,
-    bool originalOuterCounterfactual) const
+    bool originalOuterCounterfactual,bool localize) const
 {
     Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || ModelAwareAudit()),
         "R3 residual-resolution audit requires serial flat2D Upstream+Capped");
@@ -95,13 +95,19 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     (void)anchored;
     ResidualResolutionResult result;result.constraints=Constraints(state,time,data);
     result.effectiveState=ExternalLift(state,time,data);const auto &s=result.effectiveState;
-    Refresh(s,time,&data);Buckets buckets;
+    Refresh(s,time,&data);Buckets buckets;std::map<std::string,Buckets> elementBuckets;
+    std::string elementKey;
     for(const auto &name:RANSWallResolutionSpatialTerms())Bucket(buckets,name,Size());
     auto load=[&](const std::string &name,int block,const RANSWallGlobalPoint &q,double value,const Flux &flux,double weight)
-        {Add(buckets,name,Size(),offset[block],q,value,flux,weight);};
+        {
+            Add(buckets,name,Size(),offset[block],q,value,flux,weight);
+            if(localize && name.rfind("diagnostic_",0)!=0)
+                Add(elementBuckets[elementKey],name,Size(),offset[block],q,value,flux,weight);
+        };
     auto evaluate=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile,
         const RANSVector &force,const RANSCappedDestructionValues *normalization)
     {
+        elementKey=std::string(inner?"inner:":"outer:")+std::to_string(q.v.geometry);
         RANSTensor G{},stress{},cancelled{};RANSVector u{};
         for(int a=0;a<m_dimension;++a){u[PhysicalAxis(a)]=q.v.Value(s,offset[a]);G[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);}
         const double k=q.v.Value(s,offset[K()]),pi=q.p.Value(s,offset[inner?InnerPressure():OuterPressure()]);
@@ -234,6 +240,8 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
                 std::numeric_limits<double>::infinity()),std::numeric_limits<double>::infinity());
         }
     }
+    for(const auto &[element,values]:elementBuckets)
+        for(const auto &[name,a]:values)result.elementTerms[element][name]=a.sum;
     auto total=[&](const std::string &key,const std::vector<std::string> &names)
     {
         result.terms[key]=Vector(Size());result.compensated[key]=Vector(Size());result.extended[key]=Wide(Size());
@@ -273,9 +281,9 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
 }
 
 RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::ResidualResolution(
-    const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored) const
+    const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored,bool localize) const
 {
-    auto result=ResidualResolutionComponents(state,history,alpha,time,data,anchored);
+    auto result=ResidualResolutionComponents(state,history,alpha,time,data,anchored,false,localize);
     result.native["spatial_unmasked"]=Residual(state,history,0,time,data,anchored,false);
     result.native["stage_unmasked"]=Residual(state,history,alpha,time,data,anchored,false);
     result.native["stage_constrained"]=Residual(state,history,alpha,time,data,anchored,true);
