@@ -50,7 +50,11 @@ def native_accounting(summary,policy):
             minimum_arithmetic_reserve=min((b['arithmetic_reserve'] for b in bounds),default=None),
             raw_corrected_k_hashes_equal=all(b['raw_sha256']==b['corrected_sha256'] for b in bounds),
             maximum_added_k_storage_residual=max((abs(a.get('k_added_storage_residual',0)) for a in attempts),default=0)))
+        stage_present=bool(d['last_stage_history'])
+        callback_context=('failed_attempt_not_accepted' if d.get('failure') and stage_present else
+                          'completed_accepted' if stage_present else 'inapplicable_startup')
         lineage[policy+'/'+name]=dict(report=str(path),report_sha256=file_hash(path),state_sha256=state_hash(d['state']),
+            callback_context=callback_context,usable_as_accepted_stage=callback_context=='completed_accepted',
             native_history_sha256=digest(d['native_history']),native_history_times=d['native_history_times'],
             last_stage_history_sha256=state_hash(d['last_stage_history']) if d['last_stage_history'] else None,
             last_stage_time=d['last_stage_time'],last_stage_alpha=d['last_stage_alpha'],
