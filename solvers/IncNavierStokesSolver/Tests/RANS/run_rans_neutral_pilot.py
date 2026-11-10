@@ -8,6 +8,7 @@ No field, checkpoint signature, timestep or boundary vector is rewritten.
 """
 import argparse,gzip,json,math,os,subprocess,sys,tempfile,time,xml.etree.ElementTree as ET
 from pathlib import Path
+from contextlib import nullcontext
 import numpy as np
 from rans_qualification import THREADS,write_json,exact_vector_hash,compare_samples,audited_extrema
 from rans_request_manifest import RequestManifest,runtime_identity
@@ -43,13 +44,13 @@ def accuracy(ref,packet,initial,weights):
 
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--label',required=True);p.add_argument('--model',choices=('E94E95','A95','A93'),default='E94E95');p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);p.add_argument('--degree',type=int,default=5);p.add_argument('--level',type=int,default=0);p.add_argument('--columns',type=int,choices=(1,2),default=1);p.add_argument('--dt',type=float,default=.0001);p.add_argument('--max-time',type=float,default=.0016);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=1);p.add_argument('--velocity-amplitude',type=float,default=0.);p.add_argument('--cache',choices=('Off','ExactStepV1'),default='ExactStepV1');p.add_argument('--resume',action='store_true');p.add_argument('--timeout',type=int,default=3600);a=p.parse_args();a.root=a.root.resolve()
- if a.degree<5 or a.level<0:raise ValueError('declared pilot candidate requires degree >=5, nonnegative refinement')
+ if a.degree<4 or a.level<0:raise ValueError('declared pilot candidate requires degree >=4, nonnegative refinement')
  r=a.root;out=r/'campaigns'/a.label;ref=Reference(a.model,a.policy,a.wall)
  os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
  # One common physical grid resolves both declared candidates and profile breaks.
  grid,weights=physical_grid(nested(ref.knots(),max(1,a.level)),10,8)
  sampler=r/'runtime/RANSPreservationProbe';solver=r/'runtime/IncNavierStokesSolver'
- with tempfile.TemporaryDirectory(prefix='pilot-request-',dir=r/'tmp') as tmp:
+ with nullcontext(tempfile.mkdtemp(prefix='pilot-request-',dir=r/'tmp')) as tmp:
   pre=Path(tmp)/'seed';configure(pre,a,ref,0);seed=probe(sampler,pre,dict(operation='neutral',grid=grid,export_basis=False))
   initial=dict(seed['observation'],grid_weights=weights)
   request=dict(schema='NeutralPilotV1',model=a.model,policy=a.policy,wall=a.wall,descriptor=seed['observation']['resolved_descriptor'],

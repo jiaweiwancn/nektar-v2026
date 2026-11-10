@@ -24,6 +24,7 @@ from run_cls_epawf_picard import sha
 from rans_request_manifest import RequestManifest,runtime_identity
 from run_cls_epawf_pimple import identity
 import tempfile
+from contextlib import nullcontext
 
 Q=((32,8,8,8,8),(48,12,12,12,12),(64,16,16,16,16))
 MODELS=('E94E95','A95','A93');POLICIES=('Natural','Prescribed');WALLS=('EP','Accepted')
@@ -94,7 +95,7 @@ class Campaign:
             panels=sorted(set(v for ref in refs for v in nested(ref.knots(),2)));g,w=physical_grid(panels,10,8)
             request['evaluation']=dict(grid=g,weights=w,sides=[0]*len(g),export_basis=True)
             request['spatial_series']=dict(reference_degree=3,h_levels=[0,1,2],p_degrees=[3,4,5],quadratures=Q,representation='native constrained neutral RadialProject')
-        with tempfile.TemporaryDirectory(prefix='request-preflight-',dir=self.r/'tmp') as tmp:
+        with nullcontext(tempfile.mkdtemp(prefix='request-preflight-',dir=self.r/'tmp')) as tmp:
             for m in self.models:
                 for policy in self.policies:
                     for wall in self.walls:
