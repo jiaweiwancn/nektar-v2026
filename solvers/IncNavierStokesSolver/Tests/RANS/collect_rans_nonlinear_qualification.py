@@ -46,6 +46,7 @@ def collect():
         value=receipt(path)
         if value.get('status')=='fail':result['failed_response_spatial_audits'][path.parent.name]=dict(value,checks=[compact_analysis(c) for c in value.get('checks',[])])
     result['physical_budget_diagnostic_controls']={p.parent.name:receipt(p) for p in (r/'physical-budgets').glob('test-*/results.json')}
+    result['physical_budget_accuracy_classifications']={p.parent.name:receipt(p) for p in (r/'physical-budget-accuracy').glob('*/results.json')}
     for name in ('runtime','runtime-resolution-v2','runtime-resolution-v3','runtime-budget-v4','runtime-budget-v5','runtime-probe-v6','runtime-probe-v7'):
         for leaf in ('source-build.json','actual-loaded-libraries.json','actual-loaded-libraries-current.json','lineage.json'):
             path=r/name/leaf
