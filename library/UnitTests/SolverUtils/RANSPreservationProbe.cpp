@@ -115,7 +115,8 @@ int main(int argc,char **argv)
                     {"P",J::Number(law.production)},{"c_mu",J::Number(law.cMu)},
                     {"nu_t",J::Number(law.eddyViscosity)},{"raw_divergence",J::Number(law.divergence)},
                     {"epsilon_production",J::Number(law.epsilonProduction)},{"epsilon_destruction",J::Number(law.epsilonDestruction)},
-                    {"a95_radicand",law.a95RadicandDefined?J::Number(law.a95Radicand):"null"}}));
+                    {"a95_radicand",law.a95RadicandDefined?J::Number(law.a95Radicand):"null"},
+                    {"covariance_eigenvalues",J::Numbers(J::Eigenvalues(law.reynoldsStress))}}));
             }
             constitutive=J::Object({{"schema",J::Quote("NativeForwardConstitutiveV1")},
                 {"descriptor",J::Quote(p.model.Signature())},{"samples",J::List(rows)},

@@ -81,14 +81,20 @@ def main():
         comparisons[str(t)]=dict(c,source=str(path),source_sha256=sha(path))
     quadpath=r/('frozen-quadrature-'+tag)/'results.json';quad=load(quadpath)
     require(quad['status']=='pass' and len(quad['checks'])==2,'model_quadrature_incomplete')
-    for check in quad['checks']:identity(check['configuration'],config);require(abs(check['time']-.016)<1e-13,'quadrature_time_mismatch')
+    quadrature_bindings=[]
+    for check in quad['checks']:
+        member='B5' if check['space']=='Balanced5V1' else 'B11';folder=old/'campaigns'/(tag+'-'+member);binding=load(folder/'request-manifest.json');identity(binding['request'],config)
+        require(check['trajectory_request_sha256']==binding['sha256'],'quadrature_request_mismatch')
+        require(check['native_report_sha256']==sha(folder/'T-0.0160/case.evolution.json'),'quadrature_report_mismatch')
+        identity(check['configuration'],{k:config[k] for k in ('model','policy','wall')});require(abs(check['time']-.016)<1e-13,'quadrature_time_mismatch')
+        quadrature_bindings.append(dict(space=member,configuration={k:binding['request'][k] for k in config},request_sha256=binding['sha256'],source='sealed trajectory request validates the full descriptor, including earlier receipts with a three-field configuration'))
     output=dict(schema='ConfigurationDurationAdmissionV2',status='pass',configuration=config,
         required_short_times=list(SHORT_TIMES),milestones=[.016,.1,.5],timestep_trials=[[.002,.001],[.001,.0005]],
         meshes=meshes,common_directory=str(common),common_packet_sha256=sha(common/'packet.json.gz'),
-        runtime=runtimes,diagnostic_runtime=runtime_identity(r/'runtime-resolution-v2/RANSPreservationProbe'),
+        runtime=runtimes,diagnostic_runtime=runtime_identity(r/'runtime-resolution-v2/RANSPreservationProbe'),duration_diagnostic_runtime=runtime_identity(r/'runtime-resolution-v3/RANSPreservationProbe'),
         runtime_reuse_bridges=bridges,governing_source_proof=source_proof,initial_gate=dict(source=str(initial),sha256=sha(initial),body=load(initial)),
         short_spatial_audits=audits,short_companions=companions,short_comparisons=comparisons,evolved_reductions=reductions,
-        frozen_quadrature=dict(quad,source=str(quadpath),sha256=sha(quadpath)),previous_root=str(old),
+        frozen_quadrature=dict(quad,source=str(quadpath),sha256=sha(quadpath),descriptor_bindings=quadrature_bindings),previous_root=str(old),
         neutral_gates=dict(field_RMS=1e-3,vertical_RMS=1e-4,wall_traction=1e-3,interface_traction=1e-3,temporal_floor=1e-7,temporal_fraction=.1,residual_floor=1e-8,residual_ratio=.85,residual_uncertainty=1e-10),
         history='independently initialized at each dt; unchanged-method restart within trajectory')
     dest=r/'admissions'/(tag+'.json');dest.parent.mkdir(exist_ok=True);require(not dest.exists(),'admission_already_exists');write_json(dest,output);print(str(dest));return 0

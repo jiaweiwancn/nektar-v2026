@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Four companions, immutable configuration admission, gates before continuation."""
-import argparse,fcntl,os,subprocess,sys,time
+import argparse,os,subprocess,sys,time
 from pathlib import Path
 from qualify_rans_preservation import load
 from rans_qualification import THREADS,write_json
@@ -9,6 +9,7 @@ from rans_request_manifest import RequestManifest,sha,runtime_identity
 from rans_duration_contract import require,prefix,MEMBERS
 from compare_rans_balanced_evolution import compare
 from schedule_rans_balanced_evolution import workers
+from rans_worker_budget import spawn
 
 
 def main():
@@ -30,10 +31,10 @@ def main():
                 code=proc.poll()
                 if code is None:continue
                 stream.close();done.append(dict(label=label,exit_code=code,command=cmd));del running[label]
-            with (r/'worker-launch.lock').open('a') as lock:
-                fcntl.flock(lock,fcntl.LOCK_EX)
-                if queue and len(running)<a.concurrency and workers()+10<=72:
-                    label,cmd=queue.pop(0);stream=(out/(label+'-'+str(T)+'-'+str(time.time_ns())+'.log')).open('x');proc=subprocess.Popen(cmd,stdout=stream,stderr=subprocess.STDOUT,env=env);running[label]=(proc,stream,cmd)
+            if queue and len(running)<a.concurrency:
+                label,cmd=queue[0];stream=(out/(label+'-'+str(T)+'-'+str(time.time_ns())+'.log')).open('x');proc=spawn(r,cmd,stdout=stream,stderr=subprocess.STDOUT,env=env)
+                if proc is None:stream.close()
+                else:queue.pop(0);running[label]=(proc,stream,cmd)
             write_json(out/'progress.json',dict(status='running',time=T,workers=workers(),running=list(running),queued=[v[0] for v in queue],completed=done))
             if queue or running:time.sleep(5)
         dest=r/'comparisons'/(tag+'-'+str(T)+'.json');dest.parent.mkdir(exist_ok=True)

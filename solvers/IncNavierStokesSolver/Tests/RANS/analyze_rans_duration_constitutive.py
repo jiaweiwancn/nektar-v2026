@@ -21,7 +21,7 @@ def analyze(packet, config, weights):
         if sample['a95_radicand'] is not None:
             rad=1-9*expect['cmu']**2*np.sum(sd*sd)*(k/e)**2;entries['A95_radicand']=abs(rad-sample['a95_radicand']);margins.append(dict(value=sample['a95_radicand'],coordinate=point,side=sample['side']))
         for key,value in entries.items():defects[key]=max(defects.get(key,0.),float(value))
-        eig=np.linalg.eigvalsh(R);analytic=ref.at(point[2],1);R0=np.array(analytic['R'])
+        eig=np.linalg.eigvalsh(R);defects['covariance_eigenvalues']=max(defects.get('covariance_eigenvalues',0.),float(np.max(np.abs(eig-np.array(sample['covariance_eigenvalues'])))));analytic=ref.at(point[2],1);R0=np.array(analytic['R'])
         values.append([R[0,0],R[1,1],R[2,2],R[0,2],Q[0,2],np.linalg.norm(Q),sample['P'],nonlinear,isotropic,np.trace(A),eig[0],R[2,2]-R0[2,2]])
         w.append(weights[j])
     require(values and all(np.isfinite(v) and v<=5e-11 for v in defects.values()),'independent_constitutive_mismatch')

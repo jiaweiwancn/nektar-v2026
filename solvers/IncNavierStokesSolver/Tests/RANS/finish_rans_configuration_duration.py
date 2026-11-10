@@ -10,11 +10,12 @@ from rans_duration_contract import MEMBERS,identity,require,required_times,scala
 from admit_rans_configuration import validate_audit
 from analyze_rans_duration_constitutive import analyze as constitutive
 from schedule_rans_balanced_evolution import workers
+from rans_worker_budget import spawn
 
 
 def finish(r, admission_path, dt, T, resume=False):
     source=Path(__file__).parent;ad=load(admission_path);config=ad['configuration'];tag=prefix(config['model'],config['policy'],config['wall'])+'-duration-'+str(dt);runtime=r/'runtime-resolution-v3';require(runtime.exists(),'forward_probe_runtime_not_frozen')
-    common=Path(ad['common_directory']);require(sha(common/'packet.json.gz')==ad['common_packet_sha256'],'common_packet_changed')
+    common=Path(ad['common_directory']);require(sha(common/'packet.json.gz')==ad['common_packet_sha256'],'common_packet_changed');require(runtime_identity(runtime/'RANSPreservationProbe')==ad['duration_diagnostic_runtime'],'admitted_diagnostic_runtime_changed')
     times=[t for t in ad['milestones'] if t<=T+1e-13];out=r/'duration-audits'/(tag+'-'+str(T));labels={m:tag+'-'+m for m in MEMBERS}
     request=dict(schema='ConfigurationMilestoneAuditV2',configuration=config,timesteps=[dt,dt/2],required_times=times,meshes=ad['meshes'],common_packet_sha256=ad['common_packet_sha256'],admission_sha256=sha(admission_path),analysis_runtime=runtime_identity(runtime/'RANSPreservationProbe'),trajectory_requests={m:sha(r/'campaigns'/v/'request-manifest.json') for m,v in labels.items()})
     manifest=RequestManifest(out,request,resume)
@@ -22,8 +23,12 @@ def finish(r, admission_path, dt, T, resume=False):
     env=dict(os.environ,**THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'));execution=[];files=[]
     def run(name,cmd):
         # Read-only probes also consume MPI helper threads; share the same limit.
-        while workers()+9>72:time.sleep(5)
-        with (out/(name+'.log')).open('x') as f:code=subprocess.run([sys.executable,'-B',*map(str,cmd)],env=env,stdout=f,stderr=subprocess.STDOUT).returncode
+        with (out/(name+'.log')).open('x') as f:
+            proc=None
+            while proc is None:
+                proc=spawn(r,[sys.executable,'-B',*map(str,cmd)],env=env,stdout=f,stderr=subprocess.STDOUT)
+                if proc is None:time.sleep(5)
+            code=proc.wait()
         execution.append(dict(name=name,exit_code=code,command=list(map(str,cmd))));write_json(out/'progress.json',dict(status='running',execution=execution))
         require(code==0,'audit_subprocess_failed:'+name)
     try:
