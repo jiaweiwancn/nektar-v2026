@@ -1,0 +1,220 @@
+{
+  "schema": "FrozenEffectiveInputsV1",
+  "checks": [
+    {
+      "name": "guard-descriptor",
+      "status": "pass",
+      "observed_failure": "verification resolved descriptor mismatch",
+      "intended_rejection": "descriptor mismatch",
+      "exit_code": 1
+    },
+    {
+      "name": "guard-identity",
+      "status": "pass",
+      "observed_failure": "verification physics/mesh/space identity mismatch",
+      "intended_rejection": "identity mismatch",
+      "exit_code": 1
+    },
+    {
+      "name": "guard-nonzero_time",
+      "status": "pass",
+      "observed_failure": "initial history export requires an admissible identical state/reference at time zero",
+      "intended_rejection": "initial history export requires",
+      "exit_code": 1
+    },
+    {
+      "name": "guard-different_reference",
+      "status": "pass",
+      "observed_failure": "initial history export requires an admissible identical state/reference at time zero",
+      "intended_rejection": "initial history export requires",
+      "exit_code": 1
+    },
+    {
+      "name": "guard-boundary",
+      "status": "pass",
+      "observed_failure": "verification external boundary identity mismatch",
+      "intended_rejection": "external boundary identity mismatch",
+      "exit_code": 1
+    },
+    {
+      "name": "Q2-Q0-E94E95-Accepted",
+      "status": "pass",
+      "comparison": {
+        "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+        "time": 0.0002,
+        "global_pressure_gauge_shifts": [
+          -5.932539353230313e-21,
+          5.645921270980689e-21
+        ],
+        "fields": {
+          "u": {
+            "weighted_RMS": 2.6119550760094662e-14,
+            "L2": 7.387724585603672e-14
+          },
+          "v": {
+            "weighted_RMS": 2.945079010474064e-15,
+            "L2": 8.329941357745512e-15
+          },
+          "k": {
+            "weighted_RMS": 1.1515508051025377e-15,
+            "L2": 3.2570775326753315e-15
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 0.0,
+            "L2": 0.0
+          },
+          "Pi": {
+            "weighted_RMS": 1.1447308332585415e-12,
+            "L2": 3.2377877393217675e-12
+          }
+        }
+      },
+      "initialization_receipts": [
+        {
+          "raw_initial_sha256": "339ca3fd7cf1a1592fae25fd328f07540f6d664b1882074b2b1164a1d9728915",
+          "effective_initial_sha256": "339ca3fd7cf1a1592fae25fd328f07540f6d664b1882074b2b1164a1d9728915",
+          "fixed_reference_sha256": "339ca3fd7cf1a1592fae25fd328f07540f6d664b1882074b2b1164a1d9728915",
+          "explicit_boundary_sha256": "4efd749f81057206dab8655e8740b2587ccac690a1d76cb598b7ae7c200256e4",
+          "implicit_boundary_sha256": "4efd749f81057206dab8655e8740b2587ccac690a1d76cb598b7ae7c200256e4",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0
+        },
+        {
+          "raw_initial_sha256": "339ca3fd7cf1a1592fae25fd328f07540f6d664b1882074b2b1164a1d9728915",
+          "effective_initial_sha256": "339ca3fd7cf1a1592fae25fd328f07540f6d664b1882074b2b1164a1d9728915",
+          "fixed_reference_sha256": "339ca3fd7cf1a1592fae25fd328f07540f6d664b1882074b2b1164a1d9728915",
+          "explicit_boundary_sha256": "4efd749f81057206dab8655e8740b2587ccac690a1d76cb598b7ae7c200256e4",
+          "implicit_boundary_sha256": "4efd749f81057206dab8655e8740b2587ccac690a1d76cb598b7ae7c200256e4",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 4.769275252503036e-14
+        }
+      ],
+      "steps": 2
+    },
+    {
+      "name": "Q2-Q0-A95-Accepted",
+      "status": "pass",
+      "comparison": {
+        "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+        "time": 0.0002,
+        "global_pressure_gauge_shifts": [
+          -1.5666721392415536e-17,
+          7.047314121155777e-19
+        ],
+        "fields": {
+          "u": {
+            "weighted_RMS": 2.0854676631294322e-14,
+            "L2": 5.898593306176337e-14
+          },
+          "v": {
+            "weighted_RMS": 6.674257526186076e-15,
+            "L2": 1.8877651024606106e-14
+          },
+          "k": {
+            "weighted_RMS": 9.388546132858664e-16,
+            "L2": 2.6554818544108396e-15
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 0.0,
+            "L2": 0.0
+          },
+          "Pi": {
+            "weighted_RMS": 8.959073098044691e-13,
+            "L2": 2.534008536309349e-12
+          }
+        }
+      },
+      "initialization_receipts": [
+        {
+          "raw_initial_sha256": "829e9a01c845a3a89ecb108b27e8aedd0211caf7c3d9baa95262a6480d245e79",
+          "effective_initial_sha256": "829e9a01c845a3a89ecb108b27e8aedd0211caf7c3d9baa95262a6480d245e79",
+          "fixed_reference_sha256": "829e9a01c845a3a89ecb108b27e8aedd0211caf7c3d9baa95262a6480d245e79",
+          "explicit_boundary_sha256": "0fbe6ace1c90dfe2c41e6724432440d1a5e9577b3d78ed1c6d421c9c1960395e",
+          "implicit_boundary_sha256": "0fbe6ace1c90dfe2c41e6724432440d1a5e9577b3d78ed1c6d421c9c1960395e",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0
+        },
+        {
+          "raw_initial_sha256": "829e9a01c845a3a89ecb108b27e8aedd0211caf7c3d9baa95262a6480d245e79",
+          "effective_initial_sha256": "829e9a01c845a3a89ecb108b27e8aedd0211caf7c3d9baa95262a6480d245e79",
+          "fixed_reference_sha256": "829e9a01c845a3a89ecb108b27e8aedd0211caf7c3d9baa95262a6480d245e79",
+          "explicit_boundary_sha256": "0fbe6ace1c90dfe2c41e6724432440d1a5e9577b3d78ed1c6d421c9c1960395e",
+          "implicit_boundary_sha256": "0fbe6ace1c90dfe2c41e6724432440d1a5e9577b3d78ed1c6d421c9c1960395e",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 1.1940101685148363e-13
+        }
+      ],
+      "steps": 2
+    },
+    {
+      "name": "Q2-Q0-A93-Accepted",
+      "status": "pass",
+      "comparison": {
+        "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+        "time": 0.0002,
+        "global_pressure_gauge_shifts": [
+          -1.0570971181733666e-18,
+          -4.404571325722361e-19
+        ],
+        "fields": {
+          "u": {
+            "weighted_RMS": 2.514747312137096e-14,
+            "L2": 7.112779509531138e-14
+          },
+          "v": {
+            "weighted_RMS": 2.887187500354839e-15,
+            "L2": 8.166199440231778e-15
+          },
+          "k": {
+            "weighted_RMS": 8.507304087885466e-16,
+            "L2": 2.4062289640639403e-15
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 1.5821657607265885e-18,
+            "L2": 3.1643315214531773e-18
+          },
+          "Pi": {
+            "weighted_RMS": 1.0773439258296221e-12,
+            "L2": 3.047188782497051e-12
+          }
+        }
+      },
+      "initialization_receipts": [
+        {
+          "raw_initial_sha256": "6099bd198e3edecf35d044ff9f4e1c99aad2b229d7dc40acd605ce9828b27ec8",
+          "effective_initial_sha256": "6099bd198e3edecf35d044ff9f4e1c99aad2b229d7dc40acd605ce9828b27ec8",
+          "fixed_reference_sha256": "6099bd198e3edecf35d044ff9f4e1c99aad2b229d7dc40acd605ce9828b27ec8",
+          "explicit_boundary_sha256": "81a9b83566124b00c350d6d060f904833ee0b402b3de27e3ce669edbb0bd44be",
+          "implicit_boundary_sha256": "81a9b83566124b00c350d6d060f904833ee0b402b3de27e3ce669edbb0bd44be",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0
+        },
+        {
+          "raw_initial_sha256": "6099bd198e3edecf35d044ff9f4e1c99aad2b229d7dc40acd605ce9828b27ec8",
+          "effective_initial_sha256": "6099bd198e3edecf35d044ff9f4e1c99aad2b229d7dc40acd605ce9828b27ec8",
+          "fixed_reference_sha256": "6099bd198e3edecf35d044ff9f4e1c99aad2b229d7dc40acd605ce9828b27ec8",
+          "explicit_boundary_sha256": "81a9b83566124b00c350d6d060f904833ee0b402b3de27e3ce669edbb0bd44be",
+          "implicit_boundary_sha256": "81a9b83566124b00c350d6d060f904833ee0b402b3de27e3ce669edbb0bd44be",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 1.7524672576811617e-13
+        }
+      ],
+      "steps": 2
+    }
+  ],
+  "status": "pass",
+  "coverage": {
+    "status": "pass",
+    "missing": [],
+    "unexpected": [],
+    "duplicates": [],
+    "expected_count": 8,
+    "actual_count": 8
+  }
+}

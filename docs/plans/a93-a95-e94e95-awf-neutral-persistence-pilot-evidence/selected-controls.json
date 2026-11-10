@@ -1,0 +1,260 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "name": "E94E95-Prescribed-EP",
+      "status": "pass",
+      "result": {
+        "label": "E-P-EP-h0p5",
+        "request_sha256": "f10d544bc6699a9a398cd3f32d2e04db9a2c08202b8b039b21dea007f8b1dc1d",
+        "descriptor": "E94E95:OriginalHighRe-v1:A0=4:As=3lambdaMax(Sd)/norm(Sd):Q=0:q=3.3245064563141753:kappa=0.40999999999999998:policy=Prescribed:sigmaK=1:sigmaE=1.1878733446660723:Ceps1=0.42999999999999999:Ceps2=1.8999999999999999:wall=EPAWF:SCI-original-.09-2.55:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=C1(eta)*S*epsilon:wallSink=P-Dpre:redistribution-once",
+        "reference_error": {
+          "u": {
+            "weighted_RMS": 1.7773845387443582e-05,
+            "L2": 5.0272026404890375e-05
+          },
+          "v": {
+            "weighted_RMS": 1.4685389025033937e-07,
+            "L2": 4.1536552655855985e-07
+          },
+          "k": {
+            "weighted_RMS": 2.8094787261799904e-07,
+            "L2": 7.946405835524857e-07
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 3.4293757051684734e-08,
+            "L2": 6.858751410336945e-08
+          },
+          "Pi": {
+            "weighted_RMS": 2.1414438023420434e-05,
+            "L2": 6.0569177366638536e-05
+          }
+        },
+        "initialization": {
+          "raw_initial_sha256": "d3bca49f77f3ef710015ec7ea43c7eb71c993f389e6c23281d32777b73d6c3cc",
+          "effective_initial_sha256": "d3bca49f77f3ef710015ec7ea43c7eb71c993f389e6c23281d32777b73d6c3cc",
+          "fixed_reference_sha256": "d3bca49f77f3ef710015ec7ea43c7eb71c993f389e6c23281d32777b73d6c3cc",
+          "explicit_boundary_sha256": "40f0c31c84e41b4ec85b4b9a5fd8d3a8145cb0efddc0fefd02eb3c4bcfabdb99",
+          "implicit_boundary_sha256": "40f0c31c84e41b4ec85b4b9a5fd8d3a8145cb0efddc0fefd02eb3c4bcfabdb99",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0
+        },
+        "history": {
+          "order": 1,
+          "steps": 4,
+          "time": 0.0016,
+          "dt": 0.0004,
+          "sha256": "fce8524b6fc974b7d2082e7da2b2f74c3e024d5b336d385a77332da28da96225"
+        },
+        "source_and_constraint_maxima": {
+          "refreshed_trace_defect": 8.070629325566483e-09,
+          "momentum_splitting_identity_defect": 3.0103418596519826e-19,
+          "k_same_state_source_storage_defect": 1.2175484187021563e-16,
+          "epsilon_same_state_source_storage_defect": 4.044582323139284e-18,
+          "corrected_continuity_gauge": 3.627233316720873e-21,
+          "bound_calls": 0.0
+        }
+      }
+    },
+    {
+      "name": "E94E95-Prescribed-Accepted",
+      "status": "pass",
+      "result": {
+        "label": "E-P-Accepted-h0p5",
+        "request_sha256": "49e7e68ba87153694bb6a75c90c140e3027b77aad96900f764dda43f04d64f24",
+        "descriptor": "E94E95:OriginalHighRe-v1:A0=4:As=3lambdaMax(Sd)/norm(Sd):Q=0:q=3.3245064563141753:kappa=0.40999999999999998:policy=Prescribed:sigmaK=1:sigmaE=1.1878733446660723:Ceps1=0.42999999999999999:Ceps2=1.8999999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=C1(eta)*S*epsilon:wallSink=P-Ew(K):frozen-prescribed-zero-reaction",
+        "reference_error": {
+          "u": {
+            "weighted_RMS": 1.8111793254326043e-05,
+            "L2": 5.122788731833084e-05
+          },
+          "v": {
+            "weighted_RMS": 1.4769128795792216e-07,
+            "L2": 4.1773404494888736e-07
+          },
+          "k": {
+            "weighted_RMS": 3.298020884743366e-06,
+            "L2": 9.328211728387563e-06
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 3.2357149099878215e-08,
+            "L2": 6.471429819975643e-08
+          },
+          "Pi": {
+            "weighted_RMS": 2.1511239252315745e-05,
+            "L2": 6.0842972588154806e-05
+          }
+        },
+        "initialization": {
+          "raw_initial_sha256": "e1828781d3b68dd3d88fe0e687bee94f4a55cd8e7a5f282911d96d9838ccbdd2",
+          "effective_initial_sha256": "e1828781d3b68dd3d88fe0e687bee94f4a55cd8e7a5f282911d96d9838ccbdd2",
+          "fixed_reference_sha256": "e1828781d3b68dd3d88fe0e687bee94f4a55cd8e7a5f282911d96d9838ccbdd2",
+          "explicit_boundary_sha256": "2b0eb782f2c10f7bcbfd8d35287a2c5a3e8f32d12ec5d4d50791586942d252df",
+          "implicit_boundary_sha256": "2b0eb782f2c10f7bcbfd8d35287a2c5a3e8f32d12ec5d4d50791586942d252df",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0
+        },
+        "history": {
+          "order": 1,
+          "steps": 4,
+          "time": 0.0016,
+          "dt": 0.0004,
+          "sha256": "00a96869feedee827a5a4189fe2d75d1cc2a36497762816b248a087afeec8b5f"
+        },
+        "source_and_constraint_maxima": {
+          "refreshed_trace_defect": 2.5126949753685735e-08,
+          "momentum_splitting_identity_defect": 9.083998225383844e-19,
+          "k_same_state_source_storage_defect": 2.205250278176571e-16,
+          "epsilon_same_state_source_storage_defect": 5.383741412748333e-18,
+          "corrected_continuity_gauge": 7.331964642332987e-21,
+          "bound_calls": 0.0
+        }
+      }
+    },
+    {
+      "name": "A95-Prescribed-EP",
+      "status": "pass",
+      "result": {
+        "label": "A95-P-EP-h0p5",
+        "request_sha256": "62059c0076705b2af35f344a00aa27afab6089c9f45cfef5032ca5d9b4dc5e5c",
+        "descriptor": "A95:OriginalHighRe-v1:A0=6.5:As=3lambdaMax(Sd)/norm(Sd):Q=2sqrt(1-9Cmu^2(s*tau)^2)[O,S]/(1+6sr*tau^2):q=3.8220004260766363:kappa=0.40999999999999998:policy=Prescribed:sigmaK=1:sigmaE=1.3384963992155885:Ceps1=1.4399999999999999:Ceps2=1.9199999999999999:wall=EPAWF:SCI-original-.09-2.55:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=Ceps1*epsilon*P/k:wallSink=P-Dpre:redistribution-once",
+        "reference_error": {
+          "u": {
+            "weighted_RMS": 1.6643309218642777e-05,
+            "L2": 4.707438723954754e-05
+          },
+          "v": {
+            "weighted_RMS": 1.4389476750541737e-07,
+            "L2": 4.0699586352136906e-07
+          },
+          "k": {
+            "weighted_RMS": 2.2462862383809665e-07,
+            "L2": 6.353456926580811e-07
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 2.589912759789864e-08,
+            "L2": 5.1798255195797274e-08
+          },
+          "Pi": {
+            "weighted_RMS": 2.1125946107769353e-05,
+            "L2": 5.975319900714103e-05
+          }
+        },
+        "initialization": {
+          "raw_initial_sha256": "cf96ecaad0060faf71c80ecdcf2781dfd9f090b749ccfd4280c666bd34459ea0",
+          "effective_initial_sha256": "cf96ecaad0060faf71c80ecdcf2781dfd9f090b749ccfd4280c666bd34459ea0",
+          "fixed_reference_sha256": "cf96ecaad0060faf71c80ecdcf2781dfd9f090b749ccfd4280c666bd34459ea0",
+          "explicit_boundary_sha256": "a21552931867f1147ed7254f679fe500ab76d1d04cf25cc4e90aa6a536c5793c",
+          "implicit_boundary_sha256": "a21552931867f1147ed7254f679fe500ab76d1d04cf25cc4e90aa6a536c5793c",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0
+        },
+        "history": {
+          "order": 1,
+          "steps": 4,
+          "time": 0.0016,
+          "dt": 0.0004,
+          "sha256": "865de5da99aaa08f398d56e0e64b7a8c1dca48462899c5edd631ec14a640dda0"
+        },
+        "source_and_constraint_maxima": {
+          "refreshed_trace_defect": 6.4871979799053716e-09,
+          "momentum_splitting_identity_defect": 5.526526021364786e-19,
+          "k_same_state_source_storage_defect": 3.043385144319965e-16,
+          "epsilon_same_state_source_storage_defect": 6.085084693074894e-18,
+          "corrected_continuity_gauge": 3.091862998311316e-17,
+          "bound_calls": 0.0
+        }
+      }
+    },
+    {
+      "name": "A93-Prescribed-Accepted",
+      "status": "pass",
+      "result": {
+        "label": "A93-P-Accepted-h0p5",
+        "request_sha256": "ac01732a4e58fbc317288c150854942983a902e2c41114382c2778438839c4c7",
+        "descriptor": "A93:OriginalHighRe-v1:Cmu=(2/3)/(1.25+eta+.9xi):Q=(3devS2-19devO2+15[O,S])/(1000+eta^3):q=3.4012654173971675:kappa=0.40999999999999998:policy=Prescribed:sigmaK=1:sigmaE=1.1911514930509661:Ceps1=1.4399999999999999:Ceps2=1.9199999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=Ceps1*epsilon*P/k:wallSink=P-Ew(K):frozen-prescribed-zero-reaction",
+        "reference_error": {
+          "u": {
+            "weighted_RMS": 1.810676394165823e-05,
+            "L2": 5.121366227396237e-05
+          },
+          "v": {
+            "weighted_RMS": 1.4796066140135123e-07,
+            "L2": 4.184959481029684e-07
+          },
+          "k": {
+            "weighted_RMS": 3.225743197866776e-06,
+            "L2": 9.123779558311906e-06
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 4.6720326633277025e-08,
+            "L2": 9.344065326655405e-08
+          },
+          "Pi": {
+            "weighted_RMS": 2.1818582499777834e-05,
+            "L2": 6.171227056588416e-05
+          }
+        },
+        "initialization": {
+          "raw_initial_sha256": "1d53d1812d4b39c667b6b2330de444ef4f42e52744a39fac56c29577644efecf",
+          "effective_initial_sha256": "1d53d1812d4b39c667b6b2330de444ef4f42e52744a39fac56c29577644efecf",
+          "fixed_reference_sha256": "1d53d1812d4b39c667b6b2330de444ef4f42e52744a39fac56c29577644efecf",
+          "explicit_boundary_sha256": "092c87d50630ed10e62a5f0ed46e687543cbf74e62520412f3c1235a8065eea3",
+          "implicit_boundary_sha256": "092c87d50630ed10e62a5f0ed46e687543cbf74e62520412f3c1235a8065eea3",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0
+        },
+        "history": {
+          "order": 1,
+          "steps": 4,
+          "time": 0.0016,
+          "dt": 0.0004,
+          "sha256": "088db5e2b126b3f4e4e79a614e48982247f3db5162d42a8640f8fc6728e960d1"
+        },
+        "source_and_constraint_maxima": {
+          "refreshed_trace_defect": 2.445538082301163e-08,
+          "momentum_splitting_identity_defect": 5.42706582451141e-19,
+          "k_same_state_source_storage_defect": 1.9471699270600263e-16,
+          "epsilon_same_state_source_storage_defect": 4.450311104874094e-18,
+          "corrected_continuity_gauge": 9.345180491196965e-18,
+          "bound_calls": 0.0
+        }
+      }
+    },
+    {
+      "name": "A95-p5-current-gradient-cache",
+      "status": "pass",
+      "result": {
+        "status": "pass",
+        "state_history_and_audit_bitwise_equal": true,
+        "source_labels": [
+          "A95-N-EP-h0p5",
+          "A95-N-EP-h0p5-cache-off"
+        ]
+      }
+    },
+    {
+      "name": "ordinary-reviewed-CLS-restart",
+      "status": "pass",
+      "result": {
+        "status": "pass",
+        "bitwise_state_history_equal": true,
+        "baseline": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/cls-reviewed-whole4",
+        "reference_source": "99112a1cbb9c5448dd3de69f50600bf91465062b",
+        "native_continuation": "ec41eab417bc3fdb1f0f05435e9a7a0a19d0bd42452b1bb543ae2f92e0cb4b16"
+      }
+    }
+  ],
+  "coverage": {
+    "status": "pass",
+    "missing": [],
+    "unexpected": [],
+    "duplicates": [],
+    "expected_count": 6,
+    "actual_count": 6
+  }
+}

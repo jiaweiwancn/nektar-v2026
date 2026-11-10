@@ -1,0 +1,57 @@
+{
+  "status": "pass",
+  "execution_status": "completed",
+  "reuse_status": "verified",
+  "numerical_campaign_status": "fail",
+  "numerical_failure_reason": "two-point, T=.0001 Pi temporal order outside original band; retained, not pilot evidence",
+  "guards": [
+    {
+      "name": "changed-runtime",
+      "status": "pass",
+      "exit_code": 1,
+      "intended_rejection": "immutable request mismatch",
+      "aggregate_unchanged": true
+    },
+    {
+      "name": "changed-quadrature",
+      "status": "pass",
+      "exit_code": 1,
+      "intended_rejection": "immutable request mismatch",
+      "aggregate_unchanged": true
+    },
+    {
+      "name": "changed-perturbation",
+      "status": "pass",
+      "exit_code": 1,
+      "intended_rejection": "immutable request mismatch",
+      "aggregate_unchanged": true
+    },
+    {
+      "name": "changed-horizon",
+      "status": "pass",
+      "exit_code": 1,
+      "intended_rejection": "immutable request mismatch",
+      "aggregate_unchanged": true
+    },
+    {
+      "name": "changed-boundary",
+      "status": "pass",
+      "exit_code": 1,
+      "intended_rejection": "immutable request mismatch",
+      "aggregate_unchanged": true
+    }
+  ],
+  "completed_cases": 3,
+  "only_missing_native_cases_completed": [
+    1,
+    2
+  ],
+  "existing_case0_seal_verified": true,
+  "repeat_resume_reran_native_cases": false,
+  "artifacts_and_original_receipt_unchanged": true,
+  "expected_negative": {
+    "exit_code": 1,
+    "required_failed_field": "Pi",
+    "order": -0.7803356083475652
+  }
+}

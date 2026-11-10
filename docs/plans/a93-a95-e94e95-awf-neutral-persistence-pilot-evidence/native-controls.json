@@ -1,0 +1,403 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "name": "compatible-restart-Accepted",
+      "status": "pass",
+      "result": {
+        "bitwise_equal": true,
+        "steps": 16
+      }
+    },
+    {
+      "name": "complete-rollback-Accepted",
+      "status": "pass",
+      "result": {
+        "coupled_and_native_history_bitwise_equal": true
+      }
+    },
+    {
+      "name": "cache-on-off-Accepted",
+      "status": "pass",
+      "result": {
+        "bitwise_equal": true
+      }
+    },
+    {
+      "name": "time-refinement-Accepted",
+      "status": "pass",
+      "result": {
+        "common_time": 0.0015999999999999992,
+        "physical_sample_comparison": {
+          "metric": "weighted_RMS and true L2; one common pressure gauge",
+          "time": 0.0016000000000000005,
+          "global_pressure_gauge_shifts": [
+            -5.373365259144466e-21,
+            6.7233240188310074e-21
+          ],
+          "fields": {
+            "values_0": {
+              "weighted_RMS": 2.419529211016798e-07,
+              "L2": 6.843462049555661e-07
+            },
+            "values_1": {
+              "weighted_RMS": 2.511054451322314e-09,
+              "L2": 7.102334521834696e-09
+            },
+            "values_2": {
+              "weighted_RMS": 9.338466923737376e-08,
+              "L2": 2.6413173150643904e-07
+            },
+            "values_3": {
+              "weighted_RMS": 1.0520457635793404e-09,
+              "L2": 2.104091527158681e-09
+            },
+            "values_4": {
+              "weighted_RMS": 2.782776776691699e-07,
+              "L2": 5.565553553383398e-07
+            },
+            "values_5": {
+              "weighted_RMS": 2.0852812937583468e-07,
+              "L2": 4.170562587516694e-07
+            }
+          }
+        },
+        "drift": [
+          0.0015999999999999992,
+          32,
+          0.0006874424808933683,
+          -0.0,
+          0.00010731832379243166,
+          1.10013555094647e-06,
+          2.198122309088716e-05,
+          6.547104512043557e-07,
+          0.0006874424808933683,
+          0.00026996611025848085
+        ]
+      }
+    },
+    {
+      "name": "spatial-quadrature-refinement-Accepted",
+      "status": "pass",
+      "result": {
+        "coarse_initial_residual": [
+          0.490433921719345,
+          4.2655225557796354e-15,
+          0.3712921556014947,
+          0.001699869352317466,
+          2.3963433591505e-16,
+          4.337158290331966e-17,
+          0,
+          0
+        ],
+        "fine_initial_residual": [
+          0.2048065986033461,
+          5.5454988657124385e-15,
+          0.0967700268177728,
+          0.00040902801045283296,
+          1.1250747290460352e-16,
+          2.1288805044520043e-17,
+          0,
+          0
+        ],
+        "residual_ratios": [
+          0.4176028401243999,
+          null,
+          0.26063041019814975,
+          0.24062320430402306,
+          null,
+          null,
+          null,
+          null
+        ],
+        "coarse_drift": [
+          0.0016000000000000005,
+          16,
+          0.0006876205896350707,
+          -0.0,
+          0.00010679550359734287,
+          1.0993769290323641e-06,
+          2.1823385679137896e-05,
+          6.479347707070897e-07,
+          0.0006876205896350707,
+          0.0002711383109066011
+        ],
+        "fine_drift": [
+          0.0016000000000000005,
+          16,
+          4.4469362870006535e-05,
+          -0.0,
+          2.2572704103596577e-05,
+          1.0562857347463421e-07,
+          4.5785896470560066e-06,
+          1.0209042839725144e-07,
+          4.4469362870006535e-05,
+          1.7734072948970744e-05
+        ]
+      }
+    },
+    {
+      "name": "mild-admissible-perturbation-Accepted",
+      "status": "pass",
+      "result": {
+        "steps": 8,
+        "amplitude_over_K0": 0.005,
+        "drift": [
+          0.0008000000000000001,
+          8,
+          0.0017933307966294832,
+          -0.0,
+          6.037754696912174e-05,
+          5.59866391351868e-07,
+          0.0017933307966294832,
+          2.64271212966666e-07,
+          0.0007152773182989882,
+          0.00027822429010443525
+        ],
+        "accepted_endpoint_kernel_unchanged": true
+      }
+    },
+    {
+      "name": "compatible-restart-EP",
+      "status": "pass",
+      "result": {
+        "bitwise_equal": true,
+        "steps": 16
+      }
+    },
+    {
+      "name": "complete-rollback-EP",
+      "status": "pass",
+      "result": {
+        "coupled_and_native_history_bitwise_equal": true
+      }
+    },
+    {
+      "name": "cache-on-off-EP",
+      "status": "pass",
+      "result": {
+        "bitwise_equal": true
+      }
+    },
+    {
+      "name": "time-refinement-EP",
+      "status": "pass",
+      "result": {
+        "common_time": 0.0015999999999999992,
+        "physical_sample_comparison": {
+          "metric": "weighted_RMS and true L2; one common pressure gauge",
+          "time": 0.0016000000000000005,
+          "global_pressure_gauge_shifts": [
+            -3.30872245021211e-21,
+            4.235164736271501e-21
+          ],
+          "fields": {
+            "values_0": {
+              "weighted_RMS": 2.418914256634286e-07,
+              "L2": 6.841722695899682e-07
+            },
+            "values_1": {
+              "weighted_RMS": 2.5138593139291032e-09,
+              "L2": 7.1102678713129246e-09
+            },
+            "values_2": {
+              "weighted_RMS": 2.0802745842746973e-08,
+              "L2": 5.8839050610826584e-08
+            },
+            "values_3": {
+              "weighted_RMS": 7.872430651835741e-10,
+              "L2": 1.5744861303671484e-09
+            },
+            "values_4": {
+              "weighted_RMS": 2.7723448819709247e-07,
+              "L2": 5.544689763941849e-07
+            },
+            "values_5": {
+              "weighted_RMS": 2.0962158979795902e-07,
+              "L2": 4.192431795959181e-07
+            }
+          }
+        },
+        "drift": [
+          0.0015999999999999992,
+          32,
+          0.0006866229632796856,
+          -0.0,
+          0.00010695803347333036,
+          1.0993699516964936e-06,
+          4.461381292157941e-06,
+          6.033032792252816e-07,
+          0.0006866229632796856,
+          0.00026901786768776694
+        ]
+      }
+    },
+    {
+      "name": "spatial-quadrature-refinement-EP",
+      "status": "pass",
+      "result": {
+        "coarse_initial_residual": [
+          0.49048179359730704,
+          3.4520091337972475e-15,
+          0.019203175796434744,
+          0.00169986935128638,
+          2.3844177398204567e-16,
+          4.3370848468126894e-17,
+          0,
+          0
+        ],
+        "fine_initial_residual": [
+          0.2048232186273815,
+          3.51825639659383e-15,
+          0.008818470684832524,
+          0.0004090280127406479,
+          1.1042039137912195e-16,
+          2.128881108682164e-17,
+          0,
+          0
+        ],
+        "residual_ratios": [
+          0.41759596645812397,
+          null,
+          0.459219390496324,
+          0.24062320579585425,
+          null,
+          null,
+          null,
+          null
+        ],
+        "coarse_drift": [
+          0.0016000000000000005,
+          16,
+          0.0006868023579031276,
+          -0.0,
+          0.00010643433921397415,
+          1.09859530852855e-06,
+          4.457382636223997e-06,
+          5.996529515470009e-07,
+          0.0006868023579031276,
+          0.00027019744549876696
+        ],
+        "fine_drift": [
+          0.0016000000000000005,
+          16,
+          4.432250849902256e-05,
+          -0.0,
+          2.241688453943242e-05,
+          1.055277548848121e-07,
+          1.091359048746191e-06,
+          1.0264906493437004e-07,
+          4.432250849902256e-05,
+          1.7587624628248945e-05
+        ]
+      }
+    },
+    {
+      "name": "mild-admissible-perturbation-EP",
+      "status": "pass",
+      "result": {
+        "steps": 8,
+        "amplitude_over_K0": 0.005,
+        "drift": [
+          0.0008000000000000001,
+          8,
+          0.0017932665200139568,
+          -0.0,
+          6.0235282200974e-05,
+          5.596470885584514e-07,
+          0.0017932665200139568,
+          2.6384649313270175e-07,
+          0.0007148160168682623,
+          0.0002777335702312314
+        ],
+        "accepted_endpoint_kernel_unchanged": null
+      }
+    },
+    {
+      "name": "changed-model-restart-rejection",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "changed-calibration-restart-rejection",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "changed-wall-restart-rejection",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "unsupported-nonlinear",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "unsupported-inner-stress",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "unsupported-regularized",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "native-EP-switch-and-baseline",
+      "status": "pass",
+      "result": {
+        "steps": 2,
+        "dt": 1e-06,
+        "reason": "baseline prescribed sink is stiff on its molecular cutoff; structural switch test, not an equilibrium claim",
+        "unanchored": true,
+        "chi_plateau_transition_baseline": true,
+        "report_sha256": "42e5a41c566caa4a02e9228337b2e131c6f54a163dc515694007f17909e09f69"
+      }
+    },
+    {
+      "name": "unsupported-curved",
+      "status": "pass",
+      "result": {
+        "rejected": true,
+        "ranks": 1
+      }
+    },
+    {
+      "name": "unsupported-3D",
+      "status": "pass",
+      "result": {
+        "rejected": true,
+        "ranks": 1
+      }
+    },
+    {
+      "name": "unsupported-MPI",
+      "status": "pass",
+      "result": {
+        "rejected": true,
+        "ranks": 2
+      }
+    }
+  ],
+  "coverage": {
+    "status": "pass",
+    "missing": [],
+    "unexpected": [],
+    "duplicates": [],
+    "expected_count": 22,
+    "actual_count": 22
+  }
+}

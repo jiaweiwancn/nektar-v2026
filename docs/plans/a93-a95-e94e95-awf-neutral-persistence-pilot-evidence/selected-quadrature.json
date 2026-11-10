@@ -1,0 +1,265 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "wall": "EP",
+      "status": "pass",
+      "same_coefficient_and_effective_boundary_inputs": true,
+      "source_quadrature": [
+        48,
+        12,
+        12,
+        12,
+        12
+      ],
+      "target_quadrature": [
+        64,
+        16,
+        16,
+        16,
+        16
+      ],
+      "actual_target_quadrature": {
+        "wall_normal": 64,
+        "wall_tangential": 16,
+        "outer_volume": 16,
+        "mass_override": 16,
+        "mass_default": "max(8,p+3) per native field",
+        "interface": 16,
+        "reference_projection": "Gauss32 on native radial elements, supplied breakpoints and geometric 1e-4*1.5^j subpanels",
+        "inner_volume_points": 29696,
+        "outer_volume_points": 1280
+      },
+      "gates": [
+        {
+          "metric": "coupled_norms",
+          "index": 0,
+          "quadrature_change": 7.807643420676413e-14,
+          "spatial_difference": 0.021765494853353218,
+          "limit": 0.00021765494853353217,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 1,
+          "quadrature_change": 1.5568594372722746e-14,
+          "spatial_difference": 1.3898103999642523e-15,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 2,
+          "quadrature_change": 7.686342881618735e-15,
+          "spatial_difference": 0.0010206440286227782,
+          "limit": 1.0206440286227782e-05,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 3,
+          "quadrature_change": 4.142197110486301e-14,
+          "spatial_difference": 9.81192641046071e-06,
+          "limit": 9.811926410460711e-08,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 4,
+          "quadrature_change": 7.754225372672627e-17,
+          "spatial_difference": 1.0457726636488882e-16,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 5,
+          "quadrature_change": 1.4830062639672883e-17,
+          "spatial_difference": 7.50593930345391e-18,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 6,
+          "quadrature_change": 0,
+          "spatial_difference": 0,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 7,
+          "quadrature_change": 0,
+          "spatial_difference": 0,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 0,
+          "quadrature_change": 8.122625835826902e-15,
+          "spatial_difference": 0.0010204825536462396,
+          "limit": 1.0204825536462396e-05,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 1,
+          "quadrature_change": 9.907806521841166e-16,
+          "spatial_difference": 2.5070447311210687e-08,
+          "limit": 2.5070447311210687e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 2,
+          "quadrature_change": 6.3260854718430026e-15,
+          "spatial_difference": 2.4031430283941542e-06,
+          "limit": 2.4031430283941544e-08,
+          "status": "pass"
+        }
+      ],
+      "initialization_receipt": {
+        "raw_initial_sha256": "bc143345f7f22684f7c1988ea1b20f002e0081e958dd6154fe27f57ce4524742",
+        "effective_initial_sha256": "bc143345f7f22684f7c1988ea1b20f002e0081e958dd6154fe27f57ce4524742",
+        "fixed_reference_sha256": "bc143345f7f22684f7c1988ea1b20f002e0081e958dd6154fe27f57ce4524742",
+        "explicit_boundary_sha256": "2e154cc3e68f11260ea240439c33546fcf20d6b3e361d6dc4bfee23561e8c437",
+        "implicit_boundary_sha256": "2e154cc3e68f11260ea240439c33546fcf20d6b3e361d6dc4bfee23561e8c437",
+        "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+        "raw_effective_max_difference": 0,
+        "source_target_boundary_max_difference": 0
+      }
+    },
+    {
+      "wall": "Accepted",
+      "status": "pass",
+      "same_coefficient_and_effective_boundary_inputs": true,
+      "source_quadrature": [
+        48,
+        12,
+        12,
+        12,
+        12
+      ],
+      "target_quadrature": [
+        64,
+        16,
+        16,
+        16,
+        16
+      ],
+      "actual_target_quadrature": {
+        "wall_normal": 64,
+        "wall_tangential": 16,
+        "outer_volume": 16,
+        "mass_override": 16,
+        "mass_default": "max(8,p+3) per native field",
+        "interface": 16,
+        "reference_projection": "Gauss32 on native radial elements, supplied breakpoints and geometric 1e-4*1.5^j subpanels",
+        "inner_volume_points": 29696,
+        "outer_volume_points": 1280
+      },
+      "gates": [
+        {
+          "metric": "coupled_norms",
+          "index": 0,
+          "quadrature_change": 4.987676938128516e-14,
+          "spatial_difference": 0.021143136115377104,
+          "limit": 0.00021143136115377105,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 1,
+          "quadrature_change": 2.6045413908246066e-16,
+          "spatial_difference": 9.240720985549972e-15,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 2,
+          "quadrature_change": 6.3976601794024646e-15,
+          "spatial_difference": 0.0034731465276032214,
+          "limit": 3.473146527603222e-05,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 3,
+          "quadrature_change": 4.0636276895517076e-14,
+          "spatial_difference": 9.811910835181605e-06,
+          "limit": 9.811910835181605e-08,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 4,
+          "quadrature_change": 7.83967165816443e-17,
+          "spatial_difference": 1.0571686505818775e-16,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 5,
+          "quadrature_change": 1.4829628671562615e-17,
+          "spatial_difference": 7.506764771247804e-18,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 6,
+          "quadrature_change": 0,
+          "spatial_difference": 0,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 7,
+          "quadrature_change": 0,
+          "spatial_difference": 0,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 0,
+          "quadrature_change": 6.38378239159465e-15,
+          "spatial_difference": 0.0034731302036525996,
+          "limit": 3.4731302036525995e-05,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 1,
+          "quadrature_change": 8.787244930699179e-16,
+          "spatial_difference": 2.508107128769523e-08,
+          "limit": 2.508107128769523e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 2,
+          "quadrature_change": 4.739443683836981e-15,
+          "spatial_difference": 3.187205123144115e-06,
+          "limit": 3.187205123144115e-08,
+          "status": "pass"
+        }
+      ],
+      "initialization_receipt": {
+        "raw_initial_sha256": "55d147f51b13053f9c1a1553afe53270ef6a6db16634b6205afcf09eb833e8e9",
+        "effective_initial_sha256": "55d147f51b13053f9c1a1553afe53270ef6a6db16634b6205afcf09eb833e8e9",
+        "fixed_reference_sha256": "55d147f51b13053f9c1a1553afe53270ef6a6db16634b6205afcf09eb833e8e9",
+        "explicit_boundary_sha256": "0b89b4b9eace508f0160896d384bebae463c7caa43f3cdee1e93704b4ce620f7",
+        "implicit_boundary_sha256": "0b89b4b9eace508f0160896d384bebae463c7caa43f3cdee1e93704b4ce620f7",
+        "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+        "raw_effective_max_difference": 0,
+        "source_target_boundary_max_difference": 2.0508594822388204e-13
+      }
+    }
+  ]
+}

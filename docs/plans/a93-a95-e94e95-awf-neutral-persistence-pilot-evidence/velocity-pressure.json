@@ -1,0 +1,264 @@
+{
+  "status": "pass",
+  "amplitude": 2e-05,
+  "initial_divergence_L2": [
+    8.541241412701525e-16,
+    1.8620954164575183e-16
+  ],
+  "actual_initial_identity": {
+    "raw_initial_sha256": "77aebe75bf3c57447ea6197b8aa7b3eb88653d7fdf255d69db9c1f96b6f60a9b",
+    "effective_initial_sha256": "77aebe75bf3c57447ea6197b8aa7b3eb88653d7fdf255d69db9c1f96b6f60a9b",
+    "fixed_reference_sha256": "a62ad7983009a192ae017653636864cc75764550759f7176c99bd54c65c2b31c",
+    "explicit_boundary_sha256": "d3f11f37c5537dfc1617a3ba363374c2185b71e0da291e5c7a6410f7f1df68b4",
+    "implicit_boundary_sha256": "d3f11f37c5537dfc1617a3ba363374c2185b71e0da291e5c7a6410f7f1df68b4",
+    "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+    "raw_effective_max_difference": 0,
+    "source_target_boundary_max_difference": 0
+  },
+  "initial_native_history_sha256": "3309ad5c09f06e6f899542bab0e2f6edacbe04869831a0def2cdf9c6d7de00f6",
+  "observations": [
+    {
+      "time": 0.0016,
+      "theta": 0.00032,
+      "perturbed_minus_unperturbed_weighted_RMS": {
+        "u": {
+          "weighted_RMS": 3.495640932318701e-05,
+          "L2": 9.887165631343273e-05
+        },
+        "v": {
+          "weighted_RMS": 3.497803902031897e-05,
+          "L2": 9.89328343355008e-05
+        },
+        "k": {
+          "weighted_RMS": 3.605103155675444e-08,
+          "L2": 1.0196771553020513e-07
+        },
+        "epsilon_outer": {
+          "weighted_RMS": 4.533938322223e-08,
+          "L2": 9.067876644445997e-08
+        },
+        "Pi": {
+          "weighted_RMS": 0.0003110131566778487,
+          "L2": 0.000879678048500564
+        }
+      },
+      "outer_normal_stress_response_Rxx_Ryy_Rzz_scaled": [
+        0.00016093722024438685,
+        1.059442442051091e-06,
+        0.0001609934644197793
+      ],
+      "whole_patch_Rzz_response_scaled": 0.00012224554401484334,
+      "independent_stress_vs_native_traction_max_error": 1.3877787807814457e-16,
+      "physical_extrema": {
+        "over_all_audited_states_and_stages": {
+          "inner_k": {
+            "value": 0.6115176084845333,
+            "time": 0.0016,
+            "stage": "accepted",
+            "location": [
+              0.5917001814331422,
+              0,
+              0.04
+            ],
+            "side": "inner",
+            "geometry": null
+          },
+          "outer_k": {
+            "value": 0.6115200328174072,
+            "time": 0.0016,
+            "stage": "accepted",
+            "location": [
+              0.7699026741943047,
+              0,
+              2.9760293140926186
+            ],
+            "side": "outer",
+            "geometry": null
+          },
+          "outer_epsilon": {
+            "value": 0.039597981953638395,
+            "time": 0,
+            "stage": "accepted",
+            "location": [
+              -1,
+              0,
+              4
+            ],
+            "side": "outer",
+            "geometry": null
+          },
+          "inner_covariance": {
+            "value": 0.24705777801460163,
+            "time": 0.0016,
+            "stage": "accepted",
+            "location": [
+              1,
+              0,
+              0.1
+            ],
+            "side": 0,
+            "geometry": 7
+          },
+          "outer_covariance": {
+            "value": 0.17726415843623947,
+            "time": 0,
+            "stage": "accepted",
+            "location": [
+              0,
+              0,
+              4
+            ],
+            "side": 0,
+            "geometry": 16
+          },
+          "A95_radicand": {
+            "value": 0.6917658203186192,
+            "time": 0,
+            "stage": "accepted",
+            "location": [
+              0,
+              0,
+              4
+            ],
+            "side": 0,
+            "geometry": 16
+          },
+          "required_cutoff_ratio": {
+            "value": 5.315260858772072,
+            "time": 0.0016,
+            "stage": "accepted",
+            "location": [
+              -0.1252334085114689,
+              0,
+              2
+            ],
+            "side": "wall_profile",
+            "geometry": null
+          }
+        }
+      }
+    },
+    {
+      "time": 0.016,
+      "theta": 0.0032,
+      "perturbed_minus_unperturbed_weighted_RMS": {
+        "u": {
+          "weighted_RMS": 3.286442426163863e-05,
+          "L2": 9.295462902078546e-05
+        },
+        "v": {
+          "weighted_RMS": 3.325187040773049e-05,
+          "L2": 9.405049220977005e-05
+        },
+        "k": {
+          "weighted_RMS": 3.3109917346457005e-07,
+          "L2": 9.364898832082337e-07
+        },
+        "epsilon_outer": {
+          "weighted_RMS": 3.9056334042440307e-07,
+          "L2": 7.811266808488059e-07
+        },
+        "Pi": {
+          "weighted_RMS": 0.00034455129777824766,
+          "L2": 0.0009745382365024971
+        }
+      },
+      "outer_normal_stress_response_Rxx_Ryy_Rzz_scaled": [
+        0.00014781841128090644,
+        7.520022801395356e-06,
+        0.00014832060731810695
+      ],
+      "whole_patch_Rzz_response_scaled": 0.00011320492295146742,
+      "independent_stress_vs_native_traction_max_error": 1.3877787807814457e-16,
+      "physical_extrema": {
+        "over_all_audited_states_and_stages": {
+          "inner_k": {
+            "value": 0.611514958027487,
+            "time": 0.0096,
+            "stage": "accepted",
+            "location": [
+              -0.5917001814331423,
+              0,
+              0.09732526186760156
+            ],
+            "side": "inner",
+            "geometry": null
+          },
+          "outer_k": {
+            "value": 0.6115197751554738,
+            "time": 0.01599999999999999,
+            "stage": "accepted",
+            "location": [
+              0.7699026741943047,
+              0,
+              2.8968294885716546
+            ],
+            "side": "outer",
+            "geometry": null
+          },
+          "outer_epsilon": {
+            "value": 0.039597981953638395,
+            "time": 0.0016,
+            "stage": "accepted",
+            "location": [
+              -1,
+              0,
+              4
+            ],
+            "side": "outer",
+            "geometry": null
+          },
+          "inner_covariance": {
+            "value": 0.24705400672176148,
+            "time": 0.01599999999999999,
+            "stage": "accepted",
+            "location": [
+              1,
+              0,
+              0.1
+            ],
+            "side": 0,
+            "geometry": 7
+          },
+          "outer_covariance": {
+            "value": 0.1772645821053471,
+            "time": 0.0016,
+            "stage": "accepted",
+            "location": [
+              0,
+              0,
+              4
+            ],
+            "side": 0,
+            "geometry": 16
+          },
+          "A95_radicand": {
+            "value": 0.6917701537236066,
+            "time": 0.0016,
+            "stage": "accepted",
+            "location": [
+              0,
+              0,
+              4
+            ],
+            "side": 0,
+            "geometry": 16
+          },
+          "required_cutoff_ratio": {
+            "value": 5.315260838097008,
+            "time": 0.01599999999999999,
+            "stage": "accepted",
+            "location": [
+              0.1252334085114688,
+              0,
+              2
+            ],
+            "side": "wall_profile",
+            "geometry": null
+          }
+        }
+      }
+    }
+  ],
+  "scope": "bounded response, no monotone decay or global stability assertion"
+}

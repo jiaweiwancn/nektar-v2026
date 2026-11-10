@@ -77,8 +77,9 @@ this package.
 
 ## Results and provenance
 
-In progress. Gates, coverage, first failures and the next justified experiment
-will be completed after the bounded evolution work.
+Completed through the bounded native pilot. The declared field/traction,
+admissibility and verification gates pass. Full native spatial-residual
+qualification remains a separate unresolved gate; see the final account below.
 
 ### First p5 advance and diagnostic extension
 
@@ -237,3 +238,140 @@ The selected coefficient-policy/cache/CLS controls are reproduced by
 /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/cls-reviewed-whole4`.
 Exact inputs, commands, request hashes and source/native-history locations are
 retained in the evidence index.
+
+
+## Final numerical account
+
+All six natural-kappa configurations complete T=.0016,.016,.05,.1 with dt=.0004
+and genuine same-method checkpoint continuation. The last horizon has 250 accepted
+steps and theta=.02. At every accepted candidate the native monitor checks the
+predeclared reference-error, vertical-velocity, mean wall-traction and full
+interface-traction budgets; all mandatory scalar, covariance, radicand, cutoff
+and finite-evaluation checks remain active at the audited stages.
+
+The following are terminal weighted physical RMS errors on the declared fixed
+scales. These are errors against the analytical reference, not only changes from
+the initial polynomial state. True L2, D_f, initial/evolved unanchored alpha=0
+residuals and native time-discrete residuals are separate in the machine receipt.
+
+| Model | Wall | E_u | E_w | E_k | E_epsilon | E_Pi | Traction jump RMS/u_star^2 |
+|---|---|---:|---:|---:|---:|---:|---:|
+| A93 | Accepted | 2.092e-05 | 1.480e-06 | 3.778e-06 | 3.003e-07 | 2.487e-05 | 5.572e-04 |
+| A93 | EP | 2.117e-05 | 1.521e-06 | 1.721e-06 | 3.217e-07 | 2.564e-05 | 5.571e-04 |
+| A95 | Accepted | 2.209e-05 | 1.309e-06 | 3.758e-06 | 1.501e-07 | 2.308e-05 | 5.568e-04 |
+| A95 | EP | 1.986e-05 | 1.023e-06 | 1.299e-06 | 1.350e-07 | 1.778e-05 | 5.578e-04 |
+| E94E95 | Accepted | 2.169e-05 | 1.434e-06 | 4.143e-06 | 1.437e-07 | 2.444e-05 | 5.562e-04 |
+| E94E95 | EP | 2.135e-05 | 1.382e-06 | 1.730e-06 | 1.538e-07 | 2.351e-05 | 5.564e-04 |
+
+The finer E94E95 accepted-wall comparator also reaches .1. The base/fine
+comparisons and independent dt=.0002 histories pass the predeclared uncertainty
+gates for **all six natural configurations** at .0016 and .016, with matching
+actual raw/effective/reference/boundary identities for the temporal pairs.
+No new temporal order is claimed at .1. The historical eight epsilon-order
+observations remain unresolved under their original criterion.
+
+Across the six primary pilots and all their audited stages, minima are:
+inner k .5319135, outer k .5319208, outer epsilon .03735493, inner covariance
+.1939924, outer covariance .1772787, actual A95 radicand .6919086, and required
+cutoff budget ratio 5.315261. Locations, native sides, stages and times are in
+the receipts. Additional fixed native quadrature/face observations provide
+scalar maxima and reconstructed one-sweep scalar-stage ranges; they are finite
+sampling evidence, not a global positivity proof.
+
+Source/storage agreement defects stay below 4.83e-16; pressure/continuity/gauge
+row defects stay below 6.81e-17. The refreshed epsilon-trace lag reaches
+2.484e-8 and is retained as declared splitting error. The frozen imposed trace
+is not repaired after the k solve. Native outer-epsilon constant-test load minus
+prescribed-row reaction is below 1.3e-16 at .1. All bound/correction calls,
+activations and signed/absolute correction integrals are zero. Momentum/k weak
+load/reaction balances, conservative shared rows, pointwise k flux and full
+traction diagnostics remain separate.
+
+Both selected p5 wall quadrature controls hold the coefficient vector and live
+boundary map fixed while raising 48/12/12/12/12 to 64/16/16/16/16. The largest
+reported norm change is 7.81e-14, below the declared 1% spatial-difference
+criterion and absolute floor. Fresh independent analytical weak balances pass
+against the actual native test functions on all six selected base spaces and
+the finer accepted-wall space. Accepted-wall diffusion and nonzero source
+moments cancel together; no production residual is subtracted.
+
+Selected prescribed-kappa (.41) controls pass at .0016 for E94E95/EP,
+E94E95/accepted, A95/EP and A93/accepted. The other two prescribed combinations
+receive no new pilot trajectory; their previous short twelve-case evidence is
+reused only within its recorded scope. A95 p5 cache-on/off states, native
+histories and diagnostics are bitwise equal. An ordinary CLS checkpoint from
+reviewed 99112a1 continues bitwise to its original four-step terminal state and
+history. The affected 22 native controls, targeted 4/4 CTest selection and
+extended 8/8 CTest selection pass. The expanded spectrum/domain/ground suite
+passes 724 assertions. Thirty governing-source files and the independent
+reference/weak-oracle semantic ASTs are unchanged from reviewed 1297301,
+justifying reuse of the independent constitutive/wall kernel evidence.
+
+The trace-compatible A95 velocity perturbation uses the declared piecewise
+streamfunction with amplitude 2e-5. Its actual native initial divergence L2 is
+at most 8.55e-16. At .0016/.016 the pressure response relative to the unperturbed
+numerical solution is 3.110e-4/3.446e-4 on u_star^2; outer Rzz response is
+1.610e-4/1.483e-4. Independent outer Rzz agrees with native full normal-traction
+reconstruction below 1e-12; all three outer normal-stress responses are retained. This is a bounded response test, without a decay or
+stability claim. The one/two-column p4 control at .0016 has scaled differences
+(u,w,k,epsilon,Pi)=(3.917e-6,5.078e-7,8.866e-7,1.923e-8,5.544e-5), using one
+common partition-resolving physical grid. It does not qualify a multi-column
+.1 pilot or an open-outflow ABL.
+
+## Failed, unresolved and unattempted gates
+
+The exploratory p4 cases first fail the declared interface-traction accuracy
+budget at T=.0028; the last committed state is .0024. Their scalar and covariance
+domains remain admissible. These are preserved numerical-accuracy failures.
+The initial cubic-only p5 check is an implementation limitation corrected by
+the verified p4/p5 polynomial-extremum extension. Full h1/p5 evolution remains
+explicitly rejected at 3801 unknowns by the unchanged 3000-unknown backend guard.
+
+**Evolved field accuracy is demonstrated; full unanchored spatial-residual
+resolution is not.** For E94E95 accepted wall, initial inner-k dual norms are
+.100833 (base p5), .097360 (Interface8V1), and .015894 (a frozen eight-interval
+near-wall refinement). The latter isolates the near-wall/cutoff representation
+contribution while the independent weak oracle still passes. Momentum norms
+are .110556/.089413/.088743. The existing frozen global h1/p5 audit lowers
+momentum to .012004, inner k to .010211 and outer epsilon to 1.085e-6, but that
+space cannot advance under the current backend limit. Thus the unresolved
+initial dual-residual behavior is not concealed by the successful field-error
+pilot or small time-discrete stage residuals. No continuum closure or wall
+source was changed to address it.
+
+Two prematurely requested comparisons correctly returned a nonzero incomplete-
+endpoint result; completed comparisons were written to new receipts. The first
+streamwise analysis correctly rejected unequal point-count metadata before
+orders and mesh counts were separated; its corrected analysis reuses the same
+physical trajectories. All original logs and numerical failure receipts remain
+on Linux. The known two-point/T=.0001 reuse fixture's failed Pi order and exit 1
+are retained; they are not relabelled as numerical convergence.
+
+Longer persistence, full temporal order at the new horizons, open-outflow or
+physical benchmarks, curved geometry, true 3D, MPI and complete nonlinear/action
+routes are unattempted here and remain outside the claim or explicitly guarded.
+
+The next evidence-supported package is a balanced near-wall/interface space
+study, starting with an initialization-only h1/p4 candidate or a separately
+qualified backend for h1/p5 above 3000 unknowns. Qualify its evolved .0016/.016
+pair and timestep uncertainty before extending duration. The present results
+support this bounded pilot; they do **not yet justify a broad longer neutral
+campaign**. Once that residual/space gate closes, a targeted T=.5 (theta=.1)
+run with a finer-space and dt/2 companion is the next duration gate.
+
+## Evidence index and process status
+
+[summary.json](a93-a95-e94e95-awf-neutral-persistence-pilot-evidence/summary.json)
+is the compact machine receipt (31 configurations/controls, including preserved
+exploratory failures). Its `pass` status covers the declared selected pilot and
+verification gates; its separate spatial-residual and historical epsilon fields
+remain explicitly unresolved. Full native coefficients, histories, field files,
+all accepted/stage audits and sealed request artifacts remain under the Linux
+root recorded above. Compact failure witnesses and XMLs are included; those XMLs
+are archival and refer to immutable run paths—regenerate a fresh destination
+using the commands above before executing a reproducer.
+
+The collector's deliberate missing-observer negative control exits 1 for the
+intended missing required receipt. The complete export exits 0. Changed request
+identity checks likewise return nonzero before replacing receipts. No missing
+case is treated as successful evidence.
