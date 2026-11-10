@@ -45,4 +45,7 @@ def main():
   events.append(dict(time=T,execution=done,comparison=str(receipt),exit_code=code,status=load(receipt)['status']));write_json(out/'results.json',dict(status='pass' if code==0 and all(x['exit_code']==0 for x in done) else 'failed_or_unresolved',milestones=events))
   if code or any(x['exit_code'] for x in done):return 1
  return 0
-if __name__=='__main__':raise SystemExit(main())
+if __name__=='__main__':
+ if '--admission' in sys.argv:
+  from run_rans_configuration_duration import main
+ raise SystemExit(main())

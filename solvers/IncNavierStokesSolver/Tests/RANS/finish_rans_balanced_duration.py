@@ -39,4 +39,7 @@ def main():
   with (out/'final-quadrature.log').open('x') as f:code=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,env=env).returncode
   checks.append(dict(label='final-quadrature',command=cmd,exit_code=code))
  status='pass' if comparison['status']=='pass' and len(checks)==7 and all(x['exit_code']==0 for x in checks) else 'failed_or_incomplete';write_json(out/'results.json',dict(status=status,checks=checks,comparison_status=comparison['status']));return 0 if status=='pass' else 1
-if __name__=='__main__':raise SystemExit(main())
+if __name__=='__main__':
+ if '--admission' in sys.argv:
+  from finish_rans_configuration_duration import main
+ raise SystemExit(main())
