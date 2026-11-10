@@ -22,5 +22,6 @@ def main():
     for j,(x,y,z) in enumerate(zip(base[index][key],q[key],base[1-index][key],strict=True)):
      change=abs(x-y);difference=abs(x-z);limit=max(1e-10,.01*difference);rows.append(dict(metric=key,index=j,quadrature_change=change,spatial_difference=difference,limit=limit,status='pass' if change<=limit else 'fail'))
    checks.append(dict(wall=wall,space='Balanced5V1' if index==0 else 'Balanced11V1',time=native['time'],status='pass' if all(x['status']=='pass' for x in rows) else 'fail',same_raw_effective_reference_boundary=True,state_sha256=receipt['raw_initial_sha256'],source_orders=Q[1],target_orders=Q[2],actual_target_quadrature=packet['observation']['actual_quadrature'],checks=rows))
- status='pass' if len(checks)==4 and all(x['status']=='pass' for x in checks) else 'fail';write_json(out/'results.json',dict(status=status,checks=checks,scope='frozen actual evolved-state spatial residuals; no initial regeneration or time advance'));return 0 if status=='pass' else 1
+ expected={(wall,space) for wall in a.walls for space in ('Balanced5V1','Balanced11V1')};observed={(x['wall'],x['space']) for x in checks}
+ status='pass' if len(checks)==len(expected) and observed==expected and all(x['status']=='pass' for x in checks) else 'fail';write_json(out/'results.json',dict(status=status,checks=checks,required_coverage=sorted(expected),observed_coverage=sorted(observed),scope='frozen actual evolved-state spatial residuals; no initial regeneration or time advance'));return 0 if status=='pass' else 1
 if __name__=='__main__':raise SystemExit(main())
