@@ -34,6 +34,38 @@ double MinimumEigenvalue(RANSTensor a)
     }
     return std::min({a[0][0],a[1][1],a[2][2]});
 }
+// Incompressible rank-one momentum action for propagation in the physical x-z
+// plane. Reflection symmetry decouples the transverse polarization in this 2D
+// pilot. A coarse bracket followed by bounded minimization is a numerical
+// diagnostic on this plane, not a global 3D ellipticity certificate.
+RANSWallAlgebra::Vector WJPrincipal(double k,double epsilon,const RANSTensor &g,const WJParameters &p)
+{
+    const auto law=EvaluateWJClosure(k,epsilon,g,p,WJGradientPolicy::DevStrainRawWorkV1);
+    std::array<RANSTensor,3> h{};h[0][0][0]=1;h[0][2][2]=-1;h[1][0][2]=1;h[2][2][0]=1;
+    std::array<RANSTensor,3> actions{};
+    for(int j=0;j<3;++j)actions[j]=ApplyWJClosureDirection(k,epsilon,g,0,0,h[j],p,WJGradientPolicy::DevStrainRawWorkV1).reynoldsStress;
+    double matrix[3][3]{};
+    for(int i=0;i<3;++i)for(int j=0;j<3;++j)for(int a=0;a<3;++a)for(int b=0;b<3;++b)
+        matrix[i][j]-=h[i][a][b]*actions[j][a][b]/law.eddyViscosity;
+    auto form=[&](double angle){const double c=std::cos(angle),s=std::sin(angle);const double v[3]={-c*s,-s*s,c*c};double result=0;
+        for(int i=0;i<3;++i)for(int j=0;j<3;++j)result+=v[i]*matrix[i][j]*v[j];return result;};
+    const double pi=std::acos(-1.),spacing=pi/32;double best=1e300;
+    for(int j=0;j<32;++j)
+    {
+        const double center=j*spacing;
+        if(form(center)>form(center-spacing) || form(center)>form(center+spacing))continue;
+        double lo=center-spacing,hi=center+spacing;
+        for(int n=0;n<48;++n){const double x=lo+(hi-lo)*.3819660112501051,y=hi-(hi-lo)*.3819660112501051;
+            if(form(x)<form(y))hi=y;else lo=x;}
+        best=std::min(best,form((lo+hi)/2));
+    }
+    RANSTensor hx{},hz{};hx[1][0]=1;hz[1][2]=1;
+    const auto dx=ApplyWJClosureDirection(k,epsilon,g,0,0,hx,p,WJGradientPolicy::DevStrainRawWorkV1).reynoldsStress;
+    const auto dz=ApplyWJClosureDirection(k,epsilon,g,0,0,hz,p,WJGradientPolicy::DevStrainRawWorkV1).reynoldsStress;
+    const double a=-dx[1][0]/law.eddyViscosity,b=-(dx[1][2]+dz[1][0])/(2*law.eddyViscosity),c=-dz[1][2]/law.eddyViscosity;
+    return {best,(a+c-std::hypot(a-c,2*b))/2};
+}
+
 }
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s,const Vector &history,
     double alpha,double time,const RANSWallEvolutionData &data,double ustar,bool constitutiveReconstruction) const
@@ -96,10 +128,12 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
                     range[3]=std::min(range[3],epsilon/e0);range[4]=std::max(range[4],epsilon/e0);
                     range[7]=std::max(range[7],std::abs(G[0][0]+G[1][1]+G[2][2])/g0);
                 }
-                const double h=1e-5*std::max(1.,std::abs(G[0][2]));auto plus=G,minus=G;plus[1][0]+=h;minus[1][0]-=h;
-                const auto cp=OuterClosure(k,epsilon,plus,v.coordinate);
-                const auto cm=OuterClosure(k,epsilon,minus,v.coordinate);
-                r[4]=std::min(r[4],-(cp.reynoldsStress[1][0]-cm.reynoldsStress[1][0])/(2*h));
+                if(!WJ())
+                {
+                    const double h=1e-5*std::max(1.,std::abs(G[0][2]));auto plus=G,minus=G;plus[1][0]+=h;minus[1][0]-=h;
+                    const auto cp=OuterClosure(k,epsilon,plus,v.coordinate),cm=OuterClosure(k,epsilon,minus,v.coordinate);
+                    r[4]=std::min(r[4],-(cp.reynoldsStress[1][0]-cm.reynoldsStress[1][0])/(2*h));
+                } // WJ principal diagnostics are supplied by its shared action below.
             }
             const double minimum=MinimumEigenvalue(covariance);
             r[3]=std::min(r[3],minimum);
@@ -185,7 +219,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         const double w=f.weight*measure;face[0]+=w;face[1]+=w*(pi-po);face[2]+=w*normal*normal;
         face[3]+=w*norm;face[4]=std::max(face[4],std::abs(normal));
         const auto gki=Point(K(),p,-1).Gradient(s,offset[K()]),gko=Point(K(),p,1).Gradient(s,offset[K()]);
-        double flux=0,un=0;for(int a=0;a<3;++a){flux+=((m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK)*gki[a]-c.kDiffusion*gko[a])*n[a];}
+        double flux=0,un=0;for(int a=0;a<3;++a){flux+=((m_parameters.geometry.molecularNu+nt/SigmaK())*gki[a]-c.kDiffusion*gko[a])*n[a];}
         for(int a=0;a<m_dimension;++a)un+=Point(0,p).Value(s,offset[a])*n[PhysicalAxis(a)];
         face[5]+=w*flux*flux;face[6]+=w*un;face[7]+=w*normal;
     }
@@ -369,7 +403,7 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
             for(int a=0;a<3;++a)for(int b=0;b<3;++b){ss+=std::pow(g[a][b]+g[b][a],2);oo+=std::pow(g[a][b]-g[b][a],2);}
             c.strainInvariant=k/epsilon*std::sqrt(ss/2);c.rotationInvariant=k/epsilon*std::sqrt(oo/2);
             for(int a=0;a<3;++a)for(int b=0;b<3;++b)c.divergence+=a==b?g[a][b]:0;
-            c.kSource=c.production-epsilon;c.kDiffusion=m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK;
+            c.kSource=c.production-epsilon;c.kDiffusion=m_parameters.geometry.molecularNu+nt/SigmaK();
         }
         else
         {
@@ -602,4 +636,71 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         {"reuse",EvaluationReuseJSON()},{"governing_solves","0"},{"physical_commits","0"}});
 }
 
+}
+
+namespace Nektar
+{
+RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const Vector &state,const Vector &history,
+    double alpha,double time,const RANSWallEvolutionData &data,bool rangesOnly) const
+{
+    Require(WJ(),"WJ audit requires WJ model ownership");
+    const auto domain=ScalarDomain(state,time,data,true);
+    Diagnostic audit;
+    audit["wj_scalar_domain"]={domain.admissible?1.:0.,domain.minimumInnerK,domain.minimumOuterK,
+        domain.minimumOuterEpsilon,domain.minimumSampledK,domain.minimumTraceEpsilon,
+        domain.minimumBudgetRatio,domain.maximumBudgetRelativeDefect};
+    audit["wj_hard_admissible"]={0};
+    if(!domain.admissible){audit["admissible"]={0};return audit;}
+    const auto scalar=audit["wj_scalar_domain"];
+    if(!rangesOnly)audit=Audit(state,history,alpha,time,data,m_robustUstar,true);
+    audit.erase("robust_source");audit.erase("outer_constitutive_range");
+    audit["wj_scalar_domain"]=scalar;
+    const double K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
+    Vector covariance{1e300,1e300},root{1e300,0},viscosity{1e300,0,1e300,0},work{0,0},principal{1e300,1e300};
+    Vector innerWitness,outerWitness;int innerCount=0,outerCount=0,innerH=0,outerH=0;
+    std::set<std::tuple<int,RANSWallCoordinate,double>> seen;
+    for(const auto &p:domain.observations)
+    {
+        if(p.block!=K() && !p.dependentTrace)continue;
+        const auto provenance=ResolveObservation(p);const auto &row=*provenance.velocity;
+        const double k=GeometryPoint(K(),row.geometry,p.coordinate).Value(state,offset[K()]);
+        RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=row.Gradient(state,offset[a]);
+        const bool inner=provenance.inner;
+        const double epsilon=inner?0:p.dependentTrace?p.value:GeometryPoint(Epsilon(),row.geometry,p.coordinate).Value(state,offset[Epsilon()]);
+        if(!seen.emplace(row.geometry,p.coordinate,epsilon).second)continue;
+        const bool atH=std::abs(p.coordinate[2]-m_parameters.geometry.height)<1e-12;
+        if(inner)
+        {
+            ++innerCount;if(atH)++innerH;
+            const auto profile=StateProfile(state,p.coordinate,time,data);
+            const auto law=InnerStress(k,profile->Original().EddyViscosity(Distance(p.coordinate)),g);
+            const double eigen=RANSWallSolveJson::Eigenvalues(law.reynoldsStress)[0];
+            if(eigen<covariance[0]){covariance[0]=eigen;innerWitness={double(row.geometry),double(row.element),double(provenance.radialSide),p.coordinate[0],p.coordinate[2],k,eigen};}
+            continue;
+        }
+        ++outerCount;if(atH)++outerH;
+        const auto law=OuterClosure(k,epsilon,g,p.coordinate);const double eigen=RANSWallSolveJson::Eigenvalues(law.reynoldsStress)[0];
+        if(eigen<covariance[1]){covariance[1]=eigen;outerWitness={double(row.geometry),double(row.element),double(provenance.radialSide),p.coordinate[0],p.coordinate[2],k,epsilon,eigen};}
+        root[0]=std::min(root[0],law.wj.n);const double n=law.wj.n;
+        root[1]=std::max(root[1],std::abs(law.wj.rootResidual)/(1+n*n*n+2.7*law.wj.s*n+std::abs(2*law.wj.w*n)));
+        viscosity[0]=std::min(viscosity[0],law.eddyViscosity);viscosity[1]=std::max(viscosity[1],law.eddyViscosity);
+        viscosity[2]=std::min(viscosity[2],law.scalarViscosity);viscosity[3]=std::max(viscosity[3],law.scalarViscosity);
+        double actual=0;for(int a=0;a<3;++a)for(int b=0;b<3;++b)actual-=law.reynoldsStress[a][b]*g[a][b];
+        work[0]=std::max(work[0],std::max(std::abs(actual-law.production),std::abs(law.productionDev-law.production-2*k*law.divergence/3)));
+        work[1]=std::max(work[1],std::abs(law.divergence));
+        const auto values=WJPrincipal(k,epsilon,g,m_parameters.wj);
+        for(int i=0;i<2;++i)principal[i]=std::min(principal[i],values[i]);
+    }
+    audit["wj_covariance"]=covariance;audit["wj_root_minimum_scaled_residual"]=root;
+    audit["wj_nu_eff_and_nu_d_ranges"]=viscosity;audit["wj_work_defect_raw_divergence"]=work;
+    audit["wj_rank_one_xz_principal_minima_over_nu_eff"]=principal;
+    audit["wj_native_element_side_counts"]={double(innerCount),double(outerCount),double(innerH),double(outerH)};
+    audit["wj_inner_minimum_geometry_element_side_x_z_k_covariance"]=innerWitness;
+    audit["wj_outer_minimum_geometry_element_side_x_z_k_epsilon_covariance"]=outerWitness;
+    audit["wj_cls_max_beta04_R1_R2_cap_applicable"]={0,0,0,0,0};
+    const bool valid=covariance[0]>=-1e-10*K0 && covariance[1]>=-1e-10*K0 && root[0]>=1.8 && root[1]<1e-12 &&
+        principal[0]>0 && principal[1]>0 && work[0]<1e-11 && scalar[6]>=1 && scalar[7]<1e-10;
+    audit["wj_hard_admissible"]={valid?1.:0.};
+    return audit;
+}
 }

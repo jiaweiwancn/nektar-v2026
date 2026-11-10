@@ -168,7 +168,7 @@ AWFTransitionInput RANSWallEvolutionPatch::TransitionInput(const Vector &s,
 AWFTransitionValues RANSWallEvolutionPatch::Transition(const Vector &s,const RANSWallCoordinate &p,
     double time,const RANSWallEvolutionData &data) const
 {
-    Require(!AcceptedAWF(),"chi transition is not defined for the accepted budget AWF");
+    Require(!WJ() && !AcceptedAWF(),"chi transition is not defined for the accepted budget AWF");
     if(m_uniformEP)
     {
         const auto profile=Profile(SampleK(s,p),p,1);
@@ -204,7 +204,7 @@ std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::StateProfile(con
 std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::ProspectiveActiveProfile(
     const Vector &s,const RANSWallCoordinate &p,std::string &reason) const
 {
-    if(AcceptedAWF()){reason="not_applicable_budget_awf";return {};}
+    if(WJ() || AcceptedAWF()){reason="not_applicable_budget_awf";return {};}
     // Reachability depends on spatial support and K-dependent intrinsic gates,
     // not on the current velocity/pressure sensor. A U/p update can change the
     // latter without changing a single transported k coefficient.
@@ -241,7 +241,7 @@ std::array<std::map<int,double>,2> RANSWallEvolutionPatch::DissipationTrace(cons
     const auto face=[&](int axis,int side,const RANSWallGlobalField::Element &e)
         {return axis==2 && !side && Same(e.lower[2],m_parameters.geometry.height);};
     std::array<std::map<int,double>,2> trace;
-    if(AcceptedAWF())
+    if(WJ() || AcceptedAWF())
     {
         trace[0]=fields[Epsilon()]->Boundary([&](const RANSWallCoordinate &p)
             {return StateProfile(s,p,time,data)->Dissipation(Distance(p));},face);

@@ -88,7 +88,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored,
     bool originalOuterCounterfactual) const
 {
-    Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || AcceptedAWF()),
+    Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || AcceptedAWF() || WJ()),
         "R3 residual-resolution audit requires serial flat2D Upstream+Capped");
     Require(state.size()==Size() && history.size()==Size() && alpha>=0 && m_eta==0,
         "R3 residual-resolution audit requires frozen unanchored valid state/history");
@@ -110,7 +110,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
         {
             const double nt=profile->Original().EddyViscosity(Distance(q.v.coordinate));
             const auto law=InnerStress(k,nt,G);stress=RANSWallInnerMeanStress(law,m_parameters.geometry.molecularNu,pi);
-            dk=m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK;
+            dk=m_parameters.geometry.molecularNu+nt/SigmaK();
             const auto actual=WallSource(s,q.v.coordinate,law.production,*profile,normalization);
             double destruction=actual.dissipation-actual.redistribution;
             if(m_cappedDestruction)
@@ -129,7 +129,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
         }
         else
         {
-            epsilon=q.e.Value(s,offset[Epsilon()]);const auto c=originalOuterCounterfactual?
+            epsilon=q.e.Value(s,offset[Epsilon()]);const auto c=originalOuterCounterfactual && !WJ()?
                 EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,G,Distance(q.v.coordinate),m_parameters.model.Parameters(),0):
                 OuterClosure(k,epsilon,G,q.v.coordinate);
             dk=c.kDiffusion;de=c.epsilonDiffusion;sk=c.kSource+data.outerKSource(q.v.coordinate,time);
@@ -141,7 +141,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
             {
                 stress[a][b]=-c.reynoldsStress[a][b]+(a==b?2*k/3-pi:0);
                 const double sr=shear*(m_referenceFlow[a]*m_referenceNormal[b]+m_referenceNormal[a]*m_referenceFlow[b]);
-                const long double B=(long double)c.eddyViscosity*(G[a][b]+G[b][a])-c.quadraticStress[a][b]-c.cubicStress[a][b]+
+                const long double B=WJ()?-(long double)c.deviatoricStress[a][b]:(long double)c.eddyViscosity*(G[a][b]+G[b][a])-c.quadraticStress[a][b]-c.cubicStress[a][b]+
                     (long double)gamma*(G[a][b]+G[b][a]-sr);
                 cancelled[a][b]=B-(a==b?pi:0);
                 stableProduction+=(B-(a==b?(long double)2*k/3:0))*G[a][b];
@@ -155,7 +155,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
             load("prescribed_scalar_source",Epsilon(),q.e,-data.outerEpsilonSource(q.v.coordinate,time),{},q.weight);
             load("diagnostic_outer_cancelled_k_production",K(),q.v,-static_cast<double>(stableProduction),{},q.weight);
             load("diagnostic_outer_cancelled_epsilon_production",Epsilon(),q.e,
-                -static_cast<double>((long double)m_parameters.model.Parameters().cEpsilon1*epsilon/k*stableProduction),{},q.weight);
+                -static_cast<double>((long double)Epsilon1()*epsilon/k*stableProduction),{},q.weight);
         }
         for(int a=0;a<m_dimension;++a)
         {

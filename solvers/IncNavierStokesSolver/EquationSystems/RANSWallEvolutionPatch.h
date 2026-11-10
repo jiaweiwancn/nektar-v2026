@@ -91,10 +91,19 @@ public:
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart,double time,
         const RANSWallEvolutionData &data) const;
     bool UniformEPFlat() const { return m_uniformEP; }
-    bool AcceptedAWF() const { return m_formulation=="CLSCalibratedBudgetAWF"; }
+    bool WJ() const { return m_parameters.model.Model()==SolverUtils::RANSModel::WJHighRe; }
+    const SolverUtils::WJParameters &WJConfiguration() const { return m_parameters.wj; }
+    std::string EpsilonName() const { return WJ()?"epsilon":"eps_tilde"; }
+    double SigmaK() const { return WJ()?m_parameters.wj.sigmaK:m_parameters.model.Parameters().sigmaK; }
+    double Epsilon1() const { return WJ()?m_parameters.wj.cEpsilon1:m_parameters.model.Parameters().cEpsilon1; }
+    double Epsilon2() const { return WJ()?m_parameters.wj.cEpsilon2:m_parameters.model.Parameters().cEpsilon2; }
+    bool BudgetAWF() const { return m_formulation=="CLSCalibratedBudgetAWF" || m_formulation=="WJCalibratedBudgetAWF"; }
+    bool AcceptedAWF() const { return BudgetAWF(); } // Legacy compatibility.
+    bool WJEP() const { return WJ() && m_formulation=="WJCalibratedEPAWF"; }
+    bool UncappedWall() const { return !m_cappedDestruction; }
     const std::string &FormulationName() const { return m_formulation; }
-    bool MatchingEnabled() const { return m_transitionEnabled || AcceptedAWF(); }
-    std::string WallPolicyName() const { return AcceptedAWF()?m_formulation:(m_uniformEP?"UniformEPFlat-v1":(m_transitionEnabled?"Upstream":"Fixed")); }
+    bool MatchingEnabled() const { return m_transitionEnabled || BudgetAWF() || WJEP(); }
+    std::string WallPolicyName() const { return (BudgetAWF() || WJEP())?m_formulation:(m_uniformEP?"UniformEPFlat-v1":(m_transitionEnabled?"Upstream":"Fixed")); }
     bool TransitionEnabled() const { return m_transitionEnabled; }
     const SolverUtils::AWFTransitionControls &TransitionControls() const { return m_transition; }
     const Vector &TransitionReference() const { return m_transitionReference; }
@@ -236,7 +245,7 @@ public:
         return values;
     }
     bool ConstitutiveKInventory() const { return PimpleKBoundEnabled() &&
-        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3" || m_pimpleKInventory=="AcceptedBudgetV1"); }
+        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3" || m_pimpleKInventory=="AcceptedBudgetV1" || m_pimpleKInventory=="WJNativeV1"); }
     bool ProspectiveKInventory() const { return PimpleKBoundEnabled() && m_pimpleKInventory=="ConstitutiveV3"; }
     std::string BranchCoverageDiagnostic(const Vector &state,double time,
         const RANSWallEvolutionData &data,const std::vector<RANSWallCoordinate> &anchors) const;
@@ -343,6 +352,9 @@ public:
     double WallDissipation(const Vector &state,const RANSWallCoordinate &point,
         const SolverUtils::EquilibriumAWFProfiles &profile) const;
     std::string Signature() const;
+    Diagnostic WJCompleteAudit(const Vector &state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,bool rangesOnly=false) const;
+    std::string WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data) const;
     const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
     class Factor

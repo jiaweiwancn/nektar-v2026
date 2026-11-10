@@ -133,7 +133,7 @@ std::vector<RANSWallCoordinate> RANSWallEvolutionPatch::ConstitutiveAnchors(cons
         for(const auto &p:Surface(b,axis,axis==2?(side<0?0.:upper[2]):(side<0?lower[0]:upper[0]),side,order))add(p.test.coordinate);
     for(const auto &p:WallTraceR4(state))add(p.row.coordinate);
     for(const auto &p:additional)add(p);
-    if(ProspectiveKInventory() || AcceptedAWF())for(const auto &[p,w]:PhysicalBandRays())add(p);
+    if(ProspectiveKInventory() || AcceptedAWF() || WJ())for(const auto &[p,w]:PhysicalBandRays())add(p);
     for(double x:ConstitutiveReportingAbscissae())if(x>=lower[0] && x<=upper[0])add({x,0,0});
     return {anchors.begin(),anchors.end()};
 }
@@ -250,7 +250,7 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
         if(!inner)add(name,Point(Epsilon(),v.coordinate,Same(v.coordinate[2],m_parameters.geometry.height)?1:0),Epsilon(),true,side);
     };
     for(const auto &q:Quadrature(0))pair("mass_volume",q,q.coordinate[2]<m_parameters.geometry.height);
-    if(AcceptedAWF())
+    if(AcceptedAWF() || WJ())
     {
         // Fixed physical reporting quadrature uses these exact vertical
         // panels and tangential rays, including partial-element band edges.
@@ -314,7 +314,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
     const std::vector<RANSWallCoordinate> &additionalAnchors) const
 {
     RANSWallTiming::Scope timing("domain.compute");
-    ScalarDomainResult result;result.phase="coefficients";result.normalizationApplicable=!AcceptedAWF();
+    ScalarDomainResult result;result.phase="coefficients";result.normalizationApplicable=CappedDestruction();
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
     auto check=[&](const std::string &name,const RANSWallGlobalPoint &q,int block,bool strict,
@@ -376,7 +376,8 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             result.minimumCutoff=std::min(result.minimumCutoff,profile->Reference().cutoff);
             result.maximumCutoff=std::max(result.maximumCutoff,profile->Reference().cutoff);
             result.profileBranches.push_back(AcceptedAWF()?'A':profile->Reference().weight==0?'B':profile->Reference().weight==1?'E':'M');
-            result.minimumBudgetRatio=std::min(result.minimumBudgetRatio,profile->Reference().productionBudget/profile->Reference().minimumBudget);
+            if(profile->Reference().minimumBudget>0)
+                result.minimumBudgetRatio=std::min(result.minimumBudgetRatio,profile->Reference().productionBudget/profile->Reference().minimumBudget);
             result.maximumBudgetRelativeDefect=std::max(result.maximumBudgetRelativeDefect,
                 std::abs(profile->Reference().budgetResidual)/std::max(1e-300,profile->Reference().productionBudget));
             const double scale=m_mapping.At(p).scale;
@@ -400,7 +401,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                     "volume_normalization_ray",true,r.weight))return result;
         for(const auto &p:m_traceScalarAnchors)
         {
-            if(!AcceptedAWF() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"trace_baseline_normalization_ray",false,0))return result;
+            if(CappedDestruction() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"trace_baseline_normalization_ray",false,0))return result;
             if(!ray(p,StateProfile(result.effectiveState,p,time,data),
                     AcceptedAWF()?"trace_budget_awf_ray":"trace_current_normalization_ray",false,0))return result;
         }
@@ -425,7 +426,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             }
             for(const auto &p:anchors)
             {
-                if(!AcceptedAWF() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"constitutive_baseline_normalization_ray",false,0))return result;
+                if(CappedDestruction() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"constitutive_baseline_normalization_ray",false,0))return result;
                 if(!ray(p,StateProfile(result.effectiveState,p,time,data),AcceptedAWF()?"constitutive_budget_awf_ray":"constitutive_current_normalization_ray",false,0))return result;
                 if(ProspectiveKInventory())
                 {
@@ -480,7 +481,7 @@ std::string RANSWallEvolutionPatch::CheckConstitutiveCoverage(const Vector &s,do
     bool caught=false;std::string reason;
     {
         CoverageScope coverage(m_assertKCoverage,true);
-        try{if(AcceptedAWF())(void)SampleK(s,unregistered);else WallNormalization(s,unregistered,*StateProfile(s,unregistered,time,data));}
+        try{if(!CappedDestruction())(void)SampleK(s,unregistered);else WallNormalization(s,unregistered,*StateProfile(s,unregistered,time,data));}
         catch(const std::exception &error){reason=error.what();caught=reason.find("unprotected constitutive k evaluation")!=std::string::npos;}
     }
     Require(caught,"coverage tripwire failed to reject an undeclared consumer");
@@ -2112,6 +2113,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAudit(
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool rangesOnly) const
 {
+    if(WJ())return WJCompleteAudit(state,history,alpha,time,data,rangesOnly);
     RANSWallTiming::Scope timing("audit.complete");
     EvaluationScope evaluation(*this,data,time);
     const auto domain=ScalarDomain(state,time,data,true);Diagnostic audit;

@@ -189,8 +189,22 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             "evolution requires a full serial native mesh on each collective rank");
     parameters.geometry.Validate();m_mapping.dimension=m_dimension;m_mapping.height=parameters.geometry.height;
     session->LoadSolverInfo("RANSWallFormulation",m_formulation,"EPAWF");
-    Require(m_formulation=="EPAWF" || AcceptedAWF(),"unknown wall formulation");
-    if(AcceptedAWF())
+    Require(m_formulation=="EPAWF" || BudgetAWF() || m_formulation=="WJCalibratedEPAWF","unknown wall formulation");
+    Require(WJ()==(m_formulation=="WJCalibratedEPAWF" || m_formulation=="WJCalibratedBudgetAWF"),"WJ requires its explicit calibrated wall formulation");
+    if(WJ())
+    {
+        m_parameters.wj.Validate();
+        m_parameters.model=RANSNeutralReference::WJ(m_parameters.wj);
+        Require(m_dimension==2 && !Mapped() && m_comm->GetSize()==1,"WJ native supports serial flat 2D only");
+        Require(parameters.geometry.sampleHeight==parameters.geometry.height &&
+            (WJEP()?parameters.chi==1 && parameters.geometry.tailStart==parameters.geometry.height/2:
+                parameters.chi==0 && parameters.geometry.tailStart==parameters.geometry.height),"WJ requires endpoint K and its EP/budget tail policy");
+        std::string gradient;session->LoadSolverInfo("RANSWJGradientPolicy",gradient,"Unspecified");
+        Require(gradient=="DevStrainRawWorkV1","WJ native requires explicit DevStrainRawWorkV1");
+        m_wallParameters=WJCalibratedAWFParameters(m_parameters.model);
+        m_options.formulation=WJEP()?AWFProfileFormulation::WJCalibratedEPAWF:AWFProfileFormulation::WJCalibratedBudgetAWF;
+    }
+    if(AcceptedAWF() && !WJ())
     {
         Require(m_dimension==2 && !Mapped() && m_comm->GetSize()==1 && parameters.model.Model()==RANSModel::CLSHighRe,
             "CLSCalibratedBudgetAWF evolution currently supports serial flat 2D CLS only");
@@ -204,8 +218,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(comparison=="Off" || comparison=="HeightV1" || comparison=="AcceptedAWFV1","unknown comparison family");
     m_heightComparison=comparison=="HeightV1";m_acceptedComparison=comparison=="AcceptedAWFV1";
     Require(!m_acceptedComparison || AcceptedAWF(),"AcceptedAWFV1 requires its explicit wall formulation");
-    Require(m_kSampling=="Point" || m_kSampling=="ColumnAverage" || (AcceptedAWF() && m_kSampling=="InterfaceTrace"),"unknown representative K functional");
-    Require(!AcceptedAWF() || m_kSampling=="InterfaceTrace","CLSCalibratedBudgetAWF requires InterfaceTrace sampling");
+    Require(m_kSampling=="Point" || m_kSampling=="ColumnAverage" || ((AcceptedAWF() || WJ()) && m_kSampling=="InterfaceTrace"),"unknown representative K functional");
+    Require(!(AcceptedAWF() || WJ()) || m_kSampling=="InterfaceTrace","CLSCalibratedBudgetAWF requires InterfaceTrace sampling");
     if(ColumnAverageK())
     {
         Require(m_dimension==2 && !Mapped() && m_comm->GetSize()==1,"ColumnAverage K is a serial flat2D pilot");
@@ -227,7 +241,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     session->LoadSolverInfo("RANSWallNonlinearPolicy",m_nonlinearPolicy,"Legacy");
     session->LoadSolverInfo("RANSWallTemporalCoupling",m_temporalCoupling,"ConvergedStage");
     Require(m_temporalCoupling=="ConvergedStage" || PimpleSingleSweep(),"unknown temporal coupling mode");
-    Require(!AcceptedAWF() || PimpleSingleSweep(),"accepted wall formulation currently supports only the one-sweep temporal path");
+    Require(!(AcceptedAWF() || WJ()) || PimpleSingleSweep(),"accepted wall formulation currently supports only the one-sweep temporal path");
     Require(!ColumnAverageK() || PimpleSingleSweep(),"ColumnAverage K is supported only by the PIMPLE pilot");
     if(PimpleSingleSweep())
     {
@@ -254,8 +268,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         "ExactStepV1 is restricted to the serial flat2D one-sweep pilot");
     session->LoadSolverInfo("RANSWallPimpleKInventory",m_pimpleKInventory,"LegacyV1");
     Require(m_pimpleKInventory=="LegacyV1" || (PimpleKBoundEnabled() &&
-        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3" || (AcceptedAWF() && m_pimpleKInventory=="AcceptedBudgetV1"))),"invalid PIMPLE k inventory policy");
-    Require(!AcceptedAWF() || (PimpleKBoundEnabled() && m_pimpleKInventory=="AcceptedBudgetV1"),"accepted AWF requires its model-aware inventory");
+        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3" || (AcceptedAWF() && !WJ() && m_pimpleKInventory=="AcceptedBudgetV1") || (WJ() && m_pimpleKInventory=="WJNativeV1"))),"invalid PIMPLE k inventory policy");
+    Require(!(AcceptedAWF() && !WJ()) || (PimpleKBoundEnabled() && m_pimpleKInventory=="AcceptedBudgetV1"),"accepted AWF requires its model-aware inventory");
+    Require(!WJ() || (PimpleKBoundEnabled() && m_pimpleKInventory=="WJNativeV1" && !m_evaluationReuse),"WJ requires explicit WJNativeV1 MassProjection and evaluation reuse Off");
     session->LoadParameter("RANSWallPimpleKFloorRelative",m_pimpleKFloorRelative,1e-8);
     Require(std::isfinite(m_pimpleKFloorRelative) && m_pimpleKFloorRelative>0 && m_pimpleKFloorRelative<=1.,"invalid k floor relative to K0");
     session->LoadParameter("RANSWallPimpleKBoundMaxAdd",m_kBoundMaxAdd,2000);
@@ -413,6 +428,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(bottom>=-1e-12 && !(bottom<parameters.geometry.height-1e-12 && top>parameters.geometry.height+1e-12),
                 "evolution element crosses ground or H");
         all.push_back(e);if(top<=parameters.geometry.height+1e-12)inner.push_back(e);else outer.push_back(e);
+        if(WJ())for(int axis=0;axis<2;++axis)
+            Require(full->GetExp(e)->GetBasisNumModes(axis)==4,"WJ pilot requires the supported tensor-cubic basis");
         Require(full->GetExp(e)->GetBasisNumModes(normal)>=4,"evolution velocity/scalar degree must be at least three");
     }
     Require(!inner.empty() && !outer.empty() && Same(lower[2],0),"incomplete wall/outer physical domains");
@@ -420,7 +437,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     std::string transition;session->LoadSolverInfo("RANSWallTransition",transition,"Fixed");
     Require(transition=="Fixed" || transition=="Upstream" || transition=="UniformEPFlat","unknown RANSWallTransition");
     m_uniformEP=transition=="UniformEPFlat";
-    m_transitionEnabled=transition=="Upstream" || m_uniformEP;
+    m_transitionEnabled=!WJ() && (transition=="Upstream" || m_uniformEP);
+    Require(!WJ() || (WJEP()?transition=="UniformEPFlat":transition=="Fixed"),"WJ transitions are unsupported; select uniform EP or fixed budget");
     Require(!AcceptedAWF() || transition=="Fixed","accepted AWF does not use an EP transition or uniform-EP policy");
     Require(!m_uniformEP || (PimpleSingleSweep() && m_dimension==2 && !Mapped() && m_parameters.chi==1),
         "UniformEPFlat is an explicit chi=1 serial flat2D PIMPLE control");
@@ -494,13 +512,13 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     m_solver=std::make_shared<SolverCache>();m_solver->free.resize(Gauge());m_solver->massFactors.resize(Gauge());
     InitialiseRobust(session);
     if(SegregatedPicard() || PimpleSingleSweep())
-        Require(m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || (AcceptedAWF() && !m_cappedDestruction)) &&
-            m_parameters.model.Model()==RANSModel::CLSHighRe && !m_solveDiagnosticReplay,
+        Require(m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || ((AcceptedAWF() || WJEP()) && !m_cappedDestruction)) &&
+            (m_parameters.model.Model()==RANSModel::CLSHighRe || WJ()) && !m_solveDiagnosticReplay,
             "SegregatedPicard requires flat 2D upstream CLS with capped destruction and no legacy replay");
     Vector seed(Size());for(int i=0;i<size[K()];++i)seed[offset[K()]+i]=parameters.model.Q()*.16*m_constants[K()][i];
     Refresh(seed);for(const auto &ray:m_rays)for(const auto &q:ray.points)m_bodyInner.push_back(q);
     if(m_transitionEnabled)InitialiseTransition(session);
-    else if(AcceptedAWF())
+    else if(MatchingEnabled())
     {
         const auto atH=[&](int axis,int side,const RANSWallGlobalField::Element &e)
             {return axis==2 && !side && Same(e.lower[2],m_parameters.geometry.height);};
@@ -514,7 +532,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
 std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::Profile(double k,const RANSWallCoordinate &chart,double weight) const
 {
     if(AcceptedAWF())weight=1; // cutoff applicability flag; not a chi weight
-    else if(weight<0)weight=m_transitionEnabled?0:m_parameters.chi;
+    else if(weight<0)weight=WJEP()?1:m_transitionEnabled?0:m_parameters.chi;
     Require(k>0 && std::isfinite(k),"invalid physical sampled K");
     const auto metric=m_mapping.At(chart);auto geometry=m_parameters.geometry;geometry.height=metric.height;
     auto options=m_options;options.requestedWeight=weight;for(double &r:options.physicalBreakpoints)r*=metric.scale;
@@ -667,6 +685,20 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FlatReference(double us,c
     const double K0=m_parameters.model.Q()*us*us,H=m_parameters.geometry.height,Z=upper[2];
     auto options=m_options;if(MatchingEnabled())options.requestedWeight=1;
     const auto profile=MatchingEnabled()?std::make_shared<EquilibriumAWFProfiles>(m_parameters.geometry,K0,m_parameters.model,AWFNormalMetric{},options,m_wallParameters):Profile(K0);
+    if(WJ() && BudgetAWF())
+    {
+        std::vector<double> locations{0,H};
+        for(const auto &q:profile->Quadrature())locations.push_back(q.r);
+        for(const auto &e:fields[K()]->Elements())if(e.lower[2]<H)
+        {locations.push_back(e.lower[2]);locations.push_back(std::min(H,e.upper[2]));}
+        for(double z:locations)
+        {
+            const double value=profile->ReferenceK(z);
+            if(!(std::isfinite(value) && value>0))
+            {std::ostringstream message;message<<std::setprecision(17)<<"reference_nonpositive: z="<<z<<" k_ref="<<value<<" K="<<K0<<" cutoff="<<profile->Reference().cutoff;
+             throw std::domain_error(message.str());}
+        }
+    }
     const double UH=profile->Reference().matchingVelocity;
     const auto speed=[&](double r){return r<=H?profile->Original().Velocity(r,{UH,0},{0,0})[0]:UH+us/m_parameters.model.Kappa()*std::log(r/H);};
     const auto velocity=fields[0]->RadialProject(speed,{{0,0,0},{H,0,UH},
@@ -690,7 +722,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FlatReference(double us,c
         {{H,0,profile->Dissipation(H)},{Z,0,A/Z},{Z,-1,-A/(Z*Z)}});
     std::copy(ep.begin(),ep.end(),s.begin()+offset[Epsilon()]);
     RANSTensor G{};for(int a=0;a<3;++a)for(int b=0;b<3;++b)G[a][b]=flow[a]*frame.normal[b]*us/(m_parameters.model.Kappa()*H);
-    const auto closure=EvaluateRANSClosure(m_parameters.model.Model(),K0,A/H,G,H,m_parameters.model.Parameters(),0);
+    const auto closure=OuterClosure(K0,A/H,G,{lower[0],0,H});
     double jump=-2*K0/3;for(int a=0;a<3;++a)for(int b=0;b<3;++b)jump+=frame.normal[a]*closure.reynoldsStress[a][b]*frame.normal[b];
     for(int b=InnerPressure();b<=OuterPressure();++b)
     {
@@ -826,7 +858,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
                 const double nt=profile->Original().EddyViscosity(Distance(q.v.coordinate));
                 const auto innerStress=InnerStress(k,nt,G);
                 stress=RANSWallInnerMeanStress(innerStress,m_parameters.geometry.molecularNu,pi);
-                dk=m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK;
+                dk=m_parameters.geometry.molecularNu+nt/SigmaK();
                 sk=WallSource(s,q.v.coordinate,innerStress.production,*profile,normalization).kSource+data.innerKSource(q.v.coordinate,time);
             }
             else
@@ -1587,7 +1619,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector
 }
 std::string RANSWallEvolutionPatch::Signature() const
 {
-    std::ostringstream text;text<<std::setprecision(17)<<"CLS-EPAWF-M4:replicated-CG:"<<m_dimension<<':'<<m_parameters.geometry.height
+    std::ostringstream text;text<<std::setprecision(17)<<(WJ()?"WJ-Native-SerialFlat2D-v1:replicated-CG:":"CLS-EPAWF-M4:replicated-CG:")<<m_dimension<<':'<<m_parameters.geometry.height
         <<':'<<m_parameters.geometry.molecularNu<<':'<<m_parameters.geometry.roughness<<':'<<(ColumnAverageK()?0:m_parameters.geometry.sampleHeight)
         <<':'<<m_parameters.geometry.tailStart<<':'<<m_parameters.chi<<':'<<m_parameters.model.Q()<<':'<<m_parameters.tangentialOrder<<':'<<m_parameters.normalOrder;
     for(int b=0;b<Gauge();++b)
@@ -1602,7 +1634,9 @@ std::string RANSWallEvolutionPatch::Signature() const
         }
     }
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
-    if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();
+    if(AcceptedAWF() || WJ())text<<":wall_formulation="<<FormulationMetadata();
+    if(WJ())text<<":model=WJHighRe:gradient=DevStrainRawWorkV1:epsilon=physical:pressure=pi=p/rho+2k/3:tensor=full3D:cubicN=2D:cd="<<m_parameters.wj.cd
+        <<":c1="<<m_parameters.wj.c1<<":c2="<<m_parameters.wj.c2<<":ce1="<<Epsilon1()<<":ce2="<<Epsilon2()<<":sigmaK="<<SigmaK()<<":sigmaE="<<m_parameters.wj.sigmaEpsilon;
     if(Mapped())text<<':'<<m_mapping.Signature();
     if(m_innerStress==RANSWallInnerStressModel::SaturatedR2)
         text<<":M8-R2:InnerStress:SaturatedR2:v1:rho=0.8";

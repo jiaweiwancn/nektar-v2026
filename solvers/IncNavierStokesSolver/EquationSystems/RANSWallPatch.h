@@ -6,6 +6,7 @@
 #define NEKTAR_RANS_WALL_PATCH_H
 #include <IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h>
 #include <SolverUtils/Turbulence/EquilibriumAWFProfiles.h>
+#include <SolverUtils/Turbulence/WJEARSM.h>
 #include <memory>
 
 namespace Nektar
@@ -24,10 +25,13 @@ struct RANSWallPatchData
 struct RANSWallPatchParameters
 {
     SolverUtils::AWFProfileGeometry geometry{1.5e-5,2,.1,1,1};
+    SolverUtils::WJParameters wj = SolverUtils::WJParameters::Defaults();
     double chi = 1;
     int tangentialOrder = 8, normalOrder = 16;
     SolverUtils::RANSNeutralReference model = SolverUtils::RANSNeutralReference::CLS();
 };
+
+void LoadWJNativeConfiguration(const LibUtilities::SessionReaderSharedPtr &session, RANSWallPatchParameters &parameters);
 
 /** Uncondensed native 2D flat patch: conservative full-strain momentum and
  * scalar transport, mixed pressure with one global gauge, original CLS outside

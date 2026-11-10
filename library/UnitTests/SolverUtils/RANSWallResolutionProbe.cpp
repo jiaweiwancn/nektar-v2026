@@ -178,6 +178,8 @@ int main(int argc,char **argv)
         serial->LoadParameter("RANSWallRoughness",p.geometry.roughness,.1);serial->LoadParameter("Kinvis",p.geometry.molecularNu,1.5e-5);
         serial->LoadParameter("RANSWallSampleHeight",p.geometry.sampleHeight,1.);serial->LoadParameter("RANSWallTailStart",p.geometry.tailStart,1.);
         serial->LoadParameter("RANSWallTangentialOrder",p.tangentialOrder,8);serial->LoadParameter("RANSWallNormalOrder",p.normalOrder,16);
+        std::string model;serial->LoadSolverInfo("TurbulenceModel",model,"CLSHighRe");
+        if(model=="WJHighRe")LoadWJNativeConfiguration(serial,p);
         RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
         Require(patch.Dimension()==2 && !patch.Mapped() && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
         Require(patch.InnerStressName()==packet.get<std::string>("inner_stress_model"),"packet law differs from session");
@@ -282,7 +284,7 @@ int main(int argc,char **argv)
             Require(RANSWallR3::HashFile(archived.get<std::string>("matrix_file"))==archived.get<std::string>("matrix_sha256"),"archived frozen transport matrix SHA256 differs");
         }
         const bool strictSpatialReadback=packet.get_optional<std::string>("native_checkpoint") &&
-            ((patch.AcceptedAWF() && (operation=="accepted_awf" || operation=="height_comparison" || operation=="selected_original_operator")) || operation=="evaluation_reuse_checks");
+            ((patch.AcceptedAWF() && (operation=="accepted_awf" || operation=="height_comparison" || operation=="selected_original_operator")) || operation=="evaluation_reuse_checks" || (patch.WJ() && operation=="wj_checks"));
         if(packet.get_optional<std::string>("native_checkpoint"))
         {
             Require((operation=="k_bound" || operation=="branch_coverage" || archivedStages || strictSpatialReadback) && !packet.get<bool>("projection_only",false),
@@ -457,6 +459,12 @@ int main(int argc,char **argv)
         const bool historyMatch=std::memcmp(history.data(),reference.data(),history.size()*sizeof(double))==0;
         Require(strictSpatialReadback || archivedStages || !packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
         const double time=packet.get<double>("time"),alpha=packet.get<double>("alpha");
+        if(operation=="wj_checks")
+        {
+            Require(strictSpatialReadback && patch.WJ(),"WJ checks require immutable native checkpoint readback");
+            std::ofstream out(argv[3]);out<<J::Object({{"replay",replayContext},{"checks",patch.WJNativeChecks(state,data)}})<<'\n';
+            Require(out.good(),"WJ native check write failed");world->Finalise();return 0;
+        }
         if(operation=="evaluation_reuse_checks")
         {std::ofstream out(argv[3]);out<<patch.EvaluationReuseChecks(state,history,time,data)<<'\n';Require(out.good(),"reuse verification write failed");world->Finalise();return 0;}
         RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,time);

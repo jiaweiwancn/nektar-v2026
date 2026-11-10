@@ -11,6 +11,20 @@ namespace Nektar
 using namespace SolverUtils;
 using RANSWallAlgebra::Require;
 
+void LoadWJNativeConfiguration(const LibUtilities::SessionReaderSharedPtr &session,RANSWallPatchParameters &parameters)
+{
+    auto &p=parameters.wj;const auto defaults=WJParameters::Defaults();
+    for(auto [name,value]:std::vector<std::pair<std::string,double*>>{{"C1",&p.c1},{"C2",&p.c2},{"Cd",&p.cd},
+        {"Cepsilon1",&p.cEpsilon1},{"Cepsilon2",&p.cEpsilon2},{"SigmaK",&p.sigmaK},{"SigmaEpsilon",&p.sigmaEpsilon}})
+        session->LoadParameter("RANSWJ"+name,*value,*value);
+    p.Validate();
+    Require(p.c1==defaults.c1 && p.c2==defaults.c2 && p.cd==defaults.cd &&
+        p.cEpsilon1==defaults.cEpsilon1 && p.cEpsilon2==defaults.cEpsilon2 &&
+        p.sigmaK==defaults.sigmaK && p.sigmaEpsilon==defaults.sigmaEpsilon,
+        "WJ-2 native supports only the reviewed default coefficients; kernel parameter variants remain separate");
+    parameters.model=RANSNeutralReference::WJ(p);
+}
+
 void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderSharedPtr &session)
 {
     std::string innerStress;session->LoadSolverInfo("RANSWallInnerStress",innerStress,"Linear");
@@ -33,6 +47,7 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
     session->LoadSolverInfo("RANSWallDestruction",destruction,selected?"Capped":"Original");
     Require(destruction=="Original" || destruction=="Capped","unknown inner destruction selection");
     m_cappedDestruction=destruction=="Capped";
+    Require(!WJ() || (m_variantName=="Original" && !m_cappedDestruction && m_innerStress==RANSWallInnerStressModel::Linear && m_regularizationGamma==0 && m_regularizationScale==0),"WJ requires Original outer, Linear full-strain inner and uncapped destruction");
     Require(!AcceptedAWF() || !m_cappedDestruction,"accepted budget AWF has no capped-destruction normalization");
     session->LoadSolverInfo("RANSWallDestructionSmoothing",smoothing,"Linear");
     Require(smoothing=="Linear" || smoothing=="C2","unknown destruction limiter shape");
@@ -69,6 +84,7 @@ RANSClosureValues RANSWallEvolutionPatch::OuterClosure(double k,double epsilon,
     const RANSTensor &gradient,const RANSWallCoordinate &p) const
 {
     if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: outer closure");
+    if(WJ())return EvaluateWJClosure(k,epsilon,gradient,m_parameters.wj,WJGradientPolicy::DevStrainRawWorkV1,0);
     if(m_variantName=="Original")return EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,
         gradient,Distance(p),m_parameters.model.Parameters(),0);
     auto variant=m_robust;
@@ -88,7 +104,7 @@ RANSClosureValues RANSWallEvolutionPatch::OuterClosure(double k,double epsilon,
 RANSCappedDestructionValues RANSWallEvolutionPatch::WallNormalization(const Vector &s,
     const RANSWallCoordinate &p,const EquilibriumAWFProfiles &profile) const
 {
-    Require(!AcceptedAWF(),"capped normalization is not part of CLSCalibratedBudgetAWF");
+    Require(CappedDestruction(),"normalization applies only to physical capped destruction");
     if(auto cached=CachedNormalization(s,p,profile))return *cached;
     ++m_evaluationWork.normalizationComputes;
     RANSCappedDestructionInput input;input.sampledK=profile.K();
@@ -125,6 +141,7 @@ AWFProfileValues RANSWallEvolutionPatch::WallSource(const Vector &s,const RANSWa
     double production,const EquilibriumAWFProfiles &profile,const RANSCappedDestructionValues *normalization,
     double *destructionRate) const
 {
+    if(destructionRate)*destructionRate=0.;
     auto values=profile.AtProduction(Distance(p),production);
     if(!m_cappedDestruction)return values;
     RANSCappedDestructionValues local;

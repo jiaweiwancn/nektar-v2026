@@ -14,7 +14,7 @@ namespace J=RANSWallSolveJson;
 std::string RANSWallEvolutionPatch::SourceBalanceDiagnostic(const Vector &s,double time,
     const RANSWallEvolutionData &data,const Vector &stations,const Vector &heights) const
 {
-    Require(!AcceptedAWF(),"legacy chi/cap source diagnostic is unsupported for the accepted wall formulation; use accepted_awf readback");
+    Require(CappedDestruction(),"legacy chi/cap source diagnostic is unsupported for the accepted wall formulation; use accepted_awf readback");
     Require(Dimension()==2 && !Mapped(),"source diagnostic is restricted to the flat 2D pilot");
     const auto hash=RANSWallR3::Hash(s);const auto domain=ScalarDomain(s,time,data);
     Require(domain.admissible,"selected source readback is outside its declared scalar inventory: "+domain.failure);
@@ -125,7 +125,7 @@ std::string RANSWallEvolutionPatch::SourceBalanceDiagnostic(const Vector &s,doub
                         {"limiter",J::Number(value.limiter)},{"B",J::Number(normal.b)},{"m",J::Number(normal.m)},{"lambda",J::Number(normal.lambda)},
                         {"dependent_epsilon",J::Number(value.dissipation)},{"redistribution",J::Number(value.redistribution)},
                         {"D",J::Number(value.destruction)},{"D_over_k",J::Number(value.rate)},{"source",J::Number(actual.production-value.destruction)},
-                        {"auxiliary_nu",J::Number(nt)},{"k_diffusivity",J::Number(m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK)},
+                        {"auxiliary_nu",J::Number(nt)},{"k_diffusivity",J::Number(m_parameters.geometry.molecularNu+nt/SigmaK())},
                         {"saturation_active",J::Boolean(actual.active)},{"saturation_a_c",J::Numbers(Vector{actual.a,actual.c})},
                         {"selected_native_spatial_rate",J::Number(row.Value(rate.rate))},{"selected_native_component_rates",J::Object(components)}}));
                 }

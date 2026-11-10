@@ -7,6 +7,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <algorithm>
+#include <LibUtilities/Foundations/ManagerAccess.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <chrono>
 #include <cmath>
@@ -79,7 +80,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     const auto n = system.rows.size();
     system.matrix.assign(n, Vector(n));
     system.residual.assign(n, 0.);
-    const auto &model = m_parameters.model.Parameters();
+
     const double nu   = m_parameters.geometry.molecularNu;
     Refresh(s, time, &data);
 
@@ -138,8 +139,8 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 double rate = 0.;
                 const auto source=WallSource(s, q.v.coordinate, law.production, *ray->profile,
                            &ray->destruction, &rate);
-                addScalar(q.v, u, q.weight, nu + nt / model.sigmaK, rate,
-                          (AcceptedAWF()?source.kSource:law.production) +
+                addScalar(q.v, u, q.weight, nu + nt / SigmaK(), rate,
+                          (CappedDestruction()?law.production:source.kSource) +
                               data.innerKSource(q.v.coordinate, time));
                 return;
             }
@@ -165,7 +166,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 {
                     addScalar(
                         q.e, u, q.weight, law.epsilonDiffusion,
-                        model.cEpsilon2 * epsilon / k,
+                        Epsilon2() * epsilon / k,
                         law.epsilonProduction + law.yap +
                             data.outerEpsilonSource(q.v.coordinate, time));
                 }
@@ -1265,3 +1266,155 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
     return s;
 }
 } // namespace Nektar
+
+namespace Nektar
+{
+std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data) const
+{
+    Require(WJ() && !Mapped() && m_dimension==2 && !CappedDestruction(),"WJ checks require the selected native pilot");
+    const auto hash=RANSWallR3::Hash(state);const double alpha=1e6,time=0.;
+    const auto constraints=Constraints(state,time,data),external=ExternalConstraints(time,data);
+    const auto physical=Residual(state,state,alpha,time,data,false);
+    double blockError=0,pressureColumnError=0,pressureFDError=0,traceColumn=0;
+    std::vector<std::string> blockReports,pressureReports;
+    for(int block:{0,K(),Epsilon()})
+    {
+        const auto frozen=AssemblePicardBlock(block,state,state,alpha,time,data,external);
+        double error=0;
+        for(int i=0;i<frozen.rows.size();++i)error=std::max(error,std::abs(frozen.residual[i]-physical[frozen.rows[i]]));
+        blockError=std::max(blockError,error);
+        blockReports.push_back(J::Object({{"block",J::Number(block)},{"same_state_max_defect",J::Number(error)},
+            {"rows",J::Numbers(frozen.rows)},{"frozen_residual",J::Numbers(frozen.residual)}}));
+        if(block==0)
+        {
+            for(int mode=0;mode<5;++mode)
+            {
+                Vector direction(Size());
+                if(mode==2)direction[offset[Gauge()]]=1.;
+                else if(mode==4)
+                {
+                    // Nonconstant outer pressure produces a nonzero sampled
+                    // tangential roughness forcing with all sensors absent.
+                    const auto values=fields[OuterPressure()]->Project([](const RANSWallCoordinate &p){return p[0]+.13*p[0]*p[2];});
+                    std::copy(values.begin(),values.end(),direction.begin()+offset[OuterPressure()]);
+                }
+                else for(int side=0;side<2;++side)for(int i=0;i<size[InnerPressure()+side];++i)
+                    if((mode==0 && side==0) || (mode==1 && side==1) || mode==3)
+                        direction[offset[InnerPressure()+side]+i]=(mode==3 && side==1?-1:1)*m_constants[InnerPressure()+side][i];
+                const auto action=AffinePressureAction(direction,constraints);
+                Vector reduced;for(int row:frozen.rows)reduced.push_back(direction[row]);
+                const auto column=RANSWallAlgebra::Multiply(frozen.matrix,reduced);
+                double ce=0,fd=1e300;
+                for(int i=0;i<frozen.rows.size();++i)ce=std::max(ce,std::abs(column[i]-action[frozen.rows[i]]));
+                for(double h:{1e-3,1e-4,1e-5})
+                {
+                    auto plus=state,minus=state;
+                    for(int i=0;i<Size();++i){plus[i]+=h*direction[i];minus[i]-=h*direction[i];}
+                    const auto rp=Residual(plus,state,alpha,time,data,false),rm=Residual(minus,state,alpha,time,data,false);
+                    double errorFD=0;for(int i=0;i<Size();++i)errorFD=std::max(errorFD,std::abs((rp[i]-rm[i])/(2*h)-action[i]));
+                    fd=std::min(fd,errorFD);
+                }
+                pressureColumnError=std::max(pressureColumnError,ce);pressureFDError=std::max(pressureFDError,fd);
+                pressureReports.push_back(J::Object({{"mode",J::Number(mode)},{"frozen_column_defect",J::Number(ce)},{"physical_difference_defect",J::Number(fd)}}));
+            }
+        }
+        if(block==Epsilon())
+        {
+            for(int id:m_traceIds)
+            {
+                const auto found=std::find(frozen.rows.begin(),frozen.rows.end(),offset[Epsilon()]+id);
+                Require(found!=frozen.rows.end(),"WJ epsilon trace row lost");
+                const int col=found-frozen.rows.begin();
+                for(int i=0;i<frozen.rows.size();++i)if(i!=col)traceColumn=std::max(traceColumn,std::abs(frozen.matrix[i][col]));
+            }
+        }
+    }
+    Require(blockError<1e-8 && pressureColumnError<1e-10 && pressureFDError<1e-7 && traceColumn>0,
+        "WJ frozen same-state/pressure/trace check failed");
+    // The resting-velocity fixture keeps the same transported scalars and
+    // sampled K. Complete prescribed destruction must remain in the residual.
+    auto resting=state;std::fill(resting.begin(),resting.begin()+offset[K()],0.);
+    auto restingData=data;for(auto &[row,value]:restingData.fixedBoundary)if(row<offset[K()])value=0;
+    const auto restingResidual=Residual(resting,resting,0,time,restingData,false);
+    const auto restingFrozen=AssemblePicardBlock(K(),resting,resting,0,time,restingData,ExternalConstraints(time,restingData));
+    double sinkBlockError=0,sinkPointError=0;
+    for(int i=0;i<restingFrozen.rows.size();++i)sinkBlockError=std::max(sinkBlockError,std::abs(restingFrozen.residual[i]-restingResidual[restingFrozen.rows[i]]));
+    Refresh(resting,time,&restingData);
+    for(const auto &ray:m_rays)for(const auto &q:ray.points)
+    {
+        const auto source=WallSource(resting,q.v.coordinate,0,*ray.profile);
+        const double expected=WJEP()?-ray.profile->ReferenceProduction(Distance(q.v.coordinate)):-ray.profile->Dissipation(Distance(q.v.coordinate));
+        sinkPointError=std::max(sinkPointError,std::abs(source.kSource-expected));
+    }
+    Require(sinkBlockError<1e-9 && sinkPointError<1e-12,"uncapped WJ sink was dropped");
+    const auto resolution=ResidualResolutionComponents(state,state,0,time,data,false);
+    std::vector<std::pair<std::string,std::string>> terms;
+    for(const auto &[name,values]:resolution.terms)terms.push_back({name,J::Numbers(values)});
+    // Independent test quadrature: new higher-order Gauss rules evaluate the
+    // unchanged represented fields, split at physical native/source knots.
+    // These evaluations perform no projection, Lift or governing solve.
+    std::vector<std::string> samples;
+    auto append=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile)
+    {
+        const auto &v=q.v;RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=v.Gradient(state,offset[a]);
+        Vector gradient;for(const auto &row:g)gradient.insert(gradient.end(),row.begin(),row.end());
+        const double k=v.Value(state,offset[K()]),epsilon=inner?profile->Dissipation(v.coordinate[2]):q.e.Value(state,offset[Epsilon()]);
+        const auto gk=v.Gradient(state,offset[K()]);RANSVector ge{};if(!inner)ge=q.e.Gradient(state,offset[Epsilon()]);
+        std::vector<std::string> derivatives;for(int axis:{0,2})derivatives.push_back(J::Numbers(v.derivative[axis]));
+        std::vector<std::string> epsilonDerivatives;if(!inner)for(int axis:{0,2})epsilonDerivatives.push_back(J::Numbers(q.e.derivative[axis]));
+        samples.push_back(J::Object({{"inner",J::Boolean(inner)},{"geometry",J::Number(v.geometry)},{"element",J::Number(v.element)},
+            {"coordinate",J::Numbers(v.coordinate)},{"weight",J::Number(q.weight)},{"k",J::Number(k)},{"epsilon",J::Number(epsilon)},
+            {"G",J::Numbers(gradient)},{"grad_k",J::Numbers(gk)},{"grad_epsilon",J::Numbers(ge)},
+            {"sampled_K",inner?J::Number(profile->K()):"null"},{"ids",J::Numbers(v.ids)},{"phi",J::Numbers(v.phi)},
+            {"derivative_xz",J::List(derivatives)},{"epsilon_ids",inner?"[]":J::Numbers(q.e.ids)},
+            {"epsilon_phi",inner?"[]":J::Numbers(q.e.phi)},{"epsilon_derivative_xz",J::List(epsilonDerivatives)}}));
+    };
+    const auto xrule=LibUtilities::PointsManager()[LibUtilities::PointsKey(10,LibUtilities::eGaussGaussLegendre)];
+    for(const auto &element:innerVelocity->Elements())if(element.lower[2]==0)
+        for(int j=0;j<10;++j)
+        {
+            RANSWallCoordinate anchor{element.lower[0]+(xrule->GetZ()[j]+1)*(element.upper[0]-element.lower[0])/2,0,0};
+            const auto selected=StateProfile(state,anchor,time,data);auto options=selected->Options();options.quadratureOrder=32;
+            EquilibriumAWFProfiles profile(selected->Geometry(),selected->K(),m_parameters.model,{},options,m_wallParameters);
+            const double wx=xrule->GetW()[j]*(element.upper[0]-element.lower[0])/2;
+            for(const auto &r:profile.Quadrature()){auto p=anchor;p[2]=r.r;append({Point(0,p),Point(InnerPressure(),p),{},wx*r.weight},true,&profile);}
+        }
+    for(const auto &v:outerVelocity->Quadrature(24))append({v,Point(OuterPressure(),v.coordinate),Point(Epsilon(),v.coordinate),v.weight},false,nullptr);
+    // Extract actual native off-constraint states and test the common action
+    // in a simultaneous k/epsilon/raw-G direction without changing the state.
+    std::vector<std::string> constitutive;int extracted=0;
+    for(const auto &q:m_outer)
+    {
+        if(extracted++>=4)break;
+        RANSTensor g{},h{{{.2,.1,.3},{0,-.1,0},{-.2,0,.4}}};
+        for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=q.v.Gradient(state,offset[a]);
+        g[0][0]+=.07;g[2][0]-=.13;
+        const double k=q.v.Value(state,offset[K()]),epsilon=q.e.Value(state,offset[Epsilon()]);
+        const auto c=OuterClosure(k,epsilon,g,q.v.coordinate),d=ApplyWJClosureDirection(k,epsilon,g,.13,-.04,h,m_parameters.wj,WJGradientPolicy::DevStrainRawWorkV1);
+        Vector G,H,R,dR;for(int a=0;a<3;++a)for(int b=0;b<3;++b){G.push_back(g[a][b]);H.push_back(h[a][b]);R.push_back(c.reynoldsStress[a][b]);dR.push_back(d.reynoldsStress[a][b]);}
+        constitutive.push_back(J::Object({{"coordinate",J::Numbers(q.v.coordinate)},{"k",J::Number(k)},{"epsilon",J::Number(epsilon)},
+            {"G",J::Numbers(G)},{"direction_G",J::Numbers(H)},{"R",J::Numbers(R)},{"direction_R",J::Numbers(dR)},
+            {"nu_eff",J::Number(c.eddyViscosity)},{"nu_d",J::Number(c.scalarViscosity)},{"Praw",J::Number(c.production)},
+            {"Pdev",J::Number(c.productionDev)},{"divergence",J::Number(c.divergence)},
+            {"direction_sources_diffusion",J::Numbers(Vector{d.kSource,d.epsilonSource,d.kDiffusion,d.epsilonDiffusion})}}));
+    }
+    auto anchor=RANSWallCoordinate{(lower[0]+upper[0])/2,0,m_parameters.geometry.height};
+    const double sample=SampleK(state,anchor),delta=sample*1e-5;
+    auto plus=state,minus=state;
+    for(int j=0;j<size[K()];++j){plus[offset[K()]+j]+=delta*m_constants[K()][j];minus[offset[K()]+j]-=delta*m_constants[K()][j];}
+    const auto pp=StateProfile(plus,anchor,time,data),pm=StateProfile(minus,anchor,time,data);
+    const double traceDirection=(pp->Dissipation(anchor[2])-pm->Dissipation(anchor[2]))/(2*delta);
+    const double traceExpected=1.5*StateProfile(state,anchor,time,data)->Dissipation(anchor[2])/sample;
+    Require(std::abs(traceDirection-traceExpected)<1e-8,"WJ endpoint-K dependent trace response failed");
+    Require(hash==RANSWallR3::Hash(state),"WJ read-only check changed state");
+    return J::Object({{"schema","1"},{"model",J::Quote("WJHighRe")},{"audit_revision",J::Quote(AuditRevision())},
+        {"governing_solves","0"},{"state_unchanged","true"},{"state_sha256",J::Quote(hash)},
+        {"frozen_blocks",J::List(blockReports)},{"pressure_modes",J::List(pressureReports)},
+        {"max_same_state_defect",J::Number(blockError)},{"epsilon_retained_trace_column",J::Number(traceColumn)},
+        {"zero_production_sink_point_error",J::Number(sinkPointError)},{"zero_production_sink_block_error",J::Number(sinkBlockError)},
+        {"endpoint_K_cutoff_plus_minus",J::Numbers(Vector{pp->Reference().cutoff,pm->Reference().cutoff})},
+        {"endpoint_K_trace_action_expected",J::Numbers(Vector{traceDirection,traceExpected})},
+        {"terms",J::Object(terms)},{"independent_quadrature",J::List(samples)},
+        {"extracted_constitutive",J::List(constitutive)}});
+}
+}
