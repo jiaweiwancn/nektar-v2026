@@ -9,7 +9,7 @@ from rans_preservation_oracle import Reference,physical_grid,representation,weak
 from rans_request_manifest import runtime_identity
 from qualify_rans_preservation import load,Q,nested,replay_request
 from run_a93_a95_e94e95_matrix import case_xml
-from rans_spatial_resolution import analyze,common_test
+from rans_spatial_resolution import analyze,common_test,test_parent_geometries
 
 def run_probe(runtime,folder,request):
     write_json(folder/'request.json',request);t=time.monotonic()
@@ -29,20 +29,20 @@ def specs(ref):
     return dict(BaseP5=dict(degree=5,knots=base),Interface8P5=dict(degree=5,knots=split(interface)),Nearwall8P5=dict(degree=5,knots=split(pairs[:8])),H1P5=dict(degree=5,knots=nested(base,1)),H1P4=dict(degree=4,knots=nested(base,1)),NoAuxP5=dict(degree=5,knots=noaux))
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--model',default='E94E95',choices=('E94E95','A95','A93'));p.add_argument('--policy',default='Natural',choices=('Natural','Prescribed'));p.add_argument('--wall',required=True,choices=('EP','Accepted'));p.add_argument('--label',required=True);p.add_argument('--names',nargs='+');p.add_argument('--specifications',type=Path);p.add_argument('--quadrature-index',type=int,default=1,choices=(0,1,2));a=p.parse_args();r=a.root.resolve();out=r/'diagnosis'/a.label;out.mkdir(parents=True,exist_ok=False)
-    os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--analysis-runtime',type=Path);p.add_argument('--model',default='E94E95',choices=('E94E95','A95','A93'));p.add_argument('--policy',default='Natural',choices=('Natural','Prescribed'));p.add_argument('--wall',required=True,choices=('EP','Accepted'));p.add_argument('--label',required=True);p.add_argument('--names',nargs='+');p.add_argument('--specifications',type=Path);p.add_argument('--quadrature-index',type=int,default=1,choices=(0,1,2));a=p.parse_args();r=a.root.resolve();runtime=a.analysis_runtime.resolve() if a.analysis_runtime else r/'runtime';out=r/'diagnosis'/a.label;out.mkdir(parents=True,exist_ok=False)
+    os.environ.update(THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'))
     ref=Reference(a.model,a.policy,a.wall);choices=load(a.specifications) if a.specifications else specs(ref);names=a.names or list(choices)
     active=[x for x in ref.knots() if x!=ref.kernel.ze];grid,weights=physical_grid(sorted(set(nested(ref.knots(),1)+[x for s in choices.values() for x in s['knots']])),10,8)
-    intent=dict(schema='BalancedSpatialDiagnosisV1',model=a.model,policy=a.policy,wall=a.wall,spaces={n:choices[n] for n in names},common_test=dict(degree=3,pressure_degree=1,knots=active,scope='fixed native p3 tests; omit unused original epsilon breakpoint in this common space only'),quadrature=Q[a.quadrature_index],runtime={n:runtime_identity(r/'runtime'/n) for n in ('RANSPreservationProbe','RANSNewModelsProbe')},evaluation=dict(grid=grid,weights=weights),alpha=0,time=0)
+    intent=dict(schema='BalancedSpatialDiagnosisV1',model=a.model,policy=a.policy,wall=a.wall,spaces={n:choices[n] for n in names},common_test=dict(degree=3,pressure_degree=1,knots=active,scope='fixed native p3 tests; omit unused original epsilon breakpoint in this common space only'),quadrature=Q[a.quadrature_index],runtime={n:runtime_identity((runtime if n=='RANSPreservationProbe' else r/'runtime')/n) for n in ('RANSPreservationProbe','RANSNewModelsProbe')},evaluation=dict(grid=grid,weights=weights),alpha=0,time=0)
     write_json(out/'immutable-request.json',intent)
     common=out/'common';case_xml(common,a.model,a.policy,a.wall,steps=0,descriptor_probe=r/'runtime/RANSNewModelsProbe',radial_knots=active,degree=3,quadrature=Q[a.quadrature_index],boundary_policy='FrozenReferenceV1')
-    cp,_=run_probe(r/'runtime',common,dict(operation='neutral',grid=[],export_basis=True,export_resolution=True));checks=[]
+    cp,_=run_probe(runtime,common,dict(operation='neutral',grid=[],export_basis=True,export_resolution=True));checks=[]
     for name in names:
         try:
             spec=choices[name];folder=out/name;case_xml(folder,a.model,a.policy,a.wall,steps=0,descriptor_probe=r/'runtime/RANSNewModelsProbe',radial_knots=spec['knots'],degree=spec['degree'],quadrature=Q[a.quadrature_index],boundary_policy='FrozenReferenceV1')
-            packet,elapsed=run_probe(r/'runtime',folder,dict(operation='neutral',grid=grid,export_basis=True,export_resolution=True));o=packet['observation']
-            cross=out/(name+'-common-cross');cross.mkdir();__import__('shutil').copy2(common/'case.xml',cross/'case.xml');request=replay_request(cp,[q['coordinate'] for q in o['volume']]);request['export_test_basis']=True
-            crosspacket,_=run_probe(r/'runtime',cross,request)
+            packet,elapsed=run_probe(runtime,folder,dict(operation='neutral',grid=grid,export_basis=True,export_resolution=True));o=packet['observation']
+            cross=out/(name+'-common-cross');cross.mkdir();__import__('shutil').copy2(common/'case.xml',cross/'case.xml');request=replay_request(cp,[q['coordinate'] for q in o['volume']]);request['export_test_basis']=True;request['grid_test_geometries']=test_parent_geometries(cp,packet)
+            crosspacket,_=run_probe(runtime,cross,request)
             record=dict(name=name,status='pass',space=dict(spec,pressure_degree=spec['degree']-2,dof=sum(o['sizes']),block_sizes=o['sizes']),evolution_eligible=sum(o['sizes'])<=3000,
                 exact_source_runtime=intent['runtime'],initial_state_sha256=exact_vector_hash(o['state']),reference_sha256=exact_vector_hash(packet['reference']),initialization=packet['initialization_receipt'],
                 initialization_and_full_export_seconds=elapsed,actual_quadrature=o['actual_quadrature'],representation=representation(ref,o,weights),analytical_weak_balance=weak_balance(ref,o),

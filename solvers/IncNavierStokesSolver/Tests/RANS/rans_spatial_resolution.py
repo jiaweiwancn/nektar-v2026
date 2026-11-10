@@ -77,6 +77,18 @@ def analyze(packet,ref):
         constrained_reactions={FIELDS[b]:dict(rows=[int(i) for i in range(off[b],off[b]+size[b]) if i in fixed],load=[float(physical[i]) for i in range(off[b],off[b]+size[b]) if i in fixed]) for b in range(6)},
         scope='native alpha-zero terms and reactions; full native test space; no time-discrete mass or semidiscrete scalar-rate inference')
 
+def test_parent_geometries(coarse,fine):
+    """Choose each common parent by the actual fine element, never a near-face point."""
+    parents={}
+    for e in fine['observation']['elements']:
+        center=[(a+b)/2 for a,b in zip(e['lower'],e['upper'],strict=True)]
+        matches=[c for c in coarse['observation']['elements'] if all(c['lower'][a]<center[a]<c['upper'][a] for a in (0,2))]
+        if len(matches)!=1:raise ValueError('fine element has no unique common parent')
+        c=matches[0]
+        if any(e['lower'][a]<c['lower'][a]-2e-13 or e['upper'][a]>c['upper'][a]+2e-13 for a in (0,2)):raise ValueError('common tests are not a polynomial subspace')
+        parents[e['geometry']]=c['geometry']
+    return [parents[q['velocity_k']['geometry']] for q in fine['observation']['volume']]
+
 def common_test(coarse,fine,cross,ref):
     """P = M_f^{-1} B_fc on native quadrature, then restrict by P^T.
 

@@ -5,6 +5,8 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallPhysicsSignature.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <cstring>
+#include <algorithm>
+#include <cmath>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <SpatialDomains/MeshGraphIO.h>
 #include <boost/property_tree/json_parser.hpp>
@@ -153,14 +155,29 @@ int main(int argc,char **argv)
         }
         if(request.get<bool>("export_test_basis",false))
         {
+            std::vector<int> geometries;
+            if(auto selected=request.get_child_optional("grid_test_geometries"))
+                for(const auto &v:*selected)geometries.push_back(v.second.get_value<int>());
+            Require(geometries.empty() || geometries.size()==grid.size(),"test geometry selector count differs");
             std::vector<std::string> rows;
             for(int i=0;i<grid.size();++i)
             {
                 const auto &q=grid[i];const int side=sides.empty()?0:sides[i];
-                const bool outer=q[2]>p.geometry.height || (q[2]==p.geometry.height && side==1);
-                rows.push_back(J::Object({{"velocity_k",Row(patch.Point(0,q,side))},
-                    {"pressure",Row(patch.Point(patch.InnerPressure()+outer,q,side))},
-                    {"epsilon",outer?Row(patch.Point(patch.Epsilon(),q,side)):"null"}}));
+                bool outer=q[2]>p.geometry.height || (q[2]==p.geometry.height && side==1);
+                if(!geometries.empty())
+                {
+                    const auto &elements=patch.fields[0]->Elements();
+                    const auto parent=std::find_if(elements.begin(),elements.end(),[&](const auto &e){return e.geometry==geometries[i];});
+                    Require(parent!=elements.end(),"unknown explicit native test geometry");
+                    const bool selectedOuter=parent->lower[2]>=p.geometry.height;
+                    if(std::abs(q[2]-p.geometry.height)<1e-12)
+                        Require(selectedOuter==(side==1),"test geometry conflicts with declared interface side");
+                    outer=selectedOuter;
+                }
+                auto selected=[&](int block){return geometries.empty()?patch.Point(block,q,side):patch.GeometryPoint(block,geometries[i],q);};
+                rows.push_back(J::Object({{"velocity_k",Row(selected(0))},
+                    {"pressure",Row(selected(patch.InnerPressure()+outer))},
+                    {"epsilon",outer?Row(selected(patch.Epsilon())):"null"}}));
             }
             testBasis=J::List(rows);
         }
