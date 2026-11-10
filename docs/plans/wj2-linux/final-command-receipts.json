@@ -1,0 +1,80 @@
+[
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj2-20261110/build",
+      "--parallel",
+      "1",
+      "--target",
+      "IncNavierStokesSolver",
+      "RANSWallResolutionProbe",
+      "WJKernelProbe",
+      "RANSKernelProbe",
+      "RANSConstitutiveProbe",
+      "RANSAcceptedAWFProbe",
+      "RANSEquilibriumProfilesProbe",
+      "RANSProfileBranchChecks",
+      "RANSKBoundQPChecks",
+      "RANSHistoryRejectionChecks",
+      "RANSStressTangentAudit",
+      "RANSReturnedFieldsProbe",
+      "RANSObservationKernelProbe",
+      "RANSWallTimingChecks",
+      "RANSEquilibriumTimeProbe",
+      "RANSReducedModelChecks"
+    ],
+    "exit_code": 0,
+    "seconds": 145.96380925178528,
+    "started_utc": "2026-11-10T09:56:19.052206+00:00",
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj2-20261110/build-final-2.log",
+    "source_revision": "c8f3481b03a5e172f7875aedaa7d18faae3574d4"
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj2-20261110/build",
+      "--show-only=json-v1"
+    ],
+    "exit_code": 0,
+    "seconds": 0.05004382133483887,
+    "started_utc": "2026-11-10T09:58:45.028475+00:00",
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj2-20261110/test-inventory.json",
+    "source_revision": "c8f3481b03a5e172f7875aedaa7d18faae3574d4"
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj2-20261110/build",
+      "-j",
+      "1",
+      "--output-on-failure",
+      "-R",
+      "^(WJNativeEP|WJNativeBudget|RANSWJSharedLegacyTransaction)$"
+    ],
+    "exit_code": 0,
+    "seconds": 407.14082050323486,
+    "started_utc": "2026-11-10T09:58:45.090078+00:00",
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj2-20261110/ctest-native-final-2.log",
+    "source_revision": "c8f3481b03a5e172f7875aedaa7d18faae3574d4"
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj2-20261110/build",
+      "-j",
+      "1",
+      "--output-on-failure",
+      "-R",
+      "^(WJKernelContracts|WJIndependentOracle|RANSKernelUnitTests|RANSCLSEPAWFM1Oracle|RANSCLSEPAWFM2Oracle|RANSAcceptedAWFKernel|RANSEquilibriumProfilesNative|RANSProfileBranchChecks|RANSKBoundQPChecks|RANSHistoryRejectionChecks|RANSAcceptedAWFCases|RANSStressTangentOracle|RANSReturnedFieldsChecks|RANSObservationKernels|RANSWallTimingChecks|RANSEquilibriumTimeNative|RANSReducedModelChecks|RANSStandardTransportSmoke|RANSCLSTransportSmoke|RANSAWFOriginalSmoke|RANSAWFEquilibriumSmoke|RANSStandardAWFEquilibriumSmoke|RANSEquilibriumWallEvolutionSmoke|RANSEquilibriumWallStageSmoke)$"
+    ],
+    "exit_code": 0,
+    "seconds": 82.3885452747345,
+    "started_utc": "2026-11-10T10:05:32.246372+00:00",
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj2-20261110/ctest-regressions-final-2.log",
+    "source_revision": "c8f3481b03a5e172f7875aedaa7d18faae3574d4"
+  }
+]
