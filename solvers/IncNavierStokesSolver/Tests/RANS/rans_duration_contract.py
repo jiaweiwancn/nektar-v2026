@@ -99,8 +99,8 @@ def scalar_coverage(observer, reports, config, horizon):
     for obs, (t,state) in zip(accepted, expected, strict=True):
         require(abs(obs['time']-t) <= TIME_TOL, 'scalar_accepted_time_mismatch')
         digest = exact_vector_hash(state)
-        if 'state_sha256' in obs:
-            require(obs['state_sha256'] == digest, 'scalar_accepted_state_mismatch')
+        require('state_sha256' in obs, 'scalar_state_identity_missing')
+        require(obs['state_sha256'] == digest, 'scalar_accepted_state_mismatch')
         key = next((s for s in unique if abs(s-t) <= TIME_TOL), None)
         if key is None:
             unique[t] = digest

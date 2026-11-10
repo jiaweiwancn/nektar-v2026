@@ -5,7 +5,7 @@ import argparse,os,subprocess,sys,time
 from pathlib import Path
 from qualify_rans_preservation import load
 from rans_qualification import THREADS,write_json
-from rans_request_manifest import RequestManifest,sha
+from rans_request_manifest import RequestManifest,sha,runtime_identity
 from rans_duration_contract import MEMBERS,identity,require,scalar_coverage
 from admit_rans_configuration import validate_audit
 from rans_worker_budget import spawn
@@ -16,6 +16,11 @@ def main():
     request=dict(schema='ResponseFinalAuditV1',configuration=cfg,time=a.time,admission_sha256=sha(a.admission),meshes=ad['meshes'],common_packet_sha256=ad['common_packet_sha256'],diagnostic_runtime=ad['duration_diagnostic_runtime'],trajectory_requests={m:sha(r/'campaigns'/label/'request-manifest.json') for m,label in zip(MEMBERS,labels,strict=True)})
     seal=RequestManifest(out,request,a.resume)
     if seal.completed(out):return 0 if load(out/'results.json')['status']=='pass' else 1
+    os.environ['LD_LIBRARY_PATH']=str(r/'runtime-resolution-v3/lib')
+    require(runtime_identity(r/'runtime-resolution-v3/RANSPreservationProbe')==ad['duration_diagnostic_runtime'],
+            'admitted_response_diagnostic_runtime_changed')
+    require(sha(Path(ad['common_directory'])/'packet.json.gz')==ad['common_packet_sha256'],'response_common_packet_changed')
+    env['LD_LIBRARY_PATH']=os.environ['LD_LIBRARY_PATH']
     def run(name,cmd):
         with (out/(name+'.log')).open('x') as f:
             proc=None

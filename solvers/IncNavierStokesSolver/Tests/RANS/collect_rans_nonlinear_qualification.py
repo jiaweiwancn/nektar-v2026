@@ -7,7 +7,7 @@ from rans_qualification import THREADS,write_json
 os.environ.update(THREADS)
 from qualify_rans_preservation import load
 from rans_request_manifest import RequestManifest,sha
-from rans_duration_contract import require,required_times,prefix,MEMBERS,aggregate
+from rans_duration_contract import require,required_times,prefix,MEMBERS,aggregate,identity
 from collect_rans_balanced_spatial import compact_analysis,audit_summaries
 from rans_nonlinear_evidence_contract import classify
 
@@ -100,19 +100,35 @@ def main():
                 shutil.copy2(path.parent/'case.xml',out/(folder.name+'-failure.xml'));result['failures'].append(dict(label=folder.name,target=metric['target'],failure=metric.get('failure'),witness=dest.name))
         result['cases'].append(row)
     for path in sorted((r/'response-cohorts').glob('*/results.json')) if (r/'response-cohorts').exists() else []:
-        data=receipt(path);bodies={}
+        data=receipt(path);controller=load(path.parent/'request-manifest.json')['request'];response_seal=RequestManifest(path.parent,controller,True);identity(data['configuration'],controller['configuration']);bodies={}
         for milestone in data.get('milestones',[]):
-            target=Path(milestone['comparison']);bodies[str(milestone['time'])]=receipt(target)
+            target=Path(milestone['comparison']);body=receipt(target)
+            if body.get('status')=='pass':
+                require(response_seal.completed(target.parent),'response_comparison_unsealed');identity(body['configuration'],controller['configuration']);require(abs(body['time']-milestone['time'])<1e-13,'response_comparison_time_mismatch')
+                require(body['amplitude']==controller['amplitude'] and body['timesteps']==controller['timesteps'],'response_request_physics_mismatch')
+            bodies[str(milestone['time'])]=body
         data['complete_comparisons']=bodies;data['audits']={};rows=[]
         for time,body in bodies.items():
             audit=receipt(r/'response-audits'/(path.parent.name+'-'+time)/'results.json')
+            if audit.get('status')=='pass':
+                aq=load(Path(audit['source']).parent/'request-manifest.json')['request'];identity(aq['configuration'],controller['configuration']);require(aq['admission_sha256']==controller['admission_sha256'],'response_audit_admission_mismatch');require(abs(aq['time']-float(time))<1e-13,'response_audit_time_mismatch');require(RequestManifest(Path(audit['source']).parent,aq,True).completed(Path(audit['source']).parent),'response_audit_unsealed')
             if 'spatial' in audit:audit['spatial']={m:dict(v,checks=[compact_analysis(c) for c in v['checks']]) for m,v in audit['spatial'].items()}
             data['audits'][time]=audit
             budgets={q.parent.name:receipt(q) for q in (r/'physical-budgets').glob(path.parent.name+'-*'+time+'*/results.json')}
             data.setdefault('physical_budgets',{})[time]=budgets
-            rows.append(dict(time=float(time),status=body.get('status','not_completed'),audit_status=audit.get('status','not_completed'),physical_budget_status='reconstructed' if budgets and all(v['status']=='pass' for v in budgets.values()) else 'not_completed',companions={m:dict(last_time=float(time)) for m in MEMBERS} if len(body.get('provenance',[]))==8 else {}))
+            required_budgets={path.parent.name+'-'+kind+'-'+m+'-'+time+'-Q'+str(q) for kind in ('perturbed','baseline') for m in MEMBERS[:2] for q in (1,2)}
+            coverage=required_budgets.issubset(budgets) and all(budgets[n]['status']=='pass' for n in required_budgets)
+            if coverage:
+                for kind in ('perturbed','baseline'):
+                    head=path.parent.name if kind=='perturbed' else prefix(**{k:controller['configuration'][k] for k in ('model','policy','wall')})+'-duration-'+str(controller['timesteps'][0])
+                    for m in MEMBERS[:2]:
+                        report=r/'campaigns'/(head+'-'+m)/('T-'+format(float(time),'.4f'))/'case.evolution.json'
+                        for q in (1,2):
+                            value=budgets[path.parent.name+'-'+kind+'-'+m+'-'+time+'-Q'+str(q)]
+                            identity(value['configuration'],controller['configuration']);require(value['source_report_sha256']==sha(report),'physical_budget_native_report_mismatch');require(abs(value['time']-float(time))<1e-13,'physical_budget_horizon_mismatch')
+            data.setdefault('physical_budget_coverage',{})[time]=dict(status='reconstructed' if coverage else 'not_completed',required=sorted(required_budgets),observed=sorted(budgets))
+            rows.append(dict(time=float(time),status=body.get('status','not_completed'),audit_status=audit.get('status','not_completed'),physical_budget_status='reconstructed' if coverage else 'not_completed',companions={m:dict(last_time=float(time)) for m in MEMBERS} if len(body.get('provenance',[]))==8 else {}))
         result['responses'][path.parent.name]=data
-        controller=load(path.parent/'request-manifest.json')['request']
         if controller.get('amplitude')==2e-5:
             value=dict(configuration=data['configuration'],status=data['status'],comparisons=rows,extended_to_point_one=any(v['time']==.1 for v in rows))
             if data['configuration']['wall']=='Accepted':scope_input['responses'][data['configuration']['model']]=value

@@ -73,6 +73,7 @@ def classify(bundle):
             require(row['configuration']['model'] in admitted_response,
                     'ep_model_neutral_not_qualified')
             require(row['configuration']['wall'] == 'EP', 'wrong_wall_for_ep_control')
+            require(row['configuration']['policy'] == 'Natural', 'wrong_policy_for_ep_control')
             require(row['status'] == 'pass', 'ep_response_missing_or_failed')
             required_times(row['comparisons'], (.016,))
             require(all(v['status'] == 'pass' and v['audit_status'] == 'pass'

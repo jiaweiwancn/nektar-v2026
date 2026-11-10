@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Adversarial pass-labelled evidence must not satisfy a configuration gate."""
 import copy,unittest
-from rans_duration_contract import aggregate, required_times, MEMBERS
+from rans_duration_contract import aggregate, required_times, scalar_coverage, MEMBERS
 
 
 class DurationContract(unittest.TestCase):
@@ -37,6 +37,17 @@ class DurationContract(unittest.TestCase):
     def test_both_short_times(self):
         with self.assertRaisesRegex(ValueError,'missing_required_time'):required_times([dict(time=.016)],(.0016,.016))
         required_times([dict(time=.0016+1e-17),dict(time=.016-1e-17)],(.0016,.016))
+    def test_each_scalar_state_identity(self):
+        from rans_qualification import exact_vector_hash
+        report=dict(audit_times=[0.,.001,.002],accepted_states=[[0.],[1.],[2.]],time=.002,
+                    pimple_attempts=[dict(alpha=1000.),dict(alpha=1000.)])
+        observations=[dict(stage='accepted',time=t,state_sha256=exact_vector_hash(state))
+                      for t,state in zip(report['audit_times'],report['accepted_states'])]
+        observer=dict(status='pass',configuration=self.config,observations=observations)
+        self.assertEqual(scalar_coverage(observer,[report],self.config,.002)['unique_accepted_states'],3)
+        del observations[-1]['state_sha256']
+        with self.assertRaisesRegex(ValueError,'scalar_state_identity_missing'):
+            scalar_coverage(observer,[report],self.config,.002)
 
 
 if __name__=='__main__':unittest.main()
