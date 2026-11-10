@@ -862,7 +862,7 @@ std::string RANSWallEvolutionPatch::WJWeakLoads(const Vector &state,const Vector
 }
 
 std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vector &stageHistory,double stageAlpha,double time,
-    const RANSWallEvolutionData &data,const std::vector<std::array<double,6>> &observations) const
+    const RANSWallEvolutionData &data,const std::vector<std::array<double,7>> &observations) const
 {
     namespace J=RANSWallSolveJson;
     Require(WJ() && m_eta==0 && stageAlpha>=0,"WJ measurement requires unanchored selected model");
@@ -899,7 +899,7 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
         for(int j=0;j<6;++j)evaluationSensitivity[j]=std::max(evaluationSensitivity[j],std::abs(value[j]-alternate[j]));}
         Vector G;for(const auto &r:g)G.insert(G.end(),r.begin(),r.end());
         samples.push_back(J::Object({{"position",J::Numbers(p)},{"geometry",J::Number(v.geometry)},{"element",J::Number(v.element)},
-            {"face_sides_xz",J::Numbers(Vector{double(xface),double(zface)})},{"provenance",J::Quote("NativeElementSideV2")},{"weight",J::Number(o[3])},{"side",J::Number(side)},
+            {"requested_x_side",J::Number(o[6])},{"face_sides_xz",J::Numbers(Vector{double(xface),double(zface)})},{"provenance",J::Quote("NativeElementSideV2")},{"weight",J::Number(o[3])},{"side",J::Number(side)},
             {"inner",J::Boolean(inner)},{"value",J::Numbers(value)},{"represented_initial",J::Numbers(initial)},
             {"raw_G",J::Numbers(G)},{"grad_k",J::Numbers(v.Gradient(state,offset[K()]))},
             {"stress",J::Rows([&](){RANSTensor t{};const double k=value[2];if(inner){const auto profile=StateProfile(state,p,time,data);

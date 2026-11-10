@@ -494,9 +494,9 @@ int main(int argc,char **argv)
                     binding.get<double>("time")==time && binding.get<double>("alpha_mass")==stageAlpha,
                     "WJ completed-stage audit binding differs");
             }
-            std::vector<std::array<double,6>> observations;
+            std::vector<std::array<double,7>> observations;
             for(const auto &entry:packet.get_child("observations"))
-            {std::array<double,6> q{};q[5]=-1;int i=0;for(const auto &v:entry.second){Require(i<6,"WJ observation shape");q[i++]=v.second.get_value<double>();}Require(i==5 || i==6,"WJ observation shape");observations.push_back(q);}
+            {std::array<double,7> q{};q[5]=-1;int i=0;for(const auto &v:entry.second){Require(i<7,"WJ observation shape");q[i++]=v.second.get_value<double>();}Require(i>=5 && i<=7,"WJ observation shape");observations.push_back(q);}
             const auto checkpointHash=RANSWallR3::HashFile(packet.get<std::string>("native_checkpoint")+"/State.bin");
             std::ofstream out(argv[3]);out<<J::Object({{"replay",replayContext},{"native_report_sha256",J::Quote(reportHash)},
                 {"measurements",patch.WJMeasurements(state,stageHistory,stageAlpha,time,data,observations)},

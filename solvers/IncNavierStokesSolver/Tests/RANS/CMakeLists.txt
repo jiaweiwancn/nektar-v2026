@@ -639,3 +639,13 @@ if(Python3_Interpreter_FOUND)
     add_test(NAME WJQualificationMetadata COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_wj4_metadata.py)
     set_tests_properties(WJQualificationMetadata PROPERTIES PROCESSORS 1 TIMEOUT 30)
 endif()
+if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
+    foreach(wj_policy EP Budget)
+        add_test(NAME WJCompositeObservation${wj_policy} COMMAND ${Python3_EXECUTABLE} -B
+            ${CMAKE_CURRENT_LIST_DIR}/test_wj4_observations.py
+            --solver $<TARGET_FILE:IncNavierStokesSolver> --probe $<TARGET_FILE:RANSWallResolutionProbe>
+            --policy ${wj_policy} --output ${CMAKE_CURRENT_BINARY_DIR}/wj4-observations)
+        set_tests_properties(WJCompositeObservation${wj_policy} PROPERTIES PROCESSORS 1 TIMEOUT 600
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
+    endforeach()
+endif()
