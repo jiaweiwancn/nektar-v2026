@@ -81,7 +81,7 @@ class Study:
             r=read(receipt);require(r['intent_sha256']==digest(intent),'cached execution fingerprint mismatch')
             verify_artifacts(r['artifacts']);return r
         require(not (folder/'command.log').exists(),'unreconciled attempt retained; inspect ledger and choose a new attempt name')
-        label=str(folder.relative_to(self.a.output));limit=max(120.,steps*16.+120.)
+        label=str(folder.resolve());limit=max(120.,steps*16.+120.)
         self.ledger.reserve(label,intent,steps,limit)
         start=time.time();code=-1;failure=None
         try:
@@ -243,7 +243,7 @@ class Study:
             r=read(receipt);require(r['intent_sha256']==digest(intent),'cached arithmetic intent mismatch')
             verify_artifacts(r['artifacts']);return read(path)
         require(not receipt.exists(),'orphan arithmetic receipt')
-        label=str(folder.relative_to(self.a.output))+'/svd';self.ledger.reserve(label,intent,0,300)
+        label=str(folder.resolve())+'/svd';self.ledger.reserve(label,intent,0,300)
         start=time.time()
         try:value=arithmetic(d,m)
         except Exception:
