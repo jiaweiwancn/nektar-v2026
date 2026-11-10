@@ -32,6 +32,20 @@ def compact_analysis(d):
   d['common_test']=dict(d['common_test']);d['common_test']['fields']={name:{k:v for k,v in row.items() if k not in ('restricted_load','common_free_ids')} | dict(restricted_load_sha256=exact_vector_hash(row.get('restricted_load',[])),free_ids_sha256=exact_vector_hash(row.get('common_free_ids',[]))) for name,row in d['common_test']['fields'].items()}
  return d
 
+def audit_summaries(native):
+    maxima={};cutoffs=[]
+    for t,audit in zip(native.get('audit_times',[]),native.get('state_audits',[]),strict=True):
+        for key,values in audit.items():
+            if not any(token in key for token in ('interface','traction','flux','trace','gauge','divergence','budget','pilot_accuracy')):continue
+            rows=maxima.setdefault(key,[None]*len(values))
+            if len(rows)!=len(values):raise ValueError('native diagnostic shape changed')
+            for j,v in enumerate(values):
+                if v is not None and (rows[j] is None or abs(v)>abs(rows[j]['value'])):rows[j]=dict(value=v,time=t,stage='accepted',component=j)
+    for attempt in native.get('pimple_attempts',[]):
+        for stage,d in attempt.items():
+            if stage.endswith('_domain') and isinstance(d,dict) and 'cutoff_range' in d:cutoffs.append(dict(time=attempt['time'],stage=stage,range=d['cutoff_range'],minimum_required_ratio=d.get('minimum_required_budget_ratio'),required=d.get('required_cutoff_count'),limiting_point=d.get('cutoff_limiting_point')))
+    return dict(accepted_componentwise_absolute_maxima=maxima,cutoff_motion=dict(samples=len(cutoffs),minimum=min(cutoffs,key=lambda x:x['range'][0]) if cutoffs else None,maximum=max(cutoffs,key=lambda x:x['range'][1]) if cutoffs else None,first=cutoffs[:1],last=cutoffs[-1:]),scope='all retained accepted-state diagnostic components; all audited stage cutoff ranges; full named vector schema and records remain in the hashed native report')
+
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();r=a.root.resolve();out=a.output;out.mkdir(parents=True,exist_ok=False)
  result=dict(schema='BalancedSpatialEvidenceV1',environment=dict(python=sys.version,numpy=numpy.__version__,scipy=scipy.__version__,platform=platform.platform(),threads=THREADS,ranks=1,aggregate_worker_limit=72),starting_revision='3b0961e12142d7eca56d75962feebfffa34630cc',source_report=subprocess.check_output(['git','-C',str(r/'source'),'rev-parse','HEAD'],text=True).strip(),verification={},initial_screens={},initial_gates={},evolved_audits={},required_short_comparisons={},cases=[],duration={},failures=[],scope='serial flat2D prescribed-reference patch; unchanged equations; full native and fixed-common tests')
@@ -67,6 +81,7 @@ def main():
    m=load(p);native=load(p.parent/'case.evolution.json')
    receipt_init={k:v for k,v in m.get('initialization_receipt',{}).items() if k not in ('live_fixed_boundary','effective_initial')}
    item={k:v for k,v in m.items() if k in ('status','target','time','theta','exit_code','failure','execution_status','accuracy_status','seconds_per_step','wall_seconds','steps','reference_error','change_from_initial','gradient_weighted_RMS','spatial_alpha_zero','final_stage_residual','source_and_constraint_maxima','history_identity','final_state_sha256')};item['initialization']=receipt_init;item['extrema']={k:v for k,v in m.get('extrema',{}).items() if k!='final_state'};item['final_state_audit']=m.get('final_audit');item['configuration_sha256']=sha(p.parent/'case.xml');item['native_report_sha256']=sha(p.parent/'case.evolution.json');item['energy_budget']=native.get('energy_budget');item['roughness_budget']=native.get('roughness_budget');item['corrections']=dict(calls=sum(x.get('bound_calls',0) for x in native.get('pimple_attempts',[])),activations=sum(x.get('bound_activations',0) for x in native.get('pimple_attempts',[])))
+   item['all_state_and_stage_summaries']=audit_summaries(native)
    item['corrections'].update(signed_integral=0. if item['corrections']['calls']==0 else None,absolute_integral=0. if item['corrections']['calls']==0 else None)
    row['milestones'].append(item)
    if m['status']!='pass':
