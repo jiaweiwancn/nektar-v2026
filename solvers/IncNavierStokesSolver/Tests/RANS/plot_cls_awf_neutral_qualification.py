@@ -23,7 +23,7 @@ def main():
         row = source['cases'][label]; result = Path(row['receipt']['output'])
         require(sha(result) == row['receipt']['output_sha256'], 'plot input differs from retained native result')
         physical = load(result)['diagnostics']['physical']; s = physical['common_samples']
-        x = np.array(s['x']); z = np.array(s['z']); station = min(x, key=lambda v: abs(v-a.station)); mask = x == station
+        x = np.array(s['x']); z = np.array(s['z']); station = min(x, key=lambda v: abs(v-a.station)); mask = (x == station) & (z<=physical['H'])
         for axis, key, ref in [(axes[0, 0], 'u', 'reference_u'), (axes[0, 1], 'du_dz', 'reference_du_dz'), (axes[0, 2], 'k', 'reference_k')]:
             axis.plot(np.array(s[key])[mask], z[mask], label=label)
             if not reference: axis.plot(np.array(s[ref])[mask], z[mask], 'k:', label='analytical')
@@ -37,13 +37,13 @@ def main():
         receipts.append(dict(label=label, result=str(result), sha256=sha(result), actual_station=float(station)))
     for ax, xlabel in zip(axes[0], ('U', 'dU/dz', 'k')):
         ax.set(xlabel=xlabel, ylabel='physical z', ylim=(0, .5)); ax.set_yscale('symlog', linthresh=.0025)
-        sec = ax.secondary_yaxis('right', functions=(lambda z: z/.5, lambda r: r*.5)); sec.set_ylabel('z/H')
+        sec = ax.twinx(); sec.set_yscale('symlog',linthresh=.005);sec.set_ylim(0,1);sec.set_yticks([0,.01,.1,1]);sec.set_ylabel('z/H')
     axes[0, 1].set_xscale('log')
     axes[1, 0].set(xlabel='transported outer epsilon', ylabel='physical z', ylim=(.5, 4))
     axes[1, 1].axhline(.16, color='black', linestyle=':'); axes[1, 1].set(xlabel='native ground x', ylabel='wall traction')
     axes[1, 2].axhline(1e-3, color='black', linestyle=':'); axes[1, 2].set_xticks(range(4), ['Ux', 'W', 'k', 'epsilon'])
     axes[1, 2].set(ylabel='common-normalized selected spatial residual')
-    axes[0, 0].legend(fontsize=7); fig.suptitle('H=.5 calibrated budget AWF: native reference error and evolution')
+    axes[0, 0].legend(fontsize=7); fig.suptitle(f'H=.5 calibrated budget AWF, x={station:.6g}: reference error and evolution')
     a.output.parent.mkdir(parents=True, exist_ok=True); fig.savefig(a.output, dpi=170); plt.close(fig)
     atomic(a.output.with_suffix('.json'), dict(script_sha256=sha(Path(__file__)), inputs=receipts, plot_sha256=sha(a.output),
         governing_solves=0, state_or_history_changes=False))

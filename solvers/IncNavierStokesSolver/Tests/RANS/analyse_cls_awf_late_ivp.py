@@ -10,7 +10,7 @@ from pathlib import Path
 from analyse_cls_accepted_awf import normalized
 from analyse_cls_epawf_height_comparison import differences
 from continue_cls_epawf_pimple import atomic
-from diagnose_cls_accepted_covariance import checkpoint
+from diagnose_cls_accepted_covariance import checkpoint,common_packet,run_probe
 from qualify_cls_awf_neutral import observe
 from run_cls_epawf_picard import THREADS, load, require, sha
 
@@ -27,6 +27,21 @@ def estimate(dc, df, nc, nf, target, policy):
         target=target, original_dt_within_target=coarse is not None and coarse <= target,
         observed_pairwise_sensitivity_below_target=max(nc, nf) <= target,
         interpretation='Richardson estimate only with coherent non-negligible scaling; a small observed difference alone is a finite-window sensitivity result')
+
+
+def assess(fields):
+    """A resolved above-budget component cannot be hidden by another tiny one."""
+    rows = list(fields)
+    resolved = all(v['order_resolved'] for v in rows)
+    adequate = all(v['original_dt_within_target'] if v['order_resolved'] else
+                   v['observed_span_below_target'] for v in rows)
+    if resolved:
+        label = 'coherent_order_and_within_budget' if adequate else 'coherent_order_estimate_above_budget'
+    elif adequate:
+        label = 'observed_late_sensitivity_below_budget_order_unresolved'
+    else:
+        label = 'late_sensitivity_requires_further_diagnosis'
+    return label, adequate
 
 
 def main():
@@ -55,21 +70,43 @@ def main():
             summary['normalized_change_from_common_seed']=normalized(summary['dimensional_change_from_common_seed'])
             out['observations'][label][elapsed] = summary; data[label][elapsed] = physical
             atomic(a.output/'summary.json', out)
+    # Independent full consistent-mass check includes the solved matching
+    # trace, whose coefficients can differ between dt levels.
+    import numpy as np
+    last=str(policy['elapsed_observations'][-1]);coarse=load(a.study/'coarse/progress.json')['observations'][last]
+    cp=Path(coarse['checkpoint']);saved=checkpoint(cp)
+    metric,rc=run_probe(a.probe,Path(coarse['xml']),dict(common_packet(cp),operation='native_epsilon_metric',
+        state=saved['coupled'],history=saved['coupled'],alpha=0.,time=saved['time'],inner_stress_model='Linear'),a.output/'epsilon-mass-crosscheck')
+    mass=np.array(metric['matrix']);offset=int(metric['offset']);count=len(metric['coefficients'])
+    out['full_epsilon_mass_crosscheck']=dict(receipt=rc,physical_measure=metric['physical_volume'],pairs={})
+    require(abs(metric['physical_volume']-21)<1e-10,'incomplete physical outer-epsilon mass')
     for elapsed in policy['elapsed_observations']:
         key = str(elapsed); c, m, f = [data[label][key] for label in ('coarse', 'middle', 'fine')]
-        dc = differences(c, m); df = differences(m, f); nc, nf = normalized(dc), normalized(df)
+        dc = differences(c, m); df = differences(m, f); span=differences(c,f);nc, nf = normalized(dc), normalized(df);ns=normalized(span)
+        coefficients=[]
+        for label in ('coarse','middle','fine'):
+            cp=Path(load(a.study/label/'progress.json')['observations'][key]['checkpoint'])
+            coefficients.append(np.array(checkpoint(cp)['coupled'][offset:offset+count]))
+        check=[]
+        for delta,norm in [(coefficients[0]-coefficients[1],dc['epsilon']),(coefficients[1]-coefficients[2],df['epsilon'])]:
+            value=math.sqrt(max(0.,float(delta@mass@delta)));require(abs(value-norm)<1e-12,'full outer epsilon common quadrature disagrees with native mass')
+            check.append(dict(native_mass_norm=value,quadrature_norm=norm,absolute_agreement=abs(value-norm)))
+        out['full_epsilon_mass_crosscheck']['pairs'][key]=check
         fields = {name: estimate(dc[name], df[name], nc[name], nf[name], policy['middle_step_accuracy_targets'][name], policy)
             for name in ('u', 'v', 'k', 'epsilon', 'pressure')}
+        for name,value in fields.items():
+            value.update(coarse_finest_difference=span[name],normalized_coarse_finest_difference=ns[name],
+                observed_span_below_target=max(nc[name],nf[name],ns[name])<=value['target'])
         tc, tm, tf = [d['mean_wall_stress'] for d in (c, m, f)]
         fields['traction'] = estimate(abs(tc-tm), abs(tm-tf), abs(tc-tm)/.16, abs(tm-tf)/.16,
             policy['middle_step_accuracy_targets']['relative_mean_traction'], policy)
         fields['traction']['values'] = [tc, tm, tf]
+        fields['traction'].update(coarse_finest_difference=abs(tc-tf),normalized_coarse_finest_difference=abs(tc-tf)/.16,
+            observed_span_below_target=max(abs(tc-tm),abs(tm-tf),abs(tc-tf))/.16<=fields['traction']['target'])
         out['triplets'][key] = fields
-    resolved = all(v['order_resolved'] for t in out['triplets'].values() for v in t.values())
-    small = all(v['observed_pairwise_sensitivity_below_target'] for t in out['triplets'].values() for v in t.values())
-    out.update(status='passed', classification='coherent_order_and_within_budget' if resolved and small else
-        'observed_late_sensitivity_below_budget_order_unresolved' if small else 'late_sensitivity_requires_further_diagnosis',
-        extend_to_half_unit=False if small else None, completed_UTC=datetime.now(timezone.utc).isoformat())
+    classification, adequate = assess(v for t in out['triplets'].values() for v in t.values())
+    out.update(status='passed', classification=classification,
+        extend_to_half_unit=False if adequate else None, completed_UTC=datetime.now(timezone.utc).isoformat())
     atomic(a.output/'summary.json', out)
 
 

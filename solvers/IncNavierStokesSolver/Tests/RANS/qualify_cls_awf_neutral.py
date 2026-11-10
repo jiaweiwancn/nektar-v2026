@@ -31,10 +31,24 @@ TERMS = ('inner_momentum_stress', 'outer_momentum_stress', 'conservative_advecti
 def balances(d):
     import numpy as np
     from scipy.linalg import cho_factor, cho_solve
+    from scipy.sparse import coo_matrix,diags
+    from scipy.sparse.linalg import spsolve
     out = {}
     for metric in d['mass_metrics']:
         b = int(metric['block']); indices = np.array(metric['free_local_rows'], dtype=int)+int(metric['offset'])
         mass = np.array(metric['consistent_free_mass']); factor = cho_factor(mass)
+        constant=None
+        if metric.get('native_GL4_rows'):
+            rr=[];cc=[];vv=[];weights=[]
+            for i,q in enumerate(metric['native_GL4_rows']):
+                for j,phi in zip(q['ids'],q['phi']):rr.append(i);cc.append(int(j));vv.append(phi)
+                weights.append(q['weight'])
+            evaluation=coo_matrix((vv,(rr,cc))).tocsr();weights=np.array(weights)
+            full_mass=evaluation.T@diags(weights)@evaluation
+            constant=spsolve(full_mass.tocsc(),evaluation.T@weights)
+            require(np.max(abs(evaluation@constant-1))<1e-12,'native test-space constant reconstruction failed')
+            local=np.array(metric['free_local_rows'],dtype=int)
+            require(np.max(abs(full_mass[local][:,local].toarray()-mass))<1e-12,'native full/free mass consistency failed')
         rows = {}
         for kind in ('analytical_selected', 'analytical_Original', 'archived_reference_representation', 'retained_state'):
             values = d[kind]['terms']; loads = np.column_stack([np.array(values[n])[indices] for n in TERMS])
@@ -47,6 +61,15 @@ def balances(d):
                 signed_component_projection_onto_total={n: float(v) for n, v in zip(TERMS, signed)},
                 signed_projection_sum_error=abs(float(sum(signed))-norm))
             require(rows[kind]['signed_projection_sum_error'] < 1e-8, 'mass-dual cancellation accounting failed')
+            if constant is not None:
+                n=len(constant);offset=int(metric['offset']);free=np.array(metric['free_local_rows'],dtype=int)
+                physical=np.array(values['spatial_sum'][offset:offset+n]);free_sum=float(constant[free]@physical[free]);total_sum=float(constant@physical)
+                pieces={key:float(constant@np.array(values[key][offset:offset+n])) for key in TERMS}
+                require(abs(sum(pieces.values())-total_sum)<1e-10,'constant-test weak balance does not close')
+                rows[kind]['constant_test_balance']=dict(total_volume_residual=total_sum,free_row_contraction=free_sum,
+                    prescribed_row_reaction=total_sum-free_sum,inferred_outward_boundary_supply=free_sum-total_sum,
+                    signed_component_integrals=pieces,closure_error=abs(sum(pieces.values())-total_sum),
+                    convention='alpha=0 native weak volume load; outward prescribed-boundary flux reaction is minus the prescribed-row contraction. This is a discrete reaction, not an exactly conservative local CG physical-flux estimate.')
             if kind in ('retained_state', 'archived_reference_representation') and metric.get('native_GL4_rows'):
                 terms_rate = cho_solve(factor, loads)
                 index = {int(j): i for i, j in enumerate(metric['free_local_rows'])}
@@ -118,14 +141,26 @@ def observe(probe, selection, folder):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('probe', 'selections', 'output'): p.add_argument('--'+name, type=Path, required=True)
+    p.add_argument('--reuse',type=Path,help='reuse immutable identical-probe/checkpoint readbacks for new algebra reductions')
     a = p.parse_args(); os.environ.update(THREADS); a.output.mkdir(parents=True, exist_ok=False)
     selected = load(a.selections); out = dict(status='running', probe_sha256=sha(a.probe), script_sha256=sha(Path(__file__)),
         selections_sha256=sha(a.selections), started_UTC=datetime.now(timezone.utc).isoformat(), cases={}, comparisons={},
         common_domains='whole-domain U/k/pressure, full .5<=z<=4 epsilon, fixed union-of-mesh physical panels, one pressure gauge',
         governing_solves=0, physical_commits=0, native_history_advanced=False)
+    previous=load(a.reuse/'summary.json') if a.reuse else None
+    if previous: require(previous['probe_sha256']==sha(a.probe),'reused native probe identity differs')
     data = {}
     for label, selection in selected['states'].items():
-        row, physical = observe(a.probe, selection, a.output/label); data[label] = physical
+        if previous:
+            row=previous['cases'][label];require(row['selection']==selection,'reused native selection differs')
+            file=Path(row['receipt']['output']);require(sha(file)==row['receipt']['output_sha256'],'reused native output differs')
+            cp=file.parents[1]/'checkpoint';saved=checkpoint(cp)
+            require(sha(cp/'State.bin')==selection['checkpoint_sha256'] and state_hash(saved['coupled'])==row['state_sha256'],'reused immutable checkpoint differs')
+            raw=load(file);physical=raw['diagnostics']['physical']
+            if 'neutral_reference_balance' in raw['diagnostics']:row['balance']=balances(raw['diagnostics']['neutral_reference_balance'])
+            row['readback_reuse']=dict(summary=str(a.reuse/'summary.json'),summary_sha256=sha(a.reuse/'summary.json'))
+        else: row, physical = observe(a.probe, selection, a.output/label)
+        data[label] = physical
         row['dimensional_reference_errors'] = reference_errors(physical)
         row['common_normalized_reference_errors'] = normalized(row['dimensional_reference_errors'])
         out['cases'][label] = row; atomic(a.output/'summary.json', out)
