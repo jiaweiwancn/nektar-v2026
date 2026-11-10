@@ -1,0 +1,500 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "wall": "EP",
+      "space": "Balanced5V1",
+      "time": 0.01599999999999999,
+      "status": "pass",
+      "same_raw_effective_reference_boundary": true,
+      "state_sha256": "f57b858c28b724004d07baa4f350f9d79a60b156effbd654aca18a80d7c3cd40",
+      "source_orders": [
+        48,
+        12,
+        12,
+        12,
+        12
+      ],
+      "target_orders": [
+        64,
+        16,
+        16,
+        16,
+        16
+      ],
+      "actual_target_quadrature": {
+        "wall_normal": 64,
+        "wall_tangential": 16,
+        "outer_volume": 16,
+        "mass_override": 16,
+        "mass_default": "max(8,p+3) per native field",
+        "interface": 16,
+        "reference_projection": "Gauss32 on native radial elements, supplied breakpoints and geometric 1e-4*1.5^j subpanels",
+        "inner_volume_points": 32768,
+        "outer_volume_points": 1536
+      },
+      "checks": [
+        {
+          "metric": "coupled_norms",
+          "index": 0,
+          "quadrature_change": 2.6935593512578127e-14,
+          "spatial_difference": 0.0005474210090693441,
+          "limit": 5.474210090693441e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 1,
+          "quadrature_change": 1.0310898185608708e-15,
+          "spatial_difference": 3.120801302070034e-05,
+          "limit": 3.120801302070034e-07,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 2,
+          "quadrature_change": 1.1057344276310666e-14,
+          "spatial_difference": 0.00015330027538776664,
+          "limit": 1.5330027538776664e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 3,
+          "quadrature_change": 4.225640644873015e-15,
+          "spatial_difference": 2.2248738217276786e-07,
+          "limit": 2.224873821727679e-09,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 4,
+          "quadrature_change": 7.404898673933305e-17,
+          "spatial_difference": 2.8618424236836397e-20,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 5,
+          "quadrature_change": 1.759972665053183e-17,
+          "spatial_difference": 2.0962661498451004e-22,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 6,
+          "quadrature_change": 0.0,
+          "spatial_difference": 1.1364991609827938e-22,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 7,
+          "quadrature_change": 0.0,
+          "spatial_difference": 1.6027545778049433e-10,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 0,
+          "quadrature_change": 1.107046312259774e-14,
+          "spatial_difference": 0.00015330055528474192,
+          "limit": 1.5330055528474192e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 1,
+          "quadrature_change": 1.4423742113108718e-14,
+          "spatial_difference": 1.0547857063588931e-08,
+          "limit": 1.0547857063588931e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 2,
+          "quadrature_change": 3.023332537942737e-14,
+          "spatial_difference": 3.1401398508167536e-08,
+          "limit": 3.1401398508167535e-10,
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "wall": "EP",
+      "space": "Balanced11V1",
+      "time": 0.01599999999999999,
+      "status": "pass",
+      "same_raw_effective_reference_boundary": true,
+      "state_sha256": "67aa56aa24aecb0ff31c4036970e27aedfa42478b706593207d6b4f0de8fae9f",
+      "source_orders": [
+        48,
+        12,
+        12,
+        12,
+        12
+      ],
+      "target_orders": [
+        64,
+        16,
+        16,
+        16,
+        16
+      ],
+      "actual_target_quadrature": {
+        "wall_normal": 64,
+        "wall_tangential": 16,
+        "outer_volume": 16,
+        "mass_override": 16,
+        "mass_default": "max(8,p+3) per native field",
+        "interface": 16,
+        "reference_projection": "Gauss32 on native radial elements, supplied breakpoints and geometric 1e-4*1.5^j subpanels",
+        "inner_volume_points": 37888,
+        "outer_volume_points": 1792
+      },
+      "checks": [
+        {
+          "metric": "coupled_norms",
+          "index": 0,
+          "quadrature_change": 4.1533959024885395e-14,
+          "spatial_difference": 0.0005474210090693441,
+          "limit": 5.474210090693441e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 1,
+          "quadrature_change": 1.1653197649869702e-15,
+          "spatial_difference": 3.120801302070034e-05,
+          "limit": 3.120801302070034e-07,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 2,
+          "quadrature_change": 4.485618402730969e-15,
+          "spatial_difference": 0.00015330027538776664,
+          "limit": 1.5330027538776664e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 3,
+          "quadrature_change": 1.0163175110211966e-16,
+          "spatial_difference": 2.2248738217276786e-07,
+          "limit": 2.224873821727679e-09,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 4,
+          "quadrature_change": 4.541880237674319e-17,
+          "spatial_difference": 2.8618424236836397e-20,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 5,
+          "quadrature_change": 1.468688930858125e-17,
+          "spatial_difference": 2.0962661498451004e-22,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 6,
+          "quadrature_change": 0.0,
+          "spatial_difference": 1.1364991609827938e-22,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 7,
+          "quadrature_change": 0.0,
+          "spatial_difference": 1.6027545778049433e-10,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 0,
+          "quadrature_change": 4.351342504767481e-15,
+          "spatial_difference": 0.00015330055528474192,
+          "limit": 1.5330055528474192e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 1,
+          "quadrature_change": 1.119706721816482e-14,
+          "spatial_difference": 1.0547857063588931e-08,
+          "limit": 1.0547857063588931e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 2,
+          "quadrature_change": 5.572292435732243e-15,
+          "spatial_difference": 3.1401398508167536e-08,
+          "limit": 3.1401398508167535e-10,
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "wall": "Accepted",
+      "space": "Balanced5V1",
+      "time": 0.01599999999999999,
+      "status": "pass",
+      "same_raw_effective_reference_boundary": true,
+      "state_sha256": "504b78deb372ee48b5737c653753e3e9385d19dc468657aea20d61149076a5a1",
+      "source_orders": [
+        48,
+        12,
+        12,
+        12,
+        12
+      ],
+      "target_orders": [
+        64,
+        16,
+        16,
+        16,
+        16
+      ],
+      "actual_target_quadrature": {
+        "wall_normal": 64,
+        "wall_tangential": 16,
+        "outer_volume": 16,
+        "mass_override": 16,
+        "mass_default": "max(8,p+3) per native field",
+        "interface": 16,
+        "reference_projection": "Gauss32 on native radial elements, supplied breakpoints and geometric 1e-4*1.5^j subpanels",
+        "inner_volume_points": 32768,
+        "outer_volume_points": 1536
+      },
+      "checks": [
+        {
+          "metric": "coupled_norms",
+          "index": 0,
+          "quadrature_change": 9.659308942977507e-14,
+          "spatial_difference": 0.0005596029488805484,
+          "limit": 5.596029488805485e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 1,
+          "quadrature_change": 1.6093693760467487e-15,
+          "spatial_difference": 3.141992507242991e-05,
+          "limit": 3.141992507242991e-07,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 2,
+          "quadrature_change": 4.228876363671086e-15,
+          "spatial_difference": 0.00015738971799071375,
+          "limit": 1.5738971799071375e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 3,
+          "quadrature_change": 4.194424304393142e-15,
+          "spatial_difference": 2.1173398829323388e-07,
+          "limit": 2.1173398829323387e-09,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 4,
+          "quadrature_change": 7.525416232564487e-17,
+          "spatial_difference": 2.0264247215195827e-20,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 5,
+          "quadrature_change": 1.7602067562125766e-17,
+          "spatial_difference": 4.071622312157134e-22,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 6,
+          "quadrature_change": 0.0,
+          "spatial_difference": 1.0033690103542036e-22,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 7,
+          "quadrature_change": 0.0,
+          "spatial_difference": 4.797661417871681e-11,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 0,
+          "quadrature_change": 4.220040115965329e-15,
+          "spatial_difference": 0.00015738998830505823,
+          "limit": 1.5738998830505822e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 1,
+          "quadrature_change": 1.6121955755906455e-14,
+          "spatial_difference": 1.3219593696840666e-08,
+          "limit": 1.3219593696840666e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 2,
+          "quadrature_change": 2.3817045946771486e-14,
+          "spatial_difference": 5.120965749442411e-08,
+          "limit": 5.120965749442411e-10,
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "wall": "Accepted",
+      "space": "Balanced11V1",
+      "time": 0.01599999999999999,
+      "status": "pass",
+      "same_raw_effective_reference_boundary": true,
+      "state_sha256": "7ad4568fd851fce2dc1c3b49d90960a592d0e15f7485216d8abaaf3a3298c96d",
+      "source_orders": [
+        48,
+        12,
+        12,
+        12,
+        12
+      ],
+      "target_orders": [
+        64,
+        16,
+        16,
+        16,
+        16
+      ],
+      "actual_target_quadrature": {
+        "wall_normal": 64,
+        "wall_tangential": 16,
+        "outer_volume": 16,
+        "mass_override": 16,
+        "mass_default": "max(8,p+3) per native field",
+        "interface": 16,
+        "reference_projection": "Gauss32 on native radial elements, supplied breakpoints and geometric 1e-4*1.5^j subpanels",
+        "inner_volume_points": 37888,
+        "outer_volume_points": 1792
+      },
+      "checks": [
+        {
+          "metric": "coupled_norms",
+          "index": 0,
+          "quadrature_change": 2.698803332234264e-14,
+          "spatial_difference": 0.0005596029488805484,
+          "limit": 5.596029488805485e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 1,
+          "quadrature_change": 2.1642886118803002e-15,
+          "spatial_difference": 3.141992507242991e-05,
+          "limit": 3.141992507242991e-07,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 2,
+          "quadrature_change": 9.270523191880035e-15,
+          "spatial_difference": 0.00015738971799071375,
+          "limit": 1.5738971799071375e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 3,
+          "quadrature_change": 4.963603541789543e-16,
+          "spatial_difference": 2.1173398829323388e-07,
+          "limit": 2.1173398829323387e-09,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 4,
+          "quadrature_change": 4.66800462009199e-17,
+          "spatial_difference": 2.0264247215195827e-20,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 5,
+          "quadrature_change": 1.4688321333687435e-17,
+          "spatial_difference": 4.071622312157134e-22,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 6,
+          "quadrature_change": 0.0,
+          "spatial_difference": 1.0033690103542036e-22,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "coupled_norms",
+          "index": 7,
+          "quadrature_change": 0.0,
+          "spatial_difference": 4.797661417871681e-11,
+          "limit": 1e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 0,
+          "quadrature_change": 9.788272080889227e-15,
+          "spatial_difference": 0.00015738998830505823,
+          "limit": 1.5738998830505822e-06,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 1,
+          "quadrature_change": 1.1976315046869726e-14,
+          "spatial_difference": 1.3219593696840666e-08,
+          "limit": 1.3219593696840666e-10,
+          "status": "pass"
+        },
+        {
+          "metric": "native_k_inner_outer_shared_interface_dual",
+          "index": 2,
+          "quadrature_change": 2.3680880781523816e-14,
+          "spatial_difference": 5.120965749442411e-08,
+          "limit": 5.120965749442411e-10,
+          "status": "pass"
+        }
+      ]
+    }
+  ],
+  "scope": "frozen actual evolved-state spatial residuals; no initial regeneration or time advance",
+  "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/evolved-quadrature-0.016/results.json",
+  "source_file_sha256": "cb7717ccd1e7b7efd2450083ba34cbee21db8a2f263d03905929a2b7b04acfee"
+}

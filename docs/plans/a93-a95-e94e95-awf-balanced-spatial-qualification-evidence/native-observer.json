@@ -1,0 +1,53 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "name": "positive-x-EP",
+      "status": "pass",
+      "bitwise_equal": {
+        "state": true,
+        "initial": true,
+        "fixed_reference": true,
+        "native_history_times": true,
+        "accepted_states": true,
+        "native_history": true,
+        "state_audits": true
+      },
+      "old_source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-pilot-20261110",
+      "new_source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/diagnostic-regression/EP",
+      "state_sha256": "508a4639669c142a2d8fe93151e562c02cbdd3242d1cc180c84951ad94a73c50",
+      "semantics": "NeutralV1 canonical positive-x; E is analytical-reference error; legacy D entries 5..9 measure change from fixed neutral polynomial reference, not drift from a perturbed initial state"
+    },
+    {
+      "name": "negative-direction-EP",
+      "status": "pass",
+      "exit_code": 1,
+      "reason": "NeutralV1 accuracy observer requires canonical positive-x reference direction"
+    },
+    {
+      "name": "positive-x-Accepted",
+      "status": "pass",
+      "bitwise_equal": {
+        "state": true,
+        "initial": true,
+        "fixed_reference": true,
+        "native_history_times": true,
+        "accepted_states": true,
+        "native_history": true,
+        "state_audits": true
+      },
+      "old_source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-pilot-20261110",
+      "new_source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/diagnostic-regression/Accepted",
+      "state_sha256": "5dfa1caf1bdaa511fc6c2898561fa5b16676a83ad282c8b957727d7123d61852",
+      "semantics": "NeutralV1 canonical positive-x; E is analytical-reference error; legacy D entries 5..9 measure change from fixed neutral polynomial reference, not drift from a perturbed initial state"
+    },
+    {
+      "name": "negative-direction-Accepted",
+      "status": "pass",
+      "exit_code": 1,
+      "reason": "NeutralV1 accuracy observer requires canonical positive-x reference direction"
+    }
+  ],
+  "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/diagnostic-regression/results.json",
+  "source_file_sha256": "76bbddfee8c08d3330edfdd9fc112e4f17936f93955c9ca249042602bba0c74c"
+}

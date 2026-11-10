@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/audit_rans_balanced_evolved.py", line 52, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/audit_rans_balanced_evolved.py", line 45, in main
+    spatial=analyze(packet,ref),common_test=common_test(cp,packet,xp,ref),analytical_weak_balance=weak_balance(ref,packet['observation']),
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_spatial_resolution.py", line 112, in common_test
+    if ve>2e-10 or ge>2e-6 or me>2e-11*den or trace>2e-10:raise ValueError('test inclusion/orientation/constraint check failed '+name+str(condition))
+ValueError: test inclusion/orientation/constraint check failed u{'value_error': 9.700233671861014e-10, 'gradient_error': 2.8118098498453037e-06, 'mass_congruence_error': 1.6653345369377348e-15, 'mass_scale': 1.0, 'free_test_on_fine_fixed_rows': 5.635604358750868e-13}
+E-N-EP-h0p5 exit 1
+0.0016 pass
+0.016 pass
+E-N-EP-Interface8p5 exit 0
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/audit_rans_balanced_evolved.py", line 52, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/audit_rans_balanced_evolved.py", line 45, in main
+    spatial=analyze(packet,ref),common_test=common_test(cp,packet,xp,ref),analytical_weak_balance=weak_balance(ref,packet['observation']),
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_spatial_resolution.py", line 112, in common_test
+    if ve>2e-10 or ge>2e-6 or me>2e-11*den or trace>2e-10:raise ValueError('test inclusion/orientation/constraint check failed '+name+str(condition))
+ValueError: test inclusion/orientation/constraint check failed u{'value_error': 3.1165506911290386e-09, 'gradient_error': 8.990956757770618e-06, 'mass_congruence_error': 1.6653345369377348e-15, 'mass_scale': 1.0, 'free_test_on_fine_fixed_rows': 4.486063901298366e-13}
+E-N-Accepted-h0p5 exit 1
+0.0016 pass
+0.016 pass
+E-N-Accepted-Interface8p5 exit 0

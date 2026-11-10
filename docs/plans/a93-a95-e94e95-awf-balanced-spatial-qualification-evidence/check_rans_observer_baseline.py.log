@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/check_rans_observer_baseline.py", line 22, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/check_rans_observer_baseline.py", line 16, in main
+    configure(out,args,Reference('A95','Natural','EP'),0)
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_neutral_pilot.py", line 40, in configure
+    case_xml(folder,a.model,a.policy,a.wall,steps=steps,dt=a.dt,restart=restart,descriptor_probe=a.root/'runtime/RANSNewModelsProbe',radial_knots=selected_knots(ref,a),degree=a.degree,quadrature=Q[a.quadrature_index],checkpoint_interval=max(steps,1),cache=a.cache,boundary_policy='FrozenReferenceV1',xknots=[-1.,0.,1.] if a.columns==2 else [-1.,1.])
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/run_a93_a95_e94e95_matrix.py", line 23, in case_xml
+    folder.mkdir(parents=True,exist_ok=False)
+  File "/usr/lib/python3.10/pathlib.py", line 1175, in mkdir
+    self._accessor.mkdir(self, mode)
+FileExistsError: [Errno 17] File exists: '/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/observer-perturbed-baseline'

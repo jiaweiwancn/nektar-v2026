@@ -81,8 +81,14 @@ new backend is authorized by this package.
 ## Results
 
 Balanced initial/evolved spatial gates are complete for all six natural
-configurations. The scoped duration cohort advances only after its separate
-four-member gates. Exact terminal results and remaining gates are recorded below.
+configurations. E94E95 Natural Accepted also passes its four-member duration
+cohort through T=.5 (theta=.1), including companions at that horizon. The final
+Linux collector returns zero with all six aggregate gates passing. Complete
+receipts and their hashes are in
+[`a93-a95-e94e95-awf-balanced-spatial-qualification-evidence/summary.json`](a93-a95-e94e95-awf-balanced-spatial-qualification-evidence/summary.json)
+and the indexed `complete-results.json.gz`; the evidence README explains their
+structure. The earlier package's overall unresolved receipt and eight epsilon
+order observations remain unchanged. Exact limits and remaining scope follow.
 
 ## Initial screen and localized candidates (before advancement)
 
@@ -103,13 +109,13 @@ reduces full norms but leaves common momentum nearly unchanged and slightly
 increases accepted common k. Thus removal alone is not physical consistency
 improvement and does not pass the balanced gate.
 
-The next bounded initialization screen is a nested p5 hierarchy on the base
+The predeclared bounded initialization screen uses a nested p5 hierarchy on the base
 mesh with only that inactive epsilon mesh breakpoint omitted. Active viscosity,
 cutoff, roughness/forcing and interface breaks remain; profile quadrature is
 unchanged. `Balanced5V1` splits inner [0,.0025], [zc,.02], [.02,.04], [1,2] and
 outer [2,2.25]. `Balanced11V1` also splits [.0025,.005], [.04,.1], [.1,.25],
-[.25,.5], [.5,1] and outer [2.5,3]. Expected counts are 2355 and 2997 and must be
-verified natively. Both use velocity/k p5 and pressure p3, quadrature
+[.25,.5], [.5,1] and outer [2.5,3]. Native counts confirm 2355 and 2997.
+Both use velocity/k p5 and pressure p3, quadrature
 48/12/12/12/12. The exact per-model/policy cutoff is computed from its descriptor;
 no mesh motion is allowed. This allocation follows assembled-load support
 energy rather than raw element stress loads that cancel between neighbors.
@@ -286,15 +292,74 @@ full native/common residuals and interface balances provide separate evidence.
 No zero dependent-epsilon boundary rate is assumed; no semidiscrete scalar-rate
 claim is made.
 
-## Duration-admission outcome so far
+## Duration admission and four-member endpoint comparison
 
 The scoped admission selects E94E95 Natural Accepted, whose nonconstant wall has
 the larger qualified E94E95 scalar residual and reference error. The .004/.002
 fresh-history cohort passes execution, physical and field-accuracy checks at
 .016 but **fails pressure timestep uncertainty**: 4.1630e-7 exceeds 1.9186e-7.
 Its nonzero process result and all four trajectories remain archived. The
-predeclared .002/.001 independent-history refinement is the next experiment;
-no .5 result is inferred from the successful short .0004/.0002 study.
+predeclared .002/.001 independent-history refinement passes at .016, .1 and .5.
+These are new independently initialized histories, with unchanged-method native
+restart between milestones. The .5 histories contain 250 or 500 accepted steps;
+their actual terminal times are .5000000000000003, within the declared 1e-13
+comparison tolerance. All four members pass their physical and field-accuracy
+gates. The .5 endpoint has theta=.1, with u_star=.4 and H=2.
+
+The following dimensionless weighted physical RMS values use the fixed scales
+u_star, K0, epsilon(H) and u_star^2. Pressure uses one global gauge. The timestep
+column is the larger of the two independently initialized same-space dt/2
+differences; the unchanged limit is max(1e-7,.1*spatial_difference).
+
+| Field | B5 reference error | B11 reference error | Spatial difference | Maximum timestep difference | Timestep limit |
+|---|---:|---:|---:|---:|---:|
+| U | 1.91250e-5 | 7.50504e-7 | 1.92907e-5 | 9.00308e-10 | 1.92907e-6 |
+| w | 3.01246e-7 | 2.71565e-8 | 2.98349e-7 | 5.72377e-10 | 1.00000e-7 |
+| k | 3.99755e-6 | 1.76082e-7 | 4.03681e-6 | 9.19224e-10 | 4.03681e-7 |
+| Outer epsilon | 6.47468e-9 | 2.05473e-9 | 6.16102e-9 | 1.36468e-12 | 1.00000e-7 |
+| Pi | 2.50286e-6 | 3.98747e-7 | 2.43077e-6 | 5.64126e-9 | 2.43077e-7 |
+
+Actual-initial drift is separately retained. For B11 at .5 its scaled RMS
+values are U=5.13779e-7, w=2.71565e-8, k=1.23053e-7,
+epsilon=1.54038e-9 and Pi=3.98747e-7. These do not replace reference error.
+The largest refreshed dependent-trace defect over the four final continuation
+segments is 7.45982e-12; it remains unrepaired. Source/storage defects are below
+2.81e-16 for k and 7.92e-18 for epsilon. All correction calls and integrals
+are zero. Complete all-milestone extrema, sides, locations, stage identities,
+boundary maps and history hashes are retained in the machine evidence.
+
+Across all four duration trajectories and all three milestones, the maximum
+normalized mean wall-traction error is 1.78881e-6 and full interface-traction
+RMS is 8.70912e-6, both below 1e-3. The largest refreshed trace lag over this
+entire cohort is 8.57119e-10. Sampled inner/outer k stays above .5319210313,
+outer epsilon above .0388267081, and inner/outer covariance minima above .19461.
+The minimum required cutoff ratio is 5.9053557267; cutoff positions remain in
+[.01481361562717,.01481361562858] on the fixed meshes. The all-natural short
+A95 controls have minimum actual radicand .6919426086, with its accepted-state
+time/location/side retained. No new constitutive interior margin is imposed.
+
+All seven final-horizon audit commands return zero: both primary spatial-term
+replays, all four trajectories' scalar observation audits and the selected-wall
+frozen-quadrature control. The latter verifies both requested spaces explicitly;
+its coverage no longer assumes that two walls were requested. At .5 the native
+physical term reconstruction defects are 2.13e-14 and 3.91e-14, and constraint
+replacement defects are below 5.88e-15. Independent analytical native-test weak
+checks also pass. These results remain separate from the evolved residuals:
+
+| Space at .5 | Native U | Native w | Native inner k | Common U | Common k | Native outer epsilon |
+|---|---:|---:|---:|---:|---:|---:|
+| B5 | 9.00857e-7 | 6.03225e-7 | 1.27493e-6 | 5.59278e-7 | 8.85148e-7 | 6.96041e-10 |
+| B11 | 3.55812e-7 | 2.59220e-7 | 4.43518e-7 | 3.08026e-7 | 4.07257e-7 | 9.46108e-10 |
+
+All common norms use the same physical p3 tests and normalization as the short
+study. Full native epsilon residual increases under refinement at this endpoint;
+both values are below the predeclared 1e-8 residual floor. This is reported as a
+floor, not a demonstrated epsilon-residual convergence rate. The dominant U/k
+defects still improve in both full and common tests. Native stage residuals,
+spatial residuals and refreshed trace splitting defects have separate receipts.
+The largest Q48-to-Q64 change among the frozen final residual metrics is
+6.54e-12. Both actual coefficient vectors and consumed live boundaries remain
+identical within each of those controls.
 
 ## Source mapping and reproduction
 
@@ -317,7 +382,9 @@ under `runtime-resolution-v2`; its solver copy is byte-identical and is not
 used to replace any trajectory executable. Manifests include relevant source
 file contents/hashes, compiler/options, CMake cache, executable, direct linked
 libraries, actual loaded libraries and thread environment. Later changes are
-Python observation/orchestration and documentation. The source proof checks
+Python observation/orchestration and documentation. The inherited console
+banner says `EP-AWF IMEX1` for both walls; the recorded resolved descriptor,
+wall policy and source identity determine the actual formulation. The source proof checks
 34 governing/history/geometry files and three independent-oracle files against
 3b0961e. Ordinary positive-x histories and numeric diagnostics are tested for
 bitwise equivalence; unsupported routes retain their guards.
@@ -339,7 +406,9 @@ export OLD=/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-pilot-20261110
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 export BLIS_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1
 mkdir -p "$B/dependency" "$B/tmp"
-git -C /media/jay/新加卷/nektar-v2026 worktree add --detach "$B/source" TESTED_HEAD
+git -C /media/jay/新加卷/nektar-v2026 fetch origin codex/a93-a95-e94e95-awf
+git -C /media/jay/新加卷/nektar-v2026 worktree add --detach "$B/source" \
+  4a0382dfc6b8cba10da1d9dc8d410e5daeceb471
 cp "$ORIGINAL/runtime/lib/libSpatialDomains.so.5.9.0" "$B/dependency/"
 export T="$B/source/solvers/IncNavierStokesSolver/Tests/RANS"
 export TMPDIR="$B/tmp"
@@ -354,11 +423,17 @@ python3 -B "$T/freeze_rans_pilot_runtime.py" --source "$B/source" \
   --build "$B/build" --output "$B/runtime"
 python3 -B "$T/freeze_rans_pilot_runtime.py" --source "$B/source" \
   --build "$B/build" --output "$B/runtime-resolution-v2"
+ctest --test-dir "$B/build" --parallel 1 --output-on-failure \
+  -R '^(RANSNativeDiagnosticChecks|RANSPilotEvidenceContract|RANSQualificationFailureContract)$'
+python3 -B "$T/record_rans_balanced_source.py" --root "$B"
 python3 -B "$T/check_rans_balanced_evidence.py" --root "$B" --previous-root "$OLD"
 python3 -B "$T/check_rans_balanced_diagnostics.py" --root "$B" --previous-root "$OLD"
 for wall in EP Accepted; do
   python3 -B "$T/diagnose_rans_balanced_spatial.py" --root "$B" \
     --wall "$wall" --label "initial-$wall"
+  python3 -B "$T/explain_rans_spatial_residual.py" --wall "$wall" \
+    --directory "$B/diagnosis/initial-$wall" \
+    --output "$B/initial-$wall-dual-energy.json"
   python3 -B "$T/make_rans_balanced_meshes.py" --wall "$wall" \
     --output "$B/meshes/E-N-$wall"
   python3 -B "$T/diagnose_rans_balanced_spatial.py" --root "$B" \
@@ -392,6 +467,11 @@ python3 -B "$T/check_rans_balanced_state_quadrature.py" --root "$B" --time .016
 python3 -B "$T/check_rans_balanced_evaluation.py" --root "$B"
 python3 -B "$T/check_rans_common_test_sides.py" --root "$B"
 python3 -B "$T/check_rans_observer_baseline.py" --root "$B"
+python3 -B "$T/check_rans_balanced_prescribed.py" --root "$B"
+python3 -B "$T/analyze_rans_balanced_normals.py" --root "$B" \
+  --output "$B/nonlinear-normal-stresses.json"
+python3 -B "$T/profile_rans_balanced.py" --root "$B" \
+  --output "$B/exclusive-timing.json"
 ```
 
 After the scoped prerequisites and complete term replays pass, create the
@@ -408,6 +488,9 @@ python3 -B "$T/run_rans_balanced_duration.py" --root "$B" \
 # .5 remains conditional on the .1 four-member gate.
 python3 -B "$T/run_rans_balanced_duration.py" --root "$B" \
   --model E94E95 --wall Accepted --dt .002 --max-time .5 --resume
+python3 -B "$T/finish_rans_balanced_duration.py" --root "$B"
+python3 -B "$T/collect_rans_balanced_spatial.py" --root "$B" \
+  --output "$B/evidence-final"
 ```
 
 The controller validates an immutable current request before using completed
@@ -440,3 +523,42 @@ sigma-epsilon and distinct wall calibration. They complement earlier recorded
 controls but are not a new twelve-case prescribed campaign, spatial order or
 duration study. The eight historical unresolved epsilon-order observations
 retain their original receipt and criterion.
+
+## Cost, retained failures and remaining scope
+
+Profiling the Accepted B11 short trajectory assigns about 64.3% of exclusive
+instrumented time to diagnostics. On its 36-step .016 segment, exclusive time
+is 306.4 seconds: mandatory domain computation alone is 152.9 seconds; dense
+factorization and triangular solves together are about 1.5%. There is no
+evidence here for raising the dense limit or replacing the backend. No new
+cache or state-validity reuse is introduced. Eight build workers, at most four
+serial trajectory controllers and two audit slots share the 72-worker limit;
+all numerical-library thread counts are one. Frozen runtime maps retain 122
+actual solver libraries/plugins and 119 actual revised-probe libraries.
+
+The original small-panel controls, failed common-test lookups, initial fixture
+directory error, incomplete collector and failed .004 pressure uncertainty
+remain archived. They are not relabelled as successful numerical trajectories.
+The negative coverage and epsilon-budget controls pass only by observing the
+specified nonzero exit and intended reason. The supplemented export preserves
+all twelve old required comparison bodies; new qualification has twelve complete
+short comparisons, twelve primary evolved-term audits and twelve natural-case
+scalar observers. Both natural walls of all three models receive the .0016/.016
+four-member qualification. Only E94E95 Natural Accepted receives the new .5
+duration and same-horizon fine-space/timestep companions.
+
+The bounded prescribed-reference patch passes its stated spatial, uncertainty,
+accuracy, admissibility and conservation gates. It retains finite spatial
+defects and polynomial reference error. Eight historical epsilon temporal-order
+observations remain unresolved, and two new timestep levels do not establish
+an order. Full h1/p5 evolution remains unattempted under the unchanged
+3000-unknown guard. Curved geometry, true 3D, MPI execution, nonlinear/action
+routes, open-outflow ABLs and physical benchmarks are outside this package.
+
+The next evidence-supported gate is a matched-duration nonlinear-stress
+control, prioritizing A93/Accepted's normal-stress/pressure response and A95's
+radicand margin, with both spatial and dt/2 companions through .5. Retain the
+same gates and resolve their own first uncertainty failure before continuation.
+This is better supported than broadening the present E94E95 result into a
+long-time or open-outflow claim. A later extension beyond .5 should again carry
+companions at the new horizon.

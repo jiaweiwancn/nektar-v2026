@@ -1,0 +1,1130 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "wall": "EP",
+      "space": "B5",
+      "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/campaigns/E-N-EP-B5/T-0.0160",
+      "exclusive_total": 223.31248091899988,
+      "elapsed": 223.47955414804164,
+      "seconds_per_accepted_step": 6.207765393001157,
+      "categories": {
+        "constitutive_refresh_shared": {
+          "wall_seconds": 7.744764834999997,
+          "cpu_seconds": 7.742800000000012,
+          "calls": 556
+        },
+        "initialization": {
+          "wall_seconds": 1.6306873080000004,
+          "cpu_seconds": 1.6225460000000003,
+          "calls": 2
+        },
+        "assembly": {
+          "wall_seconds": 40.75555798699995,
+          "cpu_seconds": 38.940401,
+          "calls": 633
+        },
+        "residual_evaluation_shared": {
+          "wall_seconds": 19.150926368999993,
+          "cpu_seconds": 19.142921000000005,
+          "calls": 336
+        },
+        "solve": {
+          "wall_seconds": 2.5974976490000143,
+          "cpu_seconds": 2.595158000000017,
+          "calls": 10916
+        },
+        "other": {
+          "wall_seconds": 19.993051852999976,
+          "cpu_seconds": 13.734224999999977,
+          "calls": 909
+        },
+        "diagnostic": {
+          "wall_seconds": 131.07060229099991,
+          "cpu_seconds": 129.167312,
+          "calls": 473
+        },
+        "output": {
+          "wall_seconds": 0.369392627,
+          "cpu_seconds": 0.271422,
+          "calls": 6
+        }
+      },
+      "scopes": {
+        "constitutive.refresh": {
+          "wall_seconds": 7.744764834999997,
+          "cpu_seconds": 7.742800000000012,
+          "calls": 556
+        },
+        "startup.object": {
+          "wall_seconds": 1.4722133800000001,
+          "cpu_seconds": 1.465055,
+          "calls": 1
+        },
+        "matching.constraints": {
+          "wall_seconds": 0.9665797890000002,
+          "cpu_seconds": 0.9661830000000009,
+          "calls": 489
+        },
+        "residual": {
+          "wall_seconds": 19.150926368999993,
+          "cpu_seconds": 19.142921000000005,
+          "calls": 336
+        },
+        "dense.factorization": {
+          "wall_seconds": 0.9530816220000005,
+          "cpu_seconds": 0.9524249999999996,
+          "calls": 297
+        },
+        "dense.triangular_solve": {
+          "wall_seconds": 1.644416026999995,
+          "cpu_seconds": 1.6427330000000009,
+          "calls": 10619
+        },
+        "residual.mass_dual_norms": {
+          "wall_seconds": 1.657469356,
+          "cpu_seconds": 0.08529999999999996,
+          "calls": 149
+        },
+        "native.explicit": {
+          "wall_seconds": 0.5511889830000001,
+          "cpu_seconds": 0.5071360000000001,
+          "calls": 37
+        },
+        "domain.compute": {
+          "wall_seconds": 99.32854791399994,
+          "cpu_seconds": 99.30372199999995,
+          "calls": 145
+        },
+        "domain.scalar": {
+          "wall_seconds": 1.0842561950000007,
+          "cpu_seconds": 0.25668699999999994,
+          "calls": 181
+        },
+        "audit.physical": {
+          "wall_seconds": 15.188988580999997,
+          "cpu_seconds": 14.156144999999999,
+          "calls": 37
+        },
+        "audit.complete": {
+          "wall_seconds": 14.347581492999998,
+          "cpu_seconds": 14.329691000000002,
+          "calls": 37
+        },
+        "audit.neutral_accuracy": {
+          "wall_seconds": 0.18387097200000002,
+          "cpu_seconds": 0.183869,
+          "calls": 37
+        },
+        "native.acceptance_audit": {
+          "wall_seconds": 0.6681696299999992,
+          "cpu_seconds": 0.0024720000000000297,
+          "calls": 37
+        },
+        "output.project_fields": {
+          "wall_seconds": 0.02982179,
+          "cpu_seconds": 0.029810000000000003,
+          "calls": 2
+        },
+        "startup.initialize": {
+          "wall_seconds": 0.15847392800000026,
+          "cpu_seconds": 0.15749100000000027,
+          "calls": 1
+        },
+        "pimple.check.input": {
+          "wall_seconds": 0.008006080999999887,
+          "cpu_seconds": 0.007728999999999653,
+          "calls": 36
+        },
+        "flow.assembly": {
+          "wall_seconds": 29.190834515999995,
+          "cpu_seconds": 29.185191,
+          "calls": 36
+        },
+        "momentum.factorize": {
+          "wall_seconds": 0.03221364199999999,
+          "cpu_seconds": 0.03201999999999999,
+          "calls": 36
+        },
+        "pressure.mass_factorize": {
+          "wall_seconds": 0.16563742299999998,
+          "cpu_seconds": 0.029592999999999994,
+          "calls": 36
+        },
+        "momentum.solve_validate": {
+          "wall_seconds": 0.05690100799999999,
+          "cpu_seconds": 0.056252,
+          "calls": 36
+        },
+        "pressure.build": {
+          "wall_seconds": 6.032616705999999,
+          "cpu_seconds": 4.224507999999998,
+          "calls": 36
+        },
+        "pressure.solve_validate": {
+          "wall_seconds": 0.009985024,
+          "cpu_seconds": 0.009439000000000003,
+          "calls": 36
+        },
+        "pimple.check.flow": {
+          "wall_seconds": 0.007556464000000096,
+          "cpu_seconds": 0.007011000000000267,
+          "calls": 36
+        },
+        "flow.correction_validate": {
+          "wall_seconds": 1.3508509730000002,
+          "cpu_seconds": 1.023614,
+          "calls": 36
+        },
+        "flow.total": {
+          "wall_seconds": 0.763292558999999,
+          "cpu_seconds": 0.3080420000000017,
+          "calls": 36
+        },
+        "epsilon.assembly": {
+          "wall_seconds": 0.214961825,
+          "cpu_seconds": 0.21470099999999998,
+          "calls": 36
+        },
+        "epsilon.solve_validate": {
+          "wall_seconds": 0.003506956,
+          "cpu_seconds": 0.003266999999999999,
+          "calls": 36
+        },
+        "pimple.check.epsilon": {
+          "wall_seconds": 0.007379813000000013,
+          "cpu_seconds": 0.007081999999999922,
+          "calls": 36
+        },
+        "epsilon.total": {
+          "wall_seconds": 0.009541921000000009,
+          "cpu_seconds": 0.006726000000000232,
+          "calls": 36
+        },
+        "k.assembly": {
+          "wall_seconds": 4.350565151,
+          "cpu_seconds": 4.349818,
+          "calls": 36
+        },
+        "k.solve_validate": {
+          "wall_seconds": 0.021754200999999997,
+          "cpu_seconds": 0.021236999999999995,
+          "calls": 36
+        },
+        "pimple.check.k": {
+          "wall_seconds": 0.007870461999999412,
+          "cpu_seconds": 0.007854000000000583,
+          "calls": 36
+        },
+        "k.total": {
+          "wall_seconds": 0.4075583410000001,
+          "cpu_seconds": 0.008905999999998748,
+          "calls": 36
+        },
+        "pimple.final_refresh_diagnostics": {
+          "wall_seconds": 0.004478660999999634,
+          "cpu_seconds": 0.003290999999999711,
+          "calls": 36
+        },
+        "pimple.sweep": {
+          "wall_seconds": 0.34557524300000075,
+          "cpu_seconds": 0.08073800000000464,
+          "calls": 36
+        },
+        "native.physical_samples": {
+          "wall_seconds": 0.9373571359999998,
+          "cpu_seconds": 0.9371980000000001,
+          "calls": 36
+        },
+        "native.implicit": {
+          "wall_seconds": 11.244209457000007,
+          "cpu_seconds": 10.947601999999998,
+          "calls": 36
+        },
+        "native.advance": {
+          "wall_seconds": 0.057540093000001846,
+          "cpu_seconds": 0.057149999999999146,
+          "calls": 36
+        },
+        "native.step": {
+          "wall_seconds": 1.2009479910000005,
+          "cpu_seconds": 0.13123299999999727,
+          "calls": 36
+        },
+        "io.checkpoint": {
+          "wall_seconds": 0.010042668,
+          "cpu_seconds": 0.0030489999999999996,
+          "calls": 2
+        },
+        "native.solve_block": {
+          "wall_seconds": 0.07217124599998215,
+          "cpu_seconds": 0.07213899999999285,
+          "calls": 1
+        },
+        "output.report": {
+          "wall_seconds": 0.187982015,
+          "cpu_seconds": 0.105203,
+          "calls": 1
+        },
+        "output.fields_and_report": {
+          "wall_seconds": 0.14154615399999998,
+          "cpu_seconds": 0.13335999999999998,
+          "calls": 1
+        },
+        "process": {
+          "wall_seconds": 1.3392463249999764,
+          "cpu_seconds": 0.3183919999999887,
+          "calls": 1
+        }
+      },
+      "output_timing_status": "instrumented",
+      "diagnostic_fraction": 0.5869380956747419,
+      "solve_fraction": 0.011631672525917533
+    },
+    {
+      "wall": "EP",
+      "space": "B11",
+      "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/campaigns/E-N-EP-B11/T-0.0160",
+      "exclusive_total": 264.0499412920001,
+      "elapsed": 264.23355825903127,
+      "seconds_per_accepted_step": 7.339821062750868,
+      "categories": {
+        "constitutive_refresh_shared": {
+          "wall_seconds": 7.260909861999995,
+          "cpu_seconds": 7.258601000000004,
+          "calls": 556
+        },
+        "initialization": {
+          "wall_seconds": 3.134862804000001,
+          "cpu_seconds": 3.1274459999999995,
+          "calls": 2
+        },
+        "assembly": {
+          "wall_seconds": 52.92117626499999,
+          "cpu_seconds": 49.01529600000002,
+          "calls": 633
+        },
+        "residual_evaluation_shared": {
+          "wall_seconds": 22.190294695000006,
+          "cpu_seconds": 21.877290999999996,
+          "calls": 336
+        },
+        "solve": {
+          "wall_seconds": 4.941215384999978,
+          "cpu_seconds": 4.939940999999926,
+          "calls": 13508
+        },
+        "other": {
+          "wall_seconds": 21.024290518000026,
+          "cpu_seconds": 15.509242999999959,
+          "calls": 909
+        },
+        "diagnostic": {
+          "wall_seconds": 152.06935241999997,
+          "cpu_seconds": 151.34637200000012,
+          "calls": 473
+        },
+        "output": {
+          "wall_seconds": 0.5078393429999999,
+          "cpu_seconds": 0.36276,
+          "calls": 6
+        }
+      },
+      "scopes": {
+        "constitutive.refresh": {
+          "wall_seconds": 7.260909861999995,
+          "cpu_seconds": 7.258601000000004,
+          "calls": 556
+        },
+        "startup.object": {
+          "wall_seconds": 2.950889084,
+          "cpu_seconds": 2.944378,
+          "calls": 1
+        },
+        "matching.constraints": {
+          "wall_seconds": 1.175353607,
+          "cpu_seconds": 1.1747549999999993,
+          "calls": 489
+        },
+        "residual": {
+          "wall_seconds": 22.190294695000006,
+          "cpu_seconds": 21.877290999999996,
+          "calls": 336
+        },
+        "dense.factorization": {
+          "wall_seconds": 1.8526053019999986,
+          "cpu_seconds": 1.8519159999999988,
+          "calls": 297
+        },
+        "dense.triangular_solve": {
+          "wall_seconds": 3.088610083000002,
+          "cpu_seconds": 3.088024999999998,
+          "calls": 13211
+        },
+        "residual.mass_dual_norms": {
+          "wall_seconds": 1.1395499160000002,
+          "cpu_seconds": 0.09176400000000004,
+          "calls": 149
+        },
+        "native.explicit": {
+          "wall_seconds": 0.7651439660000002,
+          "cpu_seconds": 0.540015,
+          "calls": 37
+        },
+        "domain.compute": {
+          "wall_seconds": 116.36376438999997,
+          "cpu_seconds": 116.32331900000003,
+          "calls": 145
+        },
+        "domain.scalar": {
+          "wall_seconds": 0.3719341979999992,
+          "cpu_seconds": 0.17702999999999952,
+          "calls": 181
+        },
+        "audit.physical": {
+          "wall_seconds": 17.233378354000003,
+          "cpu_seconds": 16.751417999999997,
+          "calls": 37
+        },
+        "audit.complete": {
+          "wall_seconds": 16.738625178,
+          "cpu_seconds": 16.733171,
+          "calls": 37
+        },
+        "audit.neutral_accuracy": {
+          "wall_seconds": 0.22853283099999996,
+          "cpu_seconds": 0.22847900000000002,
+          "calls": 37
+        },
+        "native.acceptance_audit": {
+          "wall_seconds": 0.44674669700000025,
+          "cpu_seconds": 0.00257499999999955,
+          "calls": 37
+        },
+        "output.project_fields": {
+          "wall_seconds": 0.034670481,
+          "cpu_seconds": 0.03467,
+          "calls": 2
+        },
+        "startup.initialize": {
+          "wall_seconds": 0.1839737200000009,
+          "cpu_seconds": 0.18306799999999956,
+          "calls": 1
+        },
+        "pimple.check.input": {
+          "wall_seconds": 0.23425795399999982,
+          "cpu_seconds": 0.008152000000000159,
+          "calls": 36
+        },
+        "flow.assembly": {
+          "wall_seconds": 33.862130147,
+          "cpu_seconds": 33.804205999999986,
+          "calls": 36
+        },
+        "momentum.factorize": {
+          "wall_seconds": 0.06361861100000002,
+          "cpu_seconds": 0.06353700000000001,
+          "calls": 36
+        },
+        "pressure.mass_factorize": {
+          "wall_seconds": 0.05981269400000003,
+          "cpu_seconds": 0.059568000000000024,
+          "calls": 36
+        },
+        "momentum.solve_validate": {
+          "wall_seconds": 0.092780605,
+          "cpu_seconds": 0.092332,
+          "calls": 36
+        },
+        "pressure.build": {
+          "wall_seconds": 11.907068905000001,
+          "cpu_seconds": 8.627804000000001,
+          "calls": 36
+        },
+        "pressure.solve_validate": {
+          "wall_seconds": 0.013841749,
+          "cpu_seconds": 0.013823999999999996,
+          "calls": 36
+        },
+        "pimple.check.flow": {
+          "wall_seconds": 0.007940265000000002,
+          "cpu_seconds": 0.007204999999999906,
+          "calls": 36
+        },
+        "flow.correction_validate": {
+          "wall_seconds": 1.8593883110000002,
+          "cpu_seconds": 1.3811129999999998,
+          "calls": 36
+        },
+        "flow.total": {
+          "wall_seconds": 0.7663279719999998,
+          "cpu_seconds": 0.5198300000000016,
+          "calls": 36
+        },
+        "epsilon.assembly": {
+          "wall_seconds": 0.704887934,
+          "cpu_seconds": 0.252225,
+          "calls": 36
+        },
+        "epsilon.solve_validate": {
+          "wall_seconds": 0.0036415550000000007,
+          "cpu_seconds": 0.0034000000000000007,
+          "calls": 36
+        },
+        "pimple.check.epsilon": {
+          "wall_seconds": 0.00858318899999988,
+          "cpu_seconds": 0.007712999999999859,
+          "calls": 36
+        },
+        "epsilon.total": {
+          "wall_seconds": 0.10418668800000008,
+          "cpu_seconds": 0.007309000000000121,
+          "calls": 36
+        },
+        "k.assembly": {
+          "wall_seconds": 5.271735671999999,
+          "cpu_seconds": 5.156306,
+          "calls": 36
+        },
+        "k.solve_validate": {
+          "wall_seconds": 0.03640716499999999,
+          "cpu_seconds": 0.036201000000000004,
+          "calls": 36
+        },
+        "pimple.check.k": {
+          "wall_seconds": 0.07994267499999996,
+          "cpu_seconds": 0.008205000000000129,
+          "calls": 36
+        },
+        "k.total": {
+          "wall_seconds": 0.08863024800000008,
+          "cpu_seconds": 0.010439999999998895,
+          "calls": 36
+        },
+        "pimple.final_refresh_diagnostics": {
+          "wall_seconds": 0.0050267970000001105,
+          "cpu_seconds": 0.0032159999999998024,
+          "calls": 36
+        },
+        "pimple.sweep": {
+          "wall_seconds": 0.8150214090000034,
+          "cpu_seconds": 0.11127900000000057,
+          "calls": 36
+        },
+        "native.physical_samples": {
+          "wall_seconds": 1.1331174689999999,
+          "cpu_seconds": 1.132955,
+          "calls": 36
+        },
+        "native.implicit": {
+          "wall_seconds": 11.902636430000001,
+          "cpu_seconds": 11.874243000000002,
+          "calls": 36
+        },
+        "native.advance": {
+          "wall_seconds": 0.12916916399999678,
+          "cpu_seconds": 0.0670889999999984,
+          "calls": 36
+        },
+        "native.step": {
+          "wall_seconds": 0.8473856430000062,
+          "cpu_seconds": 0.1922019999999991,
+          "calls": 36
+        },
+        "io.checkpoint": {
+          "wall_seconds": 0.011504991999999999,
+          "cpu_seconds": 0.003163,
+          "calls": 2
+        },
+        "native.solve_block": {
+          "wall_seconds": 0.08267830399998388,
+          "cpu_seconds": 0.08245999999996911,
+          "calls": 1
+        },
+        "output.report": {
+          "wall_seconds": 0.260836083,
+          "cpu_seconds": 0.132896,
+          "calls": 1
+        },
+        "output.fields_and_report": {
+          "wall_seconds": 0.20082778699999998,
+          "cpu_seconds": 0.19203100000000003,
+          "calls": 1
+        },
+        "process": {
+          "wall_seconds": 1.4715725110000335,
+          "cpu_seconds": 0.3255709999999965,
+          "calls": 1
+        }
+      },
+      "output_timing_status": "instrumented",
+      "diagnostic_fraction": 0.5759113282734414,
+      "solve_fraction": 0.01871318494078257
+    },
+    {
+      "wall": "Accepted",
+      "space": "B5",
+      "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/campaigns/E-N-Accepted-B5/T-0.0160",
+      "exclusive_total": 268.33752587300006,
+      "elapsed": 268.51306601800025,
+      "seconds_per_accepted_step": 7.458696278277785,
+      "categories": {
+        "constitutive_refresh_shared": {
+          "wall_seconds": 6.282964459000007,
+          "cpu_seconds": 6.281570999999996,
+          "calls": 556
+        },
+        "initialization": {
+          "wall_seconds": 3.665546187999999,
+          "cpu_seconds": 3.661316,
+          "calls": 2
+        },
+        "assembly": {
+          "wall_seconds": 41.37543596800005,
+          "cpu_seconds": 38.57555200000003,
+          "calls": 633
+        },
+        "residual_evaluation_shared": {
+          "wall_seconds": 19.581155739999996,
+          "cpu_seconds": 19.038312000000012,
+          "calls": 336
+        },
+        "solve": {
+          "wall_seconds": 2.556170466999995,
+          "cpu_seconds": 2.554909000000051,
+          "calls": 10916
+        },
+        "other": {
+          "wall_seconds": 20.1468504130001,
+          "cpu_seconds": 15.532857000000012,
+          "calls": 909
+        },
+        "diagnostic": {
+          "wall_seconds": 173.43290639100022,
+          "cpu_seconds": 173.02774300000007,
+          "calls": 473
+        },
+        "output": {
+          "wall_seconds": 1.296496247,
+          "cpu_seconds": 0.338635,
+          "calls": 6
+        }
+      },
+      "scopes": {
+        "constitutive.refresh": {
+          "wall_seconds": 6.282964459000007,
+          "cpu_seconds": 6.281570999999996,
+          "calls": 556
+        },
+        "startup.object": {
+          "wall_seconds": 2.639831863,
+          "cpu_seconds": 2.6371379999999998,
+          "calls": 1
+        },
+        "matching.constraints": {
+          "wall_seconds": 0.9274813829999998,
+          "cpu_seconds": 0.9269580000000003,
+          "calls": 489
+        },
+        "residual": {
+          "wall_seconds": 19.581155739999996,
+          "cpu_seconds": 19.038312000000012,
+          "calls": 336
+        },
+        "dense.factorization": {
+          "wall_seconds": 0.9345514519999991,
+          "cpu_seconds": 0.9342030000000003,
+          "calls": 297
+        },
+        "dense.triangular_solve": {
+          "wall_seconds": 1.6216190149999927,
+          "cpu_seconds": 1.6207059999999822,
+          "calls": 10619
+        },
+        "residual.mass_dual_norms": {
+          "wall_seconds": 0.32125616600000007,
+          "cpu_seconds": 0.058050999999999985,
+          "calls": 149
+        },
+        "native.explicit": {
+          "wall_seconds": 0.7923908100000004,
+          "cpu_seconds": 0.5269370000000001,
+          "calls": 37
+        },
+        "domain.compute": {
+          "wall_seconds": 135.69565976200002,
+          "cpu_seconds": 135.56902300000004,
+          "calls": 145
+        },
+        "domain.scalar": {
+          "wall_seconds": 0.1650140889999986,
+          "cpu_seconds": 0.07521999999999915,
+          "calls": 181
+        },
+        "audit.physical": {
+          "wall_seconds": 13.510152549999999,
+          "cpu_seconds": 13.327161,
+          "calls": 37
+        },
+        "audit.complete": {
+          "wall_seconds": 21.762477912,
+          "cpu_seconds": 21.757948000000003,
+          "calls": 37
+        },
+        "audit.neutral_accuracy": {
+          "wall_seconds": 1.3482098189999996,
+          "cpu_seconds": 1.347473,
+          "calls": 37
+        },
+        "native.acceptance_audit": {
+          "wall_seconds": 0.003601940000000914,
+          "cpu_seconds": 0.002787000000001205,
+          "calls": 37
+        },
+        "output.project_fields": {
+          "wall_seconds": 0.03282521,
+          "cpu_seconds": 0.032696,
+          "calls": 2
+        },
+        "startup.initialize": {
+          "wall_seconds": 1.0257143249999991,
+          "cpu_seconds": 1.024178,
+          "calls": 1
+        },
+        "pimple.check.input": {
+          "wall_seconds": 0.007484435000000178,
+          "cpu_seconds": 0.007234000000000518,
+          "calls": 36
+        },
+        "flow.assembly": {
+          "wall_seconds": 28.95492260600001,
+          "cpu_seconds": 28.948114000000004,
+          "calls": 36
+        },
+        "momentum.factorize": {
+          "wall_seconds": 0.03419483799999999,
+          "cpu_seconds": 0.03393099999999999,
+          "calls": 36
+        },
+        "pressure.mass_factorize": {
+          "wall_seconds": 0.43454660100000014,
+          "cpu_seconds": 0.034022,
+          "calls": 36
+        },
+        "momentum.solve_validate": {
+          "wall_seconds": 0.057274702999999996,
+          "cpu_seconds": 0.05681400000000002,
+          "calls": 36
+        },
+        "pressure.build": {
+          "wall_seconds": 6.924203660999999,
+          "cpu_seconds": 4.133532000000001,
+          "calls": 36
+        },
+        "pressure.solve_validate": {
+          "wall_seconds": 0.014218709999999997,
+          "cpu_seconds": 0.013248999999999997,
+          "calls": 36
+        },
+        "pimple.check.flow": {
+          "wall_seconds": 0.008405979999999924,
+          "cpu_seconds": 0.007387000000000032,
+          "calls": 36
+        },
+        "flow.correction_validate": {
+          "wall_seconds": 1.262030245,
+          "cpu_seconds": 1.261606,
+          "calls": 36
+        },
+        "flow.total": {
+          "wall_seconds": 0.6212793939999985,
+          "cpu_seconds": 0.34605200000000047,
+          "calls": 36
+        },
+        "epsilon.assembly": {
+          "wall_seconds": 0.22000770099999997,
+          "cpu_seconds": 0.21960000000000005,
+          "calls": 36
+        },
+        "epsilon.solve_validate": {
+          "wall_seconds": 0.00425736,
+          "cpu_seconds": 0.0036999999999999997,
+          "calls": 36
+        },
+        "pimple.check.epsilon": {
+          "wall_seconds": 0.0077935480000002055,
+          "cpu_seconds": 0.007103999999999777,
+          "calls": 36
+        },
+        "epsilon.total": {
+          "wall_seconds": 0.3244036640000001,
+          "cpu_seconds": 0.00599800000000017,
+          "calls": 36
+        },
+        "k.assembly": {
+          "wall_seconds": 4.3488206169999994,
+          "cpu_seconds": 4.347347999999999,
+          "calls": 36
+        },
+        "k.solve_validate": {
+          "wall_seconds": 0.08929470400000002,
+          "cpu_seconds": 0.023059000000000003,
+          "calls": 36
+        },
+        "pimple.check.k": {
+          "wall_seconds": 0.014533204000000022,
+          "cpu_seconds": 0.014248000000000483,
+          "calls": 36
+        },
+        "k.total": {
+          "wall_seconds": 0.15042381300000018,
+          "cpu_seconds": 0.01078899999999905,
+          "calls": 36
+        },
+        "pimple.final_refresh_diagnostics": {
+          "wall_seconds": 0.23029948299999997,
+          "cpu_seconds": 0.004145000000000065,
+          "calls": 36
+        },
+        "pimple.sweep": {
+          "wall_seconds": 0.742845104999998,
+          "cpu_seconds": 0.13194799999999773,
+          "calls": 36
+        },
+        "native.physical_samples": {
+          "wall_seconds": 0.951392259,
+          "cpu_seconds": 0.9509180000000003,
+          "calls": 36
+        },
+        "native.implicit": {
+          "wall_seconds": 12.387695219000003,
+          "cpu_seconds": 12.382093999999993,
+          "calls": 36
+        },
+        "native.advance": {
+          "wall_seconds": 0.06976091499999981,
+          "cpu_seconds": 0.06935299999999689,
+          "calls": 36
+        },
+        "native.step": {
+          "wall_seconds": 1.2226524139999997,
+          "cpu_seconds": 0.14614900000000208,
+          "calls": 36
+        },
+        "io.checkpoint": {
+          "wall_seconds": 0.010375562000000001,
+          "cpu_seconds": 0.002643,
+          "calls": 2
+        },
+        "native.solve_block": {
+          "wall_seconds": 0.07135534900010043,
+          "cpu_seconds": 0.0711350000000266,
+          "calls": 1
+        },
+        "output.report": {
+          "wall_seconds": 1.112708526,
+          "cpu_seconds": 0.171621,
+          "calls": 1
+        },
+        "output.fields_and_report": {
+          "wall_seconds": 0.14058694900000002,
+          "cpu_seconds": 0.13167500000000001,
+          "calls": 1
+        },
+        "process": {
+          "wall_seconds": 1.274851812999998,
+          "cpu_seconds": 0.31506500000000415,
+          "calls": 1
+        }
+      },
+      "output_timing_status": "instrumented",
+      "diagnostic_fraction": 0.6463237142354934,
+      "solve_fraction": 0.009525952282237968
+    },
+    {
+      "wall": "Accepted",
+      "space": "B11",
+      "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/campaigns/E-N-Accepted-B11/T-0.0160",
+      "exclusive_total": 306.377341839,
+      "elapsed": 307.07312762603397,
+      "seconds_per_accepted_step": 8.529809100723165,
+      "categories": {
+        "constitutive_refresh_shared": {
+          "wall_seconds": 6.898306400999994,
+          "cpu_seconds": 6.894853999999996,
+          "calls": 556
+        },
+        "initialization": {
+          "wall_seconds": 4.231312451,
+          "cpu_seconds": 4.211005,
+          "calls": 2
+        },
+        "assembly": {
+          "wall_seconds": 50.41036160600003,
+          "cpu_seconds": 48.059741000000024,
+          "calls": 633
+        },
+        "residual_evaluation_shared": {
+          "wall_seconds": 21.904176629999988,
+          "cpu_seconds": 21.426895000000005,
+          "calls": 336
+        },
+        "solve": {
+          "wall_seconds": 4.635620231999988,
+          "cpu_seconds": 4.633893999999976,
+          "calls": 13508
+        },
+        "other": {
+          "wall_seconds": 20.749092920000038,
+          "cpu_seconds": 17.069173999999865,
+          "calls": 909
+        },
+        "diagnostic": {
+          "wall_seconds": 197.11435173600015,
+          "cpu_seconds": 195.66523499999997,
+          "calls": 473
+        },
+        "output": {
+          "wall_seconds": 0.434119863,
+          "cpu_seconds": 0.35146,
+          "calls": 6
+        }
+      },
+      "scopes": {
+        "constitutive.refresh": {
+          "wall_seconds": 6.898306400999994,
+          "cpu_seconds": 6.894853999999996,
+          "calls": 556
+        },
+        "startup.object": {
+          "wall_seconds": 3.139611412,
+          "cpu_seconds": 3.1203670000000003,
+          "calls": 1
+        },
+        "matching.constraints": {
+          "wall_seconds": 1.2591090589999983,
+          "cpu_seconds": 1.2582529999999998,
+          "calls": 489
+        },
+        "residual": {
+          "wall_seconds": 21.904176629999988,
+          "cpu_seconds": 21.426895000000005,
+          "calls": 336
+        },
+        "dense.factorization": {
+          "wall_seconds": 1.8158541410000004,
+          "cpu_seconds": 1.8156090000000003,
+          "calls": 297
+        },
+        "dense.triangular_solve": {
+          "wall_seconds": 2.8197660909999986,
+          "cpu_seconds": 2.818285000000068,
+          "calls": 13211
+        },
+        "residual.mass_dual_norms": {
+          "wall_seconds": 0.071115726,
+          "cpu_seconds": 0.06637100000000003,
+          "calls": 149
+        },
+        "native.explicit": {
+          "wall_seconds": 0.5577613069999998,
+          "cpu_seconds": 0.5567410000000002,
+          "calls": 37
+        },
+        "domain.compute": {
+          "wall_seconds": 152.90879430800007,
+          "cpu_seconds": 152.74080299999997,
+          "calls": 145
+        },
+        "domain.scalar": {
+          "wall_seconds": 0.34981813199999984,
+          "cpu_seconds": 0.17866300000000204,
+          "calls": 181
+        },
+        "audit.physical": {
+          "wall_seconds": 16.459587668,
+          "cpu_seconds": 15.477832000000003,
+          "calls": 37
+        },
+        "audit.complete": {
+          "wall_seconds": 24.649849827999997,
+          "cpu_seconds": 24.521853,
+          "calls": 37
+        },
+        "audit.neutral_accuracy": {
+          "wall_seconds": 1.6777849939999998,
+          "cpu_seconds": 1.6776039999999999,
+          "calls": 37
+        },
+        "native.acceptance_audit": {
+          "wall_seconds": 0.0731776019999999,
+          "cpu_seconds": 0.0025169999999998804,
+          "calls": 37
+        },
+        "output.project_fields": {
+          "wall_seconds": 0.034516841,
+          "cpu_seconds": 0.034496,
+          "calls": 2
+        },
+        "startup.initialize": {
+          "wall_seconds": 1.0917010390000002,
+          "cpu_seconds": 1.0906380000000002,
+          "calls": 1
+        },
+        "pimple.check.input": {
+          "wall_seconds": 0.006827830999999396,
+          "cpu_seconds": 0.006809999999999317,
+          "calls": 36
+        },
+        "flow.assembly": {
+          "wall_seconds": 33.201106333,
+          "cpu_seconds": 33.192420999999996,
+          "calls": 36
+        },
+        "momentum.factorize": {
+          "wall_seconds": 0.06668286300000001,
+          "cpu_seconds": 0.06539099999999998,
+          "calls": 36
+        },
+        "pressure.mass_factorize": {
+          "wall_seconds": 0.054953661,
+          "cpu_seconds": 0.05435800000000002,
+          "calls": 36
+        },
+        "momentum.solve_validate": {
+          "wall_seconds": 0.11306590100000001,
+          "cpu_seconds": 0.08709700000000001,
+          "calls": 36
+        },
+        "pressure.build": {
+          "wall_seconds": 10.694708039000004,
+          "cpu_seconds": 8.3546,
+          "calls": 36
+        },
+        "pressure.solve_validate": {
+          "wall_seconds": 0.015916758,
+          "cpu_seconds": 0.014709999999999997,
+          "calls": 36
+        },
+        "pimple.check.flow": {
+          "wall_seconds": 0.006581104000000115,
+          "cpu_seconds": 0.006507999999999736,
+          "calls": 36
+        },
+        "flow.correction_validate": {
+          "wall_seconds": 1.3356822690000003,
+          "cpu_seconds": 1.334471000000001,
+          "calls": 36
+        },
+        "flow.total": {
+          "wall_seconds": 0.5413437259999996,
+          "cpu_seconds": 0.49440700000000026,
+          "calls": 36
+        },
+        "epsilon.assembly": {
+          "wall_seconds": 0.252737328,
+          "cpu_seconds": 0.25270099999999995,
+          "calls": 36
+        },
+        "epsilon.solve_validate": {
+          "wall_seconds": 0.003835391999999999,
+          "cpu_seconds": 0.0038150000000000002,
+          "calls": 36
+        },
+        "pimple.check.epsilon": {
+          "wall_seconds": 0.006838216000000341,
+          "cpu_seconds": 0.006259000000000126,
+          "calls": 36
+        },
+        "epsilon.total": {
+          "wall_seconds": 0.02951898899999994,
+          "cpu_seconds": 0.007010000000000516,
+          "calls": 36
+        },
+        "k.assembly": {
+          "wall_seconds": 5.002700847000001,
+          "cpu_seconds": 5.001765999999999,
+          "calls": 36
+        },
+        "k.solve_validate": {
+          "wall_seconds": 0.11349872000000001,
+          "cpu_seconds": 0.03301200000000001,
+          "calls": 36
+        },
+        "pimple.check.k": {
+          "wall_seconds": 0.006936619999999616,
+          "cpu_seconds": 0.006919999999999149,
+          "calls": 36
+        },
+        "k.total": {
+          "wall_seconds": 0.25088887300000073,
+          "cpu_seconds": 0.0106339999999987,
+          "calls": 36
+        },
+        "pimple.final_refresh_diagnostics": {
+          "wall_seconds": 0.11376245300000018,
+          "cpu_seconds": 0.0032489999999999186,
+          "calls": 36
+        },
+        "pimple.sweep": {
+          "wall_seconds": 0.7728804799999969,
+          "cpu_seconds": 0.10320899999999167,
+          "calls": 36
+        },
+        "native.physical_samples": {
+          "wall_seconds": 1.0685168059999999,
+          "cpu_seconds": 1.0684799999999999,
+          "calls": 36
+        },
+        "native.implicit": {
+          "wall_seconds": 13.507113753000002,
+          "cpu_seconds": 13.502042000000003,
+          "calls": 36
+        },
+        "native.advance": {
+          "wall_seconds": 0.07652721199999224,
+          "cpu_seconds": 0.07571999999999868,
+          "calls": 36
+        },
+        "native.step": {
+          "wall_seconds": 1.295833281000002,
+          "cpu_seconds": 0.21532100000000298,
+          "calls": 36
+        },
+        "io.checkpoint": {
+          "wall_seconds": 0.011362644,
+          "cpu_seconds": 0.0025599999999999998,
+          "calls": 2
+        },
+        "native.solve_block": {
+          "wall_seconds": 0.08083152799997606,
+          "cpu_seconds": 0.08069099999994478,
+          "calls": 1
+        },
+        "output.report": {
+          "wall_seconds": 0.188719544,
+          "cpu_seconds": 0.118282,
+          "calls": 1
+        },
+        "output.fields_and_report": {
+          "wall_seconds": 0.199520834,
+          "cpu_seconds": 0.19612200000000002,
+          "calls": 1
+        },
+        "process": {
+          "wall_seconds": 1.6475186550000558,
+          "cpu_seconds": 0.3319109999999341,
+          "calls": 1
+        }
+      },
+      "output_timing_status": "instrumented",
+      "diagnostic_fraction": 0.6433711793203785,
+      "solve_fraction": 0.015130427740429928
+    }
+  ],
+  "scope": "Exclusive cost accounting; no overlapping parent/child time is double counted.",
+  "classification": "domain/audit/physical samples are diagnostic; assembly/pressure build/constraints are assembly; dense solves are solve; named checkpoint/output scopes are output; residual and constitutive refresh are shared and reported separately",
+  "optimization": "none introduced; mandatory domain computation dominates; immutable restricted-mass factor cache would not address that cost",
+  "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/exclusive-timing.json",
+  "source_file_sha256": "a2dc3131857bb907d0c84595a1f1dbe5264e40a0c46e88a66ba5e6a4dfe05b09"
+}
