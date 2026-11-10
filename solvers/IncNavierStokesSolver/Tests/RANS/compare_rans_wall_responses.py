@@ -78,11 +78,14 @@ def main():
             bb=observations[a.model+'-N-'+wall+'-duration-'+str(a.dt)+'-'+member]
             delta=np.asarray(pp['observation']['grid_values'])-np.asarray(bb['observation']['grid_values'])
             require(delta.shape==(len(grid),5),'wall_response_field_shape')
-            delta[:,4]-=np.dot(weights,delta[:,4])/weights.sum()
+            gauge=np.dot(weights,delta[:,4])/weights.sum();delta[:,4]-=gauge
             value={key:(delta[outer,j],weights[outer]) if j==3 else (delta[:,j],weights)
                 for j,key in enumerate(('u','w','k','epsilon_outer','Pi'))}
             scales=dict(u=ref.us,w=ref.us,k=ref.K,epsilon_outer=ref.A/ref.H,Pi=ref.us**2)
             for key,(v,w) in list(value.items()):value[key]=(v/scales[key],w)
+            value['pi_mechanical']=((delta[:,4]-2*delta[:,2]/3)/ref.us**2,weights)
+            traction=np.asarray(pp['observation']['grid_traction'])-np.asarray(bb['observation']['grid_traction']);traction[:,2]+=gauge
+            value['Tzz']=(traction[:,2]/ref.us**2,weights);value['Txz']=(traction[:,0]/ref.us**2,weights)
             ps,bs=pp['native_constitutive']['samples'],bb['native_constitutive']['samples']
             require(len(ps)==len(bs),'wall_response_tensor_shape')
             stress=[];sw=[]
@@ -90,10 +93,10 @@ def main():
                 require(first['sample_index']==last['sample_index'] and first['side']==last['side'],
                         'wall_response_tensor_identity')
                 R=np.asarray(first['R'])-np.asarray(last['R']);Q=np.asarray(first['Q'])-np.asarray(last['Q'])
-                stress.append([R[0,0],R[1,1],R[2,2],R[0,2],Q[0,2],first['P']-last['P']])
+                stress.append([R[0,0],R[1,1],R[2,2],R[0,2],Q[0,0],Q[1,1],Q[2,2],Q[0,2],first['P']-last['P']])
                 sw.append(weights[first['sample_index']])
             stress=np.asarray(stress);sw=np.asarray(sw)
-            for j,key in enumerate(('Rxx','Ryy','Rzz','Rxz','Qxz','P')):
+            for j,key in enumerate(('Rxx','Ryy','Rzz','Rxz','Qxx','Qyy','Qzz','Qxz','P')):
                 value[key]=(stress[:,j]/(ref.A/ref.H if key=='P' else ref.us**2),sw)
             arrays[member]=value
         responses[wall]=arrays;wallfields={}

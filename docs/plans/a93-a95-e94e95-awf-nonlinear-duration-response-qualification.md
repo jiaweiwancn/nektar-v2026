@@ -72,6 +72,12 @@ uses epsilon(H). Initial coefficients and native zero-step history are sealed
 separately from the neutral reference; their stable artifact identities are
 checked on every same-space temporal comparison and exact resume.
 
+The declared response observables also include all three Q normal components,
+mechanical pressure `pi=Pi-2k/3`, and full vertical-plane normal/shear traction.
+Mechanical pressure and normal traction use the same single gauge shift as Pi;
+they are not independently regauged. Traction response RMS over volume samples
+is distinct from the native interface-traction-jump accuracy gate.
+
 For exactly divergence-free planar flow, A93's Q:S vanishes because the two
 nonzero strain eigenvalues are opposite and Omega^2 is a multiple of the
 identity on that plane. A95's commutator has zero contraction with S generally.

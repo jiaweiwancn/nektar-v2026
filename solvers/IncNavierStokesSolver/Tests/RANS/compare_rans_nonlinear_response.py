@@ -24,7 +24,10 @@ def main():
             require(pq[key]==bq[key],'response_baseline_identity_mismatch:'+key)
         require(pq['velocity_amplitude']!=0 and bq['velocity_amplitude']==0,'response_baseline_perturbation_invalid')
         pv,bv=[np.array(bundle['samples'][i]['grid_values']) for bundle in (pert,base)];w=np.array(pert['samples'][i]['grid_weights']);require(np.array_equal(w,weights) and pert['samples'][i]['grid']==base['samples'][i]['grid'],'response_grid_mismatch')
-        delta=pv-bv;delta[:,4]-=np.sum(w*delta[:,4])/w.sum();physical=delta/np.array([ref.us,ref.us,ref.K,ref.A/ref.H,ref.us**2]);outer=np.array(pert['samples'][i]['grid_regions'])==1;responses={name:(physical[outer,j],w[outer]) if j==3 else (physical[:,j],w) for j,name in enumerate(('u','w','k','epsilon_outer','Pi'))}
+        delta=pv-bv;gauge=np.sum(w*delta[:,4])/w.sum();delta[:,4]-=gauge;physical=delta/np.array([ref.us,ref.us,ref.K,ref.A/ref.H,ref.us**2]);outer=np.array(pert['samples'][i]['grid_regions'])==1;responses={name:(physical[outer,j],w[outer]) if j==3 else (physical[:,j],w) for j,name in enumerate(('u','w','k','epsilon_outer','Pi'))}
+        responses['pi_mechanical']=((delta[:,4]-2*delta[:,2]/3)/ref.us**2,w)
+        traction=np.array(pert['samples'][i]['grid_traction'])-np.array(base['samples'][i]['grid_traction']);traction[:,2]+=gauge
+        responses['Tzz']=(traction[:,2]/ref.us**2,w);responses['Txz']=(traction[:,0]/ref.us**2,w)
         native=[]
         for label in (pl,bl):
             folder=r/'campaigns'/label;endpoint=folder/('T-'+format(a.time,'.4f'));state=load(endpoint/'case.evolution.json');target=out/(str(i)+'-'+('perturbed' if label==pl else 'baseline'));target.mkdir();shutil.copy2(endpoint/'case.xml',target/'case.xml');seed=load(folder/'initial-packet.json');q=replay_request(seed,pq['evaluation']['grid'],state=state['state'],time=state['time']);q['fixed_boundary']=state['initialization_receipt']['live_fixed_boundary'];q['export_constitutive']=True;packet,_=run_probe(runtime,target,q);packet['observation']['grid_weights']=w.tolist();checks.append(analyze(packet,config,w));native.append(packet)
@@ -33,9 +36,9 @@ def main():
         stress=[];sw=[]
         for ps,bs in zip(pp,bb,strict=True):
             require((ps['sample_index'],ps['coordinate'],ps['side'],ps['geometry'])==(bs['sample_index'],bs['coordinate'],bs['side'],bs['geometry']),'response_constitutive_identity')
-            R=np.array(ps['R'])-np.array(bs['R']);Q=np.array(ps['Q'])-np.array(bs['Q']);stress.append([R[0,0],R[1,1],R[2,2],R[0,2],Q[0,2],ps['P']-bs['P']]);sw.append(w[ps['sample_index']])
+            R=np.array(ps['R'])-np.array(bs['R']);Q=np.array(ps['Q'])-np.array(bs['Q']);stress.append([R[0,0],R[1,1],R[2,2],R[0,2],Q[0,0],Q[1,1],Q[2,2],Q[0,2],ps['P']-bs['P']]);sw.append(w[ps['sample_index']])
         stress=np.array(stress);sw=np.array(sw)
-        for j,name in enumerate(('Rxx','Ryy','Rzz','Rxz','Qxz','P')):responses[name]=(stress[:,j]/(ref.A/ref.H if name=='P' else ref.us**2),sw)
+        for j,name in enumerate(('Rxx','Ryy','Rzz','Rxz','Qxx','Qyy','Qzz','Qxz','P')):responses[name]=(stress[:,j]/(ref.A/ref.H if name=='P' else ref.us**2),sw)
         arrays.append(responses)
         init=load(r/'campaigns'/pl/'actual-initial/observation.json');g=np.array(init['grid_gradients']);div=g[:,0,0]+g[:,1,2];initial.append(dict(label=pl,state_sha256=pq['actual_initial']['state_sha256'],native_history=pq['actual_initial']['history_header'],raw_divergence_RMS=float(np.sqrt(np.sum(w*div**2)/w.sum())),raw_divergence_maximum=float(np.max(np.abs(div))),identity=pq['actual_initial']['receipt']))
     fields={}

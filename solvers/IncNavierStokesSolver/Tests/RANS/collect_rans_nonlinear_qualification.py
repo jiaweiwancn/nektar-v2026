@@ -23,6 +23,8 @@ def main():
         result['verification'][name]=receipt(r/name)
     result['verification']['aggregate-negative-controls']=receipt(r/'aggregate-negative-controls/results.json')
     result['verification']['complete-export-negative-controls']=receipt(r/'complete-export-negative-controls/results.json')
+    for name in ('ctest-current.json','partial-export-negative-control.json','neutral-as-perturbed-negative-control.json','physical-budget-regression.json'):
+        result['verification'][name]=receipt(r/name)
     result['execution_schedules']=[]
     for folder in sorted((r/'duration-schedules').glob('*')):
         if not folder.is_dir():continue
