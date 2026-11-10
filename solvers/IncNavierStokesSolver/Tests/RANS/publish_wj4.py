@@ -8,7 +8,8 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
-from wj_immutable import file_hash,artifacts,read,write_once
+import sys
+from wj_immutable import file_hash,artifacts,read,write_once,digest,verify_artifacts
 
 
 def csv_file(path,rows):
@@ -16,6 +17,47 @@ def csv_file(path,rows):
     keys=list(dict.fromkeys(k for row in rows for k in row))
     with path.open('w',newline='') as f:
         w=csv.DictWriter(f,fieldnames=keys);w.writeheader();w.writerows(rows)
+
+def native_accounting(summary,policy):
+    """Summarize every original native attempt, including deliberate rejection.
+
+    Full per-step telemetry stays in immutable producer reports. The compact
+    bridge binds their bytes and records partial counts without filling them in.
+    """
+    from run_cls_epawf_picard import state_hash
+    counts=('momentum_predictor_solves','pressure_system_solves','k_transport_solves',
+            'epsilon_transport_solves','bound_calls','additional_governing_equation_solves',
+            'additional_correction_or_restoration_solves')
+    rows=[];lineage={}
+    for name,entry in summary.get('execution',{}).items():
+        path=Path(entry['report']);receipt=Path(entry['receipt']);r=read(receipt)
+        verify_artifacts(r['artifacts'])
+        if not path.exists():
+            rows.append(dict(policy=policy,case=name,report=str(path),status=entry['status'],attempts=r['actual_attempts'],failure=r.get('failure')));continue
+        if file_hash(path)!=entry['report_sha256']:raise ValueError('producer report changed: '+str(path))
+        d=read(path);attempts=d['pimple_attempts'];bounds=[a['k_bound'] for a in attempts if 'k_bound' in a]
+        if r['actual_attempts']!=len(attempts):raise ValueError('native attempt count differs from receipt')
+        complete=[a for a in attempts if a.get('scheduled_complete')]
+        if any(any(a.get(k)!=1 for k in counts[:5]) or any(a.get(k)!=0 for k in counts[5:]) for a in complete):
+            raise ValueError('scheduled one-sweep count violated: '+str(path))
+        rows.append(dict(policy=policy,case=name,status=entry['status'],report=str(path),report_sha256=file_hash(path),
+            receipt_sha256=file_hash(receipt),xml_sha256=file_hash(path.parent/'case.xml'),steps=d['steps'],time=d['time'],dt=d['dt'],
+            unknowns=len(d['state']),attempts=len(attempts),fully_scheduled_attempts=len(complete),
+            partial_attempts=len(attempts)-len(complete),failure=d.get('failure'),
+            **{k:sum(a.get(k,0) for a in attempts) for k in counts},
+            bound_activations=sum(a.get('bound_activations',0) for a in attempts),
+            maximum_mass_correction=max((b['mass_norm_correction'] for b in bounds),default=0),
+            minimum_arithmetic_reserve=min((b['arithmetic_reserve'] for b in bounds),default=None),
+            raw_corrected_k_hashes_equal=all(b['raw_sha256']==b['corrected_sha256'] for b in bounds),
+            maximum_added_k_storage_residual=max((abs(a.get('k_added_storage_residual',0)) for a in attempts),default=0)))
+        lineage[policy+'/'+name]=dict(report=str(path),report_sha256=file_hash(path),state_sha256=state_hash(d['state']),
+            native_history_sha256=digest(d['native_history']),native_history_times=d['native_history_times'],
+            last_stage_history_sha256=state_hash(d['last_stage_history']) if d['last_stage_history'] else None,
+            last_stage_time=d['last_stage_time'],last_stage_alpha=d['last_stage_alpha'],
+            accepted_audits_sha256=digest(d['wj_audit_packets']),physical_samples_sha256=digest(d['physical_samples']),
+            checkpoint=artifacts([Path(d['checkpoint'])/'State.bin']),signature_sha256=digest(d['signature']),
+            failed_candidate_sha256=state_hash(d['rejected_state']) if d.get('rejected_state') else None)
+    return rows,lineage
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--observer-root',type=Path);p.add_argument('--study',type=Path);a=p.parse_args()
@@ -54,17 +96,26 @@ def main():
         accepted_readback_runtime=read(study/'EP/design.json')['runtime'],
         observer_root=str(observer),study_root=str(study),producer_root=str(root),
         observer_commands=artifacts([observer/'command-receipts.json']),source_equivalence=artifacts(list(root.glob('*equivalence*.json'))+list(observer.glob('*equivalence*.json'))),finite_scope='reference-Dirichlet strip [0,1]x[0,2]; serial flat2D p3; finite observation and angular inventories; no global or long-time theorem')
+    manifest['numerical_environment']=dict(python=sys.version,numpy=__import__('numpy').__version__,scipy=__import__('scipy').__version__,
+        sympy=__import__('sympy').__version__,compiler=subprocess.check_output(['c++','--version'],text=True),platform=subprocess.check_output(['uname','-a'],text=True),
+        allocation=dict(initial_build_workers=1,later_build_workers=4,policy_concurrency=2,test_parallel=1,ranks=1,numerical_threads=1,total_worker_cap=72))
+    manifest['independent_proofs']=artifacts([root/'regression-verification.json',root/'shared-legacy-accounting-supplement.json',
+        *root.glob('independent-gradient-*/receipt.json'),*root.glob('independent-gradient-*/result.json'),
+        root/'parent-readback-proof/EP/proof.json',root/'arithmetic-cache-proof/EP/proof.json'])
     for context in (manifest['producer_runtime'],manifest['accepted_readback_runtime']):
         for value in context.values():
             if file_hash(value['path'])!=value['sha256']:raise ValueError('recorded runtime binary changed')
             for path,h in value['libraries'].items():
                 if file_hash(path)!=h:raise ValueError('recorded dependency changed')
     write_once(root/'wj4-manifest.json',manifest);write_once(out/'manifest.json',manifest)
-    rows=[];interfaces=[];windows=[];differences=[];residuals=[];horizontal=[];audits=[];witnesses={};policies={}
+    rows=[];interfaces=[];windows=[];differences=[];residuals=[];horizontal=[];audits=[];witnesses={};policies={};runs=[];stages={}
     for policy in ('EP','Budget'):
         path=study/policy/'summary.json'
         if not path.exists():continue
         s=read(path);policies[policy]={k:s.get(k) for k in ('qualification','components','longer_interpretation','stationarity','ledger_totals','cost_design','mesh_inventory','arithmetic_envelope')}
+        accounting,packets=native_accounting(s,policy);runs.extend(accounting);stages.update(packets)
+        policies[policy]['read_only_reprocessing']=s.get('read_only_reprocessing')
+        policies[policy]['final_package_ledger_totals']=__import__('wj_immutable').Ledger(root,policy).totals()
         policies[policy]['heavy_summary']=dict(path=str(path),sha256=file_hash(path),bytes=path.stat().st_size)
         for group in ('horizontal','longer'):
             for key,trajectory in s.get(group,{}).items():
@@ -101,12 +152,18 @@ def main():
         for r in s.get('stationarity',{}).get('windows',[]):windows.append(dict(policy=policy,trajectory=r['trajectory'],steps=json.dumps(r['steps']),times=json.dumps(r['times']),status=r['status'],**r['V']))
         write_once(out/(policy+'.json'),policies[policy])
     for name,data in (('fields',rows),('interfaces',interfaces),('windows',windows),('differences',differences),('residuals',residuals),('horizontal-spread',horizontal),('audit-margins',audits)):csv_file(out/(name+'.csv'),data)
+    csv_file(out/'run-accounting.csv',runs);write_once(out/'accepted-stage-lineage.json',stages)
     write_once(out/'audit-witnesses.json',witnesses)
+    for path in [root/'regression-verification.json',root/'shared-legacy-accounting-supplement.json',root/'command-receipts.json',
+                 root/'ledger-EP.json',root/'ledger-Budget.json']:
+        if path.exists():shutil.copyfile(path,out/path.name)
+    if observer!=root:shutil.copyfile(observer/'command-receipts.json',out/'observer-command-receipts.json')
     receipt=dict(schema='WJ4PublicationV1',manifest_sha256=file_hash(root/'wj4-manifest.json'),policies={p:v['qualification'] for p,v in policies.items()},
         tables=artifacts(list(out.glob('*.csv'))),figures=artifacts(list((root/'figures').glob('*'))),
         evidence_bridge=artifacts([root/'wj4-manifest.json',root/'wj4-artifact-index.json',root/'wj4-source-content.json',root/'command-receipts.json']),
         measurement_only_requalification=artifacts(list((root/'requalification').glob('*.json'))),
         original_wj3_receipts=artifacts([source/'docs/plans/wj3-linux'/name for name in ('publication.json','receipt.json','manifest.json','EP.json','Budget.json')]))
+    receipt['compact_identities']=artifacts(list(out.glob('*.json')))
     write_once(out/'receipt.json',receipt)
     if (root/'figures').exists():shutil.copytree(root/'figures',out/'figures')
     for file in out.rglob('*'):

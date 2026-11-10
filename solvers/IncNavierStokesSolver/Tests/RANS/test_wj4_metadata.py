@@ -3,6 +3,8 @@
 import copy
 import json
 import struct
+import sys
+from types import SimpleNamespace
 from pathlib import Path
 import tempfile
 import unittest
@@ -45,6 +47,15 @@ class Gates(unittest.TestCase):
         self.assertEqual(wj3_gates(self.s)['status'],'PASS')
 
 class Immutable(unittest.TestCase):
+    def test_orphan_command_log_is_retained(self):
+        from wj3_receipts import command
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);log=root/'interrupted.log';log.write_bytes(b'failed attempt witness\n')
+            args=SimpleNamespace(root=root,label='interrupted',command=[sys.executable,'-c','print("replacement")'])
+            with self.assertRaises(FileExistsError):command(args)
+            self.assertEqual(log.read_bytes(),b'failed attempt witness\n')
+            self.assertFalse((root/'command-receipts.json').exists())
+
     def test_changed_intents_and_artifacts(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);files=[]

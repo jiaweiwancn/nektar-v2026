@@ -14,7 +14,9 @@ def command(args):
     if any(r['label']==args.label for r in receipts):raise ValueError('immutable receipt label already exists')
     env=os.environ.copy();env.update(THREADS);start=time.time();log=root/(args.label+'.log')
     argv=args.command[1:] if args.command[:1]==['--'] else args.command
-    with log.open('w') as stream:result=subprocess.run(argv,stdout=stream,stderr=subprocess.STDOUT,env=env)
+    # An interrupted wrapper may leave a log without a completed receipt.
+    # Preserve that witness and require a new label instead of overwriting it.
+    with log.open('x') as stream:result=subprocess.run(argv,stdout=stream,stderr=subprocess.STDOUT,env=env)
     receipts.append(dict(label=args.label,command=argv,started_utc=datetime.fromtimestamp(start,timezone.utc).isoformat(),
         seconds=time.time()-start,exit_code=result.returncode,log=str(log),log_sha256=sha(log),threads=THREADS))
     current=receipts[-1]
