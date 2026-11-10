@@ -62,6 +62,9 @@ def main():
  if a.milestones!=sorted(set(a.milestones)) or a.milestones[0] not in (.0016,.016) or any(t<=0 or t>.5 for t in a.milestones):raise ValueError('invalid bounded milestone contract')
  r=a.root;out=r/'campaigns'/a.label;ref=Reference(a.model,a.policy,a.wall)
  os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
+ # Resource suspension can exceed the legacy sampler's ten-minute wall limit.
+ # This operational deadline does not enter any numerical request or history.
+ os.environ.setdefault('NEKTAR_RANS_PROBE_TIMEOUT',str(min(a.timeout,14400)))
  # One common physical grid resolves both declared candidates and profile breaks.
  grid,weights=physical_grid(sorted(set(nested(ref.knots(),max(1,a.level))+selected_knots(ref,a))),10,8)
  if a.columns==2:

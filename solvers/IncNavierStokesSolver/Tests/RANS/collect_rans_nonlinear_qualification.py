@@ -22,6 +22,17 @@ def main():
     for name in ('workspace.json','historical-receipt-byte-verification.json','actual-initial-regression.json','resource-census-exception.json','worker-guard-status.json'):
         result['verification'][name]=receipt(r/name)
     result['verification']['aggregate-negative-controls']=receipt(r/'aggregate-negative-controls/results.json')
+    result['verification']['complete-export-negative-controls']=receipt(r/'complete-export-negative-controls/results.json')
+    result['execution_schedules']=[]
+    for folder in sorted((r/'duration-schedules').glob('*')):
+        if not folder.is_dir():continue
+        row=dict(source=str(folder),result=receipt(folder/'results.json'),request=receipt(folder/'request-manifest.json'),logs=[])
+        for path in sorted(folder.glob('*.log')):
+            text=path.read_text(errors='replace')
+            row['logs'].append(dict(source=str(path),sha256=sha(path),tail=text[-5000:]))
+        result['execution_schedules'].append(row)
+    result['common_scalar_partitions']={p.parent.name:receipt(p) for p in (r/'common-scalar-partitions').glob('*/results.json')}
+    result['physical_budget_diagnostic_controls']={p.parent.name:receipt(p) for p in (r/'physical-budgets').glob('test-*/results.json')}
     for name in ('runtime','runtime-resolution-v2','runtime-resolution-v3','runtime-budget-v4'):
         for leaf in ('source-build.json','actual-loaded-libraries.json','actual-loaded-libraries-current.json','lineage.json'):
             path=r/name/leaf
