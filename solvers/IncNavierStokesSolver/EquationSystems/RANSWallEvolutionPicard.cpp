@@ -1273,7 +1273,9 @@ std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RAN
 {
     Require(WJ() && !Mapped() && m_dimension==2 && !CappedDestruction(),"WJ checks require the selected native pilot");
     const auto hash=RANSWallR3::Hash(state);const double alpha=1e6,time=0.;
-    const auto constraints=Constraints(state,time,data),external=ExternalConstraints(time,data);
+    const auto constraints=Constraints(state,time,data);
+    auto external=ExternalConstraints(time,data);
+    for(int id:m_traceIds)external.erase(offset[Epsilon()]+id);
     const auto physical=Residual(state,state,alpha,time,data,false);
     double blockError=0,pressureColumnError=0,pressureFDError=0,traceColumn=0;
     std::vector<std::string> blockReports,pressureReports;

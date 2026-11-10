@@ -55,6 +55,7 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
     session->LoadParameter("RANSWallPositivityTheta",m_destruction.theta,.2);
     session->LoadParameter("RANSWallPositivityDelta",m_destruction.delta,.1);
     m_destruction.Validate();
+    Require(!WJ() || (smoothing=="Linear" && m_destruction.theta==.2 && m_destruction.delta==.1),"WJ uncapped mode does not accept physical-cap tuning knobs");
     session->LoadParameter("RANSWallFrictionVelocity",m_robustUstar,.4);
     double dx,dy;session->LoadParameter("RANSWallDirectionX",dx,1.);session->LoadParameter("RANSWallDirectionY",dy,0.);
     const double length=std::hypot(dx,dy);Require(length>0 && m_robustUstar>0,"invalid regularization reference inputs");

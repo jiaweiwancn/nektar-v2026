@@ -657,7 +657,8 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
     audit.erase("robust_source");audit.erase("outer_constitutive_range");
     audit["wj_scalar_domain"]=scalar;
     const double K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
-    Vector covariance{1e300,1e300},root{1e300,0},viscosity{1e300,0,1e300,0},work{0,0},principal{1e300,1e300};
+    Vector covariance{1e300,1e300},root{1e300,0,1e300},viscosity{1e300,0,1e300,0},work{0,0},principal{1e300,1e300};
+    Vector invariants{1e300,-1e300,1e300,-1e300,1e300,-1e300},production{1e300,-1e300,1e300,-1e300};
     Vector innerWitness,outerWitness;int innerCount=0,outerCount=0,innerH=0,outerH=0;
     std::set<std::tuple<int,RANSWallCoordinate,double>> seen;
     for(const auto &p:domain.observations)
@@ -682,7 +683,11 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
         ++outerCount;if(atH)++outerH;
         const auto law=OuterClosure(k,epsilon,g,p.coordinate);const double eigen=RANSWallSolveJson::Eigenvalues(law.reynoldsStress)[0];
         if(eigen<covariance[1]){covariance[1]=eigen;outerWitness={double(row.geometry),double(row.element),double(provenance.radialSide),p.coordinate[0],p.coordinate[2],k,epsilon,eigen};}
-        root[0]=std::min(root[0],law.wj.n);const double n=law.wj.n;
+        root[0]=std::min(root[0],law.wj.n);root[2]=std::min(root[2],law.wj.rootDerivative);const double n=law.wj.n;
+        const double iv[3]={law.wj.s,law.wj.w,law.wj.i4};
+        for(int i=0;i<3;++i){invariants[2*i]=std::min(invariants[2*i],iv[i]);invariants[2*i+1]=std::max(invariants[2*i+1],iv[i]);}
+        production[0]=std::min(production[0],law.production);production[1]=std::max(production[1],law.production);
+        production[2]=std::min(production[2],law.productionDev);production[3]=std::max(production[3],law.productionDev);
         root[1]=std::max(root[1],std::abs(law.wj.rootResidual)/(1+n*n*n+2.7*law.wj.s*n+std::abs(2*law.wj.w*n)));
         viscosity[0]=std::min(viscosity[0],law.eddyViscosity);viscosity[1]=std::max(viscosity[1],law.eddyViscosity);
         viscosity[2]=std::min(viscosity[2],law.scalarViscosity);viscosity[3]=std::max(viscosity[3],law.scalarViscosity);
@@ -692,6 +697,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
         const auto values=WJPrincipal(k,epsilon,g,m_parameters.wj);
         for(int i=0;i<2;++i)principal[i]=std::min(principal[i],values[i]);
     }
+    audit["wj_normalized_invariant_s_w_I4_ranges"]=invariants;audit["wj_Praw_Pdev_ranges"]=production;
     audit["wj_covariance"]=covariance;audit["wj_root_minimum_scaled_residual"]=root;
     audit["wj_nu_eff_and_nu_d_ranges"]=viscosity;audit["wj_work_defect_raw_divergence"]=work;
     audit["wj_rank_one_xz_principal_minima_over_nu_eff"]=principal;
@@ -699,7 +705,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
     audit["wj_inner_minimum_geometry_element_side_x_z_k_covariance"]=innerWitness;
     audit["wj_outer_minimum_geometry_element_side_x_z_k_epsilon_covariance"]=outerWitness;
     audit["wj_cls_max_beta04_R1_R2_cap_applicable"]={0,0,0,0,0};
-    const bool valid=covariance[0]>=-1e-10*K0 && covariance[1]>=-1e-10*K0 && root[0]>=1.8 && root[1]<1e-12 &&
+    const bool valid=covariance[0]>=-1e-10*K0 && covariance[1]>=-1e-10*K0 && root[0]>=1.8 && root[1]<1e-12 && root[2]>0 &&
         principal[0]>0 && principal[1]>0 && work[0]<1e-11 && scalar[6]>=1 && scalar[7]<1e-10;
     audit["wj_hard_admissible"]={valid?1.:0.};
     RANSTensor adverse{};adverse[0][2]=3.5;
