@@ -95,7 +95,7 @@ def main():
                         group='output' if name.startswith(('io.','output.')) else 'diagnostic' if 'audit' in name or 'domain' in name else 'assembly' if any(x in name for x in ('assembl','residual','evaluation','profile','source','transport')) else 'solve' if 'solve' in name or 'factor' in name else 'other'
                         groups[group]+=event['exclusive_wall_seconds']
                     timings.append(dict(case=str(f.parent),exclusive_seconds=groups,definition='sum exclusive instrumented scopes by label; startup, Python and unscoped work are separate'))
-                container.append(dict(name=f.parent.name,**{k:v for k,v in d.items() if k not in ('extrema',)},extrema=d['extrema']['over_all_audited_states_and_stages']))
+                container.append(dict(name=f.parent.name,xml_sha256=hashlib.sha256((f.parent/'case.xml').read_bytes()).hexdigest(),native_report_sha256=hashlib.sha256((f.parent/'case.evolution.json').read_bytes()).hexdigest(),**{k:v for k,v in d.items() if k not in ('extrema',)},extrema=d['extrema']['over_all_audited_states_and_stages'],final_minima={k:v for k,v in (d['extrema']['final_state'] or {}).items() if k in ('accepted_awf_scalar_domain','accepted_awf_covariance','native_A95_radicand_range') or k.startswith('scalar_minimum_point_')}))
     for label,rows,expected in (('temporal',temporal,wanted),('perturbed',perturb,{(m,'Natural',w) for m in MODELS for w in WALLS})):
         check=coverage(rows,expected)
         if check['status']!='pass':errors.append(dict(input=label,coverage=check))
@@ -112,7 +112,7 @@ def main():
     control=read('controls','continuation-controls/qualification.json');cv=native_check_coverage(control.get('checks',[]),control.get('expected_check_names'))
     if cv['status']!='pass':errors.append(dict(input='continuation-coverage',coverage=cv))
     extras=read('extra-regressions','extra-regressions.json');regression=read('standard-CLS','regression/baseline.json')
-    write_json(a.output/'regressions.json',dict(continuation=control,coverage=cv,extras=extras,legacy=regression,
+    write_json(a.output/'regressions.json',dict(continuation={k:v for k,v in control.items() if k!='cases'},coverage=cv,extras=extras,legacy={k:v for k,v in regression.items() if k not in ('source_files','initial_native_audit')},
         command_line_failures=read('CLI-failures','command-line-failure-contract.json'),required_numerical_failure=read('synthetic-numerical-failure','deliberate-numerical-check/result.json')))
     production_changes=[]
     for path,digest in manifest.get('source_files',{}).items():
