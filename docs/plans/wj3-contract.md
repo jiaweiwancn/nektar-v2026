@@ -127,10 +127,11 @@ It records a practical 3600-second per-policy remaining trajectory budget.
 The same-T cross-mesh run uses2493 if the measured full one-step process cost
 on that mesh, remaining main/restart work and an observation reserve fit;
 otherwise639, leaving finer-mesh temporal qualification open. The total cap is
-500 scheduled attempts per policy, including failed attempts. Work is serial,
-initially one build worker, then four after a current capacity snapshot; CTest -j1, and subsequently two independent serial policy drivers after a
-current capacity snapshot; numerical-library threads=1, below the server-wide
-72-worker ceiling. No historical long campaign is included.
+500 scheduled attempts per policy, including failed attempts. Each trajectory
+is serial. Builds initially use one worker, then four after a current capacity
+snapshot. CTest uses -j1; subsequently two independent serial policy drivers
+run concurrently after another capacity snapshot. Numerical-library threads=1
+and the server-wide72-worker ceiling apply throughout. No historical long campaign is included.
 
 Two common-time differences A and B produce p=log2(A/B) only above their
 declared arithmetic floor. Total continuum error, initial drift, spatial

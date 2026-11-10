@@ -45,4 +45,21 @@ def main():
     fig.suptitle(durations,fontsize=8)
     for ext in ('svg','pdf','png'):fig.savefig(a.output/('wj3-errors-interface.'+ext),dpi=170)
 
+    fig,axes=plt.subplots(2,2,figsize=(8.4,5.5),layout='constrained')
+    for axis,index,label in zip(axes.flat[:3],(0,2,3),('u momentum','k','Entire outer epsilon')):
+        for s in data:
+            color='#1769aa' if s['policy']=='EP' else '#c45b16'
+            rows=s.get('main',[])
+            axis.loglog([r['dt'] for r in rows],[r['comparison']['spatial_mass_dual_norms'][index] for r in rows],'-o',color=color,label=s['policy']+' spatial alpha=0')
+            axis.loglog([r['dt'] for r in rows],[r['comparison']['completed_stage'][index] for r in rows],'--s',color=color,label=s['policy']+' actual completed stage')
+        axis.set(xlabel='dt (s)',ylabel='Scaled consistent-mass dual norm',title=label)
+        axis.grid(alpha=.2);axis.legend(fontsize=6)
+    for s in data:
+        rows=s.get('spatial',[])
+        axes[1,1].loglog([r['unknowns'] for r in rows],[r['first_step_pressure_adjustment']['fields']['reduced_pressure']['L2'] for r in rows],'-o',label=s['policy'])
+    axes[1,1].set(xlabel='Native unknowns',ylabel='First-step reduced-pressure drift, L2',title='Algebraic pressure adjustment; dt=1e-6 s')
+    axes[1,1].grid(alpha=.2);axes[1,1].legend(fontsize=6)
+    fig.suptitle(durations+'; eta=0',fontsize=8)
+    for ext in ('svg','pdf','png'):fig.savefig(a.output/('wj3-residual-stage-pressure.'+ext),dpi=170)
+
 if __name__=='__main__':main()

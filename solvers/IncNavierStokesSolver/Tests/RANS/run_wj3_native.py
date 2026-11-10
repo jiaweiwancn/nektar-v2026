@@ -57,6 +57,7 @@ class Study:
         write_json(receipt,r);self.s['receipts'].append(r);self.save();return r
 
     def native(self,name,steps=0,cp=None,dt=1e-6,level=1,normal=16,reject=0,arithmetic_time=None,floor_relative=None,resting=False):
+        require(level in (0,1,2),'unsupported WJ normal refinement level')
         level=int(level)
         folder=self.root/name;xml=folder/'case.xml'
         if not xml.exists():

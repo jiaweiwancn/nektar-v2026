@@ -45,7 +45,7 @@ def collect(args):
     for scope in [root/'study',root/'study-final',build]:
         if not scope.exists():continue
         for f in scope.rglob('*'):
-            if f.is_file() and (f.suffix in ('.json','.xml') or f.name=='State.bin'):
+            if f.is_file() and (f.suffix in ('.json','.xml','.bin') or f.name=='State.bin'):
                 artifacts[str(f)]=dict(bytes=f.stat().st_size,sha256=sha(f))
     write_json(root/'artifact-index.json',artifacts)
     specs={name:content['docs/literature/'+name] for name in ('wj_earsm_neutral_abl_ep_awf_note.tex','wj_earsm_budget_cutoff_awf_appendix.tex')}
