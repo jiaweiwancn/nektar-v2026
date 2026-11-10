@@ -595,6 +595,8 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 find_package(Python3 QUIET COMPONENTS Interpreter)
 if(Python3_Interpreter_FOUND)
+    add_test(NAME RANSQualificationFailureContract COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_qualification.py)
+    set_tests_properties(RANSQualificationFailureContract PROPERTIES PROCESSORS 1 TIMEOUT 30)
     if(RANS_BUILD_SOLVER)
         add_test(NAME RANSNativeAdmissibilityRegression COMMAND ${Python3_EXECUTABLE} -B
             ${CMAKE_CURRENT_LIST_DIR}/validate_rans_native_audits.py

@@ -89,10 +89,16 @@ class Campaign:
         return case_xml(folder,ref.model,ref.policy,ref.wall,steps=steps,dt=dt,descriptor_probe=self.descriptor,radial_knots=knots,degree=p,
                         quadrature=q,checkpoint_interval=max(steps,1),cache='ExactStepV1',perturb=perturb)
     def frozen(self,label,ref,knots,p=3,q=Q[0],base=None,basis=False,grid=None):
-        folder=self.output/label;self.config(folder,ref,knots,p,q)
+        folder=self.output/label
+        config=dict(model=ref.model,policy=ref.policy,wall=ref.wall,knots=knots,degree=p,quadrature=list(q),runtime_manifest_sha256=self.result['runtime_manifest_sha256'])
+        if (folder/'metrics.json').exists() and (folder/'state-packet.json').exists():
+            metrics=load(folder/'metrics.json')
+            if metrics.get('configuration')!=config:raise RuntimeError('existing frozen result identity mismatch')
+            return load(folder/'state-packet.json'),metrics
+        self.config(folder,ref,knots,p,q)
         request=dict(operation='neutral',export_basis=basis,grid=grid or []) if base is None else replay_request(base,grid or [],basis)
         full=probe(self.sampler,folder,request);packet=full['observation']
-        metrics=dict(status='pass',execution_status='completed',physical_admissibility=full['physical_admissibility'],
+        metrics=dict(status='pass',configuration=config,execution_status='completed',physical_admissibility=full['physical_admissibility'],
             state_sha256=exact_vector_hash(packet['state']),reference_sha256=exact_vector_hash(full['reference']),
             actual_quadrature=packet['actual_quadrature'],residuals=residual_metrics(packet['audit_alpha_zero']),
             native_alpha_zero=packet['audit_alpha_zero'],source_XML_sha256=sha(folder/'case.xml'))
@@ -114,7 +120,7 @@ class Campaign:
             def initial(ref=ref,tag=tag):
                 base,metrics=self.frozen(tag+'-h0',ref,ref.knots(),basis=True,grid=grid)
                 write_json(self.output/(tag+'-base.json'),compact_packet(base))
-                status='pass' if metrics['analytical_weak_balance']['status']=='pass' else 'fail'
+                status=metrics['analytical_weak_balance']['status']
                 return dict(status=status,model=ref.model,kappa_policy=ref.policy,wall=ref.wall,**{k:v for k,v in metrics.items() if k!='status'})
             self.check(tag+'-reference',initial)
             basepath=self.output/(tag+'-base.json')
@@ -154,11 +160,24 @@ class Campaign:
                     qerr=abs(value(byname['q2'])-value(byname['q1']))
                     data[field+'_'+typ]=dict(h=series_gate([value(byname[k]) for k in ('h0','h1','h2')],max(1e-10,qerr)),
                         p=series_gate([value(byname[k]) for k in ('h0','p4','p5')],max(1e-10,qerr)),frozen_quadrature_change=qerr)
+            # The Q2 replay supplies h0 at exactly the same quadrature as h/p.
+            byname['h0_resolved']=byname['q2']
+            spatial={}
+            for key,indices in [('coupled_norms',list(range(8))),('native_k_inner_outer_shared_interface_dual',list(range(3)))]:
+                labels=['momentum_x','momentum_z','global_k','outer_epsilon','continuity_inner','continuity_outer','gauge','dependent_trace'] if key=='coupled_norms' else ['inner_k','outer_k','shared_interface_k']
+                for i,label in enumerate(labels):
+                    def v(k):return byname[k]['native_alpha_zero'][key][i]
+                    uncertainty=max(1e-10,abs(v('q2')-v('q1')))
+                    h=series_gate([v(k) for k in ('h0_resolved','h1','h2')],uncertainty)
+                    pp=series_gate([v(k) for k in ('h0_resolved','p4','p5')],uncertainty)
+                    differences=[abs(v('h0_resolved')-v('h1')),abs(v('h1')-v('h2')),abs(v('h0_resolved')-v('p4')),abs(v('p4')-v('p5'))]
+                    quadrature_ok=all(abs(v('q2')-v('q1'))<=max(1e-10,.01*d) for d in differences)
+                    spatial[label]=dict(h=h,p=pp,quadrature_status='pass' if quadrature_ok else 'unresolved',quadrature_uncertainty=abs(v('q2')-v('q1')))
             # Preserve the full native arrays rather than guessing their labels.
             qa=byname['q1']['native_alpha_zero'];qb=byname['q2']['native_alpha_zero']
             qchanges={k:max((abs(a-b) for a,b in zip(v,qb[k],strict=True)),default=0.) for k,v in qa.items() if k in qb and len(v)==len(qb[k]) and ('norm' in k or 'dual' in k)}
-            tables[tag]=dict(representation=data,quadrature_native_last_changes=qchanges,levels=byname,
-                status='pass' if all(x.get('analytical_weak_balance',{}).get('status','pass')=='pass' for x in m) else 'fail')
+            tables[tag]=dict(representation=data,native_spatial=spatial,quadrature_native_last_changes=qchanges,levels=byname,
+                status='fail' if any(g['status']=='fail' for d in data.values() for g in (d['h'],d['p'])) or any(g['status']=='fail' for d in spatial.values() for g in (d['h'],d['p'])) or any(d['quadrature_status']!='pass' for d in spatial.values()) or any(x.get('analytical_weak_balance',{}).get('status','pass')!='pass' for x in m) else 'pass')
         self.result['spatial_tables']=tables;self.save()
     def temporal(self):
         # The first explicit temporal study uses the same fixed aligned p3 spaces.
@@ -174,8 +193,10 @@ class Campaign:
                         def trajectory(j=j,dt=dt,ref=ref,tag=tag):
                             folder=self.output/(tag+'-dt'+str(j));steps=round(.0016/dt)
                             env_value=str(folder/'timing.jsonl');os.environ['NEKTAR_RANS_TIMING_FILE']=env_value
-                            row=run_case(self.solver,folder,ref.model,ref.policy,ref.wall,steps=steps,dt=dt,descriptor_probe=self.descriptor,
+                            if (folder/'temporal-metrics.json').exists():return load(folder/'temporal-metrics.json')
+                            options=dict(steps=steps,dt=dt,descriptor_probe=self.descriptor,
                                 radial_knots=ref.knots(),degree=3,quadrature=Q[2],cache='ExactStepV1',checkpoint_interval=steps)
+                            row=load(folder/'result.json') if (folder/'result.json').exists() else run_case(self.solver,folder,ref.model,ref.policy,ref.wall,**options)
                             if row['status']!='pass':return dict(status='fail',execution=row)
                             report=load(folder/'case.evolution.json')
                             # Reconstruct exactly the initializer on these same spaces.
@@ -213,6 +234,7 @@ class Campaign:
     def finish(self):
         statuses=[x['status'] for x in self.result['checks']]
         statuses.extend(t['status'] for t in self.result.get('temporal_tables',[]))
+        statuses.extend(t['status'] for t in self.result.get('spatial_tables',{}).values())
         self.result['status']='pass' if statuses and all(s=='pass' for s in statuses) and self.result.get('coverage',{}).get('status')=='pass' else 'fail'
         self.save();return 0 if self.result['status']=='pass' else 1
 
