@@ -39,6 +39,10 @@ def main():
         started_UTC=datetime.now(timezone.utc).isoformat(), observations={}, triplets={},
         scope='Late local IVP from the same T=6 state; not accumulated initial-to-T=6 error or timestep-independent steady-root proof')
     data = {}
+    parent=a.study/'parent';seed=checkpoint(parent)
+    seed_selection=dict(checkpoint=str(parent),checkpoint_sha256=sha(parent/'State.bin'),
+        xml=str(a.study/'coarse/initial/case.xml'),native_time=seed['time'],native_step=seed['steps'],balance=False)
+    out['common_seed'],seed_fields=observe(a.probe,seed_selection,a.output/'common-seed')
     for label in ('coarse', 'middle', 'fine'):
         progress = load(a.study/label/'progress.json'); require(progress['status'] == 'targets_completed', 'late level incomplete/rejected')
         data[label] = {}; out['observations'][label] = {}
@@ -47,6 +51,8 @@ def main():
             selection = dict(checkpoint=str(cp), checkpoint_sha256=sha(cp/'State.bin'), xml=row['xml'], native_time=saved['time'],
                 native_step=saved['steps'], source_report=row['report'], balance=False)
             summary, physical = observe(a.probe, selection, a.output/label/elapsed)
+            summary['dimensional_change_from_common_seed']=differences(physical,seed_fields)
+            summary['normalized_change_from_common_seed']=normalized(summary['dimensional_change_from_common_seed'])
             out['observations'][label][elapsed] = summary; data[label][elapsed] = physical
             atomic(a.output/'summary.json', out)
     for elapsed in policy['elapsed_observations']:

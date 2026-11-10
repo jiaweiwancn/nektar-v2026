@@ -184,6 +184,13 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
         knots.insert(knots.end(),reportingBreakpoints.begin(),reportingBreakpoints.end());
         std::sort(knots.begin(),knots.end());knots.erase(std::unique(knots.begin(),knots.end()),knots.end());
     }
+    if(completeOuterEpsilon)
+    {
+        // New strict common-state diagnostics also resolve the analytical
+        // k-reference cutoff, independently of either transported mesh.
+        for(double r:{H,ref.cutoff,wall.ViscosityInterceptHeight()})if(r>0 && r<upper[2])knots.push_back(r);
+        std::sort(knots.begin(),knots.end());knots.erase(std::unique(knots.begin(),knots.end()),knots.end());
+    }
     Vector errors(4),kErrors(2);std::vector<std::string> invalid; // velocity value, gradient, production, analytical production scale
     for(const auto &ray:m_rays)for(int panel=1;panel<knots.size();++panel)for(int j=0;j<16;++j)
     {

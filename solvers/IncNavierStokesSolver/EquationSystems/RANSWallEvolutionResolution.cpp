@@ -94,6 +94,8 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
         "R3 residual-resolution audit requires frozen unanchored valid state/history");
     (void)anchored;
     Require(!analyticalReference || (AcceptedAWF() && alpha==0),"analytical weak loads require the flat accepted neutral alpha=0 diagnostic");
+    Require(!analyticalReference || (std::abs(m_referenceFlow[0]-1)<1e-14 && std::abs(m_referenceNormal[2]-1)<1e-14),
+        "analytical weak loads currently support the declared +x flat neutral reference only");
     const double us=m_robustUstar,H=m_parameters.geometry.height,K0=m_parameters.model.Q()*us*us;
     const auto exact=analyticalReference?Profile(K0,{0,0,0},1):nullptr;
     double pressureJump=0.;

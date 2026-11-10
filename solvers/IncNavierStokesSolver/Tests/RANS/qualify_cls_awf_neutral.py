@@ -13,6 +13,7 @@ import math
 import os
 from pathlib import Path
 import shutil
+import struct
 
 from analyse_cls_accepted_awf import compact, normalized, reference_errors
 from analyse_cls_epawf_height_comparison import differences, compact_diagnostic
@@ -46,6 +47,24 @@ def balances(d):
                 signed_component_projection_onto_total={n: float(v) for n, v in zip(TERMS, signed)},
                 signed_projection_sum_error=abs(float(sum(signed))-norm))
             require(rows[kind]['signed_projection_sum_error'] < 1e-8, 'mass-dual cancellation accounting failed')
+            if kind in ('retained_state', 'archived_reference_representation') and metric.get('native_GL4_rows'):
+                terms_rate = cho_solve(factor, loads)
+                index = {int(j): i for i, j in enumerate(metric['free_local_rows'])}
+                elements = {}
+                for q in metric['native_GL4_rows']:
+                    value = 0.; components = np.zeros(len(TERMS))
+                    for j, phi in zip(q['ids'], q['phi']):
+                        if int(j) in index:
+                            i = index[int(j)]; value += phi*direction[i]; components += phi*terms_rate[i]
+                    e = elements.setdefault(str(int(q['geometry'])), dict(residual_rate_L2_squared=0., signed_component_dual_work=np.zeros(len(TERMS))))
+                    e['residual_rate_L2_squared'] += q['weight']*value*value
+                    e['signed_component_dual_work'] += q['weight']*components*value
+                quadrature = math.sqrt(max(0., math.fsum(e['residual_rate_L2_squared'] for e in elements.values())))
+                require(abs(quadrature-norm)<1e-10*max(1.,norm), 'native element localization does not reproduce physical mass-dual norm')
+                for e in elements.values():
+                    e['signed_component_dual_work'] = {n: float(v) for n,v in zip(TERMS,e['signed_component_dual_work'])}
+                rows[kind]['element_residual_localization'] = elements
+                rows[kind]['mass_quadrature_norm_error'] = abs(quadrature-norm)
         out[str(b)] = rows
     out['semantics'] = 'Signed <R_component,M_ff^-1 R_total>/||R_total|| dual projections add to total norm. Component norms are not additive fractions of a traction error. Full loads and constrained reactions retained separately.'
     return out
@@ -68,6 +87,8 @@ def observe(probe, selection, folder):
         native_history_sha256=[state_hash(v) for v in saved['history']], native_history_times_sha256=state_hash(saved['history_times']),
         reference_sha256=state_hash(saved['reference']), defect_sha256=state_hash(saved['defect']),
         state_equals_fixed_reference=state_hash(saved['coupled']) == state_hash(saved['reference']),
+        state_reference_numeric_differences=sum(x!=y for x,y in zip(saved['coupled'],saved['reference'])),
+        state_reference_bit_differences=sum(struct.pack('<d',x)!=struct.pack('<d',y) for x,y in zip(saved['coupled'],saved['reference'])),
         physical=compact_diagnostic(compact(physical)), complete_audit=result['complete_audits']['selected_state'],
         selected_Original_blocks=[{k: v for k, v in b.items() if k not in ('free_rows', 'selected_load', 'same_state_Original_load', 'difference_load')} for b in d['operators']['blocks']])
     if 'neutral_reference_balance' in d:
@@ -75,8 +96,12 @@ def observe(probe, selection, folder):
         summary['balance'] = balances(balance)
         summary['analytical_stress_difference'] = balance['analytical_maximum_stress_difference']
         summary['analytical_production_difference'] = balance['analytical_maximum_production_difference']
+        require(summary['analytical_stress_difference']<1e-12 and summary['analytical_production_difference']<1e-12,
+            'selected law does not preserve the analytical neutral stress/production')
+        summary['native_outer_constitutive_difference_locations']=balance.get('native_outer_constitutive_difference_locations')
         summary['reference_operator_blocks'] = [{k: v for k, v in b.items() if k not in ('free_rows', 'selected_load', 'same_state_Original_load', 'difference_load')} for b in balance['reference_operators']['blocks']]
         summary['element_values_columns'] = balance['element_values_columns']; summary['element_values'] = balance['element_values']
+        summary['native_ground_traction'] = balance.get('native_ground_traction')
     if selection.get('source_report'):
         native = read_report(Path(selection['source_report']))
         summary['source_report_sha256'] = sha(Path(selection['source_report']))

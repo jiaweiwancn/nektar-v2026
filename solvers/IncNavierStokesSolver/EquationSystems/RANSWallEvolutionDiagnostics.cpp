@@ -553,8 +553,13 @@ std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,
         std::vector<int> free;for(int i=0;i<size[b];++i)if(!retained.constraints.count(offset[b]+i))free.push_back(i);
         const auto mass=fields[b]->Mass();WallMatrix ff(free.size(),Vector(free.size()));
         for(int i=0;i<free.size();++i)for(int j=0;j<free.size();++j)ff[i][j]=mass[free[i]][free[j]];
+        std::vector<std::string> rows;
+        for(const auto &q:Quadrature(b,4))rows.push_back(J::Object({{"geometry",J::Number(q.geometry)},
+            {"element",J::Number(q.element)},{"weight",J::Number(q.weight)},
+            {"ids",J::Numbers(q.ids)},{"phi",J::Numbers(q.phi)}}));
         blocks.push_back(J::Object({{"block",J::Number(b)},{"offset",J::Number(offset[b])},
-            {"free_local_rows",J::Numbers(free)},{"consistent_free_mass",J::Rows(ff)}}));
+            {"free_local_rows",J::Numbers(free)},{"consistent_free_mass",J::Rows(ff)},
+            {"native_GL4_rows",J::List(rows)}}));
     }
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us,kap=m_parameters.model.Kappa();
     double tensorDifference=0,productionDifference=0;RANSWallCoordinate worst{};
@@ -566,6 +571,25 @@ std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,
         productionDifference=std::max(productionDifference,std::abs(selected.production-base.production));
         for(int i=0;i<3;++i)for(int j=0;j<3;++j)if(std::abs(selected.reynoldsStress[i][j]-base.reynoldsStress[i][j])>tensorDifference)
         {tensorDifference=std::abs(selected.reynoldsStress[i][j]-base.reynoldsStress[i][j]);worst=q.v.coordinate;}
+    }
+    std::vector<std::string> constitutiveLocations;
+    for(const auto &[name,values]:std::vector<std::pair<std::string,const Vector*>>{{"archived_reference",&m_reference},{"retained",&state}})
+    {
+        double stressMax=0,productionMax=0;int geometry=-1;RANSWallCoordinate point{};
+        RANSTensor selectedTensor{},originalTensor{},gradient{};
+        for(const auto &q:m_outer)
+        {
+            const auto &s=*values;const double k=q.v.Value(s,offset[K()]),epsilon=q.e.Value(s,offset[Epsilon()]);RANSTensor G{};
+            for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);
+            const auto c=OuterClosure(k,epsilon,G,q.v.coordinate);
+            const auto o=EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,G,Distance(q.v.coordinate),m_parameters.model.Parameters(),0);
+            productionMax=std::max(productionMax,std::abs(c.production-o.production));
+            double delta=0.;for(int i=0;i<3;++i)for(int j=0;j<3;++j)delta=std::max(delta,std::abs(c.reynoldsStress[i][j]-o.reynoldsStress[i][j]));
+            if(delta>stressMax){stressMax=delta;point=q.v.coordinate;geometry=q.v.geometry;selectedTensor=c.reynoldsStress;originalTensor=o.reynoldsStress;gradient=G;}
+        }
+        constitutiveLocations.push_back(J::Object({{"state",J::Quote(name)},{"sampled_maximum_stress_difference",J::Number(stressMax)},
+            {"sampled_maximum_production_difference",J::Number(productionMax)},{"coordinate",J::Numbers(point)},{"native_geometry",J::Number(geometry)},
+            {"gradient",J::Rows(gradient)},{"selected_tensor",J::Rows(selectedTensor)},{"Original_tensor",J::Rows(originalTensor)}}));
     }
     const auto exact=Profile(K0,{0,0,0},1);const double H=m_parameters.geometry.height;
     std::map<int,Vector> element;
@@ -587,6 +611,16 @@ std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,
     };
     for(const auto &ray:m_rays)for(const auto &q:ray.points)locate(q,true);
     for(const auto &q:m_outer)locate(q,false);
+    std::vector<std::string> wallProfile;
+    for(const auto &face:Surface(0,2,0.,-1,8))
+    {
+        const auto &q=face.test;const auto profile=StateProfile(state,q.coordinate,time,data);RANSTensor G{};
+        for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=q.Gradient(state,offset[a]);
+        const auto stress=RANSWallInnerMeanStress(InnerStress(q.Value(state,offset[K()]),profile->Original().EddyViscosity(0.),G),m_parameters.geometry.molecularNu,0.);
+        wallProfile.push_back(J::Object({{"coordinate",J::Numbers(q.coordinate)},{"native_geometry",J::Number(q.geometry)},
+            {"native_element",J::Number(q.element)},{"weight",J::Number(face.weight)},
+            {"traction",J::Number(stress[0][2])},{"endpoint_K",J::Number(profile->K())}}));
+    }
     std::vector<std::string> elements;
     for(const auto &[geometry,v]:element)
     {
@@ -601,9 +635,11 @@ std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,
         {"archived_reference_representation",emit(represented)},{"retained_state",emit(retained)},
         {"mass_metrics",J::List(blocks)},{"analytical_maximum_stress_difference",J::Number(tensorDifference)},
         {"analytical_maximum_production_difference",J::Number(productionDifference)},{"stress_difference_point",J::Numbers(worst)},
+        {"native_outer_constitutive_difference_locations",J::List(constitutiveLocations)},
         {"reference_operators",CompareOuterOperators(m_reference,time,data)},
         {"element_values_columns",J::Quote("outer_flag,physical_measure,divergence_squared,U_reference_error_squared,dU_dz_error_squared,k_reference_error_squared,dk_dz_error_squared,max_abs_divergence,max_abs_du_dx,max_abs_dw_dz,integrated_divergence")},
         {"element_values",J::List(elements)},
+        {"native_ground_traction",J::List(wallProfile)},
         {"reference_sha256",J::Quote(refBefore)},{"state_sha256",J::Quote(before)},
         {"analytical_semantics",J::Quote("direct analytical values AND gradients under native test rows/quadrature; not a residual of the represented coefficient field; native boundaries and relative pressure offset retained")},
         {"governing_solves","0"},{"physical_commits","0"}});
