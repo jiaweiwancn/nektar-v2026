@@ -68,7 +68,7 @@ def series_gate(values,uncertainty=1e-10):
 
 class Campaign:
     def __init__(self,args):
-        self.r=args.root.resolve();self.phase=args.phase;self.models=tuple(args.models);self.output=self.r/('preservation-'+args.phase+('-'+args.label if args.label else ''));self.output.mkdir(exist_ok=True)
+        self.r=args.root.resolve();self.phase=args.phase;self.models=tuple(args.models);self.temporal_quadrature=Q[args.quadrature_index];self.output=self.r/('preservation-'+args.phase+('-'+args.label if args.label else ''));self.output.mkdir(exist_ok=True)
         self.solver=self.r/'runtime/IncNavierStokesSolver';self.descriptor=self.r/'runtime/RANSNewModelsProbe';self.sampler=self.r/'runtime/RANSPreservationProbe'
         self.manifest=load(self.r/'runtime/source-build.json');self.result=dict(schema=1,phase=self.phase,checks=[],status='running',
             runtime_manifest_sha256=sha(self.r/'runtime/source-build.json'),runtime_source=self.manifest['revision'],ranks=1,threads=THREADS,
@@ -181,7 +181,7 @@ class Campaign:
         self.result['spatial_tables']=tables;self.save()
     def temporal(self):
         # The first explicit temporal study uses the same fixed aligned p3 spaces.
-        # Quadrature is Q2, never inferred from changing only normal order.
+        # Select a measured adequate rule, never only a wall-normal increase.
         spatial=load(self.r/'preservation-spatial/evaluation-grid.json');grid=spatial['grid'];weights=spatial['weights']
         self.grid_weights=weights;expected=[];tables=[]
         for model in self.models:
@@ -195,7 +195,7 @@ class Campaign:
                             env_value=str(folder/'timing.jsonl');os.environ['NEKTAR_RANS_TIMING_FILE']=env_value
                             if (folder/'temporal-metrics.json').exists():return load(folder/'temporal-metrics.json')
                             options=dict(steps=steps,dt=dt,descriptor_probe=self.descriptor,
-                                radial_knots=ref.knots(),degree=3,quadrature=Q[2],cache='ExactStepV1',checkpoint_interval=steps)
+                                radial_knots=ref.knots(),degree=3,quadrature=self.temporal_quadrature,cache='ExactStepV1',checkpoint_interval=steps)
                             row=load(folder/'result.json') if (folder/'result.json').exists() else run_case(self.solver,folder,ref.model,ref.policy,ref.wall,**options)
                             if row['status']!='pass':return dict(status='fail',execution=row)
                             report=load(folder/'case.evolution.json')
@@ -206,7 +206,7 @@ class Campaign:
                             full=probe(self.sampler,folder,request)
                             packet=full['observation'];packet['grid_weights']=weights
                             result=dict(status='pass',execution_status='completed',time=report['time'],steps=report['steps'],dt=dt,
-                                initial_sha256=exact_vector_hash(report['accepted_states'][0]),reference_sha256=exact_vector_hash(initial['reference']),
+                                quadrature=list(self.temporal_quadrature),initial_sha256=exact_vector_hash(report['accepted_states'][0]),reference_sha256=exact_vector_hash(initial['reference']),
                                 final_spatial_alpha_zero=residual_metrics(packet['audit_alpha_zero']),final_stage_residual=report['stage_audits'][-1],
                                 refreshed_trace_defect_max=max(s['refreshed_trace_defect'] for s in report['pimple_attempts']),
                                 source_splitting_defects={k:max(abs(s.get(k,0)) for s in report['pimple_attempts']) for k in ('momentum_splitting_identity_defect','k_same_state_source_storage_defect','epsilon_same_state_source_storage_defect')},
@@ -239,7 +239,7 @@ class Campaign:
         self.save();return 0 if self.result['status']=='pass' else 1
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=2);a=p.parse_args()
     c=Campaign(a)
     try:getattr(c,a.phase)()
     except Exception as error:c.result['checks'].append(dict(name='orchestration',status='fail',failure=repr(error)));c.save()
