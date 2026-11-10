@@ -186,6 +186,8 @@ int main(int argc,char **argv)
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
         const auto operation=packet.get<std::string>("operation","");
+        Require(operation!="native_epsilon_metric" || packet.get_optional<std::string>("native_checkpoint"),
+            "native epsilon metric requires an immutable native checkpoint");
         if(operation=="archived_report_stages")
         {
             // Older short runs retained only periodic checkpoints. This is a
@@ -282,7 +284,8 @@ int main(int argc,char **argv)
             Require(RANSWallR3::HashFile(archived.get<std::string>("matrix_file"))==archived.get<std::string>("matrix_sha256"),"archived frozen transport matrix SHA256 differs");
         }
         const bool strictSpatialReadback=packet.get_optional<std::string>("native_checkpoint") &&
-            ((patch.AcceptedAWF() && (operation=="accepted_awf" || operation=="height_comparison" || operation=="selected_original_operator")) || operation=="evaluation_reuse_checks");
+            ((patch.AcceptedAWF() && (operation=="accepted_awf" || operation=="height_comparison" || operation=="selected_original_operator")) ||
+                operation=="evaluation_reuse_checks" || operation=="native_epsilon_metric");
         if(packet.get_optional<std::string>("native_checkpoint"))
         {
             Require((operation=="k_bound" || operation=="branch_coverage" || archivedStages || strictSpatialReadback) && !packet.get<bool>("projection_only",false),
@@ -457,6 +460,41 @@ int main(int argc,char **argv)
         const bool historyMatch=std::memcmp(history.data(),reference.data(),history.size()*sizeof(double))==0;
         Require(strictSpatialReadback || archivedStages || !packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
         const double time=packet.get<double>("time"),alpha=packet.get<double>("alpha");
+        if(operation=="native_epsilon_metric")
+        {
+            Require(strictSpatialReadback && patch.InitializationWork()==Vector({0.,0.}),
+                "native epsilon metric cannot initialize, lift or transfer a selected state");
+            const auto before=RANSWallR3::Hash(state);const int block=patch.Epsilon();
+            const auto mass=patch.fields[block]->Mass();Vector coefficients(patch.size[block]),constant(patch.size[block]);
+            std::vector<bool> assigned(patch.size[block],false);std::vector<std::string> rows;
+            for(int i=0;i<coefficients.size();++i)coefficients[i]=state[patch.offset[block]+i];
+            double volume=0.;
+            for(const auto &q:patch.Quadrature(block,4))
+            {
+                volume+=q.weight;
+                for(int j=0;j<q.ids.size();++j)
+                {
+                    const int id=q.ids[j];Require(!assigned[id] || constant[id]==q.constant[j],"inconsistent native constant representation");
+                    assigned[id]=true;constant[id]=q.constant[j];
+                }
+                rows.push_back(J::Object({{"geometry",J::Number(q.geometry)},{"element",J::Number(q.element)},
+                    {"coordinate",J::Numbers(q.coordinate)},{"weight",J::Number(q.weight)},
+                    {"ids",J::Numbers(Vector(q.ids.begin(),q.ids.end()))},{"phi",J::Numbers(q.phi)}}));
+            }
+            double measure=0.;for(int i=0;i<constant.size();++i)for(int j=0;j<constant.size();++j)measure+=constant[i]*mass[i][j]*constant[j];
+            Require(std::all_of(assigned.begin(),assigned.end(),[](bool x){return x;}) &&
+                std::abs(measure-volume)<1e-11*std::max(1.,volume),"native epsilon mass/physical measure disagree");
+            Require(before==RANSWallR3::Hash(state),"native epsilon metric modified selected coefficients");
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"native_replay_context",replayContext},
+                {"state_sha256",J::Quote(before)},{"block",J::Number(block)},{"offset",J::Number(patch.offset[block])},
+                {"coefficients",J::Numbers(coefficients)},{"matrix",J::Rows(mass)},{"constant_coefficients",J::Numbers(constant)},
+                {"physical_volume",J::Number(volume)},{"constant_mass_measure",J::Number(measure)},{"quadrature_rows",J::List(rows)},
+                {"field",Field(patch,block)},{"physical_time",J::Number(time)},{"governing_solves","0"},{"physical_commits","0"},
+                {"native_history_advanced","false"},{"selected_state_unchanged","true"},
+                {"initialization_work",J::Numbers(patch.InitializationWork())},
+                {"scope",J::Quote("actual full physical consistent outer-epsilon mass, including prescribed/matching trace coefficients; no constitutive substitution or state correction")}})<<'\n';
+            Require(out.good(),"native epsilon metric write failed");world->Finalise();return 0;
+        }
         if(operation=="evaluation_reuse_checks")
         {std::ofstream out(argv[3]);out<<patch.EvaluationReuseChecks(state,history,time,data)<<'\n';Require(out.good(),"reuse verification write failed");world->Finalise();return 0;}
         RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,time);
