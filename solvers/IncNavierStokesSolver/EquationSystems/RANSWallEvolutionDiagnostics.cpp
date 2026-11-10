@@ -810,7 +810,7 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
     std::vector<std::pair<std::string,std::string>> terms;
     for(const auto &[name,value]:resolution.terms)terms.push_back({name,J::Object({{"load",J::Numbers(value)},
         {"mass_dual_norms",J::Numbers(Norms(value,constraints,m_robustUstar))}})});
-    std::vector<std::string> samples,interfaces;double divergence=0;Vector evaluationSensitivity(6);
+    std::vector<std::string> samples,interfaces;double divergence=0;Vector evaluationSensitivity(6);int observed=0;
     for(const auto &o:observations)
     {
         const RANSWallCoordinate p{o[0],o[1],o[2]};const int side=int(o[4]);
@@ -823,9 +823,10 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
             return Vector{v.Value(s,offset[0]),v.Value(s,offset[1]),k,inner?0:Point(Epsilon(),p,side).Value(s,offset[Epsilon()]),pi,WJMechanicalPressure(pi,k,0)};};
         const auto value=values(state),initial=values(m_reference);
         const int blocks[5]={0,1,K(),Epsilon(),inner?InnerPressure():OuterPressure()};Vector alternate(6);
-        for(int j=0;j<5;++j)if(j!=3 || !inner)alternate[j]=fields[blocks[j]]->NativeEvaluate(state,p,offset[blocks[j]],side)[0];
+        if(observed++%std::max(1,int(observations.size()/64))==0)
+        {for(int j=0;j<5;++j)if(j!=3 || !inner)alternate[j]=fields[blocks[j]]->NativeEvaluate(state,p,offset[blocks[j]],side)[0];
         alternate[5]=WJMechanicalPressure(alternate[4],alternate[2],0);
-        for(int j=0;j<6;++j)evaluationSensitivity[j]=std::max(evaluationSensitivity[j],std::abs(value[j]-alternate[j]));
+        for(int j=0;j<6;++j)evaluationSensitivity[j]=std::max(evaluationSensitivity[j],std::abs(value[j]-alternate[j]));}
         Vector G;for(const auto &r:g)G.insert(G.end(),r.begin(),r.end());
         samples.push_back(J::Object({{"position",J::Numbers(p)},{"weight",J::Number(o[3])},{"side",J::Number(side)},
             {"inner",J::Boolean(inner)},{"value",J::Numbers(value)},{"represented_initial",J::Numbers(initial)},

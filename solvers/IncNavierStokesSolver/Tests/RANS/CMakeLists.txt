@@ -623,3 +623,14 @@ if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
     set_tests_properties(RANSWJSharedLegacyTransaction PROPERTIES PROCESSORS 1 TIMEOUT 1800
         ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
 endif()
+
+if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
+    foreach(wj_policy EP Budget)
+        add_test(NAME WJReadOnlyStage${wj_policy} COMMAND ${Python3_EXECUTABLE} -B
+            ${CMAKE_CURRENT_LIST_DIR}/run_wj3_native.py
+            --solver $<TARGET_FILE:IncNavierStokesSolver> --probe $<TARGET_FILE:RANSWallResolutionProbe>
+            --policy ${wj_policy} --mode smoke --output ${CMAKE_CURRENT_BINARY_DIR}/wj3-smoke)
+        set_tests_properties(WJReadOnlyStage${wj_policy} PROPERTIES PROCESSORS 1 TIMEOUT 600
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
+    endforeach()
+endif()
