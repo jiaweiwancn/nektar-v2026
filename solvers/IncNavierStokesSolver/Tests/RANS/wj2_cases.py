@@ -10,6 +10,7 @@ KN=[0.,.0025,.005,.01,.02,.04,.08,.1,.2,.4,.7,1.,1.15,1.35,1.6,2.]
 
 def normal_knots(level=0):
     if level not in (0,1,2):raise ValueError('WJ normal refinement level must be 0, 1 or 2')
+    level=int(level)
     knots=KN
     for _ in range(level):knots=sorted(set(knots+[.5*(a+b) for a,b in zip(knots[:-1],knots[1:])]))
     return knots

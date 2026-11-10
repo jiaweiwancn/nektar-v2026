@@ -37,6 +37,8 @@ class Study:
             attempt_limit=500,ranks=1,threads=THREADS,arithmetic_policy='-ffp-contract=off -fno-fast-math',
             physical_duration_units='seconds; dimensionless duration T*u*/H = T/2')
         require(self.s['solver_sha256']==sha(args.solver) and self.s['probe_sha256']==sha(args.probe),'runtime changed during immutable study; use a new root')
+        if self.s.get('failure'):
+            self.s.setdefault('resolved_harness_failures',[]).append(dict(reason=self.s['failure'],prior_driver_revision=self.s.get('comparison_driver_revision')))
         self.s['comparison_driver_revision']=subprocess.check_output(['git','-C',str(Path(__file__).resolve().parents[4]),'rev-parse','HEAD'],text=True).strip()
         self.s['measurement_driver_sha256']=sha(Path(__file__))
         self.s['physical_comparison_sha256']=sha(Path(__file__).with_name('wj3_measure.py'))
@@ -55,8 +57,10 @@ class Study:
         write_json(receipt,r);self.s['receipts'].append(r);self.save();return r
 
     def native(self,name,steps=0,cp=None,dt=1e-6,level=1,normal=16,reject=0,arithmetic_time=None,floor_relative=None,resting=False):
+        level=int(level)
         folder=self.root/name;xml=folder/'case.xml'
         if not xml.exists():
+            if folder.exists() and not any(folder.iterdir()):folder.rmdir()
             require(self.s['scheduled_attempts']+steps<=500,'500-attempt WJ work cap would be exceeded')
             xml=case_xml(folder,self.a.policy,steps,cp,level=level,normal=normal,dt=dt,hard_reject=reject)
             tree=ET.parse(xml).getroot();set_info(tree,'RANSWallPimpleSnapshotDirectory',str(folder/'pimple-states'))
@@ -316,7 +320,7 @@ def main():
     p.add_argument('--mode',choices=('smoke','spatial','scout','main'),required=True);a=p.parse_args();a.solver=a.solver.resolve();a.probe=a.probe.resolve()
     if a.mode=='smoke':a.output=a.output/('run-'+uuid.uuid4().hex[:12])
     s=Study(a)
-    try:getattr(s,{'main':'main_runs'}.get(a.mode,a.mode))();s.s[a.mode+'_gate']='OBSTRUCTED' if a.mode=='main' and s.s.get('main_obstructions') else 'PASS';s.save()
+    try:getattr(s,{'main':'main_runs'}.get(a.mode,a.mode))();s.s[a.mode+'_gate']='OBSTRUCTED' if a.mode=='main' and s.s.get('main_obstructions') else 'PASS';s.s.pop('failure',None);s.save()
     except Exception as error:s.s[a.mode+'_gate']='FAIL';s.s['failure']=str(error);s.save();raise
     print(s.file)
 
