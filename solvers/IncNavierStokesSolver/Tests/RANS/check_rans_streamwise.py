@@ -10,9 +10,10 @@ from qualify_rans_preservation import load,probe,replay_request
 from run_rans_neutral_pilot import scaled
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);a=p.parse_args();r=a.root.resolve();os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'));out=r/'streamwise-sensitivity';out.mkdir(exist_ok=False)
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path);a=p.parse_args();r=a.root.resolve();os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'));out=a.output or r/'streamwise-sensitivity';out.mkdir(exist_ok=False)
  labels=['E-N-Accepted-h0p4','E-N-Accepted-h0p4-x2'];folders=[r/'campaigns'/x for x in labels];requests=[load(f/'request-manifest.json')['request'] for f in folders];T=.0016
- for key in ('descriptor','knots','degree','pressure_degree','quadrature','dt','runtime','boundary_policy','velocity_amplitude'):assert requests[0][key]==requests[1][key],key
+ for key in ('descriptor','knots','degree','pressure_degree','dt','runtime','boundary_policy','velocity_amplitude'):assert requests[0][key]==requests[1][key],key
+ for key in ('wall_normal','wall_tangential','outer_volume','mass_override','mass_default','interface','reference_projection'):assert requests[0]['quadrature'][key]==requests[1]['quadrature'][key],key
  assert [x['columns'] for x in requests]==[1,2]
  for f,req in zip(folders,requests,strict=True):assert RequestManifest(f,req,True).completed(f/'T-0.0016')
  two=load(folders[1]/'T-0.0016/endpoint-samples.json');weights=two['grid_weights'];shutil.copy2(folders[0]/'T-0.0016/case.xml',out/'case.xml')
