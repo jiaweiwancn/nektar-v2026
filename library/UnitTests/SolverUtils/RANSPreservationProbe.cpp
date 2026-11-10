@@ -104,7 +104,9 @@ int main(int argc,char **argv)
                 [&](const Vector &v,double t){auto full=state;std::copy(v.begin(),v.end(),full.begin());return patch.ExplicitBody(full,t,data);});
             integrator.Initialise(Vector(state.begin(),state.begin()+patch.DifferentialSize()),0.);
             RANSWallTimeIntegration::Checkpoint checkpoint;
-            checkpoint.signature=RANSWallPhysicsSignature(patch,session,0.,true,us,{dx,dy},false);
+            std::string coordinates;session->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
+            Require(coordinates=="Chart" || coordinates=="Physical","unknown initialization function coordinates");
+            checkpoint.signature=RANSWallPhysicsSignature(patch,session,0.,true,us,{dx,dy},coordinates=="Chart");
             checkpoint.integration=integrator.Capture();checkpoint.coupledState=state;
             checkpoint.fixedReference=reference;checkpoint.fixedDefect=patch.Defect();checkpoint.eta=0.;
             initialHistory=RANSWallTimeIntegration::WriteCheckpoint(*target,checkpoint);

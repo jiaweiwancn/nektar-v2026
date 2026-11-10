@@ -20,7 +20,7 @@ from run_cls_epawf_picard import set_info,write,sha
 from continue_cls_epawf_pimple import header
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);a=p.parse_args();r=a.root;out=r/'frozen-initial-history-controls';out.mkdir(exist_ok=False)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--suffix',default='');a=p.parse_args();r=a.root;out=r/('frozen-initial-history-controls'+a.suffix);out.mkdir(exist_ok=False)
     os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
     sampler=r/'runtime-frozen-history/RANSPreservationProbe';grid=load(r/'preservation-spatial/evaluation-grid.json');weights=grid['weights'];result=dict(checks=[],status='running',execution_scope='fresh initialization artifact; no evolved checkpoint conversion')
     for model in ('E94E95','A95','A93'):
@@ -36,7 +36,7 @@ def main():
             assert receipt['history'][0]==lo['reference'][:differential] and all(v==0. for v in receipt['history'][1]),'inconsistent fresh native history'
             root=ET.parse(folder/'case.xml').getroot();set_info(root,'RANSWallRestart',initial['initial_history']);write(root,folder/'case.xml')
             with (folder/'solver.log').open('w') as f:child=subprocess.run([str(r/'runtime/IncNavierStokesSolver'),'case.xml'],cwd=folder,stdout=f,stderr=subprocess.STDOUT,timeout=900)
-            hi=load(folder/'case.evolution.json');assert child.returncode==0 and hi['steps']==16 and not hi['failure'] and abs(hi['time']-.0016)<1e-14
+            hi=load(folder/'case.evolution.json');assert child.returncode==0 and hi['steps']==16 and not hi['failure'] and abs(hi['time']-.0016)<1e-14, 'target native execution: '+str(hi.get('failure'))
             assert exact_vector_hash(hi['accepted_states'][0])==exact_vector_hash(lor['accepted_states'][0]),'native restart initialization changed coefficients'
             final=probe(sampler,folder,replay_request(lo,grid['grid'],state=hi['state'],time=hi['time']))
             comparison=compare_samples(dict(final['observation'],grid_weights=weights),dict(lo['observation'],grid_weights=weights),weights)
