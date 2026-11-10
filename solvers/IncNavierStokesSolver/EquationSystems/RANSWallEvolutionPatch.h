@@ -354,7 +354,7 @@ public:
     std::string Signature() const;
     Diagnostic WJCompleteAudit(const Vector &state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,bool rangesOnly=false) const;
-    std::string WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data) const;
+    std::string WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data,double time) const;
     const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
     class Factor

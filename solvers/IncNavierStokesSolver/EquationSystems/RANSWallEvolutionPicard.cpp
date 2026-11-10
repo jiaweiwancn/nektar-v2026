@@ -1269,10 +1269,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
 
 namespace Nektar
 {
-std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data) const
+std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data,double time) const
 {
     Require(WJ() && !Mapped() && m_dimension==2 && !CappedDestruction(),"WJ checks require the selected native pilot");
-    const auto hash=RANSWallR3::Hash(state);const double alpha=1e6,time=0.;
+    const auto hash=RANSWallR3::Hash(state);const double alpha=1e6;
     const auto constraints=Constraints(state,time,data);
     auto external=ExternalConstraints(time,data);
     for(int id:m_traceIds)external.erase(offset[Epsilon()]+id);
@@ -1381,7 +1381,9 @@ std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RAN
             const double wx=xrule->GetW()[j]*(element.upper[0]-element.lower[0])/2;
             for(const auto &r:profile.Quadrature()){auto p=anchor;p[2]=r.r;append({Point(0,p),Point(InnerPressure(),p),{},wx*r.weight},true,&profile);}
         }
-    for(const auto &v:outerVelocity->Quadrature(24))append({v,Point(OuterPressure(),v.coordinate),Point(Epsilon(),v.coordinate),v.weight},false,nullptr);
+    // outerVelocity has region-local numbering. Evaluate every exported field
+    // through the same full-domain map used by the physical residual.
+    for(const auto &v:outerVelocity->Quadrature(24))append({Point(0,v.coordinate),Point(OuterPressure(),v.coordinate),Point(Epsilon(),v.coordinate),v.weight},false,nullptr);
     // Extract actual native off-constraint states and test the common action
     // in a simultaneous k/epsilon/raw-G direction without changing the state.
     std::vector<std::string> constitutive;int extracted=0;
@@ -1411,6 +1413,7 @@ std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RAN
     Require(hash==RANSWallR3::Hash(state),"WJ read-only check changed state");
     return J::Object({{"schema","1"},{"model",J::Quote("WJHighRe")},{"audit_revision",J::Quote(AuditRevision())},
         {"governing_solves","0"},{"state_unchanged","true"},{"state_sha256",J::Quote(hash)},
+        {"frozen_time",J::Number(time)},{"frozen_alpha_mass",J::Number(alpha)},{"frozen_history_sha256",J::Quote(hash)},
         {"frozen_blocks",J::List(blockReports)},{"pressure_modes",J::List(pressureReports)},
         {"max_same_state_defect",J::Number(blockError)},{"epsilon_retained_trace_column",J::Number(traceColumn)},
         {"zero_production_sink_point_error",J::Number(sinkPointError)},{"zero_production_sink_block_error",J::Number(sinkBlockError)},
