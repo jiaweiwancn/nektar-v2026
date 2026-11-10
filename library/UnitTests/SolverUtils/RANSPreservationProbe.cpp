@@ -29,6 +29,107 @@ std::string Maps(const RANSWallEvolutionPatch::Diagnostic &values)
 std::string Row(const RANSWallGlobalPoint &p)
 {return J::Object({{"ids",J::Numbers(p.ids)},{"phi",J::Numbers(p.phi)},
     {"derivative",J::Rows(p.derivative)},{"geometry",J::Number(p.geometry)}});}
+
+// Physical volume/face integration, deliberately independent of assembled
+// constant-test loads and prescribed-row reactions. IMEX1, unforced one sweep.
+std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
+    const RANSWallPatchParameters &parameters,const Vector &state,const Vector &previous,
+    double dt,double time,const RANSWallEvolutionData &data)
+{
+    Require(dt>0 && previous.size()==state.size(),"invalid physical budget history");
+    auto flow=previous;
+    for(int b:{0,1,patch.InnerPressure(),patch.OuterPressure()})
+        std::copy_n(state.begin()+patch.offset[b],patch.size[b],flow.begin()+patch.offset[b]);
+    flow.back()=state.back();auto preK=flow;
+    std::copy_n(state.begin()+patch.offset[patch.Epsilon()],patch.size[patch.Epsilon()],preK.begin()+patch.offset[patch.Epsilon()]);
+    Tree packet;std::istringstream input(patch.PreservationPacket(preK,time,data,true,{},{}));
+    boost::property_tree::read_json(input,packet);
+    std::array<Vector,3> sum{Vector(7),Vector(7),Vector(7)};
+    const auto model=parameters.model.Parameters();
+    auto gradient=[&](const RANSWallGlobalPoint &v)
+    {RANSTensor g{};g[0]=v.Gradient(state,patch.offset[0]);g[2]=v.Gradient(state,patch.offset[1]);return g;};
+    auto coefficients=[&](const RANSWallGlobalPoint &v,bool outer)
+    {
+        const auto g=gradient(v);const double oldK=v.Value(previous,patch.offset[patch.K()]),newK=v.Value(state,patch.offset[patch.K()]);
+        Vector c(8); // frozen/current Dk, Se, De, Sk, current Se/Sk
+        if(!outer)
+        {
+            const auto frozen=patch.StateProfile(preK,v.coordinate,time,data),current=patch.StateProfile(state,v.coordinate,time,data);
+            const double nt=frozen->Original().EddyViscosity(v.coordinate[2]),now=current->Original().EddyViscosity(v.coordinate[2]);
+            const auto law=patch.InnerStress(oldK,nt,g),actual=patch.InnerStress(newK,now,g);
+            double rate=0;const auto source=patch.WallSource(preK,v.coordinate,law.production,*frozen,nullptr,&rate);
+            Require(rate==0,"prescribed wall sink unexpectedly has local reaction");
+            c[0]=parameters.geometry.molecularNu+nt/model.sigmaK;c[1]=parameters.geometry.molecularNu+now/model.sigmaK;
+            c[4]=source.kSource;c[5]=patch.WallSource(state,v.coordinate,actual.production,*current).kSource;
+        }
+        else
+        {
+            const auto e=patch.GeometryPoint(patch.Epsilon(),v.geometry,v.coordinate);
+            const double oldE=e.Value(previous,patch.offset[patch.Epsilon()]),newE=e.Value(state,patch.offset[patch.Epsilon()]);
+            const auto kLaw=patch.OuterClosure(oldK,newE,g,v.coordinate),eLaw=patch.OuterClosure(oldK,oldE,g,v.coordinate),current=patch.OuterClosure(newK,newE,g,v.coordinate);
+            c[0]=kLaw.kDiffusion;c[1]=current.kDiffusion;c[2]=eLaw.epsilonDiffusion;c[3]=current.epsilonDiffusion;
+            c[4]=std::max(0.,kLaw.production)-(newE-std::min(0.,kLaw.production))*newK/oldK;
+            c[5]=current.kSource;c[6]=eLaw.epsilonProduction-model.cEpsilon2*oldE/oldK*newE;c[7]=current.epsilonSource;
+        }
+        return c;
+    };
+    for(const auto &item:packet.get_child("volume"))
+    {
+        const auto &q=item.second;const auto coordinate=Values(q,"coordinate");RANSWallCoordinate p{};std::copy_n(coordinate.begin(),3,p.begin());
+        const int region=q.get<int>("region"),geometry=q.get<int>("velocity_k.geometry");const auto v=patch.GeometryPoint(0,geometry,p);const auto c=coefficients(v,region==1);const double w=q.get<double>("weight");
+        sum[region][0]+=w*(v.Value(state,patch.offset[patch.K()])-v.Value(previous,patch.offset[patch.K()]))/dt;
+        sum[region][1]+=w*c[4];sum[region][2]+=w*c[5];sum[region][5]+=w;
+        if(region==1)
+        {
+            const auto e=patch.GeometryPoint(patch.Epsilon(),geometry,p);
+            sum[2][0]+=w*(e.Value(state,patch.offset[patch.Epsilon()])-e.Value(previous,patch.offset[patch.Epsilon()]))/dt;
+            sum[2][1]+=w*c[6];sum[2][2]+=w*c[7];sum[2][5]+=w;
+        }
+    }
+    std::vector<std::string> faces;
+    for(int region=0;region<2;++region)for(int axis:{0,2})for(int side:{-1,1})
+    {
+        const double z=axis==0?(side<0?patch.lower[0]:patch.upper[0]):
+            (side<0?(region==0?0.:parameters.geometry.height):(region==0?parameters.geometry.height:patch.upper[2]));
+        for(const auto &face:patch.Surface(0,axis,z,side,16))
+        {
+            const auto &v=face.test;const auto &element=patch.fields[0]->Elements().at(v.element);
+            if((element.lower[2]>=parameters.geometry.height?1:0)!=region)continue;
+            const auto c=coefficients(v,region==1);const auto gk=v.Gradient(state,patch.offset[patch.K()]);
+            const double k=v.Value(state,patch.offset[patch.K()]);RANSVector u{};u[0]=v.Value(state,patch.offset[0]);u[2]=v.Value(state,patch.offset[1]);
+            double frozen=0,current=0;
+            for(int a=0;a<3;++a){frozen+=face.area[a]*(c[0]*gk[a]-u[a]*k);current+=face.area[a]*(c[1]*gk[a]-u[a]*k);}
+            sum[region][3]+=face.weight*frozen;sum[region][4]+=face.weight*current;
+            double ef=0,ec=0;
+            if(region==1)
+            {
+                const auto e=patch.GeometryPoint(patch.Epsilon(),v.geometry,v.coordinate);const auto ge=e.Gradient(state,patch.offset[patch.Epsilon()]);const double value=e.Value(state,patch.offset[patch.Epsilon()]);
+                for(int a=0;a<3;++a){ef+=face.area[a]*(c[2]*ge[a]-u[a]*value);ec+=face.area[a]*(c[3]*ge[a]-u[a]*value);}
+                sum[2][3]+=face.weight*ef;sum[2][4]+=face.weight*ec;
+            }
+            faces.push_back(J::Object({{"coordinate",J::Numbers(v.coordinate)},{"geometry",J::Number(v.geometry)},
+                {"region",J::Number(region)},{"axis",J::Number(axis)},{"outward_side",J::Number(side)},
+                {"weight",J::Number(face.weight)},{"area",J::Numbers(face.area)},
+                {"k_frozen_flux",J::Number(frozen)},{"k_current_flux",J::Number(current)},
+                {"epsilon_frozen_flux",region?J::Number(ef):"null"},{"epsilon_current_flux",region?J::Number(ec):"null"}}));
+        }
+    }
+    std::vector<std::pair<std::string,std::string>> rows;
+    for(int i=0;i<3;++i)
+    {
+        const auto &s=sum[i];rows.push_back({i==0?"inner_k":i==1?"outer_k":"outer_epsilon",J::Object({
+            {"storage_backward_difference",J::Number(s[0])},{"stage_source",J::Number(s[1])},
+            {"instantaneous_source",J::Number(s[2])},{"stage_physical_boundary_flux",J::Number(s[3])},
+            {"instantaneous_physical_boundary_flux",J::Number(s[4])},{"volume",J::Number(s[5])},
+            {"frozen_stage_physical_defect",J::Number(s[0]-s[1]-s[3])},
+            {"instantaneous_physical_defect",J::Number(s[0]-s[2]-s[4])},
+            {"frozen_operator_splitting",J::Number(s[1]+s[3]-s[2]-s[4])}})});
+    }
+    return J::Object({{"schema",J::Quote("PhysicalFrozenStageScalarBudgetV1")},{"time",J::Number(time)},
+        {"dt",J::Number(dt)},{"equations",J::Object(rows)},{"physical_faces",J::List(faces)},
+        {"face_order","16"},{"wall_local_reaction_rate","0"},
+        {"scope",J::Quote("independently integrated storage, frozen one-sweep scalar source and physical gradient/advective face flux; no prescribed-row reaction used. Dependent epsilon boundary storage is retained, with no inner epsilon equation. Finite discretization defects are observations, not forced balances.")}});
+}
 }
 int main(int argc,char **argv)
 {
@@ -208,6 +309,14 @@ int main(int argc,char **argv)
             }
             testBasis=J::List(rows);
         }
+        std::string physicalBudget="null";
+        if(request.get<bool>("export_physical_scalar_budget",false))
+        {
+            const auto scheme=session->GetTimeIntScheme();
+            Require(scheme.method=="IMEX" && scheme.variant.empty() && scheme.order==1,"physical stage budget requires IMEX1");
+            double dt;session->LoadParameter("TimeStep",dt);Require(time>0,"physical stage budget needs an advanced state");
+            physicalBudget=PhysicalScalarBudget(patch,p,state,Values(request,"previous_state"),dt,time,data);
+        }
         Require(state==stateCopy,"read-only verification modified coefficients");
         const auto elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
         Tree observed;std::istringstream input(observation);boost::property_tree::read_json(input,observed);
@@ -244,7 +353,7 @@ int main(int argc,char **argv)
             {"accuracy",J::Quote("not_assessed_by_sampling_adapter")},{"performed_time_steps","0"},{"initial_history",initialHistory.empty()?"null":J::Quote(initialHistory)},
             {"initialization_receipt",receipt},{"reference",J::Numbers(reference)},{"fixed_boundary",J::Constraints(data.fixedBoundary)},
             {"elapsed_seconds",J::Number(elapsed)},{"observation",observation},
-            {"resolution",resolution},{"test_basis",testBasis},{"native_constitutive",constitutive}});
+            {"resolution",resolution},{"test_basis",testBasis},{"native_constitutive",constitutive},{"physical_scalar_budget",physicalBudget}});
         std::ofstream file(argv[3]);Require(bool(file),"cannot write verification output");file<<output<<'\n';
         return physical?0:1;
     }

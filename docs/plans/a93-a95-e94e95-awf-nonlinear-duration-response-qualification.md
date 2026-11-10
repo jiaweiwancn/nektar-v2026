@@ -79,3 +79,40 @@ This special kinematic fact does not permit dropping full production: the
 variable viscosity responds, Qxz can be nonzero, and the discrete raw gradient
 can have divergence. Report the nonlinear and isotropic production contributions
 separately and keep the general three-dimensional constitutive evidence intact.
+
+The optional physical scalar-budget diagnostic reconstructs the actual IMEX1
+flow/epsilon/pre-k stages from consecutive native accepted vectors. It integrates
+storage and the actual frozen-stage sources separately from physical diffusive
+and advective face fluxes. Current-coefficient sources/fluxes are also reported,
+so frozen-operator splitting is visible. Epsilon storage includes its moving
+dependent boundary coefficients. Prescribed-row reactions do not enter this
+calculation. Nonzero physical finite-element budget defects are classified by
+quadrature, space and timestep comparisons, not forced to zero. This diagnostic
+does not establish a mean-plus-turbulent energy theorem.
+
+## Completed preparation and first milestone
+
+The stronger admission initially found missing scalar observers on the old dt/2
+short runs. New read-only receipts cover those sealed histories without changing
+the old campaign. The first loader-identity launch checks also rejected an
+unpinned environment before any advancement; new immutable admissions bind the
+explicit trajectory and diagnostic loader environments. Original failed logs
+and admissions remain archived.
+
+Both A93 and A95 .002/.001 four-member cohorts pass T=.016, including complete
+scalar/time coverage, independent native R/Q/P/eigenvalue checks, frozen
+quadrature and full/common dominant-residual reductions. Pressure timestep
+differences are respectively 8.07688e-8 and 7.67047e-8, below unchanged limits
+1.69744e-7 and 1.73943e-7. Their T=.1/.5 continuations remain conditional on each
+preceding complete milestone.
+
+Concurrent external starts produced a conservative schedule census of 75; the
+immediate active census was 67. An owned process family was suspended promptly.
+The record is retained rather than claiming the original census stayed below
+72. A process-family guard now reserves additional startup capacity and pauses
+only owned families, targeting at most 56 active threads including external
+work. Suspensions preserve in-memory numerical state; waiting Python parents
+resume after their native children finish so suspension does not consume the
+subprocess timeout. Gross wall timings therefore include resource waits and
+are distinguished from instrumented process-CPU cost. No existing campaign,
+executable, library or checkpoint is modified or signalled.
