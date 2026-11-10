@@ -1,0 +1,3642 @@
+{
+  "coverage": {
+    "status": "pass",
+    "missing": [],
+    "unexpected": [],
+    "duplicates": [],
+    "expected_count": 12,
+    "actual_count": 12
+  },
+  "cases": [
+    {
+      "model": "E94E95",
+      "kappa_policy": "Natural",
+      "wall": "EP",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.531862905141698,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            0.04
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.53191951284736,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.03882670816687558,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.18527770616220327,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            0.1
+          ],
+          "side": 0,
+          "geometry": 5
+        },
+        "outer_covariance": {
+          "value": 0.19458858161775466,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.8717401485096066,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "required_cutoff_ratio": {
+          "value": 5.816030460723373,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.18527770616220327,
+          0.19458871923132579
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          0.1,
+          0.5319210330102682,
+          0.5319210330102682,
+          0.01762216703592079,
+          0.23945142702558425,
+          0.35461402200684544,
+          0.18527770616220327
+        ],
+        "accepted_awf_outer_minimum_point": [
+          1,
+          0,
+          3,
+          0.5319210330102682,
+          0.05176829104581214,
+          0.19458871923132579
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          8.881784197001252e-16,
+          0,
+          7.167255995242563e-08
+        ],
+        "coupled_norms": [
+          0.00037567093556928956,
+          1.675106381609385e-05,
+          1.0542405299573613e-06,
+          2.4256183789693294e-07,
+          5.530367939965313e-20,
+          2.2778149799743105e-21,
+          1.3441684953986697e-20,
+          9.229801254896493e-07
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -1.2688317708349105e-06,
+          2.8918943195470345e-05,
+          0.0003054956488047193,
+          6.581248576592591e-05,
+          9.039915398299245e-06,
+          -7.5014223808131e-17,
+          1.2645647486231318e-06
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.3545768439058795,
+          0,
+          -0.1693177257737321,
+          0,
+          0.35461402200684544,
+          0,
+          -0.1693177257737321,
+          0,
+          0.35461402200684544
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.00105486745444321,
+          0,
+          9.608229407111727,
+          0,
+          0,
+          0,
+          -5.547435608721773e-06,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          5,
+          5,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.354613616213993,
+          0,
+          -0.16002520132701717,
+          0,
+          0.35461422490327166,
+          0,
+          -0.16002520132701717,
+          0,
+          0.35461422490327166
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          6.156182137330291e-07,
+          0,
+          0.3236940072988703,
+          0,
+          0,
+          0,
+          -3.526065226309831e-07,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          0.04
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          8,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.816030460723373,
+          1.6076897455090394e-16
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.49048179359730704,
+        3.4520091337972475e-15,
+        0.019203175796434744,
+        0.00169986935128638,
+        2.3844177398204567e-16,
+        4.3370848468126894e-17,
+        0,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.00037567093556928956,
+        -0.0,
+        0.00037567093556928956,
+        1.675106381609385e-05,
+        1.0542405299573613e-06,
+        2.4256183789693294e-07,
+        5.530367939965313e-20,
+        2.2778149799743105e-21,
+        1.3441684953986697e-20,
+        9.229801254896493e-07
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.01619774441364342,
+        0.01619774441364342
+      ],
+      "mesh_sha256": "6e93b21df550e2c5a21bea69654906001210dfdaaaa1f5dcc5abdd87ecae74fe",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/E94E95-Natural-EP/case.evolution.json"
+    },
+    {
+      "model": "E94E95",
+      "kappa_policy": "Natural",
+      "wall": "Accepted",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.5319188831158062,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.5319188831158062,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.03882670816687558,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.1890350342013575,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            1
+          ],
+          "side": 0,
+          "geometry": 8
+        },
+        "outer_covariance": {
+          "value": 0.19458858161772938,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.8717401485096066,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "required_cutoff_ratio": {
+          "value": 5.9053557268014245,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.1890350342013575,
+          0.1945887195269503
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          1,
+          0.5326841300326078,
+          0.5319210330102682,
+          0.16570560372281246,
+          0.23483535582111173,
+          0.3551227533550719,
+          0.1890350342013575
+        ],
+        "accepted_awf_outer_minimum_point": [
+          1,
+          0,
+          3,
+          0.5319210330102682,
+          0.05176829104581214,
+          0.1945887195269503
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          0,
+          0,
+          1.0263390314707577e-07
+        ],
+        "coupled_norms": [
+          0.000376742441275768,
+          1.6769075495230843e-05,
+          1.3204323983219425e-06,
+          2.7216005058320055e-07,
+          8.246385297006488e-20,
+          2.635049193748419e-21,
+          1.7618947047379486e-20,
+          1.3216920515893277e-06
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -1.2810361616912901e-06,
+          2.9242071554598935e-05,
+          0.0003030559926822192,
+          6.634797559967875e-05,
+          1.504304099138188e-05,
+          -7.550067549148364e-17,
+          1.2764904302087671e-06
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.3550546531924426,
+          0,
+          -0.1660536655813355,
+          0,
+          0.3551227533550719,
+          0,
+          -0.1660536655813355,
+          0,
+          0.3551227533550719
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.00020548539427537408,
+          0,
+          1.0021013495560285,
+          0,
+          0,
+          0,
+          -8.662247267836374e-07,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          8,
+          8,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.354613615937466,
+          0,
+          -0.16002520096226047,
+          0,
+          0.35461422504153517,
+          0,
+          -0.16002520096226047,
+          0,
+          0.35461422504153517
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          6.160377261568626e-07,
+          0,
+          0.3236940072990116,
+          0,
+          0,
+          0,
+          -3.5325514815501884e-07,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          0,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.9053557268014245,
+          0
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.490433921719345,
+        4.2655225557796354e-15,
+        0.3712921556014947,
+        0.001699869352317466,
+        2.3963433591505e-16,
+        4.337158290331966e-17,
+        0,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.000376742441275768,
+        -0.0,
+        0.000376742441275768,
+        1.6769075495230843e-05,
+        1.3204323983219425e-06,
+        2.7216005058320055e-07,
+        8.246385297006488e-20,
+        2.635049193748419e-21,
+        1.7618947047379486e-20,
+        1.3216920515893277e-06
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.014813614113582887,
+        0.01481361562834423
+      ],
+      "mesh_sha256": "2c8f7c8f385070702c64d3ac810c62500c92d96fdb2b95d0d00ff44faab19c5b",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/E94E95-Natural-Accepted/case.evolution.json"
+    },
+    {
+      "model": "E94E95",
+      "kappa_policy": "Prescribed",
+      "wall": "EP",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.5318629051443688,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            0.04
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.5319195123331246,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.03902439024390245,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.18527770615657635,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            0.1
+          ],
+          "side": 0,
+          "geometry": 5
+        },
+        "outer_covariance": {
+          "value": 0.1945885816177545,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.8717401485096066,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "required_cutoff_ratio": {
+          "value": 5.786568758071734,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.18527770615657635,
+          0.19458871849125683
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          0.1,
+          0.5319210330102682,
+          0.5319210330102682,
+          0.01762216703592079,
+          0.23945142702908245,
+          0.35461402200684544,
+          0.18527770615657635
+        ],
+        "accepted_awf_outer_minimum_point": [
+          1,
+          0,
+          3,
+          0.5319210330102682,
+          0.05203186382293469,
+          0.19458871849125683
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          8.881784197001252e-16,
+          0,
+          7.208213638118782e-08
+        ],
+        "coupled_norms": [
+          0.0003743725929422183,
+          1.6658447679841415e-05,
+          1.054893829336802e-06,
+          2.438232297107291e-07,
+          6.40696906288116e-20,
+          4.2471160598363776e-21,
+          1.4020711382773816e-20,
+          9.235523723839686e-07
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -1.268255148140519e-06,
+          2.8827142149165963e-05,
+          0.0003049281472239479,
+          6.559187139593137e-05,
+          9.00527475598921e-06,
+          -7.493707101803696e-17,
+          1.2640136397893434e-06
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.3545768438995722,
+          0,
+          -0.16931772577620505,
+          0,
+          0.35461402200684544,
+          0,
+          -0.16931772577620505,
+          0,
+          0.35461402200684544
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.0010548676334021477,
+          0,
+          9.608229407108603,
+          0,
+          0,
+          0,
+          -5.547292154721545e-06,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          5,
+          5,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.35461361808505387,
+          0,
+          -0.16002520253485394,
+          0,
+          0.3546142239677412,
+          0,
+          -0.16002520253485394,
+          0,
+          0.3546142239677412
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          6.158995756554514e-07,
+          0,
+          0.3253420610923833,
+          0,
+          0,
+          0,
+          -3.525530881044783e-07,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          0.04
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          8,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.786568758071734,
+          1.885816552534666e-16
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.49048179359214666,
+        2.8183831897517925e-15,
+        0.019203175711741224,
+        0.001708524059866474,
+        2.384426252583186e-16,
+        4.359254215474079e-17,
+        0,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.0003743725929422183,
+        -0.0,
+        0.0003743725929422183,
+        1.6658447679841415e-05,
+        1.054893829336802e-06,
+        2.438232297107291e-07,
+        6.40696906288116e-20,
+        4.2471160598363776e-21,
+        1.4020711382773816e-20,
+        9.235523723839686e-07
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.01668205684652964,
+        0.01668205684652964
+      ],
+      "mesh_sha256": "8a02d2dbdbc084d0013adc8d41bfea9e5ba55846e98528ad386d85caea38803a",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/E94E95-Prescribed-EP/case.evolution.json"
+    },
+    {
+      "model": "E94E95",
+      "kappa_policy": "Prescribed",
+      "wall": "Accepted",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.5319188705013793,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.5319188705013793,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.03902439024390245,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.18904055958432575,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            1
+          ],
+          "side": 0,
+          "geometry": 8
+        },
+        "outer_covariance": {
+          "value": 0.19458858161773654,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.8717401485096066,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "required_cutoff_ratio": {
+          "value": 5.905185190719858,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.18904055958432575,
+          0.19458871886631918
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          1,
+          0.5326920502815855,
+          0.5319210330102682,
+          0.16486620488239018,
+          0.23483523677551857,
+          0.355128033521057,
+          0.18904055958432575
+        ],
+        "accepted_awf_outer_minimum_point": [
+          1,
+          0,
+          3,
+          0.5319210330102682,
+          0.05203186382293469,
+          0.19458871886631918
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          0,
+          0,
+          1.0383088076826308e-07
+        ],
+        "coupled_norms": [
+          0.0003758342566470571,
+          1.668428931676386e-05,
+          1.335767826574205e-06,
+          2.7418729227162353e-07,
+          7.750231392584704e-20,
+          2.3910825976916254e-21,
+          2.0638156283198037e-20,
+          1.3303331598433703e-06
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -1.2845311140877833e-06,
+          2.925404189076633e-05,
+          0.0003016730250120857,
+          6.62984336412542e-05,
+          1.5067157781075848e-05,
+          -7.581558645940502e-17,
+          1.2799205861852945e-06
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.355060255502399,
+          0,
+          -0.1660535814692867,
+          0,
+          0.355128033521057,
+          0,
+          -0.1660535814692867,
+          0,
+          0.355128033521057
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.00020555461535113018,
+          0,
+          1.0072029277189745,
+          0,
+          0,
+          0,
+          -8.659759778302114e-07,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          8,
+          8,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.354613617721376,
+          0,
+          -0.1600252020688717,
+          0,
+          0.35461422414958016,
+          0,
+          -0.1600252020688717,
+          0,
+          0.35461422414958016
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          6.164541116178702e-07,
+          0,
+          0.325342061092484,
+          0,
+          0,
+          0,
+          -3.533825299462591e-07,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          0,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.905185190719858,
+          0
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.4904179051453982,
+        3.0271689168598473e-15,
+        0.373087726709329,
+        0.0017085240564545144,
+        2.406936528133046e-16,
+        4.359193688053063e-17,
+        0,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.0003758342566470571,
+        -0.0,
+        0.0003758342566470571,
+        1.668428931676386e-05,
+        1.335767826574205e-06,
+        2.7418729227162353e-07,
+        7.750231392584704e-20,
+        2.3910825976916254e-21,
+        2.0638156283198037e-20,
+        1.3303331598433703e-06
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.014816140581224456,
+        0.014816142099728462
+      ],
+      "mesh_sha256": "b45ec577e1e00fe7777a5f34114fafcf4c9738d8d5eb29fed02c32e58a6fb8d1",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/E94E95-Prescribed-Accepted/case.evolution.json"
+    },
+    {
+      "model": "A95",
+      "kappa_policy": "Natural",
+      "wall": "EP",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.611465986641931,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            0.04
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.611518656596215,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.039597981953638395,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.23834115978310147,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            0.1
+          ],
+          "side": 0,
+          "geometry": 5
+        },
+        "outer_covariance": {
+          "value": 0.17727059978008633,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "A95_radicand": {
+          "value": 0.6918225596402082,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "required_cutoff_ratio": {
+          "value": 5.3152608610227245,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.23834115978310147,
+          0.17727060362704125
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          0.1,
+          0.6115200681722619,
+          0.6115200681722619,
+          0.018900651381061406,
+          0.23945346633628678,
+          0.4076800454481746,
+          0.23834115978310147
+        ],
+        "accepted_awf_outer_minimum_point": [
+          1,
+          0,
+          3,
+          0.6115200681722619,
+          0.05279664311979005,
+          0.17727060362704125
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          0,
+          0,
+          5.866388606660944e-08
+        ],
+        "coupled_norms": [
+          0.00034401194959219835,
+          0.00010123562744254047,
+          6.849674155172308e-07,
+          2.1732622235716903e-07,
+          5.0557069343341925e-20,
+          2.8664798923190468e-21,
+          1.0028870095490914e-16,
+          7.407433810047889e-07
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -0.33163924861314253,
+          3.6447234694830856e-05,
+          0.00033850346465028465,
+          0.0001074954027778241,
+          8.185931128303642e-06,
+          -6.826875781866317e-17,
+          -2.4458222202288946e-06
+        ],
+        "native_A95_minimum_radicand_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "native_A95_minimum_radicand_point": [
+          -1,
+          0,
+          3,
+          0.6115200681722619,
+          0.05279664311979005,
+          0.6918226905544814
+        ],
+        "native_A95_radicand_range": [
+          0.6918226905544814,
+          0.6927253329341528
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.40764061147203784,
+          0,
+          -0.16931916752899648,
+          0,
+          0.4076800454481746,
+          0,
+          -0.16931916752899648,
+          0,
+          0.4076800454481746
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.0010431909287595732,
+          0,
+          8.958383008097309,
+          0,
+          0,
+          0,
+          -5.6424020962946865e-06,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          5,
+          5,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.5734461577830411,
+          0,
+          -0.1600313078753097,
+          0,
+          0.40768026601056817,
+          0,
+          -0.1600313078753097,
+          0,
+          0.24191371255091457
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          6.824882106241635e-07,
+          0,
+          0.33012403226265546,
+          0,
+          0,
+          0,
+          -5.230225406142393e-07,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          0.04
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          8,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.3152608610227245,
+          8.578631157561017e-17
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.48956010346326045,
+        0.0002654553927402715,
+        0.01552635832867404,
+        0.0015737460415770348,
+        2.2143634764410987e-16,
+        4.4232846696464284e-17,
+        9.757819552369537e-17,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.00034401194959219835,
+        -0.0,
+        0.00034401194959219835,
+        0.00010123562744254047,
+        6.849674155172308e-07,
+        2.1732622235716903e-07,
+        5.0557069343341925e-20,
+        2.8664798923190468e-21,
+        1.0028870095490914e-16,
+        7.407433810047889e-07
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.02672612625821143,
+        0.02672612625821143
+      ],
+      "mesh_sha256": "dec8ae164df756cd84aaa8fba2c7bcd8b84de132cbd2c5a9311b791bcba6fc68",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/A95-Natural-EP/case.evolution.json"
+    },
+    {
+      "model": "A95",
+      "kappa_policy": "Natural",
+      "wall": "Accepted",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.6115178643417342,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.6115178643417342,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.039597981953638395,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.2421265690996258,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            1
+          ],
+          "side": 0,
+          "geometry": 8
+        },
+        "outer_covariance": {
+          "value": 0.17727059978013304,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "A95_radicand": {
+          "value": 0.6918225596406188,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "required_cutoff_ratio": {
+          "value": 5.898709634200317,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.2421265690996258,
+          0.17727060401307687
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          1,
+          0.6123190473559801,
+          0.6115200681722619,
+          0.16248337272500168,
+          0.23483404557536347,
+          0.40821269823732004,
+          0.2421265690996258
+        ],
+        "accepted_awf_outer_minimum_point": [
+          1,
+          0,
+          3,
+          0.6115200681722625,
+          0.05279664311979005,
+          0.17727060401307687
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          8.881784197001252e-16,
+          0,
+          9.352551967253819e-08
+        ],
+        "coupled_norms": [
+          0.00035145567752815964,
+          0.00010193289316180492,
+          1.0431176482531295e-06,
+          2.432351855566138e-07,
+          3.8602283580620144e-20,
+          2.5851500860738704e-21,
+          1.6263032587282563e-17,
+          1.180937955146787e-06
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -0.3316395626715449,
+          3.833830151871915e-05,
+          0.00032144514240807644,
+          0.00011132094744858989,
+          1.5131521126821323e-05,
+          -7.72987676198269e-17,
+          -2.284200017030603e-06
+        ],
+        "native_A95_minimum_radicand_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "native_A95_minimum_radicand_point": [
+          -1,
+          0,
+          3,
+          0.6115200681722625,
+          0.05279664311979005,
+          0.6918226983761749
+        ],
+        "native_A95_radicand_range": [
+          0.6918226983761749,
+          0.6927290330833891
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.4081459254089099,
+          0,
+          -0.16605273936716802,
+          0,
+          0.40821269823732004,
+          0,
+          -0.16605273936716802,
+          0,
+          0.40821269823732004
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.00020547588128638132,
+          0,
+          1.0219684785708392,
+          0,
+          0,
+          0,
+          -8.976282193441396e-07,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          8,
+          8,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.5734461570898927,
+          0,
+          -0.16003130696245418,
+          0,
+          0.40768026687907244,
+          0,
+          -0.16003130696245418,
+          0,
+          0.24191371237555986
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          6.851756310283045e-07,
+          0,
+          0.33012403226216086,
+          0,
+          0,
+          0,
+          -5.271918761694577e-07,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          0,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.898709634200317,
+          0
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.48924545630300237,
+        0.0002654553920526777,
+        0.3254990371043702,
+        0.0015737460440302478,
+        2.449444016205958e-16,
+        4.423310262637409e-17,
+        9.757819552369537e-17,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.00035145567752815964,
+        -0.0,
+        0.00035145567752815964,
+        0.00010193289316180492,
+        1.0431176482531295e-06,
+        2.432351855566138e-07,
+        3.8602283580620144e-20,
+        2.5851500860738704e-21,
+        1.6263032587282563e-17,
+        1.180937955146787e-06
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.014912394812020197,
+        0.014912396178309566
+      ],
+      "mesh_sha256": "caa4d64cf36ff05a347c95139e9f4111ff8f1a27a7771280287b4694d2f95331",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/A95-Natural-Accepted/case.evolution.json"
+    },
+    {
+      "model": "A95",
+      "kappa_policy": "Prescribed",
+      "wall": "EP",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.6114659866356065,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            0.04
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.6115186579836637,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.03902439024390245,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.23834115980003862,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            0.1
+          ],
+          "side": 0,
+          "geometry": 5
+        },
+        "outer_covariance": {
+          "value": 0.17727059978010515,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "A95_radicand": {
+          "value": 0.6918225596403746,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "required_cutoff_ratio": {
+          "value": 5.3933860936249935,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.23834115980003862,
+          0.17727060382358864
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          0.1,
+          0.6115200681722619,
+          0.6115200681722619,
+          0.018900651381061406,
+          0.239453466325898,
+          0.4076800454481746,
+          0.23834115980003862
+        ],
+        "accepted_awf_outer_minimum_point": [
+          1,
+          0,
+          3,
+          0.6115200681722619,
+          0.05203186382293469,
+          0.17727060382358864
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          8.881784197001252e-16,
+          0,
+          5.770857766911747e-08
+        ],
+        "coupled_norms": [
+          0.00034768191577010755,
+          0.00010250270689095035,
+          6.837182040907596e-07,
+          2.1383777014700704e-07,
+          8.932167101141061e-20,
+          3.2907769626970672e-21,
+          4.607859233063393e-17,
+          7.393911513855673e-07
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -0.33164026269488506,
+          3.682771024460339e-05,
+          0.00034036055047729276,
+          0.00010867238390016576,
+          8.275936077860693e-06,
+          -6.852799953135974e-17,
+          -2.458289534030109e-06
+        ],
+        "native_A95_minimum_radicand_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "native_A95_minimum_radicand_point": [
+          -1,
+          0,
+          3,
+          0.6115200681722619,
+          0.05203186382293469,
+          0.691822693447022
+        ],
+        "native_A95_radicand_range": [
+          0.691822693447022,
+          0.6927356833116012
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.4076406114912225,
+          0,
+          -0.16931916752165274,
+          0,
+          0.4076800454481746,
+          0,
+          -0.16931916752165274,
+          0,
+          0.4076800454481746
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.0010431904212477704,
+          0,
+          8.958383008098547,
+          0,
+          0,
+          0,
+          -5.642791877778935e-06,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          5,
+          5,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.5734461540559848,
+          0,
+          -0.1600313078429736,
+          0,
+          0.40768026892699494,
+          0,
+          -0.1600313078429736,
+          0,
+          0.24191371336154413
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          6.81495719684676e-07,
+          0,
+          0.3253420610925096,
+          0,
+          0,
+          0,
+          -5.230786610056484e-07,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          0.04
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          8,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.3933860936249935,
+          9.682100637373228e-17
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.48956010348133705,
+        0.0002654553941170399,
+        0.015526358530637288,
+        0.001550949736389011,
+        2.214640172416721e-16,
+        4.359170058093776e-17,
+        9.757819552369537e-17,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.00034768191577010755,
+        -0.0,
+        0.00034768191577010755,
+        0.00010250270689095035,
+        6.837182040907596e-07,
+        2.1383777014700704e-07,
+        8.932167101141061e-20,
+        3.2907769626970672e-21,
+        4.607859233063393e-17,
+        7.393911513855673e-07
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.02471762040239803,
+        0.02471762040239803
+      ],
+      "mesh_sha256": "ca89aa47be26fdc05cf5be916b32d92db648c0aedf44b98cce6d86ae245d255b",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/A95-Prescribed-EP/case.evolution.json"
+    },
+    {
+      "model": "A95",
+      "kappa_policy": "Prescribed",
+      "wall": "Accepted",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.6115179010527847,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.6115179010527847,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.03902439024390245,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.2421102965188027,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            1
+          ],
+          "side": 0,
+          "geometry": 8
+        },
+        "outer_covariance": {
+          "value": 0.17727059978009324,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "A95_radicand": {
+          "value": 0.691822559640268,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            3
+          ],
+          "side": 0,
+          "geometry": 12
+        },
+        "required_cutoff_ratio": {
+          "value": 5.899201342444344,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.2421102965188027,
+          0.17727060416727444
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          1,
+          0.6122956907625836,
+          0.6115200681722619,
+          0.16487160006135473,
+          0.2348343908330292,
+          0.40819712717505574,
+          0.2421102965188027
+        ],
+        "accepted_awf_outer_minimum_point": [
+          1,
+          0,
+          3,
+          0.6115200681722625,
+          0.05203186382293469,
+          0.17727060416727444
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          8.881784197001252e-16,
+          0,
+          9.046060541265111e-08
+        ],
+        "coupled_norms": [
+          0.00035401794608565517,
+          0.00010309525461300631,
+          1.0090817679025757e-06,
+          2.3825342867780487e-07,
+          1.2124796891609616e-19,
+          1.6756826695399628e-21,
+          1.3552527156068802e-17,
+          1.1590265068495919e-06
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -0.3316405220080363,
+          3.845966153912308e-05,
+          0.0003255982104877581,
+          0.00011198397755690648,
+          1.5061722637361161e-05,
+          -7.58042110716212e-17,
+          -2.310724790069462e-06
+        ],
+        "native_A95_minimum_radicand_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "native_A95_minimum_radicand_point": [
+          -1,
+          0,
+          3,
+          0.6115200681722625,
+          0.05203186382293469,
+          0.6918227003216153
+        ],
+        "native_A95_radicand_range": [
+          0.6918227003216153,
+          0.6927389190823126
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.40812943939239127,
+          0,
+          -0.16605298331599463,
+          0,
+          0.40819712717505574,
+          0,
+          -0.16605298331599463,
+          0,
+          0.40819712717505574
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.00020527423352263737,
+          0,
+          1.0071663732847491,
+          0,
+          0,
+          0,
+          -8.987324290929807e-07,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          8,
+          8,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.5734461534620979,
+          0,
+          -0.1600313070272642,
+          0,
+          0.4076802696832112,
+          0,
+          -0.1600313070272642,
+          0,
+          0.24191371319921579
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          6.838017910910541e-07,
+          0,
+          0.32534206109263597,
+          0,
+          0,
+          0,
+          -5.266990475397262e-07,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          12,
+          12,
+          0,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          0,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.899201342444344,
+          0
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.4892912145469681,
+        0.00026545539365469456,
+        0.3210296693416522,
+        0.0015509497357740437,
+        2.4067110378596883e-16,
+        4.3592148484384985e-17,
+        9.757819552369537e-17,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.00035401794608565517,
+        -0.0,
+        0.00035401794608565517,
+        0.00010309525461300631,
+        1.0090817679025757e-06,
+        2.3825342867780487e-07,
+        1.2124796891609616e-19,
+        1.6756826695399628e-21,
+        1.3552527156068802e-17,
+        1.1590265068495919e-06
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.014905064076021888,
+        0.014905065432612245
+      ],
+      "mesh_sha256": "2bf176dc4def0a7116293ad45a4f539b6647b12c5fa1c869b54840a9de509950",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/A95-Prescribed-Accepted/case.evolution.json"
+    },
+    {
+      "model": "A93",
+      "kappa_policy": "Natural",
+      "wall": "EP",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.5441450199965702,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            0.04
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.544200972360973,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.03735493194305985,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.19346484654811527,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            0.1
+          ],
+          "side": 0,
+          "geometry": 5
+        },
+        "outer_covariance": {
+          "value": 0.2075685395390815,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            2
+          ],
+          "side": 1,
+          "geometry": 10
+        },
+        "required_cutoff_ratio": {
+          "value": 5.975968530519301,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.19346484654811527,
+          0.2075685395390815
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          0.1,
+          0.5442024667835469,
+          0.5442024667835469,
+          0.017825350042759636,
+          0.23945185274179656,
+          0.3628016445223646,
+          0.19346484654811527
+        ],
+        "accepted_awf_outer_minimum_point": [
+          -1,
+          0,
+          2,
+          0.5442024667835469,
+          0.0747098638861197,
+          0.2075685395390815
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          8.881784197001252e-16,
+          0,
+          6.617201078100779e-08
+        ],
+        "coupled_norms": [
+          0.0005210488838178254,
+          0.00031694986750846867,
+          9.773084790350965e-07,
+          1.8595931464960217e-07,
+          6.486172167219865e-20,
+          5.359234725619544e-21,
+          4.743384504624081e-18,
+          8.857198680200225e-07
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -0.06841268381098668,
+          5.8937339868542985e-05,
+          0.0002527711097284677,
+          0.00015496616014981646,
+          9.28795552502972e-06,
+          -7.478188531767711e-17,
+          7.482025563370671e-06
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.36276410417586535,
+          0,
+          -0.16931802676059246,
+          0,
+          0.3628016445223646,
+          0,
+          -0.16931802676059246,
+          0,
+          0.3628016445223646
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.001053004468611959,
+          0,
+          9.498726560438426,
+          0,
+          0,
+          0,
+          -5.561724201343011e-06,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          5,
+          5,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.41928968405869665,
+          0,
+          -0.16001166550370413,
+          0,
+          0.3406153161996337,
+          0,
+          -0.16001166550370413,
+          0,
+          0.3284999333087634
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          0.00010200553800481791,
+          0,
+          0.466936649288431,
+          0,
+          0,
+          0,
+          7.3427198838319645e-06,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          10,
+          10,
+          1,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          0.04
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          8,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.975968530519301,
+          1.3813682346138618e-16
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.49032760957037524,
+        0.0006755418187856811,
+        0.01854670217362219,
+        0.0015323945612124483,
+        2.359697788827886e-16,
+        4.172748686059313e-17,
+        1.0842021724855043e-17,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.0005210488838178254,
+        -0.0,
+        0.0005210488838178254,
+        0.00031694986750846867,
+        9.773084790350965e-07,
+        1.8595931464960217e-07,
+        6.486172167219865e-20,
+        5.359234725619544e-21,
+        4.743384504624081e-18,
+        8.857198680200225e-07
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.013803662134490932,
+        0.013803662134490932
+      ],
+      "mesh_sha256": "ea1f6dfcd0dbd3d8531ddf6fa497026e819e57f57a057d333d79ca93e14a292b",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/A93-Natural-EP/case.evolution.json"
+    },
+    {
+      "model": "A93",
+      "kappa_policy": "Natural",
+      "wall": "Accepted",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.5442004131850402,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.5442004131850402,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.03735493194305985,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.19718287116304278,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            1
+          ],
+          "side": 0,
+          "geometry": 8
+        },
+        "outer_covariance": {
+          "value": 0.2075685425104445,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            2
+          ],
+          "side": 1,
+          "geometry": 10
+        },
+        "required_cutoff_ratio": {
+          "value": 5.9056484749692055,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.19718287116304278,
+          0.2075685425104445
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          1,
+          0.5449086077250387,
+          0.5442024667835469,
+          0.17223528577945307,
+          0.2348361286480696,
+          0.3632724051500258,
+          0.19718287116304278
+        ],
+        "accepted_awf_outer_minimum_point": [
+          -1,
+          0,
+          2,
+          0.5442024667835469,
+          0.0747098638861197,
+          0.2075685425104445
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          0,
+          0,
+          9.184408915688391e-08
+        ],
+        "coupled_norms": [
+          0.0005200664749273895,
+          0.00031658940874640574,
+          1.1547877258158202e-06,
+          2.250522154992921e-07,
+          8.813906359935848e-20,
+          4.0517758949869746e-21,
+          8.809142651444722e-18,
+          1.2293435482211815e-06
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -0.0684128000683822,
+          5.882547322033282e-05,
+          0.0002547918761479614,
+          0.0001545229708246887,
+          1.4966194723970608e-05,
+          -7.269010767593056e-17,
+          7.46781862064583e-06
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.3632017677332812,
+          0,
+          -0.16605421152257485,
+          0,
+          0.3632724051500258,
+          0,
+          -0.16605421152257485,
+          0,
+          0.3632724051500258
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.0002050608167336282,
+          0,
+          0.9641133862316384,
+          0,
+          0,
+          0,
+          -7.726571649368713e-07,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          8,
+          8,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.4192896930792299,
+          0,
+          -0.16001166292265892,
+          0,
+          0.3406153115642499,
+          0,
+          -0.16001166292265892,
+          0,
+          0.32849992892361396
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          0.00010198605678336984,
+          0,
+          0.4669366492884234,
+          0,
+          0,
+          0,
+          7.340237910924211e-06,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          10,
+          10,
+          1,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          0,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.9056484749692055,
+          0
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.4903638112818651,
+        0.000675541820085825,
+        0.34920985443239605,
+        0.0015323945612598598,
+        2.3075299785610927e-16,
+        4.172729062943202e-17,
+        1.0842021724855043e-17,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.0005200664749273895,
+        -0.0,
+        0.0005200664749273895,
+        0.00031658940874640574,
+        1.1547877258158202e-06,
+        2.250522154992921e-07,
+        8.813906359935848e-20,
+        4.0517758949869746e-21,
+        8.809142651444722e-18,
+        1.2293435482211815e-06
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.014809278148614666,
+        0.014809279604223341
+      ],
+      "mesh_sha256": "c722981e10658da6063b1aa9a777919e449542eea67a91650db4f28aeb0d2c55",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/A93-Natural-Accepted/case.evolution.json"
+    },
+    {
+      "model": "A93",
+      "kappa_policy": "Prescribed",
+      "wall": "EP",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.5441450200178497,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            0.04
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.5442009681451128,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.03902439024390245,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.19346484650555673,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            0.1
+          ],
+          "side": 0,
+          "geometry": 5
+        },
+        "outer_covariance": {
+          "value": 0.20756912332916602,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            2
+          ],
+          "side": 1,
+          "geometry": 10
+        },
+        "required_cutoff_ratio": {
+          "value": 5.72031737988003,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.19346484650555673,
+          0.20756912332916602
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          0.1,
+          0.5442024667835469,
+          0.5442024667835469,
+          0.017825350042759636,
+          0.23945185277144662,
+          0.3628016445223646,
+          0.19346484650555673
+        ],
+        "accepted_awf_outer_minimum_point": [
+          -1,
+          0,
+          2,
+          0.5442024667835469,
+          0.07804878048780489,
+          0.20756912332916602
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          8.881784197001252e-16,
+          0,
+          6.947711114676245e-08
+        ],
+        "coupled_norms": [
+          0.0005036331640132266,
+          0.0003041003124097559,
+          9.822215026365884e-07,
+          1.9387134966199955e-07,
+          1.0320741003384832e-19,
+          3.953046842817426e-21,
+          4.743384504624081e-18,
+          8.901754865678935e-07
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -0.06842149816839506,
+          5.691101450131164e-05,
+          0.00024977868644892204,
+          0.0001497588143082318,
+          8.983477829027407e-06,
+          -7.407173752691053e-17,
+          7.453999922306874e-06
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.36276410413267496,
+          0,
+          -0.16931802678155342,
+          0,
+          0.3628016445223646,
+          0,
+          -0.16931802678155342,
+          0,
+          0.3628016445223646
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.0010530056801006567,
+          0,
+          9.498726560448452,
+          0,
+          0,
+          0,
+          -5.560558319180693e-06,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          5,
+          5,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.419291664622452,
+          0,
+          -0.16001116334146334,
+          0,
+          0.3406143086812901,
+          0,
+          -0.16001116334146334,
+          0,
+          0.3284989602633517
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          0.00010207341515624209,
+          0,
+          0.48780487804896594,
+          0,
+          0,
+          0,
+          7.313661230126741e-06,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          10,
+          10,
+          1,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          0.04
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          8,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.72031737988003,
+          1.4995202260341378e-16
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.4903276095732201,
+        0.0006755418203179885,
+        0.018546701494185296,
+        0.0016008799915483794,
+        2.359711801487016e-16,
+        4.3591829482492135e-17,
+        1.0842021724855043e-17,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.0005036331640132266,
+        -0.0,
+        0.0005036331640132266,
+        0.0003041003124097559,
+        9.822215026365884e-07,
+        1.9387134966199955e-07,
+        1.0320741003384832e-19,
+        3.953046842817426e-21,
+        4.743384504624081e-18,
+        8.901754865678935e-07
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.017824698998213616,
+        0.017824698998213616
+      ],
+      "mesh_sha256": "ed978383ebe71a04106d3145578d9ec1058b1e94acbbabe9f3ab00b98e8dad4e",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/A93-Prescribed-EP/case.evolution.json"
+    },
+    {
+      "model": "A93",
+      "kappa_policy": "Prescribed",
+      "wall": "Accepted",
+      "execution": "pass",
+      "time": 0.0016000000000000005,
+      "steps": 16,
+      "all_state_stage_extrema": {
+        "inner_k": {
+          "value": 0.5442003069549591,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "inner",
+          "geometry": null
+        },
+        "outer_k": {
+          "value": 0.5442003069549591,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            0,
+            0,
+            2
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "outer_epsilon": {
+          "value": 0.03902439024390245,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            4
+          ],
+          "side": "outer",
+          "geometry": null
+        },
+        "inner_covariance": {
+          "value": 0.19722874637087218,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            1,
+            0,
+            1
+          ],
+          "side": 0,
+          "geometry": 8
+        },
+        "outer_covariance": {
+          "value": 0.20756911628788802,
+          "time": 0.0016000000000000005,
+          "stage": "accepted",
+          "location": [
+            -1,
+            0,
+            2
+          ],
+          "side": 1,
+          "geometry": 10
+        },
+        "required_cutoff_ratio": {
+          "value": 5.904209001834056,
+          "time": 0,
+          "stage": "accepted",
+          "location": [
+            -0.9602898564975362,
+            0,
+            2
+          ],
+          "side": "wall_profile",
+          "geometry": null
+        }
+      },
+      "final_state": {
+        "accepted_awf_covariance": [
+          0.19722874637087218,
+          0.20756911628788802
+        ],
+        "accepted_awf_inner_minimum_point": [
+          1,
+          0,
+          1,
+          0.5449742334939283,
+          0.5442024667835469,
+          0.16486708282367643,
+          0.23483512176675156,
+          0.3633161556626188,
+          0.19722874637087218
+        ],
+        "accepted_awf_outer_minimum_point": [
+          -1,
+          0,
+          2,
+          0.5442024667835469,
+          0.07804878048780489,
+          0.20756911628788802
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          8.881784197001252e-16,
+          0,
+          1.014789663758564e-07
+        ],
+        "coupled_norms": [
+          0.0005057728238438766,
+          0.00030488582965809073,
+          1.2753986066499145e-06,
+          2.428041949053945e-07,
+          6.25033720908906e-20,
+          5.3062515224099895e-21,
+          2.0328790734103205e-17,
+          1.3001992566906598e-06
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          2,
+          -0.0684211990991493,
+          5.7222775540969764e-05,
+          0.00024466463098447877,
+          0.00015097422181753473,
+          1.5169761527268353e-05,
+          -7.580154755004877e-17,
+          7.4946699860121945e-06
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.3632483442801578,
+          0,
+          -0.16605350013899353,
+          0,
+          0.3633161556626188,
+          0,
+          -0.16605350013899353,
+          0,
+          0.3633161556626188
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.00020565470468586654,
+          0,
+          1.0071969791230273,
+          0,
+          0,
+          0,
+          -7.741863151489901e-07,
+          0,
+          0
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          8,
+          8,
+          0,
+          2
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.4192916441540304,
+          0,
+          -0.16001116947951524,
+          0,
+          0.3406143192440166,
+          0,
+          -0.16001116947951524,
+          0,
+          0.3284989701690467
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          0.00010211949760228165,
+          0,
+          0.4878048780489695,
+          0,
+          0,
+          0,
+          7.320469219909373e-06,
+          0,
+          0
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          10,
+          10,
+          1,
+          2
+        ],
+        "scalar_minimum_point_0": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_1": [
+          0,
+          0,
+          2
+        ],
+        "scalar_minimum_point_2": [
+          -1,
+          0,
+          4
+        ],
+        "wall_cutoff_activity": [
+          16,
+          16,
+          0,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          -1,
+          0,
+          2
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          5.904209001834056,
+          0
+        ]
+      },
+      "physical_margin_inventory": "actual native states plus declared dependent-trace targets; no tangent stencils; covariance provenance block identifies trace-target observations",
+      "initial_spatial_alpha_zero": [
+        0.4902287742216224,
+        0.0006755418197930556,
+        0.364033373549865,
+        0.0016008799940214816,
+        2.406888577301584e-16,
+        4.3591904358235133e-17,
+        1.0842021724855043e-17,
+        0
+      ],
+      "final_time_discrete_stage": [
+        0.0016000000000000005,
+        0.0001,
+        10000,
+        1,
+        0.0005057728238438766,
+        -0.0,
+        0.0005057728238438766,
+        0.00030488582965809073,
+        1.2753986066499145e-06,
+        2.428041949053945e-07,
+        6.25033720908906e-20,
+        5.3062515224099895e-21,
+        2.0328790734103205e-17,
+        1.3001992566906598e-06
+      ],
+      "correction_budgets": {
+        "bound_calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "cutoff_positive_inventory_range": [
+        0.014830611026343882,
+        0.014830612514756703
+      ],
+      "mesh_sha256": "b6d4d26a0395475d27d93ca2294e1f02da7f42b79dadfc0887234bd9e8599f1b",
+      "raw_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/matrix/A93-Prescribed-Accepted/case.evolution.json"
+    }
+  ],
+  "before_after": {
+    "status": "pass",
+    "comparison": "native binary checkpoint state/history; signed zeros retained; no JSON round trip",
+    "checks": [
+      {
+        "name": "E94E95-Natural-EP",
+        "status": "pass",
+        "before": {
+          "state": "5c9f4b2db45fea03d627e3706f110e5444c698cd7eced4537d7fe7556f34703c",
+          "history": [
+            "9bef3abf688d3e5c558f9982e021070d8eba1436ed08782d695f7609489e7675",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "5c9f4b2db45fea03d627e3706f110e5444c698cd7eced4537d7fe7556f34703c",
+          "history": [
+            "9bef3abf688d3e5c558f9982e021070d8eba1436ed08782d695f7609489e7675",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      },
+      {
+        "name": "E94E95-Natural-Accepted",
+        "status": "pass",
+        "before": {
+          "state": "65dd79f01cf3860191768df3e7e434550f67b3a9dd8e57445cf27def10b8e2f7",
+          "history": [
+            "d46d6f77c4f3db5320d9ec784e3bdbc9ca2aaecea3bc54fc1f80adfb2d1db147",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "65dd79f01cf3860191768df3e7e434550f67b3a9dd8e57445cf27def10b8e2f7",
+          "history": [
+            "d46d6f77c4f3db5320d9ec784e3bdbc9ca2aaecea3bc54fc1f80adfb2d1db147",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      },
+      {
+        "name": "E94E95-Prescribed-EP",
+        "status": "pass",
+        "before": {
+          "state": "67acf33f4fb4b1c6b83f0e8c1a43b8fafbe22071da25cecbf81ebaef7878bda1",
+          "history": [
+            "6243b5a43f3398104c4c3f667bd3fb8b342a9fe80bddd4217512089aa3d54f5d",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "67acf33f4fb4b1c6b83f0e8c1a43b8fafbe22071da25cecbf81ebaef7878bda1",
+          "history": [
+            "6243b5a43f3398104c4c3f667bd3fb8b342a9fe80bddd4217512089aa3d54f5d",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      },
+      {
+        "name": "E94E95-Prescribed-Accepted",
+        "status": "pass",
+        "before": {
+          "state": "68b913f32a558b1b67333fb7b80154e588eb325a1dff707fc117cca0027f69b6",
+          "history": [
+            "e87e63a8a3f58ec9d50e50c5042669f3671117a717f740d492d68d6caaf9c8ea",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "68b913f32a558b1b67333fb7b80154e588eb325a1dff707fc117cca0027f69b6",
+          "history": [
+            "e87e63a8a3f58ec9d50e50c5042669f3671117a717f740d492d68d6caaf9c8ea",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      },
+      {
+        "name": "A95-Natural-EP",
+        "status": "pass",
+        "before": {
+          "state": "5864ba20ca43806c17519941ace939987ac3487bd286291bbb4ea30684261bdc",
+          "history": [
+            "05ce9a0244ed22fdca22956bac372623fd7ec021e88a1068a6a47a46bf104b04",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "5864ba20ca43806c17519941ace939987ac3487bd286291bbb4ea30684261bdc",
+          "history": [
+            "05ce9a0244ed22fdca22956bac372623fd7ec021e88a1068a6a47a46bf104b04",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      },
+      {
+        "name": "A95-Natural-Accepted",
+        "status": "pass",
+        "before": {
+          "state": "fed2a8380c4a627105271319d8406afdf5fb31420bf229f7107255b877f45dd4",
+          "history": [
+            "0a0cb54c08aca5c2ab658de98c2dca350e42c7fda55c36a7b73ddfe47be1f12f",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "fed2a8380c4a627105271319d8406afdf5fb31420bf229f7107255b877f45dd4",
+          "history": [
+            "0a0cb54c08aca5c2ab658de98c2dca350e42c7fda55c36a7b73ddfe47be1f12f",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      },
+      {
+        "name": "A95-Prescribed-EP",
+        "status": "pass",
+        "before": {
+          "state": "493c9bcf8f60563bc8c8841bc9fd39ec9977235e6b6e688d988b2f185bd8d85a",
+          "history": [
+            "81e508aedb3d4553828ccf0594e92ce75a2b39c1256338ff7961903362af1dfb",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "493c9bcf8f60563bc8c8841bc9fd39ec9977235e6b6e688d988b2f185bd8d85a",
+          "history": [
+            "81e508aedb3d4553828ccf0594e92ce75a2b39c1256338ff7961903362af1dfb",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      },
+      {
+        "name": "A95-Prescribed-Accepted",
+        "status": "pass",
+        "before": {
+          "state": "3c6be62bcd3442b4568bc1a1da2bcb514ecfcde32a424950d9aab1a984457898",
+          "history": [
+            "0c16a88e68ea1fe83e9534b39001263a1bdf0aaec03c018bfd30f29a24f7bf68",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "3c6be62bcd3442b4568bc1a1da2bcb514ecfcde32a424950d9aab1a984457898",
+          "history": [
+            "0c16a88e68ea1fe83e9534b39001263a1bdf0aaec03c018bfd30f29a24f7bf68",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      },
+      {
+        "name": "A93-Natural-EP",
+        "status": "pass",
+        "before": {
+          "state": "3b15edad9aead0660c3c5b9403c9ca515190c5a9843866353d2aa2ddbaa6e8bc",
+          "history": [
+            "172688a11c8166ed3ce9537b0cc1a60550606d7227d91a665d3bd00cadc57b99",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "3b15edad9aead0660c3c5b9403c9ca515190c5a9843866353d2aa2ddbaa6e8bc",
+          "history": [
+            "172688a11c8166ed3ce9537b0cc1a60550606d7227d91a665d3bd00cadc57b99",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      },
+      {
+        "name": "A93-Natural-Accepted",
+        "status": "pass",
+        "before": {
+          "state": "6a9ab9da75c86ce0b05aca23e80c4bcb24a11846432984540b484df0b7693269",
+          "history": [
+            "be7a1f79269e75f175e9ae7397ae61526201b9458974ebfab290271a62e98f50",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "6a9ab9da75c86ce0b05aca23e80c4bcb24a11846432984540b484df0b7693269",
+          "history": [
+            "be7a1f79269e75f175e9ae7397ae61526201b9458974ebfab290271a62e98f50",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      },
+      {
+        "name": "A93-Prescribed-EP",
+        "status": "pass",
+        "before": {
+          "state": "e267c1f95b1ad60fb57fa7f11b7684b4de2692e566685ce4e22980b080268ad8",
+          "history": [
+            "61262d87b88fbd3a738d935111a0289d31c24372cb2112f13ee8c1e2dd163bbf",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "e267c1f95b1ad60fb57fa7f11b7684b4de2692e566685ce4e22980b080268ad8",
+          "history": [
+            "61262d87b88fbd3a738d935111a0289d31c24372cb2112f13ee8c1e2dd163bbf",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      },
+      {
+        "name": "A93-Prescribed-Accepted",
+        "status": "pass",
+        "before": {
+          "state": "bb2d6948d06b12d573ba6167f52ef4200d17b3f5e9f6b67a595dbb8642b6d614",
+          "history": [
+            "582380f719b42d8bd28d6eb8adba2912c174e80f613eb64b96e0daccf0f6a08c",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        },
+        "after": {
+          "state": "bb2d6948d06b12d573ba6167f52ef4200d17b3f5e9f6b67a595dbb8642b6d614",
+          "history": [
+            "582380f719b42d8bd28d6eb8adba2912c174e80f613eb64b96e0daccf0f6a08c",
+            "89f568fbb9127296120b4039db15af48d0c7b8441f74a218e12d57bc4ae3cf9e"
+          ],
+          "times": [
+            0.0016000000000000005,
+            0.0001
+          ],
+          "time": 0.0016000000000000005,
+          "steps": 16
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,1685 @@
+{
+  "status": "pass",
+  "results": [
+    {
+      "name": "A93-Natural-Accepted-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 3.2005370576015935e-12,
+          "L2_rows": 5.380508463585706e-12,
+          "scale": 37.49626369060406,
+          "scaled": 8.535615932324465e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 1.4552703660186683e-16,
+          "L2_rows": 2.5646604368037097e-16,
+          "scale": 0.24490919757646173,
+          "scaled": 5.942081311847533e-16,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 8.835410701679702e-13,
+          "L2_rows": 1.5602827612934673e-12,
+          "scale": 4.081785635530637,
+          "scaled": 2.1645944913839378e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 1.1355933554613173e-15,
+          "L2_rows": 1.896618791291842e-15,
+          "scale": 3.2931403010536977,
+          "scaled": 3.448360080795721e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.02173986790320763,
+          "L2_rows": 0.05772423103180083,
+          "scale": 0.02173986790320763,
+          "scaled": 1.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.021739867903207595,
+          "L2_rows": 0.0577242310318008,
+          "scale": 0.10394910636236245,
+          "scaled": 0.2091395362979195,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 1.8131926082104455e-16,
+          "L2_rows": 2.314204206385769e-16,
+          "scale": 0.2958381212188096,
+          "scaled": 6.129002579993269e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 8.835410701679702e-13,
+          "L2_rows": 1.5602865620293825e-12,
+          "scale": 4.081785635530637,
+          "scaled": 2.1645944913839378e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 1.9426626106378023e-14,
+          "L2_rows": 2.6474054754421894e-14,
+          "scale": 3.6697070074399,
+          "scaled": 5.29378123839119e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          -2.7755575615628914e-17,
+          0.0,
+          -6.938893903907228e-18
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": -1.1102230246251565e-16,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": 2.791820594150174e-18
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 5.773159728050814e-15,
+        "Q0": 0.0,
+        "QH": -1.1102230246251565e-16,
+        "k_min": 0.544202466783547,
+        "Lambda": 5.9056484749692055,
+        "cutoff": 0.014809279604223341,
+        "pressure_jump": -0.034324820606047454,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "A93-Natural-EP-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 3.277524085465444e-12,
+          "L2_rows": 5.508272365770279e-12,
+          "scale": 38.39722102535937,
+          "scaled": 8.535836703653135e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 7.613809756279455e-17,
+          "L2_rows": 1.874118757824706e-16,
+          "scale": 0.24490966181862994,
+          "scaled": 3.1088237596432315e-16,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 1.2822209656884742e-12,
+          "L2_rows": 2.0402429042132572e-12,
+          "scale": 4.1258529704507545,
+          "scaled": 3.107771834991953e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 5.984795992119984e-16,
+          "L2_rows": 1.191689400053638e-15,
+          "scale": 3.3290753342344446,
+          "scaled": 1.7977352241253053e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 9.016496316932576e-17,
+          "L2_rows": 1.4018293991256666e-16,
+          "scale": 0.29913905910014216,
+          "scaled": 3.0141487855366096e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 1.2822209656884742e-12,
+          "L2_rows": 2.0402463392952346e-12,
+          "scale": 4.1258529704507545,
+          "scaled": 3.107771834991953e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 2.6985249972077963e-14,
+          "L2_rows": 3.7892426826590894e-14,
+          "scale": 3.7130355719151114,
+          "scaled": 7.267705748953947e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          -2.7755575615628914e-17,
+          0.0,
+          -6.938893903907228e-18
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": 2.791820594150174e-18
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 0.0,
+        "Q0": 0.0,
+        "QH": -1.1102230246251565e-16,
+        "k_min": 0.544202466783547,
+        "Lambda": 5.975968530519299,
+        "cutoff": 0.013803662134490968,
+        "pressure_jump": -0.034324820606047454,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "A93-Prescribed-Accepted-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 3.4923314240487002e-12,
+          "L2_rows": 5.867776979415308e-12,
+          "scale": 40.91337247087318,
+          "scaled": 8.535916775218033e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 7.651756832316448e-17,
+          "L2_rows": 2.0169189108239978e-16,
+          "scale": 0.24490997000353615,
+          "scaled": 3.124314143767184e-16,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 8.862834511430551e-13,
+          "L2_rows": 1.594828034622333e-12,
+          "scale": 4.264076958472879,
+          "scaled": 2.0784884038783048e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 1.1442669728412014e-15,
+          "L2_rows": 1.6735735638317895e-15,
+          "scale": 3.439931248837637,
+          "scaled": 3.3264239604435484e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.022732054422456672,
+          "L2_rows": 0.060321651884262216,
+          "scale": 0.022732054422456672,
+          "scaled": 1.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.022732054422456686,
+          "L2_rows": 0.060321651884262244,
+          "scale": 0.10858783445984009,
+          "scaled": 0.2093425523727878,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 8.494724021423927e-17,
+          "L2_rows": 1.5351188791029327e-16,
+          "scale": 0.32283509863884063,
+          "scaled": 2.631288870770236e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 8.862834511430551e-13,
+          "L2_rows": 1.5948322822848578e-12,
+          "scale": 4.264076958472879,
+          "scaled": 2.0784884038783048e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 1.7500974627826515e-14,
+          "L2_rows": 2.4719690805073647e-14,
+          "scale": 3.8332718764393388,
+          "scaled": 4.565544837921299e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          -5.551115123125783e-17,
+          0.0,
+          -6.938893903907228e-18
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": 2.791820594150174e-18
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 2.220446049250313e-15,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.544202466783547,
+        "Lambda": 5.904209001834055,
+        "cutoff": 0.014830612514756722,
+        "pressure_jump": -0.034324820606047454,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "A93-Prescribed-EP-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 3.277524085465444e-12,
+          "L2_rows": 5.5078316069604196e-12,
+          "scale": 38.39722102535937,
+          "scaled": 8.535836703653135e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 7.613809756279455e-17,
+          "L2_rows": 1.9174659560364643e-16,
+          "scale": 0.24490966181862994,
+          "scaled": 3.1088237596432315e-16,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 1.2822209656884742e-12,
+          "L2_rows": 2.0402429047530903e-12,
+          "scale": 4.1258529704507545,
+          "scaled": 3.107771834991953e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 8.20957885006024e-16,
+          "L2_rows": 1.8324396126404933e-15,
+          "scale": 3.3417471476343446,
+          "scaled": 2.4566726587533353e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 1.1077835697370642e-16,
+          "L2_rows": 1.9157196982917564e-16,
+          "scale": 0.313412978299861,
+          "scaled": 3.5345810366448233e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 1.2822209656884742e-12,
+          "L2_rows": 2.0402438737642277e-12,
+          "scale": 4.1258529704507545,
+          "scaled": 3.107771834991953e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 2.6955325992117363e-14,
+          "L2_rows": 3.773343218206863e-14,
+          "scale": 3.713265121054825,
+          "scaled": 7.259197798529446e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          -5.551115123125783e-17,
+          0.0,
+          -6.938893903907228e-18
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": 2.791820594150174e-18
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 0.0,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.544202466783547,
+        "Lambda": 5.720317379880029,
+        "cutoff": 0.017824698998213647,
+        "pressure_jump": -0.034324820606047454,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "A95-Natural-Accepted-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 3.5859371028124087e-12,
+          "L2_rows": 6.0102446746697864e-12,
+          "scale": 41.94314611955045,
+          "scaled": 8.549518656972991e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 5.673439386203512e-16,
+          "L2_rows": 1.5687765072735354e-15,
+          "scale": 0.49473387209192926,
+          "scaled": 1.146765909157176e-15,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 1.0524813442644443e-12,
+          "L2_rows": 1.859716251574044e-12,
+          "scale": 4.856651332609763,
+          "scaled": 2.1670926574399246e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 1.1271365785159304e-15,
+          "L2_rows": 1.7502015852049214e-15,
+          "scale": 3.919030614162282,
+          "scaled": 2.876059642001197e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.02293795126229618,
+          "L2_rows": 0.06107496252645331,
+          "scale": 0.02293795126229618,
+          "scaled": 1.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.0229379512622962,
+          "L2_rows": 0.061074962526453315,
+          "scale": 0.11015873217315802,
+          "scaled": 0.20822635491338204,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 1.5788694136820158e-16,
+          "L2_rows": 2.1789426314096548e-16,
+          "scale": 0.3320210135559182,
+          "scaled": 4.755329781005281e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 1.0524813442644443e-12,
+          "L2_rows": 1.8597198443543792e-12,
+          "scale": 4.856651332609763,
+          "scaled": 2.1670926574399246e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 2.359126349132934e-14,
+          "L2_rows": 3.289692624687065e-14,
+          "scale": 4.36667397744798,
+          "scaled": 5.402570380378342e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          5.551115123125783e-17,
+          0.0,
+          2.7755575615628914e-17
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": -5.564667650281852e-16
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 7.771561172376096e-15,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.6115200681722619,
+        "Lambda": 5.898709634200318,
+        "cutoff": 0.01491239617830955,
+        "pressure_jump": -0.16577759081513593,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "A95-Natural-EP-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 2.9107966037500432e-12,
+          "L2_rows": 4.886217498260313e-12,
+          "scale": 34.216524219192536,
+          "scaled": 8.506990906216406e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 1.5439038936193583e-16,
+          "L2_rows": 4.466332421898081e-16,
+          "scale": 0.4947338720919293,
+          "scaled": 3.120675540348846e-16,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 1.3568159182991701e-12,
+          "L2_rows": 2.159102003806461e-12,
+          "scale": 4.370195311359113,
+          "scaled": 3.104703157711287e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 5.913238648735941e-16,
+          "L2_rows": 1.1984350443619593e-15,
+          "scale": 3.5638822005363338,
+          "scaled": 1.6592127113084854e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 1.149525353377756e-16,
+          "L2_rows": 1.8451807016769732e-16,
+          "scale": 0.3012439683656281,
+          "scaled": 3.8159281980462606e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 1.3568159182991701e-12,
+          "L2_rows": 2.159106391688191e-12,
+          "scale": 4.370195311359113,
+          "scaled": 3.104703157711287e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 3.048136829747472e-14,
+          "L2_rows": 4.287874987131848e-14,
+          "scale": 3.933825016998614,
+          "scaled": 7.748531814648698e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          5.551115123125783e-17,
+          0.0,
+          2.7755575615628914e-17
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": -5.564667650281852e-16
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 0.0,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.6115200681722619,
+        "Lambda": 5.3152608610227245,
+        "cutoff": 0.02672612625821145,
+        "pressure_jump": -0.16577759081513593,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "A95-Prescribed-Accepted-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 3.4843794516348225e-12,
+          "L2_rows": 5.843082322048141e-12,
+          "scale": 40.73721989784616,
+          "scaled": 8.553306927601722e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 1.7496312558484828e-16,
+          "L2_rows": 4.733097225122446e-16,
+          "scale": 0.4947338720919292,
+          "scaled": 3.536509939071595e-16,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 1.0501975808083208e-12,
+          "L2_rows": 1.845593734857778e-12,
+          "scale": 4.786363874248747,
+          "scaled": 2.1941448840914893e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 1.5642868944620858e-15,
+          "L2_rows": 2.6976419022758714e-15,
+          "scale": 3.8624099186885936,
+          "scaled": 4.050028162192606e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.02259798931683368,
+          "L2_rows": 0.06018364946681205,
+          "scale": 0.02259798931683368,
+          "scaled": 1.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.02259798931683366,
+          "L2_rows": 0.06018364946681207,
+          "scale": 0.1085656155504437,
+          "scaled": 0.2081505198700207,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 1.0289078616887437e-16,
+          "L2_rows": 1.9496450167101215e-16,
+          "scale": 0.32248441750513196,
+          "scaled": 3.190566135408294e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 1.0501975808083208e-12,
+          "L2_rows": 1.8455970478945136e-12,
+          "scale": 4.786363874248747,
+          "scaled": 2.1941448840914893e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 2.4759708172616968e-14,
+          "L2_rows": 3.363334100149855e-14,
+          "scale": 4.3035914634393295,
+          "scaled": 5.7532664015532714e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          2.7755575615628914e-17,
+          0.0,
+          2.7755575615628914e-17
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": -5.564667650281852e-16
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 1.7763568394002505e-15,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.6115200681722619,
+        "Lambda": 5.899201342444342,
+        "cutoff": 0.014905065432612276,
+        "pressure_jump": -0.16577759081513593,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "A95-Prescribed-EP-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 2.9107966037500432e-12,
+          "L2_rows": 4.885836986928906e-12,
+          "scale": 34.1232418550461,
+          "scaled": 8.530246381967363e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 1.8214596497756474e-16,
+          "L2_rows": 4.866919888288949e-16,
+          "scale": 0.4947338720919293,
+          "scaled": 3.6816958622093127e-16,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 1.3568159182991701e-12,
+          "L2_rows": 2.1591007526843913e-12,
+          "scale": 4.370195311359113,
+          "scaled": 3.104703157711287e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 5.676882575134101e-16,
+          "L2_rows": 1.2347477707223515e-15,
+          "scale": 3.5589898646440674,
+          "scaled": 1.5950825349433365e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 9.963817965141786e-17,
+          "L2_rows": 1.638638464121369e-16,
+          "scale": 0.29657080596624413,
+          "scaled": 3.359675923825042e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 1.3568159182991701e-12,
+          "L2_rows": 2.159104916515924e-12,
+          "scale": 4.370195311359113,
+          "scaled": 3.104703157711287e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 3.0472694680094836e-14,
+          "L2_rows": 4.2866362206654777e-14,
+          "scale": 3.933736392627356,
+          "scaled": 7.746501452717328e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          2.7755575615628914e-17,
+          0.0,
+          2.7755575615628914e-17
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": -5.564667650281852e-16
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 0.0,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.6115200681722619,
+        "Lambda": 5.393386093624993,
+        "cutoff": 0.024717620402398072,
+        "pressure_jump": -0.16577759081513593,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "E94E95-Natural-Accepted-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 3.4572206208949297e-12,
+          "L2_rows": 5.809573172253976e-12,
+          "scale": 40.541740776382234,
+          "scaled": 8.527558399537073e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 1.8753987078568013e-16,
+          "L2_rows": 3.363810571546716e-16,
+          "scale": 0.24,
+          "scaled": 7.814161282736672e-16,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 8.563271619577151e-13,
+          "L2_rows": 1.5453313266911417e-12,
+          "scale": 4.147627860947498,
+          "scaled": 2.064619080271326e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 2.1072553424428264e-15,
+          "L2_rows": 3.2973902794965948e-15,
+          "scale": 3.345824785632403,
+          "scaled": 6.298164062540796e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.022639650095559207,
+          "L2_rows": 0.06004012846479996,
+          "scale": 0.022639650095559207,
+          "scaled": 1.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.02263965009555923,
+          "L2_rows": 0.06004012846479999,
+          "scale": 0.10804270311687846,
+          "scaled": 0.20954353642066978,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 6.597370219574294e-17,
+          "L2_rows": 1.344122337281321e-16,
+          "scale": 0.3196294002280288,
+          "scaled": 2.0640686416417336e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 8.563271619577151e-13,
+          "L2_rows": 1.5453363408907016e-12,
+          "scale": 4.147627860947498,
+          "scaled": 2.064619080271326e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 2.5526022268129722e-14,
+          "L2_rows": 3.5557248342775095e-14,
+          "scale": 3.7284854887824874,
+          "scaled": 6.846217410508168e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          2.7755575615628914e-17,
+          0.0,
+          0.0
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": 0.0
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 5.773159728050814e-15,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.531921033010268,
+        "Lambda": 5.905355726801426,
+        "cutoff": 0.0148136156283442,
+        "pressure_jump": 0.0,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "E94E95-Natural-Accepted-q2",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 3.5657674729572264e-14,
+          "L2_rows": 6.939197220480579e-14,
+          "scale": 40.541737569946385,
+          "scaled": 8.795300070218333e-16,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 3.49717881064672e-16,
+          "L2_rows": 5.334613686251401e-16,
+          "scale": 0.24000000000000038,
+          "scaled": 1.4571578377694644e-15,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 5.657583776463859e-15,
+          "L2_rows": 7.250885317667486e-15,
+          "scale": 4.147627606112797,
+          "scaled": 1.3640529752781277e-15,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 1.1719276807667378e-15,
+          "L2_rows": 2.2525682173367947e-15,
+          "scale": 3.3458247856324026,
+          "scaled": 3.502657060223878e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.022639650095559172,
+          "L2_rows": 0.06004012846479997,
+          "scale": 0.022639650095559172,
+          "scaled": 1.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.02263965009555923,
+          "L2_rows": 0.06004012846479988,
+          "scale": 0.10804270311687827,
+          "scaled": 0.2095435364206701,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 2.013617544189758e-16,
+          "L2_rows": 3.1280392069305844e-16,
+          "scale": 0.3196184483947137,
+          "scaled": 6.300066702354537e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 5.657583776463859e-15,
+          "L2_rows": 7.572892794382363e-15,
+          "scale": 4.147627606112797,
+          "scaled": 1.3640529752781277e-15,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 1.7359228746301192e-15,
+          "L2_rows": 1.8980303603755204e-15,
+          "scale": 3.728485564301656,
+          "scaled": 4.655839065734071e-16,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          2.7755575615628914e-17,
+          0.0,
+          0.0
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": 0.0
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 5.773159728050814e-15,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.531921033010268,
+        "Lambda": 5.905355726801426,
+        "cutoff": 0.0148136156283442,
+        "pressure_jump": 0.0,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "E94E95-Natural-EP-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 3.3531372123363212e-12,
+          "L2_rows": 5.637925375794073e-12,
+          "scale": 39.321719098774956,
+          "scaled": 8.527443075195525e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 1.7322840210887147e-16,
+          "L2_rows": 2.9779012927746167e-16,
+          "scale": 0.24,
+          "scaled": 7.217850087869645e-16,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 1.2680945703225088e-12,
+          "L2_rows": 2.017699715211911e-12,
+          "scale": 4.079644098116329,
+          "scaled": 3.108346070942852e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 5.672545766444159e-16,
+          "L2_rows": 1.1959066021041858e-15,
+          "scale": 3.299443363283405,
+          "scaled": 1.7192432607175252e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 1.2305694657710475e-16,
+          "L2_rows": 2.2429552903498693e-16,
+          "scale": 0.31509876258740566,
+          "scaled": 3.9053452817977927e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 1.2680945703225088e-12,
+          "L2_rows": 2.0177001991332027e-12,
+          "scale": 4.079644098116329,
+          "scaled": 3.108346070942852e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 2.7231797546101166e-14,
+          "L2_rows": 3.804511282676537e-14,
+          "scale": 3.6715504762088624,
+          "scaled": 7.416974850968122e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          2.7755575615628914e-17,
+          0.0,
+          0.0
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": 0.0
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 0.0,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.531921033010268,
+        "Lambda": 5.816030460723377,
+        "cutoff": 0.016197744413643363,
+        "pressure_jump": 0.0,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "E94E95-Natural-EP-q2",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 4.522293997610838e-14,
+          "L2_rows": 8.638409652398153e-14,
+          "scale": 39.32171540712878,
+          "scaled": 1.150075461049437e-15,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 2.816714892469978e-16,
+          "L2_rows": 5.524113967290732e-16,
+          "scale": 0.23999999999999982,
+          "scaled": 1.173631205195825e-15,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 3.067370576287365e-15,
+          "L2_rows": 5.7942528243121016e-15,
+          "scale": 4.079644098116291,
+          "scaled": 7.51872100241213e-16,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 8.613579684582651e-16,
+          "L2_rows": 2.0862347176729695e-15,
+          "scale": 3.2994433632834044,
+          "scaled": 2.610616014942273e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 1.6276415707849184e-16,
+          "L2_rows": 2.88702617274723e-16,
+          "scale": 0.3150907451114074,
+          "scaled": 5.165627985072774e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 3.067370576287365e-15,
+          "L2_rows": 6.446152960324565e-15,
+          "scale": 4.079644098116291,
+          "scaled": 7.51872100241213e-16,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 3.0538993642942325e-15,
+          "L2_rows": 3.3261895660583115e-15,
+          "scale": 3.671550476208892,
+          "scaled": 8.317737653569117e-16,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          2.7755575615628914e-17,
+          0.0,
+          0.0
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": 0.0
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 0.0,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.531921033010268,
+        "Lambda": 5.816030460723377,
+        "cutoff": 0.016197744413643363,
+        "pressure_jump": 0.0,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "E94E95-Prescribed-Accepted-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 3.49309470237813e-12,
+          "L2_rows": 5.8733694978742724e-12,
+          "scale": 40.95424492249192,
+          "scaled": 8.529261640616247e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 1.3351272127801184e-16,
+          "L2_rows": 2.1163524571513864e-16,
+          "scale": 0.24000000000000016,
+          "scaled": 5.56303005325049e-16,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 8.562889980412436e-13,
+          "L2_rows": 1.549740538430191e-12,
+          "scale": 4.1687320798418135,
+          "scaled": 2.0540753918484882e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 1.0846358533544986e-15,
+          "L2_rows": 2.0264974439370267e-15,
+          "scale": 3.3628150690242102,
+          "scaled": 3.2253806144303615e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.022757121886709454,
+          "L2_rows": 0.0603476810693422,
+          "scale": 0.022757121886709454,
+          "scaled": 1.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.02275712188670949,
+          "L2_rows": 0.06034768106934219,
+          "scale": 0.10859197060845696,
+          "scaled": 0.20956541960881592,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 8.364619760725667e-17,
+          "L2_rows": 1.625401585675984e-16,
+          "scale": 0.3228880226030424,
+          "scaled": 2.5905636552549075e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 8.562889980412436e-13,
+          "L2_rows": 1.5497373740977072e-12,
+          "scale": 4.1687320798418135,
+          "scaled": 2.0540753918484882e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 2.6456267732122285e-14,
+          "L2_rows": 3.687353320439367e-14,
+          "scale": 3.7474178173180963,
+          "scaled": 7.059866025576023e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          5.551115123125783e-17,
+          0.0,
+          0.0
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": 0.0
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 5.551115123125783e-15,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.531921033010268,
+        "Lambda": 5.905185190719857,
+        "cutoff": 0.014816142099728471,
+        "pressure_jump": 0.0,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    },
+    {
+      "name": "E94E95-Prescribed-EP-h0",
+      "status": "pass",
+      "checks": {
+        "momentum_x": true,
+        "momentum_z": true,
+        "inner_k": true,
+        "outer_k": true,
+        "outer_epsilon": true,
+        "global_k": true,
+        "shared_interface_k": true,
+        "continuity": true,
+        "interface_and_gauge": true,
+        "accepted_nonconstant_moments_present": true,
+        "EP_plateau_pointwise_source_zero": true,
+        "independent_closed_reference": true
+      },
+      "rows": {
+        "momentum_x": {
+          "max_absolute": 3.3531372123363212e-12,
+          "L2_rows": 5.638051838857898e-12,
+          "scale": 39.321719098774956,
+          "scaled": 8.527443075195525e-14,
+          "rows": 208
+        },
+        "momentum_z": {
+          "max_absolute": 1.7322840210887147e-16,
+          "L2_rows": 3.007563623181513e-16,
+          "scale": 0.24,
+          "scaled": 7.217850087869645e-16,
+          "rows": 208
+        },
+        "inner_k": {
+          "max_absolute": 1.2680945703225088e-12,
+          "L2_rows": 2.0176997148811032e-12,
+          "scale": 4.079644098116329,
+          "scaled": 3.108346070942852e-13,
+          "rows": 208
+        },
+        "outer_k": {
+          "max_absolute": 6.312225048210607e-16,
+          "L2_rows": 1.375636059889114e-15,
+          "scale": 3.3009099817398515,
+          "scaled": 1.9122681573047757e-16,
+          "rows": 208
+        },
+        "inner_source": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "inner_diffusion": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 208
+        },
+        "outer_epsilon": {
+          "max_absolute": 1.464486084484795e-16,
+          "L2_rows": 2.4139001549738904e-16,
+          "scale": 0.31681021202281506,
+          "scaled": 4.622597469741065e-16,
+          "rows": 64
+        },
+        "continuity": {
+          "max_absolute": 0.0,
+          "L2_rows": 0.0,
+          "scale": 1e-12,
+          "scaled": 0.0,
+          "rows": 38
+        },
+        "global_k": {
+          "max_absolute": 1.2680945703225088e-12,
+          "L2_rows": 2.017695173229041e-12,
+          "scale": 4.079644098116329,
+          "scaled": 3.108346070942852e-13,
+          "rows": 208
+        },
+        "shared_interface_k": {
+          "max_absolute": 2.7011487664652112e-14,
+          "L2_rows": 3.777232497767846e-14,
+          "scale": 3.6715770439142363,
+          "scaled": 7.356917025457648e-15,
+          "rows": 4
+        }
+      },
+      "traces": {
+        "full_traction_jump": [
+          5.551115123125783e-17,
+          0.0,
+          0.0
+        ],
+        "k_trace": 0.0,
+        "k_flux_jump": 0.0,
+        "dependent_epsilon": 0.0,
+        "common_velocity": 0.0,
+        "global_pressure_integral": 0.0
+      },
+      "independent_reference_check": {
+        "k_closed_vs_independent_quadrature": 0.0,
+        "Q0": 0.0,
+        "QH": 0.0,
+        "k_min": 0.531921033010268,
+        "Lambda": 5.786568758071735,
+        "cutoff": 0.016682056846529625,
+        "pressure_jump": 0.0,
+        "outer_molecular_diffusion": 0.0,
+        "inner_molecular_diffusion": 1.5e-05
+      },
+      "shared_rows": [
+        24,
+        25,
+        106,
+        107
+      ],
+      "definition": "analytical fields/gradients at native quadrature, native tests; complete boundary fluxes; no production residual used"
+    }
+  ]
+}

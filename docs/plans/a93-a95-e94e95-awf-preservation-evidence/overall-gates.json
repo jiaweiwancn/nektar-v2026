@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "status": "unresolved",
+  "exit_code": 2,
+  "gates": {
+    "independent_kernels": "pass",
+    "implementation_corrections": "pass",
+    "analytical_native_tests": "pass",
+    "spatial": "pass",
+    "quadrature_and_evaluation": "pass",
+    "temporal_unperturbed": "partially_unresolved",
+    "temporal_perturbed": "pass",
+    "restart_cache_rollback": "pass",
+    "primary_trajectories_bitwise": "pass"
+  },
+  "errors": [],
+  "unresolved": [
+    {
+      "model": "E94E95",
+      "policy": "Natural",
+      "wall": "EP",
+      "field": "epsilon_outer",
+      "differences_weighted_RMS": [
+        7.872362842291857e-10,
+        3.9546239208761687e-10
+      ],
+      "differences_L2": [
+        1.5744725684583712e-09,
+        7.909247841752336e-10
+      ],
+      "order": null,
+      "uncertainty_floor": 1e-10,
+      "status": "unresolved_floor"
+    },
+    {
+      "model": "E94E95",
+      "policy": "Prescribed",
+      "wall": "EP",
+      "field": "epsilon_outer",
+      "differences_weighted_RMS": [
+        7.919970783527833e-10,
+        3.978534945427438e-10
+      ],
+      "differences_L2": [
+        1.5839941567055662e-09,
+        7.957069890854875e-10
+      ],
+      "order": null,
+      "uncertainty_floor": 1e-10,
+      "status": "unresolved_floor"
+    },
+    {
+      "model": "A95",
+      "policy": "Natural",
+      "wall": "EP",
+      "field": "epsilon_outer",
+      "differences_weighted_RMS": [
+        6.363083403990401e-10,
+        3.1934560736654047e-10
+      ],
+      "differences_L2": [
+        1.27261668079808e-09,
+        6.386912147330808e-10
+      ],
+      "order": null,
+      "uncertainty_floor": 1e-10,
+      "status": "unresolved_floor"
+    },
+    {
+      "model": "A95",
+      "policy": "Natural",
+      "wall": "Accepted",
+      "field": "epsilon_outer",
+      "differences_weighted_RMS": [
+        9.356675502095319e-10,
+        4.685858129218594e-10
+      ],
+      "differences_L2": [
+        1.8713351004190633e-09,
+        9.371716258437185e-10
+      ],
+      "order": null,
+      "uncertainty_floor": 1e-10,
+      "status": "unresolved_floor"
+    },
+    {
+      "model": "A95",
+      "policy": "Prescribed",
+      "wall": "EP",
+      "field": "epsilon_outer",
+      "differences_weighted_RMS": [
+        6.254021617632957e-10,
+        3.138780079107026e-10
+      ],
+      "differences_L2": [
+        1.2508043235265911e-09,
+        6.277560158214051e-10
+      ],
+      "order": null,
+      "uncertainty_floor": 1e-10,
+      "status": "unresolved_floor"
+    },
+    {
+      "model": "A95",
+      "policy": "Prescribed",
+      "wall": "Accepted",
+      "field": "epsilon_outer",
+      "differences_weighted_RMS": [
+        9.065977199310996e-10,
+        4.540400360178019e-10
+      ],
+      "differences_L2": [
+        1.8131954398621988e-09,
+        9.080800720356036e-10
+      ],
+      "order": null,
+      "uncertainty_floor": 1e-10,
+      "status": "unresolved_floor"
+    },
+    {
+      "model": "A93",
+      "policy": "Natural",
+      "wall": "EP",
+      "field": "epsilon_outer",
+      "differences_weighted_RMS": [
+        8.017276489135297e-10,
+        4.049475101339123e-10
+      ],
+      "differences_L2": [
+        1.603455297827059e-09,
+        8.098950202678244e-10
+      ],
+      "order": null,
+      "uncertainty_floor": 1e-10,
+      "status": "unresolved_floor"
+    },
+    {
+      "model": "A93",
+      "policy": "Prescribed",
+      "wall": "EP",
+      "field": "epsilon_outer",
+      "differences_weighted_RMS": [
+        8.3883428651803e-10,
+        4.2343896190437316e-10
+      ],
+      "differences_L2": [
+        1.6776685730360598e-09,
+        8.468779238087462e-10
+      ],
+      "order": null,
+      "uncertainty_floor": 1e-10,
+      "status": "unresolved_floor"
+    }
+  ],
+  "source_revision": "3391ff90264ad78a9709d17ea884a5dacda5a49f",
+  "runtime_source": "0db2f1f2d2e1330b05acfa4e1e62f2ac89dc4c27",
+  "compiled_CXX_revision": "3655ac3",
+  "scope": "bounded serial flat2D one-sweep, T=.0016; no long-time/physical/curved/3D/MPI/nonlinear qualification",
+  "root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110"
+}

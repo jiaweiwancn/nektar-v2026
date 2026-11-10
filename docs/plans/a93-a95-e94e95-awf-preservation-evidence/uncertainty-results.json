@@ -1,0 +1,554 @@
+{
+  "checks": [
+    {
+      "name": "Q2-Q0-E94E95-EP",
+      "status": "pass",
+      "comparison": {
+        "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+        "time": 0.0016000000000000005,
+        "global_pressure_gauge_shifts": [
+          2.4825758134247747e-21,
+          3.5171719645754744e-21
+        ],
+        "fields": {
+          "u": {
+            "weighted_RMS": 8.609643249267956e-13,
+            "L2": 2.435174850061741e-12
+          },
+          "v": {
+            "weighted_RMS": 6.519832489184489e-15,
+            "L2": 1.8440871061210875e-14
+          },
+          "k": {
+            "weighted_RMS": 2.0067895333239295e-14,
+            "L2": 5.6760579497101494e-14
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 2.1137532282456702e-18,
+            "L2": 4.2275064564913405e-18
+          },
+          "Pi": {
+            "weighted_RMS": 7.407257078442934e-11,
+            "L2": 2.095088684063621e-10
+          }
+        }
+      },
+      "declaration": "all field RMS differences below predeclared 1e-10 uncertainty floor",
+      "high": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/preservation-temporal-E94E95/E94E95-Natural-EP-dt0",
+      "low": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/preservation-temporal-Q0-E94E95/E94E95-Natural-EP-dt0"
+    },
+    {
+      "name": "Q2-Q0-A95-EP",
+      "status": "pass",
+      "comparison": {
+        "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+        "time": 0.0016000000000000005,
+        "global_pressure_gauge_shifts": [
+          -1.785884265990967e-17,
+          8.304649828060063e-17
+        ],
+        "fields": {
+          "u": {
+            "weighted_RMS": 7.075276038325475e-13,
+            "L2": 2.0011902661866535e-12
+          },
+          "v": {
+            "weighted_RMS": 1.965193454503956e-13,
+            "L2": 5.558406472092656e-13
+          },
+          "k": {
+            "weighted_RMS": 6.083291483698509e-15,
+            "L2": 1.7206146640230356e-14
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 2.915835299736101e-18,
+            "L2": 5.8316705994722e-18
+          },
+          "Pi": {
+            "weighted_RMS": 2.306533995360328e-11,
+            "L2": 6.523863316626354e-11
+          }
+        }
+      },
+      "declaration": "all field RMS differences below predeclared 1e-10 uncertainty floor",
+      "high": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/preservation-temporal-A95/A95-Natural-EP-dt0",
+      "low": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/preservation-temporal-Q0-A95/A95-Natural-EP-dt0"
+    },
+    {
+      "name": "Q2-Q0-A93-EP",
+      "status": "pass",
+      "comparison": {
+        "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+        "time": 0.0016000000000000005,
+        "global_pressure_gauge_shifts": [
+          6.9007774212807864e-18,
+          4.295304075526558e-18
+        ],
+        "fields": {
+          "u": {
+            "weighted_RMS": 9.245645585669124e-13,
+            "L2": 2.6150634760296423e-12
+          },
+          "v": {
+            "weighted_RMS": 5.3639535406250266e-14,
+            "L2": 1.5171551690182188e-13
+          },
+          "k": {
+            "weighted_RMS": 3.3676451991215323e-14,
+            "L2": 9.525139027716625e-14
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 1.8004374693932256e-18,
+            "L2": 3.600874938786451e-18
+          },
+          "Pi": {
+            "weighted_RMS": 5.4345239244781355e-12,
+            "L2": 1.537115487807607e-11
+          }
+        }
+      },
+      "declaration": "all field RMS differences below predeclared 1e-10 uncertainty floor",
+      "high": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/preservation-temporal-A93/A93-Natural-EP-dt0",
+      "low": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/preservation-temporal-Q0-A93/A93-Natural-EP-dt0"
+    },
+    {
+      "name": "evaluation-GL10-GL14-EP",
+      "status": "pass",
+      "value_RMS_changes": {
+        "u": 1.7943545954635098e-17,
+        "v": 0.0,
+        "k": 8.628166150854817e-32,
+        "epsilon_outer": 2.7576216389047815e-19,
+        "Pi": 0.0
+      },
+      "gradient_RMS_changes": {
+        "u": 3.469446951953614e-17,
+        "v": 0.0,
+        "k": 0.0,
+        "epsilon_outer": 9.486769009248164e-20,
+        "Pi": 0.0
+      },
+      "lower_orders": [
+        10,
+        8
+      ],
+      "higher_orders": [
+        14,
+        10
+      ],
+      "same_state_sha256": "c88be484ef0888021dc1251422db27c1834f266ff67204692c52efb6bc5f64d3"
+    },
+    {
+      "name": "evaluation-GL10-GL14-Accepted",
+      "status": "pass",
+      "value_RMS_changes": {
+        "u": 4.472333961502706e-17,
+        "v": 0.0,
+        "k": 8.84776735383952e-17,
+        "epsilon_outer": 2.7576216389047815e-19,
+        "Pi": 0.0
+      },
+      "gradient_RMS_changes": {
+        "u": 8.326672684688674e-17,
+        "v": 0.0,
+        "k": 7.632783294297951e-17,
+        "epsilon_outer": 9.486769009248164e-20,
+        "Pi": 0.0
+      },
+      "lower_orders": [
+        10,
+        8
+      ],
+      "higher_orders": [
+        14,
+        10
+      ],
+      "same_state_sha256": "339ca3fd7cf1a1592fae25fd328f07540f6d664b1882074b2b1164a1d9728915"
+    },
+    {
+      "name": "Q2-Q0-E94E95-Accepted",
+      "status": "pass",
+      "comparison": {
+        "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+        "time": 0.0016000000000000005,
+        "global_pressure_gauge_shifts": [
+          -5.419894168600577e-21,
+          -6.811315356491339e-22
+        ],
+        "fields": {
+          "u": {
+            "weighted_RMS": 9.575081568972036e-13,
+            "L2": 2.708242043133781e-12
+          },
+          "v": {
+            "weighted_RMS": 6.348500718908621e-15,
+            "L2": 1.7956271634831827e-14
+          },
+          "k": {
+            "weighted_RMS": 4.2467322012981454e-14,
+            "L2": 1.2011572549684772e-13
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 2.6107669151810445e-18,
+            "L2": 5.2215338303620874e-18
+          },
+          "Pi": {
+            "weighted_RMS": 4.51305776937854e-12,
+            "L2": 1.2764855010456795e-11
+          }
+        }
+      },
+      "initial_state_sha256": "339ca3fd7cf1a1592fae25fd328f07540f6d664b1882074b2b1164a1d9728915",
+      "fresh_history_sha256": "58d49e9e7fc6313074fae1f9098b4b236901caaf76406dc3897500a84eaad55c",
+      "native_initial_state_identical": true,
+      "source_initializer_quadrature": [
+        32,
+        8,
+        8,
+        8,
+        8
+      ],
+      "target_equation_quadrature": [
+        64,
+        16,
+        16,
+        16,
+        16
+      ],
+      "target_signature_verified_by_native_restart": true,
+      "xml_sha256": "74f0ff1d642ab0c5b0519080d2ff03c0756dab9855e3c8b36751091414072ed0"
+    },
+    {
+      "name": "Q2-Q0-A95-Accepted",
+      "status": "pass",
+      "comparison": {
+        "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+        "time": 0.0016000000000000005,
+        "global_pressure_gauge_shifts": [
+          2.59395369767157e-17,
+          -1.9200542848360483e-17
+        ],
+        "fields": {
+          "u": {
+            "weighted_RMS": 9.957066079941663e-13,
+            "L2": 2.8162835783397214e-12
+          },
+          "v": {
+            "weighted_RMS": 2.748425910936902e-13,
+            "L2": 7.77372239684919e-13
+          },
+          "k": {
+            "weighted_RMS": 5.1946291158646044e-14,
+            "L2": 1.4692629894307764e-13
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 2.1147381669364224e-18,
+            "L2": 4.229476333872844e-18
+          },
+          "Pi": {
+            "weighted_RMS": 2.7475395591036012e-12,
+            "L2": 7.771215415281813e-12
+          }
+        }
+      },
+      "initial_state_sha256": "829e9a01c845a3a89ecb108b27e8aedd0211caf7c3d9baa95262a6480d245e79",
+      "fresh_history_sha256": "f0cf8dc0e5a3e99c94b57c60f0c4c176e548c453ee3d89649ce9d62cb1fa7373",
+      "native_initial_state_identical": true,
+      "source_initializer_quadrature": [
+        32,
+        8,
+        8,
+        8,
+        8
+      ],
+      "target_equation_quadrature": [
+        64,
+        16,
+        16,
+        16,
+        16
+      ],
+      "target_signature_verified_by_native_restart": true,
+      "xml_sha256": "8d81575424e8823a91fc97a6e81feddd6943804e2f358f1430fabbc0d5f507be"
+    },
+    {
+      "name": "Q2-Q0-A93-Accepted",
+      "status": "pass",
+      "comparison": {
+        "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+        "time": 0.0016000000000000005,
+        "global_pressure_gauge_shifts": [
+          4.7908183496703235e-18,
+          6.496742705440485e-19
+        ],
+        "fields": {
+          "u": {
+            "weighted_RMS": 9.133690406104384e-13,
+            "L2": 2.5833977693659682e-12
+          },
+          "v": {
+            "weighted_RMS": 5.231578053039138e-14,
+            "L2": 1.479713727044276e-13
+          },
+          "k": {
+            "weighted_RMS": 2.519402071550114e-14,
+            "L2": 7.125945157314083e-14
+          },
+          "epsilon_outer": {
+            "weighted_RMS": 2.0517656167315353e-18,
+            "L2": 4.103531233463071e-18
+          },
+          "Pi": {
+            "weighted_RMS": 4.6877661176109056e-12,
+            "L2": 1.3259004841516824e-11
+          }
+        }
+      },
+      "initial_state_sha256": "6099bd198e3edecf35d044ff9f4e1c99aad2b229d7dc40acd605ce9828b27ec8",
+      "fresh_history_sha256": "e7194a74b449fb220fd6de4a8c616fcdd105197028cd7279b5774a166003a99b",
+      "native_initial_state_identical": true,
+      "source_initializer_quadrature": [
+        32,
+        8,
+        8,
+        8,
+        8
+      ],
+      "target_equation_quadrature": [
+        64,
+        16,
+        16,
+        16,
+        16
+      ],
+      "target_signature_verified_by_native_restart": true,
+      "xml_sha256": "0215fce753936da69d271dc3c26779ebd7ecdcd913ad046fb846024431259d84"
+    }
+  ],
+  "status": "pass",
+  "mass_quadrature": {
+    "actual_global_flat_rule": "Gauss max(8,p+3) per direction, from RANSWallGlobalField::Mass/Quadrature; patch override affects regional/diagnostic integration only",
+    "degrees": [
+      3,
+      4,
+      5
+    ],
+    "maximum_mass_integrand_degree": 10,
+    "minimum_exact_Gauss_degree": 15,
+    "status": "exact_polynomial_rule",
+    "temporal_comparison_rule": "common panel grid contains every element boundary; GL10 integrates squared p<=5 polynomial differences exactly in exact arithmetic",
+    "projection_rule": "fixed independent Gauss32 geometric subpanels; its coefficient approximation belongs to representation, not frozen residual quadrature"
+  },
+  "coverage": {
+    "status": "pass",
+    "missing": [],
+    "unexpected": [],
+    "duplicates": [],
+    "expected_count": 8,
+    "actual_count": 8
+  },
+  "strict_initialization_controls": {
+    "checks": [
+      {
+        "name": "Q2-Q0-E94E95-Accepted",
+        "status": "pass",
+        "comparison": {
+          "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+          "time": 0.0016000000000000005,
+          "global_pressure_gauge_shifts": [
+            -5.419894168600577e-21,
+            -6.811315356491339e-22
+          ],
+          "fields": {
+            "u": {
+              "weighted_RMS": 9.575081568972036e-13,
+              "L2": 2.708242043133781e-12
+            },
+            "v": {
+              "weighted_RMS": 6.348500718908621e-15,
+              "L2": 1.7956271634831827e-14
+            },
+            "k": {
+              "weighted_RMS": 4.2467322012981454e-14,
+              "L2": 1.2011572549684772e-13
+            },
+            "epsilon_outer": {
+              "weighted_RMS": 2.6107669151810445e-18,
+              "L2": 5.2215338303620874e-18
+            },
+            "Pi": {
+              "weighted_RMS": 4.51305776937854e-12,
+              "L2": 1.2764855010456795e-11
+            }
+          }
+        },
+        "initial_state_sha256": "339ca3fd7cf1a1592fae25fd328f07540f6d664b1882074b2b1164a1d9728915",
+        "fresh_history_sha256": "58d49e9e7fc6313074fae1f9098b4b236901caaf76406dc3897500a84eaad55c",
+        "native_initial_state_identical": true,
+        "source_initializer_quadrature": [
+          32,
+          8,
+          8,
+          8,
+          8
+        ],
+        "target_equation_quadrature": [
+          64,
+          16,
+          16,
+          16,
+          16
+        ],
+        "target_signature_verified_by_native_restart": true,
+        "xml_sha256": "74f0ff1d642ab0c5b0519080d2ff03c0756dab9855e3c8b36751091414072ed0"
+      },
+      {
+        "name": "guard-descriptor",
+        "status": "pass",
+        "intended_rejection": "descriptor mismatch",
+        "observed_failure": "verification resolved descriptor mismatch",
+        "exit_code": 1
+      },
+      {
+        "name": "guard-identity",
+        "status": "pass",
+        "intended_rejection": "identity mismatch",
+        "observed_failure": "verification physics/mesh/space identity mismatch",
+        "exit_code": 1
+      },
+      {
+        "name": "guard-nonzero_time",
+        "status": "pass",
+        "intended_rejection": "initial history export requires",
+        "observed_failure": "initial history export requires an admissible identical state/reference at time zero",
+        "exit_code": 1
+      },
+      {
+        "name": "guard-different_reference",
+        "status": "pass",
+        "intended_rejection": "initial history export requires",
+        "observed_failure": "initial history export requires an admissible identical state/reference at time zero",
+        "exit_code": 1,
+        "corrected_input": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/frozen-initial-history-controls-v2/E94E95-Natural-Accepted-dt0/guard-distinct-state-v3.json",
+        "corrected_input_sha256": "d91722511ba795260918ae58face5542403ade95e123125157234343e2e532ce"
+      },
+      {
+        "name": "Q2-Q0-A95-Accepted",
+        "status": "pass",
+        "comparison": {
+          "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+          "time": 0.0016000000000000005,
+          "global_pressure_gauge_shifts": [
+            2.59395369767157e-17,
+            -1.9200542848360483e-17
+          ],
+          "fields": {
+            "u": {
+              "weighted_RMS": 9.957066079941663e-13,
+              "L2": 2.8162835783397214e-12
+            },
+            "v": {
+              "weighted_RMS": 2.748425910936902e-13,
+              "L2": 7.77372239684919e-13
+            },
+            "k": {
+              "weighted_RMS": 5.1946291158646044e-14,
+              "L2": 1.4692629894307764e-13
+            },
+            "epsilon_outer": {
+              "weighted_RMS": 2.1147381669364224e-18,
+              "L2": 4.229476333872844e-18
+            },
+            "Pi": {
+              "weighted_RMS": 2.7475395591036012e-12,
+              "L2": 7.771215415281813e-12
+            }
+          }
+        },
+        "initial_state_sha256": "829e9a01c845a3a89ecb108b27e8aedd0211caf7c3d9baa95262a6480d245e79",
+        "fresh_history_sha256": "f0cf8dc0e5a3e99c94b57c60f0c4c176e548c453ee3d89649ce9d62cb1fa7373",
+        "native_initial_state_identical": true,
+        "source_initializer_quadrature": [
+          32,
+          8,
+          8,
+          8,
+          8
+        ],
+        "target_equation_quadrature": [
+          64,
+          16,
+          16,
+          16,
+          16
+        ],
+        "target_signature_verified_by_native_restart": true,
+        "xml_sha256": "8d81575424e8823a91fc97a6e81feddd6943804e2f358f1430fabbc0d5f507be"
+      },
+      {
+        "name": "Q2-Q0-A93-Accepted",
+        "status": "pass",
+        "comparison": {
+          "metric": "weighted_RMS=sqrt(integral(error^2)/volume); L2=sqrt(integral(error^2))",
+          "time": 0.0016000000000000005,
+          "global_pressure_gauge_shifts": [
+            4.7908183496703235e-18,
+            6.496742705440485e-19
+          ],
+          "fields": {
+            "u": {
+              "weighted_RMS": 9.133690406104384e-13,
+              "L2": 2.5833977693659682e-12
+            },
+            "v": {
+              "weighted_RMS": 5.231578053039138e-14,
+              "L2": 1.479713727044276e-13
+            },
+            "k": {
+              "weighted_RMS": 2.519402071550114e-14,
+              "L2": 7.125945157314083e-14
+            },
+            "epsilon_outer": {
+              "weighted_RMS": 2.0517656167315353e-18,
+              "L2": 4.103531233463071e-18
+            },
+            "Pi": {
+              "weighted_RMS": 4.6877661176109056e-12,
+              "L2": 1.3259004841516824e-11
+            }
+          }
+        },
+        "initial_state_sha256": "6099bd198e3edecf35d044ff9f4e1c99aad2b229d7dc40acd605ce9828b27ec8",
+        "fresh_history_sha256": "e7194a74b449fb220fd6de4a8c616fcdd105197028cd7279b5774a166003a99b",
+        "native_initial_state_identical": true,
+        "source_initializer_quadrature": [
+          32,
+          8,
+          8,
+          8,
+          8
+        ],
+        "target_equation_quadrature": [
+          64,
+          16,
+          16,
+          16,
+          16
+        ],
+        "target_signature_verified_by_native_restart": true,
+        "xml_sha256": "0215fce753936da69d271dc3c26779ebd7ecdcd913ad046fb846024431259d84"
+      }
+    ],
+    "status": "pass",
+    "execution_scope": "fresh initialization artifact; no evolved checkpoint conversion",
+    "coverage": {
+      "status": "pass",
+      "missing": [],
+      "unexpected": [],
+      "duplicates": [],
+      "expected_count": 7,
+      "actual_count": 7
+    }
+  },
+  "initial_quadrature_failure_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/uncertainty/results.json"
+}

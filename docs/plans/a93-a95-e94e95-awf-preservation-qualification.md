@@ -82,9 +82,7 @@ Capabilities not exercised are not inferred from successful endpoints.
 
 ## Results
 
-In progress. Before/after witnesses, frozen-state geometry/basis packets,
-uncertainty and convergence tables, runtime/source identities and final gates
-will be recorded here and in the adjacent compact evidence directory.
+Completed through bounded native consistency qualification. The final machine receipt is unresolved only for the below-floor unperturbed epsilon orders; see the numerical tables and evidence index below.
 
 ## Implementation and source mapping
 
@@ -205,14 +203,105 @@ is repaired after the k solve. Perturbation response is measured against the
 unperturbed numerical solution at the identical time, separately from drift
 relative to the analytical reference; no monotone-decay assertion is imposed.
 
-<!-- GENERATED_NUMERICAL_TABLES -->
+## Numerical results
+
+Final required numerical gates pass; the overall receipt is **unresolved / exit 2**, with no failed required checks, because eight unperturbed outer-epsilon temporal signals are below the predeclared resolution threshold. Their numerical orders remain null. All six natural-kappa model/wall combinations additionally have resolved perturbed epsilon orders.
+
+| Evidence | Result |
+|---|---|
+| Native audit defects | Nine before/after controls; all intended outcomes observed |
+| Spectrum / domain helper | 696 checks; normalized spectra, eigenvectors, hard decisions and exact A95 witness pass |
+| Independent model/wall kernels | 1346 checks pass |
+| Native weak oracle | 14 evaluations, including all twelve configurations; worst scaled required defect 3.11e-13 |
+| Spatial study | 34 initialized/frozen checks; independent h and p gates pass |
+| Temporal study | Twelve unperturbed triplets (36 runs); 52 resolved field orders pass, eight epsilon orders unresolved |
+| Epsilon signal controls | Six natural-kappa combinations pass; 0.5%, with one targeted 1% A95/EP triplet |
+| Native matrix | Twelve combinations, 16 steps each; previous binary checkpoint states/histories bitwise identical |
+| Regression | 22 continuation/guard controls, A95 cache, reviewed CLS restart and 15 distinct CTest targets pass |
+
+Frozen residual changes from the final two quadrature rules are below 1e-13 for the principal groups and below the declared uncertainty criterion. The largest measured Q2/Q0 endpoint field RMS difference is 7.41e-11 (pressure); the native starting coefficients are byte-identical. Common-grid GL10/GL14 changes in analytical value/gradient error estimates are below 9e-17. No bound projection activates in these trajectories.
+
+### Separate h and p results
+
+E94/E95, natural kappa. h0/h1/h2 use p=3; p4/p5 use the fixed h0 mesh. Momentum and scalar residuals are dimensionless mass-dual alpha=0 norms on unchanged physical scales.
+
+| Wall | Space | U value RMS | U gradient RMS | Momentum x | Inner k | Outer epsilon |
+|---|---|---:|---:|---:|---:|---:|
+| EP | h0 | 0.0003255 | 0.03334 | 3.907 | 0.02257 | 0.0017 |
+| EP | h1 | 2.371e-05 | 0.006378 | 1.183 | 0.00896 | 0.000409 |
+| EP | h2 | 1.689e-06 | 0.0009425 | 0.2512 | 0.001017 | 9.25e-05 |
+| EP | p4 | 5.238e-05 | 0.008023 | 0.8063 | 0.01573 | 0.0001692 |
+| EP | p5 | 6.531e-06 | 0.001612 | 0.1081 | 0.001246 | 1.681e-05 |
+| Accepted | h0 | 0.0003305 | 0.03383 | 4.042 | 2.796 | 0.0017 |
+| Accepted | h1 | 2.408e-05 | 0.006426 | 1.208 | 1.13 | 0.000409 |
+| Accepted | h2 | 1.715e-06 | 0.0009534 | 0.2565 | 0.2491 | 9.25e-05 |
+| Accepted | p4 | 5.319e-05 | 0.007976 | 0.7728 | 0.6386 | 0.0001692 |
+| Accepted | p5 | 6.632e-06 | 0.001636 | 0.1106 | 0.1008 | 1.681e-05 |
+
+Accepted k value RMS decreases `3.12e-5 -> 4.05e-6 -> 3.32e-7` under h refinement; its gradient RMS decreases `1.55e-2 -> 2.91e-3 -> 4.29e-4`. At fixed mesh p=3,4,5 the corresponding value errors are `3.12e-5, 8.30e-6, 1.41e-6` and gradient errors `1.55e-2, 3.62e-3, 7.84e-4`. EP constant-k representation is at roundoff, while its native k residual still reflects the velocity-gradient representation error.
+
+| Wall | Shared k row h0 -> h1 -> h2 | Outer k h0 -> h1 -> h2 |
+|---|---:|---:|
+| EP | 0.0002623 -> 1.7e-05 -> 1.001e-06 | 1.617e-05 -> 1.308e-06 -> 1.186e-07 |
+| Accepted | 0.0002906 -> 2.141e-05 -> 1.339e-06 | 1.617e-05 -> 1.308e-06 -> 1.186e-07 |
+
+A93/A95 selected normal-stress checks (h0 -> h1, fixed p=3):
+
+| Model / wall | Vertical momentum residual | Full pointwise traction-jump RMS |
+|---|---:|---:|
+| A95 / EP | 0.0002655 -> 6.294e-05 | 4.401e-14 -> 9.131e-14 |
+| A95 / Accepted | 0.0002655 -> 6.294e-05 | 4.752e-14 -> 9.643e-14 |
+| A93 / EP | 0.0006755 -> 0.0001602 | 3.829e-14 -> 7.842e-14 |
+| A93 / Accepted | 0.0006755 -> 0.0001602 | 3.761e-14 -> 7.811e-14 |
+
+The pointwise traction jumps are already below the absolute floor; they are not claimed to converge from roundoff. Their small size does not replace the separate nonzero shared weak-row residual. All twelve model/wall/policy configurations have the selected coarse/fine spatial receipts in `spatial-results.json`.
+
+### Temporal orders at T=0.0016
+
+`dt=1e-4, 5e-5, 2.5e-5`; identical initial coefficient hashes within each triplet. `w` is the native session variable `v`, i.e. physical vertical velocity.
+
+| Model | Kappa | Wall | p(U) | p(w) | p(k) | p(epsilon) | p(Pi) |
+|---|---|---|---:|---:|---:|---:|---:|
+| E94E95 | Natural | EP | 0.978 | 0.978 | 0.968 | unresolved | 0.992 |
+| E94E95 | Natural | Accepted | 0.978 | 0.978 | 0.974 | 0.996 | 0.992 |
+| E94E95 | Prescribed | EP | 0.978 | 0.978 | 0.968 | unresolved | 0.992 |
+| E94E95 | Prescribed | Accepted | 0.978 | 0.979 | 0.974 | 0.996 | 0.992 |
+| A95 | Natural | EP | 0.992 | 0.963 | 0.964 | unresolved | 0.995 |
+| A95 | Natural | Accepted | 0.978 | 0.962 | 0.974 | unresolved | 0.994 |
+| A95 | Prescribed | EP | 0.987 | 0.963 | 0.970 | unresolved | 0.994 |
+| A95 | Prescribed | Accepted | 0.978 | 0.962 | 0.974 | unresolved | 0.994 |
+| A93 | Natural | EP | 0.978 | 0.945 | 0.967 | unresolved | 0.993 |
+| A93 | Natural | Accepted | 0.978 | 0.945 | 0.974 | 0.991 | 0.993 |
+| A93 | Prescribed | EP | 0.978 | 0.946 | 0.968 | unresolved | 0.993 |
+| A93 | Prescribed | Accepted | 0.978 | 0.946 | 0.974 | 0.992 | 0.993 |
+
+Resolved unperturbed orders range from 0.945 to 0.996. The unresolved entries are all six EP epsilon cases and both A95 accepted-wall epsilon cases. No prescribed-kappa temporal coverage is inferred: all six prescribed-kappa configurations actually have their own triplets.
+
+| Natural-kappa signal control | Initial epsilon amplitude / epsilon(H) | Measured epsilon order |
+|---|---:|---:|
+| A93 / Accepted | 0.5% | 0.995 |
+| A93 / EP | 0.5% | 0.993 |
+| A95 / Accepted | 0.5% | 0.999 |
+| A95 / EP | 1.0% | 0.998 |
+| E94E95 / Accepted | 0.5% | 0.998 |
+| E94E95 / EP | 0.5% | 0.997 |
+
+The largest refreshed trace lag decreases roughly by four when dt decreases by four: for E94/E95 it is `9.62e-8 -> 2.44e-8` (EP) and `1.35e-7 -> 3.41e-8` (accepted). A93/A95 show the same scaling. The raw lag, source-splitting receipts, final alpha=0 spatial residuals and time-discrete stage residuals are all retained. These are first-order consistency measurements on the fixed qualified spaces, not a complete temporal-order or long-time stability campaign.
+
+The initial accepted-wall coefficient differences observed in the uncontrolled quadrature comparison are `4.77e-14` (E94/E95), `1.19e-13` (A95) and `1.75e-13` (A93). The final endpoint controls eliminate them using fresh native histories. Their native physics signatures and starting-state byte hashes are verified; all four new replay/export rejection controls pass.
+
+Serial runs through the MPI-enabled SDK emit the same PMIX dstore permission warning seen in the earlier baseline. Exit statuses, completed histories and numerical checks are recorded independently. No MPI numerical qualification is inferred from these runs.
+
+
+The compact receipt index is [preservation-evidence/README.md](a93-a95-e94e95-awf-preservation-evidence/README.md); [overall-gates.json](a93-a95-e94e95-awf-preservation-evidence/overall-gates.json) gives the machine decision.
 
 ## Provenance and reproduction
 
 The primary frozen solver was compiled from numerical C++ at `3655ac3` and frozen
 with source manifest `0db2f1f`. Subsequent production numerical C++ is unchanged.
-Later verification-only executables have their own manifests. The exact source
-files, compiler/options, executable and linked-library hashes, actually loaded
+Later verification-only executables have their own manifests. The primary solver SHA-256 is
+`cb08d0c4689177913960932f3e6a6c3cca6fc073937c8b6f5240137541d72e0a`.
+The exact source files, compiler/options, executable and linked-library hashes, actually loaded
 libraries/plugins, configurations and thread environment accompany the compact
 receipts. Direct linked dependencies are private copies; dynamically loaded
 system MPI plugins are identified by path and hash. This is not a claim of a

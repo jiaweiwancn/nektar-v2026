@@ -1,0 +1,282 @@
+{
+  "before": {
+    "schema": 1,
+    "checks": [
+      {
+        "name": "inactive_chi_zero",
+        "status": "pass",
+        "execution_exit": 1,
+        "intended_outcome": "before_defect_rejection",
+        "expected_reason": "covariance_or_budget",
+        "xml_sha256": "6bea2e8cc7bb475e7912e9ae8cf5e799561cb866303b7b45d98c4d33939a57a4",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-before-audits/inactive_chi_zero/solver.log",
+        "failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit"
+      },
+      {
+        "name": "outside_spatial_support",
+        "status": "pass",
+        "execution_exit": 1,
+        "intended_outcome": "before_defect_rejection",
+        "expected_reason": "covariance_or_budget",
+        "xml_sha256": "6f0e26978e653c46ebdee1d3c82df6b3efca2efd9a97e56539d33bd2ffb43a9b",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-before-audits/outside_spatial_support/solver.log",
+        "failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit"
+      },
+      {
+        "name": "active_invalid_cutoff",
+        "status": "pass",
+        "execution_exit": -6,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "inadmissib",
+        "xml_sha256": "665a132ea85e22f2a7f566f56f397f8705b622eaa6e30ab23493046a8256a0e8",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-before-audits/active_invalid_cutoff/solver.log",
+        "failure": "Requested EP-AWF profile is inadmissible; no cutoff clipping"
+      },
+      {
+        "name": "accepted_invalid_cutoff",
+        "status": "pass",
+        "execution_exit": -6,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "inadmissib",
+        "xml_sha256": "85bacb8c2168e1332bb22062327a8bd2047cbef8b7224a6df94f94df648ee82a",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-before-audits/accepted_invalid_cutoff/solver.log",
+        "failure": "CLSCalibratedBudgetAWF cutoff_budget_inadmissible; no cutoff clipping"
+      },
+      {
+        "name": "inactive_invalid_scalar",
+        "status": "pass",
+        "execution_exit": 1,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "legacy collective physical-state rejection (specific cause masked)",
+        "xml_sha256": "4d0fe8c0baecd60866aed3ba8ea6365b09f6b2d8bbe73e18730c1a268c53e04f",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-before-audits/inactive_invalid_scalar/solver.log",
+        "failure": "EP-AWF patch: inadmissible evolution volume/sampler state on a collective rank"
+      },
+      {
+        "name": "inactive_invalid_constitutive",
+        "status": "pass",
+        "execution_exit": 1,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "legacy collective physical-state rejection (specific cause masked)",
+        "xml_sha256": "345acd64a29cfba9e080c31786fe111002d46f81701b145a74059effb4f1c935",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-before-audits/inactive_invalid_constitutive/solver.log",
+        "failure": "EP-AWF patch: inadmissible evolution volume/sampler state on a collective rank"
+      },
+      {
+        "name": "near_boundary_A95_forward",
+        "status": "pass",
+        "execution_exit": 1,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "radicand",
+        "xml_sha256": "1eef8e124a69dced9f18584e670edfda44d7304719c62f7a6417bf18f52b219b",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-before-audits/near_boundary_A95_forward/solver.log",
+        "failure": "constitutive audit failed; complete candidate/history saved: A95 negative square-root radicand; no constitutive clipping; witness="
+      },
+      {
+        "name": "covariance_scale_ordinary",
+        "status": "pass",
+        "execution_exit": 1,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "covariance",
+        "xml_sha256": "58d9c96727de9f4df1bea0d4144caba38c01ddb4508a5ca1994cd054f745118f",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-before-audits/covariance_scale_ordinary/solver.log",
+        "failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit"
+      },
+      {
+        "name": "covariance_scale_small",
+        "status": "pass",
+        "execution_exit": 0,
+        "intended_outcome": "before_defect_false_acceptance",
+        "expected_reason": "old false covariance acceptance",
+        "xml_sha256": "1dae55e97bc755090d9a487e66aeadac5c736efacc12121f056bee83066444e3",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-before-audits/covariance_scale_small/solver.log",
+        "failure": ""
+      }
+    ],
+    "status": "pass",
+    "scope": "initialization and actual native audit only; no steps",
+    "coverage": {
+      "status": "pass",
+      "missing": [],
+      "unexpected": [],
+      "duplicates": [],
+      "expected_count": 9,
+      "actual_count": 9
+    }
+  },
+  "after": {
+    "schema": 1,
+    "checks": [
+      {
+        "name": "inactive_chi_zero",
+        "status": "pass",
+        "execution_exit": 0,
+        "intended_outcome": "baseline_defined",
+        "expected_reason": null,
+        "xml_sha256": "c62ffb18c51e3cb9b11c321931e5dfe70143a70b8eb673229423aaa971a416b0",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-after-audits/inactive_chi_zero/solver.log",
+        "failure": ""
+      },
+      {
+        "name": "outside_spatial_support",
+        "status": "pass",
+        "execution_exit": 0,
+        "intended_outcome": "baseline_defined",
+        "expected_reason": null,
+        "xml_sha256": "754f06f07ed7132bc038903bf234f48fd286286091f21adf6dfdf6d3cdc14cd7",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-after-audits/outside_spatial_support/solver.log",
+        "failure": ""
+      },
+      {
+        "name": "active_invalid_cutoff",
+        "status": "pass",
+        "execution_exit": -6,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "inadmissib",
+        "xml_sha256": "0957c22e192b417c50f39eb0e648aa23d1883af8d762b73480d85e16c7fc158b",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-after-audits/active_invalid_cutoff/solver.log",
+        "failure": "Requested EP-AWF profile is inadmissible; no cutoff clipping"
+      },
+      {
+        "name": "accepted_invalid_cutoff",
+        "status": "pass",
+        "execution_exit": -6,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "inadmissib",
+        "xml_sha256": "81a8e4c69df20c165d1b9bf9e9f67a4644b6d6c3e6c7984af16891e482ef5d97",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-after-audits/accepted_invalid_cutoff/solver.log",
+        "failure": "CLSCalibratedBudgetAWF cutoff_budget_inadmissible; no cutoff clipping"
+      },
+      {
+        "name": "inactive_invalid_scalar",
+        "status": "pass",
+        "execution_exit": 1,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "epsilon",
+        "xml_sha256": "562388f61b91700bad3fea1d484516a112475d4da472c76f94b13e344c6ee411",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-after-audits/inactive_invalid_scalar/solver.log",
+        "failure": "EP-AWF patch: inadmissible evolution volume/sampler state on a collective rank: RANS total epsilon must be finite and positive"
+      },
+      {
+        "name": "inactive_invalid_constitutive",
+        "status": "pass",
+        "execution_exit": 1,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "radicand",
+        "xml_sha256": "38d2b14e9df2b4c4d7cc884a539cc3c5dfce2afc01e3d7427376cc1934e127cc",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-after-audits/inactive_invalid_constitutive/solver.log",
+        "failure": "EP-AWF patch: inadmissible evolution volume/sampler state on a collective rank: A95 negative square-root radicand; no constitutive clipping"
+      },
+      {
+        "name": "near_boundary_A95_forward",
+        "status": "pass",
+        "execution_exit": 0,
+        "intended_outcome": "forward_physical_state_valid",
+        "expected_reason": null,
+        "xml_sha256": "ac344052a81d9090604100be7865fa7513443cf841b5f33f905e105631c42636",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-after-audits/near_boundary_A95_forward/solver.log",
+        "failure": ""
+      },
+      {
+        "name": "covariance_scale_ordinary",
+        "status": "pass",
+        "execution_exit": 1,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "covariance",
+        "xml_sha256": "8ebe76fe02bb3c6575e526a67f0bf2b2b4449676e23bde136a480d7ba7a4a5d6",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-after-audits/covariance_scale_ordinary/solver.log",
+        "failure": "accepted AWF hard audit exit; candidate/history retained: model_aware_covariance_exit"
+      },
+      {
+        "name": "covariance_scale_small",
+        "status": "pass",
+        "execution_exit": 1,
+        "intended_outcome": "expected_rejection",
+        "expected_reason": "covariance",
+        "xml_sha256": "008004b860a63f77b44d22e645b612d2cc1b4ba33987a11267caeb54a6430744",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/coherent-after-audits/covariance_scale_small/solver.log",
+        "failure": "accepted AWF hard audit exit; candidate/history retained: model_aware_covariance_exit"
+      }
+    ],
+    "status": "pass",
+    "scope": "initialization and actual native audit only; no steps",
+    "coverage": {
+      "status": "pass",
+      "missing": [],
+      "unexpected": [],
+      "duplicates": [],
+      "expected_count": 9,
+      "actual_count": 9
+    }
+  },
+  "eigen_and_A95": {
+    "status": "pass",
+    "checks": 696,
+    "maximum_scaled_eigenvalue_error": 6.661338147750939e-16,
+    "tiny_tensor_minimum": -3.333333333333332e-17,
+    "A95_actual_radicand": 5.683387788169014e-15,
+    "A95_covariance_eigenvalues": [
+      0.19526214587563628,
+      0.6666666666666666,
+      1.138071187457697
+    ],
+    "tangent_status": "unavailable_forward_only_new_model",
+    "old_stencil_domain_failures": 2
+  },
+  "before_eigen": [
+    6.666666666666667e-17,
+    6.666666666666667e-17,
+    6.666666666666667e-17
+  ],
+  "coherent_scale_controls": [
+    {
+      "scale": 1.0,
+      "version": "before",
+      "exit_code": 1,
+      "failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+      "covariance": null,
+      "domain": null,
+      "K0": 1.0
+    },
+    {
+      "scale": 1.0,
+      "version": "after",
+      "exit_code": 1,
+      "failure": "accepted AWF hard audit exit; candidate/history retained: model_aware_covariance_exit",
+      "covariance": null,
+      "domain": null,
+      "K0": 1.0
+    },
+    {
+      "scale": 1e-16,
+      "version": "before",
+      "exit_code": 0,
+      "failure": "",
+      "covariance": [
+        6.666666666663339e-17,
+        6.666666666666432e-17
+      ],
+      "domain": [
+        1,
+        0.979331317802318,
+        1e-16,
+        1e-16,
+        9.803921568627449e-26,
+        1e-16,
+        1.9607843137254903e-25,
+        9.186839702019876,
+        0
+      ],
+      "K0": 1e-16
+    },
+    {
+      "scale": 1e-16,
+      "version": "after",
+      "exit_code": 1,
+      "failure": "accepted AWF hard audit exit; candidate/history retained: model_aware_covariance_exit",
+      "covariance": null,
+      "domain": null,
+      "K0": 1e-16
+    }
+  ]
+}

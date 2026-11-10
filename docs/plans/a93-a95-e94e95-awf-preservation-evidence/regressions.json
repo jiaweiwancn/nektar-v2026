@@ -1,0 +1,678 @@
+{
+  "continuation": {
+    "schema": 1,
+    "checks": [
+      {
+        "name": "compatible-restart-Accepted",
+        "status": "pass",
+        "result": {
+          "bitwise_equal": true,
+          "steps": 16
+        }
+      },
+      {
+        "name": "complete-rollback-Accepted",
+        "status": "pass",
+        "result": {
+          "coupled_and_native_history_bitwise_equal": true
+        }
+      },
+      {
+        "name": "cache-on-off-Accepted",
+        "status": "pass",
+        "result": {
+          "bitwise_equal": true
+        }
+      },
+      {
+        "name": "time-refinement-Accepted",
+        "status": "pass",
+        "result": {
+          "common_time": 0.0015999999999999992,
+          "physical_sample_comparison": {
+            "metric": "weighted_RMS and true L2; one common pressure gauge",
+            "time": 0.0016000000000000005,
+            "global_pressure_gauge_shifts": [
+              -5.373365259144466e-21,
+              6.7233240188310074e-21
+            ],
+            "fields": {
+              "values_0": {
+                "weighted_RMS": 2.419529211016798e-07,
+                "L2": 6.843462049555661e-07
+              },
+              "values_1": {
+                "weighted_RMS": 2.511054451322314e-09,
+                "L2": 7.102334521834696e-09
+              },
+              "values_2": {
+                "weighted_RMS": 9.338466923737376e-08,
+                "L2": 2.6413173150643904e-07
+              },
+              "values_3": {
+                "weighted_RMS": 1.0520457635793404e-09,
+                "L2": 2.104091527158681e-09
+              },
+              "values_4": {
+                "weighted_RMS": 2.782776776691699e-07,
+                "L2": 5.565553553383398e-07
+              },
+              "values_5": {
+                "weighted_RMS": 2.0852812937583468e-07,
+                "L2": 4.170562587516694e-07
+              }
+            }
+          },
+          "drift": [
+            0.0015999999999999992,
+            32,
+            0.0006874424808933683,
+            -0.0,
+            0.00010731832379243166,
+            1.10013555094647e-06,
+            2.198122309088716e-05,
+            6.547104512043557e-07,
+            0.0006874424808933683,
+            0.00026996611025848085
+          ]
+        }
+      },
+      {
+        "name": "spatial-quadrature-refinement-Accepted",
+        "status": "pass",
+        "result": {
+          "coarse_initial_residual": [
+            0.490433921719345,
+            4.2655225557796354e-15,
+            0.3712921556014947,
+            0.001699869352317466,
+            2.3963433591505e-16,
+            4.337158290331966e-17,
+            0,
+            0
+          ],
+          "fine_initial_residual": [
+            0.2048065986033461,
+            5.5454988657124385e-15,
+            0.0967700268177728,
+            0.00040902801045283296,
+            1.1250747290460352e-16,
+            2.1288805044520043e-17,
+            0,
+            0
+          ],
+          "residual_ratios": [
+            0.4176028401243999,
+            null,
+            0.26063041019814975,
+            0.24062320430402306,
+            null,
+            null,
+            null,
+            null
+          ],
+          "coarse_drift": [
+            0.0016000000000000005,
+            16,
+            0.0006876205896350707,
+            -0.0,
+            0.00010679550359734287,
+            1.0993769290323641e-06,
+            2.1823385679137896e-05,
+            6.479347707070897e-07,
+            0.0006876205896350707,
+            0.0002711383109066011
+          ],
+          "fine_drift": [
+            0.0016000000000000005,
+            16,
+            4.4469362870006535e-05,
+            -0.0,
+            2.2572704103596577e-05,
+            1.0562857347463421e-07,
+            4.5785896470560066e-06,
+            1.0209042839725144e-07,
+            4.4469362870006535e-05,
+            1.7734072948970744e-05
+          ]
+        }
+      },
+      {
+        "name": "mild-admissible-perturbation-Accepted",
+        "status": "pass",
+        "result": {
+          "steps": 8,
+          "amplitude_over_K0": 0.005,
+          "drift": [
+            0.0008000000000000001,
+            8,
+            0.0017933307966294832,
+            -0.0,
+            6.037754696912174e-05,
+            5.59866391351868e-07,
+            0.0017933307966294832,
+            2.64271212966666e-07,
+            0.0007152773182989882,
+            0.00027822429010443525
+          ],
+          "accepted_endpoint_kernel_unchanged": true
+        }
+      },
+      {
+        "name": "compatible-restart-EP",
+        "status": "pass",
+        "result": {
+          "bitwise_equal": true,
+          "steps": 16
+        }
+      },
+      {
+        "name": "complete-rollback-EP",
+        "status": "pass",
+        "result": {
+          "coupled_and_native_history_bitwise_equal": true
+        }
+      },
+      {
+        "name": "cache-on-off-EP",
+        "status": "pass",
+        "result": {
+          "bitwise_equal": true
+        }
+      },
+      {
+        "name": "time-refinement-EP",
+        "status": "pass",
+        "result": {
+          "common_time": 0.0015999999999999992,
+          "physical_sample_comparison": {
+            "metric": "weighted_RMS and true L2; one common pressure gauge",
+            "time": 0.0016000000000000005,
+            "global_pressure_gauge_shifts": [
+              -3.30872245021211e-21,
+              4.235164736271501e-21
+            ],
+            "fields": {
+              "values_0": {
+                "weighted_RMS": 2.418914256634286e-07,
+                "L2": 6.841722695899682e-07
+              },
+              "values_1": {
+                "weighted_RMS": 2.5138593139291032e-09,
+                "L2": 7.1102678713129246e-09
+              },
+              "values_2": {
+                "weighted_RMS": 2.0802745842746973e-08,
+                "L2": 5.8839050610826584e-08
+              },
+              "values_3": {
+                "weighted_RMS": 7.872430651835741e-10,
+                "L2": 1.5744861303671484e-09
+              },
+              "values_4": {
+                "weighted_RMS": 2.7723448819709247e-07,
+                "L2": 5.544689763941849e-07
+              },
+              "values_5": {
+                "weighted_RMS": 2.0962158979795902e-07,
+                "L2": 4.192431795959181e-07
+              }
+            }
+          },
+          "drift": [
+            0.0015999999999999992,
+            32,
+            0.0006866229632796856,
+            -0.0,
+            0.00010695803347333036,
+            1.0993699516964936e-06,
+            4.461381292157941e-06,
+            6.033032792252816e-07,
+            0.0006866229632796856,
+            0.00026901786768776694
+          ]
+        }
+      },
+      {
+        "name": "spatial-quadrature-refinement-EP",
+        "status": "pass",
+        "result": {
+          "coarse_initial_residual": [
+            0.49048179359730704,
+            3.4520091337972475e-15,
+            0.019203175796434744,
+            0.00169986935128638,
+            2.3844177398204567e-16,
+            4.3370848468126894e-17,
+            0,
+            0
+          ],
+          "fine_initial_residual": [
+            0.2048232186273815,
+            3.51825639659383e-15,
+            0.008818470684832524,
+            0.0004090280127406479,
+            1.1042039137912195e-16,
+            2.128881108682164e-17,
+            0,
+            0
+          ],
+          "residual_ratios": [
+            0.41759596645812397,
+            null,
+            0.459219390496324,
+            0.24062320579585425,
+            null,
+            null,
+            null,
+            null
+          ],
+          "coarse_drift": [
+            0.0016000000000000005,
+            16,
+            0.0006868023579031276,
+            -0.0,
+            0.00010643433921397415,
+            1.09859530852855e-06,
+            4.457382636223997e-06,
+            5.996529515470009e-07,
+            0.0006868023579031276,
+            0.00027019744549876696
+          ],
+          "fine_drift": [
+            0.0016000000000000005,
+            16,
+            4.432250849902256e-05,
+            -0.0,
+            2.241688453943242e-05,
+            1.055277548848121e-07,
+            1.091359048746191e-06,
+            1.0264906493437004e-07,
+            4.432250849902256e-05,
+            1.7587624628248945e-05
+          ]
+        }
+      },
+      {
+        "name": "mild-admissible-perturbation-EP",
+        "status": "pass",
+        "result": {
+          "steps": 8,
+          "amplitude_over_K0": 0.005,
+          "drift": [
+            0.0008000000000000001,
+            8,
+            0.0017932665200139568,
+            -0.0,
+            6.0235282200974e-05,
+            5.596470885584514e-07,
+            0.0017932665200139568,
+            2.6384649313270175e-07,
+            0.0007148160168682623,
+            0.0002777335702312314
+          ],
+          "accepted_endpoint_kernel_unchanged": null
+        }
+      },
+      {
+        "name": "changed-model-restart-rejection",
+        "status": "pass",
+        "result": {
+          "rejected": true
+        }
+      },
+      {
+        "name": "changed-calibration-restart-rejection",
+        "status": "pass",
+        "result": {
+          "rejected": true
+        }
+      },
+      {
+        "name": "changed-wall-restart-rejection",
+        "status": "pass",
+        "result": {
+          "rejected": true
+        }
+      },
+      {
+        "name": "unsupported-nonlinear",
+        "status": "pass",
+        "result": {
+          "rejected": true
+        }
+      },
+      {
+        "name": "unsupported-inner-stress",
+        "status": "pass",
+        "result": {
+          "rejected": true
+        }
+      },
+      {
+        "name": "unsupported-regularized",
+        "status": "pass",
+        "result": {
+          "rejected": true
+        }
+      },
+      {
+        "name": "native-EP-switch-and-baseline",
+        "status": "pass",
+        "result": {
+          "steps": 2,
+          "dt": 1e-06,
+          "reason": "baseline prescribed sink is stiff on its molecular cutoff; structural switch test, not an equilibrium claim",
+          "unanchored": true,
+          "chi_plateau_transition_baseline": true,
+          "report_sha256": "84e9aa8da4ff5d302fd9dbfdf7dff0f71edd0a9e042025d379634965b6d47a65"
+        }
+      },
+      {
+        "name": "unsupported-curved",
+        "status": "pass",
+        "result": {
+          "rejected": true,
+          "ranks": 1
+        }
+      },
+      {
+        "name": "unsupported-3D",
+        "status": "pass",
+        "result": {
+          "rejected": true,
+          "ranks": 1
+        }
+      },
+      {
+        "name": "unsupported-MPI",
+        "status": "pass",
+        "result": {
+          "rejected": true,
+          "ranks": 2
+        }
+      }
+    ],
+    "status": "pass",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "ranks": 1,
+    "expected_check_names": [
+      "cache-on-off-Accepted",
+      "cache-on-off-EP",
+      "changed-calibration-restart-rejection",
+      "changed-model-restart-rejection",
+      "changed-wall-restart-rejection",
+      "compatible-restart-Accepted",
+      "compatible-restart-EP",
+      "complete-rollback-Accepted",
+      "complete-rollback-EP",
+      "mild-admissible-perturbation-Accepted",
+      "mild-admissible-perturbation-EP",
+      "native-EP-switch-and-baseline",
+      "spatial-quadrature-refinement-Accepted",
+      "spatial-quadrature-refinement-EP",
+      "time-refinement-Accepted",
+      "time-refinement-EP",
+      "unsupported-3D",
+      "unsupported-MPI",
+      "unsupported-curved",
+      "unsupported-inner-stress",
+      "unsupported-nonlinear",
+      "unsupported-regularized"
+    ],
+    "coverage": {
+      "status": "pass",
+      "missing": [],
+      "unexpected": [],
+      "duplicates": [],
+      "expected_count": 22,
+      "actual_count": 22
+    }
+  },
+  "coverage": {
+    "status": "pass",
+    "missing": [],
+    "unexpected": [],
+    "duplicates": [],
+    "expected_count": 22,
+    "actual_count": 22,
+    "missing_required_declarations": [],
+    "unknown_declarations": []
+  },
+  "extras": {
+    "status": "pass",
+    "checks": [
+      {
+        "name": "A95-current-gradient-cache-on-off",
+        "status": "pass",
+        "bitwise_history_equal": true
+      },
+      {
+        "name": "CLS-reviewed-whole4-execution",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "CLS-reviewed-restart2-execution",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "reviewed-CLS-checkpoint-continuation",
+        "status": "pass",
+        "before": {
+          "state": "bd82647216aafe966184c5e8d8f71f165db426f50a3c899238f034ed20bbb8fd",
+          "history": [
+            "b05b1fc18359e6aefdde6f1696e7fe8a7e1ca00945bfe5f6de4410ccce564a60",
+            "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f"
+          ],
+          "times": [
+            0.0025,
+            0.000625
+          ],
+          "time": 0.0025,
+          "steps": 4
+        },
+        "after": {
+          "state": "bd82647216aafe966184c5e8d8f71f165db426f50a3c899238f034ed20bbb8fd",
+          "history": [
+            "b05b1fc18359e6aefdde6f1696e7fe8a7e1ca00945bfe5f6de4410ccce564a60",
+            "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f"
+          ],
+          "times": [
+            0.0025,
+            0.000625
+          ],
+          "time": 0.0025,
+          "steps": 4
+        }
+      }
+    ]
+  },
+  "legacy": {
+    "schema": 1,
+    "revision": "aa06ce32e72f951856144fcaea9335c314764996",
+    "status": "pass",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "ranks": 1,
+    "commands": [
+      {
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m1.py",
+          "--kernel-probe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/build/RANSKernelProbe",
+          "--constitutive-probe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/build/RANSConstitutiveProbe",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/kernel-oracle"
+        ],
+        "exit_code": 0,
+        "log": "existing-kernel-oracle.log"
+      },
+      {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/build/RANSAcceptedAWFProbe",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/accepted-kernel.json"
+        ],
+        "exit_code": 0,
+        "log": "accepted-kernel.log"
+      },
+      {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/build/RANSProfileBranchChecks"
+        ],
+        "exit_code": 0,
+        "log": "profile-branches.log"
+      },
+      {
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_pimple.py",
+          "--solver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/IncNavierStokesSolver",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/cls-control",
+          "--steps",
+          "2",
+          "--dt",
+          ".000625",
+          "--diagnostic",
+          "--wall-policy",
+          "UniformEPFlat"
+        ],
+        "exit_code": 0,
+        "log": "native-cls-control.log"
+      }
+    ],
+    "source_manifest_sha256": "714fdb73b75a3fb683d83d6e5397b69f30c4bd6fda0586254d526f21f8170120",
+    "cmake_cache_sha256": "949b792a7be7d6be22058ccb21ded82bf8f2cfdbad365e963b41787087ba8292",
+    "runtime": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/IncNavierStokesSolver",
+      "sha256": "cb08d0c4689177913960932f3e6a6c3cca6fc073937c8b6f5240137541d72e0a",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffe0c36a000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libSpatialDomains.so.5.9.0 (0x0000741ba7c00000)\n\tlibSolverUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libSolverUtils.so.5.9.0 (0x0000741ba7600000)\n\tlibFieldUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libFieldUtils.so.5.9.0 (0x0000741ba7200000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libmpi_cxx.so.40 (0x0000741ba8781000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libmpi.so.40 (0x0000741ba8648000)\n\tlibGlobalMapping.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libGlobalMapping.so.5.9.0 (0x0000741ba7f6b000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libMultiRegions.so.5.9.0 (0x0000741ba6e00000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libLocalRegions.so.5.9.0 (0x0000741ba6a00000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libStdRegions.so.5.9.0 (0x0000741ba6600000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libLibUtilities.so.5.9.0 (0x0000741ba6000000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/liblapack.so.3 (0x0000741ba5800000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libblas.so.3 (0x0000741ba7f09000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libstdc++.so.6 (0x0000741ba5400000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libm.so.6 (0x0000741ba7e22000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libgcc_s.so.1 (0x0000741ba7be0000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libc.so.6 (0x0000741ba5000000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libptscotch-6.1.so (0x0000741ba7b0d000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libz.so.1 (0x0000741ba7af1000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libboost_program_options.so.1.74.0 (0x0000741ba7aac000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libopen-pal.so.40 (0x0000741ba6d4d000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libopen-rte.so.40 (0x0000741ba6c90000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libhwloc.so.15 (0x0000741ba7a50000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libCollections.so.5.9.0 (0x0000741ba648d000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libfftw3.so.3 (0x0000741ba4c00000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libboost_iostreams.so.1.74.0 (0x0000741ba75e8000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libopenblas.so.0 (0x0000741ba27b0000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libgfortran.so.5 (0x0000741ba2400000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000741ba879d000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libptscotcherr-6.1.so (0x0000741ba7e19000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libbz2.so.1.0 (0x0000741ba75d5000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/liblzma.so.5 (0x0000741ba6c65000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libevent_core-2.1.so.7 (0x0000741ba6c30000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libevent_pthreads-2.1.so.7 (0x0000741ba7e12000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libudev.so.1 (0x0000741ba69d6000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libMatrixFreeOps.so.5.9.0 (0x0000741b9f600000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libzstd.so.1 (0x0000741ba6907000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libquadmath.so.0 (0x0000741ba68bf000)\n",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/regression/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+      }
+    },
+    "accepted_steps": 2,
+    "failure": ""
+  },
+  "command_line_failures": {
+    "status": "pass",
+    "checks": [
+      {
+        "name": "deliberate-required-failure",
+        "observed_exit": 1,
+        "expected_exit": 1,
+        "status": "pass",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/run_a93_a95_e94e95_matrix.py",
+          "--solver",
+          "/usr/bin/false",
+          "--descriptor-probe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/runtime/RANSNewModelsProbe",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/deliberate-failure",
+          "--models",
+          "E94E95",
+          "--policies",
+          "Natural",
+          "--walls",
+          "EP",
+          "--steps",
+          "1"
+        ]
+      },
+      {
+        "name": "missing-case-collection",
+        "observed_exit": 1,
+        "expected_exit": 1,
+        "status": "pass",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/collect_a93_a95_e94e95.py",
+          "--matrix",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/deliberate-failure/matrix.json",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/deliberate-failure/collected.json"
+        ]
+      },
+      {
+        "name": "comparison-contract",
+        "observed_exit": 0,
+        "expected_exit": 0,
+        "status": "pass",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-preservation-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/test_rans_qualification.py"
+        ]
+      }
+    ]
+  },
+  "required_numerical_failure": {
+    "status": "pass",
+    "observed_exit": 1,
+    "expected_exit": 1,
+    "intended_failure": "required unanchored numerical check",
+    "observed_gate": false,
+    "synthetic_control": true
+  }
+}
