@@ -11,6 +11,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output-name',default='runtime-resolution-v3');p.add_argument('--parent-name',default='runtime-resolution-v2');a=p.parse_args();r=a.root.resolve();s=r/'source';out=r/a.output_name;assert not out.exists();shutil.copytree(r/a.parent_name,out)
     for name in ('source-build.json','lineage.json','actual-loaded-libraries.json'):
         if (out/name).exists():(out/name).rename(out/('inherited-'+a.parent_name+'-'+name))
+    if (out/'actual-loaded-libraries-current.json').exists():(out/'actual-loaded-libraries-current.json').rename(out/('inherited-'+a.parent_name+'-actual-loaded-libraries-current.json'))
     shutil.copy2(r/'build/RANSPreservationProbe',out/'RANSPreservationProbe');os.environ.update(THREADS,LD_LIBRARY_PATH=str(out/'lib'))
     names=[]
     for folder in ('library/SolverUtils/Turbulence','solvers/IncNavierStokesSolver/EquationSystems'):
