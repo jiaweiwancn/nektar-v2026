@@ -595,6 +595,13 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 find_package(Python3 QUIET COMPONENTS Interpreter)
 if(Python3_Interpreter_FOUND)
+    if(RANS_BUILD_SOLVER)
+        add_test(NAME RANSNativeAdmissibilityRegression COMMAND ${Python3_EXECUTABLE} -B
+            ${CMAKE_CURRENT_LIST_DIR}/validate_rans_native_audits.py
+            --solver $<TARGET_FILE:IncNavierStokesSolver> --descriptor-probe $<TARGET_FILE:RANSNewModelsProbe>)
+        set_tests_properties(RANSNativeAdmissibilityRegression PROPERTIES PROCESSORS 1 TIMEOUT 600
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;PYTHONDONTWRITEBYTECODE=1;TMPDIR=$ENV{TMPDIR}")
+    endif()
     add_test(NAME RANSNewModelsIndependentOracle COMMAND ${Python3_EXECUTABLE} -B
         ${CMAKE_CURRENT_LIST_DIR}/validate_a93_a95_e94e95.py
         --probe $<TARGET_FILE:RANSNewModelsProbe>

@@ -10,6 +10,7 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ET
 sys.dont_write_bytecode=True
+from rans_qualification import coverage
 from run_a93_a95_e94e95_matrix import case_xml,run_case
 from run_cls_epawf_picard import THREADS,sha,state_hash,set_info,set_parameter,write
 from continue_cls_epawf_pimple import header
@@ -26,14 +27,26 @@ def checkpoint(folder,steps):
     check(bool(candidates),('checkpoint missing',steps,folder));return sorted(candidates)[0]
 
 def physical_difference(a,b):
+    check(math.isclose(a['time'],b['time'],rel_tol=1e-12,abs_tol=1e-14),'terminal physical times differ')
+    samples_a,samples_b=a['physical_samples'],b['physical_samples']
+    keys={k for k in samples_a if k.startswith('values_')}
+    check(keys=={k for k in samples_b if k.startswith('values_')},'physical field identities differ')
+    gauge=[]
+    for samples in (samples_a,samples_b):
+        numerator=math.fsum(math.fsum(w*v for w,v in zip(samples['weights_'+i],samples['values_'+i],strict=True)) for i in ('4','5'))
+        denominator=math.fsum(math.fsum(samples['weights_'+i]) for i in ('4','5'))
+        gauge.append(numerator/denominator)
     result={}
-    for k,v in a['physical_samples'].items():
-        if not k.startswith('values_'):continue
-        if k not in b['physical_samples']:continue
-        w=a['physical_samples']['weights_'+k[7:]]
-        diff=[x-y for x,y in zip(v,b['physical_samples'][k])]
-        result[k]=math.sqrt(math.fsum(q*x*x for q,x in zip(w,diff))/math.fsum(w))
-    return result
+    for key in sorted(keys):
+        index=key[7:];v=samples_a[key];other=samples_b[key];weights=samples_a['weights_'+index]
+        check(len(v)==len(other)==len(weights),'physical sample lengths differ')
+        for label in ('coordinates_','geometries_','weights_'):
+            check(label+index in samples_a and samples_a[label+index]==samples_b.get(label+index),'physical coordinates/weights/identities differ')
+        check(len(samples_a['coordinates_'+index])==3*len(v) and len(samples_a['geometries_'+index])==len(v),'invalid sample identity shape')
+        square=math.fsum(w*((x-gauge[0] if index in ('4','5') else x)-(y-gauge[1] if index in ('4','5') else y))**2
+                         for w,x,y in zip(weights,v,other,strict=True))
+        result[key]=dict(weighted_RMS=math.sqrt(square/math.fsum(weights)),L2=math.sqrt(square))
+    return dict(metric='weighted_RMS and true L2; one common pressure gauge',time=a['time'],global_pressure_gauge_shifts=gauge,fields=result)
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--solver',type=Path,required=True);p.add_argument('--descriptor-probe',type=Path,required=True);p.add_argument('--matrix',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
@@ -77,7 +90,7 @@ def main():
         def temporal(wall=wall,whole=whole):
             row,r=control('half-dt-'+wall,wall=wall,steps=32,dt=.00005)
             check(row['status']=='pass','dt-refined trajectory rejected')
-            return dict(common_time=r['time'],physical_L2_difference=physical_difference(whole,r),drift=r['step_audits'][-1])
+            return dict(common_time=r['time'],physical_sample_comparison=physical_difference(whole,r),drift=r['step_audits'][-1])
         record('time-refinement-'+wall,temporal)
         def spatial(wall=wall,whole=whole):
             row,r=control('spatial-'+wall,wall=wall,steps=16,refine=True)
@@ -147,6 +160,14 @@ def main():
             text=(folder/'solver.log').read_text();check(r.returncode!=0 and ('serial flat 2D only' in text or 'serial flat 2D' in text),('geometry/execution guard',label,text[-500:]))
             return dict(rejected=True,ranks=2 if label=='MPI' else 1)
         record('unsupported-'+label,geometry_guard)
-    results['status']='pass' if all(r['status']=='pass' for r in results['checks']) else 'fail';save()
+    expected={prefix+'-'+wall for wall in ('Accepted','EP') for prefix in
+        ('compatible-restart','complete-rollback','cache-on-off','time-refinement','spatial-quadrature-refinement','mild-admissible-perturbation')}
+    expected.update(label+'-restart-rejection' for label in ('changed-model','changed-calibration','changed-wall'))
+    expected.update('unsupported-'+label for label in ('nonlinear','inner-stress','regularized','curved','3D','MPI'))
+    expected.add('native-EP-switch-and-baseline')
+    results['expected_check_names']=sorted(expected)
+    results['coverage']=coverage(results['checks'],expected,key=lambda x:x['name'])
+    results['status']='pass' if results['coverage']['status']=='pass' and all(r['status']=='pass' for r in results['checks']) else 'fail';save()
     print(json.dumps(dict(status=results['status'],checks=[(r['name'],r['status']) for r in results['checks']])))
-if __name__=='__main__':main()
+    return 0 if results['status']=='pass' else 1
+if __name__=='__main__':sys.exit(main())

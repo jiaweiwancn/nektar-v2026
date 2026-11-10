@@ -10,18 +10,22 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ET
 sys.dont_write_bytecode=True
+from rans_qualification import dependencies,coverage,audited_extrema
+dependencies('numpy','scipy')
 from run_cls_epawf_picard import ROOT,ORIGINAL,THREADS,session,set_info,set_parameter,write,sha,state_hash
 from cls_epawf_m4_cases import tensor_mesh
 from run_cls_epawf_pimple import identity
 from validate_a93_a95_e94e95 import Probe
 
 
-def case_xml(folder,model,policy,wall,steps=16,dt=.0001,restart=None,cache='Off',reject=0,refine=False,perturb=0.,descriptor_probe=None):
+def case_xml(folder,model,policy,wall,steps=16,dt=.0001,restart=None,cache='Off',reject=0,refine=False,perturb=0.,descriptor_probe=None,
+             radial_knots=None,degree=3,quadrature=None,checkpoint_interval=1):
     folder.mkdir(parents=True,exist_ok=False)
     xml=session(ORIGINAL,folder/'case.xml','outer6');root=ET.parse(xml).getroot()
     knots=[0.,.0025,.005,.01,.02,.04,.1,.25,.5,1.,2.,2.25,2.5,3.,3.5,4.]
     if refine:knots=sorted(set(knots+[(a+b)/2 for a,b in zip(knots[:-1],knots[1:])]))
-    tensor_mesh(root,knots,3,2,2.,1.,points=[8,8],xknots=[-1.,1.])
+    if radial_knots is not None:knots=radial_knots
+    tensor_mesh(root,knots,degree,2,2.,1.,points=[max(8,degree+3)]*2,xknots=[-1.,1.])
     if descriptor_probe is None:raise ValueError('case construction requires the resolved descriptor probe')
     provider=Probe(descriptor_probe)
     resolved=provider.closure(model,[[0.,0.,0.],[0.,0.,0.],[0.,0.,0.]],policy=policy)
@@ -43,11 +47,13 @@ def case_xml(folder,model,policy,wall,steps=16,dt=.0001,restart=None,cache='Off'
     params={'NumSteps':steps,'TimeStep':dt,'Time':0.,'RANSWallHeight':2.,'RANSWallSampleHeight':2.,'RANSWallTailStart':2.,
         'RANSWallRoughness':.1,'Kinvis':1.5e-5,'RANSWallFrictionVelocity':.4,'RANSWallEta':0.,'RANSWallChi':1. if wall=='EP' else 0.,
         'RANSKappa':.41,'Qstar':q,'Kappa':kap,'K0':q*.16,'RANSWallNormalOrder':48 if refine else 32,'RANSWallTangentialOrder':8,
-        'RANSWallDiagnostics':1,'IO_CheckSteps':1,'RANSWallPimpleRejectStep':reject,'RANSWallPimpleHardAuditRejectStep':0,
+        'RANSWallDiagnostics':1,'IO_CheckSteps':checkpoint_interval,'RANSWallPimpleRejectStep':reject,'RANSWallPimpleHardAuditRejectStep':0,
         'RANSWallPicardFlowRelaxation':1.,'RANSWallPicardKRelaxation':1.,'RANSWallPicardEpsilonRelaxation':1.,
         'RANSWallPicardPseudoAlpha':0.,'RANSWallCubicBeta':1.,'RANSWallRegularizationGamma':0.,'RANSWallRegularizationScale':0.,
         'RANSWallAcceptedKAmplitude':perturb if wall=='Accepted' else 0.}
     for key,value in params.items():set_parameter(root,key,value)
+    if quadrature:
+        for key,value in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),quadrature,strict=True):set_parameter(root,key,value)
     # Initial perturbation functions of the CLS archive are not part of this
     # reference definition. A separately declared native inner-k perturbation
     # uses fixed external and interface traces when requested.
@@ -75,7 +81,17 @@ def run_case(solver,folder,model,policy,wall,**kwargs):
             state_sha256=state_hash(r.get('state',[])),history=r.get('native_history'),physics_signature=r.get('signature'),
             state_audits=r.get('state_audits'),step_diagnostics=[{k:v for k,v in s.items() if k in ('time','refreshed_original_block_norms','refreshed_trace_defect',
                 'corrected_continuity_gauge','momentum_splitting_identity_defect','epsilon_same_state_source_storage_defect','k_same_state_source_storage_defect','bound_calls','k_bound')} for s in r.get('pimple_attempts',[])])
-        if code==0 and not r.get('failure') and r.get('steps',0)>=kwargs.get('steps',16):row['status']='pass'
+        requested=kwargs.get('steps',16);start_steps=0;start_time=0.
+        if kwargs.get('restart'):
+            from continue_cls_epawf_pimple import header
+            receipt=header(kwargs['restart']);start_steps=receipt['steps'];start_time=receipt['time']
+        end=start_time+requested*kwargs.get('dt',.0001)
+        complete=(code==0 and not r.get('failure') and r.get('steps')==start_steps+requested and
+            abs(r.get('time',-1.)-end)<1e-13 and len(r.get('stage_audits',[]))==requested)
+        if complete:row['status']='pass'
+        row['execution_status']='completed' if complete else 'failed_or_incomplete'
+        row['numerical_accuracy_status']='not_assessed_by_trajectory_runner';row['convergence_status']='not_assessed'
+        row['audited_extrema']=audited_extrema(r)
         # Keep compact reports; full states and every native audit stay on Linux.
         row['drift_history']=r.get('step_audits',[])
         row['milestones']=[s for s in r.get('step_audits',[]) if int(s[1]) in (1,2,8,16)]
@@ -98,6 +114,10 @@ def main():
                 row=run_case(a.solver,folder,model,policy,wall,steps=a.steps,descriptor_probe=a.descriptor_probe)
                 summary['cases'].append(row);(a.output/'matrix.json').write_text(json.dumps(summary,indent=2)+'\n')
                 print(json.dumps({k:row.get(k) for k in ('model','kappa_policy','wall','status','accepted_steps','failure')}),flush=True)
-    summary['status']='pass' if all(r['status']=='pass' for r in summary['cases']) else 'fail'
+    expected={(m,p,w) for m in a.models for p in a.policies for w in a.walls}
+    summary['coverage']=coverage(summary['cases'],expected)
+    summary['status']='pass' if summary['coverage']['status']=='pass' and all(r['status']=='pass' for r in summary['cases']) else 'fail'
+    summary['accuracy_status']='not_assessed';summary['convergence_status']='not_assessed'
     (a.output/'matrix.json').write_text(json.dumps(summary,indent=2)+'\n')
-if __name__=='__main__':main()
+    return 0 if summary['status']=='pass' else 1
+if __name__=='__main__':sys.exit(main())

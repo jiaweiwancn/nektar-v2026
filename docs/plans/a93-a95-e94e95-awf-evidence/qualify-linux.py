@@ -33,6 +33,8 @@ from run_cls_epawf_pimple import identity
 from continue_cls_epawf_pimple import freeze, header
 from run_a93_a95_e94e95_matrix import run_case
 from compare_cls_epawf_pimple import same_history
+from rans_qualification import coverage,dependencies
+dependencies("numpy","scipy")
 
 os.environ.update(THREADS)
 os.environ.update(TMPDIR=str(r/'tmp'), PYTHONDONTWRITEBYTECODE='1', PYTHONPATH=str(t))
@@ -51,7 +53,7 @@ record = dict(revision=git('rev-parse', 'HEAD'), content_status=git('status', '-
               compiler=subprocess.check_output(['c++', '--version'], text=True), source_files=sources,
               source_manifest_sha256=hashlib.sha256(json.dumps(sources, sort_keys=True).encode()).hexdigest(),
               cmake_cache_sha256=sha(r/'build/CMakeCache.txt'), solver=solver_identity, probe=probe_identity,
-              ranks=1, threads=THREADS, tmpdir=os.environ['TMPDIR'], commands=[])
+              ranks=1, threads=THREADS, tmpdir=os.environ['TMPDIR'], commands=[], required_failures=[])
 receipt = r/'runtime-qualified/source-build.json'
 def save(): receipt.write_text(json.dumps(record, indent=2)+'\n')
 save()
@@ -84,6 +86,7 @@ def execute(command, log, env=None, witness=False):
                 if not found: time.sleep(.25)
         code = child.wait()
     record['commands'].append(dict(command=command, exit_code=code, log=str(r/log)))
+    if code:record['required_failures'].append(dict(stage=log,exit_code=code))
     save()
     print(log, code, flush=True)
     return code
@@ -98,9 +101,11 @@ execute(['python3','-B',t/'qualify_a93_a95_e94e95_native.py','--solver',solver,'
 qpath = r/'qualification-qualified/qualification.json'
 q = json.loads(qpath.read_text())
 def extra(name, fn):
+    if name not in q.setdefault('expected_check_names',[]):q['expected_check_names'].append(name)
     try: value=fn(); q['checks'].append(dict(name=name,status='pass',result=value))
     except Exception as error: q['checks'].append(dict(name=name,status='fail',failure=repr(error)))
-    q['status']='pass' if all(x['status']=='pass' for x in q['checks']) else 'fail'
+    q['coverage']=coverage(q['checks'],set(q['expected_check_names']),key=lambda x:x['name'])
+    q['status']='pass' if q['coverage']['status']=='pass' and all(x['status']=='pass' for x in q['checks']) else 'fail'
     qpath.write_text(json.dumps(q,indent=2)+'\n')
 def a95_cache():
     whole=json.loads((r/'matrix-qualified/A95-Natural-Accepted/case.evolution.json').read_text())
@@ -165,4 +170,18 @@ current_identity=identity(solver)
 record['runtime_unchanged'] = all(current_identity[key]==solver_identity[key] for key in ('sha256','libraries'))
 record['final_content_status']=git('status','--porcelain')
 save()
-print('QUALIFICATION_DRIVER_COMPLETE',flush=True)
+for label,path,key,wanted in (
+    ('kernel',r/'kernel-results-qualified.json','status','pass'),
+    ('matrix',r/'matrix-qualified/matrix.json','status','pass'),
+    ('continuation',qpath,'status','pass'),
+    ('regression',r/'regression-qualified/baseline.json','status','pass'),
+    ('collection',r/'matrix-qualified/compact-results.json','bounded_matrix_pass',True)):
+    try:
+        packet=json.loads(path.read_text())
+        if packet.get(key)!=wanted:record['required_failures'].append(dict(stage=label,reason='structured status failed'))
+    except Exception as error:record['required_failures'].append(dict(stage=label,reason=repr(error)))
+if len(q['checks'])!=28 or q.get('coverage',{}).get('status')!='pass':record['required_failures'].append(dict(stage='coverage',reason='28 required continuation checks missing/failed'))
+if not record['runtime_unchanged'] or record['final_content_status']:record['required_failures'].append(dict(stage='provenance',reason='source/runtime changed'))
+record['status']='pass' if not record['required_failures'] else 'fail';save()
+print('QUALIFICATION_DRIVER_'+record['status'].upper(),flush=True)
+sys.exit(0 if record['status']=='pass' else 1)

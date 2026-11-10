@@ -28,7 +28,8 @@ int main(int argc,char **argv)
         auto world=LibUtilities::SessionReader::CreateInstance(2,argv);world->InitSession();
         Require(world->GetComm()->GetSize()==1,"preservation verification requires serial execution");
         char name[]="preservation-probe";char *args[]{name,nullptr};
-        auto session=LibUtilities::SessionReader::CreateInstance(1,args,std::vector<std::string>{argv[1]},LibUtilities::CommSerial::create(1,args));session->InitSession();
+        std::vector<std::string> files{argv[1]};
+        auto session=LibUtilities::SessionReader::CreateInstance(1,args,files,LibUtilities::CommSerial::create(1,args));session->InitSession();
         session->SetSolverInfo("GlobalSysSoln","DirectFull");auto graph=SpatialDomains::MeshGraphIO::Read(session);
         RANSWallPatchParameters p;
         session->LoadParameter("RANSWallChi",p.chi,1.);session->LoadParameter("RANSWallHeight",p.geometry.height,2.);
@@ -80,6 +81,7 @@ int main(int argc,char **argv)
         Tree observed;std::istringstream input(observation);boost::property_tree::read_json(input,observed);
         const auto &audit=observed.get_child("audit_alpha_zero");
         const bool physical=audit.get_child("accepted_awf_scalar_domain").front().second.get_value<double>()==1 &&
+            audit.get_child_optional("accepted_awf_hard_admissible") &&
             audit.get_child("accepted_awf_hard_admissible").front().second.get_value<double>()==1;
         const std::string output=J::Object({{"status",J::Quote(physical?"pass":"fail")},{"execution",J::Quote("completed")},
             {"physical_admissibility",J::Quote(physical?"pass":"fail")},

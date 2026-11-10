@@ -316,7 +316,11 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::PhysicalSamples(
     {
         const auto name=std::to_string(b);
         for(const auto &q:Quadrature(b))
-        {result["weights_"+name].push_back(q.weight);result["values_"+name].push_back(q.Value(s,offset[b]));}
+        {
+            result["weights_"+name].push_back(q.weight);result["values_"+name].push_back(q.Value(s,offset[b]));
+            result["coordinates_"+name].insert(result["coordinates_"+name].end(),q.coordinate.begin(),q.coordinate.end());
+            result["geometries_"+name].push_back(q.geometry);
+        }
     }
     for(const auto &q:Surface(0,2,0.,-1,8))
     {
