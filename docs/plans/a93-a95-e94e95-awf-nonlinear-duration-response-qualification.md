@@ -193,6 +193,62 @@ differences are respectively 8.07688e-8 and 7.67047e-8, below unchanged limits
 1.69744e-7 and 1.73943e-7. Their T=.1/.5 continuations remain conditional on each
 preceding complete milestone.
 
+The historical global common-k norm is retained. An additional sealed check
+uses only common free tests supported strictly inside the inner k region;
+outer and shared tests remain separately reported. It rechecks the two reused
+short times and all three new duration milestones on the same fixed mass and
+physical scale. The final export and perturbation admission require this
+inner-only check. A regression demonstrates that a passing global-k norm cannot
+substitute for a failed inner-k reduction. These supplementary receipts do not
+alter the previously sealed global-k results.
+
+## A93 first duration gate failure
+
+All four A93 Accepted trajectories reach T=.5 (theta=.1) with unchanged native
+histories. Their physical accuracy, admissibility, source/storage, scalar
+coverage, frozen-quadrature, and independent constitutive checks pass. The
+complete duration qualification fails its fixed-common vertical-momentum
+reduction. A93 perturbation and selected A93/EP response runs are consequently
+not admitted. This is a post-step qualification failure in accepted physical
+states; there is no invented rejected timestep or constitutive-domain failure.
+
+| T | Native u ratio | Native inner-k ratio | Native w ratio | Common u ratio | Common global-k ratio | Common w ratio |
+|---|---:|---:|---:|---:|---:|---:|
+| .016 | .023740 | .016009 | .054212 | .010210 | .005602 | .023143 |
+| .1 | .034640 | .031849 | .120642 | .017310 | .008058 | .052528 |
+| .5 | .631766 | .489268 | .547848 | .832472 | .610110 | **1.013463** |
+
+Ratios are B11/B5 on fixed physical scales. The unchanged required maximum is
+.85 above the 1e-8 floor. At T=.5 the common w norms are 1.0800020643e-7 and
+1.0945424092e-7, so the failing observation is above the floor. The actual
+same-time half-timestep states give 1.1025359676e-7 and 1.1133651181e-7, ratio
+1.009822: timestep halving does not remove this failure. The common residual
+load difference across spaces is 1.7347749779e-7; timestep load differences are
+1.3770209677e-8 and 7.9255652265e-9, below the separately declared diagnostic
+uncertainty bound .1 times that spatial load difference. This diagnostic does
+not replace the original ratio gate.
+
+At the primary T=.5 endpoints, scaled reference RMS errors on B5/B11 are:
+
+| Field | B5 | B11 |
+|---|---:|---:|
+| U | 1.83999e-5 | 7.22311e-7 |
+| w | 2.83147e-7 | 2.93619e-8 |
+| k | 3.61579e-6 | 1.60314e-7 |
+| outer epsilon | 6.56483e-9 | 2.12770e-9 |
+| Pi | 2.37958e-6 | 4.15255e-7 |
+
+These passing field errors do not override the failed spatial-residual gate.
+Pressure timestep differences are at most 7.09847e-9, against a 2.30733e-7
+limit. The largest assembled common vertical-momentum rows have support around
+z=.04.. .5, particularly across the roughness height .1. Large separate
+element stress norms contain cancelling constant-flux boundary contributions;
+they cannot by themselves be called localized physical defects. The read-only
+failure supplement retains those full terms and additionally separates actual
+augmented pressure, the constitutive-stress remainder, and advection, and
+localizes the varying-flux buckets with their constant bucket explicitly kept.
+It changes no evolution equation or residual used by the solver.
+
 Concurrent external starts produced a conservative schedule census of 75; the
 immediate active census was 67. An owned process family was suspended promptly.
 The record is retained rather than claiming the original census stayed below

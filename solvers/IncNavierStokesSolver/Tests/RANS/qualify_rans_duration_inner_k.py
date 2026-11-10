@@ -24,19 +24,21 @@ def reduction(coarse,fine):
                 maximum_ratio=.85,residual_floor=1e-8,uncertainty=1e-10)
 
 
-def qualify(root,admission_path,cohort,times):
+def qualify(root,admission_path,cohort,times,resume=False):
     ad=json.loads(admission_path.read_text());cfg=ad['configuration'];common=Path(ad['common_directory'])/'packet.json.gz'
     require(sha(common)==ad['common_packet_sha256'],'common_packet_changed')
     source={str(t):{m:root/'evolved-audits'/(cohort+'-'+str(t)+'-'+m)/'results.json'
         for m in ('B5','B11')} for t in times}
     request=dict(schema='DurationCommonInnerKQualificationV1',configuration=cfg,
+        qualifier_source_sha256=sha(Path(__file__)),
         admission_sha256=sha(admission_path),common_packet_sha256=sha(common),required_times=times,
         source_audit_sha256={t:{m:sha(p) for m,p in paths.items()} for t,paths in source.items()},
         partition_source_sha256=sha(Path(__file__).with_name('audit_rans_common_scalar_partitions.py')),
         gates=dict(maximum_ratio=.85,residual_floor=1e-8,uncertainty=1e-10),
         scope='additional inner-only fixed-common free tests; global-k and full-native norms remain separate')
-    out=root/'common-inner-qualification'/cohort;seal=RequestManifest(out,request,out.exists())
+    out=root/'common-inner-qualification'/cohort;existed=out.exists();seal=RequestManifest(out,request,existed)
     if seal.completed(out):return json.loads((out/'results.json').read_text())
+    require(not existed or resume,'incomplete_inner_qualification_requires_explicit_resume')
     with gzip.open(common,'rt') as f:cp=json.load(f)
     ref=Reference(cfg['model'],cfg['policy'],cfg['wall']);checks=[];short=[]
     for t in (.0016,.016):
@@ -67,8 +69,8 @@ def qualify(root,admission_path,cohort,times):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True)
     p.add_argument('--admission',type=Path,required=True);p.add_argument('--cohort',required=True)
-    p.add_argument('--times',type=float,nargs='+',default=[.016,.1,.5]);a=p.parse_args()
-    result=qualify(a.root,a.admission,a.cohort,a.times);print(result['status'])
+    p.add_argument('--times',type=float,nargs='+',default=[.016,.1,.5]);p.add_argument('--resume',action='store_true');a=p.parse_args()
+    result=qualify(a.root,a.admission,a.cohort,a.times,a.resume);print(result['status'])
     return 0 if result['status']=='pass' else 1
 
 

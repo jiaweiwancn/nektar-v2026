@@ -19,7 +19,7 @@ def main():
     matches=[path for path in (r/'admissions').glob('*.json') if sha(path)==neutral_audit_request['admission_sha256']]
     require(bool(matches),'neutral_admission_artifact_missing')
     neutral_admission=matches[0]
-    require(qualify(r,neutral_admission,neutral_cohort,[.016,.1,.5])['status']=='pass','neutral_common_inner_k_not_qualified')
+    require(qualify(r,neutral_admission,neutral_cohort,[.016,.1,.5],a.resume)['status']=='pass','neutral_common_inner_k_not_qualified')
     inner_proof=r/'common-inner-qualification'/neutral_cohort/'results.json'
     tag=prefix(cfg['model'],cfg['policy'],cfg['wall']);baseline=[tag+'-duration-'+str(a.dt)+'-'+m for m in MEMBERS];name=tag+'-response-'+str(a.amplitude)+'-dt-'+str(a.dt);labels=[name+'-'+m for m in MEMBERS];out=r/'response-cohorts'/name
     for label in baseline:
