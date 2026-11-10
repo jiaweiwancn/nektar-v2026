@@ -80,9 +80,9 @@ new backend is authorized by this package.
 
 ## Results
 
-Pending native term diagnosis and candidate screening; this is not a completion
-receipt. Results, exact reproduction commands and remaining gates follow in
-logical commits.
+Balanced initial/evolved spatial gates are complete for all six natural
+configurations. The scoped duration cohort advances only after its separate
+four-member gates. Exact terminal results and remaining gates are recorded below.
 
 ## Initial screen and localized candidates (before advancement)
 
