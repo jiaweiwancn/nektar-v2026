@@ -68,7 +68,7 @@ def series_gate(values,uncertainty=1e-10):
 
 class Campaign:
     def __init__(self,args):
-        self.r=args.root.resolve();self.phase=args.phase;self.models=tuple(args.models);self.policies=tuple(args.policies);self.epsilon_perturbation=args.epsilon_perturbation;self.temporal_quadrature=Q[args.quadrature_index];self.output=self.r/('preservation-'+args.phase+('-'+args.label if args.label else ''));self.output.mkdir(exist_ok=True)
+        self.r=args.root.resolve();self.phase=args.phase;self.models=tuple(args.models);self.policies=tuple(args.policies);self.walls=tuple(args.walls);self.epsilon_perturbation=args.epsilon_perturbation;self.temporal_quadrature=Q[args.quadrature_index];self.output=self.r/('preservation-'+args.phase+('-'+args.label if args.label else ''));self.output.mkdir(exist_ok=True)
         self.solver=self.r/'runtime/IncNavierStokesSolver';self.descriptor=self.r/'runtime/RANSNewModelsProbe';self.sampler=self.r/'runtime/RANSPreservationProbe'
         self.manifest=load(self.r/'runtime/source-build.json');self.result=dict(schema=1,phase=self.phase,checks=[],status='running',
             runtime_manifest_sha256=sha(self.r/'runtime/source-build.json'),runtime_source=self.manifest['revision'],ranks=1,threads=THREADS,
@@ -186,7 +186,7 @@ class Campaign:
         self.grid_weights=weights;expected=[];tables=[]
         for model in self.models:
             for policy in self.policies:
-                for wall in WALLS:
+                for wall in self.walls:
                     ref=Reference(model,policy,wall);tag='-'.join((model,policy,wall));runs=[]
                     for j,dt in enumerate((1e-4,5e-5,2.5e-5)):
                         name=tag+'-dt'+str(j);expected.append(name)
@@ -247,7 +247,7 @@ class Campaign:
         self.save();return 0 if self.result['status']=='pass' else 2 if self.result['status']=='unresolved' else 1
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');p.add_argument('--policies',nargs='+',choices=POLICIES,default=list(POLICIES));p.add_argument('--epsilon-perturbation',type=float,default=0.);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=2);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');p.add_argument('--policies',nargs='+',choices=POLICIES,default=list(POLICIES));p.add_argument('--walls',nargs='+',choices=WALLS,default=list(WALLS));p.add_argument('--epsilon-perturbation',type=float,default=0.);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=2);a=p.parse_args()
     c=Campaign(a)
     try:getattr(c,a.phase)()
     except Exception as error:c.result['checks'].append(dict(name='orchestration',status='fail',failure=repr(error)));c.save()
