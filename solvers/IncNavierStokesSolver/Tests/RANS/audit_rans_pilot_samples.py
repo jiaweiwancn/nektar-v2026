@@ -8,6 +8,7 @@ One-sweep intermediate scalar fields equal the recorded old/new scalar blocks.
 """
 import argparse,gzip,json,os,sys
 from pathlib import Path
+os.environ.update(dict.fromkeys(('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','NUMEXPR_NUM_THREADS'),'1'))
 import numpy as np
 from scipy.sparse import csr_matrix
 from qualify_rans_preservation import probe,replay_request,load

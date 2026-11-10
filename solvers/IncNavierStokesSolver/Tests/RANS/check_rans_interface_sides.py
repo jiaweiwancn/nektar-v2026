@@ -3,6 +3,7 @@
 """Production preservation packet: explicit one-sided interface provenance."""
 import argparse,copy,os,subprocess,sys
 from pathlib import Path
+os.environ.update(dict.fromkeys(('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','NUMEXPR_NUM_THREADS'),'1'))
 import numpy as np
 from qualify_rans_preservation import probe,replay_request,load,Q
 from rans_qualification import THREADS,write_json

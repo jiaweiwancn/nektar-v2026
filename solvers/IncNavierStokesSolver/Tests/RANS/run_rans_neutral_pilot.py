@@ -9,6 +9,7 @@ No field, checkpoint signature, timestep or boundary vector is rewritten.
 import argparse,gzip,json,math,os,subprocess,sys,tempfile,time,xml.etree.ElementTree as ET
 from pathlib import Path
 from contextlib import nullcontext
+os.environ.update(dict.fromkeys(('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','NUMEXPR_NUM_THREADS'),'1'))
 import numpy as np
 from rans_qualification import THREADS,write_json,exact_vector_hash,compare_samples,audited_extrema
 from rans_request_manifest import RequestManifest,runtime_identity
