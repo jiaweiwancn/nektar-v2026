@@ -13,11 +13,12 @@ def runtime_bytes(value):
     return dict(sha256=value['sha256'],libraries={Path(p).name:h for p,h in value['libraries'].items()})
 
 
-def validate_audit(path,campaign,config,times,common):
+def validate_audit(path,campaign,config,times,common,allow_failed=False,expected_runtime=None):
     data=load(path);identity(load(campaign/'request-manifest.json')['request'],config)
-    require(data['status']=='pass','spatial_audit_failed')
+    require(data['status']=='pass' or (allow_failed and data['status']=='fail'),'spatial_audit_failed')
     required_times(data['checks'],times)
     intent=load(path.parent/'immutable-request.json')
+    if expected_runtime is not None:require(intent['analysis_runtime']==expected_runtime,'spatial_audit_runtime_mismatch')
     require(intent['common_packet_sha256']==sha(common/'packet.json.gz'),'wrong_common_test_packet')
     req=load(campaign/'request-manifest.json');manifest=RequestManifest(campaign,req['request'],True)
     for row in data['checks']:

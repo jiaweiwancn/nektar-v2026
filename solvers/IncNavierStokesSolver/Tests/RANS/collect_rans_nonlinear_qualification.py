@@ -40,6 +40,11 @@ def collect():
     result['common_scalar_partitions']={p.parent.name:receipt(p) for p in (r/'common-scalar-partitions').glob('*/results.json')}
     result['common_inner_qualification']={p.parent.name:receipt(p) for p in (r/'common-inner-qualification').glob('*/results.json')}
     result['residual_failure_diagnoses']={p.parent.name:receipt(p) for p in (r/'residual-diagnosis').glob('*/results.json')}
+    result['volume_ownership_diagnoses']={p.parent.name:receipt(p) for p in (r/'volume-ownership').glob('*/results.json')}
+    result['failed_response_spatial_audits']={}
+    for path in (r/'evolved-audits').glob('response-*/results.json'):
+        value=receipt(path)
+        if value.get('status')=='fail':result['failed_response_spatial_audits'][path.parent.name]=dict(value,checks=[compact_analysis(c) for c in value.get('checks',[])])
     result['physical_budget_diagnostic_controls']={p.parent.name:receipt(p) for p in (r/'physical-budgets').glob('test-*/results.json')}
     for name in ('runtime','runtime-resolution-v2','runtime-resolution-v3','runtime-budget-v4','runtime-budget-v5','runtime-probe-v6','runtime-probe-v7'):
         for leaf in ('source-build.json','actual-loaded-libraries.json','actual-loaded-libraries-current.json','lineage.json'):
@@ -172,6 +177,26 @@ def collect():
                 aq=load(Path(audit['source']).parent/'request-manifest.json')['request'];identity(aq['configuration'],controller['configuration']);require(aq['admission_sha256']==controller['admission_sha256'],'response_audit_admission_mismatch');require(abs(aq['time']-float(time))<1e-13,'response_audit_time_mismatch');require(RequestManifest(Path(audit['source']).parent,aq,True).completed(Path(audit['source']).parent),'response_audit_unsealed')
             if 'spatial' in audit:audit['spatial']={m:dict(v,checks=[compact_analysis(c) for c in v['checks']]) for m,v in audit['spatial'].items()}
             data['audits'][time]=audit
+            supplements={p.parent.name:receipt(p) for p in (r/'response-audits').glob(path.parent.name+'-'+time+'-*/results.json')}
+            for value in supplements.values():
+                aq=load(Path(value['source']).parent/'request-manifest.json')['request'];identity(aq['configuration'],controller['configuration'])
+                require(aq['trajectory_requests']==load(r/'response-audits'/(path.parent.name+'-'+time)/'request-manifest.json')['request']['trajectory_requests'],'response_supplement_trajectory_mismatch')
+                require(aq['previous_failure']['sha256']==sha(r/'response-audits'/(path.parent.name+'-'+time)/'results.json'),'response_supplement_failure_changed')
+                require(RequestManifest(Path(value['source']).parent,aq,True).completed(Path(value['source']).parent),'response_supplement_unsealed')
+                if 'spatial' in value:value['spatial']={m:dict(v,checks=[compact_analysis(c) for c in v['checks']]) for m,v in value['spatial'].items()}
+            data.setdefault('complete_audit_supplements',{})[time]=supplements
+            if audit.get('status')=='fail':
+                name=path.parent.name+'-'+time+'-response-audit-failure.json.gz'
+                witness=dict(configuration=controller['configuration'],time=float(time),gate='response_native_spatial_audit',audit=audit,members={},
+                    meaning='post-step read-only qualification failure in accepted states; no rejected timestep is fabricated')
+                for m in MEMBERS:
+                    endpoint=r/'campaigns'/(path.parent.name+'-'+m)/('T-'+format(float(time),'.4f'));native=load(endpoint/'case.evolution.json')
+                    q=load(endpoint.parent/'request-manifest.json');require(RequestManifest(endpoint.parent,q['request'],True).completed(endpoint),'response_failure_endpoint_unsealed')
+                    config=path.parent.name+'-'+m+'-'+time+'-audit-gate.xml';shutil.copy2(endpoint/'case.xml',out/config)
+                    witness['members'][m]=dict(configuration_file=config,configuration_sha256=sha(endpoint/'case.xml'),native_report_sha256=sha(endpoint/'case.evolution.json'),request=q,
+                        source_fields={k:native[k] for k in ('signature','time','dt','order','state','initial','fixed_reference','initialization_receipt','native_history','native_history_times','last_stage_history','last_stage_alpha','last_stage_time','failure','rejected_state')})
+                with gzip.open(out/name,'wt') as f:json.dump(witness,f,separators=(',',':'),allow_nan=False)
+                result['failures'].append(dict(cohort=path.parent.name,time=float(time),gate='response_native_spatial_audit',witness=name,sha256=sha(out/name)))
             budgets={q.parent.name:receipt(q) for q in (r/'physical-budgets').glob(path.parent.name+'-*'+time+'*/results.json')}
             data.setdefault('physical_budgets',{})[time]=budgets
             required_budgets={path.parent.name+'-'+kind+'-'+m+'-'+time+'-Q'+str(q)+suffix for kind in ('perturbed','baseline') for m in MEMBERS for q,suffix in (((1,''),(2,''),(2,'-F32')) if m in MEMBERS[:2] else ((2,'-F32'),))}
