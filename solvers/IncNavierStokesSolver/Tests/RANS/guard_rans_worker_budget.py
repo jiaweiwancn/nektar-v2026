@@ -4,7 +4,7 @@
 from pathlib import Path
 import argparse,os,subprocess,json,signal,time
 parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--root',type=Path,required=True);args=parser.parse_args()
-r=args.root.resolve();started=time.time();paused=set();maximum=0
+r=args.root.resolve();started=time.time();paused=set();maximum=0;active_seconds={};last_clock=time.monotonic()
 if (r/'worker-guard-status.json').exists():maximum=json.loads((r/'worker-guard-status.json').read_text()).get('maximum_observed_active_before_actions',0)
 initial=r/'resource-paused.json'
 if initial.exists():paused.update(json.loads(initial.read_text())['paused_pids'])
@@ -29,6 +29,17 @@ while not (r/'worker-guard.stop').exists():
  allowed=4 if external<=16 else 3 if external<=24 else 2 if external<=40 else 1 if external<=48 else 0
  chosen=set()
  for root,fam in families[:allowed]:chosen.update(fam)
+ elapsed=time.monotonic()-last_clock;last_clock=time.monotonic()
+ held_roots=set()
+ for root,fam in families[:allowed]:
+  live_children=[pid for pid in fam if pid!=root and pid in rows and not rows[pid]['state'].startswith('Z')]
+  for pid in live_children:active_seconds[pid]=active_seconds.get(pid,0.)+(elapsed if not rows[pid]['state'].startswith('T') else 0.)
+  # Let an interrupted native child finish before waking its waiting Python
+  # parent: suspension must not consume a subprocess wall-time deadline.
+  # A genuinely hung child still releases the parent's timeout after its
+  # generous active-time allowance.
+  limit=14400 if any(rows[p]['name'].startswith('IncNavier') for p in live_children) else 1800
+  if rows[root]['state'].startswith('T') and live_children and max(active_seconds.get(p,0.) for p in live_children)<limit:held_roots.add(root)
  events=[]
  for root,fam in families:
   for pid in sorted(fam,reverse=True):
@@ -36,7 +47,7 @@ while not (r/'worker-guard.stop').exists():
    if pid not in chosen and not rows[pid]['state'].startswith(('T','Z')):
     try:os.kill(pid,signal.SIGSTOP);paused.add(pid);events.append(['pause',root,pid])
     except ProcessLookupError:pass
-   elif pid in chosen and (pid in paused or rows[pid]['state'].startswith('T')):
+   elif pid in chosen and pid not in held_roots and (pid in paused or rows[pid]['state'].startswith('T')):
     try:os.kill(pid,signal.SIGCONT);paused.discard(pid);events.append(['resume',root,pid])
     except ProcessLookupError:pass
  active=sum(d['threads'] for pid,d in rows.items() if relevant(d) and not d['state'].startswith(('T','Z')));maximum=max(maximum,active)
