@@ -290,6 +290,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             Require(domain.admissible,"initial R2 scalar inventory is outside its evaluation domain: "+domain.failure);
         }
         if(m_diagnostics)RecordAudit(m_state,m_state,0,m_time);
+        if(m_patch->PimpleSingleSweep())m_physicalSamples=m_patch->PhysicalSamples(m_state,m_time,m_data);
         UpdateFields();
     }
     catch(const std::exception &error)
