@@ -35,7 +35,7 @@ def collect(args):
             if p.is_file():libs[str(p.resolve())]=sha(p.resolve())
         runtime[name]=dict(path=str(binary),sha256=sha(binary),ldd=ldd,resolved_libraries=libs)
     artifacts={}
-    for scope in [root/'study',build/'wj3-smoke',build/'wj2-native-EP',build/'wj2-native-Budget',build/'wj2-legacy-transaction']:
+    for scope in [root/'study',root/'study-final',build/'wj3-smoke',build/'wj2-native-EP',build/'wj2-native-Budget',build/'wj2-legacy-transaction']:
         if not scope.exists():continue
         for f in scope.rglob('*'):
             if f.is_file() and (f.suffix in ('.json','.xml') or f.name=='State.bin'):
@@ -43,6 +43,7 @@ def collect(args):
     write_json(root/'artifact-index.json',artifacts)
     specs={name:content['docs/literature/'+name] for name in ('wj_earsm_neutral_abl_ep_awf_note.tex','wj_earsm_budget_cutoff_awf_appendix.tex')}
     flags={str(p.relative_to(build)):p.read_text() for p in [build/'CMakeFiles/IncNavierStokesSolver.dir/flags.make',build/'CMakeFiles/RANSWallResolutionProbe.dir/flags.make',build/'CMakeFiles/RANSKernels.dir/flags.make']}
+    studyroot=root/'study-final' if (root/'study-final').exists() else root/'study'
     manifest=dict(schema='WJ3LinuxManifestV1',root=str(root),source_revision=git('rev-parse','HEAD'),source_tree=git('rev-parse','HEAD^{tree}'),
         source_status=git('status','--short'),source_content_sha256=sha(root/'source-content.json'),specification_sha256=specs,
         runtime=runtime,effective_flags=flags,cmake_cache_sha256=sha(build/'CMakeCache.txt'),
@@ -51,7 +52,7 @@ def collect(args):
         command_receipts=json.loads((root/'command-receipts.json').read_text()),command_receipts_sha256=sha(root/'command-receipts.json'),
         inventory=dict(path=str(root/'inventory.log'),sha256=sha(root/'inventory.log'),count=len(json.loads((root/'inventory.log').read_text())['tests'])),
         artifacts=dict(path=str(root/'artifact-index.json'),sha256=sha(root/'artifact-index.json'),count=len(artifacts)),
-        summaries={p.name:dict(path=str(root/'study'/p.name/'summary.json'),sha256=sha(root/'study'/p.name/'summary.json')) for p in (root/'study').iterdir() if (p/'summary.json').exists()})
+        summaries={p.name:dict(path=str(studyroot/p.name/'summary.json'),sha256=sha(studyroot/p.name/'summary.json')) for p in studyroot.iterdir() if (p/'summary.json').exists()})
     write_json(root/'manifest.json',manifest);print(root/'manifest.json')
 
 

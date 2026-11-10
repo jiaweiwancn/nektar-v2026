@@ -192,13 +192,14 @@ class Study:
             tag=format(dt,'.9g');z,r,f=self.native('scout-'+tag+'-cp0',dt=dt);self.valid(z,r)
             if initial is None:initial=z
             require(state_hash(z['state'])==state_hash(initial['state']) and digest_object(z['native_history'])==digest_object(initial['native_history']) and
-                digest_object(z['native_history_times'])==digest_object(initial['native_history_times']),'dt CP0 changed initial primary/gauge/physical history')
+                z['time']==initial['time']==0. and z['dt']==dt,'dt CP0 changed initial primary/gauge/physical history')
             s,rc,sf=self.native('scout-'+tag,4,z['checkpoint'],dt=dt,arithmetic_time=4*dt)
             status='admissible'
             try:self.valid(s,rc)
             except ValueError as error:status=str(error)
             row=dict(dt=dt,status=status,seconds=rc['seconds'],seconds_per_step=rc['seconds']/4,
-                initial_sha256=state_hash(z['state']),native_dt_signature_sha256=digest_object(z['signature']),
+                initial_sha256=state_hash(z['state']),initial_history_sha256=digest_object(z['native_history']),
+                native_initial_history_labels=z['native_history_times'],native_dt_signature_sha256=digest_object(z['signature']),
                 result=str(sf/'case.evolution.json'),accepted_steps=s['steps'] if s else None)
             if s:
                 row['last_accepted_sha256']=state_hash(s['state']);row['failure']=s.get('failure')

@@ -118,7 +118,9 @@ candidate before commit/history advance; no subsequent scout step runs. A
 fresh near-reference numerical-floor fixture verifies this stopping path.
 It does not change the physical signature or saved metadata. Each dt owns a fresh
 native CP0 and native signature; primary/gauge and corresponding physical
-histories must agree. No signature or history is edited. After cost measurement,
+histories must agree. Native fresh IMEX1 labels are [0,dt]; these dt-specific
+labels remain intact and are not required to equal another dt's labels.
+No signature or history is edited. After cost measurement,
 the driver writes a frozen D,T=32D design before any 32/64/128-step main run.
 It records a practical 3600-second per-policy remaining trajectory budget.
 The same-T cross-mesh run uses2493 if a conservative cubic-cost estimate fits;
