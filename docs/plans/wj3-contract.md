@@ -123,7 +123,8 @@ labels remain intact and are not required to equal another dt's labels.
 No signature or history is edited. After cost measurement,
 the driver writes a frozen D,T=32D design before any 32/64/128-step main run.
 It records a practical 3600-second per-policy remaining trajectory budget.
-The same-T cross-mesh run uses2493 if a conservative cubic-cost estimate fits;
+The same-T cross-mesh run uses2493 if the measured full one-step process cost
+on that mesh, remaining main/restart work and an observation reserve fit;
 otherwise639, leaving finer-mesh temporal qualification open. The total cap is
 500 scheduled attempts per policy, including failed attempts. Work is serial,
 initially one build worker, then four after a current capacity snapshot; one test,

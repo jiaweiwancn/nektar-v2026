@@ -210,20 +210,24 @@ class Study:
             chosen=dt
         require(chosen is not None,'no fully admissible four-step scout')
         cost=max(s['seconds_per_step'] for s in scouts if s['status']=='admissible')
+        fine_cost=load(self.root/'spatial-first-step-L2/receipt.json')['seconds']
+        fine_estimate=257*cost+128*fine_cost+120
+        fine_fits=fine_estimate<3600
         # Declared BEFORE main trajectories. Cross-mesh level0 keeps this
         # bounded dense-backend pilot within a 60-minute per-policy remaining trajectory cap.
         # Level2 remains spatially qualified, temporally open.
         self.s['frozen_design']=dict(D=chosen,T=32*chosen,T_ustar_over_H=16*chosen,
             main_steps=[32,64,128],main_dt=[chosen,chosen/2,chosen/4],mesh_unknowns=1257,
-            cross_mesh_level=2 if cost*(257+8*128)<3600 else 0,
-            cross_mesh_unknowns=2493 if cost*(257+8*128)<3600 else 639,cross_mesh_steps=128,
-            measured_max_seconds_per_step=cost,estimated_remaining_seconds=cost*(224+128+32+1),
+            cross_mesh_level=2 if fine_fits else 0,
+            cross_mesh_unknowns=2493 if fine_fits else 639,cross_mesh_steps=128,
+            measured_max_seconds_per_step=cost,estimated_remaining_seconds=fine_estimate if fine_fits else 385*cost+120,
+            measured_fine_one_step_process_seconds=fine_cost,
             practical_wall_seconds_per_policy=3600,safety_factor_over_arithmetic_floor=100,
             floor_policy='terminal frozen matrix SVD and long-double residual, arithmetic evaluation sensitivity, accumulated using frozen history-map mass-norm amplification and safety100; no spatial/stage residual used as noise',
             pressure_policy='common-time common overall gauge; algebraic first-step adjustment not required to scale with dt',
             frozen_before_main_utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
-            finer_temporal_mesh_open=cost*(257+8*128)>=3600,
-            cross_mesh_cost_estimator='measured 1257 step cost times (2493/1257)^3 rounded up to 8; choose 2493 if all remaining work fits 3600 seconds')
+            finer_temporal_mesh_open=not fine_fits,
+            cross_mesh_cost_estimator='257 times measured 1257 scout step cost plus128 times measured 2493 full one-step process cost plus120 seconds observation reserve; choose2493 if below3600 seconds')
         self.save()
 
     def main_runs(self):
@@ -276,7 +280,7 @@ class Study:
         try:self.valid(s,rc)
         except ValueError as error:self.s['cross_obstruction']=dict(reason=str(error),result=str(sf/'case.evolution.json'));self.save();return
         m,c=self.measure('cross-128-measure',s,sf)
-        self.s['cross_mesh']=dict(comparison=c,versus_main_finest=compare(m,measurements[-1],self.a.policy));self.save()
+        self.s['cross_mesh']=dict(comparison=c,arithmetic=arithmetic(s,m),versus_main_finest=compare(m,measurements[-1],self.a.policy));self.save()
         self.transactions(D)
 
     def transactions(self,dt):
