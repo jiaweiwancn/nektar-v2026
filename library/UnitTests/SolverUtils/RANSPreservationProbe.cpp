@@ -131,7 +131,8 @@ int main(int argc,char **argv)
                 const double vertical=q.Value(state,patch.offset[1]);
                 fluxes.push_back(J::Object({{"coordinate",J::Numbers(q.coordinate)},
                     {"weight",J::Number(f.weight)},{"geometry",J::Number(q.geometry)},
-                    {"region",outer?"1":"0"},{"side",J::Number(side)},
+                    {"region",outer?"1":"0"},{"side",J::Number(-side)},
+                    {"outward_normal_z",J::Number(side)},
                     {"velocity",J::Numbers(Vector{q.Value(state,patch.offset[0]),vertical})},
                     {"k",J::Number(k)},{"epsilon",outer?J::Number(epsilon):"null"},
                     {"Pi",J::Number(pi)},{"velocity_gradient",J::Rows(g)},

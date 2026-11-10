@@ -24,6 +24,10 @@ FIELDS=('u','v','k','epsilon_outer','Pi')
 TARGETS=(.0016,.016,.05,.1)
 
 def selected_knots(ref,a):
+ if getattr(a,'mesh_file',None):
+  spec=load(a.mesh_file);knots=spec['knots']
+  if spec['degree']!=a.degree or knots!=sorted(set(knots)) or knots[0]!=0 or knots[-1]!=ref.Z or ref.H not in knots:raise ValueError('invalid declared fixed mesh')
+  return knots
  knots=nested(ref.knots(),a.level)
  if a.refinement=='Interface8V1':
   # Retain the dense backend limit: split six largest inner intervals and
@@ -53,12 +57,13 @@ def accuracy(ref,packet,initial,weights):
  return dict(reference_error=scaled(rep,ref),change_from_initial=scaled(compare_samples(packet,base,weights),ref),gradient_weighted_RMS=rep['gradient_weighted_RMS'],global_pressure_gauge=rep['global_pressure_gauge_shifts'])
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--label',required=True);p.add_argument('--model',choices=('E94E95','A95','A93'),default='E94E95');p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);p.add_argument('--degree',type=int,choices=(4,5),default=5);p.add_argument('--level',type=int,default=0);p.add_argument('--refinement',choices=('Base','Interface8V1'),default='Base');p.add_argument('--columns',type=int,choices=(1,2),default=1);p.add_argument('--dt',type=float,default=.0001);p.add_argument('--max-time',type=float,default=.0016);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=1);p.add_argument('--velocity-amplitude',type=float,default=0.);p.add_argument('--cache',choices=('Off','ExactStepV1'),default='ExactStepV1');p.add_argument('--resume',action='store_true');p.add_argument('--timeout',type=int,default=3600);a=p.parse_args();a.root=a.root.resolve()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--label',required=True);p.add_argument('--model',choices=('E94E95','A95','A93'),default='E94E95');p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);p.add_argument('--degree',type=int,choices=(4,5),default=5);p.add_argument('--level',type=int,default=0);p.add_argument('--refinement',choices=('Base','Interface8V1'),default='Base');p.add_argument('--columns',type=int,choices=(1,2),default=1);p.add_argument('--dt',type=float,default=.0001);p.add_argument('--max-time',type=float,default=.0016);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=1);p.add_argument('--velocity-amplitude',type=float,default=0.);p.add_argument('--mesh-file',type=Path);p.add_argument('--milestones',type=float,nargs='+',default=list(TARGETS));p.add_argument('--cache',choices=('Off','ExactStepV1'),default='ExactStepV1');p.add_argument('--resume',action='store_true');p.add_argument('--timeout',type=int,default=3600);a=p.parse_args();a.root=a.root.resolve()
  if a.degree<4 or a.level<0:raise ValueError('declared pilot candidate requires degree >=4, nonnegative refinement')
+ if a.milestones!=sorted(set(a.milestones)) or a.milestones[0]!=.0016 or any(t<=0 or t>.5 for t in a.milestones):raise ValueError('invalid bounded milestone contract')
  r=a.root;out=r/'campaigns'/a.label;ref=Reference(a.model,a.policy,a.wall)
  os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
  # One common physical grid resolves both declared candidates and profile breaks.
- grid,weights=physical_grid(nested(ref.knots(),max(1,a.level)),10,8)
+ grid,weights=physical_grid(sorted(set(nested(ref.knots(),max(1,a.level))+selected_knots(ref,a))),10,8)
  if a.columns==2:
   # Resolve the x=0 partition in both physical integrals and later comparisons.
   g0,w0=grid,weights;grid=[];weights=[]
@@ -80,12 +85,13 @@ def main():
    actual=probe(sampler,pre,replay_request(seed,grid,state=z['state']));initial=dict(actual['observation'],grid_weights=weights)
   request=dict(schema='NeutralPilotV1',model=a.model,policy=a.policy,wall=a.wall,descriptor=seed['observation']['resolved_descriptor'],
    knots=selected_knots(ref,a),degree=a.degree,pressure_degree=a.degree-2,columns=a.columns,quadrature=seed['observation']['actual_quadrature'],
-   dt=a.dt,horizons=TARGETS,integration='native IMEX1 PimpleSingleSweep',history='native same-method restart; independently initialized for each dt',
+   dt=a.dt,horizons=a.milestones,integration='native IMEX1 PimpleSingleSweep',history='native same-method restart; independently initialized for each dt',
    initialization='constrained neutral projection plus declared divergence-free streamfunction',velocity_amplitude=a.velocity_amplitude,perturbation='StreamfunctionPolyV1',
    raw_neutral_sha256=exact_vector_hash(seed['reference']),reference_sha256=exact_vector_hash(seed['reference']),boundary_policy='FrozenReferenceV1',boundary=seed['fixed_boundary'],
    runtime={n:runtime_identity(r/'runtime'/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},
    evaluation=dict(grid=grid,weights=weights,sides=[0]*len(grid),export_basis=False,metric='physical weighted RMS and true L2; common global pressure gauge'),
    gates=dict(field_RMS=1e-3,vertical_RMS=1e-4,wall_traction=1e-3,interface_traction=1e-3,spatial_ratio=.85,temporal_fraction=.1,comparison_floor=1e-7),cache=a.cache,accuracy_policy='NeutralV1')
+  if a.mesh_file:request['declared_mesh']=dict(file_sha256=sha(a.mesh_file),specification=load(a.mesh_file))
   if actual_initial:request['actual_initial']=actual_initial
   admission=RequestManifest(out,request,a.resume)
   if not a.resume:
@@ -94,7 +100,7 @@ def main():
   if result.get('first_failure'):
    print(json.dumps(dict(status='preserved_failure',failure=result['first_failure'])));return 1
   restart=None;start=0.
-  for T in TARGETS:
+  for T in a.milestones:
    if T>a.max_time+1e-14:break
    label='T-'+format(T,'.4f');folder=out/label
    if a.resume and admission.completed(folder):
@@ -137,5 +143,5 @@ def main():
    result['milestones'].append(metric);result['execution_status']=metric['execution_status'];result['numerical_accuracy_status']=metric['accuracy_status'];result['status']=metric['status'];write_json(out/'results.json',result)
    print(json.dumps({k:metric[k] for k in ('target','status','seconds_per_step','failure')}),flush=True)
    if metric['status']!='pass':result['first_failure']=dict(folder=str(folder),failure=metric.get('failure'),time=metric.get('time'));write_json(out/'results.json',result);return 1
-  result['status']='pass' if result['milestones'] else 'unresolved';result['persistence_scope']=dict(last_time=start,theta=start*ref.us/ref.H,requested_final_time=.1,bounded=True);write_json(out/'results.json',result);return 0 if result['status']=='pass' else 2
+  result['status']='pass' if result['milestones'] else 'unresolved';result['persistence_scope']=dict(last_time=start,theta=start*ref.us/ref.H,requested_final_time=a.milestones[-1],bounded=True);write_json(out/'results.json',result);return 0 if result['status']=='pass' else 2
 if __name__=='__main__':sys.exit(main())
