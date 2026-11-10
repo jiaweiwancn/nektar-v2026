@@ -217,6 +217,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     std::string comparison;session->LoadSolverInfo("RANSWallComparison",comparison,"Off");
     Require(comparison=="Off" || comparison=="HeightV1" || comparison=="AcceptedAWFV1","unknown comparison family");
     m_heightComparison=comparison=="HeightV1";m_acceptedComparison=comparison=="AcceptedAWFV1";
+    Require(!WJ() || comparison=="Off","WJ uses its native read-only audit, not CLS comparison families");
     Require(!m_acceptedComparison || AcceptedAWF(),"AcceptedAWFV1 requires its explicit wall formulation");
     Require(m_kSampling=="Point" || m_kSampling=="ColumnAverage" || ((AcceptedAWF() || WJ()) && m_kSampling=="InterfaceTrace"),"unknown representative K functional");
     Require(!(AcceptedAWF() || WJ()) || m_kSampling=="InterfaceTrace","CLSCalibratedBudgetAWF requires InterfaceTrace sampling");

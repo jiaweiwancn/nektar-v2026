@@ -137,6 +137,9 @@ def main():
         for audit in report['state_audits']:
             require(audit['wj_hard_admissible']==[1.],'WJ hard audit failed')
             require(audit['wj_cls_max_beta04_R1_R2_cap_applicable']==[0.]*5,'CLS qualification leaked into WJ')
+            witness=audit['wj_separate_analytic_adverse_witnesses']
+            assert_allclose(witness,[4.130462147295278,-.00633378103539413,.27877891195383653,1.0357609543534572,
+                3,-2/15,-2/15,34/15,48/5],rtol=3e-12,atol=3e-12)
         for attempt in report['pimple_attempts']:
             require(attempt['scheduled_complete'],'incomplete scheduled attempt')
             for key in ('momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls'):
@@ -154,6 +157,7 @@ def main():
         result=load(out/'result.json')
         require(result['replay']['governing_solves']==0 and result['replay']['initialization_lift_calls_iterations']==[0.,0.],
                 'read-only diagnostic solved or lifted state')
+        require(result['source_balance']['normalization'] is None,'uncapped source readback normalized the wall')
         checks=result['checks'];require(checks['governing_solves']==0 and checks['state_unchanged'],'diagnostic mutated state')
         independent_result=independent_loads(checks,a.policy,report['offsets'])
         return dict(result=str(out/'result.json'),result_sha256=sha(out/'result.json'),independent=independent_result,

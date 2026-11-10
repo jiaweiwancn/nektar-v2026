@@ -114,7 +114,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         const std::string epsilonName=model=="WJHighRe"?"epsilon":"eps_tilde";
         const std::vector<std::string> expected=dim==2?std::vector<std::string>{"u","v","k",epsilonName,"p"}:
             std::vector<std::string>{"u","v","w","k",epsilonName,"p"};
-        Require(m_session->GetVariables()==expected,"evolution variables must be native velocity components,k,eps_tilde,p");
+        Require(m_session->GetVariables()==expected,model=="WJHighRe"?"WJ evolution variables must be native velocity components,k,epsilon,p":"legacy evolution variables must be native velocity components,k,eps_tilde,p");
         RANSWallPatchParameters parameters;
         m_session->LoadParameter("RANSWallHeight",parameters.geometry.height,2.);
         m_session->LoadParameter("RANSWallRoughness",parameters.geometry.roughness,.1);
@@ -200,6 +200,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         if(m_patch->WJ())
         {
             Require(m_neutral && m_direction[1]==0 && !m_chartFunctions,"WJ-2 requires the physical neutral serial flat pilot");
+            for(const std::string name:{"Gravity","g","RANSWallGravity"})
+                Require(!m_session->DefinesParameter(name) || m_session->GetParameter(name)==0,"WJ-2 pilot requires zero gravity");
             for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
                 Require(!m_serialSession->DefinesFunction(name),"WJ-2 requires zero prescribed body/scalar force");
         }

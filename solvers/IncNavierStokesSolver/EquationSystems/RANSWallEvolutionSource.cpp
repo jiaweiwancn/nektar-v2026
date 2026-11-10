@@ -14,6 +14,28 @@ namespace J=RANSWallSolveJson;
 std::string RANSWallEvolutionPatch::SourceBalanceDiagnostic(const Vector &s,double time,
     const RANSWallEvolutionData &data,const Vector &stations,const Vector &heights) const
 {
+    if(WJ())
+    {
+        Require(!CappedDestruction() && !Mapped() && Dimension()==2,"WJ source readback scope differs");
+        const auto hash=RANSWallR3::Hash(s);std::vector<std::string> rows;
+        for(double x:stations)for(double z:heights)
+        {
+            Require(x>=lower[0] && x<=upper[0] && z>=0 && z<=m_parameters.geometry.height,"WJ source query outside inner domain");
+            const RANSWallCoordinate p{x,0,z};const auto profile=StateProfile(s,p,time,data);
+            const auto row=Point(0,p,z==m_parameters.geometry.height?-1:0);
+            RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=row.Gradient(s,offset[a]);
+            const double k=row.Value(s,offset[K()]),nt=profile->Original().EddyViscosity(z);
+            const auto law=InnerStress(k,nt,g);const auto source=WallSource(s,p,law.production,*profile);
+            rows.push_back(J::Object({{"coordinate",J::Numbers(p)},{"geometry",J::Number(row.geometry)},
+                {"element",J::Number(row.element)},{"sampled_K",J::Number(profile->K())},{"local_k",J::Number(k)},
+                {"production",J::Number(law.production)},{"reference_production",J::Number(source.referenceProduction)},
+                {"dissipation",J::Number(source.dissipation)},{"redistribution",J::Number(source.redistribution)},
+                {"source",J::Number(source.kSource)},{"normalization","null"},{"epsilon_H",J::Number(profile->Dissipation(m_parameters.geometry.height))}}));
+        }
+        Require(hash==RANSWallR3::Hash(s),"WJ source readback changed state");
+        return J::Object({{"model",J::Quote("WJHighRe")},{"source_policy",J::Quote(WJEP()?"Praw-pA0":"Praw-Ec")},
+            {"normalization","null"},{"governing_solves","0"},{"state_sha256",J::Quote(hash)},{"samples",J::List(rows)}});
+    }
     Require(CappedDestruction(),"legacy chi/cap source diagnostic is unsupported for the accepted wall formulation; use accepted_awf readback");
     Require(Dimension()==2 && !Mapped(),"source diagnostic is restricted to the flat 2D pilot");
     const auto hash=RANSWallR3::Hash(s);const auto domain=ScalarDomain(s,time,data);

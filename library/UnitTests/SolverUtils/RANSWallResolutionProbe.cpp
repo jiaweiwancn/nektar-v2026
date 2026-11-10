@@ -462,7 +462,8 @@ int main(int argc,char **argv)
         if(operation=="wj_checks")
         {
             Require(strictSpatialReadback && patch.WJ(),"WJ checks require immutable native checkpoint readback");
-            std::ofstream out(argv[3]);out<<J::Object({{"replay",replayContext},{"checks",patch.WJNativeChecks(state,data)}})<<'\n';
+            std::ofstream out(argv[3]);out<<J::Object({{"replay",replayContext},{"checks",patch.WJNativeChecks(state,data)},
+                {"source_balance",patch.SourceBalanceDiagnostic(state,time,data,{.5*(patch.lower[0]+patch.upper[0])},{0.,.1,.5,1.})}})<<'\n';
             Require(out.good(),"WJ native check write failed");world->Finalise();return 0;
         }
         if(operation=="evaluation_reuse_checks")
