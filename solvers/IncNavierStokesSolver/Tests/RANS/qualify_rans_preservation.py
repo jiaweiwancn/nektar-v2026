@@ -243,7 +243,8 @@ class Campaign:
         statuses.extend(t['status'] for t in self.result.get('temporal_tables',[]))
         statuses.extend(t['status'] for t in self.result.get('spatial_tables',{}).values())
         self.result['status']='pass' if statuses and all(s=='pass' for s in statuses) and self.result.get('coverage',{}).get('status')=='pass' else 'fail'
-        self.save();return 0 if self.result['status']=='pass' else 1
+        if self.result['status']=='pass' and any(t.get('convergence_status')=='partially_unresolved' for t in self.result.get('temporal_tables',[])):self.result['status']='unresolved'
+        self.save();return 0 if self.result['status']=='pass' else 2 if self.result['status']=='unresolved' else 1
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');p.add_argument('--policies',nargs='+',choices=POLICIES,default=list(POLICIES));p.add_argument('--epsilon-perturbation',type=float,default=0.);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=2);a=p.parse_args()

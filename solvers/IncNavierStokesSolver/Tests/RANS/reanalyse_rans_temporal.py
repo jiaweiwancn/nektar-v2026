@@ -50,9 +50,12 @@ def main():
                     measured=min(d1,d2)>5*uncertainty;order=math.log2(d1/d2) if measured else None
                     table['fields'][field]=dict(differences_weighted_RMS=[d1,d2],differences_L2=[ab['fields'][field]['L2'],bc['fields'][field]['L2']],order=order,
                         uncertainty_floor=uncertainty,status='unresolved_floor' if not measured else 'pass' if .8<=order<=1.2 else 'fail')
-                table['status']='fail' if any(x['status']=='fail' for x in table['fields'].values()) else 'pass';table['initial_state_sha256']=runs[0][1]['initial_sha256'];table['terminal_time']=.0016
+                table['status']='fail' if any(x['status']=='fail' for x in table['fields'].values()) else 'pass';table['convergence_status']='failed' if table['status']=='fail' else 'partially_unresolved' if any(x['status']=='unresolved_floor' for x in table['fields'].values()) else 'demonstrated';table['initial_state_sha256']=runs[0][1]['initial_sha256'];table['terminal_time']=.0016
             result['temporal_tables'].append(table)
     result['coverage']=coverage(result['checks'],set(result['expected_check_names']),key=lambda x:x['name'])
     result['status']='pass' if result['coverage']['status']=='pass' and all(x['status']=='pass' for x in result['checks']) and all(x['status']=='pass' for x in result['temporal_tables']) else 'fail'
-    write_json(folder/'reanalysis.json',result);print(result['status']);return 0 if result['status']=='pass' else 1
+    result['execution_status']='completed' if result['coverage']['status']=='pass' and all(x['status']=='pass' for x in result['checks']) else 'failed_or_missing'
+    result['convergence_status']='failed' if result['status']=='fail' else 'partially_unresolved' if any(t.get('convergence_status')=='partially_unresolved' for t in result['temporal_tables']) else 'demonstrated'
+    if result['status']=='pass' and result['convergence_status']=='partially_unresolved':result['status']='unresolved'
+    write_json(folder/'reanalysis.json',result);print(result['status']);return 0 if result['status']=='pass' else 2 if result['status']=='unresolved' else 1
 if __name__=='__main__':sys.exit(main())
