@@ -110,5 +110,15 @@ def main():
  duration_final=[x for k,x in result['duration'].items() if k.endswith('-0.5')]
  result['duration_final_audits']=receipt(r/'duration-final-audits/results.json')
  result['gates']=dict(natural_scalar_observations='pass' if len(result['coverage']['complete_natural_scalar_observers'])==12 else 'failed_or_missing',initial_spatial='pass' if all(result['initial_gates'].get(k,{}).get('status')=='pass' for k in required_initial) else 'failed_or_missing',verification='pass' if all(x['status']=='pass' for x in result['verification'].values()) else 'failed_or_missing',short_spatial_temporal='pass' if result['coverage']['present_short_comparisons']==12 else 'failed_or_missing',all_model_term_replay='pass' if len(result['coverage']['complete_evolved_term_audits'])==12 else 'failed_or_missing',targeted_duration='pass' if duration_final and all(x['status']=='pass' for x in duration_final) and result['duration_final_audits']['status']=='pass' else 'failed_or_unattempted')
- result['status']='pass' if all(x=='pass' for x in result['gates'].values()) else 'failed_unresolved_or_incomplete';write_json(out/'summary.json',result);print(result['status']);return 0 if result['status']=='pass' else 1
+ result['status']='pass' if all(x=='pass' for x in result['gates'].values()) else 'failed_unresolved_or_incomplete'
+ full=out/'complete-results.json.gz'
+ with gzip.open(full,'wt',compresslevel=9) as stream:json.dump(result,stream,separators=(',',':'),allow_nan=False)
+ light={k:v for k,v in result.items() if k not in ('initial_screens','evolved_audits','cases')}
+ light['complete_results']=dict(file=full.name,sha256=sha(full),format='gzip JSON; includes every complete result body, field error, native/common term localization, reaction and all-state receipt')
+ light['initial_screens']={k:{q:v[q] for q in ('status','source','source_sha256')} | dict(checks=[dict(name=c['name'],status=c['status'],dof=c.get('space',{}).get('dof'),source=c.get('source')) for c in v['checks']]) for k,v in result['initial_screens'].items()}
+ light['evolved_audits']={k:{q:v[q] for q in ('status','source','source_sha256')} | dict(times=[c['time'] for c in v['checks']]) for k,v in result['evolved_audits'].items()}
+ light['cases']=[{k:c[k] for k in ('label','model','policy','wall','descriptor','space','dt','request_sha256','source')} | dict(milestones=[{k:m.get(k) for k in ('target','time','theta','status','final_state_sha256')} for m in c['milestones']]) for c in result['cases']]
+ witness=r/'portable-sampling-witness/witness.json'
+ if witness.exists():(out/'portable-sampling-witness.json').write_bytes(witness.read_bytes())
+ write_json(out/'summary.json',light);print(result['status']);return 0 if result['status']=='pass' else 1
 if __name__=='__main__':raise SystemExit(main())
