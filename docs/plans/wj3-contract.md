@@ -119,7 +119,8 @@ It records a practical 3600-second per-policy remaining trajectory budget.
 The same-T cross-mesh run uses2493 if a conservative cubic-cost estimate fits;
 otherwise639, leaving finer-mesh temporal qualification open. The total cap is
 500 scheduled attempts per policy, including failed attempts. Work is serial,
-one build worker, one test, numerical-library threads=1, below the server-wide
+initially one build worker, then four after a current capacity snapshot; one test,
+numerical-library threads=1, below the server-wide
 72-worker ceiling. No historical long campaign is included.
 
 Two common-time differences A and B produce p=log2(A/B) only above their
