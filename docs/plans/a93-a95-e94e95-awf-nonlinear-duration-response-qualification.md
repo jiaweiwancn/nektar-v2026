@@ -5,8 +5,9 @@ through T=.5 (theta=.1). A93 reaches the same duration with passing physical
 accuracy, admissibility and timestep bounds, but fails the fixed-common vertical
 momentum reduction; its response is not admitted. A95's T=.016 controlled
 response resolves pressure, vertical velocity, nonlinear shear stress and full
-production with passing space/timestep uncertainty. Its conditional extension
-and selected EP/half-amplitude controls are reported separately below.
+production with passing space/timestep uncertainty. Selected A95/EP and
+half-amplitude controls complete T=.016. Their field comparisons pass, but
+native weak-balance failures prevent full response qualification or extension.
 
 The Accepted response's T=.1 extension stops at a read-only native weak-balance
 gate. A frozen control identifies incorrect containing-element selection at
@@ -348,3 +349,293 @@ resume after their native children finish so suspension does not consume the
 subprocess timeout. Gross wall timings therefore include resource waits and
 are distinguished from instrumented process-CPU cost. No existing campaign,
 executable, library or checkpoint is modified or signalled.
+
+## Final A95 neutral duration receipt
+
+The A95 Natural Accepted cohort passes all three required milestones, both
+final spatial-term audits, all four scalar observers, both frozen-quadrature
+controls, independent constitutive checks and the additional common inner-k
+checks. Each primary observer contains 251 unique accepted states (253 records,
+including two repeated restart boundaries); each half-timestep observer contains
+501 unique states (503 records). Time intervals, state hashes and duplicate
+identities agree with the sealed native reports. All four histories retain
+their original timestep and IMEX1 method. No finer trial cohort is needed for
+the declared fieldwise uncertainty gate.
+
+| T=.5 scaled mass-dual residual | B5 | B11 | Ratio |
+|---|---:|---:|---:|
+| Native momentum-x | 1.126894e-6 | 3.764294e-7 | .334042 |
+| Native inner k | 1.350593e-6 | 4.143729e-7 | .306808 |
+| Native momentum-z | 7.182219e-7 | 2.693788e-7 | .375064 |
+| Fixed-common momentum-x | 6.783273e-7 | 3.242799e-7 | .478058 |
+| Fixed-common global k | 8.974764e-7 | 3.750535e-7 | .417898 |
+| Fixed-common momentum-z | 2.501352e-7 | 1.158366e-7 | .463096 |
+
+Every resolved ratio is below .85. The separately partitioned common inner-k
+receipt also passes; the historical global-k value cannot replace it. Other
+equations remain visible: outer epsilon native norms are 9.36418e-10 and
+1.11968e-9, below the declared residual floor, so these do not establish a
+spatial rate. Shared k rows, pressure, continuity, prescribed-row reactions and
+full reconstructed traction remain distinct from these six reduction checks.
+
+| T=.5 scaled reference RMS | A95 B5 | A95 B11 |
+|---|---:|---:|
+| U | 1.947736e-5 | 7.642459e-7 |
+| w | 3.115986e-7 | 2.742108e-8 |
+| k | 3.631649e-6 | 1.599723e-7 |
+| outer epsilon | 6.501799e-9 | 2.071413e-9 |
+| Pi | 2.583396e-6 | 4.104976e-7 |
+
+These are weighted physical RMS divided by the fixed scales declared above,
+not pointwise relative errors. True scaled L2 and actual-initial drift are
+also retained. For example B11 drift RMS is U=5.23170e-7, w=2.74211e-8,
+k=1.11803e-7, epsilon=1.56288e-9 and Pi=4.10498e-7. Source/storage identities
+are at most 2.54e-16 for k and 7.65e-18 for epsilon on the two primary final
+segments. Refreshed trace lag remains visible (up to 7.82e-12 on those segments)
+and is not repaired. Native correction calls and signed/absolute correction
+integrals are zero.
+
+The B11 final segment's native all-state/stage A95 radicand minimum is
+.6919428274, outer covariance minimum .1772842540, inner covariance minimum
+.2476860343, outer epsilon minimum .03959798195, and required cutoff budget
+ratio minimum 5.898709634. Coordinates, side, stage and time accompany each
+extremum. These values describe their declared native sampling set; the
+independent 800-point constitutive grid has its own margins and receipts.
+Across both models' final independent grids, R, Q, full signed production,
+model-specific epsilon sources, covariance and full normal/shear traction agree
+with independent formulas within 3.34e-16 (absolute criterion 5e-11). No stress
+component or isotropic raw-divergence work is omitted.
+
+## Completed bounded response controls
+
+All three A95 response cohorts use four native trajectories at T=.016
+(theta=.0032), with their own immutable actual perturbed zero-step histories.
+Accepted full amplitude, Accepted half amplitude and EP full amplitude each
+pass their field/traction/domain and baseline-subtracted space/timestep checks.
+Their native analytical weak momentum-z audits fail; these remain failed
+response qualifications. The complete supplement for the first Accepted
+failure gathers both spatial audits, all four scalar observers and both frozen
+quadrature controls without overwriting the first failed receipt. The EP and
+half-amplitude audits likewise have complete independent coverage.
+
+| Scaled primary response RMS at .016 | Accepted, 2e-5 | EP, 2e-5 |
+|---|---:|---:|
+| w | 3.324634e-5 | 3.319142e-5 |
+| Pi | 3.773466e-4 | 3.450708e-4 |
+| full normal traction Tzz | 3.724946e-4 | 3.417200e-4 |
+| Rxx | 1.476798e-4 | 1.475258e-4 |
+| Ryy | 7.423326e-6 | 7.262230e-6 |
+| Rzz | 1.482754e-4 | 1.480380e-4 |
+| Rxz | 1.899707e-4 | 1.892548e-4 |
+| Qxz | 1.427917e-4 | 1.427989e-4 |
+| full production | 1.918261e-4 | 1.909692e-4 |
+
+All 17 observables retain their four-member comparisons. k and outer epsilon
+responses are below the predeclared 5e-7 spatial signal floor; Qyy is identically
+zero here. They are unresolved signals, not measured convergence orders.
+Other listed core responses are resolved. Independent R/Q/P/traction and
+radicand comparisons remain within 4.45e-16; actual A95 radicands on those
+sampling grids remain above .6917828. Neutral analytical Qxz=0 is kept separate
+from the actual perturbed nonlinear shear response and from Rxz=-u_star^2.
+
+The initialized Accepted full-amplitude B5 divergence RMS is 2.87045e-16,
+maximum 1.60821e-15. Its actual/effective state hash is
+`f482078dcda8ec5403975a2f9b17e820aeb24f7b16c7e55d7e0880175a9d54f3`,
+different from neutral reference
+`b1743ac5799f15d30684aedafcef4d1e97662d646597f59f7e2a0f513a37590e`.
+Explicit and implicit boundary hashes both equal
+`efa95f6e5e2190ebbcebfb94c9d273db0107dab5a8ff92df4ea59f718ece2b8e`;
+raw/effective and source/target boundary differences are zero. Fresh/resume
+zero-step histories are byte identical. All other member identities are in the
+complete comparison bodies rather than inferred from this representative case.
+
+The half-amplitude test passes all 68 observable/member checks. Maximum
+departure from half the full response is 7.68644e-9, below the declared
+observable-specific limits. This is a bounded linear-scaling control, not a
+claim of linear governing turbulence equations. On the common wall-comparison
+grid, EP versus Accepted differences are Pi=3.44672e-5, Tzz=3.44384e-5,
+w=7.69576e-7, Qxz=3.27634e-6 and P=6.13491e-6 on the primary pair. Same-wall
+space/time uncertainty checks pass; different wall laws are not required to
+predict equal responses. The grid resolves both fixed partitions and analytical
+profile breakpoints, with exact-H inner/outer samples and one pressure gauge.
+Moving cutoff panels remain part of native source quadrature and are recorded
+separately; the computational mesh is not moved.
+
+The independent EP frozen ownership control also diagnoses the same locator
+failure: 127 misowned points, analytical weak momentum-z 9.60712e-10 falling to
+5.04018e-16 with explicit containing-element bases. The one-point neutral
+initialization fixture in the evidence directory reproduces geometry 4 being
+selected for a strictly interior point in geometry 5, with no time stepping or
+perturbation. Its forward closure remains valid; its ownership checker exits 1.
+This is distinct from the earlier near-H diagnostic fixture, whose initial
+failure and subsequent explicitly restricted scope are both archived.
+
+## Independent physical scalar budgets
+
+All 16 required Accepted full-response physical-budget reconstructions complete:
+perturbed and neutral baselines, both spaces, both timesteps, volume orders
+48/64 and physical-face orders 16/32. Reconstruction, finiteness, exact request
+resume and quadrature/face-order controls pass. They include the dependent
+epsilon boundary coefficient's storage rate and exclude the internal interface
+from whole-patch external flux. Prescribed-row reaction values do not enter.
+
+Their finite-defect accuracy does **not** pass the separately declared criteria.
+For perturbed B5/B11, signed scaled frozen-stage defects are approximately
+1.22755e-5/1.23242e-5 (inner k), 1.42630e-5/1.42644e-5 (outer k),
+1.38970e-5/1.38974e-5 (outer epsilon), and 1.32304e-5/1.32508e-5 (whole k).
+Spatial reductions fail or are unresolved and temporal uncertainty is unresolved.
+On the baseline, outer k is below the floor and whole-k temporal uncertainty
+passes; neither fact establishes full physical budget accuracy. A separate
+derived classifier recomputes these numerical conditions rather than trusting
+printed pass labels, preserves the earlier reconstruction receipt, and exits 1.
+Four regression fixtures distinguish failure, uncertainty, floor and success.
+Physical budget accuracy for EP/half amplitude is unattempted after the common
+native weak-balance gate; no independent conservation theorem is claimed.
+
+## Provenance, verification and cost
+
+The trajectory runtime is unchanged from the byte-bridged prior numerical
+snapshot. No governing turbulence, wall, patch, stage or acceptance source file
+differs from the reviewed baseline. Thirty-four governing file hashes and all
+loaded dependencies are checked by each admission. New C++ code is confined
+to the read-only probe. Final reporting source is recorded independently from
+each runtime's actual compilation source and compiler/link identities.
+
+| Artifact | SHA256 |
+|---|---|
+| Frozen trajectory solver | `389dee61618f51c9d451be2ddbdc0e83ee049351683da2eae3b59ab0758afcb4` |
+| Frozen descriptor probe | `a050e8af62360391588667ad168e2daa4dc433bc39679f6d326bf6ff33ae9279` |
+| Spatial/response probe v3 | `6a24d6eaaeee1c129b338ed90526f41fddfece01b69c7636bc5efb5bd7ad86df` |
+| Physical-budget probe v5 | `71501637551c05e5c948d81c2deb7665a5b5ea209b1881fc283821c431eb9dab` |
+| Exact-interface diagnostic regression probe v7 | `4e461b4000dade3e3a033d197451f265b82e765149257c4e37e39f4626fbb67f` |
+
+v3 was compiled from `b48fc2c7f2f3ea04848af2d2c0bb31aee335f4b8`, v5 from
+`9034f1efa2353896069fa32036a267b4613bf829`, and v7 from
+`c5ca6b597539b219389c48c20962867552129e23`. Actual current loader maps, source
+hashes, compiler flags, CMake/compile/link hashes and runtime lineage accompany
+the export. GCC 11.4 Release uses `-fno-fast-math -ffp-contract=off` and
+`_GLIBCXX_ASSERTIONS`. Native work is rank 1, flat 2D, all numerical thread
+variables explicitly 1. No shared installation is replaced.
+
+Six targeted Python suites pass on Linux Python 3.10.12, as do CTest's duration,
+evidence, physical-budget accounting, forward-interface and budget-accuracy
+controls. The first CTest attempt without a built descriptor target remains
+failed and archived; the target was then built in isolation and the affected
+test passed. Command-line negative controls reject missing times, foreign
+configuration, missing companions, truncated observers, failed residual
+reductions, changed sealed evidence, existing output reuse, and neutral vectors
+misrepresented as perturbed inputs for the intended reasons. The real final
+scientific collector exits 1 and preserves four full accepted-state/history
+failure witnesses. Reconstruction success never replaces spatial reduction.
+
+Unchanged constitutive/wall, analytical weak-oracle, CLS, cache/rollback and
+ordinary restart evidence is reused only through its byte/source bridges, not
+rerun as a new broad campaign. Current neutral continuations and same-space
+perturbation initialization controls additionally exercise genuine native
+histories. Historical receipts and the eight epsilon temporal-order observations
+are byte checked and remain unchanged.
+
+Forty completed native segments contain 3192 accepted steps: A93 Accepted 1500,
+A95 Accepted 1596, and A95 EP 96. Sum of instrumented exclusive process CPU is
+22066.554799 seconds (6.13 CPU hours); diagnostic probes and orchestration are
+additional. Native domain/physical/audit scopes account for about 65.5% of that
+instrumented cost. Final-duration process CPU per step is approximately
+6.1–6.6 seconds on B5 and 7.4–7.5 seconds on B11. Gross wall times include
+resource suspensions and initialization and are not substituted for CPU cost.
+No backend or state-dependent validity-cache optimization was introduced.
+The owned guard is stopped only after checking there are no live or paused
+owned numerical families; the final census and the earlier exception remain
+in the evidence. Concurrent existing jobs are untouched.
+
+## Reproduction and retained artifacts
+
+The adjacent `a93-a95-e94e95-awf-nonlinear-duration-response-qualification-evidence`
+directory contains `decision.json`, full `complete-results.json.gz`, compressed
+extended summary, admissions, all four qualification failure witnesses, runtime
+manifests, source/consumed-input/history identities, controls, selected complete
+response comparisons, budget classifications, geometry diagnosis and the small
+one-point fixture. `artifact-inventory.json` maps every exported artifact to its
+Linux source and original hash. `SHA256SUMS` covers committed evidence. Heavy
+packets, quadrature arrays, binary/checkpoint files and full logs remain under
+the isolated Linux root above. No prior evidence file is replaced.
+
+Reproduction on Linux, with those preserved frozen runtimes and artifacts:
+
+```bash
+R='/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110'
+S="$R/source/solvers/IncNavierStokesSolver/Tests/RANS"
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+export BLIS_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1 TMPDIR="$R/tmp"
+export LD_LIBRARY_PATH="$R/runtime/lib"
+export NEKTAR_RANS_PROBE_TIMEOUT=14400
+
+# Exact resume: validates immutable requests/seals before reusing completed work.
+# Do not increase concurrency without a fresh aggregate worker census.
+python3 -B "$S/run_rans_balanced_duration.py" --root "$R" \
+  --admission "$R/admissions/A95-N-Accepted-loader-v2.json" \
+  --dt .002 --max-time .5 --concurrency 1 --resume \
+  --receipt-tag init-timeout-recovery-v1 \
+  --recovery-from "$R/comparisons/A95-N-Accepted-duration-0.002-0.1.json"
+# This selects the recorded recovery request and preserves the original timeout.
+
+python3 -B "$S/collect_rans_nonlinear_qualification.py" --root "$R" \
+  --admissions "$R/admissions/A93-N-Accepted-loader-v2.json" \
+    "$R/admissions/A95-N-Accepted-loader-v2.json" \
+  --regression-receipt "$R/targeted-regressions-final-v6.json" \
+  --forward-interface-receipt "$R/forward-interface-exact-scope-status.json" \
+  --output "$R/export-reproduction-new"
+# Expected exit 1: A93 common-w and A95/EP response-audit gates still fail.
+
+python3 -B "$S/classify_rans_physical_budget_accuracy.py" \
+  --source "$R/physical-budget-analyses/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json" \
+  --output "$R/physical-budget-accuracy-reproduction-new"
+# Expected exit 1, with complete failed/unresolved numerical classifications.
+```
+
+The geometry diagnosis commands and immutable requests are copied under
+`linux-controllers/run-A95-volume-ownership.py` and
+`run-A95-EP-volume-ownership.py`. A new destination is required for a fresh
+diagnosis; exact resume validates every completed artifact. The minimal fixture
+can be rerun with the frozen v3 probe on its `case.xml request.json new-packet.json`
+and checked with `check_minimal_ownership.py --packet new-packet.json --output new-result.json`.
+The checker must exit 1 for `native_geometry_not_containing_point`; recognizing
+that intended negative outcome is a successful reproduction, not a passing
+native quadrature qualification. Full response/EP/half commands and the
+separately initialized timestep identities are in `linux-controllers` and the
+complete result bodies. Existing destination mismatches fail before overwrite.
+
+## Scope and next capability gate
+
+Demonstrated: A95 Natural Accepted neutral qualification through T=.5/theta=.1
+on B5/B11 with both timestep companions; A93 physical evolution through the
+same duration with a failed final common-w reduction; short A95 Accepted and
+EP nonlinear responses with controlled field uncertainty and half-amplitude
+scaling. Earlier E94E95 Accepted T=.5 and the six short natural configurations
+remain qualified only within their prior scope. No new prescribed-kappa
+duration or response campaign is claimed.
+
+Failed or unresolved: A93's final common-w reduction; native analytical weak
+balance for all three A95 short response cohorts; physical scalar-budget
+spatial/temporal accuracy. A93 response is not admitted. A95 response beyond
+.016, EP neutral duration beyond .016, and EP/half physical-budget accuracy are
+unattempted after their stated gates. There is no hard-domain rejected timestep
+in these failures; the preserved witnesses are accepted physical states and
+their histories at failed post-step qualification checks.
+
+The next bounded package should correct native integration-point ownership:
+retain the generating geometry for volume points, distinguish strict interior
+containment from tolerance-based interface selection, and verify Stokes,
+partition, side and constraint identities on tiny moving-cutoff panels. This
+changes the numerical operator and needs an explicit method/signature version,
+fresh histories, ordinary CLS controls, and repeated short weak/space/time
+qualification before longer response work. It must not rewrite these failures
+or continue a changed operator from these old histories. Recheck A93's common-w
+load on the corrected operator; if it persists, use the retained pressure,
+stress, advection and common-row decomposition before another spatial choice.
+
+These data do not justify another duration increase now. After ownership and
+the residual/budget gates close, repeat bounded nonlinear response and then
+introduce a multi-column neutral inflow/outflow test with an independent
+physical face-flux budget before curved-terrain validation. MPI, true 3D,
+nonlinear/action solvers, terrain, open-outflow preservation, global stability
+and realizability/positivity theorems remain outside this evidence.
