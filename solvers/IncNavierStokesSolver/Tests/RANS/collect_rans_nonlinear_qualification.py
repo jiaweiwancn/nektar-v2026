@@ -9,6 +9,7 @@ from qualify_rans_preservation import load
 from rans_request_manifest import RequestManifest,sha
 from rans_duration_contract import require,required_times,prefix,MEMBERS,aggregate
 from collect_rans_balanced_spatial import compact_analysis,audit_summaries
+from rans_nonlinear_evidence_contract import classify
 
 
 def receipt(path):
@@ -21,15 +22,27 @@ def main():
     for name in ('workspace.json','historical-receipt-byte-verification.json','actual-initial-regression.json','resource-census-exception.json','worker-guard-status.json'):
         result['verification'][name]=receipt(r/name)
     result['verification']['aggregate-negative-controls']=receipt(r/'aggregate-negative-controls/results.json')
-    for name in ('runtime','runtime-resolution-v2','runtime-resolution-v3'):
-        for leaf in ('source-build.json','actual-loaded-libraries.json','lineage.json'):
+    for name in ('runtime','runtime-resolution-v2','runtime-resolution-v3','runtime-budget-v4'):
+        for leaf in ('source-build.json','actual-loaded-libraries.json','actual-loaded-libraries-current.json','lineage.json'):
             path=r/name/leaf
             if path.exists():shutil.copy2(path,out/(name+'-'+leaf))
     for name in ('worker-bookings.jsonl','worker-guard-events.jsonl','targeted-ctest.log','start-duration.log','short-coverage-repair.log'):
         if (r/name).exists():shutil.copy2(r/name,out/name)
-    gates={}
+    gates={};scope_input=dict(verification={},neutral={},responses={})
+    for name,path in (('aggregate_negative_controls',r/'aggregate-negative-controls/results.json'),
+                      ('actual_initial_binding',r/'actual-initial-regression.json'),
+                      ('historical_receipt_bytes',r/'historical-receipt-byte-verification.json'),
+                      ('targeted_regressions',r/'targeted-regressions.json')):
+        scope_input['verification'][name]=receipt(path)
+    for name,folder,binary in (('current_solver_libraries','runtime','IncNavierStokesSolver'),
+                               ('current_diagnostic_libraries','runtime-resolution-v3','RANSPreservationProbe')):
+        value=receipt(r/folder/'actual-loaded-libraries-current.json')
+        valid=value.get('executable')==str(r/folder/binary) and value.get('executable_sha256')==sha(r/folder/binary)
+        valid=valid and bool(value.get('libraries')) and all(Path(p).is_file() and sha(Path(p))==h for p,h in value.get('libraries',{}).items())
+        scope_input['verification'][name]=dict(status='pass' if valid else 'fail',receipt=value)
     for path in a.admissions:
         ad=receipt(path);cfg=ad['configuration'];tag=prefix(cfg['model'],cfg['policy'],cfg['wall']);result['admissions'][tag]=ad;attempts=[];qualified=False
+        selected=None
         for dt in (.002,.001):
             cohort=tag+'-duration-'+str(dt);control=r/'duration-cohorts'/cohort/'request-manifest.json'
             if not control.exists():continue
@@ -42,9 +55,13 @@ def main():
                     audit['spatial_audits']={m:dict(value,checks=[compact_analysis(c) for c in value['checks']]) for m,value in audit['spatial_audits'].items()}
                 row['audits'][str(T)]=audit
             final=row['audits']['0.5'];complete=all(x.get('status')=='pass' for x in row['comparisons'].values()) and final.get('status')=='pass'
+            if complete:
+                required_times(list(row['comparisons'].values()),(.016,.1,.5))
+                selected=dict(configuration=cfg,status='pass',comparisons=[dict(time=v['time'],status=v['status']) for v in row['comparisons'].values()],final_audit_status=final['status'],companions={m:v['scalar_coverage'] for m,v in final['companions'].items()})
             row['numerical_status']='pass' if complete else 'failed_unresolved_or_incomplete';qualified|=complete;result['cohorts'][cohort]=row;attempts.append(cohort)
         gates[tag+'-duration']='pass' if qualified else 'failed_unresolved_or_incomplete'
         result['admissions'][tag]['attempted_cohorts']=attempts
+        if cfg['wall']=='Accepted':scope_input['neutral'][cfg['model']]=selected or dict(configuration=cfg,status='failed_unresolved_or_incomplete')
     for folder in sorted((r/'campaigns').iterdir()):
         path=folder/'request-manifest.json'
         if not path.exists():continue
@@ -62,9 +79,25 @@ def main():
         data=receipt(path);bodies={}
         for milestone in data.get('milestones',[]):
             target=Path(milestone['comparison']);bodies[str(milestone['time'])]=receipt(target)
-        data['complete_comparisons']=bodies;result['responses'][path.parent.name]=data
+        data['complete_comparisons']=bodies;data['audits']={};rows=[]
+        for time,body in bodies.items():
+            audit=receipt(r/'response-audits'/(path.parent.name+'-'+time)/'results.json')
+            if 'spatial' in audit:audit['spatial']={m:dict(v,checks=[compact_analysis(c) for c in v['checks']]) for m,v in audit['spatial'].items()}
+            data['audits'][time]=audit
+            budgets={q.parent.name:receipt(q) for q in (r/'physical-budgets').glob(path.parent.name+'-*'+time+'*/results.json')}
+            data.setdefault('physical_budgets',{})[time]=budgets
+            rows.append(dict(time=float(time),status=body.get('status','not_completed'),audit_status=audit.get('status','not_completed'),physical_budget_status='reconstructed' if budgets and all(v['status']=='pass' for v in budgets.values()) else 'not_completed',companions={m:dict(last_time=float(time)) for m in MEMBERS} if len(body.get('provenance',[]))==8 else {}))
+        result['responses'][path.parent.name]=data
+        controller=load(path.parent/'request-manifest.json')['request']
+        if controller.get('amplitude')==2e-5:
+            value=dict(configuration=data['configuration'],status=data['status'],comparisons=rows,extended_to_point_one=any(v['time']==.1 for v in rows))
+            if data['configuration']['wall']=='Accepted':scope_input['responses'][data['configuration']['model']]=value
+            elif data['configuration']['wall']=='EP':
+                value['wall_comparison_status']=receipt(r/'wall-response-comparison/results.json').get('status','not_completed');scope_input['ep_control']=value
+    result['half_amplitude']=receipt(r/'half-amplitude-comparison/results.json');scope_input['half_amplitude']=result['half_amplitude']
+    result['wall_response_comparison']=receipt(r/'wall-response-comparison/results.json')
     result['historical_epsilon_orders']='eight observations remain unresolved under their immutable original criterion; new pairs bound uncertainty and do not measure order'
-    result['gates']=gates;result['status']='pass' if gates and all(x=='pass' for x in gates.values()) else 'failed_unresolved_or_incomplete'
+    result['gates']=gates;result['required_scope_input']=scope_input;result['required_scope_classification']=classify(scope_input);result['status']=result['required_scope_classification']['status']
     result['scope']='serial flat2D prescribed-reference patch; unsupported geometry/3D/MPI/actions unchanged; response and independent physical-flux scopes reported separately'
     complete=out/'complete-results.json.gz'
     with gzip.open(complete,'wt',compresslevel=9) as f:json.dump(result,f,separators=(',',':'),allow_nan=False)
