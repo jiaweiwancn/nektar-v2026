@@ -77,7 +77,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::NeutralAccuracy(const Vec
         const double w=f.weight*std::hypot(f.area[0],f.area[1],f.area[2]);area+=w;
         for(int a=0;a<3;++a)wall[a]+=w*(t[a][2]-(a==0?us*us:a==2?-pi[0]:0.));
     }
-    for(double v:wall)result[10]+=v*v;result[10]=std::sqrt(result[10])/area/(us*us);result[11]=eg;
+    for(double v:wall)result[10]+=v*v;
+    result[10]=std::sqrt(result[10])/area/(us*us);result[11]=eg;
     Require(std::all_of(result.begin(),result.end(),[](double v){return std::isfinite(v);}),"nonfinite neutral accuracy measurement");
     return result;
 }
