@@ -10,7 +10,7 @@ import uuid
 import xml.etree.ElementTree as ET
 
 from wj2_cases import case_xml, normal_knots, local_normal_knots
-from cls_epawf_m3_cases import set_info, write
+from cls_epawf_m3_cases import set_info, set_parameter, write
 from wj_immutable import Ledger, artifacts, digest, file_hash, read, write_once
 from wj6_resources import DEFAULT, run_limited
 from run_cls_epawf_picard import THREADS, require, state_hash
@@ -32,7 +32,7 @@ def main():
     write_once(root/'resource-design.json',design);resource_hash=file_hash(root/'resource-design.json')
     records=[]
 
-    def case(name,steps=0,capacity=None,cp=None,mesh='small',extras=None):
+    def case(name,steps=0,capacity=None,cp=None,mesh='small',extras=None,parameters=None):
         folder=root/name
         z=normal_knots(2) if mesh in ('L2Nx2','L2Nx1') else local_normal_knots('M2') if mesh=='M2' else normal_knots(0)
         x=[0.,1.] if mesh in ('small','L2Nx1') else [0.,.5,1.]
@@ -42,6 +42,13 @@ def main():
             set_info(tree,'RANSWallDenseEvolutionCapacity',str(capacity))
             set_info(tree,'RANSWallDenseEvolutionResourceDesign',resource_hash)
         for key,value in (extras or {}).items():set_info(tree,key,value)
+        for key,value in (parameters or {}).items():set_parameter(tree,key,value)
+        if (extras or {}).get('TurbulenceModel')=='CLSHighRe':
+            # Make an otherwise valid legacy variable inventory so this test
+            # reaches the capacity route guard, not epsilon-semantics parsing.
+            for e in tree.findall('./EXPANSIONS/E'):e.set('FIELDS',e.get('FIELDS').replace('epsilon','eps_tilde'))
+            for v in tree.findall('./CONDITIONS/VARIABLES/V'):
+                if v.text=='epsilon':v.text='eps_tilde'
         write(tree,xml)
         return folder,xml
 
@@ -68,6 +75,10 @@ def main():
             folder,xml=case('invalid-'+token.replace('.','p').replace('-','m'),capacity=token)
             execute(folder,[a.solver,xml],reason='dense_capacity_invalid')
         folder,xml=case('out-of-route',capacity=4331,extras={'TurbulenceModel':'CLSHighRe','RANSWallFormulation':'EPAWF','RANSWallKSampling':'Point','RANSWallTransition':'Fixed'})
+        execute(folder,[a.solver,xml],reason='dense_capacity_route')
+        folder,xml=case('out-of-route-eta',capacity=4331,parameters={'RANSWallEta':.1})
+        execute(folder,[a.solver,xml],reason='dense_capacity_route')
+        folder,xml=case('out-of-route-condensed',capacity=4331,extras={'RANSWallCondense':'True'})
         execute(folder,[a.solver,xml],reason='dense_capacity_route')
         folder,xml=case('missing-resource',capacity=4331,extras={'RANSWallDenseEvolutionResourceDesign':'None'})
         execute(folder,[a.solver,xml],reason='dense_capacity_resource_design')
