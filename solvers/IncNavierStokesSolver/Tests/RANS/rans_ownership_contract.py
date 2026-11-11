@@ -50,5 +50,6 @@ def classify_scope(receipt):
     return dict(schema=SCHEMA,numerical_operator=OPERATOR,
         status='pass' if all(v['status']=='pass' for v in gates.values()) else 'failed_unresolved_or_incomplete',
         gates=gates,response_extension_eligible=all(gates[k]['status']=='pass' for k in (
+            'ownership_geometry','history_cache_CLS','natural_short_matrix','selected_prescribed',
             'A95_neutral','A95_response_fields','A95_response_native_weak','physical_budget_reconstruction','physical_budget_accuracy')),
         scope='corrected bounded patch only; independent accuracy gates retained; no A93 response or extension beyond .016 in this package')

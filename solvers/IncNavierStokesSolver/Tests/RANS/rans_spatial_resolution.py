@@ -90,11 +90,19 @@ def test_parent_geometries(coarse,fine):
     return [parents[q['velocity_k']['geometry']] for q in fine['observation']['volume']]
 
 def test_effective_coordinates(fine):
-    # The native BasisData evaluator clamps local coordinates to [-1,1].
-    # Preserve raw source coordinates in the packet; match its actual test row.
-    # This algebraic compatibility does not verify physical element ownership.
     elements={e['geometry']:e for e in fine['observation']['elements']}
-    return [[min(max(q['coordinate'][a],elements[q['velocity_k']['geometry']]['lower'][a]),elements[q['velocity_k']['geometry']]['upper'][a]) for a in range(3)] for q in fine['observation']['volume']]
+    if fine.get('source_numerical_operator')=='LegacyCoordinateToleranceV1':
+        # Explicit legacy read-only comparison only; never a corrected run.
+        return [[min(max(q['coordinate'][a],elements[q['velocity_k']['geometry']]['lower'][a]),elements[q['velocity_k']['geometry']]['upper'][a]) for a in range(3)] for q in fine['observation']['volume']]
+    if fine['observation'].get('numerical_operator')!='GeneratedVolumeOwnerV1':
+        raise ValueError('common tests require an explicit corrected ownership identity')
+    result=[]
+    for q in fine['observation']['volume']:
+        e=elements[q['velocity_k']['geometry']]
+        if any(not e['lower'][a]<=q['coordinate'][a]<=e['upper'][a] for a in range(3)):
+            raise ValueError('corrected common-test point outside its generating geometry')
+        result.append(list(q['coordinate']))
+    return result
 
 def common_test(coarse,fine,cross,ref):
     """P = M_f^{-1} B_fc on native quadrature, then restrict by P^T.

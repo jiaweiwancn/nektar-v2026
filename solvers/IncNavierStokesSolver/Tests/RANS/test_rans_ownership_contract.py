@@ -72,5 +72,17 @@ class OwnershipContract(unittest.TestCase):
                                    '--input',str(inp),'--output',str(out)],capture_output=True,text=True)
             self.assertEqual(result.returncode,1);self.assertFalse(json.loads(out.read_text())['response_extension_eligible'])
 
+    def test_shared_prerequisites_block_future_extension(self):
+        keys=['ownership_geometry','history_cache_CLS','natural_short_matrix','selected_prescribed','A93_neutral',
+              'A95_neutral','A95_response_fields','A95_response_native_weak','physical_budget_reconstruction','physical_budget_accuracy']
+        r=dict(schema=SCHEMA,numerical_operator=OPERATOR,gates={k:dict(status='pass') for k in keys},
+               out_of_scope=dict(A93_response=True),response_max_time=.016)
+        # A93 remains independent where the A95 experiment permits it.
+        r['gates']['A93_neutral']['status']='failed_or_unresolved'
+        self.assertTrue(classify_scope(r)['response_extension_eligible'])
+        for key in keys[:4]:
+            q=copy.deepcopy(r);q['gates'][key]['status']='failed_or_unresolved'
+            self.assertFalse(classify_scope(q)['response_extension_eligible'],key)
+
 
 if __name__=='__main__':unittest.main()
