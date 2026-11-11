@@ -184,7 +184,8 @@ def independent_operator(packet,model='A95'):
     """
     o=packet['observation'];s=np.array(o['state']);off=np.array(o['offsets'],int);n=len(s)
     masses=[np.array(m) for m in packet['open_frozen_systems']['masses']]
-    M=block_diag(*masses,np.zeros((1,1)));A=M.copy();r=np.zeros(n)
+    # Pressure is an algebraic test field, with no backward storage term.
+    M=block_diag(*masses[:4],np.zeros((n-off[4],n-off[4])));A=M.copy();r=np.zeros(n)
     params=parameters(model);c=Column(model,1.,2.,0.,1.5e-5)
     for point in o['volume']:
         region=int(point['region']);v=point['velocity_k'];pr=point['pressure'];ids=np.array(v['ids'],int)
