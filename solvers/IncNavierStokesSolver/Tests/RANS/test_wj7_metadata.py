@@ -15,6 +15,26 @@ from wj_immutable import file_identity
 
 
 class Metadata(unittest.TestCase):
+    def test_streamed_boundary_estimate_omits_only_zero_mask_interior_rows(self):
+        from wj4_measure import boundary_rule
+        from wj5_measure import boundary_uncertainty
+        from wj7_qualification import boundary_rows_estimate,NAMES
+        from numpy.testing import assert_allclose
+        settings=dict(order=1,xorder=1)
+        points=list(boundary_rule(**settings));inner=next((x,z) for x,z in points if x==0 and z<1)
+        outer=next((x,z) for x,z in points if x==0 and z>1)
+        desc=dict(row=[[0,1.]],free_row=[[0,1.]],free_row_L2=1.,gross_row_L2=1.,absolute_accumulation=1.,prescribed_accumulation=1.)
+        rows=[dict(position=[x,0.,z],inner=z<1,constraint_rows=[copy.deepcopy(desc) for _ in range(5)]) for x,z in (inner,(.5,.5),outer)]
+        for q in rows[1]['constraint_rows']:q['free_row_L2']=1000.
+        m=dict(observations=rows,dependent_trace_action=[],arithmetic_evaluation_sensitivity=[1e-15]*6,
+            passive_diagnostics=dict(pressure_regions=[dict(offset=0,gauge_mean_row=[1.])]))
+        a=dict(systems={k:dict(physical_metric_min_eigenvalue=1.) for k in ('momentum','k','epsilon')},
+            estimated_comparison_floor={f:1e-12 for f in NAMES},estimated_sampled_comparison_floor={f:1e-12 for f in NAMES})
+        a['systems']['pressure']=dict(physical_mass_operator_bound=1.)
+        full=boundary_uncertainty(m,a,settings);filtered=boundary_rows_estimate(m,a,settings)
+        for f in NAMES:
+            for norm in ('L2','sampled_Linf'):assert_allclose(full['fields'][f][norm],filtered['fields'][f][norm],rtol=1e-14,atol=1e-30)
+        self.assertEqual(full['maximum_boundary_free_rows'],filtered['maximum_boundary_free_rows'])
     def test_both_order_comparisons_integrate_the_complete_boundary(self):
         from wj4_measure import rule,comparison
         from wj7_qualification import consistent_comparison

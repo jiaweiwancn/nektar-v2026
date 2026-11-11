@@ -92,6 +92,7 @@ class Study(WJ6Study):
         self.resource_file=self.root/'resource-design.json'
         self.design=dict(schema='WJ7FrozenRunIntentV1',policy=policy,runtime=self.runtime,source=artifacts([SCRIPTS.parents[3]/'docs/plans/wj7-contract.md']),
             code=self.code,parent=file_identity(a.root/'correction.json'),equivalence=file_identity(a.root/'native-equivalence.json'),
+            retained_replay=file_identity(a.root/a.replay_name/(policy+'.json')),
             meshes=dict(L2=normal_knots(2)),xknots=[[0.,1.],[0.,.5,1.]],amplitudes=AMP,budgets=BUDGET,sensitivity_fraction=.1,
             start=dict(coarse=32,fine=64,baseline=32),targets=[64,96,128],dt=dict(coarse=3.2e-5,fine=1.6e-5,baseline=3.2e-5),
             final_time=.004096,absolute_steps=True,drift_origin='original WJ-6 native CP0/fixed_reference',observation_orders=[8,10],xorders=[4,6],
@@ -232,6 +233,12 @@ def projection(a,policy,end):
     folder=a.root/'study'/policy;s=read(folder/'summary.json');ledger=Ledger(a.root,policy,cap=800)
     old=read(a.parent/'study'/policy/'T3-resource-projection.json')
     rates=dict(old['native_seconds_per_step_bounds'])
+    current_receipts={}
+    for name,e in s['execution'].items():
+        verify_artifacts({e['receipt']['path']:e['receipt']});r=read(e['receipt']['path'])
+        require(r['exit_code']==e['exit_code'] and r['actual_attempts']==e['actual_attempts'] and r['resource']==e['resource'],
+                'projection progress differs from immutable execution receipt')
+        current_receipts[name]=e['receipt']
     for tag in rates:
         current=[e['resource']['seconds']/e['actual_attempts']*1.25 for e in s['execution'].values()
             if e['role']==tag and e.get('actual_attempts') and e['exit_code']==0]
@@ -240,25 +247,49 @@ def projection(a,policy,end):
     rows=(128-(end-32))//32
     # Old native observation pair plus separately measured map export cost is
     # retained. We do NOT subtract all of the former q10 supplement.
-    order10_per_pair=old['remaining_order10_row_qualification_seconds']/9/1.25
-    observation=sum(max(old['measured_observation_seconds'][tag])+order10_per_pair for tag in rates)*rows*1.25
+    # Actual first-read native q8 and q10-with-maps costs, not the old extra
+    # quadrature-only q10 read plus an entire duplicate repair campaign.
+    prefix,q10,_=sealed_prefix(a.parent,policy);native_observation={}
+    old_manifest=read(a.parent/'compact-v3/manifest.json');identity=old_manifest['artifact_index']
+    verify_artifacts({identity['path']:identity});old_index=read(identity['path'])
+    cost_inputs={}
+    for tag,t in prefix['trajectories'].items():
+        pairs=[]
+        for c in [t['initial']]+t['trajectory']:
+            q=q10[tag+'/'+str(int(c['steps']))]
+            paths=[Path(v['path']).parent/'receipt.json' for v in (c,q)]
+            for f in paths:
+                require(str(f) in old_index,'missing sealed native row-export cost receipt')
+                verify_artifacts({str(f):old_index[str(f)]});cost_inputs[str(f)]=old_index[str(f)]
+            pairs.append(sum(read(f)['seconds'] for f in paths))
+        native_observation[tag]=max(pairs)
+    observation=sum(native_observation.values())*rows*1.25
     svd=sum(max(old['measured_svd_seconds'][tag]) for tag in rates)*rows*1.25
     replay=read(folder/('qualification-'+str(end-32)+'.json'))
     retained_count=len(replay['record_index'])/2
     # Existing prefix must be requalified each row under an enlarged envelope.
     expected_counts=[sum(len(observation_steps(tag,v)) for tag in rates) for v in range(end,129,32)]
     prefix_parent=sum(expected_counts)*replay['seconds']/retained_count*1.25
-    production_parent=3*rows*old['parent_seconds_per_observation_pair']*1.25
+    # Full payload parsing/evaluation is directly timed by the replay. Retain
+    # an explicit additional allowance for independent loads/diagnosis and
+    # serialization, validated by the passive production replay below.
+    profile=read(a.root/'production-profile'/ (policy+'.json'))
+    production_parent=3*rows*profile['maximum_parent_pair_seconds']*1.25
     parent=prefix_parent+production_parent
     launches=sum(math.ceil(n/32) for n in remaining.values());launch_overhead=launches*5*1.25
     estimate=sum(remaining[t]*rates[t] for t in rates)+observation+svd+parent+launch_overhead+600
     totals=ledger.totals();fits=totals['seconds']+estimate<=10800 and totals['attempts']+sum(remaining.values())<=800
+    archive=a.root/'resources'/policy/('before-'+str(end)+'-basis')
+    write_once(archive/'ledger.json',read(ledger.file));write_once(archive/'native-export-receipts.json',cost_inputs)
+    write_once(archive/'current-native-receipts.json',current_receipts)
     value=dict(schema='WJ7RemainingResourceProjectionV1',status='PASS' if fits else 'RESOURCE_LIMIT',before=end,
         native_rates=rates,remaining_steps=remaining,remaining_rows=rows,native_launches=launches,
         native_seconds=sum(remaining[t]*rates[t] for t in rates),observation_seconds=observation,svd_seconds=svd,
         streamed_prefix_parent_seconds=prefix_parent,production_parent_seconds=production_parent,additional_launch_overhead_seconds=launch_overhead,closure_seconds=600,
         headroom=1.25,totals=totals,projected_remaining_seconds=estimate,projected_total_seconds=totals['seconds']+estimate,
-        basis=artifacts([a.parent/'study'/policy/'T3-resource-projection.json',folder/('qualification-'+str(end-32)+'.json'),ledger.file]),
+        measured_native_row_export_pairs=native_observation,production_profile=file_identity(a.root/'production-profile'/(policy+'.json')),
+        basis=artifacts([a.parent/'study'/policy/'T3-resource-projection.json',folder/('qualification-'+str(end-32)+'.json'),
+            archive/'ledger.json',archive/'native-export-receipts.json',archive/'current-native-receipts.json']),
         allocation=scientific_workers(),policy_bytes=volume(folder),hard_limits=DEFAULT)
     require(max(rates.values())*32+120<=1500,'RESOURCE_LIMIT: <=32-step timeout unsupported')
     write_once(a.root/'resources'/policy/('before-'+str(end)+'.json'),value);return value
@@ -268,7 +299,8 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root',type=Path,required=True);p.add_argument('--parent',type=Path,required=True)
     p.add_argument('--solver',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
-    p.add_argument('--mode',choices=('prepare','retained-replay','import','replay','admit','cadence'),required=True)
+    p.add_argument('--mode',choices=('prepare','retained-replay','production-profile','import','replay','admit','cadence'),required=True)
+    p.add_argument('--replay-name',default='retained-replay')
     p.add_argument('--end',type=int,choices=(32,64,96,128),default=32);a=p.parse_args()
     require(platform.system()=='Linux','Linux is authoritative');os.environ.update(THREADS)
     for name in ('root','parent','solver','probe'):setattr(a,name,getattr(a,name).resolve())
@@ -298,8 +330,31 @@ def main():
                 require(max(changes)<=1e-15,'retained arithmetic ordering differs; unchanged budgets required')
                 result.update(seconds=time.time()-start,retained_replay=dict(leaves=504,decisions_exact=True,
                     maximum_absolute_value_or_uncertainty_difference=max(changes)),code=artifacts([SCRIPTS/'wj7_qualification.py',Path(__file__)]))
-                write_once(a.root/'retained-replay'/(policy+'.json'),result)
+                write_once(a.root/a.replay_name/(policy+'.json'),result)
         print('both retained-data qualifications complete');return
+    if a.mode=='production-profile':
+        from run_wj5_native import diagnose,independent_loads,independent_weak,independent_near_h,flow_decomposition
+        from wj7_qualification import complete_errors
+        for policy in ('EP','Budget'):
+            ledger=Ledger(a.root,policy,cap=800)
+            with session(ledger,'production-profile'):
+                old,q10,_=sealed_prefix(a.parent,policy);timings=[];checks=[]
+                for tag,t in old['trajectories'].items():
+                    c=t['trajectory'][-1];start=time.monotonic();raw=read(c['path']);m=raw['measurements'];d=read(c['report'])
+                    errors=complete_errors(m,policy,c);require(errors==c['errors'],'production-profile accuracy changed')
+                    dg=diagnose(m);require(dg==c['diagnosis'],'production-profile diagnosis changed')
+                    ch=raw['assembly_checks'];ch['policy']=policy
+                    independent_loads(ch,policy,d['offsets']);independent_weak(ch,m['weak_modes']);independent_near_h(ch,m);flow_decomposition(d,ch)
+                    del raw,m,d,ch;gc.collect()
+                    q=q10[tag+'/'+str(int(c['steps']))];raw=read(q['path']);m=raw['measurements']
+                    require(complete_errors(m,policy,q)==q['errors'],'production-profile order10 changed');diagnose(m)
+                    del raw,m;gc.collect();timings.append(time.monotonic()-start)
+                    checks.append(dict(tag=tag,q8=file_identity(c['path']),q10=file_identity(q['path'])))
+                value=dict(status='PASS',pair_seconds=timings,maximum_parent_pair_seconds=max(timings)+5.,
+                    fixed_extra_serialization_verification_seconds=5.,inputs=checks,governing_attempts=0,
+                    scope='measured complete passive parent work on actual retained fields; native export CPU accounted separately; plus25% in admission')
+                write_once(a.root/'production-profile'/(policy+'.json'),value)
+        return
     results={}
     if a.mode=='cadence':
         require(a.end in (64,96,128),'scientific cadence invalid')
@@ -311,7 +366,7 @@ def main():
         with session(s.ledger,a.mode+'-'+str(a.end)):
             if a.mode=='import':s.import_endpoints();results[policy]=s.s['components']['imports']
             elif a.mode=='replay':
-                retained=a.root/'retained-replay'/(policy+'.json')
+                retained=a.root/a.replay_name/(policy+'.json')
                 if retained.exists():
                     value=read(retained);verify_artifacts(value['code'])
                     require(value['gate']['status']=='PASS' and len(s.index(32))==len(value['record_index']),'retained replay/import coverage differs')

@@ -5,6 +5,7 @@ import gc
 import math
 import mmap
 import json
+import time
 from pathlib import Path
 import numpy as np
 from wj_immutable import read,file_hash,verify_artifacts,digest
@@ -101,6 +102,15 @@ def consistent_comparison(a,b,policy,settings):
     return regional_norms(av-bv,w,outer,a['observations'],xorder=int(settings['xorder']),rule_settings=settings)
 
 
+def boundary_rows_estimate(m,envelope,settings):
+    # Interior rows have zero boundary mask/weight in the original estimator.
+    # Preserve full-volume pressure gauge rows and global coefficient/basis
+    # bounds, but avoid constructing unused interior point estimates.
+    selected=[r for r in m['observations'] if r['position'][0] in (0.,1.) or r['position'][2]==2.]
+    require(selected,'missing boundary observations')
+    return boundary_uncertainty(dict(m,observations=selected),envelope,settings)
+
+
 def qualify(index,policy,design,end):
     """Only one full payload, or the current comparison pair, is live.
 
@@ -112,7 +122,7 @@ def qualify(index,policy,design,end):
     require(set(index)==expected,'missing/duplicate required observation order/time')
     require(all(c['steps']==step and c['rule_settings']['order']==order for (tag,step,order),c in index.items()),
             'wrong observation role/order/absolute step')
-    parts={};metrics={};envelopes={};sources={}
+    parts={};metrics={};envelopes={};sources={};parent_timings=[]
     for tag in TAGS:
         records=[index[tag,step,8] for step in observation_steps(tag,end)]
         packets=[copy.deepcopy(c['arithmetic']) for c in records if c.get('arithmetic')]
@@ -140,12 +150,13 @@ def qualify(index,policy,design,end):
         boundary={f:dict(L2=0.,sampled_Linf=0.) for f in floors};coverage=[]
         for step in observation_steps(tag,end):
             for order in (8,10):
-                c=index[tag,step,order];m=load_measurement(c)
+                c=index[tag,step,order];start=time.monotonic();m=load_measurement(c)
                 errors=complete_errors(m,policy,c)
+                parent_timings.append(dict(tag=tag,step=step,order=order,load_evaluate_seconds=time.monotonic()-start))
                 require(errors==c['errors'],'replayed accuracy/interface/divergence decisions differ')
                 metrics[tag,step,order]=errors
                 parts['accuracy/'+tag+'/'+str(step)+'/'+str(order)]=errors['accuracy_gate']
-                estimate=boundary_uncertainty(m,envelope,c['rule_settings'])
+                estimate=boundary_rows_estimate(m,envelope,c['rule_settings'])
                 for f,row in estimate['fields'].items():
                     for norm in ('L2','sampled_Linf'):boundary[f][norm]=max(boundary[f][norm],row[norm])
                 coverage.append(dict(step=step,order=order,state=c['state_sha256'],measurement_sha256=c['sha256']))
@@ -181,7 +192,7 @@ def qualify(index,policy,design,end):
                         scope,field,norm=key.split('/')
                         destination.append(dict(key=[order,group,int(step),scope,field,norm],**v))
     parts['tuple_coverage']=tuple_gate(rows,end)
-    return dict(schema='WJ7StreamedPrefixQualificationV1',policy=policy,end=end,gate=aggregate(parts),
+    return dict(schema='WJ7StreamedPrefixQualificationV1',policy=policy,end=end,gate=aggregate(parts),parent_timings=parent_timings,
         sensitivity=rows,legacy_sensitivity=legacy_rows,comparison_quadrature_correction=integration_changes,envelopes=envelopes,comparisons=comparisons,
         memory_contract='one full row-map payload or current comparison pair/order; no all-history payload cache',
         record_index={tag+'/'+str(step)+'/'+str(order):dict(path=c['path'],sha256=c['sha256'],report=c['report'],report_sha256=c['report_sha256'])

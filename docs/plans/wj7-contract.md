@@ -158,3 +158,15 @@ retains the old measured per-new-observation allowance; complete prefix
 requalification uses its newly measured streamed cost. These distinct tasks
 are both projected with25% headroom, along with all nine SVD analyses,
 first-read row exports, extra launches and600s closure.
+
+The boundary estimator may skip interior point evaluations only because their
+boundary mask/weights are identically zero; full-volume gauge rows and the
+global basis/coefficient maxima remain. A focused full-versus-filtered fixture
+and complete retained replay check this algebraic optimization. Each new
+admission uses a separate measured full passive production replay (parsing,
+evaluation, independent loads, diagnosis and serialization reserve) plus the
+sealed native q8 and q10-with-maps process receipts. Thus q10 row export remains
+charged, while the obsolete quadrature-only duplicate and duplicate repair
+parent work are not projected as a second campaign. Every cost input, ledger
+basis and native receipt is snapshotted immutably before launch. Superseded
+unoptimized replay time remains charged to WJ-7.
