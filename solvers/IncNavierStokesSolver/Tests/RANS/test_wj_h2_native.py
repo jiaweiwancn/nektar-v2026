@@ -9,7 +9,7 @@ import uuid
 import xml.etree.ElementTree as ET
 import numpy as np
 from numpy.testing import assert_allclose
-from wj_h2_profiles import wall,NU,D0,TOP
+from wj_h2_profiles import wall,constitutive,NU,D0,TOP
 from wj_h2_cases import case_xml
 from cls_epawf_m3_cases import set_info,set_parameter,write
 from validate_wj_h1 import run,require,save,sha
@@ -25,7 +25,9 @@ def independent_boundary(report):
         role=r['role'];inner=r['inner'];un=U@normal;mass+=w*un
         measures[(role,inner)]=measures.get((role,inner),0)+w
         nt=wall(r['K'],H,h)['a']*max(r['chart'][2]-wall(r['K'],H,h)['zv'],0) if inner else 0
-        T=-R+np.eye(3)*(2*k/3-r['pi'])+(NU*(G+G.T) if inner else 0)
+        Rexpected=2*k/3*np.eye(3)-nt*(G+G.T) if inner else constitutive(k,r['epsilon'],G)[0]
+        assert_allclose(R,Rexpected,rtol=3e-12,atol=3e-13)
+        T=-Rexpected+np.eye(3)*(2*k/3-r['pi'])+(NU*(G+G.T) if inner else 0)
         assert_allclose(r['actual_traction'],T@normal,rtol=2e-12,atol=3e-13)
         applied=np.array(r['applied_traction']);dk=NU+nt if inner else (572/6561)*k*k/r['epsilon']
         de=0 if inner else dk/1.3

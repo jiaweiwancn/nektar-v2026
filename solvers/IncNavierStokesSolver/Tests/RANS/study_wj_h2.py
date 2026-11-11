@@ -101,6 +101,9 @@ class Study:
 
     def persist(self):save(self.status,self.summary)
 
+    def stop(self,record,gate):
+        self.summary.update(status='RESOURCE_LIMIT' if record.get('status')=='RESOURCE_LIMIT' else 'OBSTRUCTED',first_limiting_gate=gate);self.persist()
+
     def native(self,key,steps,dt=.02,refined=False,restart=None,reuse='ExactStepV1',length=.09):
         if key in self.summary['runs']:raise ValueError('immutable run key exists; inspect retained result before explicit continuation')
         folder=self.folder/key;xml=case_xml(folder,'physical',steps,dt,refined,reuse,length=length,restart=restart)
@@ -108,7 +111,8 @@ class Study:
         okay=execute(self.root,'study-'+key,[self.runtime,xml],folder,steps,900,extra_env=self.env)
         rp=xml.with_suffix('.evolution.json');report=load(rp) if rp.exists() else None
         passed=okay and report is not None and accepted(report)
-        record=dict(status='PASS' if passed else 'OBSTRUCTED',xml=str(xml),xml_sha256=sha(xml),report=str(rp),
+        resource=load(self.root/'operations'/('study-'+key)/'receipt.json')['status']=='RESOURCE_LIMIT'
+        record=dict(status='PASS' if passed else 'RESOURCE_LIMIT' if resource else 'OBSTRUCTED',xml=str(xml),xml_sha256=sha(xml),report=str(rp),
             report_sha256=sha(rp) if rp.exists() else None,requested_steps=steps,dt=dt,refined=refined,
             reuse=reuse,seconds=time.monotonic()-start,checkpoint=report.get('checkpoint') if report else None,
             steps=report.get('steps') if report else None,time=report.get('time') if report else None,
@@ -134,27 +138,32 @@ class Study:
     def pilot(self):
         # Each dt has its own immutable native CP0; no changed-dt checkpoint reuse.
         cp0,z=self.native('base-cp0',0,reuse='Off')
-        if z['status']!='PASS':self.summary.update(status='OBSTRUCTED',first_limiting_gate='represented physical CP0');self.persist();return
+        if z['status']!='PASS':self.stop(z,'represented physical CP0');return
         base,b=self.native('base-pilot-off',4,restart=cp0['checkpoint'],reuse='Off')
-        if b['status']!='PASS':self.summary.update(status='OBSTRUCTED',first_limiting_gate='coarse physical pilot');self.persist();return
+        if b['status']!='PASS':self.stop(b,'coarse physical pilot');return
         on,o=self.native('base-pilot-on',4,restart=cp0['checkpoint'])
-        if o['status']!='PASS':self.summary.update(status='OBSTRUCTED',first_limiting_gate='exact-cache pilot');self.persist();return
+        if o['status']!='PASS':self.stop(o,'exact-cache pilot');return
         same_history(base,on)
         self.summary['physical_off_on_exact']=True
         fcp0,fz=self.native('fine-cp0',0,dt=.01)
-        if fz['status']!='PASS':self.summary.update(status='OBSTRUCTED',first_limiting_gate='fine represented CP0');self.persist();return
+        if fz['status']!='PASS':self.stop(fz,'fine represented CP0');return
         assert np.asarray(cp0['state'],dtype='<f8').tobytes()==np.asarray(fcp0['state'],dtype='<f8').tobytes()
         fine,f=self.native('fine-pilot',8,dt=.01,restart=fcp0['checkpoint'])
-        if f['status']!='PASS':self.summary.update(status='OBSTRUCTED',first_limiting_gate='fine physical pilot');self.persist();return
+        if f['status']!='PASS':self.stop(f,'fine physical pilot');return
         rcp0,rz=self.native('refined-cp0',0,refined=True)
-        if rz['status']!='PASS':self.summary.update(status='OBSTRUCTED',first_limiting_gate='refined represented CP0');self.persist();return
+        if rz['status']!='PASS':self.stop(rz,'refined represented CP0');return
         refined,r=self.native('refined-pilot',4,refined=True,restart=rcp0['checkpoint'])
-        if r['status']!='PASS':self.summary.update(status='OBSTRUCTED',first_limiting_gate='refined physical pilot');self.persist();return
+        if r['status']!='PASS':self.stop(r,'refined physical pilot');return
         designs=[load(Path(b['xml']).with_name('case-design.json')),load(Path(r['xml']).with_name('case-design.json'))]
         points,weights=observation_rule(designs)
         obs=[]
         for label,record in [('coarse',o),('fine',f),('refined',r)]:
             v=self.observe('pilot-'+label,record,points,weights,weak=label=='coarse',assembly=label=='coarse');assert v is not None;obs.append(v)
+        from wj_h2_weak import independent_weak
+        from test_wj_h2_native import independent_boundary
+        actual=load(o['report'])
+        self.summary['pilot_independent_loads']=independent_weak(obs[0]['weak_checks'],actual)
+        self.summary['pilot_boundary_loads']=independent_boundary(actual)
         K=designs[0]['K'];eps=(K/QE)**1.5/(KAPPA*.5)
         self.summary['comparisons']['pilot_time']=comparison(obs[0],obs[1],weights,K,eps)
         self.summary['comparisons']['pilot_normal']=comparison(obs[0],obs[2],weights,K,eps)
@@ -186,7 +195,7 @@ class Study:
                     count=min(25,goal-record['steps']);key=f'{name}-to-{record["steps"]+count:04d}'
                     report,record=self.native(key,count,dt,name=='refined',record['checkpoint'])
                     if record['status']!='PASS':
-                        self.summary.update(status='OBSTRUCTED',first_limiting_gate=key);self.persist();return
+                        self.stop(record,key);return
                 last[name]=record
                 current[name]=self.observe(f'{name}-measure-{goal:04d}',record,points,weights,weak=target==8 and name=='base')
                 if current[name] is None:self.summary.update(status='OBSTRUCTED',first_limiting_gate='passive measurement');self.persist();return
@@ -201,4 +210,5 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--solver',type=Path,required=True)
     p.add_argument('--observer',type=Path,required=True);p.add_argument('--phase',choices=('pilot','extend'),required=True);a=p.parse_args()
     s=Study(a.root,a.solver,a.observer);getattr(s,a.phase)();print(json.dumps(s.summary,indent=2))
+    raise SystemExit(0 if s.summary['status']=='PASS' else 2)
 if __name__=='__main__':main()

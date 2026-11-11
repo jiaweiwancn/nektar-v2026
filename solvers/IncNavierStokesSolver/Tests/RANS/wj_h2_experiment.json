@@ -1,0 +1,73 @@
+{
+  "schema": "WJH2RoughFlatV1",
+  "source": {
+    "citation": "Cao and Tamura, JWEIA 94 (2006), 1-19",
+    "doi": "10.1016/j.jweia.2005.10.001",
+    "pdf_sha256": "adffb5c1d740be791211d82ce35778a37a3315a6dc72c56c80b70cc6642a43df",
+    "reported_anchors": "wj_h1_experiment.json; retained without relabeling H1 as calibrated",
+    "digitized_data": "cao-tamura-fig3/rough-fig3.csv",
+    "digitization_provenance": "cao-tamura-fig3/digitization.json",
+    "visual_check": "cao-tamura-fig3/source-overlay.png"
+  },
+  "units": {"length": "H_h=0.040 m", "velocity": "U_infinity", "time": "H_h/U_infinity"},
+  "physical_parameters": {
+    "hill_height": 1, "hill_halfwidth": 2.5, "cube_height": 0.125,
+    "cube_spacing": 0.875, "frontal_area_density": 0.041,
+    "aerodynamic_z0": 0.005, "assumed_displacement": 0.0875,
+    "boundary_layer_depth_approximate": 6.25, "physical_ceiling": 20,
+    "reported_u_tau": 0.051, "AWF_nu": 0.00006423173803526447
+  },
+  "data_plane": {
+    "location": "virtual crest with hill absent; Fig.3, p.7 and Sec.3.1 pp.6-8",
+    "virtual_crest_x": 0, "computational_inlet_x": 0, "outlet_x": 8,
+    "assumption": "identify the measured plane approximately with inlet; no upstream-fetch calibration",
+    "consequence": "imposed outer mean data at x=0 are not an independent validation; report flat development at x=2,4,6,8"
+  },
+  "missing_inputs": {
+    "spanwise_variance": "(1-theta)*sigma_vertical^2 + theta*sigma_u^2",
+    "theta_family": [0, 0.5, 1], "base_theta": 0.5,
+    "k": "0.5*(sigma_u^2+sigma_span^2+sigma_vertical^2)",
+    "reported_anchor_k_over_utau2_bracket": [3.58815, 5.26095],
+    "reported_anchor_midpoint": 4.42455,
+    "actual_K_H": "evaluate digitized rms at physical z=d0+H_w; not the rounded near-wall anchor",
+    "epsilon": "Cd^(3/4)*k(z)^(3/2)/l(r); l=kappa*r*(1+kappa*H_w/L)/(1+kappa*r/L)",
+    "L_over_delta_family": [0.05, 0.09, 0.15], "base_L_over_delta": 0.09,
+    "trace": "epsilon_H=A(K)/H_w is dependent, never independently prescribed in conflict",
+    "far_completion": "C1 finite-depth tail to U=1 and assumed .003 rms per component at physical z=12.5; constant beyond",
+    "classification": "unmeasured completion assumptions, not experimental error bars or retuned WJ constants"
+  },
+  "roughness_calibration": {
+    "height_rule": "smallest H in [.375,.5,.75] containing at least three rough-case mean points above effective wall",
+    "selected_H_w": 0.5,
+    "h_s_rule": "least squares finite-nu AWF U(r)=u_tau^2*J0(r), using measured completion K(H) and reported u_tau only",
+    "selected_h_s_reference": 0.03721697831176141,
+    "fitting_residuals": "retain exact Linux case-design.json and completion summary",
+    "restrictions": "no hill speed-up/reattachment fit; cube height, z0 and h_s remain distinct"
+  },
+  "boundary_roles": {
+    "mode": "OpenTunnelV1, production serial flat composite WJ Budget route",
+    "inlet": "physical finite-depth U,k,outer epsilon; no-slip ground corner wins; H epsilon owned by dependent trace",
+    "outlet": "prescribed full physical mean traction vector, zero for physical pilot; scalar zero outward diffusive flux",
+    "pressure": "traction fixes level; no redundant mean-pressure unknown/row or initial regauging; p/rho=pi-2k/3",
+    "ceiling": "physical z=20, impermeable slip, zero scalar diffusive flux for physical pilot; later sensitivity remains",
+    "ground": "no-slip, zero modeled k diffusive flux",
+    "backflow": "stop before commit if sampled outlet normal velocity < -1e-12; no clamp or scalar extrapolation"
+  },
+  "analytic_control": {
+    "kind": "separate Budget/WJ neutral reference, not measured-k completion",
+    "u_ref": 0.051, "K": "q_e*u_ref^2", "A": "u_ref^3/kappa",
+    "inner_k": "integrated budget reference, nonconstant",
+    "outer_velocity": "u_ref^2*J0(H)+(u_ref/kappa)*ln((z-d0)/H)",
+    "outer_epsilon": "A/(z-d0)", "reduced_pressure": "pi_outer=0, pi_inner=-K/Ne",
+    "outlet": "complete regional T_ref*e_x, including transverse +u_ref^2",
+    "ceiling": "impermeable, applied tangent +u_ref^2 and epsilon diffusive flux Cd*K^2/(sigma_epsilon*(Ztop-d0))"
+  },
+  "numerical_scope": {
+    "spaces": "Q3 velocity/scalars, regional continuous Q1 pressure, one shared U/k trace, outer-only epsilon",
+    "temporal": "IMEX1/PimpleSingleSweep, eta=0, one U/pressure/k/epsilon solve and one logical bound",
+    "dense_state_limit": 3000,
+    "pilot": "dt .02/.01 to T=.08; fresh compatible CP0 per dt",
+    "frozen_target": "T=8, one nominal flow-through of [0,8]; otherwise retain unreached target",
+    "excluded": "physical hill prediction, EP, WJ7 continuation, clipping/caps/forcing, sparse rewrite, 3D/MPI, LES/spectra"
+  }
+}
