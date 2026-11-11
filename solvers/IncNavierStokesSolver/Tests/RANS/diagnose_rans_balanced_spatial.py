@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Initialization-first native spatial diagnosis on explicitly declared spaces."""
-import argparse,gzip,hashlib,json,os,subprocess,sys,time
+import argparse,gzip,hashlib,json,os,resource,subprocess,sys,time
 from pathlib import Path
 os.environ.update(dict.fromkeys(('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','NUMEXPR_NUM_THREADS'),'1'))
 from rans_qualification import THREADS,write_json,exact_vector_hash
@@ -12,10 +12,14 @@ from run_a93_a95_e94e95_matrix import case_xml
 from rans_spatial_resolution import analyze,common_test,test_parent_geometries,test_effective_coordinates
 
 def run_probe(runtime,folder,request):
-    write_json(folder/'request.json',request);t=time.monotonic()
+    write_json(folder/'request.json',request);t=time.monotonic();cpu0=resource.getrusage(resource.RUSAGE_CHILDREN)
     timeout=int(os.environ.get('NEKTAR_RANS_PROBE_TIMEOUT','1200'))
     if not 1<=timeout<=14400:raise ValueError('invalid read-only diagnostic deadline')
     with (folder/'probe.log').open('w') as f:c=subprocess.run([str(runtime/'RANSPreservationProbe'),'case.xml','request.json','packet.json'],cwd=folder,stdout=f,stderr=subprocess.STDOUT,timeout=timeout)
+    cpu1=resource.getrusage(resource.RUSAGE_CHILDREN)
+    write_json(folder/'probe-process-cost.json',dict(exit_code=c.returncode,wall_seconds=time.monotonic()-t,
+        process_cpu_seconds=cpu1.ru_utime-cpu0.ru_utime+cpu1.ru_stime-cpu0.ru_stime,
+        scope='probe and reaped descendants; wall includes independently recorded resource suspensions'))
     if not (folder/'packet.json').exists():raise RuntimeError('missing native packet; exit '+str(c.returncode))
     data=load(folder/'packet.json')
     if c.returncode or data.get('status')!='pass':raise RuntimeError('native diagnostic failed '+str({k:v for k,v in data.items() if k not in ('observation','resolution','test_basis')}))

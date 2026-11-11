@@ -6,7 +6,7 @@
 all completed artifacts and advances only missing milestones with native history.
 No field, checkpoint signature, timestep or boundary vector is rewritten.
 """
-import argparse,gzip,json,math,os,shutil,subprocess,sys,tempfile,time,xml.etree.ElementTree as ET
+import argparse,gzip,json,math,os,resource,shutil,subprocess,sys,tempfile,time,xml.etree.ElementTree as ET
 from pathlib import Path
 from contextlib import nullcontext
 os.environ.update(dict.fromkeys(('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','NUMEXPR_NUM_THREADS'),'1'))
@@ -124,15 +124,18 @@ def main():
     m=load(folder/'metrics.json');restart=Path(m['checkpoint']);start=T;continue
    steps=round((T-start)/a.dt)
    if steps<=0 or abs(steps*a.dt-(T-start))>1e-13:raise ValueError('milestone is not an integer number of unchanged timesteps')
-   configure(folder,a,ref,steps,restart);env=dict(os.environ,NEKTAR_RANS_TIMING_FILE=str(folder/'timing.jsonl'));t0=time.monotonic()
+   configure(folder,a,ref,steps,restart);env=dict(os.environ,NEKTAR_RANS_TIMING_FILE=str(folder/'timing.jsonl'));t0=time.monotonic();cpu0=resource.getrusage(resource.RUSAGE_CHILDREN)
    with (folder/'solver.log').open('w') as f:
     try:c=subprocess.run([str(solver),'case.xml'],cwd=folder,stdout=f,stderr=subprocess.STDOUT,env=env,timeout=a.timeout);code=c.returncode
     except subprocess.TimeoutExpired:code=124
-   elapsed=time.monotonic()-t0;report=load(folder/'case.evolution.json') if (folder/'case.evolution.json').exists() else {}
+   elapsed=time.monotonic()-t0;cpu1=resource.getrusage(resource.RUSAGE_CHILDREN);report=load(folder/'case.evolution.json') if (folder/'case.evolution.json').exists() else {}
    if actual_initial and report.get('initialization_receipt') and start==0.:assert report['initialization_receipt']['raw_initial_sha256']==actual_initial['state_sha256'],'actual perturbed initialization changed'
    complete=code==0 and not report.get('failure') and abs(report.get('time',-1)-T)<1e-13 and report.get('steps')==round(T/a.dt)
    metric=dict(time=report.get('time'),theta=report.get('time',0)*ref.us/ref.H,target=T,exit_code=code,wall_seconds=elapsed,seconds_per_step=elapsed/max(1,len(report.get('pimple_attempts',[]))),requested_steps=steps,steps=report.get('steps'),execution_status='completed' if complete else 'failed',
     initialization_receipt=report.get('initialization_receipt'),extrema=audited_extrema(report),failure=report.get('failure'),configuration_sha256=sha(folder/'case.xml'))
+   metric['process_cpu_seconds']=dict(user=cpu1.ru_utime-cpu0.ru_utime,system=cpu1.ru_stime-cpu0.ru_stime,
+     total=cpu1.ru_utime-cpu0.ru_utime+cpu1.ru_stime-cpu0.ru_stime,
+     scope='native solver and reaped descendants only; wall includes resource suspensions, recorded independently by the owner-aware guard')
    audits=report.get('state_audits',[]);metric['all_audited_accuracy']=[dict(time=t,values=x['pilot_accuracy_E_D_wall_gauge']) for t,x in zip(report.get('audit_times',[]),audits,strict=True) if 'pilot_accuracy_E_D_wall_gauge' in x]
    metric['final_stage_residual']=report.get('stage_audits',[])[-1:];metric['final_audit']=audits[-1] if audits else None
    attempts=report.get('pimple_attempts',[]);metric['source_and_constraint_maxima']={k:max((float(np.max(np.abs(x.get(k,0)))) for x in attempts),default=0.) for k in ('refreshed_trace_defect','momentum_splitting_identity_defect','k_same_state_source_storage_defect','epsilon_same_state_source_storage_defect','corrected_continuity_gauge','bound_calls')}

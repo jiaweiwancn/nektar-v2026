@@ -11,6 +11,7 @@ import hashlib
 import json
 import math
 import os
+import resource
 from pathlib import Path
 import subprocess
 import sys
@@ -39,10 +40,15 @@ def compact_packet(root):
 
 def probe(executable,folder,request):
     write_json(folder/'request.json',request)
+    t=time.monotonic();cpu0=resource.getrusage(resource.RUSAGE_CHILDREN)
     with (folder/'probe.log').open('w') as f:
         timeout=int(os.environ.get('NEKTAR_RANS_PROBE_TIMEOUT','600'))
         if not 1<=timeout<=14400:raise ValueError('invalid read-only probe deadline')
         child=subprocess.run([str(executable),'case.xml','request.json','packet.json'],cwd=folder,stdout=f,stderr=subprocess.STDOUT,timeout=timeout,env=dict(os.environ,**THREADS))
+    cpu1=resource.getrusage(resource.RUSAGE_CHILDREN)
+    write_json(folder/'probe-process-cost.json',dict(exit_code=child.returncode,wall_seconds=time.monotonic()-t,
+        process_cpu_seconds=cpu1.ru_utime-cpu0.ru_utime+cpu1.ru_stime-cpu0.ru_stime,
+        scope='probe and reaped descendants; wall includes independently recorded resource suspensions'))
     path=folder/'packet.json'
     if not path.exists():raise RuntimeError('probe produced no packet; exit '+str(child.returncode))
     full=load(path)
