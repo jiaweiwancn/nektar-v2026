@@ -42,7 +42,7 @@ def approximate(fn,knots,degree=12):
     """Declared independent expression approximation; native Q3 projection separate."""
     expressions=[];maxerr=0.
     for a,b in zip(knots[:-1],knots[1:]):
-        cp=Chebyshev.interpolate(lambda t:fn((a+b)/2+(b-a)/2*t),degree)
+        cp=Chebyshev.interpolate(lambda t:np.vectorize(fn,otypes=[float])((a+b)/2+(b-a)/2*t),degree)
         coefficients=cp.convert(kind=Polynomial).coef
         t=f'(2*(y-({num(D0+a)}))/({num(b-a)})-1)'
         expression=poly(coefficients[::-1],t)
