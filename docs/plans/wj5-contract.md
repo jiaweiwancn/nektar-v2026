@@ -52,6 +52,20 @@ accumulation reserves remain, with the declared 100x arithmetic factor.
 Pressure is unconstrained and retains a full-domain gauge-aligned estimate;
 no regional gauge or fixed-velocity exemption applies to pressure. The original
 WJ-4 boundary UNRESOLVED result is retained as a separate estimator outcome.
+The dependent epsilon row propagates free k and free epsilon estimates through
+their respective rows, with their physical units. Early/middle/end arithmetic
+provides a conservative coefficient envelope; it is applied to every actual
+startup/cadence observation map. Both compared trajectories retain the100x
+reserve, including prescribed-data/lift and accumulation errors. A fixed value
+trace does not fix its normal derivative: the tighter velocity-value estimate
+cannot exempt strong divergence from its unchanged accuracy gate.
+
+Producing/measurement source paths are frozen once used. A metadata or
+measurement repair owns a separate checkout and versioned output lineage;
+measurement-only qualification may reuse immutable native rows/packets without
+another governing attempt. Development receipts remain visible. The native
+state reader retains signed binary64 zero, while intent metadata retains JSON
+integer types for canonical fingerprint verification.
 
 ## Frozen mesh/run design and stopping
 

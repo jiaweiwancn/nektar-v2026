@@ -8,7 +8,7 @@ from wj4_measure import AMP,boundary_rule,physical_norms
 from run_cls_epawf_picard import require
 
 
-def constraint_estimate(row,coefficient_uncertainty,prescribed_uncertainty=0.,evaluation_uncertainty=0.):
+def constraint_estimate(row,coefficient_uncertainty,prescribed_uncertainty=0.,evaluation_uncertainty=0.,free_state_bound=None):
     """Actual E*P action plus fixed-data/lift/evaluation/accumulation reserve.
 
     coefficient_uncertainty already carries the frozen-system 100x reserve.
@@ -17,10 +17,11 @@ def constraint_estimate(row,coefficient_uncertainty,prescribed_uncertainty=0.,ev
     """
     values=[row['free_row_L2'],row['gross_row_L2'],row['absolute_accumulation'],
             row['prescribed_accumulation'],coefficient_uncertainty,prescribed_uncertainty,evaluation_uncertainty]
+    if free_state_bound is not None:values.append(free_state_bound)
     require(all(math.isfinite(x) and x>=0 for x in values),'invalid constraint uncertainty input')
     n=max(1,len(row['row']));eps=np.finfo(float).eps
     accumulation=2*100*eps*(32*n+16)*(1+row['absolute_accumulation']+row['prescribed_accumulation'])
-    free=row['free_row_L2']*coefficient_uncertainty
+    free=row['free_row_L2']*coefficient_uncertainty if free_state_bound is None else free_state_bound
     data=2*100*row['gross_row_L2']*prescribed_uncertainty
     evaluation=2*100*evaluation_uncertainty
     return dict(total=free+data+evaluation+accumulation,free_state=free,prescribed_data_and_lift=data,
@@ -39,6 +40,7 @@ def boundary_uncertainty(measurement,arithmetic,rule_settings):
     weights=boundary_rule(**{k:v for k,v in rule_settings.items() if k!='all_faces'})
     rows=measurement['observations'];values=[];max_free=np.zeros(4);proof=[]
     systems=arithmetic['systems'];floors=arithmetic['estimated_comparison_floor'];sampled=arithmetic['estimated_sampled_comparison_floor']
+    trace_K_ids={int(i) for row in measurement['dependent_trace_action'] for i,value in row['free_K_action']}
     mean={int(region['offset'])+i:float(value) for region in measurement['passive_diagnostics']['pressure_regions'] for i,value in enumerate(region['gauge_mean_row'])}
     pressure_coefficient=floors['reduced_pressure']/math.sqrt(systems['pressure']['physical_mass_operator_bound'])
     for r in rows:
@@ -51,7 +53,17 @@ def boundary_uncertainty(measurement,arithmetic,rule_settings):
             block='momentum' if j<2 else 'k' if j==2 else 'epsilon'
             minimum=systems[block]['physical_metric_min_eigenvalue'];require(minimum>0,'invalid physical coefficient metric')
             coefficient=floors[name]/math.sqrt(minimum)
-            estimate=constraint_estimate(desc,coefficient,evaluation_uncertainty=measurement['arithmetic_evaluation_sensitivity'][j])
+            free_bound=None
+            if j==3:
+                # The dependent trace maps k coefficients into epsilon units.
+                # Propagate the two field estimates through their own rows;
+                # epsilon's coefficient estimate cannot stand in for k's.
+                krow=math.sqrt(sum(phi*phi for i,phi in desc['free_row'] if int(i) in trace_K_ids))
+                erow=math.sqrt(sum(phi*phi for i,phi in desc['free_row'] if int(i) not in trace_K_ids))
+                kcoefficient=floors['k']/math.sqrt(systems['k']['physical_metric_min_eigenvalue'])
+                free_bound=krow*kcoefficient+erow*coefficient
+            estimate=constraint_estimate(desc,coefficient,evaluation_uncertainty=measurement['arithmetic_evaluation_sensitivity'][j],free_state_bound=free_bound)
+            if j==3:estimate.update(free_K_row_L2=krow,free_epsilon_row_L2=erow,k_coefficient_estimate=kcoefficient,epsilon_coefficient_estimate=coefficient)
             v[j]=estimate['total']
             if on_boundary:max_free[j]=max(max_free[j],desc['free_row_L2'])
             if on_boundary and (desc['free_row_L2']>1e-12 or z in (1.,2.)):
@@ -206,3 +218,32 @@ def flow_decomposition(report,checks):
     return dict(status='PASS',maximum_accepted_velocity_replay_defect=defect,components=result,
         incoming_sha256=a['incoming_sha256'],history_sha256=a['history_sha256'],packet_sha256={n:a[n+'_arithmetic']['sha256'] for n in packets},
         scope='offline replay of retained actual incoming velocity, completed predictor increment and pressure correction; no governing solve, no missing callbacks fabricated')
+
+
+def boundary_envelope(trajectories):
+    """Propagate one finite arithmetic envelope through EVERY actual row map.
+
+    Early/middle/end systems supply coefficient estimates. Every startup and
+    cadence observation supplies its own constraint/trace and evaluation rows.
+    This does not extrapolate a terminal boundary map over the trajectory.
+    """
+    from wj_immutable import read,file_hash
+    from wj4_qualification import arithmetic_floors
+    floors=arithmetic_floors(trajectories)
+    packets=[c['arithmetic'] for t in trajectories.values() for c in t.get('trajectory',[]) if c.get('arithmetic')]
+    require(packets,'missing passive arithmetic packets')
+    systems={}
+    for block in ('momentum','k','epsilon'):
+        systems[block]=dict(physical_metric_min_eigenvalue=min(a['systems'][block]['physical_metric_min_eigenvalue'] for a in packets))
+    systems['pressure']=dict(physical_mass_operator_bound=min(a['systems']['pressure']['physical_mass_operator_bound'] for a in packets))
+    envelope=dict(systems=systems,estimated_comparison_floor={f:v['L2'] for f,v in floors.items()},estimated_sampled_comparison_floor={f:v['sampled_Linf'] for f,v in floors.items()})
+    boundary={f:dict(L2=0.,sampled_Linf=0.) for f in floors};coverage=[]
+    for tag,t in trajectories.items():
+        for c in [t['initial']]+t.get('trajectory',[]):
+            require(file_hash(c['path'])==c['sha256'],'boundary observation bytes changed')
+            m=read(c['path'])['measurements'];estimate=boundary_uncertainty(m,envelope,c['rule_settings'])
+            for f,row in estimate['fields'].items():
+                for norm in ('L2','sampled_Linf'):boundary[f][norm]=max(boundary[f][norm],row[norm])
+            coverage.append(dict(trajectory=tag,steps=c['steps'],observation_sha256=c['sha256'],state_sha256=c['state_sha256'],maximum_boundary_free_rows=estimate['maximum_boundary_free_rows']))
+    return floors,boundary,dict(schema='WJAllObservationBoundaryEnvelopeV1',coefficient_envelope=envelope,coverage=coverage,
+        scope='all startup/cadence rows; separate k/epsilon trace inputs; one full pressure gauge; finite diagnostic estimate with100x reserve, not a nonlinear theorem')

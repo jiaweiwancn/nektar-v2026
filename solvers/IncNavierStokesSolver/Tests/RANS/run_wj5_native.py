@@ -17,7 +17,7 @@ from wj2_cases import case_xml,local_normal_knots
 from wj3_measure import checkpoint_payload,replay_witnesses,FIELDS
 from wj4_measure import rule,boundary_rule,owned_rule,evaluate,comparison,independent_weak,AMP,BUDGET
 from wj4_qualification import sensitivity_sequence,arithmetic_floors
-from wj5_measure import diagnose,boundary_uncertainty,independent_near_h,flow_decomposition
+from wj5_measure import diagnose,boundary_uncertainty,boundary_envelope,independent_near_h,flow_decomposition
 from wj_immutable import (Ledger,write_once,atomic,read,file_hash,artifacts,verify_artifacts,
                           runtime,execution_intent,digest,xml_identity)
 from wj_qualification import component,aggregate
@@ -262,11 +262,12 @@ class Study(WJ4Study):
                     if 'boundary_uncertainty' not in c:continue
                     for f,r in c['boundary_uncertainty']['fields'].items():
                         for norm in ('L2','sampled_Linf'):boundary[f][norm]=max(boundary[f][norm],r[norm])
+            global_floors,boundary,boundary_coverage=boundary_envelope({a:ta,b:tb})
             adjusted=sensitivity_sequence(pairs,global_floors,self.design,[str(i) for i in range(5)],scope_uncertainty={'constrained_boundary':boundary})
             targetok=all(len(t['trajectory'])==4 and not t.get('hard_obstruction') and not t.get('accuracy_obstruction') and t['initial']['errors']['accuracy_gate']['status']=='PASS' for t in (ta,tb))
             arithmetic_ok=all(all(any(c['steps']==step and c.get('arithmetic') for c in t['trajectory']) for step in ([64,128,256] if tag=='Nx2half' else [32,64,128])) for tag,t in ((a,ta),(b,tb)))
             gate=aggregate(dict(target=component('PASS' if targetok else 'OBSTRUCTED','complete frozen targets required'),arithmetic=component('PASS' if arithmetic_ok else 'NOT_RUN'),sensitivity=adjusted))
-            self.s[key+'_comparisons']=pairs;self.s[key+'_uncertainty']=dict(global_floors=global_floors,constraint_aware_boundary=boundary,original_global_gate=original)
+            self.s[key+'_comparisons']=pairs;self.s[key+'_uncertainty']=dict(global_floors=global_floors,constraint_aware_boundary=boundary,boundary_coverage=boundary_coverage,original_global_gate=original)
             self.s['components'][key]=gate
         a,b=traces['Nx2'],traces['Nx2half'];require(a['initial_primary_sha256']==b['initial_primary_sha256'] and a['initial_history_sha256']==b['initial_history_sha256'] and a['native_dt_signature_sha256']!=b['native_dt_signature_sha256'],'fresh dt pair startup physical fields/history/signatures differ')
 
