@@ -72,6 +72,7 @@ def main():
     parser.add_argument('--root', type=Path, required=True)
     parser.add_argument('--build', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--epoch', default='v3', help='immutable native receipt epoch')
     args = parser.parse_args()
     started = time.monotonic()
     args.output.mkdir(parents=True, exist_ok=False)
@@ -152,7 +153,7 @@ def main():
             for domain in ('input_domain', 'flow_domain', 'final_domain'):
                 if isinstance(a.get(domain), dict):
                     a[domain].pop('profile_branch_pattern', None)
-        summary['timing'] = timing(args.root / 'operations' / ('native-' + name + '-v3') / 'native-timing.jsonl')
+        summary['timing'] = timing(args.root / 'operations' / ('native-' + name + '-' + args.epoch) / 'native-timing.jsonl')
         assert summary['timing']['terms']['pimple.sweep']['calls'] == report['steps']
         summary['weak_fields'] = {}
         for phase, path in [('startup', folder / 'report.json.startup-weak.json'), ('final', Path(report['final_weak']))]:

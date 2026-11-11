@@ -183,3 +183,19 @@ corrected Python fixture; do not overwrite the original source/build metadata.
 The additional five attempts keep the planned total at32, below40. All current
 native sources remain at b50aaa8; later publisher/fixture commits do not require
 recompiling or reopening the already-passed terrain trajectories.
+
+Sealing found a separate loader defect in the inherited optional prebuilt
+SpatialDomains path: CTest always requested a new-build geometry-lib directory,
+which did not exist in that mode. The loader used the installed library rather
+than the intended isolated source-built one. Preserve native-v3, summary-v1,
+its default-shell ldd receipts and all results as the installed-library lineage.
+Fix the execution path to the actual prebuilt library directory and register a
+zero-solve runtime-closure check. Native C++/headers are unchanged; reuse their
+verified ELFs, configure fresh test metadata and repeat only the three mapped
+controls (3+3+1 steps). Their seven extra units make39/40. No repeated flat or
+legacy transaction is authorized/needed for this CMake-only correction; retain
+their completed checks explicitly under the original installed dependency
+closure. Recheck relevant zero-solve oracles and a flat accepted-checkpoint
+readback with the corrected loader. Record both dependency identities. New
+mapped output/observer epochs must not replace their predecessors. The H1
+numerical ceiling remains10800s and the default evolution size limit3000.

@@ -232,10 +232,13 @@ if(RANS_BUILD_SOLVER)
         if(NOT EXISTS "${RANS_PREBUILT_SPATIAL_LIBRARY}")
             message(FATAL_ERROR "RANS_PREBUILT_SPATIAL_LIBRARY does not exist")
         endif()
+        get_filename_component(rans_spatial_real "${RANS_PREBUILT_SPATIAL_LIBRARY}" REALPATH)
+        get_filename_component(RANS_SPATIAL_RUNTIME_DIR "${rans_spatial_real}" DIRECTORY)
         add_library(RANSSpatialDomains SHARED IMPORTED)
         set_target_properties(RANSSpatialDomains PROPERTIES
             IMPORTED_LOCATION "${RANS_PREBUILT_SPATIAL_LIBRARY}")
     else()
+    set(RANS_SPATIAL_RUNTIME_DIR "${CMAKE_CURRENT_BINARY_DIR}/geometry-lib")
     # Build the source SpatialDomains library in isolation too: terrain normals
     # depend on full-precision XML curve partitioning, which older installations
     # round. Use the production base list and installed dependency configuration.
@@ -575,7 +578,7 @@ endif()
 if(RANS_BUILD_SOLVER)
     get_property(rans_all_tests DIRECTORY PROPERTY TESTS)
     set_property(TEST ${rans_all_tests} APPEND PROPERTY ENVIRONMENT
-        "LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
+        "LD_LIBRARY_PATH=${RANS_SPATIAL_RUNTIME_DIR}:$ENV{LD_LIBRARY_PATH}")
 endif()
 
 # WJ-1 common-kernel probes remain independent of the WJ-2 native pilot.
@@ -626,14 +629,14 @@ if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
             --solver $<TARGET_FILE:IncNavierStokesSolver> --probe $<TARGET_FILE:RANSWallResolutionProbe>
             --policy ${wj_policy} --output ${CMAKE_CURRENT_BINARY_DIR}/wj2-native-${wj_policy})
         set_tests_properties(WJNative${wj_policy} PROPERTIES PROCESSORS 1 TIMEOUT 1800
-            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;LD_LIBRARY_PATH=${RANS_SPATIAL_RUNTIME_DIR}:$ENV{LD_LIBRARY_PATH}")
     endforeach()
     add_test(NAME RANSWJSharedLegacyTransaction COMMAND ${Python3_EXECUTABLE} -B
         ${CMAKE_CURRENT_LIST_DIR}/test_wj2_legacy_transaction.py
         --solver $<TARGET_FILE:IncNavierStokesSolver> --probe $<TARGET_FILE:RANSWallResolutionProbe>
         --output ${CMAKE_CURRENT_BINARY_DIR}/wj2-legacy-transaction)
     set_tests_properties(RANSWJSharedLegacyTransaction PROPERTIES PROCESSORS 1 TIMEOUT 1800
-        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;LD_LIBRARY_PATH=${RANS_SPATIAL_RUNTIME_DIR}:$ENV{LD_LIBRARY_PATH}")
 endif()
 
 if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
@@ -643,7 +646,7 @@ if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
             --solver $<TARGET_FILE:IncNavierStokesSolver> --probe $<TARGET_FILE:RANSWallResolutionProbe>
             --policy ${wj_policy} --mode smoke --output ${CMAKE_CURRENT_BINARY_DIR}/wj3-smoke)
         set_tests_properties(WJReadOnlyStage${wj_policy} PROPERTIES PROCESSORS 1 TIMEOUT 600
-            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;LD_LIBRARY_PATH=${RANS_SPATIAL_RUNTIME_DIR}:$ENV{LD_LIBRARY_PATH}")
     endforeach()
 endif()
 
@@ -663,7 +666,7 @@ if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
             --solver $<TARGET_FILE:IncNavierStokesSolver> --probe $<TARGET_FILE:RANSWallResolutionProbe>
             --policy ${wj_policy} --output ${CMAKE_CURRENT_BINARY_DIR}/wj4-observations)
         set_tests_properties(WJCompositeObservation${wj_policy} PROPERTIES PROCESSORS 1 TIMEOUT 600
-            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1;LD_LIBRARY_PATH=${RANS_SPATIAL_RUNTIME_DIR}:$ENV{LD_LIBRARY_PATH}")
     endforeach()
     foreach(wj_policy EP Budget)
         add_test(NAME WJLocalNormalObservation${wj_policy} COMMAND ${Python3_EXECUTABLE} -B
@@ -671,7 +674,7 @@ if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
             --solver $<TARGET_FILE:IncNavierStokesSolver> --probe $<TARGET_FILE:RANSWallResolutionProbe>
             --policy ${wj_policy} --output ${CMAKE_CURRENT_BINARY_DIR}/wj5-observations)
         set_tests_properties(WJLocalNormalObservation${wj_policy} PROPERTIES PROCESSORS 1 TIMEOUT 900
-            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1;LD_LIBRARY_PATH=${RANS_SPATIAL_RUNTIME_DIR}:$ENV{LD_LIBRARY_PATH}")
     endforeach()
     add_test(NAME WJDenseCapacityMetadata COMMAND ${Python3_EXECUTABLE} -B
         ${CMAKE_CURRENT_LIST_DIR}/test_wj6_metadata.py)
@@ -685,19 +688,21 @@ if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
         --mode geometry --geometry-probe $<TARGET_FILE:WJTerrainGeometryProbe> --output ${CMAKE_CURRENT_BINARY_DIR}/wj-h1-geometry)
     add_test(NAME WJH1RouteGuards COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/validate_wj_h1.py
         --mode guards --native-probe $<TARGET_FILE:WJTerrainCoupledProbe> --output ${CMAKE_CURRENT_BINARY_DIR}/wj-h1-guards)
+    add_test(NAME WJH1RuntimeClosure COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_wj_h1_runtime.py
+        --probe $<TARGET_FILE:WJTerrainCoupledProbe> --library $<TARGET_FILE:RANSSpatialDomains>)
     foreach(wj_h1_kind hill zero plane)
         add_test(NAME WJH1Native_${wj_h1_kind} COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/validate_wj_h1.py
             --mode native --kind ${wj_h1_kind} --native-probe $<TARGET_FILE:WJTerrainCoupledProbe>
             --output ${CMAKE_CURRENT_BINARY_DIR}/wj-h1-${wj_h1_kind})
     endforeach()
-    set_tests_properties(WJH1CompositeGeometry WJH1RouteGuards WJH1Native_hill WJH1Native_zero WJH1Native_plane PROPERTIES
-        PROCESSORS 1 TIMEOUT 1200 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
+    set_tests_properties(WJH1CompositeGeometry WJH1RouteGuards WJH1RuntimeClosure WJH1Native_hill WJH1Native_zero WJH1Native_plane PROPERTIES
+        PROCESSORS 1 TIMEOUT 1200 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1;LD_LIBRARY_PATH=${RANS_SPATIAL_RUNTIME_DIR}:$ENV{LD_LIBRARY_PATH}")
     foreach(wj_policy EP Budget)
         add_test(NAME WJDenseCapacity${wj_policy} COMMAND ${Python3_EXECUTABLE} -B
             ${CMAKE_CURRENT_LIST_DIR}/test_wj6_capacity.py
             --solver $<TARGET_FILE:IncNavierStokesSolver> --probe $<TARGET_FILE:RANSWallResolutionProbe>
             --policy ${wj_policy} --output ${CMAKE_CURRENT_BINARY_DIR}/wj6-capacity)
         set_tests_properties(WJDenseCapacity${wj_policy} PROPERTIES PROCESSORS 1 TIMEOUT 1800
-            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1;LD_LIBRARY_PATH=${RANS_SPATIAL_RUNTIME_DIR}:$ENV{LD_LIBRARY_PATH}")
     endforeach()
 endif()
