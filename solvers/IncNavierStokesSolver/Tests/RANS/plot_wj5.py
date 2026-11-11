@@ -82,17 +82,30 @@ def main():
             ax.bar(x+(j-(len(names)-1)/2)*width,np.array(vals)*1e6,width,label=name.replace('/terminal',''))
         ax.axhline(0,color='0.4',lw=.7);ax.set_xticks(x,['storage','advection','viscous stress','reduced pressure','roughness force'],rotation=25,ha='right');ax.set_ylabel(r'signed weak load [$10^{-6}$ m$^3$/s$^2$]');ax.set_title(policy+'; continuous test on [.08,.2]');ax.legend(fontsize=7);ax.grid(axis='y',alpha=.2)
     save(fig,out,'near-h-momentum-loads')
-    fig,axes=plt.subplots(2,2,figsize=(10,6.5),sharex=True)
-    for ax,field in zip(axes.flat,('velocity','k','outer_epsilon','reduced_pressure')):
-        for policy,color in (('EP','#315c8c'),('Budget','#b16a28')):
-            for tag,style in (('Nx2','-'),('Nx2half','--')):
-                for kind,alpha in (('continuum_error',1.),('initial_drift',.45)):
-                    q=[r for r in fields if r['policy']==policy and r['scope']=='full' and r['field']==field and r['kind']==kind and r['case'].startswith('selected/'+tag+'/')]
-                    q.sort(key=lambda r:float(r['time']))
-                    if q:ax.semilogy([float(r['time']) for r in q],[max(float(r['normalized_L2']),1e-18) for r in q],style,color=color,alpha=alpha,label=policy+' '+tag+' '+('error' if kind=='continuum_error' else 'drift'))
-        ax.axhline(1e-4,color='#a33232',ls=':');ax.set_title(field);ax.set_ylabel('normalized physical L2');ax.grid(alpha=.2);ax.set_xlabel('t [s]');ax.legend(fontsize=6,ncol=2)
-    fig.suptitle('Selected local mesh; frozen T3=.004096 s, T3 u*/H=.002048',fontsize=11)
-    save(fig,out,'selected-error-drift')
+    if any(r['case'].startswith('selected/') for r in fields):
+        fig,axes=plt.subplots(2,2,figsize=(10,6.5),sharex=True)
+        for ax,field in zip(axes.flat,('velocity','k','outer_epsilon','reduced_pressure')):
+            for policy,color in (('EP','#315c8c'),('Budget','#b16a28')):
+                for tag,style in (('Nx2','-'),('Nx2half','--')):
+                    for kind,alpha in (('continuum_error',1.),('initial_drift',.45)):
+                        q=[r for r in fields if r['policy']==policy and r['scope']=='full' and r['field']==field and r['kind']==kind and r['case'].startswith('selected/'+tag+'/')]
+                        q.sort(key=lambda r:float(r['time']))
+                        if q:ax.semilogy([float(r['time']) for r in q],[max(float(r['normalized_L2']),1e-18) for r in q],style,color=color,alpha=alpha,label=policy+' '+tag+' '+('error' if kind=='continuum_error' else 'drift'))
+            ax.axhline(1e-4,color='#a33232',ls=':');ax.set_title(field);ax.set_ylabel('normalized physical L2');ax.grid(alpha=.2);ax.set_xlabel('t [s]');ax.legend(fontsize=6,ncol=2)
+        fig.suptitle('Selected local mesh; frozen T3=.004096 s, T3 u*/H=.002048',fontsize=11)
+        save(fig,out,'selected-error-drift')
+    else:
+        fig,axes=plt.subplots(2,2,figsize=(10,6.5),sharex=True)
+        for ax,field in zip(axes.flat,('velocity','k','outer_epsilon','reduced_pressure')):
+            selected=[r for r in fields if r['scope']=='full' and r['field']==field and float(r['steps'])>0 and (r['case']=='retained-Nx2-32' or r['case']=='control/terminal' or r['case'].startswith('screen/') and r['case'].endswith('/terminal'))]
+            labels=list(dict.fromkeys(r['case'] for r in selected));x=np.arange(len(labels))
+            for j,(policy,color) in enumerate((('EP','#315c8c'),('Budget','#b16a28'))):
+                for kind,marker in (('continuum_error','o'),('initial_drift','x')):
+                    values=[next((float(r['normalized_L2']) for r in selected if r['policy']==policy and r['case']==name and r['kind']==kind),float('nan')) for name in labels]
+                    ax.semilogy(x+(j-.5)*.12,np.maximum(values,1e-18),marker,color=color,label=policy+' '+('error' if kind=='continuum_error' else 'drift'))
+            ax.axhline(1e-4,color='#a33232',ls=':');ax.set_title(field);ax.set_ylabel('normalized physical L2');ax.set_xticks(x,[v.replace('/terminal','').replace('retained-','') for v in labels],rotation=25,ha='right');ax.grid(alpha=.2);ax.legend(fontsize=7)
+        fig.suptitle('Screen at Tx=.001024 s, Tx u*/H=.000512; selected T3 trajectories NOT RUN',fontsize=11)
+        save(fig,out,'screen-error-drift')
     if (a.compact/'sensitivity.csv').exists():
         sensitivity=load('sensitivity.csv');fig,axes=plt.subplots(1,2,figsize=(10,3.7),sharey=True)
         for ax,group in zip(axes,('selected_horizontal','selected_timestep')):

@@ -21,6 +21,7 @@ from publish_wj4 import native_accounting
 
 def records(s):
     result=dict(s.get('retained',{}))
+    result.update(s.get('retained_fine',{}))
     t=s.get('adverse_dt_control',{})
     for k in ('initial','terminal'):
         if k in t:result['control/'+k]=t[k]
@@ -71,10 +72,18 @@ def requalify(s,design):
         tr={str(nx):dict(initial=retained['retained-Nx%d-0'%nx],trajectory=[retained['retained-Nx%d-32'%nx]]) for nx in (1,2)}
         a,b=(retained['retained-Nx%d-32'%nx] for nx in (1,2));ma=read(a['path'])['measurements'];mb=read(b['path'])['measurements']
         pairs={'Tx':comparison(ma,mb,updated['policy'],a['rule_settings'])};floors,boundary,coverage=boundary_envelope(tr)
-        updated['retained_boundary_requalification']=dict(original_algorithm=sensitivity_sequence(pairs,floors,design,['Tx']),
+        updated['retained_boundary_requalification']=dict(comparison=pairs,original_algorithm=sensitivity_sequence(pairs,floors,design,['Tx']),
             constraint_aware=sensitivity_sequence(pairs,floors,design,['Tx'],scope_uncertainty={'constrained_boundary':boundary}),
             coverage=coverage,measured_divergence_unchanged=[a['errors']['strong_divergence'],b['errors']['strong_divergence']],
             original_WJ4='original immutable publication remains UNRESOLVED for constrained velocity boundary uncertainty and OBSTRUCTED for measured divergence')
+    if updated.get('adverse_dt_control'):
+        from wj3_measure import checkpoint_payload
+        from run_cls_epawf_picard import state_hash
+        a=checkpoint_payload(updated['retained']['retained-Nx2-0']['checkpoint']);b=checkpoint_payload(updated['adverse_dt_control']['initial']['checkpoint'])
+        updated['adverse_dt_control']['fresh_startup']=dict(exact_primary_gauge=state_hash(a['state'])==state_hash(b['state']),
+            exact_physical_histories=[state_hash(v) for v in a['native_history']]==[state_hash(v) for v in b['native_history']],
+            native_dt_labels_differ=a['native_history_times']!=b['native_history_times'],
+            old_dt=a['dt'],new_dt=b['dt'],old_signature=a['signature'],new_signature=b['signature'])
     updated['components']['measurement_requalification']=component('PASS','versioned constraint-aware estimates applied to every required available observation; original native files unchanged')
     updated['qualification']=aggregate(updated['components'])
     return updated,dict(schema='WJ5ConstraintRequalificationV1',lineage=lineage,code=artifacts([Path(__file__),Path(__file__).with_name('wj5_measure.py'),Path(__file__).with_name('wj4_qualification.py')]),
@@ -94,7 +103,7 @@ def main():
     start=time.time();ledgers={p:Ledger(r,p,cap=800) for p in ('EP','Budget')};label='publication/'+str(output)
     inputs=artifacts([a.study/p/name for p in ('EP','Budget') for name in ('summary.json','design.json')])
     for l in ledgers.values():l.reserve(label,dict(inputs=inputs,code=artifacts([Path(__file__)])),0,240)
-    summaries={};rows={k:[] for k in ('fields','residuals','divergence','pressure-projection','near-h-loads','interfaces','sensitivity','mesh-runs','independent-loads','face-traces','run-accounting')};diagnoses={};histories={}
+    summaries={};rows={k:[] for k in ('fields','residuals','divergence','pressure-projection','near-h-loads','interfaces','sensitivity','diagnostic-sensitivity','mesh-runs','independent-loads','face-traces','run-accounting')};diagnoses={};histories={};audits={}
     try:
         for policy in ('EP','Budget'):
             s=read(a.study/policy/'summary.json');design=read(a.study/policy/'design.json');s,lineage=requalify(s,design);summaries[policy]=s
@@ -121,6 +130,7 @@ def main():
                 # All owners remain in immutable heavy packets. Compact face
                 # traces retain every actual normal face at five shared rays.
                 m=read(c['path'])['measurements']
+                audits[policy+'/'+name]=m['audit']
                 for obs in m['observations']:
                     x,_,z=obs['position']
                     if obs['weight'] or x not in (0.,.25,.5,.75,1.) or z not in c['zknots'] or not any(obs['face_sides_xz']):continue
@@ -130,11 +140,17 @@ def main():
                 for timekey,t in gate.get('components',{}).get('sensitivity',{}).get('components',{}).items():
                     for key,v in t.get('components',{}).items():
                         if 'value' in v:rows['sensitivity'].append(dict(policy=policy,group=group,cadence_index=timekey,quantity=key,status=v['status'],value=v['value'],uncertainty=v['uncertainty'],limit=v['limit'],margin=v['limit']-v['value']-v['uncertainty'],fraction=(v['value']+v['uncertainty'])/v['limit']))
-            write_once(output/(policy+'.json'),dict(qualification=s['qualification'],components=s['components'],retained=s.get('retained'),retained_boundary_requalification=s.get('retained_boundary_requalification'),screens=s.get('screens'),adverse_dt_control=s.get('adverse_dt_control'),
+            for estimator,gate in s.get('retained_boundary_requalification',{}).items():
+                if not isinstance(gate,dict) or 'components' not in gate:continue
+                for t in gate['components'].values():
+                    for key,v in t.get('components',{}).items():
+                        if 'value' in v:rows['diagnostic-sensitivity'].append(dict(policy=policy,group='retained_hx_Tx',estimator=estimator,quantity=key,status=v['status'],value=v['value'],uncertainty=v['uncertainty'],limit=v['limit'],margin=v['limit']-v['value']-v['uncertainty']))
+            write_once(output/(policy+'.json'),dict(qualification=s['qualification'],components=s['components'],retained=s.get('retained'),retained_fine=s.get('retained_fine'),retained_boundary_requalification=s.get('retained_boundary_requalification'),screens=s.get('screens'),adverse_dt_control=s.get('adverse_dt_control'),
                 selected=s.get('selected'),comparisons={k:v for k,v in s.items() if k.endswith('_comparisons') or k.endswith('_uncertainty')},
                 frozen_design=design,heavy_summary=file_identity(a.study/policy/'summary.json'),stationarity=s['stationarity']))
         for key,value in rows.items():table(output/(key+'.csv'),value)
         write_once(output/'diagnoses.json',diagnoses)
+        write_once(output/'audit-witnesses.json',audits)
         write_once(output/'accepted-stage-lineage.json',histories)
         # Preserve exact heavy input/lineage bytes. Every source/run artifact is
         # indexed once; build object files and repository copies are not fields.
