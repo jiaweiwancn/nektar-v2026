@@ -13,6 +13,12 @@ from rans_worker_budget import spawn
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--admission',type=Path,required=True);p.add_argument('--accepted-neutral-proof',type=Path,required=True);p.add_argument('--dt',type=float,choices=(.002,.001),default=.002);p.add_argument('--max-time',type=float,choices=(.016,.1),default=.016);p.add_argument('--amplitude',type=float,choices=(2e-5,1e-5),default=2e-5);p.add_argument('--concurrency',type=int,choices=(1,2,4),default=2);p.add_argument('--resume',action='store_true');a=p.parse_args();r=a.root.resolve();source=Path(__file__).parent;ad=load(a.admission);cfg=ad['configuration'];proof=load(a.accepted_neutral_proof);require(proof['status']=='pass','neutral_duration_not_qualified');identity(proof['configuration'],dict(model=cfg['model'],policy=cfg['policy'],wall='Accepted'))
     for m in MEMBERS:require(proof['companions'][m]['scalar_coverage']['last_time']>=.5-1e-13,'neutral_duration_horizon_incomplete')
+    owned=ad.get('schema')=='NativeOwnershipDurationAdmissionV1'
+    if owned:
+        require(cfg['model']=='A95','A93_response_outside_corrective_scope')
+        require(a.max_time<=.016,'response_duration_outside_corrective_scope')
+        require(proof.get('numerical_operator')==ad['numerical_operator'],'old_operator_neutral_proof')
+    milestones=[.016] if owned else [.016,.1]
     from qualify_rans_duration_inner_k import qualify
     neutral_cohort=a.accepted_neutral_proof.parent.name.removesuffix('-0.5')
     neutral_audit_request=load(a.accepted_neutral_proof.parent/'request-manifest.json')['request']
@@ -27,10 +33,12 @@ def main():
     for label in baseline:
         request=load(r/'campaigns'/label/'request-manifest.json')['request'];identity(request,cfg);require(RequestManifest(r/'campaigns'/label,request,True).completed(r/'campaigns'/label/'T-0.0160'),'response_neutral_baseline_missing')
     request=dict(schema='NonlinearResponseControllerV1',configuration=cfg,amplitude=a.amplitude,timesteps=[a.dt,a.dt/2],milestones=[.016,.1],admission_sha256=sha(a.admission),accepted_neutral_proof_sha256=sha(a.accepted_neutral_proof),meshes=ad['meshes'],runtime=ad['runtime'],baseline_requests=[sha(r/'campaigns'/label/'request-manifest.json') for label in baseline],gates=dict(spatial_absolute_floor=5e-7,spatial_relative=.1,temporal_absolute_floor=1e-7,temporal_relative=.05),observables=['u','w','k','epsilon_outer','Pi','pi_mechanical','Tzz','Txz','Rxx','Ryy','Rzz','Rxz','Qxx','Qyy','Qzz','Qxz','P'],initialization='actual zero-step coefficients/native histories sealed before any advancement')
+    request['milestones']=milestones
+    if owned:request.update(numerical_operator=ad['numerical_operator'],corrective_contract=ad['corrective_contract'])
     request['accepted_common_inner_k_proof_sha256']=sha(inner_proof)
     manifest=RequestManifest(out,request,a.resume);env=dict(os.environ,**THREADS);events=[]
     def command(i,T,initial=False):
-        m=MEMBERS[i];mesh='B5' if m.startswith('B5') else 'B11';label=labels[i];cmd=[sys.executable,'-B',str(source/'run_rans_neutral_pilot.py'),'--root',str(r),'--label',label,'--model',cfg['model'],'--policy',cfg['policy'],'--wall',cfg['wall'],'--mesh-file',ad['meshes'][mesh]['path'],'--dt',str(a.dt/(2 if m.endswith('dt2') else 1)),'--velocity-amplitude',str(a.amplitude),'--milestones','.016','.1','--max-time',str(T),'--timeout','14400']
+        m=MEMBERS[i];mesh='B5' if m.startswith('B5') else 'B11';label=labels[i];cmd=[sys.executable,'-B',str(source/'run_rans_neutral_pilot.py'),'--root',str(r),'--label',label,'--model',cfg['model'],'--policy',cfg['policy'],'--wall',cfg['wall'],'--mesh-file',ad['meshes'][mesh]['path'],'--dt',str(a.dt/(2 if m.endswith('dt2') else 1)),'--velocity-amplitude',str(a.amplitude),'--milestones',*map(str,milestones),'--max-time',str(T),'--timeout','14400']
         if (r/'campaigns'/label).exists():cmd+=['--resume']
         if initial:cmd+=['--initialize-only']
         return cmd
@@ -58,7 +66,7 @@ def main():
     initial_path=out/'actual-initial-comparison.json'
     if initial_path.exists():require(load(initial_path)['cases']==initial_receipt['cases'],'sealed_actual_initial_comparison_changed')
     else:write_json(initial_path,initial_receipt)
-    for T in (.016,.1):
+    for T in milestones:
         if T>a.max_time+1e-13:break
         for label in baseline:
             q=load(r/'campaigns'/label/'request-manifest.json')['request'];require(RequestManifest(r/'campaigns'/label,q,True).completed(r/'campaigns'/label/('T-'+format(T,'.4f'))),'matching_baseline_endpoint_missing')

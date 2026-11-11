@@ -606,6 +606,9 @@ if(Python3_Interpreter_FOUND)
     add_test(NAME RANSDurationCoverageContract COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_duration_contract.py)
     add_test(NAME RANSNonlinearEvidenceContract COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_nonlinear_evidence.py)
     add_test(NAME RANSBudgetAccuracyContract COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_budget_accuracy_contract.py)
+    add_test(NAME RANSOwnershipRequiredScopeContract COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_ownership_contract.py)
+    set_tests_properties(RANSOwnershipRequiredScopeContract PROPERTIES PROCESSORS 1 TIMEOUT 30
+        ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
     set_tests_properties(RANSBudgetAccuracyContract PROPERTIES PROCESSORS 1 TIMEOUT 30
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
     set_tests_properties(RANSNonlinearEvidenceContract PROPERTIES PROCESSORS 1 TIMEOUT 30

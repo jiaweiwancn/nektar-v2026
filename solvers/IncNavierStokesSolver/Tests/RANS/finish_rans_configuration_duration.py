@@ -18,7 +18,9 @@ def finish(r, admission_path, dt, T, resume=False):
     os.environ.update(THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'))
     common=Path(ad['common_directory']);require(sha(common/'packet.json.gz')==ad['common_packet_sha256'],'common_packet_changed');require(runtime_identity(runtime/'RANSPreservationProbe')==ad['duration_diagnostic_runtime'],'admitted_diagnostic_runtime_changed')
     times=[t for t in ad['milestones'] if t<=T+1e-13];out=r/'duration-audits'/(tag+'-'+str(T));labels={m:tag+'-'+m for m in MEMBERS}
+    owned=ad.get('schema')=='NativeOwnershipDurationAdmissionV1'
     request=dict(schema='ConfigurationMilestoneAuditV2',configuration=config,timesteps=[dt,dt/2],required_times=times,meshes=ad['meshes'],common_packet_sha256=ad['common_packet_sha256'],admission_sha256=sha(admission_path),analysis_runtime=runtime_identity(runtime/'RANSPreservationProbe'),trajectory_requests={m:sha(r/'campaigns'/v/'request-manifest.json') for m,v in labels.items()})
+    if owned:request.update(numerical_operator=ad['numerical_operator'],inner_only_common_k='required_at_every_milestone')
     manifest=RequestManifest(out,request,resume)
     if manifest.completed(out):return load(out/'results.json')
     env=dict(os.environ,**THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'));execution=[];files=[]
@@ -36,8 +38,10 @@ def finish(r, admission_path, dt, T, resume=False):
         audits={};companions={};stress={}
         for m,label in labels.items():
             folder=r/'campaigns'/label;req=load(folder/'request-manifest.json')['request'];identity(req,config);reports=[]
+            if owned:require(req.get('numerical_operator')==ad['numerical_operator'],'old_operator_trajectory_request')
             for t in times:
                 endpoint=folder/('T-'+format(t,'.4f'));require(RequestManifest(folder,req,True).completed(endpoint),'unsealed_companion_endpoint:'+m);reports.append(load(endpoint/'case.evolution.json'))
+                if owned:require(reports[-1].get('numerical_operator')==ad['numerical_operator'],'old_operator_native_report')
             if m in MEMBERS[:2]:
                 dest=r/'evolved-audits'/(tag+'-'+str(T)+'-'+m)
                 if not dest.exists():run('spatial-'+m,[source/'audit_rans_balanced_evolved.py','--root',r,'--analysis-runtime',runtime,'--campaign-root',r,'--label',label,'--output-label',dest.name,'--times',str(T),'--common-directory',common,'--constitutive-samples'])
@@ -58,6 +62,21 @@ def finish(r, admission_path, dt, T, resume=False):
         q=load(qpath);require(q['status']=='pass' and len(q['checks'])==2,'frozen_quadrature_failed');files.append(qpath)
         result=dict(configuration=config,status='running',companions=companions,spatial_audits=audits,constitutive=stress,quadrature=q,execution=execution)
         gate=aggregate(dict(config,audit_times=times),result);result.update(status=gate['status'],aggregate=gate,evolved_reductions=[dict(time=t,**residual_reduction(*[next(x for x in audits[m]['checks'] if abs(x['time']-t)<1e-13) for m in MEMBERS[:2]],config['model'])) for t in times])
+        if owned:
+            from audit_rans_common_scalar_partitions import partitions
+            from qualify_rans_duration_inner_k import reduction
+            from rans_preservation_oracle import Reference
+            with gzip.open(common/'packet.json.gz','rt') as stream:cp=json.load(stream)
+            require(cp['observation']['numerical_operator']==ad['numerical_operator'],'old_operator_common_packet')
+            ref=Reference(config['model'],config['policy'],config['wall']);checks=[]
+            for t in times:
+                groups={m:partitions(cp,next(x for x in audits[m]['checks'] if abs(x['time']-t)<1e-13),ref) for m in MEMBERS[:2]}
+                reduced=reduction(*[groups[m]['inner']['mass_dual'] for m in MEMBERS[:2]])
+                checks.append(dict(time=t,reduction=reduced,groups=groups))
+            result.update(numerical_operator=ad['numerical_operator'],fixed_common_inner_k=checks)
+            if any(v['reduction']['status'] not in ('pass','unresolved_floor') for v in checks):
+                result.update(status='fail',inner_only_common_k_status='fail')
+            else:result['inner_only_common_k_status']='pass'
     except Exception as e:result=dict(status='fail',configuration=config,failure=repr(e),execution=execution)
     write_json(out/'results.json',result);manifest.seal(out,['results.json',*map(str,files)]);return result
 
