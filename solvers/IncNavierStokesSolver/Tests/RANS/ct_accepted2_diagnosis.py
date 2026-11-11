@@ -81,7 +81,7 @@ def inventory(rows,coords,s,off,region=None):
         v=at(row,s,off);count+=1;div2+=v['raw_divergence']**2;divmax=max(divmax,abs(v['raw_divergence']))
         if v['status']!='admissible':negative+=1
         if minimum is None or v.get('radicand',-1e300)<minimum.get('radicand',-1e300):
-            minimum=dict(v,coordinate=coords[i],geometry=row['velocity_k']['geometry'],element=row['velocity_k']['element'],side=0,sample_index=i)
+            minimum=dict(v,coordinate=coords[i],geometry=row['velocity_k']['geometry'],element=row['velocity_k'].get('element'),side=0,sample_index=i)
     return dict(minimum=minimum,domain_failure_count=negative,count=count,divergence_unweighted_RMS=float(np.sqrt(div2/count)),divergence_maximum=divmax)
 
 def independent_pressure_action(o,direction,hr):
