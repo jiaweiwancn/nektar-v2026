@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "cmake",
+    "--build",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3",
+    "--parallel",
+    "1",
+    "--target",
+    "WJTerrainGeometryProbe",
+    "WJTerrainCoupledProbe",
+    "IncNavierStokesSolver",
+    "RANSWallResolutionProbe",
+    "WJKernelProbe",
+    "RANSReturnedFieldsProbe",
+    "RANSEquilibriumProfilesProbe",
+    "RANSKernelProbe",
+    "RANSConstitutiveProbe",
+    "RANSAcceptedAWFProbe",
+    "RANSProfileBranchChecks",
+    "RANSKBoundQPChecks",
+    "RANSHistoryRejectionChecks",
+    "RANSStressTangentAudit",
+    "RANSWallGeometryProbe"
+  ],
+  "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111",
+  "timeout": 6500,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "exit": 0,
+  "seconds": 1488.9604796619387,
+  "log_sha256": "c705bbaf837ef6fc7e15bb67e81889d43c979b35e2cb2f8e147d1e139bd2ff7d"
+}

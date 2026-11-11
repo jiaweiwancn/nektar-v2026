@@ -1,0 +1,47 @@
+Internal ctest changing into directory: /media/jay/新加卷/nektar-v2026-runs/wj-h1-20261111/build-v3
+Test project /media/jay/新加卷/nektar-v2026-runs/wj-h1-20261111/build-v3
+    Start 50: WJNativeBudget
+1/1 Test #50: WJNativeBudget ...................***Failed  116.23 sec
+EXACT CERTIFICATE: D >= nu_eff/250 on all incompressible rank-one increments.
+Exact positive LDL pivots: ['35607/250', '2902757/300250', '3295566703/12201000', '3188912170563/3295566703000', '2212408252197/24379099000', '609851247/332332000', '3616758816461/553102063049250', '355627/143000']
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/wj-h1-20261111/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/test_wj2_native.py", line 340, in <module>
+    if __name__=='__main__':main()
+  File "/media/jay/新加卷/nektar-v2026-runs/wj-h1-20261111/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/test_wj2_native.py", line 317, in main
+    require(expected in text,'wrong incompatible-input failure reason: '+name+' expected '+expected)
+  File "/media/jay/新加卷/nektar-v2026-runs/wj-h1-20261111/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py", line 29, in require
+    raise ValueError(message)
+ValueError: wrong incompatible-input failure reason: curved expected WJ native supports serial flat 2D only
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) = 116.49 sec
+
+The following tests FAILED:
+	 50 - WJNativeBudget (Failed)
+Errors while running CTest
+Command exited with non-zero status 8
+	Command being timed: "ctest --test-dir /media/jay/新加卷/nektar-v2026-runs/wj-h1-20261111/build-v3 -j 1 --output-on-failure -R ^WJNativeBudget$"
+	User time (seconds): 74.86
+	System time (seconds): 6.68
+	Percent of CPU this job got: 69%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:56.66
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 208020
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 2
+	Minor (reclaiming a frame) page faults: 943900
+	Voluntary context switches: 115376
+	Involuntary context switches: 4792
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 192
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 8

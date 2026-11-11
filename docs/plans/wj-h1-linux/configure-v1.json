@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "cmake",
+    "-S",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/source-v1/solvers/IncNavierStokesSolver/Tests/RANS",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v1",
+    "-DRANS_BUILD_SOLVER=ON",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math"
+  ],
+  "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111",
+  "timeout": 180,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "exit": 1,
+  "seconds": 0.41551996499765664,
+  "log_sha256": "69ab0f0ed67fac78fdcc9afd836f31c4d4b1503dc8a07eda3cb304f6318c01da"
+}

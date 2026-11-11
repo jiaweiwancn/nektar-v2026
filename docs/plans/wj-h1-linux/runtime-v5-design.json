@@ -1,0 +1,93 @@
+{
+  "schema": "H1SourceMatchedLoaderV5",
+  "revision": "2826b8e5daaebb4bd1024bfa225c4b4b8065ad58",
+  "tree": "6b00f37fad6eda63696dcafd3ffef5bce87fa62a",
+  "argv": [
+    "cmake",
+    "-S",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/source-v5/solvers/IncNavierStokesSolver/Tests/RANS",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/metadata-v5",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DRANS_BUILD_SOLVER=ON",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+    "-DRANS_PREBUILT_SPATIAL_LIBRARY=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib/libSpatialDomains.so.5.9.0"
+  ],
+  "exit": 0,
+  "seconds": 4.452129260986112,
+  "log_sha256": "2ecb17e239a17e9289c2865c82e66a5828586aca96acf6bb21a19ef6aee51745",
+  "native_cpp_header_identity": "equal to b50aaa8; exact ELF reuse, no new native compilation",
+  "executables": {
+    "RANSEquilibriumProfilesProbe": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/RANSEquilibriumProfilesProbe",
+      "sha256": "2710a71ef1431b7c069bf593b171c89a74a99cd30dea6df22f0ddda671db1e8e"
+    },
+    "IncNavierStokesSolver": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/IncNavierStokesSolver",
+      "sha256": "846c1b0b31e747153d3dfc545bbf0ece51905d0c92c78ed12f672ade64585434"
+    },
+    "RANSAcceptedAWFProbe": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/RANSAcceptedAWFProbe",
+      "sha256": "1c9f2c886873e44060eec8558de4fea08bb2db98db5fe1dd7cc4a660c2e7f142"
+    },
+    "RANSConstitutiveProbe": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/RANSConstitutiveProbe",
+      "sha256": "a7bac9291bf881e0426ffce1a77a8573a0673ff4f37ef8b8d0192145c21527c1"
+    },
+    "RANSHistoryRejectionChecks": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/RANSHistoryRejectionChecks",
+      "sha256": "45e04e048ee9689d53dc07b86d21b11c1f10c526ef55c8dce79d22e9ae6542a8"
+    },
+    "RANSKBoundQPChecks": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/RANSKBoundQPChecks",
+      "sha256": "9c2b4ac1a91c1c9967522dc00cfc7692057fd803e3515b1922988c3c3b4ac344"
+    },
+    "RANSKernelProbe": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/RANSKernelProbe",
+      "sha256": "7194265990c477a7336f01fecfa493f6a04229106cc5c5eb51f326aaf2c51e07"
+    },
+    "RANSProfileBranchChecks": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/RANSProfileBranchChecks",
+      "sha256": "8904bf184819bca7a7012a251a3221645a34cd5ec131dba584a0007245e3f587"
+    },
+    "RANSReturnedFieldsProbe": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/RANSReturnedFieldsProbe",
+      "sha256": "2b411be712e55cf24ab2afbdd71df17e3243ef9ab14747b5d26b7ed088e9ccc8"
+    },
+    "RANSStressTangentAudit": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/RANSStressTangentAudit",
+      "sha256": "acc9f2d92330d5f9ab5c1161b03a8334089f5da33564b6e1c000b15449f8ac62"
+    },
+    "RANSWallGeometryProbe": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/RANSWallGeometryProbe",
+      "sha256": "afcb34829c85d58e675a47dfdfb446e02cef7eb94beafc2f14f2119e9b6894d6"
+    },
+    "RANSWallResolutionProbe": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/RANSWallResolutionProbe",
+      "sha256": "7efbabd1e172f023e74087005b55fc9ac2d114039a27efde9bf5b3cfc6cd5d37"
+    },
+    "WJKernelProbe": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/WJKernelProbe",
+      "sha256": "3d4edf79a2718a281175be1a575776a33dd5f988c48d5a1b594a9b5f2dd7844c"
+    },
+    "WJTerrainCoupledProbe": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/WJTerrainCoupledProbe",
+      "sha256": "1a190333603bf9fec7c16a997143e1f3e296f70d3e90c4ad7bc48753e25c3ebc"
+    },
+    "WJTerrainGeometryProbe": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/WJTerrainGeometryProbe",
+      "sha256": "3633393abcc041d86d29ed40e0bdf4b5619aec990f34d93145e56e9e13dd9a53"
+    }
+  },
+  "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib:",
+  "actual_terrain_ldd": "\tlinux-vdso.so.1 (0x00007fff121cd000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib/libSpatialDomains.so.5.9.0 (0x00007830a6800000)\n\tlibmpi_cxx.so.40 => /lib/x86_64-linux-gnu/libmpi_cxx.so.40 (0x00007830a70fe000)\n\tlibmpi.so.40 => /lib/x86_64-linux-gnu/libmpi.so.40 (0x00007830a6fc7000)\n\tlibMultiRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0 (0x00007830a6400000)\n\tlibLocalRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0 (0x00007830a6000000)\n\tlibStdRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0 (0x00007830a5c00000)\n\tlibLibUtilities.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0 (0x00007830a5600000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x00007830a4e00000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007830a4a00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007830a6b19000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007830a6fa3000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007830a4600000)\n\tlibptscotch-6.1.so => /lib/x86_64-linux-gnu/libptscotch-6.1.so (0x00007830a6a46000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007830a6f87000)\n\tlibopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x00007830a634d000)\n\tlibopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x00007830a6290000)\n\tlibhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x00007830a6234000)\n\tlibCollections.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0 (0x00007830a5a8d000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x00007830a5f9e000)\n\tlibfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x00007830a4200000)\n\tlibboost_iostreams.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0 (0x00007830a6a2e000)\n\tlibboost_program_options.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0 (0x00007830a5f59000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x00007830a1db0000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007830a1a00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007830a713c000)\n\tlibptscotcherr-6.1.so => /lib/x86_64-linux-gnu/libptscotcherr-6.1.so (0x00007830a6f7e000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x00007830a6a1b000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007830a5f2e000)\n\tlibevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x00007830a5ef9000)\n\tlibevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x00007830a6f77000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x00007830a5ecf000)\n\tlibMatrixFreeOps.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0 (0x000078309ec00000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x00007830a5531000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007830a54e9000)\n",
+  "spatial": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib/libSpatialDomains.so.5.9.0",
+    "sha256": "0c23e0de180a233bd88f70b265ae9865aeac456e6482f8ff0fa1b4be84d69dab"
+  },
+  "supersedes_runtime_claim": "v3 CTest used installed SpatialDomains; original results/default-shell ldd preserved",
+  "resource_units_after_repeats": 39,
+  "numerical_seconds_ceiling": 10800
+}

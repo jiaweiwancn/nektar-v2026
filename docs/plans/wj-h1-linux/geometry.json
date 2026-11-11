@@ -1,0 +1,114 @@
+{
+  "status": "PASS",
+  "geometry": {
+    "maps": [
+      {
+        "kind": 0,
+        "physical_volume": 199.125,
+        "gradient_fd_max": 6.713767319865838e-10,
+        "inverse_error": 8.881784197001252e-16
+      },
+      {
+        "kind": 1,
+        "physical_volume": 196.58458219804263,
+        "gradient_fd_max": 9.77140590663339e-10,
+        "inverse_error": 1.5543122344752192e-15
+      },
+      {
+        "kind": 2,
+        "physical_volume": 199.19837529762265,
+        "gradient_fd_max": 5.768920896542795e-10,
+        "inverse_error": 1.7763568394002505e-15
+      }
+    ],
+    "calibration": [
+      {
+        "H": 0.25,
+        "h_s": 0.09143037977818491,
+        "z_v": -0.0018043531089941285,
+        "cutoff": 0.02560679554557118,
+        "gate": 3.2786031506037383,
+        "minimum_reference_k": 0.008809015145515194,
+        "K": 0.008809015145515194,
+        "UH": 0.5223981183389242,
+        "nu_over_nut_H": 0.013096229936521346
+      },
+      {
+        "H": 0.375,
+        "h_s": 0.09067919520940076,
+        "z_v": -0.001769879860235167,
+        "cutoff": 0.02582918456335882,
+        "gate": 3.6754209887237868,
+        "minimum_reference_k": 0.008809015145515194,
+        "K": 0.008809015145515194,
+        "UH": 0.5765425365169078,
+        "nu_over_nut_H": 0.008752524773359527
+      },
+      {
+        "H": 0.5,
+        "h_s": 0.09030695163520461,
+        "z_v": -0.0017528173431726498,
+        "cutoff": 0.02594167261161107,
+        "gate": 3.9587574415967937,
+        "minimum_reference_k": 0.008809015145515194,
+        "K": 0.008809015145515194,
+        "UH": 0.6149586125778421,
+        "nu_over_nut_H": 0.006572335208387989
+      }
+    ],
+    "curved_columns": [
+      {
+        "kappa_eff": -0.848165776877407,
+        "cutoff": 0.02539112135065226,
+        "gate": 4.02539519851727,
+        "K_ground": 0.018372572097653778,
+        "initial_defect_margin": 0.010258719613950801
+      },
+      {
+        "kappa_eff": 0,
+        "cutoff": 0.02582918456335883,
+        "gate": 3.6754209887237868,
+        "K_ground": 0.0187384653542911,
+        "initial_defect_margin": 0.010490717893000826
+      },
+      {
+        "kappa_eff": 0.7385443669462606,
+        "cutoff": 0.026208865790393863,
+        "gate": 3.4503147438338337,
+        "K_ground": 0.019031258315331978,
+        "initial_defect_margin": 0.010685523188339641
+      }
+    ],
+    "invalid_geometry_rejections": 5,
+    "frame": {
+      "R_error": 1.734723475976807e-18,
+      "tangential_outer_traction": 0.002600999999999999,
+      "production": 0.0009262096219197016,
+      "epsilon": 0.0009262096219197016
+    },
+    "positivity_scope": "At fixed selected K/h/H, p_ref is unimodal, E-p_ref is positive after cutoff and negative initially; Q_J<=0 by the budget. Linear-in-curvature budgets bracket every intermediate cutoff between endpoint roots. Thus k_col>=K for the certified curvature interval; no evolving-k positivity theorem."
+  },
+  "command": {
+    "argv": [
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/WJTerrainGeometryProbe",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/metadata-v5/wj-h1-geometry/run-6728b99b3c26/geometry.json"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/metadata-v5/wj-h1-geometry/run-6728b99b3c26",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "timeout_seconds": 900,
+    "rss_ceiling_bytes": 8589934592,
+    "output_ceiling_bytes": 4294967296,
+    "exit": 0,
+    "seconds": 0.4282667889492586,
+    "log_sha256": "39a415823d3c6fff79723aa8984e9d86ec21625122b54ac1672e12709f272107",
+    "peak_rss_bytes": 4194304,
+    "output_bytes": 91551
+  }
+}

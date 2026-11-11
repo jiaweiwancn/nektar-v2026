@@ -1,0 +1,5 @@
+role,nx,normal_elements,inner_elements,state,free_velocity,pressure_gauge,flow,one_dense_flow_matrix_GiB,evolution_size_guard,permitted_by_size_only,note
+executed prototype,4,5,2,790,308,36,344,0.0008816719055175781,3000,True,"storage lower bound for one flow matrix, excludes copies/factors/mass/scalars; no performance qualification"
+NOT_RUN: one uniform bisection,8,10,4,2909,1334,109,1443,0.015513963997364044,3000,True,"storage lower bound for one flow matrix, excludes copies/factors/mass/scalars; no performance qualification"
+NOT_RUN: exceeds current guard,16,20,8,11155,5546,375,5921,0.2612042501568794,3000,False,"storage lower bound for one flow matrix, excludes copies/factors/mass/scalars; no performance qualification"
+NOT_RUN: illustrative future hill/wake resolution only,160,80,8,465343,228962,13203,242165,436.93100828677416,3000,False,"storage lower bound for one flow matrix, excludes copies/factors/mass/scalars; no performance qualification"

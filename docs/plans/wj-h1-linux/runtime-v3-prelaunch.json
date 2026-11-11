@@ -1,0 +1,259 @@
+{
+  "native_source": {
+    "revision": "b50aaa8b0c5aaa8022ba5ded5e16dd6eb8c69dab",
+    "tree": "81c5e6aa53e2c400294af3a7d2c29b874f5d9bc7",
+    "status": "",
+    "reused_spatial_library": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib/libSpatialDomains.so.5.9.0",
+      "sha256": "0c23e0de180a233bd88f70b265ae9865aeac456e6482f8ff0fa1b4be84d69dab",
+      "source_equivalence": "library/SpatialDomains unchanged c6163a7..b50aaa8; identical dependency environment/arithmetic flags"
+    },
+    "start": 1794401073.7804356
+  },
+  "runtime": {
+    "WJTerrainGeometryProbe": {
+      "executable": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/WJTerrainGeometryProbe",
+        "size": 240688,
+        "sha256": "3633393abcc041d86d29ed40e0bdf4b5619aec990f34d93145e56e9e13dd9a53"
+      },
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffe4b193000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007c3104e00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007c310510a000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007c31050ea000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007c3104a00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007c3105248000)\n",
+      "libraries": {
+        "/lib/x86_64-linux-gnu/libstdc++.so.6": {
+          "path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30",
+          "size": 2260296,
+          "sha256": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128"
+        },
+        "/lib/x86_64-linux-gnu/libm.so.6": {
+          "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "size": 940560,
+          "sha256": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6"
+        },
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+          "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "size": 125488,
+          "sha256": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a"
+        },
+        "/lib/x86_64-linux-gnu/libc.so.6": {
+          "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "size": 2220400,
+          "sha256": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793"
+        },
+        "/lib64/ld-linux-x86-64.so.2": {
+          "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "size": 240936,
+          "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+        }
+      }
+    },
+    "WJTerrainCoupledProbe": {
+      "executable": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/WJTerrainCoupledProbe",
+        "size": 3979048,
+        "sha256": "1a190333603bf9fec7c16a997143e1f3e296f70d3e90c4ad7bc48753e25c3ebc"
+      },
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffd2a263000)\n\tlibSpatialDomains.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0 (0x000074c1adc00000)\n\tlibmpi_cxx.so.40 => /lib/x86_64-linux-gnu/libmpi_cxx.so.40 (0x000074c1ae417000)\n\tlibmpi.so.40 => /lib/x86_64-linux-gnu/libmpi.so.40 (0x000074c1adec9000)\n\tlibMultiRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0 (0x000074c1ad800000)\n\tlibLocalRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0 (0x000074c1ad400000)\n\tlibStdRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0 (0x000074c1ad000000)\n\tlibLibUtilities.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0 (0x000074c1aca00000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x000074c1ac200000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x000074c1abe00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000074c1ad719000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000074c1ae3f3000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000074c1aba00000)\n\tlibptscotch-6.1.so => /lib/x86_64-linux-gnu/libptscotch-6.1.so (0x000074c1ad646000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000074c1ae3d7000)\n\tlibopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x000074c1ade16000)\n\tlibopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x000074c1ad343000)\n\tlibhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x000074c1ae379000)\n\tlibCollections.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0 (0x000074c1ace8d000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x000074c1ad2e1000)\n\tlibfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x000074c1ab600000)\n\tlibboost_iostreams.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0 (0x000074c1adbe8000)\n\tlibboost_program_options.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0 (0x000074c1ac9bb000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x000074c1a91b0000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x000074c1a8e00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000074c1ae455000)\n\tlibptscotcherr-6.1.so => /lib/x86_64-linux-gnu/libptscotcherr-6.1.so (0x000074c1ae372000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x000074c1ad633000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x000074c1ad2b6000)\n\tlibevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x000074c1ac986000)\n\tlibevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x000074c1ade11000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x000074c1ac95c000)\n\tlibMatrixFreeOps.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0 (0x000074c1a6000000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x000074c1ac131000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x000074c1ac914000)\n",
+      "libraries": {
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": {
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0",
+          "size": 2517088,
+          "sha256": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda"
+        },
+        "/lib/x86_64-linux-gnu/libmpi_cxx.so.40": {
+          "path": "/usr/lib/x86_64-linux-gnu/libmpi_cxx.so.40.30.1",
+          "size": 102272,
+          "sha256": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788"
+        },
+        "/lib/x86_64-linux-gnu/libmpi.so.40": {
+          "path": "/usr/lib/x86_64-linux-gnu/libmpi.so.40.30.2",
+          "size": 1198600,
+          "sha256": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982"
+        },
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": {
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0",
+          "size": 4923376,
+          "sha256": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e"
+        },
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": {
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0",
+          "size": 2566896,
+          "sha256": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc"
+        },
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": {
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0",
+          "size": 3068984,
+          "sha256": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7"
+        },
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": {
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0",
+          "size": 5842632,
+          "sha256": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b"
+        },
+        "/lib/x86_64-linux-gnu/liblapack.so.3": {
+          "path": "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3",
+          "size": 7092680,
+          "sha256": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151"
+        },
+        "/lib/x86_64-linux-gnu/libstdc++.so.6": {
+          "path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30",
+          "size": 2260296,
+          "sha256": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128"
+        },
+        "/lib/x86_64-linux-gnu/libm.so.6": {
+          "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "size": 940560,
+          "sha256": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6"
+        },
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+          "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "size": 125488,
+          "sha256": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a"
+        },
+        "/lib/x86_64-linux-gnu/libc.so.6": {
+          "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "size": 2220400,
+          "sha256": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793"
+        },
+        "/lib/x86_64-linux-gnu/libptscotch-6.1.so": {
+          "path": "/usr/lib/x86_64-linux-gnu/libptscotch-6.1.3.so",
+          "size": 853488,
+          "sha256": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0"
+        },
+        "/lib/x86_64-linux-gnu/libz.so.1": {
+          "path": "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11",
+          "size": 108936,
+          "sha256": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370"
+        },
+        "/lib/x86_64-linux-gnu/libopen-pal.so.40": {
+          "path": "/usr/lib/x86_64-linux-gnu/libopen-pal.so.40.30.2",
+          "size": 700256,
+          "sha256": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1"
+        },
+        "/lib/x86_64-linux-gnu/libopen-rte.so.40": {
+          "path": "/usr/lib/x86_64-linux-gnu/libopen-rte.so.40.30.2",
+          "size": 761608,
+          "sha256": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57"
+        },
+        "/lib/x86_64-linux-gnu/libhwloc.so.15": {
+          "path": "/usr/lib/x86_64-linux-gnu/libhwloc.so.15.5.2",
+          "size": 372064,
+          "sha256": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54"
+        },
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": {
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0",
+          "size": 1933192,
+          "sha256": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88"
+        },
+        "/lib/x86_64-linux-gnu/libblas.so.3": {
+          "path": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+          "size": 395776,
+          "sha256": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd"
+        },
+        "/lib/x86_64-linux-gnu/libfftw3.so.3": {
+          "path": "/usr/lib/x86_64-linux-gnu/libfftw3.so.3.5.8",
+          "size": 2201936,
+          "sha256": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d"
+        },
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": {
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0",
+          "size": 92336,
+          "sha256": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e"
+        },
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": {
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0",
+          "size": 276664,
+          "sha256": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+        },
+        "/lib/x86_64-linux-gnu/libopenblas.so.0": {
+          "path": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so",
+          "size": 38017672,
+          "sha256": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+        },
+        "/lib/x86_64-linux-gnu/libgfortran.so.5": {
+          "path": "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0",
+          "size": 2989432,
+          "sha256": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30"
+        },
+        "/lib64/ld-linux-x86-64.so.2": {
+          "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "size": 240936,
+          "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+        },
+        "/lib/x86_64-linux-gnu/libptscotcherr-6.1.so": {
+          "path": "/usr/lib/x86_64-linux-gnu/libptscotcherr-6.1.3.so",
+          "size": 14680,
+          "sha256": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e"
+        },
+        "/lib/x86_64-linux-gnu/libbz2.so.1.0": {
+          "path": "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+          "size": 74848,
+          "sha256": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9"
+        },
+        "/lib/x86_64-linux-gnu/liblzma.so.5": {
+          "path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5",
+          "size": 170456,
+          "sha256": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037"
+        },
+        "/lib/x86_64-linux-gnu/libevent_core-2.1.so.7": {
+          "path": "/usr/lib/x86_64-linux-gnu/libevent_core-2.1.so.7.0.1",
+          "size": 211136,
+          "sha256": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f"
+        },
+        "/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7": {
+          "path": "/usr/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7.0.1",
+          "size": 14256,
+          "sha256": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537"
+        },
+        "/lib/x86_64-linux-gnu/libudev.so.1": {
+          "path": "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.2",
+          "size": 166240,
+          "sha256": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda"
+        },
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": {
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0",
+          "size": 47818768,
+          "sha256": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc"
+        },
+        "/lib/x86_64-linux-gnu/libzstd.so.1": {
+          "path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8",
+          "size": 841808,
+          "sha256": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667"
+        },
+        "/lib/x86_64-linux-gnu/libquadmath.so.0": {
+          "path": "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0",
+          "size": 289592,
+          "sha256": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c"
+        }
+      }
+    }
+  },
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "arithmetic": "Release -O3 -DNDEBUG -ffp-contract=off -fno-fast-math; C++17; serial rank, all numerical threads1",
+  "specs": {
+    "wj_earsm_budget_cutoff_awf_appendix.tex": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/source-v3/docs/literature/wj_earsm_budget_cutoff_awf_appendix.tex",
+      "size": 53271,
+      "sha256": "0ab52e0d813b8fb344973f75ca6d8da97ff389ef9f93476500ca9d1df1fbc47c"
+    },
+    "wj_earsm_neutral_abl_ep_awf_note.tex": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/source-v3/docs/literature/wj_earsm_neutral_abl_ep_awf_note.tex",
+      "size": 138078,
+      "sha256": "1959e96ea0b61f9deb9ff9ad1f5b26488a932a8451c2de6d3b6f7b7c9dbd9124"
+    }
+  },
+  "wrapper": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/operations/checks-driver-v1.py",
+    "size": 5453,
+    "sha256": "0aee415d156719d888f009663713508be7b6737d1cf62069d7f331714471ac97"
+  },
+  "cache": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/CMakeCache.txt",
+    "size": 13276,
+    "sha256": "b4bb25162b6936a52ed5cfca330cee8739ac92f41d79cbfc3c54509b74eff47b"
+  },
+  "compile_commands": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v3/compile_commands.json",
+    "size": 333977,
+    "sha256": "5bdbac0bbc31841c116b875bca08e87962997c815e01264aca146dae41d98c95"
+  }
+}
