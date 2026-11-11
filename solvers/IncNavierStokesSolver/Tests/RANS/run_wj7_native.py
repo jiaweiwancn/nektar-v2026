@@ -215,7 +215,7 @@ class Study(WJ6Study):
         if end==32:
             old=sealed_prefix(self.a.parent,self.a.policy)[2];differences=[]
             for row in result['legacy_sensitivity']:
-                order,group,step,scope,field,norm=row['key']
+                order,group,step,scope,field,norm=row['key'];order=int(order);step=int(step)
                 before=old['gate']['components'][group+'_order'+str(order)+'_sensitivity']['components'][str(step)]['components'][scope+'/'+field+'/'+norm]
                 require(before['status']==row['status'],'replay sensitivity decision differs')
                 differences.extend([abs(before['value']-row['value']),abs(before['uncertainty']-row['uncertainty'])])
@@ -364,7 +364,7 @@ def main():
                 start=time.time();result=qualify(index,policy,dict(amplitudes=AMP,budgets=BUDGET,sensitivity_fraction=.1),32,caches,previous)
                 changes=[]
                 for row in result['legacy_sensitivity']:
-                    order,group,step,scope,field,norm=row['key']
+                    order,group,step,scope,field,norm=row['key'];order=int(order);step=int(step)
                     prior=supp['gate']['components'][group+'_order'+str(order)+'_sensitivity']['components'][str(step)]['components'][scope+'/'+field+'/'+norm]
                     require(prior['status']==row['status'],'retained replay decision differs')
                     changes.extend((abs(prior['value']-row['value']),abs(prior['uncertainty']-row['uncertainty'])))
