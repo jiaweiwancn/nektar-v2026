@@ -33,6 +33,9 @@ def main():
     p.add_argument('--geometry-receipt',type=Path,required=True)
     p.add_argument('--concurrency',type=int,choices=(1,2),default=2)
     p.add_argument('--resume',action='store_true')
+    p.add_argument('--output-label',default='ownership-short-qualification')
+    p.add_argument('--audit-prefix',default='short-audits')
+    p.add_argument('--reuse-executions',type=Path)
     a=p.parse_args();r=a.root.resolve();source=Path(__file__).parent
     geometry=load(a.geometry_receipt);require(geometry['status']=='pass','native_geometry_not_qualified')
     require(geometry['contract']['numerical_operator']==OPERATOR,'foreign_geometry_operator')
@@ -58,7 +61,16 @@ def main():
         runtime=runtime_ids,source_sha256=source_ids,controller_sha256=sha(Path(__file__)),
         gates='unchanged physical field/traction/domain, .85 dominant native/common and inner-only k; original temporal floors',
         history='fresh corrected initializations, native same-method continuation only')
-    out=r/'ownership-short-qualification';seal=RequestManifest(out,intent,a.resume)
+    reuse=a.reuse_executions.resolve() if a.reuse_executions else None
+    if reuse:
+        previous=load(reuse/'request-manifest.json');old_request=previous['request']
+        require(RequestManifest(reuse,old_request,True).completed(reuse),'previous_short_execution_not_sealed')
+        for key in ('numerical_operator','geometry_receipt_sha256','configurations','spaces','timesteps','required_times','runtime','source_sha256'):
+            require(old_request[key]==intent[key],'reuse_short_request_mismatch:'+key)
+        intent['explicit_reuse']=dict(path=str(reuse),manifest_sha256=sha(reuse/'request-manifest.json'),
+            policy='sealed successful jobs only; retry missing comparison-output setup failure; scientific failures remain failed')
+    out=r/a.output_label;seal=RequestManifest(out,intent,a.resume)
+    (r/'comparisons').mkdir(exist_ok=True)
     if seal.completed(out):return 0 if load(out/'results.json')['status']=='pass' else 1
     lock=threading.Lock();events=[];results={}
     env=dict(os.environ,**THREADS,NEKTAR_RANS_PROBE_TIMEOUT='14400')
@@ -72,6 +84,20 @@ def main():
                      numerical_operator=OPERATOR,runtime=runtime_ids)
         manifest=RequestManifest(job,request,a.resume and job.exists())
         if manifest.completed(job):return load(job/'results.json')['exit_code']
+        if reuse:
+            prior=reuse/'jobs'/name
+            if (prior/'results.json').exists():
+                old=load(prior/'request-manifest.json')['request'];value=load(prior/'results.json')
+                normalized=lambda words:[word for word in words if word!='--resume']
+                require(normalized(old['command'])==normalized(cmd) and old['runtime']==runtime_ids and
+                    old['numerical_operator']==OPERATOR,'reused_job_identity_differs:'+name)
+                require(RequestManifest(prior,old,True).completed(prior),'reused_job_artifacts_changed:'+name)
+                setup_retry=(value['exit_code']!=0 and 'FileNotFoundError' in (prior/'execution.log').read_text() and
+                    '/comparisons/' in (prior/'execution.log').read_text() and all(not p.exists() for p in artifacts))
+                if not setup_retry:
+                    write_json(job/'results.json',dict(value,reuse_source=str(prior),reuse_manifest_sha256=sha(prior/'request-manifest.json')))
+                    manifest.seal(job,['results.json',str(prior/'completed-artifacts.json')])
+                    return value['exit_code']
         with (job/'execution.log').open('x') as f:
             proc=None
             while proc is None:
@@ -182,7 +208,7 @@ def main():
             gate=aggregate(dict(cfg,audit_times=[T]),receipt)
             receipt.update(aggregate=gate,status='pass' if compare_code==0 and gate['status']=='pass' and inner['status'] in ('pass','unresolved_floor') and
                            all(v==0 for v in audits_execution) and all(v['status']=='pass' for v in stress.values()) else 'fail')
-            target=r/'short-audits'/(tag+'-'+str(T));target.mkdir(parents=True,exist_ok=False)
+            target=r/a.audit_prefix/(tag+'-'+str(T));target.mkdir(parents=True,exist_ok=False)
             write_json(target/'results.json',receipt)
             row['milestones'].append(dict(time=T,status=receipt['status'],receipt=str(target/'results.json'),sha256=sha(target/'results.json')))
             if receipt['status']!='pass':break
@@ -203,7 +229,7 @@ def main():
                 numerical_operator=OPERATOR,configurations=results,execution=events,
                 scope='six Natural configurations; corrected runtime and fresh histories only; no old evolution reuse')
     write_json(out/'results.json',result)
-    files=['results.json']+[str(p) for p in (r/'short-audits').glob('*/results.json')]
+    files=['results.json']+[str(p) for p in (r/a.audit_prefix).glob('*/results.json')]
     seal.seal(out,files)
     return 0 if result['status']=='pass' else 1
 
