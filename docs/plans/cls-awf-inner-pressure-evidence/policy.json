@@ -1,0 +1,21 @@
+{
+  "version": "AcceptedAWFInnerPressureP2V1",
+  "declared_date_Asia_Shanghai": "2026-11-11",
+  "base_revision": "3714cf3",
+  "question": "Does quadratic inner pressure reduce the remaining velocity-pressure representation error of the settled cutoff-v1 H=.5 Regularized/Linear solution?",
+  "control": "Existing cutoff-v1 H=.5 Regularized/Linear P1-inner/P1-outer campaign, freshly initialized h0 and exact retained native observations; no rerun or checkpoint migration",
+  "changed": "Inner pressure degree 1 to 2 only; separate regional pressure fields and one common gauge retained",
+  "pressure_space": "inner-p2-v1",
+  "expected_native_field_sizes": [784, 784, 784, 400, 187, 54, 1],
+  "expected_coupled_size": 2994,
+  "unchanged": "H=.5, endpoint K=k(H), zK=zm=H, h=.1, nu=1.5e-5, u*=.4, calibrated coefficients, Regularized beta=.4/gamma0=0/scale=1, Linear inner stress, actual represented P_h-E_C(K), zero prescribed forcing/redistribution/eta, cutoff-v1 mesh, 3rd-degree U/k/epsilon, outer P1, source quadrature 16x8 and native points 8x8, IMEX1 dt=.000625, one U/p/epsilon/k solve and one logical bound call, unit relaxation, ExactStepV1, NativeElementSideV2, AcceptedBudgetV1/RetainedPool, floor 1e-8 and work limits 2000/20000/2000/900",
+  "initialization": "Fresh native initialization in the declared pressure spaces. Compare all unchanged differential fields/history bits and physical pressure after one common gauge; never copy or edit an incompatible checkpoint.",
+  "pilot": {"global_steps": [32, 80, 160, 800], "physical_times": [0.02, 0.05, 0.1, 0.5], "block_steps": 32, "timeout_seconds_per_block": 7200, "maximum_wall_hours": 8, "maximum_native_RSS_GiB": 16},
+  "metrics": ["native h0/reference/projection equivalence", "physical U/k/full .5-to-4 epsilon and common-gauge pressure differences", "reference traction and gradients", "inner/outer and element-local strong divergence", "all selected alpha=0 free-row spatial residuals and signed component balances", "full/normal traction and k-flux interface discrepancies", "refreshed epsilon mismatch without trace restoration", "actual splitting defect separately from its identity check", "covariance/scalar/budget validity", "bound calls/activation/signed and absolute supply", "actual solve/callback counts", "runtime and peak memory"],
+  "norms": "Existing common physical panels on this same mesh, split at all mesh interfaces and the analytical cutoff; complete outer epsilon H<=z<=4 and fixed E0*sqrt(12) normalization; one pressure gauge across both regions, relative offset retained",
+  "resolution_floors": {"common_normalized_field_difference": 1e-8, "mean_traction_absolute_change": 1e-5},
+  "interpretation": "A controlled pressure-space sensitivity test, not a spatial convergence order or proof that pressure order is the sole cause. No requirement that every physical error improve. Initial physical/differential discrepancies are measured separately from subsequent evolution.",
+  "continuation_decision": "Complete the .5 pilot unless a genuine hard rejection, 8-hour/16GiB resource limit or documented growing invalid mode intervenes. If admissible, affordable and informative, continue the SAME new case from its own exact checkpoint through half-unit milestones to at most T=6; stop when the unchanged three-consecutive-half-unit steady screen passes, including full outer epsilon. Record the boundary decision; no automatic numerical retries or continuation beyond 6.",
+  "comparison_scope": "Matched-time comparisons against retained P1 states first; independently qualified steady candidates may be compared at different final times. The existing faithful H2 outer-P2 failure is a separate experiment.",
+  "allocation": "One new native rank and all six computational-library thread controls one; at most one extra read-only diagnostic alongside it, account for unrelated work within 72 workers. Preserve all frozen historical runtimes."
+}

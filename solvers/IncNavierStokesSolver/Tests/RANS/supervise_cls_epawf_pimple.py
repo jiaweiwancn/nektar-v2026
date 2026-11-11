@@ -24,6 +24,7 @@ def main():
     p.add_argument('--accepted-awf-companion-reason',default='')
     p.add_argument('--accepted-awf-perturbation',type=float,default=0.)
     p.add_argument('--inner-refinement','--accepted-awf-inner-refinement',dest='accepted_awf_inner_refinement',choices=('none','cutoff-v1'),default='none')
+    p.add_argument('--pressure-space',choices=('baseline-v1','inner-p2-v1'),default='baseline-v1')
     p.add_argument('--inventory',choices=('ConstitutiveV2','ConstitutiveV3','AcceptedBudgetV1'),default='ConstitutiveV2')
     p.add_argument('--bound-solver',choices=('WorkingSet','RetainedPool'),default='WorkingSet')
     p.add_argument('--targets',type=int,nargs='+',default=[32,160,800,1600,3200,8000])
@@ -41,7 +42,10 @@ def main():
             a.bound_solver=='RetainedPool' and bound_work_arguments(a)==WORK,'accepted-AWF family/method controls mismatch')
         require(a.accepted_awf_companion=='faithful' or a.accepted_awf_companion_reason.strip(),'companion needs its preserved faithful blocker')
         require(a.accepted_awf_inner_refinement=='none' or a.accepted_awf_case.endswith('G'),'focused cutoff refinement requires a graded accepted-AWF case')
-    else:require(a.wall_policy!='CLSCalibratedBudgetAWF' and a.inventory!='AcceptedBudgetV1' and a.accepted_awf_inner_refinement=='none','new formulation requires its declared case family')
+        require(a.pressure_space=='baseline-v1' or (a.accepted_awf_case=='Accepted-AWF-05G' and
+            a.accepted_awf_inner_refinement=='cutoff-v1'),'inner-p2-v1 requires the matched cutoff-v1 H=.5 graded case')
+    else:require(a.wall_policy!='CLSCalibratedBudgetAWF' and a.inventory!='AcceptedBudgetV1' and
+        a.accepted_awf_inner_refinement=='none' and a.pressure_space=='baseline-v1','new formulation requires its declared case family')
     a.output.mkdir(parents=True,exist_ok=True)
     ownership=a.output/'supervisor';ownership.mkdir(exist_ok=True);lock=CampaignLock(ownership)
     root=a.output/'trajectory';driver=Path(__file__).with_name('continue_cls_epawf_pimple.py')
@@ -56,7 +60,7 @@ def main():
         base += ['--accepted-awf-case',a.accepted_awf_case,'--accepted-awf-companion',a.accepted_awf_companion,
                  '--accepted-awf-companion-reason',a.accepted_awf_companion_reason,
                  '--accepted-awf-perturbation',str(a.accepted_awf_perturbation),
-                 '--inner-refinement',a.accepted_awf_inner_refinement]
+                 '--inner-refinement',a.accepted_awf_inner_refinement,'--pressure-space',a.pressure_space]
     retries=0
     while True:
         try:progress=load_progress(root/'progress.json') if root.exists() else {}
@@ -72,6 +76,7 @@ def main():
                 progress.get('accepted_awf_companion_reason','')==a.accepted_awf_companion_reason and
                 progress.get('accepted_awf_perturbation',0.)==a.accepted_awf_perturbation and
                 progress.get('accepted_awf_inner_refinement','none')==a.accepted_awf_inner_refinement and
+                progress.get('accepted_awf_pressure_space','baseline-v1')==a.pressure_space and
                 progress.get('wall_policy')==a.wall_policy and progress.get('inventory')==a.inventory and
                 progress.get('bound_solver')==a.bound_solver and
                 progress.get('projection_work_controls')==bound_work_arguments(a),

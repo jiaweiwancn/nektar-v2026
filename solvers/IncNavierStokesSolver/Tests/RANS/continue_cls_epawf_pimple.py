@@ -191,6 +191,7 @@ def main():
     p.add_argument('--accepted-awf-companion-reason',default='')
     p.add_argument('--accepted-awf-perturbation',type=float,default=0.)
     p.add_argument('--inner-refinement','--accepted-awf-inner-refinement',dest='accepted_awf_inner_refinement',choices=('none','cutoff-v1'),default='none')
+    p.add_argument('--pressure-space',choices=('baseline-v1','inner-p2-v1'),default='baseline-v1')
     p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2','ConstitutiveV3','AcceptedBudgetV1'),default='LegacyV1')
     p.add_argument('--bound-solver',choices=('WorkingSet','RetainedPool'),default='WorkingSet')
     p.add_argument('--output', type=Path, required=True)
@@ -210,9 +211,12 @@ def main():
             a.bound_solver=='RetainedPool' and bound_work_arguments(a)==WORK,'accepted-AWF family/method controls mismatch')
         require(a.accepted_awf_companion=='faithful' or a.accepted_awf_companion_reason.strip(),'companion needs its preserved faithful blocker')
         require(a.accepted_awf_inner_refinement=='none' or a.accepted_awf_case.endswith('G'),'focused cutoff refinement requires a graded accepted-AWF case')
+        require(a.pressure_space=='baseline-v1' or (a.accepted_awf_case=='Accepted-AWF-05G' and
+            a.accepted_awf_inner_refinement=='cutoff-v1'),'inner-p2-v1 requires the matched cutoff-v1 H=.5 graded case')
     else:
         require(a.wall_policy!='CLSCalibratedBudgetAWF' and a.inventory!='AcceptedBudgetV1','accepted model requires its declared case family')
         require(a.accepted_awf_companion=='faithful' and a.accepted_awf_perturbation==0. and a.accepted_awf_inner_refinement=='none','accepted model controls on another case family')
+        require(a.pressure_space=='baseline-v1','pressure-space control requires its declared accepted-AWF case')
     os.environ.update(THREADS); os.environ['TMPDIR'] = str(a.output/'tmp')
     if not a.resume:a.output.mkdir(parents=True,exist_ok=False)
     require(not (a.output/'runtime-handoff.json').exists(),'campaign sealed by a validated runtime handoff; use its recorded successor')
@@ -232,6 +236,7 @@ def main():
         require(progress.get('accepted_awf_companion','faithful')==a.accepted_awf_companion,'accepted-AWF companion differs from campaign')
         require(progress.get('accepted_awf_perturbation',0.)==a.accepted_awf_perturbation,'accepted-AWF initialization differs from campaign')
         require(progress.get('accepted_awf_inner_refinement','none')==a.accepted_awf_inner_refinement,'accepted-AWF inner mesh policy differs from campaign')
+        require(progress.get('accepted_awf_pressure_space','baseline-v1')==a.pressure_space,'accepted-AWF pressure space differs from campaign')
         if a.accepted_awf_case:require(progress.get('accepted_awf_companion_reason','')==a.accepted_awf_companion_reason,'companion provenance differs from campaign')
         require(progress.get('projection_work_controls',{})==bound_work_arguments(a),'projection work controls differ from recorded campaign')
         assert_native_stopped(progress)
@@ -306,6 +311,7 @@ def main():
                     accepted_awf_case=a.accepted_awf_case,accepted_awf_companion=a.accepted_awf_companion,
                     accepted_awf_companion_reason=a.accepted_awf_companion_reason,accepted_awf_perturbation=a.accepted_awf_perturbation,
                     accepted_awf_inner_refinement=a.accepted_awf_inner_refinement,
+                    accepted_awf_pressure_space=a.pressure_space,
                     case_family='AcceptedAWFV1' if a.accepted_awf_case else ('UpstreamHeightV1' if a.upstream_case else ('HeightSamplerV1' if a.height_case else 'LegacyOuter6')),
                     process_start=Path('/proc/self/stat').read_text().split()[21], executable=str(executable),
                     executable_sha256=pinned['sha256'], source_revision=subprocess.check_output(['git','-C',str(Path(__file__).resolve().parents[4]),'rev-parse','HEAD'],text=True).strip())
@@ -337,7 +343,8 @@ def main():
                 xml=case_xml(a.accepted_awf_case,directory,end-start,.000625,
                     restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,
                     companion=a.accepted_awf_companion,companion_reason=a.accepted_awf_companion_reason,
-                    perturbation=a.accepted_awf_perturbation,inner_refinement=a.accepted_awf_inner_refinement)
+                    perturbation=a.accepted_awf_perturbation,inner_refinement=a.accepted_awf_inner_refinement,
+                    pressure_space=a.pressure_space)
             elif a.height_case or a.upstream_case:
                 from run_cls_epawf_height_comparison import case_xml,WORK
                 require((a.upstream_case and a.wall_policy=='Upstream' and a.inventory=='ConstitutiveV3') or
