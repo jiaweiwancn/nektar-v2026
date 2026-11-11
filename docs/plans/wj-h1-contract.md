@@ -98,6 +98,14 @@ numerical study ceiling10800s; <=40 scheduled prototype/control attempts,
 RSS<=8GiB, invocation output<=4GiB, H1 output<=16GiB. Retain failed work and
 actual time/RSS/output costs. No large SVD or all-history campaign.
 
+The narrow H1 CTest runner reuses the existing process-tree/worker inspection
+helpers but opens only `wj-h1-*/checks-accounting.json`. It reserves every
+selection before launch, keeps failed/unknown reservations charged, and bounds
+whole-process RSS, current worker count and output. A600s closure reserve and
+120s setup allowance supplement actual check wall time. Native timing uses
+the existing passive timing stream, with per-invocation source/runtime/argv
+receipts. No old package ledger is opened or reset. Build time is separate.
+
 Initial coarse chart mesh retains feet and crest, s=[-5,-2.5,0,2.5,5],
 rho=[0,H_w/2,H_w,2,6.25,20], p=3; confirm dimensions before evolution and
 keep the legacy3000 dense-state guard. Start with dt=1e-6 in H_h/U_infinity
