@@ -15,6 +15,25 @@ from wj_immutable import file_identity
 
 
 class Metadata(unittest.TestCase):
+    def test_one_cadence_chunks_fine_history_and_observes_only_common_time(self):
+        from run_wj7_native import Study
+        from types import SimpleNamespace
+        with tempfile.TemporaryDirectory() as temp:
+            s=Study.__new__(Study);s.root=Path(temp);s.ledger=SimpleNamespace(totals=lambda:dict(command_seconds=0.))
+            s.s=dict(trajectories={t:dict(dt=1.6e-5 if t=='fine' else 3.2e-5,nx=1 if t=='baseline' else 2,
+                trajectory=[dict(steps=64 if t=='fine' else 32,checkpoint='immutable-'+t)]) for t in ('coarse','fine','baseline')})
+            calls=[];observed=[];s.save=lambda:None;s.valid=lambda d,r:None
+            def native(name,steps,cp,dt,nx,arithmetic=False,role=None):
+                calls.append((name,steps,cp,arithmetic));folder=Path(temp)/name;folder.mkdir();f=folder/'case.evolution.json';f.write_text('{}')
+                return dict(checkpoint=name+'-CP'),{},folder
+            def observe(tag,step,d,folder,arithmetic):
+                observed.append((tag,step));return dict(steps=step,checkpoint=d['checkpoint'],errors=dict(accuracy_gate=dict(status='PASS')),quadrature=dict(status='PASS'))
+            s.native=native;s.observe=observe;s.replay=lambda end:dict(end=end,seconds=0.,gate=dict(status='PASS'))
+            s.row(64)
+            self.assertEqual([(n,k,a) for n,k,cp,a in calls],[('coarse-64',32,True),('fine-96',32,False),('fine-128',32,True),('baseline-64',32,True)])
+            self.assertEqual(calls[2][2],'fine-96-CP')
+            self.assertEqual(observed,[('coarse',64),('fine',128),('baseline',64)])
+
     def test_discrete_native_counts_preserve_exact_parsed_integers(self):
         from run_wj7_native import native_counts
         self.assertEqual(native_counts(32.,2.,0.),(32,2,0))

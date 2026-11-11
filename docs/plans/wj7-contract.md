@@ -182,3 +182,17 @@ observation/producer identities and a prior qualification binding. Every old
 leaf is re-gated with the enlarged, separate trajectory uncertainties. Only new
 time pairs require new full-payload comparisons. This is verified measurement
 reuse, not reuse of a bare success receipt or a reset of uncertainty/history.
+
+## Recorded initial-admission outcome
+
+The actual imports and corrected/cached Tx prefix pass for both policies.
+The immutable first admission projects EP7736.467437s and
+Budget10866.759210s, including all charged development/replay/import/setup work,
+25% measured headroom and600s closure, against10800s per policy. Budget fails
+by66.759210s. The joint admission is RESOURCE_LIMIT. Neither policy advances
+from Tx; .002048/.003072/T3 and all nine new arithmetic analyses per policy
+are NOT_RUN. This outcome is not repaired by dropping historical costs,
+reducing reserves, extending a ledger or advancing EP alone. Independent
+semantic correction, import/readback, metadata/refusal tests and publication
+are completed within the existing allocation. The producing WJ-6 roots and
+their own original T3 denial remain unchanged.
