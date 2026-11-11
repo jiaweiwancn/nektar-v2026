@@ -402,11 +402,23 @@ std::string RANSWallEvolutionPatch::InitializationReceipt(const Vector &state,co
     const auto effective=ExternalLift(state,time,data);double difference=0,boundaryDifference=0;
     for(int i=0;i<state.size();++i)difference=std::max(difference,std::abs(state[i]-effective[i]));
     for(const auto &[row,value]:live)if(generated.count(row))boundaryDifference=std::max(boundaryDifference,std::abs(value-generated.at(row)));
-    return J::Object({{"raw_initial_sha256",J::Quote(H::Hash(state))},{"effective_initial_sha256",J::Quote(H::Hash(effective))},
+    std::vector<std::pair<std::string,std::string>> entries{{"raw_initial_sha256",J::Quote(H::Hash(state))},{"effective_initial_sha256",J::Quote(H::Hash(effective))},
         {"fixed_reference_sha256",J::Quote(H::Hash(reference))},{"explicit_boundary_sha256",J::Quote(hash(live))},
         {"implicit_boundary_sha256",J::Quote(hash(other))},{"boundary_hash_format",J::Quote("sorted row-as-f64,value pairs, native little endian")},
         {"raw_effective_max_difference",J::Number(difference)},{"source_target_boundary_max_difference",J::Number(boundaryDifference)},
-        {"live_fixed_boundary",J::Constraints(live)},{"effective_initial",J::Numbers(effective)}});
+        {"live_fixed_boundary",J::Constraints(live)},{"effective_initial",J::Numbers(effective)}};
+    if(OpenBoundary())
+    {
+        const auto explicitLoads=OpenBoundaryContributions(state,time,data),implicitLoads=OpenBoundaryContributions(state,time,implicit);
+        Require(data.openBoundaryIdentity==implicit.openBoundaryIdentity && explicitLoads.traction==implicitLoads.traction &&
+            explicitLoads.diffusion==implicitLoads.diffusion,"explicit/implicit open boundary data differ");
+        entries.push_back({"open_boundary_definition",J::Quote(data.openBoundaryIdentity)});
+        entries.push_back({"open_traction_load_sha256",J::Quote(H::Hash(explicitLoads.traction))});
+        entries.push_back({"open_diffusive_load_sha256",J::Quote(H::Hash(explicitLoads.diffusion))});
+        entries.push_back({"open_advective_load_sha256",J::Quote(H::Hash(explicitLoads.advection))});
+        entries.push_back({"open_explicit_implicit_agreement","true"});
+    }
+    return J::Object(entries);
 }
 std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) const
 {
@@ -431,6 +443,11 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
         }
     }
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
+    if(OpenBoundary())
+    {
+        Require(!legacyOperator,"open boundary has no legacy replay identity");
+        out<<":boundary="<<m_openBoundaryIdentity;
+    }
     return out.str();
 }
 std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,double time,

@@ -66,6 +66,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     {
         RANSWallTiming::Scope checkTiming(std::string("pimple.check.")+phase);
         Require(std::all_of(q.begin(),q.end(),[](double x){return std::isfinite(x);}),"PIMPLE nonfinite state");
+        if(OpenBoundary())
+        {
+            bool outflow=false;const auto outlet=OpenBoundaryStatus(q,time,data,outflow);
+            put(std::string(phase)+"_outlet",outlet);
+            Require(outflow,std::string("PIMPLE ")+phase+" outlet_backflow_unsupported: "+outlet);
+        }
         const auto domain=ScalarDomain(q,time,data);
         bool ground=false;const auto wall=WallTraceJSON(q,ground);
         put(std::string(phase)+"_domain",ScalarDomainJSON(domain));

@@ -28,6 +28,12 @@ struct RANSWallEvolutionData
     // prescribed load to the explicit side. Empty means use outerBody.
     std::vector<RANSWallEvolutionFunction> sensorBody;
     RANSWallEvolutionFunction innerKSource,outerKSource,outerEpsilonSource;
+    // AcceptedOpenFlatV1: actual outward total traction and natural diffusive
+    // scalar data. Advective flux is assembled separately from these data.
+    std::array<std::vector<RANSWallEvolutionFunction>,2> outletTraction;
+    std::array<RANSWallEvolutionFunction,2> outletKDiffusion;
+    RANSWallEvolutionFunction outletEpsilonDiffusion;
+    std::string openBoundaryIdentity;
     // Optional fixed native external traces, e.g. the stored neutral target.
     std::map<int,double> fixedBoundary;
     // Callers changing a callable or its captured data inside an evaluation
@@ -103,6 +109,14 @@ public:
     bool UniformEPFlat() const { return m_uniformEP; }
     bool AcceptedAWF() const { return m_formulation=="CLSCalibratedBudgetAWF" || m_formulation=="AcceptedBudgetAWF"; }
     bool NewModels() const { return m_parameters.model.NewModel(); }
+    bool OpenBoundary() const { return m_boundaryPolicy=="AcceptedOpenFlatV1"; }
+    const std::string &BoundaryPolicyName() const { return m_boundaryPolicy; }
+    const std::string &OpenBoundaryIdentity() const { return m_openBoundaryIdentity; }
+    struct OpenBoundaryTerms { Vector advection,traction,diffusion; };
+    OpenBoundaryTerms OpenBoundaryContributions(const Vector&,double,const RANSWallEvolutionData&,int region=-1) const;
+    std::string OpenBoundaryStatus(const Vector&,double,const RANSWallEvolutionData&,bool &admissible) const;
+    std::string OpenBoundaryPacket(const Vector&,double,const RANSWallEvolutionData&) const;
+    std::string OpenFrozenSystemsPacket(const Vector&,double,const RANSWallEvolutionData&) const;
     bool ModelAwareAudit() const { return AcceptedAWF() || NewModels(); }
     const std::string &FormulationName() const { return m_formulation; }
     bool MatchingEnabled() const { return m_transitionEnabled || AcceptedAWF() || NewModels(); }
@@ -576,6 +590,8 @@ private:
     int m_ownershipShift=0;
     SolverUtils::AWFProfileOptions m_options;
     std::string m_formulation="EPAWF";
+    std::string m_boundaryPolicy="Closed",m_openBoundaryIdentity;
+    double m_openVelocityScale=1.;
     SolverUtils::AWFParameters m_wallParameters;
     std::string m_variantName="Original";
     SolverUtils::RANSRobustVariant m_robust;
@@ -662,5 +678,13 @@ private:
     mutable Vector m_lastFeasibleState;
     mutable int m_feasibleSolveCount=0;
 };
+
+// One analytic-function loader shared by native evolution and read-only probes.
+// It is deliberately restricted to the new canonical flat boundary policy.
+std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSharedPtr &);
+RANSWallEvolutionData LoadRANSAcceptedOpenData(const LibUtilities::SessionReaderSharedPtr &,
+    const RANSWallEvolutionPatch &);
+std::vector<RANSWallEvolutionFunction> RANSAcceptedOpenInitialFunctions(
+    const LibUtilities::SessionReaderSharedPtr &,const RANSWallEvolutionPatch &);
 }
 #endif

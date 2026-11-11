@@ -201,7 +201,20 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     const auto prescribed=OwnedBodyLoad(time,data);
     for(int row=0;row<Size();++row)
     {Bucket(buckets,"prescribed_body",Size()).Add(row,-prescribed[row],-prescribed[row]);Bucket(buckets,"legacy_spatial",Size()).Add(row,-prescribed[row],-prescribed[row]);}
-    for(int side=0;side<2;++side)for(int j=0;j<m_pressureMean[side].size();++j)
+    if(OpenBoundary())for(int region=0;region<2;++region)
+    {
+        const auto boundary=OpenBoundaryContributions(s,time,data,region);
+        for(int row=0;row<Size();++row)
+        {
+            Bucket(buckets,"conservative_advection",Size()).Add(row,boundary.advection[row],boundary.advection[row]);
+            Bucket(buckets,region?"outer_momentum_stress":"inner_momentum_stress",Size()).Add(row,boundary.traction[row],boundary.traction[row]);
+            const std::string scalar=row>=offset[Epsilon()] && row<offset[InnerPressure()]?"epsilon_diffusion":"k_diffusion";
+            Bucket(buckets,scalar,Size()).Add(row,boundary.diffusion[row],boundary.diffusion[row]);
+            const double total=boundary.advection[row]+boundary.traction[row]+boundary.diffusion[row];
+            Bucket(buckets,"legacy_spatial",Size()).Add(row,total,total);
+        }
+    }
+    if(!OpenBoundary())for(int side=0;side<2;++side)for(int j=0;j<m_pressureMean[side].size();++j)
     {
         const int row=offset[InnerPressure()+side]+j;const double w=m_pressureMean[side][j];
         for(const std::string name:{"gauge","legacy_spatial"})

@@ -50,7 +50,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     Tree packet;std::istringstream input(patch.PreservationPacket(preK,time,data,true,{},{}));
     boost::property_tree::read_json(input,packet);
     std::array<Vector,3> sum{Vector(7),Vector(7),Vector(7)};
-    std::array<std::array<Vector,7>,3> loads;
+    std::array<std::array<Vector,8>,3> loads;
     std::array<Vector,3> advectiveFaces,diffusiveFaces;
     if(reconcile)for(int region=0;region<3;++region)
     {
@@ -87,6 +87,12 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
             c[5]=current.kSource;c[6]=eLaw.epsilonProduction-model.cEpsilon2*oldE/oldK*newE;c[7]=current.epsilonSource;
             c[8]=std::max(0.,kLaw.production);c[9]=(newE-std::min(0.,kLaw.production))/oldK;
             c[10]=eLaw.epsilonProduction;c[11]=model.cEpsilon2*oldE/oldK;
+        }
+        if(patch.OpenBoundary())
+        {
+            const double kSource=(outer?data.outerKSource:data.innerKSource)(v.coordinate,time);
+            c[4]+=kSource;c[5]+=kSource;c[8]+=kSource;
+            if(outer){const double eSource=data.outerEpsilonSource(v.coordinate,time);c[6]+=eSource;c[7]+=eSource;c[10]+=eSource;}
         }
         return c;
     };
@@ -163,6 +169,19 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
         Require(stageHistory.size()==state.size(),"frozen audit requires actual native stage history");
         std::vector<std::pair<std::string,std::string>> regional;
         const auto fixed=patch.Constraints(flow,time,data);
+        if(patch.OpenBoundary())for(const auto &face:patch.Surface(0,0,patch.upper[0],1,faceOrder))
+        {
+            const auto &v=face.test;const int side=patch.fields[0]->Elements()[v.element].lower[2]>=parameters.geometry.height?1:0;
+            const double un=face.area[0]*v.Value(state,patch.offset[0])+face.area[2]*v.Value(state,patch.offset[1]);
+            const double area=std::hypot(face.area[0],face.area[2]);
+            auto add=[&](int region,int block,const RANSWallGlobalPoint &q,double datum)
+            {
+                const double load=un*q.Value(state,patch.offset[block])-area*datum;
+                for(int i=0;i<q.ids.size();++i)loads[region][7][q.ids[i]]+=face.weight*q.phi[i]*load;
+            };
+            add(side,patch.K(),v,data.outletKDiffusion[side](v.coordinate,time));
+            if(side)add(2,patch.Epsilon(),patch.GeometryPoint(patch.Epsilon(),v.geometry,v.coordinate),data.outletEpsilonDiffusion(v.coordinate,time));
+        }
         for(int region=0;region<3;++region)
         {
             const int block=region==2?patch.Epsilon():patch.K();
@@ -198,6 +217,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
                 {"backward_storage",J::Numbers(loads[region][0])},{"negative_frozen_RHS",J::Numbers(loads[region][1])},
                 {"reaction",J::Numbers(loads[region][2])},{"conservative_advection",J::Numbers(loads[region][3])},
                 {"diffusion",J::Numbers(loads[region][4])},{"strong_conservative_advection",J::Numbers(loads[region][5])},
+                {"outlet_weak_load",J::Numbers(loads[region][7])},
                 {"all_element_advective_faces",J::Numbers(advectiveFaces[region])},{"advective_IBP_defect",J::Numbers(ibp)},
                 {"all_element_diffusive_faces",J::Numbers(diffusiveFaces[region])},
                 {"independent_strong_diffusion",diffusionIBPFraction?J::Numbers(loads[region][6]):"null"},
@@ -212,6 +232,8 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
             const int first=block==patch.K()?0:2,last=block==patch.K()?2:3;
             for(int region=first;region<last;++region)for(int term=0;term<5;++term)
                 for(int j=0;j<raw.size();++j)reconstructed[j]+=loads[region][term][j];
+            if(patch.OpenBoundary())for(int region=first;region<last;++region)
+                for(int j=0;j<raw.size();++j)reconstructed[j]+=loads[region][7][j];
             Vector defect=raw;for(int j=0;j<raw.size();++j)
             {
                 defect[j]-=reconstructed[j];
@@ -316,24 +338,34 @@ int main(int argc,char **argv)
         p.model=RANSResolvedModel::Resolve(ParseRANSModel(model),policy=="Natural"?RANSKappaPolicy::Natural:RANSKappaPolicy::Prescribed,
             kappa,wall=="EPAWF"?RANSWallFormulation::EPAWF:RANSWallFormulation::AcceptedBudgetAWF,p.geometry.molecularNu);
         Require(p.model.NewModel(),"new-model descriptor required; no CLS-default replay");
+        std::string boundaryPolicy;session->LoadSolverInfo("RANSWallBoundaryPolicy",boundaryPolicy,"Closed");
+        const bool open=boundaryPolicy=="AcceptedOpenFlatV1";
         for(const auto &name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
-            Require(!session->DefinesFunction(name),"neutral preservation verifier requires unforced source definitions");
+            Require(open || !session->DefinesFunction(name),"neutral preservation verifier requires unforced source definitions");
         std::string referenceMode;session->LoadSolverInfo("RANSWallReference",referenceMode,"Neutral");
-        Require(referenceMode=="Neutral","neutral verification requires the Neutral reference/boundary contract");
+        Require(referenceMode=="Neutral" || (open && referenceMode=="Functions"),"neutral verification requires the Neutral reference/boundary contract");
         double eta;session->LoadParameter("RANSWallEta",eta,0.);Require(eta==0,"unanchored verification requires eta zero");
         RANSWallEvolutionPatch patch(session,graph,world->GetComm(),p,LoadRANSWallNormalMap(session,2,p.geometry.height));
         Require(patch.Dimension()==2 && !patch.Mapped() && (patch.AcceptedAWF() || patch.UniformEPFlat()),
             "neutral preservation probe supports accepted or EP plateau references, serial flat2D only");
         RANSWallEvolutionData data(2);Vector state,reference;double time=request.get<double>("time",0.);
+        if(open)data=LoadRANSAcceptedOpenData(session,patch);
         const std::string operation=request.get<std::string>("operation","neutral");
         const bool legacy=operation=="legacy_operator_replay";
         const std::string sourceOperator=legacy?"LegacyCoordinateToleranceV1":RANSWallNumericalOperatorIdentity();
         if(operation=="neutral")
         {
+            Require(!open,"open-boundary sampling requires actual Functions or a bound replay, not a closed neutral initializer");
             double us,dx,dy;session->LoadParameter("RANSWallFrictionVelocity",us,.4);
             session->LoadParameter("RANSWallDirectionX",dx,1.);session->LoadParameter("RANSWallDirectionY",dy,0.);
             state=patch.NeutralReference(us,{dx,dy});data.fixedBoundary=patch.FixedReferenceBoundary(state);
             state=patch.Lift(state,time,data);reference=state;
+        }
+        else if(operation=="functions")
+        {
+            Require(open && referenceMode=="Functions" && time==0.,"Functions verification is a fresh open-policy initialization only");
+            state=patch.Lift(patch.Project(RANSAcceptedOpenInitialFunctions(session,patch),time),time,data);reference=state;
+            data.fixedBoundary=patch.FixedReferenceBoundary(state);
         }
         else
         {
@@ -360,7 +392,7 @@ int main(int argc,char **argv)
         {RANSWallCoordinate q{};int i=0;for(const auto &v:item.second){Require(i<3,"invalid verification coordinate");q[i++]=v.second.get_value<double>();}Require(i==3,"invalid verification coordinate");grid.push_back(q);}
         std::vector<int> sides;if(auto selected=request.get_child_optional("grid_sides"))for(const auto &v:*selected)sides.push_back(v.second.get_value<int>());
         double receiptUs,receiptDx,receiptDy;session->LoadParameter("RANSWallFrictionVelocity",receiptUs,.4);session->LoadParameter("RANSWallDirectionX",receiptDx,1.);session->LoadParameter("RANSWallDirectionY",receiptDy,0.);
-        const auto targetReference=patch.NeutralReference(receiptUs,{receiptDx,receiptDy});
+        const auto targetReference=open?reference:patch.NeutralReference(receiptUs,{receiptDx,receiptDy});
         const auto receipt=patch.InitializationReceipt(state,reference,time,data,data,patch.FixedReferenceBoundary(targetReference));
         const auto stateCopy=state;
         const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid,sides);
@@ -480,9 +512,10 @@ int main(int argc,char **argv)
             }
             testBasis=J::List(rows);
         }
-        std::string tensorValidation="null",mixedSpace="null";
+        std::string tensorValidation="null",mixedSpace="null",openSystems="null";
         if(request.get<bool>("export_tensor_validation",false))tensorValidation=RANSTensorValidation(patch);
         if(request.get<bool>("export_mixed_space",false))mixedSpace=patch.MixedSpaceRankPacket(state,time,data);
+        if(request.get<bool>("export_open_verification",false))openSystems=patch.OpenFrozenSystemsPacket(state,time,data);
         std::string physicalBudget="null";
         if(request.get<bool>("export_physical_scalar_budget",false))
         {
@@ -497,13 +530,19 @@ int main(int argc,char **argv)
         const auto elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
         Tree observed;std::istringstream input(observation);boost::property_tree::read_json(input,observed);
         const auto &audit=observed.get_child("audit_alpha_zero");
-        const bool physical=audit.get_child("accepted_awf_scalar_domain").front().second.get_value<double>()==1 &&
+        bool physical=audit.get_child("accepted_awf_scalar_domain").front().second.get_value<double>()==1 &&
             audit.get_child_optional("accepted_awf_hard_admissible") &&
             audit.get_child("accepted_awf_hard_admissible").front().second.get_value<double>()==1;
+        std::string openPacket;
+        if(open)
+        {
+            bool outflow=false;patch.OpenBoundaryStatus(state,time,data,outflow);physical=physical && outflow;
+            openPacket=patch.OpenBoundaryPacket(state,time,data);
+        }
         std::string initialHistory;
         if(auto target=request.get_optional<std::string>("write_initial_history"))
         {
-            Require(operation=="replay" && time==0. && physical &&
+            Require(!open && operation=="replay" && time==0. && physical &&
                 std::memcmp(state.data(),reference.data(),state.size()*sizeof(double))==0,
                 "initial history export requires an admissible identical state/reference at time zero");
             const auto scheme=session->GetTimeIntScheme();
@@ -524,7 +563,7 @@ int main(int argc,char **argv)
             initialHistory=RANSWallTimeIntegration::WriteCheckpoint(*target,checkpoint);
             Require(state==stateCopy,"initial history export modified coefficients");
         }
-        const std::string output=J::Object({{"status",J::Quote(physical?"pass":"fail")},{"execution",J::Quote("completed")},
+        std::string output=J::Object({{"status",J::Quote(physical?"pass":"fail")},{"execution",J::Quote("completed")},
             {"source_numerical_operator",J::Quote(sourceOperator)},
             {"numerical_operator",J::Quote(RANSWallNumericalOperatorIdentity())},
             {"physical_admissibility",J::Quote(physical?"pass":"fail")},
@@ -533,6 +572,7 @@ int main(int argc,char **argv)
             {"elapsed_seconds",J::Number(elapsed)},{"observation",observation},
             {"resolution",resolution},{"test_basis",testBasis},{"native_constitutive",constitutive},{"physical_scalar_budget",physicalBudget},
             {"tensor_validation",tensorValidation},{"mixed_space",mixedSpace}});
+        if(open){output.pop_back();output+=",\"open_boundary\":"+openPacket+",\"open_frozen_systems\":"+openSystems+"}";}
         std::ofstream file(argv[3]);Require(bool(file),"cannot write verification output");file<<output<<'\n';
         return physical?0:1;
     }

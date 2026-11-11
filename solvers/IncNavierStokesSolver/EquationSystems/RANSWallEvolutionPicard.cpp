@@ -267,6 +267,35 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     for (const auto &q : m_outer)
         evaluate(q, nullptr, {}, nullptr);
 
+    if(OpenBoundary())
+    {
+        const auto outlet=OpenBoundaryContributions(s,time,data);
+        for(int i=0;i<n;++i)
+        {
+            const int row=system.rows[i];
+            system.residual[i]+=outlet.advection[row]+outlet.traction[row]+outlet.diffusion[row];
+        }
+        for(const auto &face:Surface(0,0,upper[0],1))
+        {
+            const auto &v=face.test;const bool outer=fields[0]->Elements()[v.element].lower[2]>=m_parameters.geometry.height;
+            if(block==Epsilon() && !outer)continue;
+            const auto q=block==Epsilon()?GeometryPoint(Epsilon(),v.geometry,v.coordinate):v;
+            const double un=v.Value(s,offset[0])*face.area[0]+v.Value(s,offset[1])*face.area[2];
+            // Frozen Oseen transport: the corrected/frozen normal velocity
+            // multiplies each newly transported component, exactly as inside.
+            for(int b=flow?0:block;b<(flow?K():block+1);++b)
+                for(int i=0;i<q.ids.size();++i)
+                {
+                    const int row=index[offset[b]+q.ids[i]];if(row<0)continue;
+                    for(int j=0;j<q.ids.size();++j)
+                    {
+                        const int col=index[offset[b]+q.ids[j]];
+                        if(col>=0)system.matrix[row][col]+=face.weight*q.phi[i]*un*q.phi[j];
+                    }
+                }
+        }
+    }
+
     const auto body = flow ? OwnedBodyLoad(time, data) : Vector{};
     for (int b = flow ? 0 : block; b < (flow ? K() : block + 1); ++b)
     {
@@ -293,7 +322,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             }
         }
     }
-    if (flow)
+    if (flow && !OpenBoundary())
     {
         const int gauge = index[offset[Gauge()]];
         for (int side = 0; side < 2; ++side)
@@ -358,7 +387,28 @@ std::string RANSWallEvolutionPatch::MixedSpaceRankPacket(const Vector &state,dou
     return J::Object({{"schema",J::Quote("NativeMixedSpaceRankV1")},{"rows",J::Numbers(block.rows)},
         {"matrix",J::Rows(block.matrix)},{"velocity_size",J::Number(velocity)},
         {"pressure_constant_with_zero_gauge",J::Numbers(constant)},
-        {"scope",J::Quote("actual constrained one-sweep mixed matrix, alpha=1; one common pressure gauge; finite fixture only, not an inf-sup theorem")}});
+        {"scope",J::Quote(OpenBoundary()?"actual open constrained matrix, alpha=1; absolute total traction fixes pressure; unused gauge excluded; finite fixture only":
+            "actual constrained one-sweep mixed matrix, alpha=1; one common pressure gauge; finite fixture only, not an inf-sup theorem")}});
+}
+
+std::string RANSWallEvolutionPatch::OpenFrozenSystemsPacket(const Vector &state,double time,
+    const RANSWallEvolutionData &data) const
+{
+    Require(OpenBoundary() && Size()<500,"open frozen-system export requires a small verification fixture");
+    const auto external=ExternalConstraints(time,data);
+    std::vector<std::string> blocks,masses;
+    for(int b:{0,Epsilon(),K()})
+    {
+        const auto s=AssemblePicardBlock(b,state,state,1.,time,data,external);
+        blocks.push_back(J::Object({{"block",J::Number(b)},{"rows",J::Numbers(s.rows)},
+            {"matrix",J::Rows(s.matrix)},{"residual",J::Numbers(s.residual)}}));
+    }
+    for(int b=0;b<Gauge();++b)masses.push_back(J::Rows(m_mass[b]));
+    const auto raw=Residual(state,state,1.,time,data,false,false);
+    return J::Object({{"schema",J::Quote("AcceptedOpenFrozenSystemsV1")},
+        {"alpha","1"},{"blocks",J::List(blocks)},{"masses",J::List(masses)},
+        {"external_constraints",J::Constraints(external)},
+        {"raw_residual",J::Numbers(raw)},{"constrained_residual",J::Numbers(Residual(state,state,1.,time,data))}});
 }
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ProjectPicardGround(

@@ -235,6 +235,12 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
             const auto boundary=Functions("BoundaryValues",false);
             for(int b=0;b<m_patch->InnerPressure();++b)m_data.boundary[b]=boundary[b];
         }
+        if(m_patch->OpenBoundary())
+        {
+            Require(!m_neutral && m_neutralBoundaryPolicy=="Legacy" && m_pilotAccuracy=="Off",
+                "AcceptedOpenFlatV1 requires explicitly supplied finite-depth Functions, ordinary restart and its own diagnostics");
+            m_data=LoadRANSAcceptedOpenData(m_serialSession,*m_patch);
+        }
         m_fields=Array<OneD,MultiRegions::ExpListSharedPtr>(expected.size());
         for(int a=0;a<dim;++a)m_fields[a]=MemoryManager<MultiRegions::ContField>::AllocateSharedPtr(*m_patch->outerVelocity->Field());
         m_fields[dim]=m_patch->fields[m_patch->K()]->Field();m_fields[dim+1]=m_patch->fields[m_patch->Epsilon()]->Field();m_fields[dim+2]=m_patch->fields[m_patch->OuterPressure()]->Field();
@@ -290,6 +296,11 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
         }
         m_historyReady=true;
         m_implicitData=m_data;
+        if(m_patch->OpenBoundary())
+        {
+            bool outflow=false;const auto boundary=m_patch->OpenBoundaryStatus(m_state,m_time,m_data,outflow);
+            Require(outflow,"initial outlet_backflow_unsupported: "+boundary);
+        }
         if(m_patch->TransitionEnabled())m_implicitData.sensorBody=m_data.outerBody;
         for(auto *body:{&m_implicitData.innerBody,&m_implicitData.outerBody})for(auto &f:*body)f=[](const RANSWallCoordinate&,double){return 0.;};
         const auto residualStart=std::chrono::steady_clock::now();
