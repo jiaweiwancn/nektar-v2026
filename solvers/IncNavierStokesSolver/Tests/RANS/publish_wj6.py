@@ -28,6 +28,31 @@ def leaves(gate,prefix=''):
         else:yield key,value
 
 
+def execution_stage_binding(report_identity):
+    """Validate semantic producer role independently of binary payload hashes."""
+    verify_artifacts({report_identity['path']:report_identity})
+    d=read(report_identity['path'])
+    require(all(k in d for k in ('pimple_attempts','accepted_states','state','last_stage_history')),
+            'stage producer is not a native execution report')
+    allocations=[]
+    for attempt in d['pimple_attempts']:
+        for field in ('momentum','pressure','k','epsilon'):
+            packet=attempt.get(field+'_arithmetic')
+            if not packet:continue
+            require(file_hash(packet['path'])==packet['sha256'],'native arithmetic descriptor changed')
+            for kind,f in ((k,read(packet['path'])[k]) for k in ('matrix','mass_or_correction_map')):
+                matrix_identity=file_identity(f['path']);shape=list(map(int,f['shape']))
+                require(matrix_identity['sha256']==f['sha256'] and matrix_identity['bytes']==8*shape[0]*shape[1],
+                        'native dense allocation packet shape/bytes/hash differs')
+                allocations.append(dict(time=attempt['time'],field=field,kind=kind,rows=shape[0],columns=shape[1],
+                    bytes=matrix_identity['bytes'],sha256=matrix_identity['sha256'],path=f['path'],
+                    scope='actual exported binary64 payload; selected allocation inventory, not sum of simultaneous live allocations or a full nonlinear Jacobian'))
+    stage=dict(report=report_identity,checkpoint=d.get('checkpoint'),last_stage_history=d.get('last_stage_history'),
+        last_stage_time=d.get('last_stage_time'),last_stage_alpha=d.get('last_stage_alpha'),accepted_packets=d.get('wj_audit_packets'),
+        scope='actual producing callbacks; startup alpha0 is not substituted for a completed stage')
+    return d,stage,allocations
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ('root','study','output','build','checks','producer-source','driver-source'):
@@ -126,10 +151,10 @@ def main():
                             fraction=(v['value']+v['uncertainty'])/v['limit']))
             for name,e in s['execution'].items():
                 rows['resources'].append(dict(policy=policy,case=name,exit_code=e['exit_code'],attempts=e['actual_attempts'],**{k:v for k,v in e['resource'].items() if k!='exit_code' and not isinstance(v,(list,dict))}))
-                identity=e.get('report')
-                if not identity:continue
-                verify_artifacts({identity['path']:identity});d=read(identity['path']);attempts=d['pimple_attempts']
-                row=dict(policy=policy,case=name,report=identity['path'],report_sha256=identity['sha256'],absolute_steps=d['steps'],time=d['time'],
+                report_identity=e.get('report')
+                if not report_identity:continue
+                d,stage,allocations=execution_stage_binding(report_identity);attempts=d['pimple_attempts']
+                row=dict(policy=policy,case=name,report=report_identity['path'],report_sha256=report_identity['sha256'],absolute_steps=d['steps'],time=d['time'],
                     scheduled_attempts=len(attempts),fully_scheduled=sum(bool(v['scheduled_complete']) for v in attempts),failure=d.get('failure'))
                 for key in ('momentum_predictor_solves','pressure_system_solves','k_transport_solves','epsilon_transport_solves','bound_calls',
                     'bound_activations','additional_governing_equation_solves','additional_correction_or_restoration_solves'):
@@ -139,24 +164,9 @@ def main():
                     snap=read(v['k_snapshot'])
                     from run_cls_epawf_picard import state_hash
                     equal=equal and state_hash(snap['raw'])==state_hash(snap['corrected'])
-                    for field in ('momentum','pressure','k','epsilon'):
-                        key=field+'_arithmetic'
-                        if key not in v:continue
-                        packet=v[key]
-                        require(Path(packet['path']).is_file() and file_hash(packet['path'])==packet['sha256'],
-                            'native arithmetic descriptor changed')
-                        data=read(packet['path'])
-                        for kind in ('matrix','mass_or_correction_map'):
-                            f=data[kind];identity=file_identity(f['path']);shape=list(map(int,f['shape']))
-                            require(identity['sha256']==f['sha256'] and identity['bytes']==8*shape[0]*shape[1],
-                                'native dense allocation packet shape/bytes/hash differs')
-                            rows['dense-allocations'].append(dict(policy=policy,case=name,time=v['time'],field=field,kind=kind,
-                                rows=shape[0],columns=shape[1],bytes=identity['bytes'],sha256=identity['sha256'],path=f['path'],
-                                scope='actual exported binary64 payload; selected allocation inventory, not sum of simultaneous live allocations or a full nonlinear Jacobian'))
                 row['raw_corrected_k_equal']=equal;rows['run-accounting'].append(row)
-                stages[identity['path']]=dict(report=identity,checkpoint=d.get('checkpoint'),last_stage_history=d.get('last_stage_history'),
-                    last_stage_time=d.get('last_stage_time'),last_stage_alpha=d.get('last_stage_alpha'),accepted_packets=d.get('wj_audit_packets'),
-                    scope='actual producing callbacks; startup alpha0 is not substituted for a completed stage')
+                rows['dense-allocations'].extend(dict(policy=policy,case=name,**item) for item in allocations)
+                stages[report_identity['path']]=stage
             # Only immutable completed case/observer artifacts enter this index.
             # Mutable progress summaries and live publisher/ledger files do not.
             for f in (a.study/policy).rglob('*'):

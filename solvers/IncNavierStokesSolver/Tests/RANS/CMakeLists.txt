@@ -665,6 +665,10 @@ if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
         ${CMAKE_CURRENT_LIST_DIR}/test_wj6_metadata.py)
     set_tests_properties(WJDenseCapacityMetadata PROPERTIES PROCESSORS 1 TIMEOUT 60
         ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1")
+    add_test(NAME WJStageLineageContinuationMetadata COMMAND ${Python3_EXECUTABLE} -B
+        ${CMAKE_CURRENT_LIST_DIR}/test_wj7_metadata.py)
+    set_tests_properties(WJStageLineageContinuationMetadata PROPERTIES PROCESSORS 1 TIMEOUT 90
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1")
     foreach(wj_policy EP Budget)
         add_test(NAME WJDenseCapacity${wj_policy} COMMAND ${Python3_EXECUTABLE} -B
             ${CMAKE_CURRENT_LIST_DIR}/test_wj6_capacity.py
