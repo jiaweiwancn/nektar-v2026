@@ -1,0 +1,2490 @@
+{
+  "schema": "WJ5AdverseControlSensitivityV1",
+  "policies": {
+    "EP": {
+      "gate": {
+        "status": "PASS",
+        "reason": "",
+        "components": {
+          "coverage": {
+            "status": "PASS",
+            "reason": "all declared common-time observations required"
+          },
+          "Tx": {
+            "status": "PASS",
+            "reason": "",
+            "components": {
+              "full/u/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.305353613919437e-08,
+                "uncertainty": 1.594874766779295e-09,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.188148621826372e-07,
+                "uncertainty": 1.6625278720114836e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "full/v/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.450968465040637e-09,
+                "uncertainty": 1.593986588375477e-09,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "full/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.2043835043116024e-08,
+                "uncertainty": 1.661602017905303e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "full/k/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 3.0056769068590864e-09,
+                "uncertainty": 2.342618351437255e-11,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 3.2501888464556146e-08,
+                "uncertainty": 2.4756833902273997e-07,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "full/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 8.413093779529233e-10,
+                "uncertainty": 2.372278794344119e-13,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.495668874235922e-09,
+                "uncertainty": 2.2885935936484253e-10,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "full/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 8.30029844533706e-08,
+                "uncertainty": 9.148242819556812e-12,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.278593692164175e-07,
+                "uncertainty": 4.091218563840671e-11,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "full/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 8.328060351201123e-08,
+                "uncertainty": 6.223542057877169e-11,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.278593693274398e-07,
+                "uncertainty": 5.590139348695694e-07,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "full/velocity/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.307797910273249e-08,
+                "uncertainty": 2.254865575955738e-09,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.188148809595477e-07,
+                "uncertainty": 2.350514877877187e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "central/u/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.356695203149229e-08,
+                "uncertainty": 2.2554935254659094e-09,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.188148621826372e-07,
+                "uncertainty": 1.6625278720114836e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "central/v/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.4439479283022834e-09,
+                "uncertainty": 2.254237451521423e-09,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "central/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.1306305472002178e-08,
+                "uncertainty": 1.661602017905303e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "central/k/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 3.046679063912117e-09,
+                "uncertainty": 3.312962644066673e-11,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 3.155597591678797e-08,
+                "uncertainty": 2.4756833902273997e-07,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "central/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 8.492013025424717e-10,
+                "uncertainty": 3.3549088446915483e-13,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.495668874235922e-09,
+                "uncertainty": 2.2885935936484253e-10,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "central/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 6.890129742173905e-08,
+                "uncertainty": 1.2937569067299546e-11,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.848013243090772e-07,
+                "uncertainty": 4.091218563840671e-11,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "central/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 6.923740294491534e-08,
+                "uncertainty": 8.801417584249266e-11,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.84054298201438e-07,
+                "uncertainty": 5.590139348695694e-07,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "central/velocity/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.3590873986810575e-08,
+                "uncertainty": 3.18886147884483e-09,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.188148809595477e-07,
+                "uncertainty": 2.350514877877187e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "constrained_boundary/u/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 6.868698022531128e-10,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "constrained_boundary/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 7.739635726532915e-10,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "constrained_boundary/v/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.1176896168534297e-25,
+                "uncertainty": 4.6895820592913937e-11,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "constrained_boundary/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.0598251598335667e-24,
+                "uncertainty": 4.689582059827167e-11,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "constrained_boundary/k/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 7.479907377854351e-11,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "constrained_boundary/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 7.47990737786234e-11,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "constrained_boundary/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 1.0085301099149546e-10,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "constrained_boundary/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 1.1533325162399648e-10,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "constrained_boundary/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.3834649758249534e-07,
+                "uncertainty": 6.38862186778486e-10,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "constrained_boundary/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.278593692164175e-07,
+                "uncertainty": 6.472479233900643e-10,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "constrained_boundary/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.3834649758716156e-07,
+                "uncertainty": 8.077451405562901e-10,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "constrained_boundary/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.278593693274398e-07,
+                "uncertainty": 8.161332566635197e-10,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "constrained_boundary/velocity/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.1176896168534297e-25,
+                "uncertainty": 6.884688396988733e-10,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "constrained_boundary/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.0598251598335667e-24,
+                "uncertainty": 7.753830213407973e-10,
+                "limit": 0.0001,
+                "resolved": false
+              }
+            }
+          }
+        }
+      },
+      "boundary_coverage": {
+        "schema": "WJAllObservationBoundaryEnvelopeV1",
+        "coefficient_envelope": {
+          "systems": {
+            "momentum": {
+              "physical_metric_min_eigenvalue": 1.840540167005615e-08
+            },
+            "k": {
+              "physical_metric_min_eigenvalue": 1.7907826251339486e-08
+            },
+            "epsilon": {
+              "physical_metric_min_eigenvalue": 1.0744695138243768e-06
+            },
+            "pressure": {
+              "physical_mass_operator_bound": 0.10000000000000002
+            }
+          },
+          "estimated_comparison_floor": {
+            "u": 1.1277467627329522e-09,
+            "v": 1.127118725760709e-09,
+            "k": 2.805069022309623e-11,
+            "outer_epsilon": 7.764361858835375e-14,
+            "reduced_pressure": 3.234392266824879e-12,
+            "mechanical_pressure": 2.2003543960623116e-11,
+            "velocity": 1.5944307394224115e-09
+          },
+          "estimated_sampled_comparison_floor": {
+            "u": 8.312639360057418e-06,
+            "v": 8.308010089526515e-06,
+            "k": 2.0961488350647413e-07,
+            "outer_epsilon": 7.490463958647691e-11,
+            "reduced_pressure": 1.0228046409601678e-11,
+            "mechanical_pressure": 1.3975348371739236e-07,
+            "velocity": 1.1752574389385935e-05
+          }
+        },
+        "coverage": [
+          {
+            "trajectory": "coarse",
+            "steps": 0.0,
+            "observation_sha256": "71fb1786070c80d599472667e1d9c40d89f262ee445baed1132229e51d8e3313",
+            "state_sha256": "43855837d6f4f2ff4a0dd3a963b3d4c6532b7221aad28412a6f58da6d59b8a4d",
+            "maximum_boundary_free_rows": {
+              "u": 3.8163916471489756e-16,
+              "v": 3.8163916471489756e-16,
+              "k": 3.8163916471489756e-16,
+              "outer_epsilon": 3.3306690738754696e-16
+            }
+          },
+          {
+            "trajectory": "coarse",
+            "steps": 32.0,
+            "observation_sha256": "9a6b3220a3ecaee91dec44ee3c542112d840b87b4919736b0dd3e0cf41bfef2b",
+            "state_sha256": "96b0a6287e681cd6093370e65037335d4b6d250ef1f925776739f11e5d516b40",
+            "maximum_boundary_free_rows": {
+              "u": 3.8163916471489756e-16,
+              "v": 3.8163916471489756e-16,
+              "k": 3.8163916471489756e-16,
+              "outer_epsilon": 3.3306690738754696e-16
+            }
+          },
+          {
+            "trajectory": "fine",
+            "steps": 0.0,
+            "observation_sha256": "06fa062d7774bbf954a4d83370c6c2e6df24e29efedcf27d2f9c7af03947a46a",
+            "state_sha256": "43855837d6f4f2ff4a0dd3a963b3d4c6532b7221aad28412a6f58da6d59b8a4d",
+            "maximum_boundary_free_rows": {
+              "u": 3.8163916471489756e-16,
+              "v": 3.8163916471489756e-16,
+              "k": 3.8163916471489756e-16,
+              "outer_epsilon": 3.3306690738754696e-16
+            }
+          },
+          {
+            "trajectory": "fine",
+            "steps": 64.0,
+            "observation_sha256": "5a46118844c14a9141f47aec27686b8d4734807dfcca757ac78eb62fb014bc99",
+            "state_sha256": "bf32fd68ea054829664dd63abf9d45a9293977e94c6d0c7a034bf077460683b5",
+            "maximum_boundary_free_rows": {
+              "u": 3.8163916471489756e-16,
+              "v": 3.8163916471489756e-16,
+              "k": 3.8163916471489756e-16,
+              "outer_epsilon": 3.3306690738754696e-16
+            }
+          }
+        ],
+        "scope": "all startup/cadence rows; separate k/epsilon trace inputs; one full pressure gauge; finite diagnostic estimate with100x reserve, not a nonlinear theorem"
+      },
+      "global_floors": {
+        "u": {
+          "L2": 1.1277467627329522e-09,
+          "sampled_Linf": 8.312639360057418e-06
+        },
+        "v": {
+          "L2": 1.127118725760709e-09,
+          "sampled_Linf": 8.308010089526515e-06
+        },
+        "k": {
+          "L2": 2.805069022309623e-11,
+          "sampled_Linf": 2.0961488350647413e-07
+        },
+        "outer_epsilon": {
+          "L2": 7.764361858835375e-14,
+          "sampled_Linf": 7.490463958647691e-11
+        },
+        "reduced_pressure": {
+          "L2": 3.234392266824879e-12,
+          "sampled_Linf": 1.0228046409601678e-11
+        },
+        "mechanical_pressure": {
+          "L2": 2.2003543960623116e-11,
+          "sampled_Linf": 1.3975348371739236e-07
+        },
+        "velocity": {
+          "L2": 1.5944307394224115e-09,
+          "sampled_Linf": 1.1752574389385935e-05
+        }
+      },
+      "constraint_boundary": {
+        "u": {
+          "L2": 7.679437847648995e-10,
+          "sampled_Linf": 3.8698178632664574e-10
+        },
+        "v": {
+          "L2": 5.243112135319505e-11,
+          "sampled_Linf": 2.3447910299135835e-11
+        },
+        "k": {
+          "L2": 1.4161466699145634e-10,
+          "sampled_Linf": 6.333200440084601e-11
+        },
+        "outer_epsilon": {
+          "L2": 5.717280985214957e-11,
+          "sampled_Linf": 3.7748054828117446e-11
+        },
+        "reduced_pressure": {
+          "L2": 3.571348194727157e-10,
+          "sampled_Linf": 1.6181198084751609e-10
+        },
+        "mechanical_pressure": {
+          "L2": 4.5154326069474695e-10,
+          "sampled_Linf": 2.0403331416587994e-10
+        },
+        "velocity": {
+          "L2": 7.697315629785436e-10,
+          "sampled_Linf": 3.8769151067039865e-10
+        }
+      },
+      "engineering_outcome": {
+        "status": "OBSTRUCTED",
+        "reason": "required components are not all PASS",
+        "components": {
+          "original": {
+            "status": "OBSTRUCTED",
+            "reason": "required components are not all PASS",
+            "components": {
+              "continuum_error/u/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 2.9688602463843083e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "continuum_error/v/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.0899558884394343e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.387328382257238e-06,
+                "limit": 0.001
+              },
+              "continuum_error/k/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 5.361149241848472e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 5.90091851705125e-06,
+                "limit": 0.001
+              },
+              "continuum_error/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 4.158075254902937e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 2.0249308505110075e-06,
+                "limit": 0.001
+              },
+              "continuum_error/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 8.704333619633279e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 5.9531728844334186e-05,
+                "limit": 0.001
+              },
+              "continuum_error/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 8.787931445074352e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 5.9531728844778276e-05,
+                "limit": 0.001
+              },
+              "continuum_error/velocity/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 2.9688802540595954e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "initial_drift/u/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.3200240954282918e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 0.00017665960643498124,
+                "limit": 0.001
+              },
+              "initial_drift/v/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.0899558884394343e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.387328382257238e-06,
+                "limit": 0.001
+              },
+              "initial_drift/k/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 5.361149241846841e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 5.9009185171823745e-06,
+                "limit": 0.001
+              },
+              "initial_drift/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 2.2693949399946895e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.2048037327905825e-06,
+                "limit": 0.001
+              },
+              "initial_drift/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 8.704333619639738e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 5.9531728844278675e-05,
+                "limit": 0.001
+              },
+              "initial_drift/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 8.787931445074274e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 5.9531728844334186e-05,
+                "limit": 0.001
+              },
+              "initial_drift/velocity/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.3200690939852938e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 0.0001766596120418384,
+                "limit": 0.001
+              },
+              "traction": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0002120039720628912,
+                "limit": 0.001
+              },
+              "k_flux": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.425272292270112e-07,
+                "limit": 0.0001
+              },
+              "pressure_offset": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.4672840692695495e-05,
+                "limit": 0.0001
+              },
+              "divergence": {
+                "status": "OBSTRUCTED",
+                "reason": "",
+                "value": 0.002133663882997226,
+                "limit": 0.001
+              }
+            }
+          },
+          "all_scopes": {
+            "status": "PASS",
+            "reason": "",
+            "components": {
+              "continuum_error/full/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.9688602463843083e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/full/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "continuum_error/full/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.0899558884394343e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/full/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.387328382257238e-06,
+                "limit": 0.001
+              },
+              "continuum_error/full/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.361149241848472e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/full/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.90091851705125e-06,
+                "limit": 0.001
+              },
+              "continuum_error/full/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 4.158075254902937e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/full/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.0249308505110075e-06,
+                "limit": 0.001
+              },
+              "continuum_error/full/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.704333619633279e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/full/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9531728844334186e-05,
+                "limit": 0.001
+              },
+              "continuum_error/full/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.787931445074352e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/full/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9531728844778276e-05,
+                "limit": 0.001
+              },
+              "continuum_error/full/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.9688802540595954e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/full/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "continuum_error/central/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.976963564923516e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/central/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00013971204964402517,
+                "limit": 0.001
+              },
+              "continuum_error/central/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.455846196760192e-08,
+                "limit": 0.0001
+              },
+              "continuum_error/central/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.357651583811461e-07,
+                "limit": 0.001
+              },
+              "continuum_error/central/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.43286419852469e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/central/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.90091851705125e-06,
+                "limit": 0.001
+              },
+              "continuum_error/central/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 4.137511646468403e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/central/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.1637412729698698e-06,
+                "limit": 0.001
+              },
+              "continuum_error/central/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.371677007089997e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/central/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.35171639910958e-05,
+                "limit": 0.001
+              },
+              "continuum_error/central/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.5080696854771666e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/central/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.348347649213875e-05,
+                "limit": 0.001
+              },
+              "continuum_error/central/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.9769755740040988e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/central/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00013971205198097574,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.380901709830662e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.5477769893879222e-23,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.2093639049466687e-22,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3112431023666472e-16,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3112431023666477e-16,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.609107387391495e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.0249308505110075e-06,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3501091722330552e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9531728844334186e-05,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3501091722372292e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9531728844778276e-05,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.380901709830662e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "initial_drift/full/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3200240954282918e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/full/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00017665960643498124,
+                "limit": 0.001
+              },
+              "initial_drift/full/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.0899558884394343e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/full/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.387328382257238e-06,
+                "limit": 0.001
+              },
+              "initial_drift/full/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.361149241846841e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/full/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9009185171823745e-06,
+                "limit": 0.001
+              },
+              "initial_drift/full/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.2693949399946895e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/full/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.2048037327905825e-06,
+                "limit": 0.001
+              },
+              "initial_drift/full/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.704333619639738e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/full/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9531728844278675e-05,
+                "limit": 0.001
+              },
+              "initial_drift/full/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.787931445074274e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/full/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9531728844334186e-05,
+                "limit": 0.001
+              },
+              "initial_drift/full/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3200690939852938e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/full/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0001766596120418384,
+                "limit": 0.001
+              },
+              "initial_drift/central/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3384066640317138e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/central/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00017665960643498124,
+                "limit": 0.001
+              },
+              "initial_drift/central/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.455846196760192e-08,
+                "limit": 0.0001
+              },
+              "initial_drift/central/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.357651583811461e-07,
+                "limit": 0.001
+              },
+              "initial_drift/central/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.432864198523e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/central/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9009185171823745e-06,
+                "limit": 0.001
+              },
+              "initial_drift/central/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.3085971730951992e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/central/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.2048037327905825e-06,
+                "limit": 0.001
+              },
+              "initial_drift/central/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.371677007105562e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/central/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.351716399115131e-05,
+                "limit": 0.001
+              },
+              "initial_drift/central/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.508069685517216e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/central/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.3483476491694664e-05,
+                "limit": 0.001
+              },
+              "initial_drift/central/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.338433375129074e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/central/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0001766596120418384,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.5477769893879222e-23,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.2093639049466687e-22,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3501091722335554e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9531728844278675e-05,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3501091722306764e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9531728844334186e-05,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.5477769893879222e-23,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.2093639049466687e-22,
+                "limit": 0.001
+              }
+            }
+          }
+        }
+      },
+      "interpretation": "adverse diagnostic only; no selected-mesh qualification or order claim"
+    },
+    "Budget": {
+      "gate": {
+        "status": "PASS",
+        "reason": "",
+        "components": {
+          "coverage": {
+            "status": "PASS",
+            "reason": "all declared common-time observations required"
+          },
+          "Tx": {
+            "status": "PASS",
+            "reason": "",
+            "components": {
+              "full/u/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.305342195421687e-08,
+                "uncertainty": 1.5947569626865988e-09,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.18814493588593e-07,
+                "uncertainty": 1.6624050707786696e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "full/v/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.4507759379120668e-09,
+                "uncertainty": 1.5940464199614266e-09,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "full/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.2042146809995608e-08,
+                "uncertainty": 1.6616643874915175e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "full/k/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.0503630251150932e-08,
+                "uncertainty": 7.367827906211925e-11,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.865997650293458e-07,
+                "uncertainty": 7.786334106992647e-07,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "full/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 8.41424647080696e-10,
+                "uncertainty": 2.4228299337287603e-13,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.49566946785553e-09,
+                "uncertainty": 2.3373614762527564e-10,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "full/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 8.299302639850757e-08,
+                "uncertainty": 9.160028818948667e-12,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.275156782067356e-07,
+                "uncertainty": 4.0964894230052636e-11,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "full/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 8.63070561758274e-08,
+                "uncertainty": 1.7575348164652194e-10,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.275156782067356e-07,
+                "uncertainty": 1.75808107963317e-06,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "full/velocity/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.3077858498187535e-08,
+                "uncertainty": 2.2548245517177664e-09,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "full/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.18814512398326e-07,
+                "uncertainty": 2.350472113429171e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "central/u/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.356683225633635e-08,
+                "uncertainty": 2.255326925320315e-09,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.18814493588593e-07,
+                "uncertainty": 1.6624050707786696e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "central/v/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.4437453295164478e-09,
+                "uncertainty": 2.254322066161731e-09,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "central/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.1304636824053245e-08,
+                "uncertainty": 1.6616643874915175e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "central/k/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.0641429714715838e-08,
+                "uncertainty": 1.0419682150195884e-10,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.865997650293458e-07,
+                "uncertainty": 7.786334106992647e-07,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "central/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 8.493247918385972e-10,
+                "uncertainty": 3.426398951602721e-13,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.49566946785553e-09,
+                "uncertainty": 2.3373614762527564e-10,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "central/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 6.889821033838534e-08,
+                "uncertainty": 1.2954236987485629e-11,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.845931790962041e-07,
+                "uncertainty": 4.0964894230052636e-11,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "central/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 7.296406057222413e-08,
+                "uncertainty": 2.4855295737880256e-10,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.8336124476388e-07,
+                "uncertainty": 1.75808107963317e-06,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "central/velocity/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 4.359074756675148e-08,
+                "uncertainty": 3.188803461811104e-09,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "central/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.18814512398326e-07,
+                "uncertainty": 2.350472113429171e-05,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "constrained_boundary/u/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 6.868698022531127e-10,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "constrained_boundary/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 7.739635726532912e-10,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "constrained_boundary/v/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.1195716806191432e-25,
+                "uncertainty": 4.689582058762002e-11,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "constrained_boundary/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.0565939855657814e-24,
+                "uncertainty": 4.689582059297795e-11,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "constrained_boundary/k/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 7.570844732634703e-11,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "constrained_boundary/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 1.3261688621106105e-10,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "constrained_boundary/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 1.0086994078344768e-10,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "constrained_boundary/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 0.0,
+                "uncertainty": 1.1535021218422149e-10,
+                "limit": 0.0001,
+                "resolved": false
+              },
+              "constrained_boundary/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.3833067565720075e-07,
+                "uncertainty": 6.389046945534575e-10,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "constrained_boundary/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.275156782067356e-07,
+                "uncertainty": 6.473012141220972e-10,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "constrained_boundary/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.3833067566909378e-07,
+                "uncertainty": 8.096746614848696e-10,
+                "limit": 1e-05,
+                "resolved": true
+              },
+              "constrained_boundary/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 5.275156782067356e-07,
+                "uncertainty": 9.467306933344313e-10,
+                "limit": 0.0001,
+                "resolved": true
+              },
+              "constrained_boundary/velocity/L2": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.1195716806191432e-25,
+                "uncertainty": 6.884688396985126e-10,
+                "limit": 1e-05,
+                "resolved": false
+              },
+              "constrained_boundary/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "difference plus finite uncertainty <=10% budget; below-floor values receive no rate",
+                "value": 1.0565939855657814e-24,
+                "uncertainty": 7.753830213404769e-10,
+                "limit": 0.0001,
+                "resolved": false
+              }
+            }
+          }
+        }
+      },
+      "boundary_coverage": {
+        "schema": "WJAllObservationBoundaryEnvelopeV1",
+        "coefficient_envelope": {
+          "systems": {
+            "momentum": {
+              "physical_metric_min_eigenvalue": 1.840540167005615e-08
+            },
+            "k": {
+              "physical_metric_min_eigenvalue": 1.7907826251339486e-08
+            },
+            "epsilon": {
+              "physical_metric_min_eigenvalue": 1.0744695138243768e-06
+            },
+            "pressure": {
+              "physical_mass_operator_bound": 0.10000000000000002
+            }
+          },
+          "estimated_comparison_floor": {
+            "u": 1.127663462660155e-09,
+            "v": 1.127161033080863e-09,
+            "k": 8.822293144226227e-11,
+            "outer_epsilon": 7.9298134657437e-14,
+            "reduced_pressure": 3.2385592468714e-12,
+            "mechanical_pressure": 6.21382393447005e-11,
+            "velocity": 1.5944017309055486e-09
+          },
+          "estimated_sampled_comparison_floor": {
+            "u": 8.312025353893348e-06,
+            "v": 8.308321937457588e-06,
+            "k": 6.592650430271025e-07,
+            "outer_epsilon": 7.650079046272297e-11,
+            "reduced_pressure": 1.0241223557513159e-11,
+            "mechanical_pressure": 4.395202699082925e-07,
+            "velocity": 1.1752360567145855e-05
+          }
+        },
+        "coverage": [
+          {
+            "trajectory": "coarse",
+            "steps": 0.0,
+            "observation_sha256": "e40d921af260c9d1036aaa42fd43e48793737a2ef6001d47984ef7739b69983a",
+            "state_sha256": "d59b01553145dbf4e3287b5345bc85b237120a3f14c96e32ba1879be26d28b74",
+            "maximum_boundary_free_rows": {
+              "u": 3.8163916471489756e-16,
+              "v": 3.8163916471489756e-16,
+              "k": 3.8163916471489756e-16,
+              "outer_epsilon": 3.3306690738754696e-16
+            }
+          },
+          {
+            "trajectory": "coarse",
+            "steps": 32.0,
+            "observation_sha256": "8c34f7e642189a15c4a94bb766e608a7ba32736dbce5a9e374d98947f5889ae2",
+            "state_sha256": "9e227bc94c29d7c811461b566ff1359ca8d6f1eeacceaaadcf9b20b1ca605d4f",
+            "maximum_boundary_free_rows": {
+              "u": 3.8163916471489756e-16,
+              "v": 3.8163916471489756e-16,
+              "k": 3.8163916471489756e-16,
+              "outer_epsilon": 3.3306690738754696e-16
+            }
+          },
+          {
+            "trajectory": "fine",
+            "steps": 0.0,
+            "observation_sha256": "6105e772eb09b2342c4675dcd7c93baaa1115e578828cad3862e67e7e081f769",
+            "state_sha256": "d59b01553145dbf4e3287b5345bc85b237120a3f14c96e32ba1879be26d28b74",
+            "maximum_boundary_free_rows": {
+              "u": 3.8163916471489756e-16,
+              "v": 3.8163916471489756e-16,
+              "k": 3.8163916471489756e-16,
+              "outer_epsilon": 3.3306690738754696e-16
+            }
+          },
+          {
+            "trajectory": "fine",
+            "steps": 64.0,
+            "observation_sha256": "157a232e85fc68e333c4bb5a663da01a6008ac14eec8e95cf2a8cd6154e43d88",
+            "state_sha256": "c70f38792a258e5923988f805fac243fdd1363a600d10039b5aeb45d069855ad",
+            "maximum_boundary_free_rows": {
+              "u": 3.8163916471489756e-16,
+              "v": 3.8163916471489756e-16,
+              "k": 3.8163916471489756e-16,
+              "outer_epsilon": 3.3306690738754696e-16
+            }
+          }
+        ],
+        "scope": "all startup/cadence rows; separate k/epsilon trace inputs; one full pressure gauge; finite diagnostic estimate with100x reserve, not a nonlinear theorem"
+      },
+      "global_floors": {
+        "u": {
+          "L2": 1.127663462660155e-09,
+          "sampled_Linf": 8.312025353893348e-06
+        },
+        "v": {
+          "L2": 1.127161033080863e-09,
+          "sampled_Linf": 8.308321937457588e-06
+        },
+        "k": {
+          "L2": 8.822293144226227e-11,
+          "sampled_Linf": 6.592650430271025e-07
+        },
+        "outer_epsilon": {
+          "L2": 7.9298134657437e-14,
+          "sampled_Linf": 7.650079046272297e-11
+        },
+        "reduced_pressure": {
+          "L2": 3.2385592468714e-12,
+          "sampled_Linf": 1.0241223557513159e-11
+        },
+        "mechanical_pressure": {
+          "L2": 6.21382393447005e-11,
+          "sampled_Linf": 4.395202699082925e-07
+        },
+        "velocity": {
+          "L2": 1.5944017309055486e-09,
+          "sampled_Linf": 1.1752360567145855e-05
+        }
+      },
+      "constraint_boundary": {
+        "u": {
+          "L2": 7.679437847648994e-10,
+          "sampled_Linf": 3.869817863266456e-10
+        },
+        "v": {
+          "L2": 5.243112134727627e-11,
+          "sampled_Linf": 2.3447910296488976e-11
+        },
+        "k": {
+          "L2": 1.4333635451561357e-10,
+          "sampled_Linf": 1.1228605912959458e-10
+        },
+        "outer_epsilon": {
+          "L2": 5.7182407223280136e-11,
+          "sampled_Linf": 3.775360594324057e-11
+        },
+        "reduced_pressure": {
+          "L2": 3.571585820413178e-10,
+          "sampled_Linf": 1.618253035305243e-10
+        },
+        "mechanical_pressure": {
+          "L2": 4.52621895684825e-10,
+          "sampled_Linf": 2.366826733336078e-10
+        },
+        "velocity": {
+          "L2": 7.697315629781403e-10,
+          "sampled_Linf": 3.8769151067023843e-10
+        }
+      },
+      "engineering_outcome": {
+        "status": "OBSTRUCTED",
+        "reason": "required components are not all PASS",
+        "components": {
+          "original": {
+            "status": "OBSTRUCTED",
+            "reason": "required components are not all PASS",
+            "components": {
+              "continuum_error/u/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 2.9688602463491947e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "continuum_error/v/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.0899733224858811e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.3873514273314308e-06,
+                "limit": 0.001
+              },
+              "continuum_error/k/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 5.092994635643727e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 7.445106290618504e-05,
+                "limit": 0.001
+              },
+              "continuum_error/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 4.155593146150683e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 2.0249308505110075e-06,
+                "limit": 0.001
+              },
+              "continuum_error/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 8.705516094593215e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 5.953765137200411e-05,
+                "limit": 0.001
+              },
+              "continuum_error/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.4422744399954157e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 0.00019468485407304122,
+                "limit": 0.001
+              },
+              "continuum_error/velocity/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 2.9688802546645386e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "initial_drift/u/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.3200240851937238e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 0.00017665959971413514,
+                "limit": 0.001
+              },
+              "initial_drift/v/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.0899733224858811e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.3873514273314308e-06,
+                "limit": 0.001
+              },
+              "initial_drift/k/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 3.2640338401941674e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 8.390901083930714e-05,
+                "limit": 0.001
+              },
+              "initial_drift/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 2.2693111414718796e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.2048037342322303e-06,
+                "limit": 0.001
+              },
+              "initial_drift/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 8.705516094599677e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 5.9537651371948596e-05,
+                "limit": 0.001
+              },
+              "initial_drift/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.1405578624163815e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 0.0002017780762413262,
+                "limit": 0.001
+              },
+              "initial_drift/velocity/L2": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 1.3200690851905821e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "engineering accuracy budget",
+                "value": 0.00017665960532329858,
+                "limit": 0.001
+              },
+              "traction": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00021202294781043506,
+                "limit": 0.001
+              },
+              "k_flux": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.3395737414410684e-06,
+                "limit": 0.0001
+              },
+              "pressure_offset": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.468721433053101e-05,
+                "limit": 0.0001
+              },
+              "divergence": {
+                "status": "OBSTRUCTED",
+                "reason": "",
+                "value": 0.0021336644171831586,
+                "limit": 0.001
+              }
+            }
+          },
+          "all_scopes": {
+            "status": "PASS",
+            "reason": "",
+            "components": {
+              "continuum_error/full/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.9688602463491947e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/full/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "continuum_error/full/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.0899733224858811e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/full/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3873514273314308e-06,
+                "limit": 0.001
+              },
+              "continuum_error/full/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.092994635643727e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/full/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 7.445106290618504e-05,
+                "limit": 0.001
+              },
+              "continuum_error/full/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 4.155593146150683e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/full/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.0249308505110075e-06,
+                "limit": 0.001
+              },
+              "continuum_error/full/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.705516094593215e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/full/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.953765137200411e-05,
+                "limit": 0.001
+              },
+              "continuum_error/full/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.4422744399954157e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/full/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00019468485407304122,
+                "limit": 0.001
+              },
+              "continuum_error/full/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.9688802546645386e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/full/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "continuum_error/central/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.976963564168939e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/central/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0001397120511530403,
+                "limit": 0.001
+              },
+              "continuum_error/central/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.455990761124434e-08,
+                "limit": 0.0001
+              },
+              "continuum_error/central/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.357675567280189e-07,
+                "limit": 0.001
+              },
+              "continuum_error/central/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.119984434742899e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/central/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 6.168025845514443e-05,
+                "limit": 0.001
+              },
+              "continuum_error/central/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 4.1349071906562705e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/central/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.1637412694081522e-06,
+                "limit": 0.001
+              },
+              "continuum_error/central/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.372877870676871e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/central/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.3540159737604424e-05,
+                "limit": 0.001
+              },
+              "continuum_error/central/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.2748500108582863e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/central/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.000152382378119758,
+                "limit": 0.001
+              },
+              "continuum_error/central/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.976975573660151e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/central/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00013971205348744164,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.380901709830662e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.54780046644269e-23,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.2092346579759573e-22,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.5094538149444036e-06,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 7.445106290618504e-05,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.609107387391495e-07,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.0249308505110075e-06,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3502433998388111e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.953765137200411e-05,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.5655844325124913e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00019468485407304122,
+                "limit": 0.001
+              },
+              "continuum_error/constrained_boundary/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.380901709830662e-05,
+                "limit": 0.0001
+              },
+              "continuum_error/constrained_boundary/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00020844023573030057,
+                "limit": 0.001
+              },
+              "initial_drift/full/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3200240851937238e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/full/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00017665959971413514,
+                "limit": 0.001
+              },
+              "initial_drift/full/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.0899733224858811e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/full/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3873514273314308e-06,
+                "limit": 0.001
+              },
+              "initial_drift/full/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.2640338401941674e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/full/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.390901083930714e-05,
+                "limit": 0.001
+              },
+              "initial_drift/full/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.2693111414718796e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/full/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.2048037342322303e-06,
+                "limit": 0.001
+              },
+              "initial_drift/full/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.705516094599677e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/full/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9537651371948596e-05,
+                "limit": 0.001
+              },
+              "initial_drift/full/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.1405578624163815e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/full/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0002017780762413262,
+                "limit": 0.001
+              },
+              "initial_drift/full/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3200690851905821e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/full/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00017665960532329858,
+                "limit": 0.001
+              },
+              "initial_drift/central/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.338406651899162e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/central/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00017665959971413514,
+                "limit": 0.001
+              },
+              "initial_drift/central/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.455990761124434e-08,
+                "limit": 0.0001
+              },
+              "initial_drift/central/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.357675567280189e-07,
+                "limit": 0.001
+              },
+              "initial_drift/central/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.306686318203369e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/central/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 8.390901083930714e-05,
+                "limit": 0.001
+              },
+              "initial_drift/central/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.30851206682355e-07,
+                "limit": 0.0001
+              },
+              "initial_drift/central/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.2048037342322303e-06,
+                "limit": 0.001
+              },
+              "initial_drift/central/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.372877870692438e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/central/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 3.3540159737659936e-05,
+                "limit": 0.001
+              },
+              "initial_drift/central/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 9.198738812818494e-06,
+                "limit": 0.0001
+              },
+              "initial_drift/central/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0001832484734984812,
+                "limit": 0.001
+              },
+              "initial_drift/central/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3384333639100889e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/central/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.00017665960532329858,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/u/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/u/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/v/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.54780046644269e-23,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/v/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.2092346579759573e-22,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/k/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/k/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/outer_epsilon/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/outer_epsilon/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 0.0,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/reduced_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.350243399839311e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/reduced_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.9537651371948596e-05,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/mechanical_pressure/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.3502433998389202e-05,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/mechanical_pressure/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 5.953765137167104e-05,
+                "limit": 0.001
+              },
+              "initial_drift/constrained_boundary/velocity/L2": {
+                "status": "PASS",
+                "reason": "",
+                "value": 2.54780046644269e-23,
+                "limit": 0.0001
+              },
+              "initial_drift/constrained_boundary/velocity/sampled_Linf": {
+                "status": "PASS",
+                "reason": "",
+                "value": 1.2092346579759573e-22,
+                "limit": 0.001
+              }
+            }
+          }
+        }
+      },
+      "interpretation": "adverse diagnostic only; no selected-mesh qualification or order claim"
+    }
+  },
+  "input_lineage": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/EP.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/EP.json",
+      "bytes": 7442128,
+      "sha256": "bff02a2fa62e384a3bf5f51d7953eeaf1c9b31f17116e9e8ec5a5cea846767f8"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/Budget.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/Budget.json",
+      "bytes": 7451537,
+      "sha256": "f933f716a19b6678e7795a02c21e39e11f543e6bf94b498d71a19ba680c7741f"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/manifest.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/manifest.json",
+      "bytes": 71303,
+      "sha256": "bf2445b2380526320c97111272bf357e3d272c392f89fc8f08c8358ca10ff5b2"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/receipt.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/receipt.json",
+      "bytes": 9047,
+      "sha256": "325a26a37688abfbc62eb9319b0f63844306e01e92f7668c278be8c6961903d9"
+    }
+  },
+  "code": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/passive-tools-dec8d23/supplement_wj5_control.py": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/passive-tools-dec8d23/supplement_wj5_control.py",
+      "bytes": 4927,
+      "sha256": "974c6791c4a232a40e3d02331c4445014c753197de31130548b164a297bb333f"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/final-source/solvers/IncNavierStokesSolver/Tests/RANS/wj5_measure.py": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/final-source/solvers/IncNavierStokesSolver/Tests/RANS/wj5_measure.py",
+      "bytes": 19338,
+      "sha256": "7335c2f032d883b4eb73ce2020f01f1e6569f1a2125075c6df382432f576a233"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/final-source/solvers/IncNavierStokesSolver/Tests/RANS/wj4_qualification.py": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/final-source/solvers/IncNavierStokesSolver/Tests/RANS/wj4_qualification.py",
+      "bytes": 7771,
+      "sha256": "1168df9432ef01b2edfeb22629cdafa66869866dfc2f5c9f426c56b7dd4a8090"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/final-source/solvers/IncNavierStokesSolver/Tests/RANS/wj_immutable.py": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/final-source/solvers/IncNavierStokesSolver/Tests/RANS/wj_immutable.py",
+      "bytes": 6939,
+      "sha256": "2d023f40b865ce9bf6ed622ae8cea4fb66d7946e003a55a04ba4b66b498cea7f"
+    }
+  },
+  "table": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/control-sensitivity.csv",
+    "bytes": 11082,
+    "sha256": "3815853b8bcb33accd54f7f9261e1a8818268a388fa5cba0329ca9b5e79a66de"
+  },
+  "governing_attempts": 0,
+  "measured_seconds": 23.956727981567383
+}

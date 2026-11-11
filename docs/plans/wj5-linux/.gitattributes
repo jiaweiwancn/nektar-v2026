@@ -1,0 +1,6 @@
+# Preserve the exact Linux receipt/table bytes and deterministic gzip payloads.
+* -text
+*.csv whitespace=cr-at-eol
+# Matplotlib paths and CTest output retain their original generated whitespace.
+figures/*.svg -whitespace
+logs/* -whitespace

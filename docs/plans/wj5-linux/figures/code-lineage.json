@@ -1,0 +1,50 @@
+{
+  "revision": "dec8d23c64e52e392416adf55bf10f2baa332c6c",
+  "code": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/passive-tools-dec8d23/plot_wj5.py": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/passive-tools-dec8d23/plot_wj5.py",
+      "bytes": 11623,
+      "sha256": "da4e95b1230b4463db90576ec06d28414446cbede9b6c8a92c1448f7f533f628"
+    }
+  },
+  "inputs": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/receipt.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/receipt.json",
+      "bytes": 9047,
+      "sha256": "325a26a37688abfbc62eb9319b0f63844306e01e92f7668c278be8c6961903d9"
+    }
+  },
+  "command": {
+    "label": "figures-v2",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/passive-tools-dec8d23/plot_wj5.py",
+      "--compact",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/figures-v2"
+    ],
+    "started_utc": "2026-11-11T02:31:18.693369+00:00",
+    "seconds": 6.841105222702026,
+    "exit_code": 0,
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/figures-v2.log",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  },
+  "previous_version": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/figures-v1/figures.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/figures-v1/figures.json",
+      "bytes": 2317,
+      "sha256": "6b1b0e72311c5ca3b327cf827e19baf3e8b349381c60abab994e73c5e8006774"
+    }
+  },
+  "change": "separate colorbar axis and legends after visual inspection; unchanged numeric inputs"
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "WJ5OuterReceiptBridgeV1",
+  "publication": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/publication.json",
+    "bytes": 29425,
+    "sha256": "91ba532eef9096fe0ec0240391634c466025b454b5f7cc049100dd0e7652a7cb"
+  },
+  "seal_command": {
+    "label": "seal-v2",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/passive-tools-5534d2b/seal_wj5.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111",
+      "--compact",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2",
+      "--figures",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/figures-v2",
+      "--source",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/publication-source-v2"
+    ],
+    "started_utc": "2026-11-11T02:39:59.664713+00:00",
+    "seconds": 15.372801542282104,
+    "exit_code": 0,
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/seal-v2.log",
+    "log_sha256": "780d47328702096a423411d68a85d49c45773edc8728b16019663e0f0fa7e281",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  },
+  "final_command_receipts": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/compact-v2/final-command-receipts.json",
+    "bytes": 43518,
+    "sha256": "9c56c50b7d5ecfe03ed5a21a4a48eeeef14eaee36edfb865bc5343bfa3060317"
+  },
+  "code": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/passive-tools-5534d2b/export_wj5.py": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/passive-tools-5534d2b/export_wj5.py",
+      "bytes": 5777,
+      "sha256": "c5be71c3f17568b41ea6076053cae153d38986f590bc37e794239170720a2f10"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/publication-source-v2/solvers/IncNavierStokesSolver/Tests/RANS/wj_immutable.py": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj5-20261111/publication-source-v2/solvers/IncNavierStokesSolver/Tests/RANS/wj_immutable.py",
+      "bytes": 6939,
+      "sha256": "2d023f40b865ce9bf6ed622ae8cea4fb66d7946e003a55a04ba4b66b498cea7f"
+    }
+  },
+  "governing_attempts": 0,
+  "coverage": "post-seal transport I/O covered by120-second conservative passive reserve"
+}
