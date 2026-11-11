@@ -27,6 +27,7 @@ def latest_record(path, step):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--campaign',action='append',help='capture only explicitly named LABEL=/absolute/trajectory campaigns')
     a=p.parse_args();root=a.root.resolve();base=root.parent
     require(platform.system()=='Linux' and base==Path('/media/jay/新加卷/nektar-v2026-runs'),
         'authoritative Linux run volume required')
@@ -41,6 +42,13 @@ def main():
         'BudgetRegularizedSaturated05G':root/'selected-regularized-saturated-05G/trajectory',
         'BudgetRegularizedSaturated05O':root/'selected-regularized-saturated-05O/trajectory',
         'BudgetRefinedRegularized2G':root/'selected-refined-regularized-2G/trajectory'}
+    if a.campaign:
+        roots={}
+        for item in a.campaign:
+            name,text=item.split('=',1);campaign=Path(text)
+            require(Path(name).name==name and name not in ('.','..') and name not in roots,'invalid/duplicate campaign label')
+            require(campaign.is_absolute() and campaign.resolve().is_relative_to(base),'campaign must be on the authoritative run volume')
+            roots[name]=campaign
     stamp=datetime.now(timezone.utc);directory=root/('status-capture-'+stamp.strftime('%Y%m%dT%H%M%S%fZ'))
     directory.mkdir();out=dict(schema=1,captured_UTC=stamp.isoformat(),root=str(root),
         production_governing_solves_added=0,scope='read-only current pointers; immutable verified checkpoint bytes; no retry or migration',
@@ -71,6 +79,7 @@ def main():
             supervisor_identity=supervisor,supervisor_matches=bool(supervisor and supervisor==supervisor_expected),
             cumulative_bound_integral=progress.get('cumulative_bound_integral'),
             case_family=progress.get('case_family'),case_definition=progress.get('case_definition'),
+            accepted_awf_pressure_space=progress.get('accepted_awf_pressure_space','baseline-v1'),
             dt=receipt['dt'],physical_time_in_H_over_ustar=receipt['time']/(progress.get('case_definition',{}).get('H',.5)/.4))
         record=latest_record(campaign/'steps.jsonl',receipt['steps'])
         if record:
