@@ -16,7 +16,7 @@ from analyze_rans_duration_constitutive import analyze
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--perturbed',nargs=4,required=True);p.add_argument('--baseline',nargs=4,required=True);p.add_argument('--time',type=float,required=True);p.add_argument('--output-directory',type=Path,required=True);a=p.parse_args();r=a.root.resolve();out=a.output_directory;out.mkdir(parents=True,exist_ok=False);runtime=r/'runtime-resolution-v3';os.environ.update(LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--perturbed',nargs=4,required=True);p.add_argument('--baseline',nargs=4,required=True);p.add_argument('--time',type=float,required=True);p.add_argument('--output-directory',type=Path,required=True);a=p.parse_args();r=a.root.resolve();out=a.output_directory;out.mkdir(parents=True,exist_ok=False);runtime=(r/'runtime-resolution-v3').resolve();os.environ.update(LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'))
     pert=compare(r,a.perturbed,a.time,inputs_only=True);base=compare(r,a.baseline,a.time,inputs_only=True);requests=pert['requests'];config={k:requests[0][k] for k in ('model','policy','wall','descriptor')};ref=Reference(config['model'],config['policy'],config['wall']);weights=np.array(requests[0]['evaluation']['weights']);arrays=[];initial=[];checks=[];provenance=[]
     for i,(pl,bl) in enumerate(zip(a.perturbed,a.baseline,strict=True)):
         pq,bq=requests[i],base['requests'][i]

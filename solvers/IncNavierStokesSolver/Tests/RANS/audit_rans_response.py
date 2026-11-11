@@ -38,8 +38,9 @@ def main():
             require(previous_request[key]==request[key],'response_supplement_input_mismatch:'+key)
     seal=RequestManifest(out,request,a.resume)
     if seal.completed(out):return 0 if load(out/'results.json')['status']=='pass' else 1
-    os.environ['LD_LIBRARY_PATH']=str(r/'runtime-resolution-v3/lib');env['LD_LIBRARY_PATH']=os.environ['LD_LIBRARY_PATH']
-    require(runtime_identity(r/'runtime-resolution-v3/RANSPreservationProbe')==ad['duration_diagnostic_runtime'],'admitted_response_diagnostic_runtime_changed')
+    runtime=(r/'runtime-resolution-v3').resolve()
+    os.environ['LD_LIBRARY_PATH']=str(runtime/'lib');env['LD_LIBRARY_PATH']=os.environ['LD_LIBRARY_PATH']
+    require(runtime_identity(runtime/'RANSPreservationProbe')==ad['duration_diagnostic_runtime'],'admitted_response_diagnostic_runtime_changed')
     require(sha(Path(ad['common_directory'])/'packet.json.gz')==ad['common_packet_sha256'],'response_common_packet_changed')
     def run(name,cmd):
         with (out/(name+'.log')).open('x') as f:
@@ -64,7 +65,7 @@ def main():
         if m in MEMBERS[:2]:
             try:
                 dest=r/'evolved-audits'/('response-'+a.cohort_prefix+'-'+str(a.time)+'-'+m)
-                if not dest.exists():run('spatial-'+m,[source/'audit_rans_balanced_evolved.py','--root',r,'--analysis-runtime',r/'runtime-resolution-v3','--campaign-root',r,'--label',label,'--output-label',dest.name,'--times',str(a.time),'--common-directory',ad['common_directory']])
+                if not dest.exists():run('spatial-'+m,[source/'audit_rans_balanced_evolved.py','--root',r,'--analysis-runtime',runtime,'--campaign-root',r,'--label',label,'--output-label',dest.name,'--times',str(a.time),'--common-directory',ad['common_directory']])
                 spatial[m]=validate_audit(dest/'results.json',folder,cfg,[a.time],Path(ad['common_directory']),allow_failed=True,expected_runtime=ad['duration_diagnostic_runtime'])
                 if spatial[m]['status']!='pass':failures.append('spatial_numerical_check_failed:'+m)
                 files.extend([str(dest/'results.json'),str(dest/'immutable-request.json'),str(dest/('T-'+format(a.time,'.4f'))/'packet.json.gz')])
@@ -80,7 +81,7 @@ def main():
     quad={}
     try:
         qlabel='response-quadrature-'+a.cohort_prefix+'-'+str(a.time);path=r/qlabel/'results.json'
-        if not path.exists():run('quadrature',[source/'check_rans_balanced_state_quadrature.py','--root',r,'--analysis-runtime',r/'runtime-resolution-v3','--model',cfg['model'],'--policy',cfg['policy'],'--walls',cfg['wall'],'--label-prefix',a.cohort_prefix,'--time',str(a.time),'--output-label',qlabel]+(['--space-names',*ad['space_names']] if 'space_names' in ad else []))
+        if not path.exists():run('quadrature',[source/'check_rans_balanced_state_quadrature.py','--root',r,'--analysis-runtime',runtime,'--model',cfg['model'],'--policy',cfg['policy'],'--walls',cfg['wall'],'--label-prefix',a.cohort_prefix,'--time',str(a.time),'--output-label',qlabel]+(['--space-names',*ad['space_names']] if 'space_names' in ad else []))
         quad=load(path);files.append(str(path));require(quad['status']=='pass','response_quadrature_failed')
     except Exception as error:failures.append('quadrature:'+repr(error))
     require(set(spatial).issubset(MEMBERS[:2]) and set(scalars).issubset(MEMBERS),'response_audit_member_identity')
