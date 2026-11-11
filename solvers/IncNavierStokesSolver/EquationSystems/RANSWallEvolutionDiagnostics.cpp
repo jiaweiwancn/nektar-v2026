@@ -1000,6 +1000,9 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
         const auto pr=GeometryPoint(inner?InnerPressure():OuterPressure(),v.geometry,p);
         const int xface=std::abs(p[0]-element.lower[0])<1e-12?-1:std::abs(p[0]-element.upper[0])<1e-12?1:0;
         const int zface=std::abs(p[2]-element.lower[2])<1e-12?-1:std::abs(p[2]-element.upper[2])<1e-12?1:0;
+        Require((o[6]==-1 || o[6]==0 || o[6]==1) && (o[7]==-1 || o[7]==0 || o[7]==1),"invalid WJ face selector");
+        if(o[6] && xface && p[0]>lower[0] && p[0]<upper[0])Require(xface*o[6]<0,"WJ explicit geometry disagrees with requested x side");
+        if(o[7] && zface && p[2]>0 && p[2]<upper[2])Require(zface*o[7]<0,"WJ explicit geometry disagrees with requested normal side");
         RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=v.Gradient(state,offset[a]);
         const double div=std::abs(g[0][0]+g[2][2]);
         if(div>=divergence || xface!=0 || zface!=0 || observed%std::max(1,int(observations.size()/64))==0)
@@ -1016,7 +1019,7 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
             if(div>=divergence){Vector fast,independent;for(int a=0;a<3;++a)for(int b=0;b<3;++b){fast.push_back(g[a][b]);independent.push_back(native[a][b]);}
                 divergenceWitness=J::Object({{"geometry",J::Number(v.geometry)},{"element",J::Number(v.element)},
                     {"region",J::Quote(inner?"inner":"outer")},{"position",J::Numbers(p)},{"radial_side",J::Number(side)},
-                    {"requested_x_side",J::Number(o[6])},{"face_sides_xz",J::Numbers(Vector{double(xface),double(zface)})},
+                    {"requested_x_side",J::Number(o[6])},{"requested_normal_side",J::Number(o[7])},{"face_sides_xz",J::Numbers(Vector{double(xface),double(zface)})},
                     {"raw_G",J::Numbers(fast)},{"independent_native_G",J::Numbers(independent)},
                     {"raw_divergence",J::Number(g[0][0]+g[2][2])},{"independent_native_divergence",J::Number(native[0][0]+native[2][2])},
                     {"state_sha256",J::Quote(stateHash)},{"stage_history_sha256",J::Quote(historyHash)},
@@ -1044,17 +1047,23 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
             {
                 if(j==3 && inner){rows.push_back("null");continue;}
                 const int b=blocks[j];const auto q=GeometryPoint(b,v.geometry,p);
+                // Value() uses constant-centred accumulation. Include its
+                // constant reproduction defect in the actual observation row,
+                // rather than assuming phi.constant is exactly one in binary64.
+                auto valueRow=q.phi;long double constantSum=0;
+                for(int n=0;n<q.ids.size();++n)constantSum+=(long double)q.phi[n]*q.constant[n];
+                valueRow[0]+=(1-constantSum)/q.constant[0];
                 std::map<int,double> effective;double accumulation=0,prescribed=0,gross=0;
                 for(int n=0;n<q.ids.size();++n)
                 {
-                    const int id=offset[b]+q.ids[n];const double phi=q.phi[n];
+                    const int id=offset[b]+q.ids[n];const double phi=valueRow[n];
                     accumulation+=std::abs(phi*state[id]);gross+=phi*phi;
                     if(traceAction.count(id))for(auto [freeId,t]:traceAction.at(id))effective[freeId]+=phi*t;
                     else if(!constraints.count(id))effective[id]+=phi;
                     else prescribed+=std::abs(phi*constraints.at(id));
                 }
                 double freeNorm=0;for(auto [id,phi]:effective){(void)id;freeNorm+=phi*phi;}
-                std::map<int,double> nativeRow;for(int n=0;n<q.ids.size();++n)nativeRow[offset[b]+q.ids[n]]=q.phi[n];
+                std::map<int,double> nativeRow;for(int n=0;n<q.ids.size();++n)nativeRow[offset[b]+q.ids[n]]=valueRow[n];
                 rows.push_back(J::Object({{"block",J::Number(b)},{"row",J::Constraints(nativeRow)},
                     {"free_row",J::Constraints(effective)},{"free_row_L2",J::Number(std::sqrt(freeNorm))},
                     {"gross_row_L2",J::Number(std::sqrt(gross))},{"absolute_accumulation",J::Number(accumulation)},
@@ -1107,6 +1116,8 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
         {"residual_order",J::Quote("u,v,k,entire outer epsilon,inner continuity,outer continuity,gauge,boundary/trace; consistent mass dual physical scaling")},
         {"component_norm_warning",J::Quote("separately normed regional/source/diffusion/interface contributions are not linearly additive")},
         {"observations",J::List(samples)},{"interfaces",J::List(interfaces)},
+        {"dependent_trace_action",passiveDiagnostics?J::List([&](){std::vector<std::string> rows;for(const auto &[id,row]:traceAction)
+            rows.push_back(J::Object({{"row",J::Number(id)},{"free_K_action",J::Constraints(row)}}));return rows;}()):"null"},
         {"passive_diagnostics",passiveDiagnostics?WJPassiveDiagnostics(state,stageAlpha>0?stageHistory:state,stageAlpha,time,data):"null"},
         {"strong_divergence_sampled_Linf",J::Number(divergence)},{"strong_divergence_witness",divergenceWitness},{"fast_independent_gradient_max_defect",J::Numbers(gradientDefect)},{"independent_gradient_observations",J::Number(independentGradients)},{"evaluation_basis_row_norm_max",J::Numbers(basisNorm)},{"arithmetic_evaluation_sensitivity",J::Numbers(evaluationSensitivity)},
         {"audit",WJAuditPacket(audit,state,stageAlpha>0?stageHistory:state,stageAlpha,time,stageAlpha>0?"accepted_checkpoint_stage":"startup_readback")}});

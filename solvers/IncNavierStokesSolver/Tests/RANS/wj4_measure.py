@@ -40,7 +40,7 @@ def rule(xmeshes=((0.,1.),(0.,.5,1.)),order=6,xorder=4,zmeshes=None,all_faces=Fa
                         for normal_side in ((-1,1) if z in zs[1:-1] and z!=1 else (side,)):
                             rows.append([float(x),0.,float(z),0.,side,xside,normal_side])
                     else:rows.append([float(x),0.,float(z),0.,side,xside])
-    if all_faces:rows=[r+[0] if len(r)==6 else r for r in rows]
+    if all_faces:rows=[r+[r[4]] if len(r)==6 else r for r in rows]
     return rows
 
 def boundary_rule(order=6,xorder=4,xmeshes=((0.,1.),(0.,.5,1.)),zmeshes=None):

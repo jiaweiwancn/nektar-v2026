@@ -27,6 +27,8 @@ def main():
         assert {(r['requested_x_side'],r['requested_normal_side']) for r in corner}=={(-1,-1),(-1,1),(1,-1),(1,1)}
         rng=np.random.default_rng(541);free=rng.normal(size=len(initial['state']));constraints={int(i):v for i,v in m['constraints']}
         for i in constraints:free[i]=0.
+        for row in m['dependent_trace_action']:
+            free[int(row['row'])]=sum(float(p)*free[int(i)] for i,p in row['free_K_action'])
         fixed_count=free_count=pressure_count=dependent_count=0;maximum=0.
         for r in m['observations']:
             x,_,z=r['position'];boundary=x in (0.,1.) or z==2.
@@ -35,8 +37,7 @@ def main():
                 native=sum(float(p)*free[int(i)] for i,p in desc['row']);mapped=sum(float(p)*free[int(i)] for i,p in desc['free_row'])
                 # On dependent H epsilon the map includes free K, rather than
                 # treating its constrained coefficient as independent data.
-                if j==3 and z==1.:
-                    dependent_count+=1;continue
+                if j==3 and z==1.:dependent_count+=1
                 maximum=max(maximum,abs(native-mapped));assert_allclose(native,mapped,rtol=0,atol=3e-13)
                 if boundary and j<4:
                     fixed_count+=1;assert desc['free_row_L2']<1e-12
