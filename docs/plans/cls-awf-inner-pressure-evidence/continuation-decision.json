@@ -1,0 +1,35 @@
+{
+  "decided_UTC": "2026-11-11T03:41:46.440612+00:00",
+  "pilot_steps": 800,
+  "pilot_time": 0.4999999999999921,
+  "pilot_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot-matched/trajectory/steps-000769-000800/checkpoint.3",
+  "pilot_checkpoint_sha256": "547b9f811aaa3869cf39baabc5c929377a335967e256881e3460772b7207da98",
+  "pilot_wall_seconds": 6370.870454140182,
+  "seconds_per_step": 7.963588067675228,
+  "correction_activations": 0,
+  "normalized_spatial_blocks": [
+    0.0035484340144404333,
+    0.001795786886302337,
+    0.006182035899063946,
+    0.0011515518452247658
+  ],
+  "mean_traction": 0.15956319361691887,
+  "decision": "continue own unchanged P2 case to the existing three complete half-unit steady windows, including full epsilon, or at most T=6",
+  "reason": "Finite-horizon response is mixed: traction unchanged within declared 1e-5 scale, inner divergence and k residual worse, vector velocity reference error and epsilon spatial residual slightly/broadly better. A separately qualified late state is needed to assess the remaining settled-reference question. No hard failure or correction; measured cost is affordable for one serial continuation.",
+  "targets": [
+    1600,
+    2400,
+    3200,
+    4000,
+    4800,
+    5600,
+    6400,
+    7200,
+    8000,
+    8800,
+    9600
+  ],
+  "estimated_wall_hours_to_T6_from_measured_pilot": 19.466548609872778,
+  "maximum_physical_time": 6,
+  "stopping_policy": "unchanged; no numerical retry, no extension beyond6, preserve hard rejection"
+}

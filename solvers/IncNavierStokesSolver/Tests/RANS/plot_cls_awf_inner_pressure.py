@@ -25,18 +25,18 @@ def main():
     steps = sorted(map(int, d['observations'])); require(len(steps) > 1, 'evolved readback required')
     a.output.mkdir(parents=True, exist_ok=True)
     fig, axes = plt.subplots(2, 2, figsize=(10, 7), layout='constrained')
-    for name, rows, color in [('P1 inner', old, 'tab:blue'), ('P2 inner', {int(k): v for k, v in d['observations'].items()}, 'tab:orange')]:
+    for name, rows, color in [('P1 case', old, 'tab:blue'), ('P2 case', {int(k): v for k, v in d['observations'].items()}, 'tab:orange')]:
         times = [rows[n]['physical']['time'] for n in steps]
         axes[0, 0].plot(times, [100*(rows[n]['physical']['mean_wall_stress']/.16-1) for n in steps], 'o-', label=name, color=color)
         for region, style in [(0, '-'), (1, '--')]:
             axes[0, 1].plot(times, [rows[n]['complete_audit']['strong_continuity'][region] for n in steps],
-                style, marker='o', color=color, label=name+(' inner' if region == 0 else ' outer'))
+                style, marker='o', color=color, label=name+(': inner' if region == 0 else ': outer'))
         axes[1, 0].plot(times, [max(rows[n]['physical']['common_normalized_spatial_first4']) for n in steps], 'o-', label=name, color=color)
         axes[1, 1].plot(times, [rows[n]['physical']['matching_trace_defect'] for n in steps], 'o-', label=name, color=color)
     axes[0, 0].set(ylabel='Mean traction reference error (%)')
-    axes[0, 1].set(ylabel='Strong divergence physical L2', yscale='log')
+    axes[0, 1].set(ylabel='Strong divergence physical L2', ylim=(0, None))
     axes[1, 0].set(ylabel='Largest common-normalized spatial block', yscale='log')
-    axes[1, 1].set(ylabel='Refreshed epsilon trace defect', yscale='log')
+    axes[1, 1].set(ylabel='Refreshed epsilon trace defect', ylim=(0, None))
     for axis in axes.flat: axis.set_xlabel('Physical time'); axis.grid(alpha=.2); axis.legend(fontsize=8)
     fig.savefig(a.output/'pressure-space-evolution.png', dpi=150); plt.close(fig)
     n = steps[-1]; last = d['observations'][str(n)]; q = verified_physical(last); q1 = verified_physical(old[n]); q0 = verified_physical(d['observations']['0'])

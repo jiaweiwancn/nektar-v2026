@@ -399,15 +399,19 @@ projection activates the selected constitutive modification, and interface
 and within-element divergence errors remain. Their causal shares have not
 been uniquely separated, nor has the refined steady root been qualified.
 
-The refined steady-window assessment is now complete. The next discriminating
-experiment is one same-mesh velocity–pressure-space
-comparison, especially in the inner region where strong divergence is
-localized. A quadratic inner pressure space would give an estimated 2994
-unknowns on this refined pilot, subject to native dimension/compatibility
-verification. This is a proposal, not a launched extra case or a proof that
-pressure order caused the discrepancy. Constitutive retuning, a new limiter,
-another mesh family and a broad perturbation sweep are not justified by this
-package. Successful faithful Original-CLS evolution remains a separate gate.
+The refined steady-window assessment is complete. The proposed same-mesh
+inner-pressure P1-to-P2 control has now been implemented and tested on Linux:
+the [dedicated pressure-space report](cls-awf-inner-pressure.md) records native
+2994-unknown initialization, strict restart/rollback checks and an 800-step
+fresh trajectory through T=.5. At that finite horizon traction is essentially
+unchanged, inner strong divergence is 16.4% higher and k residual is 44.1%
+higher; epsilon residual is lower. There is no bounding. Its separately
+bounded settling continuation remains distinct from the completed P1 result
+above. This tests one pressure-space change; it does not establish that
+pressure order caused the remaining discrepancy. Constitutive retuning, a new
+limiter, another mesh family and a broad perturbation sweep are not justified
+by this package. Successful faithful Original-CLS evolution remains a
+separate gate.
 
 ## Provenance and reproduction
 

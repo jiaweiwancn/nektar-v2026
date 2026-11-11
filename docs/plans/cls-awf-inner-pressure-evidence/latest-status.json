@@ -1,0 +1,712 @@
+{
+  "captured_Asia_Shanghai": "2026-11-11T11:59:47.886887+08:00",
+  "native_status": {
+    "status": "running",
+    "accepted_steps": 928,
+    "accepted_time": 0.5799999999999904,
+    "next_target": 1600.0,
+    "completed_targets": [],
+    "failure": null,
+    "source_progress": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/progress.json",
+    "immutable_progress": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/status-capture-20261111T035938330944Z/InnerP2Continuation/progress.json",
+    "progress_sha256": "605cbedd2067d20d363296b398a899bfb30245c227cefecf7909614d08a2f49e",
+    "source_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/steps-000897-000928/checkpoint.3",
+    "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/status-capture-20261111T035938330944Z/InnerP2Continuation/checkpoint",
+    "checkpoint_sha256": "cc95cd52bae639d1d6f812b3ce69c227e12b49154eaab6df698dcaf95fb48e27",
+    "coupled_state_sha256": "da3c93933667699f52cd5a805e18ad9f0063cce1a848fff5a6dfbd9d60356027",
+    "native_history_sha256": [
+      "25c0c7ebfa44ef549ba732bc456a657eb1ca220edc8279be88c54295e9e6019f",
+      "98aa85556c7b888bbe0ed12839fca9bd73c0f02ea1a93ae0985aadc157346a61"
+    ],
+    "native_history_times_sha256": "a7a836e87f619bcc87dd388eecf1bb1242f4968c2a972bc6c7fc398ed013d58c",
+    "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/runtime/IncNavierStokesSolver",
+    "executable_sha256": "177ce5e54e7de514fa019122e46d3a5d709455cd091bd3023fbfa745c48c9bfc",
+    "driver_identity": {
+      "pid": 626371,
+      "start": "49625286",
+      "executable": "/usr/bin/python3.10",
+      "cwd": "/home/jay"
+    },
+    "driver_matches": true,
+    "native_identity": {
+      "pid": 632490,
+      "start": "49724849",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/runtime/IncNavierStokesSolver",
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/steps-000929-000960"
+    },
+    "native_matches": true,
+    "supervisor_identity": {
+      "pid": 626365,
+      "start": "49625227",
+      "executable": "/usr/bin/python3.10",
+      "cwd": "/home/jay"
+    },
+    "supervisor_matches": true,
+    "cumulative_bound_integral": 0.0,
+    "case_family": "AcceptedAWFV1",
+    "case_definition": {
+      "family": "AcceptedAWFV1",
+      "case": "Accepted-AWF-05G",
+      "formulation": "CLSCalibratedBudgetAWF",
+      "formulation_version": "accepted-appendix-v1",
+      "case_identity": "Accepted-AWF-05G:cutoff-v1:inner-p2-v1",
+      "inner_refinement": "cutoff-v1",
+      "outer_refinement": "none",
+      "focused_outer_refinement_knots": [],
+      "checkpoint_reporting_interval": 8.0,
+      "focused_refinement_knots": [
+        0.0025,
+        0.005,
+        0.02,
+        0.04
+      ],
+      "appendix_sha256": "9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf",
+      "wall_policy": "CLSCalibratedBudgetAWF",
+      "companion": "regularized",
+      "companion_reason": "matched inner-pressure P2 sensitivity; faithful covariance blocker retained",
+      "model_choices": {
+        "outer_variant": "Regularized",
+        "inner_stress": "Linear",
+        "cubic_beta": 0.4,
+        "regularization_gamma": 0.0,
+        "regularization_scale": 1.0
+      },
+      "H": 0.5,
+      "z_K": 0.5,
+      "z_m": 0.5,
+      "h": 0.1,
+      "Z": 4.0,
+      "molecular_nu": 1.5e-05,
+      "friction_velocity": 0.4,
+      "K_sampling": "InterfaceTrace",
+      "K_functional_version": "InterfaceTrace-v1:common-CG-matching-face:physical-local-H",
+      "source": "P_h-E_C(K); prescribed redistribution exactly zero",
+      "scalar_source_split": "frozen K/viscosity/cutoff/E_C; signed source; no local reaction rate",
+      "outer_equations": "Regularized high-Re CLS/Yap; no molecular outer diffusion",
+      "inner_viscosity": "nu+nu_tA",
+      "wall_coefficients": "derived from selected CLS q_star/kappa: c_mu=q_star^-2; c_length=kappa*q_star^1.5",
+      "chi": null,
+      "capped_normalization": null,
+      "reference": "native projection of nonconstant diffusion-balanced k_w,0",
+      "temporal_coupling": "PimpleSingleSweep",
+      "native_order": 1.0,
+      "dt": 0.000625,
+      "steps": 32.0,
+      "relaxation": 1.0,
+      "eta": 0.0,
+      "prescribed_forcing": 0.0,
+      "radial_knots": [
+        0.0,
+        0.0025,
+        0.005,
+        0.01,
+        0.02,
+        0.04,
+        0.1,
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        2.3333333333333335,
+        2.6666666666666665,
+        3.0,
+        3.333333333333333,
+        3.666666666666667,
+        4.0
+      ],
+      "tangential_knots": [
+        -4.0,
+        -3.0,
+        -2.0,
+        -1.0,
+        1.0,
+        2.0
+      ],
+      "velocity_scalar_degree": 3.0,
+      "pressure_degree": {
+        "inner": 2.0,
+        "outer": 1.0
+      },
+      "pressure_space": "inner-p2-v1",
+      "regional_pressure_degrees": {
+        "inner": 2.0,
+        "outer": 1.0
+      },
+      "tensor_unknown_estimate": 2994.0,
+      "tensor_field_size_estimates": [
+        784.0,
+        784.0,
+        784.0,
+        400.0,
+        187.0,
+        54.0
+      ],
+      "native_points": [
+        8.0,
+        8.0
+      ],
+      "source_normal_order": 16.0,
+      "source_tangential_order": 8.0,
+      "inventory": "AcceptedBudgetV1",
+      "bound_solver": "RetainedPool",
+      "k_floor_relative": 1e-08,
+      "work": {
+        "add": 2000.0,
+        "total": 20000.0,
+        "separations": 2000.0,
+        "seconds": 900.0
+      },
+      "perturbation": {
+        "amplitude": 0.0,
+        "scale": "K0",
+        "shape": "sin(pi*(x-xmin)/(xmax-xmin))^2*(1-3*(z/H)^2+2*(z/H)^3) on inner layer; zero outside",
+        "endpoint_and_external_compatible": true,
+        "maximum_relative_amplitude": 0.0
+      },
+      "xml_sha256": "42272b02133e798c53b438ec2960c22568e2ce547cb91a02335b22cadd26547b",
+      "fresh_native_initialization": false,
+      "restart": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/steps-000897-000928/checkpoint.3",
+      "zero_prescribed_perturbation_functions_retained": true
+    },
+    "accepted_awf_pressure_space": "inner-p2-v1",
+    "dt": 0.000625,
+    "physical_time_in_H_over_ustar": 0.4639999999999923,
+    "last_accepted_step": {
+      "solves": {
+        "outer_sweeps": 1,
+        "momentum_predictor_solves": 1,
+        "pressure_system_solves": 1,
+        "epsilon_transport_solves": 1,
+        "k_transport_solves": 1,
+        "bound_calls": 1,
+        "additional_governing_equation_solves": 0
+      },
+      "bound_activations": 0,
+      "minimum_k": {
+        "value": 0.5102441537915549,
+        "functional_kind": "Point",
+        "coordinate": [
+          1.625,
+          0,
+          0.9375
+        ],
+        "geometry": 44,
+        "inventory": "reconstruction_dense"
+      },
+      "continuous_ground": {
+        "admissible": true,
+        "minimum": 0.985104308640997,
+        "arithmetic_scale": 0,
+        "point": [
+          -1,
+          0,
+          0
+        ],
+        "geometry": 2,
+        "extrema_checked": 17
+      },
+      "raw_mass_norm": 1.6962127197068317e-06,
+      "bound_mass_norm": 0,
+      "accepted_mass_norm": 1.6962127197068317e-06,
+      "seconds": 4.080891313,
+      "refreshed_matching_defect": 3.170902772612564e-07
+    }
+  },
+  "scientific_observer": {
+    "progress": {
+      "status": "observing",
+      "started_UTC": "2026-11-11T03:42:50.133642+00:00",
+      "script_sha256": "8a90cf008c9fb236aa2d29aadff9343496b04145448c32541ad549d39747807b",
+      "observer_identity": {
+        "pid": 626366,
+        "start": "49625227",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "campaign": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory",
+      "maximum_step": 9600,
+      "probe_sha256": "67e9d5093d8bdf164ca7fdf7dc97f5a5cb70a7012dce1096be399e45363f2a43",
+      "policy_sha256": "5ab70c348311d7352501ea8b9884a67e6acdfb204ea238d68e8923e855890057",
+      "assessed_steps": [],
+      "diagnostics": {},
+      "stopping_policy": "First three passing unchanged half-unit windows, INCLUDING full transported epsilon, or maximum authorized endpoint. Stop only at a completed native block.",
+      "updated_UTC": "2026-11-11T03:59:39.179791+00:00",
+      "accepted_steps": 928.0,
+      "accepted_time": 0.5799999999999904,
+      "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/steps-000897-000928/checkpoint.3",
+      "checkpoint_sha256": "cc95cd52bae639d1d6f812b3ce69c227e12b49154eaab6df698dcaf95fb48e27",
+      "native_identity": {
+        "pid": 632490.0,
+        "start": "49724849",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/steps-000929-000960"
+      }
+    },
+    "actual_process_identity": {
+      "pid": 626366,
+      "start": "49625227",
+      "executable": "/usr/bin/python3.10",
+      "cwd": "/home/jay"
+    }
+  },
+  "pilot_status": {
+    "status": "targets_completed",
+    "accepted_steps": 800,
+    "accepted_time": 0.4999999999999921,
+    "next_target": null,
+    "completed_targets": [
+      32.0,
+      80.0,
+      160.0,
+      800.0
+    ],
+    "failure": null,
+    "source_progress": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot-matched/trajectory/progress.json",
+    "immutable_progress": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/status-capture-20261111T035938330944Z/InnerP2/progress.json",
+    "progress_sha256": "f3e4f999c685a4be3709977d03b1a9850b147104e6e1c332627ea94391f0e9c8",
+    "source_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot-matched/trajectory/steps-000769-000800/checkpoint.3",
+    "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/status-capture-20261111T035938330944Z/InnerP2/checkpoint",
+    "checkpoint_sha256": "547b9f811aaa3869cf39baabc5c929377a335967e256881e3460772b7207da98",
+    "coupled_state_sha256": "42bb7315505d1bedca7fac87d2865a9650021fb1303ba55271e854115f502ebe",
+    "native_history_sha256": [
+      "a9fc43388a0aaeee195ca51e383a0a0f38f228d423d3f828b7325f9fb23dcb53",
+      "98aa85556c7b888bbe0ed12839fca9bd73c0f02ea1a93ae0985aadc157346a61"
+    ],
+    "native_history_times_sha256": "8937ac9ee7b987c499ba3b3148b63ccb26d69ddaa0f0cb6d4ac3f8498a3589b8",
+    "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot-matched/trajectory/runtime/IncNavierStokesSolver",
+    "executable_sha256": "177ce5e54e7de514fa019122e46d3a5d709455cd091bd3023fbfa745c48c9bfc",
+    "driver_identity": null,
+    "driver_matches": false,
+    "native_identity": null,
+    "native_matches": false,
+    "supervisor_identity": null,
+    "supervisor_matches": false,
+    "cumulative_bound_integral": 0.0,
+    "case_family": "AcceptedAWFV1",
+    "case_definition": {
+      "family": "AcceptedAWFV1",
+      "case": "Accepted-AWF-05G",
+      "formulation": "CLSCalibratedBudgetAWF",
+      "formulation_version": "accepted-appendix-v1",
+      "case_identity": "Accepted-AWF-05G:cutoff-v1:inner-p2-v1",
+      "inner_refinement": "cutoff-v1",
+      "outer_refinement": "none",
+      "focused_outer_refinement_knots": [],
+      "checkpoint_reporting_interval": 8.0,
+      "focused_refinement_knots": [
+        0.0025,
+        0.005,
+        0.02,
+        0.04
+      ],
+      "appendix_sha256": "9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf",
+      "wall_policy": "CLSCalibratedBudgetAWF",
+      "companion": "regularized",
+      "companion_reason": "matched inner-pressure P2 sensitivity; faithful covariance blocker retained",
+      "model_choices": {
+        "outer_variant": "Regularized",
+        "inner_stress": "Linear",
+        "cubic_beta": 0.4,
+        "regularization_gamma": 0.0,
+        "regularization_scale": 1.0
+      },
+      "H": 0.5,
+      "z_K": 0.5,
+      "z_m": 0.5,
+      "h": 0.1,
+      "Z": 4.0,
+      "molecular_nu": 1.5e-05,
+      "friction_velocity": 0.4,
+      "K_sampling": "InterfaceTrace",
+      "K_functional_version": "InterfaceTrace-v1:common-CG-matching-face:physical-local-H",
+      "source": "P_h-E_C(K); prescribed redistribution exactly zero",
+      "scalar_source_split": "frozen K/viscosity/cutoff/E_C; signed source; no local reaction rate",
+      "outer_equations": "Regularized high-Re CLS/Yap; no molecular outer diffusion",
+      "inner_viscosity": "nu+nu_tA",
+      "wall_coefficients": "derived from selected CLS q_star/kappa: c_mu=q_star^-2; c_length=kappa*q_star^1.5",
+      "chi": null,
+      "capped_normalization": null,
+      "reference": "native projection of nonconstant diffusion-balanced k_w,0",
+      "temporal_coupling": "PimpleSingleSweep",
+      "native_order": 1.0,
+      "dt": 0.000625,
+      "steps": 32.0,
+      "relaxation": 1.0,
+      "eta": 0.0,
+      "prescribed_forcing": 0.0,
+      "radial_knots": [
+        0.0,
+        0.0025,
+        0.005,
+        0.01,
+        0.02,
+        0.04,
+        0.1,
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        2.3333333333333335,
+        2.6666666666666665,
+        3.0,
+        3.333333333333333,
+        3.666666666666667,
+        4.0
+      ],
+      "tangential_knots": [
+        -4.0,
+        -3.0,
+        -2.0,
+        -1.0,
+        1.0,
+        2.0
+      ],
+      "velocity_scalar_degree": 3.0,
+      "pressure_degree": {
+        "inner": 2.0,
+        "outer": 1.0
+      },
+      "pressure_space": "inner-p2-v1",
+      "regional_pressure_degrees": {
+        "inner": 2.0,
+        "outer": 1.0
+      },
+      "tensor_unknown_estimate": 2994.0,
+      "tensor_field_size_estimates": [
+        784.0,
+        784.0,
+        784.0,
+        400.0,
+        187.0,
+        54.0
+      ],
+      "native_points": [
+        8.0,
+        8.0
+      ],
+      "source_normal_order": 16.0,
+      "source_tangential_order": 8.0,
+      "inventory": "AcceptedBudgetV1",
+      "bound_solver": "RetainedPool",
+      "k_floor_relative": 1e-08,
+      "work": {
+        "add": 2000.0,
+        "total": 20000.0,
+        "separations": 2000.0,
+        "seconds": 900.0
+      },
+      "perturbation": {
+        "amplitude": 0.0,
+        "scale": "K0",
+        "shape": "sin(pi*(x-xmin)/(xmax-xmin))^2*(1-3*(z/H)^2+2*(z/H)^3) on inner layer; zero outside",
+        "endpoint_and_external_compatible": true,
+        "maximum_relative_amplitude": 0.0
+      },
+      "xml_sha256": "84c1b819285d6e0b4eb42aa452917bb298e5cc1bb0c757b316e11933dd608e62",
+      "fresh_native_initialization": false,
+      "restart": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot-matched/trajectory/steps-000737-000768/checkpoint.3",
+      "zero_prescribed_perturbation_functions_retained": true
+    },
+    "accepted_awf_pressure_space": "inner-p2-v1",
+    "dt": 0.000625,
+    "physical_time_in_H_over_ustar": 0.3999999999999937,
+    "last_accepted_step": {
+      "solves": {
+        "outer_sweeps": 1,
+        "momentum_predictor_solves": 1,
+        "pressure_system_solves": 1,
+        "epsilon_transport_solves": 1,
+        "k_transport_solves": 1,
+        "bound_calls": 1,
+        "additional_governing_equation_solves": 0
+      },
+      "bound_activations": 0,
+      "minimum_k": {
+        "value": 0.5102454665716836,
+        "functional_kind": "Point",
+        "coordinate": [
+          1.625,
+          0,
+          0.9375
+        ],
+        "geometry": 44,
+        "inventory": "reconstruction_dense"
+      },
+      "continuous_ground": {
+        "admissible": true,
+        "minimum": 0.9878324426662677,
+        "arithmetic_scale": 0,
+        "point": [
+          -1,
+          0,
+          0
+        ],
+        "geometry": 2,
+        "extrema_checked": 16
+      },
+      "raw_mass_norm": 1.932632875254299e-06,
+      "bound_mass_norm": 0,
+      "accepted_mass_norm": 1.932632875254299e-06,
+      "seconds": 4.024549589,
+      "refreshed_matching_defect": 4.7602005066871967e-07
+    }
+  },
+  "preliminary_status": {
+    "status": "stopped_at_checkpoint",
+    "accepted_steps": 64,
+    "accepted_time": 0.04000000000000002,
+    "next_target": 80.0,
+    "completed_targets": [
+      32.0
+    ],
+    "failure": null,
+    "source_progress": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot/trajectory/progress.json",
+    "immutable_progress": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/status-capture-20261111T035938330944Z/PreliminaryP2/progress.json",
+    "progress_sha256": "81f725057ccd086500e5a64787610b22df8e92dea131873eda1d1e877d77a733",
+    "source_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot/trajectory/steps-000033-000064/checkpoint.3",
+    "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/status-capture-20261111T035938330944Z/PreliminaryP2/checkpoint",
+    "checkpoint_sha256": "7db9dcad0a5dc3af272f22f32cbf776d1cae4fa6ce3cfc405a26ca38aae86b58",
+    "coupled_state_sha256": "88e221286bbab651d7689813da451c52a4b740221e8985a5a1f87ea19a32921b",
+    "native_history_sha256": [
+      "9a1ec72207c0e219b993507d896d617679e71f6dfa250f03cfa910af3a04efea",
+      "98aa85556c7b888bbe0ed12839fca9bd73c0f02ea1a93ae0985aadc157346a61"
+    ],
+    "native_history_times_sha256": "ba30bcdd398b83c023352f57533c64ecd4dbf9df1493c30161098f36a47b3544",
+    "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot/trajectory/runtime/IncNavierStokesSolver",
+    "executable_sha256": "177ce5e54e7de514fa019122e46d3a5d709455cd091bd3023fbfa745c48c9bfc",
+    "driver_identity": null,
+    "driver_matches": false,
+    "native_identity": null,
+    "native_matches": false,
+    "supervisor_identity": null,
+    "supervisor_matches": false,
+    "cumulative_bound_integral": 0.0,
+    "case_family": "AcceptedAWFV1",
+    "case_definition": {
+      "family": "AcceptedAWFV1",
+      "case": "Accepted-AWF-05G",
+      "formulation": "CLSCalibratedBudgetAWF",
+      "formulation_version": "accepted-appendix-v1",
+      "case_identity": "Accepted-AWF-05G:cutoff-v1:inner-p2-v1",
+      "inner_refinement": "cutoff-v1",
+      "outer_refinement": "none",
+      "focused_outer_refinement_knots": [],
+      "checkpoint_reporting_interval": 8.0,
+      "focused_refinement_knots": [
+        0.0025,
+        0.005,
+        0.02,
+        0.04
+      ],
+      "appendix_sha256": "9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf",
+      "wall_policy": "CLSCalibratedBudgetAWF",
+      "companion": "regularized",
+      "companion_reason": "matched inner-pressure P2 sensitivity; faithful covariance blocker retained",
+      "model_choices": {
+        "outer_variant": "Regularized",
+        "inner_stress": "Linear",
+        "cubic_beta": 0.4,
+        "regularization_gamma": 0.0,
+        "regularization_scale": 1.0
+      },
+      "H": 0.5,
+      "z_K": 0.5,
+      "z_m": 0.5,
+      "h": 0.1,
+      "Z": 4.0,
+      "molecular_nu": 1.5e-05,
+      "friction_velocity": 0.4,
+      "K_sampling": "InterfaceTrace",
+      "K_functional_version": "InterfaceTrace-v1:common-CG-matching-face:physical-local-H",
+      "source": "P_h-E_C(K); prescribed redistribution exactly zero",
+      "scalar_source_split": "frozen K/viscosity/cutoff/E_C; signed source; no local reaction rate",
+      "outer_equations": "Regularized high-Re CLS/Yap; no molecular outer diffusion",
+      "inner_viscosity": "nu+nu_tA",
+      "wall_coefficients": "derived from selected CLS q_star/kappa: c_mu=q_star^-2; c_length=kappa*q_star^1.5",
+      "chi": null,
+      "capped_normalization": null,
+      "reference": "native projection of nonconstant diffusion-balanced k_w,0",
+      "temporal_coupling": "PimpleSingleSweep",
+      "native_order": 1.0,
+      "dt": 0.000625,
+      "steps": 32.0,
+      "relaxation": 1.0,
+      "eta": 0.0,
+      "prescribed_forcing": 0.0,
+      "radial_knots": [
+        0.0,
+        0.0025,
+        0.005,
+        0.01,
+        0.02,
+        0.04,
+        0.1,
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        2.3333333333333335,
+        2.6666666666666665,
+        3.0,
+        3.333333333333333,
+        3.666666666666667,
+        4.0
+      ],
+      "tangential_knots": [
+        -4.0,
+        -3.0,
+        -2.0,
+        -1.0,
+        1.0,
+        2.0
+      ],
+      "velocity_scalar_degree": 3.0,
+      "pressure_degree": {
+        "inner": 2.0,
+        "outer": 1.0
+      },
+      "pressure_space": "inner-p2-v1",
+      "regional_pressure_degrees": {
+        "inner": 2.0,
+        "outer": 1.0
+      },
+      "tensor_unknown_estimate": 2994.0,
+      "tensor_field_size_estimates": [
+        784.0,
+        784.0,
+        784.0,
+        400.0,
+        187.0,
+        54.0
+      ],
+      "native_points": [
+        8.0,
+        8.0
+      ],
+      "source_normal_order": 16.0,
+      "source_tangential_order": 8.0,
+      "inventory": "AcceptedBudgetV1",
+      "bound_solver": "RetainedPool",
+      "k_floor_relative": 1e-08,
+      "work": {
+        "add": 2000.0,
+        "total": 20000.0,
+        "separations": 2000.0,
+        "seconds": 900.0
+      },
+      "perturbation": {
+        "amplitude": 0.0,
+        "scale": "K0",
+        "shape": "sin(pi*(x-xmin)/(xmax-xmin))^2*(1-3*(z/H)^2+2*(z/H)^3) on inner layer; zero outside",
+        "endpoint_and_external_compatible": true,
+        "maximum_relative_amplitude": 0.0
+      },
+      "xml_sha256": "35db00d6108e9c27058a84db5d5a9ceaea8cd9616d5ba7ce2634433f464e66db",
+      "fresh_native_initialization": false,
+      "restart": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot/trajectory/steps-000001-000032/checkpoint.3",
+      "zero_prescribed_perturbation_functions_retained": true
+    },
+    "accepted_awf_pressure_space": "inner-p2-v1",
+    "dt": 0.000625,
+    "physical_time_in_H_over_ustar": 0.032000000000000015,
+    "last_accepted_step": {
+      "solves": {
+        "outer_sweeps": 1,
+        "momentum_predictor_solves": 1,
+        "pressure_system_solves": 1,
+        "epsilon_transport_solves": 1,
+        "k_transport_solves": 1,
+        "bound_calls": 1,
+        "additional_governing_equation_solves": 0
+      },
+      "bound_activations": 0,
+      "minimum_k": {
+        "value": 0.5104521541016988,
+        "functional_kind": "Point",
+        "coordinate": [
+          -3.591717321247825,
+          0,
+          0.8645041944143068
+        ],
+        "geometry": 40,
+        "inventory": "budget_awf_reporting_volume"
+      },
+      "continuous_ground": {
+        "admissible": true,
+        "minimum": 0.9941475683282913,
+        "arithmetic_scale": 0,
+        "point": [
+          1,
+          0,
+          0
+        ],
+        "geometry": 3,
+        "extrema_checked": 20
+      },
+      "raw_mass_norm": 1.8567619540763143e-06,
+      "bound_mass_norm": 0,
+      "accepted_mass_norm": 1.8567619540763143e-06,
+      "seconds": 4.454300303,
+      "refreshed_matching_defect": 1.5198783024945325e-06
+    }
+  },
+  "time_scales": {
+    "native_h0_bulk_velocity": 5.113919343023293,
+    "physical_volume": 24.000000000000004,
+    "full_outer_epsilon_area": 21.000000000000004,
+    "flow_length": 6,
+    "flow_through_time": 1.1732684067818844,
+    "H_over_ustar": 1.25,
+    "Tpoint5_wall_units": 0.4,
+    "Tpoint5_flow_through_units": 0.4261599452519411,
+    "source_native_output": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/runtime-matched/probe/RANSWallResolutionProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/verification-matched/p2-initial/case.xml",
+        "input.json",
+        "result.json"
+      ],
+      "exit_code": 0,
+      "seconds": 20.614093598967884,
+      "input_sha256": "c051a706b44f0772054019b4f076cec7d7245c1ab3f58e4cfd111239d1175599",
+      "log_sha256": "affe95b32a26b5f67c0b1397642c2463cea6f63511ccb39c7f30d56f2ca9b2bb",
+      "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/matched-final-readbacks/p2-000000/readback/result.json",
+      "output_sha256": "05ff3a2d060bb9a772d439785f997bd5a0e23c3c4f377b345c3ef9e1f7ea353c"
+    }
+  },
+  "continuation_decision": {
+    "decided_UTC": "2026-11-11T03:41:46.440612+00:00",
+    "pilot_steps": 800,
+    "pilot_time": 0.4999999999999921,
+    "pilot_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot-matched/trajectory/steps-000769-000800/checkpoint.3",
+    "pilot_checkpoint_sha256": "547b9f811aaa3869cf39baabc5c929377a335967e256881e3460772b7207da98",
+    "pilot_wall_seconds": 6370.870454140182,
+    "seconds_per_step": 7.963588067675228,
+    "correction_activations": 0,
+    "normalized_spatial_blocks": [
+      0.0035484340144404333,
+      0.001795786886302337,
+      0.006182035899063946,
+      0.0011515518452247658
+    ],
+    "mean_traction": 0.15956319361691887,
+    "decision": "continue own unchanged P2 case to the existing three complete half-unit steady windows, including full epsilon, or at most T=6",
+    "reason": "Finite-horizon response is mixed: traction unchanged within declared 1e-5 scale, inner divergence and k residual worse, vector velocity reference error and epsilon spatial residual slightly/broadly better. A separately qualified late state is needed to assess the remaining settled-reference question. No hard failure or correction; measured cost is affordable for one serial continuation.",
+    "targets": [
+      1600,
+      2400,
+      3200,
+      4000,
+      4800,
+      5600,
+      6400,
+      7200,
+      8000,
+      8800,
+      9600
+    ],
+    "estimated_wall_hours_to_T6_from_measured_pilot": 19.466548609872778,
+    "maximum_physical_time": 6,
+    "stopping_policy": "unchanged; no numerical retry, no extension beyond6, preserve hard rejection"
+  }
+}
