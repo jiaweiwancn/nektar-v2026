@@ -50,12 +50,13 @@ def observation_rule(designs,order=8,xorder=4):
             for zi,wj in zip(z,wz):
                 observations.append([4*(1+float(xi)),0,(lo+hi)/2+(hi-lo)/2*float(zi)])
                 weights.append(4*float(wi)*(hi-lo)/2*float(wj))
-    assert_allclose(sum(weights),8*(TOP-D0),rtol=2e-15)
+    assert_allclose(math.fsum(weights),8*(TOP-D0),rtol=2e-15)
     return observations,weights
 
 
 def comparison(a,b,weights,K,epsilonH):
     aa=a['open_boundary']['stations'];bb=b['open_boundary']['stations'];assert len(aa)==len(bb)==len(weights)
+    assert all(math.isfinite(w) and w>0 for w in weights),'invalid physical weights'
     assert abs(a['open_boundary']['time']-b['open_boundary']['time'])<=1e-12,'comparison physical times differ'
     result={}
     for field,amplitude in (('U',1.),('k',K),('epsilon',epsilonH),('pi',US**2)):
@@ -63,7 +64,9 @@ def comparison(a,b,weights,K,epsilonH):
         for x,y,w in zip(aa,bb,weights):
             assert_allclose(x['physical'],y['physical'],rtol=0,atol=3e-13)
             if field=='epsilon' and x['inner']:continue
-            d=np.asarray(x[field])-np.asarray(y[field]);values.append(float(np.sum(d*d)));ww.append(w)
+            d=np.asarray(x[field],float)-np.asarray(y[field],float)
+            assert np.all(np.isfinite(d)),'nonfinite required field comparison'
+            values.append(float(np.sum(d*d)));ww.append(w)
         l2=math.sqrt(sum(w*d for w,d in zip(ww,values))/sum(ww))/amplitude
         maximum=math.sqrt(max(values))/amplitude
         result[field]=dict(normalized_L2=l2,normalized_sampled_maximum=maximum,
