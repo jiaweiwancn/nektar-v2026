@@ -112,7 +112,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         if(m_assertKCoverage)Require(m_coveredKLocations.count(v.coordinate),"unprotected constitutive k evaluation: audit sample");
         ++r[0];const double k=v.Value(s,offset[K()]);r[1]=std::min(r[1],k);
         const double epsilon=inner?(constitutive?DependentEpsilon(s,v.coordinate,time,data):sentinel):
-            Point(Epsilon(),v.coordinate,std::abs(v.coordinate[2]-m_parameters.geometry.height)<1e-12?1:0).Value(s,offset[Epsilon()]);
+            GeometryPoint(Epsilon(),v.geometry,v.coordinate).Value(s,offset[Epsilon()]);
         r[2]=std::min(r[2],epsilon);
         if(!std::isfinite(k) || k<0 || (!inner && !(k>0)) || !std::isfinite(epsilon) || !(epsilon>0))++r[5];
         // The selected inner law is defined at exact local k=0.  Evaluate
@@ -433,6 +433,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
     EvaluationScope evaluation(*this,data,time);Refresh(state,time,&data);
     auto row=[&](const RANSWallGlobalPoint &p)
     {return J::Object({{"ids",J::Numbers(p.ids)},{"phi",J::Numbers(p.phi)},
+        {"constant",J::Numbers(p.constant)},
         {"derivative",J::Rows(p.derivative)},{"geometry",J::Number(p.geometry)},
         {"element",J::Number(p.element)},
         {"endpoint_roundoff_axes",J::Number(p.endpointRoundoffAxes)},

@@ -17,10 +17,10 @@ from validate_a93_a95_e94e95 import constants,oracle
 from a93_a95_e94e95_note_wall_oracle import Kernel
 
 class Reference:
-    def __init__(self,model,policy,wall):
+    def __init__(self,model,policy,wall,friction_velocity=.4):
         self.model,self.policy,self.wall=model,policy,wall
         self.q,self.kappa,self.sigma=constants(model,policy)
-        self.us=.4;self.nu=1.5e-5;self.H=2.;self.Z=4.;self.K=self.q*self.us**2
+        self.us=friction_velocity;self.nu=1.5e-5;self.H=2.;self.Z=4.;self.K=self.q*self.us**2
         self.A=self.us**3/self.kappa;self.t0=self.us**2
         self.kernel=Kernel(self.K,self.nu,self.H,.1,.2295 if wall=='EP' else self.kappa/math.sqrt(self.q),
                            2.55 if wall=='EP' else self.kappa*self.q**1.5)

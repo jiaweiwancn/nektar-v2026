@@ -28,7 +28,9 @@ std::string Maps(const RANSWallEvolutionPatch::Diagnostic &values)
 {std::vector<std::pair<std::string,std::string>> r;for(const auto &[name,v]:values)r.push_back({name,J::Numbers(v)});return J::Object(r);}
 std::string Row(const RANSWallGlobalPoint &p)
 {return J::Object({{"ids",J::Numbers(p.ids)},{"phi",J::Numbers(p.phi)},
-    {"derivative",J::Rows(p.derivative)},{"geometry",J::Number(p.geometry)}});}
+    {"constant",J::Numbers(p.constant)},{"derivative",J::Rows(p.derivative)},
+    {"geometry",J::Number(p.geometry)},{"endpoint_roundoff_axes",J::Number(p.endpointRoundoffAxes)},
+    {"raw_local_coordinate",J::Numbers(p.rawLocalCoordinate)}});}
 
 // Physical volume/face integration, deliberately independent of assembled
 // constant-test loads and prescribed-row reactions. IMEX1, unforced one sweep.

@@ -934,7 +934,8 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<"{\"schema\":1,\"native_time_map\":true,\"dimension\":"<<m_patch->Dimension()<<",\"ranks\":"<<m_session->GetComm()->GetSize()
        <<",\"time\":"<<m_time<<",\"dt\":"<<m_timestep<<",\"steps\":"<<snapshot.steps<<",\"order\":"<<m_order
        <<",\"chi\":"<<(m_patch->AcceptedAWF()?"null":RANSWallSolveJson::Number(m_patch->Parameters().chi))<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
-       <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
+       <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature)
+       <<",\"numerical_operator\":"<<Quoted(RANSWallNumericalOperatorIdentity());
     out<<",\"neutral_boundary_policy\":"<<Quoted(m_neutralBoundaryPolicy)<<",\"initialization_receipt\":"<<m_initializationReceipt;
     if(m_patch->NewModels())out<<",\"resolved_physics\":"<<Quoted(m_patch->Parameters().model.Signature());
     out<<",\"wall_formulation\":"<<m_patch->FormulationMetadata()<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())

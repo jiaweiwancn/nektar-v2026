@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-"""Production forward probe: exact interface sides and explicit near-H scope."""
+"""Production forward probe: exact interface sides and strict nearby interiors."""
 import argparse
 import json
 import os
@@ -58,9 +58,20 @@ def main():
             target=folder/'near-rejected';target.mkdir();shutil.copy2(folder/'case.xml',target/'case.xml')
             ambiguous=dict(request,grid=near,grid_sides=[-1,1,-1,1])
             code,body=run(target,a.probe,ambiguous)
-            reason='unsupported diagnostic sample: near-interface coordinates require exact H and an explicit side'
+            reason='ambiguous interface sample: declare inner=-1 or outer=+1 at H; interior side must be zero'
             assert code!=0 and reason in (target/'probe.log').read_text()
             rows[-1]['near_coordinate_scope_rejection']=dict(exit_code=code,reason=reason,physical_state_valid_on_supported_grid=True)
+            target=folder/'near-interiors';target.mkdir();shutil.copy2(folder/'case.xml',target/'case.xml')
+            near_request=dict(request,grid=[[0.,0.,ref.H-5e-13],[0.,0.,ref.H+5e-13]],grid_sides=[0,0])
+            code,body=run(target,a.probe,near_request)
+            assert code==0 and body['status']=='pass'
+            assert body['observation']['grid_regions']==[0,1]
+            assert [v['sample_index'] for v in body['native_constitutive']['samples']]==[1]
+            for j,row in enumerate(body['test_basis']):
+                g=body['observation']['grid_geometry_by_field'][j]
+                assert row['velocity_k']['geometry']==g[0]==g[2]==row['pressure']['geometry']
+                if j==1:assert row['epsilon']['geometry']==g[3]==g[0]
+            rows[-1]['nearby_interiors_remain_in_containing_regions']=True
             if a.legacy_probe:
                 ordinary=dict(request,grid=[[0.,0.,1.5],[0.,0.,ref.H],[0.,0.,ref.H],[0.,0.,2.5]],grid_sides=[0,-1,1,0])
                 packets=[]
@@ -81,7 +92,7 @@ def main():
                     rows[-1]['before_reproduction']=dict(exit_code=code,reason='Auxiliary height outside [0,H]',
                         ordinary_physical_state_valid=True,scope='diagnostic selector failure, not a constitutive-domain failure')
     result=dict(status='pass',checks=rows,probe=runtime_identity(a.probe),legacy_probe=runtime_identity(a.legacy_probe) if a.legacy_probe else None,
-                scope='six natural model/wall initialization audits only; exact interface sides supported, ambiguous near-H observations rejected; no timestep or governing solve, exact/interior samples unchanged')
+                scope='six natural model/wall initialization audits only; exact interface sides are explicit; nearby interiors retain their containing cells; no timestep or governing solve')
     write_json(out/'results.json',result);print(str(out));return 0
 
 
