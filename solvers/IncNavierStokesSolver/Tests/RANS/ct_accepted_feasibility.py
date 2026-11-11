@@ -225,6 +225,9 @@ def main():
                             uncertainty={key:abs(row[key]-tight[key]) for key in ('J0','J2','finite_nu_production','matching_velocity')}
                             if c.cutoff is not None:uncertainty['minimum_k_over_K']=abs(row['reference_k']['minimum_over_K']-tight['reference_k']['minimum_over_K'])
                             row.update(surface=surface,scenario=name,H_m=Hm,K_factor=factor,quadrature_uncertainty=uncertainty)
+                            if c.cutoff is not None:
+                                require(max(abs(m['defect']) for m in row['weak_moments'])<=2e-9*c.A,
+                                        'flat_weak_moment_identity')
                             row['native']=native_compare(process,c,row);flat.append(row)
         for model in contract['physics']['models']:
             for surface in ('S','R'):
@@ -242,7 +245,18 @@ def main():
                         row.update(surface=surface,H_m=Hm,x_over_Hh=x,thin_layer_eligible=thin,global_normal_reach_bound=12.5/math.pi**2,within_sufficient_global_reach=reach,
                             geometric_classification='admissible_geometry' if thin and reach and row['geometry_valid'] else 'geometric_exclusion',covariance='not_certified: frozen normal column has no declared complete terrain velocity/strain')
                         if curvature==0 and c.cutoff is not None:
-                            f=Column(model,K,H,hr,ref['nu']).result();require(abs(row['cutoff']-f['cutoff'])<1e-13,'zero_curvature_cutoff_limit')
+                            f=Column(model,K,H,hr,ref['nu']).result()
+                            root=math.exp(brentq(lambda z:float(c.sink_integral(H,math.exp(z)))-c.PJ,
+                                math.log(H)-64,math.log(H),xtol=5e-14))
+                            require(abs(root-f['cutoff'])<=2e-12*H,'zero_curvature_weighted_cutoff_limit')
+                            require(abs(row['reference_k']['minimum_over_K']-f['reference_k']['minimum_over_K'])<=2e-12,
+                                    'zero_curvature_k_limit')
+                        if c.cutoff is not None and (abs(x) in (0.,1.25,2.5,3.) or abs(abs(x)-2.5)<2e-8):
+                            t=Column(model,K,H,hr,ref['nu'],curvature,96).result()
+                            row['quadrature_uncertainty']=dict(cutoff_over_H=abs(row['cutoff']-t['cutoff'])/H,
+                                minimum_k_over_K=abs(row['reference_k']['minimum_over_K']-t['reference_k']['minimum_over_K']),
+                                production=abs(row['finite_nu_production']-t['finite_nu_production'])/max(c.PJ,1e-30))
+                            require(max(row['quadrature_uncertainty'].values())<=2e-8,'curved_column_quadrature_unresolved')
                         curved.append(row)
         # Deliberate molecular-only cutoff rejection, not a failed physical case.
         controls=[]
