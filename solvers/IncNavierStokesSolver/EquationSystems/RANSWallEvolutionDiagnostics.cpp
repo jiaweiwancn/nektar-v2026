@@ -1116,8 +1116,10 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
         {"residual_order",J::Quote("u,v,k,entire outer epsilon,inner continuity,outer continuity,gauge,boundary/trace; consistent mass dual physical scaling")},
         {"component_norm_warning",J::Quote("separately normed regional/source/diffusion/interface contributions are not linearly additive")},
         {"observations",J::List(samples)},{"interfaces",J::List(interfaces)},
-        {"dependent_trace_action",passiveDiagnostics?J::List([&](){std::vector<std::string> rows;for(const auto &[id,row]:traceAction)
-            rows.push_back(J::Object({{"row",J::Number(id)},{"free_K_action",J::Constraints(row)}}));return rows;}()):"null"},
+        {"dependent_trace_action",passiveDiagnostics?J::List([&](){std::vector<std::string> rows;
+            for(const auto &[id,row]:traceAction)
+            {rows.push_back(J::Object({{"row",J::Number(id)},{"free_K_action",J::Constraints(row)}}));}
+            return rows;}()):"null"},
         {"passive_diagnostics",passiveDiagnostics?WJPassiveDiagnostics(state,stageAlpha>0?stageHistory:state,stageAlpha,time,data):"null"},
         {"strong_divergence_sampled_Linf",J::Number(divergence)},{"strong_divergence_witness",divergenceWitness},{"fast_independent_gradient_max_defect",J::Numbers(gradientDefect)},{"independent_gradient_observations",J::Number(independentGradients)},{"evaluation_basis_row_norm_max",J::Numbers(basisNorm)},{"arithmetic_evaluation_sensitivity",J::Numbers(evaluationSensitivity)},
         {"audit",WJAuditPacket(audit,state,stageAlpha>0?stageHistory:state,stageAlpha,time,stageAlpha>0?"accepted_checkpoint_stage":"startup_readback")}});

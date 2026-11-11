@@ -19,25 +19,28 @@ def constraint_estimate(row,coefficient_uncertainty,prescribed_uncertainty=0.,ev
             row['prescribed_accumulation'],coefficient_uncertainty,prescribed_uncertainty,evaluation_uncertainty]
     require(all(math.isfinite(x) and x>=0 for x in values),'invalid constraint uncertainty input')
     n=max(1,len(row['row']));eps=np.finfo(float).eps
-    accumulation=100*eps*(32*n+16)*(1+row['absolute_accumulation']+row['prescribed_accumulation'])
+    accumulation=2*100*eps*(32*n+16)*(1+row['absolute_accumulation']+row['prescribed_accumulation'])
     free=row['free_row_L2']*coefficient_uncertainty
-    data=100*row['gross_row_L2']*prescribed_uncertainty
-    evaluation=100*evaluation_uncertainty
+    data=2*100*row['gross_row_L2']*prescribed_uncertainty
+    evaluation=2*100*evaluation_uncertainty
     return dict(total=free+data+evaluation+accumulation,free_state=free,prescribed_data_and_lift=data,
         basis_geometry_evaluation=evaluation,accumulation=accumulation,free_row_L2=row['free_row_L2'],
-        safety_factor=100,scope='finite frozen-system estimate through actual elimination/lift map; not a nonlinear theorem')
+        safety_factor=100,comparison_trajectories=2,scope='finite frozen-system estimate through actual elimination/lift map; not a nonlinear theorem')
 
 
 def boundary_uncertainty(measurement,arithmetic,rule_settings):
     """Tighten only constrained differential observations; pressure stays free.
 
     One full-domain pressure alignment is already used by physical_norms. The
-    retained global pressure envelope is doubled for its subtraction of the
-    full-volume mean. There is no regional or boundary-only pressure gauge.
+    pressure observation row is composed with the full-volume gauge row. There
+    is no regional or boundary-only pressure gauge; the original global
+    pressure estimate is retained wherever it is larger.
     """
     weights=boundary_rule(**{k:v for k,v in rule_settings.items() if k!='all_faces'})
     rows=measurement['observations'];values=[];max_free=np.zeros(4);proof=[]
     systems=arithmetic['systems'];floors=arithmetic['estimated_comparison_floor'];sampled=arithmetic['estimated_sampled_comparison_floor']
+    mean={int(region['offset'])+i:float(value) for region in measurement['passive_diagnostics']['pressure_regions'] for i,value in enumerate(region['gauge_mean_row'])}
+    pressure_coefficient=floors['reduced_pressure']/math.sqrt(systems['pressure']['physical_mass_operator_bound'])
     for r in rows:
         x,_,z=r['position'];on_boundary=x in (0.,1.) or z==2.
         v=np.zeros(6)
@@ -53,7 +56,15 @@ def boundary_uncertainty(measurement,arithmetic,rule_settings):
             if on_boundary:max_free[j]=max(max_free[j],desc['free_row_L2'])
             if on_boundary and (desc['free_row_L2']>1e-12 or z in (1.,2.)):
                 proof.append(dict(position=r['position'],geometry=r['geometry'],field=name,estimate=estimate))
-        v[4]=2*sampled['reduced_pressure'];v[5]=v[4]+2*v[2]/3
+        pressure_row={i:-value for i,value in mean.items()}
+        desc=r['constraint_rows'][4]
+        for i,value in desc['row']:pressure_row[int(i)]=pressure_row.get(int(i),0.)+value
+        pressure_norm=math.sqrt(sum(value*value for value in pressure_row.values()))
+        pressure_accumulation=2*100*np.finfo(float).eps*(32*len(pressure_row)+16)*(1+desc['absolute_accumulation'])
+        v[4]=max(sampled['reduced_pressure'],pressure_norm*pressure_coefficient+pressure_accumulation)
+        v[5]=v[4]+2*v[2]/3
+        if on_boundary and z==2.:proof.append(dict(position=r['position'],geometry=r['geometry'],field='reduced_pressure',
+            gauge_aligned_free_row_L2=pressure_norm,global_retained=sampled['reduced_pressure'],estimate=float(v[4])))
         values.append(v)
     q=np.array(values);bw=[];seen=set()
     for r in rows:

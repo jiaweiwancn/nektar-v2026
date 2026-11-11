@@ -72,6 +72,10 @@ class Study(WJ4Study):
             write(tree,xml);write_once(folder/'requested-intent.json',options);write_once(folder/'xml-identity.json',xml_identity(xml))
         report=folder/'case.evolution.json';inputs=[xml]+([Path(cp)/'State.bin'] if cp else [])
         r=self.execute(folder,[self.a.solver,xml],inputs,options,steps,[report]);d=read(report) if report.exists() else None
+        if d and r['exit_code']==0 and not d.get('failure'):
+            require(len(d['pimple_attempts'])==steps,'native completed attempt count differs from immutable target')
+            start=checkpoint_payload(cp)['steps'] if cp else 0
+            require(d['steps']==start+steps and abs(d['time']-(start+steps)*dt)<=2e-15,'native step/time target differs')
         self.s['execution'][name]=dict(status='PASS' if r['exit_code']==0 and d and not d.get('failure') else 'OBSTRUCTED',receipt=str(folder/'receipt.json'),
             receipt_sha256=file_hash(folder/'receipt.json'),report=str(report),report_sha256=file_hash(report) if report.exists() else None,attempts=r['actual_attempts'],role=role)
         self.save();return d,r,folder
@@ -171,7 +175,7 @@ class Study(WJ4Study):
                     error=abs(row['L2']-qc['errors'][kind][scope]['fields'][field]['L2']);require(error<=1e-10,'observation quadrature sensitivity exceeds declared absolute floor')
                     quadrature[kind+'/'+scope+'/'+field]=error
         entry=dict(initial=c0,terminal=c,unknowns=len(d['state']),run_seconds=r['seconds'],seconds_per_step=r['seconds']/32,
-            quadrature=dict(order=[6,8],xorder=[4,6],absolute_floor=1e-10,changes=quadrature),status=c['errors']['accuracy_gate']['status'])
+            quadrature=dict(order=[6,8],xorder=[4,6],absolute_floor=1e-10,changes=quadrature),status=aggregate(dict(startup=c0['errors']['accuracy_gate'],terminal=c['errors']['accuracy_gate']))['status'])
         self.s.setdefault('screens',{})[mesh]=entry;self.s['components']['local_screen']=component(entry['status'],mesh=mesh);self.save()
 
     def select(self):
@@ -280,6 +284,8 @@ class Study(WJ4Study):
             immutable_inputs=immutable,producer=rows[-2]['report'],rejected_report=str(j/'case.evolution.json'),failed_candidate_sha256=state_hash(rejected['rejected_state']));self.save()
 
     def finish(self):
+        totals=self.ledger.totals()
+        self.s['components']['actual_resource']=component('PASS' if totals['attempts']<=800 and totals['seconds']<=10800 else 'RESOURCE_LIMIT',totals=totals)
         self.s['qualification']=aggregate(self.s['components']);self.s['stationarity']='NOT_TARGETED; WJ-4 NOT_REACHED remains unchanged';self.save()
 
 
