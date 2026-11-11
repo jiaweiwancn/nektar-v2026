@@ -15,6 +15,7 @@ from cls_epawf_m3_cases import set_info,set_parameter,write
 from validate_wj_h1 import run,require,save,sha
 from compare_cls_epawf_pimple import same_history
 from wj_h2_weak import independent_weak
+from run_wj_h2 import load
 
 
 def independent_boundary(report):
@@ -65,7 +66,7 @@ def main():
         if mutate:
             tree=ET.parse(xml);mutate(tree.getroot());write(tree.getroot(),xml)
         receipt=run([a.solver.resolve(),xml.resolve()],folder,timeout=600,expected_failure=reason)
-        report=json.loads(xml.with_suffix('.evolution.json').read_text());summary['runs'][label]=dict(report=str(xml.with_suffix('.evolution.json')),receipt=receipt)
+        report=load(xml.with_suffix('.evolution.json'));summary['runs'][label]=dict(report=str(xml.with_suffix('.evolution.json')),receipt=receipt)
         return report,xml
     baseline,bxml=native('two')
     require(baseline['steps']==2 and baseline['failure']=='','analytic native control did not accept both steps')
@@ -121,6 +122,9 @@ def main():
         checks.append(dict(path=str(out),sha256=sha(out),boundary=independent_boundary(report),assembly=c['assembly_checks'],weak=independent_weak(c['weak_checks'],report)))
     summary.update(status='PASS',native_attempts=7,checks=checks,
         exact_off_on_and_restart=True,frozen_and_rejected_rollback=True,unchanged_producer=immutable)
-    save(root/'summary.json',summary);print(json.dumps(dict(status='PASS',root=str(root),native_attempts=7)))
+    save(root/'summary.json',summary)
+    from test_wj_h2_reader import check
+    check(a.probe,root/'summary.json',root/'producer-reader-fixtures')
+    print(json.dumps(dict(status='PASS',root=str(root),native_attempts=7)))
 
 if __name__=='__main__':main()

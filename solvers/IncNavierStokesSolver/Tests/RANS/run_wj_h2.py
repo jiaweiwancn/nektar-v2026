@@ -16,7 +16,10 @@ from wj7_command import owned_groups
 THREADS={k:'1' for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS',
     'BLIS_NUM_THREADS','NUMEXPR_NUM_THREADS','VECLIB_MAXIMUM_THREADS')}
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
-def load(p):return json.loads(Path(p).read_text())
+def load(p):
+    # Native streams may emit binary64 negative zero as the JSON number -0.
+    # Preserve its sign without converting integer step/geometry indices to float.
+    return json.loads(Path(p).read_text(),parse_int=lambda v:-0.0 if v=='-0' else int(v))
 def save(p,v):
     tmp=Path(str(p)+'.tmp');tmp.write_text(json.dumps(v,indent=2,allow_nan=False)+'\n');os.replace(tmp,p)
 def size(p):return int(subprocess.check_output(['du','-sb',str(p)],text=True).split()[0])

@@ -105,7 +105,8 @@ class Measurements:
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--observer',type=Path,required=True)
-    p.add_argument('--kernel',type=Path,required=True);a=p.parse_args();m=Measurements(a.root,a.observer)
+    p.add_argument('--kernel',type=Path,required=True);p.add_argument('--output-version',default='observations-v1')
+    a=p.parse_args();m=Measurements(a.root,a.observer,a.output_version)
     study=load(a.root/'study-v1/progress.json');records=study['runs']
     c=Completion();designs=[load(Path(records[k]['xml']).with_name('case-design.json')) for k in ('base-pilot-on','refined-pilot')]
     result=dict(status='OBSERVATIONS_COMPLETE',original_study='OBSTRUCTED',unreached_target=8.,comparisons={},profiles={})
