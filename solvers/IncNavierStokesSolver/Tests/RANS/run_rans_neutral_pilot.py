@@ -37,7 +37,7 @@ def selected_knots(ref,a):
  return knots
 
 def configure(folder,a,ref,steps,restart=None):
- case_xml(folder,a.model,a.policy,a.wall,steps=steps,dt=a.dt,restart=restart,descriptor_probe=a.root/'runtime/RANSNewModelsProbe',radial_knots=selected_knots(ref,a),degree=a.degree,quadrature=Q[a.quadrature_index],checkpoint_interval=max(steps,1),cache=a.cache,boundary_policy='FrozenReferenceV1',xknots=[-1.,0.,1.] if a.columns==2 else [-1.,1.])
+ case_xml(folder,a.model,a.policy,a.wall,steps=steps,dt=a.dt,restart=restart,descriptor_probe=(getattr(a,'runtime_root',None) or a.root/'runtime')/'RANSNewModelsProbe',radial_knots=selected_knots(ref,a),degree=a.degree,quadrature=Q[a.quadrature_index],checkpoint_interval=max(steps,1),cache=a.cache,boundary_policy='FrozenReferenceV1',xknots=[-1.,0.,1.] if a.columns==2 else [-1.,1.])
  root=ET.parse(folder/'case.xml').getroot();set_info(root,'RANSWallPilotAccuracy','NeutralV1')
  if a.velocity_amplitude:
   # Streamfunction a*(1-x*x)^2*f(z). Both f,f' vanish at each
@@ -57,11 +57,11 @@ def accuracy(ref,packet,initial,weights):
  return dict(reference_error=scaled(rep,ref),change_from_initial=scaled(compare_samples(packet,base,weights),ref),gradient_weighted_RMS=rep['gradient_weighted_RMS'],global_pressure_gauge=rep['global_pressure_gauge_shifts'])
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--label',required=True);p.add_argument('--model',choices=('E94E95','A95','A93'),default='E94E95');p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);p.add_argument('--degree',type=int,choices=(4,5),default=5);p.add_argument('--level',type=int,default=0);p.add_argument('--refinement',choices=('Base','Interface8V1'),default='Base');p.add_argument('--columns',type=int,choices=(1,2),default=1);p.add_argument('--dt',type=float,default=.0001);p.add_argument('--max-time',type=float,default=.0016);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=1);p.add_argument('--velocity-amplitude',type=float,default=0.);p.add_argument('--mesh-file',type=Path);p.add_argument('--milestones',type=float,nargs='+',default=list(TARGETS));p.add_argument('--cache',choices=('Off','ExactStepV1'),default='ExactStepV1');p.add_argument('--resume',action='store_true');p.add_argument('--timeout',type=int,default=3600);p.add_argument('--initialize-only',action='store_true');a=p.parse_args();a.root=a.root.resolve()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--runtime-root',type=Path);p.add_argument('--label',required=True);p.add_argument('--model',choices=('E94E95','A95','A93'),default='E94E95');p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);p.add_argument('--degree',type=int,choices=(4,5),default=5);p.add_argument('--level',type=int,default=0);p.add_argument('--refinement',choices=('Base','Interface8V1'),default='Base');p.add_argument('--columns',type=int,choices=(1,2),default=1);p.add_argument('--dt',type=float,default=.0001);p.add_argument('--max-time',type=float,default=.0016);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=1);p.add_argument('--velocity-amplitude',type=float,default=0.);p.add_argument('--mesh-file',type=Path);p.add_argument('--milestones',type=float,nargs='+',default=list(TARGETS));p.add_argument('--cache',choices=('Off','ExactStepV1'),default='ExactStepV1');p.add_argument('--resume',action='store_true');p.add_argument('--timeout',type=int,default=3600);p.add_argument('--initialize-only',action='store_true');a=p.parse_args();a.root=a.root.resolve()
  if a.degree<4 or a.level<0:raise ValueError('declared pilot candidate requires degree >=4, nonnegative refinement')
  if a.milestones!=sorted(set(a.milestones)) or a.milestones[0] not in (.0016,.016) or any(t<=0 or t>.5 for t in a.milestones):raise ValueError('invalid bounded milestone contract')
- r=a.root;out=r/'campaigns'/a.label;ref=Reference(a.model,a.policy,a.wall)
- os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
+ r=a.root;runtime=a.runtime_root.resolve() if a.runtime_root else r/'runtime';out=r/'campaigns'/a.label;ref=Reference(a.model,a.policy,a.wall)
+ os.environ.update(THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'))
  # Resource suspension can exceed the legacy sampler's ten-minute wall limit.
  # This operational deadline does not enter any numerical request or history.
  os.environ.setdefault('NEKTAR_RANS_PROBE_TIMEOUT',str(min(a.timeout,14400)))
@@ -72,12 +72,12 @@ def main():
   g0,w0=grid,weights;grid=[];weights=[]
   for xl,xr in [(-1.,0.),(0.,1.)]:
    for q,w in zip(g0,w0,strict=True):grid.append([(xl+xr)/2+(xr-xl)*q[0]/2,q[1],q[2]]);weights.append(w*(xr-xl)/2)
- sampler=r/'runtime/RANSPreservationProbe';solver=r/'runtime/IncNavierStokesSolver'
+ sampler=runtime/'RANSPreservationProbe';solver=runtime/'IncNavierStokesSolver'
  if out.exists() and not a.resume:raise FileExistsError('destination exists: explicit identical resume required')
  with nullcontext(tempfile.mkdtemp(prefix='pilot-request-',dir=r/'tmp')) as tmp:
   pre=Path(tmp)/'seed';configure(pre,a,ref,0)
   normalized=ET.parse(pre/'case.xml').getroot();set_info(normalized,'RANSWallCheckpoint','DECLARED_NEW_OUTPUT')
-  intent=dict(schema='ReadOnlyInitializationIntentV1',normalized_session_sha256=__import__('hashlib').sha256(ET.tostring(normalized)).hexdigest(),grid=grid,weights=weights,operations=['read-only neutral binding']+(['zero-step native initialization'] if a.velocity_amplitude else []),runtime={n:runtime_identity(r/'runtime'/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},time=0,steps=0)
+  intent=dict(schema='ReadOnlyInitializationIntentV1',normalized_session_sha256=__import__('hashlib').sha256(ET.tostring(normalized)).hexdigest(),grid=grid,weights=weights,operations=['read-only neutral binding']+(['zero-step native initialization'] if a.velocity_amplitude else []),runtime={n:runtime_identity(runtime/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},time=0,steps=0)
   with (pre/'immutable-initialization-intent.json').open('x') as f:json.dump(intent,f,sort_keys=True)
   seed=probe(sampler,pre,dict(operation='neutral',grid=grid,export_basis=False))
   initial=dict(seed['observation'],grid_weights=weights);actual_initial=None
@@ -92,7 +92,7 @@ def main():
    dt=a.dt,horizons=a.milestones,integration='native IMEX1 PimpleSingleSweep',history='native same-method restart; independently initialized for each dt',
    initialization='constrained neutral projection plus declared divergence-free streamfunction',velocity_amplitude=a.velocity_amplitude,perturbation='StreamfunctionPolyV1',
    raw_neutral_sha256=exact_vector_hash(seed['reference']),reference_sha256=exact_vector_hash(seed['reference']),boundary_policy='FrozenReferenceV1',boundary=seed['fixed_boundary'],
-   runtime={n:runtime_identity(r/'runtime'/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},
+   runtime={n:runtime_identity(runtime/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},
    evaluation=dict(grid=grid,weights=weights,sides=[0]*len(grid),export_basis=False,metric='physical weighted RMS and true L2; common global pressure gauge'),
    gates=dict(field_RMS=1e-3,vertical_RMS=1e-4,wall_traction=1e-3,interface_traction=1e-3,spatial_ratio=.85,temporal_fraction=.1,comparison_floor=1e-7),cache=a.cache,accuracy_policy='NeutralV1')
   if a.mesh_file:request['declared_mesh']=dict(file_sha256=sha(a.mesh_file),specification=load(a.mesh_file))

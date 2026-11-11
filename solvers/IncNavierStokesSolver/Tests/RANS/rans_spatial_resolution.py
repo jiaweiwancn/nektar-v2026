@@ -85,7 +85,8 @@ def test_parent_geometries(coarse,fine):
         matches=[c for c in coarse['observation']['elements'] if all(c['lower'][a]<center[a]<c['upper'][a] for a in (0,2))]
         if len(matches)!=1:raise ValueError('fine element has no unique common parent')
         c=matches[0]
-        if any(e['lower'][a]<c['lower'][a]-2e-13 or e['upper'][a]>c['upper'][a]+2e-13 for a in (0,2)):raise ValueError('common tests are not a polynomial subspace')
+        allowance=2e-13 if fine.get('source_numerical_operator')=='LegacyCoordinateToleranceV1' else 0.
+        if any(e['lower'][a]<c['lower'][a]-allowance or e['upper'][a]>c['upper'][a]+allowance for a in (0,2)):raise ValueError('common tests are not a polynomial subspace')
         parents[e['geometry']]=c['geometry']
     return [parents[q['velocity_k']['geometry']] for q in fine['observation']['volume']]
 
@@ -134,4 +135,7 @@ def common_test(coarse,fine,cross,ref):
             value=p.T@np.array(fr['terms'][k])[fo['offsets'][b]:fo['offsets'][b]+nf];terms[k]=norm(value)
         result[name]=dict(prolongation_sha256=hashlib.sha256(np.asarray(P,dtype='<f8').tobytes()).hexdigest(),identity_checks=condition,coarse_common_mass_dual=norm(own),fine_restricted_common_mass_dual=norm(restricted),restricted_load_difference=norm(restricted-own),restricted_load=restricted.tolist(),common_free_ids=free.tolist(),common_mass_sha256=hashlib.sha256(np.asarray(M,dtype='<f8').tobytes()).hexdigest(),restricted_term_mass_dual=terms,common_free_test_count=len(free),fine_full_count=nf)
     shifts=np.max(np.abs(np.array([q['coordinate'] for q in rows])-np.array(cross['observation']['grid'])),axis=1)
-    return dict(status='pass',raw_to_effective_test_coordinate=dict(maximum=float(np.max(shifts,initial=0.)),shifted_points=int(np.count_nonzero(shifts)),meaning='native basis-coordinate clamp under locator tolerance; physical source coordinates remain unchanged; shifts require a separate physical element-ownership check'),fields=result,definition='P^T r_f on identical coarse free tests and physical coarse mass/normalization; full fine norms retained separately; inclusion identities do not certify physical quadrature ownership')
+    legacy=fine.get('source_numerical_operator')=='LegacyCoordinateToleranceV1'
+    if not legacy and np.any(shifts):raise ValueError('corrected common tests changed physical coordinates')
+    meaning='explicit legacy read-only basis-coordinate compatibility' if legacy else 'GeneratedVolumeOwnerV1: contained generating geometry and unchanged physical coordinates; no clamp'
+    return dict(status='pass',raw_to_effective_test_coordinate=dict(maximum=float(np.max(shifts,initial=0.)),shifted_points=int(np.count_nonzero(shifts)),meaning=meaning),fields=result,definition='P^T r_f on identical coarse free tests and physical coarse mass/normalization; full fine norms retained separately; inclusion identities do not certify physical quadrature ownership')
