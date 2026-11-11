@@ -59,10 +59,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PicardKResidual(
 RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     int block, const Vector &s, const Vector &history, double alpha,
     double time, const RANSWallEvolutionData &data,
-    const std::map<int, double> &external) const
+    const std::map<int, double> &external,bool diagnosticRawScalar) const
 {
     RANSWallTiming::Scope timing(block==0?"flow.assembly":block==Epsilon()?"epsilon.assembly":"k.assembly");
     const bool flow = block == 0;
+    Require(!diagnosticRawScalar || (NewModels() && PimpleSingleSweep() &&
+        !Mapped() && m_dimension==2 && external.empty() && (block==K() || block==Epsilon())),
+        "raw frozen scalar matrix is a read-only flat2D one-sweep diagnostic");
     PicardBlock system;
     std::vector<int> index(Size(), -1);
     for (int row = 0; row < Size(); ++row)
@@ -304,7 +307,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 system.residual[gauge] += s[id] * w;
             }
     }
-    else if (block == Epsilon())
+    else if (block == Epsilon() && !diagnosticRawScalar)
     {
         // Hold Phi fixed for this scalar solve. Free transport rows retain
         // the columns of the matching trace, including its update.
@@ -321,6 +324,41 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
         }
     }
     return system;
+}
+
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FrozenScalarWeakLoad(
+    int block,const Vector &frozen,const Vector &solved,const Vector &previous,
+    double alpha,double time,const RANSWallEvolutionData &data) const
+{
+    Require(frozen.size()==Size() && solved.size()==Size() && previous.size()==Size() && alpha>0,
+            "invalid frozen scalar audit state/history");
+    const auto native=AssemblePicardBlock(block,frozen,previous,alpha,time,data,{},true);
+    Vector delta(native.rows.size());
+    for(int j=0;j<delta.size();++j)delta[j]=solved[native.rows[j]]-frozen[native.rows[j]];
+    const auto action=Multiply(native.matrix,delta);auto result=native.residual;
+    Require(result.size()==size[block],"raw scalar audit lost a native row");
+    for(int j=0;j<result.size();++j)result[j]+=action[j];
+    return result;
+}
+
+std::string RANSWallEvolutionPatch::MixedSpaceRankPacket(const Vector &state,double time,
+    const RANSWallEvolutionData &data) const
+{
+    Require(NewModels() && PimpleSingleSweep() && !Mapped() && m_dimension==2 && Size()<500,
+            "mixed rank packet is restricted to a small canonical new-model one-sweep fixture");
+    const auto external=ExternalConstraints(time,data);
+    const auto block=AssemblePicardBlock(0,state,state,1.,time,data,external);
+    Vector constant(block.rows.size());int velocity=0;
+    for(int j=0;j<block.rows.size();++j)
+    {
+        const int row=block.rows[j];if(row<offset[K()])++velocity;
+        for(int b=InnerPressure();b<=OuterPressure();++b)
+            if(row>=offset[b] && row<offset[b+1])constant[j]=m_constants[b][row-offset[b]];
+    }
+    return J::Object({{"schema",J::Quote("NativeMixedSpaceRankV1")},{"rows",J::Numbers(block.rows)},
+        {"matrix",J::Rows(block.matrix)},{"velocity_size",J::Number(velocity)},
+        {"pressure_constant_with_zero_gauge",J::Numbers(constant)},
+        {"scope",J::Quote("actual constrained one-sweep mixed matrix, alpha=1; one common pressure gauge; finite fixture only, not an inf-sup theorem")}});
 }
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ProjectPicardGround(

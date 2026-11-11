@@ -368,6 +368,12 @@ public:
     double WallDissipation(const Vector &state,const RANSWallCoordinate &point,
         const SolverUtils::EquilibriumAWFProfiles &profile) const;
     std::string Signature() const;
+    // Read-only audit of the actual frozen one-sweep scalar matrix, before
+    // prescribed/trace row replacement. Never used to advance a solution.
+    Vector FrozenScalarWeakLoad(int block,const Vector &frozen,const Vector &solved,
+        const Vector &previous,double alpha,double time,const RANSWallEvolutionData &data) const;
+    std::string MixedSpaceRankPacket(const Vector &state,double time,
+        const RANSWallEvolutionData &data) const;
     const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
     int m_massOrder=0,m_volumeOrder=0,m_interfaceOrder=0;
@@ -415,7 +421,7 @@ private:
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
     PicardBlock AssemblePicardBlock(int block,const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,
-        const std::map<int,double> &external) const;
+        const std::map<int,double> &external,bool diagnosticRawScalar=false) const;
     Vector ProjectPicardGround(const Vector &state,const PicardBlock &block,
         const Factor &factor,const Vector &step,double relaxation,int &cuts,
         std::string *diagnostic=nullptr) const;
