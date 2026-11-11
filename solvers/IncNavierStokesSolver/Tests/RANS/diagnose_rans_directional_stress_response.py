@@ -36,15 +36,16 @@ def main():
                 iso=-2*k*div/3;nonlinear=-float(np.sum(Q*g));linear=2*nt*float(np.sum(sd*sd))
                 max_defect=max(max_defect,abs(R[1,1]-(scalar+divergence)),abs(Q[1,1]),
                     abs(div-sample['raw_divergence']),abs(sample['P']-(iso+nonlinear+linear)))
-                rows.append([R[1,1]/ref.us**2,scalar/ref.us**2,divergence/ref.us**2,
-                    div/(ref.us/ref.H),sample['P']/(ref.A/ref.H),iso/(ref.A/ref.H),
-                    nonlinear/(ref.A/ref.H),linear/(ref.A/ref.H)])
+                rows.append([R[1,1],scalar,divergence,div,sample['P'],iso,nonlinear,linear])
                 identities.append((index,sample['coordinate'],sample['side'],sample['geometry']))
             if kind=='perturbed':previous=identities
             else:require(previous==identities,'stress_decomposition_baseline_sample_mismatch')
             require(len(rows)==len(weights),'stress_decomposition_weights_differ')
             arrays.append(np.array(rows))
-        responses.append(arrays[0]-arrays[1])
+        # Match the sealed comparator: subtract dimensional native values
+        # first, then scale. Scaling before subtraction loses small responses
+        # to cancellation against the O(K) normal stress.
+        responses.append((arrays[0]-arrays[1])/np.array([ref.us**2]*3+[ref.us/ref.H]+[ref.A/ref.H]*4))
     require(max_defect<=5e-14,'stress_decomposition_native_identity_defect')
     intent=dict(schema='DirectionalStressResponseDecompositionV1',comparison_sha256=sha(a.comparison/'results.json'),
         packet_sha256=inputs,response_vectors_sha256=sha(vector_file),configuration=cfg,time=.016,
