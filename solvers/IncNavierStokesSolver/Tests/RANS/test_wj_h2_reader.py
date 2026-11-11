@@ -28,7 +28,7 @@ def check(probe, summary, output):
     immutable={str(p):sha(p) for p in (rp,Path(cp)/'State.bin')}
     receipts={}
     def observe(label,request,reason=None):
-        folder=output/label;folder.mkdir();inp=folder/'request.json';out=folder/'result.json';save(inp,request)
+        folder=output/label;folder.mkdir();inp=folder/'packet.json';out=folder/'result.json';save(inp,request)
         receipts[label]=run([Path(probe).resolve(),xml,inp,out],folder,timeout=180,expected_failure=reason)
         return json.loads(out.read_text()) if reason is None else None
     earlier=observe('earlier',packet)

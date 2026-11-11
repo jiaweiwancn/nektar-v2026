@@ -23,6 +23,13 @@ def load(p):
 def save(p,v):
     tmp=Path(str(p)+'.tmp');tmp.write_text(json.dumps(v,indent=2,allow_nan=False)+'\n');os.replace(tmp,p)
 def size(p):return int(subprocess.check_output(['du','-sb',str(p)],text=True).split()[0])
+def input_files(argv):
+    result={}
+    for v in argv:
+        try:is_file=Path(v).is_file()
+        except OSError:is_file=False  # e.g. a long CTest regex, retained in argv
+        if is_file:result[v]=dict(sha256=sha(v),bytes=Path(v).stat().st_size)
+    return result
 
 
 def execute(root,label,argv,cwd=None,units=0,seconds=600,expected=None,extra_env=None):
@@ -33,8 +40,7 @@ def execute(root,label,argv,cwd=None,units=0,seconds=600,expected=None,extra_env
     env=dict(os.environ,**THREADS);env.update(extra_env or {})
     env['NEKTAR_RANS_TIMING_FILE']=str(out/'timing.jsonl')
     request=dict(argv=argv,cwd=str(cwd),units=units,seconds_limit=seconds,expected_reason=expected,
-        threads=THREADS,driver_sha256=sha(__file__),inputs={v:dict(sha256=sha(v),bytes=Path(v).stat().st_size)
-        for v in argv if Path(v).is_file()},loader=env.get('LD_LIBRARY_PATH',''))
+        threads=THREADS,driver_sha256=sha(__file__),inputs=input_files(argv),loader=env.get('LD_LIBRARY_PATH',''))
     save(out/'request.json',request)
     journal=root/'accounting.json'
     with (root/'accounting.lock').open('a') as lock:

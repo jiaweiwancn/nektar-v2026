@@ -264,7 +264,7 @@ int main(int argc,char **argv)
                     v.back()=0;for(auto [row,target]:constraints){(void)target;int b=0;while(b+1<patch.offset.size() && row>=patch.offset[b+1])++b;
                         v.back()=std::max(v.back(),std::abs(r[row])/(b<2?1.:b==patch.K()?amplitudeK:amplitudeEpsilon));}return v;};
                 spatialNorms=physicalNorms(spatial);if(alpha>0)stageNorms=physicalNorms(stage);
-                if(packet.get<bool>("weak",false))weak=Weak(patch,state,history,alpha,time,data);
+                if(packet.get<bool>("weak",false))weak=Weak(patch,state,history,alpha,time,data,packet.get<int>("weak_outer_order",24));
                 assembly=packet.get<bool>("assembly",true)?patch.WJTerrainAssemblyChecks(state,history,alpha>0?alpha:1/dt,time,data):"null";
             }
             if(packet.get<bool>("reuse",false))reuse=patch.EvaluationReuseChecks(state,history,time,data);

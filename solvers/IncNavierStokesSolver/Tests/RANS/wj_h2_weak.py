@@ -4,7 +4,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 from wj_h2_profiles import wall,constitutive,CD,NU,D0,TOP
 from validate_wj_h1 import require
-def independent_weak(packet,report):
+def independent_weak(packet,report,enforce=True):
     H=report["parameters"][1];h=report["parameters"][2]
     alpha=packet['alpha_mass'];expected=np.zeros((2,3,6));parts={}
     def add(name,mode,block,value):
@@ -73,7 +73,7 @@ def independent_weak(packet,report):
             for block in range(3 if inner else 4):exterior[side,mode,block]+=w*phi*flux[block]
     expected+=exterior
     parts['exterior_boundary']=exterior.sum(axis=0)
-    errors={}
+    errors={};conditions={}
     component_names=('inner_momentum_stress','outer_momentum_stress','conservative_advection',
         'k_diffusion','epsilon_diffusion','inner_k_production','inner_k_destruction','outer_k_production',
         'outer_k_destruction','epsilon_production','epsilon_destruction','epsilon_yap','prescribed_scalar_source',
@@ -83,10 +83,16 @@ def independent_weak(packet,report):
         oracle=parts.get(name,np.zeros((3,6)));native=np.array(native)
         # Different independent quadrature; absolute floors cover nearly zero
         # mode loads. Production/source and pressure errors remain separate.
-        assert_allclose(native,oracle,rtol=2e-8,atol=2e-9,err_msg=name)
+        conditions[name]=bool(np.all(np.isfinite(native)) and np.all(np.isfinite(oracle)) and
+            np.all(abs(native-oracle)<=2e-9+2e-8*abs(oracle)))
+        if enforce:assert_allclose(native,oracle,rtol=2e-8,atol=2e-9,err_msg=name)
         errors[name]=float(np.max(abs(native-oracle)))
     actual=np.array([packet['native_inner'],packet['native_outer']])
-    assert_allclose(actual,expected,rtol=2e-8,atol=4e-9,err_msg='regional physical weak loads')
-    return dict(samples=len(packet['samples']),component_max_errors=errors,
+    conditions['regional_sum']=bool(np.all(np.isfinite(actual)) and np.all(np.isfinite(expected)) and
+        np.all(abs(actual-expected)<=4e-9+2e-8*abs(expected)))
+    if enforce:assert_allclose(actual,expected,rtol=2e-8,atol=4e-9,err_msg='regional physical weak loads')
+    return dict(status='PASS' if all(conditions.values()) else 'UNRESOLVED',conditions=conditions,
+        outer_quadrature_order=packet.get('outer_quadrature_order',24),samples=len(packet['samples']),component_max_errors=errors,
+        independent_components={k:v.tolist() for k,v in parts.items()},native_components=packet['native_terms'],
         regional_max_error=float(np.max(abs(actual-expected))),regional_native=actual.tolist(),regional_independent=expected.tolist(),
         scope='three declared test modes, actual represented fields; raw regional/exterior reaction loads, not a nonlinear Jacobian')

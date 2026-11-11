@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 from study_wj_h2 import observation_rule,comparison
 from wj_h2_profiles import D0,TOP
-from run_wj_h2 import load
+from run_wj_h2 import load,input_files
 
 class Measurements(unittest.TestCase):
     def test_binary64_negative_zero_is_retained(self):
@@ -15,6 +15,8 @@ class Measurements(unittest.TestCase):
             p=Path(folder)/'native.json';p.write_text('{"step":2,"state":[-0,0,-0.0]}')
             v=load(p);self.assertIsInstance(v['step'],int)
             self.assertEqual(np.signbit(v['state']).tolist(),[True,False,True])
+    def test_long_ctest_regex_is_an_argument_not_a_file(self):
+        self.assertEqual(input_files(['^('+'NativeTest|'*100+')$']),{})
     def packet(self):
         row=dict(physical=[1.,0.,1.],inner=False,U=[1.,0,0],k=.01,epsilon=.001,pi=0.)
         return dict(open_boundary=dict(time=.04,stations=[row],interface=[dict(K=.01,cutoff=.02)],

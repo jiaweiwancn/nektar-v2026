@@ -8,8 +8,9 @@ Vec Velocity(const RANSWallEvolutionPatch &p,const Vector &s,const RANSWallGloba
 double Volume(const RANSWallEvolutionPatch &p)
 {double result=0;for(const auto &q:p.Quadrature(0,16))result+=q.weight;return result;}
 std::string Weak(const RANSWallEvolutionPatch &p,const Vector &s,const Vector &h,double alpha,double time,
-    const RANSWallEvolutionData &data)
+    const RANSWallEvolutionData &data,int outerOrder=24)
 {
+    Require(outerOrder>=8 && outerOrder<=32,"unsupported passive outer weak quadrature order");
     const auto hash=RANSWallR3::Hash(s);const auto work=p.InitializationWork();
     const double H=p.Parameters().geometry.height;
     double outerSupport=p.upper[2];for(const auto &el:p.fields[0]->Elements())if(el.lower[2]==H)outerSupport=std::min(outerSupport,el.upper[2]);
@@ -77,7 +78,7 @@ std::string Weak(const RANSWallEvolutionPatch &p,const Vector &s,const Vector &h
             {auto a=anchor;a[2]=q.r;append(p.Point(0,a),p.Point(p.InnerPressure(),a),{},
                 wx*metric.baseArea*q.weight*q.jacobian,wx*q.weight,true,&profile);}
         }
-    for(const auto &v:p.outerVelocity->Quadrature(24))
+    for(const auto &v:p.outerVelocity->Quadrature(outerOrder))
     {
         const auto a=v.coordinate;
         append(p.Point(0,a),p.Point(p.OuterPressure(),a),p.Point(p.Epsilon(),a),v.weight*p.Mapping().At(a).determinant,v.weight,false,nullptr);
@@ -98,6 +99,7 @@ std::string Weak(const RANSWallEvolutionPatch &p,const Vector &s,const Vector &h
         {"scope",J::Quote("three native polynomial tests:1,x/5,interface_hat; independently split actual-state quadrature; raw loads include prescribed exterior reactions")},
         {"native_inner",contract(inner)},{"native_outer",contract(outer)},
         {"native_terms",J::Object(terms)},{"volume",J::Number(Volume(p))},
+        {"outer_quadrature_order",J::Number(outerOrder)},
         {"geometry_kind",J::Number(p.Mapping().kind==RANSWallNormalMap::Kind::Plane?2:p.Mapping().amplitude==0?0:1)},
         {"samples",J::List(rows)},{"boundary_mode_samples",J::List(boundary)},
         {"governing_solves","0"}});

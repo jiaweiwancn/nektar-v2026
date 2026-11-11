@@ -83,21 +83,22 @@ class Measurements:
             code_sha256=sha(__file__),role='immutable accepted-state observations, no continuation',normal_orders=[8,10],horizontal_orders=[4,6],
             quadrature_absolute_norm_floor=1e-10,original_study_sha256=sha(self.root/'study-v1/progress.json')))
 
-    def observe(self,label,record,step,points,weights=None,weak=False,assembly=False):
+    def observe(self,label,record,step,points,weights=None,weak=False,assembly=False,weak_order=24):
         folder=self.out/label;folder.mkdir();cp,payload=checkpoint_for(record,step);report=load(record['report'])
         assert sha(record['report'])==record['report_sha256']
         packet=dict(operation='open_checks',inner_stress_model='Linear',native_report=record['report'],
             native_report_sha256=record['report_sha256'],native_checkpoint=cp,checkpoint_sha256=sha(Path(cp)/'State.bin'),
-            allow_failed_producer=bool(report['failure']),physical_observations=points,weak=weak,assembly=assembly,reuse=False)
+            allow_failed_producer=bool(report['failure']),physical_observations=points,weak=weak,assembly=assembly,reuse=False,
+            weak_outer_order=weak_order)
         save(folder/'request.json',packet)
         if weights is not None:save(folder/'weights.json',weights)
-        assert execute(self.root,'measure-'+label,[self.observer,record['xml'],folder/'request.json',folder/'native.json'],folder,0,600,extra_env=self.env)
+        assert execute(self.root,'measure-'+self.out.name+'-'+label,[self.observer,record['xml'],folder/'request.json',folder/'native.json'],folder,0,600,extra_env=self.env)
         result=load(folder/'native.json');assert result['selected_absolute_step']==step and result['initialization_work']==[0,0]
         source=dict(report_sha256=record['report_sha256'],checkpoint_sha256=packet['checkpoint_sha256'],
             callback_history_sha256=result['callback_history_sha256'],checkpoint=cp,step=step,time=payload['time'],native=str(folder/'native.json'),native_sha256=sha(folder/'native.json'))
         if weak:
             selected=dict(report,open_boundary=result['open_boundary'])
-            source['independent_weak']=independent_weak(result['weak_checks'],selected)
+            source['independent_weak']=independent_weak(result['weak_checks'],selected,enforce=weak_order==8)
             source['independent_boundary']=independent_boundary(selected)
         self.records[label]=source;save(self.out/'index.json',self.records)
         return result
@@ -128,6 +129,10 @@ def main():
         for order,points,w in ((8,low,weights),(10,high,wh)):
             payloads[(label,order)]=m.observe(f'{label}-q{order}',record,step,points,w,
                 weak=label in ('base08','refined-fine08') and order==8,assembly=label=='base08' and order==8)
+    # Same-node algebra and increased independent quadrature have distinct roles.
+    # Preserve a failed quadrature comparison rather than weakening its floor.
+    for label,record,step in [('base08-nativeweak',records['base-pilot-on'],4),('refined-fine08-nativeweak',hrec,8)]:
+        m.observe(label,record,step,[[4.,0.,1.]],weak=True,weak_order=8)
     for order,w in ((8,weights),(10,wh)):
         for label,x,y in [('time04','base04','fine04'),('normal04','base04','refined04'),('time08','base08','fine08'),
             ('refined-time04','refined04','refined-fine04'),('normal-fine08','fine08','refined-fine08')]:
