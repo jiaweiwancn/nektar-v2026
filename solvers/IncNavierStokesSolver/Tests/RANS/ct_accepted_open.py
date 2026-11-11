@@ -35,7 +35,7 @@ def fixture(folder,runtime,model='A95',steps=0,dt=1e-7,pressure=0.,traction_shif
     root=ET.parse(path).getroot();p=parameters(model);K=1.;H=2.;nu=1.5e-5
     c=Column(model,K,H,0.,nu);eps=c.A/H
     for key,value in dict(RANSWallBoundaryPolicy='AcceptedOpenFlatV1',RANSOpenTop='DirichletCompatibleV1',
-        RANSOpenBackflow='RejectV1',RANSWallReference='Functions',RANSWallPimpleSnapshots='On').items():set_info(root,key,value)
+        RANSOpenBackflow='RejectV1',RANSWallReference='Functions',RANSWallFunctionCoordinates='Physical',RANSWallPimpleSnapshots='On').items():set_info(root,key,value)
     for key,value in dict(RANSWallRoughness=0.,K0=K,RANSWallFrictionVelocity=math.sqrt(K/p['q']),RANSOpenVelocityScale=1.).items():set_parameter(root,key,value)
     u=('-' if backflow else '')+'.02*y*(8-y)'
     values=dict(u=u,v='0',k='1',eps_tilde=repr(eps),p=repr(pressure))
@@ -93,7 +93,7 @@ def pilot_case(folder,runtime,feasibility,model='A95',steps=0,dt=.002,restart=No
         radial_knots=knots,degree=3,xknots=[0.,.125,.25],cache='Off',restart=restart,quadrature=[32,8,10,10,10])
     root=ET.parse(xml).getroot()
     for key,value in dict(RANSWallBoundaryPolicy='AcceptedOpenFlatV1',RANSOpenTop='DirichletCompatibleV1',
-        RANSOpenBackflow='RejectV1',RANSWallReference='Functions',RANSWallPimpleSnapshots='On').items():set_info(root,key,value)
+        RANSOpenBackflow='RejectV1',RANSWallReference='Functions',RANSWallFunctionCoordinates='Physical',RANSWallPimpleSnapshots='On').items():set_info(root,key,value)
     for key,value in dict(RANSWallHeight=H,RANSWallSampleHeight=H,RANSWallTailStart=H,RANSWallRoughness=hr,
         Kinvis=nu,RANSWallFrictionVelocity=us,K0=K,RANSOpenVelocityScale=1.).items():set_parameter(root,key,value)
     # Region selection uses RANSWallHeight on this conforming topology.
