@@ -31,6 +31,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSWallEvolutionDiagnostics.cpp
         ./EquationSystems/RANSWallEvolutionTransition.cpp
         ./EquationSystems/RANSWallEvolutionRobust.cpp
+        ./EquationSystems/RANSWallEvolutionDeveloping.cpp
         ./EquationSystems/RANSWallEvolutionActions.cpp
         ./EquationSystems/RANSWallEvolutionNonpressure.cpp
         ./EquationSystems/RANSWallEvolutionResolution.cpp
@@ -203,7 +204,8 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
                 EquationSystems/RANSWallEvolutionPatch.cpp
                 EquationSystems/RANSWallEvolutionEvaluation.cpp
                 EquationSystems/RANSWallEvolutionTransition.cpp
-                EquationSystems/RANSWallEvolutionRobust.cpp)
+                EquationSystems/RANSWallEvolutionRobust.cpp
+                EquationSystems/RANSWallEvolutionDeveloping.cpp)
         TARGET_SOURCES(RANSEquilibriumEvolutionProbe PRIVATE
             EquationSystems/RANSWallEvolutionActions.cpp
             EquationSystems/RANSWallEvolutionNonpressure.cpp

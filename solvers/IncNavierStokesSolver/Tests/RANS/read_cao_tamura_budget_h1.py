@@ -14,6 +14,7 @@ from run_cls_epawf_picard import load,require,sha,state_hash
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for n in ('probe','campaign','output'):p.add_argument('--'+n,type=Path,required=True)
+    p.add_argument('--native-budgets',action='store_true',help='bind saved callback history from the immutable native report and evaluate H2a weak budgets')
     a=p.parse_args();require(platform.system()=='Linux','authoritative native Linux reader required')
     a.output.mkdir(parents=True,exist_ok=False)
     probe,identity=freeze(a.probe.resolve(),a.output/'runtime')
@@ -24,6 +25,7 @@ def main():
         packet=dict(common_packet(cp),operation='finite_inflow_h1',state=saved['coupled'],history=saved['coupled'],
             time=saved['time'],alpha=0.,inner_stress_model='Linear',
             permitted_queries_file=str(a.campaign/'input/permitted-queries.txt'),permitted_queries_sha256=sha(a.campaign/'input/permitted-queries.txt'))
+        if a.native_budgets:packet.update(native_report_file=str(a.campaign/name/'case.evolution.json'),native_report_sha256=sha(a.campaign/name/'case.evolution.json'))
         q,receipt=run_probe(probe,a.campaign/name/'case.xml',packet,a.output/name)
         require(q['governing_solves']==q['physical_commits']==0 and not q['native_history_advanced'] and q['initialization_work']==[0,0],
             'H1 readback altered native state/history or called Lift')
@@ -41,6 +43,7 @@ def main():
             native_selected_spatial_blocks=q['selected_spatial_block_norms'],resolution_error=q['residual_resolution_native_max_error'],
             provider=q['provider'],physical_profiles=q['physical_profiles'],profile_columns=q['physical_profile_columns'],
             actual_native_flat_data_comparison=fits)
+        if a.native_budgets:summary['observations'][name]['native_turbulence_budget']=q['native_turbulence_budget']
         atomic(a.output/'summary.json',summary)
         if name=='whole8':
             for label,mutate in [
@@ -51,6 +54,13 @@ def main():
                 bad=deepcopy(packet);mutate(bad)
                 error,rr=run_probe(probe,a.campaign/name/'case.xml',bad,a.output/('reject-'+label),False)
                 summary['contract_rejections'][label]=dict(receipt=rr,reason=error[-1800:])
+            if a.native_budgets:
+                changed=deepcopy(report);changed['last_stage_history'][0]+=1e-6
+                file=a.output/'corrupt-callback-report.json';atomic(file,changed)
+                bad=deepcopy(packet);bad.update(native_report_file=str(file),native_report_sha256=sha(file))
+                error,rr=run_probe(probe,a.campaign/name/'case.xml',bad,a.output/'reject-callback-history',False)
+                require('callback history/alpha/time differs' in error,'corrupt callback history rejected for an unexpected reason')
+                summary['contract_rejections']['callback_history']=dict(receipt=rr,reason=error[-1800:])
             require(sha(cp/'State.bin')==packet['checkpoint_sha256'],'immutable parent checkpoint bytes changed')
     summary['status']='passed';atomic(a.output/'summary.json',summary);print(a.output/'summary.json')
 

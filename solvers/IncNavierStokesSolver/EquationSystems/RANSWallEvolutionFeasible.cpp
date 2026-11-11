@@ -250,6 +250,10 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
         if(!inner)add(name,Point(Epsilon(),v.coordinate,Same(v.coordinate[2],m_parameters.geometry.height)?1:0),Epsilon(),true,side);
     };
     for(const auto &q:Quadrature(0))pair("mass_volume",q,q.coordinate[2]<m_parameters.geometry.height);
+    if(DevelopingFlat())for(int axis:{0,2})for(int side:{-1,1})
+        for(const auto &f:Surface(0,axis,side<0?lower[axis]:upper[axis],side,8))
+        {const auto &el=fields[0]->Elements()[f.test.element];pair("open_boundary_native",f.test,el.upper[2]<=m_parameters.geometry.height,0);}
+
     if(AcceptedAWF())
     {
         // Fixed physical reporting quadrature uses these exact vertical

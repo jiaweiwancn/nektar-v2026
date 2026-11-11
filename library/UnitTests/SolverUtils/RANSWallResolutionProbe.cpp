@@ -527,6 +527,33 @@ int main(int argc,char **argv)
             const auto domain=patch.ScalarDomain(state,time,data);
             Require(domain.admissible,"finite H1 readback outside scalar/budget domain");
             const auto audit=patch.CompleteRestrictedAudit(state,history,0,time,data);
+            std::string turbulence="null",boundaryFixture="null",boundaryStatus="null",stepCorrection="null";
+            if(packet.get_optional<std::string>("native_report_file"))
+            {
+                const auto file=packet.get<std::string>("native_report_file");
+                Require(RANSWallR3::HashFile(file)==packet.get<std::string>("native_report_sha256"),"budget native report SHA256 differs");
+                Tree saved;boost::property_tree::read_json(file,saved);
+                Require(saved.get<std::string>("signature")==packet.get<std::string>("native_signature") && saved.get<double>("time")==time &&
+                    RANSWallR3::Hash(Read(saved,"state"))==before && RANSWallR3::Hash(Read(saved,"fixed_reference"))==referenceHash,
+                    "budget report does not bind selected native state/reference/signature/time");
+                Require(RANSWallR3::Hash(Read(saved,"native_history_times"))==RANSWallR3::Hash(Read(packet,"native_history_times")),"budget native report history times differ");
+                const auto &a=saved.get_child("native_history"),&b=packet.get_child("native_history");Require(a.size()==b.size(),"budget history shape");
+                auto bi=b.begin();for(const auto &slot:a){Vector x,y;for(const auto &v:slot.second)x.push_back(v.second.get_value<double>());for(const auto &v:bi++->second)y.push_back(v.second.get_value<double>());Require(RANSWallR3::Hash(x)==RANSWallR3::Hash(y),"budget report history differs");}
+                const auto h=Read(saved,"last_stage_history");const double aa=h.empty()?0:saved.get<double>("last_stage_alpha");
+                Require(h.empty() || saved.get<double>("last_stage_time")==time,"budget callback time differs");
+                if(const auto attempts=saved.get_child_optional("pimple_attempts"))if(!attempts->empty())
+                {const auto &last=attempts->back().second;
+                 Require(last.get<double>("time")==time && last.get<double>("alpha")==aa &&
+                    RANSWallR3::Hash(h)==last.get<std::string>("history_sha256"),"budget callback history/alpha/time differs from native attempted stage");
+                 if(const auto correction=last.get_child_optional("k_bound"))
+                    {std::ostringstream text;boost::property_tree::write_json(text,*correction,false);stepCorrection=text.str();}}
+                turbulence=patch.FiniteTurbulenceBudget(state,h.empty()?state:h,aa,time,data);
+            }
+            if(patch.DevelopingFlat())
+            {
+                boundaryStatus=patch.DevelopingChecks(state,time,data);
+                if(packet.get<bool>("boundary_fixture",false))boundaryFixture=patch.DevelopingBoundaryFixture(state,data);
+            }
             const auto components=patch.ResidualResolutionComponents(state,state,0,time,data);
             const auto native=patch.Residual(state,state,0,time,data,false,true);
             double residualError=0;
@@ -591,7 +618,7 @@ int main(int argc,char **argv)
                 std::ifstream input(file);double z,target,weight,bound;std::string name;
                 while(input>>z>>name>>target>>weight>>bound)
                 {
-                    const RANSWallCoordinate point{-.15,0,z};const auto v=patch.Point(0,point);
+                    const RANSWallCoordinate point{packet.get<double>("observation_x",-.15),0,z};const auto v=patch.Point(0,point);
                     const double k=patch.Point(patch.K(),point).Value(state,patch.offset[patch.K()]);
                     const bool inner=z<H;const double epsilon=inner?0:patch.Point(patch.Epsilon(),point).Value(state,patch.offset[patch.Epsilon()]);
                     const bool valid=std::isfinite(k) && (inner?k>=0:k>0) && (inner || (epsilon>0 && std::isfinite(epsilon)));
@@ -626,7 +653,8 @@ int main(int argc,char **argv)
             std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"native_replay_context",replayContext},
                 {"state_sha256",J::Quote(before)},{"reference_sha256",J::Quote(referenceHash)},
                 {"selected_state_unchanged","true"},{"provider",patch.FiniteInflowChecks(state)},
-                {"complete_audit",Maps(audit)},{"residual_resolution_native_max_error",J::Number(residualError)},
+                {"physical_samples",Maps(patch.PhysicalSamples(state,time,data))},
+                {"complete_audit",Maps(audit)},{"native_turbulence_budget",turbulence},{"native_step_correction",stepCorrection},{"developing_boundary",boundaryStatus},{"boundary_fixture",boundaryFixture},{"residual_resolution_native_max_error",J::Number(residualError)},
                 {"selected_spatial_block_norms",J::Numbers(patch.Norms(native,components.constraints,us))},
                 {"physical_projection_metrics",J::List(metric)},{"physical_profile_columns",J::Quote("x,z,velocity_geometry,radial_side,U_h,dU_h/dz,k_h,U_ref,dU_ref/dz,k_ref,epsilon_ref")},
                 {"physical_profiles",J::List(profiles)},{"permitted_flat_native_queries",J::List(dataQueries)},

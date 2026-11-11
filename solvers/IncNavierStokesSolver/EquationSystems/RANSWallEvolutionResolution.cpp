@@ -80,7 +80,7 @@ const std::vector<std::string> &RANSWallResolutionSpatialTerms()
         "k_diffusion","epsilon_diffusion","inner_k_production","inner_k_destruction",
         "outer_k_production","outer_k_destruction","epsilon_production",
         "epsilon_destruction","epsilon_yap","prescribed_scalar_source",
-        "roughness_force","prescribed_body","continuity","gauge"};
+        "roughness_force","prescribed_body","continuity","gauge","external_advection","external_traction","external_diffusion"};
     return names;
 }
 
@@ -211,10 +211,17 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     for(const auto &ray:m_rays)
     {const auto force=analyticalReference?RANSVector{}:CartesianForcing(s,ray.coordinate,time,data,false);for(const auto &q:ray.points)evaluate(q,true,ray.profile.get(),force,&ray.destruction);}
     for(const auto &q:m_outer)evaluate(q,false,nullptr,{},nullptr);
+    if(DevelopingFlat())
+    {
+        const auto f=DevelopingFlux(s);
+        for(const auto &term:std::vector<std::pair<std::string,const Vector*>>{{"external_advection",&f.advection},{"external_traction",&f.traction},{"external_diffusion",&f.diffusion}})
+            for(int i=0;i<Size();++i)
+            {Bucket(buckets,term.first,Size()).Add(i,(*term.second)[i],(*term.second)[i]);Bucket(buckets,"legacy_spatial",Size()).Add(i,(*term.second)[i],(*term.second)[i]);}
+    }
     const auto prescribed=OwnedBodyLoad(time,data);
     for(int row=0;row<Size();++row)
     {Bucket(buckets,"prescribed_body",Size()).Add(row,-prescribed[row],-prescribed[row]);Bucket(buckets,"legacy_spatial",Size()).Add(row,-prescribed[row],-prescribed[row]);}
-    for(int side=0;side<2;++side)for(int j=0;j<m_pressureMean[side].size();++j)
+    if(!DevelopingFlat())for(int side=0;side<2;++side)for(int j=0;j<m_pressureMean[side].size();++j)
     {
         const int row=offset[InnerPressure()+side]+j;const double w=m_pressureMean[side][j];
         for(const std::string name:{"gauge","legacy_spatial"})

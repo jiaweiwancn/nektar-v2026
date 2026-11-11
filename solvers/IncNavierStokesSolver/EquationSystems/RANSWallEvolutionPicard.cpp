@@ -262,6 +262,12 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     for (const auto &q : m_outer)
         evaluate(q, nullptr, {}, nullptr);
 
+    if(DevelopingFlat())
+    {
+        const auto f=DevelopingFlux(s);
+        for(int i=0;i<n;++i)system.residual[i]+=f.advection[system.rows[i]]+f.traction[system.rows[i]]+f.diffusion[system.rows[i]];
+        AddDevelopingMatrix(block,s,system.rows,system.matrix);
+    }
     const auto body = flow ? OwnedBodyLoad(time, data) : Vector{};
     for (int b = flow ? 0 : block; b < (flow ? K() : block + 1); ++b)
     {
@@ -288,7 +294,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             }
         }
     }
-    if (flow)
+    if (flow && !DevelopingFlat())
     {
         const int gauge = index[offset[Gauge()]];
         for (int side = 0; side < 2; ++side)

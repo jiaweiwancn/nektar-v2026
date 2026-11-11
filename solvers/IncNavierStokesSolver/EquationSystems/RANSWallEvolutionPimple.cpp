@@ -8,6 +8,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <filesystem>
 #include <fstream>
+#include <cstring>
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -19,6 +20,9 @@ namespace Nektar
 using namespace RANSWallAlgebra;
 namespace J = RANSWallSolveJson;
 
+bool RANSRetainAttemptPacket(const std::string &policy,bool active,bool verification,long long step,int interval)
+{return policy=="EveryAttempt" || active || verification || step<=1 || step%interval==0;}
+
 // A temporal coupling operation, deliberately independent of every nonlinear
 // convergence/search driver. All updates below have fraction exactly one.
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
@@ -29,7 +33,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     Require(s.size()==Size() && history.size()==s.size() &&
         std::isfinite(alpha) && alpha>0 && std::isfinite(time),"invalid PIMPLE stage input");
     const auto start=std::chrono::steady_clock::now();
-    iterations=0;
+    iterations=0;m_pendingPacket={};m_lastPacketPath.clear();m_lastPacketHash.clear();
     std::vector<std::pair<std::string,std::string>> record;
     int momentum=0,pressure=0,epsilon=0,k=0,massApplications=0;
     int momentumAttempts=0,pressureAttempts=0,epsilonAttempts=0,kAttempts=0;
@@ -103,7 +107,19 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         RANSWallTiming::Scope momentumFactorTiming("momentum.factorize");
         const Factor momentumFactor(a);momentumFactorTiming.Stop();
         RANSWallTiming::Scope massFactorTiming("pressure.mass_factorize");
-        const Factor mass(m);massFactorTiming.Stop();
+        bool sameMass=m_velocityMassKey.size()==m.size();
+        if(sameMass)for(int i=0;i<m.size();++i)if(m_velocityMassKey[i].size()!=m[i].size() || std::memcmp(m_velocityMassKey[i].data(),m[i].data(),m[i].size()*sizeof(double))!=0){sameMass=false;break;}
+        const bool massHit=m_velocityMassReuse && m_velocityMassFactor && m_velocityMassRows==std::vector<int>(flow.rows.begin(),flow.rows.begin()+nv) && sameMass;
+        std::shared_ptr<Factor> massOwner;
+        if(massHit)massOwner=m_velocityMassFactor;
+        else
+        {
+            massOwner=std::make_shared<Factor>(m);
+            if(m_velocityMassReuse){m_velocityMassFactor=massOwner;m_velocityMassKey=m;m_velocityMassRows.assign(flow.rows.begin(),flow.rows.begin()+nv);}
+        }
+        const Factor &mass=*massOwner;massFactorTiming.Stop();
+        put("velocity_mass_factor_reused",J::Boolean(massHit));
+        put("velocity_mass_reuse_mode",J::Quote(m_velocityMassReuse?"ExactV1":"Off"));
         RANSWallTiming::Scope predictorTiming("momentum.solve_validate");
         const auto predictor=momentumFactor.Apply(rhs);
         auto predictorDefect=Multiply(a,predictor);
@@ -187,7 +203,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             put("verification_pressure_action_dt_absolute_relative",J::List(actions));
         }
         check(s,"flow");correctionTiming.Stop();flowTiming.Stop();
-        const auto flowState=s;
+        const auto flowState=s;put("post_flow_sha256",J::Quote(RANSWallR3::Hash(s)));
         auto budget=[&](const char *phase,const Vector &q)
         {
             if(m_pimpleBudgetTime<0 || std::abs(time-m_pimpleBudgetTime)>.25/alpha)return;
@@ -232,6 +248,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                 }
             }
             const auto preScalar=s;
+            if(b==K())put("pre_k_sha256",J::Quote(RANSWallR3::Hash(s)));
             if(b==K()) {budget("last_accepted",base);budget("post_flow",flowState);budget("pre_k",preScalar);}
             for(int i=0;i<block.rows.size();++i)s[block.rows[i]]+=delta[i];
             const std::string name=b==Epsilon()?"epsilon":"k";
@@ -245,7 +262,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             }
             if(b==K())
             {
-                const auto raw=s;KBoundResult bounded;bounded.state=raw;bounded.success=true;
+                const auto raw=s;put("raw_k_sha256",J::Quote(RANSWallR3::Hash(raw)));KBoundResult bounded;bounded.state=raw;bounded.success=true;
                 if(PimpleKBoundEnabled())
                 {
                     ++boundCalls;bounded=ApplyPimpleKBound(raw,preScalar,time,data);s=bounded.state;
@@ -262,8 +279,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                     put("k_added_storage_residual",J::Number(Maximum(physicalStorage)));
                     put("bound_residual_accounting_mass_applications","1");
                 }
+                put("corrected_k_sha256",J::Quote(RANSWallR3::Hash(s)));
+                Require(RANSWallR3::Hash(Vector(preScalar.begin()+offset[Epsilon()],preScalar.begin()+offset[InnerPressure()]))==
+                    RANSWallR3::Hash(Vector(s.begin()+offset[Epsilon()],s.begin()+offset[InnerPressure()])),"post-k operation changed solved epsilon");
+                put("solved_epsilon_retained_bitwise","true");
                 if(m_pimpleSnapshots)
                 {
+                    m_pendingPacket=[=](){
                     RANSWallTiming::Scope snapshotTiming("io.attempt_snapshot");
                     std::filesystem::create_directories(m_pimpleSnapshotDirectory);
                     const auto stem=(std::filesystem::path(m_pimpleSnapshotDirectory)/
@@ -285,8 +307,15 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                         {"matrix_encoding",J::Quote("row-major native IEEE754 binary64")},
                         {"k_bound",PimpleKBoundEnabled()?bounded.report:"null"}})<<'\n';
                     out.close();Require(out.good(),"could not save raw/corrected k snapshot");
-                    put("k_snapshot",J::Quote(std::filesystem::absolute(packet).string()));
-                    put("k_snapshot_sha256",J::Quote(RANSWallR3::HashFile(packet)));
+                    m_lastPacketPath=std::filesystem::absolute(packet).string();m_lastPacketHash=RANSWallR3::HashFile(packet);
+
+                    };
+                    const long long global=std::llround(time*alpha);
+                    const bool selected=RANSRetainAttemptPacket(m_packetPolicy,bounded.activated,m_pimpleVerify,global,m_packetInterval);
+                    put("attempt_packet_policy",J::Quote(m_packetPolicy));
+                    put("attempt_packet_selected",J::Boolean(selected));
+                    if(selected || !bounded.success)
+                    {FinishAttemptPacket(true);put("k_snapshot",J::Quote(m_lastPacketPath));put("k_snapshot_sha256",J::Quote(m_lastPacketHash));}
                 }
                 Require(bounded.success,"PIMPLE k corrector failed: "+bounded.failure);
             }
@@ -304,7 +333,35 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         m_lastFeasibleState=s;
         finalTiming.Stop();publish(true,"");return s;
     }
-    catch(const std::exception &error){m_lastFeasibleState=s;publish(false,error.what());throw;}
+    catch(const std::exception &error)
+    {
+        FinishAttemptPacket(true);
+        if(m_pimpleSnapshots && m_lastPacketPath.empty())
+        {
+            std::filesystem::create_directories(m_pimpleSnapshotDirectory);
+            m_lastPacketPath=(std::filesystem::absolute(m_pimpleSnapshotDirectory)/("partial-t"+J::Number(time)+"-"+RANSWallR3::Hash(history).substr(0,12)+".json")).string();
+            std::ofstream out(m_lastPacketPath);out<<J::Object({{"schema","1"},{"partial_attempt","true"},
+                {"candidate",J::Numbers(s)},{"history",J::Numbers(history)},{"fixed_reference",J::Numbers(m_reference)},
+                {"time",J::Number(time)},{"alpha",J::Number(alpha)},{"failure",J::Quote(error.what())},
+                {"completed_U_p_epsilon_k",J::Numbers(Vector{double(momentum),double(pressure),double(epsilon),double(k)})},
+                {"matrix_recovery",J::Quote("no completed post-k packet; frozen configuration/checkpoint/native callback history permit deterministic isolated stage replay")}})<<'\n';
+            out.close();Require(out.good(),"could not preserve partial failed attempt");m_lastPacketHash=RANSWallR3::HashFile(m_lastPacketPath);
+        }
+        m_lastFeasibleState=s;publish(false,error.what());throw;
+    }
+}
+
+void RANSWallEvolutionPatch::FinishAttemptPacket(bool rejected) const
+{
+    if(rejected && m_pendingPacket)m_pendingPacket();
+    m_pendingPacket={};
+}
+std::string RANSWallEvolutionPatch::AttemptPacketStatus() const
+{
+    return J::Object({{"policy",J::Quote(m_packetPolicy)},{"interval",J::Number(m_packetInterval)},
+        {"last_written_packet",m_lastPacketPath.empty()?"null":J::Quote(m_lastPacketPath)},
+        {"sha256",m_lastPacketHash.empty()?"null":J::Quote(m_lastPacketHash)},
+        {"crash_recovery",J::Quote("accepted native checkpoint/history authoritative; unselected in-flight packet is not SIGKILL-durable; frozen runtime/config plus checkpoint replay deterministically reconstructs its frozen A_k")}});
 }
 
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::PhysicalSamples(

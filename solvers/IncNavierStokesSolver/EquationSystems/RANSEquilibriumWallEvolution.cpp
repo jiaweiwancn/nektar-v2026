@@ -552,6 +552,7 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             {
                 if(single)
                 {
+                    m_patch->FinishAttemptPacket(true);
                     if(m_rejectedState.empty())m_rejectedState=m_state;
                     m_state=committedState;m_lastHistory=committedHistory;m_physicalSamples=committedSamples;
                     m_stageTime=committedStageTime;m_stageAlpha=committedStageAlpha;
@@ -559,6 +560,7 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
                 }
                 throw;
             }
+            m_patch->FinishAttemptPacket(false);
             std::copy(diff.begin(),diff.end(),m_state.begin());m_time=m_integrator->Time();
             const auto drift=m_patch->StateNorms(m_state,m_initial,m_ustar);
             Vector record{m_time,static_cast<double>(m_integrator->Steps()),Maximum(drift),m_patch->AnchorEnergyWork(m_state)};
@@ -971,6 +973,8 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"chi\":"<<(m_patch->AcceptedAWF()?"null":RANSWallSolveJson::Number(m_patch->Parameters().chi))<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
        <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
     if(m_patch->FiniteInflowReference())out<<",\"finite_inflow_reference\":"<<m_patch->FiniteInflowChecks(m_state);
+    if(m_patch->DevelopingFlat())out<<",\"developing_boundary\":"<<m_patch->DevelopingChecks(m_state,m_time,m_data);
+    out<<",\"attempt_packet_status\":"<<m_patch->AttemptPacketStatus();
     out<<",\"wall_formulation\":"<<m_patch->FormulationMetadata()<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())
        <<",\"audit_revision\":"<<Quoted(m_patch->AuditRevision())
        <<",\"evaluation_reuse\":"<<m_patch->EvaluationReuseJSON()

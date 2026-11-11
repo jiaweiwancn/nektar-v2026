@@ -150,6 +150,16 @@ public:
     SolverUtils::RANSRobustVariant RegularizedReferenceAt(const RANSWallCoordinate &point) const;
     const std::string &RegularizedReferenceIdentity() const { return m_finiteInflowIdentity; }
     std::string FiniteInflowChecks(const Vector &state) const;
+    bool DevelopingFlat() const { return m_boundaryPolicy=="RoughFlatOpenV1"; }
+    std::string BoundaryPolicyJSON() const;
+    struct ExternalFluxTerms { Vector advection,traction,diffusion; };
+    ExternalFluxTerms DevelopingFlux(const Vector&,int region=-1) const;
+    void AddDevelopingMatrix(int,const Vector&,const std::vector<int>&,WallMatrix&) const;
+    std::string DevelopingChecks(const Vector&,double,const RANSWallEvolutionData&) const;
+    std::string FiniteTurbulenceBudget(const Vector&,const Vector&,double,double,const RANSWallEvolutionData&) const;
+    std::string DevelopingBoundaryFixture(const Vector&,const RANSWallEvolutionData&) const;
+    void FinishAttemptPacket(bool rejected) const;
+    std::string AttemptPacketStatus() const;
     std::map<int,double> FixedReferenceBoundary(const Vector &reference) const;
     std::map<int,double> Constraints(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     Vector Lift(const Vector &state,double time,const RANSWallEvolutionData &data) const;
@@ -367,6 +377,10 @@ private:
         Vector lu;
         std::vector<int> pivots;
     };
+    mutable std::shared_ptr<Factor> m_velocityMassFactor;
+    mutable WallMatrix m_velocityMassKey;
+    mutable std::vector<int> m_velocityMassRows;
+    bool m_velocityMassReuse=false;
     struct PicardBlock
     {
         std::vector<int> rows;
@@ -547,6 +561,12 @@ private:
     int m_ownershipShift=0;
     SolverUtils::AWFProfileOptions m_options;
     std::string m_formulation="EPAWF";
+    std::string m_boundaryPolicy="CompatibilityV1";
+    double m_outletTotalPressure=0.;
+    Vector m_backflowSeed;
+    bool m_finiteReferenceReuse=false;
+    mutable std::map<std::uint64_t,SolverUtils::RANSFiniteInflowReference::Value> m_fixedReferenceValues;
+    mutable std::uint64_t m_fixedReferenceHits=0,m_fixedReferenceMisses=0,m_fixedReferenceClears=0;
     SolverUtils::AWFParameters m_wallParameters;
     std::string m_variantName="Original";
     SolverUtils::RANSRobustVariant m_robust;
@@ -595,6 +615,10 @@ private:
     std::string m_pimpleKInventory="LegacyV1";
     double m_pimpleKFloorRelative=1e-8,m_pimpleBudgetTime=-1.;
     bool m_pimpleSnapshots=false;
+    std::string m_packetPolicy="EveryAttempt";
+    int m_packetInterval=32;
+    mutable std::function<void()> m_pendingPacket;
+    mutable std::string m_lastPacketPath,m_lastPacketHash;
     int m_kBoundMaxAdd=2000,m_kBoundMaxTotal=2000,m_kBoundMaxSeparations=2000;
     double m_kBoundMaxSeconds=900.;
     std::string m_kBoundTrace="Summary",m_kBoundTraceFile="None",m_kBoundDumpFile="None";

@@ -199,6 +199,12 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_wallParameters=CalibratedAWFParameters(parameters.model);
         m_options.formulation=AWFProfileFormulation::CLSCalibratedBudgetAWF;
     }
+    session->LoadSolverInfo("RANSWallBoundaryPolicy",m_boundaryPolicy,"CompatibilityV1");
+    Require(m_boundaryPolicy=="CompatibilityV1" || DevelopingFlat(),"unknown wall boundary policy");
+    Require(!DevelopingFlat() || (AcceptedAWF() && m_dimension==2 && !Mapped() && m_comm->GetSize()==1),
+        "RoughFlatOpenV1 requires the serial affine accepted-budget pilot");
+    session->LoadParameter("RANSWallOutletTotalPressure",m_outletTotalPressure,0.);
+    Require(std::isfinite(m_outletTotalPressure),"nonfinite outlet total-traction datum");
     session->LoadSolverInfo("RANSWallKSampling",m_kSampling,"Point");
     std::string comparison;session->LoadSolverInfo("RANSWallComparison",comparison,"Off");
     Require(comparison=="Off" || comparison=="HeightV1" || comparison=="AcceptedAWFV1","unknown comparison family");
@@ -275,6 +281,13 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     std::string snapshots;session->LoadSolverInfo("RANSWallPimpleSnapshots",snapshots,"Off");
     Require(snapshots=="Off" || snapshots=="On","invalid PIMPLE snapshot selector");
     m_pimpleSnapshots=snapshots=="On" || PimpleKBoundEnabled();
+    session->LoadSolverInfo("RANSWallAttemptPackets",m_packetPolicy,"EveryAttempt");
+    Require(m_packetPolicy=="EveryAttempt" || m_packetPolicy=="SelectedV1","unknown attempt packet output policy");
+    session->LoadParameter("RANSWallPacketInterval",m_packetInterval,32);
+    Require(m_packetInterval>0,"invalid packet interval");
+    std::string massReuse;session->LoadSolverInfo("RANSWallVelocityMassReuse",massReuse,"Off");
+    Require(massReuse=="Off" || massReuse=="ExactV1","unknown velocity mass reuse");
+    m_velocityMassReuse=massReuse=="ExactV1";
     session->LoadSolverInfo("RANSWallPimpleSnapshotDirectory",m_pimpleSnapshotDirectory,"pimple-states");
     session->LoadParameter("RANSWallPimpleBudgetTime",m_pimpleBudgetTime,-1.);
     session->LoadSolverInfo("RANSWallFeasibleFile",m_feasibleTraceFile,"case.feasible.jsonl");
@@ -652,7 +665,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Project(const std::vector
     }
     double mean=0;for(int side=0;side<2;++side)for(int i=0;i<m_pressureMean[side].size();++i)
         mean+=m_pressureMean[side][i]*s[offset[InnerPressure()+side]+i];
-    for(int b=InnerPressure();b<=OuterPressure();++b)for(int i=0;i<size[b];++i)s[offset[b]+i]-=mean*m_constants[b][i];
+    if(!DevelopingFlat())for(int b=InnerPressure();b<=OuterPressure();++b)for(int i=0;i<size[b];++i)s[offset[b]+i]-=mean*m_constants[b][i];
     Broadcast(s);return s;
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::NeutralReference(double us,const std::array<double,2> &direction) const
@@ -708,10 +721,17 @@ std::map<int,double> RANSWallEvolutionPatch::ExternalConstraints(double time,con
     {
         const auto values=fields[b]->Boundary([&](const RANSWallCoordinate &p){return b<m_dimension && Same(p[2],0)?0.:data.boundary[b](p,time);},
             [&](int axis,int side,const RANSWallGlobalField::Element &e){
+                if(DevelopingFlat())
+                {
+                    if(axis==0)return !side && Same(e.lower[0],lower[0]);
+                    if(axis==2)return side?(b==1 && Same(e.upper[2],upper[2])):(b<m_dimension && Same(e.lower[2],0));
+                    return false;
+                }
                 if(axis!=2)return Same(side?e.upper[axis]:e.lower[axis],side?upper[axis]:lower[axis]);
                 return side?Same(e.upper[2],upper[2]):(b<m_dimension && Same(e.lower[2],0));});
         for(auto [id,value]:values)result[offset[b]+id]=value;
     }
+    if(DevelopingFlat())result[offset[Gauge()]]=0.; // unused slot; no closed mean gauge
     if(Mapped())
     {
         if(m_boundaryFlux.empty())
@@ -861,6 +881,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
             for(const auto &q:ray.points)evaluate(q,true,ray.profile.get(),force,m_cappedDestruction?&ray.destruction:nullptr);
         }
         if(region!=0)for(const auto &q:m_outer)evaluate(q,false,nullptr,{},nullptr);
+        if(DevelopingFlat())
+        {
+            const auto f=DevelopingFlux(s,region);
+            for(int i=0;i<Size();++i)r[i]+=f.advection[i]+f.traction[i]+f.diffusion[i];
+        }
         const auto body=OwnedBodyLoad(time,data,region);
         for(int i=0;i<Size();++i)r[i]-=body[i];
     }
@@ -884,7 +909,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
             load=Multiply(mass,delta);
         }for(int i=0;i<size[b];++i)r[offset[b]+i]+=alpha*load[i];
     }
-    for(int side=0;side<2;++side)if(region<0 || side==region)for(int i=0;i<m_pressureMean[side].size();++i)
+    if(!DevelopingFlat())for(int side=0;side<2;++side)if(region<0 || side==region)for(int i=0;i<m_pressureMean[side].size();++i)
     {
         const int row=offset[InnerPressure()+side]+i;const double w=m_pressureMean[side][i];
         r[row]+=s[offset[Gauge()]]*w;r[offset[Gauge()]]+=s[row]*w;
@@ -1492,6 +1517,7 @@ void RANSWallEvolutionPatch::SetReference(const Vector &ref,const RANSWallEvolut
     Require(!m_evaluation,"reference generation cannot change within an evaluation scope");
     Require(eta==0 || eta==1,"only fixed global eta=0 or eta=1 is supported");
     Require(!MatchingEnabled() || eta==0,"every upstream transition/terrain run requires eta=0");
+    if(DevelopingFlat())m_backflowSeed=ref;
     const auto raw=Residual(ref,ref,0,time,data,false);const auto norms=Norms(raw,Constraints(ref,time,data));
     for(int b=InnerPressure();b<norms.size();++b)
         if(!((Mapped() || MatchingEnabled()) && eta==0 && b<Gauge()))Require(norms[b]<1e-9,"reference violates an algebraic constraint");
@@ -1616,6 +1642,7 @@ std::string RANSWallEvolutionPatch::Signature() const
         text<<':'<<m_robustUstar<<":incoming-flat-strain-extension";
     }
     if(m_finiteInflow)text<<":regularized-reference="<<m_finiteInflowIdentity;
+    if(DevelopingFlat())text<<":boundary="<<BoundaryPolicyJSON();
     if(m_uniformEP)text<<":wall_policy=UniformEPFlat-v1:chi=1:full_EP_trace:require_intrinsic_admissibility";
     if(m_transitionEnabled)
     {

@@ -6,6 +6,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <cmath>
 #include <fstream>
+#include <cstring>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 
 namespace Nektar
@@ -48,6 +49,9 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
     const auto incoming=m_mapping.At({lower[0],lower[1],0});
     m_referenceNormal=incoming.normal;
     for(int a=0;a<3;++a)m_referenceFlow[a]=(dx*incoming.tangent1[a]+dy*incoming.tangent2[a])/length;
+    std::string reuse;session->LoadSolverInfo("RANSWallFiniteReferenceReuse",reuse,"Off");
+    Require(reuse=="Off" || reuse=="ExactHeightV1","unknown immutable reference reuse");
+    m_finiteReferenceReuse=reuse=="ExactHeightV1";
     std::string mode;session->LoadSolverInfo("RANSWallRegularizedReference",mode,"NeutralLogV1");
     Require(mode=="NeutralLogV1" || mode=="FiniteInflowV1","unknown prescribed Regularized reference mode");
     if(mode=="FiniteInflowV1")
@@ -67,6 +71,8 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
             session->LoadParameter("RANSWallReferenceFlow"+axis,flow[a],a==0?1.:0.);
             session->LoadParameter("RANSWallReferenceNormal"+axis,normal[a],a==2?1.:0.);
         }
+        Require(Mapped() || (origin[2]==0. && normal==RANSVector({0,0,1}) && flow==RANSVector({1,0,0})),
+            "affine finite initialization/readback requires zero normal origin and horizontal incoming frame");
         m_finiteInflow=std::make_shared<const RANSFiniteInflowReference>(
             RANSFiniteInflowReference::Parse(text),origin,flow,normal,m_regularizationScale,m_parameters.model.Parameters());
         m_referenceFlow=flow;m_referenceNormal=normal;
@@ -108,7 +114,22 @@ RANSRobustVariant RANSWallEvolutionPatch::RegularizedReferenceAt(const RANSWallC
     auto variant=m_robust;
     if(m_finiteInflow)
     {
-        const auto fixed=m_finiteInflow->At(Physical(p));
+        const double z=m_finiteInflow->Height(Physical(p));std::uint64_t key;std::memcpy(&key,&z,sizeof key);
+        RANSFiniteInflowReference::Value fixed;
+        const auto old=m_fixedReferenceValues.find(key);
+        if(m_finiteReferenceReuse && old!=m_fixedReferenceValues.end()){fixed=old->second;++m_fixedReferenceHits;}
+        else
+        {
+            fixed=m_finiteInflow->AtHeight(z);++m_fixedReferenceMisses;
+            // This caches the immutable mathematical height function, NOT a
+            // native field/gradient row. Geometry/side cannot affect it once
+            // the physical incoming height is formed. Each patch owns its
+            // fixed content/frame/interpretation; exact height bits distinguish
+            // signed zero. Moving heights cannot grow storage without bound.
+            if(m_finiteReferenceReuse)
+            {if(m_fixedReferenceValues.size()>=32768){m_fixedReferenceValues.clear();++m_fixedReferenceClears;}
+             m_fixedReferenceValues.emplace(key,fixed);}
+        }
         variant.gamma=fixed.gamma;variant.referenceStrain=fixed.strain;return variant;
     }
     // Preserve the historical arithmetic and default identity exactly.
@@ -174,7 +195,9 @@ std::string RANSWallEvolutionPatch::FiniteInflowChecks(const Vector &s) const
         const auto v=m_finiteInflow->AtHeight(z);
         samples.push_back(J::Numbers(Vector{z,v.U,v.dU,v.k,v.epsilon,v.nuT,v.gamma}));
     }
-    return J::Object({{"mode",J::Quote("FiniteInflowV1")},{"identity",J::Quote(m_finiteInflowIdentity)},
+    return J::Object({{"reference_reuse_mode",J::Quote(m_finiteReferenceReuse?"ExactHeightV1":"Off")},
+        {"reference_reuse_hits_misses_entries_clears",J::Numbers(Vector{double(m_fixedReferenceHits),double(m_fixedReferenceMisses),double(m_fixedReferenceValues.size()),double(m_fixedReferenceClears)})},
+        {"mode",J::Quote("FiniteInflowV1")},{"identity",J::Quote(m_finiteInflowIdentity)},
         {"comparison_reference",J::Quote("native finite-profile initialized seed; not analytical neutral equilibrium")},
         {"frame_height",J::Quote("dot(physical-X_in,n_in); independent of wall distance and outer chart")},
         {"outer_native_points",J::Number(points)},{"gamma_min_max",J::Numbers(Vector{minGamma,maxGamma})},

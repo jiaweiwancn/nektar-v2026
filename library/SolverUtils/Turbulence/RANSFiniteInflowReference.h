@@ -68,9 +68,10 @@ public:
     }
     Value At(const RANSVector &physical) const
     {
-        double z=0;for(int a=0;a<3;++a)z+=(physical[a]-m_origin[a])*m_normal[a];
-        return AtHeight(z);
+        return AtHeight(Height(physical));
     }
+    double Height(const RANSVector &physical) const
+    {double z=0;for(int a=0;a<3;++a)z+=(physical[a]-m_origin[a])*m_normal[a];return z;}
     Value AtHeight(double z) const
     {
         Check(std::isfinite(z) && z>=0,"incoming-frame height outside finite reference");
