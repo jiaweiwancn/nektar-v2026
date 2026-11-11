@@ -7,6 +7,11 @@ versioned contract on `codex/a93-a95-e94e95-awf`. The older standard/CLS,
 EP-transition plan and all its receipts below remain historical evidence for
 their stated routes; they do not qualify the new wall formulation. The frozen
 dataset, observation roles, weights and extraction bounds remain unchanged.
+CT-Accepted-1 now verifies a small conservative open-floor operator. Its intended
+A95 rough-floor pilot stops on the original A95 radicand domain at attempted
+T=.004; it is not admitted as a developed precursor or hill prediction. See
+the separate package decision, including its recorded aggregate-resource failure,
+before selecting the next bounded inlet/normal-resolution control.
 
 ## Material Passport
 

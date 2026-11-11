@@ -1,0 +1,35 @@
+[
+  {
+    "command": [
+      "cmake",
+      "-S",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/build",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DRANS_BUILD_SOLVER=ON",
+      "-DRANS_PREBUILT_SPATIAL_LIBRARY=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/dependency/libSpatialDomains.so.5.9.0",
+      "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 3.6204006489133462,
+    "process_cpu_seconds": 1.467588
+  },
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/build",
+      "--parallel",
+      "4",
+      "--target",
+      "IncNavierStokesSolver",
+      "RANSPreservationProbe",
+      "RANSNewModelsProbe",
+      "RANSNativeDiagnosticChecks"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 313.33569207799155,
+    "process_cpu_seconds": 869.3065650000001
+  }
+]

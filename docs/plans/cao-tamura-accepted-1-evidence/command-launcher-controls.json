@@ -1,0 +1,81 @@
+{
+  "status": "pass",
+  "controls": [
+    {
+      "name": "one-thread",
+      "status": "pass",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "execution": {
+        "command": [
+          "python3",
+          "-c",
+          "import numpy as n;from pathlib import Path;n.linalg.svd(n.eye(8));assert int(next(s.split(':')[1] for s in Path('/proc/self/status').read_text().splitlines() if s.startswith('Threads:')))==1"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "wall_seconds": 0.6251671010395512,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 0.31235599999999997,
+        "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+        "family_reservation": 8,
+        "project_limit": 16,
+        "aggregate_limit": 72,
+        "startup_reserve": 16
+      },
+      "observed_guard": {
+        "external": 17,
+        "active_before_actions": 18,
+        "allowed_families": 4,
+        "paused_pids": [],
+        "maximum_observed_active_before_actions": 18,
+        "time_unix": 1794411051.5041807
+      }
+    },
+    {
+      "name": "failed-required-command",
+      "status": "pass",
+      "expected_exit": 7,
+      "actual_exit": 7,
+      "execution": {
+        "command": [
+          "python3",
+          "-c",
+          "raise SystemExit(7)"
+        ],
+        "exit_code": 7,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "wall_seconds": 0.646956350072287,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 0.228271,
+        "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+        "family_reservation": 8,
+        "project_limit": 16,
+        "aggregate_limit": 72,
+        "startup_reserve": 16
+      },
+      "observed_guard": {
+        "external": 17,
+        "active_before_actions": 18,
+        "allowed_families": 4,
+        "paused_pids": [],
+        "maximum_observed_active_before_actions": 18,
+        "time_unix": 1794411052.17546
+      }
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+[
+  {
+    "label": "boundary-verification-v1",
+    "status": "fail",
+    "failure": "ValueError('native_actual_state_rejected')",
+    "cases": {},
+    "results_sha256": "1ab687c44779c2b78e39f37176b5fc4e8a277529deee2fa7f354f6fd68bb6ebd",
+    "scope": "archived preparation/fixture/export failure; no successful physical pilot inferred"
+  },
+  {
+    "label": "boundary-verification-v2",
+    "status": "fail",
+    "failure": "ValueError('native_actual_state_rejected')",
+    "cases": {},
+    "results_sha256": "fc4191795b02ec4f99ff7f9732e3480b072fffe673e6fba45e042e278547c753",
+    "scope": "archived preparation/fixture/export failure; no successful physical pilot inferred"
+  },
+  {
+    "label": "boundary-verification-v3",
+    "status": "fail",
+    "failure": "ValueError('independent_manufactured_native_weak_balance')",
+    "cases": {},
+    "results_sha256": "7bee99e6fee713256e85511e66b64fcc1f9ed25baa8a796676f2f9fe93864413",
+    "scope": "archived preparation/fixture/export failure; no successful physical pilot inferred"
+  },
+  {
+    "label": "pilot-v1",
+    "status": "fail",
+    "failure": null,
+    "cases": {
+      "A95-dt-0.002": {
+        "status": "fail",
+        "failure": "FileNotFoundError(2, 'No such file or directory')"
+      },
+      "A95-dt-0.001": {
+        "status": "fail",
+        "failure": "FileNotFoundError(2, 'No such file or directory')"
+      },
+      "A93-dt-0.001": {
+        "status": "fail",
+        "failure": "FileNotFoundError(2, 'No such file or directory')"
+      },
+      "E94E95-dt-0.001": {
+        "status": "fail",
+        "failure": "FileNotFoundError(2, 'No such file or directory')"
+      }
+    },
+    "results_sha256": "61227788801a924453d61091741230e95494c6e4397e3f0284de1e61a1d9df88",
+    "scope": "archived preparation/fixture/export failure; no successful physical pilot inferred"
+  },
+  {
+    "label": "pilot-v2",
+    "status": "fail",
+    "failure": null,
+    "cases": {
+      "A95-dt-0.002": {
+        "status": "fail",
+        "failure": "ValueError('native_initialization_failed:Global wall field: nonfinite projection/boundary data')"
+      },
+      "A95-dt-0.001": {
+        "status": "fail",
+        "failure": "ValueError('native_initialization_failed:Global wall field: nonfinite projection/boundary data')"
+      },
+      "A93-dt-0.001": {
+        "status": "fail",
+        "failure": "ValueError('native_initialization_failed:Global wall field: nonfinite projection/boundary data')"
+      },
+      "E94E95-dt-0.001": {
+        "status": "fail",
+        "failure": "IsADirectoryError(21, 'Is a directory')"
+      }
+    },
+    "results_sha256": "59a299af0817840638ab0766b907b2c4387d48015dd790e180501e5df32e3051",
+    "scope": "archived preparation/fixture/export failure; no successful physical pilot inferred"
+  }
+]

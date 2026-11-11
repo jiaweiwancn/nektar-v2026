@@ -1,0 +1,26 @@
+{
+  "status": "failed_historical_aggregate_gate",
+  "observed_highwater": 79,
+  "limit": 72,
+  "attribution": "likely unbooked read-only NumPy inspection helper with unset library thread environment; old monitor did not record peak PID/time, so attribution cannot be established conclusively",
+  "evidence": {
+    "guard_status_sha256": "4405584b20fa05254638e8440f93ff0fe26024a7346fec3b7ab5b445b1d33e21",
+    "pause_events_file_exists": false
+  },
+  "scope": "native qualification launchers and project allocation used explicit one-thread libraries, four compiler jobs and owner bookings; peak attribution uncertainty retained",
+  "correction": "all subsequent remote numerical helpers launched with explicit one-thread environment; existing guard now logs high-water PID/thread/ownership inventory even without pause events",
+  "corrected_helper": {
+    "status": "pass",
+    "environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "observed_process_threads": 1
+  },
+  "guard_logging_selftest": "pass",
+  "selftest_peak": 17,
+  "historical_observation_not_reset": true
+}

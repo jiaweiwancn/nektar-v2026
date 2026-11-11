@@ -1,0 +1,42 @@
+[
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_open_supplement.py",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2",
+      "--base",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/boundary-controls-v1/results.json",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/boundary-controls-supplement-v1"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 32.445789251010865,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 33.088155
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_pilot.py",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2",
+      "--feasibility",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/feasibility-v2/results.json",
+      "--contract",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/source/docs/plans/cao-tamura-accepted-1-evidence/contract.json",
+      "--verification",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/boundary-verification-v4/results.json",
+      "--controls",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/boundary-controls-supplement-v1/results.json",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/pilot-v3"
+    ],
+    "exit_code": 1,
+    "wall_seconds": 298.16412420501,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 325.92866000000004
+  }
+]

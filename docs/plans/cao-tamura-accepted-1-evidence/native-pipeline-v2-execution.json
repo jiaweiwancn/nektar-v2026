@@ -1,0 +1,57 @@
+[
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_open.py",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/boundary-verification-v4"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 53.32419573701918,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 52.109273
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_open_controls.py",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2",
+      "--old-runtime",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/boundary-controls-v1"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 239.181341885007,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 255.111503
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_pilot.py",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2",
+      "--feasibility",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/feasibility-v2/results.json",
+      "--contract",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/source/docs/plans/cao-tamura-accepted-1-evidence/contract.json",
+      "--verification",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/boundary-verification-v4/results.json",
+      "--controls",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/boundary-controls-v1/results.json",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/pilot-v1"
+    ],
+    "exit_code": 1,
+    "wall_seconds": 8.148434565053321,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 3.99399999999995
+  }
+]

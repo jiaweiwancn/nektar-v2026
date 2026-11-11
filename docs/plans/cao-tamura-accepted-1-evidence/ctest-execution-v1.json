@@ -1,0 +1,29 @@
+[
+  {
+    "command": [
+      "cmake",
+      "-S",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/build"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 2.3462191571015865,
+    "process_cpu_seconds": 1.40891
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/build",
+      "-R",
+      "^CTAcceptedOpenConservativeNative$",
+      "-j",
+      "1",
+      "--output-on-failure"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 54.799747654935345,
+    "process_cpu_seconds": 51.929589
+  }
+]

@@ -1,0 +1,193 @@
+{
+  "status": "pass",
+  "checks": {
+    "open_restart": {
+      "status": "pass",
+      "state_sha256": "7135b6979e2beb79ea006ebde1e49a42ba497830f11481ec1d66c5d232484495",
+      "history": [
+        2e-07,
+        1e-07
+      ]
+    },
+    "pressure_offset_evolution": {
+      "status": "pass",
+      "maximum_coefficient_defect": 4.85722573273506e-15,
+      "offset": 0.125
+    },
+    "open_rollback": {
+      "status": "pass",
+      "reason": "deliberate PIMPLE rejection after scheduled solves before commit",
+      "last_accepted_time": 1e-07
+    },
+    "changed_boundary_restart": {
+      "status": "pass",
+      "expected_rejection": "physics signature",
+      "witness": "\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\n=======================================================================\n\t      Wall evolution: native IMEX, mapped multiregion CG\n\t  Physical dimension: 2\n\t     Global unknowns: 188\n\t         MPI backend: replicated global coefficients, owned-cell collective assembly\n\t  Correction weights: chi=0.000000, eta=0.000000\n=======================================================================\nEP-AWF evolution state/history: Wall IMEX: checkpoint signature mismatch\n[jay-Super-Server:748567] PMIX ERROR: NO-PERMISSIONS in file ../../../../../../src/mca/common/dstore/dstore_base.c at line 247\n"
+    },
+    "internal_reverse": {
+      "status": "pass",
+      "native_physical_status": "pass",
+      "outlet": {
+        "policy": "AcceptedOpenFlatV1",
+        "admissible": true,
+        "minimum_outward_velocity": 2.5923254169321802e-05,
+        "roundoff_tolerance": 1e-12,
+        "point": [
+          1,
+          0,
+          3.9739065285171717
+        ],
+        "geometry": 3,
+        "side": 1,
+        "time": 0,
+        "samples": 20,
+        "reason": "outflow",
+        "scope": "declared Gaussian outlet face inventory; signed flux retained; no rejection of internal reversed flow or negative wall shear"
+      },
+      "velocities": [
+        [
+          -0.0014999999999999996,
+          -7.447968504056109e-20,
+          1,
+          0,
+          0
+        ],
+        [
+          0.0007499999999999999,
+          7.724742009703683e-20,
+          1,
+          0,
+          0
+        ]
+      ]
+    },
+    "closed_CLS_compatibility_cache": {
+      "status": "pass",
+      "state_sha256": "7097970d568fdc38d1ccd30a4976a686920596819fa361d00e52507e7e02fb96",
+      "scope": "two ordinary CLS diagnostic steps; no renewed physical qualification"
+    },
+    "existing_diagnostic_controls": {
+      "status": "pass"
+    }
+  },
+  "executions": [
+    {
+      "name": "full",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.073369540972635,
+      "process_cpu_seconds": 9.436326,
+      "peak_RSS_KiB": 160724,
+      "actual_mapped_files_digest": "5d7cc840617144fab721060366e0d17e58cc8d4582c3eea00b6aa8659e5b5860"
+    },
+    {
+      "name": "first",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 7.118655423983,
+      "process_cpu_seconds": 5.889377999999997,
+      "peak_RSS_KiB": 156136,
+      "actual_mapped_files_digest": "d7b3341b0ca7786dceb8385a204ce54b6bf140e34ac03a57d66a3368f790908e"
+    },
+    {
+      "name": "continued",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.1273543209536,
+      "process_cpu_seconds": 5.8481830000000015,
+      "peak_RSS_KiB": 158200,
+      "actual_mapped_files_digest": "21a4e864151cebc34d45242ffd1ac8977df9bb00d3cf87f5a732989d1aa5d39e"
+    },
+    {
+      "name": "shifted",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 10.554580462048762,
+      "process_cpu_seconds": 9.537834999999998,
+      "peak_RSS_KiB": 160820,
+      "actual_mapped_files_digest": "98c623c3e76d94e4fe59f84c33fb37f56f1000365959c028e22cf859b775b4d9"
+    },
+    {
+      "name": "rejected",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 1,
+      "wall_seconds": 16.920602404978126,
+      "process_cpu_seconds": 7.762207000000005,
+      "peak_RSS_KiB": 156692,
+      "actual_mapped_files_digest": "06021dade4dacc7d05a2075149ee68835536f1daadfeccf9f774f266943922c5"
+    },
+    {
+      "name": "changed_traction_restart",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 1,
+      "wall_seconds": 6.544894799008034,
+      "process_cpu_seconds": 2.049760000000001,
+      "peak_RSS_KiB": 100372,
+      "actual_mapped_files_digest": "95655f2dfa8673de2f788ff39151acfd0ee25ad9107992f4831ec12a7c6ad54a"
+    },
+    {
+      "name": "closed_old",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 77.14932278497145,
+      "process_cpu_seconds": 74.372682,
+      "peak_RSS_KiB": 261564,
+      "actual_mapped_files_digest": "9093cf270ad8eec4b803ed5a2566ad37efaab521566221bec16bdd3575e50506"
+    },
+    {
+      "name": "closed_new",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 70.3364510909887,
+      "process_cpu_seconds": 69.05148200000002,
+      "peak_RSS_KiB": 261756,
+      "actual_mapped_files_digest": "94250f6f1029ac0b7177d25c804628be4ee5e6eaec4d33ca4c216eefd6c4e9e1"
+    },
+    {
+      "name": "closed_cached",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 13.674432803993113,
+      "process_cpu_seconds": 12.669469000000001,
+      "peak_RSS_KiB": 573240,
+      "actual_mapped_files_digest": "784fa2f9b9b47f4f1156e27b75e82524b7c9cf06c352a9802819c13ac4de67ae"
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/runtime-v2/RANSNativeDiagnosticChecks"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.0546461520716548,
+      "process_cpu_seconds": 0.015607999999986522,
+      "peak_RSS_KiB": 324,
+      "actual_mapped_files_digest": "6a1fd023dcc24a56cb29f36357d98c71ef2a378eefa186b2653f965a1fc29ec5"
+    }
+  ]
+}

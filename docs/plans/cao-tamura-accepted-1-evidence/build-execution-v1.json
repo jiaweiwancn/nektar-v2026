@@ -1,0 +1,33 @@
+[
+  {
+    "command": [
+      "cmake",
+      "-S",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/build",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 2.6160177850397304,
+    "process_cpu_seconds": 1.31013
+  },
+  {
+    "command": [
+      "cmake",
+      "--build",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111/build",
+      "--parallel",
+      "4",
+      "--target",
+      "RANSWallEvolutionSolver",
+      "RANSPreservationProbe",
+      "RANSNewModelsProbe",
+      "RANSWallEvolutionProbe"
+    ],
+    "exit_code": 2,
+    "wall_seconds": 0.09174837497994304,
+    "process_cpu_seconds": 0.07792399999999988
+  }
+]
