@@ -7,6 +7,7 @@ import signal
 import subprocess
 import time
 import re
+import resource
 
 from run_cls_epawf_picard import THREADS
 
@@ -86,10 +87,11 @@ def run_limited(argv, folder, log, limits, kind='native', seconds=None):
     time_file=Path(folder)/'resource-time.txt'
     if time_file.exists():raise ValueError('unreconciled resource-time output exists')
     launcher=['/usr/bin/time','-v','-o',str(time_file.resolve()),'--',*list(map(str,argv))]
+    def child_limits():resource.setrlimit(resource.RLIMIT_CORE,(0,0))
     with Path(log).open('x') as stream:
         proc = subprocess.Popen(launcher, cwd=folder, stdout=stream,
                                 stderr=subprocess.STDOUT, start_new_session=True,
-                                env=dict(os.environ, **THREADS))
+                                env=dict(os.environ, **THREADS),preexec_fn=child_limits)
         while proc.poll() is None:
             rss, threads = tree_usage(proc.pid)
             peak_rss, peak_threads = max(peak_rss, rss), max(peak_threads, threads)
@@ -107,11 +109,13 @@ def run_limited(argv, folder, log, limits, kind='native', seconds=None):
                     reason = 'server_worker_ceiling'
                 last_workers = now
             if reason:
-                os.killpg(proc.pid, signal.SIGTERM)
+                try:os.killpg(proc.pid, signal.SIGTERM)
+                except ProcessLookupError:pass
                 try:
                     proc.wait(timeout=3)
                 except subprocess.TimeoutExpired:
-                    os.killpg(proc.pid, signal.SIGKILL)
+                    try:os.killpg(proc.pid, signal.SIGKILL)
+                    except ProcessLookupError:pass
                 break
             time.sleep(.1)
         exit_code = proc.wait()

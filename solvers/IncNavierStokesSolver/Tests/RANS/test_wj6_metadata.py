@@ -10,9 +10,26 @@ from wj6_resources import DEFAULT, validate
 from run_wj5_native import executed_m1_obstruction
 from verify_wj4_transactions import verify
 from wj_immutable import write_once
+from wj6_qualification import sum_envelopes,common_extension_authorized,required_accuracy
 
 
 class Metadata(unittest.TestCase):
+    def test_both_asymmetric_uncertainty_contributions(self):
+        self.assertEqual(sum_envelopes(dict(u=dict(L2=2.,sampled_Linf=3.)),dict(u=dict(L2=7.,sampled_Linf=11.))),
+                         dict(u=dict(L2=9.,sampled_Linf=14.)))
+        with self.assertRaises(ValueError):sum_envelopes(dict(u=dict(L2=2.)),{})
+
+    def test_no_missing_or_failed_primary_extension(self):
+        good=dict(primary=dict(status='PASS'),transactions=dict(status='PASS'),extension_resource=dict(status='PASS'))
+        self.assertTrue(common_extension_authorized(dict(EP=good,Budget=good)))
+        self.assertFalse(common_extension_authorized(dict(EP=good)))
+        for key in good:
+            bad=copy.deepcopy(good);bad[key]['status']='UNRESOLVED'
+            self.assertFalse(common_extension_authorized(dict(EP=good,Budget=bad)))
+        records={'0':dict(errors=dict(accuracy_gate=dict(status='PASS'))),'4':dict(errors=dict(accuracy_gate=dict(status='OBSTRUCTED'))),'32':dict(errors=dict(accuracy_gate=dict(status='PASS')))}
+        self.assertEqual(required_accuracy(records,['0','4','32'])['status'],'OBSTRUCTED')
+        del records['4']
+        self.assertNotEqual(required_accuracy(records,['0','4','32'])['status'],'PASS')
     def test_finite_resource_design(self):
         validate(DEFAULT)
         for key,value in [('rss_bytes',float('nan')),('native_seconds',float('inf')),

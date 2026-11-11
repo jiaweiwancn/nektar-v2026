@@ -38,8 +38,8 @@ def legacy_control_budget(tests):
     return rows
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--label',default='qualification');p.add_argument('--suite',choices=SUITES,required=True);a=p.parse_args()
-    root=a.root.resolve();build=root/'build';scripts=Path(__file__).resolve().parent
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--build',type=Path);p.add_argument('--label',default='qualification');p.add_argument('--suite',choices=SUITES,required=True);a=p.parse_args()
+    root=a.root.resolve();build=a.build.resolve() if a.build else root/'build';scripts=Path(__file__).resolve().parent
     env=os.environ.copy();env.update(THREADS);env['WJ4_PACKAGE_ROOT']=os.environ.get('WJ4_PACKAGE_ROOT',str(root));env['LD_LIBRARY_PATH']=str(build/'geometry-lib')+':'+env.get('LD_LIBRARY_PATH','')
     regex,count,reserve=SUITES[a.suite];regex='^('+regex+')$';label=a.label+'-'+a.suite
     inventory=subprocess.check_output(['ctest','--test-dir',str(build),'--show-only=json-v1','-R',regex],env=env,text=True)
