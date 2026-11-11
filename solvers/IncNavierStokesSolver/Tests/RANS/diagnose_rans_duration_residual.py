@@ -92,6 +92,7 @@ def common_vertical(common, packet, cross, analysis, ref):
             interval=[e['lower'][2],e['upper'][2]]))
     ranking=sorted(range(len(free)),key=lambda j:abs(total[j])/np.sqrt(M[j,j]),reverse=True)[:20]
     body=dict(total=norm(total),common_free_ids=free.tolist(),common_mass_sha256=sha_bytes(M),
+        signed_restricted_load=total.tolist(),signed_grouped_loads={k:v.tolist() for k,v in grouped.items()},
         physical_term_norms={k:norm(v) for k,v in terms.items()},
         term_sum_reconstruction_maximum=float(np.max(np.abs(sum(terms.values())-total))),
         term_cancellation_ratio=norm(total)/sum(norm(v) for v in terms.values()),
@@ -102,6 +103,17 @@ def common_vertical(common, packet, cross, analysis, ref):
         dominant_elements=sorted(local,key=lambda q:q['varying_flux_common_mass_dual'],reverse=True)[:16],
         dominant_rows=[dict(common_id=int(free[j]),load=float(total[j]),
             diagonal_mass_scaled=float(total[j]/np.sqrt(M[j,j])/scale),support=support[free[j]]) for j in ranking])
+    native_path=Path(analysis['trajectory_source'])/'case.evolution.json'
+    native=load(native_path);history=np.asarray(native['last_stage_history'])
+    backward=np.asarray(r['mass'][1])@(state[offset:offset+n]-history[offset:offset+n])*native['last_stage_alpha']
+    storage=p.T@backward;stage=project(native['final_stage_loads'])
+    identity_defect=stage-storage-total
+    require(np.max(abs(identity_defect),initial=0.)<=2e-10,'actual_stage_storage_spatial_identity_failed')
+    body['finite_time_diagnostic']=dict(source_report_sha256=sha(native_path),alpha=native['last_stage_alpha'],
+        history_sha256=sha_bytes(history),backward_storage_load=storage.tolist(),current_native_stage_load=stage.tolist(),
+        backward_storage_norm=norm(storage),current_native_stage_norm=norm(stage),
+        identity_maximum_defect=float(np.max(abs(identity_defect),initial=0.)),
+        scope='actual current-state time-discrete residual equals native alpha-zero spatial load plus actual stage-history mass; the frozen predictor/scalar splitting is separate and is not called a steady residual')
     return body,total,norm
 
 

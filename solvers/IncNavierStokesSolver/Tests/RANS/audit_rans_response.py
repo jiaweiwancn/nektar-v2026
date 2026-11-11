@@ -80,7 +80,7 @@ def main():
     quad={}
     try:
         qlabel='response-quadrature-'+a.cohort_prefix+'-'+str(a.time);path=r/qlabel/'results.json'
-        if not path.exists():run('quadrature',[source/'check_rans_balanced_state_quadrature.py','--root',r,'--analysis-runtime',r/'runtime-resolution-v3','--model',cfg['model'],'--policy',cfg['policy'],'--walls',cfg['wall'],'--label-prefix',a.cohort_prefix,'--time',str(a.time),'--output-label',qlabel])
+        if not path.exists():run('quadrature',[source/'check_rans_balanced_state_quadrature.py','--root',r,'--analysis-runtime',r/'runtime-resolution-v3','--model',cfg['model'],'--policy',cfg['policy'],'--walls',cfg['wall'],'--label-prefix',a.cohort_prefix,'--time',str(a.time),'--output-label',qlabel]+(['--space-names',*ad['space_names']] if 'space_names' in ad else []))
         quad=load(path);files.append(str(path));require(quad['status']=='pass','response_quadrature_failed')
     except Exception as error:failures.append('quadrature:'+repr(error))
     require(set(spatial).issubset(MEMBERS[:2]) and set(scalars).issubset(MEMBERS),'response_audit_member_identity')

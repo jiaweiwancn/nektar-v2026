@@ -10,7 +10,7 @@ from rans_qualification import write_json
 from rans_ownership_contract import budget_gate, OPERATOR
 
 
-def bind(root,admission,cohort,dt,time,analysis_path,accuracy_path,output):
+def bind(root,admission,cohort,dt,time,analysis_path,accuracy_path,output,baseline_cohort=None):
     r=root.resolve();ad=load(admission);cfg=ad['configuration'];require(cfg['model']=='A95' and cfg['wall']=='Accepted','budget_scope_not_full_A95_accepted_response')
     analysis=load(analysis_path);accuracy=load(accuracy_path);members={};trajectories={}
     for p in (analysis_path,accuracy_path):
@@ -18,7 +18,7 @@ def bind(root,admission,cohort,dt,time,analysis_path,accuracy_path,output):
     for member in MEMBERS:
         members[member]={}
         for kind in ('baseline','perturbed'):
-            label=(prefix(cfg['model'],cfg['policy'],cfg['wall'])+'-duration-'+str(dt) if kind=='baseline' else cohort)+'-'+member
+            label=((baseline_cohort or prefix(cfg['model'],cfg['policy'],cfg['wall'])+'-duration-'+str(dt)) if kind=='baseline' else cohort)+'-'+member
             folder=r/'campaigns'/label;rm=load(folder/'request-manifest.json');q=rm['request'];identity(q,cfg)
             require(q['numerical_operator']==OPERATOR,'old_operator_budget_history')
             if kind=='perturbed':require(q['velocity_amplitude']==2e-5,'foreign_budget_response_amplitude')
@@ -43,6 +43,9 @@ def bind(root,admission,cohort,dt,time,analysis_path,accuracy_path,output):
     binding=dict(schema='NativeOwnershipBudgetBindingV1',numerical_operator=OPERATOR,configuration=cfg,
         cohort=cohort,amplitude=2e-5,time=time,members=members,analysis_sha256=sha(analysis_path),accuracy_sha256=sha(accuracy_path),
         controls=dict(volume_orders=[48,64],physical_face_orders=[16,32]))
+    if baseline_cohort:
+        binding.update(package_scope='DirectionalResolutionExperimentV1',baseline_cohort=baseline_cohort,
+            member_spaces={m:{kind:value['request'].get('spatial_control') for (kind,mm),value in trajectories.items() if mm==m} for m in MEMBERS})
     gate=budget_gate(analysis,accuracy,binding,dict(configuration=cfg,cohort=cohort,time=time,members=members,
         analysis_sha256=sha(analysis_path),accuracy_sha256=sha(accuracy_path)))
     seal=RequestManifest(output,binding,False);value=dict(binding=binding,**gate)
@@ -52,8 +55,8 @@ def bind(root,admission,cohort,dt,time,analysis_path,accuracy_path,output):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for n in ('root','admission','analysis','accuracy','output'):p.add_argument('--'+n,type=Path,required=True)
-    p.add_argument('--cohort',required=True);p.add_argument('--dt',type=float,required=True);p.add_argument('--time',type=float,default=.016)
-    a=p.parse_args();value=bind(a.root,a.admission,a.cohort,a.dt,a.time,a.analysis,a.accuracy,a.output)
+    p.add_argument('--cohort',required=True);p.add_argument('--baseline-cohort');p.add_argument('--dt',type=float,required=True);p.add_argument('--time',type=float,default=.016)
+    a=p.parse_args();value=bind(a.root,a.admission,a.cohort,a.dt,a.time,a.analysis,a.accuracy,a.output,a.baseline_cohort)
     print(value['status']);return 0 if value['status']=='pass' else 1
 
 

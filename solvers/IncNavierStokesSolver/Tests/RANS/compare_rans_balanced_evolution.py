@@ -24,7 +24,7 @@ def compare(root,labels,T,inputs_only=False,common_sampling=None):
             if h['sha256']!=actual['history_sha256'] or h['steps']!=0 or h['time']!=0 or h['dt']!=req['dt'] or exact_vector_hash(h['coupled_state'])!=actual['state_sha256']:raise ValueError('actual perturbed initial native history invalid')
     if reqs[0]['dt']!=reqs[1]['dt'] or reqs[2]['dt']!=reqs[0]['dt']/2 or reqs[3]['dt']!=reqs[1]['dt']/2:raise ValueError('invalid dt pair')
     for a,b in ((0,2),(1,3)):
-        for key in ('knots','degree','pressure_degree','columns','quadrature','raw_neutral_sha256','boundary','declared_mesh'):
+        for key in ('knots','degree','pressure_degree','columns','quadrature','raw_neutral_sha256','boundary','declared_mesh','spatial_control'):
             if reqs[a].get(key)!=reqs[b].get(key):raise ValueError('same-space initial request differs '+key)
         receipt=[load(folders[i]/('T-'+format(reqs[i]['horizons'][0],'.4f'))/'metrics.json')['initialization_receipt'] for i in (a,b)]
         for key in ('raw_initial_sha256','effective_initial_sha256','fixed_reference_sha256','explicit_boundary_sha256','implicit_boundary_sha256'):
@@ -37,7 +37,7 @@ def compare(root,labels,T,inputs_only=False,common_sampling=None):
         admission=RequestManifest(folder,request,True);endpoint=folder/('T-'+format(T,'.4f'))
         if not admission.completed(endpoint):raise ValueError('incomplete endpoint '+str(endpoint))
         m=load(endpoint/'metrics.json');s=load(endpoint/'endpoint-samples.json');assert m['status']=='pass' and abs(m['time']-T)<1e-13
-        metrics.append(m);samples.append(s);provenance.append(dict(label=folder.name,request_sha256=admission.payload['sha256'],space={k:request[k] for k in ('knots','degree','pressure_degree','quadrature','columns')},dt=request['dt'],time=m['time'],history=m['history_identity'],state_sha256=m['final_state_sha256'],metrics_sha256=hashlib.sha256((endpoint/'metrics.json').read_bytes()).hexdigest(),source=str(endpoint)))
+        metrics.append(m);samples.append(s);provenance.append(dict(label=folder.name,request_sha256=admission.payload['sha256'],space={k:request[k] for k in ('knots','degree','pressure_degree','quadrature','columns')},spatial_control=request.get('spatial_control'),dt=request['dt'],time=m['time'],history=m['history_identity'],state_sha256=m['final_state_sha256'],metrics_sha256=hashlib.sha256((endpoint/'metrics.json').read_bytes()).hexdigest(),source=str(endpoint)))
     if common_sampling is not None:
         from run_rans_neutral_pilot import accuracy
         if len(common_sampling)!=4:raise ValueError('common sampling companion coverage')
