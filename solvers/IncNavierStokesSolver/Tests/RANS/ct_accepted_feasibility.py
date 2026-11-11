@@ -9,7 +9,18 @@ import numpy as np
 from numpy.polynomial.legendre import leggauss,Legendre
 from scipy.optimize import brentq,minimize_scalar
 from rans_request_manifest import RequestManifest,sha,runtime_identity
-from rans_qualification import write_json
+from rans_qualification import write_json as _write_json
+
+
+def write_json(path, value):
+    # Numerical receipts contain NumPy comparisons as well as Python scalars.
+    # Convert their representation only; keep the common writer's finite check.
+    def plain(x):
+        if isinstance(x, np.generic):return x.item()
+        if isinstance(x, dict):return {k:plain(v) for k,v in x.items()}
+        if isinstance(x, (tuple,list)):return [plain(v) for v in x]
+        return x
+    _write_json(path,plain(value))
 
 
 def require(condition,reason):
