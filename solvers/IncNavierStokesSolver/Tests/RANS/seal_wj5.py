@@ -61,7 +61,8 @@ def main():
             development.append(dict(revision=revision,relative=relative,archive=file_identity(path),scope='retained development code; not qualified immutable reuse'))
     write_once(out/'development-code-bridge.json',development)
     # The publication inventory contains immutable cases plus three explicitly
-    # mutable package-progress paths. Verify every immutable artifact; bind the
+    # mutable package-progress paths and its own not-yet-closed output log.
+    # Verify every immutable artifact; bind the
     # final write-once replacements for those progress files below. Original
     # publication receipts and inventory bytes remain unchanged.
     heavy_meta=read(out/'manifest.json')['heavy_artifact_index']
@@ -69,6 +70,12 @@ def main():
     heavy_index=read(heavy_meta['path']);progress={str(r/name):out/replacement for name,replacement in (
         ('command-receipts.json','command-receipts-before-seal.json'),
         ('ledger-EP.json','final-ledger-EP.json'),('ledger-Budget.json','final-ledger-Budget.json'))}
+    publisher=next(c for c in commands if c['label']=='publish-v2')
+    require(publisher['exit_code']==0 and str(out) in publisher['command'] and file_hash(publisher['log'])==publisher['log_sha256'],
+            'completed publication process/log identity differs')
+    published_log=out/'publication-process.log'
+    with published_log.open('xb') as stream:stream.write(Path(publisher['log']).read_bytes())
+    progress[publisher['log']]=published_log
     require(set(progress)<=set(heavy_index),'missing indexed package-progress identity')
     immutable_count=0
     for name,identity in heavy_index.items():
@@ -98,7 +105,7 @@ def main():
     write_once(out/'progress-index-bridge.json',dict(schema='WJ5ProgressSnapshotBridgeV1',
         original_index=heavy_meta,verified_immutable_artifacts=immutable_count,
         progress={name:dict(publication_time_identity=heavy_index[name],final_snapshot=file_identity(path)) for name,path in progress.items()},
-        meaning='only these three live progress paths continue after publication; final snapshots supersede their inventory-time identities; outer seal receipt is bound separately'))
+        meaning='only the live progress paths and closing publication log continue after inventory; final snapshots supersede their inventory-time identities; outer seal receipt is bound separately'))
     compact_files=artifacts([f for f in out.iterdir() if f.is_file()]);figure_files=artifacts([f for f in a.figures.iterdir() if f.is_file()])
     policies={}
     for policy in ledgers:
