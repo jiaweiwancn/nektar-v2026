@@ -25,10 +25,10 @@ from run_cls_accepted_awf import case_xml, check_report
 from run_cls_epawf_picard import THREADS, load, require, sha, state_hash, set_info, write
 
 
-def prepare(folder, steps, dt, parent=None, restart=None, refinement='none', bad_hash=False):
+def prepare(folder, steps, dt, parent=None, restart=None, refinement='none', bad_hash=False,inner_k=None,hard_reject=0):
     xml = case_xml('Accepted-AWF-05G', folder, steps, dt, restart=restart,
-        companion='regularized', companion_reason='same physical T=6 state diagnostic IVP; faithful covariance blocker retained',
-        inner_refinement=refinement, checkpoint_every=1)
+        companion='regularized', companion_reason='same retained physical state diagnostic IVP; faithful covariance blocker retained',
+        inner_refinement=refinement, checkpoint_every=1,hard_reject=hard_reject)
     tree = ET.parse(xml).getroot()
     set_info(tree, 'RANSWallEvaluationReuse', 'ExactStepV1')
     if parent:
@@ -37,7 +37,18 @@ def prepare(folder, steps, dt, parent=None, restart=None, refinement='none', bad
         for k, v in dict(RANSWallDiagnosticIVP='LateStateIMEX1V1', RANSWallIVPParent=str(parent),
             RANSWallIVPParentSHA256='0'*64 if bad_hash else sha(parent/'State.bin'),
             RANSWallIVPParentTimeStep=format(q['dt'], '.17g')).items(): set_info(tree, k, v)
+        if inner_k is not None:
+            set_info(tree,'RANSWallDiagnosticIVP','LateStateInnerKIMEX1V1')
+            set_info(tree,'RANSWallIVPInnerKAmplitude',format(inner_k,'.17g'))
+    require(inner_k is None or parent is not None,'inner-k seed belongs only to explicit diagnostic IVP initialization')
     write(tree, xml)
+    definition=load(folder/'definition.json');definition['xml_sha256']=sha(xml)
+    if parent:
+        definition.update(fresh_native_initialization=False,initialization_contract='explicit retained-state IMEX1 IVP; no Lift; own native histories',
+            diagnostic_ivp=dict(parent_checkpoint=str(parent),parent_sha256=sha(parent/'State.bin'),physical_t0=q['time'],
+                parent_dt=q['dt'],target_dt=dt,inner_k_amplitude=inner_k,refinement=refinement))
+    else:definition['initialization_contract']='ordinary compatible native restart' if restart else 'fresh analytical-family native initialization'
+    atomic(folder/'definition.json',definition)
     return xml
 
 

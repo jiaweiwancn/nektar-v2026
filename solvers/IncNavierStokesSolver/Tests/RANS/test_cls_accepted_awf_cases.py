@@ -66,6 +66,12 @@ def main():
         require(parameters(tree)['IO_CHECKSTEPS']=='1','focused control lacks exact last-accepted checkpoints')
         rejects(lambda:case_xml('Accepted-AWF-05G',root/'hidden-outer-control',0,outer_refinement='pressure-p2-v1'),'cutoff-resolved H2')
         rejects(lambda:case_xml('Accepted-AWF-2G',root/'hidden-fallback',0,companion='regularized'),'preserved faithful-model blocker')
+        control=case_xml('Accepted-AWF-05G',root/'half-first',0,inner_refinement='cutoff-v1',first_cell='half-first-v1')
+        d=load(control.parent/'definition.json')
+        require(d['tensor_unknown_estimate']==2861 and d['radial_knots'][1]==.00125 and .0025 not in d['radial_knots'],
+            'same-size zero-time control did not replace only the first interior knot')
+        require(d['radial_knots'][2:]==[.005,.01,.02,.04,.1,.25,.5,1.,2.]+[2+j/3 for j in range(1,7)],'zero-time control changed another knot')
+        rejects(lambda:case_xml('Accepted-AWF-05G',root/'half-evolving',1,inner_refinement='cutoff-v1',first_cell='half-first-v1'),'zero-physical-step')
     minimal=dict(temporal_coupling='PimpleSingleSweep',order=1,wall_policy=FORMULATION,eta=0.,
         k_bound_mode='MassProjection',inner_stress_model='Linear',implicit_callback_count=1,stage_audits=[],
         pimple_attempts=[dict(time=.000625,scheduled_complete=True,additional_governing_equation_solves=0,

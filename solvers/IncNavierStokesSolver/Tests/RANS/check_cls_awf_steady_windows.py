@@ -23,6 +23,7 @@ from analyse_cls_accepted_awf import normalized
 from continue_cls_epawf_pimple import atomic, load_progress
 from diagnose_cls_accepted_covariance import checkpoint
 from run_cls_epawf_picard import THREADS, require, sha, state_hash
+from cls_awf_native_metrics import interface_metrics
 
 
 def native_report(segment, folder):
@@ -83,7 +84,7 @@ def main():
         progress = load_progress(campaign/'progress.json')
         segments = {int(s['end_step']): s for s in progress['segments'] if not s['failure'] and s['exit_code'] == 0}
         stride = round(policy['primary_physical_window']/progress['dt'])
-        eligible = [n for n in segments if all(n-i*stride in segments for i in range(4))]
+        eligible = [n for n in segments if n%stride==0 and all(n-i*stride in segments for i in range(4))]
         require(eligible, 'three complete physical windows are unavailable')
         end = max(eligible)
         steps = [end-i*stride for i in (3, 2, 1, 0)]
@@ -104,7 +105,7 @@ def main():
                 matching_defect=q.get('matching_trace_defect', attempt['refreshed_trace_defect']),
                 mean_wall_stress=q['mean_wall_stress'], relative_reference_traction_error=q['mean_wall_stress']/.16-1,
                 bound={k:attempt['k_bound'][k] for k in bound_keys if k in attempt['k_bound']},
-                strong_continuity=audit['strong_continuity'], interface=audit['interface'],
+                strong_continuity=audit['strong_continuity'], interface=audit['interface'], named_interface_metrics=interface_metrics(audit['interface']),
                 covariance=audit.get('accepted_awf_covariance', audit.get('r2_covariance')), receipt=receipt)
         records = {}
         with (campaign/'steps.jsonl').open() as stream:

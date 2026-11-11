@@ -547,6 +547,87 @@ std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,
     const auto original=ResidualResolutionComponents(m_reference,m_reference,0,time,data,false,true,true);
     const auto represented=ResidualResolutionComponents(m_reference,m_reference,0,time,data,false);
     const auto retained=ResidualResolutionComponents(state,state,0,time,data,false);
+    // A continuous Q2(x) x P1(z) lifting, zero on every boundary except the
+    // ground and zero at its side corners. Contract the FULL native load,
+    // then explicitly separate free-row work from the prescribed reaction.
+    double firstHeight=m_parameters.geometry.height;
+    for(const auto &e:fields[0]->Elements())if(e.lower[2]==0)firstHeight=std::min(firstHeight,e.upper[2]);
+    const auto groundWeight=[&](const RANSWallCoordinate &p)
+    {const double x=(p[0]-lower[0])/(upper[0]-lower[0]);return 4*x*(1-x);};
+    const auto liftingFunction=[&](const RANSWallCoordinate &p)
+    {return groundWeight(p)*std::max(0.,1-p[2]/firstHeight);};
+    const auto lifting=fields[0]->Project(liftingFunction);
+    double liftingError=0;for(const auto &q:Quadrature(0,8))
+        liftingError=std::max(liftingError,std::abs(q.Value(lifting)-liftingFunction(q.coordinate)));
+    Require(liftingError<1e-12,"ground reaction diagnostic lifting is not represented exactly");
+    const auto reaction=[&](const ResidualResolutionResult &r,const Vector &s,bool analytical)
+    {
+        long double total=0,free=0;std::vector<std::pair<std::string,std::string>> components;
+        for(int i=0;i<size[0];++i)
+        {const double v=lifting[i]*r.terms.at("spatial_sum")[offset[0]+i];total+=v;if(!r.constraints.count(offset[0]+i))free+=v;}
+        for(const auto &name:RANSWallResolutionSpatialTerms())
+        {long double v=0;for(int i=0;i<size[0];++i)v+=(long double)lifting[i]*r.terms.at(name)[offset[0]+i];components.push_back({name,J::Number(v)});}
+        double sampled=0,measure=0,gradient=0;
+        for(const auto &face:Surface(0,2,0.,-1,8))
+        {
+            const auto &q=face.test;const auto profile=StateProfile(s,q.coordinate,time,data);RANSTensor G{};
+            for(int b=0;b<m_dimension;++b)G[PhysicalAxis(b)]=q.Gradient(s,offset[b]);
+            if(analytical){G={};G[0][2]=profile->Original().VelocityGradient(0.,{profile->Reference().matchingVelocity,0},{0,0})[0];}
+            const auto stress=RANSWallInnerMeanStress(InnerStress(q.Value(s,offset[K()]),profile->Original().EddyViscosity(0.),G),m_parameters.geometry.molecularNu,0.);
+            const double w=face.weight*groundWeight(q.coordinate);measure+=w;sampled+=w*stress[0][2];gradient+=w*G[0][2];
+        }
+        return J::Object({{"weighted_ground_measure",J::Number(measure)},{"sampled_weighted_mean_shear",J::Number(sampled/measure)},
+            {"sampled_weighted_mean_dU_dz",J::Number(gradient/measure)},
+            {"full_spatial_lifting_contraction",J::Number(total)},{"free_row_lifting_work",J::Number(free)},
+            {"prescribed_row_reaction",J::Number(total-free)},{"inferred_weighted_mean_shear",J::Number(-(total-free)/measure)},
+            {"signed_volume_components",J::Object(components)}});
+    };
+    const auto transport=[&](const Vector &s,const ResidualResolutionResult &r)
+    {
+        std::vector<std::string> output;
+        for(int b=0;b<InnerPressure();++b)
+        {
+            Vector advective(size[b]),dilatation(size[b]),boundary(size[b]),isotropicProduction(size[b]);
+            double integratedDilatation=0,integratedIsotropicProduction=0;
+            for(const auto &q:Quadrature(b,8))
+            {
+                const auto v=Point(0,q.coordinate),krow=Point(K(),q.coordinate);
+                const auto grad=q.Gradient(s,offset[b]);RANSVector u{};RANSTensor G{};
+                for(int d=0;d<m_dimension;++d){u[PhysicalAxis(d)]=v.Value(s,offset[d]);G[PhysicalAxis(d)]=v.Gradient(s,offset[d]);}
+                const double div=G[0][0]+G[1][1]+G[2][2],value=q.Value(s,offset[b]);double dot=0;
+                for(int d=0;d<3;++d)dot+=u[d]*grad[d];
+                // BOTH actual inner and outer productions contract the full
+                // Reynolds tensor, including its 2/3 k isotropic part.
+                const double iso=b==K()?-2./3*krow.Value(s,offset[K()])*div:
+                    (b==Epsilon()?-2./3*m_parameters.model.Parameters().cEpsilon1*value*div:0.);
+                integratedDilatation+=q.weight*value*div;integratedIsotropicProduction+=q.weight*iso;
+                for(int j=0;j<q.ids.size();++j)
+                {advective[q.ids[j]]+=q.weight*q.phi[j]*dot;dilatation[q.ids[j]]+=q.weight*q.phi[j]*value*div;isotropicProduction[q.ids[j]]+=q.weight*q.phi[j]*iso;}
+            }
+            for(int axis:{0,2})for(int side:{-1,1})
+            {
+                const double bottom=b==Epsilon()?m_parameters.geometry.height:lower[2];
+                const double value=axis==0?(side<0?lower[0]:upper[0]):(side<0?bottom:upper[2]);
+                for(const auto &f:Surface(b,axis,value,side,8))
+                {
+                    const auto &q=f.test;const auto v=Point(0,q.coordinate);
+                    const double un=side*v.Value(s,offset[axis==0?0:1]);
+                    for(int j=0;j<q.ids.size();++j)boundary[q.ids[j]]+=f.weight*q.phi[j]*q.Value(s,offset[b])*un;
+                }
+            }
+            double error=0;Vector native(size[b]);
+            for(int i=0;i<size[b];++i)
+            {native[i]=r.terms.at("conservative_advection")[offset[b]+i];error=std::max(error,std::abs(native[i]-advective[i]-dilatation[i]+boundary[i]));}
+            Require(error<1e-10,"native conservative/advective/dilatation diagnostic identity failed");
+            output.push_back(J::Object({{"block",J::Number(b)},{"native_conservative_load",J::Numbers(native)},
+                {"advective_load",J::Numbers(advective)},{"dilatation_load",J::Numbers(dilatation)},
+                {"outward_boundary_load",J::Numbers(boundary)},{"load_identity_max_error",J::Number(error)},
+                {"integrated_q_div_u",J::Number(integratedDilatation)},
+                {"physical_isotropic_production_load",J::Numbers(isotropicProduction)},
+                {"integrated_physical_isotropic_production",J::Number(integratedIsotropicProduction)}}));
+        }
+        return J::List(output);
+    };
     std::vector<std::string> blocks;
     for(int b=0;b<InnerPressure();++b)
     {
@@ -640,6 +721,13 @@ std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,
         {"element_values_columns",J::Quote("outer_flag,physical_measure,divergence_squared,U_reference_error_squared,dU_dz_error_squared,k_reference_error_squared,dk_dz_error_squared,max_abs_divergence,max_abs_du_dx,max_abs_dw_dz,integrated_divergence")},
         {"element_values",J::List(elements)},
         {"native_ground_traction",J::List(wallProfile)},
+        {"ground_reaction",J::Object({{"test",J::Quote("w=4*xhat*(1-xhat)*max(0,1-z/firstHeight); exact native continuous lifting; all other boundary values zero including side corners")},
+            {"first_height",J::Number(firstHeight)},{"lifting_projection_error",J::Number(liftingError)},
+            {"sign",J::Quote("positive reported shear is +sigma_xz; outward ground traction is negative. Inferred shear = minus prescribed-row weak-volume contraction / weighted ground measure; free-row/unsteady work is reported separately, not discarded")},
+            {"analytical_selected",reaction(a,m_reference,true)},{"archived_reference_representation",reaction(represented,m_reference,false)},
+            {"retained_state",reaction(retained,state,false)}})},
+        {"transport_decomposition",J::Object({{"identity",J::Quote("native conservative advection = advective + q div(u) - outward boundary load; all free and prescribed rows retained")},
+            {"archived_reference_representation",transport(m_reference,represented)},{"retained_state",transport(state,retained)}})},
         {"reference_sha256",J::Quote(refBefore)},{"state_sha256",J::Quote(before)},
         {"analytical_semantics",J::Quote("direct analytical values AND gradients under native test rows/quadrature; not a residual of the represented coefficient field; native boundaries and relative pressure offset retained")},
         {"governing_solves","0"},{"physical_commits","0"}});

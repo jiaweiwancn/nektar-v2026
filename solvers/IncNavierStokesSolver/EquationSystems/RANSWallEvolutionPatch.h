@@ -283,6 +283,8 @@ public:
     bool HeightComparisonEnabled() const {return m_heightComparison || m_acceptedComparison;}
     bool AcceptedComparisonEnabled() const {return m_acceptedComparison;}
     Vector AcceptedPerturbation(const Vector &state,double amplitude) const;
+    Vector LateInnerKPerturbation(const Vector &state,double amplitude,double time,
+        const RANSWallEvolutionData &data,std::string &report) const;
     std::string FormulationMetadata() const;
     RANSWallGlobalPoint SampleKRow(const RANSWallCoordinate &anchor) const;
     // Exact physical mass restricted to the supplied global free-k rows.

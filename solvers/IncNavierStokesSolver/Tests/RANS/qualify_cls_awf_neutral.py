@@ -20,12 +20,50 @@ from analyse_cls_epawf_height_comparison import differences, compact_diagnostic
 from continue_cls_epawf_pimple import atomic
 from diagnose_cls_accepted_covariance import checkpoint, common_packet, run_probe, read_report
 from run_cls_epawf_picard import THREADS, load, require, sha, state_hash
+from cls_awf_native_metrics import flat_partition, interface_metrics
 
 
 TERMS = ('inner_momentum_stress', 'outer_momentum_stress', 'conservative_advection', 'k_diffusion',
     'epsilon_diffusion', 'inner_k_production', 'inner_k_destruction', 'outer_k_production',
     'outer_k_destruction', 'epsilon_production', 'epsilon_destruction', 'epsilon_yap',
     'prescribed_scalar_source', 'roughness_force', 'prescribed_body', 'continuity', 'gauge')
+
+
+def step_storage_reaction(summary,raw):
+    """Actual callback-history storage; never reconstruct history from a state."""
+    d=raw['diagnostics'];balance=d.get('neutral_reference_balance')
+    source=summary['selection'].get('source_report')
+    if not balance or not source:return None
+    native=read_report(Path(source));attempts=[v for v in native['pimple_attempts'] if v['time']==summary['selection']['native_time']]
+    if not attempts:return None # h0 has no physical time derivative supplied
+    import numpy as np
+    t=attempts[-1];file=Path(t['k_snapshot']);packet=load(file)
+    require(state_hash(packet['corrected'])==summary['state_sha256'] and packet['time']==summary['selection']['native_time'],
+        'storage diagnostic packet/state/time differs')
+    metric=balance['mass_metrics'][0];n=int(summary['physical']['native_degrees_of_freedom'][0]);lift=np.zeros(n)
+    elements={int(e['geometry']):e for e in balance['element_values']};seen=set()
+    xmin=min(e['lower'][0] for e in elements.values());L=max(e['upper'][0] for e in elements.values())-xmin
+    # Exact modified-A coefficients of Q2(x)*P1(z), nonzero only on ground.
+    for row in metric['native_GL4_rows']:
+        g=int(row['geometry']);e=elements[g]
+        if g in seen or e['lower'][2]!=0:continue
+        seen.add(g);x0,x1=e['lower'][0],e['upper'][0];a=(x0-xmin)/L;b=(x1-xmin)/L
+        for j,value in ((0,4*a*(1-a)),(1,4*b*(1-b)),(2,4*((x1-x0)/L)**2)):
+            lift[int(row['ids'][j])]=value
+    spatial=np.array(balance['retained_state']['terms']['spatial_sum'][:n]);reaction=balance['ground_reaction']['retained_state']
+    require(abs(float(lift@spatial)-reaction['full_spatial_lifting_contraction'])<1e-12,'native ground lifting reconstruction differs')
+    delta=np.array(packet['corrected'][:n])-np.array(packet['history'][:n]);storage=np.zeros(n);alpha=packet['alpha']
+    for row in metric['native_GL4_rows']:
+        ids=np.array(row['ids'],dtype=int);phi=np.array(row['phi']);storage[ids]+=alpha*row['weight']*phi*float(phi@delta[ids])
+    moment=float(lift@storage);measure=reaction['weighted_ground_measure']
+    from scipy.linalg import cho_factor,cho_solve
+    free=np.array(metric['free_local_rows'],dtype=int);stage=spatial[free]+storage[free]
+    factor=cho_factor(np.array(metric['consistent_free_mass']));stage_norm=math.sqrt(max(0.,float(stage@cho_solve(factor,stage))))
+    return dict(packet=str(file),packet_sha256=sha(file),callback_history_sha256=state_hash(packet['history']),alpha=alpha,
+        storage_lifting_moment=moment,spatial_lifting_moment=float(lift@spatial),
+        refreshed_free_momentum_stage_residual_mass_dual=stage_norm,
+        inferred_mean_shear_including_last_callback_storage=-(reaction['prescribed_row_reaction']+moment)/measure,
+        scope='actual last-callback alpha*M*(U-history), physical GL4 consistent mass and exact ground lifting; refreshed spatial operator still contains one-sweep splitting/lag defects, so this is a discrete reaction diagnostic, not exact physical wall stress')
 
 
 def balances(d):
@@ -100,7 +138,7 @@ def observe(probe, selection, folder):
     H = selection.get('H', .5)
     packet = dict(common_packet(cp), operation='selected_original_operator', state=saved['coupled'], history=saved['coupled'],
         alpha=0., time=saved['time'], inner_stress_model='Linear', complete_outer_epsilon=True,
-        reporting_breakpoints=[.0025, .005, .02, .04], neutral_reference_balance=selection.get('balance', True),
+        reporting_breakpoints=sorted(set(flat_partition(Path(selection['xml']))[1]+selection.get('reporting_breakpoints',[]))), neutral_reference_balance=selection.get('balance', True),
         witnesses=[[-3.5, 0, H], [-2.625, 0, H], [-1., 0, H], [1.6, 0, H]])
     result, receipt = run_probe(probe, Path(selection['xml']), packet, folder/'readback')
     require(result['governing_solves'] == result['physical_commits'] == 0 and not result['native_history_advanced'] and result['initialization_work'] == [0, 0], 'readback changed state/history')
@@ -114,6 +152,15 @@ def observe(probe, selection, folder):
         state_reference_bit_differences=sum(struct.pack('<d',x)!=struct.pack('<d',y) for x,y in zip(saved['coupled'],saved['reference'])),
         physical=compact_diagnostic(compact(physical)), complete_audit=result['complete_audits']['selected_state'],
         selected_Original_blocks=[{k: v for k, v in b.items() if k not in ('free_rows', 'selected_load', 'same_state_Original_load', 'difference_load')} for b in d['operators']['blocks']])
+    summary['named_interface_metrics'] = interface_metrics(summary['complete_audit']['interface'])
+    constitutive=d['selected_state']
+    summary['same_state_covariance_minima']={}
+    for name,law in (('minimum_inner','selected'),('minimum_outer','selected'),
+        ('minimum_same_state_Original_outer','same_state_Original')):
+        witness=constitutive[name]
+        summary['same_state_covariance_minima'][name]=dict(coordinate=witness['coordinate'],geometry=witness['geometry'],
+            element=witness['element'],eigenvalue=witness[law]['eigenvalues'][0],
+            velocity_gradient=witness['velocity_gradient'],epsilon_semantics=witness['epsilon_semantics'])
     if 'neutral_reference_balance' in d:
         balance = d['neutral_reference_balance']
         summary['balance'] = balances(balance)
@@ -125,6 +172,26 @@ def observe(probe, selection, folder):
         summary['reference_operator_blocks'] = [{k: v for k, v in b.items() if k not in ('free_rows', 'selected_load', 'same_state_Original_load', 'difference_load')} for b in balance['reference_operators']['blocks']]
         summary['element_values_columns'] = balance['element_values_columns']; summary['element_values'] = balance['element_values']
         summary['native_ground_traction'] = balance.get('native_ground_traction')
+        summary['ground_reaction'] = balance.get('ground_reaction')
+        if 'transport_decomposition' in balance:
+            import numpy as np
+            from scipy.linalg import cho_factor,cho_solve
+            transport={}
+            for kind in ('archived_reference_representation','retained_state'):
+                transport[kind]=[]
+                for item in balance['transport_decomposition'][kind]:
+                    b=int(item['block']);metric=balance['mass_metrics'][b];free=np.array(metric['free_local_rows'],dtype=int)
+                    factor=cho_factor(np.array(metric['consistent_free_mass']))
+                    keys=('native_conservative_load','advective_load','dilatation_load','outward_boundary_load','physical_isotropic_production_load')
+                    loads=np.column_stack([np.array(item[k])[free] for k in keys]);rates=cho_solve(factor,loads)
+                    norms=np.sqrt(np.maximum(0,np.sum(loads*rates,axis=0)))
+                    direction=rates[:,0];norm=norms[0]
+                    signed=loads.T@direction/norm if norm>1e-30 else np.zeros(len(keys))
+                    transport[kind].append(dict(block=b,dimensional_mass_dual_norms=dict(zip(keys,map(float,norms))),
+                        signed_projection_onto_conservative_advection=dict(zip(keys,map(float,signed))),
+                        integrated_q_div_u=item['integrated_q_div_u'],integrated_physical_isotropic_production=item['integrated_physical_isotropic_production'],
+                        load_identity_max_error=item['load_identity_max_error']))
+            summary['transport_decomposition']=transport
     if selection.get('source_report'):
         native = read_report(Path(selection['source_report']))
         summary['source_report_sha256'] = sha(Path(selection['source_report']))
@@ -134,6 +201,7 @@ def observe(probe, selection, folder):
             summary['step'] = {k: t.get(k) for k in ('outer_sweeps', 'momentum_predictor_solves', 'pressure_system_solves', 'epsilon_transport_solves', 'k_transport_solves', 'bound_calls', 'additional_governing_equation_solves', 'frozen_momentum_defect', 'momentum_splitting_identity_defect', 'refreshed_trace_defect', 'bound_activations')}
             summary['step']['bound_integral'] = t['k_bound']['integral_total']
             summary['step']['bound_positive_negative'] = t['k_bound']['integrals_inner_outer_near_positive_negative'][3:5]
+    summary['last_step_ground_storage']=step_storage_reaction(summary,result)
     atomic(folder/'summary.json', summary)
     return summary, physical
 
@@ -158,6 +226,7 @@ def main():
             require(sha(cp/'State.bin')==selection['checkpoint_sha256'] and state_hash(saved['coupled'])==row['state_sha256'],'reused immutable checkpoint differs')
             raw=load(file);physical=raw['diagnostics']['physical']
             if 'neutral_reference_balance' in raw['diagnostics']:row['balance']=balances(raw['diagnostics']['neutral_reference_balance'])
+            row['last_step_ground_storage']=step_storage_reaction(row,raw)
             row['readback_reuse']=dict(summary=str(a.reuse/'summary.json'),summary_sha256=sha(a.reuse/'summary.json'))
         else: row, physical = observe(a.probe, selection, a.output/label)
         data[label] = physical

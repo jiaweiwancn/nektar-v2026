@@ -49,7 +49,7 @@ def model_choices(companion='faithful'):
 
 def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,
              companion='faithful',companion_reason='',perturbation=0.,verify=False,inner_refinement='none',outer_refinement='none',checkpoint_every=8,
-             pressure_space='baseline-v1'):
+             pressure_space='baseline-v1',first_cell='baseline-v1'):
     require(case in CASES and int(steps)==steps and steps>=0 and dt>0,'invalid accepted-AWF case/step controls')
     require(math.isfinite(perturbation) and abs(perturbation)<=.05,'small admissible perturbation amplitude required')
     require(int(checkpoint_every)==checkpoint_every and checkpoint_every>0,'positive checkpoint reporting interval required')
@@ -63,6 +63,11 @@ def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,
     require(inner_refinement=='none' or partition=='graded','cutoff-v1 is a separately named graded follow-up')
     added=[z for z in (.0025,.005,.02,.04) if z<H] if inner_refinement=='cutoff-v1' else []
     if added:knots=sorted(set(knots+added))
+    require(first_cell in ('baseline-v1','half-first-v1'),'unknown zero-time first-cell control')
+    require(first_cell=='baseline-v1' or (case=='Accepted-AWF-05G' and inner_refinement=='cutoff-v1'
+        and outer_refinement=='none' and pressure_space=='baseline-v1' and steps==0 and restart is None),
+        'half-first-v1 is a fresh zero-physical-step P1 initialization control only')
+    if first_cell=='half-first-v1':knots=[.00125 if z==.0025 else z for z in knots]
     require(outer_refinement in ('none','pressure-p2-v1'),'unknown focused outer refinement')
     require(outer_refinement=='none' or (case=='Accepted-AWF-2G' and inner_refinement=='cutoff-v1'),
         'pressure-p2-v1 preserves the cutoff-resolved H2 graded inner representation')
@@ -133,7 +138,8 @@ def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,
             if e.get('VAR')=='eps_tilde':e.set('VALUE',e.get('VALUE').replace('(y-(2.0))/(2.0)','(y-RANSWallHeight)/(4-RANSWallHeight)'))
     write(root,xml)
     definition=dict(family=FAMILY,case=case,formulation=FORMULATION,formulation_version='accepted-appendix-v1',
-        case_identity=case+(':'+inner_refinement if inner_refinement!='none' else '')+(':'+outer_refinement if outer_refinement!='none' else '')+(':'+pressure_space if pressure_space!='baseline-v1' else ''),inner_refinement=inner_refinement,
+        case_identity=case+(':'+inner_refinement if inner_refinement!='none' else '')+(':'+outer_refinement if outer_refinement!='none' else '')+(':'+pressure_space if pressure_space!='baseline-v1' else '')+(':'+first_cell if first_cell!='baseline-v1' else ''),inner_refinement=inner_refinement,
+        first_cell_control=first_cell,zero_time_control=first_cell!='baseline-v1',
         outer_refinement=outer_refinement,focused_outer_refinement_knots=outer_added,
         checkpoint_reporting_interval=checkpoint_every,
         focused_refinement_knots=added,

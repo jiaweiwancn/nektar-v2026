@@ -1,0 +1,31 @@
+{
+  "version": "RefinedP1LateResponseV1",
+  "declared_before_execution": "2026-11-11 Asia/Shanghai",
+  "parent": "cutoff-v1 H=.5 Regularized/Linear P1 step6432 T4.02",
+  "dt": 0.000625,
+  "amplitude_K0": 0.001,
+  "seed_policy": "ConstrainedInnerMassV1; fixed actual essential and all outer-supported k coefficients; no Lift, epsilon/endpoint/reference change",
+  "observations_elapsed": [0.05, 0.1, 0.25, 0.5],
+  "conditional_elapsed_cap": 1.25,
+  "norms": {
+    "velocity_domain": [-4, 2, 0, 4],
+    "k_domain": [-4, 2, 0, 4],
+    "epsilon_domain": [-4, 2, 0.5, 4],
+    "pressure": "one common physical mean alignment across inner and outer regions",
+    "physical_panels": "union of native interfaces and physical breakpoints; GL8xGL16; independent GL4 check",
+    "normalization": {"U": 0.4, "K": 0.5105080130598861, "epsilon": 0.07263583326186134, "pressure": 0.16, "volume": 24, "epsilon_reference_volume": 12},
+    "k_amplification": "physical L2 difference perturbed-control divided by ACTUAL initial physical L2 perturbation; no division by zero initial induced-field differences"
+  },
+  "comparison_floor_normalized_fields": 1e-10,
+  "traction_absolute_floor": 1e-11,
+  "decision": {
+    "decay": "A(.5)<.9 and decreasing on final two observations; report transient amplification separately",
+    "sustained_growth": "A(.5)>1.1 and increasing on final two observations",
+    "transient_amplification": "any resolved A>1.05 followed by decay",
+    "otherwise": "report bounded/inconclusive response; extend only if the remaining question is resolvable by elapsed<=1.25",
+    "scope": "one selected discrete steady candidate, one small disturbance, finite horizon; not general stability or neutral-reference accuracy proof"
+  },
+  "resources": {"parallel_legs": 2, "MPI_ranks_per_leg": 1, "computational_threads_per_leg": 1, "block_steps": 32, "block_timeout_seconds": 3600, "maximum_wall_hours_per_leg": 8},
+  "zero_time_control": {"only_change": "first interior vertical knot .0025 -> .00125", "expected_unknowns": 2861, "physical_steps": 0},
+  "steady_screen": "unchanged convergence-policy.json; three .5 windows and all fields incl full epsilon"
+}

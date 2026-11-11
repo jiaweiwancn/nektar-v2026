@@ -160,8 +160,9 @@ the [.01,.1] panel contributes about 66%. Initial divergence was near roundoff.
 The evolved field has developed unresolved within-element variation while
 satisfying the weak continuity and common gauge constraints near roundoff.
 
-The interface has full/normal traction-jump RMS .00556248/.00447793 and
-k-flux-jump RMS .000212342. The solved epsilon trace is retained; its refreshed
+The interface has full/normal traction-jump RMS .00556248/.00142450 and
+k-flux-jump RMS .000212342. Its maximum absolute sampled normal jump is
+.00447793 (index4), distinct from normal RMS (index2). The solved epsilon trace is retained; its refreshed
 matching discrepancy is 4.388e-8. These spatial quantities are distinct from
 the tiny frozen linear-system and splitting-identity residuals.
 
@@ -210,7 +211,8 @@ The unchanged coarse trajectory is reused, not rerun.
 | Inner production reference error, physical L2 | .630151 | .0393042 |
 | Full outer epsilon reference error, common normalized | .00297881 | .00293469 |
 | Inner / outer strong-divergence L2 | .0202283 / .00206279 | .00349462 / .00192952 |
-| Full / normal traction-jump RMS | .00545277 / .00184986 | .00542804 / .00173496 |
+| Full / normal traction-jump RMS | .00545277 / .00120508 | .00542804 / .00115808 |
+| Maximum absolute sampled normal jump | .00184986 | .00173496 |
 | k-flux-jump RMS | .000235934 | .000163593 |
 | Refreshed epsilon matching defect | 1.627e-6 | 6.618e-7 |
 | Common selected U/W/k/epsilon spatial residuals | .01710 / .008152 / .03630 / .005751 | .002910 / .001993 / .004290 / .002100 |
@@ -250,7 +252,10 @@ continues this case from its own exact .5 checkpoint, with a separate durable
 successor and immutable runtime. It stops on three passing unchanged half-unit
 windows including full outer epsilon, or at T=6. The remaining k residual has
 risen from about .00346 at .28 to .00429 at .5, and strong divergence is growing.
-These trends merit observation; this is **not a refined steady candidate**.
+At the dated T=.5 screening, these trends required observation and did not
+establish a refined steady candidate. The completed Nov11 assessment above
+supersedes that transient status: three windows qualify through T=4, with a
+safe final stopping checkpoint at T=4.02.
 The forecast to the maximum endpoint is about 20 hours at the observed cost;
 early scientific qualification can stop it sooner. No unchanged numerical
 rejection is automatically retried.

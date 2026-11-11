@@ -5,6 +5,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallKBoundProjection.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <cmath>
+#include <limits>
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <set>
 
@@ -46,6 +47,76 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::AcceptedPerturbation(cons
             return Same(side?e.upper[axis]:e.lower[axis],side?upper[axis]:lower[axis]);});
     for(auto [id,value]:boundary){(void)value;delta[id]=0.;}
     for(int i=0;i<delta.size();++i)s[offset[K()]+i]+=delta[i];
+    return s;
+}
+
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::LateInnerKPerturbation(
+    const Vector &state,double amplitude,double time,const RANSWallEvolutionData &data,std::string &report) const
+{
+    Require(AcceptedAWF() && !Mapped() && m_dimension==2 && (amplitude==0 || amplitude==.001),
+        "late inner-k experiment permits only zero or +.001 K0 on the flat pilot");
+    const double H=m_parameters.geometry.height,K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
+    std::set<int> fixed;
+    for(const auto &[row,value]:ExternalConstraints(time,data))
+        if(row>=offset[K()] && row<offset[K()]+size[K()])fixed.insert(row-offset[K()]);
+    // Exclude EVERY outer-supported coefficient, including the shared H trace.
+    // A full-domain unconstrained projection followed by trace zeroing would
+    // leave an unintended outer increment and solve a different projection.
+    for(int e=0;e<fields[K()]->Elements().size();++e)
+    {
+        const auto &element=fields[K()]->Elements()[e];
+        if(element.lower[2]<H-1e-12)continue;
+        RANSWallCoordinate centre{};
+        for(int d=0;d<3;++d)centre[d]=(element.lower[d]+element.upper[d])/2;
+        for(int id:fields[K()]->ElementPoint(e,centre).ids)fixed.insert(id);
+    }
+    Vector s=state,load(size[K()]);std::vector<int> free;
+    for(int i=0;i<size[K()];++i)if(!fixed.count(i))free.push_back(offset[K()]+i);
+    const auto shape=[&](const RANSWallCoordinate &p)
+    {
+        if(p[2]>=H)return 0.;
+        const double z=p[2]/H;
+        const double v=std::sin(std::acos(-1.)*(p[0]-lower[0])/(upper[0]-lower[0]));
+        return amplitude*K0*v*v*(1-3*z*z+2*z*z*z);
+    };
+    if(amplitude!=0)
+    {
+        for(const auto &q:Quadrature(K(),16))if(q.coordinate[2]<H)
+            for(int j=0;j<q.ids.size();++j)load[q.ids[j]]+=q.weight*q.phi[j]*shape(q.coordinate);
+        Vector rhs;for(int row:free)rhs.push_back(load[row-offset[K()]]);
+        const auto correction=RANSWallAlgebra::Solve(PicardKMass(free),rhs);
+        for(int j=0;j<free.size();++j)s[free[j]]+=correction[j];
+    }
+    // Measure the ACTUAL rounded increment, relative to the exact parent.
+    Vector delta(size[K()]);int changed=0;double essential=0,outer=0;
+    for(int i=0;i<size[K()];++i)
+    {delta[i]=s[offset[K()]+i]-state[offset[K()]+i];if(delta[i]!=0)++changed;if(fixed.count(i))essential=std::max(essential,std::abs(delta[i]));}
+    double norm=0,integral=0,error=0,trace=0,traceGradient=0,traceValueChange=0;
+    for(const auto &q:Quadrature(K(),16))
+    {const double v=q.Value(delta);norm+=q.weight*v*v;integral+=q.weight*v;error+=q.weight*(v-shape(q.coordinate))*(v-shape(q.coordinate));if(q.coordinate[2]>H)outer=std::max(outer,std::abs(v));}
+    // Surface's sign is the element's outward face, not an approach side:
+    // +1 at H selects the INNER element's upper face (H-minus gradient).
+    for(const auto &face:Surface(K(),2,H,1,8))
+    {
+        trace=std::max(trace,std::abs(face.test.Value(delta)));
+        traceValueChange=std::max(traceValueChange,std::abs(face.test.Value(s,offset[K()])-face.test.Value(state,offset[K()])));
+        traceGradient=std::max(traceGradient,std::abs(face.test.Gradient(delta)[2]));
+    }
+    // Value(delta) uses the native constant-centred row: a mathematically zero
+    // trace can have cancellation at ~eps*delta. Trace/outer COEFFICIENTS and
+    // the before/after native sampled trace must still agree exactly.
+    const double traceRoundoff=256*std::numeric_limits<double>::epsilon()*std::max(std::abs(amplitude*K0),1e-30);
+    Require(essential==0 && outer==0 && traceValueChange==0 && trace<=traceRoundoff,
+        "late perturbation leaked into fixed/outer/matching data");
+    report=J::Object({{"version",J::Quote("ConstrainedInnerMassV1")},{"amplitude_K0",J::Number(amplitude)},
+        {"actual_increment",J::Numbers(delta)},{"actual_increment_sha256",J::Quote(RANSWallR3::Hash(delta))},
+        {"changed_k_coefficients",J::Number(changed)},{"physical_L2",J::Number(std::sqrt(norm))},
+        {"physical_integral",J::Number(integral)},{"shape_projection_error_L2",J::Number(std::sqrt(error))},
+        {"fixed_coefficient_increment_max",J::Number(essential)},{"outer_value_increment_max",J::Number(outer)},
+        {"matching_trace_increment_max",J::Number(trace)},{"matching_derivative_increment_max",J::Number(traceGradient)},
+        {"matching_native_value_change_max",J::Number(traceValueChange)},{"matching_trace_evaluation_roundoff",J::Number(traceRoundoff)},
+        {"matching_derivative_provenance",J::Quote("native H-minus inner-element upper face")},
+        {"mass_solves",amplitude==0?"0":"1"},{"governing_solves","0"},{"Lift_calls","0"}});
     return s;
 }
 

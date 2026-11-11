@@ -190,13 +190,18 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         }
         m_session->LoadSolverInfo("RANSWallRestart",m_restart,"None");m_session->LoadSolverInfo("RANSWallCheckpoint",m_checkpointBase,"None");
         m_session->LoadSolverInfo("RANSWallDiagnosticIVP",m_diagnosticIVP,"Off");
-        Require(m_diagnosticIVP=="Off" || m_diagnosticIVP=="LateStateIMEX1V1","unknown diagnostic IVP contract");
+        Require(m_diagnosticIVP=="Off" || m_diagnosticIVP=="LateStateIMEX1V1" || m_diagnosticIVP=="LateStateInnerKIMEX1V1","unknown diagnostic IVP contract");
         if(m_diagnosticIVP!="Off")
         {
             std::string parentDt;
             m_session->LoadSolverInfo("RANSWallIVPParent",m_ivpParent,"None");
             m_session->LoadSolverInfo("RANSWallIVPParentSHA256",m_ivpParentHash,"");
             m_session->LoadSolverInfo("RANSWallIVPParentTimeStep",parentDt,"");
+            std::string amplitude;m_session->LoadSolverInfo("RANSWallIVPInnerKAmplitude",amplitude,"0");
+            std::size_t parsed=0;m_ivpInnerKAmplitude=std::stod(amplitude,&parsed);
+            Require(parsed==amplitude.size() && std::isfinite(m_ivpInnerKAmplitude) &&
+                (m_ivpInnerKAmplitude==0 || (m_diagnosticIVP=="LateStateInnerKIMEX1V1" && m_ivpInnerKAmplitude==.001)),
+                "late inner-k seed permits only the declared zero/+1e-3 experiment");
             std::size_t used=0;m_ivpParentDt=std::stod(parentDt,&used);
             Require(used==parentDt.size() && std::isfinite(m_ivpParentDt) && m_ivpParentDt>0 &&
                 m_ivpParent!="None" && m_ivpParentHash.size()==64 && m_restart=="None" &&
@@ -256,6 +261,9 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             m_time=parent.integration.time;m_state=parent.coupledState;m_initial=parent.fixedReference;
             m_data.fixedBoundary=m_patch->FixedReferenceBoundary(parent.fixedReference);
             m_patch->RestoreReference(parent.fixedReference,parent.fixedDefect,parent.eta,m_data,m_time);
+            std::string perturbation="null";
+            if(m_diagnosticIVP=="LateStateInnerKIMEX1V1")
+                m_state=m_patch->LateInnerKPerturbation(m_state,m_ivpInnerKAmplitude,m_time,m_data,perturbation);
             m_implicitData=m_data;
             if(m_patch->TransitionEnabled())m_implicitData.sensorBody=m_data.outerBody;
             for(auto *body:{&m_implicitData.innerBody,&m_implicitData.outerBody})for(auto &f:*body)f=[](const RANSWallCoordinate&,double){return 0.;};
@@ -278,7 +286,8 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
                 {"fixed_reference_sha256",J::Quote(RANSWallR3::Hash(parent.fixedReference))},
                 {"fixed_defect_sha256",J::Quote(RANSWallR3::Hash(parent.fixedDefect))},
                 {"initial_native_history_sha256",J::List(history)},{"initial_native_history_times",J::Numbers(seed.times)},
-                {"initialization_lift_calls_iterations",J::Numbers(m_patch->InitializationWork())}});
+                {"initialization_lift_calls_iterations",J::Numbers(m_patch->InitializationWork())},
+                {"inner_k_seed",perturbation}});
         }
         else
         {
