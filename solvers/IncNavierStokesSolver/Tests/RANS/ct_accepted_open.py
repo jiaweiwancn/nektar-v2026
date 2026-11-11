@@ -61,7 +61,8 @@ def manufactured_fixture(folder,runtime):
     for suffix,p in [('Inner',0.),('Outer',pi)]:
         values=dict(u=f'({G:.17g})*y',v='0',k='1',eps_tilde=repr(eps),p=repr(p))
         functions(root,'InitialConditions'+suffix,values);functions(root,'BoundaryValues'+suffix,values)
-        functions(root,'OutletTotalTraction'+suffix,dict(u='0' if suffix=='Inner' else repr(Q[2,2]-Q[0,0]),v=repr(c.D(2.)*G)))
+        functions(root,'OutletTotalTraction'+suffix,dict(u='0' if suffix=='Inner' else repr(Q[2,2]-Q[0,0]),
+            v=f'(({c.nu:.17g})+{nt})*({G:.17g})' if suffix=='Inner' else repr(c.D(2.)*G)))
         functions(root,'OutletDiffusiveFlux'+suffix,dict(k='0',eps_tilde='0'))
     functions(root,'BodyForceInner',dict(u=f'(-{c.a*G:.17g})*(y>{c.zv:.17g})',v='0'))
     functions(root,'ScalarSourceInner',dict(k=f'({sink}-{nt}*({G*G:.17g}))'))
