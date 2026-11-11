@@ -50,6 +50,7 @@ class Profiles(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             for kind in ('physical','analytic'):
                 p=case_xml(Path(d)/kind,kind,0);r=ET.parse(p).getroot();design=json.loads(p.with_name('case-design.json').read_text())
+                self.assertNotIn('&&',p.read_text())
                 info={e.get('PROPERTY'):e.get('VALUE') for e in r.findall('./CONDITIONS/SOLVERINFO/I')}
                 self.assertEqual(info['SolverType'],'RANSEquilibriumWallEvolution')
                 self.assertEqual(info['RANSWallBoundaryMode'],'OpenTunnelV1')

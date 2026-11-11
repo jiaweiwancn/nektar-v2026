@@ -24,7 +24,7 @@ def piecewise(p,lower,upper):
     """PPoly local polynomials with finite inactive branches (no if division)."""
     x=p.x;c=p.c;terms=[f'(y<{num(x[0])})*({num(lower)})']
     for j in range(len(x)-1):
-        terms.append(f'((y>={num(x[j])})&&(y<{num(x[j+1])}))*({poly(c[:,j],f"y-({num(x[j])})")})')
+        terms.append(f'((y>={num(x[j])})*(y<{num(x[j+1])}))*({poly(c[:,j],f"y-({num(x[j])})")})')
     terms.append(f'(y>={num(x[-1])})*({num(upper)})')
     return '('+'+'.join(terms)+')'
 
@@ -46,7 +46,7 @@ def approximate(fn,knots,degree=12):
         coefficients=cp.convert(kind=Polynomial).coef
         t=f'(2*(y-({num(D0+a)}))/({num(b-a)})-1)'
         expression=poly(coefficients[::-1],t)
-        mask=f'((y>={num(D0+a)})&&(y<{num(D0+b)}))'
+        mask=f'((y>={num(D0+a)})*(y<{num(D0+b)}))'
         expressions.append(f'{mask}*({expression})')
         test=np.linspace(-1,1,101);maxerr=max(maxerr,float(np.max(abs(cp(test)-np.array([fn((a+b)/2+(b-a)/2*s) for s in test])))))
     expressions.append(f'(y>={num(D0+knots[-1])})*({num(fn(knots[-1]))})')
