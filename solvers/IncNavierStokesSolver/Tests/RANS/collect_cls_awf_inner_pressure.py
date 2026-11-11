@@ -33,13 +33,21 @@ def work(capture):
             require(n not in records, 'duplicate accepted ledger record'); records[n] = row
     require(sorted(records) == list(range(start+1, end+1)), 'accepted ledger is not contiguous')
     if records: require(records[end]['checkpoint_sha256'] == capture['checkpoint_sha256'], 'ledger/immutable checkpoint differs')
-    counts = Counter(); signed = []; positive = []; negative = []; seconds = []
+    counts = Counter(); signed = []; positive = []; negative = []; seconds = []; maxima = {}; minima = {}
     for row in records.values():
         t = row['attempt']; require(t['scheduled_complete'] and not t['failure'], 'invalid accepted attempt')
         require(all(t[k] == 1 for k in COUNTS[:6]) and t['additional_governing_equation_solves'] == 0, 'production schedule differs')
         for k in COUNTS: counts[k] += t.get(k, 0)
         b = t['k_bound']; signed.append(b['integral_total']); positive.append(b['integrals_inner_outer_near_positive_negative'][3]); negative.append(b['integrals_inner_outer_near_positive_negative'][4])
         seconds.append(t['seconds'])
+        for k in ('predictor_linear_residual', 'pressure_linear_residual', 'epsilon_frozen_linear_residual',
+                  'k_frozen_linear_residual', 'boundary_defect', 'momentum_splitting_identity_defect',
+                  'native_full_G_action_defect', 'frozen_momentum_defect', 'refreshed_trace_defect'):
+            maxima[k] = max(maxima.get(k, 0.), abs(t[k]))
+        maxima['corrected_continuity_gauge'] = max(maxima.get('corrected_continuity_gauge', 0.), *map(abs, t['corrected_continuity_gauge']))
+        for k in ('minimum_inner_k', 'minimum_outer_k', 'minimum_outer_epsilon', 'minimum_sampled_K'):
+            value = t['k_domain'][k]; minima[k] = min(minima.get(k, value), value)
+        value = t['k_ground']['minimum']; minima['continuous_ground_k'] = min(minima.get('continuous_ground_k', value), value)
     callbacks = 0; reported = 0; receipts = []
     for segment in progress['segments']:
         if segment['end_step'] > end or segment['failure'] or segment['exit_code']: continue
@@ -51,6 +59,7 @@ def work(capture):
         callbacks += int(d['implicit_callback_count']); reported += steps
         receipts.append(dict(path=str(file), compressed_sha256=sha(file), native_payload_sha256=segment['report_sha256'], seconds=segment['seconds']))
     return dict(prefix_steps_excluded=start, accepted_new_steps=end-start, actual_counts=dict(counts),
+        accepted_attempt_maxima=maxima, accepted_inventory_minima=minima,
         completed_block_callbacks=callbacks, completed_block_steps=reported, partial_block_steps=end-start-reported,
         correction_integral=math.fsum(signed), correction_positive=math.fsum(positive), correction_negative=math.fsum(negative),
         correction_absolute=math.fsum(positive)-math.fsum(negative),

@@ -23,6 +23,15 @@ their previous generated XML. The new control has native field sizes
 outer pressure remains linear. Velocity, k and outer epsilon remain cubic.
 Both regional pressures and the single common gauge remain separate.
 
+The flat mesh has five tangential panels and sixteen vertical panels (eight
+inside and eight outside H), for 80 quadrilaterals. Its vertical knots are
+`0,.0025,.005,.01,.02,.04,.1,.25,.5,1,2,7/3,8/3,3,10/3,11/3,4`;
+tangential knots are `-4,-3,-2,-1,1,2`. Native points remain 8x8 and source
+quadrature remains 16x8. The free vector-velocity system stays at 1,316
+unknowns; the pressure/gauge system grows from 109 to 242. Its 242 consistent
+velocity-mass inverse applications per step are separate from the single
+momentum-equation solve.
+
 The physical mesh, H=.5, endpoint K=k(H), z_K=z_m=H, h=.1, nu=1.5e-5,
 u_star=.4, calibrated budget cutoff, actual P_h-E_C source and zero forcing
 are unchanged. The selected companion is Regularized/Linear. Native IMEX1
@@ -59,6 +68,11 @@ Initialization uses the established native zero-perturbation projection
 and two initialization Lift iterations. These are separate from physical
 steps. Verification performs five solves of each governing equation in
 independent test paths; production is a separate fresh h0 trajectory.
+The earlier exploratory-closure verification also performed five solves
+per equation; its receipts remain separate. Neither set is counted as
+production evolution. Direct readback comparison additionally finds exact
+equality in all 120 analytical/reference/retained physical weak-load vectors
+through the unchanged first four field blocks at t=0.
 
 ## Runtime and comparison provenance
 
