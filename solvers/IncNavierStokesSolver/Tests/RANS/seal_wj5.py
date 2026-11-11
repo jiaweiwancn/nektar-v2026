@@ -61,7 +61,7 @@ def main():
             development.append(dict(revision=revision,relative=relative,archive=file_identity(path),scope='retained development code; not qualified immutable reuse'))
     write_once(out/'development-code-bridge.json',development)
     # The publication inventory contains immutable cases plus three explicitly
-    # mutable package-progress paths and its own not-yet-closed output log.
+    # mutable package-progress paths and its own not-yet-closed output logs.
     # Verify every immutable artifact; bind the
     # final write-once replacements for those progress files below. Original
     # publication receipts and inventory bytes remain unchanged.
@@ -73,9 +73,14 @@ def main():
     publisher=next(c for c in commands if c['label']=='publish-v2')
     require(publisher['exit_code']==0 and str(out) in publisher['command'] and file_hash(publisher['log'])==publisher['log_sha256'],
             'completed publication process/log identity differs')
-    published_log=out/'publication-process.log'
-    with published_log.open('xb') as stream:stream.write(Path(publisher['log']).read_bytes())
-    progress[publisher['log']]=published_log
+    driver=r/(publisher['label']+'-driver.log')
+    require(json.loads(driver.read_text())==publisher,'publication wrapper output differs from its completed receipt')
+    for original,target in ((Path(publisher['log']),out/'publication-process.log'),(driver,out/'publication-wrapper.log')):
+        data=original.read_bytes()
+        if target.exists():require(target.read_bytes()==data,'immutable publication log snapshot changed')
+        else:
+            with target.open('xb') as stream:stream.write(data)
+        progress[str(original)]=target
     require(set(progress)<=set(heavy_index),'missing indexed package-progress identity')
     immutable_count=0
     for name,identity in heavy_index.items():
