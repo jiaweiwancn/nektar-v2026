@@ -2239,6 +2239,8 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     double innerCov=1e300,outerCov=1e300;Vector innerPoint,outerPoint,gradientPoint,innerProvenance,outerProvenance;
     Vector innerTensor,outerTensor,innerGradient,outerGradient,radicandPoint,radicandProvenance;
     double minimumRadicand=1e300,maximumRadicand=-1e300;
+    double minimumDivergence=1e300,maximumDivergence=-1e300,maximumIsotropicWork=0.;
+    Vector divergencePoint,isotropicWorkPoint;
     auto flatten=[](const RANSTensor &a){Vector v;for(const auto &row:a)for(double x:row)v.push_back(x);return v;};
     for(const auto &p:domain.observations)
     {
@@ -2248,6 +2250,19 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         RANSTensor G{};
         for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=row.Gradient(domain.effectiveState,offset[a]);
         const double k=EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[K()]);
+        if(NewModels())
+        {
+            const double divergence=G[0][0]+G[1][1]+G[2][2];
+            if(std::abs(divergence)>std::max(std::abs(minimumDivergence==1e300?0.:minimumDivergence),
+                std::abs(maximumDivergence==-1e300?0.:maximumDivergence)))
+                divergencePoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],divergence,double(row.geometry),double(provenance.radialSide),inner?0.:1.};
+            minimumDivergence=std::min(minimumDivergence,divergence);maximumDivergence=std::max(maximumDivergence,divergence);
+            if(!inner && std::abs(-2*k*divergence/3)>maximumIsotropicWork)
+            {
+                maximumIsotropicWork=std::abs(-2*k*divergence/3);
+                isotropicWorkPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],-2*k*divergence/3,double(row.geometry),double(provenance.radialSide)};
+            }
+        }
         if(inner)
         {
             const auto profile=StateProfile(domain.effectiveState,p.coordinate,time,data);
@@ -2298,6 +2313,10 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     audit["native_outer_minimum_geometry_element_side_block"]=outerProvenance;
     if(NewModels())
     {
+        audit["native_raw_divergence_range"]={minimumDivergence,maximumDivergence};
+        audit["native_raw_divergence_maximum_witness"]=divergencePoint;
+        audit["native_outer_isotropic_production_work_maximum"]={maximumIsotropicWork};
+        audit["native_outer_isotropic_production_work_witness"]=isotropicWorkPoint;
         audit["native_inner_covariance_tensor_row_major"]=innerTensor;
         audit["native_outer_covariance_tensor_row_major"]=outerTensor;
         audit["native_inner_covariance_witness_gradient_row_major"]=innerGradient;

@@ -28,9 +28,9 @@ def functions(root,name,values):
     for key,value in values.items():ET.SubElement(f,'E',{'VAR':key,'VALUE':str(value)})
 
 
-def fixture(folder,runtime,model='A95',steps=0,dt=1e-7,pressure=0.,traction_shift=0.,flux_shift=0.,cache='Off',backflow=False,restart=None,reject=0):
+def fixture(folder,runtime,model='A95',steps=0,dt=1e-7,pressure=0.,traction_shift=0.,flux_shift=0.,cache='Off',backflow=False,restart=None,reject=0,internal_reverse=False):
     path=case_xml(folder,model,'Natural','Accepted',steps=steps,dt=dt,descriptor_probe=runtime/'RANSNewModelsProbe',
-        radial_knots=[0.,2.,4.],degree=3,xknots=[0.,.5,1.],cache=cache,restart=restart,reject=reject,
+        radial_knots=[0.,2.,4.],degree=4 if internal_reverse else 3,xknots=[0.,.5,1.],cache=cache,restart=restart,reject=reject,
         quadrature=[32,8,10,10,10])
     root=ET.parse(path).getroot();p=parameters(model);K=1.;H=2.;nu=1.5e-5
     c=Column(model,K,H,0.,nu);eps=c.A/H
@@ -39,6 +39,9 @@ def fixture(folder,runtime,model='A95',steps=0,dt=1e-7,pressure=0.,traction_shif
     for key,value in dict(RANSWallRoughness=0.,K0=K,RANSWallFrictionVelocity=math.sqrt(K/p['q']),RANSOpenVelocityScale=1.).items():set_parameter(root,key,value)
     u=('-' if backflow else '')+'.02*y*(8-y)'
     values=dict(u=u,v='0',k='1',eps_tilde=repr(eps),p=repr(pressure))
+    if internal_reverse:
+        values.update(u='.001*(1-48*x^2*(1-x)^2)*(y-y^2/4)',
+            v='.001*96*x*(1-x)*(1-2*x)*(y^2/2-y^3/12)')
     for suffix in ('Inner','Outer'):
         functions(root,'InitialConditions'+suffix,values)
         functions(root,'BoundaryValues'+suffix,values)
@@ -118,10 +121,22 @@ def pilot_case(folder,runtime,feasibility,model='A95',steps=0,dt=.002,restart=No
 
 def run(command,folder,log):
     start=time.monotonic();before=resource.getrusage(resource.RUSAGE_CHILDREN)
-    with (folder/log).open('x') as f:r=subprocess.run([str(x) for x in command],cwd=folder,stdout=f,stderr=subprocess.STDOUT,env=dict(os.environ,**THREADS))
+    mapped={};peak=0
+    with (folder/log).open('x') as f:
+        r=subprocess.Popen([str(x) for x in command],cwd=folder,stdout=f,stderr=subprocess.STDOUT,env=dict(os.environ,**THREADS))
+        while r.poll() is None:
+            try:
+                for line in (Path('/proc')/str(r.pid)/'maps').read_text().splitlines():
+                    word=line.split()[-1];p=Path(word)
+                    if word.startswith('/') and p.is_file() and word not in mapped:mapped[word]=sha(p)
+                for line in (Path('/proc')/str(r.pid)/'status').read_text().splitlines():
+                    if line.startswith('VmHWM:'):peak=max(peak,int(line.split()[1]))
+            except (FileNotFoundError,ProcessLookupError):pass
+            time.sleep(.05)
     after=resource.getrusage(resource.RUSAGE_CHILDREN)
     return dict(command=[str(x) for x in command],exit_code=r.returncode,wall_seconds=time.monotonic()-start,
-        process_cpu_seconds=after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,maximum_child_RSS_KiB=after.ru_maxrss)
+        process_cpu_seconds=after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,peak_RSS_KiB=peak,
+        actual_mapped_files=mapped)
 
 
 def probe(runtime,folder,request,name='sample'):
