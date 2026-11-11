@@ -295,6 +295,16 @@ The latest snapshot is immutable; rotating live checkpoints are not used as
 long-lived evidence. This is running continuation, not completed T=1 or T=6
 qualification.
 
+A later [complete native block capture](cls-awf-inner-pressure-evidence/continuation-step960.json)
+at **12:04:48** verifies step960, T=.6, checkpoint
+`2f1cf38b57115c1396d1cc6cb17a808dbb86e9c41d8878003404c99eee4da3f0`.
+All 160 added U/p/epsilon/k solves, callbacks and logical bound calls are
+accounted for; activation remains zero. The successor was already running
+step961 at inspection, toward T=1. Mean traction is .159561069,
+inner divergence .00432122, and U/W/k/epsilon normalized spatial residuals
+are .00267548/.00158179/.00520512/.00102337. This remains a transient
+selected-operator trajectory, with no steady qualification claimed.
+
 The evidence supports retaining the qualified P1 dataset as the current steady
 reference. Inner pressure enrichment alone has not removed its finite-horizon
 traction/gradient departure. Complete the one bounded P2 settling comparison
