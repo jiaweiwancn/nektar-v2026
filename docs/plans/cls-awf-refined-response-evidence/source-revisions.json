@@ -1,0 +1,26 @@
+{
+  "base_commit": "1ef4d7e2e0448886e4fa404436f0c937d074a597",
+  "implementation_commit": "96c0c098e1668e2ac52034940401640ddf50af07",
+  "numerical_report_commit": "671ff220330bf79cbf1ca4a02472ccb07b0d1d58",
+  "response_runtime_sha256": "81d78312548c917eef3b5ebbbd476fd3990abdfa7c6823e580a35da275d74ae6",
+  "readback_runtime_sha256": "c4a545389c21e4c7b3f4587e20a14bf4b30f7df80b2aa5c2c05fab8fd1c4d35d",
+  "final_seed_runtime_sha256": "cf75b923fbeb4e7411e1e38ea7a07ce052c62e62daa94f0c42f1c989a233054a",
+  "source_equivalence": {
+    "commit": "96c0c098e1668e2ac52034940401640ddf50af07",
+    "files": {
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp": "0b0116178a737fb923d664b166782bf4a936ca2d1fc9beee6c9c825a3aadfd99",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.h": "b27ab3facd6ef828bcd0c363a099ad794ab6a1e42b17506f5d79d53cf6436258",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp": "9915faf2c8fbcf8533f34c44f83426383c943caa0faaf09f36ebb8bcf77e00fe",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp": "3cccdeba7282db62c02f4eec041a19d130281ba0c3001bd427286402f296cc3b",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h": "e25348769abdd3d227e864f2817a274835736989d24f3b0b1807ce2a64520d55"
+    },
+    "linux_source_matches": {
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp": true,
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.h": true,
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp": true,
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp": true,
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h": true
+    }
+  },
+  "note": "Production runtimes are immutable. Final seed-side telemetry was tested in isolation; seed, all first-step stages, native histories and clock labels match the production image bitwise. No production equation, floor, reserve or schedule changed."
+}

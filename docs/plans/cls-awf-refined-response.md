@@ -384,4 +384,3 @@ in .02<z<.25, retaining near-ground resolution. The single first-knot move is
 not sufficient to improve all metrics. Finish the already authorized P2 screen
 before changing the pressure default. A new closure, force calibration,
 positivity stabilizer or broad timestep matrix is not supported by this package.
-
