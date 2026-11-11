@@ -11,6 +11,16 @@ from ct_accepted_open import pilot_case,probe,run,require
 from rans_request_manifest import RequestManifest,runtime_identity,sha
 from run_cls_epawf_picard import set_parameter,write
 from validate_a93_a95_e94e95 import oracle
+import hashlib
+
+
+def artifact_hash(path):
+    path=Path(path)
+    if path.is_file():return sha(path)
+    require(path.is_dir(),'missing_native_history_artifact')
+    items={str(p.relative_to(path)):sha(p) for p in sorted(path.rglob('*')) if p.is_file()}
+    require(items,'empty_native_history_artifact')
+    return hashlib.sha256(json.dumps(items,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
 
 def grid(construction):
@@ -142,7 +152,7 @@ def main():
                 points,weights=grid(c);initial,e=probe(a.runtime,zero,dict(operation='functions',grid=points,grid_sides=[0]*len(points),export_basis=True),'initial')
                 result['executions'].append(e);require(e['exit_code']==0 and initial['observation']['state']==native['state'],'initial_effective_native_input_mismatch')
                 initials[name]=initial;row.update(unknowns=len(native['state']),physical_unknowns=len(native['state'])-1,initial_state_sha256=exact_vector_hash(native['state']),
-                    initial_history_sha256=sha(native['checkpoint']),boundary=initial['initialization_receipt'],initial_native_report_sha256=sha(zero/'case.evolution.json'),
+                    initial_history_sha256=artifact_hash(native['checkpoint']),boundary=initial['initialization_receipt'],initial_native_report_sha256=sha(zero/'case.evolution.json'),
                     initial_observations=physical_observations(initial,weights,c),construction=c)
                 if model=='A95' and dt==.001:require(row['initial_state_sha256']==result['cases']['A95-dt-0.002']['initial_state_sha256'],'same_space_timestep_initial_coefficients_differ')
                 folder=a.output/name;pilot_case(folder,a.runtime,a.feasibility,model,round(T/dt),dt,Path(native['checkpoint']))
@@ -150,7 +160,7 @@ def main():
                 report=json.loads((folder/'case.evolution.json').read_text());row.update(exit_code=e['exit_code'],time=report['time'],steps=report['steps'],
                     failure=report['failure'],report_sha256=sha(folder/'case.evolution.json'),state_sha256=exact_vector_hash(report['state']),
                     extrema=audited_extrema(report),initialization_receipt=report['initialization_receipt'],
-                    checkpoint=report['checkpoint'],history_sha256=sha(report['checkpoint']) if report['checkpoint'] else None,
+                    checkpoint=report['checkpoint'],history_sha256=artifact_hash(report['checkpoint']) if report['checkpoint'] else None,
                     pimple_stage_count=len(report['pimple_attempts']),zero_correction_calls=all(x.get('bound_calls',0)==0 for x in report['pimple_attempts']))
                 require(e['exit_code']==0 and not report['failure'] and abs(report['time']-T)<1e-13 and report['steps']==round(T/dt),'trajectory_stopped_or_incomplete')
                 request=replay(initial,report['state'],report['time'],points,export_basis=True,export_constitutive=True)
