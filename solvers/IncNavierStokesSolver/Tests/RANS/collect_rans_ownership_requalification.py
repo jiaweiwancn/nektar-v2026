@@ -128,7 +128,8 @@ def collect(root,output,previous_attempts):
                  'short-coverage-negative-control.json','budget-cost-instrumentation.json',
                  'budget-postprocessing-v2-launch.json','budget-axis-controller-launch.json',
                  'budget-axis-control-results.json','A93-half-spatial-execution.json',
-                 'A93-corrected-signed-load-execution.json'):
+                 'A93-corrected-signed-load-execution.json','environment-and-cost-summary.json',
+                 'completed-request-recheck.json'):
         include(r/name)
     for name in ('worker-bookings.jsonl','worker-guard-events.jsonl','resource-priority-events.jsonl'):
         path=r/name
