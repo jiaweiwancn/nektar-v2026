@@ -142,7 +142,10 @@ def main():
                     for field in ('momentum','pressure','k','epsilon'):
                         key=field+'_arithmetic'
                         if key not in v:continue
-                        packet=v[key];verify_artifacts({packet['path']:packet});data=read(packet['path'])
+                        packet=v[key]
+                        require(Path(packet['path']).is_file() and file_hash(packet['path'])==packet['sha256'],
+                            'native arithmetic descriptor changed')
+                        data=read(packet['path'])
                         for kind in ('matrix','mass_or_correction_map'):
                             f=data[kind];identity=file_identity(f['path']);shape=list(map(int,f['shape']))
                             require(identity['sha256']==f['sha256'] and identity['bytes']==8*shape[0]*shape[1],
