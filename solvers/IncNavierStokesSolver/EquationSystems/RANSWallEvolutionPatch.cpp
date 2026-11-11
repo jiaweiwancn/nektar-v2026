@@ -731,9 +731,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Project(const std::vector
         const auto values=PhysicalProject(b,f[b],time);
         std::copy(values.begin(),values.end(),s.begin()+offset[b]);
     }
-    double mean=0;for(int side=0;side<2;++side)for(int i=0;i<m_pressureMean[side].size();++i)
-        mean+=m_pressureMean[side][i]*s[offset[InnerPressure()+side]+i];
-    for(int b=InnerPressure();b<=OuterPressure();++b)for(int i=0;i<size[b];++i)s[offset[b]+i]-=mean*m_constants[b][i];
+    // A traction outlet fixes the pressure level. Only the closed/gauged
+    // problem may remove an overall mean during reference initialization.
+    if(HasGauge())
+    {
+        double mean=0;for(int side=0;side<2;++side)for(int i=0;i<m_pressureMean[side].size();++i)
+            mean+=m_pressureMean[side][i]*s[offset[InnerPressure()+side]+i];
+        for(int b=InnerPressure();b<=OuterPressure();++b)for(int i=0;i<size[b];++i)s[offset[b]+i]-=mean*m_constants[b][i];
+    }
     Broadcast(s);return s;
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::NeutralReference(double us,const std::array<double,2> &direction) const

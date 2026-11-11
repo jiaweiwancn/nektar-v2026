@@ -104,6 +104,10 @@ def main():
     for label,report,xml,reuse in [('startup',None,bxml,False),('final',on,ox,True)]:
         if report is None:
             report,xml=native('startup',0,reuse='ExactStepV1')
+            K=report['parameters'][5]
+            for point in report['open_boundary']['stations']:
+                assert_allclose(point['pi'],-K/(81/20) if point['inner'] else 0.,rtol=0,atol=3e-13,
+                    err_msg='traction-fixed reference pressure was independently regauged')
         packet=dict(operation='open_checks',inner_stress_model='Linear',native_report=str(xml.with_suffix('.evolution.json')),
             native_report_sha256=sha(xml.with_suffix('.evolution.json')),native_checkpoint=report['checkpoint'],
             checkpoint_sha256=sha(Path(report['checkpoint'])/'State.bin'),assembly=True,reuse=reuse,weak=True)
