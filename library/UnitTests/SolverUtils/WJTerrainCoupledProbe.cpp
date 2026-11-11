@@ -66,8 +66,12 @@ std::string Interface(const RANSWallEvolutionPatch &p,const Vector &s,double tim
         const double jump=WJInterfacePressureJump(k,p.Parameters().geometry.molecularNu+nt,strain,outer.reynoldsStress,frame.normal);
         Require(std::abs(Dot(delta,frame.normal)-(jump-mechanicalI+mechanicalO))<1e-10,
             "normal pressure-jump/full-traction identity differs");
-        Require(vi.ids==vo.ids,"shared interface velocity map differs");
-        for(int j=0;j<vi.ids.size();++j)common=std::max(common,std::abs(vi.phi[j]-vo.phi[j]));
+        // Adjacent volume rows have different interior IDs. Only their
+        // assembled trace functionals must agree in the shared global space.
+        std::map<int,long double> trace;
+        for(int j=0;j<vi.ids.size();++j)trace[vi.ids[j]]+=vi.phi[j];
+        for(int j=0;j<vo.ids.size();++j)trace[vo.ids[j]]-=vo.phi[j];
+        for(const auto &[id,value]:trace){(void)id;common=std::max(common,double(std::abs(value)));}
         rows.push_back(J::Object({{"chart",J::Numbers(q)},{"physical",J::Numbers(p.Physical(q))},
             {"inner_geometry",J::Number(vi.geometry)},{"outer_geometry",J::Number(vo.geometry)},
             {"surface_weight",J::Number(f.weight*std::hypot(f.area[0],f.area[1],f.area[2]))},
@@ -86,6 +90,31 @@ std::string Interface(const RANSWallEvolutionPatch &p,const Vector &s,double tim
     }
     return J::Object({{"samples",J::List(rows)},{"shared_value_test_row_defect",J::Number(common)},
         {"scope",J::Quote("shared trace tests give opposite common mass/advection/traction loads; one-sided physical traction and k-flux defects are separately retained, not imposed as extra conditions")}});
+}
+
+std::string Observations(const RANSWallEvolutionPatch &p,const Vector &s,double time,const RANSWallEvolutionData &data)
+{
+    if(p.Mapping().kind==RANSWallNormalMap::Kind::Plane)
+        return J::Object({{"scope",J::Quote("inclined verification has no experimental hill anchors")},{"samples","[]"}});
+    std::vector<std::string> rows;
+    for(const auto &target:std::vector<std::array<double,2>>{{-4.,.25},{0.,.25},{1.25,.25},{3.,.175},{4.5,.175},{0.,2.}})
+    {
+        const double x=target[0];
+        const double f=std::abs(x)<2.5?p.Mapping().amplitude*std::pow(std::cos(std::acos(-1.)*x/5),2):0;
+        const Vec physical{x,0,f+target[1]};
+        const auto q=p.Mapping().Inverse(physical);const bool inner=q[2]<p.Parameters().geometry.height;
+        const auto v=p.Point(0,q);Tensor g{};const auto u=Velocity(p,s,v,g);
+        const double k=v.Value(s,p.offset[p.K()]);const auto profile=p.StateProfile(s,q,time,data);
+        const double e=inner?profile->Dissipation(q[2]):p.Point(p.Epsilon(),q).Value(s,p.offset[p.Epsilon()]);
+        const auto R=inner?p.InnerStress(k,profile->Original().EddyViscosity(q[2]),g).reynoldsStress:p.OuterClosure(k,e,g,q).reynoldsStress;
+        rows.push_back(J::Object({{"physical",J::Numbers(physical)},{"vertical_clearance",J::Number(physical[2]-f)},
+            {"chart",J::Numbers(q)},{"region",J::Quote(inner?"inner":"outer")},{"geometry",J::Number(v.geometry)},
+            {"normal_r",inner?J::Number(q[2]):"null"},{"outer_eta",inner?"null":J::Number(p.Mapping().At(q).eta)},
+            {"U",J::Numbers(u)},{"k",J::Number(k)},{"epsilon",J::Number(e)},
+            {"epsilon_kind",J::Quote(inner?"dependent":"transported")},{"R_physical_x_span_z",TensorJSON(R)}}));
+    }
+    return J::Object({{"scope",J::Quote("actual represented fields at original physical coordinates; no experimental comparison/fitting")},
+        {"samples",J::List(rows)},{"reattachment_x6p5",J::Quote("outside controlled prototype domain; NOT_RUN")}});
 }
 
 // New independent quadrature on the actual represented fields. Only three
@@ -115,7 +144,7 @@ std::string Weak(const RANSWallEvolutionPatch &p,const Vector &s,const Vector &h
     const auto inner=p.Residual(s,h,alpha,time,data,false,false,0),outer=p.Residual(s,h,alpha,time,data,false,false,1);
     std::vector<std::string> rows;
     auto append=[&](const RANSWallGlobalPoint &v,const RANSWallGlobalPoint &pressure,const RANSWallGlobalPoint &ep,
-        double weight,bool in,const EquilibriumAWFProfiles *profile)
+        double weight,double canonicalWeight,bool in,const EquilibriumAWFProfiles *profile)
     {
         Tensor G{};const auto u=Velocity(p,s,v,G);const auto kgrad=v.Gradient(s,p.offset[p.K()]);
         const auto ge=in?Vec{}:ep.Gradient(s,p.offset[p.Epsilon()]);
@@ -127,15 +156,22 @@ std::string Weak(const RANSWallEvolutionPatch &p,const Vector &s,const Vector &h
          modes.push_back(J::Object({{"v",J::Number(v.Value(tests[mode][0]))},{"grad_v",J::Numbers(tg)},
           {"p",J::Number(pressure.Value(tests[mode][pb]))},{"e",in?"0":J::Number(ep.Value(tests[mode][p.Epsilon()]))},{"grad_e",J::Numbers(eg)}}));}
         const auto metric=p.Mapping().At(v.coordinate);
+        auto atH=v.coordinate;atH[2]=H;Tensor gh{};Vec uh{},gpi{},gkh{};
+        if(in){uh=Velocity(p,s,p.Point(0,atH,1),gh);
+            gpi=p.Point(p.OuterPressure(),atH,1).Gradient(s,p.offset[p.OuterPressure()]);
+            gkh=p.Point(p.K(),atH,1).Gradient(s,p.offset[p.K()]);}
         rows.push_back(J::Object({{"inner",J::Boolean(in)},{"chart",J::Numbers(v.coordinate)},
             {"physical",J::Numbers(p.Physical(v.coordinate))},{"geometry",J::Number(v.geometry)},
-            {"element",J::Number(v.element)},{"weight",J::Number(weight)},{"U",J::Numbers(u)},{"G",TensorJSON(G)},
+            {"element",J::Number(v.element)},{"weight",J::Number(weight)},{"canonical_weight",J::Number(canonicalWeight)},
+            {"U",J::Numbers(u)},{"G",TensorJSON(G)},
             {"k",J::Number(k)},{"epsilon",J::Number(e)},{"grad_k",J::Numbers(kgrad)},{"grad_epsilon",J::Numbers(ge)},
             {"pi",J::Number(pressure.Value(s,p.offset[pb]))},{"lambda",J::Number(s[p.offset[p.Gauge()]])},
             {"history",J::Numbers(Vector{v.Value(h,p.offset[0]),v.Value(h,p.offset[1]),v.Value(h,p.offset[p.K()]),in?0:ep.Value(h,p.offset[p.Epsilon()])})},
             {"K",in?J::Number(profile->K()):"null"},{"cutoff",in?J::Number(profile->Reference().cutoff):"null"},
             {"kappa_eff",in?J::Number(metric.kappa1+metric.kappa2):"null"},
-            {"force",J::Numbers(in?p.CartesianForcing(s,v.coordinate,time,data,false):Vec{})},{"modes",J::List(modes)}}));
+            {"force",J::Numbers(in?p.CartesianForcing(s,v.coordinate,time,data,false):Vec{})},
+            {"H_U",in?J::Numbers(uh):"null"},{"H_G",in?TensorJSON(gh):"null"},
+            {"H_grad_pi",in?J::Numbers(gpi):"null"},{"H_grad_k",in?J::Numbers(gkh):"null"},{"modes",J::List(modes)}}));
     };
     const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(24,LibUtilities::eGaussGaussLegendre)];
     for(const auto &el:p.innerVelocity->Elements())if(el.lower[2]==0)
@@ -146,20 +182,23 @@ std::string Weak(const RANSWallEvolutionPatch &p,const Vector &s,const Vector &h
             const auto metric=p.Mapping().At(anchor);
             auto profile=EquilibriumAWFProfiles::WJ(selected->Geometry(),selected->K(),p.Parameters().model,options,
                 {metric.kappa1,metric.kappa2});
-            const double wx=rule->GetW()[j]*(el.upper[0]-el.lower[0])/2*metric.baseArea;
+            const double wx=rule->GetW()[j]*(el.upper[0]-el.lower[0])/2;
             for(const auto &q:profile.Quadrature())
-            {auto a=anchor;a[2]=q.r;append(p.Point(0,a),p.Point(p.InnerPressure(),a),{},wx*q.weight*q.jacobian,true,&profile);}
+            {auto a=anchor;a[2]=q.r;append(p.Point(0,a),p.Point(p.InnerPressure(),a),{},
+                wx*metric.baseArea*q.weight*q.jacobian,wx*q.weight,true,&profile);}
         }
     for(const auto &v:p.outerVelocity->Quadrature(24))
     {
         const auto a=v.coordinate;
-        append(p.Point(0,a),p.Point(p.OuterPressure(),a),p.Point(p.Epsilon(),a),v.weight*p.Mapping().At(a).determinant,false,nullptr);
+        append(p.Point(0,a),p.Point(p.OuterPressure(),a),p.Point(p.Epsilon(),a),v.weight*p.Mapping().At(a).determinant,v.weight,false,nullptr);
     }
     Require(hash==RANSWallR3::Hash(s) && work==p.InitializationWork(),"weak observation mutated state/Lift");
     return J::Object({{"state_sha256",J::Quote(hash)},{"alpha_mass",J::Number(alpha)},
         {"scope",J::Quote("three physical weak modes:1,s/5,interface_hat; raw regional loads retain constrained exterior reactions; no additional epsilon flux")},
         {"native_inner",contract(inner)},{"native_outer",contract(outer)},
-        {"native_terms",J::Object(terms)},{"volume",J::Number(Volume(p))},{"samples",J::List(rows)},
+        {"native_terms",J::Object(terms)},{"volume",J::Number(Volume(p))},
+        {"geometry_kind",J::Number(p.Mapping().kind==RANSWallNormalMap::Kind::Plane?2:p.Mapping().amplitude==0?0:1)},
+        {"samples",J::List(rows)},
         {"governing_solves","0"}});
 }
 }
@@ -171,11 +210,14 @@ int main(int argc,char **argv)
         const auto started=std::chrono::steady_clock::now();
         auto world=LibUtilities::SessionReader::CreateInstance(2,argv);world->InitSession();
         char program[]="wj-terrain-coupled";char *args[]{program,nullptr};
-        auto session=LibUtilities::SessionReader::CreateInstance(1,args,std::vector<std::string>{argv[1]},LibUtilities::CommSerial::create(1,args));
+        std::vector<std::string> filenames{argv[1]};
+        auto session=LibUtilities::SessionReader::CreateInstance(1,args,filenames,LibUtilities::CommSerial::create(1,args));
         session->InitSession();session->SetSolverInfo("GlobalSysSoln","DirectFull");
         const auto graph=SpatialDomains::MeshGraphIO::Read(session);RANSWallPatchParameters par;
         session->LoadParameter("RANSWallHeight",par.geometry.height,.375);session->LoadParameter("RANSWallRoughness",par.geometry.roughness,.09);
-        session->LoadParameter("Kinvis",par.geometry.molecularNu,.051*.005/3.97);par.geometry.sampleHeight=par.geometry.tailStart=par.geometry.height;par.chi=0;
+        session->LoadParameter("Kinvis",par.geometry.molecularNu,.051*.005/3.97);
+        session->LoadParameter("RANSWallSampleHeight",par.geometry.sampleHeight,par.geometry.height);
+        session->LoadParameter("RANSWallTailStart",par.geometry.tailStart,par.geometry.height);session->LoadParameter("RANSWallChi",par.chi,0.);
         session->LoadParameter("RANSWallTangentialOrder",par.tangentialOrder,16);session->LoadParameter("RANSWallNormalOrder",par.normalOrder,24);
         LoadWJNativeConfiguration(session,par);
         RANSWallEvolutionPatch p(session,graph,world->GetComm(),par,LoadRANSWallNormalMap(session,2,par.geometry.height));
@@ -240,7 +282,9 @@ int main(int argc,char **argv)
         {
             integration.Advance();saveCheckpoint();
             events.push_back(J::Object({{"step",J::Number(integration.Steps())},{"time",J::Number(integration.Time())},
-                {"interface",Interface(p,state,integration.Time(),data)},{"physical_samples",AuditJSON(p.PhysicalSamples(state,integration.Time(),data))}}));
+                {"interface",Interface(p,state,integration.Time(),data)},
+                {"physical_observations",Observations(p,state,integration.Time(),data)},
+                {"physical_samples",AuditJSON(p.PhysicalSamples(state,integration.Time(),data))}}));
         }
         const auto weak=std::string(argv[2])+".final-weak.json";
         Save(weak,Weak(p,state,lastHistory,lastAlpha,integration.Time(),data));

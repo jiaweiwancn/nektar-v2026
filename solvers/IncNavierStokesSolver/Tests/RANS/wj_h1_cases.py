@@ -52,6 +52,7 @@ def case_xml(folder,kind='hill',steps=3,dt=1e-6):
         RANSWallKSampling='InterfaceTrace',RANSWallPhysicalRangeGuard='WJNativeV1',
         RANSWallCondense='False',RANSWallReference='Functions',RANSWallFunctionCoordinates='Chart',
         RANSWallEvaluationReuse='Off',RANSWallPimpleVerify='Off',RANSWallComparison='Off',
+        RANSWallPimpleStopOnBound='On',
         RANSWallPimpleKBound='MassProjection',RANSWallPimpleKInventory='WJNativeV1',
         RANSWallPimpleKBoundSolver='RetainedPool',RANSWallPimpleSnapshots='On').items():set_info(root,key,value)
     # No production inlet/outlet is selected by this controlled native probe.

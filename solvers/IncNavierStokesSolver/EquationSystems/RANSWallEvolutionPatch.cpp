@@ -729,7 +729,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Project(const std::vector
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::NeutralReference(double us,const std::array<double,2> &direction) const
 {
-    Require(m_mapping.PlanarConstantHeight(),"neutral reference requires a planar constant-height map");
+    Require(m_mapping.PlanarConstantHeight() && !m_mapping.compositeTunnel,
+        "neutral reference requires a noncomposite planar constant-height map; declare terrain verification Functions");
     return FlatReference(us,direction);
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FlatReference(double us,const std::array<double,2> &direction) const

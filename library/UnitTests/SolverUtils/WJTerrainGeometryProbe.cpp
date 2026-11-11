@@ -96,7 +96,7 @@ int main(int argc,char **argv)
             }
             out<<"]}";
         }
-        out<<"],\"calibration\":[";
+        out<<"],\"calibration\":[";double selectedRoughness=0;
         for(double H:{.25,.375,.5})
         {
             if(H!=.25)out<<',';
@@ -108,6 +108,7 @@ int main(int argc,char **argv)
                 AnalyticalWallFunction awf({nu,H,h,H/2},K,wall);
                 if(awf.ViscosityInterceptHeight()>zv)lo=h;else hi=h;}
             const double h=(lo+hi)/2;AWFProfileOptions options;options.formulation=AWFProfileFormulation::WJCalibratedBudgetAWF;
+            if(H==.375)selectedRoughness=h;
             options.quadratureOrder=32;
             auto profile=EquilibriumAWFProfiles::WJ({nu,H,h,H,H},K,model,options);
             double minK=K;for(int j=0;j<=100;++j)minK=std::min(minK,profile.ReferenceK(H*j/100));
@@ -116,6 +117,22 @@ int main(int argc,char **argv)
                <<",\"cutoff\":"<<r.cutoff<<",\"gate\":"<<r.productionBudget/r.minimumBudget
                <<",\"minimum_reference_k\":"<<minK<<",\"K\":"<<K<<",\"UH\":"<<r.matchingVelocity
                <<",\"nu_over_nut_H\":"<<nu/awf.EddyViscosity(H)<<'}';
+        }
+        out<<"],\"curved_columns\":[";
+        const double bound=std::acos(-1.)*std::acos(-1.)/(2*2.5*2.5);
+        int column=0;
+        for(double c:{-bound/(1-.0875*bound),0.,bound/(1+.0875*bound)})
+        {
+            if(column++)out<<',';AWFProfileOptions options;
+            options.formulation=AWFProfileFormulation::WJCalibratedBudgetAWF;options.quadratureOrder=32;
+            auto profile=EquilibriumAWFProfiles::WJ({nu,.375,selectedRoughness,.375,.375},K,model,options,{c,0});
+            const auto &ref=profile.Reference();double minK=K;
+            for(int j=0;j<=100;++j)minK=std::min(minK,profile.ReferenceK(.375*j/100));
+            out<<"{\"kappa_eff\":"<<c<<",\"cutoff\":"<<ref.cutoff<<",\"gate\":"<<ref.productionBudget/ref.minimumBudget
+               <<",\"budget_defect\":"<<ref.budgetResidual<<",\"minimum_k_101\":"<<minK
+               <<",\"Q_endpoints\":["<<profile.ReferenceKFlux(0)<<','<<profile.ReferenceKFlux(.375)<<"],\"reference_k\":[";
+            for(int j=0;j<5;++j){if(j)out<<',';out<<profile.ReferenceK(.375*j/4);}
+            out<<"]}";
         }
         int rejects=0;
         for(int kind=0;kind<5;++kind)

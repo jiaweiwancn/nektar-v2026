@@ -135,7 +135,29 @@ def check_geometry(packet):
         assert_allclose(row['h_s'],provisional_roughness(row['H']),rtol=1e-12)
         require(row['z_v']<=0 and 0<row['h_s']<row['H'] and row['gate']>=1 and row['minimum_reference_k']>0,
             'conditional flat calibration/reference gates')
-    return dict(maps=out,calibration=packet['calibration'],invalid_geometry_rejections=5,frame=packet['frame_check'])
+    K=QE*US*US;proof=[]
+    for row in packet['curved_columns']:
+        c=row['kappa_eff'];a,zv,A,rc,P=wall(K,c);d=NU-a*zv;t=K/QE
+        assert_allclose(row['cutoff'],rc,rtol=3e-11,atol=3e-14)
+        def Q(r):
+            y=d+a*r
+            production=t*t/a*((c/a)*(y-d)+(1-c*d/a-NU*c/a)*math.log(y/d)
+                +NU*(1-c*d/a)*(1/y-1/d))
+            loss=A/rc*(r+c*r*r/2) if r<=rc else A*(1+math.log(r/rc)+c*(r-rc/2))
+            return loss-production
+        values=[]
+        for r in np.linspace(0,HW,5):
+            knots=sorted(set([float(r),HW]+([rc] if r<rc<HW else [])))
+            values.append(K-sum(quad(lambda z:Q(z)/((1+c*z)*(d+a*z)),l,u,epsabs=2e-14,epsrel=2e-12)[0]
+                for l,u in zip(knots[:-1],knots[1:])))
+        assert_allclose(row['reference_k'],values,rtol=2e-10,atol=3e-13)
+        assert_allclose(row['Q_endpoints'],[0,0],atol=2e-14)
+        require(row['minimum_k_101']>0,'curved auxiliary reference nonpositive')
+        proof.append(dict(kappa_eff=c,cutoff=rc,gate=row['gate'],K_ground=values[0],
+            initial_defect_margin=t*t*a*(-zv)/d**2-A/rc))
+    require(min(v['initial_defect_margin'] for v in proof)>0,'rough-column single-crossing positivity certificate fails')
+    return dict(maps=out,calibration=packet['calibration'],curved_columns=proof,invalid_geometry_rejections=5,frame=packet['frame_check'],
+        positivity_scope='At fixed selected K/h/H, p_ref is unimodal, E-p_ref is positive after cutoff and negative initially; Q_J<=0 by the budget. Linear-in-curvature budgets bracket every intermediate cutoff between endpoint roots. Thus k_col>=K for the certified curvature interval; no evolving-k positivity theorem.')
 
 @functools.lru_cache(maxsize=2048)
 def wall(K,c):
@@ -158,8 +180,18 @@ def independent_weak(packet):
     for row in packet['samples']:
         inner=row['inner'];w=row['weight'];u=np.array(row['U']);G=np.array(row['G']);M=G+G.T
         k,e,pi=row['k'],row['epsilon'],row['pi'];gk=np.array(row['grad_k']);ge=np.array(row['grad_epsilon'])
-        divergence=np.trace(G);force=np.array(row['force']) if inner and row['chart'][2]<=provisional_roughness() else np.zeros(3)
+        _,j,curvature,_,normal,_=geometry(row['chart'][0],row['chart'][2],packet['geometry_kind'])
+        assert_allclose(w,row['canonical_weight']*np.linalg.det(j),rtol=5e-13,atol=2e-15)
+        divergence=np.trace(G);force=np.zeros(3)
         if inner:
+            _,_,curv,_,n,_=geometry(row['chart'][0],HW,packet['geometry_kind'])
+            t=np.array([n[2],0,-n[0]]);uh=np.array(row['H_U']);gh=np.array(row['H_G'])
+            curvH=curv/(1+HW*curv)
+            scalar=np.dot(t,np.array(row['H_grad_pi'])-2*np.array(row['H_grad_k'])/3)
+            scalar+=2*np.dot(t,uh)*(t@gh@t-curvH*np.dot(n,uh))
+            expected_force=scalar*t
+            assert_allclose(row['force'],expected_force,rtol=3e-11,atol=3e-12)
+            if row['chart'][2]<=provisional_roughness():force=expected_force
             a,zv,A,rc,P=wall(row['K'],row['kappa_eff'])
             assert_allclose(row['cutoff'],rc,rtol=3e-11,atol=3e-14)
             nt=a*max(row['chart'][2]-zv,0);dk=NU+nt
@@ -261,6 +293,7 @@ def main():
             xml=case_xml(folder/'input',args.kind,1 if args.kind=='plane' else 3)
             receipt=run([args.native_probe.resolve(),xml.resolve(),folder.resolve()/'report.json'],folder)
             result=check_native(json.loads((folder/'report.json').read_text()),folder);result['command']=receipt
+            if args.kind=='plane':require(result['signed_wall_traction_range'][0]<0,'reversed inclined native traction was lost')
         else:
             import xml.etree.ElementTree as ET
             from cls_epawf_m3_cases import set_info,set_parameter,write
@@ -272,7 +305,10 @@ def main():
             results=[]
             for name,key,value,reason in cases:
                 sub=folder/name;xml=case_xml(sub/'input','hill',0);root=ET.parse(xml).getroot()
-                (set_parameter if key=='RANSWallHeight' else set_info)(root,key,value);write(root,xml)
+                (set_parameter if key=='RANSWallHeight' else set_info)(root,key,value)
+                if name=='fold':
+                    set_parameter(root,'RANSWallSampleHeight',value);set_parameter(root,'RANSWallTailStart',value)
+                write(root,xml)
                 results.append(run([args.native_probe.resolve(),xml.resolve(),sub.resolve()/'report.json'],sub,expected_failure=reason))
             result=dict(status='PASS',reason_specific_rejections=len(results),commands=results)
         save(folder/'result.json',result);print(json.dumps(dict(result=str(folder/'result.json'),status='PASS')))
