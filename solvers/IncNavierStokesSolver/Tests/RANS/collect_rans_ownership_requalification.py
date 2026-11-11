@@ -5,14 +5,16 @@ import argparse
 import gzip
 import hashlib
 import json
+import math
 from pathlib import Path
 import shutil
 import subprocess
-from qualify_rans_preservation import load
+from qualify_rans_preservation import load, replay_request
 from rans_request_manifest import sha, RequestManifest
 from rans_ownership_contract import SCHEMA, OPERATOR, classify_scope
 from rans_qualification import write_json
-from rans_duration_contract import identity, prefix, require, required_times
+from rans_duration_contract import identity, prefix, require, required_times, MEMBERS
+from collect_rans_balanced_spatial import audit_summaries
 
 
 def short_matrix_coverage(root, short):
@@ -43,12 +45,15 @@ def short_matrix_coverage(root, short):
 
 
 def collect(root,output,previous_attempts):
-    r=root.resolve();output.mkdir(parents=True,exist_ok=False);bodies={};index=[];costs=[]
+    r=root.resolve();output.mkdir(parents=True,exist_ok=False);bodies={};index=[];costs=[];states=[]
     def include(path):
         if not path.exists():return None
-        request=path.parent/'request-manifest.json'
-        if request.exists() and (path.parent/'completed-artifacts.json').exists():
-            if not RequestManifest(path.parent,load(request)['request'],True).completed(path.parent):
+        owner=path.parent
+        if (path.parent/'completed-artifacts.json').exists():
+            while owner!=r and not (owner/'request-manifest.json').exists():owner=owner.parent
+            request=owner/'request-manifest.json'
+            require(request.exists(),'completed_receipt_has_no_request_owner:'+str(path))
+            if not RequestManifest(owner,load(request)['request'],True).completed(path.parent):
                 raise ValueError('unsealed completed receipt: '+str(path))
         value=load(path);key=str(path.relative_to(r));bodies[key]=value
         index.append(dict(path=str(path),sha256=sha(path)));return value
@@ -71,7 +76,10 @@ def collect(root,output,previous_attempts):
         'response-quadrature-*/results.json','duration-quadrature-*/results.json',
         'corrective-duration-response/*.json','corrective-duration-response-v2/*.json',
         'duration-residual-diagnosis/*/results.json',
-        'selected-frozen-operator-comparison/*/results.json','actual-loaded-maps/*.json'):
+        'selected-frozen-operator-comparison/*/results.json','actual-loaded-maps/*.json',
+        'budget-axis-controls/*/results.json','budget-axis-controls/*/hypothesis.json',
+        'budget-axis-controls/*/mesh.json','budget-axis-controls/*/unsupported-receipt.json',
+        'budget-axis-controls/*/execution/results.json'):
         for path in sorted(r.glob(glob)):include(path)
     for path in sorted((r/'campaigns').glob('*/T-*/metrics.json')):
         m=load(path);index.append(dict(path=str(path),sha256=sha(path)))
@@ -83,6 +91,27 @@ def collect(root,output,previous_attempts):
             status=m['status'],wall_seconds=m['wall_seconds'],process_cpu_seconds=m.get('process_cpu_seconds'),
             history=m.get('history_identity'),configuration_sha256=m['configuration_sha256'],
             initialization_receipt=m.get('initialization_receipt'),final_state_sha256=m.get('final_state_sha256')))
+        native=load(path.parent/'case.evolution.json')
+        domain_keys=('minimum_inner_k','minimum_outer_k','minimum_outer_epsilon','minimum_sampled_K',
+            'minimum_projected_trace_epsilon','scalar_minimum_points_inner_k_outer_k_epsilon',
+            'sampled_covariance_minima','covariance_minimum_points','covariance_minimum_sides',
+            'covariance_minimum_geometries','minimum_A95_radicand','A95_radicand_minimum_point',
+            'A95_radicand_side','A95_radicand_geometry','minimum_required_budget_ratio',
+            'required_cutoff_count','required_cutoff_admissible','cutoff_failure_reason',
+            'cutoff_limiting_point','cutoff_range','maximum_budget_relative_defect',
+            'active_correction_profiles','inactive_baseline_profiles','fallback_profiles')
+        domains=[dict(time=attempt['time'],stage=stage,**{k:d[k] for k in domain_keys if k in d})
+                 for attempt in native.get('pimple_attempts',[]) for stage,d in attempt.items()
+                 if stage.endswith('_domain') and isinstance(d,dict)]
+        calls=sum(x.get('bound_calls',0) for x in native.get('pimple_attempts',[]))
+        states.append(dict(campaign=path.parents[1].name,time=m.get('time'),status=m['status'],
+            native_report_sha256=sha(path.parent/'case.evolution.json'),extrema=m.get('extrema'),
+            final_state_audit=m.get('final_audit'),all_state_and_stage=audit_summaries(native),
+            audited_stage_domains=domains,reference_error=m.get('reference_error'),
+            actual_initial_drift=m.get('change_from_initial'),spatial_alpha_zero=m.get('spatial_alpha_zero'),
+            source_and_constraint_maxima=m.get('source_and_constraint_maxima'),
+            corrections=dict(calls=calls,signed_integral=0. if calls==0 else None,
+                             absolute_integral=0. if calls==0 else None)))
     for path in sorted((r/'campaigns').glob('*/request-manifest.json')):include(path)
     for path in sorted(r.rglob('probe-process-cost.json')):
         # The source/build are symlinked to the owned isolated build area;
@@ -95,7 +124,11 @@ def collect(root,output,previous_attempts):
                  'idle-watcher-resource-cleanup.json','independent-admission-launch.json',
                  'build-completion.json','source-identities.json','native-exclusive-costs.json',
                  'final-resource-census.json','historical-evidence-integrity.json',
-                 'completion-wrapper-transition.json','legacy-probe-dependency-identity.json'):
+                 'completion-wrapper-transition.json','legacy-probe-dependency-identity.json',
+                 'short-coverage-negative-control.json','budget-cost-instrumentation.json',
+                 'budget-postprocessing-v2-launch.json','budget-axis-controller-launch.json',
+                 'budget-axis-control-results.json','A93-half-spatial-execution.json',
+                 'A93-corrected-signed-load-execution.json'):
         include(r/name)
     for name in ('worker-bookings.jsonl','worker-guard-events.jsonl','resource-priority-events.jsonl'):
         path=r/name
@@ -117,18 +150,42 @@ def collect(root,output,previous_attempts):
     response_coverage={(v.get('configuration',{}).get('wall'),v.get('amplitude')) for v in field_rows}
     response_complete=(len(field_rows)==3 and response_coverage=={('Accepted',2e-5),('Accepted',1e-5),('EP',2e-5)} and
         all(v.get('configuration',{}).get('model')=='A95' and v.get('configuration',{}).get('policy')=='Natural' and
-            abs(v.get('time',-1)-.016)<=1e-13 and len(v.get('fields',{}))==17 for v in field_rows))
+            abs(v.get('time',-1)-.016)<=1e-13 and len(v.get('fields',{}))==17 and
+            v.get('core_pressure_velocity_nonlinear_production_response_resolved') for v in field_rows))
     half=bodies.get('physical-postprocessing/half-amplitude.json',{})
+    common_wall=bodies.get('common-wall-response/results.json',{})
+    weak_complete=response_complete and len(weak_rows)==3
+    for key,body in list(bodies.items()):
+        if not key.startswith('response-cohorts/') or '/T-' not in key:continue
+        name=key.split('/')[1];audit=bodies.get('response-audits/'+name+'-0.016/results.json',{})
+        weak_complete &= (audit.get('status')=='pass' and audit.get('configuration')==body.get('configuration') and
+            abs(audit.get('time',-1)-.016)<=1e-13 and audit.get('independent_coverage')=='complete' and
+            set(audit.get('scalars',{}))==set(MEMBERS) and all(v['coverage']['status']=='pass' and
+                v['coverage']['last_time']>=.016-1e-13 for v in audit.get('scalars',{}).values()))
+    half_complete=(half.get('status')=='pass' and len(half.get('checks',[]))==68 and
+                   all(math.isfinite(v['limit']) and v['limit']>=0 and
+                       0<=v['departure_from_linear_scaling_RMS']<=v['limit'] for v in half.get('checks',[])))
+    wall_complete=(common_wall.get('status')=='pass' and abs(common_wall.get('time',-1)-.016)<=1e-13 and
+                   set(common_wall.get('fields',{}))=={'Accepted','EP'} and
+                   all(len(v)==17 for v in common_wall.get('fields',{}).values()) and
+                   len(common_wall.get('wall_differences',{}))==17 and all(
+                       all(math.isfinite(v[k]) and v[k]>=0 for k in ('spatial_difference','temporal_difference','spatial_limit','temporal_limit')) and
+                       v['spatial_difference']<=v['spatial_limit'] and v['temporal_difference']<=v['temporal_limit']
+                       for fields in common_wall.get('fields',{}).values() for v in fields.values()))
     gates=dict(ownership_geometry=simple(geometry),history_cache_CLS=simple(compat),natural_short_matrix=short_matrix_coverage(r,short),
         selected_prescribed=simple(prescribed),A93_neutral=schedules['A93'],A95_neutral=schedules['A95'],
         A95_response_fields=dict(status='pass' if response_complete and all(x['status']=='pass' for x in field_rows) and
-            half.get('status')=='pass' and len(half.get('checks',[]))==68 else 'failed_unresolved_or_incomplete'),
-        A95_response_native_weak=dict(status='pass' if len(weak_rows)==3 and all(x['status']=='pass' for x in weak_rows) else 'failed_unresolved_or_incomplete'),
+            half_complete and wall_complete else 'failed_unresolved_or_incomplete',
+            half_amplitude_status='pass' if half_complete else 'incomplete_or_failed',
+            common_wall_status='pass' if wall_complete else 'incomplete_or_failed'),
+        A95_response_native_weak=dict(status='pass' if weak_complete else 'failed_unresolved_or_incomplete'),
         physical_budget_reconstruction=dict(status='pass' if len(budget_rows)==1 and budget_rows[0]['reconstruction_status']=='pass' else 'not_qualified'),
         physical_budget_accuracy=dict(status=budget_rows[0]['accuracy_status'] if len(budget_rows)==1 else 'not_qualified'))
     scope=dict(schema=SCHEMA,numerical_operator=OPERATOR,response_max_time=.016,out_of_scope=dict(A93_response=True),gates=gates)
     write_json(output/'required-scope-input.json',scope);decision=classify_scope(scope)
     write_json(output/'decision.json',decision);write_json(output/'costs-and-input-identities.json',dict(records=costs))
+    with gzip.open(output/'all-state-stage-receipts.json.gz','wt',compresslevel=9) as stream:
+        json.dump(states,stream,separators=(',',':'),allow_nan=False)
     with gzip.open(output/'complete-results.json.gz','wt',compresslevel=9) as stream:json.dump(bodies,stream,separators=(',',':'),allow_nan=False)
     prior={}
     for path in previous_attempts:
@@ -140,6 +197,60 @@ def collect(root,output,previous_attempts):
             if p.exists():entries.append(dict(path=str(p),sha256=sha(p),body=load(p)))
         prior[str(path)]=entries
     write_json(output/'preserved-execution-failures.json',prior)
+    witnesses=output/'failure-witnesses';witnesses.mkdir();failures=[]
+    for key,body in bodies.items():
+        if not key.startswith('duration-audits/'):continue
+        failed=[v for v in body.get('evolved_reductions',[]) if v['status']!='pass']
+        if not failed:continue
+        first=min(failed,key=lambda v:v['time']);t=first['time'];cohort=key.split('/')[1].removesuffix('-'+str(t))
+        witness=dict(configuration=body['configuration'],cohort=cohort,time=t,numerical_operator=OPERATOR,
+            gate='evolved_spatial_reduction',reduction=first,aggregate=body['aggregate'],members={},
+            meaning='post-step qualification failure in accepted physical states; no rejected timestep invented')
+        for member in MEMBERS:
+            folder=r/'campaigns'/(cohort+'-'+member);endpoint=folder/('T-'+format(t,'.4f'))
+            q=load(folder/'request-manifest.json');require(RequestManifest(folder,q['request'],True).completed(endpoint),'failure_endpoint_unsealed')
+            native=load(endpoint/'case.evolution.json');base=cohort+'-'+member
+            shutil.copy2(endpoint/'case.xml',witnesses/(base+'.xml'))
+            request=replay_request(load(folder/'initial-packet.json'),[],state=native['state'],time=native['time'])
+            request.update(fixed_boundary=native['initialization_receipt']['live_fixed_boundary'],export_basis=True,export_resolution=True)
+            with gzip.open(witnesses/(base+'-replay.json.gz'),'wt',compresslevel=9) as stream:json.dump(request,stream,separators=(',',':'),allow_nan=False)
+            checkpoint=Path(native['checkpoint'])/'State.bin'
+            if checkpoint.exists():
+                with checkpoint.open('rb') as source,gzip.open(witnesses/(base+'-State.bin.gz'),'wb',compresslevel=9) as dest:shutil.copyfileobj(source,dest)
+                index.append(dict(path=str(checkpoint),sha256=sha(checkpoint)))
+            witness['members'][member]=dict(source=str(endpoint),configuration_sha256=sha(endpoint/'case.xml'),
+                native_report_sha256=sha(endpoint/'case.evolution.json'),trajectory_request=q,
+                source_fields={k:native[k] for k in ('signature','numerical_operator','time','dt','order','state','initial',
+                    'fixed_reference','initialization_receipt','native_history','native_history_times','last_stage_history',
+                    'last_stage_alpha','last_stage_time','failure','rejected_state') if k in native})
+        dest=witnesses/(cohort+'-qualification-failure.json.gz')
+        with gzip.open(dest,'wt',compresslevel=9) as stream:json.dump(witness,stream,separators=(',',':'),allow_nan=False)
+        failures.append(dict(gate=witness['gate'],time=t,witness=dest.name))
+    budget_requests=[*(r/'physical-budgets').glob('*-0.016-Q2-F32/request.json'),
+                     *(r/'physical-budgets').glob('axis-*-Q2-F32/request.json')]
+    for path in sorted(budget_requests):
+        # The selected required cohort's eight primary/half/baseline requests
+        # retain consecutive accepted and frozen-stage vectors for replay.
+        if not path.parent.name.startswith(('A95-N-Accepted-response-2e-05-dt-','axis-')):continue
+        base=path.parent.name;shutil.copy2(path.parent/'case.xml',witnesses/(base+'.xml'))
+        with path.open('rb') as source,gzip.open(witnesses/(base+'-request.json.gz'),'wb',compresslevel=9) as dest:shutil.copyfileobj(source,dest)
+        index.append(dict(path=str(path),sha256=sha(path)))
+    fixtures=output/'geometry-and-guard-fixtures';fixtures.mkdir()
+    for source in [*(r/'geometric-regressions-v1').glob('*/case.xml'),
+                   *(r/'budget-axis-controls').glob('*/native-guard-witness/case.xml')]:
+        base=source.parent.name
+        if base=='native-guard-witness':base=source.parent.parent.name+'-'+base
+        dest=fixtures/base;dest.mkdir()
+        for name in ('case.xml','request.json','probe.log','packet.json','immutable-initialization-intent.json'):
+            p=source.parent/name
+            if not p.exists():continue
+            if name=='request.json':
+                with p.open('rb') as stream,gzip.open(dest/(name+'.gz'),'wb',compresslevel=9) as target:shutil.copyfileobj(stream,target)
+            else:shutil.copy2(p,dest/name)
+            index.append(dict(path=str(p),sha256=sha(p)))
+    write_json(output/'qualification-failure-index.json',dict(failures=failures,
+        physical_budget_accuracy='failed binding and replay requests retained separately from successful reconstruction',
+        unsupported_control='StreamwiseP6V1 stopped by the existing equal-order tensor-basis guard before any evolution'))
     controllers=output/'linux-controllers';controllers.mkdir()
     for path in sorted(r.glob('*.py')):
         shutil.copy2(path,controllers/path.name);index.append(dict(path=str(path),sha256=sha(path)))
