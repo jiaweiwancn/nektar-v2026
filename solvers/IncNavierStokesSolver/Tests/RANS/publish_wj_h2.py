@@ -45,6 +45,7 @@ def native_inputs(root,source,revision):
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--analysis',type=Path)
     a=p.parse_args();start=time.monotonic();r=a.root.resolve();out=a.output.resolve();out.mkdir(exist_ok=False);s=r/'source-v1'
     revision=git(s,'rev-parse',PRODUCER);head=git(s,'rev-parse','HEAD');tree=git(s,'rev-parse','HEAD^{tree}')
     source_inputs=native_inputs(r,s,revision);save(out/'native-source-inputs.json',source_inputs)
@@ -118,9 +119,11 @@ def main():
     for v in c['runs'].values():manifest['files'].append(identity(v['report']))
     for pattern in ('wj2-native-Budget/**/summary.json','wj2-legacy-transaction/**/summary.json','wj1-oracle.json'):
         for p in (r/'build-v1').glob(pattern):manifest['files'].append(identity(p))
+    analysis=a.analysis or r/'analysis-v2'
+    manifest['analysis']=identity(analysis/'summary.json')
     for name in ('summary.json','profiles-at-measured-heights.csv','experimental-discrepancy.csv','comparison-table.csv',
         'physical-profiles.png','admission-and-interface.png'):
-        shutil.copyfile(r/'analysis-v2'/name,out/name)
+        shutil.copyfile(analysis/name,out/name)
     shutil.copyfile(r/'completions-compiled-v1/summary.json',out/'inlet-completion-family.json')
     shutil.copyfile(r/'observations-v3/incident.json',out/'principal-incident.json')
     shutil.copyfile(s/'docs/plans/wj-h2-linux/continuation-denial.json',out/'continuation-denial.json')

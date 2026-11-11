@@ -71,7 +71,7 @@ def comparison(a,b,weights,K,epsilonH):
         maximum=math.sqrt(max(values))/amplitude
         result[field]=dict(normalized_L2=l2,normalized_sampled_maximum=maximum,
             limit_L2=.02 if field!='pi' else None,limit_maximum=.05 if field!='pi' else None,
-            status='PASS' if field=='pi' or (l2<=.02 and maximum<=.05) else 'UNRESOLVED')
+            gate_applied=field!='pi',status='REPORTED' if field=='pi' else 'PASS' if (l2<=.02 and maximum<=.05) else 'UNRESOLVED')
     for key,amplitude,limit in (('K',K,.02),('cutoff',1.,.02)):
         a0=a['open_boundary']['interface'];b0=b['open_boundary']['interface'];assert len(a0)==len(b0)
         delta=max(abs(x[key]-y[key])/(amplitude if key=='K' else max(abs(x[key]),abs(y[key]),1e-15)) for x,y in zip(a0,b0))
@@ -82,7 +82,7 @@ def comparison(a,b,weights,K,epsilonH):
     assert len(a0)==len(b0)
     delta=max(abs(x['actual_traction'][0]-y['actual_traction'][0])/US**2 for x,y in zip(a0,b0))
     result['wall_stress']=dict(normalized_sampled_maximum=delta,limit=.05,status='PASS' if delta<=.05 else 'UNRESOLVED')
-    return dict(status='PASS' if all(v['status']=='PASS' for v in result.values()) else 'UNRESOLVED',fields=result,
+    return dict(status='PASS' if all(v['status']=='PASS' for k,v in result.items() if k!='pi') else 'UNRESOLVED',fields=result,
         pressure_convention='fixed physical traction level; no gauge realignment',points=len(weights),measure=sum(weights))
 
 

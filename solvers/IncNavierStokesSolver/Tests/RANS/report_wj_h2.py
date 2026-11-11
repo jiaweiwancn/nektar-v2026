@@ -59,7 +59,7 @@ def run_summary(record):
         attempts=len(attempts),failure=d['failure'],solve_counts=counts,
         solve_dimensions={k:attempts[0][k] for k in ('velocity_size','pressure_gauge_size','assembled_flow_size','k_solve_size','epsilon_solve_size')} if attempts else {},
         sweep_seconds=sum(a['seconds'] for a in attempts),k_snapshots=snapshots,
-        linear_residual_max={k:max(a[k] for a in attempts) for k in ('predictor_linear_residual','pressure_linear_residual',
+        linear_residual_max={k:component_maximum([a[k] for a in attempts]) for k in ('predictor_linear_residual','pressure_linear_residual',
             'corrected_continuity_gauge','k_frozen_linear_residual','epsilon_frozen_linear_residual')} if attempts else {},
         imposed_epsilon_trace_max=max((a['refreshed_trace_defect'] for a in attempts),default=0.),
         final_conditions=d['wj_audit_packets'][-1]['conditions'],
@@ -77,10 +77,18 @@ def timer_summary(path):
     return values
 
 
+def component_maximum(values):
+    return np.max(np.asarray(values),axis=0).tolist()
+
+
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--measurements',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(exist_ok=False)
     root=a.root;measure=load(a.measurements/'summary.json');index=load(a.measurements/'index.json');study=load(root/'study-v1/progress.json')
+    for row in measure['comparisons'].values():
+        # A fixed pressure level is required and nonfinite pressure was rejected,
+        # but H2 froze no numerical pressure-difference budget.
+        row['fields']['pi'].update(status='REPORTED',gate_applied=False)
     assert study['status']=='OBSTRUCTED'
     c=Completion();summary=dict(schema='WJH2ScientificSummaryV1',status='OBSTRUCTED',first_limiting_gate=study['first_limiting_gate'],
         unreached_target=8.,unperformed=['developed one-flow-through precursor','evolved missing-input companion','physical hill prediction'],
