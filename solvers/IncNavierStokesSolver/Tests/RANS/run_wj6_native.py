@@ -21,7 +21,7 @@ from wj3_measure import checkpoint_payload
 from wj4_measure import comparison,AMP,BUDGET
 from wj4_qualification import sensitivity_sequence
 from wj5_measure import boundary_uncertainty
-from wj6_qualification import paired_envelope,required_accuracy,common_extension_authorized
+from wj6_qualification import paired_envelope,required_accuracy,common_extension_authorized,fresh_startup_gate
 from wj6_resources import DEFAULT,run_limited,volume
 from wj_immutable import (Ledger,read,write_once,atomic,artifacts,verify_artifacts,file_hash,
     file_identity,runtime,digest,xml_identity,execution_intent)
@@ -107,9 +107,19 @@ class Study(WJ5Study):
         require(totals['seconds']+seconds+hold<=10800,'RESOURCE_LIMIT: invocation plus closure reserve exceeds package seconds')
         require(volume(self.root)<=limits['policy_output_bytes'],'RESOURCE_LIMIT: policy output ceiling')
         label=str(folder.resolve());self.ledger.reserve(label,intent,steps,seconds)
-        metrics=run_limited(argv,folder,folder/'command.log',limits,kind,seconds)
+        not_launched=False
+        try:metrics=run_limited(argv,folder,folder/'command.log',limits,kind,seconds)
+        except RuntimeError as error:
+            # A denied worker reservation precedes Popen. Preserve and charge
+            # its measured inspection time, but do not invent a native attempt.
+            if 'RESOURCE_LIMIT:' not in str(error) or (folder/'command.log').exists() or (folder/'resource-time.txt').exists():raise
+            not_launched=True
+            with (folder/'command.log').open('x') as stream:stream.write(str(error)+'\n')
+            metrics=dict(exit_code=125,limit_reason=str(error),seconds=0.,peak_rss_bytes=0,
+                peak_process_threads=0,output_bytes=volume(folder),timeout_seconds=seconds,
+                limits=limits,allocation=None,threads=THREADS,not_launched=True)
         report=folder/'case.evolution.json';d=read(report) if report.exists() else None
-        actual=len(d['pimple_attempts']) if d and 'pimple_attempts' in d else 0 if not steps else None
+        actual=0 if not_launched else len(d['pimple_attempts']) if d and 'pimple_attempts' in d else 0 if not steps else None
         files=[folder/'command.log',folder/'resource-time.txt',*outputs]
         if d and d.get('checkpoint') and Path(d['checkpoint']).exists():files.extend(p for p in Path(d['checkpoint']).rglob('*') if p.is_file())
         r=dict(argv=argv,intent_sha256=digest(intent),exit_code=metrics['exit_code'],seconds=metrics['seconds'],resource=metrics,
@@ -259,7 +269,7 @@ class Study(WJ5Study):
         t=self.s['trajectories'];primary=phase=='primary';extension=phase=='extension'
         targets=dict(self.design['extension' if extension else 'primary' if primary else 'pilot'])
         if endcap is not None:targets.update(coarse=endcap,fine=2*endcap,baseline=endcap)
-        parts={};observations={}
+        parts={'fresh_startup':fresh_startup_gate(self.s.get('fresh_startup'))};observations={}
         if phase!='pilot':parts['pilot_gate']=self.s['components']['pilot']
         if extension:parts['primary_gate']=self.s['components']['primary']
         for tag,row in t.items():

@@ -9,11 +9,22 @@ import unittest
 from wj6_resources import DEFAULT, validate
 from run_wj5_native import executed_m1_obstruction
 from verify_wj4_transactions import verify
-from wj_immutable import write_once
-from wj6_qualification import sum_envelopes,common_extension_authorized,required_accuracy
+from wj_immutable import write_once,artifacts
+from wj6_qualification import sum_envelopes,common_extension_authorized,required_accuracy,fresh_startup_gate
 
 
 class Metadata(unittest.TestCase):
+    def test_fresh_startup_requires_both_immutable_inputs(self):
+        self.assertEqual(fresh_startup_gate(None)['status'],'NOT_RUN')
+        with tempfile.TemporaryDirectory() as temp:
+            paths=[Path(temp)/n for n in ('coarse','fine')]
+            for p in paths:p.write_bytes(p.name.encode())
+            packet=dict(exact_physical_primary_gauge_history=True,native_labels_differ=True,checkpoints=artifacts(paths))
+            self.assertEqual(fresh_startup_gate(packet)['status'],'PASS')
+            bad=copy.deepcopy(packet);bad['native_labels_differ']=False
+            self.assertEqual(fresh_startup_gate(bad)['status'],'FAIL')
+            paths[0].write_bytes(b'stale')
+            with self.assertRaises(ValueError):fresh_startup_gate(packet)
     def test_both_asymmetric_uncertainty_contributions(self):
         self.assertEqual(sum_envelopes(dict(u=dict(L2=2.,sampled_Linf=3.)),dict(u=dict(L2=7.,sampled_Linf=11.))),
                          dict(u=dict(L2=9.,sampled_Linf=14.)))

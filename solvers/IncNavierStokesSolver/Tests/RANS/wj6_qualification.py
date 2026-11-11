@@ -6,6 +6,7 @@ import numpy as np
 from wj3_measure import FIELDS
 from wj5_measure import boundary_envelope
 from wj_qualification import aggregate, component, finite
+from wj_immutable import verify_artifacts
 from run_cls_epawf_picard import require
 
 
@@ -61,6 +62,15 @@ def required_accuracy(records,expected):
     for key,c in records.items():
         parts[str(key)]=c.get('errors',{}).get('accuracy_gate',component('NOT_RUN','missing accuracy packet'))
     return aggregate(parts)
+
+
+def fresh_startup_gate(packet):
+    if not isinstance(packet,dict) or any(k not in packet for k in ('exact_physical_primary_gauge_history','native_labels_differ','checkpoints')):
+        return component('NOT_RUN','missing fresh-startup compatibility packet')
+    if packet['exact_physical_primary_gauge_history'] is not True or packet['native_labels_differ'] is not True or len(packet['checkpoints'])!=2:
+        return component('FAIL','incompatible physical startup or native dt labels')
+    verify_artifacts(packet['checkpoints'])
+    return component('PASS','equal physical primary/gauge/history, distinct native dt labels; exact saved bytes verified')
 
 
 def common_extension_authorized(policies):
