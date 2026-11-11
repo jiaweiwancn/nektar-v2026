@@ -103,7 +103,9 @@ int main(int argc,char **argv)
             const double a=model.Kappa()*us,ell=H/(H/.005-1),zv=nu/a-ell;
             double lo=0,hi=H*(1-1e-12);
             for(int i=0;i<100;++i){double h=(lo+hi)/2;
-                AnalyticalWallFunction awf({nu,H,h,H},K,wall);
+                // Legacy scalar-kernel P is an interior reporting point;
+                // the separate WJ profile still samples K at the endpoint H.
+                AnalyticalWallFunction awf({nu,H,h,H/2},K,wall);
                 if(awf.ViscosityInterceptHeight()>zv)lo=h;else hi=h;}
             const double h=(lo+hi)/2;AWFProfileOptions options;options.formulation=AWFProfileFormulation::WJCalibratedBudgetAWF;
             options.quadratureOrder=32;
@@ -136,7 +138,18 @@ int main(int argc,char **argv)
             for(int a=0;a<3;++a)for(int b=0;b<3;++b)v+=rotation[i][a]*flat.reynoldsStress[a][b]*rotation[j][b];
             error=std::max(error,std::abs(v-law.reynoldsStress[i][j]));}
         const auto tr=WJOuterTraction(law.reynoldsStress,0,frame.normal);
-        out<<error<<",\"tangential_outer_traction\":"<<Dot(tr,frame.tangent1)<<",\"production\":"<<law.production<<",\"epsilon\":"<<e<<"}}\n";
+        out<<error<<",\"tangential_outer_traction\":"<<Dot(tr,frame.tangent1)<<",\"production\":"<<law.production<<",\"epsilon\":"<<e<<"},\"signed_forcing\":[";
+        AnalyticalWallFunction awf({nu,.375,.090675,.1875},K,wall);
+        bool first=true;
+        for(const auto &data:std::vector<std::array<double,2>>{{.1,0.},{-.1,0.},{.1,.2}})
+        {
+            if(!first)out<<',';first=false;
+            const auto value=awf.Evaluate({data[0],0},{data[1],0});
+            out<<"{\"U_H\":"<<data[0]<<",\"F\":"<<data[1]<<",\"traction\":"<<value.traction[0]
+               <<",\"J0\":"<<awf.Integrals().j0<<",\"J1\":"<<awf.Integrals().j1
+               <<",\"mean_production\":"<<value.meanProduction<<'}';
+        }
+        out<<"]}\n";
         Check(out.good(),"geometry output write failed");Check(rejects==5,"invalid geometry accepted");
         return 0;
     }

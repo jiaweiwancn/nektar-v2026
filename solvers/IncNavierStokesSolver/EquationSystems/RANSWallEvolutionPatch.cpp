@@ -1696,7 +1696,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector
 }
 std::string RANSWallEvolutionPatch::Signature() const
 {
-    std::ostringstream text;text<<std::setprecision(17)<<(WJ()?"WJ-Native-SerialFlat2D-v1:replicated-CG:":"CLS-EPAWF-M4:replicated-CG:")<<m_dimension<<':'<<m_parameters.geometry.height
+    std::ostringstream text;text<<std::setprecision(17)<<(WJ()?(WJTerrain()?"WJ-BudgetTerrainV1:replicated-CG:":"WJ-Native-SerialFlat2D-v1:replicated-CG:"):"CLS-EPAWF-M4:replicated-CG:")<<m_dimension<<':'<<m_parameters.geometry.height
         <<':'<<m_parameters.geometry.molecularNu<<':'<<m_parameters.geometry.roughness<<':'<<(ColumnAverageK()?0:m_parameters.geometry.sampleHeight)
         <<':'<<m_parameters.geometry.tailStart<<':'<<m_parameters.chi<<':'<<m_parameters.model.Q()<<':'<<m_parameters.tangentialOrder<<':'<<m_parameters.normalOrder;
     for(int b=0;b<Gauge();++b)

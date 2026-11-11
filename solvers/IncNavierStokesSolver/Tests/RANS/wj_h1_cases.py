@@ -60,5 +60,6 @@ def case_xml(folder,kind='hill',steps=3,dt=1e-6):
         RANSWallFrictionVelocity=US,RANSWallMapDisplacement=.0875,RANSWallMapTunnelTop=20.,
         RANSWallMapAmplitude=0. if kind=='zero' else 1.,RANSWallMapLengthX=2.5,
         RANSWallMapSlopeX=.2 if kind=='plane' else 0.,RANSWallEta=0.,RANSWallTangentialOrder=16,
-        RANSWallNormalOrder=24,RANSWallPimpleKBoundMaxSeconds=60.,RANSWallPimpleKFloorRelative=1e-8).items():set_parameter(root,key,value)
+        RANSWallNormalOrder=24,RANSWallPimpleKBoundMaxSeconds=60.,RANSWallPimpleKFloorRelative=1e-8,
+        RANSWallVerificationVortexSign=-1. if kind=='plane' else 1.).items():set_parameter(root,key,value)
     path=folder/'case.xml';write(root,path);return path

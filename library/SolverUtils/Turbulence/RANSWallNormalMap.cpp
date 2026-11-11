@@ -432,7 +432,7 @@ void RANSWallNormalMap::Validate(const RANSVector &lower,const RANSVector &upper
 std::string RANSWallNormalMap::Signature() const
 {
     Parameters(*this);std::ostringstream out;out.imbue(std::locale::classic());out<<std::setprecision(17);
-    out<<"CLS-EPAWF-NORMAL-MAP-v1:"<<dimension<<':'<<static_cast<int>(kind);
+    out<<(compositeTunnel?"RANS-COMPOSITE-TUNNEL-v1:":"CLS-EPAWF-NORMAL-MAP-v1:")<<dimension<<':'<<static_cast<int>(kind);
     for(double value:{height,heightSlopeX,heightSlopeY,heightAmplitude,heightWaveX,heightWaveY,
                       slopeX,slopeY,radius,amplitude,lengthX,lengthY})out<<':'<<value;
     if(compositeTunnel)out<<":CompositeTunnelV1:"<<displacement<<':'<<tunnelTop;

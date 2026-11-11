@@ -122,7 +122,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
             {
                 const auto c=OuterClosure(k,epsilon,G,v.coordinate);
                 covariance=c.reynoldsStress;
-                if(constitutiveReconstruction)
+                if(constitutiveReconstruction && !WJTerrain())
                 {
                     const double g0=ustar/(m_parameters.model.Kappa()*Distance(v.coordinate));
                     const double e0=ustar*ustar*ustar/(m_parameters.model.Kappa()*Distance(v.coordinate));
@@ -778,7 +778,8 @@ std::string RANSWallEvolutionPatch::WJAuditPacket(const Diagnostic &audit,const 
         const auto &v=found->second;Require(v.size()==62,"WJ principal witness layout mismatch");
         auto range=[&](int a,int b){return J::Numbers(Vector(v.begin()+a,v.begin()+b));};
         witnesses.push_back({polarization,J::Object({{"geometry",J::Number(v[0])},{"element",J::Number(v[1])},
-            {"region",J::Quote("outer")},{"side",J::Number(v[3])},{"position",range(4,7)},
+            {"region",J::Quote("outer")},{"side",J::Number(v[3])},{"chart",range(4,7)},
+            {"position",J::Numbers(Physical({v[4],v[5],v[6]}))},
             {"k",J::Number(v[7])},{"epsilon",J::Number(v[8])},{"sampled_K",J::Number(v[9])},
             {"N",J::Number(v[10])},{"covariance_eigenvalues",range(11,14)},{"nu_eff",J::Number(v[14])},
             {"nu_d",J::Number(v[15])},{"Praw",J::Number(v[16])},{"Pdev",J::Number(v[17])},

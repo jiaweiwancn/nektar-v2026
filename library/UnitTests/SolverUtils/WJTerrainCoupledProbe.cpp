@@ -4,6 +4,8 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <SpatialDomains/MeshGraphIO.h>
@@ -178,7 +180,9 @@ int main(int argc,char **argv)
         LoadWJNativeConfiguration(session,par);
         RANSWallEvolutionPatch p(session,graph,world->GetComm(),par,LoadRANSWallNormalMap(session,2,par.geometry.height));
         Require(p.WJTerrain() && p.Size()<=3000,"terrain prototype requires its declared small coupled route");
-        double us,dt;int steps;session->LoadParameter("RANSWallFrictionVelocity",us,.051);
+        double us,dt,vortexSign;int steps;session->LoadParameter("RANSWallFrictionVelocity",us,.051);
+        session->LoadParameter("RANSWallVerificationVortexSign",vortexSign,1.);
+        Require(vortexSign==1 || vortexSign==-1,"verification vortex sign must be +/-1");
         session->LoadParameter("TimeStep",dt,1e-6);session->LoadParameter("NumSteps",steps,3);
         Require(steps>=0 && steps<=3 && dt>0,"terrain prototype step/time bound");
         const double H=par.geometry.height,K=par.model.Q()*us*us,E=us*us*us/(par.model.Kappa()*H);
@@ -186,7 +190,7 @@ int main(int argc,char **argv)
         for(int b=0;b<p.Gauge();++b)functions.push_back([&,b](const Vec &q,double){
             const double t=q[2]/H;
             if(b<2){if(q[2]>=H)return 0.;const auto m=p.Mapping().At(q);
-                const double speed=.1*2*t*(1-t)*(1-2*t);return speed*m.tangent1[p.PhysicalAxis(b)];}
+                const double speed=vortexSign*.1*2*t*(1-t)*(1-2*t);return speed*m.tangent1[p.PhysicalAxis(b)];}
             if(b==p.K())return q[2]>=H?K:K*(1+.1*(1-3*t*t+2*t*t*t));
             if(b==p.Epsilon())return E;return 0.;});
         auto state=p.Project(functions,0.);
@@ -222,7 +226,8 @@ int main(int argc,char **argv)
                 Require(audit.at("wj_hard_admissible")[0]==1,"terrain completed candidate hard model-domain audit failed");
                 callbacks.push_back(J::Object({{"state",J::Numbers(candidate)},{"history",J::Numbers(history)},
                     {"state_sha256",J::Quote(RANSWallR3::Hash(candidate))},{"history_sha256",J::Quote(RANSWallR3::Hash(history))},
-                    {"time",J::Number(time)},{"alpha",J::Number(1/lambda)},{"audit",AuditJSON(audit)}}));
+                    {"time",J::Number(time)},{"alpha",J::Number(1/lambda)},{"audit",AuditJSON(audit)},
+                    {"audit_packet",p.WJAuditPacket(audit,candidate,history,1/lambda,time,"completed_stage")}}));
                 lastHistory=history;lastAlpha=1/lambda;state=std::move(candidate);
                 return Vector(state.begin(),state.begin()+p.DifferentialSize());
             },[&](const Vector &h,double time){auto s=state;std::copy(h.begin(),h.end(),s.begin());return p.ExplicitBody(s,time,data);});

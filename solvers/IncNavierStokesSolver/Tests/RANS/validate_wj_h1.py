@@ -9,6 +9,7 @@ import math
 import os
 from pathlib import Path
 import re
+import signal
 import subprocess
 import time
 import uuid
@@ -39,10 +40,14 @@ def run(argv,folder,timeout=900,expected_failure=None):
         resource.setrlimit(resource.RLIMIT_FSIZE,(4*1024**3,4*1024**3))
     with log.open('wb') as f:
         try:
-            proc=subprocess.run(['/usr/bin/time','-v',*map(str,argv)],cwd=folder,env=env,
-                stdout=f,stderr=subprocess.STDOUT,timeout=timeout,preexec_fn=limits)
-            code=proc.returncode
-        except subprocess.TimeoutExpired:code=124
+            proc=subprocess.Popen(['/usr/bin/time','-v',*map(str,argv)],cwd=folder,env=env,
+                stdout=f,stderr=subprocess.STDOUT,preexec_fn=limits,start_new_session=True)
+            code=proc.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            os.killpg(proc.pid,signal.SIGTERM)
+            try:proc.wait(timeout=10)
+            except subprocess.TimeoutExpired:os.killpg(proc.pid,signal.SIGKILL);proc.wait()
+            code=124
     text=log.read_text(errors='replace');rss=re.findall(r'Maximum resident set size \(kbytes\): (\d+)',text)
     result=dict(request,exit=code,seconds=time.monotonic()-start,log_sha256=sha(log),
         peak_rss_bytes=int(rss[-1])*1024 if rss else None,
@@ -121,6 +126,11 @@ def check_geometry(packet):
     assert_allclose(packet['frame_check']['R_error'],0,atol=2e-16)
     assert_allclose(packet['frame_check']['tangential_outer_traction'],US*US,rtol=3e-13)
     assert_allclose(packet['frame_check']['production'],packet['frame_check']['epsilon'],rtol=3e-13)
+    for row in packet['signed_forcing']:
+        assert_allclose(row['traction'],(row['U_H']-row['F']*row['J1'])/row['J0'],rtol=3e-13,atol=2e-15)
+        require(row['mean_production']>=0,'turbulent production lost its signed-traction square')
+    require(packet['signed_forcing'][0]['traction']>0 and packet['signed_forcing'][1]['traction']<0
+        and packet['signed_forcing'][2]['traction']<0,'pressure-gradient/reversal witnesses absent')
     for row in packet['calibration']:
         assert_allclose(row['h_s'],provisional_roughness(row['H']),rtol=1e-12)
         require(row['z_v']<=0 and 0<row['h_s']<row['H'] and row['gate']>=1 and row['minimum_reference_k']>0,
@@ -231,6 +241,8 @@ def check_native(report,folder):
         maximum_K_change=float(np.max(abs(np.array(K[-1])-K[0]))),maximum_cutoff_change=float(np.max(abs(np.array(cut[-1])-cut[0]))),
         maximum_epsilon_trace_change=float(np.max(abs(np.array(ep[-1])-ep[0]))),
         startup_independent_loads=initial,final_independent_loads=final,
+        signed_wall_traction_range=[min(v for event in report['events'] for v in event['physical_samples']['wall_stress']),
+            max(v for event in report['events'] for v in event['physical_samples']['wall_stress'])],
         corrections=0,governing_solves_each=report['steps'],logical_bounds=report['steps'])
 
 def main():

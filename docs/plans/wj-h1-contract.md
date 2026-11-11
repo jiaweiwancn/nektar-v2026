@@ -117,6 +117,15 @@ partial solve counts/candidates on failure. Report true pointwise traction/k
 flux defects separately from conservative shared-test assembly. No zero-step
 readback or kernel-only result counts as the terrain demonstration.
 
+The inclined-plane control reverses the initial vortex sign. Before any native
+governing launch, the first compiled geometry driver rejected its incorrectly
+placed legacy AWF reporting point P=H. The correction uses P=H/2 only in that
+scalar-kernel inversion; the physical WJ endpoint K and epsilon trace stay at
+H. The first coupled-probe compile also lacked explicit diagnostic/hash
+headers. Both failed source/log epochs are retained; neither is a model-domain
+failure or an executed governing step. The verified installed CMake package is
+`/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake`.
+
 Record physical tensor axes and both interface owners, K/k/epsilon, cutoff and
 metric margins, covariance/root/principal diagnostics, actual/reference
 production, wall traction, global budgets and correction accounting. Point
