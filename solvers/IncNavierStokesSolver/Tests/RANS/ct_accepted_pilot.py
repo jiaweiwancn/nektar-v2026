@@ -112,7 +112,13 @@ def budget_classification(packet,construction):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--feasibility',type=Path,required=True);p.add_argument('--contract',type=Path,required=True);p.add_argument('--verification',type=Path,required=True);p.add_argument('--controls',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
-    for f in (a.verification,a.controls):require(json.loads(f.read_text())['status']=='pass','boundary_capability_not_admitted:'+str(f))
+    for f in (a.verification,a.controls):
+        receipt=json.loads(f.read_text());require(receipt['status']=='pass' and all(r['status']=='pass' for r in receipt['checks'].values()),'boundary_capability_not_admitted:'+str(f))
+        request=json.loads((f.parent/'request-manifest.json').read_text())['request'];bound=request['runtime']
+        solver_identity=bound['IncNavierStokesSolver'] if 'IncNavierStokesSolver' in bound else bound
+        require(solver_identity==runtime_identity(a.runtime/'IncNavierStokesSolver'),'foreign_boundary_verification_runtime')
+        sealed=json.loads((f.parent/'completed-artifacts.json').read_text())
+        require(all(sha(f.parent/name)==value for name,value in sealed['files'].items()),'changed_boundary_verification_artifact')
     manifest=RequestManifest(a.output,dict(schema='CTAcceptedOpenPilotV1',contract_sha256=sha(a.contract),feasibility_sha256=sha(a.feasibility),
         required_verification={str(f):sha(f) for f in (a.verification,a.controls)},
         runtime={n:runtime_identity(a.runtime/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},
@@ -130,6 +136,7 @@ def main():
                 zero=a.output/(name+'-zero');pilot_case(zero,a.runtime,a.feasibility,model,0,dt)
                 c=json.loads((zero/'construction.json').read_text());constructions[name]=c
                 e=run([a.runtime/'IncNavierStokesSolver','case.xml'],zero,'solver.log');result['executions'].append(dict(case=name,phase='native_zero',**e))
+                require((zero/'case.evolution.json').exists(),'native_initialization_produced_no_report: '+(zero/'solver.log').read_text()[-2000:])
                 native=json.loads((zero/'case.evolution.json').read_text());require(e['exit_code']==0 and not native['failure'],'native_initialization_failed:'+str(native.get('failure')))
                 points,weights=grid(c);initial,e=probe(a.runtime,zero,dict(operation='functions',grid=points,grid_sides=[0]*len(points),export_basis=True),'initial')
                 result['executions'].append(e);require(e['exit_code']==0 and initial['observation']['state']==native['state'],'initial_effective_native_input_mismatch')

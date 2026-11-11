@@ -73,7 +73,9 @@ def manufactured_fixture(folder,runtime):
 def cubic_expression(knots,values,derivatives):
     spline=CubicHermiteSpline(knots,values,derivatives);terms=[];grad=[]
     for j,(a,b) in enumerate(zip(knots[:-1],knots[1:])):
-        mask=f'((y>={a:.17g})&&(y{ "<=" if j==len(knots)-2 else "<"}{b:.17g}))'
+        # The pinned native Interpreter supports comparisons but not &&.
+        # Multiplication of their 0/1 values expresses the identical partition.
+        mask=f'((y>={a:.17g})*(y{ "<=" if j==len(knots)-2 else "<"}{b:.17g}))'
         x=f'(y-({a:.17g}))';c=spline.c[:,j]
         poly='+'.join(f'({value:.17g})*{x}^{3-i}' for i,value in enumerate(c))
         dp='+'.join(f'({(3-i)*value:.17g})*{x}^{2-i}' for i,value in enumerate(c[:-1]))
