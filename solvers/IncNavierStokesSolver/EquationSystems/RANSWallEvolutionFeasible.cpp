@@ -99,7 +99,7 @@ RANSWallEvolutionPatch::ReconstructionLocations(int block,bool complete) const
         const bool inner=el.upper[2]<=m_parameters.geometry.height;
         for(int kind=0;kind<2;++kind)
         {
-            const int dense=2*el.degree+(complete && inner?7:3);
+            const int dense=2*el.MaximumDegree()+(complete && inner?7:3);
             const int nx=kind?dense:exp->GetNumPoints(0);
             const int ny=m_dimension==3?(kind?dense:exp->GetNumPoints(1)):1;
             const int nz=kind?dense:exp->GetNumPoints(m_dimension-1);
@@ -282,7 +282,7 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
     // source Gauss anchors or an assumed degree+1 interpolation grid.
     for(const auto &el:fields[Epsilon()]->Elements())if(Same(el.lower[2],m_parameters.geometry.height))
     {
-        const int n=std::max(8,el.degree+3);
+        const int n=std::max(8,el.MaximumDegree()+3);
         const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(n,LibUtilities::eGaussLobattoLegendre)];
         const auto z=rule->GetZ();
         for(int iy=0;iy<(m_dimension==3?n:1);++iy)for(int ix=0;ix<n;++ix)
@@ -956,17 +956,25 @@ RANSWallEvolutionPatch::WallTraceR4(const Vector &state) const
     {
         const auto &el=field.Elements()[e];
         if(el.lower[2]!=0.)continue;
-        Require((el.degree==3 || (NewModels() && (el.degree==4 || el.degree==5))) && native->GetExp(e)->GetBasis(0)->GetBasisType()==LibUtilities::eModified_A &&
+        const int px=el.degrees[0];
+        Require((px==3 || (NewModels() && (px==4 || px==5 || px==6))) && native->GetExp(e)->GetBasis(0)->GetBasisType()==LibUtilities::eModified_A &&
             native->GetExp(e)->GetBasis(1)->GetBasisType()==LibUtilities::eModified_A,
-            "continuous wall trace requires cubic, or qualified new-model p4/p5 Modified_A basis");
+            "continuous wall trace requires cubic, or qualified new-model p4/p5/p6 Modified_A basis");
         const int start=native->GetCoeff_Offset(e);
-        if(el.degree!=3)
+        if(px!=3)
         {
             std::array<long double,6> coefficients{};
-            for(int j=0;j<=el.degree;++j)coefficients[j]=map->GetLocalToGlobalSign(start+j)*state[offset[K()]+map->GetLocalToGlobalMap(start+j)];
-            const auto polynomial=RANSWallGroundPolynomial::ModifiedA(coefficients);
+            for(int j=0;j<=std::min(px,5);++j)coefficients[j]=map->GetLocalToGlobalSign(start+j)*state[offset[K()]+map->GetLocalToGlobalMap(start+j)];
+            auto polynomial=RANSWallGroundPolynomial::ModifiedA(coefficients);
+            long double sixth=0;
+            if(px==6)
+            {
+                sixth=map->GetLocalToGlobalSign(start+6)*state[offset[K()]+map->GetLocalToGlobalMap(start+6)];
+                polynomial=RANSWallGroundPolynomial::ModifiedA6(coefficients,sixth);
+            }
             auto points=RANSWallGroundPolynomial::Roots(RANSWallGroundPolynomial::Derivative(polynomial));
             points.insert(points.end(),{-1,1});long double norm=0;for(auto c:coefficients)norm+=std::abs(c);
+            norm+=std::abs(sixth);
             const long double error=512*std::numeric_limits<long double>::epsilon()*norm;
             for(auto x:points)
             {

@@ -37,13 +37,13 @@ double Sample(const RANSWallFunction &function,const Coordinate &coordinate)
     Require(std::isfinite(value),"nonfinite projection/boundary data");
     return value;
 }
-int TensorSize(int modes,int dimension)
+int TensorSize(const std::array<int,3> &modes,int dimension)
 {
-    return dimension==2 ? modes*modes : modes*modes*modes;
+    return modes[0]*modes[1]*(dimension==2 ? 1 : modes[2]);
 }
-std::array<int,3> Indices(int index,int modes)
+std::array<int,3> Indices(int index,const std::array<int,3> &modes)
 {
-    return {index%modes,(index/modes)%modes,index/(modes*modes)};
+    return {index%modes[0],(index/modes[0])%modes[1],index/(modes[0]*modes[1])};
 }
 double LocalCoordinate(double x,double lower,double upper,double &raw,bool &rounded)
 {
@@ -167,9 +167,10 @@ RANSWallGlobalField::RANSWallGlobalField(
         {
             const auto basis=exp->GetBasis(d);
             Require(basis->GetBasisType()==LibUtilities::eModified_A &&
-                        basis->GetNumModes()==element.degree+1 &&
+                        basis->GetNumModes()>=2 &&
                         basis->GetNumPoints()>=basis->GetNumModes(),
-                    "requires equal-order Modified_A tensor bases");
+                    "requires Modified_A tensor bases with sufficient points");
+            element.degrees[d]=basis->GetNumModes()-1;
             Require(element.upper[m_axes[d]]>element.lower[m_axes[d]],"nonpositive physical element extent");
             const auto key=std::make_tuple(basis->GetNumModes(),basis->GetNumPoints(),
                                            static_cast<int>(basis->GetPointsType()));
@@ -178,7 +179,9 @@ RANSWallGlobalField::RANSWallGlobalField(
                 found=m_basis.emplace(key,std::make_shared<BasisData>(basis->GetBasisKey())).first;
             bases[d]=found->second;
         }
-        const int modes=element.degree+1;
+        Require(dimension==2 || !element.Directional(dimension),
+                "directional order is restricted to canonical affine 2D");
+        const auto modes=element.Modes();
         Require(exp->GetNcoeffs()==TensorSize(modes,dimension),"unexpected tensor coefficient count");
         for(int v=0;v<geometry->GetNumVerts();++v)
         {
@@ -195,6 +198,11 @@ RANSWallGlobalField::RANSWallGlobalField(
         }
         m_elements.push_back(element);m_elementBasis.push_back(std::move(bases));
     }
+    const bool directional=std::any_of(m_elements.begin(),m_elements.end(),
+        [&](const Element &e){return e.Directional(dimension);});
+    if(directional)for(const auto &e:m_elements)
+        Require(e.degrees==m_elements.front().degrees,
+                "directional order must be uniform in each native direction");
 }
 int RANSWallGlobalField::Size() const
 {
@@ -218,7 +226,7 @@ RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &co
         if(rounded)endpointRoundoffAxes|=1u<<a;
         basis[d]=m_elementBasis[e][d]->Evaluate(local);
     }
-    const int modes=element.degree+1,count=TensorSize(modes,m_dimension);
+    const auto modes=element.Modes();const int count=TensorSize(modes,m_dimension);
     const auto map=m_field->GetLocalToGlobalMap();const int start=m_field->GetCoeff_Offset(e);
     RANSWallGlobalPoint result;result.coordinate=coordinate;result.geometry=element.geometry;result.element=e;
     result.rawLocalCoordinate=rawLocal;result.endpointRoundoffAxes=endpointRoundoffAxes;
@@ -253,7 +261,7 @@ std::array<RANSWallGlobalField::Vector,3> RANSWallGlobalField::RadialGradientDer
 {
     const auto &element=m_elements.at(point.element);
     Require(point.geometry==element.geometry,"radial Hessian has mismatched native geometry");
-    const int radial=m_dimension-1,modes=element.degree+1,count=TensorSize(modes,m_dimension);
+    const int radial=m_dimension-1;const auto modes=element.Modes();const int count=TensorSize(modes,m_dimension);
     Require(point.ids.size()==static_cast<std::size_t>(count),"radial Hessian row shape differs");
     std::array<std::shared_ptr<const BasisData::Values>,3> basis{};
     std::array<double,3> inverse{};
@@ -311,17 +319,22 @@ std::vector<RANSWallGlobalPoint> RANSWallGlobalField::Quadrature(int order) cons
     std::vector<RANSWallGlobalPoint> result;
     for(std::size_t e=0;e<m_elements.size();++e)
     {
-        const auto &element=m_elements[e];const int n=order?order:std::max(8,element.degree+3);
-        auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(n,LibUtilities::eGaussGaussLegendre)];
-        const auto z=rule->GetZ(),weights=rule->GetW();
-        for(int k=0;k<(m_dimension==3?n:1);++k)for(int j=0;j<n;++j)for(int i=0;i<n;++i)
+        const auto &element=m_elements[e];std::array<int,3> n{1,1,1};
+        std::array<Array<OneD,const NekDouble>,3> z,weights;
+        for(int d=0;d<m_dimension;++d)
+        {
+            n[d]=order?order:std::max(8,element.degrees[d]+3);
+            auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(n[d],LibUtilities::eGaussGaussLegendre)];
+            z[d]=rule->GetZ();weights[d]=rule->GetW();
+        }
+        for(int k=0;k<n[2];++k)for(int j=0;j<n[1];++j)for(int i=0;i<n[0];++i)
         {
             const std::array<int,3> index{i,j,k};Coordinate coordinate{};double weight=1;
             for(int d=0;d<m_dimension;++d)
             {
                 const int a=m_axes[d];const double half=(element.upper[a]-element.lower[a])/2;
-                coordinate[a]=element.lower[a]+(z[index[d]]+1)*half;
-                weight*=weights[index[d]]*half;
+                coordinate[a]=element.lower[a]+(z[d][index[d]]+1)*half;
+                weight*=weights[d][index[d]]*half;
             }
             auto point=ElementPoint(e,coordinate);point.weight=weight;result.push_back(std::move(point));
         }
@@ -354,7 +367,7 @@ RANSWallGlobalField::Vector RANSWallGlobalField::RestrictCoefficients(
             if(source.m_elements[j].geometry==target.geometry){owner=j;break;}
         Require(owner>=0,"native restriction geometry is absent in source");
         const auto &from=source.m_elements[owner];
-        Require(target.degree==from.degree && target.lower==from.lower && target.upper==from.upper,
+        Require(target.degrees==from.degrees && target.lower==from.lower && target.upper==from.upper,
                 "native restriction geometry/basis differs");
         const int count=m_field->GetExp(e)->GetNcoeffs();
         Require(count==source.m_field->GetExp(owner)->GetNcoeffs(),"native restriction coefficient shape differs");
@@ -436,20 +449,26 @@ std::map<int,double> RANSWallGlobalField::Boundary(
         {
             if(!predicate(m_axes[fixed],side,element))continue;
             std::vector<int> free;for(int d=0;d<m_dimension;++d)if(d!=fixed)free.push_back(d);
-            const int nq=m_dimension==2?n:n*n,nc=m_dimension==2?modes:modes*modes;
+            const int faceModes=element.degrees[free[0]]+1;
+            const int faceN=std::max(8,faceModes+2);
+            const int nq=m_dimension==2?faceN:n*n,nc=m_dimension==2?faceModes:modes*modes;
+            const LibUtilities::BasisKey faceKey(LibUtilities::eModified_A,faceModes,
+                LibUtilities::PointsKey(faceN,LibUtilities::eGaussLobattoLegendre));
+            StdRegions::StdSegExp faceSegment(faceKey);
+            const auto faceZ=faceSegment.GetBasis(0)->GetZ();
             Array<OneD,NekDouble> values(nq),coefficients(nc);
             for(int q=0;q<nq;++q)
             {
-                const std::array<int,2> index{q%n,q/n};Coordinate coordinate{};
+                const std::array<int,2> index{q%(m_dimension==2?faceN:n),q/(m_dimension==2?faceN:n)};Coordinate coordinate{};
                 coordinate[m_axes[fixed]]=side?element.upper[m_axes[fixed]]:element.lower[m_axes[fixed]];
                 for(std::size_t d=0;d<free.size();++d)
                 {
                     const int a=m_axes[free[d]];
-                    coordinate[a]=element.lower[a]+(z[index[d]]+1)*(element.upper[a]-element.lower[a])/2;
+                    coordinate[a]=element.lower[a]+((m_dimension==2?faceZ[index[d]]:z[index[d]])+1)*(element.upper[a]-element.lower[a])/2;
                 }
                 values[q]=Sample(function,coordinate);
             }
-            if(m_dimension==2)segment.FwdTransBndConstrained(values,coefficients);
+            if(m_dimension==2)faceSegment.FwdTransBndConstrained(values,coefficients);
             else
             {
                 // The native StdQuadExp constrained transform reverses the
@@ -473,9 +492,10 @@ std::map<int,double> RANSWallGlobalField::Boundary(
             }
             for(int j=0;j<nc;++j)
             {
-                const std::array<int,2> index{j%modes,j/modes};std::array<int,3> tensor{};tensor[fixed]=side;
+                const std::array<int,2> index{j%(m_dimension==2?faceModes:modes),j/(m_dimension==2?faceModes:modes)};std::array<int,3> tensor{};tensor[fixed]=side;
                 for(std::size_t d=0;d<free.size();++d)tensor[free[d]]=index[d];
-                const int mode=tensor[0]+modes*tensor[1]+modes*modes*tensor[2];
+                const auto axisModes=element.Modes();
+                const int mode=tensor[0]+axisModes[0]*tensor[1]+axisModes[0]*axisModes[1]*tensor[2];
                 const int pos=m_field->GetCoeff_Offset(e)+mode,id=map->GetLocalToGlobalMap(pos);
                 const double value=map->GetLocalToGlobalSign(pos)*coefficients[j];
                 const auto found=result.find(id);
@@ -536,10 +556,10 @@ RANSWallGlobalField::Vector RANSWallGlobalField::RadialProject(
         double area=element.upper[0]-element.lower[0];
         if(m_dimension==3)area*=element.upper[1]-element.lower[1];
         auto found=intervals.find(key);
-        if(found==intervals.end())intervals.emplace(key,Interval{key.first,key.second,area,element.degree,{},e});
+        if(found==intervals.end())intervals.emplace(key,Interval{key.first,key.second,area,element.degrees[m_dimension-1],{},e});
         else
         {
-            Require(found->second.degree==element.degree,"nonuniform horizontal degree in radial restriction");
+            Require(found->second.degree==element.degrees[m_dimension-1],"nonuniform radial degree in radial restriction");
             found->second.area+=area;
         }
     }
@@ -565,7 +585,7 @@ RANSWallGlobalField::Vector RANSWallGlobalField::RadialProject(
     const auto map=m_field->GetLocalToGlobalMap();
     for(std::size_t e=0;e<m_elements.size();++e)
     {
-        const auto &element=m_elements[e];const int modes=element.degree+1;
+        const auto &element=m_elements[e];const auto modes=element.Modes();
         const auto &interval=intervals.at({element.lower[2],element.upper[2]});
         for(int j=0;j<TensorSize(modes,m_dimension);++j)
         {

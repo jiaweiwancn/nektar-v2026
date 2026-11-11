@@ -49,5 +49,14 @@ inline Polynomial ModifiedA(const std::array<long double,6> &c)
         (c[1]-c[0])/2+c[3]/2-3*c[5]/4,-c[2]/4+18*c[4]/16,
         -c[3]/2+10*c[5]/4,-15*c[4]/16,-7*c[5]/4};
 }
+inline Polynomial ModifiedA6(const std::array<long double,6> &c,long double c6)
+{
+    auto p=ModifiedA(c);
+    // Preserve the established p3/p4/p5 evaluation exactly. The new bubble is
+    // (1-x^2) P_4^(1,1)(x)/4 = (5-75x^2+175x^4-105x^6)/32.
+    if(c6==0)return p;
+    p.resize(7);p[0]+=5*c6/32;p[2]-=75*c6/32;
+    p[4]+=175*c6/32;p[6]=-105*c6/32;return p;
+}
 }
 #endif

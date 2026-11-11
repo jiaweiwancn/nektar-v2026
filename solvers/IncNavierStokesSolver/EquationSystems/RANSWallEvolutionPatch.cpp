@@ -463,6 +463,17 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     fields.push_back(std::make_shared<RANSWallGlobalField>(session,full,outer,m_dimension));
     fields.push_back(std::make_shared<RANSWallGlobalField>(session,pressure,inner,m_dimension));
     fields.push_back(std::make_shared<RANSWallGlobalField>(session,pressure,outer,m_dimension));
+    bool directional=false;
+    for(const auto &field:fields)for(const auto &e:field->Elements())
+        directional=directional || e.Directional(m_dimension);
+    if(directional)
+    {
+        Require(NewModels() && PimpleSingleSweep() && m_dimension==2 && !Mapped(),
+                "directional tensor order requires the serial flat2D new-model one-sweep route");
+        for(int b=0;b<Gauge();++b)for(const auto &e:fields[b]->Elements())
+            Require(e.degrees==std::array<int,3>{b<InnerPressure()?6:4,b<InnerPressure()?5:3,0},
+                    "qualified directional layout is velocity/k/epsilon (6,5), pressure (4,3) only");
+    }
     offset.resize(Gauge()+1);size.resize(Gauge()+1);
     for(int b=0;b<Gauge();++b){size[b]=fields[b]->Size();offset[b+1]=offset[b]+size[b];}
     size[Gauge()]=1;
@@ -1654,6 +1665,8 @@ std::string RANSWallEvolutionPatch::Signature() const
                 <<':'<<exp->GetBasis(d)->GetPointsType()<<':'<<exp->GetBasis(d)->GetNumPoints();
         }
     }
+    if(fields[0]->Elements().front().Directional(m_dimension))
+        text<<":layout=UniformDirectionalModifiedA2DV1";
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();
     if(NewModels())text<<":resolved="<<m_parameters.model.Signature();

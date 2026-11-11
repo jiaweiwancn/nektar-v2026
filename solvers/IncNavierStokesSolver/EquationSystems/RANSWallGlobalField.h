@@ -7,6 +7,7 @@
 
 #include <IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallNumericalOperator.h>
+#include <algorithm>
 #include <array>
 #include <functional>
 #include <map>
@@ -58,6 +59,15 @@ public:
     {
         Coordinate lower{}, upper{};
         int geometry = -1, degree = 0;
+        // Native tensor directions (x,z in 2D). degree retains its historical
+        // first-direction meaning; consumers needing a direction use degrees.
+        std::array<int,3> degrees{};
+        std::array<int,3> Modes() const
+        { return {degrees[0]+1,degrees[1]+1,degrees[2]+1}; }
+        bool Directional(int dimension) const
+        { return degrees[0]!=degrees[1] || (dimension==3 && degrees[0]!=degrees[2]); }
+        int MaximumDegree() const
+        { return std::max(degrees[0],std::max(degrees[1],degrees[2])); }
     };
     using BoundaryPredicate = std::function<bool(int,int,const Element &)>;
 

@@ -418,6 +418,17 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
         out<<"|"<<offset[b]<<","<<size[b];
         for(const auto &e:fields[b]->Elements())out<<":"<<e.geometry<<","<<e.degree<<","<<e.lower[0]<<","<<e.upper[0]<<","<<e.lower[2]<<","<<e.upper[2];
         for(const auto &q:fields[b]->Quadrature(2)){for(int id:q.ids)out<<","<<id;}
+        if(fields[b]->Elements().front().Directional(m_dimension))
+        {
+            Require(!legacyOperator,"directional layout has no legacy ownership identity");
+            out<<":UniformDirectionalModifiedA2DV1";
+            // Deliberately exclude points/quadrature: frozen coefficients may
+            // be evaluated with independently increased integration orders.
+            for(int e=0;e<fields[b]->Field()->GetExpSize();++e)
+                for(int d=0;d<m_dimension;++d)
+                    out<<':'<<fields[b]->Field()->GetExp(e)->GetBasis(d)->GetBasisType()
+                       <<':'<<fields[b]->Field()->GetExp(e)->GetBasisNumModes(d);
+        }
     }
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
     return out.str();
@@ -510,7 +521,8 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
     for(const auto &[key,v]:audit)diagnostic.push_back({key,J::Numbers(v)});
     std::vector<std::string> elements;
     for(const auto &e:fields[0]->Elements())elements.push_back(J::Object({{"geometry",J::Number(e.geometry)},
-        {"degree",J::Number(e.degree)},{"lower",J::Numbers(e.lower)},{"upper",J::Numbers(e.upper)}}));
+        {"degree",J::Number(e.degree)},{"degrees",J::Numbers(e.degrees)},
+        {"lower",J::Numbers(e.lower)},{"upper",J::Numbers(e.upper)}}));
     return J::Object({{"schema","2"},{"read_only","true"},{"time",J::Number(time)},{"identity",J::Quote(PreservationIdentity())},
         {"numerical_operator",J::Quote(RANSWallNumericalOperatorIdentity())},
         {"resolved_descriptor",J::Quote(m_parameters.model.Signature())},{"state",J::Numbers(state)},

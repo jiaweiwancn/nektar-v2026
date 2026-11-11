@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/RANSWallForwardDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallGroundPolynomial.h>
+#include <StdRegions/StdSegExp.h>
 #include <iostream>
 #include <iomanip>
 using namespace Nektar;
@@ -30,6 +31,43 @@ int main()
         const auto roots=P::Roots(P::Derivative(narrow));require(roots.size()==1 && std::abs(roots[0]-location)<1e-18);
         require(P::Value(narrow,roots[0])<0 && P::Value(narrow,-1)>0 && P::Value(narrow,1)>0);
         require(P::Roots({0}).empty());require(P::Roots({.4L}).empty());
+        StdRegions::StdSegExp native(LibUtilities::BasisKey(LibUtilities::eModified_A,7,
+            LibUtilities::PointsKey(12,LibUtilities::eGaussLobattoLegendre)));
+        for(int mode=0;mode<7;++mode)
+        {
+            std::array<long double,6> c{};if(mode<6)c[mode]=1;
+            const auto polynomial=P::ModifiedA6(c,mode==6?1:0);
+            for(int i=0;i<=80;++i)
+            {
+                Array<OneD,NekDouble> x(1);x[0]=-1.+i/40.;
+                require(std::abs(P::Value(polynomial,x[0])-native.PhysEvaluateBasis(x,mode))<3e-15);
+            }
+        }
+        for(const auto roots: {std::vector<long double>{-.9L,-.2L,.13L,.13L,.8L},
+                              std::vector<long double>{-.9L,-.2L,.13L,.130001L,.8L}})
+        {
+            P::Polynomial derivative{1};
+            for(auto root:roots)
+            {P::Polynomial next(derivative.size()+1);for(int j=0;j<int(derivative.size());++j){next[j]-=root*derivative[j];next[j+1]+=derivative[j];}derivative=next;}
+            const auto found=P::Roots(derivative);
+            for(auto root:roots)require(std::any_of(found.begin(),found.end(),[&](auto x){return std::abs(x-root)<1e-11;}));
+        }
+        // Degree-six narrow negative pocket; ordinary 81-point sampling misses
+        // it. Endpoints and every real stationary root still expose its sign.
+        P::Polynomial sextic(7);
+        for(int j:{0,2,4})for(int k=0;k<3;++k)sextic[j+k]+=narrow[k];
+        const auto stationary=P::Roots(P::Derivative(sextic));
+        long double least=std::min(P::Value(sextic,-1),P::Value(sextic,1));
+        for(auto x:stationary)least=std::min(least,P::Value(sextic,x));
+        require(least< -1e-12L);
+        for(int i=0;i<=80;++i)require(P::Value(sextic,-1.L+i/40.L)>0);
+        for(long double margin:{-1e-20L,0.L,1e-20L})
+        {
+            std::array<long double,6> c{margin,margin,0,0,0,0};
+            require(P::Value(P::ModifiedA6(c,0),-1)==margin);
+            require(P::Value(P::ModifiedA6(c,0),1)==margin);
+            for(long double x:{-.7L,0.L,.3L})require(P::Value(P::ModifiedA6(c,0),x)==margin);
+        }
         const double c=std::cos(.37),s=std::sin(.37);
         const RANSTensor rotation{{{c,0,s},{0,1,0},{-s,0,c}}};
         for(const auto spectrum: {RANSVector{.2,1.,2.},RANSVector{0.,1.,2.},RANSVector{-1./3,2./3,5./3}})
