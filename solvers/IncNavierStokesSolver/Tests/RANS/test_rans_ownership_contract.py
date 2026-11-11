@@ -3,6 +3,12 @@
 """Negative controls for the corrective-package accuracy and operator gates."""
 import copy
 import unittest
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
 from rans_ownership_contract import budget_gate, classify_scope, OPERATOR, SCHEMA
 from classify_rans_physical_budget_accuracy import classify_row
 from rans_duration_contract import MEMBERS
@@ -60,6 +66,11 @@ class OwnershipContract(unittest.TestCase):
         self.assertEqual(classify_scope(r)['status'],'pass')
         r['gates']['physical_budget_accuracy']['status']='failed_or_unresolved'
         q=classify_scope(r);self.assertNotEqual(q['status'],'pass');self.assertFalse(q['response_extension_eligible'])
+        with tempfile.TemporaryDirectory(dir=os.environ.get('TMPDIR')) as d:
+            inp=Path(d)/'input.json';out=Path(d)/'output.json';inp.write_text(json.dumps(r))
+            result=subprocess.run([sys.executable,'-B',str(Path(__file__).with_name('classify_rans_ownership_scope.py')),
+                                   '--input',str(inp),'--output',str(out)],capture_output=True,text=True)
+            self.assertEqual(result.returncode,1);self.assertFalse(json.loads(out.read_text())['response_extension_eligible'])
 
 
 if __name__=='__main__':unittest.main()

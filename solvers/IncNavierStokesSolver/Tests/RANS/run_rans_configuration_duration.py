@@ -59,7 +59,7 @@ def main():
             result=dict(status='fail',failure=repr(e))
             if not dest.exists():write_json(dest,result)
         field_status=result['status'];audit_status='not_attempted';audit_file=r/'duration-audits'/(tag+'-'+str(T))/'results.json'
-        if field_status=='pass' and all(x['exit_code']==0 for x in done):
+        if all(x['exit_code']==0 for x in done):
             cmd=[sys.executable,'-B',str(source/'finish_rans_balanced_duration.py'),'--root',str(r),'--admission',str(a.admission),'--dt',str(a.dt),'--time',str(T)]
             if audit_file.parent.exists():cmd+=['--resume']
             with (out/('audit-'+str(T)+'-'+str(time.time_ns())+'.log')).open('x') as f:code=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,env=env).returncode

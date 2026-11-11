@@ -83,13 +83,15 @@ def main():
                 require((destination/'results.json').exists(),'response_comparison_missing');manifest.seal(destination,['results.json',*(['response-vectors.npz'] if (destination/'response-vectors.npz').exists() else []),*map(str,destination.glob('*/packet.json.gz'))])
             result=load(destination/'results.json');status=result['status']
             if status=='pass' and not result['eligible_for_extension']:status='unresolved_response_signal'
-            if status=='pass':
+            # Complete independent audits even when a response signal/accuracy
+            # check fails. Their success never overwrites the original failure.
+            if status!='failed_execution':
                 audit=r/'response-audits'/(name+'-'+str(T))/'results.json'
                 cmd=[sys.executable,'-B',str(source/'audit_rans_response.py'),'--root',str(r),'--admission',str(a.admission),'--cohort-prefix',name,'--time',str(T)]
                 if audit.parent.exists():cmd+=['--resume']
                 with (out/('audit-'+str(T)+'-'+str(time.time_ns())+'.log')).open('x') as f:
                     code=subprocess.run(cmd,env=env,stdout=f,stderr=subprocess.STDOUT).returncode
-                status='pass' if code==0 and audit.exists() and load(audit)['status']=='pass' else 'failed_response_audit'
+                if status=='pass' and not (code==0 and audit.exists() and load(audit)['status']=='pass'):status='failed_response_audit'
         events.append(dict(time=T,status=status,execution=execution,comparison=str(destination/'results.json')));write_json(out/'results.json',dict(status=status,configuration=cfg,milestones=events))
         if status!='pass':return 1
     return 0
