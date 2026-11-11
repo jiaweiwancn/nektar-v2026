@@ -29,6 +29,7 @@ def collect(root,output,previous_attempts):
     prescribed_supplement=include(r/'selected-prescribed-results-v2.json')
     if prescribed_supplement:prescribed=prescribed_supplement
     include(r/'build/a93-a95-e94e95-kernels.json')
+    include(r/'ownership-short-qualification/progress.json')
     short=include(r/'ownership-short-qualification/results.json')
     supplement=include(r/'ownership-short-qualification-v2/results.json')
     if supplement:short=supplement
@@ -39,12 +40,14 @@ def collect(root,output,previous_attempts):
         'physical-budget-analyses/*/results.json','physical-budget-accuracy/*/results.json',
         'physical-budget-bindings/*/results.json','physical-budget-diagnosis/*/results.json',
         'physical-postprocessing/*.json','common-wall-response/results.json',
+        'response-quadrature-*/results.json','duration-quadrature-*/results.json',
         'corrective-duration-response/*.json','duration-residual-diagnosis/*/results.json',
         'selected-frozen-operator-comparison/*/results.json'):
         for path in sorted(r.glob(glob)):include(path)
     for path in sorted((r/'campaigns').glob('*/T-*/metrics.json')):
         m=load(path);index.append(dict(path=str(path),sha256=sha(path)))
-        for name in ('case.xml','case.evolution.json','completed-artifacts.json','endpoint-samples.json'):
+        for name in ('case.xml','case.evolution.json','case.evolution.state',
+                     'case.evolution.state.json','completed-artifacts.json','endpoint-samples.json'):
             f=path.parent/name
             if f.exists():index.append(dict(path=str(f),sha256=sha(f)))
         costs.append(dict(campaign=path.parents[1].name,time=m.get('time'),target=m.get('target'),
@@ -59,8 +62,17 @@ def collect(root,output,previous_attempts):
     for name in ('runtime','runtime-resolution-v3','runtime-budget-v5'):
         include(r/name/'source-build.json')
     for name in ('targeted-native-executions.json','required-scope-cli-receipt.json','controller-launches.json',
-                 'worker-guard-status.json','debugger-resource-incident.json'):
+                 'worker-guard-status.json','debugger-resource-incident.json','owned-orphan-MPI-cleanup.json',
+                 'idle-watcher-resource-cleanup.json','independent-admission-launch.json',
+                 'build-completion.json','source-identities.json','native-exclusive-costs.json',
+                 'final-resource-census.json','historical-evidence-integrity.json'):
         include(r/name)
+    for name in ('worker-bookings.jsonl','worker-guard-events.jsonl','resource-priority-events.jsonl'):
+        path=r/name
+        if path.exists():
+            with path.open('rb') as source,gzip.open(output/(name+'.gz'),'wb',compresslevel=9) as dest:
+                shutil.copyfileobj(source,dest)
+            index.append(dict(path=str(path),sha256=sha(path)))
     schedules={}
     for model in ('A93','A95'):
         p=r/'corrective-duration-response'/(model+'-N-Accepted-neutral.json');v=include(p)
