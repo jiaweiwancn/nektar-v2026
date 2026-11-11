@@ -4,11 +4,13 @@
 import argparse
 import json
 from pathlib import Path
+import re
 import time
 
 from wj_immutable import Ledger, artifacts, file_hash, file_identity, read, verify_artifacts, write_once
 from wj_qualification import aggregate, component
 from run_cls_epawf_picard import require
+from wj6_resources import DEFAULT,volume
 
 
 def main():
@@ -102,12 +104,27 @@ def main():
     for policy in ledgers:
         s = read(out/(policy+'.json'))
         parts = s['components']
+        scopes=[root/'study'/policy,root/'checks-v4/wj6-capacity'/policy]+[v/policy for v in root.glob('row-qualified-v*')]
+        peaks=[]
+        for scope in scopes:
+            for f in scope.rglob('receipt.json'):
+                data=read(f)
+                if data.get('resource'):peaks.append(data['resource']['peak_rss_bytes'])
+        whole=[]
+        for f in root.glob('*-'+policy+'-whole-resource.txt'):
+            match=re.search(r'Maximum resident set size \(kbytes\):\s*(\d+)',f.read_text())
+            require(match,'missing completed whole-phase resource receipt: '+str(f))
+            peaks.append(1024*int(match.group(1)));whole.append(file_identity(f))
+        policy_bytes=sum(volume(scope) for scope in scopes)
+        actual=component('PASS' if max(peaks)<=DEFAULT['rss_bytes'] and policy_bytes<=DEFAULT['policy_output_bytes'] else 'RESOURCE_LIMIT',
+            totals=accounting[policy]['totals'],peak_measured_rss_bytes=max(peaks),policy_data_bytes=policy_bytes,
+            limits=DEFAULT,whole_phase_receipts=whole,scope='measured native/passive child and whole-phase maxima; source/build storage separate')
         primary = aggregate({k: parts.get(k, component('NOT_RUN')) for k in
-                             ('pilot', 'resource_projection', 'primary', 'transactions')})
+                             ('pilot', 'resource_projection', 'primary', 'transactions')}|dict(actual_resources=actual))
         policies[policy] = dict(primary=primary,
             extension=parts.get('extension', component('NOT_RUN')),
             extension_resource=parts.get('extension_resource', component('NOT_RUN')),
-            actual_resource=component('PASS', totals=accounting[policy]['totals']))
+            actual_resource=actual)
     write_once(out/'publication.json', dict(schema='WJ6FinalPublicationV1', inner_receipt=file_identity(out/'receipt.json'),
         files=artifacts([f for f in out.iterdir() if f.is_file() and f.suffix != '.lock']),
         figures=artifacts([f for f in args.figures.iterdir() if f.is_file()]), policies=policies, accounting=accounting,

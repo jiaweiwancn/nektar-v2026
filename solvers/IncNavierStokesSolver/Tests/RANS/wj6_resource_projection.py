@@ -54,7 +54,8 @@ def main():
             require(obs[tag] and svd[tag], 'missing actual observation or SVD cost: '+tag)
         commands = read(root/'command-receipts.json')
         completed = [c for c in commands if c['label'] in
-                     [name+'-'+a.policy for name in ('pilot', 'primary', 'transactions', 'extend')]]
+                     [name+'-'+a.policy for name in ('pilot', 'primary', 'extend')] or
+                     (c['label'].startswith('transactions') and c['label'].endswith('-'+a.policy))]
         require(any(c['label'] == 'pilot-'+a.policy and c['exit_code'] == 0 for c in completed),
                 'whole pilot process receipt must complete before projection')
         for c in completed:

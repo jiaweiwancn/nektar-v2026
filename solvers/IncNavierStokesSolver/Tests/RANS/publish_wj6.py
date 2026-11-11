@@ -193,6 +193,7 @@ def main():
             for name,h in packet['members'].items():require(file_hash(f.with_suffix('')/name)==h,'observer code member changed')
             observer_archives[f.name]=file_identity(f)
         manifest=dict(schema='WJ6LinuxManifestV1',root=str(r),native_source_revision=git(producer,'rev-parse','HEAD'),native_tree=git(producer,'rev-parse','HEAD^{tree}'),
+            producer_source_path=str(producer),driver_source_path=str(driver),
             driver_source_revision=git(driver,'rev-parse','HEAD'),driver_tree=git(driver,'rev-parse','HEAD^{tree}'),
             producer_status=git(producer,'status','--short'),driver_status=git(driver,'status','--short'),
             native_input_equivalence=dict(equal=True,files=len(native),content_sha256=digest(native)),

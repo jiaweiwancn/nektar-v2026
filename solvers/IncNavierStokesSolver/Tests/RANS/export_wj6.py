@@ -80,6 +80,8 @@ def main():
     for path in root.glob('observer-*-source.json'):copy(path,'identity/'+path.name)
     for path in sorted(root.glob('*-whole-resource.txt')):
         copy(path,'identity/'+path.name)
+    for policy in ('EP','Budget'):
+        copy(root/'checks-v4/wj6-capacity'/policy/'result.json','controls/'+policy+'/result.json')
     commands = read(compact/'final-command-receipts.json')
     for c in commands:copy(Path(c['log']), 'logs/'+Path(c['log']).name)
     copy(root/'inventory-checks-v4.json', 'logs/inventory.json')
