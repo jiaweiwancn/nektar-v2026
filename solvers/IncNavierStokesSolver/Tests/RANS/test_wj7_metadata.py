@@ -24,7 +24,8 @@ class Metadata(unittest.TestCase):
         points=list(boundary_rule(**settings));inner=next((x,z) for x,z in points if x==0 and z<1)
         outer=next((x,z) for x,z in points if x==0 and z>1)
         desc=dict(row=[[0,1.]],free_row=[[0,1.]],free_row_L2=1.,gross_row_L2=1.,absolute_accumulation=1.,prescribed_accumulation=1.)
-        rows=[dict(position=[x,0.,z],inner=z<1,constraint_rows=[copy.deepcopy(desc) for _ in range(5)]) for x,z in (inner,(.5,.5),outer)]
+        rows=[dict(position=[x,0.,z],geometry=i,inner=z<1,constraint_rows=[copy.deepcopy(desc) for _ in range(5)])
+            for i,(x,z) in enumerate((inner,(.5,.5),outer))]
         for q in rows[1]['constraint_rows']:q['free_row_L2']=1000.
         m=dict(observations=rows,dependent_trace_action=[],arithmetic_evaluation_sensitivity=[1e-15]*6,
             passive_diagnostics=dict(pressure_regions=[dict(offset=0,gauge_mean_row=[1.])]))
