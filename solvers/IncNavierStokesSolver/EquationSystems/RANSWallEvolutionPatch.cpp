@@ -498,14 +498,26 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         if(m_dimension==3)ray.weight*=w[j]*(column[3]-column[2])/2;
         ray.coordinate[2]=(ColumnAverageK()?m_parameters.geometry.sampleHeight:parameters.geometry.sampleHeight)/m_mapping.At(ray.coordinate).scale;
         ray.weight*=m_mapping.At(ray.coordinate).baseArea;
+        const double scale=m_mapping.At(ray.coordinate).scale;
+        for(const auto &element:innerVelocity->Elements())
+            if(element.lower[0]==column[0] && element.upper[0]==column[1] &&
+               element.lower[1]==column[2] && element.upper[1]==column[3])
+                ray.owners.push_back({element.lower[2]*scale,element.upper[2]*scale,element.geometry});
+        Require(!ray.owners.empty(),"wall ray has no generating native column");
         ray.sample=SampleKRow(ray.coordinate);
         auto H=ray.coordinate;H[2]=parameters.geometry.height;
         ray.outerV=Point(0,H,1);ray.outerP=Point(OuterPressure(),H,1);ray.outerK=Point(K(),H,1);
         m_rays.push_back(std::move(ray));
     }
     for(const auto &q:outerVelocity->Quadrature(m_volumeOrder?m_volumeOrder:order))if(Owner(q.geometry)==m_comm->GetRank())
-        m_outer.push_back({Point(0,q.coordinate),Point(OuterPressure(),q.coordinate),
-            Point(Epsilon(),q.coordinate),q.weight*(Mapped()?m_mapping.At(q.coordinate).determinant:1.)});
+    {
+        const auto &element=outerVelocity->Elements().at(q.element);
+        auto v=GeometryPoint(0,q.geometry,q.coordinate),kp=GeometryPoint(K(),q.geometry,q.coordinate);
+        Require(kp.ids==v.ids,"native owned k/velocity maps differ");
+        m_outer.push_back({std::move(v),GeometryPoint(OuterPressure(),q.geometry,q.coordinate),
+            GeometryPoint(Epsilon(),q.geometry,q.coordinate),q.weight*(Mapped()?m_mapping.At(q.coordinate).determinant:1.),
+            q.geometry,element.lower[2],element.upper[2]});
+    }
     m_solver=std::make_shared<SolverCache>();m_solver->free.resize(Gauge());m_solver->massFactors.resize(Gauge());
     InitialiseRobust(session);
     if(NewModels())
@@ -657,12 +669,27 @@ void RANSWallEvolutionPatch::Refresh(const Vector &s,double time,const RANSWallE
         if(k==ray.cachedK && (weight>0)==(ray.cachedWeight>0))
         {ray.profile=std::move(profile);ray.cachedWeight=weight;continue;}
         std::vector<VolumePoint> points;
+        int owner=-1;double panelLower=-1,panelUpper=-1;
         for(const auto &q:profile->Quadrature())
         {
-            auto p=ray.coordinate;p[2]=q.r/m_mapping.At(ray.coordinate).scale;auto v=Point(0,p);
+            if(q.panelLower!=panelLower || q.panelUpper!=panelUpper)
+            {
+                owner=-1;panelLower=q.panelLower;panelUpper=q.panelUpper;
+                Require(panelUpper>panelLower,"empty generating wall quadrature panel");
+                for(const auto &interval:ray.owners)
+                    if(panelLower>=interval.lower && panelUpper<=interval.upper)
+                    {
+                        Require(owner<0,"wall quadrature panel has multiple native owners");
+                        owner=interval.geometry;
+                    }
+                Require(owner>=0,"wall quadrature panel crosses or lacks a native owner");
+            }
+            auto p=ray.coordinate;p[2]=q.r/m_mapping.At(ray.coordinate).scale;
+            auto v=GeometryPoint(0,owner,p);
             if(Owner(v.geometry)!=m_comm->GetRank())continue;
-            const auto kp=Point(K(),p);Require(kp.ids==v.ids,"native k/velocity maps differ");
-            points.push_back({std::move(v),Point(InnerPressure(),p),{},ray.weight*q.weight*q.jacobian});
+            const auto kp=GeometryPoint(K(),owner,p);Require(kp.ids==v.ids,"native owned k/velocity maps differ");
+            points.push_back({std::move(v),GeometryPoint(InnerPressure(),owner,p),{},ray.weight*q.weight*q.jacobian,
+                owner,panelLower,panelUpper});
         }
         ray.cachedK=k;ray.cachedWeight=weight;ray.profile=std::move(profile);ray.points=std::move(points);
     }
@@ -1648,6 +1675,7 @@ std::string RANSWallEvolutionPatch::Signature() const
         for(double w:c.weights)text<<':'<<w;
         for(double v:m_transitionReference)text<<':'<<v;
     }
+    text<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
     return text.str();
 }
 }

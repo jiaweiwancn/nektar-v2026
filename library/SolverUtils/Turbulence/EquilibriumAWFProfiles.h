@@ -67,6 +67,9 @@ struct AWFProfileOptions
 struct AWFProfileQuadraturePoint
 {
     double r, weight, jacobian; // weight is dr; weight*jacobian is physical volume/wall area
+    // Generating physical panel, retained before a Gauss coordinate is rounded.
+    // Callers mapping to native elements must use the panel, not relocate r.
+    double panelLower = 0, panelUpper = 0;
 };
 
 struct AWFProfileReference

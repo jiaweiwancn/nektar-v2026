@@ -1039,7 +1039,7 @@ RANSWallGlobalPoint RANSWallEvolutionPatch::GeometryPoint(int block,int geometry
 {
     const int e=GeometryElement(block,geometry);const auto &element=fields[block]->Elements()[e];
     for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
-        Require(coordinate[a]>=element.lower[a]-1e-11 && coordinate[a]<=element.upper[a]+1e-11,
+        Require(coordinate[a]>=element.lower[a] && coordinate[a]<=element.upper[a],
             "observation coordinate is outside its recorded native element");
     return *EvaluationRow(block,e,coordinate);
 }
@@ -1055,12 +1055,12 @@ RANSWallEvolutionPatch::ObservationProvenance RANSWallEvolutionPatch::ResolveObs
     const auto v=EvaluationRow(0,p.geometry>=0?GeometryElement(0,p.geometry):fields[0]->LocateElement(p.coordinate,p.side),p.coordinate);
     const auto &element=fields[0]->Elements().at(v->element);
     for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
-        Require(p.coordinate[a]>=element.lower[a]-1e-11 && p.coordinate[a]<=element.upper[a]+1e-11,
+        Require(p.coordinate[a]>=element.lower[a] && p.coordinate[a]<=element.upper[a],
             "observation coordinate is outside its recorded native element");
     const double H=m_parameters.geometry.height;
-    const bool inner=element.upper[2]<=H+1e-11;
-    Require(inner || element.lower[2]>=H-1e-11,"constitutive element crosses the fitted wall interface");
-    const bool atInterface=Same(Distance(p.coordinate),m_mapping.At(p.coordinate).height);
+    const bool inner=element.upper[2]<=H;
+    Require(inner || element.lower[2]>=H,"constitutive element crosses the fitted wall interface");
+    const bool atInterface=p.coordinate[2]==H;
     const int side=atInterface?(inner?-1:1):0;
     Require(!atInterface || p.side==0 || p.side==side,"observation radial side disagrees with its native element");
     return {v,inner,side};

@@ -403,7 +403,7 @@ std::vector<AWFProfileQuadraturePoint> EquilibriumAWFProfiles::MakeQuadrature(
             const double weight = Cast(half*m_gaussWeights[k]);
             Positive(weight);
             const double jacobian = m_metric.Jacobian(point); Positive(jacobian);
-            result.push_back({point, weight, jacobian});
+            result.push_back({point, weight, jacobian, breaks[j-1], breaks[j]});
         }
     }
     return result;

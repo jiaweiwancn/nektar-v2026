@@ -124,8 +124,8 @@ std::shared_ptr<const RANSWallGlobalPoint> RANSWallEvolutionPatch::EvaluationRow
     const RANSWallCoordinate &coordinate) const
 {
     const auto &el=fields.at(block)->Elements().at(element);
-    const int side=std::abs(coordinate[2]-m_parameters.geometry.height)<1e-11?
-        (el.upper[2]<=m_parameters.geometry.height+1e-11?-1:1):0;
+    const int side=coordinate[2]==m_parameters.geometry.height?
+        (el.upper[2]<=m_parameters.geometry.height?-1:1):0;
     // A patch owns an immutable field/mesh/map generation. Both geometry and
     // native element, actual radial side and all coordinate bits enter the key.
     const RowKey key{Bits(block),Bits(el.geometry),Bits(element),Bits(side+1),Bit(coordinate[0]),Bit(coordinate[1]),Bit(coordinate[2])};

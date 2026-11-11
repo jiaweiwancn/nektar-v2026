@@ -87,6 +87,7 @@ def main():
    actual_initial=dict(schema='ActualPerturbedInitialV2',state_sha256=exact_vector_hash(z['state']),state_coefficients=z['state'],history_sha256=sha(Path(z['checkpoint'])/'State.bin'),history_source=str(out/'actual-initial/State.bin'),history_header=header(Path(z['checkpoint'])),receipt=z['initialization_receipt'])
    actual=probe(sampler,pre,replay_request(seed,grid,state=z['state']));initial=dict(actual['observation'],grid_weights=weights)
   request=dict(schema='NeutralPilotV1',model=a.model,policy=a.policy,wall=a.wall,descriptor=seed['observation']['resolved_descriptor'],
+   numerical_operator=seed['observation']['numerical_operator'],
    knots=selected_knots(ref,a),degree=a.degree,pressure_degree=a.degree-2,columns=a.columns,quadrature=seed['observation']['actual_quadrature'],
    dt=a.dt,horizons=a.milestones,integration='native IMEX1 PimpleSingleSweep',history='native same-method restart; independently initialized for each dt',
    initialization='constrained neutral projection plus declared divergence-free streamfunction',velocity_amplitude=a.velocity_amplitude,perturbation='StreamfunctionPolyV1',

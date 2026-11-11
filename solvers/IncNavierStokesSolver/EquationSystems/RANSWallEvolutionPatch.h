@@ -69,7 +69,7 @@ public:
     // Read-only accuracy monitor. Cached rows/targets depend only on this
     // immutable space and the stored neutral reference, never on validity.
     Vector NeutralAccuracy(const Vector&,double,const RANSWallEvolutionData&) const;
-    std::string PreservationIdentity() const;
+    std::string PreservationIdentity(bool legacyOperator=false) const;
     std::string PreservationPacket(const Vector &state,double time,const RANSWallEvolutionData &data,
         bool basis,const std::vector<RANSWallCoordinate> &grid={},const std::vector<int> &sides={}) const;
     std::string EvaluationReuseChecks(const Vector &,const Vector &,double,const RANSWallEvolutionData &);
@@ -532,7 +532,12 @@ private:
     Vector SolveScalarFeasible(Vector state,const Vector &history,double alpha,
         double time,const RANSWallEvolutionData &data,bool condensed,int &iterations,
         double tolerance,int maximumIterations,bool scalarOnly=false) const;
-    struct VolumePoint { RANSWallGlobalPoint v,p,e; double weight; };
+    struct VolumePoint
+    {
+        RANSWallGlobalPoint v,p,e;double weight;
+        int generatingGeometry=-1;
+        double panelLower=0,panelUpper=0;
+    };
     struct Ray
     {
         RANSWallCoordinate coordinate;double weight,cachedK=-1,cachedWeight=-1;
@@ -540,6 +545,8 @@ private:
         std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> profile;
         SolverUtils::RANSCappedDestructionValues destruction;
         std::vector<VolumePoint> points;
+        struct Interval {double lower,upper;int geometry;};
+        std::vector<Interval> owners; // physical intervals in this ray's column
     };
     std::map<int,double> ExternalConstraints(double time,const RANSWallEvolutionData &data) const;
     Vector OwnedBodyLoad(double time,const RANSWallEvolutionData &data,int region=-1) const;

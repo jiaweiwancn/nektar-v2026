@@ -168,6 +168,8 @@ int main(int argc,char **argv)
             "neutral preservation probe supports accepted or EP plateau references, serial flat2D only");
         RANSWallEvolutionData data(2);Vector state,reference;double time=request.get<double>("time",0.);
         const std::string operation=request.get<std::string>("operation","neutral");
+        const bool legacy=operation=="legacy_operator_replay";
+        const std::string sourceOperator=legacy?"LegacyCoordinateToleranceV1":RANSWallNumericalOperatorIdentity();
         if(operation=="neutral")
         {
             double us,dx,dy;session->LoadParameter("RANSWallFrictionVelocity",us,.4);
@@ -177,8 +179,16 @@ int main(int argc,char **argv)
         }
         else
         {
-            Require(operation=="replay","unknown read-only verification operation");
-            Require(request.get<std::string>("identity")==patch.PreservationIdentity(),"verification physics/mesh/space identity mismatch");
+            Require(operation=="replay" || legacy,"unknown read-only verification operation");
+            if(legacy)
+            {
+                Require(request.get<std::string>("source_numerical_operator")==sourceOperator &&
+                    request.get<std::string>("target_numerical_operator")==RANSWallNumericalOperatorIdentity(),
+                    "legacy read-only comparison requires both numerical operator identities");
+                Require(!request.get_optional<std::string>("write_initial_history"),
+                    "legacy operator coefficients cannot create or continue a history");
+            }
+            Require(request.get<std::string>("identity")==patch.PreservationIdentity(legacy),"verification physics/mesh/space/operator identity mismatch");
             Require(request.get<std::string>("descriptor")==p.model.Signature(),"verification resolved descriptor mismatch");
             state=Values(request,"state");reference=Values(request,"reference");
             Require(state.size()==std::size_t(patch.Size()) && reference.size()==state.size(),"verification coefficient size mismatch");
@@ -191,9 +201,6 @@ int main(int argc,char **argv)
         if(auto points=request.get_child_optional("grid"))for(const auto &item:*points)
         {RANSWallCoordinate q{};int i=0;for(const auto &v:item.second){Require(i<3,"invalid verification coordinate");q[i++]=v.second.get_value<double>();}Require(i==3,"invalid verification coordinate");grid.push_back(q);}
         std::vector<int> sides;if(auto selected=request.get_child_optional("grid_sides"))for(const auto &v:*selected)sides.push_back(v.second.get_value<int>());
-        for(const auto &q:grid)
-            Require(q[2]==p.geometry.height || std::abs(q[2]-p.geometry.height)>=1e-12,
-                "unsupported diagnostic sample: near-interface coordinates require exact H and an explicit side");
         double receiptUs,receiptDx,receiptDy;session->LoadParameter("RANSWallFrictionVelocity",receiptUs,.4);session->LoadParameter("RANSWallDirectionX",receiptDx,1.);session->LoadParameter("RANSWallDirectionY",receiptDy,0.);
         const auto targetReference=patch.NeutralReference(receiptUs,{receiptDx,receiptDy});
         const auto receipt=patch.InitializationReceipt(state,reference,time,data,data,patch.FixedReferenceBoundary(targetReference));
@@ -206,7 +213,7 @@ int main(int argc,char **argv)
             for(int index=0;index<grid.size();++index)
             {
                 const auto &q=grid[index];const int side=sides.empty()?0:sides[index];
-                const bool atInterface=std::abs(q[2]-p.geometry.height)<1e-12;
+                const bool atInterface=q[2]==p.geometry.height;
                 const bool outer=atInterface?side==1:q[2]>p.geometry.height;
                 if(!outer)continue;
                 const auto v=patch.Point(0,q,side),e=patch.Point(patch.Epsilon(),q,side);
@@ -296,7 +303,7 @@ int main(int argc,char **argv)
             for(int i=0;i<grid.size();++i)
             {
                 const auto &q=grid[i];const int side=sides.empty()?0:sides[i];
-                const bool atInterface=std::abs(q[2]-p.geometry.height)<1e-12;
+                const bool atInterface=q[2]==p.geometry.height;
                 bool outer=atInterface?side==1:q[2]>p.geometry.height;
                 if(!geometries.empty())
                 {
@@ -304,7 +311,7 @@ int main(int argc,char **argv)
                     const auto parent=std::find_if(elements.begin(),elements.end(),[&](const auto &e){return e.geometry==geometries[i];});
                     Require(parent!=elements.end(),"unknown explicit native test geometry");
                     const bool selectedOuter=parent->lower[2]>=p.geometry.height;
-                    if(std::abs(q[2]-p.geometry.height)<1e-12)
+                    if(q[2]==p.geometry.height)
                         Require(selectedOuter==(side==1),"test geometry conflicts with declared interface side");
                     outer=selectedOuter;
                 }
@@ -355,6 +362,8 @@ int main(int argc,char **argv)
             Require(state==stateCopy,"initial history export modified coefficients");
         }
         const std::string output=J::Object({{"status",J::Quote(physical?"pass":"fail")},{"execution",J::Quote("completed")},
+            {"source_numerical_operator",J::Quote(sourceOperator)},
+            {"numerical_operator",J::Quote(RANSWallNumericalOperatorIdentity())},
             {"physical_admissibility",J::Quote(physical?"pass":"fail")},
             {"accuracy",J::Quote("not_assessed_by_sampling_adapter")},{"performed_time_steps","0"},{"initial_history",initialHistory.empty()?"null":J::Quote(initialHistory)},
             {"initialization_receipt",receipt},{"reference",J::Numbers(reference)},{"fixed_boundary",J::Constraints(data.fixedBoundary)},

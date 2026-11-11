@@ -6,6 +6,7 @@
 #define NEKTAR_RANS_WALL_GLOBAL_FIELD_H
 
 #include <IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallNumericalOperator.h>
 #include <array>
 #include <functional>
 #include <map>
@@ -34,6 +35,10 @@ struct RANSWallGlobalPoint
     Vector constant;
     double weight = 0;
     bool columnAverage = false; // normalized physical functional, not a point
+    // Only local-coordinate arithmetic may round to an endpoint. Physical
+    // containment is exact and coordinates are never snapped or clamped.
+    unsigned endpointRoundoffAxes = 0;
+    RANSWallCoordinate rawLocalCoordinate{};
     double Value(const Vector &state, int offset=0) const;
     std::array<double,3> Gradient(const Vector &state, int offset=0) const;
 };

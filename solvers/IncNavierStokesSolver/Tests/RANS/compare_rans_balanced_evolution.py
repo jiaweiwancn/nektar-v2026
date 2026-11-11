@@ -13,6 +13,8 @@ def compare(root,labels,T,inputs_only=False):
     folders=[root/'campaigns'/label for label in labels];reqs=[load(f/'request-manifest.json')['request'] for f in folders];metrics=[];samples=[];provenance=[]
     for key in ('model','policy','wall','descriptor','boundary_policy','runtime','velocity_amplitude'):
         if any(q[key]!=reqs[0][key] for q in reqs[1:]):raise ValueError('physics/runtime identity differs '+key)
+    if any(q.get('numerical_operator')!=reqs[0].get('numerical_operator') for q in reqs[1:]):
+        raise ValueError('numerical operator identity differs')
     for req in reqs:
         if req.get('actual_initial'):
             from continue_cls_epawf_pimple import header

@@ -408,7 +408,7 @@ std::string RANSWallEvolutionPatch::InitializationReceipt(const Vector &state,co
         {"raw_effective_max_difference",J::Number(difference)},{"source_target_boundary_max_difference",J::Number(boundaryDifference)},
         {"live_fixed_boundary",J::Constraints(live)},{"effective_initial",J::Numbers(effective)}});
 }
-std::string RANSWallEvolutionPatch::PreservationIdentity() const
+std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) const
 {
     std::ostringstream out;out<<std::setprecision(17)<<"NeutralVerification-v1:"<<m_parameters.model.Signature()
         <<":"<<m_parameters.geometry.height<<":"<<m_parameters.geometry.roughness<<":"<<m_parameters.geometry.sampleHeight
@@ -419,6 +419,7 @@ std::string RANSWallEvolutionPatch::PreservationIdentity() const
         for(const auto &e:fields[b]->Elements())out<<":"<<e.geometry<<","<<e.degree<<","<<e.lower[0]<<","<<e.upper[0]<<","<<e.lower[2]<<","<<e.upper[2];
         for(const auto &q:fields[b]->Quadrature(2)){for(int id:q.ids)out<<","<<id;}
     }
+    if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
     return out.str();
 }
 std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,double time,
@@ -433,11 +434,15 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
     auto row=[&](const RANSWallGlobalPoint &p)
     {return J::Object({{"ids",J::Numbers(p.ids)},{"phi",J::Numbers(p.phi)},
         {"derivative",J::Rows(p.derivative)},{"geometry",J::Number(p.geometry)},
-        {"element",J::Number(p.element)}});};
+        {"element",J::Number(p.element)},
+        {"endpoint_roundoff_axes",J::Number(p.endpointRoundoffAxes)},
+        {"raw_local_coordinate",J::Numbers(p.rawLocalCoordinate)}});};
     auto point=[&](const VolumePoint &q,int region)
     {
         return J::Object({{"coordinate",J::Numbers(q.v.coordinate)},{"weight",J::Number(q.weight)},
             {"region",J::Number(region)},{"velocity_k",row(q.v)},{"pressure",row(q.p)},
+            {"generating_geometry",J::Number(q.generatingGeometry)},
+            {"generating_radial_panel",J::Numbers(Vector{q.panelLower,q.panelUpper})},
             {"epsilon",region==1?row(q.e):"null"}});
     };
     std::vector<std::string> volume,faces,mass,profiles,values,gradients,regions,observedSides,provenance,tractions,dependentEpsilon;
@@ -481,7 +486,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
     Require(sides.empty() || sides.size()==grid.size(),"sample side count differs");
     for(int index=0;index<grid.size();++index)
     {
-        const auto &p=grid[index];const bool interface=std::abs(p[2]-H)<1e-12;
+        const auto &p=grid[index];const bool interface=p[2]==H;
         const int side=sides.empty()?0:sides[index];
         Require(interface?(side==-1 || side==1):side==0,"ambiguous interface sample: declare inner=-1 or outer=+1 at H; interior side must be zero");
         const int region=interface?(side<0?0:1):(p[2]<H?0:1);Vector v,geometry;std::vector<Vector> g;
@@ -505,7 +510,8 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
     std::vector<std::string> elements;
     for(const auto &e:fields[0]->Elements())elements.push_back(J::Object({{"geometry",J::Number(e.geometry)},
         {"degree",J::Number(e.degree)},{"lower",J::Numbers(e.lower)},{"upper",J::Numbers(e.upper)}}));
-    return J::Object({{"schema","1"},{"read_only","true"},{"time",J::Number(time)},{"identity",J::Quote(PreservationIdentity())},
+    return J::Object({{"schema","2"},{"read_only","true"},{"time",J::Number(time)},{"identity",J::Quote(PreservationIdentity())},
+        {"numerical_operator",J::Quote(RANSWallNumericalOperatorIdentity())},
         {"resolved_descriptor",J::Quote(m_parameters.model.Signature())},{"state",J::Numbers(state)},
         {"offsets",J::Numbers(offset)},{"sizes",J::Numbers(size)},{"elements",J::List(elements)},
         {"actual_quadrature",J::Object({{"wall_normal",J::Number(m_parameters.normalOrder)},

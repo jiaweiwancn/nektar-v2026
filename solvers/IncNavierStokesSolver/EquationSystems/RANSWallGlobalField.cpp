@@ -45,6 +45,20 @@ std::array<int,3> Indices(int index,int modes)
 {
     return {index%modes,(index/modes)%modes,index/(modes*modes)};
 }
+double LocalCoordinate(double x,double lower,double upper,double &raw,bool &rounded)
+{
+    Require(std::isfinite(x) && x>=lower && x<=upper,
+            "sample outside its native element (strict physical ownership)");
+    raw=(x-lower)*(2/(upper-lower))-1;
+    rounded=raw < -1. || raw > 1.;
+    if(rounded)
+    {
+        Require(std::abs(raw)<=1.+8*std::numeric_limits<double>::epsilon(),
+                "local endpoint arithmetic exceeds its roundoff allowance");
+        return raw<0?-1.:1.;
+    }
+    return raw;
+}
 }
 
 struct RANSWallGlobalField::BasisData
@@ -69,7 +83,8 @@ struct RANSWallGlobalField::BasisData
     }
     std::shared_ptr<const Values> Evaluate(double coordinate) const
     {
-        coordinate=std::clamp(coordinate,-1.,1.);
+        Require(std::isfinite(coordinate) && coordinate>=-1. && coordinate<=1.,
+                "basis coordinate outside known native owner");
         const auto found=cache.find(coordinate);
         if(found!=cache.end()) return found->second;
         auto result=std::make_shared<Values>();
@@ -193,17 +208,20 @@ RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &co
     if(m_dimension==2) Require(Equal(coordinate[1],0),"2D sample has nonzero physical span coordinate");
     std::array<std::shared_ptr<const BasisData::Values>,3> basis{};
     std::array<double,3> inverse{};
+    Coordinate rawLocal{};unsigned endpointRoundoffAxes=0;
     for(int d=0;d<m_dimension;++d)
     {
         const int a=m_axes[d];
-        Require(coordinate[a]>=element.lower[a]-1e-11 && coordinate[a]<=element.upper[a]+1e-11,
-                "sample outside its native element");
         inverse[d]=2/(element.upper[a]-element.lower[a]);
-        basis[d]=m_elementBasis[e][d]->Evaluate((coordinate[a]-element.lower[a])*inverse[d]-1);
+        bool rounded=false;
+        const double local=LocalCoordinate(coordinate[a],element.lower[a],element.upper[a],rawLocal[a],rounded);
+        if(rounded)endpointRoundoffAxes|=1u<<a;
+        basis[d]=m_elementBasis[e][d]->Evaluate(local);
     }
     const int modes=element.degree+1,count=TensorSize(modes,m_dimension);
     const auto map=m_field->GetLocalToGlobalMap();const int start=m_field->GetCoeff_Offset(e);
     RANSWallGlobalPoint result;result.coordinate=coordinate;result.geometry=element.geometry;result.element=e;
+    result.rawLocalCoordinate=rawLocal;result.endpointRoundoffAxes=endpointRoundoffAxes;
     result.ids.reserve(count);result.phi.reserve(count);result.constant.reserve(count);
     for(auto &derivative:result.derivative) derivative.reserve(count);
     for(int j=0;j<count;++j)
@@ -242,8 +260,9 @@ std::array<RANSWallGlobalField::Vector,3> RANSWallGlobalField::RadialGradientDer
     for(int d=0;d<m_dimension;++d)
     {
         const int axis=m_axes[d];inverse[d]=2/(element.upper[axis]-element.lower[axis]);
-        basis[d]=m_elementBasis[point.element][d]->Evaluate(
-            (point.coordinate[axis]-element.lower[axis])*inverse[d]-1);
+        double raw;bool rounded;
+        basis[d]=m_elementBasis[point.element][d]->Evaluate(LocalCoordinate(
+            point.coordinate[axis],element.lower[axis],element.upper[axis],raw,rounded));
     }
     std::array<Vector,3> result;for(auto &row:result)row.assign(count,0.);
     const auto map=m_field->GetLocalToGlobalMap();const int start=m_field->GetCoeff_Offset(point.element);
@@ -275,10 +294,12 @@ int RANSWallGlobalField::LocateElement(const Coordinate &coordinate,int side) co
         for(int d=0;d<m_dimension;++d)
         {
             const int a=m_axes[d];
-            contains=contains && coordinate[a]>=element.lower[a]-1e-11 && coordinate[a]<=element.upper[a]+1e-11;
+            contains=contains && coordinate[a]>=element.lower[a] && coordinate[a]<=element.upper[a];
         }
-        if(!contains || (side>0 && coordinate[2]>=element.upper[2]-1e-12) ||
-                        (side<0 && coordinate[2]<=element.lower[2]+1e-12)) continue;
+        // Side selection applies to exact radial traces. A nearby interior
+        // point retains its unique containing cell, independently of IDs.
+        if(!contains || (side>0 && coordinate[2]>=element.upper[2]) ||
+                        (side<0 && coordinate[2]<=element.lower[2])) continue;
         if(selected<0 || element.geometry<m_elements[selected].geometry) selected=e;
     }
     Require(selected>=0,"physical sample not found on requested radial side");
