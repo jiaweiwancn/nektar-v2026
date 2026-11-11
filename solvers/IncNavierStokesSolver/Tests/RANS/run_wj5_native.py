@@ -29,6 +29,12 @@ from cls_epawf_m3_cases import set_info,write
 
 SCRIPTS=Path(__file__).resolve().parent
 
+def read_execution_intent(path):
+    # Intent fingerprints bind JSON metadata types. The physical-state reader
+    # deliberately parses every native token as binary64 to retain negative
+    # zero; applying that policy to metadata changes canonical integer hashes.
+    return json.loads(Path(path).read_text())
+
 class Study(WJ4Study):
     def __init__(self,a):
         require(platform.system()=='Linux','compiled Linux is authoritative')
@@ -82,7 +88,7 @@ class Study(WJ4Study):
 
     def retained(self,name,nx,step):
         folder=self.a.retained.resolve()/'study'/self.a.policy/('horizontal-Nx%d-%s'%(nx,'cp0' if step==0 else step))
-        report=folder/'case.evolution.json';intent=read(folder/'execution-intent.json');receipt=read(folder/'receipt.json')
+        report=folder/'case.evolution.json';intent=read_execution_intent(folder/'execution-intent.json');receipt=read(folder/'receipt.json')
         require(receipt['intent_sha256']==digest(intent),'retained native intent changed');verify_artifacts(intent['inputs']);verify_artifacts(receipt['artifacts'])
         for group in intent['code'].values():verify_artifacts(group)
         for identity in intent['runtime'].values():

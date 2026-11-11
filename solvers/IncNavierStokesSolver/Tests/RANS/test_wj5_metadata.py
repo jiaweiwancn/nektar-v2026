@@ -12,6 +12,15 @@ from wj4_measure import rule,boundary_rule,owned_rule
 from wj_immutable import write_once,xml_identity
 
 class Meshes(unittest.TestCase):
+    def test_retained_metadata_integer_fingerprint(self):
+        from run_wj5_native import read_execution_intent
+        from wj_immutable import digest,read
+        import json
+        with tempfile.TemporaryDirectory() as t:
+            path=Path(t)/'intent.json';intent=dict(steps=32,mesh=dict(level=1,nx=2),runtime=dict(bytes=1088),dt=3.2e-5)
+            path.write_text(json.dumps(intent))
+            self.assertEqual(digest(read_execution_intent(path)),digest(intent))
+            self.assertNotEqual(digest(read(path)),digest(intent))
     def test_local_mesh_is_refinement_only(self):
         l1=normal_knots(1);m1=local_normal_knots('M1');m2=local_normal_knots('M2')
         self.assertEqual((len(l1),len(m1),len(m2)),(31,35,43))
