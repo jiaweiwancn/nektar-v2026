@@ -1,0 +1,30 @@
+{
+  "status": "pass",
+  "checks": {
+    "all_export_hashes": 106,
+    "complete_result_bodies": 203,
+    "all_state_stage_segments": 94,
+    "required_short_bodies": 12,
+    "real_failed_gates": [
+      "A93_neutral",
+      "physical_budget_accuracy"
+    ],
+    "compiled_source_hashes_unchanged": 209
+  },
+  "cli": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/source/solvers/IncNavierStokesSolver/Tests/RANS/classify_rans_ownership_scope.py",
+      "--input",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/exports-v1/a93-a95-e94e95-awf-native-ownership-requalification-evidence/required-scope-input.json",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/final-scope-cli-validation.json"
+    ],
+    "exit_code": 1,
+    "stdout": "failed_unresolved_or_incomplete\n",
+    "stderr": "",
+    "meaning": "actual required-scope failure preserved, not a successful negative-control result"
+  },
+  "collected_source_revision": "1333017f1dd4cb7fd4a34393ab42d44d5487d0cf"
+}
