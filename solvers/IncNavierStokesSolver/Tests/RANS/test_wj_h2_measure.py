@@ -4,6 +4,8 @@ import copy
 import unittest
 import tempfile
 from pathlib import Path
+import subprocess
+import sys
 import numpy as np
 from study_wj_h2 import observation_rule,comparison
 from wj_h2_profiles import D0,TOP
@@ -17,6 +19,13 @@ class Measurements(unittest.TestCase):
             self.assertEqual(np.signbit(v['state']).tolist(),[True,False,True])
     def test_long_ctest_regex_is_an_argument_not_a_file(self):
         self.assertEqual(input_files(['^('+'NativeTest|'*100+')$']),{})
+    def test_denied_continuation_never_launches_by_default(self):
+        with tempfile.TemporaryDirectory() as folder:
+            result=subprocess.run([sys.executable,str(Path(__file__).with_name('continue_wj_h2.py')),
+                '--root',folder,'--solver','not-launched','--observer','not-launched'],capture_output=True,text=True)
+            self.assertEqual(result.returncode,2)
+            self.assertIn('denied by automatic approval review',result.stderr)
+            self.assertFalse((Path(folder)/'study-v2').exists())
     def packet(self):
         row=dict(physical=[1.,0.,1.],inner=False,U=[1.,0,0],k=.01,epsilon=.001,pi=0.)
         return dict(open_boundary=dict(time=.04,stations=[row],interface=[dict(K=.01,cutoff=.02)],
