@@ -1,0 +1,148 @@
+{
+  "schema": "DirectionalResolutionExperimentV1",
+  "starting_revision": "d0182aa8df9b3ebb03577811ce658ee93a594f45",
+  "starting_worktree": "clean; no intervening commits",
+  "operator": "GeneratedVolumeOwnerV1",
+  "physical_equations_changed": false,
+  "experiment_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+  "specification_hashes": {
+    "docs/literature/A93_A95_E94_E95_neutral_ABL_EP_AWF_combined.tex": "056a85c2aea5ce4ca168caf561613e662416bb6b7d7177451ba5038d2cf68a64",
+    "docs/literature/accepted_awf_appendix_A93_A95_E94_E95.tex": "17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40"
+  },
+  "preservation": {
+    "eta": 0,
+    "corrections": false,
+    "unknown_limit": 3000,
+    "outer_molecular_diffusion": 0,
+    "inner_molecular_nu": 1.5e-05,
+    "source": "uncapped prescribed; conservative scalar transport",
+    "stages": "unchanged flow/epsilon/k one sweep"
+  },
+  "capabilities": {
+    "layout": "UniformDirectionalModifiedA2DV1",
+    "velocity_k_epsilon_degrees": [
+      6,
+      5
+    ],
+    "pressure_degrees": [
+      4,
+      3
+    ],
+    "geometry": "canonical affine serial flat2D",
+    "routes": "original new models, one sweep only",
+    "predicted_unknowns": 2769,
+    "actual_unknowns": null,
+    "ground_k": "continuous degree-six endpoints and derivative roots, not sampling"
+  },
+  "prerequisite_gates": [
+    "sealed_frozen_scalar_reconciliation",
+    "native_directional_rows_faces_mass_nullspace",
+    "continuous_ground_k",
+    "isotropic_compatibility",
+    "ownership",
+    "restart_cache_rollback_CLS"
+  ],
+  "A95": {
+    "model": "A95",
+    "policy": "Natural",
+    "wall": "Accepted",
+    "meshes": [
+      "unchanged B5 isotropic",
+      "same B5 vertical mesh, px6/pz5 pressure4/3"
+    ],
+    "amplitudes": [
+      0,
+      2e-05
+    ],
+    "timesteps": [
+      0.002,
+      0.001
+    ],
+    "milestones": [
+      0.016
+    ],
+    "response_observables": 17,
+    "common_grid": "union physical partitions and active profile breaks, explicit sides, one pressure gauge",
+    "budget_volume_orders": [
+      48,
+      64
+    ],
+    "budget_face_orders": [
+      16,
+      32
+    ],
+    "conditional_extra_timesteps": [
+      0.001,
+      0.0005
+    ],
+    "extra_trial_condition": "only resolved spatial improvement but unresolved timestep uncertainty; one new fresh pair on both spaces",
+    "total_budgets_required": true,
+    "baseline_subtracted_budget": "additional diagnostic only"
+  },
+  "A93": {
+    "model": "A93",
+    "policy": "Natural",
+    "wall": "Accepted",
+    "candidate": "RoughnessTransferV1",
+    "base": "Balanced11V1",
+    "donor_node": 2.75,
+    "donor_interval": [
+      2.5,
+      3.0
+    ],
+    "target_node": 0.1375,
+    "target_interval": [
+      0.1,
+      0.175
+    ],
+    "prediction_unknowns": 2967,
+    "preserve": "every B5 node, all active breaks, fixed p3/p1 common test, p5/p3 fields",
+    "basis_for_selection": "signed common row 75/81 changes and varying-flux supports .04.. .5; remove only B11-only outer split, not a physical break",
+    "timesteps": [
+      0.002,
+      0.001
+    ],
+    "milestones": [
+      0.016,
+      0.1,
+      0.5
+    ],
+    "coarse": "exact sealed ownership-package B5 cohort, unchanged runtime and request",
+    "runtime": "frozen ownership runtime; new candidate histories only",
+    "candidate_count_limit": 1
+  },
+  "gates": {
+    "fields_scaled_RMS": 0.001,
+    "vertical_velocity_scaled_RMS": 0.0001,
+    "mean_wall_traction": 0.001,
+    "full_interface_traction_RMS": 0.001,
+    "field_timestep_floor": 1e-07,
+    "field_timestep_spatial_fraction": 0.1,
+    "residual_ratio": 0.85,
+    "residual_floor": 1e-08,
+    "residual_uncertainty": 1e-10,
+    "budget_ratio": 0.85,
+    "budget_floor": 5e-09,
+    "budget_quadrature_multiplier": 5,
+    "budget_timestep_floor": 1e-09,
+    "budget_timestep_spatial_fraction": 0.1,
+    "response_spatial_floor": 5e-07,
+    "response_spatial_fraction": 0.1,
+    "response_temporal_floor": 1e-07,
+    "response_temporal_fraction": 0.05
+  },
+  "stopping": "stop only affected capability/cohort at first required gate; retain state/history and independent diagnostics; no iterative mesh search",
+  "out_of_scope": [
+    "responses beyond .016",
+    "A93 perturbations",
+    "open boundaries",
+    "terrain",
+    "MPI",
+    "true3D",
+    "backend expansion",
+    "arbitrary elementwise p adaptation",
+    "mapped directional layouts",
+    "general action routes"
+  ],
+  "historical": "all previous statuses immutable; old long trajectories remain attached to pinned runtime; timestep pairs give uncertainty, not order"
+}
