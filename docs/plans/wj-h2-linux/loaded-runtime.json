@@ -1,0 +1,696 @@
+{
+  "status": "PASS",
+  "method": "actual /proc/main-native-pid/maps throughout frozen restart",
+  "solver": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h2-20261111/runtime-v4/IncNavierStokesSolver",
+  "solver_sha256": "9ae37a1aba62755b10ad99c9484c498cef9d927a75fb950f00344f4ffc5d06fe",
+  "loaded_files": [
+    {
+      "path": "/etc/ld.so.cache",
+      "bytes": 138060,
+      "sha256": "3195d708e1fb33877a298168d35b39602b0ca215c34214f59057cb579d01e5f7"
+    },
+    {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0",
+      "bytes": 1933192,
+      "sha256": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88"
+    },
+    {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0",
+      "bytes": 4347728,
+      "sha256": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330"
+    },
+    {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0",
+      "bytes": 711168,
+      "sha256": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660"
+    },
+    {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0",
+      "bytes": 5842632,
+      "sha256": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b"
+    },
+    {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0",
+      "bytes": 2566896,
+      "sha256": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc"
+    },
+    {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0",
+      "bytes": 47818768,
+      "sha256": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc"
+    },
+    {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0",
+      "bytes": 4923376,
+      "sha256": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e"
+    },
+    {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0",
+      "bytes": 5151440,
+      "sha256": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c"
+    },
+    {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0",
+      "bytes": 3068984,
+      "sha256": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7"
+    },
+    {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0",
+      "bytes": 92336,
+      "sha256": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e"
+    },
+    {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0",
+      "bytes": 276664,
+      "sha256": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib/libSpatialDomains.so.5.9.0",
+      "bytes": 2517088,
+      "sha256": "0c23e0de180a233bd88f70b265ae9865aeac456e6482f8ff0fa1b4be84d69dab"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h2-20261111/runtime-v4/IncNavierStokesSolver",
+      "bytes": 7737280,
+      "sha256": "9ae37a1aba62755b10ad99c9484c498cef9d927a75fb950f00344f4ffc5d06fe"
+    },
+    {
+      "path": "/usr/lib/libpsm1/libpsm_infinipath.so.1.16",
+      "bytes": 353024,
+      "sha256": "bb44c7e69c8c93eb7c0392485636170443ef29181abfeb53bf7c7e1e1c388208"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_gl.so",
+      "bytes": 14928,
+      "sha256": "f3758a7666bd979a2eacdd92b6264e2f160cd58e0bbbc88f82492121d07e2df5"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_opencl.so",
+      "bytes": 14928,
+      "sha256": "bc26e4d7970e376af2643d5be346adcb14cc4de4a2b297ff9927386e2f82d678"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_pci.so",
+      "bytes": 23248,
+      "sha256": "e7b1dd3d2f88011fed33735e83b67ea82495b5fd60676f8b7a64f3df27abd0e6"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_xml_libxml.so",
+      "bytes": 23256,
+      "sha256": "d1f058e867eb4b7c619ebb268b75f68c4393bcce8b339901e856d1a44c125506"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "bytes": 240936,
+      "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0",
+      "bytes": 1306280,
+      "sha256": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libXNVCtrl.so.0.0.0",
+      "bytes": 34984,
+      "sha256": "331363807c5e2d1d0166d08d8e99740dc083c7d84590d8e29c7d783aa2da1284"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+      "bytes": 18720,
+      "sha256": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+      "bytes": 26800,
+      "sha256": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0",
+      "bytes": 81640,
+      "sha256": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9",
+      "bytes": 137560,
+      "sha256": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9",
+      "bytes": 51512,
+      "sha256": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5",
+      "bytes": 89096,
+      "sha256": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+      "bytes": 74848,
+      "sha256": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "bytes": 2220400,
+      "sha256": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1",
+      "bytes": 18504,
+      "sha256": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+      "bytes": 4455728,
+      "sha256": "7cc817ff1841b59516d684f357bc0c3fc2cc52c3fa9b4ffb8ce8bdc215f02915"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libcuda.so.555.42.02",
+      "bytes": 28094872,
+      "sha256": "7916043d99f754caedfe4f343869da51c31cba661ed1867d68ba1976951f808e"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0",
+      "bytes": 661272,
+      "sha256": "1dc53d91b473c3ebcc65b196c83baa7b1a6c4009f590bcf5c640cf35ba343d6f"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libdl.so.2",
+      "bytes": 14432,
+      "sha256": "3eaaa4aefd9c28f3867c96a427c3cbec9191cb61c4c9d0a2cb4a765d66064499"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libevent_core-2.1.so.7.0.1",
+      "bytes": 211136,
+      "sha256": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7.0.1",
+      "bytes": 14256,
+      "sha256": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0",
+      "bytes": 47688,
+      "sha256": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libfftw3.so.3.5.8",
+      "bytes": 2201936,
+      "sha256": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "bytes": 125488,
+      "sha256": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0",
+      "bytes": 2989432,
+      "sha256": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1",
+      "bytes": 526896,
+      "sha256": "4dc20a901c6951e678e216e959da2534bcef7053e6efdf1492509baf142282b0"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0",
+      "bytes": 2008512,
+      "sha256": "dcadda7f0f82c54ca157b6ca0a5fdc8e1128db4d778109c8e197e2f84c2ac9ba"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2",
+      "bytes": 338648,
+      "sha256": "e367a86cae4e1e81d9bba594a9daea3b90eb50fadb62bb45e38a322184484867"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4",
+      "bytes": 289800,
+      "sha256": "47d56894948545036bd49aed718393bf6edb93fce222874dad30b59f085ad9ee"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libhwloc.so.15.5.2",
+      "bytes": 372064,
+      "sha256": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libicudata.so.70.1",
+      "bytes": 29476472,
+      "sha256": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1",
+      "bytes": 2062664,
+      "sha256": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7",
+      "bytes": 129096,
+      "sha256": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libinfinipath.so.4.0",
+      "bytes": 63928,
+      "sha256": "ba9d11f98daf1ed203b1c1d3c0d62c5709f13e06cc8bfa186154dde69d868b0f"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1",
+      "bytes": 182864,
+      "sha256": "c62a2a983e0d9c1de76ab2f4cf21a4d81da007af9e0351b8c04740459d231d3f"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9",
+      "bytes": 22600,
+      "sha256": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3",
+      "bytes": 827936,
+      "sha256": "9386cfdeb2f894869cdd0190b4f110a65ec0c257ac50ddefaefd6cbaeaab3c35"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1",
+      "bytes": 52016,
+      "sha256": "3160dcc37106767e1afb341ee3cb3cd25bb79246691ffd137131f37a23597288"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.15",
+      "bytes": 63992,
+      "sha256": "3d6d7558e2764fa0a2ee3ee9bf1754bff872bed23148d673bdb648f737ec39ff"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.15",
+      "bytes": 380608,
+      "sha256": "f7c5ddb238bc12a13c4d4b4f8e6ea8af61f8bd144651728936d31b65bec7bbdc"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5",
+      "bytes": 170456,
+      "sha256": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "bytes": 940560,
+      "sha256": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libmca_common_monitoring.so.50.20.0",
+      "bytes": 31424,
+      "sha256": "04d8c353ddc54d1da3e0950d7578de424ec28a7d55370810c4ad3011c32324ab"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libmca_common_sm.so.40.30.0",
+      "bytes": 14808,
+      "sha256": "738da2e4239bca8526a41eac96cd6034cc2cf87182f60cbb15d4decd38a01ba1"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5",
+      "bytes": 47472,
+      "sha256": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libmpi.so.40.30.2",
+      "bytes": 1198600,
+      "sha256": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libmpi_cxx.so.40.30.1",
+      "bytes": 102272,
+      "sha256": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libnettle.so.8.4",
+      "bytes": 281000,
+      "sha256": "2d3bda6cfa2d477cd91b8178843d19e081b911a124f04b4be06b6e32c9fabc73"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1",
+      "bytes": 166288,
+      "sha256": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0",
+      "bytes": 138136,
+      "sha256": "458dd70122be79952cd517f469e3714ee6a972c0d96cd67954b1e37fb4830b27"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0",
+      "bytes": 48152,
+      "sha256": "3582bce922d99959ee3eb6b7d686c0b99e14c2135616ad4d9d608b2118a7e78c"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.555.42.02",
+      "bytes": 22987712,
+      "sha256": "71cc9fa5f8377db1fd177d9fc6cb45ca97586f81c2f30797194905e4ea825604"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libopen-pal.so.40.30.2",
+      "bytes": 700256,
+      "sha256": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libopen-rte.so.40.30.2",
+      "bytes": 761608,
+      "sha256": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0",
+      "bytes": 1285888,
+      "sha256": "883ecfef9c8d3a2f17a1b8a3116e9e32d272f1c43e2088bf7837b98d2c50f5e2"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libpciaccess.so.0.11.1",
+      "bytes": 39424,
+      "sha256": "f1ca739f568225439e4a7957e09dd483359bf715f01d13396c436c74076cca53"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2",
+      "bytes": 75768,
+      "sha256": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libpsm2.so.2.2",
+      "bytes": 438296,
+      "sha256": "bc6e727a5385af004c2eac85e70681905790798529cb9ec90b789c9915a68f19"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libpthread.so.0",
+      "bytes": 21448,
+      "sha256": "fbed9505adacada2abb37c6b43be2df6de81e742712c6025694ba48de62c7e78"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libptscotch-6.1.3.so",
+      "bytes": 853488,
+      "sha256": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libptscotcherr-6.1.3.so",
+      "bytes": 14680,
+      "sha256": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0",
+      "bytes": 289592,
+      "sha256": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libresolv.so.2",
+      "bytes": 64456,
+      "sha256": "7230adfc1d3676f2485bec78f2d5c916d6becb15bc554ff95901f46800215194"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/librt.so.1",
+      "bytes": 14664,
+      "sha256": "5f20d34fb3bb4d84b4edeb6ca11fa5b48c705207253741619acab7cc758185fb"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/librtmp.so.1",
+      "bytes": 121864,
+      "sha256": "2401c4fc99c7b93e79648071224a6eb230dcb800184ccacc8e1854e33fc61445"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25",
+      "bytes": 105392,
+      "sha256": "344870a9ff3cfee1df28f518e9e93073df8d0522a288f016f06fdacbfa49eed8"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7",
+      "bytes": 446040,
+      "sha256": "e7162733430abba6f51e4a5186b9c61a6c706a63d4461182d5f66ce55f35507e"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30",
+      "bytes": 2260296,
+      "sha256": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2",
+      "bytes": 92312,
+      "sha256": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.2",
+      "bytes": 166240,
+      "sha256": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0",
+      "bytes": 1743016,
+      "sha256": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0",
+      "bytes": 30936,
+      "sha256": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+      "bytes": 166504,
+      "sha256": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13",
+      "bytes": 1967384,
+      "sha256": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11",
+      "bytes": 108936,
+      "sha256": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8",
+      "bytes": 841808,
+      "sha256": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+      "bytes": 395776,
+      "sha256": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3",
+      "bytes": 7092680,
+      "sha256": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so",
+      "bytes": 38017672,
+      "sha256": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_basic.so",
+      "bytes": 15032,
+      "sha256": "73dd820c7ce28b37ecc288e106008c7e25eb444910ceecc9c39e751c34494590"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_bucket.so",
+      "bytes": 14952,
+      "sha256": "840f38ddad79015cd9b462034f6050d496040c34ae65d28cd63b648ada9a60e9"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_bml_r2.so",
+      "bytes": 27512,
+      "sha256": "4a40fd9fea463b44580aac7303d4176806a39295a61a2a344a48055d96ff457f"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_self.so",
+      "bytes": 20968,
+      "sha256": "052b8eb02b650de08fbdd0fe1724a7da86c29cbaf4a0ce8a5e89717cde49aee2"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_sm.so",
+      "bytes": 14776,
+      "sha256": "b23fd800bdfe2daff3fe74cb99dc1de9c19f437352bce579cef7d9585037d0df"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_tcp.so",
+      "bytes": 84728,
+      "sha256": "c8c2cff0d5c056f4acf9400bc28614a15881404ccd7954c419636c2aa33b6887"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_adapt.so",
+      "bytes": 48480,
+      "sha256": "b9f1c8a26f7b8ad1529f085f26885c229f375246d3bab7e9d8350eb3d10b0d75"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_basic.so",
+      "bytes": 68168,
+      "sha256": "4f7a2151e1b566de99307a8faac82456088a5debab1bad6db2a0bd71802cb2a3"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_han.so",
+      "bytes": 114200,
+      "sha256": "362a195703a4d7b8d3851d43a8a89520adf778ff1e8fd6b00b751f8e31476c76"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_inter.so",
+      "bytes": 18920,
+      "sha256": "6b5e029e8acf72559f6dd8acc6e828dd72af8eb3d69fe98e0b0a94e96e8bec46"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_libnbc.so",
+      "bytes": 143312,
+      "sha256": "7c471ad91a2538e0e315af2697fde25747b4b4d42f3be4a0a588976b2f2fa726"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_self.so",
+      "bytes": 14792,
+      "sha256": "61826f87d8596e8b88146cf9a14043582d378fe277d99ab081b74f714bd528e9"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sm.so",
+      "bytes": 43888,
+      "sha256": "756d7c20c69ced45843f3200f4582deaae403243f123749236801a8ffc4dd248"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sync.so",
+      "bytes": 19104,
+      "sha256": "c14550b0cdb5407c5ea840dae1727db0bc608aac2f30d6a3e72a9841f7868b25"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_tuned.so",
+      "bytes": 81232,
+      "sha256": "54b234d1dff42ef92f4437be095d557d990153b960702f2edb98c78649ac5b3a"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_errmgr_default_app.so",
+      "bytes": 15136,
+      "sha256": "6231acb4ce2eb2281bb7051b4950c0c3f0c6a8e10e6f122acfe3c15f16b0855a"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_ess_singleton.so",
+      "bytes": 27728,
+      "sha256": "9e36ea68ba070279c6c964e08c5af596f774c5944c3aad1743e85b573af3ec1a"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mpool_hugepage.so",
+      "bytes": 23560,
+      "sha256": "286f789d85c8c499ad670678ee957e3e84f122c6c3e7647b0ac81ac1874cfa08"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm.so",
+      "bytes": 27872,
+      "sha256": "77fcec2b00102887a50f55c23575761655359a610890258166d6686d6b79a000"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm2.so",
+      "bytes": 32056,
+      "sha256": "abdf7c98aadd279811dfd3821bc44a4e2da5f2880bd03fee268fc323e64cac69"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_op_avx.so",
+      "bytes": 220888,
+      "sha256": "8240052b353a7ebfa9f894163c2a491fd1f47a742cca9490c4d4a7de76259e7b"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_rdma.so",
+      "bytes": 111688,
+      "sha256": "7ae12dfa0db4604fd69ea793e112a067817fbb24e6a9b89fe1b81bedb4147cd0"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_sm.so",
+      "bytes": 32104,
+      "sha256": "1e808a24af4ba80f1727cb5df31f25c2bac49632db11a7ee57a23d7d1ad11e7f"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pmix_ext3x.so",
+      "bytes": 131440,
+      "sha256": "a44d4cc1c9f9fde978a0d519b8305f609138283cc20694be4d1eb3105aab5722"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_cm.so",
+      "bytes": 44496,
+      "sha256": "78bbef9dbecc1e11d7c36425d176b653e32eada4d33e578a27b4ed99b7bed392"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_monitoring.so",
+      "bytes": 19208,
+      "sha256": "3904969c7ac96b24f637e36e0eac9d6daa2002fd590a39aa66ffaa28ca725a9b"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_ob1.so",
+      "bytes": 124792,
+      "sha256": "0ad5a81720593262e7c09ba98d3153527b18011ef68dba40984806c897beb880"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_rcache_grdma.so",
+      "bytes": 19288,
+      "sha256": "81066b828f2f070e0a9f8d9bd403c5c977f71a8957cc956cf37efb09862665b0"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_reachable_netlink.so",
+      "bytes": 19536,
+      "sha256": "5a606b631dfea7dbed5c0ccd81f84bc26f25080872068d0a9e382fbcf90fdda8"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_flux.so",
+      "bytes": 15048,
+      "sha256": "3d6050004330107889696420382517358e08664a9be3f90cd1f71acdbdceedc1"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_jsm.so",
+      "bytes": 15048,
+      "sha256": "452bf398f565aa69bfe2155a97f8fa5af0659ddff5fcb8b30ee36603bb66615b"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_ompi.so",
+      "bytes": 50656,
+      "sha256": "982d5490f7e0465af0228c7c27b416f51095b766f5d37c22d1c1ab6439780ff0"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_orte.so",
+      "bytes": 15048,
+      "sha256": "9a9fe6e13bb9b5db1acf7aa10485c9286cb03a9e1b66c1b244142c81f2aac054"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_slurm.so",
+      "bytes": 15112,
+      "sha256": "de18ee69766665d6c1063e714806e6449caa48a63f730749dca0ce311d8a2b48"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_shmem_mmap.so",
+      "bytes": 19280,
+      "sha256": "47b116b3a5eff9c50f16dbbe3fd912efd10bcdfb18791edb2a19adffb2ed3317"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_state_app.so",
+      "bytes": 15064,
+      "sha256": "9da7b32c694270f7f811f6962adfb6c36bdb91f6adc62c6fa121ea91427ef7bd"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/pmix2/lib/libpmix.so.2.5.2",
+      "bytes": 1808696,
+      "sha256": "651d3664e655fa125fe81101a00fea58dd0f3f5adf3aac84d7f59c93c995203a"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/pmix2/lib/pmix/mca_pcompress_zlib.so",
+      "bytes": 15000,
+      "sha256": "1132fb7e3ae88daab3bf16d3fc67637ef641eab0480735ea047233b89f19ef4a"
+    },
+    {
+      "path": "/usr/local/cuda-12.5/targets/x86_64-linux/lib/libOpenCL.so.1.0.0",
+      "bytes": 30856,
+      "sha256": "1552ec44b469da72e585a29ac7fd2aa98d7f99b9362b7fb8f3dcb2d6b603d3fb"
+    }
+  ],
+  "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib:",
+  "elapsed_seconds": 6.694216926000081,
+  "governing_attempts": 0,
+  "initialization_Lift": 0,
+  "primary_gauge_history_time_fixed_reference_exact": true,
+  "unchanged_original": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h2-20261111/study-v1/base-pilot-on/case.evolution.json": "253e2dbd3f68fa42e69bb1dff70efbbf31d2d762f6ffa9d3137e17bc529028b6",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h2-20261111/study-v1/base-pilot-on/CP.4/State.bin": "7bc8b5e147d5852db8986f32110b2d356872fdd3e0e2c7c0f79f5163a863d778"
+  },
+  "preceding_callback_report": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h2-20261111/study-v1/base-pilot-on/case.evolution.json",
+    "sha256": "253e2dbd3f68fa42e69bb1dff70efbbf31d2d762f6ffa9d3137e17bc529028b6"
+  },
+  "startup_report": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h2-20261111/loaded-runtime-v2/readback/case.evolution.json",
+    "sha256": "911871d894156bf857797c57d47378b004c0c60aac708f316ee6902c479fc775"
+  },
+  "scope": "startup alpha=0 audit does not replace the original completed callback"
+}

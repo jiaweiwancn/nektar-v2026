@@ -1,0 +1,109 @@
+{
+  "schema": "WJH2ComponentGatesV1",
+  "overall": "OBSTRUCTED",
+  "components": {
+    "physical_flat_boundary_operators": {
+      "status": "PASS",
+      "scope": "serial flat composite WJ Budget; production session path; 21 unique selected CTests"
+    },
+    "analytic_neutral_control": {
+      "status": "PASS",
+      "scope": "compatible full traction/top shear and epsilon flux; truncation error retained"
+    },
+    "digitization_and_provenance": {
+      "status": "PASS",
+      "symbols": 60,
+      "scope": "visually checked rough-case Fig.3; not experimental uncertainty bars"
+    },
+    "experimental_calibration": {
+      "status": "UNRESOLVED",
+      "scope": "conditional three-height h_s fit; material stress discrepancy; unmeasured spanwise variance/epsilon"
+    },
+    "flowing_physical_prefix": {
+      "status": "PASS",
+      "scope": "admissible base and half-dt refined T=.08; .01 nominal flow-through; not developed"
+    },
+    "original_matched_refined_dt_002": {
+      "status": "OBSTRUCTED",
+      "accepted_time": 0.04,
+      "rejected_time": 0.06,
+      "reason": "WJ_principal_in_plane_exit",
+      "positive_covariance": true
+    },
+    "bounded_refined_dt_001_diagnosis": {
+      "status": "PASS",
+      "accepted_steps": 8,
+      "time": 0.08,
+      "minimum_principal_over_nu_eff": 0.0003274181007134839
+    },
+    "available_common_time_field_sensitivity": {
+      "status": "PASS",
+      "scope": "fixed pilot U/k/outer-epsilon/wall/K/cutoff limits only; pressure REPORTED, not gated"
+    },
+    "field_norm_quadrature": {
+      "status": "PASS",
+      "normal_orders": [
+        8,
+        10
+      ],
+      "horizontal_orders": [
+        4,
+        6
+      ],
+      "absolute_floor": 1e-10
+    },
+    "same_native_node_independent_weak_algebra": {
+      "status": "PASS",
+      "maximum_component_error": 8.922260174605567e-14
+    },
+    "increased_outer_load_quadrature": {
+      "status": "UNRESOLVED",
+      "differences": [
+        3.813433140445466e-09,
+        4.353532897030665e-09
+      ],
+      "absolute_floor": 2e-09
+    },
+    "restart_rollback_cache_and_producer_lineage": {
+      "status": "PASS",
+      "scope": "source-built analytic transactions, physical Off/On, passive earlier/failed-producer fixtures"
+    },
+    "developed_precursor_T8": {
+      "status": "NOT_RUN",
+      "reason": "original hard stop; proposed continuation denied by automatic approval review before launch"
+    },
+    "evolved_missing_input_companion": {
+      "status": "NOT_RUN",
+      "reason": "base developed precursor not established; five preflight completions retained"
+    },
+    "curved_physical_open_boundaries": {
+      "status": "NOT_RUN",
+      "scope": "explicitly unsupported; H1 curved prescribed foundation retained"
+    },
+    "hill_validation": {
+      "status": "NOT_RUN"
+    },
+    "stationarity": {
+      "status": "NOT_REACHED",
+      "scope": "startup/short-transient uncancelled residuals exceed declared development criterion"
+    }
+  },
+  "evidence": {
+    "manifest_sha256": "2fc5ac13eff8a3b5d7858416a1594f2293d229cd6e576118767c2c71b0c8c1e7",
+    "summary_sha256": "604b6054efdc1a83ab55624a46c8da5f98a22c634b0a831ac437522d3da1cec4"
+  },
+  "accounting": {
+    "charged_units": 132,
+    "charged_seconds": 1795.6079541281797,
+    "closure_reserve": 600,
+    "unit_ceiling": 2200,
+    "seconds_ceiling": 21600,
+    "maximum_recorded_global_workers": 33,
+    "ledger": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj-h2-20261111/accounting.json",
+      "bytes": 296282,
+      "sha256": "cc707f2c43131b748b158eb99f306ec01092aa728c6e45f0c09fc8911eb0b186"
+    },
+    "build_time_scope": "separate /usr/bin/time receipts; not numerical-study seconds"
+  }
+}
