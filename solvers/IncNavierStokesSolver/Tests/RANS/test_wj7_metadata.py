@@ -36,6 +36,14 @@ class Metadata(unittest.TestCase):
         for f in NAMES:
             for norm in ('L2','sampled_Linf'):assert_allclose(full['fields'][f][norm],filtered['fields'][f][norm],rtol=1e-14,atol=1e-30)
         self.assertEqual(full['maximum_boundary_free_rows'],filtered['maximum_boundary_free_rows'])
+        from wj7_cache import build,estimate
+        with tempfile.TemporaryDirectory() as temp:
+            f=Path(temp)/'native.json';f.write_text('{}')
+            m.update(state_sha256='state',stage_history_sha256='history',time=0.,completed_stage=None,evaluation_basis_row_norm_max=[1.]*6)
+            c=dict(path=str(f),report=str(f),steps=0,rule_settings=settings,errors={})
+            cached=estimate(build(m,c),a)
+            for field in NAMES:
+                for norm in ('L2','sampled_Linf'):assert_allclose(full['fields'][field][norm],cached['fields'][field][norm],rtol=1e-14,atol=1e-30)
     def test_both_order_comparisons_integrate_the_complete_boundary(self):
         from wj4_measure import rule,comparison
         from wj7_qualification import consistent_comparison

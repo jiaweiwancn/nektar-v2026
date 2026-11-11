@@ -170,3 +170,15 @@ charged, while the obsolete quadrature-only duplicate and duplicate repair
 parent work are not projected as a second campaign. Every cost input, ledger
 basis and native receipt is snapshotted immutably before launch. Superseded
 unoptimized replay time remains charged to WJ-7.
+
+Before imports, a versioned sufficient-statistics cache may bind actual native
+row norms, dependent K/epsilon partitions, pressure rows composed with the full
+gauge, evaluation/accumulation data, weights and explicit owners to each source
+packet's byte hash. Its estimates must match the full retained calculation and
+all504 prefix leaves. These small immutable row records are streamed under each
+new coefficient envelope; no all-history full payload is retained. Matched field
+differences at historical immutable states can be reused only with identical
+observation/producer identities and a prior qualification binding. Every old
+leaf is re-gated with the enlarged, separate trajectory uncertainties. Only new
+time pairs require new full-payload comparisons. This is verified measurement
+reuse, not reuse of a bare success receipt or a reset of uncertainty/history.

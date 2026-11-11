@@ -111,7 +111,7 @@ def boundary_rows_estimate(m,envelope,settings):
     return boundary_uncertainty(dict(m,observations=selected),envelope,settings)
 
 
-def qualify(index,policy,design,end):
+def qualify(index,policy,design,end,cache_index=None,previous=None):
     """Only one full payload, or the current comparison pair, is live.
 
     The index consists of scalar records/immutable identities. Row-map passes
@@ -123,6 +123,11 @@ def qualify(index,policy,design,end):
     require(all(c['steps']==step and c['rule_settings']['order']==order for (tag,step,order),c in index.items()),
             'wrong observation role/order/absolute step')
     parts={};metrics={};envelopes={};sources={};parent_timings=[]
+    from wj7_cache import estimate as cached_estimate,verify as verify_cache
+    def row_cache(key):
+        require(cache_index and key in cache_index,'missing native sufficient-statistics cache')
+        identity=cache_index[key];verify_artifacts({identity['path']:identity})
+        value=read(identity['path']);verify_cache(value,index[key]);return value
     for tag in TAGS:
         records=[index[tag,step,8] for step in observation_steps(tag,end)]
         packets=[copy.deepcopy(c['arithmetic']) for c in records if c.get('arithmetic')]
@@ -132,7 +137,7 @@ def qualify(index,policy,design,end):
         basis=np.zeros(6);evaluation=np.zeros(6)
         for step in observation_steps(tag,end):
             for order in (8,10):
-                b,e=evaluation_metadata(index[tag,step,order])
+                cache=row_cache((tag,step,order));b,e=cache['basis'],cache['evaluation'];del cache
                 basis=np.maximum(basis,b);evaluation=np.maximum(evaluation,e)
         minimum={name:min(p['systems'][name]['physical_metric_min_eigenvalue'] for p in packets) for name in ('momentum','k','epsilon')}
         pressure=min(p['systems']['pressure']['physical_mass_operator_bound'] for p in packets)
@@ -150,24 +155,24 @@ def qualify(index,policy,design,end):
         boundary={f:dict(L2=0.,sampled_Linf=0.) for f in floors};coverage=[]
         for step in observation_steps(tag,end):
             for order in (8,10):
-                c=index[tag,step,order];start=time.monotonic();m=load_measurement(c)
-                errors=complete_errors(m,policy,c)
+                c=index[tag,step,order];start=time.monotonic();cache=row_cache((tag,step,order))
+                errors=cache['errors']
                 parent_timings.append(dict(tag=tag,step=step,order=order,load_evaluate_seconds=time.monotonic()-start))
-                require(errors==c['errors'],'replayed accuracy/interface/divergence decisions differ')
+                require(errors==c['errors'],'cached accuracy/interface/divergence decisions differ')
                 metrics[tag,step,order]=errors
                 parts['accuracy/'+tag+'/'+str(step)+'/'+str(order)]=errors['accuracy_gate']
-                estimate=boundary_rows_estimate(m,envelope,c['rule_settings'])
+                estimate=cached_estimate(cache,envelope)
                 for f,row in estimate['fields'].items():
                     for norm in ('L2','sampled_Linf'):boundary[f][norm]=max(boundary[f][norm],row[norm])
                 coverage.append(dict(step=step,order=order,state=c['state_sha256'],measurement_sha256=c['sha256']))
-                del m;gc.collect()
+                del cache;gc.collect()
             a,b=(metrics[tag,step,o] for o in (8,10))
             changes=[abs(a[k][s]['fields'][f]['L2']-b[k][s]['fields'][f]['L2'])
                 for k in ('continuum_error','initial_drift') for s in SCOPES for f in NAMES]
             parts['quadrature/'+tag+'/'+str(step)]=component('PASS' if max(changes)<=1e-10 else 'UNRESOLVED',maximum=max(changes),limit=1e-10)
         envelopes[tag]=dict(floors=floors,boundary=boundary,coefficient_envelope=envelope,coverage=coverage,
             maximum_basis=basis.tolist(),evaluation_sensitivity=evaluation.tolist())
-    rows=[];legacy_rows=[];comparisons={};integration_changes=[]
+    rows=[];legacy_rows=[];comparisons={};integration_changes=[];reused_comparisons=[]
     for order in (8,10):
         for group,ta,tb in (('horizontal','baseline','coarse'),('timestep','coarse','fine')):
             floors=sum_envelopes(envelopes[ta]['floors'],envelopes[tb]['floors'])
@@ -176,24 +181,46 @@ def qualify(index,policy,design,end):
             for step in (0,4,32,64,96,128):
                 if step>end:continue
                 ca=index[ta,step,order];cb=index[tb,step*2 if tb=='fine' else step,order]
-                a=load_measurement(ca);b=load_measurement(cb)
-                require(abs(a['time']-b['time'])<=2e-15,'common physical times differ')
-                legacy[str(step)]=comparison(a,b,policy,ca['rule_settings'])
-                diffs[str(step)]=consistent_comparison(a,b,policy,ca['rule_settings'])
-                integration_changes.append(dict(order=order,group=group,step=step,old_boundary_measure=legacy[str(step)]['constrained_boundary']['fields']['velocity']['measure'],new_boundary_measure=diffs[str(step)]['constrained_boundary']['fields']['velocity']['measure']))
-                del a,b;gc.collect()
+                prior=previous.get('comparisons',{}).get(group+'/'+str(order),{}).get(str(step)) if previous else None
+                if prior is not None:
+                    for tag,st,c in ((ta,step,ca),(tb,step*2 if tb=='fine' else step,cb)):
+                        old=previous['record_index'][tag+'/'+str(st)+'/'+str(order)]
+                        require(all(old[k]==c[k] for k in ('path','sha256','report','report_sha256')),'stale reused comparison context')
+                    diffs[str(step)]=prior;reused_comparisons.append([order,group,step])
+                else:
+                    a=load_measurement(ca);b=load_measurement(cb)
+                    require(abs(a['time']-b['time'])<=2e-15,'common physical times differ')
+                    diffs[str(step)]=consistent_comparison(a,b,policy,ca['rule_settings'])
+                    if end==32:legacy[str(step)]=comparison(a,b,policy,ca['rule_settings'])
+                    del a,b;gc.collect()
             gate=sensitivity_sequence(diffs,floors,design,list(diffs),scope_uncertainty={'constrained_boundary':boundary})
             parts[group+'/'+str(order)]=gate;comparisons[group+'/'+str(order)]=diffs
-            oldgate=sensitivity_sequence(legacy,floors,design,list(legacy),scope_uncertainty={'constrained_boundary':boundary})
-            for source,destination in ((gate,rows),(oldgate,legacy_rows)):
-                for step,g in source['components'].items():
+            for step,g in gate['components'].items():
+                if not step.isdigit():continue
+                for key,v in g['components'].items():
+                    scope,field,norm=key.split('/')
+                    rows.append(dict(key=[order,group,int(step),scope,field,norm],**v))
+            if legacy:
+                oldgate=sensitivity_sequence(legacy,floors,design,list(legacy),scope_uncertainty={'constrained_boundary':boundary})
+                for step,g in oldgate['components'].items():
                     if not step.isdigit():continue
                     for key,v in g['components'].items():
                         scope,field,norm=key.split('/')
-                        destination.append(dict(key=[order,group,int(step),scope,field,norm],**v))
+                        legacy_rows.append(dict(key=[order,group,int(step),scope,field,norm],**v))
+    cache_difference=0.
+    if end==32 and previous:
+        for tag in TAGS:
+            for kind in ('floors','boundary'):
+                for field,value in envelopes[tag][kind].items():
+                    for norm in ('L2','sampled_Linf'):
+                        cache_difference=max(cache_difference,abs(value[norm]-previous['envelopes'][tag][kind][field][norm]))
+        require(cache_difference<=1e-15,'cached all-history row estimator differs from full retained replay')
+        require(len(reused_comparisons)==12,'retained comparison coverage missing')
+        legacy_rows=copy.deepcopy(previous['legacy_sensitivity'])
+        integration_changes=copy.deepcopy(previous['comparison_quadrature_correction'])
     parts['tuple_coverage']=tuple_gate(rows,end)
     return dict(schema='WJ7StreamedPrefixQualificationV1',policy=policy,end=end,gate=aggregate(parts),parent_timings=parent_timings,
-        sensitivity=rows,legacy_sensitivity=legacy_rows,comparison_quadrature_correction=integration_changes,envelopes=envelopes,comparisons=comparisons,
+        sensitivity=rows,legacy_sensitivity=legacy_rows,reused_comparisons=reused_comparisons,cache_replay_maximum_envelope_difference=cache_difference,comparison_quadrature_correction=integration_changes,envelopes=envelopes,comparisons=comparisons,
         memory_contract='one full row-map payload or current comparison pair/order; no all-history payload cache',
         record_index={tag+'/'+str(step)+'/'+str(order):dict(path=c['path'],sha256=c['sha256'],report=c['report'],report_sha256=c['report_sha256'])
             for (tag,step,order),c in index.items()})

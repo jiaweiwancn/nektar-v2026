@@ -87,12 +87,13 @@ class Study(WJ6Study):
         self.code=dict(native_case_inputs=artifacts([SCRIPTS/n for n in ('wj2_cases.py','cls_epawf_m4_cases.py','cls_epawf_m3_cases.py','EquilibriumWallFlat.xml')]),
             execution_engine=artifacts([Path(__file__),SCRIPTS/'wj_immutable.py',SCRIPTS/'wj6_resources.py',SCRIPTS/'wj7_lineage.py']))
         self.measure_code=artifacts([SCRIPTS/n for n in ('run_wj7_native.py','run_wj6_native.py','run_wj5_native.py','wj3_measure.py','wj4_measure.py',
-            'wj5_measure.py','wj6_qualification.py','wj6_arithmetic.py','wj7_qualification.py','wj4_qualification.py','wj_qualification.py','test_wj2_native.py','validate_wj1.py')])
+            'wj5_measure.py','wj6_qualification.py','wj6_arithmetic.py','wj7_qualification.py','wj7_cache.py','wj4_qualification.py','wj_qualification.py','test_wj2_native.py','validate_wj1.py')])
         self.measure_version=digest(self.measure_code)[:12]
         self.resource_file=self.root/'resource-design.json'
         self.design=dict(schema='WJ7FrozenRunIntentV1',policy=policy,runtime=self.runtime,source=artifacts([SCRIPTS.parents[3]/'docs/plans/wj7-contract.md']),
             code=self.code,parent=file_identity(a.root/'correction.json'),equivalence=file_identity(a.root/'native-equivalence.json'),
             retained_replay=file_identity(a.root/a.replay_name/(policy+'.json')),
+            prefix_row_cache=file_identity(a.root/('prefix-row-cache-index-'+policy+'.json')),
             meshes=dict(L2=normal_knots(2)),xknots=[[0.,1.],[0.,.5,1.]],amplitudes=AMP,budgets=BUDGET,sensitivity_fraction=.1,
             start=dict(coarse=32,fine=64,baseline=32),targets=[64,96,128],dt=dict(coarse=3.2e-5,fine=1.6e-5,baseline=3.2e-5),
             final_time=.004096,absolute_steps=True,drift_origin='original WJ-6 native CP0/fixed_reference',observation_orders=[8,10],xorders=[4,6],
@@ -149,10 +150,12 @@ class Study(WJ6Study):
         if arithmetic:
             c['arithmetic']=self.arithmetic(name,d,m)
             c['arithmetic']['absolute_steps']=d['steps']
+        self.cache_row(m,c,tag,end,8)
         del m;gc.collect()
         m,q=self.measure(tag+'-'+str(end)+'-q10x6',d,folder,nx=nx,order=10,xorder=6,diagnostics=True)
         q.update(tag=tag,dt=d['dt'],native_receipt=file_identity(folder/'receipt.json'))
         require(m['represented_initial_sha256']==self.s['origins'][tag]['represented_initial_sha256'],'order10 original CP0 changed')
+        self.cache_row(m,q,tag,end,10)
         del m;gc.collect()
         changes=[abs(c['errors'][k][s]['fields'][f]['L2']-q['errors'][k][s]['fields'][f]['L2']) for k in ('continuum_error','initial_drift')
             for s in ('full','central','constrained_boundary') for f in AMP]
@@ -162,6 +165,15 @@ class Study(WJ6Study):
             write_once(out,rec);rec['qualified_record']=file_identity(out)
         self.s.setdefault('order10',{})[tag+'/'+str(end)]=q
         return c
+
+    def cache_row(self,m,c,tag,step,order):
+        from wj7_cache import build
+        out=self.root/'native-row-cache'/(tag+'-'+str(step)+'-'+str(order)+'.json')
+        write_once(out,build(m,c));c['row_cache']=file_identity(out)
+
+    def cache_index(self,end):
+        old=read(self.a.root/('prefix-row-cache-index-'+self.a.policy+'.json'))['records']
+        return {key:c.get('row_cache') or old[key[0]+'/'+str(key[1])+'/'+str(key[2])] for key,c in self.index(end).items()}
 
     def import_endpoints(self):
         old,q10,supp=sealed_prefix(self.a.parent,self.a.policy);correction=read(self.a.root/'correction.json')
@@ -198,7 +210,8 @@ class Study(WJ6Study):
     def replay(self,end):
         out=self.root/('qualification-'+str(end)+'.json')
         require(not out.exists(),'immutable qualification already exists')
-        started=time.time();result=qualify(self.index(end),self.a.policy,self.design,end)
+        previous=read(self.root/('qualification-'+str(end-32)+'.json')) if end>32 else None
+        started=time.time();result=qualify(self.index(end),self.a.policy,self.design,end,self.cache_index(end),previous)
         if end==32:
             old=sealed_prefix(self.a.parent,self.a.policy)[2];differences=[]
             for row in result['legacy_sensitivity']:
@@ -213,6 +226,7 @@ class Study(WJ6Study):
         self.s['components']['prefix_'+str(end)]=result['gate'];self.s['last_qualification']=file_identity(out);self.save();return result
 
     def row(self,end):
+        start_time=time.monotonic();commands_before=self.ledger.totals()['command_seconds']
         for tag,target in (('coarse',end),('fine',2*end),('baseline',end)):
             t=self.s['trajectories'][tag];last=t['trajectory'][-1];start=int(last['steps']);cp=last['checkpoint']
             require(target>start,'already executed row cannot be relaunched')
@@ -226,7 +240,11 @@ class Study(WJ6Study):
                     c=self.observe(tag,stop,d,folder,True);t['trajectory'].append(c);self.save()
                     require(c['errors']['accuracy_gate']['status']=='PASS' and c['quadrature']['status']=='PASS',
                             'OBSTRUCTED: required cadence accuracy/quadrature failed; no further native advance')
-        return self.replay(end)
+        result=self.replay(end)
+        elapsed=time.monotonic()-start_time;child=self.ledger.totals()['command_seconds']-commands_before
+        parent=max(0,elapsed-child);cost=dict(end=end,whole_seconds=elapsed,child_seconds=child,parent_seconds=parent,
+            prefix_qualification_seconds=result['seconds'],production_parent_seconds_per_pair=max(0,parent-result['seconds'])/3)
+        write_once(self.root/('row-cost-'+str(end)+'.json'),cost);return result
 
 
 def projection(a,policy,end):
@@ -274,7 +292,8 @@ def projection(a,policy,end):
     # an explicit additional allowance for independent loads/diagnosis and
     # serialization, validated by the passive production replay below.
     profile=read(a.root/'production-profile'/ (policy+'.json'))
-    production_parent=3*rows*profile['maximum_parent_pair_seconds']*1.25
+    observed_parent=[read(f)['production_parent_seconds_per_pair']+5 for f in folder.glob('row-cost-*.json')]
+    production_parent=3*rows*max([profile['maximum_parent_pair_seconds'],*observed_parent])*1.25
     parent=prefix_parent+production_parent
     launches=sum(math.ceil(n/32) for n in remaining.values());launch_overhead=launches*5*1.25
     estimate=sum(remaining[t]*rates[t] for t in rates)+observation+svd+parent+launch_overhead+600
@@ -299,7 +318,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root',type=Path,required=True);p.add_argument('--parent',type=Path,required=True)
     p.add_argument('--solver',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
-    p.add_argument('--mode',choices=('prepare','retained-replay','production-profile','import','replay','admit','cadence'),required=True)
+    p.add_argument('--mode',choices=('prepare','prepare-caches','cached-replay','production-profile','import','replay','admit','cadence'),required=True)
     p.add_argument('--replay-name',default='retained-replay')
     p.add_argument('--end',type=int,choices=(32,64,96,128),default=32);a=p.parse_args()
     require(platform.system()=='Linux','Linux is authoritative');os.environ.update(THREADS)
@@ -312,7 +331,24 @@ def main():
             eq=verify_parent(a.parent,SCRIPTS.parents[3]);write_once(a.root/'native-equivalence.json',eq)
             correct_stage_map(a.parent,a.root/'correction.json')
         print('semantic correction and native equivalence PASS');return
-    if a.mode=='retained-replay':
+    if a.mode=='prepare-caches':
+        from wj7_cache import build
+        from wj7_qualification import load_measurement
+        for policy in ('EP','Budget'):
+            ledger=Ledger(a.root,policy,cap=800)
+            with session(ledger,'prepare-caches'):
+                old,q10,_=sealed_prefix(a.parent,policy);records={}
+                for tag,t in old['trajectories'].items():
+                    for c8 in [t['initial']]+t['trajectory']:
+                        step=int(c8['steps'])
+                        for order,c in ((8,c8),(10,q10[tag+'/'+str(step)])):
+                            m=load_measurement(c);out=a.root/'native-row-cache'/policy/(tag+'-'+str(step)+'-'+str(order)+'.json')
+                            write_once(out,build(m,c));records[tag+'/'+str(step)+'/'+str(order)]=file_identity(out)
+                            del m;gc.collect()
+                write_once(a.root/('prefix-row-cache-index-'+policy+'.json'),dict(records=records,
+                    previous_full_replay=file_identity(a.root/'retained-replay'/(policy+'.json')),code=artifacts([SCRIPTS/'wj7_cache.py'])))
+        return
+    if a.mode in ('retained-replay','cached-replay'):
         for policy in ('EP','Budget'):
             ledger=Ledger(a.root,policy,cap=800)
             with session(ledger,'retained-replay'):
@@ -320,7 +356,12 @@ def main():
                 for tag,t in old['trajectories'].items():
                     for c in [t['initial']]+t['trajectory']:
                         step=int(c['steps']);index[tag,step,8]=c;index[tag,step,10]=q10[tag+'/'+str(step)]
-                start=time.time();result=qualify(index,policy,dict(amplitudes=AMP,budgets=BUDGET,sensitivity_fraction=.1),32)
+                caches=None;previous=None
+                if a.mode=='cached-replay':
+                    info=read(a.root/('prefix-row-cache-index-'+policy+'.json'));verify_artifacts(info['code'])
+                    caches={tuple([name.split('/')[0],int(name.split('/')[1]),int(name.split('/')[2])]):v for name,v in info['records'].items()}
+                    verify_artifacts({info['previous_full_replay']['path']:info['previous_full_replay']});previous=read(info['previous_full_replay']['path'])
+                start=time.time();result=qualify(index,policy,dict(amplitudes=AMP,budgets=BUDGET,sensitivity_fraction=.1),32,caches,previous)
                 changes=[]
                 for row in result['legacy_sensitivity']:
                     order,group,step,scope,field,norm=row['key']
