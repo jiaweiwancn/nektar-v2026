@@ -118,6 +118,24 @@ def main():
         ax.grid(alpha=.2)
     axes[-1].legend(fontsize=6)
     save(fig, 'interface-diagnostics')
+    residuals = load('residuals')
+    fig, axes = plt.subplots(2, 4, figsize=(13, 6.3), sharex=True)
+    for ax, block in zip(axes.flat, ('u', 'w', 'k', 'entire_outer_epsilon',
+                                    'inner_continuity', 'outer_continuity', 'gauge', 'boundary_trace')):
+        for policy, marker in (('EP', 'o'), ('Budget', 'x')):
+            q = sorted((r for r in residuals if r['policy'] == policy and r['tag'] == 'coarse' and
+                        r['block'] == block), key=lambda r: float(r['time']))
+            for key, style in (('uncancelled_spatial', '-'), ('actual_completed_stage', '--')):
+                values = [r for r in q if r[key] != '']
+                ax.semilogy([float(r['time']) for r in values], [max(float(r[key]), 1e-24) for r in values],
+                            marker+style, ms=3, label=policy+' '+key)
+        ax.set_title(block)
+        ax.set_ylabel('consistent-mass dual physical norm')
+        ax.set_xlabel('physical time [s]')
+        ax.grid(alpha=.2)
+        ax.legend(fontsize=5)
+    fig.suptitle('Uncancelled spatial residuals and actual callback-stage defects; coarse L2/Nx2')
+    save(fig, 'spatial-residual-and-stage-defect')
     manifest = {f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in out.iterdir() if f.is_file()}
     (out/'figures.json').write_text(json.dumps(dict(schema='WJ6ScientificFiguresV1', files=manifest,
         scope='serial flat2D finite reference-Dirichlet strip; residuals and actual-stage defects remain separate tables'), indent=2)+'\n')

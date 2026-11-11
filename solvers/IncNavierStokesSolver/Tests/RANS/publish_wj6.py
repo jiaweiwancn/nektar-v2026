@@ -68,7 +68,11 @@ def main():
                     for i,value in enumerate(c['spatial_residual']):
                         rows['residuals'].append(dict(prefix,block=('u','w','k','entire_outer_epsilon','inner_continuity','outer_continuity','gauge','boundary_trace')[i],
                             uncancelled_spatial=value,actual_completed_stage=c['stage_defect'][i] if c['stage_defect'] else None))
-                    rows['interfaces'].append(dict(prefix,**{k:v for k,v in c['errors']['interface'].items() if not isinstance(v,list)},strong_divergence=c['errors']['strong_divergence']))
+                    interface=c['errors']['interface']
+                    rows['interfaces'].append(dict(prefix,**{k:v for k,v in interface.items() if not isinstance(v,list)},
+                        sampled_K_min=interface['sampled_K'][0],sampled_K_max=interface['sampled_K'][1],
+                        cutoff_min=interface['cutoff'][0],cutoff_max=interface['cutoff'][1],
+                        strong_divergence=c['errors']['strong_divergence']))
                     for key,v in leaves(c['errors']['accuracy_gate']):
                         rows['accuracy-gates'].append(dict(prefix,quantity=key,**v,margin=v.get('limit',0)-v.get('value',0)))
                     for kind in ('independent_loads','independent_near_h','independent_weak_modes'):
@@ -123,6 +127,9 @@ def main():
             for f in scope.rglob('*'):
                 if f.is_file() and 'CMakeFiles' not in f.parts and f.suffix in ('.xml','.json','.bin','.log') and 'Testing' not in f.parts:
                     index[str(f.resolve())]=file_identity(f)
+        for scope in (r/'resource-projections-v1',):
+            for f in scope.rglob('*'):
+                if f.is_file() and f.suffix!='.lock':index[str(f.resolve())]=file_identity(f)
         index_path=r/('artifact-index-'+out.name+'.json');write_once(index_path,index)
         git=lambda folder,*args:subprocess.check_output(['git','-c','core.filemode=false','-C',str(folder),*args],text=True).strip()
         producer=a.producer_source.resolve();driver=a.driver_source.resolve()
