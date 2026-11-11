@@ -54,12 +54,17 @@ def check(probe, summary, output):
         checkpoint_sha256=sha(Path(report['checkpoint'])/'State.bin'))
     observe('wrong-native-history',terminal,'open native GLM history differs')
     failed=Path(runs['rejected']['report']);d=load(failed)
+    # The abort publishes no new checkpoint. The original step-one producer
+    # owns the immutable accepted checkpoint and its genuine callback.
+    original_cp=load(runs['one']['report'])['checkpoint']
     predecessor=dict(packet,native_report=str(failed),native_report_sha256=sha(failed),
-        native_checkpoint=d['checkpoint'],checkpoint_sha256=sha(Path(d['checkpoint'])/'State.bin'))
+        native_checkpoint=original_cp,checkpoint_sha256=sha(Path(original_cp)/'State.bin'))
     observe('failed-role-required',predecessor,'requires an explicit diagnostic role')
-    pred=observe('accepted-predecessor',dict(predecessor,allow_failed_producer=True))
-    require(pred['state_sha256']==earlier['state_sha256'] and pred['producer_failure'],
-        'failed producer promoted rejected state or lost diagnostic role')
+    # This failed report contains only a restart-start audit for its accepted
+    # predecessor, with alpha=0. It cannot replace the preceding producing
+    # callback, even though the checkpoint/state is correct.
+    observe('startup-is-not-callback',dict(predecessor,allow_failed_producer=True),
+        'open accepted audit/callback binding differs')
     require(all(sha(p)==h for p,h in immutable.items()),'passive fixtures altered original producer bytes')
     result=dict(status='PASS',governing_attempts=0,original_summary=str(summary),original_summary_sha256=sha(summary),
         selected_earlier_step=1,producer_step=2,unchanged=immutable,receipts=receipts)
