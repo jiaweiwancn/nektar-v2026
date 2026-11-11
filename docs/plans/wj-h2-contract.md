@@ -159,3 +159,23 @@ strict. No interior sample or field is clipped. Source-built Budget and legacy
 controls qualify the shared projection change. Measurement packets can request
 physical coordinates directly; production code contains no experimental point
 list. Preserve producer/observer identities across this development correction.
+
+The first flowing study is closed OBSTRUCTED: coarse four steps at dt=.02 and
+fine eight at dt=.01 reached T=.08, with exact Off/On trajectories. The predefined
+1966-state normal refinement accepted two steps to T=.04; its T=.06 candidate
+failed the in-plane principal predicate with positive covariance and no numerical
+correction. No T=8 continuation is admitted. Preserve its complete failed state,
+incoming history and accepted predecessor. Authorize one diagnostic refined
+half-timestep companion: fresh compatible CP0, dt=.01, at most eight steps to
+T=.08, stopping at the first hard/correction exit. Reserve300s and8 units plus
+zero-step startup/passive time in the SAME H2 ledger. This diagnoses timestep
+sensitivity, does not replace the failed study or admit a new campaign.
+
+New versioned passive observations may select earlier accepted native checkpoints
+from their full original producing report, or an accepted predecessor retained
+in a failed report under an explicit diagnostic role. Bind exact selected state,
+step/time, fixed reference and actual per-entry callback/audit. Terminal native
+histories retain full report equality checks; earlier native checkpoint histories
+retain their checksum/signature and primary-state checks and are reported as
+such. Never use a zero-step report to fabricate a preceding callback or promote
+the rejected candidate to an accepted checkpoint.

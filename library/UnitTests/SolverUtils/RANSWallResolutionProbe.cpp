@@ -199,7 +199,8 @@ int main(int argc,char **argv)
             const auto reportHash=RANSWallR3::HashFile(reportPath);
             Require(reportHash==packet.get<std::string>("native_report_sha256"),"open producing report SHA256 differs");
             Tree native;boost::property_tree::read_json(reportPath,native);
-            Require(native.get<std::string>("failure").empty(),"open readback requires an accepted native producer");
+            Require(native.get<std::string>("failure").empty() || packet.get<bool>("allow_failed_producer",false),
+                "open readback of an accepted predecessor in a failed report requires an explicit diagnostic role");
             const auto signature=RANSWallPhysicsSignature(patch,serial,0.,false,us,{1.,0.},false);
             Require(signature==native.get<std::string>("signature"),"open native physical signature differs");
             const auto cpPath=packet.get<std::string>("native_checkpoint");
@@ -208,23 +209,38 @@ int main(int argc,char **argv)
             double dt;serial->LoadParameter("TimeStep",dt);
             const auto cp=RANSWallTimeIntegration::ReadCheckpoint(cpPath,signature,1,dt,patch.Size(),patch.DifferentialSize());
             const auto &state=cp.coupledState;const double time=cp.integration.time;
-            Require(cp.integration.steps==native.get<std::size_t>("steps") && time==native.get<double>("time") &&
-                RANSWallR3::Hash(state)==RANSWallR3::Hash(Read(native,"state")),"open state/time producer differs");
+            const auto producerSteps=native.get<std::size_t>("steps");
+            const auto &accepted=native.get_child("accepted_states"),&packets=native.get_child("wj_audit_packets");
+            Require(!accepted.empty() && accepted.size()==packets.size() && producerSteps+1>=accepted.size(),"open accepted lineage shape differs");
+            const auto first=producerSteps+1-accepted.size();
+            Require(first<=cp.integration.steps && cp.integration.steps<=producerSteps,"open checkpoint outside producer accepted lineage");
+            auto ai=accepted.begin(),pi=packets.begin();std::advance(ai,cp.integration.steps-first);std::advance(pi,cp.integration.steps-first);
+            Vector acceptedState;for(const auto &v:ai->second)acceptedState.push_back(v.second.get_value<double>());
+            Require(RANSWallR3::Hash(state)==RANSWallR3::Hash(acceptedState) && time==pi->second.get<double>("time"),"open selected state/time producer differs");
             Require(RANSWallR3::Hash(cp.fixedReference)==RANSWallR3::Hash(Read(native,"fixed_reference")),"open fixed reference differs");
-            std::size_t slot=0;for(const auto &v:native.get_child("native_history"))
-            {Vector h;for(const auto &x:v.second)h.push_back(x.second.get_value<double>());
-                Require(slot<cp.integration.history.size() && RANSWallR3::Hash(h)==RANSWallR3::Hash(cp.integration.history[slot++]),"open native GLM history differs");}
-            Require(slot==cp.integration.history.size() && Read(native,"native_history_times")==cp.integration.times,"open native history time labels differ");
+            Require(RANSWallR3::Hash(Vector(state.begin(),state.begin()+patch.DifferentialSize()))==RANSWallR3::Hash(cp.integration.state),
+                "open native integrator primary state differs from coupled fields");
+            std::vector<std::string> checkpointHistory;
+            for(const auto &slot:cp.integration.history)checkpointHistory.push_back(J::Quote(RANSWallR3::Hash(slot)));
+            if(cp.integration.steps==producerSteps)
+            {
+                Require(time==native.get<double>("time") && RANSWallR3::Hash(state)==RANSWallR3::Hash(Read(native,"state")),"open terminal state differs");
+                std::size_t slot=0;for(const auto &v:native.get_child("native_history"))
+                {Vector h;for(const auto &x:v.second)h.push_back(x.second.get_value<double>());
+                    Require(slot<cp.integration.history.size() && RANSWallR3::Hash(h)==RANSWallR3::Hash(cp.integration.history[slot++]),"open native GLM history differs");}
+                Require(slot==cp.integration.history.size() && Read(native,"native_history_times")==cp.integration.times,"open native history time labels differ");
+            }
             patch.RestoreReference(cp.fixedReference,cp.fixedDefect,cp.eta,data,time);
             Vector history=state;double alpha=0;
             if(cp.integration.steps>0)
             {
-                history=Read(native,"last_stage_history");alpha=native.get<double>("last_stage_alpha");
-                Require(history.size()==state.size() && alpha==1/dt && native.get<double>("last_stage_time")==time &&
-                    native.get<int>("implicit_callback_count")>0,"open completed callback must come from its producing report");
-                const auto &audit=native.get_child("wj_audit_packets").back().second;
-                Require(audit.get<std::string>("state_sha256")==RANSWallR3::Hash(state) &&
+                const auto &audit=pi->second;history=Read(audit,"callback_history");alpha=audit.get<double>("alpha_mass");
+                Require(history.size()==state.size() && alpha==1/dt && native.get<int>("implicit_callback_count")>0 &&
+                    audit.get<std::string>("state_sha256")==RANSWallR3::Hash(state) &&
                     audit.get<std::string>("stage_history_sha256")==RANSWallR3::Hash(history),"open accepted audit/callback binding differs");
+                if(cp.integration.steps==producerSteps)Require(native.get<double>("last_stage_time")==time &&
+                    native.get<double>("last_stage_alpha")==alpha && RANSWallR3::Hash(Read(native,"last_stage_history"))==RANSWallR3::Hash(history),
+                    "open completed callback must come from its producing report, not a zero-step restart");
             }
             std::string diagnostics,assembly,reuse="null",domain,weak="null";
             Vector spatial,stage,spatialNorms,stageNorms;
@@ -256,6 +272,10 @@ int main(int argc,char **argv)
                 checkpointHash==RANSWallR3::HashFile(cpPath+"/State.bin"),"open passive reader changed saved bytes or lifted state");
             std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},
                 {"report_sha256",J::Quote(reportHash)},{"checkpoint_sha256",J::Quote(checkpointHash)},
+                {"selected_absolute_step",J::Number(cp.integration.steps)},{"producer_absolute_step",J::Number(producerSteps)},
+                {"producer_failure",J::Quote(native.get<std::string>("failure"))},
+                {"checkpoint_native_history_sha256",J::List(checkpointHistory)},
+                {"checkpoint_native_history_times",J::Numbers(cp.integration.times)},
                 {"state_sha256",J::Quote(RANSWallR3::Hash(state))},{"callback_history_sha256",J::Quote(RANSWallR3::Hash(history))},
                 {"open_boundary",diagnostics},{"weak_checks",weak},{"scalar_domain",domain},{"assembly_checks",assembly},{"reuse_checks",reuse},
                 {"spatial_residual",J::Numbers(spatial)},{"actual_completed_stage_residual",J::Numbers(stage)},
