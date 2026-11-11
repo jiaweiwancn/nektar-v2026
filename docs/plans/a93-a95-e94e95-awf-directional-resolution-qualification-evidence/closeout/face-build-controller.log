@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/face-probe-build-controller-v1.py", line 13, in <module>
+    out=r/'runtime-face-decomposition-v1';out.mkdir();(out/'lib').symlink_to(r/'runtime/lib');shutil.copy2(r/'build/bin/RANSPreservationProbe',out/'RANSPreservationProbe')
+  File "/usr/lib/python3.10/shutil.py", line 434, in copy2
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.10/shutil.py", line 254, in copyfile
+    with open(src, 'rb') as fsrc:
+FileNotFoundError: [Errno 2] No such file or directory: '/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build/bin/RANSPreservationProbe'

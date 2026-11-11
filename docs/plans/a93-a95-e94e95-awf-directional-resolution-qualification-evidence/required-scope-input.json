@@ -1,0 +1,78 @@
+{
+  "schema": "DirectionalResolutionRequiredScopeV1",
+  "numerical_operator": "GeneratedVolumeOwnerV1",
+  "layout": {
+    "fields": [
+      6,
+      5
+    ],
+    "pressure": [
+      4,
+      3
+    ]
+  },
+  "unknown_limit": 3000,
+  "response_max_time": 0.016,
+  "A93_response_out_of_scope": true,
+  "gates": {
+    "directional_capability": {
+      "status": "pass",
+      "sources": [
+        "directional-layout-v2/results.json",
+        "directional-export-layout-v1/results.json"
+      ]
+    },
+    "isotropic_compatibility": {
+      "status": "pass",
+      "source": "isotropic-compatibility-v1/results.json",
+      "sha256": "aff9e16d2ee112799020359cc467f97469b6a52855713b74551034fb4e1f51e9"
+    },
+    "frozen_scalar_reconciliation": {
+      "status": "pass",
+      "source": "frozen-scalar-reconciliation-v1/results.json",
+      "sha256": "9f2f6d479cecd6a785cef9d46e6c733a2da3d740c1bc584b72d134cc807927d6"
+    },
+    "geometry": {
+      "status": "pass",
+      "source": "directional-geometry-v1/results.json",
+      "sha256": "859055fb43e26df95d96992c8f4b9dd0f39097b3088a3aae92e3404a0f8a5ec6"
+    },
+    "history_cache_CLS": {
+      "status": "pass",
+      "source": "directional-history-v3/results.json",
+      "sha256": "a90f73bb26dfec926141a06e0a3e2d15a179fba493151e0a37ff0d4e92eb9b92"
+    },
+    "required_short_verification": {
+      "status": "pass",
+      "source": "scope-negative-execution.json",
+      "sha256": "f1953c20a7d13ceef74556b84de47db89603e2ab65f0b65c39c3d6d3d77b315f"
+    },
+    "A93_mesh_candidate": {
+      "status": "failed_or_unresolved",
+      "source": "a93-redistribution-v2/results.json",
+      "sha256": "a72869bc49ac50a6f2010f29286fb4444964ec6eb91136b659e342a37a0c8433"
+    },
+    "A95_neutral_control": {
+      "status": "pass"
+    },
+    "A95_response_fields": {
+      "status": "failed_or_unresolved",
+      "source": "directional-resolution-supplement-v1/response-comparison/results.json",
+      "sha256": "968d5016187f8d4ce72a9e0bf52e317994378df5ead8524a623e2424384a2e69"
+    },
+    "A95_response_native_weak": {
+      "status": "pass",
+      "source": "response-audits/A95-N-Accepted-directional-dt-0.002-response-0.016/results.json",
+      "sha256": "957f38683b27b8796567ebb4b5f81d5d9d0d9ed989ca95a10d9053d8aec05f36"
+    },
+    "physical_budget_reconstruction": {
+      "status": "pass"
+    },
+    "physical_budget_accuracy": {
+      "status": "failed_or_unresolved",
+      "primitive_status": "failed_or_unresolved",
+      "binding_sha256": "40cfc71f860917b9616d15750060638acd14d755e3ff46497cff27035d91e462"
+    }
+  },
+  "historical_status_unchanged": true
+}

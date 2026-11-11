@@ -1,0 +1,29 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "name": "native_export_all_file_hashes",
+      "status": "pass"
+    },
+    {
+      "name": "command_line_scope_recomputation",
+      "status": "pass",
+      "required_scientific_job_exit_code": 1,
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/classify_rans_directional_scope.py",
+        "--input",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/compact-export-v1/required-scope-input.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/final-scope-recheck.json"
+      ]
+    },
+    {
+      "name": "all_primary_native_histories_untouched",
+      "status": "pass",
+      "proof": "collector revalidated all eight native endpoint seals and exact budget member/report bindings"
+    }
+  ],
+  "parent_export_SHA256SUMS_sha256": "36ffe677457dc5f9263c73fb1d48e2799b5d3f48160b676861a80f13c02f401a"
+}

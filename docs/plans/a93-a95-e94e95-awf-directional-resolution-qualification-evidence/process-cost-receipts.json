@@ -1,0 +1,2006 @@
+[
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-decomposition-execution.json",
+    "value": {
+      "events": [
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/audit_rans_balanced_evolved.py",
+            "--root",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2",
+            "--analysis-runtime",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/runtime-resolution-v3",
+            "--campaign-root",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2",
+            "--label",
+            "A93-N-Accepted-duration-0.002-B5-dt2",
+            "--output-label",
+            "A93-N-Accepted-duration-0.002-0.016-B5-dt2",
+            "--times",
+            ".016",
+            "--common-directory",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/diagnosis/A93-Natural-Accepted/common"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 53.43245411902899,
+          "process_cpu_seconds": 44.368896
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/audit_rans_balanced_evolved.py",
+            "--root",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2",
+            "--analysis-runtime",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/runtime-resolution-v3",
+            "--campaign-root",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2",
+            "--label",
+            "A93-N-Accepted-duration-0.002-B11-dt2",
+            "--output-label",
+            "A93-N-Accepted-duration-0.002-0.016-B11-dt2",
+            "--times",
+            ".016",
+            "--common-directory",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/diagnosis/A93-Natural-Accepted/common"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 65.99163371603936,
+          "process_cpu_seconds": 49.856401999999996
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/diagnose_rans_duration_residual.py",
+            "--root",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2",
+            "--admission",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/admissions/A93-N-Accepted.json",
+            "--cohort",
+            "A93-N-Accepted-duration-0.002",
+            "--time",
+            ".016",
+            "--output",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/signed-load-supplement"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 26.33468458597781,
+          "process_cpu_seconds": 23.193179000000008
+        }
+      ],
+      "status": "pass"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build-v1-execution.json",
+    "value": {
+      "status": "fail",
+      "events": [
+        {
+          "command": [
+            "cmake",
+            "-S",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build",
+            "-DRANS_BUILD_SOLVER=ON",
+            "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+            "-DRANS_PREBUILT_SPATIAL_LIBRARY=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/dependency/libSpatialDomains.so.5.9.0",
+            "-DCMAKE_BUILD_TYPE=Release",
+            "-DCMAKE_CXX_FLAGS=-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "cmake",
+            "--build",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build",
+            "--parallel",
+            "4",
+            "--target",
+            "IncNavierStokesSolver",
+            "RANSPreservationProbe",
+            "RANSNewModelsProbe",
+            "RANSNativeDiagnosticChecks",
+            "RANSWallResolutionProbe"
+          ],
+          "exit_code": 2
+        }
+      ],
+      "wall_seconds": 332.9361266140477,
+      "user_CPU_seconds": 752.000554,
+      "system_CPU_seconds": 164.264226
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build-v2-execution.json",
+    "value": {
+      "status": "pass",
+      "events": [
+        {
+          "command": [
+            "cmake",
+            "-S",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build",
+            "-DRANS_BUILD_SOLVER=ON",
+            "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+            "-DRANS_PREBUILT_SPATIAL_LIBRARY=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/dependency/libSpatialDomains.so.5.9.0",
+            "-DCMAKE_BUILD_TYPE=Release",
+            "-DCMAKE_CXX_FLAGS=-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "cmake",
+            "--build",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build",
+            "--parallel",
+            "4",
+            "--target",
+            "IncNavierStokesSolver",
+            "RANSPreservationProbe",
+            "RANSNewModelsProbe",
+            "RANSNativeDiagnosticChecks",
+            "RANSWallResolutionProbe"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "wall_seconds": 275.81103166902903,
+      "user_CPU_seconds": 524.141163,
+      "system_CPU_seconds": 106.062052
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build-v3-execution.json",
+    "value": {
+      "status": "pass",
+      "events": [
+        {
+          "command": [
+            "cmake",
+            "-S",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build",
+            "-DRANS_BUILD_SOLVER=ON",
+            "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+            "-DRANS_PREBUILT_SPATIAL_LIBRARY=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/dependency/libSpatialDomains.so.5.9.0",
+            "-DCMAKE_BUILD_TYPE=Release",
+            "-DCMAKE_CXX_FLAGS=-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "cmake",
+            "--build",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build",
+            "--parallel",
+            "4",
+            "--target",
+            "IncNavierStokesSolver",
+            "RANSPreservationProbe",
+            "RANSNewModelsProbe",
+            "RANSNativeDiagnosticChecks",
+            "RANSWallResolutionProbe"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "wall_seconds": 106.9085695350077,
+      "user_CPU_seconds": 66.856051,
+      "system_CPU_seconds": 14.541592
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/compatibility-v1-execution.json",
+    "value": {
+      "status": "failed_or_unresolved",
+      "events": [
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/check_rans_directional_compatibility.py",
+            "--old-runtime",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/runtime",
+            "--runtime",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime",
+            "--output",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/isotropic-compatibility-v1"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 113.81790469802218,
+          "process_cpu_seconds": 99.586028
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/check_rans_directional_history.py",
+            "--root",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+            "--mesh",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/meshes/A95-N-Accepted/Balanced5V1.json",
+            "--old-root",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 125.00503444799688,
+          "process_cpu_seconds": 147.515893
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/check_rans_native_ownership.py",
+            "--probe",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/RANSPreservationProbe",
+            "--descriptor-probe",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/RANSNewModelsProbe",
+            "--directional",
+            "--output",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-geometry-v1"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 191.677100911038,
+          "process_cpu_seconds": 167.543658
+        },
+        {
+          "command": [
+            "ctest",
+            "--test-dir",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build",
+            "-j",
+            "1",
+            "--output-on-failure",
+            "-R",
+            "^(RANSNativeOwnershipGeometry|RANSNativeAdmissibilityRegression|RANSFrozenBoundaryInterfaceRegression|RANSForwardInterfaceTolerance)$"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 433.01549548096955,
+          "process_cpu_seconds": 343.1617349999999
+        }
+      ]
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-face-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/diagnose_rans_directional_budget_faces.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--cohort",
+        "A95-N-Accepted-directional-dt-0.002",
+        "--runtime-name",
+        "runtime-face-decomposition-v2",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-physical-face-decomposition-v1"
+      ],
+      "exit_code": 0,
+      "waiting_for_sealed_inputs_seconds": 148.46050985902548,
+      "wall_seconds": 312.1953758530435,
+      "process_cpu_seconds": 302.300639
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/scope-ctest-execution.json",
+    "value": {
+      "status": "pass",
+      "events": [
+        {
+          "command": [
+            "cmake",
+            "-S",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build",
+            "-DRANS_BUILD_SOLVER=ON",
+            "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+            "-DRANS_PREBUILT_SPATIAL_LIBRARY=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/dependency/libSpatialDomains.so.5.9.0",
+            "-DCMAKE_BUILD_TYPE=Release",
+            "-DCMAKE_CXX_FLAGS=-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 4.255168359959498,
+          "process_cpu_seconds": 1.4000629999999998
+        },
+        {
+          "command": [
+            "ctest",
+            "--test-dir",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build",
+            "-j",
+            "1",
+            "--output-on-failure",
+            "-R",
+            "^(RANSDirectionalRequiredScopeContract|RANSOwnershipRequiredScopeContract|RANSBudgetAccuracyContract)$"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 0.5749049480073154,
+          "process_cpu_seconds": 0.48014999999999997
+        }
+      ]
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/scope-negative-execution.json",
+    "value": {
+      "status": "pass",
+      "events": [
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/test_rans_directional_scope.py"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 0.11692972300807014,
+          "process_cpu_seconds": 0.09474899999999999
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/test_rans_ownership_contract.py"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 0.8562675879802555,
+          "process_cpu_seconds": 0.369179
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/test_rans_budget_accuracy_contract.py"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 0.06701969204004854,
+          "process_cpu_seconds": 0.05374700000000002
+        }
+      ]
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/prerequisite-v1-execution.json",
+    "value": {
+      "status": "failed_or_unresolved",
+      "events": [
+        {
+          "command": [
+            "ctest",
+            "--test-dir",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build",
+            "-j",
+            "1",
+            "--output-on-failure",
+            "-R",
+            "^(RANSNativeDiagnosticChecks|RANSOwnershipRequiredScopeContract|RANSBudgetAccuracyContract|RANSNonlinearEvidenceContract)$"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 1.6517133669694886,
+          "user_CPU_seconds": 0.5994659999999999,
+          "system_CPU_seconds": 0.262358
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/check_rans_directional_layout.py",
+            "--runtime",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime",
+            "--output",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-layout-v1"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 6.183941835013684,
+          "user_CPU_seconds": 3.740244,
+          "system_CPU_seconds": 0.433184
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/reconcile_rans_frozen_scalar_budget.py",
+            "--root",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+            "--ownership-root",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3",
+            "--runtime",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 618.9767516459688,
+          "user_CPU_seconds": 507.81092300000006,
+          "system_CPU_seconds": 87.411979
+        }
+      ]
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-science-execution.json",
+    "value": {
+      "status": "failed_or_unresolved",
+      "events": [
+        {
+          "name": "native-export-aux-build",
+          "command": [
+            "cmake",
+            "--build",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build",
+            "--parallel",
+            "2",
+            "--target",
+            "RANSPreservationProbe"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 23.578959247970488,
+          "process_cpu_seconds": 15.198802999999998
+        },
+        {
+          "name": "native-export-layout-v1",
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/check_rans_directional_layout.py",
+            "--runtime",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime-export-check-v2",
+            "--output",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-export-layout-v1"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 37.81168608501321,
+          "process_cpu_seconds": 27.504853000000004
+        },
+        {
+          "name": "A95-directional-control-v1",
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_directional_resolution.py",
+            "--root",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+            "--old-root",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3",
+            "--contract",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/docs/plans/a93-a95-e94e95-awf-directional-resolution-qualification-evidence/experiment-contract.json"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 735.3187510849675,
+          "process_cpu_seconds": 663.618999
+        }
+      ]
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-supplement-execution.json",
+    "value": {
+      "status": "failed_or_unresolved",
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/supplement_rans_directional_resolution.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--old-root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3"
+      ],
+      "exit_code": 1,
+      "wall_seconds": 1724.500629858987,
+      "process_cpu_seconds": 1563.3920540000001
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/face-probe-build-execution.json",
+    "value": {
+      "status": "execution_failure_after_successful_compile",
+      "compile_exit_code": 0,
+      "source_revision": "79cfa8dcc357996d6ae25ce8f659215049f41307",
+      "reason": "packaging controller expected build/bin but external test build emits build/RANSPreservationProbe",
+      "failure_log_sha256": "0f0a23d6f6575a62c4fc8d90b93f422a96847d07ab23c127d79ef4bb27a6897a",
+      "process_cpu_seconds": null,
+      "wall_seconds": null,
+      "cost_limitation": "controller failed before writing captured build costs; not reconstructed"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution/initial-screen/B11/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 25.88362162699923,
+      "process_cpu_seconds": 23.845927000000003,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution/initial-screen/B11-common/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 10.943238912965171,
+      "process_cpu_seconds": 8.891052999999996,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution/initial-screen/B5/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 23.931523200008087,
+      "process_cpu_seconds": 21.302498,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution/initial-screen/B5-common/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 10.442430685041472,
+      "process_cpu_seconds": 8.614583000000001,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/campaigns/A93-N-Accepted-duration-0.002-B11/scalar-observations-0.016/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 24.969679307949264,
+      "process_cpu_seconds": 21.122559,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/campaigns/A93-N-Accepted-duration-0.002-B11/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 9.440546391007956,
+      "process_cpu_seconds": 8.078756000000002,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/campaigns/A93-N-Accepted-duration-0.002-B11-dt2/scalar-observations-0.016/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 25.88111628498882,
+      "process_cpu_seconds": 21.804636,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/campaigns/A93-N-Accepted-duration-0.002-B11-dt2/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 10.191648804990109,
+      "process_cpu_seconds": 8.748683000000014,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/common-sampling/0.016/A93-N-Accepted-duration-0.002-B11-dt2-final/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 8.794402903004084,
+      "process_cpu_seconds": 7.904327000000013,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/common-sampling/0.016/A93-N-Accepted-duration-0.002-B11-dt2-initial/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 9.288166909012944,
+      "process_cpu_seconds": 7.6856380000000115,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/common-sampling/0.016/A93-N-Accepted-duration-0.002-B11-final/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 10.041391203005332,
+      "process_cpu_seconds": 8.812592000000045,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/common-sampling/0.016/A93-N-Accepted-duration-0.002-B11-initial/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 8.687894884031266,
+      "process_cpu_seconds": 7.6368619999999865,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/common-sampling/0.016/A93-N-Accepted-duration-0.002-B5-dt2-final/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 8.086563201039098,
+      "process_cpu_seconds": 6.472428999999977,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/common-sampling/0.016/A93-N-Accepted-duration-0.002-B5-dt2-initial/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 7.684374656993896,
+      "process_cpu_seconds": 6.559421999999987,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/common-sampling/0.016/A93-N-Accepted-duration-0.002-B5-final/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 8.686430146044586,
+      "process_cpu_seconds": 7.404678999999987,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/common-sampling/0.016/A93-N-Accepted-duration-0.002-B5-initial/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 8.390300056023989,
+      "process_cpu_seconds": 7.081725999999989,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/duration-quadrature-A93-N-Accepted-duration-0.002-0.016/Accepted-0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 9.089220066030975,
+      "process_cpu_seconds": 7.658765,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/duration-quadrature-A93-N-Accepted-duration-0.002-0.016/Accepted-1/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 12.844952663988806,
+      "process_cpu_seconds": 10.641659,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/evolved-audits/A93-N-Accepted-duration-0.002-0.016-B11/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 29.888500789005775,
+      "process_cpu_seconds": 27.531078,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/evolved-audits/A93-N-Accepted-duration-0.002-0.016-B11/T-0.0160-common-cross/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 11.239232883031946,
+      "process_cpu_seconds": 9.280399000000001,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/evolved-audits/A93-N-Accepted-duration-0.002-0.016-B11-dt2/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 26.98355722601991,
+      "process_cpu_seconds": 24.508756,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/evolved-audits/A93-N-Accepted-duration-0.002-0.016-B11-dt2/T-0.0160-common-cross/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 14.847633000987116,
+      "process_cpu_seconds": 9.021824000000002,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/evolved-audits/A93-N-Accepted-duration-0.002-0.016-B5/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 22.816828737035394,
+      "process_cpu_seconds": 19.934382,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/evolved-audits/A93-N-Accepted-duration-0.002-0.016-B5/T-0.0160-common-cross/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 10.792561400972772,
+      "process_cpu_seconds": 8.995410000000001,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/evolved-audits/A93-N-Accepted-duration-0.002-0.016-B5-dt2/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 24.728323763993103,
+      "process_cpu_seconds": 21.69015,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/evolved-audits/A93-N-Accepted-duration-0.002-0.016-B5-dt2/T-0.0160-common-cross/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 11.145193679025397,
+      "process_cpu_seconds": 8.891903000000003,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/initial-screen/B11/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 27.488255940028466,
+      "process_cpu_seconds": 25.421297,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/initial-screen/B11-common/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 10.694388315023389,
+      "process_cpu_seconds": 9.385586000000002,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/initial-screen/B5/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 22.574903906031977,
+      "process_cpu_seconds": 19.903606,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/a93-redistribution-v2/initial-screen/B5-common/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 9.28914382099174,
+      "process_cpu_seconds": 8.135858,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-neutral-B11/response-scalar-observations-0.016/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 23.823834748007357,
+      "process_cpu_seconds": 21.753327,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-neutral-B11/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 9.087002414977178,
+      "process_cpu_seconds": 8.121806999999988,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-neutral-B11-dt2/response-scalar-observations-0.016/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 27.57909541699337,
+      "process_cpu_seconds": 25.372606,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-neutral-B11-dt2/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 8.735239155997988,
+      "process_cpu_seconds": 7.963501000000001,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-neutral-B5/response-scalar-observations-0.016/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 19.713704308029264,
+      "process_cpu_seconds": 17.017475,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-neutral-B5/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 9.288370040012524,
+      "process_cpu_seconds": 7.433488000000008,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-neutral-B5-dt2/response-scalar-observations-0.016/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 23.721834082971327,
+      "process_cpu_seconds": 21.599526,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-neutral-B5-dt2/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 8.284948165994138,
+      "process_cpu_seconds": 7.239050999999995,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-response-B11/response-scalar-observations-0.016/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 24.075403812981676,
+      "process_cpu_seconds": 22.156026999999998,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-response-B11/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 6.2300072819925845,
+      "process_cpu_seconds": 4.509218999999999,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-response-B11-dt2/response-scalar-observations-0.016/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 24.164065503980964,
+      "process_cpu_seconds": 21.261403,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-response-B11-dt2/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 5.52850443701027,
+      "process_cpu_seconds": 4.663087000000006,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-response-B5/response-scalar-observations-0.016/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 20.315996354969684,
+      "process_cpu_seconds": 18.374617,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-response-B5/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 5.078143629012629,
+      "process_cpu_seconds": 4.190709999999996,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-response-B5-dt2/response-scalar-observations-0.016/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 22.019642707018647,
+      "process_cpu_seconds": 19.270435999999997,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/campaigns/A95-N-Accepted-directional-dt-0.002-response-B5-dt2/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 5.776629297004547,
+      "process_cpu_seconds": 4.460196999999985,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-export-layout-v1/P3/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 3.523184733989183,
+      "process_cpu_seconds": 1.8692130000000007,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-export-layout-v1/P4/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 2.9760634090052918,
+      "process_cpu_seconds": 2.1546440000000002,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-export-layout-v1/P5/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 3.9757814499898814,
+      "process_cpu_seconds": 2.7739680000000013,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-export-layout-v1/X6Z5/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 4.77925329603022,
+      "process_cpu_seconds": 3.188869999999999,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-layout-v1/P3/probe-process-cost.json",
+    "value": {
+      "exit_code": 1,
+      "wall_seconds": 5.227551992982626,
+      "process_cpu_seconds": 3.6481070000000004,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-layout-v2/P3/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 3.173373957979493,
+      "process_cpu_seconds": 1.787239,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-layout-v2/P4/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 3.0731886280118488,
+      "process_cpu_seconds": 2.1623469999999996,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-layout-v2/P5/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 4.175959612999577,
+      "process_cpu_seconds": 2.7856050000000003,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-layout-v2/X6Z5/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 4.174095603986643,
+      "process_cpu_seconds": 3.2677729999999996,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-physical-face-decomposition-v1/baseline-B11/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 43.573506786022335,
+      "process_cpu_seconds": 42.684916,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-physical-face-decomposition-v1/baseline-B11-dt2/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 38.30932170298183,
+      "process_cpu_seconds": 37.00803100000002,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-physical-face-decomposition-v1/baseline-B5/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 34.40085913601797,
+      "process_cpu_seconds": 33.410744,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-physical-face-decomposition-v1/baseline-B5-dt2/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 41.26761237101164,
+      "process_cpu_seconds": 40.33322599999999,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-physical-face-decomposition-v1/perturbed-B11/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 39.75761278200662,
+      "process_cpu_seconds": 38.57039300000001,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-physical-face-decomposition-v1/perturbed-B11-dt2/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 39.20829380501527,
+      "process_cpu_seconds": 38.26948099999998,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-physical-face-decomposition-v1/perturbed-B5/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 38.464525468996726,
+      "process_cpu_seconds": 36.467242,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-physical-face-decomposition-v1/perturbed-B5-dt2/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 35.002074318996165,
+      "process_cpu_seconds": 33.898528000000006,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-supplement-v1/response-comparison/0-baseline/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 8.285431358963251,
+      "process_cpu_seconds": 7.4064939999999995,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-supplement-v1/response-comparison/0-perturbed/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 8.88728722097585,
+      "process_cpu_seconds": 7.558588,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-supplement-v1/response-comparison/1-baseline/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 9.583800619002432,
+      "process_cpu_seconds": 8.388227,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-supplement-v1/response-comparison/1-perturbed/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 7.682208173035178,
+      "process_cpu_seconds": 6.479259999999998,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-supplement-v1/response-comparison/2-baseline/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 9.63416282000253,
+      "process_cpu_seconds": 8.427308000000004,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-supplement-v1/response-comparison/2-perturbed/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 8.53348763199756,
+      "process_cpu_seconds": 7.647701999999999,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-supplement-v1/response-comparison/3-baseline/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 10.185853388975374,
+      "process_cpu_seconds": 8.973232000000003,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-supplement-v1/response-comparison/3-perturbed/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 9.236224121006671,
+      "process_cpu_seconds": 7.8500299999999985,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/response-quadrature-A95-N-Accepted-directional-dt-0.002-neutral-0.016/Accepted-0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 11.043217319005635,
+      "process_cpu_seconds": 7.953046,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/response-quadrature-A95-N-Accepted-directional-dt-0.002-neutral-0.016/Accepted-1/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 10.791412746009883,
+      "process_cpu_seconds": 9.800871,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/response-quadrature-A95-N-Accepted-directional-dt-0.002-response-0.016/Accepted-0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 10.588114147016313,
+      "process_cpu_seconds": 9.724950999999999,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/response-quadrature-A95-N-Accepted-directional-dt-0.002-response-0.016/Accepted-1/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 10.48972811101703,
+      "process_cpu_seconds": 8.709436000000002,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/evolve-A95-N-Accepted-directional-dt-0.002-neutral-B11-dt2-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-mesh.json",
+        "--control",
+        "StreamwiseP6V1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-neutral-B11-dt2",
+        "--dt",
+        "0.001",
+        "--amplitude",
+        "0.0",
+        "--resume"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 146.46315860300092,
+      "process_cpu_seconds": 138.66122100000007
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/evolve-A95-N-Accepted-directional-dt-0.002-neutral-B11-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-mesh.json",
+        "--control",
+        "StreamwiseP6V1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-neutral-B11",
+        "--dt",
+        "0.002",
+        "--amplitude",
+        "0.0",
+        "--resume"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 90.60195139801363,
+      "process_cpu_seconds": 86.03062500000006
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/evolve-A95-N-Accepted-directional-dt-0.002-neutral-B5-dt2-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-mesh.json",
+        "--control",
+        "StreamwiseBaseV1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-neutral-B5-dt2",
+        "--dt",
+        "0.001",
+        "--amplitude",
+        "0.0",
+        "--resume"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 128.24591036798665,
+      "process_cpu_seconds": 119.65078399999996
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/evolve-A95-N-Accepted-directional-dt-0.002-neutral-B5-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-mesh.json",
+        "--control",
+        "StreamwiseBaseV1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-neutral-B5",
+        "--dt",
+        "0.002",
+        "--amplitude",
+        "0.0",
+        "--resume"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 83.32562502799556,
+      "process_cpu_seconds": 75.777375
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initialize-A95-N-Accepted-directional-dt-0.002-neutral-B11-dt2-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-mesh.json",
+        "--control",
+        "StreamwiseP6V1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-neutral-B11-dt2",
+        "--dt",
+        "0.001",
+        "--amplitude",
+        "0.0",
+        "--initialize-only"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 9.997012101986911,
+      "process_cpu_seconds": 8.254047999999997
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initialize-A95-N-Accepted-directional-dt-0.002-neutral-B11-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-mesh.json",
+        "--control",
+        "StreamwiseP6V1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-neutral-B11",
+        "--dt",
+        "0.002",
+        "--amplitude",
+        "0.0",
+        "--initialize-only"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 10.090248951979447,
+      "process_cpu_seconds": 8.166954000000002
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initialize-A95-N-Accepted-directional-dt-0.002-response-B5-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-mesh.json",
+        "--control",
+        "StreamwiseBaseV1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-response-B5",
+        "--dt",
+        "0.002",
+        "--amplitude",
+        "2e-05",
+        "--initialize-only"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 24.82670038298238,
+      "process_cpu_seconds": 21.287665000000004
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/neutral-audit-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/audit_rans_response.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--admission",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/admission.json",
+        "--cohort-prefix",
+        "A95-N-Accepted-directional-dt-0.002-neutral",
+        "--time",
+        ".016"
+      ],
+      "exit_code": 1,
+      "wall_seconds": 0.5892213740153238,
+      "process_cpu_seconds": 0.4760559999999998
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initialize-A95-N-Accepted-directional-dt-0.002-neutral-B5-dt2-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-mesh.json",
+        "--control",
+        "StreamwiseBaseV1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-neutral-B5-dt2",
+        "--dt",
+        "0.001",
+        "--amplitude",
+        "0.0",
+        "--initialize-only"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.383649435010739,
+      "process_cpu_seconds": 7.763996000000001
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initialize-A95-N-Accepted-directional-dt-0.002-neutral-B5-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-mesh.json",
+        "--control",
+        "StreamwiseBaseV1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-neutral-B5",
+        "--dt",
+        "0.002",
+        "--amplitude",
+        "0.0",
+        "--initialize-only"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.135056480998173,
+      "process_cpu_seconds": 9.193673
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initialize-A95-N-Accepted-directional-dt-0.002-response-B11-dt2-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-mesh.json",
+        "--control",
+        "StreamwiseP6V1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-response-B11-dt2",
+        "--dt",
+        "0.001",
+        "--amplitude",
+        "2e-05",
+        "--initialize-only"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 28.390814427053556,
+      "process_cpu_seconds": 23.901885
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initialize-A95-N-Accepted-directional-dt-0.002-response-B11-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseP6V1-mesh.json",
+        "--control",
+        "StreamwiseP6V1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-response-B11",
+        "--dt",
+        "0.002",
+        "--amplitude",
+        "2e-05",
+        "--initialize-only"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 26.15124953398481,
+      "process_cpu_seconds": 22.10358000000001
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initialize-A95-N-Accepted-directional-dt-0.002-response-B5-dt2-execution.json",
+    "value": {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_budget_axis_control.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111",
+        "--binding",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3/physical-budget-bindings/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+        "--hypothesis",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-hypothesis.json",
+        "--mesh-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/StreamwiseBaseV1-mesh.json",
+        "--control",
+        "StreamwiseBaseV1",
+        "--label",
+        "A95-N-Accepted-directional-dt-0.002-response-B5-dt2",
+        "--dt",
+        "0.001",
+        "--amplitude",
+        "2e-05",
+        "--initialize-only"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 25.10366383998189,
+      "process_cpu_seconds": 20.15288899999999
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initial-screen-A95-N-Accepted-directional-dt-0.002-neutral-B11/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 29.385953328048345,
+      "process_cpu_seconds": 27.245302,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initial-screen-A95-N-Accepted-directional-dt-0.002-neutral-B5/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 23.621162587951403,
+      "process_cpu_seconds": 21.36553100000001,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initial-screen-A95-N-Accepted-directional-dt-0.002-response-B11/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 30.137708852009382,
+      "process_cpu_seconds": 27.263257000000014,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/directional-resolution-v1/initial-screen-A95-N-Accepted-directional-dt-0.002-response-B5/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 25.416539254016243,
+      "process_cpu_seconds": 23.09586299999998,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/evolved-audits/response-A95-N-Accepted-directional-dt-0.002-neutral-0.016-B11/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 31.09063386701746,
+      "process_cpu_seconds": 27.620453,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/evolved-audits/response-A95-N-Accepted-directional-dt-0.002-neutral-0.016-B11/T-0.0160-common-cross/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 11.244663976016454,
+      "process_cpu_seconds": 8.604852,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/evolved-audits/response-A95-N-Accepted-directional-dt-0.002-neutral-0.016-B5/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 24.42231452499982,
+      "process_cpu_seconds": 22.864542,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/evolved-audits/response-A95-N-Accepted-directional-dt-0.002-neutral-0.016-B5/T-0.0160-common-cross/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 10.787940548034385,
+      "process_cpu_seconds": 8.950028999999997,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/evolved-audits/response-A95-N-Accepted-directional-dt-0.002-response-0.016-B11/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 27.984057535999455,
+      "process_cpu_seconds": 23.599943000000003,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/evolved-audits/response-A95-N-Accepted-directional-dt-0.002-response-0.016-B11/T-0.0160-common-cross/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 11.186611298995558,
+      "process_cpu_seconds": 8.796619,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/evolved-audits/response-A95-N-Accepted-directional-dt-0.002-response-0.016-B5/T-0.0160/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 24.275193770998158,
+      "process_cpu_seconds": 21.780952000000003,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/evolved-audits/response-A95-N-Accepted-directional-dt-0.002-response-0.016-B5/T-0.0160-common-cross/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 9.93380124802934,
+      "process_cpu_seconds": 8.203322999999997,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/baseline-B11-dt2-Q2-F32-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 40.414427921990864,
+      "process_cpu_seconds": 39.302597000000006,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/baseline-B11-Q2-F32-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 42.910523980041035,
+      "process_cpu_seconds": 41.979253,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/baseline-B5-dt2-Q2-F32-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 36.64660591701977,
+      "process_cpu_seconds": 34.86257500000002,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/baseline-B5-Q1-F32-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 22.868704618013,
+      "process_cpu_seconds": 21.54512,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/baseline-B5-Q2-F16-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 41.526272509014234,
+      "process_cpu_seconds": 39.396350999999996,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/baseline-B5-Q2-F32-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 36.049282311985735,
+      "process_cpu_seconds": 34.308773,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/baseline-B5-Q2-F32-h0.000244140625/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 40.74850427597994,
+      "process_cpu_seconds": 39.86682999999999,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/baseline-B5-Q2-F32-h0.00048828125/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 43.50244476995431,
+      "process_cpu_seconds": 42.718667,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/perturbed-B11-dt2-Q2-F32-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 42.61625657702098,
+      "process_cpu_seconds": 40.491033,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/perturbed-B11-Q2-F32-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 43.363884342019446,
+      "process_cpu_seconds": 42.60022399999998,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/perturbed-B5-dt2-Q2-F32-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 37.24577403604053,
+      "process_cpu_seconds": 34.685286000000005,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/perturbed-B5-Q1-F32-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 24.22430439502932,
+      "process_cpu_seconds": 22.693688,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/perturbed-B5-Q2-F16-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 44.01398462598445,
+      "process_cpu_seconds": 42.85779200000006,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/perturbed-B5-Q2-F32-h0.0/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 37.05674270296004,
+      "process_cpu_seconds": 35.562550999999964,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/perturbed-B5-Q2-F32-h0.000244140625/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 41.40370784699917,
+      "process_cpu_seconds": 40.239065,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/frozen-scalar-reconciliation-v1/perturbed-B5-Q2-F32-h0.00048828125/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 40.40091134398244,
+      "process_cpu_seconds": 39.035847999999994,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/isotropic-compatibility-v1/3-new/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 12.794631938042585,
+      "process_cpu_seconds": 11.753157,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/isotropic-compatibility-v1/3-old/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 13.346518244012259,
+      "process_cpu_seconds": 11.168353999999999,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/isotropic-compatibility-v1/5-new/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 23.97124566399725,
+      "process_cpu_seconds": 19.381877000000003,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/isotropic-compatibility-v1/5-old/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 22.46766894700704,
+      "process_cpu_seconds": 19.296978999999997,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-baseline-B11-0.016-Q1/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 25.78276305203326,
+      "process_cpu_seconds": 24.137489,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-baseline-B11-0.016-Q2/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 42.16929116100073,
+      "process_cpu_seconds": 41.05423599999999,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-baseline-B11-0.016-Q2-F32/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 43.82353154098382,
+      "process_cpu_seconds": 42.53157,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-baseline-B11-dt2-0.016-Q2-F32/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 42.915327865979634,
+      "process_cpu_seconds": 41.66579600000001,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-baseline-B5-0.016-Q1/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 23.62275638699066,
+      "process_cpu_seconds": 22.551557999999996,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-baseline-B5-0.016-Q2/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 37.709029544959776,
+      "process_cpu_seconds": 35.962491,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-baseline-B5-0.016-Q2-F32/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 33.99655087199062,
+      "process_cpu_seconds": 32.807888,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-baseline-B5-dt2-0.016-Q2-F32/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 36.30497594398912,
+      "process_cpu_seconds": 35.460163,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-perturbed-B11-0.016-Q1/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 25.576428970030975,
+      "process_cpu_seconds": 24.772764000000002,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-perturbed-B11-0.016-Q2/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 42.970859047956765,
+      "process_cpu_seconds": 41.233622000000004,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-perturbed-B11-0.016-Q2-F32/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 41.46629792294698,
+      "process_cpu_seconds": 39.780933,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-perturbed-B11-dt2-0.016-Q2-F32/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 39.913391638954636,
+      "process_cpu_seconds": 37.602654,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-perturbed-B5-0.016-Q1/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 23.621415636967868,
+      "process_cpu_seconds": 22.332189,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-perturbed-B5-0.016-Q2/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 35.55177805799758,
+      "process_cpu_seconds": 33.779381,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-perturbed-B5-0.016-Q2-F32/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 34.198699232016224,
+      "process_cpu_seconds": 32.295728000000004,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  },
+  {
+    "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/physical-budgets/A95-N-Accepted-directional-dt-0.002-perturbed-B5-dt2-0.016-Q2-F32/probe-process-cost.json",
+    "value": {
+      "exit_code": 0,
+      "wall_seconds": 35.05171603598865,
+      "process_cpu_seconds": 34.237146,
+      "scope": "probe and reaped descendants; wall includes independently recorded resource suspensions"
+    }
+  }
+]

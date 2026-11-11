@@ -1,0 +1,36 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+double free or corruption (out)
+[jay-Super-Server:698605] *** Process received signal ***
+[jay-Super-Server:698605] Signal: Aborted (6)
+[jay-Super-Server:698605] Signal code:  (-6)
+[jay-Super-Server:698605] [ 0] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libc.so.6(+0x42520)[0x744d82842520]
+[jay-Super-Server:698605] [ 1] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libc.so.6(pthread_kill+0x12c)[0x744d828969bc]
+[jay-Super-Server:698605] [ 2] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libc.so.6(raise+0x16)[0x744d82842476]
+[jay-Super-Server:698605] [ 3] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libc.so.6(abort+0xd3)[0x744d828287f3]
+[jay-Super-Server:698605] [ 4] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libc.so.6(+0x89637)[0x744d82889637]
+[jay-Super-Server:698605] [ 5] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libc.so.6(+0xa0cbc)[0x744d828a0cbc]
+[jay-Super-Server:698605] [ 6] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libc.so.6(+0xa2e30)[0x744d828a2e30]
+[jay-Super-Server:698605] [ 7] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libc.so.6(free+0x73)[0x744d828a5413]
+[jay-Super-Server:698605] [ 8] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libMatrixFreeOps.so.5.9.0(_ZN6Nektar10MatrixFree26PhysInterp1DScaledTemplateILNS_12LibUtilities9ShapeTypeE4ELb0EE10operator2DERKNS_5ArrayINS_4OneDEKdEERNS5_IS6_dEE+0x8c6)[0x744d7f8f7c16]
+[jay-Super-Server:698605] [ 9] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libCollections.so.5.9.0(_ZN6Nektar11Collections22CollectionOptimisation14SetWithTimingsESt6vectorISt10shared_ptrINS_12LocalRegions9ExpansionEESaIS6_EERSt3mapINS0_12OperatorTypeENS0_18ImplementationTypeESt4lessISA_ESaISt4pairIKSA_SB_EEEb+0x18a7)[0x744d83d442f7]
+[jay-Super-Server:698605] [10] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libMultiRegions.so.5.9.0(_ZN6Nektar12MultiRegions7ExpList17CreateCollectionsENS_11Collections18ImplementationTypeE+0xf33)[0x744d84836613]
+[jay-Super-Server:698605] [11] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libMultiRegions.so.5.9.0(_ZN6Nektar12MultiRegions7ExpListC1ERKSt10shared_ptrINS_12LibUtilities13SessionReaderEERKS2_INS_14SpatialDomains9MeshGraphEEbRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENS_11Collections18ImplementationTypeE+0x385)[0x744d8484dd45]
+[jay-Super-Server:698605] [12] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/IncNavierStokesSolver(+0x29432c)[0x5b095070132c]
+[jay-Super-Server:698605] [13] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/IncNavierStokesSolver(+0x445c9d)[0x5b09508b2c9d]
+[jay-Super-Server:698605] [14] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/IncNavierStokesSolver(+0x44c553)[0x5b09508b9553]
+[jay-Super-Server:698605] [15] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/IncNavierStokesSolver(+0x178369)[0x5b09505e5369]
+[jay-Super-Server:698605] [16] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libSolverUtils.so.5.9.0(_ZN6Nektar12LibUtilities10NekFactoryINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENS_11SolverUtils14EquationSystemEJRKSt10shared_ptrINS0_13SessionReaderEERKSA_INS_14SpatialDomains9MeshGraphEEEE14CreateInstanceES7_SE_SJ_+0x60)[0x744d85244610]
+[jay-Super-Server:698605] [17] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libSolverUtils.so.5.9.0(_ZN6Nektar11SolverUtils6Driver12v_InitObjectERSo+0x83c)[0x744d8524279c]
+[jay-Super-Server:698605] [18] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libSolverUtils.so.5.9.0(_ZN6Nektar11SolverUtils14DriverStandard6createERKSt10shared_ptrINS_12LibUtilities13SessionReaderEERKS2_INS_14SpatialDomains9MeshGraphEE+0x1e9)[0x744d8527c7e9]
+[jay-Super-Server:698605] [19] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libSolverUtils.so.5.9.0(_ZNSt17_Function_handlerIFSt10shared_ptrIN6Nektar11SolverUtils6DriverEERKS0_INS1_12LibUtilities13SessionReaderEERKS0_INS1_14SpatialDomains9MeshGraphEEEPSF_E9_M_invokeERKSt9_Any_dataS9_SE_+0x29)[0x744d8524d4a9]
+[jay-Super-Server:698605] [20] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/IncNavierStokesSolver(+0x15ff2e)[0x5b09505ccf2e]
+[jay-Super-Server:698605] [21] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/IncNavierStokesSolver(+0xeb4d4)[0x5b09505584d4]
+[jay-Super-Server:698605] [22] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libc.so.6(+0x29d90)[0x744d82829d90]
+[jay-Super-Server:698605] [23] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/lib/libc.so.6(__libc_start_main+0x80)[0x744d82829e40]
+[jay-Super-Server:698605] [24] /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/runtime/IncNavierStokesSolver(+0x155935)[0x5b09505c2935]
+[jay-Super-Server:698605] *** End of error message ***
+[jay-Super-Server:698606] PMIX ERROR: NO-PERMISSIONS in file ../../../../../../src/mca/common/dstore/dstore_base.c at line 247
