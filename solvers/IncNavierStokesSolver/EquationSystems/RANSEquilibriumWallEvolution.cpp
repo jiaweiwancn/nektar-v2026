@@ -841,7 +841,7 @@ void RANSEquilibriumWallEvolution::UpdateFields()
     const int dim=m_patch->Dimension();
     for(int a=0;a<dim;++a)
     {
-        const auto values=m_patch->outerVelocity->Project([&](const RANSWallCoordinate &p){return m_patch->fields[a]->Point(p).Value(m_state,m_patch->offset[a]);});
+        const auto values=m_patch->outerVelocity->RestrictCoefficients(*m_patch->fields[a],m_state,m_patch->offset[a]);
         Array<OneD,NekDouble> global(values.size(),values.data());
         m_patch->outerVelocity->Field()->GetLocalToGlobalMap()->GlobalToLocal(global,m_fields[a]->UpdateCoeffs());
         m_fields[a]->BwdTrans(m_fields[a]->GetCoeffs(),m_fields[a]->UpdatePhys());m_fields[a]->SetPhysState(true);
@@ -862,12 +862,24 @@ void RANSEquilibriumWallEvolution::v_GenerateSummary(SolverUtils::SummaryList &s
 void RANSEquilibriumWallEvolution::v_EvaluateExactSolution(unsigned int field,Array<OneD,NekDouble> &out,NekDouble time)
 {
     const int nq=m_fields[field]->GetTotPoints();out=Array<OneD,NekDouble>(nq,0.);
-    const auto exact=Functions("ExactSolution",false);Array<OneD,NekDouble> x(nq),y(nq),z(nq);m_fields[field]->GetCoords(x,y,z);
     const int block=field==m_patch->Dimension()+2?m_patch->OuterPressure():static_cast<int>(field);
+    if(m_neutral)
+    {
+        // Driver errors compare against the represented reference. Evaluate
+        // that polynomial on its generating native basis, rather than search
+        // again using geometry-generated rounded endpoint coordinates.
+        const auto native=field<static_cast<unsigned int>(m_patch->Dimension())?
+            m_patch->outerVelocity:m_patch->fields[block];
+        const auto values=native->RestrictCoefficients(*m_patch->fields[block],m_patch->Reference(),m_patch->offset[block]);
+        Array<OneD,NekDouble> global(values.size(),values.data()),local(m_fields[field]->GetNcoeffs());
+        native->Field()->GetLocalToGlobalMap()->GlobalToLocal(global,local);
+        m_fields[field]->BwdTrans(local,out);return;
+    }
+    const auto exact=Functions("ExactSolution",false);Array<OneD,NekDouble> x(nq),y(nq),z(nq);m_fields[field]->GetCoords(x,y,z);
     for(int i=0;i<nq;++i)
     {
         const RANSWallCoordinate point{x[i],m_patch->Dimension()==3?y[i]:0.,m_patch->Dimension()==3?z[i]:y[i]};
-        out[i]=m_neutral?m_patch->fields[block]->Point(point).Value(m_patch->Reference(),m_patch->offset[block]):exact[block](point,time);
+        out[i]=exact[block](point,time);
     }
 }
 void RANSEquilibriumWallEvolution::v_Output()

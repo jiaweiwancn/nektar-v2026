@@ -4,6 +4,7 @@
 import argparse
 import gzip
 import json
+import os
 from pathlib import Path
 from qualify_rans_preservation import load
 from rans_request_manifest import RequestManifest, sha, runtime_identity
@@ -14,13 +15,23 @@ from rans_qualification import write_json
 OPERATOR = 'GeneratedVolumeOwnerV1'
 
 
+def pinned_runtime(path):
+    previous=os.environ.get('LD_LIBRARY_PATH')
+    try:
+        os.environ['LD_LIBRARY_PATH']=str(path.parent/'lib')
+        return runtime_identity(path)
+    finally:
+        if previous is None:os.environ.pop('LD_LIBRARY_PATH',None)
+        else:os.environ['LD_LIBRARY_PATH']=previous
+
+
 def admit(root, model, wall, output=None):
     r=root.resolve(); cfg=dict(model=model,policy='Natural',wall=wall);tag=prefix(**cfg)
     geometry=r/'geometric-regressions-v1/results.json';g=load(geometry)
     require(g['status']=='pass' and g['contract']['numerical_operator']==OPERATOR,'native_geometry_not_qualified')
     first=r/'campaigns'/(tag+'-B5');q=load(first/'request-manifest.json')['request']
     identity(q,cfg);cfg['descriptor']=q['descriptor']
-    runtimes={n:runtime_identity(r/'runtime'/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')}
+    runtimes={n:pinned_runtime(r/'runtime'/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')}
     build=r/'runtime/source-build.json';require(load(build)['numerical_operator']==OPERATOR,'legacy_compiled_operator')
     common=r/'diagnosis'/('initial-'+wall if model=='E94E95' else model+'-Natural-'+wall)/'common'
     with gzip.open(common/'packet.json.gz','rt') as stream:cp=json.load(stream)
@@ -41,7 +52,7 @@ def admit(root, model, wall, output=None):
         for m in MEMBERS[:2]:
             source=Path(a['spatial_sources'][m]['path']);require(sha(source)==a['spatial_sources'][m]['sha256'],'short_audit_changed')
             validated=validate_audit(source,r/'campaigns'/(tag+'-'+m),cfg,[t],common,
-                                     expected_runtime=runtime_identity(r/'runtime/RANSPreservationProbe'))
+                                     expected_runtime=pinned_runtime(r/'runtime/RANSPreservationProbe'))
             audits[m]['checks'].extend(validated['checks'])
         receipts[str(t)]=dict(path=str(p),sha256=sha(p),body=a)
         comparisons[str(t)]=a['comparison'];quadratures[str(t)]=a['quadrature']
@@ -68,8 +79,8 @@ def admit(root, model, wall, output=None):
             response_models=['A95'],response_max_time=.016,A93_response='outside_scope'),
         required_short_times=list(SHORT_TIMES),milestones=[.016,.1,.5],timestep_trials=[[.002,.001],[.001,.0005]],
         meshes=meshes,common_directory=str(common),common_packet_sha256=sha(common/'packet.json.gz'),runtime=runtimes,
-        diagnostic_runtime=runtime_identity(r/'runtime-resolution-v2/RANSPreservationProbe'),
-        duration_diagnostic_runtime=runtime_identity(r/'runtime-resolution-v3/RANSPreservationProbe'),
+        diagnostic_runtime=pinned_runtime(r/'runtime-resolution-v2/RANSPreservationProbe'),
+        duration_diagnostic_runtime=pinned_runtime(r/'runtime-resolution-v3/RANSPreservationProbe'),
         compiled_source_build=dict(path=str(build),sha256=sha(build),body=load(build)),
         geometric_qualification=dict(path=str(geometry),sha256=sha(geometry)),
         initial_gate=dict(source=str(initial),sha256=sha(initial),body=load(initial)),
