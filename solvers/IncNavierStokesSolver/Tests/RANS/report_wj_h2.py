@@ -14,7 +14,8 @@ from wj_h2_profiles import Completion, QE, US, NU, D0, TOP, wall
 
 def csv_file(path, rows):
     with Path(path).open('w') as f:
-        writer=csv.DictWriter(f,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
+        keys=list(dict.fromkeys(k for row in rows for k in row))
+        writer=csv.DictWriter(f,fieldnames=keys);writer.writeheader();writer.writerows(rows)
 
 
 def boundary_summary(report):
