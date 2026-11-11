@@ -227,7 +227,8 @@ int main(int argc,char **argv)
                     audit.get<std::string>("stage_history_sha256")==RANSWallR3::Hash(history),"open accepted audit/callback binding differs");
             }
             std::string diagnostics,assembly,reuse="null",domain,weak="null";
-            Vector spatial,stage;
+            Vector spatial,stage,spatialNorms,stageNorms;
+            double amplitudeK=0,amplitudeEpsilon=0;
             {
                 RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,time);
                 patch.ValidateOutlet(state,"immutable_readback");
@@ -238,6 +239,15 @@ int main(int argc,char **argv)
                 diagnostics=patch.OpenBoundaryDiagnostic(state,history,alpha,time,data,locations);
                 spatial=patch.Residual(state,state,0.,time,data,false);
                 stage=alpha>0?patch.Residual(state,history,alpha,time,data,false):Vector{};
+                const double H=p.geometry.height,Q=p.model.Q(),kappa=p.model.Kappa();
+                amplitudeK=patch.SampleK(cp.fixedReference,{patch.lower[0],0,H});
+                amplitudeEpsilon=std::pow(amplitudeK/Q,1.5)/(kappa*H);
+                const auto constraints=patch.Constraints(state,time,data);
+                auto physicalNorms=[&](const Vector &r){auto v=patch.Norms(r,constraints,1.);
+                    v[0]/=H;v[1]/=H;v[2]*=Q/(H*amplitudeK);v[3]/=(kappa*H*H*amplitudeEpsilon);v[4]/=H;v[5]/=H;
+                    v.back()=0;for(auto [row,target]:constraints){(void)target;int b=0;while(b+1<patch.offset.size() && row>=patch.offset[b+1])++b;
+                        v.back()=std::max(v.back(),std::abs(r[row])/(b<2?1.:b==patch.K()?amplitudeK:amplitudeEpsilon));}return v;};
+                spatialNorms=physicalNorms(spatial);if(alpha>0)stageNorms=physicalNorms(stage);
                 if(packet.get<bool>("weak",false))weak=Weak(patch,state,history,alpha,time,data);
                 assembly=packet.get<bool>("assembly",true)?patch.WJTerrainAssemblyChecks(state,history,alpha>0?alpha:1/dt,time,data):"null";
             }
@@ -249,6 +259,10 @@ int main(int argc,char **argv)
                 {"state_sha256",J::Quote(RANSWallR3::Hash(state))},{"callback_history_sha256",J::Quote(RANSWallR3::Hash(history))},
                 {"open_boundary",diagnostics},{"weak_checks",weak},{"scalar_domain",domain},{"assembly_checks",assembly},{"reuse_checks",reuse},
                 {"spatial_residual",J::Numbers(spatial)},{"actual_completed_stage_residual",J::Numbers(stage)},
+                {"physical_mass_dual_norms",J::Object({{"uncancelled_spatial",J::Numbers(spatialNorms)},
+                    {"completed_stage",J::Numbers(stageNorms)},{"fixed_amplitudes_U_k_epsilon",J::Numbers(Vector{1.,amplitudeK,amplitudeEpsilon})},
+                    {"time_scale_H_h_over_U_infinity","1"},{"order",J::Quote("u,v,k,entire_outer_epsilon,inner_continuity,outer_continuity,absent_gauge,constraints")},
+                    {"scope",J::Quote("consistent-mass dual passive algebra; no governing solve, synthetic callback or state projection")}})},
                 {"initialization_work",J::Numbers(patch.InitializationWork())},{"governing_solves","0"}})<<'\n';
             Require(out.good(),"open immutable checks write failed");world->Finalise();return 0;
         }

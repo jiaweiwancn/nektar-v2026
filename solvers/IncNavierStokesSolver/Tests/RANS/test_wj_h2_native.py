@@ -81,6 +81,8 @@ def main():
     require(frozen['initialization_lift_calls_iterations']==[0,0] and not frozen['pimple_attempts'],'read-only restart solved/lifted')
     rejected,rx=native('rejected',1,first['checkpoint'],reason='deliberate_PIMPLE_WJ_hard_audit_rejection',reject=2)
     same_history(first,rejected)
+    for key in ('accepted_states','wj_audit_packets','state_audits','physical_samples'):
+        require(frozen[key]==rejected[key],key+' rollback changed accepted restart-start audit/sample data')
     require(rejected['rejected_state'] and rejected['rejected_state']!=first['state'],'rejected candidate not retained')
     require(all(sha(f)==h for f,h in immutable.items()),'transaction changed producer checkpoint/report')
     for k in ('momentum_predictor_solves','pressure_system_solves','k_transport_solves','epsilon_transport_solves','bound_calls'):
@@ -90,7 +92,13 @@ def main():
     native('signature',0,first['checkpoint'],mutate=traction,reason='signature mismatch')
     def corner(r):r.find('./CONDITIONS/FUNCTION[@NAME="BoundaryValuesOuter"]/E[@VAR="epsilon"]').set('VALUE','0.1')
     native('corner',0,mutate=corner,reason='open_inlet_epsilon_corner_conflict')
-    def backflow(r):r.find('./CONDITIONS/FUNCTION[@NAME="InitialConditionsOuter"]/E[@VAR="u"]').set('VALUE','-0.1')
+    def backflow(r):
+        # Fully reversed reference: scalar/covariance/principal invariants agree
+        # with the forward state by reflection; the selected outlet role rejects it.
+        for name in ('InitialConditionsInner','InitialConditionsOuter','BoundaryValuesInner','BoundaryValuesOuter'):
+            e=r.find(f'./CONDITIONS/FUNCTION[@NAME="{name}"]/E[@VAR="u"]');e.set('VALUE','-('+e.get('VALUE')+')')
+        for name,var in (('OutletTractionInner','v'),('OutletTractionOuter','v'),('TopTractionOuter','u')):
+            e=r.find(f'./CONDITIONS/FUNCTION[@NAME="{name}"]/E[@VAR="{var}"]');e.set('VALUE','-('+e.get('VALUE')+')')
     native('backflow',0,mutate=backflow,reason='open_boundary_backflow')
     checks=[]
     for label,report,xml,reuse in [('startup',None,bxml,False),('final',on,ox,True)]:

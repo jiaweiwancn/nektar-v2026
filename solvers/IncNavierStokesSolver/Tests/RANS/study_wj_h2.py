@@ -56,6 +56,7 @@ def observation_rule(designs,order=8,xorder=4):
 
 def comparison(a,b,weights,K,epsilonH):
     aa=a['open_boundary']['stations'];bb=b['open_boundary']['stations'];assert len(aa)==len(bb)==len(weights)
+    assert abs(a['open_boundary']['time']-b['open_boundary']['time'])<=1e-12,'comparison physical times differ'
     result={}
     for field,amplitude in (('U',1.),('k',K),('epsilon',epsilonH),('pi',US**2)):
         values=[];ww=[]
