@@ -95,12 +95,13 @@ class Study(WJ5Study):
         projection=meta(self.resource_file)
         seconds=limits[kind+'_seconds']
         if kind=='native' and steps and 'native_seconds_per_step_bound' in projection:
-            seconds=min(1500.,max(120.,projection['native_seconds_per_step_bound']*steps+120.))
+            rate=projection.get('native_seconds_per_step_bounds',{}).get(settings.get('role'),projection['native_seconds_per_step_bound'])
+            seconds=min(1500.,max(120.,rate*steps+120.))
         totals=self.ledger.totals()
         hold=600. # Explicit closure headroom persists across every mode/resume.
         transaction_pending=self.s['components']['transactions']['status']!='PASS' and self.a.mode!='transactions'
         if transaction_pending:
-            hold+=9*projection.get('native_seconds_per_step_bound',100.)
+            hold+=9*projection.get('native_seconds_per_step_bounds',{}).get('coarse',projection.get('native_seconds_per_step_bound',100.))
         require(totals['attempts']+steps+(9 if transaction_pending else 0)<=800,
                 'RESOURCE_LIMIT: transaction unit reservation would be consumed')
         require(totals['seconds']+seconds+hold<=10800,'RESOURCE_LIMIT: invocation plus closure reserve exceeds package seconds')
@@ -213,22 +214,31 @@ class Study(WJ5Study):
         rates=[r['resource']['seconds']/r['actual_attempts'] for r in rows if r['exit_code']==0]
         require(rates,'missing actual capacity pilot cost')
         rate=max(rates)*headroom
-        observations=[e['seconds'] for t in self.s['trajectories'].values() for c in [t['initial']]+t['trajectory']
-                      for e in [meta(Path(c['path']).parent/'receipt.json')]]
-        svd=[]
-        for t in self.s['trajectories'].values():
+        rates_by_tag={tag:max(r['resource']['seconds']/r['actual_attempts'] for r in rows if r['exit_code']==0 and r['role']==tag)*headroom
+                      for tag in ('coarse','fine','baseline')}
+        observations={};svd={}
+        for tag,t in self.s['trajectories'].items():
+            observations[tag]=[];svd[tag]=[]
+            for c in [t['initial']]+t['trajectory']:
+                q8=meta(Path(c['path']).parent/'receipt.json')['seconds']
+                q10=meta(Path(c['quadrature']['independent']['path']).parent/'receipt.json')['seconds']
+                observations[tag].append(q8+q10)
             for c in t['trajectory']:
                 if c.get('arithmetic'):
                     folder=Path(c['path']).parent.with_name(Path(c['path']).parent.name+'-svd')
-                    svd.append(meta(folder/'receipt.json')['seconds'])
-        remaining=sum(max(0,int(target[tag])-int(t['trajectory'][-1]['steps'])) for tag,t in self.s['trajectories'].items())
-        remaining_observations=12 if phase=='Tx' else 18
-        remaining_svd=6 if phase=='Tx' else 6
+                    svd[tag].append(meta(folder/'receipt.json')['seconds'])
+        remaining_by_tag={tag:max(0,int(target[tag])-int(t['trajectory'][-1]['steps'])) for tag,t in self.s['trajectories'].items()}
+        remaining=sum(remaining_by_tag.values())
+        remaining_observations=dict(coarse=3,fine=3,baseline=2) if phase=='Tx' else dict(coarse=3,fine=3,baseline=3)
+        remaining_svd=dict(coarse=2,fine=2,baseline=2)
         tx=0 if self.s['components']['transactions']['status']=='PASS' else 9
-        estimate=remaining*rate+remaining_observations*max(observations)*2*headroom+remaining_svd*max(svd)*headroom+tx*rate+600
+        estimate=sum(remaining_by_tag[tag]*rates_by_tag[tag]+remaining_observations[tag]*max(observations[tag])*headroom+
+                     remaining_svd[tag]*max(svd[tag])*headroom for tag in remaining_by_tag)
+        estimate+=tx*rates_by_tag['coarse']+(60 if tx else 0)+600
         totals=self.ledger.totals();fits=totals['attempts']+remaining+tx<=800 and totals['seconds']+estimate<=10800
         value=dict(schema='WJ6MeasuredResourceProjectionV1',phase=phase,status='PASS' if fits else 'RESOURCE_LIMIT',
             parent_resource=file_identity(self.root/'resource-design.json'),native_seconds_per_step_bound=rate,
+            native_seconds_per_step_bounds=rates_by_tag,remaining_by_tag=remaining_by_tag,
             measured_step_rates=rates,measured_observation_seconds=observations,measured_svd_seconds=svd,
             remaining_native_attempts=remaining,transaction_attempts_held=tx,closure_seconds_held=600,
             remaining_observation_allowance=remaining_observations,remaining_svd_allowance=remaining_svd,
