@@ -195,6 +195,21 @@ def main():
     csv_file(args.output / 'cases.csv', cases)
     csv_file(args.output / 'interfaces.csv', interfaces)
     csv_file(args.output / 'hill-field-samples.csv', fields)
+    capacity = []
+    for nx, nz, ni, role in [(4, 5, 2, 'executed prototype'), (8, 10, 4, 'NOT_RUN: one uniform bisection'),
+                            (16, 20, 8, 'NOT_RUN: exceeds current guard'),
+                            (160, 80, 8, 'NOT_RUN: illustrative future hill/wake resolution only')]:
+        no = nz - ni
+        velocity = 2 * (3 * nx - 1) * (3 * nz - 1)
+        pressure = (nx + 1) * (nz + 2) + 1
+        state = 3 * (3 * nx + 1) * (3 * nz + 1) + (3 * nx + 1) * (3 * no + 1) + pressure
+        flow = velocity + pressure
+        capacity.append(dict(role=role, nx=nx, normal_elements=nz, inner_elements=ni, state=state,
+            free_velocity=velocity, pressure_gauge=pressure, flow=flow,
+            one_dense_flow_matrix_GiB=8 * flow ** 2 / 1024 ** 3,
+            evolution_size_guard=3000, permitted_by_size_only=state <= 3000,
+            note='storage lower bound for one flow matrix, excludes copies/factors/mass/scalars; no performance qualification'))
+    csv_file(args.output / 'capacity-estimate.csv', capacity)
     # Include exact command receipts and all pre-scientific failed epochs.
     operations = {}
     for p in sorted((args.root / 'operations').rglob('*')):

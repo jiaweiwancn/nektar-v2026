@@ -21,7 +21,7 @@ def main():
     for a in ax:
         a.plot(s, f, 'k--', label='physical hill')
         for r, label in [(0, 'effective ground'), (.375, 'matching surface')]: a.plot(*curve(r), label=label)
-        for foot in [-5, -2.5, 0, 2.5, 5]:
+        for foot in [-5, -2.5, -1.25, 0, 1.25, 2.5, 5]:
             j = np.argmin(abs(s - foot)); x, z = curve(.375)
             a.plot([s[j], x[j], foot], [f[j], z[j], 20], color='.65', lw=.7)
         a.set(xlabel=r'$x/H_h$', ylabel=r'$z/H_h$'); a.grid(alpha=.2)
@@ -43,15 +43,18 @@ def main():
     fig.tight_layout(); fig.savefig(args.output / 'native-coupled-fields.png'); plt.close(fig)
     rows = list(csv.DictReader((args.data / 'interfaces.csv').open()))
     rows = sorted([r for r in rows if r['case'] == 'hill' and int(r['step']) == 3], key=lambda r: float(r['s']))
-    fig, axes = plt.subplots(1, 3, figsize=(10, 2.8))
-    for a, names, title in zip(axes, [('K',), ('cutoff',), ('traction_x', 'traction_z', 'k_flux_sum')],
-                                  [r'Endpoint $K-K_0$', 'Metric cutoff / matching height', 'One-sided pointwise defects']):
+    fig, axes = plt.subplots(1, 4, figsize=(12, 3.1))
+    for a, names, title in zip(axes, [('K',), ('cutoff',), ('traction_x', 'traction_z'), ('k_flux_sum',)],
+                                  [r'Endpoint $K-K_0$', r'Metric cutoff / $H_w$', 'Pointwise traction defect', 'Pointwise k-flux defect']):
         for name in names:
             values = [float(r[name]) / (.375 if name == 'cutoff' else 1) for r in rows]
             if name == 'K': values = np.array(values) - 81 / (2 * np.sqrt(143)) * .051 ** 2
             a.plot([float(r['x']) for r in rows], values,
                    label=name, lw=1)
-        a.set(xlabel=r'$x/H_h$', title=title); a.grid(alpha=.25); a.ticklabel_format(axis='y', style='sci', scilimits=(-3, 3))
+        a.set_xlabel(r'$x/H_h$'); a.set_title(title, pad=18); a.grid(alpha=.25)
+        a.ticklabel_format(axis='y', style='sci', scilimits=(-3, 3), useOffset=False)
+        if names[0] == 'traction_x': a.set_ylabel(r'$\Delta t/U_\infty^2$')
+        if names[0] == 'k_flux_sum': a.set_ylabel(r'$\Delta j_k/U_\infty^3$')
         if len(names) > 1: a.legend(fontsize=7)
     fig.tight_layout(); fig.savefig(args.output / 'interface-diagnostics.png'); plt.close(fig)
 
