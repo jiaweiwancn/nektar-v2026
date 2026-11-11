@@ -20,7 +20,7 @@ def arithmetic_floors(trajectories):
                 floors[f]['sampled_Linf']=max(floors[f]['sampled_Linf'],a['estimated_sampled_comparison_floor'][f])
     return floors
 
-def sensitivity_sequence(comparisons,floors,design,expected):
+def sensitivity_sequence(comparisons,floors,design,expected,scope_uncertainty=None):
     parts={'coverage':component('PASS' if set(comparisons)==set(expected) else 'NOT_RUN','all declared common-time observations required')}
     try:
         if not finite(floors) or any(v<0 for r in floors.values() for v in r.values()):raise ValueError('invalid arithmetic estimate')
@@ -33,6 +33,14 @@ def sensitivity_sequence(comparisons,floors,design,expected):
                     if not finite([amp,measure]) or amp<=0 or measure<=0:raise ValueError('invalid physical normalization')
                     for norm in ('L2','sampled_Linf'):
                         value=r['normalized_'+norm];u=floors[f]['sampled_Linf']/amp if scope=='constrained_boundary' or norm=='sampled_Linf' else floors[f]['L2']/(amp*math.sqrt(measure))
+                        if scope_uncertainty is not None and scope in scope_uncertainty:
+                            # A separately bound estimator may tighten a scope;
+                            # complete physical uncertainty, not a measured-zero
+                            # exemption, is required for every field and norm.
+                            if set(scope_uncertainty[scope])!=set(FIELDS):raise ValueError('incomplete scope uncertainty fields')
+                            physical=scope_uncertainty[scope][f][norm]
+                            if not finite(physical) or physical<0:raise ValueError('invalid scope uncertainty')
+                            u=physical/(amp*(math.sqrt(measure) if norm=='L2' else 1.))
                         limit=design['sensitivity_fraction']*design['budgets'][norm]
                         if not finite([value,u,limit]) or min(value,u)<0 or limit<=0:raise ValueError('nonfinite/negative comparison evidence')
                         tests[scope+'/'+f+'/'+norm]=component('PASS' if value+u<=limit else 'UNRESOLVED',

@@ -54,4 +54,32 @@ class Meshes(unittest.TestCase):
             for xml in (base,same):
                 root=ET.parse(xml).getroot();self.assertEqual(len(root.findall('./GEOMETRY/ELEMENT/Q')),30)
 
+class ConstraintUncertainty(unittest.TestCase):
+    def test_fixed_free_prescribed_and_pressure_rows(self):
+        from wj5_measure import constraint_estimate
+        fixed=dict(row=[[0,1.]],free_row=[],free_row_L2=0.,gross_row_L2=1.,absolute_accumulation=7.,prescribed_accumulation=7.)
+        a=constraint_estimate(fixed,1e-2)
+        self.assertGreater(a['total'],0.);self.assertLess(a['total'],1e-9)
+        self.assertGreater(constraint_estimate(fixed,1e-2,prescribed_uncertainty=1e-6)['total'],1e-5)
+        free=dict(fixed,free_row=[[4,.5]],free_row_L2=.5)
+        self.assertGreaterEqual(constraint_estimate(free,1e-2)['total'],.005)
+        pressure=dict(fixed,free_row=[[8,1.]],free_row_L2=1.)
+        self.assertGreaterEqual(constraint_estimate(pressure,1e-2)['total'],.01)
+        for key in ('free_row_L2','absolute_accumulation'):
+            invalid=dict(fixed);invalid[key]=float('nan')
+            with self.assertRaisesRegex(ValueError,'invalid constraint'):constraint_estimate(invalid,1e-2)
+    def test_complete_scope_estimate_is_required(self):
+        from wj4_qualification import sensitivity_sequence,FIELDS,SCOPES
+        design=dict(amplitudes={f:1. for f in FIELDS},budgets=dict(L2=1e-4,sampled_Linf=1e-3),sensitivity_fraction=.1)
+        floor={f:dict(L2=1e-8,sampled_Linf=1.59e-5) for f in FIELDS}
+        pair={scope:dict(fields={f:dict(measure=1.,normalized_L2=0.,normalized_sampled_Linf=0.) for f in FIELDS}) for scope in SCOPES}
+        # Original global boundary estimate stays unresolved. Only a separately
+        # justified complete estimate can change the new classification.
+        self.assertEqual(sensitivity_sequence({'0':pair},floor,design,['0'])['status'],'UNRESOLVED')
+        tight={f:dict(L2=1e-9,sampled_Linf=1e-9) for f in FIELDS}
+        result=sensitivity_sequence({'0':pair},floor,design,['0'],scope_uncertainty={'constrained_boundary':tight})
+        self.assertEqual(result['status'],'PASS')
+        del tight['k']
+        self.assertEqual(sensitivity_sequence({'0':pair},floor,design,['0'],scope_uncertainty={'constrained_boundary':tight})['status'],'FAIL')
+
 if __name__=='__main__':unittest.main()
