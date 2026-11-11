@@ -51,9 +51,23 @@ def classify(packet):
     constant=np.array(mixed['pressure_constant_with_zero_gauge']);raw=a@constant
     constant_defect=float(np.max(abs(raw[:nv]),initial=0.))
     require(constant_defect<=2e-12,'global_pressure_constant_has_velocity_action')
+    # The implemented one-sweep pressure inverse uses the free consistent
+    # velocity mass, not the momentum block. Inspect that actual Schur system.
+    mv=gram[:nv,:nv];g=a[:nv,nv:];d=a[nv:,:nv];c=a[nv:,nv:]
+    schur=d@np.linalg.solve(mv,g)-c
+    pf=cholesky(gram[nv:,nv:],lower=True)
+    sw=solve_triangular(pf,schur,lower=True)
+    sw=solve_triangular(pf,sw.T,lower=True).T
+    pressure_spectra={name:svdvals(m) for name,m in
+        [('pimple_with_gauge',sw),('pimple_without_gauge',sw[:np_,:np_])]}
+    pressure_ranks={name:int(np.count_nonzero(s>1e-11*s[0])) for name,s in pressure_spectra.items()}
+    require(pressure_ranks['pimple_with_gauge']==np_+1 and
+            pressure_ranks['pimple_without_gauge']==np_-1,'additional_pimple_pressure_null_mode')
     return dict(status='pass',tensor_checks=checks,continuous_ground=v['continuous_ground_fixtures'],
         finite_mixed_rank=dict(ranks=ranks,expected=dict(mixed_with_gauge=len(rows),divergence=np_-1,pressure_action=np_-1),
             singular_values={k:s.tolist() for k,s in spectra.items()},relative_rank_threshold=1e-11,
+            pimple_pressure_ranks=pressure_ranks,
+            pimple_pressure_singular_values={k:s.tolist() for k,s in pressure_spectra.items()},
             common_pressure_constant_action_defect=constant_defect,
             scope='small actual assembled two-region fixture and common gauge; no general inf-sup claim'),
         radial_projection=[r['radial_projection_samples'] for r in v['fields']],unknowns=sum(o['sizes']))
