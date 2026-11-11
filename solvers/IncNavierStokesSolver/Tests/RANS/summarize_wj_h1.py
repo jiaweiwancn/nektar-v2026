@@ -11,7 +11,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 from scipy.integrate import quad
 from validate_wj1 import QE, KAPPA
-from wj_h1_cases import NU, US, HW
+from wj_h1_cases import NU, US, HW, provisional_roughness
 
 
 def load(path):
@@ -169,6 +169,21 @@ def main():
                     maximum_divergence=float(abs(divergence[maximum])), maximum_point=rows[maximum]['physical'],
                     minimum_k=min(r['k'] for r in rows), maximum_k=max(r['k'] for r in rows),
                     minimum_epsilon=min(r['epsilon'] for r in rows), maximum_epsilon=max(r['epsilon'] for r in rows)))
+                production_name = 'inner_k_production' if inner else 'outer_k_production'
+                regions[-1]['integrated_raw_actual_production'] = -weak['native_terms'][production_name][0][2]
+                if inner:
+                    matched = np.array([r['K'] for r in rows]); heights = np.array([r['chart'][2] for r in rows])
+                    xpos = provisional_roughness() * np.sqrt(matched) / (70 * NU)
+                    intercept = 10.7 * (1 - xpos ** np.maximum(.5 - .4 * xpos ** .7, 1 - .79 * xpos ** (-.28)))
+                    zv = NU * intercept / np.sqrt(matched)
+                    nt = KAPPA * np.sqrt(matched / QE) * np.maximum(heights - zv, 0)
+                    reference = float(weights @ ((matched / QE) ** 2 * nt / (NU + nt) ** 2))
+                    loss = weak['native_terms']['inner_k_destruction'][0][2]
+                    assert abs(reference - loss) < 2e-10, 'current-K metric reference budget differs'
+                    regions[-1].update(integrated_counterfactual_production=reference,
+                        integrated_cutoff_destruction=loss, reference_budget_absolute_defect=abs(reference - loss),
+                        integrated_roughness_power=sum(r['weight'] * np.dot(r['U'], r['force'])
+                            for r in rows if r['chart'][2] <= provisional_roughness()))
                 if name == 'hill':
                     # Same native physical points, downsampled for plotting only.
                     # A prime stride avoids aliasing the 24/32 point rules.
