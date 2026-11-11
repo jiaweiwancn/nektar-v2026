@@ -158,7 +158,8 @@ def main():
             # Mutable progress summaries and live publisher/ledger files do not.
             for f in (a.study/policy).rglob('*'):
                 if f.is_file() and f.name!='summary.json' and f.suffix!='.lock':index[str(f.resolve())]=file_identity(f)
-            passive_receipts=list((a.study/policy).rglob('receipt.json'))+list((r/'row-qualified-v1'/policy).rglob('receipt.json'))
+            passive_receipts=list((a.study/policy).rglob('receipt.json'))
+            for root in r.glob('row-qualified-v*'):passive_receipts.extend((root/policy).rglob('receipt.json'))
             for f in passive_receipts:
                 if f.parent.name in s['execution']:continue
                 d=read(f)
@@ -173,7 +174,7 @@ def main():
             for f in scope.rglob('*'):
                 if f.is_file() and 'CMakeFiles' not in f.parts and f.suffix in ('.xml','.json','.bin','.log') and 'Testing' not in f.parts:
                     index[str(f.resolve())]=file_identity(f)
-        for scope in (r/'resource-projections-v1',r/'row-qualified-v1'):
+        for scope in [r/'resource-projections-v1',*r.glob('row-qualified-v*')]:
             for f in scope.rglob('*'):
                 if f.is_file() and f.suffix!='.lock':index[str(f.resolve())]=file_identity(f)
         index_path=r/('artifact-index-'+out.name+'.json');write_once(index_path,index)
@@ -185,6 +186,12 @@ def main():
         native={n:h for n,h in contents.items() if n.endswith(('.cpp','.h','.hpp')) or n.endswith('CMakeLists.txt')}
         require(all(file_hash(driver/n)==h for n,h in native.items()),'driver/native C++ inputs differ')
         prior=meta(r/'prior-seals.json');verify_artifacts(prior['wj4']);verify_artifacts(prior['wj5'])
+        observer_archives={}
+        for f in r.glob('observer-*-source.json'):
+            packet=meta(f);archive=packet['archive']
+            require(file_hash(archive['path'])==archive['sha256'] and Path(archive['path']).stat().st_size==archive['bytes'],'observer source archive changed')
+            for name,h in packet['members'].items():require(file_hash(f.with_suffix('')/name)==h,'observer code member changed')
+            observer_archives[f.name]=file_identity(f)
         manifest=dict(schema='WJ6LinuxManifestV1',root=str(r),native_source_revision=git(producer,'rev-parse','HEAD'),native_tree=git(producer,'rev-parse','HEAD^{tree}'),
             driver_source_revision=git(driver,'rev-parse','HEAD'),driver_tree=git(driver,'rev-parse','HEAD^{tree}'),
             producer_status=git(producer,'status','--short'),driver_status=git(driver,'status','--short'),
@@ -200,7 +207,8 @@ def main():
             summaries=frozen,artifact_index=file_identity(index_path),prior_seals=prior,
             arithmetic_policy='Release -ffp-contract=off -fno-fast-math; serial rank; numerical threads1; <=72 all workers including MPI helpers',
             capacity_control='SolverInfo requested/effective4331, default3000; resource-design SHA binds finite process ceilings, not physical identity',
-            publication_code=artifacts([Path(__file__)]),phase_components={p:s['components'] for p,s in summaries.items()})
+            publication_code=artifacts([Path(__file__)]),observer_source_archives=observer_archives,
+            phase_components={p:s['components'] for p,s in summaries.items()})
         write_once(out/'manifest.json',manifest)
         write_once(out/'receipt.json',dict(schema='WJ6CompactReceiptV1',manifest=file_identity(out/'manifest.json'),files=artifacts([f for f in out.iterdir() if f.is_file() and f.suffix!='.lock']),
             elapsed_seconds=time.time()-start,governing_attempts=0,immutable_numeric_snapshots=frozen))

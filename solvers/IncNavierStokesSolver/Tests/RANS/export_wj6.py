@@ -69,12 +69,15 @@ def main():
                 if path.exists():copy(path,'cases/'+policy+'/'+case.parent.name+'/'+name)
     for path in sorted((root/'resource-projections-v1').rglob('*.json')):
         copy(path,'resource-bases/'+str(path.relative_to(root/'resource-projections-v1')))
-    for policy in ('EP','Budget'):
-        for name in ('resource-plan.json','qualification.json','records.json','failure.json'):
-            path=root/'row-qualified-v1'/policy/name
-            if path.exists():copy(path,'row-qualification/'+policy+'/'+name)
+    for version in sorted(root.glob('row-qualified-v*')):
+        for policy in ('EP','Budget'):
+            for name in ('resource-plan.json','qualification.json','records.json','failure.json','original-summary.json'):
+                path=version/policy/name
+                if path.exists():copy(path,'row-qualification/'+version.name+'/'+policy+'/'+name)
     for name in ('producer-source-content.json','prior-seals.json'):
         copy(root/name,'identity/'+name)
+    copy(Path(read(compact/'manifest.json')['artifact_index']['path']),'identity/heavy-artifact-index.json')
+    for path in root.glob('observer-*-source.json'):copy(path,'identity/'+path.name)
     for path in sorted(root.glob('*-whole-resource.txt')):
         copy(path,'identity/'+path.name)
     commands = read(compact/'final-command-receipts.json')

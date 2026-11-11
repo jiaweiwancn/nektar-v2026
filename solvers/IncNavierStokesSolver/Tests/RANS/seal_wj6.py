@@ -50,9 +50,14 @@ def main():
     require(latest['exit_code'] == 0 and 'Ran 6 tests' in Path(latest['log']).read_text(), 'final metadata fixtures incomplete')
     supplement=by_label['observation-metadata-v2']
     require(supplement['exit_code']==0 and 'Ran 7 tests' in Path(supplement['log']).read_text(), 'independent-order metadata fixtures incomplete')
+    resume=by_label['transaction-resumption-metadata-v3']
+    require(resume['exit_code']==0 and 'Ran 8 tests' in Path(resume['log']).read_text(), 'zero-launch resumption metadata fixtures incomplete')
+    observation_resume=by_label['observation-resume-metadata-v4']
+    require(observation_resume['exit_code']==0 and 'Ran 9 tests' in Path(observation_resume['log']).read_text(), 'observation reuse metadata fixtures incomplete')
     write_once(out/'regression-verification.json', dict(schema='WJ6RegressionSealV1', status='PASS',
         registered=len(registered), selected_unique=len(unique), names=sorted(unique), selections=selections,
-        latest_metadata=latest,independent_order_metadata=supplement,allocation_denials=[file_identity(f) for f in root.glob('*allocation*.json')
+        latest_metadata=latest,independent_order_metadata=supplement,resumption_metadata=[resume,observation_resume],
+        allocation_denials=[file_identity(f) for f in root.glob('*allocation*.json')
                                                    if read(f).get('allowed') is False]))
     manifest = read(out/'manifest.json')
     verify_artifacts(manifest['prior_seals']['wj4'])

@@ -14,6 +14,14 @@ from wj6_qualification import sum_envelopes,common_extension_authorized,required
 
 
 class Metadata(unittest.TestCase):
+    def test_observation_resume_cannot_reuse_failed_or_governing_receipts(self):
+        from qualify_wj6_observations import reusable_observation,failure_status
+        good=dict(exit_code=0,actual_attempts=0,artifacts=dict(output=dict(sha256='a'*64)))
+        self.assertTrue(reusable_observation(good))
+        for bad in (dict(good,exit_code=125),dict(good,actual_attempts=1),dict(good,artifacts={})):
+            self.assertFalse(reusable_observation(bad))
+        self.assertEqual(failure_status('physical audit failure',dict(exit_code=1,failure=None)),'OBSTRUCTED')
+        self.assertEqual(failure_status('readback failed',dict(failure='RESOURCE_LIMIT: worker denial')),'RESOURCE_LIMIT')
     def test_resource_denial_alias_requires_no_launched_attempt(self):
         from resume_wj6_transaction import prelaunch_alias
         good=dict(exit_code=125,actual_attempts=0,resource=dict(not_launched=True))
