@@ -125,7 +125,7 @@ def main():
                             value=v['value'],uncertainty=v['uncertainty'],limit=v['limit'],margin=v['limit']-v['value']-v['uncertainty'],
                             fraction=(v['value']+v['uncertainty'])/v['limit']))
             for name,e in s['execution'].items():
-                rows['resources'].append(dict(policy=policy,case=name,exit_code=e['exit_code'],attempts=e['actual_attempts'],**{k:v for k,v in e['resource'].items() if not isinstance(v,(list,dict))}))
+                rows['resources'].append(dict(policy=policy,case=name,exit_code=e['exit_code'],attempts=e['actual_attempts'],**{k:v for k,v in e['resource'].items() if k!='exit_code' and not isinstance(v,(list,dict))}))
                 identity=e.get('report')
                 if not identity:continue
                 verify_artifacts({identity['path']:identity});d=read(identity['path']);attempts=d['pimple_attempts']
@@ -166,7 +166,7 @@ def main():
                 if 'resource' not in d:continue
                 rows['resources'].append(dict(policy=policy,case=str(f.parent.relative_to(r)),
                     exit_code=d['exit_code'],attempts=d['actual_attempts'],receipt=json.dumps(file_identity(f)),
-                    **{k:v for k,v in d['resource'].items() if not isinstance(v,(list,dict))}))
+                    **{k:v for k,v in d['resource'].items() if k!='exit_code' and not isinstance(v,(list,dict))}))
         for name,data in rows.items():table(out/(name+'.csv'),data)
         write_once(out/'diagnoses.json',diagnoses);write_once(out/'audit-witnesses.json',audits)
         write_once(out/'maximum-neighborhoods.json',neighborhoods);write_once(out/'accepted-stage-lineage.json',stages)
