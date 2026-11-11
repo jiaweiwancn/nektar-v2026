@@ -136,3 +136,25 @@ imports, code/runtime/producer/callback/checkpoint links, all-order tuple covera
 gates/ledgers/log hashes and encoded/decoded transport identities are published.
 T3*u*/H=.002048 is finite-horizon strip qualification, not stationarity,
 exact discrete equilibrium, a temporal order proof or general stability.
+
+## Pre-import observer implementation clarification
+
+The retained replay exposed a discrete-order parsing issue (orders must be
+integers while signed binary64 state/history values stay unchanged). It also
+identified that the legacy pair-comparison helper defaulted to horizontal
+order4 when composing a q10/x6 boundary rule. That omitted the top's x6
+integration nodes, giving boundary measure4 instead of5 (outer epsilon2
+instead of3). WJ-7 uses the actual requested horizontal order, preserving one
+full-domain pressure gauge and all definitions/budgets. A focused fixture
+records the old/new measures. All504 legacy sensitivity leaves are replayed
+separately with unchanged legacy arithmetic/rules and retained as such;
+the corrected integration is a new versioned qualification of the same bytes.
+No WJ-6 receipt or result is replaced. Any changed decision stops admission.
+
+The streamed envelope obtains only the two unique six-scalar native evaluation
+arrays in a hash-verified mmap metadata pass, then processes each full row map
+once. Each comparison holds only its current pair. Production-parent cost
+retains the old measured per-new-observation allowance; complete prefix
+requalification uses its newly measured streamed cost. These distinct tasks
+are both projected with25% headroom, along with all nine SVD analyses,
+first-read row exports, extra launches and600s closure.

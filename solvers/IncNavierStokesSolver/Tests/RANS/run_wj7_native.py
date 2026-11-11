@@ -200,7 +200,7 @@ class Study(WJ6Study):
         started=time.time();result=qualify(self.index(end),self.a.policy,self.design,end)
         if end==32:
             old=sealed_prefix(self.a.parent,self.a.policy)[2];differences=[]
-            for row in result['sensitivity']:
+            for row in result['legacy_sensitivity']:
                 order,group,step,scope,field,norm=row['key']
                 before=old['gate']['components'][group+'_order'+str(order)+'_sensitivity']['components'][str(step)]['components'][scope+'/'+field+'/'+norm]
                 require(before['status']==row['status'],'replay sensitivity decision differs')
@@ -247,14 +247,16 @@ def projection(a,policy,end):
     retained_count=len(replay['record_index'])/2
     # Existing prefix must be requalified each row under an enlarged envelope.
     expected_counts=[sum(len(observation_steps(tag,v)) for tag in rates) for v in range(end,129,32)]
-    parent=sum(expected_counts)*max(replay['seconds']/retained_count,old['parent_seconds_per_observation_pair'])*1.25
+    prefix_parent=sum(expected_counts)*replay['seconds']/retained_count*1.25
+    production_parent=3*rows*old['parent_seconds_per_observation_pair']*1.25
+    parent=prefix_parent+production_parent
     launches=sum(math.ceil(n/32) for n in remaining.values());launch_overhead=launches*5*1.25
     estimate=sum(remaining[t]*rates[t] for t in rates)+observation+svd+parent+launch_overhead+600
     totals=ledger.totals();fits=totals['seconds']+estimate<=10800 and totals['attempts']+sum(remaining.values())<=800
     value=dict(schema='WJ7RemainingResourceProjectionV1',status='PASS' if fits else 'RESOURCE_LIMIT',before=end,
         native_rates=rates,remaining_steps=remaining,remaining_rows=rows,native_launches=launches,
         native_seconds=sum(remaining[t]*rates[t] for t in rates),observation_seconds=observation,svd_seconds=svd,
-        streamed_prefix_parent_seconds=parent,additional_launch_overhead_seconds=launch_overhead,closure_seconds=600,
+        streamed_prefix_parent_seconds=prefix_parent,production_parent_seconds=production_parent,additional_launch_overhead_seconds=launch_overhead,closure_seconds=600,
         headroom=1.25,totals=totals,projected_remaining_seconds=estimate,projected_total_seconds=totals['seconds']+estimate,
         basis=artifacts([a.parent/'study'/policy/'T3-resource-projection.json',folder/('qualification-'+str(end-32)+'.json'),ledger.file]),
         allocation=scientific_workers(),policy_bytes=volume(folder),hard_limits=DEFAULT)
@@ -288,7 +290,7 @@ def main():
                         step=int(c['steps']);index[tag,step,8]=c;index[tag,step,10]=q10[tag+'/'+str(step)]
                 start=time.time();result=qualify(index,policy,dict(amplitudes=AMP,budgets=BUDGET,sensitivity_fraction=.1),32)
                 changes=[]
-                for row in result['sensitivity']:
+                for row in result['legacy_sensitivity']:
                     order,group,step,scope,field,norm=row['key']
                     prior=supp['gate']['components'][group+'_order'+str(order)+'_sensitivity']['components'][str(step)]['components'][scope+'/'+field+'/'+norm]
                     require(prior['status']==row['status'],'retained replay decision differs')

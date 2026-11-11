@@ -15,6 +15,23 @@ from wj_immutable import file_identity
 
 
 class Metadata(unittest.TestCase):
+    def test_both_order_comparisons_integrate_the_complete_boundary(self):
+        from wj4_measure import rule,comparison
+        from wj7_qualification import consistent_comparison
+        for order,xorder in ((8,4),(10,6)):
+            settings=dict(order=order,xorder=xorder)
+            rows=[]
+            for x,y,z,w,side,*extra in rule(**settings):
+                rows.append(dict(position=[x,y,z],weight=w,side=side,inner=z<1 or (z==1 and side<0),
+                    value=[0.]*6,represented_initial=[0.]*6,geometry=0,element=0,requested_x_side=0,
+                    face_sides_xz=[0,0],provenance='fixture'))
+            m=dict(observations=rows)
+            result=consistent_comparison(m,m,'EP',settings)
+            self.assertAlmostEqual(result['constrained_boundary']['fields']['velocity']['measure'],5.)
+            self.assertAlmostEqual(result['constrained_boundary']['fields']['outer_epsilon']['measure'],3.)
+            if order==10:
+                old=comparison(m,m,'EP',settings)
+                self.assertAlmostEqual(old['constrained_boundary']['fields']['velocity']['measure'],4.)
     def test_real_publisher_stage_report_distinct_from_arithmetic_matrix(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);matrix=root/'epsilon.metric.bin';matrix.write_bytes(bytes(32))

@@ -3,12 +3,14 @@
 import copy
 import gc
 import math
+import mmap
+import json
 from pathlib import Path
 import numpy as np
 from wj_immutable import read,file_hash,verify_artifacts,digest
 from wj_qualification import aggregate,component
-from wj3_measure import FIELDS
-from wj4_measure import evaluate,comparison,BUDGET
+from wj3_measure import FIELDS,arrays
+from wj4_measure import evaluate,comparison,regional_norms,same_rule,BUDGET
 from wj4_qualification import sensitivity_sequence,arithmetic_floors
 from wj5_measure import boundary_uncertainty
 from wj6_qualification import individual_arithmetic,sum_envelopes
@@ -65,7 +67,7 @@ def load_measurement(c):
 
 
 def complete_errors(m,policy,c):
-    result=evaluate(m,policy,xorder=c['rule_settings']['xorder'],rule_settings=c['rule_settings'])
+    result=evaluate(m,policy,xorder=int(c['rule_settings']['xorder']),rule_settings=c['rule_settings'])
     tests={}
     for kind in ('continuum_error','initial_drift'):
         for scope in SCOPES:
@@ -78,12 +80,33 @@ def complete_errors(m,policy,c):
     return result
 
 
+def evaluation_metadata(c):
+    # Native exports these two unique, six-scalar arrays. Mmap avoids a second
+    # full historical row-map parse merely to discover the coefficient envelope.
+    require(file_hash(c['path'])==c['sha256'],'stale envelope metadata')
+    result=[]
+    with open(c['path'],'rb') as f, mmap.mmap(f.fileno(),0,access=mmap.ACCESS_READ) as data:
+        for name in ('evaluation_basis_row_norm_max','arithmetic_evaluation_sensitivity'):
+            key=('"'+name+'"').encode();at=data.find(key)
+            require(at>=0 and data.find(key,at+len(key))<0,'ambiguous native evaluation metadata')
+            start=data.find(b':',at)+1
+            value,_=json.JSONDecoder(parse_int=float).raw_decode(data[start:start+4096].decode().lstrip())
+            require(len(value)==6 and all(math.isfinite(v) and v>=0 for v in value),'invalid native evaluation metadata')
+            result.append(value)
+    return result
+
+
+def consistent_comparison(a,b,policy,settings):
+    same_rule(a,b);av,_,_,w,outer=arrays(a,policy);bv,_,_,_,_=arrays(b,policy)
+    return regional_norms(av-bv,w,outer,a['observations'],xorder=int(settings['xorder']),rule_settings=settings)
+
+
 def qualify(index,policy,design,end):
     """Only one full payload, or the current comparison pair, is live.
 
     The index consists of scalar records/immutable identities. Row-map passes
     release every full payload; comparisons release each pair before the next.
-    Arithmetic formulas and comparison ordering are unchanged from WJ-6.
+    Arithmetic formulas and ordering are unchanged. Legacy comparisons are replayed separately; WJ-7 composes the boundary rule with the actual horizontal order.
     """
     expected={(tag,step,order) for tag in TAGS for step in observation_steps(tag,end) for order in (8,10)}
     require(set(index)==expected,'missing/duplicate required observation order/time')
@@ -99,18 +122,8 @@ def qualify(index,policy,design,end):
         basis=np.zeros(6);evaluation=np.zeros(6)
         for step in observation_steps(tag,end):
             for order in (8,10):
-                c=index[tag,step,order];m=load_measurement(c)
-                errors=complete_errors(m,policy,c)
-                require(errors==c['errors'],'replayed accuracy/interface/divergence decisions differ')
-                metrics[tag,step,order]=errors
-                parts['accuracy/'+tag+'/'+str(step)+'/'+str(order)]=errors['accuracy_gate']
-                basis=np.maximum(basis,m['evaluation_basis_row_norm_max'])
-                evaluation=np.maximum(evaluation,m['arithmetic_evaluation_sensitivity'])
-                del m;gc.collect()
-            a,b=(metrics[tag,step,o] for o in (8,10))
-            changes=[abs(a[k][s]['fields'][f]['L2']-b[k][s]['fields'][f]['L2'])
-                for k in ('continuum_error','initial_drift') for s in SCOPES for f in NAMES]
-            parts['quadrature/'+tag+'/'+str(step)]=component('PASS' if max(changes)<=1e-10 else 'UNRESOLVED',maximum=max(changes),limit=1e-10)
+                b,e=evaluation_metadata(index[tag,step,order])
+                basis=np.maximum(basis,b);evaluation=np.maximum(evaluation,e)
         minimum={name:min(p['systems'][name]['physical_metric_min_eigenvalue'] for p in packets) for name in ('momentum','k','epsilon')}
         pressure=min(p['systems']['pressure']['physical_mass_operator_bound'] for p in packets)
         factors=[basis[i]/math.sqrt(minimum[name]) for i,name in enumerate(('momentum','momentum','k','epsilon'))]+[basis[4]/math.sqrt(pressure)]*2
@@ -128,36 +141,48 @@ def qualify(index,policy,design,end):
         for step in observation_steps(tag,end):
             for order in (8,10):
                 c=index[tag,step,order];m=load_measurement(c)
+                errors=complete_errors(m,policy,c)
+                require(errors==c['errors'],'replayed accuracy/interface/divergence decisions differ')
+                metrics[tag,step,order]=errors
+                parts['accuracy/'+tag+'/'+str(step)+'/'+str(order)]=errors['accuracy_gate']
                 estimate=boundary_uncertainty(m,envelope,c['rule_settings'])
                 for f,row in estimate['fields'].items():
                     for norm in ('L2','sampled_Linf'):boundary[f][norm]=max(boundary[f][norm],row[norm])
                 coverage.append(dict(step=step,order=order,state=c['state_sha256'],measurement_sha256=c['sha256']))
                 del m;gc.collect()
+            a,b=(metrics[tag,step,o] for o in (8,10))
+            changes=[abs(a[k][s]['fields'][f]['L2']-b[k][s]['fields'][f]['L2'])
+                for k in ('continuum_error','initial_drift') for s in SCOPES for f in NAMES]
+            parts['quadrature/'+tag+'/'+str(step)]=component('PASS' if max(changes)<=1e-10 else 'UNRESOLVED',maximum=max(changes),limit=1e-10)
         envelopes[tag]=dict(floors=floors,boundary=boundary,coefficient_envelope=envelope,coverage=coverage,
             maximum_basis=basis.tolist(),evaluation_sensitivity=evaluation.tolist())
-    rows=[];comparisons={}
+    rows=[];legacy_rows=[];comparisons={};integration_changes=[]
     for order in (8,10):
         for group,ta,tb in (('horizontal','baseline','coarse'),('timestep','coarse','fine')):
             floors=sum_envelopes(envelopes[ta]['floors'],envelopes[tb]['floors'])
             boundary=sum_envelopes(envelopes[ta]['boundary'],envelopes[tb]['boundary'])
-            diffs={}
+            diffs={};legacy={}
             for step in (0,4,32,64,96,128):
                 if step>end:continue
                 ca=index[ta,step,order];cb=index[tb,step*2 if tb=='fine' else step,order]
                 a=load_measurement(ca);b=load_measurement(cb)
                 require(abs(a['time']-b['time'])<=2e-15,'common physical times differ')
-                diffs[str(step)]=comparison(a,b,policy,ca['rule_settings'])
+                legacy[str(step)]=comparison(a,b,policy,ca['rule_settings'])
+                diffs[str(step)]=consistent_comparison(a,b,policy,ca['rule_settings'])
+                integration_changes.append(dict(order=order,group=group,step=step,old_boundary_measure=legacy[str(step)]['constrained_boundary']['fields']['velocity']['measure'],new_boundary_measure=diffs[str(step)]['constrained_boundary']['fields']['velocity']['measure']))
                 del a,b;gc.collect()
             gate=sensitivity_sequence(diffs,floors,design,list(diffs),scope_uncertainty={'constrained_boundary':boundary})
             parts[group+'/'+str(order)]=gate;comparisons[group+'/'+str(order)]=diffs
-            for step,g in gate['components'].items():
-                if not step.isdigit():continue
-                for key,v in g['components'].items():
-                    scope,field,norm=key.split('/')
-                    rows.append(dict(key=[order,group,int(step),scope,field,norm],**v))
+            oldgate=sensitivity_sequence(legacy,floors,design,list(legacy),scope_uncertainty={'constrained_boundary':boundary})
+            for source,destination in ((gate,rows),(oldgate,legacy_rows)):
+                for step,g in source['components'].items():
+                    if not step.isdigit():continue
+                    for key,v in g['components'].items():
+                        scope,field,norm=key.split('/')
+                        destination.append(dict(key=[order,group,int(step),scope,field,norm],**v))
     parts['tuple_coverage']=tuple_gate(rows,end)
     return dict(schema='WJ7StreamedPrefixQualificationV1',policy=policy,end=end,gate=aggregate(parts),
-        sensitivity=rows,envelopes=envelopes,comparisons=comparisons,
+        sensitivity=rows,legacy_sensitivity=legacy_rows,comparison_quadrature_correction=integration_changes,envelopes=envelopes,comparisons=comparisons,
         memory_contract='one full row-map payload or current comparison pair/order; no all-history payload cache',
         record_index={tag+'/'+str(step)+'/'+str(order):dict(path=c['path'],sha256=c['sha256'],report=c['report'],report_sha256=c['report_sha256'])
             for (tag,step,order),c in index.items()})
