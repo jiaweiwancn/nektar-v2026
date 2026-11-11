@@ -29,8 +29,9 @@ def classify(packet):
     for ground in v['continuous_ground_fixtures']:
         g=ground['diagnostic'];require(g['admissible']==ground['expected_admissible'],'native_continuous_ground_trace:'+ground['name'])
         require(g['admissible']==(g['minimum']>=g['arithmetic_scale']),'ground_arithmetic_classification')
-        if ground['name']=='narrow_negative_sextic':require(abs(g['point'][0]-.123456789)<2e-6 and g['minimum']<0,'narrow_ground_minimum_missing')
-    if v['fields'][0]['axis_degrees'][0]==6:require(len(v['continuous_ground_fixtures'])==7,'degree_six_ground_coverage')
+        if ground['name']=='narrow_negative_sextic':require(abs(g['point'][0]-.123456789)<2e-6 and g['minimum']<0 and ground['ordinary_81_point_minimum']>0,'narrow_ground_minimum_missing')
+        if ground['name']=='interior_arithmetic_margin':require(abs(g['minimum'])<=g['arithmetic_scale'] and g['arithmetic_scale']>0,'ground_arithmetic_margin_reason_missing')
+    if v['fields'][0]['axis_degrees'][0]==6:require(len(v['continuous_ground_fixtures'])==10,'degree_six_ground_coverage')
     a=np.array(mixed['matrix']);rows=np.array(mixed['rows'],int);nv=int(mixed['velocity_size']);np_=len(rows)-nv-1
     offset=np.array(o['offsets'],int);sizes=np.array(o['sizes'],int)
     masses=[np.array(r['mass']) for r in v['fields']]
@@ -75,6 +76,8 @@ def main():
             for e in root.findall('./EXPANSIONS/E'):e.set('NUMMODES',','.join(str(x+1) for x in (pressure if e.get('FIELDS')=='p' else degree)))
             write(root,folder/'case.xml')
             packet,_=run_probe(a.runtime,folder,dict(operation='neutral',grid=[],export_basis=False,export_tensor_validation=True,export_mixed_space=True))
+            for b,row in enumerate(packet['tensor_validation']['fields']):
+                require(row['axis_degrees']==[* (degree if b<4 else pressure),0],'requested_axis_orders_not_constructed')
             files += [folder/'case.xml',folder/'request.json',folder/'packet.json.gz',folder/'probe.log'];rows[name]=classify(packet)
         radial=max(abs(np.array(x)-np.array(y)).max() for x,y in zip(rows['P5']['radial_projection'],rows['X6Z5']['radial_projection'],strict=True))
         require(radial<=3e-12,'radial_projection_depends_on_streamwise_order')
@@ -82,7 +85,7 @@ def main():
     except Exception as e:result=dict(status='fail',failure=repr(e),layouts=rows)
     write_json(a.output/'results.json',result)
     files=[p for p in a.output.rglob('*') if p.is_file() and p.name not in ('completed-artifacts.json','request-manifest.json')]
-    manifest.seal(a.output,files);print(result['status']);return 0 if result['status']=='pass' else 1
+    manifest.seal(a.output,files);print(result['status'],str(a.output.resolve()));return 0 if result['status']=='pass' else 1
 
 
 if __name__=='__main__':raise SystemExit(main())

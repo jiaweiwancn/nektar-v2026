@@ -4,6 +4,8 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <StdRegions/StdSegExp.h>
+#include <cmath>
+#include <limits>
 #include <numeric>
 #include <set>
 
@@ -112,10 +114,11 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
     if(kf.Elements().front().degrees[0]==6)
     {
         auto state=patch.Reference();const auto cg=native->GetLocalToGlobalMap();
-        for(int fixture=0;fixture<7;++fixture)
+        for(int fixture=0;fixture<10;++fixture)
         {
             const std::string name=std::vector<std::string>{"positive_sextic","narrow_negative_sextic","endpoint_minimum",
-                "repeated_stationary_minimum","positive_tiny_constant","zero_constant","negative_tiny_constant"}[fixture];
+                "repeated_stationary_minimum","positive_tiny_constant","zero_constant","negative_tiny_constant",
+                "interior_arithmetic_margin","interior_positive_margin","interior_negative_margin"}[fixture];
             for(int e=0;e<kf.Elements().size();++e)if(kf.Elements()[e].lower[2]==0)
             {
                 StdRegions::StdSegExp segment(native->GetExp(e)->GetBasis(0)->GetBasisKey());
@@ -129,12 +132,27 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
                         fixture==2?x[j]+1+.1*std::pow(x[j]+1,6)+1e-8:
                                    std::pow(y,4)+.001*std::pow(y,6)-1e-8;
                 }
-                if(fixture>=4)coefficients[0]=coefficients[1]=fixture==4?1e-20:fixture==5?0.:-1e-20;
+                if(fixture>=7)
+                {
+                    // Exact dyadic modal construction: x^2(75-175x^2+
+                    // 105x^4)/32 has its zero minimum at x=0. Report the
+                    // unresolved roundoff margin, never silently accept it.
+                    const double margin=fixture==7?0.:fixture==8?std::ldexp(1.,-52):-std::ldexp(1.,-52);
+                    coefficients[0]=coefficients[1]=5./32+margin;coefficients[6]=-1;
+                }
+                else if(fixture>=4)coefficients[0]=coefficients[1]=fixture==4?1e-20:fixture==5?0.:-1e-20;
                 else segment.FwdTransBndConstrained(physical,coefficients);
                 const int start=native->GetCoeff_Offset(e);
                 for(int j=0;j<nc;++j)state[patch.offset[patch.K()]+cg->GetLocalToGlobalMap(start+j)]=cg->GetLocalToGlobalSign(start+j)*coefficients[j];
             }
-            ground.push_back(J::Object({{"name",J::Quote(name)},{"expected_admissible",J::Boolean(fixture==0 || fixture==2 || fixture==4 || fixture==5)},
+            double sampled=std::numeric_limits<double>::infinity();
+            for(int e=0;e<kf.Elements().size();++e)if(kf.Elements()[e].lower[2]==0)
+            {
+                const auto &el=kf.Elements()[e];for(int j=0;j<=80;++j)
+                    sampled=std::min(sampled,kf.ElementPoint(e,{el.lower[0]+(el.upper[0]-el.lower[0])*j/80.,0,0}).Value(state,patch.offset[patch.K()]));
+            }
+            ground.push_back(J::Object({{"name",J::Quote(name)},{"ordinary_81_point_minimum",J::Number(sampled)},
+                {"expected_admissible",J::Boolean(fixture==0 || fixture==2 || fixture==4 || fixture==5 || fixture==8)},
                 {"diagnostic",patch.ContinuousGroundDiagnostic(state)}}));
         }
     }

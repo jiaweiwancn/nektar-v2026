@@ -38,7 +38,7 @@ std::string Row(const RANSWallGlobalPoint &p)
 std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     const RANSWallPatchParameters &parameters,const Vector &state,const Vector &previous,
     double dt,double time,const RANSWallEvolutionData &data,int faceOrder,
-    bool reconcile=false,const Vector &stageHistory={})
+    bool reconcile=false,const Vector &stageHistory={},double diffusionIBPFraction=0.)
 {
     Require(dt>0 && previous.size()==state.size(),"invalid physical budget history");
     Require(faceOrder==16 || faceOrder==24 || faceOrder==32,"unsupported physical budget face order");
@@ -50,13 +50,14 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     Tree packet;std::istringstream input(patch.PreservationPacket(preK,time,data,true,{},{}));
     boost::property_tree::read_json(input,packet);
     std::array<Vector,3> sum{Vector(7),Vector(7),Vector(7)};
-    std::array<std::array<Vector,6>,3> loads;
-    std::array<Vector,3> advectiveFaces;
+    std::array<std::array<Vector,7>,3> loads;
+    std::array<Vector,3> advectiveFaces,diffusiveFaces;
     if(reconcile)for(int region=0;region<3;++region)
     {
         const int block=region==2?patch.Epsilon():patch.K();
         for(auto &v:loads[region])v.resize(patch.size[block]);
         advectiveFaces[region].resize(patch.size[block]);
+        diffusiveFaces[region].resize(patch.size[block]);
     }
     const auto model=parameters.model.Parameters();
     auto gradient=[&](const RANSWallGlobalPoint &v)
@@ -99,6 +100,34 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
         const auto ux=v.Gradient(state,patch.offset[0]),uz=v.Gradient(state,patch.offset[1]);
         const double u=v.Value(state,patch.offset[0]),w=v.Value(state,patch.offset[1]);
         const double D=c[epsilon?2:0],rhs=c[epsilon?10:8],rate=c[epsilon?11:9];
+        double divDiffusion=0;
+        if(diffusionIBPFraction)
+        {
+            Require(diffusionIBPFraction==std::ldexp(1.,-11) || diffusionIBPFraction==std::ldexp(1.,-12),
+                    "undeclared read-only diffusion IBP stencil");
+            const auto &el=patch.fields[0]->Elements()[v.element];
+            for(int a:{0,2})
+            {
+                const double h=(el.upper[a]-el.lower[a])*diffusionIBPFraction;
+                auto flux=[&](int shift)
+                {
+                    auto p=v.coordinate;p[a]+=shift*h;
+                    const auto vv=patch.GeometryPoint(0,v.geometry,p);
+                    const auto cc=coefficients(vv,region!=0);
+                    const auto scalar=patch.GeometryPoint(block,v.geometry,p);
+                    return cc[epsilon?2:0]*scalar.Gradient(state,patch.offset[block])[a];
+                };
+                if(v.coordinate[a]-2*h>=el.lower[a] && v.coordinate[a]+2*h<=el.upper[a])
+                    divDiffusion+=(-flux(2)+8*flux(1)-8*flux(-1)+flux(-2))/(12*h);
+                else
+                {
+                    const int side=v.coordinate[a]+4*h<=el.upper[a]?1:-1;
+                    Require(v.coordinate[a]+side*4*h>=el.lower[a] && v.coordinate[a]+side*4*h<=el.upper[a],
+                            "diffusion IBP stencil cannot fit its generating owner");
+                    divDiffusion+=side*(-25*flux(0)+48*flux(side)-36*flux(2*side)+16*flux(3*side)-3*flux(4*side))/(12*h);
+                }
+            }
+        }
         for(int i=0;i<q.ids.size();++i)
         {
             const int id=q.ids[i];const double test=q.phi[i];
@@ -110,6 +139,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
             // Conservative strong advection, used only for an IBP check.
             // The f*div(U) term is not added to the physical budget or operator.
             loads[region][5][id]+=weight*test*(u*grad[0]+w*grad[2]+f*(ux[0]+uz[2]));
+            if(diffusionIBPFraction)loads[region][6][id]+=weight*test*divDiffusion;
         }
     };
     for(const auto &item:packet.get_child("volume"))
@@ -151,15 +181,27 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
                     const auto v=patch.GeometryPoint(0,q.geometry,q.coordinate);
                     const double adv=(face.area[0]*v.Value(state,patch.offset[0])+face.area[2]*v.Value(state,patch.offset[1]))*
                         q.Value(state,patch.offset[block]);
-                    for(int i=0;i<q.ids.size();++i)advectiveFaces[region][q.ids[i]]+=face.weight*q.phi[i]*adv;
+                    const auto c=coefficients(v,region!=0);const auto g=q.Gradient(state,patch.offset[block]);
+                    const double diff=c[region==2?2:0]*(face.area[0]*g[0]+face.area[2]*g[2]);
+                    for(int i=0;i<q.ids.size();++i)
+                    {
+                        advectiveFaces[region][q.ids[i]]+=face.weight*q.phi[i]*adv;
+                        diffusiveFaces[region][q.ids[i]]+=face.weight*q.phi[i]*diff;
+                    }
                 }
-            Vector ibp(patch.size[block]);for(int j=0;j<ibp.size();++j)
+            Vector ibp(patch.size[block]),diffusionIBP(patch.size[block]);for(int j=0;j<ibp.size();++j)
+            {
                 ibp[j]=loads[region][5][j]-loads[region][3][j]-advectiveFaces[region][j];
+                diffusionIBP[j]=loads[region][6][j]+loads[region][4][j]-diffusiveFaces[region][j];
+            }
             regional.push_back({region==0?"inner_k":region==1?"outer_k":"outer_epsilon",J::Object({
                 {"backward_storage",J::Numbers(loads[region][0])},{"negative_frozen_RHS",J::Numbers(loads[region][1])},
                 {"reaction",J::Numbers(loads[region][2])},{"conservative_advection",J::Numbers(loads[region][3])},
                 {"diffusion",J::Numbers(loads[region][4])},{"strong_conservative_advection",J::Numbers(loads[region][5])},
-                {"all_element_advective_faces",J::Numbers(advectiveFaces[region])},{"advective_IBP_defect",J::Numbers(ibp)}})});
+                {"all_element_advective_faces",J::Numbers(advectiveFaces[region])},{"advective_IBP_defect",J::Numbers(ibp)},
+                {"all_element_diffusive_faces",J::Numbers(diffusiveFaces[region])},
+                {"independent_strong_diffusion",diffusionIBPFraction?J::Numbers(loads[region][6]):"null"},
+                {"diffusion_IBP_defect",diffusionIBPFraction?J::Numbers(diffusionIBP):"null"}})});
         }
         std::vector<std::pair<std::string,std::string>> assembled;
         for(int block:{patch.K(),patch.Epsilon()})
@@ -186,6 +228,8 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
             {"transport_velocity",J::Quote("actual corrected flow, unchanged by subsequent scalar solves")},
             {"epsilon_coefficients",J::Quote("old k and old epsilon; transported epsilon is newly solved, including dependent trace storage")},
             {"k_coefficients",J::Quote("old k and newly solved epsilon; transported k is newly solved")},
+            {"diffusion_IBP_element_step_fraction",J::Number(diffusionIBPFraction)},
+            {"diffusion_IBP_method",J::Quote("optional fourth-order physical flux differences within each known generating owner, central or declared one-sided near its endpoint; h/h2 control; forward constitutive values only, no tangent or ellipticity claim")},
             {"scope",J::Quote("read-only actual unmasked frozen scalar matrix and independently rebuilt weak terms; prescribed reactions are algebraic diagnostics, not physical flux substitutes; no scalar*div(U) correction")}});
     }
     std::vector<std::string> faces;
@@ -435,7 +479,7 @@ int main(int argc,char **argv)
             double dt;session->LoadParameter("TimeStep",dt);Require(time>0,"physical stage budget needs an advanced state");
             const bool reconciliation=request.get<bool>("export_frozen_scalar_reconciliation",false);
             physicalBudget=PhysicalScalarBudget(patch,p,state,Values(request,"previous_state"),dt,time,data,request.get<int>("physical_face_order",16),
-                reconciliation,reconciliation?Values(request,"stage_history"):Vector{});
+                reconciliation,reconciliation?Values(request,"stage_history"):Vector{},request.get<double>("diffusion_IBP_element_step_fraction",0.));
         }
         Require(state==stateCopy,"read-only verification modified coefficients");
         const auto elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();

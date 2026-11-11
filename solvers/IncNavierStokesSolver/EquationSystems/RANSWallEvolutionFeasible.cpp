@@ -975,6 +975,12 @@ RANSWallEvolutionPatch::WallTraceR4(const Vector &state) const
             auto points=RANSWallGroundPolynomial::Roots(RANSWallGroundPolynomial::Derivative(polynomial));
             points.insert(points.end(),{-1,1});long double norm=0;for(auto c:coefficients)norm+=std::abs(c);
             norm+=std::abs(sixth);
+            // For p6 the power-coefficient L1 amplification is <=11.25;
+            // six-stage long-double Horner evaluation has gamma_12 error.
+            // The retained 512*eps modal allowance covers this conversion
+            // and evaluation. Near-zero interior margins are not certified.
+            // Recursive Rolle isolation retains near-zero critical points;
+            // this is a floating-point trace check, not a field theorem.
             const long double error=512*std::numeric_limits<long double>::epsilon()*norm;
             for(auto x:points)
             {
