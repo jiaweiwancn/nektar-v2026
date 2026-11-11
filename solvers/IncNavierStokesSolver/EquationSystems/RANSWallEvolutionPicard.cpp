@@ -34,6 +34,64 @@ double DualNorm(const Factor &mass, const RANSWallAlgebra::Vector &load)
 }
 } // namespace
 
+std::string RANSWallEvolutionPatch::WJTerrainAssemblyChecks(const Vector &state,
+    const Vector &history,double alpha,double time,const RANSWallEvolutionData &data) const
+{
+    Require(WJTerrain() && alpha>0,"mapped assembly check requires BudgetTerrainV1");
+    const auto hash=RANSWallR3::Hash(state);const auto init=InitializationWork();
+    auto external=ExternalConstraints(time,data);
+    for(int id:m_traceIds)external.erase(offset[Epsilon()]+id);
+    const auto physical=Residual(state,history,alpha,time,data,false);
+    const auto constraints=Constraints(state,time,data);
+    std::vector<std::string> blocks,pressures;
+    for(int block:{0,K(),Epsilon()})
+    {
+        const auto frozen=AssemblePicardBlock(block,state,history,alpha,time,data,external);
+        double defect=0;
+        for(int i=0;i<frozen.rows.size();++i)
+            defect=std::max(defect,std::abs(frozen.residual[i]-physical[frozen.rows[i]]));
+        Require(defect<1e-9,"terrain frozen block differs from same-state physical residual");
+        blocks.push_back(J::Object({{"block",J::Number(block)},{"size",J::Number(frozen.rows.size())},
+            {"same_state_defect",J::Number(defect)}}));
+        if(block!=0)continue;
+        for(int mode=0;mode<5;++mode)
+        {
+            Vector direction(Size());
+            if(mode==2)direction[offset[Gauge()]]=1;
+            else if(mode==4)
+            {
+                const auto v=fields[OuterPressure()]->Project([](const RANSWallCoordinate &p){return p[0]+.13*p[0]*p[2];});
+                std::copy(v.begin(),v.end(),direction.begin()+offset[OuterPressure()]);
+            }
+            else for(int side=0;side<2;++side)for(int j=0;j<size[InnerPressure()+side];++j)
+                if(mode==side || mode==3)direction[offset[InnerPressure()+side]+j]=
+                    (mode==3 && side==1?-1:1)*m_constants[InnerPressure()+side][j];
+            const auto action=AffinePressureAction(direction,constraints);
+            Vector reduced;for(int row:frozen.rows)reduced.push_back(direction[row]);
+            const auto column=RANSWallAlgebra::Multiply(frozen.matrix,reduced);
+            double ce=0,fd=1e300;
+            for(int j=0;j<column.size();++j)ce=std::max(ce,std::abs(column[j]-action[frozen.rows[j]]));
+            for(double h:{1e-2,1e-3,1e-4})
+            {
+                auto plus=state,minus=state;for(int j=0;j<Size();++j)
+                {plus[j]+=h*direction[j];minus[j]-=h*direction[j];}
+                const auto rp=Residual(plus,history,alpha,time,data,false),rm=Residual(minus,history,alpha,time,data,false);
+                double error=0;for(int j=0;j<Size();++j)error=std::max(error,std::abs((rp[j]-rm[j])/(2*h)-action[j]));
+                fd=std::min(fd,error);
+            }
+            const double scale=std::max(1.,Maximum(action));
+            Require(ce/scale<1e-10 && fd/scale<1e-8,"terrain physical/frozen affine pressure action differs");
+            pressures.push_back(J::Object({{"mode",J::Number(mode)},{"action_max",J::Number(Maximum(action))},
+                {"frozen_column_defect",J::Number(ce)},{"centered_difference_defect",J::Number(fd)}}));
+        }
+    }
+    Refresh(state,time,&data);
+    Require(hash==RANSWallR3::Hash(state) && init==InitializationWork(),"terrain check mutated state or Lift count");
+    return J::Object({{"blocks",J::List(blocks)},{"pressure_modes",J::List(pressures)},
+        {"state_sha256",J::Quote(hash)},{"alpha_mass",J::Number(alpha)},{"time",J::Number(time)},
+        {"governing_solves","0"},{"scope",J::Quote("same-state frozen blocks and affine pressure action; not the nonlinear Jacobian")}});
+}
+
 RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PicardKMass(
     const std::vector<int> &rows) const
 {
@@ -172,7 +230,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 }
                 return;
             }
-            viscosity = law.eddyViscosity + m_regularizationGamma +
+            viscosity = WJ()?law.eddyViscosity:law.eddyViscosity + m_regularizationGamma +
                         m_regularizationScale * m_parameters.model.Kappa() *
                             m_robustUstar * Distance(q.v.coordinate);
             const double pi = q.p.Value(s, offset[pBlock]);
@@ -223,16 +281,22 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                             system.matrix[row][col] += q.weight * value;
                         }
                     }
-                    if (forcingPressure && aa == 0)
+                    if (forcingPressure)
                     {
-                        // Flat tangential pressure gradient in the roughness
-                        // load. The mechanical -2 grad(k)/3 and convection
-                        // parts of CartesianForcing stay frozen in this solve.
+                        // Actual physical tangent projection, including its
+                        // vertical component on a slope. Mechanical -2grad(k)/3
+                        // and conservative convection remain frozen here.
                         const auto &fp = *forcingPressure;
+                        auto H=q.v.coordinate;H[2]=m_parameters.geometry.height;
+                        const auto normal=m_mapping.At(H).normal;
                         for (int p = 0; p < fp.ids.size(); ++p)
+                        {
+                            double normalDerivative=0;
+                            for(int d=0;d<3;++d)normalDerivative+=normal[d]*fp.derivative[d][p];
                             system.matrix[row][index[offset[OuterPressure()] +
                                                      fp.ids[p]]] -=
-                                q.weight * q.v.phi[i] * fp.derivative[0][p];
+                                q.weight * q.v.phi[i] * (fp.derivative[aa][p]-normal[aa]*normalDerivative);
+                        }
                     }
                 }
                 if (row < 0)

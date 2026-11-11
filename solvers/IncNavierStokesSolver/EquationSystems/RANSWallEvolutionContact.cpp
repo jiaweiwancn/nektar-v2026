@@ -17,7 +17,7 @@ namespace { bool Same(double a,double b){return std::abs(a-b)<1e-11;} }
 
 std::string RANSWallEvolutionPatch::FormulationMetadata() const
 {
-    if(WJ())return J::Object({{"formulation",J::Quote(m_formulation)},{"version",J::Quote("WJ-Native-SerialFlat2D-v1")},
+    if(WJ())return J::Object({{"formulation",J::Quote(m_formulation)},{"version",J::Quote(WJTerrain()?"WJ-BudgetTerrainV1":"WJ-Native-SerialFlat2D-v1")},
         {"epsilon",J::Quote("physical")},{"gradient",J::Quote("DevStrainRawWorkV1")},
         {"c_mu_wall",J::Number(m_wallParameters.cMu)},{"c_length_wall",J::Number(m_wallParameters.cLength)},
         {"source_policy",J::Quote(WJEP()?"Praw-pA0(K)":"Praw-Ec(K)")},{"K_functional",J::Quote("InterfaceTrace-v1")},
@@ -74,7 +74,7 @@ std::vector<std::pair<RANSWallCoordinate,double>> RANSWallEvolutionPatch::Physic
 std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
     const RANSWallEvolutionData &data,const Vector *change,bool exportIntegralRows) const
 {
-    Require(m_dimension==2 && !Mapped(),"physical bands require flat 2D");
+    Require(m_dimension==2 && (!Mapped() || WJTerrain()),"physical bands require a supported canonical 2D route");
     const double H=m_parameters.geometry.height;double first=H;
     std::set<double> panels{0,upper[2]};for(const auto &e:fields[K()]->Elements())
     {panels.insert(e.lower[2]);panels.insert(e.upper[2]);if(e.lower[2]==0)first=std::min(first,e.upper[2]);}
@@ -99,7 +99,8 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
                 for(int j=0;j<16;++j)
                 {
                     auto p=anchor;p[2]=a+(z[j]+1)*length/2;const auto q=Point(K(),p);
-                    const double weight=horizontalWeight*w[j]*length/2;
+                    const double metric=WJTerrain()?m_mapping.At(p).determinant/m_mapping.At(anchor).baseArea:1.;
+                    const double weight=horizontalWeight*w[j]*length/2*metric;
                     sums[0]+=weight*q.Value(s,offset[K()]);
                     if(exportIntegralRows)
                     {
@@ -137,7 +138,9 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
                             for(int k=0;k<m_dimension;++k)G[PhysicalAxis(k)]=Point(k,p).Gradient(s,offset[k]);
                             const double k=Point(K(),p).Value(s,offset[K()]),e=Point(Epsilon(),p).Value(s,offset[Epsilon()]);
                             if(!(k>0 && e>0)){invalid.push_back(J::Object({{"point",J::Numbers(p)},{"k",J::Number(k)},{"epsilon",J::Number(e)}}));continue;}
-                            const auto law=OuterClosure(k,e,G,p);const double weight=horizontalWeight*w[j]*(*b-a)/2;
+                            const auto law=OuterClosure(k,e,G,p);
+                            const double metric=WJTerrain()?m_mapping.At(p).determinant/m_mapping.At(anchor).baseArea:1.;
+                            const double weight=horizontalWeight*w[j]*(*b-a)/2*metric;
                             sums[4]+=weight*law.production;sums[5]+=weight*e;
                         }
                     }

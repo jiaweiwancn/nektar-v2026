@@ -587,6 +587,18 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Wpedantic;-Werror")
 endif()
 add_test(NAME WJKernelContracts COMMAND WJKernelProbe)
+add_executable(WJTerrainGeometryProbe ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/WJTerrainGeometryProbe.cpp)
+target_link_libraries(WJTerrainGeometryProbe RANSKernels)
+if(RANS_BUILD_SOLVER)
+    # Same production consumers as the existing native resolution probe, with
+    # only its command-line driver replaced. No installed kernel ABI is mixed.
+    get_target_property(wj_h1_native_sources RANSWallResolutionProbe SOURCES)
+    list(FILTER wj_h1_native_sources EXCLUDE REGEX "/RANSWallResolutionProbe\\.cpp$")
+    add_executable(WJTerrainCoupledProbe
+        ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/WJTerrainCoupledProbe.cpp ${wj_h1_native_sources})
+    target_include_directories(WJTerrainCoupledProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+    target_link_libraries(WJTerrainCoupledProbe RANSKernels RANSSpatialDomains ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+endif()
 if(Python3_Interpreter_FOUND)
     execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy, sympy"
         RESULT_VARIABLE wj_dependencies OUTPUT_QUIET ERROR_QUIET)
@@ -669,6 +681,17 @@ if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
         ${CMAKE_CURRENT_LIST_DIR}/test_wj7_metadata.py)
     set_tests_properties(WJStageLineageContinuationMetadata PROPERTIES PROCESSORS 1 TIMEOUT 90
         ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1")
+    add_test(NAME WJH1CompositeGeometry COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/validate_wj_h1.py
+        --mode geometry --geometry-probe $<TARGET_FILE:WJTerrainGeometryProbe> --output ${CMAKE_CURRENT_BINARY_DIR}/wj-h1-geometry)
+    add_test(NAME WJH1RouteGuards COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/validate_wj_h1.py
+        --mode guards --native-probe $<TARGET_FILE:WJTerrainCoupledProbe> --output ${CMAKE_CURRENT_BINARY_DIR}/wj-h1-guards)
+    foreach(wj_h1_kind hill zero plane)
+        add_test(NAME WJH1Native_${wj_h1_kind} COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/validate_wj_h1.py
+            --mode native --kind ${wj_h1_kind} --native-probe $<TARGET_FILE:WJTerrainCoupledProbe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/wj-h1-${wj_h1_kind})
+    endforeach()
+    set_tests_properties(WJH1CompositeGeometry WJH1RouteGuards WJH1Native_hill WJH1Native_zero WJH1Native_plane PROPERTIES
+        PROCESSORS 1 TIMEOUT 1200 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
     foreach(wj_policy EP Budget)
         add_test(NAME WJDenseCapacity${wj_policy} COMMAND ${Python3_EXECUTABLE} -B
             ${CMAKE_CURRENT_LIST_DIR}/test_wj6_capacity.py

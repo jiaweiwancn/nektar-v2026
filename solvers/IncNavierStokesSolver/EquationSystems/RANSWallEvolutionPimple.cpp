@@ -382,8 +382,10 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::PhysicalSamples(
         SolverUtils::RANSTensor grad{};for(int a=0;a<m_dimension;++a)grad[PhysicalAxis(a)]=q.test.Gradient(s,offset[a]);
         const auto stress=SolverUtils::RANSWallInnerMeanStress(InnerStress(q.test.Value(s,offset[K()]),
             profile->Original().EddyViscosity(0.),grad),m_parameters.geometry.molecularNu,0.);
-        result["wall_weights"].push_back(q.weight);
-        result["wall_stress"].push_back(stress[0][2]);
+        const auto frame=m_mapping.At(p);double traction=0;
+        for(int a=0;a<3;++a)for(int b=0;b<3;++b)traction+=frame.tangent1[a]*stress[a][b]*frame.normal[b];
+        result["wall_weights"].push_back(q.weight*std::hypot(q.area[0],q.area[1],q.area[2]));
+        result["wall_stress"].push_back(traction);
         if(CappedDestruction()){result["wall_B"].push_back(normal.b);result["wall_lambda"].push_back(normal.lambda);}
         result["wall_K"].push_back(profile->K());
     }

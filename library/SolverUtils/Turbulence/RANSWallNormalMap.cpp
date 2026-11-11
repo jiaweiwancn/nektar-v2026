@@ -54,7 +54,8 @@ void Parameters(const RANSWallNormalMap &m)
             m.kind==RANSWallNormalMap::Kind::Cylinder || m.kind==RANSWallNormalMap::Kind::Gaussian ||
             m.kind==RANSWallNormalMap::Kind::CosineHill,"unknown analytic geometry");
     for(double x:{m.height,m.heightSlopeX,m.heightSlopeY,m.heightAmplitude,m.heightWaveX,
-                  m.heightWaveY,m.slopeX,m.slopeY,m.radius,m.amplitude,m.lengthX,m.lengthY})
+                  m.heightWaveY,m.slopeX,m.slopeY,m.radius,m.amplitude,m.lengthX,m.lengthY,
+                  m.displacement,m.tunnelTop})
         Require(std::isfinite(x),"nonfinite geometry parameter");
     Require(m.height>0,"reference height must be positive");
     Require(m.dimension==3 || (m.slopeY==0 && m.heightSlopeY==0),
@@ -64,6 +65,16 @@ void Parameters(const RANSWallNormalMap &m)
         Require(m.lengthX>0,"streamwise shape length must be positive");
     if(m.kind==RANSWallNormalMap::Kind::Gaussian && m.dimension==3)
         Require(m.lengthY>0,"spanwise Gaussian length must be positive");
+    if(m.compositeTunnel)
+    {
+        Require(m.dimension==2 && (m.kind==RANSWallNormalMap::Kind::Flat ||
+            m.kind==RANSWallNormalMap::Kind::Plane || m.kind==RANSWallNormalMap::Kind::CosineHill),
+            "composite tunnel supports serial planar graphs only");
+        Require(m.heightSlopeX==0 && m.heightSlopeY==0 && m.heightAmplitude==0,
+            "composite tunnel requires constant normal matching height");
+        Require(m.displacement>=0 && m.tunnelTop>m.height,
+            "invalid effective-wall displacement or tunnel ceiling");
+    }
 }
 struct GraphJet
 {
@@ -130,11 +141,50 @@ bool FlatGraph(const RANSWallNormalMap &m)
 }
 }
 
-RANSWallNormalMap::Sample RANSWallNormalMap::At(const RANSVector &chart,int footSide) const
+RANSWallNormalMap::Sample RANSWallNormalMap::At(const RANSVector &chart,int footSide,int regionSide) const
 {
     Parameters(*this);Require(Finite(chart),"nonfinite chart coordinate");
     Require(dimension==3 || chart[1]==0,"2D chart has a nonzero unused span coordinate");
     Require(chart[2]>=0,"negative normal chart coordinate");
+    Require(regionSide>=-1 && regionSide<=1,"invalid region side");
+    if(compositeTunnel)
+    {
+        Require(chart[2]<=tunnelTop,"composite query above computational ceiling");
+        auto normal=*this;normal.compositeTunnel=false;
+        auto basePoint=chart;basePoint[2]=displacement;
+        const auto effective=normal.At(basePoint,footSide);
+        const bool inner=chart[2]<height || (chart[2]==height && regionSide<=0);
+        auto q=chart;q[2]=displacement+(inner?chart[2]:height);
+        auto s=normal.At(q,footSide);
+        s.chart=chart;s.height=height;s.scale=1.;s.normalRegion=inner;
+        s.baseArea=effective.determinant;
+        s.kappa1=effective.kappa1/(1+displacement*effective.kappa1);
+        s.kappa2=effective.kappa2/(1+displacement*effective.kappa2);
+        s.B=effective.Br;
+        if(inner)
+        {
+            s.distance=chart[2];s.J=(1+s.distance*s.kappa1)*(1+s.distance*s.kappa2);
+            return s; // physical determinant already contains offset area, once
+        }
+        const auto interface=s.point;const auto hJac=s.jacobian;
+        s.eta=(chart[2]-height)/(tunnelTop-height);
+        for(int a=0;a<3;++a)
+        {
+            const double top=a==0?chart[0]:a==1?chart[1]:tunnelTop;
+            s.point[a]=(1-s.eta)*interface[a]+s.eta*top;
+            s.jacobian[a][0]=(1-s.eta)*hJac[a][0]+s.eta*(a==0?1.:0.);
+            s.jacobian[a][1]=(a==1?1.:0.);
+            s.jacobian[a][2]=(top-interface[a])/(tunnelTop-height);
+        }
+        s.determinant=Dot(Column(s.jacobian,0),Cross(Column(s.jacobian,1),Column(s.jacobian,2)));
+        Require(std::isfinite(s.determinant) && s.determinant>0,"folded composite outer map");
+        s.inverse=Reciprocal(s.jacobian,s.determinant);
+        // These quantities have no outer normal-ray interpretation. Consumers
+        // must use the full physical map, not continue the ray budget metric.
+        s.distance=s.J=std::numeric_limits<double>::quiet_NaN();
+        s.Br={};
+        return s;
+    }
     const auto h=Height(*this,chart);Sample s;s.chart=chart;s.height=h.h;
     s.scale=h.h/height;s.distance=chart[2]*s.scale;
     RANSVector base{},t1{},t2{};
@@ -196,6 +246,39 @@ RANSVector RANSWallNormalMap::Inverse(const RANSVector &point) const
 {
     Parameters(*this);Require(Finite(point),"nonfinite physical inverse query");
     Require(dimension==3 || point[1]==0,"2D physical inverse query has nonzero span coordinate");
+    if(compositeTunnel)
+    {
+        const double tolerance=1e-10*std::max(1.,Norm(point));
+        Require(point[2]<=tunnelTop+tolerance,"physical query above tunnel ceiling");
+        auto normal=*this;normal.compositeTunnel=false;
+        try
+        {
+            auto q=normal.Inverse(point);q[2]-=displacement;
+            if(q[2]>=-tolerance && q[2]<=height+tolerance)
+            {q[2]=std::clamp(q[2],0.,height);return q;}
+        }
+        catch(const std::invalid_argument &) { /* far outer points need no normal foot */ }
+        const double reach=displacement+height;
+        auto horizontal=[&](double foot)
+        {
+            const auto H=At({foot,0,height}).point;
+            const double eta=(point[2]-H[2])/(tunnelTop-H[2]);
+            return (1-eta)*H[0]+eta*foot;
+        };
+        double a=point[0]-reach,b=point[0]+reach;
+        Require(horizontal(a)<=point[0]+tolerance && horizontal(b)>=point[0]-tolerance,
+            "composite inverse has no certified foot bracket");
+        for(int iteration=0;iteration<100;++iteration)
+        {const double mid=(a+b)/2;if(mid==a || mid==b)break;
+         if(horizontal(mid)<point[0])a=mid;else b=mid;}
+        RANSVector q{(a+b)/2,0,height};const auto H=At(q).point;
+        const double eta=(point[2]-H[2])/(tunnelTop-H[2]);
+        Require(eta>=-tolerance && eta<=1+tolerance,"physical query outside composite wall/outer domain");
+        q[2]=height+std::clamp(eta,0.,1.)*(tunnelTop-height);
+        const auto recovered=At(q).point;RANSVector error{};
+        for(int i=0;i<3;++i)error[i]=recovered[i]-point[i];
+        Require(Norm(error)<=tolerance,"composite inverse recovery failed");return q;
+    }
     RANSVector q{point[0],point[1],0};double r=0;
     if(kind==Kind::Cylinder)
     {
@@ -261,11 +344,11 @@ RANSVector RANSWallNormalMap::Inverse(const RANSVector &point) const
     return q;
 }
 
-RANSVector RANSWallNormalMap::Cofactor(const RANSVector &chart,int axis,int side,int footSide) const
+RANSVector RANSWallNormalMap::Cofactor(const RANSVector &chart,int axis,int side,int footSide,int regionSide) const
 {
     Require(axis>=0 && axis<3 && !(dimension==2 && axis==1),"unused or invalid chart face axis");
     Require(side==-1 || side==1,"face side must be -1 or +1");
-    const auto s=At(chart,footSide);RANSVector result{};
+    const auto s=At(chart,footSide,regionSide);RANSVector result{};
     for(int i=0;i<3;++i)result[i]=side*s.determinant*s.inverse[axis][i];
     return result;
 }
@@ -281,7 +364,7 @@ bool RANSWallNormalMap::PlanarConstantHeight() const
 }
 bool RANSWallNormalMap::Identity() const
 {
-    return PlanarConstantHeight() &&
+    return !compositeTunnel && PlanarConstantHeight() &&
         ((kind!=Kind::Flat && kind!=Kind::Plane) || (slopeX==0 && slopeY==0));
 }
 void RANSWallNormalMap::Validate(const RANSVector &lower,const RANSVector &upper,double minimumStretch) const
@@ -290,6 +373,25 @@ void RANSWallNormalMap::Validate(const RANSVector &lower,const RANSVector &upper
     Require(std::isfinite(minimumStretch) && minimumStretch>0 && minimumStretch<1,"invalid minimum normal stretch");
     Require(upper[0]>lower[0] && lower[2]>=0 && upper[2]>lower[2],"empty or negative-normal chart domain");
     Require(dimension==3?upper[1]>lower[1]:(lower[1]==0 && upper[1]==0),"invalid span chart domain");
+    if(compositeTunnel)
+    {
+        Require(upper[2]<=tunnelTop,"composite chart exceeds its ceiling");
+        const double bound=kind==Kind::CosineHill?std::abs(amplitude)*std::acos(-1.)*std::acos(-1.)/(2*lengthX*lengthX):0.;
+        const double reach=displacement+height;
+        Require(reach*bound<1-minimumStretch,
+            "composite inner normal reach/minimum stretch is uncertified");
+        const double slope=kind==Kind::CosineHill?std::abs(amplitude)*std::acos(-1.)/(2*lengthX):std::abs(slopeX);
+        const double fmax=kind==Kind::CosineHill?std::max(0.,amplitude):std::max(slopeX*lower[0],slopeX*upper[0]);
+        Require(tunnelTop-fmax-reach*std::hypot(1.,slope)>0,
+            "composite ceiling/outer Jacobian cannot be certified");
+        // x_s=(1-eta)*(1+reach*kappa)+eta>0. At fixed physical x,
+        // det>0 makes z strictly increase with eta. Both straight side
+        // boundaries give a connected eta interval: this is a global
+        // injectivity certificate, including both C1,1 cosine-foot limits.
+        for(double x:{lower[0],upper[0]})for(double rho:{lower[2],height,upper[2]})
+            At({x,0,rho});
+        return;
+    }
     const double x0=heightSlopeX*lower[0],x1=heightSlopeX*upper[0],
         y0=heightSlopeY*lower[1],y1=heightSlopeY*upper[1];
     const double hmin=height+std::min(x0,x1)+std::min(y0,y1)-std::abs(heightAmplitude),
@@ -333,6 +435,7 @@ std::string RANSWallNormalMap::Signature() const
     out<<"CLS-EPAWF-NORMAL-MAP-v1:"<<dimension<<':'<<static_cast<int>(kind);
     for(double value:{height,heightSlopeX,heightSlopeY,heightAmplitude,heightWaveX,heightWaveY,
                       slopeX,slopeY,radius,amplitude,lengthX,lengthY})out<<':'<<value;
+    if(compositeTunnel)out<<":CompositeTunnelV1:"<<displacement<<':'<<tunnelTop;
     return out.str();
 }
 } // namespace Nektar::SolverUtils

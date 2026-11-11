@@ -203,7 +203,10 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         m_data.innerKSource=Function("ScalarSourceInner","k");m_data.outerKSource=Function("ScalarSourceOuter","k");m_data.outerEpsilonSource=Function("ScalarSourceOuter",m_patch->EpsilonName());
         if(m_patch->WJ())
         {
-            Require(m_direction[1]==0 && !m_chartFunctions,"WJ-2 requires physical functions on the serial flat pilot");
+            Require(m_direction[1]==0 && (!m_chartFunctions || m_patch->WJTerrain()),
+                "WJ flat functions are physical; BudgetTerrainV1 explicitly permits chart-defined verification functions");
+            Require(!m_patch->WJTerrain() || !m_neutral,
+                "BudgetTerrainV1 requires declared Functions data; no curved neutral equilibrium is supplied");
             for(const std::string name:{"Gravity","g","RANSWallGravity"})
                 Require(!m_session->DefinesParameter(name) || m_session->GetParameter(name)==0,"WJ-2 pilot requires zero gravity");
             for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})

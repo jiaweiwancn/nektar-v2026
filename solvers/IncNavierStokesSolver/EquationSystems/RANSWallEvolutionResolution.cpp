@@ -88,7 +88,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored,
     bool originalOuterCounterfactual) const
 {
-    Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || AcceptedAWF() || WJ()),
+    Require(m_comm->GetSize()==1 && m_dimension==2 && (!Mapped() || WJTerrain()) && ((m_transitionEnabled && m_cappedDestruction) || AcceptedAWF() || WJ()),
         "R3 residual-resolution audit requires serial flat2D Upstream+Capped");
     Require(state.size()==Size() && history.size()==Size() && alpha>=0 && m_eta==0,
         "R3 residual-resolution audit requires frozen unanchored valid state/history");
@@ -134,7 +134,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
                 OuterClosure(k,epsilon,G,q.v.coordinate);
             dk=c.kDiffusion;de=c.epsilonDiffusion;sk=c.kSource+data.outerKSource(q.v.coordinate,time);
             se=c.epsilonSource+data.outerEpsilonSource(q.v.coordinate,time);
-            const double distance=Distance(q.v.coordinate),kap=m_parameters.model.Kappa();
+            const double distance=WJTerrain()?m_parameters.geometry.height:Distance(q.v.coordinate),kap=m_parameters.model.Kappa();
             const double gamma=originalOuterCounterfactual?0:m_regularizationGamma+m_regularizationScale*kap*m_robustUstar*distance;
             const double shear=m_robustUstar/(kap*distance);long double stableProduction=0;
             for(int a=0;a<3;++a)for(int b=0;b<3;++b)

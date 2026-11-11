@@ -25,6 +25,10 @@ struct SOLVER_UTILS_EXPORT RANSWallNormalMap
     double heightAmplitude = 0, heightWaveX = 1, heightWaveY = 1;
     double slopeX = 0, slopeY = 0, radius = 20;
     double amplitude = .02, lengthX = 1, lengthY = 1;
+    // Explicit serial-2D composite chart. Only the inner strip follows normal
+    // rays; rho>height is an independent ruled map to physical z=tunnelTop.
+    bool compositeTunnel = false;
+    double displacement = 0, tunnelTop = 20;
 
     struct Sample
     {
@@ -34,13 +38,17 @@ struct SOLVER_UTILS_EXPORT RANSWallNormalMap
         RANSTensor jacobian{}, inverse{}, B{}, Br{};
         double determinant = 0, baseArea = 0, distance = 0, height = 0;
         double scale = 0, J = 0, kappa1 = 0, kappa2 = 0;
+        bool normalRegion = true;
+        double eta = 0; // outer computational coordinate, never normal distance
     };
 
     /** At an exact cosine foot, side=-1/+1 selects the q1 left/right limit;
      * side=0 selects the flat-side curvature. Nonzero side elsewhere is an
      * error. Explicit foot patches must select their own one-sided metric.
      */
-    Sample At(const RANSVector &chart, int footSide = 0) const;
+    // At H, regionSide=+1 selects the outer computational derivative. The
+    // physical point and tangential interface geometry agree on both sides.
+    Sample At(const RANSVector &chart, int footSide = 0, int regionSide = 0) const;
 
     /** Unique normal projection is required. Cylinder q1 uses the principal
      * atan2 branch [-pi*radius,pi*radius]; unwrap into a certified nonwrapping
@@ -50,7 +58,7 @@ struct SOLVER_UTILS_EXPORT RANSWallNormalMap
 
     // Oriented physical face area vector per unit of the other chart axes.
     RANSVector Cofactor(const RANSVector &chart, int axis, int side = 1,
-                        int footSide = 0) const;
+                        int footSide = 0, int regionSide = 0) const;
     Sample Matching(const RANSVector &chart) const;
     RANSVector MatchingArea(const RANSVector &chart, int footSide = 0) const;
     bool Identity() const;

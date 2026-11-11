@@ -80,25 +80,37 @@ RANSWallNormalMap LoadRANSWallNormalMap(const LibUtilities::SessionReaderSharedP
     const std::map<std::string,RANSWallNormalMap::Kind> kinds{{"Flat",RANSWallNormalMap::Kind::Flat},{"Plane",RANSWallNormalMap::Kind::Plane},
         {"Cylinder",RANSWallNormalMap::Kind::Cylinder},{"Gaussian",RANSWallNormalMap::Kind::Gaussian},{"CosineHill",RANSWallNormalMap::Kind::CosineHill}};
     Require(kinds.count(name),"unknown wall map");m.kind=kinds.at(name);
+    std::string continuation;session->LoadSolverInfo("RANSWallMapContinuation",continuation,"Normal");
+    Require(continuation=="Normal" || continuation=="CompositeTunnelV1","unknown wall map continuation");
+    m.compositeTunnel=continuation=="CompositeTunnelV1";
     for(auto entry:std::vector<std::pair<std::string,double*>>{{"SlopeX",&m.slopeX},{"SlopeY",&m.slopeY},{"Radius",&m.radius},
         {"Amplitude",&m.amplitude},{"LengthX",&m.lengthX},{"LengthY",&m.lengthY},{"HeightSlopeX",&m.heightSlopeX},
-        {"HeightSlopeY",&m.heightSlopeY},{"HeightAmplitude",&m.heightAmplitude},{"HeightWaveX",&m.heightWaveX},{"HeightWaveY",&m.heightWaveY}})
+        {"HeightSlopeY",&m.heightSlopeY},{"HeightAmplitude",&m.heightAmplitude},{"HeightWaveX",&m.heightWaveX},{"HeightWaveY",&m.heightWaveY},
+        {"Displacement",&m.displacement},{"TunnelTop",&m.tunnelTop}})
         session->LoadParameter("RANSWallMap"+entry.first,*entry.second,*entry.second);
+    Require(m.compositeTunnel || (!session->DefinesParameter("RANSWallMapDisplacement") &&
+        !session->DefinesParameter("RANSWallMapTunnelTop")),"composite geometry parameters require CompositeTunnelV1");
     return m;
 }
 RANSWallCoordinate RANSWallEvolutionPatch::Physical(const RANSWallCoordinate &p) const
 {return Mapped()?m_mapping.At(p).point:p;}
 double RANSWallEvolutionPatch::Distance(const RANSWallCoordinate &p) const
-{return Mapped()?p[2]*(m_mapping.height+m_mapping.heightSlopeX*p[0]+m_mapping.heightSlopeY*p[1]+
-    m_mapping.heightAmplitude*std::sin(m_mapping.heightWaveX*p[0])*std::cos(m_mapping.heightWaveY*p[1]))/m_mapping.height:p[2];}
+{
+    Require(!m_mapping.compositeTunnel || p[2]<=m_mapping.height,
+        "outer_eta_is_not_normal_distance: use the full physical composite metric");
+    return Mapped()?p[2]*(m_mapping.height+m_mapping.heightSlopeX*p[0]+m_mapping.heightSlopeY*p[1]+
+        m_mapping.heightAmplitude*std::sin(m_mapping.heightWaveX*p[0])*std::cos(m_mapping.heightWaveY*p[1]))/m_mapping.height:p[2];
+}
 RANSWallGlobalPoint RANSWallEvolutionPatch::Transform(RANSWallGlobalPoint q) const
 {
     if(!Mapped())return q;
-    int side=0;
+    int side=0,region=0;
+    if(m_mapping.compositeTunnel)for(const auto &e:fields[0]->Elements())if(e.geometry==q.geometry)
+        region=e.lower[2]>=m_mapping.height?1:-1;
     if(m_mapping.kind==RANSWallNormalMap::Kind::CosineHill)
         for(double foot:{-m_mapping.lengthX,m_mapping.lengthX})if(Same(q.coordinate[0],foot))
             for(const auto &e:fields[0]->Elements())if(e.geometry==q.geometry)side=(e.lower[0]+e.upper[0])/2<foot?-1:1;
-    const auto g=m_mapping.At(q.coordinate,side);const auto old=q.derivative;
+    const auto g=m_mapping.At(q.coordinate,side,region);const auto old=q.derivative;
     for(int a=0;a<3;++a)for(int i=0;i<q.ids.size();++i)
     {q.derivative[a][i]=0;for(int b=0;b<3;++b)q.derivative[a][i]+=old[b][i]*g.inverse[b][a];}
     q.weight*=g.determinant;return q;
@@ -135,7 +147,8 @@ std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(i
             for(int a=0;a<free.size();++a){const int d=free[a];p[d]=element.lower[d]+(z[index[a]]+1)*(element.upper[d]-element.lower[d])/2;weight*=w[index[a]]*(element.upper[d]-element.lower[d])/2;}
             int footSide=0;if(m_mapping.kind==RANSWallNormalMap::Kind::CosineHill)
                 for(double foot:{-m_mapping.lengthX,m_mapping.lengthX})if(Same(p[0],foot))footSide=(element.lower[0]+element.upper[0])/2<foot?-1:1;
-            result.push_back({Transform(fields[block]->ElementPoint(e,p)),m_mapping.Cofactor(p,axis,side,footSide),weight});
+            const int region=m_mapping.compositeTunnel && element.lower[2]>=m_mapping.height?1:-1;
+            result.push_back({Transform(fields[block]->ElementPoint(e,p)),m_mapping.Cofactor(p,axis,side,footSide,region),weight});
         }
     }
     if(fixed)m_surfaceCatalog.emplace(key,result);
@@ -166,7 +179,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PhysicalProject(int block
 {
     const auto function=[&](const RANSWallCoordinate &p){return f(p,time);};
     auto values=fields[block]->Project(function);
-    if(!Mapped() || m_mapping.PlanarConstantHeight())return values;
+    if(!Mapped() || (m_mapping.PlanarConstantHeight() && !m_mapping.compositeTunnel))return values;
     const auto quadrature=Quadrature(block);
     bool constant=true;const double first=function(quadrature.front().coordinate);
     for(const auto &q:quadrature)if(function(q.coordinate)!=first){constant=false;break;}
@@ -189,13 +202,19 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             "evolution requires a full serial native mesh on each collective rank");
     parameters.geometry.Validate();m_mapping.dimension=m_dimension;m_mapping.height=parameters.geometry.height;
     session->LoadSolverInfo("RANSWallFormulation",m_formulation,"EPAWF");
+    session->LoadSolverInfo("RANSWallNativeGeometry",m_nativeGeometry,"FlatV1");
+    Require(m_nativeGeometry=="FlatV1" || m_nativeGeometry=="BudgetTerrainV1","unknown native geometry route");
+    Require(m_nativeGeometry=="FlatV1" || (WJ() && BudgetAWF() && m_mapping.compositeTunnel),
+        "BudgetTerrainV1 requires WJCalibratedBudgetAWF and CompositeTunnelV1");
+    Require(!m_mapping.compositeTunnel || WJTerrain(),"composite native evolution requires explicit BudgetTerrainV1");
     Require(m_formulation=="EPAWF" || BudgetAWF() || m_formulation=="WJCalibratedEPAWF","unknown wall formulation");
     Require(WJ()==(m_formulation=="WJCalibratedEPAWF" || m_formulation=="WJCalibratedBudgetAWF"),"WJ requires its explicit calibrated wall formulation");
     if(WJ())
     {
         m_parameters.wj.Validate();
         m_parameters.model=RANSNeutralReference::WJ(m_parameters.wj);
-        Require(m_dimension==2 && !Mapped() && m_comm->GetSize()==1,"WJ native supports serial flat 2D only");
+        Require(m_dimension==2 && (!Mapped() || WJTerrain()) && m_comm->GetSize()==1,
+            "WJ native requires serial flat2D or explicit BudgetTerrainV1");
         Require(parameters.geometry.sampleHeight==parameters.geometry.height &&
             (WJEP()?parameters.chi==1 && parameters.geometry.tailStart==parameters.geometry.height/2:
                 parameters.chi==0 && parameters.geometry.tailStart==parameters.geometry.height),"WJ requires endpoint K and its EP/budget tail policy");
@@ -269,7 +288,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(!ColumnAverageK() || PimpleSingleSweep(),"ColumnAverage K is supported only by the PIMPLE pilot");
     if(PimpleSingleSweep())
     {
-        Require(m_nonlinearPolicy=="Legacy" && m_comm->GetSize()==1 && m_dimension==2 && !Mapped(),
+        Require(m_nonlinearPolicy=="Legacy" && m_comm->GetSize()==1 && m_dimension==2 && (!Mapped() || WJTerrain()),
             "PimpleSingleSweep pilot requires Legacy policy, serial flat 2D and the inherited transition implementation");
         std::string verify;session->LoadSolverInfo("RANSWallPimpleVerify",verify,"Off");
         Require(verify=="Off" || verify=="On","invalid PIMPLE verification selector");m_pimpleVerify=verify=="On";
@@ -545,10 +564,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     m_solver=std::make_shared<SolverCache>();m_solver->free.resize(Gauge());m_solver->massFactors.resize(Gauge());
     InitialiseRobust(session);
     if(SegregatedPicard() || PimpleSingleSweep())
-        Require(m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || ((AcceptedAWF() || WJEP()) && !m_cappedDestruction)) &&
+        Require(m_dimension==2 && (!Mapped() || WJTerrain()) && ((m_transitionEnabled && m_cappedDestruction) || ((AcceptedAWF() || WJEP()) && !m_cappedDestruction)) &&
             (m_parameters.model.Model()==RANSModel::CLSHighRe || WJ()) && !m_solveDiagnosticReplay,
             "SegregatedPicard requires flat 2D upstream CLS with capped destruction and no legacy replay");
-    Vector seed(Size());for(int i=0;i<size[K()];++i)seed[offset[K()]+i]=parameters.model.Q()*.16*m_constants[K()][i];
+    Vector seed(Size());for(int i=0;i<size[K()];++i)seed[offset[K()]+i]=parameters.model.Q()*
+        (WJTerrain()?m_robustUstar*m_robustUstar:.16)*m_constants[K()][i];
     Refresh(seed);for(const auto &ray:m_rays)for(const auto &q:ray.points)m_bodyInner.push_back(q);
     if(m_transitionEnabled)InitialiseTransition(session);
     else if(MatchingEnabled())
@@ -567,7 +587,8 @@ std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::Profile(double k
     if(AcceptedAWF())weight=1; // cutoff applicability flag; not a chi weight
     else if(weight<0)weight=WJEP()?1:m_transitionEnabled?0:m_parameters.chi;
     Require(k>0 && std::isfinite(k),"invalid physical sampled K");
-    const auto metric=m_mapping.At(chart);auto geometry=m_parameters.geometry;geometry.height=metric.height;
+    auto ground=chart;ground[2]=0;
+    const auto metric=m_mapping.At(ground);auto geometry=m_parameters.geometry;geometry.height=metric.height;
     auto options=m_options;options.requestedWeight=weight;for(double &r:options.physicalBreakpoints)r*=metric.scale;
     const AWFNormalMetric normal{metric.kappa1,metric.kappa2};
     const auto construct=[&]()

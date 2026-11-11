@@ -92,6 +92,7 @@ public:
         const RANSWallEvolutionData &data) const;
     bool UniformEPFlat() const { return m_uniformEP; }
     bool WJ() const { return m_parameters.model.Model()==SolverUtils::RANSModel::WJHighRe; }
+    bool WJTerrain() const { return WJ() && m_nativeGeometry=="BudgetTerrainV1"; }
     const SolverUtils::WJParameters &WJConfiguration() const { return m_parameters.wj; }
     std::string EpsilonName() const { return WJ()?"epsilon":"eps_tilde"; }
     double SigmaK() const { return WJ()?m_parameters.wj.sigmaK:m_parameters.model.Parameters().sigmaK; }
@@ -373,6 +374,10 @@ public:
         const RANSWallEvolutionData &) const;
     std::string WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data,double time,
         const Vector &acceptedHistory={},double acceptedAlpha=0) const;
+    // Passive mapped checks. Frozen blocks are not a nonlinear Jacobian;
+    // this operation performs no governing solve or initialization Lift.
+    std::string WJTerrainAssemblyChecks(const Vector &state,const Vector &history,
+        double alpha,double time,const RANSWallEvolutionData &data) const;
     std::string WJWeakLoads(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &) const;
     const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
@@ -566,6 +571,7 @@ private:
     int m_ownershipShift=0;
     SolverUtils::AWFProfileOptions m_options;
     std::string m_formulation="EPAWF";
+    std::string m_nativeGeometry="FlatV1";
     SolverUtils::AWFParameters m_wallParameters;
     std::string m_variantName="Original";
     SolverUtils::RANSRobustVariant m_robust;

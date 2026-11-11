@@ -1,0 +1,48 @@
+{
+  "schema": "WJH1RoughRoughCaseV1",
+  "source": {
+    "authors": "Shuyang Cao and Tetsuro Tamura",
+    "journal": "JWEIA 94 (2006), 1-19",
+    "doi": "10.1016/j.jweia.2005.10.001",
+    "local_pdf_sha256": "adffb5c1d740be791211d82ce35778a37a3315a6dc72c56c80b70cc6642a43df",
+    "page_numbering": "PDF pages equal printed pages 1-19",
+    "figure_data": "Fig.3 image inspected; no vetted machine-readable digitized profiles; no digitized data asserted"
+  },
+  "scales": {"length_m": 0.04, "velocity": "U_infinity", "time": "H_h/U_infinity"},
+  "anchors": [
+    {"name": "H_h", "value": 0.04, "unit": "m", "kind": "reported", "provenance": "p.3, eq.(1), Fig.1 p.4"},
+    {"name": "L_h", "value": 0.1, "unit": "m", "kind": "reported half-width", "provenance": "p.3, eq.(1)"},
+    {"name": "cube_height_b_r", "value": 0.005, "unit": "m", "kind": "reported, distinct from AWF h_s", "provenance": "pp.4-5, Fig.2"},
+    {"name": "cube_spacing", "value": 0.035, "unit": "m", "kind": "reported staggered arrangement", "provenance": "p.5, Fig.2"},
+    {"name": "frontal_area_density", "value": 0.041, "unit": "1", "kind": "reported", "provenance": "p.5, Sec.2"},
+    {"name": "z_0", "value": 0.0002, "unit": "m", "kind": "paper fitted aerodynamic intercept", "provenance": "p.6 Sec.3.1, Fig.3(e) p.7"},
+    {"name": "d_0", "value": 0.0035, "unit": "m", "kind": "paper assumed 0.7*b_r, not measured", "provenance": "p.6 Sec.3.1"},
+    {"name": "delta", "value": 0.25, "unit": "m", "kind": "reported approximate", "provenance": "p.6 Sec.3.1, Fig.3(a) p.7"},
+    {"name": "u_tau_over_U_infinity", "value": 0.051, "unit": "1", "kind": "reported rounded", "provenance": "p.6 Sec.3.1, Fig.3(b) p.7"},
+    {"name": "u_tau_z_0_over_nu", "value": 3.97, "unit": "1", "kind": "reported rounded", "provenance": "p.6 Sec.3.1"},
+    {"name": "U_at_H_h_times_H_h_over_nu", "value": 10500, "unit": "1", "kind": "reported approximate rough case", "provenance": "p.8 Sec.3.2"},
+    {"name": "sigma_u_over_u_tau", "value": 2.15, "unit": "1", "kind": "reported near-surface", "provenance": "p.8 Table 1, Fig.3(c) p.7"},
+    {"name": "sigma_vertical_over_u_tau", "value": 1.13, "unit": "1", "kind": "reported near-surface", "provenance": "p.8 Table 1, Fig.3(d) p.7"},
+    {"name": "freestream_TI", "value": 0.003, "unit": "1", "kind": "reported approximate turntable value", "provenance": "p.3 Sec.2"},
+    {"name": "Z_top", "value": 0.8, "unit": "m in original coordinates", "kind": "reported", "provenance": "p.3 Sec.2"}
+  ],
+  "dimensionless": {"H_h": 1, "L_h": 2.5, "b_r": 0.125, "spacing": 0.875, "z_0": 0.005, "d_0": 0.0875, "delta": 6.25, "Z_top": 20, "u_tau": 0.051, "nu": 0.00006423173803526447},
+  "origin": {"kind": "physical normal displacement", "expression": "X_eff=X_phys+d_0*n_phys", "status": "homogenization assumption extending the paper's flat assumed displacement normally over hill"},
+  "matching_candidate": {"H_w": 0.375, "physical_mm": 15, "h_s": "invert flat AWF correlation from conditional WJ-slope/log-intercept anchor", "status": "provisional verification choice, not measured/calibrated at multiple experimental heights", "additional_flat_heights": [0.25, 0.5]},
+  "provisional_inlet": {
+    "used_in_native_smoke": false,
+    "status": "analytic finite-depth completion pending Fig.3 digitization and flat precursor",
+    "mean": "displaced rough log seed below 0.8*delta; C2 blend to U_infinity at delta; uniform above delta",
+    "spanwise_variance": "unmeasured: provisional mean of measured longitudinal and vertical variances, with uncertainty bracket between them; never k=1.5*sigma_u^2",
+    "k": "(sigma_u^2+sigma_span^2+sigma_vertical^2)/2; independent of exact neutral WJ reference",
+    "epsilon": "unmeasured: provisional WJ near-wall tail u_tau^3/(kappa_e*r), blended to a positive freestream value; amplitude/length sensitivity remains open",
+    "WJ_reference_bias": {"sigma_u_over_u_tau": 1.759004104, "sigma_vertical_over_u_tau": 1.192313471, "status": "exact model reference, not simultaneous experimental stress matching"}
+  },
+  "future_boundaries": {"inlet": "finite-depth measured profile", "outlet": "pressure/traction level, scalar outflow and explicit backflow state", "ceiling": "physical Z_top; slip impermeable candidate requiring sensitivity", "pressure": "absolute outlet level or one gauge according to boundary problem, never incompatible additional mean constraint"},
+  "observations": [
+    {"name": "crest_fractional_speedup", "x_over_H_h": 0, "vertical_clearance_over_H_h": 0.25, "value": 0.875, "kind": "paper reported rough/rough anchor, not fit target", "provenance": "p.10 Sec.3.2.1, Fig.6 pp.10-11"},
+    {"name": "reattachment", "x_over_H_h": 6.5, "kind": "paper reported dividing-streamline extrapolation, not fit target", "provenance": "p.12 Sec.3.2.2, Figs.8-9 p.13"},
+    {"name": "near_floor_wake_U", "physical_z_over_H_h": 0.175, "kind": "future profile; no digitized values supplied", "provenance": "p.13 Fig.9 and text"}
+  ],
+  "observation_ownership": "Use original physical x,z and y'=z-z_b(x), not normal r. Invert the certified composite chart; r<H_w uses inner U/local k/R_w, outer eta uses WJ k/epsilon/R. Tensor axes are physical x,span,z. Record native element and both H/foot owners."
+}

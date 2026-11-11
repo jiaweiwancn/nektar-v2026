@@ -323,7 +323,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         // Endpoint samplers and every native interface row carry their own
         // element. Resolve radial provenance once; a zero selector must not
         // turn an H-minus derivative into an outer constitutive observation.
-        if(!q.columnAverage && Same(Distance(q.coordinate),m_mapping.At(q.coordinate).height))
+        if(!q.columnAverage && Same(q.coordinate[2],m_parameters.geometry.height))
         {
             ScalarObservation provenance;provenance.coordinate=q.coordinate;
             provenance.block=block;provenance.geometry=q.geometry;provenance.side=side;
@@ -332,12 +332,15 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         const double value=q.Value(values,offset[block]);
         if(ConstitutiveKInventory() && block==K())
         {if(q.columnAverage){auto a=q.coordinate;a[2]=0;m_coveredKFunctionals.insert(a);}else m_coveredKLocations.insert(q.coordinate);}
-        const double scale=block==K()?K0:E0*m_parameters.geometry.height/Distance(q.coordinate);
+        // Outer eta is not physical normal distance. Terrain positivity uses
+        // the fixed interface epsilon scale; it changes no physical operator.
+        const double scale=block==K()?K0:E0*m_parameters.geometry.height/
+            (WJTerrain() && q.coordinate[2]>m_parameters.geometry.height?m_parameters.geometry.height:Distance(q.coordinate));
         const double margin=value/scale;++result.counts[name];
         if(block==K())
         {
             if(name=="physical_sampled_K")result.minimumSampledK=std::min(result.minimumSampledK,value);
-            if(Distance(q.coordinate)<=m_mapping.At(q.coordinate).height && side<=0)
+            if(q.coordinate[2]<=m_parameters.geometry.height && side<=0)
                 result.minimumInnerK=std::min(result.minimumInnerK,value);
             else result.minimumOuterK=std::min(result.minimumOuterK,value);
         }
@@ -877,7 +880,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveFrozenScalars(Vector
 std::vector<RANSWallEvolutionPatch::WallExtremum>
 RANSWallEvolutionPatch::WallTraceR4(const Vector &state) const
 {
-    Require(m_dimension==2 && !Mapped(),"R4 wall trace requires canonical flat 2D");
+    Require(m_dimension==2 && (!Mapped() || WJTerrain()),"R4 wall trace requires a supported canonical 2D tensor trace");
     const auto &field=*fields[K()];
     const auto native=field.Field();
     const auto map=native->GetLocalToGlobalMap();
@@ -974,7 +977,7 @@ RANSWallEvolutionPatch::ObservationProvenance RANSWallEvolutionPatch::ResolveObs
     const double H=m_parameters.geometry.height;
     const bool inner=element.upper[2]<=H+1e-11;
     Require(inner || element.lower[2]>=H-1e-11,"constitutive element crosses the fitted wall interface");
-    const bool atInterface=Same(Distance(p.coordinate),m_mapping.At(p.coordinate).height);
+    const bool atInterface=Same(p.coordinate[2],m_parameters.geometry.height);
     const int side=atInterface?(inner?-1:1):0;
     Require(!atInterface || p.side==0 || p.side==side,"observation radial side disagrees with its native element");
     return {v,inner,side};
