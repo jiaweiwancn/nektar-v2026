@@ -11,6 +11,7 @@ from rans_request_manifest import RequestManifest, sha, runtime_identity
 from rans_duration_contract import MEMBERS, SHORT_TIMES, identity, require, prefix, required_times, aggregate
 from admit_rans_configuration import validate_audit
 from rans_qualification import write_json
+from compare_rans_balanced_evolution import compare
 
 OPERATOR = 'GeneratedVolumeOwnerV1'
 
@@ -49,6 +50,10 @@ def admit(root, model, wall, output=None):
         require(a['fixed_common_inner_k']['reduction']['status'] in ('pass','unresolved_floor'),'common_inner_k_failed')
         require(a['quadrature']['status']=='pass' and len(a['quadrature']['checks'])==2,'incomplete_frozen_quadrature')
         require(len(a['constitutive'])==2 and all(s['status']=='pass' for s in a['constitutive'].values()),'constitutive_gate_failed')
+        comparison=Path(a['comparison']['source'])
+        require(sha(comparison)==a['comparison']['sha256'],'short_comparison_changed')
+        recalculated=compare(r,[tag+'-'+m for m in MEMBERS],t)
+        require(recalculated==load(comparison) and recalculated['status']=='pass','short_comparison_recomputation_failed')
         for m in MEMBERS[:2]:
             source=Path(a['spatial_sources'][m]['path']);require(sha(source)==a['spatial_sources'][m]['sha256'],'short_audit_changed')
             validated=validate_audit(source,r/'campaigns'/(tag+'-'+m),cfg,[t],common,
@@ -68,8 +73,11 @@ def admit(root, model, wall, output=None):
             endpoint=folder/('T-'+format(t,'.4f'));require(seal.completed(endpoint),'unsealed_short_endpoint')
             report=load(endpoint/'case.evolution.json');require(report['numerical_operator']==OPERATOR,'old_native_report')
             reports[str(t)]={n:sha(endpoint/n) for n in ('case.evolution.json','metrics.json')}
-        bindings[m]=dict(request_sha256=rm['sha256'],native_reports=reports,
-                         consumed_inputs=load(folder/'T-0.0016/metrics.json').get('initial_identity',{}))
+        consumed=load(folder/'T-0.0016/metrics.json')['initialization_receipt']
+        require(consumed['raw_initial_sha256']==consumed['effective_initial_sha256']==consumed['fixed_reference_sha256'] and
+            consumed['explicit_boundary_sha256']==consumed['implicit_boundary_sha256'] and consumed['raw_effective_max_difference']==0.,
+            'consumed_neutral_initial_boundary_identity_failed')
+        bindings[m]=dict(request_sha256=rm['sha256'],native_reports=reports,consumed_inputs=consumed)
         if m in MEMBERS[:2]:
             path=r/'meshes'/tag/('Balanced5V1.json' if m=='B5' else 'Balanced11V1.json');spec=load(path)
             require(spec['knots']==request['knots'] and spec['degree']==request['degree'],'admitted_mesh_mismatch')
