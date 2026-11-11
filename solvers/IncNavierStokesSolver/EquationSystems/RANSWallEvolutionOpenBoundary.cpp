@@ -32,7 +32,8 @@ std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSh
         "RANSWALLPIMPLEREJECTSTEP","RANSWALLPIMPLEHARDAUDITREJECTSTEP"};
     for(const auto &[name,value]:s->GetParameters())if(!work.count(name))out<<'|'<<name<<'='<<value;
     for(const std::string name:{"BoundaryValuesInner","BoundaryValuesOuter","OutletTotalTractionInner","OutletTotalTractionOuter",
-        "OutletDiffusiveFluxInner","OutletDiffusiveFluxOuter"})
+        "OutletDiffusiveFluxInner","OutletDiffusiveFluxOuter","BodyForceInner","BodyForceOuter",
+        "ScalarSourceInner","ScalarSourceOuter"})
         for(const auto &variable:s->GetVariables())if(s->DefinesFunction(name,variable))
             out<<'|'<<name<<'/'<<variable<<'='<<s->GetFunction(name,variable)->GetExpression();
     return out.str();

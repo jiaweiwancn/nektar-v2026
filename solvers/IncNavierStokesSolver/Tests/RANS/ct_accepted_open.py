@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """CT-Accepted-1 case definitions and independent conservative outlet checks."""
-import argparse,json,math,os,resource,subprocess,time,xml.etree.ElementTree as ET
+import argparse,json,math,os,resource,subprocess,tempfile,time,xml.etree.ElementTree as ET
 from pathlib import Path
 from rans_qualification import THREADS,write_json,exact_vector_hash
 os.environ.update(THREADS)
@@ -47,6 +47,25 @@ def fixture(folder,runtime,model='A95',steps=0,dt=1e-7,pressure=0.,traction_shif
         functions(root,'BoundaryValues'+suffix,values)
         functions(root,'OutletTotalTraction'+suffix,dict(u=repr(-pressure-traction_shift),v='.01'))
         functions(root,'OutletDiffusiveFlux'+suffix,dict(k=repr(.003+flux_shift),eps_tilde=repr(.004+2*flux_shift)))
+    write(root,path);return path
+
+
+def manufactured_fixture(folder,runtime):
+    """Independent steady weak identity; forcing is verification-only."""
+    path=fixture(folder,runtime);root=ET.parse(path).getroot();c=Column('A95',1.,2.,0.,1.5e-5)
+    eps=c.A/2;G=(1/c.D(2.)-6.5*eps)/(3/math.sqrt(2));gradient=np.zeros((3,3));gradient[0,2]=G
+    law=oracle('A95',1.,eps,gradient);Q=law['Q'];pi=-Q[2,2]
+    tensor_mesh(root,[0.,c.zv,2.,4.],3,2,1.,1.,points=[8,8],xknots=[0.,.5,1.])
+    nt=f'({c.a:.17g}*(y-({c.zv:.17g})+abs(y-({c.zv:.17g})))/2)'
+    sink=f'({c.A:.17g}/((y+({c.cutoff:.17g})+abs(y-({c.cutoff:.17g})))/2))'
+    for suffix,p in [('Inner',0.),('Outer',pi)]:
+        values=dict(u=f'({G:.17g})*y',v='0',k='1',eps_tilde=repr(eps),p=repr(p))
+        functions(root,'InitialConditions'+suffix,values);functions(root,'BoundaryValues'+suffix,values)
+        functions(root,'OutletTotalTraction'+suffix,dict(u='0' if suffix=='Inner' else repr(Q[2,2]-Q[0,0]),v=repr(c.D(2.)*G)))
+        functions(root,'OutletDiffusiveFlux'+suffix,dict(k='0',eps_tilde='0'))
+    functions(root,'BodyForceInner',dict(u=f'(-{c.a*G:.17g})*(y>{c.zv:.17g})',v='0'))
+    functions(root,'ScalarSourceInner',dict(k=f'({sink}-{nt}*({G*G:.17g}))'))
+    functions(root,'ScalarSourceOuter',dict(k=repr(-law['k_source']),eps_tilde=repr(-law['eps_source'])))
     write(root,path);return path
 
 
@@ -294,6 +313,13 @@ def verify(runtime,output):
             else:
                 defect=float(np.max(abs(delta[free])));require(defect<=2e-10,'pressure_offset_velocity_or_scalar_weak_action')
             result['checks'][name+'_discriminating']=dict(status='pass',maximum_defect=defect)
+        folder=output/'manufactured';manufactured_fixture(folder,runtime)
+        p,e=probe(runtime,folder,sampling_request());result['executions'].append(e)
+        require(e['exit_code']==0,'manufactured_fixture_actual_domain_rejection')
+        defect=max(abs(x) for x in p['open_frozen_systems']['constrained_residual'])
+        require(defect<=2e-9,'independent_manufactured_native_weak_balance')
+        result['checks']['manufactured_weak_balance']=dict(status='pass',maximum_free_equation_defect=defect,
+            scope='independent analytical linear U, constant outer k/epsilon and compatible complete traction; declared verification forcing only, absent from physical pilot')
         result['status']='pass'
     except Exception as error:result['failure']=repr(error)
     write_json(output/'results.json',result)
@@ -302,6 +328,7 @@ def verify(runtime,output):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--output',type=Path);a=p.parse_args()
+    if a.output is None:a.output=Path(tempfile.mkdtemp(prefix='ct-accepted-open-',dir=os.environ.get('TMPDIR')))/'verification'
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');r=verify(a.runtime,a.output);print(json.dumps(dict(status=r['status'],failure=r.get('failure'))));return 0 if r['status']=='pass' else 1
 if __name__=='__main__':raise SystemExit(main())

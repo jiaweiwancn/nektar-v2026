@@ -627,6 +627,11 @@ if(Python3_Interpreter_FOUND)
     add_test(NAME RANSQualificationFailureContract COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_qualification.py)
     set_tests_properties(RANSQualificationFailureContract PROPERTIES PROCESSORS 1 TIMEOUT 30)
     if(RANS_BUILD_SOLVER)
+        add_test(NAME CTAcceptedOpenConservativeNative COMMAND ${Python3_EXECUTABLE} -B
+            ${CMAKE_CURRENT_LIST_DIR}/ct_accepted_open.py
+            --runtime $<TARGET_FILE_DIR:RANSPreservationProbe>)
+        set_tests_properties(CTAcceptedOpenConservativeNative PROPERTIES PROCESSORS 8 TIMEOUT 600
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;PYTHONDONTWRITEBYTECODE=1;TMPDIR=$ENV{TMPDIR}")
         add_test(NAME RANSNativeOwnershipGeometry COMMAND ${Python3_EXECUTABLE} -B
             ${CMAKE_CURRENT_LIST_DIR}/check_rans_native_ownership.py
             --probe $<TARGET_FILE:RANSPreservationProbe> --descriptor-probe $<TARGET_FILE:RANSNewModelsProbe>)
