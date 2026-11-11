@@ -135,11 +135,13 @@ def main():
     p.add_argument('--previous-root', type=Path)
     p.add_argument('--output', type=Path)
     p.add_argument('--resume', action='store_true')
+    p.add_argument('--directional', action='store_true', help='qualified uniform (6,5)/(4,3) route only')
     a = p.parse_args()
     out = a.output.resolve() if a.output else Path(tempfile.mkdtemp(prefix='rans-owned-volume-',dir=os.environ.get('TMPDIR')))/'evidence'
     a.probe=a.probe.resolve();a.descriptor_probe=a.descriptor_probe.resolve()
     if a.old_probe:a.old_probe=a.old_probe.resolve()
     if a.previous_root:a.previous_root=a.previous_root.resolve()
+    if a.directional and (a.old_probe or a.previous_root):raise ValueError('directional layout has no legacy operator witness')
     fixture = Path(__file__).resolve().parents[4]/'docs/plans/a93-a95-e94e95-awf-nonlinear-duration-response-qualification-evidence/minimal-ownership/case.xml'
     frozen={}
     if a.previous_root:
@@ -154,6 +156,7 @@ def main():
                   primitive_absolute_tolerance=2e-12,
                   weak_tolerances='unchanged native-test oracle: scaled 1e-9 or absolute 1e-12',
                   method='production Refresh rows; native cutoff used as fixed mesh node; no row replacement')
+    if a.directional:intent['directional_layout']='UniformDirectionalModifiedA2DV1:6,5:4,3'
     seal = RequestManifest(out, intent, a.resume)
     if seal.completed(out): return 0 if load(out/'results.json')['status']=='pass' else 1
     results = []; sealed_files = []; ref = Reference('A95','Natural','Accepted')
@@ -171,6 +174,9 @@ def main():
         root=ET.parse(folder/'case.xml').getroot()
         set_info(root,'RANSWallRestart','None');set_info(root,'RANSWallCheckpoint',str(folder/'unused-checkpoint'))
         set_parameter(root,'RANSWallFrictionVelocity',us);set_parameter(root,'K0',ref.q*us*us)
+        if a.directional:
+            for e in root.findall('./EXPANSIONS/E'):
+                e.set('NUMMODES','5,4' if e.get('FIELDS')=='p' else '7,6')
         write(root,folder/'case.xml')
         mapping=permute_geometry(folder/'case.xml') if reverse else None
         write_json(folder/'request.json',request)
@@ -239,6 +245,19 @@ def main():
         results.append(dict(name='cutoff-position-coverage',status='pass' if len(signs)==3 and signs[0]==0 and min(signs)<0<max(signs) and
                             all(r['tiny_panel_points']>0 for r in variants[1:]) else 'fail',
                             displacements=signs,scope='fixed mesh, physical input perturbations only; no snapped coordinates or removed panels'))
+        trace=run('exact-and-near-interface',dict(volume_request,
+            grid=[[-.37,0.,2.],[-.37,0.,2.],[-.37,0.,2.-1e-13],[-.37,0.,2.+1e-13]],
+            grid_sides=[-1,1,0,0]),node=node)
+        if trace:
+            o=trace['observation'];geometries={e['geometry']:e for e in o['elements']}
+            values=np.array(o['grid_values']);jump=float(np.max(abs(values[0,[0,1,2]]-values[1,[0,1,2]])))
+            owners=o['grid_geometry_by_field'];regions=[0,1,0,1]
+            owner_ok=all((geometries[g[0]]['lower'][2]>=2.)==bool(region) and
+                g[0]==g[1]==g[2]==g[4] and (g[3]==g[0] if region else g[3]==-1)
+                for g,region in zip(owners,regions,strict=True))
+            results.append(dict(name='exact-side-and-nearby-owner-separation',status='pass' if owner_ok and jump<=2e-11 else 'fail',
+                common_velocity_k_jump=jump,actual_field_owners=owners,declared_sides=o['grid_sides'],
+                one_sided_velocity_and_k_gradients=o['grid_gradients'],scope='no gradient or eddy-viscosity continuity imposed'))
     if a.previous_root:
         for wall in ('Accepted','EP'):
             source=a.previous_root/('evolved-audits/response-A95-N-'+wall+'-response-2e-05-dt-0.002-0.016-B5/T-0.0160/packet.json.gz')
