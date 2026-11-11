@@ -1,0 +1,47 @@
+{
+  "schema": "WJ7WholeProcessReceiptV1",
+  "label": "replay-v8",
+  "argv": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/run_wj7_native.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111",
+    "--parent",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111",
+    "--solver",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/IncNavierStokesSolver",
+    "--probe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/RANSWallResolutionProbe",
+    "--mode",
+    "replay",
+    "--replay-name",
+    "retained-replay-v5",
+    "--study-name",
+    "study-v2"
+  ],
+  "exit_code": 0,
+  "failure": null,
+  "seconds": 21.64443664002465,
+  "whole_process_peak_rss_bytes": 192577536,
+  "peak_tree_threads": 3,
+  "unaccounted_parent_seconds": 8.949310821772087,
+  "log": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/replay-v8/command.log",
+    "bytes": 1555,
+    "sha256": "57aec3f3db47a43ce55e8ab4e983af8de47eb53fc3b0703958c2be5cf7380d2e"
+  },
+  "intent": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/replay-v8/intent.json",
+    "bytes": 12497,
+    "sha256": "ea00a4c1fa7c8fcbee12ce5d7abc614cf4fb68c7e64adbb9153d4bb4211f942a"
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  }
+}

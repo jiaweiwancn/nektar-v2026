@@ -1,0 +1,49 @@
+{
+  "schema": "WJ7WholeProcessReceiptV1",
+  "label": "expected-joint-admission-refusal",
+  "argv": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/run_wj7_native.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111",
+    "--parent",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111",
+    "--solver",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/IncNavierStokesSolver",
+    "--probe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/RANSWallResolutionProbe",
+    "--mode",
+    "cadence",
+    "--end",
+    "64",
+    "--replay-name",
+    "retained-replay-v5",
+    "--study-name",
+    "study-v2"
+  ],
+  "exit_code": 1,
+  "failure": null,
+  "seconds": 1.1272896099835634,
+  "whole_process_peak_rss_bytes": 100536320,
+  "peak_tree_threads": 2,
+  "unaccounted_parent_seconds": 1.1272896099835634,
+  "log": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/expected-joint-admission-refusal/command.log",
+    "bytes": 2302,
+    "sha256": "5adfbe0369561ee9cb75d039fdb1f32613a7ef67ca21cc29670e09c1d0fef6a4"
+  },
+  "intent": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/expected-joint-admission-refusal/intent.json",
+    "bytes": 13897,
+    "sha256": "c6cd4205915c77e8f9f8eea3a89022406ebfea4f1726dc48b675adb87e9b8965"
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  }
+}

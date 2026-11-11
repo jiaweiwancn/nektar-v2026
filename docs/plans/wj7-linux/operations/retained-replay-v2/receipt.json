@@ -1,0 +1,43 @@
+{
+  "schema": "WJ7WholeProcessReceiptV1",
+  "label": "retained-replay-v2",
+  "argv": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/run_wj7_native.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111",
+    "--parent",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111",
+    "--solver",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/IncNavierStokesSolver",
+    "--probe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/RANSWallResolutionProbe",
+    "--mode",
+    "retained-replay"
+  ],
+  "exit_code": 0,
+  "failure": null,
+  "seconds": 710.6901283310144,
+  "whole_process_peak_rss_bytes": 1409093632,
+  "peak_tree_threads": 2,
+  "unaccounted_parent_seconds": 1.3917357967584394,
+  "log": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/retained-replay-v2/command.log",
+    "bytes": 1527,
+    "sha256": "25d7a5f71280cbfd79fb0204e16baa94ad74540cf7071e3ecbc716e481801967"
+  },
+  "intent": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/retained-replay-v2/intent.json",
+    "bytes": 19763,
+    "sha256": "edc8f64782849ba6a1e353b012231a0315c3773ad3412d212aaaefc843e273b8"
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  }
+}

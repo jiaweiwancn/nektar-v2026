@@ -1,0 +1,452 @@
+<?xml version='1.0' encoding='utf-8'?>
+<NEKTAR>
+  <EXPANSIONS>
+    <E COMPOSITE="C[0]" NUMMODES="4,4" BASISTYPE="Modified_A,Modified_A" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" NUMPOINTS="8,8" FIELDS="u,v,k,epsilon" />
+    <E COMPOSITE="C[0]" NUMMODES="2,2" BASISTYPE="Modified_A,Modified_A" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" NUMPOINTS="8,8" FIELDS="p" />
+  </EXPANSIONS>
+  <CONDITIONS>
+    <VARIABLES>
+      <V ID="0">u</V>
+      <V ID="1">v</V>
+      <V ID="2">k</V>
+      <V ID="3">epsilon</V>
+      <V ID="4">p</V>
+    </VARIABLES>
+    <SOLVERINFO>
+      <I PROPERTY="EQTYPE" VALUE="UnsteadyNavierStokes" />
+      <I PROPERTY="SolverType" VALUE="RANSEquilibriumWallEvolution" />
+      <I PROPERTY="Projection" VALUE="Galerkin" />
+      <I PROPERTY="GlobalSysSoln" VALUE="DirectFull" />
+      <I PROPERTY="TurbulenceModel" VALUE="WJHighRe" />
+      <I PROPERTY="RANSWJGradientPolicy" VALUE="DevStrainRawWorkV1" />
+      <I PROPERTY="RANSWallFormulation" VALUE="WJCalibratedEPAWF" />
+      <I PROPERTY="RANSWallTransition" VALUE="UniformEPFlat" />
+      <I PROPERTY="RANSWallTemporalCoupling" VALUE="PimpleSingleSweep" />
+      <I PROPERTY="RANSWallNonlinearPolicy" VALUE="Legacy" />
+      <I PROPERTY="RANSWallPhysicalRangeGuard" VALUE="WJNativeV1" />
+      <I PROPERTY="RANSWallVariant" VALUE="Original" />
+      <I PROPERTY="RANSWallInnerStress" VALUE="Linear" />
+      <I PROPERTY="RANSWallDestruction" VALUE="Original" />
+      <I PROPERTY="RANSWallKSampling" VALUE="InterfaceTrace" />
+      <I PROPERTY="RANSWallReference" VALUE="Neutral" />
+      <I PROPERTY="RANSWallMap" VALUE="Flat" />
+      <I PROPERTY="RANSWallCondense" VALUE="False" />
+      <I PROPERTY="RANSWallComparison" VALUE="Off" />
+      <I PROPERTY="RANSWallEvaluationReuse" VALUE="Off" />
+      <I PROPERTY="RANSWallPimpleKBound" VALUE="MassProjection" />
+      <I PROPERTY="RANSWallPimpleKInventory" VALUE="WJNativeV1" />
+      <I PROPERTY="RANSWallPimpleKBoundSolver" VALUE="RetainedPool" />
+      <I PROPERTY="RANSWallPimpleSnapshots" VALUE="On" />
+      <I PROPERTY="RANSWallPimpleVerify" VALUE="Off" />
+      <I PROPERTY="RANSWallCheckpoint" VALUE="/media/jay/新加卷/nektar-v2026-runs/wj7-20261111/study-v2/EP/import-baseline/checkpoint" />
+      <I PROPERTY="RANSWallRestart" VALUE="/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/study/EP/baseline-32/checkpoint.16" />
+      <I PROPERTY="RANSWallDenseEvolutionCapacity" VALUE="4331" />
+      <I PROPERTY="RANSWallDenseEvolutionResourceDesign" VALUE="5c7afac2007615a7e206612599eefbac0df436773bf9425e99835eeca457b18e" />
+      <I PROPERTY="RANSWallPimpleStopOnBound" VALUE="On" />
+      <I PROPERTY="RANSWallPimpleSnapshotDirectory" VALUE="/media/jay/新加卷/nektar-v2026-runs/wj7-20261111/study-v2/EP/import-baseline/pimple-states" />
+    </SOLVERINFO>
+    <PARAMETERS>
+      <P>NumSteps = 0</P>
+      <P>TimeStep = 3.2e-05</P>
+      <P>Time = 0.0</P>
+      <P>Kinvis = 1.5e-05</P>
+      <P>RANSWallHeight = 1.0</P>
+      <P>RANSWallRoughness = 0.1</P>
+      <P>RANSWallSampleHeight = 1.0</P>
+      <P>RANSWallTailStart = 0.5</P>
+      <P>RANSWallChi = 1.0</P>
+      <P>RANSWallFrictionVelocity = 0.5</P>
+      <P>RANSWallEta = 0.0</P>
+      <P>RANSWallTangentialOrder = 8</P>
+      <P>RANSWallNormalOrder = 16</P>
+      <P>RANSWallDiagnostics = 1</P>
+      <P>IO_CheckSteps = 1</P>
+      <P>IO_InfoSteps = 1</P>
+      <P>RANSWallPimpleHardAuditRejectStep = 0</P>
+      <P>RANSWallPimpleKBoundMaxAdd = 2000</P>
+      <P>RANSWallPimpleKBoundMaxTotal = 2000</P>
+      <P>RANSWallPimpleKBoundMaxSeparations = 2000</P>
+      <P>RANSWallPimpleKBoundMaxSeconds = 120.0</P>
+      <P>RANSWallPimpleKFloorRelative = 1e-08</P>
+    </PARAMETERS>
+    <TIMEINTEGRATIONSCHEME>
+      <METHOD>IMEX</METHOD>
+      <ORDER>1</ORDER>
+    </TIMEINTEGRATIONSCHEME>
+  </CONDITIONS>
+  <GEOMETRY DIM="2" SPACE="2">
+    <VERTEX>
+      <V ID="0">0 0 0</V>
+      <V ID="1">1 0 0</V>
+      <V ID="2">0 0.00062500000000000001 0</V>
+      <V ID="3">1 0.00062500000000000001 0</V>
+      <V ID="4">0 0.00125 0</V>
+      <V ID="5">1 0.00125 0</V>
+      <V ID="6">0 0.0018749999999999999 0</V>
+      <V ID="7">1 0.0018749999999999999 0</V>
+      <V ID="8">0 0.0025000000000000001 0</V>
+      <V ID="9">1 0.0025000000000000001 0</V>
+      <V ID="10">0 0.0031250000000000002 0</V>
+      <V ID="11">1 0.0031250000000000002 0</V>
+      <V ID="12">0 0.0037499999999999999 0</V>
+      <V ID="13">1 0.0037499999999999999 0</V>
+      <V ID="14">0 0.0043750000000000004 0</V>
+      <V ID="15">1 0.0043750000000000004 0</V>
+      <V ID="16">0 0.0050000000000000001 0</V>
+      <V ID="17">1 0.0050000000000000001 0</V>
+      <V ID="18">0 0.0062500000000000003 0</V>
+      <V ID="19">1 0.0062500000000000003 0</V>
+      <V ID="20">0 0.0074999999999999997 0</V>
+      <V ID="21">1 0.0074999999999999997 0</V>
+      <V ID="22">0 0.0087500000000000008 0</V>
+      <V ID="23">1 0.0087500000000000008 0</V>
+      <V ID="24">0 0.01 0</V>
+      <V ID="25">1 0.01 0</V>
+      <V ID="26">0 0.012500000000000001 0</V>
+      <V ID="27">1 0.012500000000000001 0</V>
+      <V ID="28">0 0.014999999999999999 0</V>
+      <V ID="29">1 0.014999999999999999 0</V>
+      <V ID="30">0 0.017500000000000002 0</V>
+      <V ID="31">1 0.017500000000000002 0</V>
+      <V ID="32">0 0.02 0</V>
+      <V ID="33">1 0.02 0</V>
+      <V ID="34">0 0.025000000000000001 0</V>
+      <V ID="35">1 0.025000000000000001 0</V>
+      <V ID="36">0 0.029999999999999999 0</V>
+      <V ID="37">1 0.029999999999999999 0</V>
+      <V ID="38">0 0.035000000000000003 0</V>
+      <V ID="39">1 0.035000000000000003 0</V>
+      <V ID="40">0 0.040000000000000001 0</V>
+      <V ID="41">1 0.040000000000000001 0</V>
+      <V ID="42">0 0.050000000000000003 0</V>
+      <V ID="43">1 0.050000000000000003 0</V>
+      <V ID="44">0 0.059999999999999998 0</V>
+      <V ID="45">1 0.059999999999999998 0</V>
+      <V ID="46">0 0.070000000000000007 0</V>
+      <V ID="47">1 0.070000000000000007 0</V>
+      <V ID="48">0 0.080000000000000002 0</V>
+      <V ID="49">1 0.080000000000000002 0</V>
+      <V ID="50">0 0.084999999999999992 0</V>
+      <V ID="51">1 0.084999999999999992 0</V>
+      <V ID="52">0 0.089999999999999997 0</V>
+      <V ID="53">1 0.089999999999999997 0</V>
+      <V ID="54">0 0.095000000000000001 0</V>
+      <V ID="55">1 0.095000000000000001 0</V>
+      <V ID="56">0 0.10000000000000001 0</V>
+      <V ID="57">1 0.10000000000000001 0</V>
+      <V ID="58">0 0.125 0</V>
+      <V ID="59">1 0.125 0</V>
+      <V ID="60">0 0.15000000000000002 0</V>
+      <V ID="61">1 0.15000000000000002 0</V>
+      <V ID="62">0 0.17500000000000002 0</V>
+      <V ID="63">1 0.17500000000000002 0</V>
+      <V ID="64">0 0.20000000000000001 0</V>
+      <V ID="65">1 0.20000000000000001 0</V>
+      <V ID="66">0 0.25 0</V>
+      <V ID="67">1 0.25 0</V>
+      <V ID="68">0 0.30000000000000004 0</V>
+      <V ID="69">1 0.30000000000000004 0</V>
+      <V ID="70">0 0.35000000000000003 0</V>
+      <V ID="71">1 0.35000000000000003 0</V>
+      <V ID="72">0 0.40000000000000002 0</V>
+      <V ID="73">1 0.40000000000000002 0</V>
+      <V ID="74">0 0.47500000000000003 0</V>
+      <V ID="75">1 0.47500000000000003 0</V>
+      <V ID="76">0 0.55000000000000004 0</V>
+      <V ID="77">1 0.55000000000000004 0</V>
+      <V ID="78">0 0.625 0</V>
+      <V ID="79">1 0.625 0</V>
+      <V ID="80">0 0.69999999999999996 0</V>
+      <V ID="81">1 0.69999999999999996 0</V>
+      <V ID="82">0 0.77499999999999991 0</V>
+      <V ID="83">1 0.77499999999999991 0</V>
+      <V ID="84">0 0.84999999999999998 0</V>
+      <V ID="85">1 0.84999999999999998 0</V>
+      <V ID="86">0 0.92500000000000004 0</V>
+      <V ID="87">1 0.92500000000000004 0</V>
+      <V ID="88">0 1 0</V>
+      <V ID="89">1 1 0</V>
+      <V ID="90">0 1.0375000000000001 0</V>
+      <V ID="91">1 1.0375000000000001 0</V>
+      <V ID="92">0 1.075 0</V>
+      <V ID="93">1 1.075 0</V>
+      <V ID="94">0 1.1124999999999998 0</V>
+      <V ID="95">1 1.1124999999999998 0</V>
+      <V ID="96">0 1.1499999999999999 0</V>
+      <V ID="97">1 1.1499999999999999 0</V>
+      <V ID="98">0 1.2 0</V>
+      <V ID="99">1 1.2 0</V>
+      <V ID="100">0 1.25 0</V>
+      <V ID="101">1 1.25 0</V>
+      <V ID="102">0 1.3 0</V>
+      <V ID="103">1 1.3 0</V>
+      <V ID="104">0 1.3500000000000001 0</V>
+      <V ID="105">1 1.3500000000000001 0</V>
+      <V ID="106">0 1.4125000000000001 0</V>
+      <V ID="107">1 1.4125000000000001 0</V>
+      <V ID="108">0 1.4750000000000001 0</V>
+      <V ID="109">1 1.4750000000000001 0</V>
+      <V ID="110">0 1.5375000000000001 0</V>
+      <V ID="111">1 1.5375000000000001 0</V>
+      <V ID="112">0 1.6000000000000001 0</V>
+      <V ID="113">1 1.6000000000000001 0</V>
+      <V ID="114">0 1.7000000000000002 0</V>
+      <V ID="115">1 1.7000000000000002 0</V>
+      <V ID="116">0 1.8 0</V>
+      <V ID="117">1 1.8 0</V>
+      <V ID="118">0 1.8999999999999999 0</V>
+      <V ID="119">1 1.8999999999999999 0</V>
+      <V ID="120">0 2 0</V>
+      <V ID="121">1 2 0</V>
+    </VERTEX>
+    <EDGE>
+      <E ID="0">0 1</E>
+      <E ID="1">1 3</E>
+      <E ID="2">3 2</E>
+      <E ID="3">2 0</E>
+      <E ID="4">3 5</E>
+      <E ID="5">5 4</E>
+      <E ID="6">4 2</E>
+      <E ID="7">5 7</E>
+      <E ID="8">7 6</E>
+      <E ID="9">6 4</E>
+      <E ID="10">7 9</E>
+      <E ID="11">9 8</E>
+      <E ID="12">8 6</E>
+      <E ID="13">9 11</E>
+      <E ID="14">11 10</E>
+      <E ID="15">10 8</E>
+      <E ID="16">11 13</E>
+      <E ID="17">13 12</E>
+      <E ID="18">12 10</E>
+      <E ID="19">13 15</E>
+      <E ID="20">15 14</E>
+      <E ID="21">14 12</E>
+      <E ID="22">15 17</E>
+      <E ID="23">17 16</E>
+      <E ID="24">16 14</E>
+      <E ID="25">17 19</E>
+      <E ID="26">19 18</E>
+      <E ID="27">18 16</E>
+      <E ID="28">19 21</E>
+      <E ID="29">21 20</E>
+      <E ID="30">20 18</E>
+      <E ID="31">21 23</E>
+      <E ID="32">23 22</E>
+      <E ID="33">22 20</E>
+      <E ID="34">23 25</E>
+      <E ID="35">25 24</E>
+      <E ID="36">24 22</E>
+      <E ID="37">25 27</E>
+      <E ID="38">27 26</E>
+      <E ID="39">26 24</E>
+      <E ID="40">27 29</E>
+      <E ID="41">29 28</E>
+      <E ID="42">28 26</E>
+      <E ID="43">29 31</E>
+      <E ID="44">31 30</E>
+      <E ID="45">30 28</E>
+      <E ID="46">31 33</E>
+      <E ID="47">33 32</E>
+      <E ID="48">32 30</E>
+      <E ID="49">33 35</E>
+      <E ID="50">35 34</E>
+      <E ID="51">34 32</E>
+      <E ID="52">35 37</E>
+      <E ID="53">37 36</E>
+      <E ID="54">36 34</E>
+      <E ID="55">37 39</E>
+      <E ID="56">39 38</E>
+      <E ID="57">38 36</E>
+      <E ID="58">39 41</E>
+      <E ID="59">41 40</E>
+      <E ID="60">40 38</E>
+      <E ID="61">41 43</E>
+      <E ID="62">43 42</E>
+      <E ID="63">42 40</E>
+      <E ID="64">43 45</E>
+      <E ID="65">45 44</E>
+      <E ID="66">44 42</E>
+      <E ID="67">45 47</E>
+      <E ID="68">47 46</E>
+      <E ID="69">46 44</E>
+      <E ID="70">47 49</E>
+      <E ID="71">49 48</E>
+      <E ID="72">48 46</E>
+      <E ID="73">49 51</E>
+      <E ID="74">51 50</E>
+      <E ID="75">50 48</E>
+      <E ID="76">51 53</E>
+      <E ID="77">53 52</E>
+      <E ID="78">52 50</E>
+      <E ID="79">53 55</E>
+      <E ID="80">55 54</E>
+      <E ID="81">54 52</E>
+      <E ID="82">55 57</E>
+      <E ID="83">57 56</E>
+      <E ID="84">56 54</E>
+      <E ID="85">57 59</E>
+      <E ID="86">59 58</E>
+      <E ID="87">58 56</E>
+      <E ID="88">59 61</E>
+      <E ID="89">61 60</E>
+      <E ID="90">60 58</E>
+      <E ID="91">61 63</E>
+      <E ID="92">63 62</E>
+      <E ID="93">62 60</E>
+      <E ID="94">63 65</E>
+      <E ID="95">65 64</E>
+      <E ID="96">64 62</E>
+      <E ID="97">65 67</E>
+      <E ID="98">67 66</E>
+      <E ID="99">66 64</E>
+      <E ID="100">67 69</E>
+      <E ID="101">69 68</E>
+      <E ID="102">68 66</E>
+      <E ID="103">69 71</E>
+      <E ID="104">71 70</E>
+      <E ID="105">70 68</E>
+      <E ID="106">71 73</E>
+      <E ID="107">73 72</E>
+      <E ID="108">72 70</E>
+      <E ID="109">73 75</E>
+      <E ID="110">75 74</E>
+      <E ID="111">74 72</E>
+      <E ID="112">75 77</E>
+      <E ID="113">77 76</E>
+      <E ID="114">76 74</E>
+      <E ID="115">77 79</E>
+      <E ID="116">79 78</E>
+      <E ID="117">78 76</E>
+      <E ID="118">79 81</E>
+      <E ID="119">81 80</E>
+      <E ID="120">80 78</E>
+      <E ID="121">81 83</E>
+      <E ID="122">83 82</E>
+      <E ID="123">82 80</E>
+      <E ID="124">83 85</E>
+      <E ID="125">85 84</E>
+      <E ID="126">84 82</E>
+      <E ID="127">85 87</E>
+      <E ID="128">87 86</E>
+      <E ID="129">86 84</E>
+      <E ID="130">87 89</E>
+      <E ID="131">89 88</E>
+      <E ID="132">88 86</E>
+      <E ID="133">89 91</E>
+      <E ID="134">91 90</E>
+      <E ID="135">90 88</E>
+      <E ID="136">91 93</E>
+      <E ID="137">93 92</E>
+      <E ID="138">92 90</E>
+      <E ID="139">93 95</E>
+      <E ID="140">95 94</E>
+      <E ID="141">94 92</E>
+      <E ID="142">95 97</E>
+      <E ID="143">97 96</E>
+      <E ID="144">96 94</E>
+      <E ID="145">97 99</E>
+      <E ID="146">99 98</E>
+      <E ID="147">98 96</E>
+      <E ID="148">99 101</E>
+      <E ID="149">101 100</E>
+      <E ID="150">100 98</E>
+      <E ID="151">101 103</E>
+      <E ID="152">103 102</E>
+      <E ID="153">102 100</E>
+      <E ID="154">103 105</E>
+      <E ID="155">105 104</E>
+      <E ID="156">104 102</E>
+      <E ID="157">105 107</E>
+      <E ID="158">107 106</E>
+      <E ID="159">106 104</E>
+      <E ID="160">107 109</E>
+      <E ID="161">109 108</E>
+      <E ID="162">108 106</E>
+      <E ID="163">109 111</E>
+      <E ID="164">111 110</E>
+      <E ID="165">110 108</E>
+      <E ID="166">111 113</E>
+      <E ID="167">113 112</E>
+      <E ID="168">112 110</E>
+      <E ID="169">113 115</E>
+      <E ID="170">115 114</E>
+      <E ID="171">114 112</E>
+      <E ID="172">115 117</E>
+      <E ID="173">117 116</E>
+      <E ID="174">116 114</E>
+      <E ID="175">117 119</E>
+      <E ID="176">119 118</E>
+      <E ID="177">118 116</E>
+      <E ID="178">119 121</E>
+      <E ID="179">121 120</E>
+      <E ID="180">120 118</E>
+    </EDGE>
+    <ELEMENT>
+      <Q ID="0">0 1 2 3</Q>
+      <Q ID="1">2 4 5 6</Q>
+      <Q ID="2">5 7 8 9</Q>
+      <Q ID="3">8 10 11 12</Q>
+      <Q ID="4">11 13 14 15</Q>
+      <Q ID="5">14 16 17 18</Q>
+      <Q ID="6">17 19 20 21</Q>
+      <Q ID="7">20 22 23 24</Q>
+      <Q ID="8">23 25 26 27</Q>
+      <Q ID="9">26 28 29 30</Q>
+      <Q ID="10">29 31 32 33</Q>
+      <Q ID="11">32 34 35 36</Q>
+      <Q ID="12">35 37 38 39</Q>
+      <Q ID="13">38 40 41 42</Q>
+      <Q ID="14">41 43 44 45</Q>
+      <Q ID="15">44 46 47 48</Q>
+      <Q ID="16">47 49 50 51</Q>
+      <Q ID="17">50 52 53 54</Q>
+      <Q ID="18">53 55 56 57</Q>
+      <Q ID="19">56 58 59 60</Q>
+      <Q ID="20">59 61 62 63</Q>
+      <Q ID="21">62 64 65 66</Q>
+      <Q ID="22">65 67 68 69</Q>
+      <Q ID="23">68 70 71 72</Q>
+      <Q ID="24">71 73 74 75</Q>
+      <Q ID="25">74 76 77 78</Q>
+      <Q ID="26">77 79 80 81</Q>
+      <Q ID="27">80 82 83 84</Q>
+      <Q ID="28">83 85 86 87</Q>
+      <Q ID="29">86 88 89 90</Q>
+      <Q ID="30">89 91 92 93</Q>
+      <Q ID="31">92 94 95 96</Q>
+      <Q ID="32">95 97 98 99</Q>
+      <Q ID="33">98 100 101 102</Q>
+      <Q ID="34">101 103 104 105</Q>
+      <Q ID="35">104 106 107 108</Q>
+      <Q ID="36">107 109 110 111</Q>
+      <Q ID="37">110 112 113 114</Q>
+      <Q ID="38">113 115 116 117</Q>
+      <Q ID="39">116 118 119 120</Q>
+      <Q ID="40">119 121 122 123</Q>
+      <Q ID="41">122 124 125 126</Q>
+      <Q ID="42">125 127 128 129</Q>
+      <Q ID="43">128 130 131 132</Q>
+      <Q ID="44">131 133 134 135</Q>
+      <Q ID="45">134 136 137 138</Q>
+      <Q ID="46">137 139 140 141</Q>
+      <Q ID="47">140 142 143 144</Q>
+      <Q ID="48">143 145 146 147</Q>
+      <Q ID="49">146 148 149 150</Q>
+      <Q ID="50">149 151 152 153</Q>
+      <Q ID="51">152 154 155 156</Q>
+      <Q ID="52">155 157 158 159</Q>
+      <Q ID="53">158 160 161 162</Q>
+      <Q ID="54">161 163 164 165</Q>
+      <Q ID="55">164 166 167 168</Q>
+      <Q ID="56">167 169 170 171</Q>
+      <Q ID="57">170 172 173 174</Q>
+      <Q ID="58">173 175 176 177</Q>
+      <Q ID="59">176 178 179 180</Q>
+    </ELEMENT>
+    <COMPOSITE>
+      <C ID="0">Q[0-59]</C>
+    </COMPOSITE>
+    <DOMAIN>C[0]</DOMAIN>
+  </GEOMETRY>
+</NEKTAR>

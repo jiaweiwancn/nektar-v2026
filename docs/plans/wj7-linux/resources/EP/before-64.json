@@ -1,0 +1,204 @@
+{
+  "schema": "WJ7RemainingResourceProjectionV1",
+  "status": "PASS",
+  "before": 64.0,
+  "native_rates": {
+    "coarse": 14.413596621889155,
+    "fine": 13.044801155783716,
+    "baseline": 7.215471157505817
+  },
+  "remaining_steps": {
+    "coarse": 96.0,
+    "fine": 192.0,
+    "baseline": 96.0
+  },
+  "remaining_rows": 3.0,
+  "native_launches": 12.0,
+  "native_seconds": 4580.992328732391,
+  "observation_seconds": 415.06284767223406,
+  "svd_seconds": 132.01283257112664,
+  "streamed_prefix_parent_seconds": 92.94400385447912,
+  "production_parent_seconds": 303.1544891586236,
+  "additional_launch_overhead_seconds": 75.0,
+  "closure_seconds": 600.0,
+  "headroom": 1.25,
+  "totals": {
+    "attempts": 7.0,
+    "seconds": 1537.3009345169412,
+    "command_seconds": 544.036734744499
+  },
+  "projected_remaining_seconds": 6199.166501988854,
+  "projected_total_seconds": 7736.467436505795,
+  "measured_native_row_export_pairs": {
+    "coarse": 39.62335279700346,
+    "fine": 43.54341776698129,
+    "baseline": 27.516655481944326
+  },
+  "production_profile": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/production-profile/EP.json",
+    "bytes": 2208.0,
+    "sha256": "5469c325c90a4742805c202e458d107a2c394440e8dabf0b50e63ec6adf6cb2e"
+  },
+  "basis": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/EP/T3-resource-projection.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/EP/T3-resource-projection.json",
+      "bytes": 4374.0,
+      "sha256": "5fc0c7327b432c639bc9a61efb6ea976b422ded9a206352a7031b1cb8564884e"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/study-v2/EP/qualification-32.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/study-v2/EP/qualification-32.json",
+      "bytes": 1560252.0,
+      "sha256": "cbd06ced135cdc887215dade65b56115e26fc4e3af5c50560e61c79164918a5f"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/resources/EP/before-64-basis/ledger.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/resources/EP/before-64-basis/ledger.json",
+      "bytes": 16920.0,
+      "sha256": "61e7dbc91dfee6602cf5f2e71f99215c6354e204be54812ce475e3aafd8b2b25"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/resources/EP/before-64-basis/native-export-receipts.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/resources/EP/before-64-basis/native-export-receipts.json",
+      "bytes": 10751.0,
+      "sha256": "2079979687511bb89301ab7b04d43ceeb7a729e8524c204a82b5b2439307937c"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/resources/EP/before-64-basis/current-native-receipts.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/resources/EP/before-64-basis/current-native-receipts.json",
+      "bytes": 735.0,
+      "sha256": "516f2158ed951a61d93f29ec6b928ad4b6e6c0f5d056459f0a896615fab55ca3"
+    }
+  },
+  "allocation": {
+    "workers": 42.0,
+    "processes": [
+      {
+        "pid": 1952.0,
+        "parent": 1.0,
+        "threads": 1.0,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2118.0,
+        "parent": 1.0,
+        "threads": 2.0,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 227384.0,
+        "parent": 1.0,
+        "threads": 1.0,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source/solvers/IncNavierStokesSolver/Tests/RANS/observe_cls_accepted_awf.py --cases Accepted-AWF-05G --campaigns /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-05G/trajectory --initial-reports /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-05G/Accepted-AWF-05G/initial/case.evolution.json --output /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-05G/observer --interval 15"
+      },
+      {
+        "pid": 231716.0,
+        "parent": 1.0,
+        "threads": 1.0,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source/solvers/IncNavierStokesSolver/Tests/RANS/observe_cls_accepted_awf.py --cases Accepted-AWF-05G Accepted-AWF-05O --campaigns /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05G/trajectory /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05O/trajectory --initial-reports /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-saturated-05G/Accepted-AWF-05G/initial/case.evolution.json /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-saturated-05O/Accepted-AWF-05O/initial/case.evolution.json --output /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-pair-observer --interval 15"
+      },
+      {
+        "pid": 256553.0,
+        "parent": 1.0,
+        "threads": 1.0,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-awf-covariance-20261108/source/solvers/IncNavierStokesSolver/Tests/RANS/observe_cls_accepted_awf.py --cases Accepted-AWF-2G --campaigns /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-regularized-2G/trajectory --initial-reports /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-regularized-2G/trajectory/steps-000001-000008/case.evolution.json.gz --output /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-awf-covariance-20261108/window-observer-v2 --windows .1 .2 .5 1"
+      },
+      {
+        "pid": 626365.0,
+        "parent": 1.0,
+        "threads": 1.0,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/supervise_cls_epawf_pimple.py --solver /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/runtime-matched/solver/IncNavierStokesSolver --output /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady --wall-policy CLSCalibratedBudgetAWF --accepted-awf-case Accepted-AWF-05G --accepted-awf-companion regularized --accepted-awf-companion-reason matched inner-pressure P2 sensitivity; faithful covariance blocker retained --inner-refinement cutoff-v1 --pressure-space inner-p2-v1 --inventory AcceptedBudgetV1 --bound-solver RetainedPool --evaluation-reuse ExactStepV1 --audit-revision NativeElementSideV2 --targets 1600 2400 3200 4000 4800 5600 6400 7200 8000 8800 9600 --block-steps 32 --timeout 7200 --bound-max-add 2000 --bound-max-total 20000 --bound-max-separations 2000 --bound-max-seconds 900 --checkpoint /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/parent-800/checkpoint --prefix-report /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/parent-800/case.evolution.json --prefix-campaign /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot-matched/trajectory"
+      },
+      {
+        "pid": 626371.0,
+        "parent": 626365.0,
+        "threads": 2.0,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/continue_cls_epawf_pimple.py --solver /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/runtime-matched/solver/IncNavierStokesSolver --output /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory --inventory AcceptedBudgetV1 --bound-solver RetainedPool --wall-policy CLSCalibratedBudgetAWF --block-steps 32 --timeout 7200.0 --targets 1600 2400 3200 4000 4800 5600 6400 7200 8000 8800 9600 --bound-max-add 2000 --bound-max-total 20000 --bound-max-separations 2000 --bound-max-seconds 900.0 --evaluation-reuse ExactStepV1 --audit-revision NativeElementSideV2 --accepted-awf-case Accepted-AWF-05G --accepted-awf-companion regularized --accepted-awf-companion-reason matched inner-pressure P2 sensitivity; faithful covariance blocker retained --accepted-awf-perturbation 0.0 --inner-refinement cutoff-v1 --pressure-space inner-p2-v1 --checkpoint /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/parent-800/checkpoint --prefix-report /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/parent-800/case.evolution.json --prefix-campaign /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot-matched/trajectory"
+      },
+      {
+        "pid": 658482.0,
+        "parent": 1.0,
+        "threads": 4.0,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 678567.0,
+        "parent": 1.0,
+        "threads": 3.0,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_awf_refined_response.py --solver /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/runtime-solver/IncNavierStokesSolver --parent /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six/trajectory/steps-006401-006432/checkpoint.3 --policy /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/source/docs/plans/cls-awf-refined-response-evidence/declared-policy.json --output /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/late-response --times .05 .1 .25 .5 --timeout 3600 --max-hours 8"
+      },
+      {
+        "pid": 680439.0,
+        "parent": 1.0,
+        "threads": 1.0,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111"
+      },
+      {
+        "pid": 689309.0,
+        "parent": 1.0,
+        "threads": 1.0,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/observer-source-v3/solvers/IncNavierStokesSolver/Tests/RANS/watch_cls_awf_qualification_windows.py --campaign /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory --policy /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/observer-source-v3/docs/plans/cls-accepted-budget-awf-evidence/covariance/convergence-policy.json --probe /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/runtime-matched/probe/RANSWallResolutionProbe --output /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final --maximum-step 9600"
+      },
+      {
+        "pid": 694421.0,
+        "parent": 694419.0,
+        "threads": 3.0,
+        "args": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/runtime-solver/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/late-response/control/steps-000465-000496/case.xml"
+      },
+      {
+        "pid": 694422.0,
+        "parent": 694421.0,
+        "threads": 4.0,
+        "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 694487.0,
+        "parent": 694486.0,
+        "threads": 3.0,
+        "args": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/runtime-solver/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/late-response/perturbed/steps-000465-000496/case.xml"
+      },
+      {
+        "pid": 694488.0,
+        "parent": 694487.0,
+        "threads": 4.0,
+        "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 694749.0,
+        "parent": 626371.0,
+        "threads": 3.0,
+        "args": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/runtime/IncNavierStokesSolver case.xml"
+      },
+      {
+        "pid": 694751.0,
+        "parent": 694749.0,
+        "threads": 4.0,
+        "args": "orted --hnp --set-sid --report-uri 9 --singleton-died-pipe 10 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 694947.0,
+        "parent": 694945.0,
+        "threads": 1.0,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/wj7_command.py --root /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111 --label admission-64 --seconds 120 -- python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/run_wj7_native.py --root /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111 --parent /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111 --solver /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/IncNavierStokesSolver --probe /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/RANSWallResolutionProbe --mode admit --end 64 --replay-name retained-replay-v5 --study-name study-v2"
+      },
+      {
+        "pid": 694970.0,
+        "parent": 694968.0,
+        "threads": 1.0,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/run_wj7_native.py --root /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111 --parent /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111 --solver /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/IncNavierStokesSolver --probe /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/RANSWallResolutionProbe --mode admit --end 64 --replay-name retained-replay-v5 --study-name study-v2"
+      },
+      {
+        "pid": 694973.0,
+        "parent": 1.0,
+        "threads": 1.0,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-directional-20261111/build-controller-v3.py"
+      }
+    ]
+  },
+  "policy_bytes": 37493251.0,
+  "hard_limits": {
+    "native_seconds": 600.0,
+    "observation_seconds": 480.0,
+    "arithmetic_seconds": 600.0,
+    "rss_bytes": 8589934592.0,
+    "invocation_output_bytes": 8589934592.0,
+    "policy_output_bytes": 34359738368.0,
+    "server_workers": 72.0
+  }
+}

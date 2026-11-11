@@ -1,0 +1,39 @@
+{
+  "schema": "WJ7WholeProcessReceiptV1",
+  "label": "final-metadata-configure",
+  "argv": [
+    "cmake",
+    "-S",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/publication-source-v1/solvers/IncNavierStokesSolver/Tests/RANS",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/checks-final",
+    "-DRANS_BUILD_SOLVER=ON",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math"
+  ],
+  "exit_code": 0,
+  "failure": null,
+  "seconds": 4.131791589024942,
+  "whole_process_peak_rss_bytes": 57249792,
+  "peak_tree_threads": 3,
+  "unaccounted_parent_seconds": 4.131791589024942,
+  "log": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/final-metadata-configure/command.log",
+    "bytes": 4178,
+    "sha256": "9bdd20ed6186a9c54b65463dce07f8e235089b7a28a0f2cad5e6bfd34d0ecc76"
+  },
+  "intent": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/final-metadata-configure/intent.json",
+    "bytes": 10949,
+    "sha256": "6ce0d68b597b38440c4d69f27c0a85482b28a073dd0b87fc3818418f8d014e7a"
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  }
+}

@@ -1,0 +1,88 @@
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+CMake Warning at CMakeLists.txt:288 (add_executable):
+  Cannot generate a safe runtime search path for target IncNavierStokesSolver
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/wj7-20261111/checks-final/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:292 (add_executable):
+  Cannot generate a safe runtime search path for target RANSFieldAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/wj7-20261111/checks-final/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:294 (add_executable):
+  Cannot generate a safe runtime search path for target RANSWallFieldAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/wj7-20261111/checks-final/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:297 (add_executable):
+  Cannot generate a safe runtime search path for target RANSObservationAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/wj7-20261111/checks-final/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+-- Generating done
+-- Build files have been written to: /media/jay/新加卷/nektar-v2026-runs/wj7-20261111/checks-final
+	Command being timed: "cmake -S /media/jay/新加卷/nektar-v2026-runs/wj7-20261111/publication-source-v1/solvers/IncNavierStokesSolver/Tests/RANS -B /media/jay/新加卷/nektar-v2026-runs/wj7-20261111/checks-final -DRANS_BUILD_SOLVER=ON -DCMAKE_BUILD_TYPE=Release -DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake -DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math"
+	User time (seconds): 1.06
+	System time (seconds): 1.02
+	Percent of CPU this job got: 51%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:04.08
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 59392
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 53312
+	Voluntary context switches: 59657
+	Involuntary context switches: 22
+	Swaps: 0
+	File system inputs: 376
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

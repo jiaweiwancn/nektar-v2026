@@ -1,0 +1,37 @@
+{
+  "schema": "WJ7WholeProcessReceiptV1",
+  "label": "source-test-lineage",
+  "argv": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/closing-source-v2/collect_wj7_lineage.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111",
+    "--compact",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/compact-v1"
+  ],
+  "exit_code": 0,
+  "failure": null,
+  "seconds": 41.44067613396328,
+  "whole_process_peak_rss_bytes": 126496768,
+  "peak_tree_threads": 16,
+  "unaccounted_parent_seconds": 41.44067613396328,
+  "log": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/source-test-lineage/command.log",
+    "bytes": 1046,
+    "sha256": "192f4ad3ba8e1a831956d9cee533422d6a00056537618dfd5a4fccdbcc201722"
+  },
+  "intent": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/source-test-lineage/intent.json",
+    "bytes": 11127,
+    "sha256": "971db9596ffb57d9fd8333c0216ff127986de24158cf7f8fd2628b68c12d13a3"
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema": "WJ7WholeProcessReceiptV1",
+  "label": "prepare-caches-v6",
+  "argv": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/source-v6/solvers/IncNavierStokesSolver/Tests/RANS/run_wj7_native.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111",
+    "--parent",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111",
+    "--solver",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/IncNavierStokesSolver",
+    "--probe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/RANSWallResolutionProbe",
+    "--mode",
+    "prepare-caches",
+    "--replay-name",
+    "retained-replay-v4"
+  ],
+  "exit_code": 0,
+  "failure": null,
+  "seconds": 294.2597003139672,
+  "whole_process_peak_rss_bytes": 1080303616,
+  "peak_tree_threads": 2,
+  "unaccounted_parent_seconds": 1.3864581741509028,
+  "log": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/prepare-caches-v6/command.log",
+    "bytes": 1515,
+    "sha256": "032bf78884ee8dd3b328a5b7da023b2bf145c260bf4f47513f79d20d4b5fd95e"
+  },
+  "intent": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/operations/prepare-caches-v6/intent.json",
+    "bytes": 26176,
+    "sha256": "d31fc9e0da4d40d216f91750ce7ee6ff6e10cec7eda8eabbdc8b9a38f2c36673"
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  }
+}

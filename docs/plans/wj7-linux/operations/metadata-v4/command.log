@@ -1,0 +1,41 @@
+......E..
+======================================================================
+ERROR: test_streamed_boundary_estimate_omits_only_zero_mask_interior_rows (__main__.Metadata)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/wj7-20261111/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/test_wj7_metadata.py", line 34, in test_streamed_boundary_estimate_omits_only_zero_mask_interior_rows
+    full=boundary_uncertainty(m,a,settings);filtered=boundary_rows_estimate(m,a,settings)
+  File "/media/jay/新加卷/nektar-v2026-runs/wj7-20261111/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/wj5_measure.py", line 70, in boundary_uncertainty
+    proof.append(dict(position=r['position'],geometry=r['geometry'],field=name,estimate=estimate))
+KeyError: 'geometry'
+
+----------------------------------------------------------------------
+Ran 9 tests in 1.188s
+
+FAILED (errors=1)
+EXACT CERTIFICATE: D >= nu_eff/250 on all incompressible rank-one increments.
+Exact positive LDL pivots: ['35607/250', '2902757/300250', '3295566703/12201000', '3188912170563/3295566703000', '2212408252197/24379099000', '609851247/332332000', '3616758816461/553102063049250', '355627/143000']
+Command exited with non-zero status 1
+	Command being timed: "python3 -B /media/jay/新加卷/nektar-v2026-runs/wj7-20261111/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/test_wj7_metadata.py"
+	User time (seconds): 1.08
+	System time (seconds): 0.16
+	Percent of CPU this job got: 59%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.12
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 123880
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 25503
+	Voluntary context switches: 4633
+	Involuntary context switches: 3
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

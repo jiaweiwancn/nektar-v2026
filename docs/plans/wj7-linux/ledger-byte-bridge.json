@@ -1,0 +1,38 @@
+{
+  "schema": "WJ7ExactLedgerSupplementV1",
+  "status": "PASS",
+  "closing_bridge_sha256": "f0c1a3d25d3556d5d356155ccfb3fb296d17b142d82cf450c514ebf806877655",
+  "records": {
+    "EP": {
+      "authoritative": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/ledger-EP.json",
+        "bytes": 21824,
+        "sha256": "6b87358468bc031c5054f901d53c370dbb5f5ac27626a3dea41bc1adc6366f6d"
+      },
+      "local_path": "docs/plans/wj7-linux/authoritative-ledgers/ledger-EP.json",
+      "original_bytes_verified": true,
+      "preserved_canonical_view": {
+        "path": "final-ledger-EP.json",
+        "bytes": 21828,
+        "sha256": "38eb9db87b22d8372a7ce04cdc74048f20bed57cfb14d7fd6b627775f1523c70"
+      },
+      "semantic_values_equal": true
+    },
+    "Budget": {
+      "authoritative": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj7-20261111/ledger-Budget.json",
+        "bytes": 21343,
+        "sha256": "246f8024b4d99614aa6d33f4c70559d80d12011d5deabf30604d07d0921b121b"
+      },
+      "local_path": "docs/plans/wj7-linux/authoritative-ledgers/ledger-Budget.json",
+      "original_bytes_verified": true,
+      "preserved_canonical_view": {
+        "path": "final-ledger-Budget.json",
+        "bytes": 21347,
+        "sha256": "7f7e3901c851b06a5e2179b2d0795dd089ff215ea5b8ae57de2feb5c294b3310"
+      },
+      "semantic_values_equal": true
+    }
+  },
+  "explanation": "The original compact ledger views normalized two zero-valued count tokens to floating spelling, changing four bytes. Their sealed bytes are preserved. These separately retrieved authoritative root bytes match the closing bridge exactly; all ledger values agree. Future exporter copies original bytes directly."
+}
