@@ -320,21 +320,38 @@ class Study(WJ5Study):
         source={str(p.relative_to(c24['checkpoint'])):file_hash(p) for p in Path(c24['checkpoint']).rglob('*') if p.is_file()}
         require(source=={str(p.relative_to(copy_path)):file_hash(p) for p in copy_path.rglob('*') if p.is_file()},'private CP24 differs')
         frozen,r,folder=self.native('transaction-readback24',cp=copy_path,role='transaction_frozen_readback');self.valid(frozen,r)
+        require(frozen['initialization_lift_calls_iterations']==[0,0],'frozen native readback called initialization Lift')
         rejected,r,rf=self.native('transaction-reject25',1,copy_path,reject=int(c24['steps'])+1,role='transaction_postsolve_reject')
         require(r['exit_code']!=0 and rejected and 'deliberate_PIMPLE_WJ_hard_audit_rejection' in rejected.get('failure',''),'actual-capacity end-of-step rejection reason differs')
         same_history(frozen,rejected)
-        require(digest_object(frozen['state_audits'])==digest_object(rejected['state_audits']) and digest_object(frozen['physical_samples'])==digest_object(rejected['physical_samples']),'rollback changed accepted diagnostics/samples')
+        for key in ('state_audits','physical_samples','wj_audit_packets','accepted_states','audit_times','last_stage_history','last_stage_time','last_stage_alpha'):
+            require(digest_object(frozen[key])==digest_object(rejected[key]),'rollback changed accepted callback/audit/sample packet: '+key)
         require(rejected['rejected_state'] and state_hash(rejected['rejected_state'])!=state_hash(rejected['state']),'failed candidate not separately retained')
+        require(state_hash(rejected['rejected_state'])==state_hash(whole['accepted_states'][1]),'rejected step25 candidate differs from actual reference step25')
         attempt=rejected['pimple_attempts'][-1]
+        require(rejected['implicit_callback_count']==1,'deliberate rejection must retain one actual callback')
+        for key in ('history_sha256','incoming_sha256','time','alpha'):
+            require(attempt[key]==whole['pimple_attempts'][0][key],'rejection incoming/callback context differs from reference')
         require(all(attempt[k]==1 for k in ('momentum_predictor_solves','pressure_system_solves','k_transport_solves','epsilon_transport_solves','bound_calls')),'post-solve rejection lost scheduled counts')
         first,r,f=self.native('transaction-24-28',4,copy_path,role='transaction_resume');self.valid(first,r)
         second,r,f=self.native('transaction-28-32',4,first['checkpoint'],role='transaction_resume');self.valid(second,r)
         result=verify_transaction(whole,first,second,segment_length=8)
+        joined=first['pimple_attempts']+second['pimple_attempts']
+        for aa,bb in zip(whole['pimple_attempts'],joined):
+            sa,sb=read(aa['k_snapshot']),read(bb['k_snapshot'])
+            for key in ('committed','post_flow','pre_k','raw','corrected','history','fixed_reference','transport_residual','raw_increment','raw_linear_residual'):
+                require(state_hash(sa[key])==state_hash(sb[key]),'retained transaction substage differs: '+key)
+            for key in ('transport_rows','fixed_external_coefficients','reference_constraints'):
+                require(digest_object(sa[key])==digest_object(sb[key]),'transaction functional/constraint differs: '+key)
+            require(file_hash(sa['matrix_file'])==sa['matrix_sha256']==file_hash(sb['matrix_file'])==sb['matrix_sha256'],
+                    'transaction frozen k matrix identity differs')
         verify_artifacts(original)
         require(source=={str(p.relative_to(copy_path)):file_hash(p) for p in copy_path.rglob('*') if p.is_file()},'transaction changed private input bytes')
         result.update(reference_producer=file_identity(c32['report']),reference_steps=[24,32],reference_accepted_indices=[0,8],
             separately_executed_reference=True,original_input_lineage=original,rollback_exact=True,postsolve_rejection_step=25,
-            rejected_report=file_identity(rf/'case.evolution.json'),failed_candidate_sha256=state_hash(rejected['rejected_state']))
+            rejected_report=file_identity(rf/'case.evolution.json'),failed_candidate_sha256=state_hash(rejected['rejected_state']),
+            failed_candidate_matches_reference_step25=True,all_retained_substages_and_frozen_k_matrices_equal=True,
+            start_completed_stage_producer=file_identity(c24['report']),reference_start_scope='native restart-startup packet within actually executed24->32 report; completed CP24 stage uses its own producer')
         write_once(self.root/'transaction-result.json',result)
         self.s['components']['transactions']=component('PASS',result=file_identity(self.root/'transaction-result.json'));self.save()
 
