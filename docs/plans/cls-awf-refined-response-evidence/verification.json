@@ -1,0 +1,238 @@
+{
+  "implementation-source-equivalence.json": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/implementation-source-equivalence.json",
+    "sha256": "2980e5834d2421e13943d27e77dcbd1ebaaa74f3679fef558c7fc886b043f086",
+    "data": {
+      "commit": "96c0c098e1668e2ac52034940401640ddf50af07",
+      "files": {
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp": "0b0116178a737fb923d664b166782bf4a936ca2d1fc9beee6c9c825a3aadfd99",
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.h": "b27ab3facd6ef828bcd0c363a099ad794ab6a1e42b17506f5d79d53cf6436258",
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp": "9915faf2c8fbcf8533f34c44f83426383c943caa0faaf09f36ebb8bcf77e00fe",
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp": "3cccdeba7282db62c02f4eec041a19d130281ba0c3001bd427286402f296cc3b",
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h": "e25348769abdd3d227e864f2817a274835736989d24f3b0b1807ce2a64520d55"
+      },
+      "linux_source_matches": {
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp": true,
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.h": true,
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp": true,
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp": true,
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h": true
+      }
+    }
+  },
+  "current-seed-step-equivalence/summary.json": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/current-seed-step-equivalence/summary.json",
+    "sha256": "0bdd65e726c617869694574a7eba9509d49908835ebb22cb03240df7ac49af75",
+    "data": {
+      "status": "passed",
+      "cases": {
+        "zero": {
+          "checks": {
+            "committed": true,
+            "history": true,
+            "post_flow": true,
+            "pre_k": true,
+            "raw": true,
+            "corrected": true,
+            "fixed_reference": true,
+            "state": true,
+            "histories": true,
+            "times": true
+          },
+          "receipt": {
+            "exit_code": 0.0,
+            "seconds": 22.539133484009653,
+            "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/current-seed-step-equivalence/zero/case.evolution.json",
+            "report_sha256": "c66b9a7bc7f8040731616d08c2a39a958dc85b1f55cf0aa20b5784eeef4ca66b",
+            "xml_sha256": "4d054f1b3bdac380bebd88b0c7d0a25801084bceb062d95483530ff78c0a41fd",
+            "log_sha256": "387b5e2f4a725de607fcf0e511241d42871067c18feace42736f62228eede64d",
+            "usage": "22.26 18.82 1.28 1215500"
+          }
+        },
+        "perturbed": {
+          "checks": {
+            "committed": true,
+            "history": true,
+            "post_flow": true,
+            "pre_k": true,
+            "raw": true,
+            "corrected": true,
+            "fixed_reference": true,
+            "state": true,
+            "histories": true,
+            "times": true
+          },
+          "receipt": {
+            "exit_code": 0.0,
+            "seconds": 22.5975513929734,
+            "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/current-seed-step-equivalence/perturbed/case.evolution.json",
+            "report_sha256": "381767de0333d1a872127818e4d4a7d686da81677fe76a2dc54966b676aaf302",
+            "xml_sha256": "fe0aed728005353d2f82989437e11760dd214d81dfc34cde568e0a27c59821a8",
+            "log_sha256": "a186822a86fb1a3a613032ce737fff65da21b405e5a49dac815a3ef10d633f58",
+            "usage": "22.34 18.90 1.34 1213276"
+          }
+        }
+      },
+      "solver_sha256": "cf75b923fbeb4e7411e1e38ea7a07ce052c62e62daa94f0c42f1c989a233054a"
+    }
+  },
+  "final-driver-validation/summary.json": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/final-driver-validation/summary.json",
+    "sha256": "62c95aac0ef89761fd1145576a89c7b54ceb694fd257d5fcbc0c3f007973e203",
+    "data": {
+      "status": "validation_completed",
+      "checks": {
+        "committed": true,
+        "post_flow": true,
+        "pre_k": true,
+        "raw": true,
+        "corrected": true,
+        "history": true,
+        "fixed_reference": true,
+        "zero_seed_bits": true,
+        "zero_reference_bits": true,
+        "zero_defect_bits": true,
+        "zero_final_bits": true,
+        "zero_histories_times_bits": true,
+        "external_coefficients": true,
+        "zero_lift": true,
+        "zero_projection_noop": true,
+        "only_k_changed": true,
+        "actual_increment_bits": true,
+        "boundary_outer_matching_unchanged": true,
+        "reference_defect_exact": true,
+        "seed_lift_zero": true,
+        "initial_bound_noop": true,
+        "own_initial_history": true,
+        "restart_final_bits": true,
+        "restart_history_bits": true,
+        "rollback_state": true,
+        "rollback_history": true,
+        "rollback_time": true,
+        "rejected_candidate_retained": true
+      },
+      "solver_sha256": "cf75b923fbeb4e7411e1e38ea7a07ce052c62e62daa94f0c42f1c989a233054a",
+      "parent_sha256": "a8dad94dfff868867dcb76b775ec277d00121354f77127e9dda87b4732d6803f"
+    }
+  },
+  "first-cell-native-contracts/summary.json": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/first-cell-native-contracts/summary.json",
+    "sha256": "9f6c488272e0bc80b22915f4e3b8af68dbe6b4d36d8ac070a20fd1df1a441f69",
+    "data": {
+      "status": "passed",
+      "checks": {
+        "same_coupled_size": true,
+        "distinct_physical_signature": true,
+        "both_native_zero_time": true,
+        "ordinary_same_size_incompatible_restart_rejected": true
+      },
+      "rejection_receipt": {
+        "exit_code": 1.0,
+        "seconds": 4.761720911948942,
+        "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/first-cell-native-contracts/incompatible-same-size/case.evolution.json",
+        "report_sha256": "31b39442d2eae648a60eab3af00895173cd79891f1f28baf8da48816164d2194",
+        "xml_sha256": "28abd5976a85983ec477ea0498bdf56668a4173b2faa718e52634699a54a717e",
+        "log_sha256": "622c8ae59a0b458d108d9a9756fd749ebc2827abff7a458fb3dda3e4443759fb",
+        "usage": "Command exited with non-zero status 1\n4.44 3.23 0.28 189456"
+      },
+      "baseline_checkpoint_sha256": "8b326515315ba4a4508d267ef292b3f4bd048ea51c2326552687372e64a94d70",
+      "control_checkpoint_sha256": "7b24cfeedaeb36cc3546ac5bcea7434c5eccd8abb2fac52c25de2e81d05409d2"
+    }
+  },
+  "stepwise-mass-check.json": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/stepwise-mass-check.json",
+    "sha256": "c803ef10354cabc9d15db8a11743715292ab45af830d0d915780522d87816a2b",
+    "data": {
+      "status": "passed",
+      "last": {
+        "step": 80.0,
+        "elapsed_time": 0.05,
+        "physical_k_L2": 0.0003194297109315547,
+        "k_amplification": 0.9679636890184178
+      },
+      "maximum": 0.9996319615208334,
+      "norm_agreement": 2.1141942363467336e-18
+    }
+  },
+  "observer-upgrade-final-receipt.json": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/observer-upgrade-final-receipt.json",
+    "sha256": "d790a2125fe37bba94911b26aab046e05f153b35810a44f3b7a20ca2693b2518",
+    "data": {
+      "old_identity": {
+        "pid": 678733.0,
+        "start": "51175000",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "new_identity": {
+        "pid": 689309.0,
+        "start": "51407785",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/observer-source-v3/solvers/IncNavierStokesSolver/Tests/RANS/watch_cls_awf_qualification_windows.py",
+        "--campaign",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory",
+        "--policy",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/observer-source-v3/docs/plans/cls-accepted-budget-awf-evidence/covariance/convergence-policy.json",
+        "--probe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/runtime-matched/probe/RANSWallResolutionProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final",
+        "--maximum-step",
+        "9600"
+      ],
+      "existing_stop_request_preserved": null,
+      "driver_identity": {
+        "pid": 626371.0,
+        "start": "49625286",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "native_identity_before": {
+        "pid": 688523.0,
+        "start": "51394775",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/steps-003073-003104"
+      },
+      "production_runtime_sha256": "177ce5e54e7de514fa019122e46d3a5d709455cd091bd3023fbfa745c48c9bfc",
+      "governing_solves": 0.0,
+      "physical_commits": 0.0
+    }
+  },
+  "terminal-final-state-contract/summary.json": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/terminal-final-state-contract/summary.json",
+    "sha256": "b2f82f8a5091f52f3142c0902bde08936a07d898cf1b8cbfd504db0ef0e6f622",
+    "data": {
+      "status": "passed",
+      "final_checkpoint_step": 6432.0,
+      "qualifying_window_endpoint": 6400.0,
+      "probe_sha256": "67e9d5093d8bdf164ca7fdf7dc97f5a5cb70a7012dce1096be399e45363f2a43",
+      "governing_solves": 0.0,
+      "physical_commits": 0.0
+    }
+  },
+  "history-ctest.log": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/history-ctest.log",
+    "sha256": "cfaccd6cc0a7e93e28ae4a623c4e321040d2c5cc1a1e9a6c3c7ac0bd6a4d18f3",
+    "tail": "Internal ctest changing into directory: /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/build\nTest project /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/build\n    Start 5: RANSHistoryRejectionChecks\n1/1 Test #5: RANSHistoryRejectionChecks .......   Passed    0.05 sec\n\n100% tests passed, 0 tests failed out of 1\n\nTotal Test time (real) =   0.06 sec\n"
+  },
+  "final-python-tests.log": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/final-python-tests.log",
+    "sha256": "679845577e674ffb0fa43674fe78eeccd71df09d73e835e531abef3c506c0e11",
+    "tail": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.105s\n\nOK\naccepted-AWF case definitions, exact endpoint semantics, paired meshes, and rejection/acceptance distinction passed\ninner-P2 regional policy, unchanged physical mesh/parameters, pilot size, scope guards and default XML compatibility passed\n....\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
+  },
+  "final-probe-build.log": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/final-probe-build.log",
+    "sha256": "6edf599a72f9fdc731912ae99a6d064dc10a42ebcd5df86c24ce480d9d5d0f3c",
+    "tail": "[ 30%] Built target RANSKernels\nConsolidate compiler generated dependencies of target RANSWallResolutionProbe\n[ 30%] Building CXX object CMakeFiles/RANSWallResolutionProbe.dir/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp.o\n[ 38%] Linking CXX executable RANSWallResolutionProbe\n[100%] Built target RANSWallResolutionProbe\n"
+  },
+  "final-driver-validation.log": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/final-driver-validation.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tail": ""
+  }
+}

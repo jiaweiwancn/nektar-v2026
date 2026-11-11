@@ -1,5 +1,8 @@
 # H=.5 cutoff-v1 AWF: controlled inner-pressure P2 test
 
+**Follow-up, November 11:** the [refined qualification report](cls-awf-refined-response.md) adds matched P1/P2 readbacks at T=1.5 and2, explicit advection/production dilatation loads, corrected named interface measures, and the updated complete-field terminal observer. P2 remains under its original bounded continuation; the dated verified frontier is in [the new evidence](cls-awf-refined-response-evidence/native.json). Transient improvement is not a settled P2 qualification.
+
+
 **2026-11-11:** the fresh exact-control-closure pilot completed all 800 steps
 through T=.5. Inner P2 does **not** remove the traction departure at this
 horizon: .159563194 versus P1 .159563386 (reference .16). Inner strong
@@ -18,7 +21,8 @@ locate the immutable checkpoints, histories, packets, readbacks and runtime
 identities. Frozen transport `matrix.bin` files are A_k, not projection M_ff.
 
 The preceding package qualified a P1-inner/P1-outer selected discrete steady
-candidate through three complete half-unit windows, ending at T=4.02. Its
+candidate through three complete half-unit windows ending at T=4, with a safe
+final stopping checkpoint at T=4.02. Its
 remaining traction deficit is .2558%, and its inner strong-divergence L2 is
 .00940571. This experiment changes **only inner pressure from P1 to P2**.
 It tests pressure-space sensitivity; it does not assume pressure degree is

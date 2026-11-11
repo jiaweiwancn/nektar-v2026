@@ -1,5 +1,8 @@
 # H=.5 calibrated budget AWF: neutral-reference qualification
 
+**Element-resolved confirmation, November 11:** all U/W/k/full-epsilon/pressure windows remain passing through T=4; the final safe checkpoint is T=4.02. The [executed refined follow-up](cls-awf-refined-response.md) also reports the zero-time first-knot control, history-based ground reaction and completed bounded disturbance pair.
+
+
 **Completion update, 2026-11-11 09:02 Asia/Shanghai:** neither continuation
 remains running. The refined H=.5 case stopped under its authorized scientific
 criterion; H2 completed its maximum T=6 target. There was no numerical
@@ -248,17 +251,18 @@ Observed native high-water memory is about 1.4 GB. This is well within the
 predeclared 8-hour/16-GiB pilot limits.
 
 The [bounded decision](cls-awf-neutral-qualification-evidence/spatial-continuation-decision.json)
-continues this case from its own exact .5 checkpoint, with a separate durable
-successor and immutable runtime. It stops on three passing unchanged half-unit
-windows including full outer epsilon, or at T=6. The remaining k residual has
-risen from about .00346 at .28 to .00429 at .5, and strong divergence is growing.
+continued this case from its own exact .5 checkpoint, with a separate durable
+successor and immutable runtime. Its stopping rule was three passing unchanged
+half-unit windows including full outer epsilon, or T=6. At the T=.5 pilot,
+the k residual had risen from about .00346 at .28 to .00429 at .5, while
+strong divergence was growing.
 At the dated T=.5 screening, these trends required observation and did not
 establish a refined steady candidate. The completed Nov11 assessment above
 supersedes that transient status: three windows qualify through T=4, with a
 safe final stopping checkpoint at T=4.02.
-The forecast to the maximum endpoint is about 20 hours at the observed cost;
-early scientific qualification can stop it sooner. No unchanged numerical
-rejection is automatically retried.
+The contemporary forecast to the maximum endpoint was about 20 hours; the
+scientific rule subsequently stopped it sooner. No unchanged numerical
+rejection was automatically retried.
 
 ![Native profiles, traction and residuals](cls-awf-neutral-qualification-evidence/neutral-reference-comparison.png)
 

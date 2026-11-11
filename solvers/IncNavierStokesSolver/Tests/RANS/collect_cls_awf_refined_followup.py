@@ -82,7 +82,15 @@ def main():
     if a.response_analysis:
         q=load(a.response_analysis/'summary.json');require(q['status']=='passed','incomplete response analysis')
         out['response']={k:v for k,v in q.items() if k!='observations'};out['response']['receipt']=receipt(a.response_analysis/'summary.json')
-        out['response']['observations']={leg:{t:{k:row[k] for k in ('selection','state_sha256','reference_sha256','native_history_sha256','physical','named_interface_metrics','step','complete_audit') if k in row} for t,row in rows.items()} for leg,rows in q['observations'].items()}
+        out['response']['observations']={}
+        for leg,rows in q['observations'].items():
+            out['response']['observations'][leg]={}
+            for t,row in rows.items():
+                item={k:row[k] for k in ('selection','receipt','state_sha256','reference_sha256','native_history_sha256','named_interface_metrics','step','complete_audit') if k in row}
+                item['physical']={k:row['physical'][k] for k in ('time','H','h','z_K','z_m','reference','mean_wall_stress',
+                    'native_degrees_of_freedom','dimensional_mass_dual_spatial_first4','common_normalized_spatial_first4',
+                    'fixed_bands','matching_trace_defect','epsilon_reporting_lower','common_reporting_queries_valid')}
+                out['response']['observations'][leg][t]=item
     out['response_campaign']={}
     for leg in ('control','perturbed'):
         q=load(r/'late-response'/leg/'progress.json');segments=q['segments'];usage=[list(map(float,x['receipt']['usage'].split())) for x in segments]
