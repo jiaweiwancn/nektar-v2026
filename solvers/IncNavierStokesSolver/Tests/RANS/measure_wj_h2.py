@@ -116,22 +116,25 @@ def main():
     hd=load(half['report'])
     if hd['failure']:result['half_dt_incident']=incident(hd,kernel)
     result['half_dt']=half;kernel.close()
+    save(m.out/'incident.json',{k:v for k,v in result.items() if 'incident' in k or k=='half_dt'})
     K=c.K;E=(K/QE)**1.5/(KAPPA*c.H)
     low,weights=observation_rule(designs,8,4);high,wh=observation_rule(designs,10,6)
     # Matched accepted common time .04 across both meshes and timesteps.
     selected=[('base04',records['base-pilot-on'],2),('fine04',records['fine-pilot'],4),('refined04',records['refined-pilot'],2),
-              ('base08',records['base-pilot-on'],4),('fine08',records['fine-pilot'],8)]
+              ('base08',records['base-pilot-on'],4),('fine08',records['fine-pilot'],8),
+              ('refined-fine04',hrec,4),('refined-fine08',hrec,8)]
     payloads={}
     for label,record,step in selected:
         for order,points,w in ((8,low,weights),(10,high,wh)):
             payloads[(label,order)]=m.observe(f'{label}-q{order}',record,step,points,w,
-                weak=label=='base08' and order==8,assembly=label=='base08' and order==8)
+                weak=label in ('base08','refined-fine08') and order==8,assembly=label=='base08' and order==8)
     for order,w in ((8,weights),(10,wh)):
-        for label,x,y in [('time04','base04','fine04'),('normal04','base04','refined04'),('time08','base08','fine08')]:
+        for label,x,y in [('time04','base04','fine04'),('normal04','base04','refined04'),('time08','base08','fine08'),
+            ('refined-time04','refined04','refined-fine04'),('normal-fine08','fine08','refined-fine08')]:
             result['comparisons'][f'{label}-q{order}']=comparison(payloads[(x,order)],payloads[(y,order)],w,K,E)
     # Polynomial field norm quadrature, independently increased in x and z.
     quadrature={}
-    for label in ('time04','normal04','time08'):
+    for label in ('time04','normal04','time08','refined-time04','normal-fine08'):
         l=result['comparisons'][f'{label}-q8']['fields'];h=result['comparisons'][f'{label}-q10']['fields']
         errors={f:abs(l[f]['normalized_L2']-h[f]['normalized_L2']) for f in ('U','k','epsilon','pi')}
         assert all(v<1e-10 for v in errors.values())
@@ -139,7 +142,8 @@ def main():
     result['quadrature']=quadrature
     heights=sorted(set([D0,D0+c.H,TOP]+[float(r['y_over_H']) for r in c.rows]+np.linspace(D0,TOP,161).tolist()))
     points=[[x,0,z] for x in (0.,2.,4.,6.,8.) for z in heights]
-    for label,record,step in [('startup',records['base-cp0'],0),('base04',records['base-pilot-on'],2),('base08',records['base-pilot-on'],4),('refined04',records['refined-pilot'],2)]:
+    for label,record,step in [('startup',records['base-cp0'],0),('base04',records['base-pilot-on'],2),('base08',records['base-pilot-on'],4),
+        ('refined04',records['refined-pilot'],2),('refined-fine08',hrec,8)]:
         r=m.observe('profiles-'+label,record,step,points)
         result['profiles'][label]=m.records['profiles-'+label]
         result['profiles'][label]['spatial_norms']=r['physical_mass_dual_norms']
