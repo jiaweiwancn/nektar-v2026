@@ -171,9 +171,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 }
                 return;
             }
-            viscosity = law.eddyViscosity + m_regularizationGamma +
-                        m_regularizationScale * m_parameters.model.Kappa() *
-                            m_robustUstar * Distance(q.v.coordinate);
+            viscosity = law.eddyViscosity + RegularizedReferenceAt(q.v.coordinate).gamma;
             const double pi = q.p.Value(s, offset[pBlock]);
             for (int a = 0; a < 3; ++a)
                 for (int b = 0; b < 3; ++b)

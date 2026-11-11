@@ -31,6 +31,13 @@ add_library(RANSKernels STATIC
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallGeometry.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallNormalMap.cpp)
 target_compile_definitions(RANSKernels PRIVATE SOLVER_UTILS_EXPORTS)
+add_executable(RANSCaoTamuraBudgetH1Checks test_cao_tamura_budget_h1.cpp)
+target_include_directories(RANSCaoTamuraBudgetH1Checks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_link_libraries(RANSCaoTamuraBudgetH1Checks RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+add_test(NAME RANSCaoTamuraBudgetH1Checks COMMAND RANSCaoTamuraBudgetH1Checks
+    --output ${CMAKE_CURRENT_BINARY_DIR}/cao-tamura-h1-kernels.json)
+set_tests_properties(RANSCaoTamuraBudgetH1Checks PROPERTIES PROCESSORS 1 TIMEOUT 180
+    ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
 add_executable(RANSAcceptedAWFProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSAcceptedAWFProbe.cpp)
 target_link_libraries(RANSAcceptedAWFProbe RANSKernels)

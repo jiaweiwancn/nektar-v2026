@@ -224,6 +224,7 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
 std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vector &history,double time,
     const RANSWallEvolutionData &data,const Vector &reportingBreakpoints,bool completeOuterEpsilon) const
 {
+    Require(!FiniteInflowReference(),"neutral-specific diagnostic is unavailable for FiniteInflowV1; use its labelled provider/compatibility diagnostics");
     RANSWallTiming::Scope timing("output.physical_comparison");
     const auto hash=RANSWallR3::Hash(s);const double H=m_parameters.geometry.height,us=m_robustUstar;
     // Read-only cross-mesh comparisons can supply a common physical partition.

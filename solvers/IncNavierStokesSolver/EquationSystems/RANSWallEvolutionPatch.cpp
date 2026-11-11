@@ -658,6 +658,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Project(const std::vector
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::NeutralReference(double us,const std::array<double,2> &direction) const
 {
     Require(m_mapping.PlanarConstantHeight(),"neutral reference requires a planar constant-height map");
+    Require(!FiniteInflowReference(),"neutral initializer is not the finite experimental reference");
     return FlatReference(us,direction);
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FlatReference(double us,const std::array<double,2> &direction) const
@@ -1614,6 +1615,7 @@ std::string RANSWallEvolutionPatch::Signature() const
         for(double v:m_referenceNormal)text<<':'<<v;
         text<<':'<<m_robustUstar<<":incoming-flat-strain-extension";
     }
+    if(m_finiteInflow)text<<":regularized-reference="<<m_finiteInflowIdentity;
     if(m_uniformEP)text<<":wall_policy=UniformEPFlat-v1:chi=1:full_EP_trace:require_intrinsic_admissibility";
     if(m_transitionEnabled)
     {

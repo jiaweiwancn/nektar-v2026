@@ -2187,7 +2187,16 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         audit["accepted_awf_covariance"]=audit.at("r2_covariance");audit.erase("r2_covariance");
         audit["accepted_awf_inner_minimum_point"]=audit.at("r2_inner_minimum_point");audit.erase("r2_inner_minimum_point");
         audit["accepted_awf_outer_minimum_point"]=audit.at("r2_outer_minimum_point");audit.erase("r2_outer_minimum_point");
-        audit["accepted_awf_reference_departure"]=audit.at("r2_outer_range");audit.erase("r2_outer_range");
+        // These historical ratios use logarithmic neutral scales. They are
+        // useful dimensionless ranges, but are NOT errors against a measured
+        // finite-depth inlet. Keep that distinction explicit in finite mode.
+        audit[FiniteInflowReference()?"neutral_log_scale_ranges_diagnostic_only":
+            "accepted_awf_reference_departure"]=audit.at("r2_outer_range");audit.erase("r2_outer_range");
+        if(FiniteInflowReference() && audit.count("r4_outer_gradient_witness"))
+        {
+            audit["neutral_log_scale_gradient_witness_diagnostic_only"]=audit.at("r4_outer_gradient_witness");
+            audit.erase("r4_outer_gradient_witness");
+        }
         audit["accepted_awf_hard_admissible"]={covariance && domain.minimumBudgetRatio>=1.?1.:0.};
     }
     else audit["r2_qualified"]={box && covariance && domain.minimumLambda>=.5?1.:0.};

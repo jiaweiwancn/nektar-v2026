@@ -5,6 +5,8 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <cmath>
+#include <fstream>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 
 namespace Nektar
 {
@@ -46,6 +48,31 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
     const auto incoming=m_mapping.At({lower[0],lower[1],0});
     m_referenceNormal=incoming.normal;
     for(int a=0;a<3;++a)m_referenceFlow[a]=(dx*incoming.tangent1[a]+dy*incoming.tangent2[a])/length;
+    std::string mode;session->LoadSolverInfo("RANSWallRegularizedReference",mode,"NeutralLogV1");
+    Require(mode=="NeutralLogV1" || mode=="FiniteInflowV1","unknown prescribed Regularized reference mode");
+    if(mode=="FiniteInflowV1")
+    {
+        Require(AcceptedAWF() && m_variantName=="Regularized" && m_regularizationGamma==0,
+            "FiniteInflowV1 requires accepted budget AWF, Regularized CLS and gamma0=0");
+        std::string file,expected;session->LoadSolverInfo("RANSWallReferenceFile",file,"");
+        session->LoadSolverInfo("RANSWallReferenceSHA256",expected,"");
+        Require(!file.empty() && expected.size()==64 && RANSWallR3::HashFile(file)==expected,
+            "finite-reference content SHA256 differs or is absent");
+        std::ifstream in(file);std::string text((std::istreambuf_iterator<char>(in)),{});
+        RANSVector origin{},flow{1,0,0},normal{0,0,1};
+        for(int a=0;a<3;++a)
+        {
+            const std::string axis=a==0?"X":(a==1?"Y":"Z");
+            session->LoadParameter("RANSWallReferenceOrigin"+axis,origin[a],0.);
+            session->LoadParameter("RANSWallReferenceFlow"+axis,flow[a],a==0?1.:0.);
+            session->LoadParameter("RANSWallReferenceNormal"+axis,normal[a],a==2?1.:0.);
+        }
+        m_finiteInflow=std::make_shared<const RANSFiniteInflowReference>(
+            RANSFiniteInflowReference::Parse(text),origin,flow,normal,m_regularizationScale,m_parameters.model.Parameters());
+        m_referenceFlow=flow;m_referenceNormal=normal;
+        m_finiteInflowIdentity=m_finiteInflow->Interpretation()+":content-sha256="+expected;
+    }
+
 }
 
 std::string RANSWallEvolutionPatch::InnerStressName() const
@@ -71,18 +98,91 @@ RANSClosureValues RANSWallEvolutionPatch::OuterClosure(double k,double epsilon,
     if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: outer closure");
     if(m_variantName=="Original")return EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,
         gradient,Distance(p),m_parameters.model.Parameters(),0);
+    const auto variant=RegularizedReferenceAt(p);
+    return EvaluateRANSRobustClosure(m_parameters.model.Model(),k,epsilon,gradient,Distance(p),
+        m_parameters.model.Parameters(),0,variant);
+}
+
+RANSRobustVariant RANSWallEvolutionPatch::RegularizedReferenceAt(const RANSWallCoordinate &p) const
+{
     auto variant=m_robust;
+    if(m_finiteInflow)
+    {
+        const auto fixed=m_finiteInflow->At(Physical(p));
+        variant.gamma=fixed.gamma;variant.referenceStrain=fixed.strain;return variant;
+    }
+    // Preserve the historical arithmetic and default identity exactly.
     const double r=Distance(p),kap=m_parameters.model.Kappa();
     variant.gamma=m_regularizationGamma+m_regularizationScale*kap*m_robustUstar*r;
-    // Prescribed Cartesian extension of the incoming flat strain. It uses
-    // chart-normal physical distance and the frozen incoming frame, with no
-    // dependence on the evolving velocity, k, epsilon, or hill normal.
     const double shear=m_robustUstar/(kap*r);
     for(int a=0;a<3;++a)for(int b=0;b<3;++b)
-        variant.referenceStrain[a][b]=shear*(m_referenceFlow[a]*m_referenceNormal[b]+
-            m_referenceNormal[a]*m_referenceFlow[b]);
-    return EvaluateRANSRobustClosure(m_parameters.model.Model(),k,epsilon,gradient,r,
-        m_parameters.model.Parameters(),0,variant);
+        variant.referenceStrain[a][b]=shear*(m_referenceFlow[a]*m_referenceNormal[b]+m_referenceNormal[a]*m_referenceFlow[b]);
+    return variant;
+}
+
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FiniteInflowSeed() const
+{
+    Require(m_finiteInflow && !Mapped() && AcceptedAWF(),"finite-profile seed currently requires the affine accepted-AWF pilot");
+    const double H=m_parameters.geometry.height;
+    const auto endpoint=m_finiteInflow->AtHeight(H);const auto wall=Profile(endpoint.k,{0,0,0},1);
+    Require(m_dimension==2 && m_referenceFlow==RANSVector({1,0,0}) && m_referenceNormal==RANSVector({0,0,1}),
+        "finite compatibility seed requires the horizontal Cartesian incoming frame");
+    std::vector<double> breaks{wall->Reference().cutoff,wall->Original().ViscosityInterceptHeight(),m_parameters.geometry.roughness};
+    for(const auto &q:m_finiteInflow->Knots())if(q.z>0 && q.z<upper[2])breaks.push_back(q.z);
+    const auto velocity=[&](double r){return r<H?endpoint.U*wall->Original().Integrals(r).j0/wall->Original().Integrals().j0:m_finiteInflow->AtHeight(r).U;};
+    Vector s(Size());
+    const auto u=fields[0]->RadialProject(velocity,{{0,0,0},{H,0,endpoint.U},{upper[2],0,velocity(upper[2])}},breaks);
+    std::copy(u.begin(),u.end(),s.begin()+offset[0]);
+    const auto k=fields[K()]->RadialProject([&](double r){return r<H?wall->ReferenceK(r):m_finiteInflow->AtHeight(r).k;},
+        {{0,1,0},{H,0,endpoint.k},{upper[2],0,m_finiteInflow->AtHeight(upper[2]).k}},breaks);
+    std::copy(k.begin(),k.end(),s.begin()+offset[K()]);
+    const auto epsilon=fields[Epsilon()]->RadialProject([&](double r){return m_finiteInflow->AtHeight(r).epsilon;},
+        {{H,0,wall->Dissipation(H)},{upper[2],0,m_finiteInflow->AtHeight(upper[2]).epsilon}},breaks);
+    std::copy(epsilon.begin(),epsilon.end(),s.begin()+offset[Epsilon()]);
+    return s;
+}
+
+std::string RANSWallEvolutionPatch::FiniteInflowChecks(const Vector &s) const
+{
+    namespace J=RANSWallSolveJson;
+    Require(bool(m_finiteInflow),"finite-reference diagnostic needs its explicit provider");
+    double workError=0,epsilonError=0,trace=0,symmetry=0,minGamma=1e100,maxGamma=0;
+    double minK=1e100,minE=1e100;int points=0;
+    for(const auto &q:m_outer)
+    {
+        const auto fixed=m_finiteInflow->At(Physical(q.v.coordinate));
+        minGamma=std::min(minGamma,fixed.gamma);maxGamma=std::max(maxGamma,fixed.gamma);
+        const auto v=RegularizedReferenceAt(q.v.coordinate);
+        Require(v.gamma==fixed.gamma && v.referenceStrain==fixed.strain,"provider/assembly reference differs");
+        trace=std::max(trace,std::abs(v.referenceStrain[0][0]+v.referenceStrain[1][1]+v.referenceStrain[2][2]));
+        for(int a=0;a<3;++a)for(int b=0;b<3;++b)symmetry=std::max(symmetry,std::abs(v.referenceStrain[a][b]-v.referenceStrain[b][a]));
+        const double k=q.v.Value(s,offset[K()]),e=q.e.Value(s,offset[Epsilon()]);
+        minK=std::min(minK,k);minE=std::min(minE,e);
+        if(k>0 && e>0)
+        {
+            RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);
+            const auto c=EvaluateRANSRobustClosure(m_parameters.model.Model(),k,e,g,Distance(q.v.coordinate),m_parameters.model.Parameters(),0,v);
+            long double work=0;for(int a=0;a<3;++a)for(int b=0;b<3;++b)work-=(long double)c.reynoldsStress[a][b]*g[a][b];
+            workError=std::max(workError,std::abs(double(work)-c.production)/std::max(1.,std::abs(c.production)));
+            epsilonError=std::max(epsilonError,std::abs(c.epsilonProduction-m_parameters.model.Parameters().cEpsilon1*e/k*c.production)/std::max(1.,std::abs(c.epsilonProduction)));
+        }
+        ++points;
+    }
+    std::vector<std::string> samples;
+    for(double z:{m_parameters.geometry.height,.04,.1,.25,.4,.8,1.})
+    {
+        const auto v=m_finiteInflow->AtHeight(z);
+        samples.push_back(J::Numbers(Vector{z,v.U,v.dU,v.k,v.epsilon,v.nuT,v.gamma}));
+    }
+    return J::Object({{"mode",J::Quote("FiniteInflowV1")},{"identity",J::Quote(m_finiteInflowIdentity)},
+        {"comparison_reference",J::Quote("native finite-profile initialized seed; not analytical neutral equilibrium")},
+        {"frame_height",J::Quote("dot(physical-X_in,n_in); independent of wall distance and outer chart")},
+        {"outer_native_points",J::Number(points)},{"gamma_min_max",J::Numbers(Vector{minGamma,maxGamma})},
+        {"strain_trace_symmetry_defects",J::Numbers(Vector{trace,symmetry})},
+        {"stress_work_relative_defect",J::Number(workError)},{"epsilon_production_relative_defect",J::Number(epsilonError)},
+        {"outer_native_scalar_minima",J::Numbers(Vector{minK,minE})},
+        {"sample_columns",J::Quote("zeta,U_ref,U_ref_prime,k_ref,epsilon_ref,nu_t_ref,gamma")},
+        {"samples",J::List(samples)}});
 }
 
 RANSCappedDestructionValues RANSWallEvolutionPatch::WallNormalization(const Vector &s,

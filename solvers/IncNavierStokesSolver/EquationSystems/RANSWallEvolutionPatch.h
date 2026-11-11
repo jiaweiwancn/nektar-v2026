@@ -9,6 +9,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSharedInventory.h>
 #include <LibUtilities/Communication/Comm.h>
 #include <SolverUtils/Turbulence/RANSWallNormalMap.h>
+#include <SolverUtils/Turbulence/RANSFiniteInflowReference.h>
 #include <SolverUtils/Turbulence/EquilibriumAWFTransition.h>
 #include <SolverUtils/Turbulence/RANSRobustVariant.h>
 #include <SolverUtils/Turbulence/RANSWallInnerStress.h>
@@ -142,6 +143,13 @@ public:
     RANSWallCoordinate lower{},upper{};
     Vector Project(const std::vector<RANSWallEvolutionFunction> &functions,double time) const;
     Vector NeutralReference(double ustar,const std::array<double,2> &direction) const;
+    bool FiniteInflowReference() const { return bool(m_finiteInflow); }
+    const SolverUtils::RANSFiniteInflowReference &FixedInflow() const
+    { if(!m_finiteInflow)throw std::invalid_argument("no finite incoming reference selected");return *m_finiteInflow; }
+    Vector FiniteInflowSeed() const;
+    SolverUtils::RANSRobustVariant RegularizedReferenceAt(const RANSWallCoordinate &point) const;
+    const std::string &RegularizedReferenceIdentity() const { return m_finiteInflowIdentity; }
+    std::string FiniteInflowChecks(const Vector &state) const;
     std::map<int,double> FixedReferenceBoundary(const Vector &reference) const;
     std::map<int,double> Constraints(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     Vector Lift(const Vector &state,double time,const RANSWallEvolutionData &data) const;
@@ -546,6 +554,8 @@ private:
     bool m_cappedDestruction=false;
     SolverUtils::RANSWallInnerStressModel m_innerStress=SolverUtils::RANSWallInnerStressModel::Linear;
     double m_regularizationGamma=0,m_regularizationScale=0,m_robustUstar=.4;
+    std::shared_ptr<const SolverUtils::RANSFiniteInflowReference> m_finiteInflow;
+    std::string m_finiteInflowIdentity;
     SolverUtils::RANSVector m_referenceFlow{1,0,0},m_referenceNormal{0,0,1};
     bool m_transitionEnabled=false,m_transitionReady=false,m_uniformEP=false;
     SolverUtils::AWFTransitionControls m_transition;

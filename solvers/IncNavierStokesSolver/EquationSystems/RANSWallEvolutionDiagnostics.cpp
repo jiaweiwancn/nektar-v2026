@@ -374,9 +374,15 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
         else
         {
             c=OuterClosure(k,epsilon,g,v.coordinate);original=EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,g,Distance(v.coordinate),m_parameters.model.Parameters(),0);
-            RANSRobustVariant variant;variant.beta=.4;variant.gamma=m_parameters.model.Kappa()*m_robustUstar*Distance(v.coordinate);
-            const double shear=m_robustUstar/(m_parameters.model.Kappa()*Distance(v.coordinate));
-            for(int a=0;a<3;++a)for(int b=0;b<3;++b)variant.referenceStrain[a][b]=shear*(m_referenceFlow[a]*m_referenceNormal[b]+m_referenceNormal[a]*m_referenceFlow[b]);
+            RANSRobustVariant variant;
+            if(FiniteInflowReference())variant=RegularizedReferenceAt(v.coordinate);
+            else
+            {
+                variant.gamma=m_parameters.model.Kappa()*m_robustUstar*Distance(v.coordinate);
+                const double shear=m_robustUstar/(m_parameters.model.Kappa()*Distance(v.coordinate));
+                for(int a=0;a<3;++a)for(int b=0;b<3;++b)variant.referenceStrain[a][b]=shear*(m_referenceFlow[a]*m_referenceNormal[b]+m_referenceNormal[a]*m_referenceFlow[b]);
+            }
+            variant.beta=.4;
             regularized=EvaluateRANSRobustClosure(m_parameters.model.Model(),k,epsilon,g,Distance(v.coordinate),m_parameters.model.Parameters(),0,variant);
         }
         const double eigen=CovarianceSpectrum(c.reynoldsStress).eigenvalues[0];const int region=inner?0:1;++counts[family];
@@ -426,7 +432,7 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
         {"minimum_with_explicit_neighbors_inner",minima[0]},{"minimum_with_explicit_neighbors_outer",minima[1]},
         {"minimum_same_state_Original_outer",minima[2]},{"minimum_same_state_Regularized_outer",minima[3]},{"one_sided_witnesses",J::List(neighbors)},
         {"inventory_counts",J::Object(inventory)},{"offsets",J::Numbers(offset)},
-        {"same_state_Regularized_definition",J::Quote("beta=.4; gamma=kappa*u_star*wall_distance; incoming reference strain; same diffusion and fields")},
+        {"same_state_Regularized_definition",J::Quote(FiniteInflowReference()?"beta=.4; immutable FiniteInflowV1 gamma/S_ref; same diffusion and fields":"beta=.4; gamma=kappa*u_star*wall_distance; incoming reference strain; same diffusion and fields")},
         {"semantics",J::Quote("refreshed same-stage tensors; physical gradients on identified native elements; no averaging, lifting or acceptance waiver")},
         {"governing_solves","0"},{"physical_commits","0"},{"selected_state_unchanged","true"}});
 }
@@ -533,6 +539,7 @@ std::string RANSWallEvolutionPatch::CompareOuterOperators(const Vector &s,double
 std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,double time,
     const RANSWallEvolutionData &data) const
 {
+    Require(!FiniteInflowReference(),"neutral-specific diagnostic is unavailable for FiniteInflowV1; use its labelled provider/compatibility diagnostics");
     namespace J=RANSWallSolveJson;
     Require(AcceptedAWF() && !Mapped() && m_dimension==2 && m_eta==0,"neutral balance is a read-only flat accepted-AWF diagnostic");
     const auto before=RANSWallR3::Hash(state),refBefore=RANSWallR3::Hash(m_reference);

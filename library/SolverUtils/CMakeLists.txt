@@ -86,6 +86,8 @@ SET(SOLVER_UTILS_HEADERS
   Turbulence/EquilibriumAWFTransition.h
   Turbulence/RANSWallGeometry.h
   Turbulence/RANSWallNormalMap.h
+  Turbulence/RANSFiniteInflowReference.h
+  Turbulence/RANSTwoRegionHill.h
   AdvectionSystem.h
   ALEHelper.h
   Advection/Advection.h

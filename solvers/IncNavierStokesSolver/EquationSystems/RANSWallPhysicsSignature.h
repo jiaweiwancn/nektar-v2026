@@ -8,6 +8,9 @@ namespace Nektar
 {
 // Shared byte-for-byte native physical identity, also used for immutable
 // checkpoint replays. Only the named projection resource parameters are omitted.
+// FiniteInflowV1 appends content SHA256, units, interpolation/extrapolation,
+// prescribed Cartesian origin/frame and gamma law in patch.Signature(). Its
+// external profile is deliberately not inferred from this expression-name list.
 // The finite-QP numerical backend is a SolverInfo execution control, recorded
 // in PimpleKBoundControls: it solves the same raw-centered mass QP. The floor,
 // inventory, metric and mathematical correction policy retain strict identity.

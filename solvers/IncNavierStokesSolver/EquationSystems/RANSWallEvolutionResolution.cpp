@@ -93,7 +93,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     Require(state.size()==Size() && history.size()==Size() && alpha>=0 && m_eta==0,
         "R3 residual-resolution audit requires frozen unanchored valid state/history");
     (void)anchored;
-    Require(!analyticalReference || (AcceptedAWF() && alpha==0),"analytical weak loads require the flat accepted neutral alpha=0 diagnostic");
+    Require(!analyticalReference || (AcceptedAWF() && !FiniteInflowReference() && alpha==0),"analytical weak loads require the flat accepted neutral alpha=0 diagnostic");
     Require(!analyticalReference || (std::abs(m_referenceFlow[0]-1)<1e-14 && std::abs(m_referenceNormal[2]-1)<1e-14),
         "analytical weak loads currently support the declared +x flat neutral reference only");
     const double us=m_robustUstar,H=m_parameters.geometry.height,K0=m_parameters.model.Q()*us*us;
@@ -156,13 +156,13 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
                 OuterClosure(k,epsilon,G,q.v.coordinate);
             dk=c.kDiffusion;de=c.epsilonDiffusion;sk=c.kSource+data.outerKSource(q.v.coordinate,time);
             se=c.epsilonSource+data.outerEpsilonSource(q.v.coordinate,time);
-            const double distance=Distance(q.v.coordinate),kap=m_parameters.model.Kappa();
-            const double gamma=originalOuterCounterfactual?0:m_regularizationGamma+m_regularizationScale*kap*m_robustUstar*distance;
-            const double shear=m_robustUstar/(kap*distance);long double stableProduction=0;
+            const auto reference=RegularizedReferenceAt(q.v.coordinate);
+            const double gamma=originalOuterCounterfactual?0:reference.gamma;
+            long double stableProduction=0;
             for(int a=0;a<3;++a)for(int b=0;b<3;++b)
             {
                 stress[a][b]=-c.reynoldsStress[a][b]+(a==b?2*k/3-pi:0);
-                const double sr=shear*(m_referenceFlow[a]*m_referenceNormal[b]+m_referenceNormal[a]*m_referenceFlow[b]);
+                const double sr=reference.referenceStrain[a][b];
                 const long double B=(long double)c.eddyViscosity*(G[a][b]+G[b][a])-c.quadraticStress[a][b]-c.cubicStress[a][b]+
                     (long double)gamma*(G[a][b]+G[b][a]-sr);
                 cancelled[a][b]=B-(a==b?pi:0);

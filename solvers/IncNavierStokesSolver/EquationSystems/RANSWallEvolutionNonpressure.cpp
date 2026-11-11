@@ -365,6 +365,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
     int region,std::vector<std::string> *metadata,const std::vector<int> *freeK) const
 {
     const auto started=Clock::now();
+    Require(!FiniteInflowReference(),"legacy R3 Upstream action does not support FiniteInflowV1; use the PIMPLE block/directional closure checks");
     Require(m_dimension==2 && !Mapped() && m_transitionEnabled && m_cappedDestruction && Size()<=3000,
         "R3 nonpressure actions require the declared flat2D Upstream+Capped dense patch");
     Require(m_comm->GetSize()==1,"R3 nonpressure dense action currently requires one rank");

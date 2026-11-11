@@ -9,6 +9,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallKBoundProjection.h>
 #include <LibUtilities/Communication/CommSerial.h>
+#include <LibUtilities/Foundations/ManagerAccess.h>
 #include <SpatialDomains/MeshGraphIO.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <algorithm>
@@ -186,6 +187,25 @@ int main(int argc,char **argv)
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
         const auto operation=packet.get<std::string>("operation","");
+        if(operation=="finite_initial_domain")
+        {
+            Require(patch.FiniteInflowReference() && !packet.get_optional<std::string>("native_checkpoint") && packet.get<double>("time")==0,
+                "initial domain operation is an uncommitted finite-profile setup candidate only");
+            Require(RANSWallR3::HashFile(argv[1])==packet.get<std::string>("xml_sha256"),"initial candidate XML hash differs");
+            const auto state=Read(packet,"state");const auto hash=RANSWallR3::Hash(state);
+            Require(state.size()==patch.Size() && hash==packet.get<std::string>("state_sha256"),"initial candidate bytes differ");
+            data.fixedBoundary=patch.FixedReferenceBoundary(state);
+            const auto domain=patch.ScalarDomain(state,0,data);
+            Require(hash==RANSWallR3::Hash(state) && patch.InitializationWork()==Vector({0.,0.}),"initial domain diagnostic modified candidate or called Lift");
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},
+                {"state_sha256",J::Quote(hash)},{"xml_sha256",J::Quote(packet.get<std::string>("xml_sha256"))},
+                {"scalar_domain",patch.ScalarDomainJSON(domain,true)},{"governing_solves","0"},{"physical_commits","0"},
+                {"native_history_formed","false"},{"selected_state_unchanged","true"},{"initialization_work",J::Numbers(patch.InitializationWork())},
+                {"scope",J::Quote("exact retained uncommitted setup candidate; scalar/sampling applicability only; not an accepted checkpoint or migration")}})<<'\n';
+            Require(out.good(),"initial domain diagnostic write failed");world->Finalise();return 0;
+        }
+        const bool finiteH1=operation=="finite_inflow_h1";
+        Require(!finiteH1 || (patch.FiniteInflowReference() && packet.get_optional<std::string>("native_checkpoint")),"finite H1 readback requires its immutable compatible checkpoint");
         Require(operation!="native_epsilon_metric" || packet.get_optional<std::string>("native_checkpoint"),
             "native epsilon metric requires an immutable native checkpoint");
         if(operation=="archived_report_stages")
@@ -285,7 +305,7 @@ int main(int argc,char **argv)
         }
         const bool strictSpatialReadback=packet.get_optional<std::string>("native_checkpoint") &&
             ((patch.AcceptedAWF() && (operation=="accepted_awf" || operation=="height_comparison" || operation=="selected_original_operator")) ||
-                operation=="evaluation_reuse_checks" || operation=="native_epsilon_metric");
+                operation=="evaluation_reuse_checks" || operation=="native_epsilon_metric" || finiteH1);
         if(packet.get_optional<std::string>("native_checkpoint"))
         {
             Require((operation=="k_bound" || operation=="branch_coverage" || archivedStages || strictSpatialReadback) && !packet.get<bool>("projection_only",false),
@@ -299,8 +319,10 @@ int main(int argc,char **argv)
             serial->LoadParameter("RANSWallDirectionX",dx,1.);serial->LoadParameter("RANSWallDirectionY",dy,0.);
             std::string mode,coordinates;serial->LoadSolverInfo("RANSWallReference",mode,"Neutral");
             serial->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
-            Require(mode=="Neutral" && eta==0,"native replay requires the archived unforced neutral eta=0 configuration");
-            const auto signature=RANSWallPhysicsSignature(patch,serial,eta,true,us,{dx,dy},coordinates=="Chart");
+            Require(((mode=="Neutral" && !patch.FiniteInflowReference()) || (finiteH1 && mode=="FiniteInflowV1")) && eta==0,
+                "native replay requires neutral eta=0, or the explicit finite-H1 immutable operation");
+            const bool neutral=mode=="Neutral";
+            const auto signature=RANSWallPhysicsSignature(patch,serial,eta,neutral,us,{dx,dy},coordinates=="Chart");
             Require(signature==packet.get<std::string>("native_signature"),"native replay physical signature differs from archived report");
             const auto checkpoint=RANSWallTimeIntegration::ReadCheckpoint(checkpointPath,signature,1,dt,patch.Size(),patch.DifferentialSize());
             bool tailIdentityRejected=false;
@@ -310,9 +332,9 @@ int main(int argc,char **argv)
                 // reference or history is constructed; all real cases keep z_m=H.
                 double tail;serial->LoadParameter("RANSWallTailStart",tail);
                 double changed=tail*1.01;serial->SetParameter("RANSWallTailStart",changed);
-                const auto incompatible=RANSWallPhysicsSignature(patch,serial,eta,true,us,{dx,dy},coordinates=="Chart");
+                const auto incompatible=RANSWallPhysicsSignature(patch,serial,eta,neutral,us,{dx,dy},coordinates=="Chart");
                 serial->SetParameter("RANSWallTailStart",tail);
-                Require(RANSWallPhysicsSignature(patch,serial,eta,true,us,{dx,dy},coordinates=="Chart")==signature,
+                Require(RANSWallPhysicsSignature(patch,serial,eta,neutral,us,{dx,dy},coordinates=="Chart")==signature,
                     "reader identity test did not restore session parameter");
                 try{RANSWallTimeIntegration::ReadCheckpoint(checkpointPath,incompatible,1,dt,patch.Size(),patch.DifferentialSize());}
                 catch(const std::exception &e){tailIdentityRejected=std::string(e.what()).find("signature mismatch")!=std::string::npos;}
@@ -498,6 +520,121 @@ int main(int argc,char **argv)
         if(operation=="evaluation_reuse_checks")
         {std::ofstream out(argv[3]);out<<patch.EvaluationReuseChecks(state,history,time,data)<<'\n';Require(out.good(),"reuse verification write failed");world->Finalise();return 0;}
         RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,time);
+        if(finiteH1)
+        {
+            Require(strictSpatialReadback && patch.InitializationWork()==Vector({0.,0.}),"finite H1 readback performed setup Lift");
+            const auto before=RANSWallR3::Hash(state),referenceHash=RANSWallR3::Hash(patch.Reference());
+            const auto domain=patch.ScalarDomain(state,time,data);
+            Require(domain.admissible,"finite H1 readback outside scalar/budget domain");
+            const auto audit=patch.CompleteRestrictedAudit(state,history,0,time,data);
+            const auto components=patch.ResidualResolutionComponents(state,state,0,time,data);
+            const auto native=patch.Residual(state,state,0,time,data,false,true);
+            double residualError=0;
+            const auto &resolved=components.terms.at("total_constrained");
+            for(int i=0;i<patch.Size();++i)residualError=std::max(residualError,std::abs(resolved[i]-native[i]));
+            Require(residualError<2e-9,"finite-reference stable decomposition differs from native residual");
+            const double H=p.geometry.height;const auto endpoint=patch.FixedInflow().AtHeight(H);
+            AWFProfileOptions targetOptions;targetOptions.formulation=AWFProfileFormulation::CLSCalibratedBudgetAWF;
+            const auto wall=std::make_shared<EquilibriumAWFProfiles>(p.geometry,endpoint.k,p.model,AWFNormalMetric{},targetOptions,CalibratedAWFParameters(p.model));
+            std::vector<std::string> metric;
+            for(int order:{16,32})
+            {
+                Vector errors(7); // separate units: U,gradU,k,epsilon, seed U/k/epsilon drift
+                auto xRule=LibUtilities::PointsManager()[LibUtilities::PointsKey(8,LibUtilities::eGaussGaussLegendre)];
+                auto zRule=LibUtilities::PointsManager()[LibUtilities::PointsKey(order,LibUtilities::eGaussGaussLegendre)];
+                const auto xs=xRule->GetZ(),xw=xRule->GetW(),zs=zRule->GetZ(),zw=zRule->GetW();
+                for(int block:{0,patch.K(),patch.Epsilon()})for(const auto &element:patch.fields[block]->Elements())
+                {
+                    std::vector<double> panels{element.lower[2],element.upper[2]};
+                    for(const auto &q:patch.FixedInflow().Knots())if(q.z>element.lower[2] && q.z<element.upper[2])panels.push_back(q.z);
+                    for(double z:{wall->Reference().cutoff,wall->Original().ViscosityInterceptHeight(),p.geometry.roughness})
+                        if(z>element.lower[2] && z<element.upper[2])panels.push_back(z);
+                    std::sort(panels.begin(),panels.end());panels.erase(std::unique(panels.begin(),panels.end()),panels.end());
+                    for(std::size_t panel=1;panel<panels.size();++panel)for(int ix=0;ix<8;++ix)for(int iz=0;iz<order;++iz)
+                    {
+                        const double x=(element.lower[0]+element.upper[0])/2+xs[ix]*(element.upper[0]-element.lower[0])/2;
+                        const double z=(panels[panel-1]+panels[panel])/2+zs[iz]*(panels[panel]-panels[panel-1])/2;
+                        const double weight=xw[ix]*zw[iz]*(element.upper[0]-element.lower[0])*(panels[panel]-panels[panel-1])/4;
+                        const auto q=patch.GeometryPoint(block,element.geometry,{x,0,z});
+                        const auto f=patch.FixedInflow().At(patch.Physical(q.coordinate));
+                        const bool inner=z<H;double exact=0;
+                        if(block==0)exact=inner?wall->Original().Velocity(z,{endpoint.U,0},{0,0})[0]:f.U;
+                        else if(block==patch.K())exact=inner?wall->ReferenceK(z):f.k;
+                        else exact=f.epsilon;
+                        const int j=block==0?0:(block==patch.K()?2:3);
+                        errors[j]+=weight*std::pow(q.Value(state,patch.offset[block])-exact,2);
+                        errors[block==0?4:(block==patch.K()?5:6)]+=weight*std::pow(q.Value(state,patch.offset[block])-q.Value(patch.Reference(),patch.offset[block]),2);
+                        if(block==0)
+                        {
+                            const double grad=inner?wall->Original().VelocityGradient(z,{endpoint.U,0},{0,0})[0]:f.dU;
+                            const auto actual=q.Gradient(state,patch.offset[block]);
+                            errors[1]+=weight*(std::pow(actual[2]-grad,2)+actual[0]*actual[0]);
+                        }
+                    }
+                }
+                for(double &v:errors)v=std::sqrt(std::max(0.,v));
+                metric.push_back(J::Object({{"Gauss_order",J::Number(order)},{"U_gradU_k_epsilon_seedU_seedK_seedEpsilon_L2",J::Numbers(errors)}}));
+            }
+            std::vector<std::string> profiles;
+            for(double x:{-.15,0.,.15})for(double z:{0.,.00025,.001,.003,.005,.01,.015,.02,.03,.05,.1,.2,.3,.4,.8})
+            {
+                const int radialSide=std::abs(z-H)<1e-13?-1:0;
+                const auto row=patch.Point(0,{x,0,z},radialSide);const auto f=patch.FixedInflow().AtHeight(z);
+                profiles.push_back(J::Numbers(Vector{x,z,double(row.geometry),double(radialSide),row.Value(state,patch.offset[0]),row.Gradient(state,patch.offset[0])[2],
+                    patch.Point(patch.K(),{x,0,z}).Value(state,patch.offset[patch.K()]),f.U,f.dU,f.k,f.epsilon}));
+            }
+            std::vector<std::string> dataQueries;
+            if(packet.get_optional<std::string>("permitted_queries_file"))
+            {
+                const auto file=packet.get<std::string>("permitted_queries_file");
+                Require(RANSWallR3::HashFile(file)==packet.get<std::string>("permitted_queries_sha256"),"permitted flat query hash differs");
+                std::ifstream input(file);double z,target,weight,bound;std::string name;
+                while(input>>z>>name>>target>>weight>>bound)
+                {
+                    const RANSWallCoordinate point{-.15,0,z};const auto v=patch.Point(0,point);
+                    const double k=patch.Point(patch.K(),point).Value(state,patch.offset[patch.K()]);
+                    const bool inner=z<H;const double epsilon=inner?0:patch.Point(patch.Epsilon(),point).Value(state,patch.offset[patch.Epsilon()]);
+                    const bool valid=std::isfinite(k) && (inner?k>=0:k>0) && (inner || (epsilon>0 && std::isfinite(epsilon)));
+                    double predicted=0,production=0;bool tensorValid=valid;
+                    if(valid)
+                    {
+                        RANSTensor gradient{};gradient[0]=v.Gradient(state,patch.offset[0]);gradient[2]=v.Gradient(state,patch.offset[1]);
+                        RANSTensor stress{};
+                        if(inner)
+                        {
+                            const double K=patch.SampleKRow(point).Value(state,patch.offset[patch.K()]);
+                            const AnalyticalWallFunction auxiliary({p.geometry.molecularNu,H,p.geometry.roughness,H/2},K,CalibratedAWFParameters(p.model));
+                            const auto law=patch.InnerStress(k,auxiliary.EddyViscosity(z),gradient);stress=law.reynoldsStress;production=law.production;
+                        }
+                        else
+                        {
+                            const auto law=EvaluateRANSRobustClosure(p.model.Model(),k,epsilon,gradient,z,p.model.Parameters(),0,patch.RegularizedReferenceAt(point));
+                            stress=law.reynoldsStress;production=law.production;
+                        }
+                        tensorValid=stress[0][0]>0 && J::Eigenvalues(stress)[0]>=-1e-12;
+                        predicted=name=="U"?v.Value(state,patch.offset[0]):(name=="minusRxz"?-stress[0][2]:(tensorValid?std::sqrt(stress[0][0]):0));
+                    }
+                    Require(name=="U" || name=="minusRxz" || name=="sigmaU","unregistered experimental query quantity");
+                    dataQueries.push_back(J::Object({{"z",J::Number(z)},{"x",J::Number(point[0])},{"velocity_geometry",J::Number(v.geometry)},
+                        {"quantity",J::Quote(name)},{"target",J::Number(target)},{"weight",J::Number(weight)},{"extraction_envelope",J::Number(bound)},
+                        {"valid",J::Boolean(valid && tensorValid)},{"native_prediction",valid && tensorValid?J::Number(predicted):"null"},
+                        {"production",valid && tensorValid?J::Number(production):"null"},{"inside_AWF",J::Boolean(inner)},
+                        {"failure",valid && tensorValid?"null":J::Quote("additional diagnostic scalar/covariance query invalid; production acceptance retained")}}));
+                }
+            }
+            Require(before==RANSWallR3::Hash(state) && referenceHash==RANSWallR3::Hash(patch.Reference()),"finite readback modified state/reference");
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"native_replay_context",replayContext},
+                {"state_sha256",J::Quote(before)},{"reference_sha256",J::Quote(referenceHash)},
+                {"selected_state_unchanged","true"},{"provider",patch.FiniteInflowChecks(state)},
+                {"complete_audit",Maps(audit)},{"residual_resolution_native_max_error",J::Number(residualError)},
+                {"selected_spatial_block_norms",J::Numbers(patch.Norms(native,components.constraints,us))},
+                {"physical_projection_metrics",J::List(metric)},{"physical_profile_columns",J::Quote("x,z,velocity_geometry,radial_side,U_h,dU_h/dz,k_h,U_ref,dU_ref/dz,k_ref,epsilon_ref")},
+                {"physical_profiles",J::List(profiles)},{"permitted_flat_native_queries",J::List(dataQueries)},
+                {"projection_metric_columns",J::Quote("U,gradU,k,epsilon,U_from_native_seed,k_from_native_seed,epsilon_from_native_seed; dimensional norms kept separate")},{"initialization_work",J::Numbers(patch.InitializationWork())},
+                {"physical_time",J::Number(time)},{"governing_solves","0"},{"physical_commits","0"},{"native_history_advanced","false"},
+                {"metric_scope",J::Quote("affine integration split at every native interface, finite-profile knot, AWF cutoff, viscosity intercept and roughness; tangential GL8 and normal GL16/32; represented field versus finite completion; inner target is AWF no-slip U and budget k; epsilon uses raw finite completion, so matching changes remain visible; not curved polynomial exactness")}})<<'\n';
+            Require(out.good(),"finite H1 readback write failed");world->Finalise();return 0;
+        }
         if(archivedStages || operation=="selected_original_operator")
         {
             Require(patch.InitializationWork()==Vector({0.,0.}),"immutable diagnostic called initialization Lift");
