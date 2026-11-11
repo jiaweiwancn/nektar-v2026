@@ -1,0 +1,1043 @@
+{
+  "schema": 1,
+  "captured_UTC": "2026-11-11T14:04:44.296351+00:00",
+  "status": "H1 foundations and bounded compatibility completed",
+  "branch": "codex/cls-epawf-pimple-one-sweep",
+  "reviewed_base": "cb85f8a90fe4955cb620697bece49070cbf04b58",
+  "implementation_commit": "1124e15677a1efa2fc8b07dae73ec0aca31f983e",
+  "heavy_artifact_root": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111",
+  "numerical_environment": "authoritative Linux; one MPI rank, one computational thread; isolated Release build and frozen library closures",
+  "build": {
+    "flags": "-O3 -DNDEBUG -fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS",
+    "compiler": "GCC 11.4",
+    "explicit_max_workers": 4,
+    "final_incremental_workers": 2,
+    "source_hashes_verified": true,
+    "ctest": "Test project /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/build-final\n    Start 3: RANSCaoTamuraBudgetH1Checks\n1/3 Test #3: RANSCaoTamuraBudgetH1Checks ......   Passed    0.48 sec\n    Start 4: RANSAcceptedAWFKernel\n2/3 Test #4: RANSAcceptedAWFKernel ............   Passed    0.01 sec\n    Start 6: RANSHistoryRejectionChecks\n3/3 Test #6: RANSHistoryRejectionChecks .......   Passed    0.04 sec\n\n100% tests passed, 0 tests failed out of 3\n\nTotal Test time (real) =   0.55 sec\n",
+    "clean_build_note": "An early incremental build retained stale objects because archived Mac mtimes were older than Linux objects. Authoritative build-final was configured in an empty directory. Later edits were copied with current mtimes and actual object rebuilds verified."
+  },
+  "runtime": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/IncNavierStokesSolver",
+    "sha256": "b2bdfc9aeffd423798197928c41f9d826097b0076409c300d5958605bf1549ac",
+    "libraries": {
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-solver/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+    }
+  },
+  "final_label_runtime": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/IncNavierStokesSolver",
+    "sha256": "52b77c587f61cc2a1f4263cb68ece6a395d3ee0ad3fbeadce67c2ef9e5e38e67",
+    "libraries": {
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-upgrade/runtime-upgraded/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667"
+    }
+  },
+  "kernel_runtime": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-probe/RANSCaoTamuraBudgetH1Checks",
+    "sha256": "bcede63ca2b96e03782326253c41d4e355022600b209f5f98fd00bd8dc7b828e",
+    "libraries": {
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-probe/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-probe/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-probe/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/runtime-probe/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+    }
+  },
+  "kernel_final_sha256": "5e4ee65ad1ea8affc2e1258c9f79e59f101cc29f5776a5894de68c5d6b675510",
+  "checks": {
+    "kernel_checks": 209,
+    "kernel_status": "passed",
+    "neutral": {
+      "accepted_state_history_time": true,
+      "signature": true,
+      "fixed_reference": true,
+      "fixed_defect": true,
+      "parent_bytes": true,
+      "committed": true,
+      "post_flow": true,
+      "pre_k": true,
+      "raw": true,
+      "corrected": true,
+      "history": true,
+      "audit_values": true
+    },
+    "checkpoint_restart": "split4+restart4 equals uninterrupted8, coupled state and complete native histories/time bitwise",
+    "rollback": "deliberate rejection after all four governing solves and final bound restores seed, time and all histories; parent bytes unchanged",
+    "contracts": {
+      "status": "passed",
+      "runtime": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/IncNavierStokesSolver",
+        "sha256": "b2bdfc9aeffd423798197928c41f9d826097b0076409c300d5958605bf1549ac",
+        "ldd": "\tlinux-vdso.so.1 (0x00007ffcb30d2000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libSpatialDomains.so.5.9.0 (0x00007b992ea00000)\n\tlibSolverUtils.so.5.9.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libSolverUtils.so.5.9.0 (0x00007b992e400000)\n\tlibFieldUtils.so.5.9.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libFieldUtils.so.5.9.0 (0x00007b992e000000)\n\tlibmpi_cxx.so.40 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libmpi_cxx.so.40 (0x00007b992f499000)\n\tlibmpi.so.40 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libmpi.so.40 (0x00007b992ecc9000)\n\tlibGlobalMapping.so.5.9.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libGlobalMapping.so.5.9.0 (0x00007b992ec34000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libMultiRegions.so.5.9.0 (0x00007b992dc00000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libLocalRegions.so.5.9.0 (0x00007b992d800000)\n\tlibStdRegions.so.5.9.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libStdRegions.so.5.9.0 (0x00007b992d400000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libLibUtilities.so.5.9.0 (0x00007b992ce00000)\n\tliblapack.so.3 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/liblapack.so.3 (0x00007b992c600000)\n\tlibblas.so.3 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libblas.so.3 (0x00007b992e99e000)\n\tlibstdc++.so.6 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libstdc++.so.6 (0x00007b992c200000)\n\tlibm.so.6 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libm.so.6 (0x00007b992e8b7000)\n\tlibgcc_s.so.1 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libgcc_s.so.1 (0x00007b992f473000)\n\tlibc.so.6 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libc.so.6 (0x00007b992be00000)\n\tlibptscotch-6.1.so => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libptscotch-6.1.so (0x00007b992db2d000)\n\tlibz.so.1 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libz.so.1 (0x00007b992f457000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libboost_program_options.so.1.74.0 (0x00007b992e872000)\n\tlibopen-pal.so.40 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libopen-pal.so.40 (0x00007b992da7a000)\n\tlibopen-rte.so.40 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libopen-rte.so.40 (0x00007b992d743000)\n\tlibhwloc.so.15 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libhwloc.so.15 (0x00007b992da1e000)\n\tlibCollections.so.5.9.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libCollections.so.5.9.0 (0x00007b992d28d000)\n\tlibfftw3.so.3 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libfftw3.so.3 (0x00007b992ba00000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libboost_iostreams.so.1.74.0 (0x00007b992ec1c000)\n\tlibopenblas.so.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libopenblas.so.0 (0x00007b99295b0000)\n\tlibgfortran.so.5 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libgfortran.so.5 (0x00007b9929200000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007b992f4b5000)\n\tlibptscotcherr-6.1.so => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libptscotcherr-6.1.so (0x00007b992f44e000)\n\tlibbz2.so.1.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libbz2.so.1.0 (0x00007b992ec09000)\n\tliblzma.so.5 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/liblzma.so.5 (0x00007b992e847000)\n\tlibevent_core-2.1.so.7 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libevent_core-2.1.so.7 (0x00007b992e3cb000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libevent_pthreads-2.1.so.7 (0x00007b992e3c6000)\n\tlibudev.so.1 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libudev.so.1 (0x00007b992d719000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libMatrixFreeOps.so.5.9.0 (0x00007b9926400000)\n\tlibzstd.so.1 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libzstd.so.1 (0x00007b992cd31000)\n\tlibquadmath.so.0 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libquadmath.so.0 (0x00007b992d6d1000)\n",
+        "libraries": {
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+          "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/contracts-final/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+        }
+      },
+      "parent_checkpoint_sha256": "6d6e3c1757eb0eb542c68051171354a6935eaf8b5463d161a6954ed330f911f7",
+      "governing_solves": 0,
+      "physical_commits": 0,
+      "restart_rejections": {
+        "affine-mesh": {
+          "failure": "Wall IMEX: checkpoint signature mismatch",
+          "xml_sha256": "8a3aa1047f66ac7429ba03ec272ab43aef7769b8e17ec80731a9cbc95abd67cb",
+          "report_sha256": "b5a80cd7190514aaad27b3df21232876ad55f27857fad56f0c8e548999075729",
+          "exit_code": 1
+        },
+        "gamma-law": {
+          "failure": "Wall IMEX: checkpoint signature mismatch",
+          "xml_sha256": "41be6061c117728af20f5db77e053be226c49b2aaf597b2a7022de58eb0d6aa1",
+          "report_sha256": "b5a80cd7190514aaad27b3df21232876ad55f27857fad56f0c8e548999075729",
+          "exit_code": 1
+        }
+      },
+      "stage_checks": {
+        "k-t1.0000000000000001e-05-6e433cb953ba.json": {
+          "packet_sha256": "cb766b19cfa974dbd269d17e54c8fc84525617edc99b6f4a433cdd877bd33c7f",
+          "solved_epsilon_retained": true,
+          "inactive_bound_bitwise_noop": true
+        },
+        "k-t2.0000000000000002e-05-6aa26e29c876.json": {
+          "packet_sha256": "661e4e56f17ed3abf0c7112d33852434fbdb34730cb11d76207ca2ec381aba98",
+          "solved_epsilon_retained": true,
+          "inactive_bound_bitwise_noop": true
+        },
+        "k-t3.0000000000000004e-05-2010e685f642.json": {
+          "packet_sha256": "c80efb1865ef7ee3d234ccc5afcbd402fa890be4ca2e61027b71a5554bba66ff",
+          "solved_epsilon_retained": true,
+          "inactive_bound_bitwise_noop": true
+        },
+        "k-t4.0000000000000003e-05-1b97a5271572.json": {
+          "packet_sha256": "407693d0170413c8772170cec97c20b8eb36763a9a36dbc7c5fc9cc2ec047226",
+          "solved_epsilon_retained": true,
+          "inactive_bound_bitwise_noop": true
+        },
+        "k-t5.0000000000000002e-05-0f5de50712eb.json": {
+          "packet_sha256": "f8d73e504addf9491cf620ac93cdb13d37af59d2ed467bb764eafccff75d9445",
+          "solved_epsilon_retained": true,
+          "inactive_bound_bitwise_noop": true
+        },
+        "k-t6.0000000000000002e-05-1811cedb5484.json": {
+          "packet_sha256": "bc247866abf4eac1152a1cc4d58da094ad9bd1b249df58103d52b939c472a067",
+          "solved_epsilon_retained": true,
+          "inactive_bound_bitwise_noop": true
+        },
+        "k-t7.0000000000000007e-05-913af0260d48.json": {
+          "packet_sha256": "47ae5fb016d48cb4fdc9d19193626cd478b55fc0e9a2eb939a2f442bba695503",
+          "solved_epsilon_retained": true,
+          "inactive_bound_bitwise_noop": true
+        },
+        "k-t8.0000000000000007e-05-e6ced234742d.json": {
+          "packet_sha256": "f15ac789e73a7b49a4416e24bba6fb705dcb71fd2eb13057c0c1e6bfbcee563a",
+          "solved_epsilon_retained": true,
+          "inactive_bound_bitwise_noop": true
+        }
+      },
+      "reference_samples_sha256": "e06bb189c5f277d873f5396bdc503b82b2a92c23f9d8a537c163aca5b438cb50",
+      "reference_samples_bitwise_immutable": true,
+      "reference_defect_immutable": true,
+      "state_advanced_only_in_retained_production": true
+    },
+    "diagnostic_label_upgrade": {
+      "status": "passed",
+      "checks": {
+        "stage_history_bitwise": true,
+        "audit_values_unchanged": true
+      },
+      "governing_solves": 0,
+      "physical_commits": 0,
+      "old_report_sha256": "549fa2abe7367316844281b29fc7af73bc6b72f202419852e7ce75f30e356648",
+      "new_report_sha256": "7e8abf178a3cec12a83a0fa815d7fdbe66254c804e605afa4e732950012a3ae4",
+      "scope": "postprocess immutable completed verification legs; no re-solve after a Python path-type error"
+    }
+  },
+  "compatibility": {
+    "status": "passed",
+    "started_UTC": "2026-11-11T12:46:20.664236+00:00",
+    "completed_UTC": "2026-11-11T12:48:43.671732+00:00",
+    "accepted_physical_steps": 8.0,
+    "physical_time": 8e-05,
+    "native_dimensions": 2000,
+    "initialization_work": [
+      1.0,
+      1.0
+    ],
+    "solve_counts": {
+      "outer_sweeps": 8.0,
+      "momentum_predictor_solves": 8.0,
+      "pressure_system_solves": 8.0,
+      "epsilon_transport_solves": 8.0,
+      "k_transport_solves": 8.0,
+      "bound_calls": 8.0,
+      "additional_governing_equation_solves": 0.0
+    },
+    "correction": {
+      "activations": 0.0,
+      "signed_integral": 0.0,
+      "positive_integral": 0.0,
+      "negative_integral": 0.0,
+      "absolute_integral": 0.0
+    },
+    "restart_bitwise": true,
+    "rollback_bitwise": true,
+    "reference_immutable": true,
+    "initial_checkpoint_sha256": "6d6e3c1757eb0eb542c68051171354a6935eaf8b5463d161a6954ed330f911f7",
+    "final_checkpoint_sha256": "6c0f3b91b5fed45fc7bb071e82ea932f9061ad270c053fa2b99aa05820d6044b",
+    "initial_state_sha256": "6e433cb953ba1ddf4cef5e9753cb269d18e7ee529dbbae2e52c742e7409fd5eb",
+    "final_state_sha256": "e5121b965260846d10ec0690b3664d7630b7674a441d45e760b414a3d276b3a3",
+    "final_native_history_sha256": [
+      "50aeada8d2efa30aa289638bbf3bb4dfd2b3478620f3420d3a565781b881adb4",
+      "40e6ec0556b65467bbd9e99584930928ca107d3cb0272bdc343fb9c4d4e6ef33"
+    ],
+    "final_native_history_times": [
+      8e-05,
+      1e-05
+    ],
+    "performance": {
+      "whole8_seconds": 39.40335014893208,
+      "usage": "39.30 34.33 2.49 836420"
+    },
+    "initial_native_history_sha256": [
+      "e5e1a68cc99b1bb1b624ab819b9670e985a2956b45b55e13c34ea472d47a4add",
+      "40e6ec0556b65467bbd9e99584930928ca107d3cb0272bdc343fb9c4d4e6ef33"
+    ],
+    "initial_fixed_reference_equals_state_numerically": true,
+    "initial_fixed_reference_sha256": "6e433cb953ba1ddf4cef5e9753cb269d18e7ee529dbbae2e52c742e7409fd5eb"
+  },
+  "setup_algebra": {
+    "constrained_radial_projections": 3,
+    "lift_calls_iterations": [
+      1.0,
+      1.0
+    ],
+    "physical_governing_solves": 0
+  },
+  "finite_reference_checks": {
+    "mode": "FiniteInflowV1",
+    "identity": "FiniteInflowV1:SI:HermiteU-exactDerivative:loglinear-k-epsilon:constant-final-zero-shear:gamma=Gamma*OriginalCLSnuT:gamma0=0:Gamma=1:-0.20000000000000001:0:0:1:0:0:0:0:1:content-sha256=9375601441e2c70fb87cf8f31de305afd4b67fd2f82a750f9274f6bb68eed697",
+    "comparison_reference": "native finite-profile initialized seed; not analytical neutral equilibrium",
+    "frame_height": "dot(physical-X_in,n_in); independent of wall distance and outer chart",
+    "outer_native_points": 2304.0,
+    "gamma_min_max": [
+      6.914413768986305e-05,
+      0.0015366615342475537
+    ],
+    "strain_trace_symmetry_defects": [
+      0.0,
+      0.0
+    ],
+    "stress_work_relative_defect": 0.0,
+    "epsilon_production_relative_defect": 1.1102230246251565e-16,
+    "outer_native_scalar_minima": [
+      2.859494873598776e-05,
+      1.0520075024155935e-06
+    ],
+    "sample_columns": "zeta,U_ref,U_ref_prime,k_ref,epsilon_ref,nu_t_ref,gamma",
+    "samples": [
+      [
+        0.015,
+        0.767843024889894,
+        15.970021568819039,
+        0.0250145796399802,
+        0.10548224438480716,
+        0.0004961159158291206,
+        0.0004961159158291206
+      ],
+      [
+        0.04,
+        1.0,
+        7.894932459326188,
+        0.0208825597280688,
+        0.030046416342846903,
+        0.0007918519964548446,
+        0.0007918519964548446
+      ],
+      [
+        0.1,
+        1.2321436715734488,
+        2.6033623612269565,
+        0.0119805886991893,
+        0.009203507247663221,
+        0.0014544722574382988,
+        0.0014544722574382988
+      ],
+      [
+        0.25,
+        1.4538380322339512,
+        0.10099975316775135,
+        0.00040342708898037454,
+        5.6870062448551615e-05,
+        0.0003257629162491558,
+        0.0003257629162491558
+      ],
+      [
+        0.4,
+        1.456384826296691,
+        0.0,
+        2.8628338772555877e-05,
+        1.0750541550946533e-06,
+        6.91441376898633e-05,
+        6.91441376898633e-05
+      ],
+      [
+        0.8,
+        1.456384826296691,
+        0.0,
+        2.8628338772555853e-05,
+        1.0750541550946535e-06,
+        6.914413768986317e-05,
+        6.914413768986317e-05
+      ],
+      [
+        1.0,
+        1.456384826296691,
+        0.0,
+        2.8628338772555853e-05,
+        1.0750541550946535e-06,
+        6.914413768986317e-05,
+        6.914413768986317e-05
+      ]
+    ]
+  },
+  "steps": [
+    {
+      "time": 1e-05,
+      "alpha": 99999.99999999999,
+      "seconds": 2.474340237,
+      "solves": {
+        "outer_sweeps": 1,
+        "momentum_predictor_solves": 1,
+        "pressure_system_solves": 1,
+        "epsilon_transport_solves": 1,
+        "k_transport_solves": 1,
+        "bound_calls": 1,
+        "mass_inverse_applications": 76,
+        "bound_residual_accounting_mass_applications": 1,
+        "additional_governing_equation_solves": 0,
+        "additional_correction_or_restoration_solves": 0
+      },
+      "completed": {
+        "momentum_predictor_solve_completed": true,
+        "pressure_system_solve_completed": true,
+        "epsilon_transport_solve_completed": true,
+        "k_transport_solve_completed": true,
+        "scheduled_complete": true
+      },
+      "k_minimum": 0.0250145796399802,
+      "outer_k_minimum": 2.859467999021168e-05,
+      "epsilon_minimum": 1.0517804849262589e-06,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.038468227852394454,
+        "arithmetic_scale": 1.0704204559483524e-18,
+        "point": [
+          -0.16182758986408463,
+          0,
+          0
+        ],
+        "geometry": 0,
+        "extrema_checked": 16
+      },
+      "budget_ratio_minimum": 4.044749745775157,
+      "budget_relative_defect": 0,
+      "continuity_gauge": [
+        2.2963654165501e-19,
+        9.668623795010539e-18,
+        8.809142651444724e-20
+      ],
+      "boundary_defect": 0,
+      "raw_k_linear_residual": 9.486769009248164e-20,
+      "epsilon_linear_residual": 2.710505431213761e-20,
+      "imposed_trace_defect": 8.675430336803125e-21,
+      "refreshed_trace_defect": 3.3502012400724043e-06,
+      "actual_momentum_splitting_defect": 6.313392177536735e-07,
+      "splitting_identity_error": 5.421010862427522e-19,
+      "bound_activations": 0,
+      "bound_algebra": {
+        "bound_active_set_iterations": 0,
+        "bound_mass_factor_applications": 0,
+        "bound_kkt_solves": 0
+      },
+      "selected_refreshed_stage_blocks": [
+        0.000344317869286961,
+        0.0027310040353663656,
+        1.4991735406326047e-05,
+        4.80033125928879e-06,
+        1.1624029849893113e-16,
+        8.675236958334731e-17,
+        1.5970955931418068e-17,
+        5.404519798883232e-05
+      ],
+      "covariance": [
+        0.010042080304019594,
+        1.9062124001400336e-05
+      ],
+      "hard_admissible": [
+        1
+      ],
+      "packet_sha256": "cb766b19cfa974dbd269d17e54c8fc84525617edc99b6f4a433cdd877bd33c7f"
+    },
+    {
+      "time": 2e-05,
+      "alpha": 99999.99999999999,
+      "seconds": 2.147406539,
+      "solves": {
+        "outer_sweeps": 1,
+        "momentum_predictor_solves": 1,
+        "pressure_system_solves": 1,
+        "epsilon_transport_solves": 1,
+        "k_transport_solves": 1,
+        "bound_calls": 1,
+        "mass_inverse_applications": 76,
+        "bound_residual_accounting_mass_applications": 1,
+        "additional_governing_equation_solves": 0,
+        "additional_correction_or_restoration_solves": 0
+      },
+      "completed": {
+        "momentum_predictor_solve_completed": true,
+        "pressure_system_solve_completed": true,
+        "epsilon_transport_solve_completed": true,
+        "k_transport_solve_completed": true,
+        "scheduled_complete": true
+      },
+      "k_minimum": 0.0250145796399802,
+      "outer_k_minimum": 2.859467312017152e-05,
+      "epsilon_minimum": 1.0517804849262589e-06,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.038429566609296646,
+        "arithmetic_scale": 1.0718126764197306e-18,
+        "point": [
+          -0.16182744867893106,
+          0,
+          0
+        ],
+        "geometry": 0,
+        "extrema_checked": 16
+      },
+      "budget_ratio_minimum": 4.044749745775157,
+      "budget_relative_defect": 0,
+      "continuity_gauge": [
+        1.1130548204628724e-19,
+        3.225700080725183e-18,
+        2.879912020664621e-20
+      ],
+      "boundary_defect": 0,
+      "raw_k_linear_residual": 6.098637220230962e-20,
+      "epsilon_linear_residual": 6.776263578034403e-20,
+      "imposed_trace_defect": 7.321036393866287e-21,
+      "refreshed_trace_defect": 3.3343351423659193e-06,
+      "actual_momentum_splitting_defect": 4.987513495149069e-09,
+      "splitting_identity_error": 6.500183776788704e-19,
+      "bound_activations": 0,
+      "bound_algebra": {
+        "bound_active_set_iterations": 0,
+        "bound_mass_factor_applications": 0,
+        "bound_kkt_solves": 0
+      },
+      "selected_refreshed_stage_blocks": [
+        0.0003412114712106838,
+        0.0002415001658108735,
+        1.4892131015782933e-05,
+        5.092874979115566e-06,
+        3.428405616913875e-17,
+        7.575910627942159e-17,
+        5.221274054502061e-18,
+        5.378924727709579e-05
+      ],
+      "covariance": [
+        0.010041931888864212,
+        1.906176686550293e-05
+      ],
+      "hard_admissible": [
+        1
+      ],
+      "packet_sha256": "661e4e56f17ed3abf0c7112d33852434fbdb34730cb11d76207ca2ec381aba98"
+    },
+    {
+      "time": 3.0000000000000004e-05,
+      "alpha": 99999.99999999999,
+      "seconds": 2.268358037,
+      "solves": {
+        "outer_sweeps": 1,
+        "momentum_predictor_solves": 1,
+        "pressure_system_solves": 1,
+        "epsilon_transport_solves": 1,
+        "k_transport_solves": 1,
+        "bound_calls": 1,
+        "mass_inverse_applications": 76,
+        "bound_residual_accounting_mass_applications": 1,
+        "additional_governing_equation_solves": 0,
+        "additional_correction_or_restoration_solves": 0
+      },
+      "completed": {
+        "momentum_predictor_solve_completed": true,
+        "pressure_system_solve_completed": true,
+        "epsilon_transport_solve_completed": true,
+        "k_transport_solve_completed": true,
+        "scheduled_complete": true
+      },
+      "k_minimum": 0.0250145796399802,
+      "outer_k_minimum": 2.8594666244584236e-05,
+      "epsilon_minimum": 1.0517804849262589e-06,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.03839436623718123,
+        "arithmetic_scale": 1.0730802780128447e-18,
+        "point": [
+          -0.16182730529786485,
+          0,
+          0
+        ],
+        "geometry": 0,
+        "extrema_checked": 16
+      },
+      "budget_ratio_minimum": 4.044749745775157,
+      "budget_relative_defect": 0,
+      "continuity_gauge": [
+        1.4025891429920613e-19,
+        6.059371968585134e-18,
+        3.3881317890172014e-20
+      ],
+      "boundary_defect": 0,
+      "raw_k_linear_residual": 1.3552527156068805e-19,
+      "epsilon_linear_residual": 8.131516293641283e-20,
+      "imposed_trace_defect": 4.880690975049365e-21,
+      "refreshed_trace_defect": 3.3169639951369234e-06,
+      "actual_momentum_splitting_defect": 5.718042856121418e-10,
+      "splitting_identity_error": 3.0507744479935745e-19,
+      "bound_activations": 0,
+      "bound_algebra": {
+        "bound_active_set_iterations": 0,
+        "bound_mass_factor_applications": 0,
+        "bound_kkt_solves": 0
+      },
+      "selected_refreshed_stage_blocks": [
+        0.00033877163434310303,
+        0.00026322587532582014,
+        1.4789281081841828e-05,
+        5.0864146059758765e-06,
+        3.690333783047577e-17,
+        7.644315401330143e-17,
+        6.142675358237719e-18,
+        5.3509017218060906e-05
+      ],
+      "covariance": [
+        0.010041785064494215,
+        1.906140629920508e-05
+      ],
+      "hard_admissible": [
+        1
+      ],
+      "packet_sha256": "c80efb1865ef7ee3d234ccc5afcbd402fa890be4ca2e61027b71a5554bba66ff"
+    },
+    {
+      "time": 4e-05,
+      "alpha": 99999.99999999999,
+      "seconds": 2.111395932,
+      "solves": {
+        "outer_sweeps": 1,
+        "momentum_predictor_solves": 1,
+        "pressure_system_solves": 1,
+        "epsilon_transport_solves": 1,
+        "k_transport_solves": 1,
+        "bound_calls": 1,
+        "mass_inverse_applications": 76,
+        "bound_residual_accounting_mass_applications": 1,
+        "additional_governing_equation_solves": 0,
+        "additional_correction_or_restoration_solves": 0
+      },
+      "completed": {
+        "momentum_predictor_solve_completed": true,
+        "pressure_system_solve_completed": true,
+        "epsilon_transport_solve_completed": true,
+        "k_transport_solve_completed": true,
+        "scheduled_complete": true
+      },
+      "k_minimum": 0.0250145796399802,
+      "outer_k_minimum": 2.8594659363465856e-05,
+      "epsilon_minimum": 1.0517804849262589e-06,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.038362252223432,
+        "arithmetic_scale": 1.0742367439521068e-18,
+        "point": [
+          -0.16182716041631628,
+          0,
+          0
+        ],
+        "geometry": 0,
+        "extrema_checked": 16
+      },
+      "budget_ratio_minimum": 4.044749745775157,
+      "budget_relative_defect": 0,
+      "continuity_gauge": [
+        9.980166879217265e-20,
+        7.66079207256529e-18,
+        2.879912020664621e-20
+      ],
+      "boundary_defect": 0,
+      "raw_k_linear_residual": 6.776263578034403e-20,
+      "epsilon_linear_residual": 2.710505431213761e-20,
+      "imposed_trace_defect": 6.564505341220828e-21,
+      "refreshed_trace_defect": 3.2982611063159268e-06,
+      "actual_momentum_splitting_defect": 6.172942547611393e-10,
+      "splitting_identity_error": 6.015257414485617e-19,
+      "bound_activations": 0,
+      "bound_algebra": {
+        "bound_active_set_iterations": 0,
+        "bound_mass_factor_applications": 0,
+        "bound_kkt_solves": 0
+      },
+      "selected_refreshed_stage_blocks": [
+        0.0003363587205503198,
+        0.0002613949676260553,
+        1.4683452487326743e-05,
+        5.080302449551632e-06,
+        4.315576760188191e-17,
+        7.454202898356828e-17,
+        5.221274054502061e-18,
+        5.320730360241194e-05
+      ],
+      "covariance": [
+        0.01004163980021459,
+        1.9061043590191812e-05
+      ],
+      "hard_admissible": [
+        1
+      ],
+      "packet_sha256": "407693d0170413c8772170cec97c20b8eb36763a9a36dbc7c5fc9cc2ec047226"
+    },
+    {
+      "time": 5e-05,
+      "alpha": 99999.99999999999,
+      "seconds": 2.110111611,
+      "solves": {
+        "outer_sweeps": 1,
+        "momentum_predictor_solves": 1,
+        "pressure_system_solves": 1,
+        "epsilon_transport_solves": 1,
+        "k_transport_solves": 1,
+        "bound_calls": 1,
+        "mass_inverse_applications": 76,
+        "bound_residual_accounting_mass_applications": 1,
+        "additional_governing_equation_solves": 0,
+        "additional_correction_or_restoration_solves": 0
+      },
+      "completed": {
+        "momentum_predictor_solve_completed": true,
+        "pressure_system_solve_completed": true,
+        "epsilon_transport_solve_completed": true,
+        "k_transport_solve_completed": true,
+        "scheduled_complete": true
+      },
+      "k_minimum": 0.0250145796399802,
+      "outer_k_minimum": 2.85946524768327e-05,
+      "epsilon_minimum": 1.0517804849262589e-06,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.03833288948734115,
+        "arithmetic_scale": 1.0752941382011283e-18,
+        "point": [
+          -0.16182701454256365,
+          0,
+          0
+        ],
+        "geometry": 0,
+        "extrema_checked": 16
+      },
+      "budget_ratio_minimum": 4.044749745775157,
+      "budget_relative_defect": 0,
+      "continuity_gauge": [
+        2.543186342984483e-19,
+        4.829140904312986e-18,
+        2.0328790734103208e-20
+      ],
+      "boundary_defect": 0,
+      "raw_k_linear_residual": 4.0657581468206416e-20,
+      "epsilon_linear_residual": 8.131516293641283e-20,
+      "imposed_trace_defect": 4.067242554957389e-21,
+      "refreshed_trace_defect": 3.2783806718297837e-06,
+      "actual_momentum_splitting_defect": 6.11576552716212e-10,
+      "splitting_identity_error": 2.5455987042951895e-19,
+      "bound_activations": 0,
+      "bound_algebra": {
+        "bound_active_set_iterations": 0,
+        "bound_mass_factor_applications": 0,
+        "bound_kkt_solves": 0
+      },
+      "selected_refreshed_stage_blocks": [
+        0.00033397123330338314,
+        0.00025936315238239785,
+        1.4574919016562122e-05,
+        5.0744990551609065e-06,
+        7.765213682072367e-17,
+        8.03923112849992e-17,
+        3.6856052149426316e-18,
+        5.288659390740735e-05
+      ],
+      "covariance": [
+        0.010041496062037173,
+        1.9060679505642272e-05
+      ],
+      "hard_admissible": [
+        1
+      ],
+      "packet_sha256": "f8d73e504addf9491cf620ac93cdb13d37af59d2ed467bb764eafccff75d9445"
+    },
+    {
+      "time": 6e-05,
+      "alpha": 99999.99999999999,
+      "seconds": 2.368425159,
+      "solves": {
+        "outer_sweeps": 1,
+        "momentum_predictor_solves": 1,
+        "pressure_system_solves": 1,
+        "epsilon_transport_solves": 1,
+        "k_transport_solves": 1,
+        "bound_calls": 1,
+        "mass_inverse_applications": 76,
+        "bound_residual_accounting_mass_applications": 1,
+        "additional_governing_equation_solves": 0,
+        "additional_correction_or_restoration_solves": 0
+      },
+      "completed": {
+        "momentum_predictor_solve_completed": true,
+        "pressure_system_solve_completed": true,
+        "epsilon_transport_solve_completed": true,
+        "k_transport_solve_completed": true,
+        "scheduled_complete": true
+      },
+      "k_minimum": 0.0250145796399802,
+      "outer_k_minimum": 2.8594645584701323e-05,
+      "epsilon_minimum": 1.0517804849262589e-06,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.038305978226065976,
+        "arithmetic_scale": 1.076263254918979e-18,
+        "point": [
+          -0.16182686811928865,
+          0,
+          0
+        ],
+        "geometry": 0,
+        "extrema_checked": 16
+      },
+      "budget_ratio_minimum": 4.044749745775157,
+      "budget_relative_defect": 0,
+      "continuity_gauge": [
+        7.556566564605189e-20,
+        7.401716186506881e-18,
+        5.929230630780102e-20
+      ],
+      "boundary_defect": 0,
+      "raw_k_linear_residual": 6.606856988583543e-20,
+      "epsilon_linear_residual": 9.486769009248164e-20,
+      "imposed_trace_defect": 3.3881317890172014e-21,
+      "refreshed_trace_defect": 3.2574602665258467e-06,
+      "actual_momentum_splitting_defect": 6.055049996082505e-10,
+      "splitting_identity_error": 4.924834843793714e-19,
+      "bound_activations": 0,
+      "bound_algebra": {
+        "bound_active_set_iterations": 0,
+        "bound_mass_factor_applications": 0,
+        "bound_kkt_solves": 0
+      },
+      "selected_refreshed_stage_blocks": [
+        0.00033160848784027593,
+        0.00025735321496431755,
+        1.4463946918521848e-05,
+        5.068969229482333e-06,
+        4.35945093592836e-17,
+        9.048695412974693e-17,
+        1.0749681876916008e-17,
+        5.254910748028351e-05
+      ],
+      "covariance": [
+        0.010041353817713226,
+        1.9060285883253692e-05
+      ],
+      "hard_admissible": [
+        1
+      ],
+      "packet_sha256": "bc247866abf4eac1152a1cc4d58da094ad9bd1b249df58103d52b939c472a067"
+    },
+    {
+      "time": 7.000000000000001e-05,
+      "alpha": 99999.99999999999,
+      "seconds": 2.236796915,
+      "solves": {
+        "outer_sweeps": 1,
+        "momentum_predictor_solves": 1,
+        "pressure_system_solves": 1,
+        "epsilon_transport_solves": 1,
+        "k_transport_solves": 1,
+        "bound_calls": 1,
+        "mass_inverse_applications": 76,
+        "bound_residual_accounting_mass_applications": 1,
+        "additional_governing_equation_solves": 0,
+        "additional_correction_or_restoration_solves": 0
+      },
+      "completed": {
+        "momentum_predictor_solve_completed": true,
+        "pressure_system_solve_completed": true,
+        "epsilon_transport_solve_completed": true,
+        "k_transport_solve_completed": true,
+        "scheduled_complete": true
+      },
+      "k_minimum": 0.0250145796399802,
+      "outer_k_minimum": 2.8594638687088495e-05,
+      "epsilon_minimum": 1.0517804849262589e-06,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.03828125019876408,
+        "arithmetic_scale": 1.0771537521610966e-18,
+        "point": [
+          -0.16182672154097133,
+          0,
+          0
+        ],
+        "geometry": 0,
+        "extrema_checked": 16
+      },
+      "budget_ratio_minimum": 4.044749745775157,
+      "budget_relative_defect": 0,
+      "continuity_gauge": [
+        9.709997259953546e-20,
+        4.98962385603862e-18,
+        1.8295911660692887e-19
+      ],
+      "boundary_defect": 0,
+      "raw_k_linear_residual": 1.2197274440461925e-19,
+      "epsilon_linear_residual": 3.3457801416544863e-20,
+      "imposed_trace_defect": 5.082197683525802e-21,
+      "refreshed_trace_defect": 3.235622618689985e-06,
+      "actual_momentum_splitting_defect": 5.995517162978633e-10,
+      "splitting_identity_error": 5.636739566181352e-19,
+      "bound_activations": 0,
+      "bound_algebra": {
+        "bound_active_set_iterations": 0,
+        "bound_mass_factor_applications": 0,
+        "bound_kkt_solves": 0
+      },
+      "selected_refreshed_stage_blocks": [
+        0.0003292698836818886,
+        0.0002553667523353647,
+        1.4350791257750344e-05,
+        5.063681577831524e-06,
+        3.667137941445459e-17,
+        8.281665767307018e-17,
+        3.3170446934483685e-17,
+        5.2196824164647816e-05
+      ],
+      "covariance": [
+        0.010041213036654126,
+        1.9059883859843782e-05
+      ],
+      "hard_admissible": [
+        1
+      ],
+      "packet_sha256": "47ae5fb016d48cb4fdc9d19193626cd478b55fc0e9a2eb939a2f442bba695503"
+    },
+    {
+      "time": 8e-05,
+      "alpha": 99999.99999999999,
+      "seconds": 2.248675524,
+      "solves": {
+        "outer_sweeps": 1,
+        "momentum_predictor_solves": 1,
+        "pressure_system_solves": 1,
+        "epsilon_transport_solves": 1,
+        "k_transport_solves": 1,
+        "bound_calls": 1,
+        "mass_inverse_applications": 76,
+        "bound_residual_accounting_mass_applications": 1,
+        "additional_governing_equation_solves": 0,
+        "additional_correction_or_restoration_solves": 0
+      },
+      "completed": {
+        "momentum_predictor_solve_completed": true,
+        "pressure_system_solve_completed": true,
+        "epsilon_transport_solve_completed": true,
+        "k_transport_solve_completed": true,
+        "scheduled_complete": true
+      },
+      "k_minimum": 0.0250145796399802,
+      "outer_k_minimum": 2.859463178401116e-05,
+      "epsilon_minimum": 1.0517804849262589e-06,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.038258465403073774,
+        "arithmetic_scale": 1.077974271470396e-18,
+        "point": [
+          -0.1618265751569754,
+          0,
+          0
+        ],
+        "geometry": 0,
+        "extrema_checked": 16
+      },
+      "budget_ratio_minimum": 4.044749745775157,
+      "budget_relative_defect": 0,
+      "continuity_gauge": [
+        1.0193840522774091e-19,
+        1.0994599070981988e-17,
+        1.5585406229479126e-19
+      ],
+      "boundary_defect": 0,
+      "raw_k_linear_residual": 7.453889935837843e-20,
+      "epsilon_linear_residual": 8.131516293641283e-20,
+      "imposed_trace_defect": 1.8709316268824745e-20,
+      "refreshed_trace_defect": 3.212977183787713e-06,
+      "actual_momentum_splitting_defect": 5.937151927895795e-10,
+      "splitting_identity_error": 3.0127241398161353e-19,
+      "bound_activations": 0,
+      "bound_algebra": {
+        "bound_active_set_iterations": 0,
+        "bound_mass_factor_applications": 0,
+        "bound_kkt_solves": 0
+      },
+      "selected_refreshed_stage_blocks": [
+        0.000326954855823667,
+        0.00025340329475210903,
+        1.4235693715288157e-05,
+        5.058608127681933e-06,
+        3.4291907538232175e-17,
+        9.918155733386034e-17,
+        2.8256306647893504e-17,
+        5.1831509687953856e-05
+      ],
+      "covariance": [
+        0.01004107368980738,
+        1.9059481939174395e-05
+      ],
+      "hard_admissible": [
+        1
+      ],
+      "packet_sha256": "f15ac789e73a7b49a4416e24bba6fb705dcb71fd2eb13057c0c1e6bfbcee563a"
+    }
+  ],
+  "limitations": [
+    "not a developed precursor: both streamwise boundaries and top remain prescribed",
+    "no mapped hill governing evolution enabled; original guards and 3000-unknown limit remain",
+    "k/epsilon completion and h_eff are provisional flat-data assumptions, not uniquely measured turbulence or hill-fitted parameters",
+    "eight steps at dt=1e-5 test integration/restart/admissibility only, not physical accuracy or steady preservation"
+  ],
+  "kernel_final_runtime": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/runtime-final-kernel/RANSCaoTamuraBudgetH1Checks",
+    "sha256": "5e4ee65ad1ea8affc2e1258c9f79e59f101cc29f5776a5894de68c5d6b675510",
+    "ldd": "\tlinux-vdso.so.1 (0x00007ffdbe9fc000)\n\tlibstdc++.so.6 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/runtime-final-kernel/lib/libstdc++.so.6 (0x000071eb52000000)\n\tlibm.so.6 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/runtime-final-kernel/lib/libm.so.6 (0x000071eb51f19000)\n\tlibgcc_s.so.1 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/runtime-final-kernel/lib/libgcc_s.so.1 (0x000071eb522a9000)\n\tlibc.so.6 => /media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/runtime-final-kernel/lib/libc.so.6 (0x000071eb51c00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000071eb52311000)\n",
+    "libraries": {
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/runtime-final-kernel/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/runtime-final-kernel/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/runtime-final-kernel/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+      "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/runtime-final-kernel/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+    }
+  }
+}

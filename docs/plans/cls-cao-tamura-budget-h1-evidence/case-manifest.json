@@ -1,0 +1,343 @@
+{
+  "version": "CaoTamuraBudgetH1V1",
+  "data_version": "cao-tamura-2006-v1.1",
+  "snapshot_sha256": "2432937f6ab1b7dd41351e56e3cd4ce31a24e8cc2f63449404af2c3a688b7429",
+  "data_files": {
+    "README.md": "c1286f22350a0412a20d6a0b823277b538f06dc2d486380a3b9a8d26fa5d9528",
+    "extraction.json": "7e5e5fe15fb43c0e6c6c1102197f018ed7cdc758d45e630100977e9de9c370a3",
+    "series.json": "8cef4a13b83c7e9f6afcaecbf7ecc58d861ee54e31df29fa7e8584924e320905",
+    "profiles.csv": "f696657990c1d207a303777f17dd574049239143e6fa2c286f0d87650fd614f2",
+    "reported_scalars.csv": "d746b30d04bb2b5556adc7b1609dd898c57a3c6660b61f636dbe6ed5e2fd3641",
+    "figure_inventory.csv": "a241dbceefd1563407208af3b090dfa67284e19bdd12c02ff45852e27b565120",
+    "source_manifest.json": "8c0cab03d1fe4c1301386539d584a20754d9a0641feaf98e3fdd2f2079e778f8",
+    "uncertainty.json": "b87ba465738bc0665702fd31eebccbe811149acbcc43913e2bde8209719e28ad",
+    "scores.json": "a681bad718a6a72d6543abcad73d91b183d5d955db6933348b866ef35da1afe9"
+  },
+  "source_pdf_sha256": "adffb5c1d740be791211d82ce35778a37a3315a6dc72c56c80b70cc6642a43df",
+  "dataset_counts": {
+    "series": 98,
+    "points": 1151,
+    "scalar_facts": 39
+  },
+  "application": "rough inflow, rough hill; matching rough-flat control",
+  "dimensional_convention": {
+    "Hh_m": 0.04,
+    "U_at_Hh_m_per_s": 1.0,
+    "Uinf_m_per_s": 1.4562340769450457,
+    "nu_m2_per_s": 3.8095238095238094e-06,
+    "Re_H": 10500,
+    "U_at_Hh_over_Uinf": 0.6867027875750893,
+    "u_star_over_Uinf": 0.051,
+    "u_star_m_per_s": 0.07426793792419732,
+    "status": "explicit equivalent scale; absolute Uinf and nu not separately measured",
+    "roughness_Re_derived": 3.89906674102036,
+    "roughness_Re_reported": 3.97,
+    "inconsistency": "retain approximately 1.8% mismatch; no simultaneous calibration"
+  },
+  "geometry": {
+    "Hh_m": 0.04,
+    "L_m": 0.1,
+    "cube_b_m": 0.005,
+    "h_eff_m": 0.0008783118592928004,
+    "aerodynamic_z0_m": 0.0002,
+    "displacement_d0_m": 0.0035,
+    "nominal_delta_m": 0.25,
+    "roof_m": 0.8,
+    "planned_hill_streamwise_extent_m": [
+      -1.0,
+      1.2
+    ],
+    "hill": "Hh*cos(pi*x/(2L))^2 for abs(x)<L; zero outside",
+    "feet_are_explicit_interfaces": true,
+    "wall_normal_Hw_candidates_m": [
+      0.01,
+      0.015,
+      0.02
+    ]
+  },
+  "model": {
+    "formulation": "CLSCalibratedBudgetAWF",
+    "outer": "Regularized",
+    "inner_stress": "Linear",
+    "cMu_wall": 0.09822789532821123,
+    "cLength_wall": 2.510862475219799,
+    "beta": 0.4,
+    "Gamma": 1.0,
+    "gamma0": 0.0,
+    "source": "P_actual-E_C(K); zero redistribution; no E_C/k reaction",
+    "endpoint": "z_K=z_m=Hw; K=transported k at Gamma_H",
+    "cutoff_reference": "counterfactual flat parallel zero-force p_A0(K), not finite-reference production"
+  },
+  "inlet": {
+    "permitted_series": [
+      "f3a_R",
+      "f3b_R",
+      "f3c_R"
+    ],
+    "reserved_flat_check": [
+      "f3d_R"
+    ],
+    "held_out": "all hill series, crest speedup at vertical .01m, ground-extrapolated x_R/Hh=6.5",
+    "mean": "visible Fig3a point interpolation; fixed height weights retained for error reporting",
+    "shear": "Fig3b only used for same-profile tensor discrepancy, not forced into CLS",
+    "k_completion": "k=.5*(Rxx+Ryy+Rzz); Rxx=Fig3c sigma_u^2, Ryy=.5Rxx, Rzz=.25Rxx below measured edge; linear-height k completion",
+    "epsilon_completion": "UnshiftedCLSLengthV1: Cstar^.75*k^1.5/ell; ell=min(kappa*max(z,z0),.025m); unmeasured assumption; epsilon(Hw)=A(K)/Hw for primary strip",
+    "freestream": "last measured U constant by z=.4; positive .3% Uinf weak turbulence; fixed .025m length",
+    "low_height": "U Hermite to zero at floor; k held at lowest allowed measurement below coverage; epsilon length regularized below z0. d0 converts measured ordinates only, never shifts CLS/Yap distance",
+    "interpolation": "C1 Hermite U/exact derivative, positive loglinear k/epsilon in native provider",
+    "profile_file": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/input/finite-inflow.txt",
+    "profile_sha256": "9375601441e2c70fb87cf8f31de305afd4b67fd2f82a750f9274f6bb68eed697",
+    "knot_columns": [
+      "z",
+      "U",
+      "dU_dz",
+      "k",
+      "epsilon"
+    ],
+    "knots": [
+      [
+        0.0,
+        0.0,
+        64.48977084060293,
+        0.02382584494882016,
+        7.323514485784722
+      ],
+      [
+        0.010240861264000001,
+        0.6604307961257674,
+        31.25165651276539,
+        0.023833071369590494,
+        0.1430904374507295
+      ],
+      [
+        0.015311355771999999,
+        0.7727261413540956,
+        15.405686865873276,
+        0.025093887660224544,
+        0.10339876465703203
+      ],
+      [
+        0.020232034932,
+        0.8309780168725505,
+        10.496374603806442,
+        0.025019925479814464,
+        0.07790521408724625
+      ],
+      [
+        0.030254565304000003,
+        0.9230604512883064,
+        8.489331330611384,
+        0.024181619194342654,
+        0.0495010285541373
+      ],
+      [
+        0.04,
+        1.0,
+        7.894932459326188,
+        0.020882559728068798,
+        0.0300464163428469
+      ],
+      [
+        0.04027593432,
+        1.00217848281961,
+        7.080341055110019,
+        0.02079838395103934,
+        0.029660320308115565
+      ],
+      [
+        0.04528836084,
+        1.0319765092296347,
+        5.981708808569966,
+        0.01971745237779134,
+        0.02434818946053159
+      ],
+      [
+        0.05026826936,
+        1.0619504093978342,
+        5.311391340661701,
+        0.01926013434942019,
+        0.02117737410167377
+      ],
+      [
+        0.060228086320000006,
+        1.108073282164732,
+        4.038193094142123,
+        0.016320803253931912,
+        0.01463350682821084
+      ],
+      [
+        0.08030566512000001,
+        1.1779453831204214,
+        3.071930481892539,
+        0.014521207627471255,
+        0.012281183574006156
+      ],
+      [
+        0.10025897848,
+        1.2328179714974996,
+        2.6040491634471308,
+        0.01195032782751777,
+        0.009168659601168956
+      ],
+      [
+        0.12027384388,
+        1.282307569056886,
+        2.2121290739925215,
+        0.009660430309350994,
+        0.00666393616396595
+      ],
+      [
+        0.16023969992,
+        1.3604331705116983,
+        1.758633103788982,
+        0.0061866374378773785,
+        0.003415215543792968
+      ],
+      [
+        0.20026943072000003,
+        1.4244072218696828,
+        0.8756487748759181,
+        0.0024905252316738996,
+        0.0008723133908027417
+      ],
+      [
+        0.2502891738,
+        1.4538660634034928,
+        0.092863990723129,
+        0.0003991795634063467,
+        5.597428679447889e-05
+      ],
+      [
+        0.3002496876,
+        1.456384826296691,
+        0.0,
+        7.62043523326564e-05,
+        4.668805533024774e-06
+      ],
+      [
+        0.4,
+        1.456384826296691,
+        0.0,
+        2.8628338772555857e-05,
+        1.0750541550946535e-06
+      ],
+      [
+        0.8,
+        1.456384826296691,
+        0.0,
+        2.8628338772555853e-05,
+        1.0750541550946535e-06
+      ]
+    ],
+    "reference_frame": {
+      "origin": [
+        -0.2,
+        0,
+        0
+      ],
+      "flow": [
+        1,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "height": "global physical z above upstream floor"
+    },
+    "fitted_values_modified": false,
+    "weighted_mean_error_at_measured_knots": 0.0,
+    "query_file": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/input/permitted-queries.txt",
+    "query_sha256": "032b1b325c09d15e619076bf672392ccf342b12027c4a55197d87c02ae75aff2"
+  },
+  "data_policy": {
+    "point_visibility": "retain original; zero-weight points not fitted",
+    "weights": "frozen normalized per-series Voronoi weights",
+    "uncertainty": "extraction envelope is not a statistical confidence interval; retain all frozen ambiguity/coverage rules"
+  },
+  "boundaries": {
+    "compatibility_implemented": "native external policy fixes both x boundaries and top; ground velocity no-slip, k natural, regional pressures/common gauge",
+    "precursor_planned": "inlet profile, developed/weak outlet, top treatment and flux/gauge qualification remain H2"
+  },
+  "old_generator_reuse": "data definitions and affine tensor topology only; no EP/collar/P-N/fallback/old wall coefficients",
+  "selected_preflight": {
+    "Hw": 0.015,
+    "h_eff": 0.0008783118592928004,
+    "calibration_velocity_error": 2.220446049250313e-16
+  },
+  "archived_manifest_sha256": "93ee8c737722d6dacb282c9bef1c29f36c77a168f2fd00a62aa4d66e6a978805",
+  "interpretation_erratum": {
+    "archived_inputs_unchanged": true,
+    "epsilon": "The archived input prose overstates exact matching of the log-interpolated finite epsilon completion. Its value at Hw=.015 is .10548224438480716; the independent accepted AWF trace is .1050450587819008. The native constrained projection/Lift imposes the latter. No transported epsilon is overwritten after k.",
+    "native_inner_completion": "The fresh native inner U is AWF no-slip U scaled to finite U(Hw); inner k is the nonconstant budget-reference solution anchored at completed K(Hw), with natural zero ground flux. It is not the raw inferred RMS completion below Hw.",
+    "neutral_metrics": "The original eight-step raw reports contain legacy neutral-log scale ratios. These are not experimental reference errors; the final source explicitly labels them diagnostic-only. Use strict finite readbacks and permitted-data queries for actual profile errors."
+  },
+  "native_case": {
+    "version": "CaoTamuraBudgetH1V1",
+    "case": "rough-flat-finite-profile-compatibility-tail-v1",
+    "physical_steps": 0,
+    "dt": 1e-05,
+    "endpoint_time": 0.0,
+    "scaling": "SI U(Hh)=1, Hh=.04, Re_H=10500",
+    "Hw": 0.015,
+    "z_K": 0.015,
+    "z_m": 0.015,
+    "h_eff": 0.0008783118592928004,
+    "mesh": {
+      "x": [
+        -0.2,
+        -0.1,
+        0.0,
+        0.1,
+        0.2
+      ],
+      "z": [
+        0.0,
+        0.00025,
+        0.001,
+        0.003,
+        0.015,
+        0.03,
+        0.06,
+        0.1,
+        0.2,
+        0.25,
+        0.3,
+        0.4,
+        0.5,
+        0.8
+      ],
+      "velocity_scalar_degree": 3,
+      "pressure_degree": 1,
+      "points": [
+        8,
+        8
+      ],
+      "revision": "completion-tail-v1",
+      "added_outer_knots": [
+        0.25,
+        0.4
+      ],
+      "reason": "preserved coarse T0 epsilon undershoot near .304; resolve steep measured-to-freestream completion, no field clipping"
+    },
+    "native_size_estimate": 2000,
+    "native_field_sizes": [
+      520,
+      520,
+      520,
+      364,
+      25,
+      50,
+      1
+    ],
+    "profile_sha256": "9375601441e2c70fb87cf8f31de305afd4b67fd2f82a750f9274f6bb68eed697",
+    "fresh_native_initialization": true,
+    "boundary_scope": "both streamwise boundaries and top fixed; compatibility test, not developed experimental precursor",
+    "physical_map": "affine flat; hill production remains guarded",
+    "initialization": "native finite profile projection, AWF inner U/k completion, dependent epsilon trace Lift once during setup",
+    "restart": null,
+    "xml_sha256": "164f9e00e7d12f858cd6263c49bee6239a30334dcd6f9cea32b1230c843204f0"
+  }
+}

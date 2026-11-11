@@ -1,0 +1,137 @@
+{
+  "status": "PASS",
+  "data_version": "cao-tamura-2006-v1.1",
+  "series": 98,
+  "points": 1151,
+  "quality": {
+    "visible": 1133,
+    "legend_occluded": 18
+  },
+  "roles": {
+    "calibration": 6,
+    "flat_crosscheck": 2,
+    "duplicate_crosscheck": 22,
+    "validation": 50,
+    "wake_mean_crosscheck": 14,
+    "dimensional_holdout": 4
+  },
+  "checks": [
+    "source binding",
+    "series/count integrity",
+    "finite values",
+    "positive extraction envelopes",
+    "vertical/physical-height transform",
+    "normalised per-series height weights",
+    "canonical extraction recipe",
+    "frozen snapshot file hashes",
+    "calibration/holdout separation",
+    "figure inventory and scalar identifiers"
+  ],
+  "source_consistency": {
+    "scope": "data/source consistency only; no CFD comparison",
+    "duplicate_figure_checks": [
+      {
+        "first": "f4a_SS",
+        "second": "f8_SS",
+        "points": 69,
+        "maximum_absolute_difference": 0.010361528863302882,
+        "comparison_bound": 0.04
+      },
+      {
+        "first": "f4b_RR",
+        "second": "f8_RR",
+        "points": 56,
+        "maximum_absolute_difference": 0.007602813708456502,
+        "comparison_bound": 0.04
+      },
+      {
+        "first": "f5a_SS",
+        "second": "f10_SS",
+        "points": 102,
+        "maximum_absolute_difference": 0.001841791199999998,
+        "comparison_bound": 0.013
+      },
+      {
+        "first": "f5b_RR",
+        "second": "f10_RR",
+        "points": 81,
+        "maximum_absolute_difference": 0.001057010700440425,
+        "comparison_bound": 0.013
+      }
+    ],
+    "Reynolds_consistency": {
+      "inflows": [
+        {
+          "case": "S",
+          "U_H_over_Uinf": 0.7935109159403773,
+          "Uinf_over_nu_per_m_from_Re_H": 378066.6326996583,
+          "Uinf_m_per_s_IF_nu_1p5em5": 5.670999490494874,
+          "f3e_vs_f3a_max_U_over_Uinf_difference": 0.05014327228739135,
+          "f3e_role": "duplicate cross-check, excluded from calibration"
+        },
+        {
+          "case": "R",
+          "U_H_over_Uinf": 0.6867027876284083,
+          "Uinf_over_nu_per_m_from_Re_H": 382261.44516839384,
+          "Uinf_m_per_s_IF_nu_1p5em5": 5.733921677525908,
+          "f3e_vs_f3a_max_U_over_Uinf_difference": 0.043503130629989895,
+          "f3e_role": "duplicate cross-check, excluded from calibration"
+        }
+      ],
+      "rough_Uinf_over_nu_per_m_from_Re_s": 389215.6862745098,
+      "rough_Re_s_from_Re_H": 3.899066740717617,
+      "interpretation": "About 1.8% rough Re_s discrepancy; approximate source values, no unique absolute pair (Uinf, nu)"
+    },
+    "text_vs_crest_markers": [
+      {
+        "case": "SS",
+        "reported": 0.457,
+        "digitized": 0.4565189827,
+        "digitized_yprime_over_H": 0.254774146
+      },
+      {
+        "case": "RR",
+        "reported": 0.875,
+        "digitized": 0.8739080529,
+        "digitized_yprime_over_H": 0.254774146
+      },
+      {
+        "case": "RS",
+        "reported": 0.918,
+        "digitized": 0.9176693561,
+        "digitized_yprime_over_H": 0.2499794412
+      },
+      {
+        "case": "SR",
+        "reported": 0.245,
+        "digitized": 0.2451255837,
+        "digitized_yprime_over_H": 0.2499794412
+      }
+    ],
+    "traverse_ranges": {
+      "f9_SS": [
+        3.751219209,
+        8.747649781
+      ],
+      "f9_RR": [
+        3.751219209,
+        8.747649781
+      ],
+      "f12_SS": [
+        3.749134239,
+        8.500852276
+      ],
+      "f12_RR": [
+        3.749134239,
+        8.500852276
+      ]
+    }
+  },
+  "pdf_verification": {
+    "host": "Mac local source PDF",
+    "path": "/Users/jay/Documents/nektar-v2026/docs/literature/Experimental study on roughness effects on turbulent boundary layer flow over a two-dimensional steep hill.pdf",
+    "bytes": 497768,
+    "sha256": "adffb5c1d740be791211d82ce35778a37a3315a6dc72c56c80b70cc6642a43df",
+    "matches": true
+  }
+}
