@@ -56,7 +56,16 @@ while not (r/'worker-guard.stop').exists():
     try:os.kill(pid,signal.SIGCONT);paused.discard(pid);events.append(['resume',root,pid])
     except ProcessLookupError:pass
  # Count every owned helper thread, irrespective of its executable's name.
- active=sum(d['threads'] for pid,d in rows.items() if (pid in covered or relevant(d)) and not d['state'].startswith(('T','Z')));maximum=max(maximum,active)
+ active=sum(d['threads'] for pid,d in rows.items() if (pid in covered or relevant(d)) and not d['state'].startswith(('T','Z')))
+ if active>maximum:
+  # Retain attribution even when no owned family is running and therefore no
+  # pause event is emitted. Do not write unrelated command-line arguments.
+  with (r/'worker-guard-highwater.jsonl').open('a') as f:
+   f.write(json.dumps(dict(time_unix=time.time(),active_before_actions=active,
+    external=external,owned_roots=[root for root,_ in families],
+    processes=[dict(pid=pid,parent=d['parent'],threads=d['threads'],name=d['name'],state=d['state'],owned=pid in covered)
+     for pid,d in rows.items() if (pid in covered or relevant(d)) and not d['state'].startswith(('T','Z'))]))+'\n')
+ maximum=max(maximum,active)
  if events:
   with (r/'worker-guard-events.jsonl').open('a') as f:f.write(json.dumps(dict(time_unix=time.time(),external=external,active_before_actions=active,allowed_families=allowed,events=events))+'\n')
  if int(time.time()-started)%10==0:(r/'worker-guard-status.json').write_text(json.dumps(dict(external=external,active_before_actions=active,allowed_families=allowed,paused_pids=sorted(paused),maximum_observed_active_before_actions=maximum,time_unix=time.time()))+'\n')
