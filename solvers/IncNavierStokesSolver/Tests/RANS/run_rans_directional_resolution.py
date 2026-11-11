@@ -20,7 +20,7 @@ def main():
     r=a.root.resolve();old=a.old_root.resolve();s=Path(__file__).parent;runtime=r/'runtime';cfg=dict(model='A95',policy='Natural',wall='Accepted')
     os.environ.update(THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'),PYTHONDONTWRITEBYTECODE='1',NEKTAR_RANS_PROBE_TIMEOUT='14400')
     contract=load(a.contract);require(contract['schema']=='DirectionalResolutionExperimentV1','directional_contract_version')
-    prerequisites=['directional-layout-v2/results.json','isotropic-compatibility-v1/results.json','directional-history-v2/results.json',
+    prerequisites=['directional-layout-v2/results.json','isotropic-compatibility-v1/results.json','directional-history-v3/results.json',
         'directional-geometry-v1/results.json','frozen-scalar-reconciliation-v1/results.json']
     proofs={}
     for name in prerequisites:
@@ -32,7 +32,7 @@ def main():
     # new separately sealed supplement recomputes target-layout primitives and
     # completes signature/CLS tests; it does not relabel that failed job.
     proofs['compatibility-v1-execution.json']=sha(r/'compatibility-v1-execution.json')
-    require(load(r/'directional-history-v2/results.json')['actual_unknowns']==2769,'directional_native_count_unverified')
+    require(load(r/'directional-history-v3/results.json')['actual_unknowns']==2769,'directional_native_count_unverified')
     for name in ('runtime-resolution-v3','runtime-budget-v5'):
         if not (r/name).exists():(r/name).symlink_to(runtime,target_is_directory=True)
         require((r/name).resolve()==runtime,'directional_runtime_alias_foreign')

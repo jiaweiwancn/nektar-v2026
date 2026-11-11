@@ -13,15 +13,17 @@ from run_cls_epawf_picard import set_info,set_parameter,write
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--old-root',type=Path,required=True);a=p.parse_args()
-    r=a.root.resolve();runtime=r/'runtime';source=r/'directional-history-v1';out=r/'directional-history-v2'
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--old-root',type=Path,required=True)
+    p.add_argument('--output-label',default='directional-history-v3');a=p.parse_args()
+    r=a.root.resolve();runtime=r/'runtime';source=r/'directional-history-v1';out=r/a.output_label
     os.environ.update(THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'))
     q=load(source/'request-manifest.json')['request'];require(RequestManifest(source,q,True).completed(source),'history_source_not_sealed')
     old=load(source/'results.json');require(old['status']=='fail' and old['failure']=="ValueError('directional_axis_points_history_not_rejected')",'history_supplement_wrong_failure')
     require(q['runtime']==runtime_identity(runtime/'IncNavierStokesSolver'),'history_supplement_runtime_changed')
-    seal=RequestManifest(out,dict(schema='DirectionalNativeHistorySupplementV1',source_request_sha256=sha(source/'request-manifest.json'),
+    seal=RequestManifest(out,dict(schema='DirectionalNativeHistorySupplementV2',source_request_sha256=sha(source/'request-manifest.json'),
         source_failed_result_sha256=sha(source/'results.json'),runtime=q['runtime'],mesh_sha256=q['mesh_sha256'],
         negative_fixture_collection='NoCollection, before inherited driver allocation; same production checkpoint reader and strict per-axis signature',
+        startup_policy='explicit case.opt and native-clone .opt select NoCollection and prevent missing-opt automatic timing; input files are hashed, not checkpoint modifications',
         scope='reuse only recomputed passing target-layout histories, then independently execute both axis-signature rejections and ordinary CLS controls'))
     events=[];checks=[]
     def run(name,xml,expected=True):
@@ -57,6 +59,11 @@ def main():
             name='changed-axis-points-'+str(axis);folder=out/name;folder.mkdir();root=ET.parse(source/name/'case.xml').getroot()
             for e in root.findall('COLLECTIONS'):root.remove(e)
             ET.SubElement(root,'COLLECTIONS',{'DEFAULT':'NoCollection'})
+            # SessionReader enables timing when an .opt sidecar is absent even
+            # with an explicit XML default. Pin the existing NoCollection path
+            # for both original and native-clone sessions before construction.
+            for sidecar in ('case.opt','case-m4-native-rank0.opt'):
+                (folder/sidecar).write_text('<NEKTAR><COLLECTIONS DEFAULT="NoCollection"/></NEKTAR>\n')
             set_info(root,'RANSWallCheckpoint',str(folder/'checkpoint'));write(root,folder/'case.xml')
             _,code,log=run(name,folder/'case.xml',False)
             require(code!=0 and 'signature mismatch' in log,'axis_signature_rejection_wrong_reason:'+str(axis))
