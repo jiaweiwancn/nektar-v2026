@@ -14,7 +14,7 @@ import time
 from rans_qualification import THREADS, write_json
 os.environ.update(THREADS)
 from qualify_rans_preservation import load
-from rans_request_manifest import RequestManifest, sha, runtime_identity
+from rans_request_manifest import RequestManifest, sha, runtime_identity, canonical
 from rans_duration_contract import MEMBERS, prefix, aggregate, scalar_coverage, require
 from rans_preservation_oracle import Reference
 from make_rans_balanced_meshes import specifications
@@ -66,7 +66,7 @@ def main():
         previous=load(reuse/'request-manifest.json');old_request=previous['request']
         require(RequestManifest(reuse,old_request,True).completed(reuse),'previous_short_execution_not_sealed')
         for key in ('numerical_operator','geometry_receipt_sha256','configurations','spaces','timesteps','required_times','runtime','source_sha256'):
-            require(old_request[key]==intent[key],'reuse_short_request_mismatch:'+key)
+            require(canonical(old_request[key])==canonical(intent[key]),'reuse_short_request_mismatch:'+key)
         intent['explicit_reuse']=dict(path=str(reuse),manifest_sha256=sha(reuse/'request-manifest.json'),
             policy='sealed successful jobs only; retry missing comparison-output setup failure; scientific failures remain failed')
     out=r/a.output_label;seal=RequestManifest(out,intent,a.resume)
