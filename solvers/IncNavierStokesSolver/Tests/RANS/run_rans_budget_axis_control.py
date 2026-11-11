@@ -21,7 +21,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for key in ('root','hypothesis','binding','mesh-file'):
         p.add_argument('--'+key,type=Path,required=True)
-    p.add_argument('--control',choices=('NormalEndpointsV1','StreamwiseP6V1'),required=True)
+    p.add_argument('--control',choices=('NormalEndpointsV1','StreamwiseBaseV1','StreamwiseP6V1'),required=True)
     p.add_argument('--label',required=True)
     p.add_argument('--dt',type=float,choices=(.002,.001),required=True)
     p.add_argument('--amplitude',type=float,choices=(0.,2e-5),required=True)
@@ -45,16 +45,21 @@ def main():
     spec=load(a.mesh_file)
     field_degrees=[6,5] if a.control=='StreamwiseP6V1' else [5,5]
     pressure_degrees=[v-2 for v in field_degrees]
-    knots=base['knots'] if a.control=='StreamwiseP6V1' else sorted(set(base['knots']+[.000625,3.75]))
+    knots=sorted(set(base['knots']+[.000625,3.75])) if a.control=='NormalEndpointsV1' else base['knots']
     require(spec['knots']==knots and spec['degree']==5 and spec['field_degrees']==field_degrees and
             spec['pressure_degrees']==pressure_degrees and spec['control']==a.control,'axis_control_space_mismatch')
-    expected=2769 if a.control=='StreamwiseP6V1' else 2589
+    expected={'StreamwiseP6V1':2769,'StreamwiseBaseV1':2355,'NormalEndpointsV1':2589}[a.control]
     require(h['expected_unknowns']==expected and expected<=3000,'axis_control_backend_limit')
     sample=pilot.probe
     def checked_probe(*args,**kwargs):
         result=sample(*args,**kwargs)
         require(result['observation']['numerical_operator']==OPERATOR,'axis_control_runtime_operator_mismatch')
         require(sum(result['observation']['sizes'])==expected,'axis_control_actual_unknown_count_mismatch')
+        for b,elements in enumerate(result['observation']['field_basis_configuration']):
+            expected_degrees=pressure_degrees if b>=4 else field_degrees
+            for element in elements:
+                require([axis[1]-1 for axis in element['axes_type_modes_pointsType_points']]==expected_degrees,
+                        'axis_control_consumed_directional_basis_mismatch')
         return result
     pilot.probe=checked_probe
     initialize=pilot.configure

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Native tensor rows, faces, masses, continuous trace and finite mixed rank."""
-import argparse,os,sys,tempfile,xml.etree.ElementTree as ET
+import argparse,os,sys,tempfile,subprocess,xml.etree.ElementTree as ET
 from pathlib import Path
 os.environ.update(dict.fromkeys(('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','NUMEXPR_NUM_THREADS'),'1'))
 import numpy as np
 from scipy.linalg import block_diag,cholesky,solve_triangular,svdvals
 from run_a93_a95_e94e95_matrix import case_xml
 from run_cls_epawf_picard import write
-from qualify_rans_preservation import Q
+from qualify_rans_preservation import Q,load,replay_request
 from diagnose_rans_balanced_spatial import run_probe
 from rans_qualification import write_json
 from rans_request_manifest import RequestManifest,runtime_identity
@@ -78,18 +78,31 @@ def main():
     if a.output is None:a.output=Path(tempfile.mkdtemp(prefix='rans-directional-native-',dir=os.environ.get('TMPDIR')))/'verification'
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     layout={'P3':([3,3],[1,1]),'P4':([4,4],[2,2]),'P5':([5,5],[3,3]),'X6Z5':([6,5],[4,3])}
-    manifest=RequestManifest(a.output,dict(schema='DirectionalNativeQualificationV1',layouts=layout,knots=[0.,.1,2.,4.],
+    manifest=RequestManifest(a.output,dict(schema='DirectionalNativeQualificationV2',layouts=layout,knots=[0.,2.,4.],
+        fixture='read-only projected scalar/pressure seed, velocity multiplied by .01; its own fixed boundary and reference, no evolution or neutral-equilibrium claim',
         runtime={n:runtime_identity(a.runtime/n) for n in ('RANSPreservationProbe','RANSNewModelsProbe')},
         tensor_limits=[3e-12,3e-12,3e-12,2e-10,2e-10,3e-12,5e-12,5e-12],rank_relative_limit=1e-11))
     rows={};files=[]
     try:
         for name,(degree,pressure) in layout.items():
             folder=a.output/name;case_xml(folder,'A95','Natural','Accepted',steps=0,degree=degree[1],quadrature=Q[1],
-                descriptor_probe=a.runtime/'RANSNewModelsProbe',radial_knots=[0.,.1,2.,4.],boundary_policy='FrozenReferenceV1')
+                descriptor_probe=a.runtime/'RANSNewModelsProbe',radial_knots=[0.,2.,4.],boundary_policy='FrozenReferenceV1')
             root=ET.parse(folder/'case.xml').getroot()
             for e in root.findall('./EXPANSIONS/E'):e.set('NUMMODES',','.join(str(x+1) for x in (pressure if e.get('FIELDS')=='p' else degree)))
             write(root,folder/'case.xml')
-            packet,_=run_probe(a.runtime,folder,dict(operation='neutral',grid=[],export_basis=False,export_tensor_validation=True,export_mixed_space=True))
+            # A two-element logarithmic interpolant is not an admissible neutral
+            # pilot. Use its coefficients only as a construction seed. Retain its
+            # physical outcome; the actual read-only fixture must pass all gates.
+            write_json(folder/'seed-request.json',dict(operation='neutral',grid=[],export_basis=False))
+            with (folder/'seed.log').open('x') as stream:
+                code=subprocess.run([str(a.runtime/'RANSPreservationProbe'),'case.xml','seed-request.json','seed-packet.json'],cwd=folder,stdout=stream,stderr=subprocess.STDOUT).returncode
+            seed=load(folder/'seed-packet.json');require(seed.get('execution')=='completed','tensor_fixture_seed_construction_failed')
+            write_json(folder/'seed-outcome.json',dict(exit_code=code,status=seed['status'],scope='unqualified coefficient construction only; no history or evolution'))
+            state=np.array(seed['reference']);end=int(seed['observation']['offsets'][2]);state[:end]*=.01
+            request=replay_request(seed,[],state=state.tolist());request['reference']=state.tolist()
+            request['fixed_boundary']=[[row,value*(.01 if row<end else 1.)] for row,value in seed['fixed_boundary']]
+            request.update(export_tensor_validation=True,export_mixed_space=True)
+            packet,_=run_probe(a.runtime,folder,request)
             for b,row in enumerate(packet['tensor_validation']['fields']):
                 require(row['axis_degrees']==[* (degree if b<4 else pressure),0],'requested_axis_orders_not_constructed')
             files += [folder/'case.xml',folder/'request.json',folder/'packet.json.gz',folder/'probe.log'];rows[name]=classify(packet)
