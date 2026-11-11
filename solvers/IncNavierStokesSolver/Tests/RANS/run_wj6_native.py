@@ -108,6 +108,7 @@ class Study(WJ5Study):
         require(volume(self.root)<=limits['policy_output_bytes'],'RESOURCE_LIMIT: policy output ceiling')
         label=str(folder.resolve());self.ledger.reserve(label,intent,steps,seconds)
         not_launched=False
+        inspection_start=time.monotonic()
         try:metrics=run_limited(argv,folder,folder/'command.log',limits,kind,seconds)
         except RuntimeError as error:
             # A denied worker reservation precedes Popen. Preserve and charge
@@ -115,7 +116,7 @@ class Study(WJ5Study):
             if 'RESOURCE_LIMIT:' not in str(error) or (folder/'command.log').exists() or (folder/'resource-time.txt').exists():raise
             not_launched=True
             with (folder/'command.log').open('x') as stream:stream.write(str(error)+'\n')
-            metrics=dict(exit_code=125,limit_reason=str(error),seconds=0.,peak_rss_bytes=0,
+            metrics=dict(exit_code=125,limit_reason=str(error),seconds=time.monotonic()-inspection_start,peak_rss_bytes=0,
                 peak_process_threads=0,output_bytes=volume(folder),timeout_seconds=seconds,
                 limits=limits,allocation=None,threads=THREADS,not_launched=True)
         report=folder/'case.evolution.json';d=read(report) if report.exists() else None
