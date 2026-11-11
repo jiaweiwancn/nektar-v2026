@@ -36,7 +36,7 @@ def main():
     from wj4_measure import comparison
     from wj4_qualification import sensitivity_sequence
     from wj6_qualification import paired_envelope
-    from wj6_resources import DEFAULT, volume
+    from wj6_resources import DEFAULT, volume, scientific_workers
     from wj_qualification import aggregate, component
     from run_cls_epawf_picard import require
     started = time.time()
@@ -60,10 +60,11 @@ def main():
         projection = read(native_root/'Tx-resource-projection.json')
         estimate = count*(2*max(max(v) for v in projection['measured_observation_seconds'].values())+
                           projection['parent_seconds_per_observation_pair'])*1.25
+        estimate += 60*count
         totals = s.ledger.totals()
         fits = totals['seconds']+estimate+600+9*projection['native_seconds_per_step_bounds']['coarse'] <= 10800
         plan = dict(schema='WJ6Order10RowPlanV1', status='PASS' if fits else 'RESOURCE_LIMIT', observations=count,
-            estimated_seconds=estimate, closure_seconds=600, transaction_attempts_held=9, totals=totals,
+            estimated_seconds=estimate,prelaunch_wait_seconds_per_observation=60,closure_seconds=600, transaction_attempts_held=9, totals=totals,
             inputs=artifacts([out/'original-summary.json', native_root/'Tx-resource-projection.json']),
             code=artifacts([Path(__file__)]), governing_attempts=0)
         write_once(out/'resource-plan.json', plan)
@@ -83,6 +84,13 @@ def main():
                         'RESOURCE_LIMIT: combined original/supplement output reservation')
                 oldq = Path(c['quadrature']['independent']['path'])
                 require(file_hash(oldq) == c['quadrature']['independent']['sha256'], 'original independent-order bytes changed')
+                wait_start=time.monotonic();allocations=[]
+                while True:
+                    allocation=scientific_workers();allocations.append(dict(elapsed=time.monotonic()-wait_start,**allocation))
+                    if allocation['workers']<=60:break
+                    require(time.monotonic()-wait_start<60,'RESOURCE_LIMIT: bounded passive prelaunch allocation wait')
+                    time.sleep(2)
+                write_once(out/('allocation-'+tag+'-'+str(int(c['steps']))+'.json'),dict(samples=allocations,reserved_workers=12,limit=72))
                 d = read(c['report'])
                 m, q = s.measure('order10-rows-'+tag+'-'+str(int(c['steps'])), d, Path(c['report']).parent,
                                  nx=t['nx'], assembly=False, order=10, xorder=6, diagnostics=True)
@@ -141,7 +149,8 @@ def main():
             records=file_identity(out/'records.json'),physical_samples_unchanged=True, seconds=time.time()-started)
         write_once(out/'qualification.json', value)
     except Exception as error:
-        gate = component('RESOURCE_LIMIT' if 'RESOURCE_LIMIT' in str(error) else 'OBSTRUCTED', str(error))
+        resource_failed=any(read(f).get('failure') for f in out.rglob('receipt.json'))
+        gate = component('RESOURCE_LIMIT' if resource_failed or 'RESOURCE_LIMIT' in str(error) else 'OBSTRUCTED', str(error))
         write_once(out/'failure.json', dict(gate=gate, code=artifacts([Path(__file__)])))
         raise
     finally:
