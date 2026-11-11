@@ -848,7 +848,8 @@ std::string RANSWallEvolutionPatch::WJWeakLoads(const Vector &state,const Vector
             const double r=inner?(z-lo)/(H-lo):(hi-z)/(hi-H),dr=inner?1/(H-lo):-1/(hi-H);
             const double phi=x*r;const RANSVector chartGradient{dx*r,0,x*dr};
             auto physicalGradient=[&](const RANSVector &g){RANSVector result{};const auto inverse=m_mapping.At(v.coordinate).inverse;
-                for(int a=0;a<3;++a)for(int b=0;b<3;++b)result[a]+=g[b]*inverse[b][a];return result;};
+                for(int a=0;a<3;++a)for(int b=0;b<3;++b){result[a]+=g[b]*inverse[b][a];}
+                return result;};
             const auto dphi=physicalGradient(chartGradient);
             RANSTensor G{},stress{};RANSVector u{};for(int a=0;a<m_dimension;++a){u[PhysicalAxis(a)]=v.Value(state,offset[a]);G[PhysicalAxis(a)]=v.Gradient(state,offset[a]);}
             const double k=v.Value(state,offset[K()]),pi=q.p.Value(state,offset[inner?InnerPressure():OuterPressure()]);

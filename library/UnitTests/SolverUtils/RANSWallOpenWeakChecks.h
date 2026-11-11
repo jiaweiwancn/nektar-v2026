@@ -16,7 +16,8 @@ std::string Weak(const RANSWallEvolutionPatch &p,const Vector &s,const Vector &h
     std::vector<std::vector<Vector>> tests(3);
     for(int mode=0;mode<3;++mode)for(int block=0;block<p.Gauge();++block)
         tests[mode].push_back(p.fields[block]->Project([&](const Vec &q){
-            if(mode==0)return 1.;if(mode==1)return q[0]/5;
+            if(mode==0)return 1.;
+            if(mode==1)return q[0]/5;
             return q[2]<H/2 || q[2]>outerSupport?0.:q[2]<H?(q[2]-H/2)/(H/2):(outerSupport-q[2])/(outerSupport-H);}));
     auto contract=[&](const Vector &r)
     {
