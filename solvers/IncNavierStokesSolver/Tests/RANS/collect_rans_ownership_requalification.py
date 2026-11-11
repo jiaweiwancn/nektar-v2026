@@ -12,6 +12,34 @@ from qualify_rans_preservation import load
 from rans_request_manifest import sha, RequestManifest
 from rans_ownership_contract import SCHEMA, OPERATOR, classify_scope
 from rans_qualification import write_json
+from rans_duration_contract import identity, prefix, require, required_times
+
+
+def short_matrix_coverage(root, short):
+    """A pass label cannot replace any of the twelve required receipt bodies."""
+    configurations=[dict(model=m,policy='Natural',wall=w)
+                    for m in ('A93','A95','E94E95') for w in ('Accepted','EP')]
+    errors=[];receipts=[];rows=(short or {}).get('configurations',{})
+    if set(rows)!={prefix(**cfg) for cfg in configurations}:errors.append('short_configuration_coverage')
+    for cfg in configurations:
+        tag=prefix(**cfg)
+        try:
+            row=rows[tag];identity(row['configuration'],cfg)
+            require(row['numerical_operator']==OPERATOR,'short_operator_mismatch')
+            required_times(row['milestones'],(.0016,.016))
+            require(len(row['milestones'])==2,'short_time_coverage')
+            require(row['status']=='pass','short_configuration_failed')
+            for milestone in row['milestones']:
+                path=Path(milestone['receipt']).resolve();path.relative_to(root.resolve())
+                require(sha(path)==milestone['sha256'],'short_receipt_hash_mismatch')
+                body=load(path);identity(body['configuration'],cfg)
+                require(body['numerical_operator']==OPERATOR,'short_receipt_operator_mismatch')
+                require(abs(body['time']-milestone['time'])<=1e-13,'short_receipt_time_mismatch')
+                require(body['status']==milestone['status']=='pass','short_receipt_failed')
+                receipts.append(dict(configuration=cfg,time=body['time'],path=str(path),sha256=sha(path)))
+        except (KeyError,ValueError,OSError) as error:errors.append(tag+':'+str(error))
+    return dict(status='pass' if not errors and len(receipts)==12 and (short or {}).get('status')=='pass' else 'failed_unresolved_or_incomplete',
+                required_times=[.0016,.016],required_receipts=12,verified_receipts=receipts,failures=errors)
 
 
 def collect(root,output,previous_attempts):
@@ -41,8 +69,9 @@ def collect(root,output,previous_attempts):
         'physical-budget-bindings/*/results.json','physical-budget-diagnosis/*/results.json',
         'physical-postprocessing/*.json','common-wall-response/results.json',
         'response-quadrature-*/results.json','duration-quadrature-*/results.json',
-        'corrective-duration-response/*.json','duration-residual-diagnosis/*/results.json',
-        'selected-frozen-operator-comparison/*/results.json'):
+        'corrective-duration-response/*.json','corrective-duration-response-v2/*.json',
+        'duration-residual-diagnosis/*/results.json',
+        'selected-frozen-operator-comparison/*/results.json','actual-loaded-maps/*.json'):
         for path in sorted(r.glob(glob)):include(path)
     for path in sorted((r/'campaigns').glob('*/T-*/metrics.json')):
         m=load(path);index.append(dict(path=str(path),sha256=sha(path)))
@@ -65,7 +94,8 @@ def collect(root,output,previous_attempts):
                  'worker-guard-status.json','debugger-resource-incident.json','owned-orphan-MPI-cleanup.json',
                  'idle-watcher-resource-cleanup.json','independent-admission-launch.json',
                  'build-completion.json','source-identities.json','native-exclusive-costs.json',
-                 'final-resource-census.json','historical-evidence-integrity.json'):
+                 'final-resource-census.json','historical-evidence-integrity.json',
+                 'completion-wrapper-transition.json','legacy-probe-dependency-identity.json'):
         include(r/name)
     for name in ('worker-bookings.jsonl','worker-guard-events.jsonl','resource-priority-events.jsonl'):
         path=r/name
@@ -75,7 +105,9 @@ def collect(root,output,previous_attempts):
             index.append(dict(path=str(path),sha256=sha(path)))
     schedules={}
     for model in ('A93','A95'):
-        p=r/'corrective-duration-response'/(model+'-N-Accepted-neutral.json');v=include(p)
+        p=r/'corrective-duration-response-v2'/(model+'-N-Accepted-neutral.json')
+        if not p.exists():p=r/'corrective-duration-response'/(model+'-N-Accepted-neutral.json')
+        v=include(p)
         schedules[model]=dict(status=v['status'] if v else 'not_attempted',source=str(p),body=v)
     response=r/'corrective-duration-response/response-results.json';v=include(response)
     field_rows=[body for key,body in bodies.items() if key.startswith('response-cohorts/') and '/T-' in key]
@@ -87,7 +119,7 @@ def collect(root,output,previous_attempts):
         all(v.get('configuration',{}).get('model')=='A95' and v.get('configuration',{}).get('policy')=='Natural' and
             abs(v.get('time',-1)-.016)<=1e-13 and len(v.get('fields',{}))==17 for v in field_rows))
     half=bodies.get('physical-postprocessing/half-amplitude.json',{})
-    gates=dict(ownership_geometry=simple(geometry),history_cache_CLS=simple(compat),natural_short_matrix=simple(short),
+    gates=dict(ownership_geometry=simple(geometry),history_cache_CLS=simple(compat),natural_short_matrix=short_matrix_coverage(r,short),
         selected_prescribed=simple(prescribed),A93_neutral=schedules['A93'],A95_neutral=schedules['A95'],
         A95_response_fields=dict(status='pass' if response_complete and all(x['status']=='pass' for x in field_rows) and
             half.get('status')=='pass' and len(half.get('checks',[]))==68 else 'failed_unresolved_or_incomplete'),
