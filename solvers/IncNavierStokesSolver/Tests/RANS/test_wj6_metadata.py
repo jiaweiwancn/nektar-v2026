@@ -14,6 +14,12 @@ from wj6_qualification import sum_envelopes,common_extension_authorized,required
 
 
 class Metadata(unittest.TestCase):
+    def test_independent_order_row_gate_cannot_be_missing_or_failed(self):
+        from qualify_wj6_observations import complete_orders
+        self.assertEqual(complete_orders(dict(status='PASS'), None)['status'], 'NOT_RUN')
+        self.assertEqual(complete_orders(dict(status='PASS'), dict(status='UNRESOLVED'))['status'], 'UNRESOLVED')
+        self.assertEqual(complete_orders(dict(status='OBSTRUCTED'), dict(status='PASS'))['status'], 'OBSTRUCTED')
+        self.assertEqual(complete_orders(dict(status='PASS'), dict(status='PASS'))['status'], 'PASS')
     def test_fresh_startup_requires_both_immutable_inputs(self):
         self.assertEqual(fresh_startup_gate(None)['status'],'NOT_RUN')
         with tempfile.TemporaryDirectory() as temp:

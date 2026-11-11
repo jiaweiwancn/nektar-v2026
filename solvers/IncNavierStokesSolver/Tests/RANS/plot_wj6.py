@@ -53,7 +53,7 @@ def main():
         for policy, marker in (('EP', 'o'), ('Budget', 'x')):
             for tag, color in colors.items():
                 for kind, style in (('continuum_error', '-'), ('initial_drift', '--')):
-                    q = sorted((r for r in fields if r['policy'] == policy and r['tag'] == tag and
+                    q = sorted((r for r in fields if r.get('observation_order','8') == '8' and r['policy'] == policy and r['tag'] == tag and
                                 r['scope'] == 'full' and r['field'] == field and r['kind'] == kind),
                                key=lambda r: float(r['time']))
                     ax.semilogy([float(r['time']) for r in q],
@@ -72,12 +72,13 @@ def main():
     fig, axes = plt.subplots(1, 2, figsize=(10, 3.8), sharey=True)
     for ax, group in zip(axes, ('horizontal', 'timestep')):
         for policy, color in (('EP', '#315c8c'), ('Budget', '#b16a28')):
-            q = [r for r in sensitivity if r['policy'] == policy and r['phase'] == 'primary' and
-                 r['quantity'].startswith(group+'_sensitivity/')]
-            times = sorted({int(r['quantity'].split('/')[1]) for r in q})
-            ax.semilogy([s*3.2e-5 for s in times],
-                        [max(float(r['fraction']) for r in q if int(r['quantity'].split('/')[1]) == s) for s in times],
-                        'o-', color=color, label=policy)
+            for order, style in ((8,'o-'),(10,'x--')):
+                q = [r for r in sensitivity if r['policy'] == policy and r['phase'] == 'all_orders' and
+                     r['quantity'].startswith(group+'_order'+str(order)+'_sensitivity/')]
+                times = sorted({int(r['quantity'].split('/')[1]) for r in q})
+                ax.semilogy([s*3.2e-5 for s in times],
+                            [max(float(r['fraction']) for r in q if int(r['quantity'].split('/')[1]) == s) for s in times],
+                            style, color=color, label=policy+' q'+str(order))
         ax.axhline(1, color='#a33232', ls='--')
         ax.set_title(group+' sensitivity: worst required field/scope')
         ax.set_ylabel('(difference + both uncertainty contributions) / limit')

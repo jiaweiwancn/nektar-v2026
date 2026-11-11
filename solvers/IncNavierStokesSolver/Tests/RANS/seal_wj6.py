@@ -48,9 +48,11 @@ def main():
     require(len(unique) == 38, 'wrong actual unique selected count')
     latest = by_label['metadata-final-v7']
     require(latest['exit_code'] == 0 and 'Ran 6 tests' in Path(latest['log']).read_text(), 'final metadata fixtures incomplete')
+    supplement=by_label['observation-metadata-v2']
+    require(supplement['exit_code']==0 and 'Ran 7 tests' in Path(supplement['log']).read_text(), 'independent-order metadata fixtures incomplete')
     write_once(out/'regression-verification.json', dict(schema='WJ6RegressionSealV1', status='PASS',
         registered=len(registered), selected_unique=len(unique), names=sorted(unique), selections=selections,
-        latest_metadata=latest, allocation_denials=[file_identity(f) for f in root.glob('*allocation*.json')
+        latest_metadata=latest,independent_order_metadata=supplement,allocation_denials=[file_identity(f) for f in root.glob('*allocation*.json')
                                                    if read(f).get('allowed') is False]))
     manifest = read(out/'manifest.json')
     verify_artifacts(manifest['prior_seals']['wj4'])

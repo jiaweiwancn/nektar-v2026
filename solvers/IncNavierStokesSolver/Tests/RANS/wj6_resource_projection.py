@@ -77,6 +77,16 @@ def main():
         estimate = sum(remaining[tag]*rates[tag]+nobs[tag]*max(obs[tag])*headroom+
                        nsvd[tag]*max(svd[tag])*headroom for tag in remaining)
         estimate += parent_bound+tx*rates['coarse']+(60 if tx else 0)+600
+        remaining_row_seconds = 0.
+        row_basis = None
+        if a.phase == 'T3':
+            row_basis = s.get('order10_row_supplement', {}).get('result')
+            require(row_basis, 'T3 requires the complete versioned order10 row-map qualification')
+            verify_artifacts({row_basis['path']:row_basis})
+            row_result=read(row_basis['path'])
+            require(row_result['gate']['status']=='PASS', 'T3 independent-order row qualification did not pass')
+            remaining_row_seconds=sum(nobs.values())*row_result['seconds']/len(row_result['inputs'])*headroom
+            estimate+=remaining_row_seconds
         totals = ledger.totals()
         fits = totals['attempts']+sum(remaining.values())+tx <= 800 and totals['seconds']+estimate <= 10800
         write_once(archive/'ledger-basis.json', read(ledger.file))
@@ -90,6 +100,7 @@ def main():
             measured_whole_phase_seconds=whole_seconds, measured_child_process_seconds=child_seconds,
             measured_parent_algebra_verification_IO_seconds=parent_seconds,
             parent_seconds_per_observation_pair=parent_per_pair, remaining_parent_seconds_bound=parent_bound,
+            remaining_order10_row_qualification_seconds=remaining_row_seconds,order10_row_cost_basis=row_basis,
             headroom=headroom, closure_seconds_held=600, projected_remaining_seconds=estimate,
             work_totals=totals, actual_policy_bytes=volume(folder), resource=DEFAULT,
             source=artifacts([Path(__file__)]), basis=artifacts([archive/'ledger-basis.json', archive/'completed-commands.json', folder/'design.json']))

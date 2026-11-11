@@ -37,7 +37,8 @@ def main():
     label='publication/'+str(out)
     for l in ledgers.values():l.reserve(label,dict(code=artifacts([Path(__file__)])),0,300)
     rows={name:[] for name in ('mesh-runs','fields','residuals','interfaces','divergence','pressure-projection',
-        'near-h-loads','independent-loads','sensitivity','accuracy-gates','resources','run-accounting')}
+        'near-h-loads','independent-loads','sensitivity','accuracy-gates','resources','run-accounting',
+        'dense-allocations','arithmetic-estimates')}
     diagnoses={};audits={};stages={};neighborhoods={};summaries={};frozen={};index={}
     try:
         for policy in ledgers:
@@ -56,7 +57,8 @@ def main():
                         require(file_hash(c[key])==expected,'native observer/producer changed')
                     require(file_hash(Path(c['checkpoint'])/'State.bin')==c['checkpoint_sha256'],'checkpoint changed')
                     prefix=dict(policy=policy,tag=tag,steps=c['steps'],time=c['time'],dt=c['dt'],unknowns=c['unknowns'],
-                        state_sha256=c['state_sha256'],history_sha256=c['history_sha256'])
+                        state_sha256=c['state_sha256'],history_sha256=c['history_sha256'],
+                        observation_order=c['rule_settings']['order'],horizontal_order=c['rule_settings']['xorder'])
                     rows['mesh-runs'].append(dict(prefix,zknots=json.dumps(c['zknots']),xknots=json.dumps([0.,1.] if tag=='baseline' else [0.,.5,1.]),
                         checkpoint=c['checkpoint'],checkpoint_sha256=c['checkpoint_sha256'],producer=c['report'],producer_sha256=c['report_sha256'],
                         observation=c['path'],observation_sha256=c['sha256'],qualified_record=json.dumps(c['qualified_record'])))
@@ -77,6 +79,14 @@ def main():
                         rows['accuracy-gates'].append(dict(prefix,quantity=key,**v,margin=v.get('limit',0)-v.get('value',0)))
                     for kind in ('independent_loads','independent_near_h','independent_weak_modes'):
                         if kind in c:rows['independent-loads'].append(dict(prefix,kind=kind,packet=json.dumps(c[kind])))
+                    if c.get('arithmetic'):
+                        from wj6_qualification import individual_arithmetic
+                        individual=individual_arithmetic(c['arithmetic'])
+                        for field,value in individual['estimated_comparison_floor'].items():
+                            rows['arithmetic-estimates'].append(dict(prefix,field=field,individual_physical_L2=value,
+                                individual_sampled_Linf=individual['estimated_sampled_comparison_floor'][field],
+                                native_stored_pair_L2=c['arithmetic']['estimated_comparison_floor'][field],
+                                safety_factor=100,scope='individual envelope; paired gate adds both trajectories; finite frozen-system estimate'))
                     if c.get('diagnosis'):
                         d=c['diagnosis'];name=policy+'/'+tag+'/'+str(int(c['steps']));diagnoses[name]=d
                         maximum=d['strong_components']['full']['divergence']['maximum']
@@ -97,6 +107,23 @@ def main():
                     if 'uncertainty' in v:
                         rows['sensitivity'].append(dict(policy=policy,phase=phase,quantity=quantity,status=v['status'],value=v['value'],uncertainty=v['uncertainty'],
                             limit=v['limit'],margin=v['limit']-v['value']-v['uncertainty'],fraction=(v['value']+v['uncertainty'])/v['limit']))
+            supplement=s.get('order10_row_supplement',{}).get('result')
+            if supplement:
+                verify_artifacts({supplement['path']:supplement});q=read(supplement['path'])
+                if q.get('records'):
+                    verify_artifacts({q['records']['path']:q['records']})
+                    for key,c in read(q['records']['path']).items():
+                        prefix=dict(policy=policy,tag=key.split('/')[0],steps=c['steps'],time=c['time'],dt=c['dt'],unknowns=c['unknowns'],
+                            state_sha256=c['state_sha256'],history_sha256=c['history_sha256'],observation_order=10,horizontal_order=6)
+                        for kind in ('continuum_error','initial_drift','initial_representation'):
+                            for scope,data in c['errors'][kind].items():
+                                if not isinstance(data,dict) or 'fields' not in data:continue
+                                for field,v in data['fields'].items():rows['fields'].append(dict(prefix,kind=kind,scope=scope,field=field,
+                                    **{k:json.dumps(value) if isinstance(value,(dict,list)) else value for k,value in v.items()}))
+                    for quantity,v in leaves(q['gate']):
+                        if 'uncertainty' in v:rows['sensitivity'].append(dict(policy=policy,phase='all_orders',quantity=quantity,status=v['status'],
+                            value=v['value'],uncertainty=v['uncertainty'],limit=v['limit'],margin=v['limit']-v['value']-v['uncertainty'],
+                            fraction=(v['value']+v['uncertainty'])/v['limit']))
             for name,e in s['execution'].items():
                 rows['resources'].append(dict(policy=policy,case=name,exit_code=e['exit_code'],attempts=e['actual_attempts'],**{k:v for k,v in e['resource'].items() if not isinstance(v,(list,dict))}))
                 identity=e.get('report')
@@ -112,6 +139,17 @@ def main():
                     snap=read(v['k_snapshot'])
                     from run_cls_epawf_picard import state_hash
                     equal=equal and state_hash(snap['raw'])==state_hash(snap['corrected'])
+                    for field in ('momentum','pressure','k','epsilon'):
+                        key=field+'_arithmetic'
+                        if key not in v:continue
+                        packet=v[key];verify_artifacts({packet['path']:packet});data=read(packet['path'])
+                        for kind in ('matrix','mass_or_correction_map'):
+                            f=data[kind];identity=file_identity(f['path']);shape=list(map(int,f['shape']))
+                            require(identity['sha256']==f['sha256'] and identity['bytes']==8*shape[0]*shape[1],
+                                'native dense allocation packet shape/bytes/hash differs')
+                            rows['dense-allocations'].append(dict(policy=policy,case=name,time=v['time'],field=field,kind=kind,
+                                rows=shape[0],columns=shape[1],bytes=identity['bytes'],sha256=identity['sha256'],path=f['path'],
+                                scope='actual exported binary64 payload; selected allocation inventory, not sum of simultaneous live allocations or a full nonlinear Jacobian'))
                 row['raw_corrected_k_equal']=equal;rows['run-accounting'].append(row)
                 stages[identity['path']]=dict(report=identity,checkpoint=d.get('checkpoint'),last_stage_history=d.get('last_stage_history'),
                     last_stage_time=d.get('last_stage_time'),last_stage_alpha=d.get('last_stage_alpha'),accepted_packets=d.get('wj_audit_packets'),
@@ -120,6 +158,14 @@ def main():
             # Mutable progress summaries and live publisher/ledger files do not.
             for f in (a.study/policy).rglob('*'):
                 if f.is_file() and f.name!='summary.json' and f.suffix!='.lock':index[str(f.resolve())]=file_identity(f)
+            passive_receipts=list((a.study/policy).rglob('receipt.json'))+list((r/'row-qualified-v1'/policy).rglob('receipt.json'))
+            for f in passive_receipts:
+                if f.parent.name in s['execution']:continue
+                d=read(f)
+                if 'resource' not in d:continue
+                rows['resources'].append(dict(policy=policy,case=str(f.parent.relative_to(r)),
+                    exit_code=d['exit_code'],attempts=d['actual_attempts'],receipt=json.dumps(file_identity(f)),
+                    **{k:v for k,v in d['resource'].items() if not isinstance(v,(list,dict))}))
         for name,data in rows.items():table(out/(name+'.csv'),data)
         write_once(out/'diagnoses.json',diagnoses);write_once(out/'audit-witnesses.json',audits)
         write_once(out/'maximum-neighborhoods.json',neighborhoods);write_once(out/'accepted-stage-lineage.json',stages)
@@ -127,7 +173,7 @@ def main():
             for f in scope.rglob('*'):
                 if f.is_file() and 'CMakeFiles' not in f.parts and f.suffix in ('.xml','.json','.bin','.log') and 'Testing' not in f.parts:
                     index[str(f.resolve())]=file_identity(f)
-        for scope in (r/'resource-projections-v1',):
+        for scope in (r/'resource-projections-v1',r/'row-qualified-v1'):
             for f in scope.rglob('*'):
                 if f.is_file() and f.suffix!='.lock':index[str(f.resolve())]=file_identity(f)
         index_path=r/('artifact-index-'+out.name+'.json');write_once(index_path,index)
