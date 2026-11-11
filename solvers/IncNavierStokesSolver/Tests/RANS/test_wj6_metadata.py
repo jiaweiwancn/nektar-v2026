@@ -14,6 +14,12 @@ from wj6_qualification import sum_envelopes,common_extension_authorized,required
 
 
 class Metadata(unittest.TestCase):
+    def test_resource_denial_alias_requires_no_launched_attempt(self):
+        from resume_wj6_transaction import prelaunch_alias
+        good=dict(exit_code=125,actual_attempts=0,resource=dict(not_launched=True))
+        self.assertEqual(prelaunch_alias(good,'readback'),'readback-worker-resume1')
+        for changed in (dict(good,actual_attempts=1),dict(good,exit_code=134),dict(good,resource={}),None):
+            self.assertEqual(prelaunch_alias(changed,'readback'),'readback')
     def test_independent_order_row_gate_cannot_be_missing_or_failed(self):
         from qualify_wj6_observations import complete_orders
         self.assertEqual(complete_orders(dict(status='PASS'), None)['status'], 'NOT_RUN')
