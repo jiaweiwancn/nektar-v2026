@@ -1,5 +1,15 @@
 # CLS-calibrated budget AWF: implementation and native evolution
 
+**2026-11-11 09:02 continuation completion:** both latest continuations have
+stopped normally. H=.5 cutoff-v1 Regularized/Linear passed three complete
+half-unit steady windows, including full outer epsilon, through T=4 and
+stopped at step 6432/T=4.02. Its mean traction is .159590714, .2558% below
+reference, with zero correction. H2 completed step 9600/T=6 but remains
+above the selected spatial U/k residual limits; it is not qualified steady.
+There are no remaining processes for these two campaigns and no numerical
+rejection. See the [updated qualification report](cls-awf-neutral-qualification.md)
+and [terminal native receipt](cls-awf-neutral-qualification-evidence/completion-20261111.json).
+
 **2026-11-10 neutral-reference qualification:** the
 [same-H cutoff-refined pilot and late-state timestep study](cls-awf-neutral-qualification.md)
 are complete through T=.5 and elapsed .1 respectively. At matched T=.5,

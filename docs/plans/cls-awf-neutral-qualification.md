@@ -1,5 +1,49 @@
 # H=.5 calibrated budget AWF: neutral-reference qualification
 
+**Completion update, 2026-11-11 09:02 Asia/Shanghai:** neither continuation
+remains running. The refined H=.5 case stopped under its authorized scientific
+criterion; H2 completed its maximum T=6 target. There was no numerical
+rejection in either continuation. The [terminal inspection](cls-awf-neutral-qualification-evidence/completion-20261111.json)
+verifies checkpoint/report/reference/defect/native-history identities, actual
+solve counts, complete steady windows and absence of remaining campaign
+processes. This is read-only inspection, with zero new governing solves or
+physical-time advance.
+
+| Continuation | Final accepted frontier | Finished | Outcome |
+|---|---:|---|---|
+| H=.5 cutoff-v1 Regularized/Linear | 6432 / T=4.02 | Nov 11, 08:48 | Three complete steady windows passed through T=4; stopped after the next native block |
+| H2 cutoff-v1 Regularized/Linear | 9600 / T=6 | Nov 10, 23:51 | Target completed; necessary steady residual gate still fails |
+
+The refined screen passes on [2.5,3], [3,3.5] and [3.5,4], including the
+actual full outer-epsilon norm. Normalized k changes are 7.93e-5, 5.20e-5
+and 3.24e-5; full epsilon changes are 3.29e-5, 2.73e-5 and 1.89e-5. All
+other unchanged field, residual, matching, traction and supply conditions
+pass. Final selected alpha=0 U/W/k/epsilon residuals are
+5.68e-5 / 3.19e-5 / 2.50e-4 / 1.14e-4, below the 1e-3 gate.
+Final mean traction is .159590714, .2558% below .16. This is about eighteen
+times smaller reference-traction error than the separately qualified coarse
+T=6 candidate; two meshes still do not establish a spatial convergence order.
+It is a selected discrete steady candidate, not faithful Original-CLS or
+continuum qualification.
+
+H2 finishes with normalized spatial U/W/k/epsilon residuals
+.00120085 / .00076917 / .00220272 / .0000104409. U and k remain above
+the unchanged 1e-3 limit, so close traction (.159627825, -.2326%) does not
+establish steady convergence. Inner strong-divergence L2 grows from .0222473
+at T=5 to .0261468 at T=6 while weak residuals decline. The bounded interval
+therefore confirms persistence of that unresolved trend; no T=10 extension
+has been launched.
+
+Both continuations have **zero bound activations and zero signed, positive,
+negative and absolute correction supply** over their 5632 and 1600 added
+steps. Actual counters confirm one U/p/epsilon/k solve and one logical bound
+call per accepted step, with no additional governing solves. Their final
+checkpoint hashes are `a8dad94dfff868867dcb76b775ec277d00121354f77127e9dda87b4732d6803f`
+and `73001b027b9763e656115e55ac040a2465a215f8c5873b95588a67907946a934`.
+The inactive `next_target` value retained in the refined progress file does
+not represent a queued continuation: its supervisor honored the scientific
+stop request and exited.
+
 This package starts from `303b712` on
 `codex/cls-epawf-pimple-one-sweep`. The completed T=6 Linear/Saturated steady
 screens, corrected interface audit, exact evaluation reuse and early H2
@@ -283,9 +327,9 @@ The [bounded successor decision](cls-awf-neutral-qualification-evidence/h2-conti
 authorizes one unchanged T=5-to-6 continuation to observe that trend. The
 completed parent and frozen runtime remain immutable; T=10 is not scheduled.
 
-## Observed continuation disposition
+## Historical continuation snapshot, November 10
 
-The [verified status receipt](cls-awf-neutral-qualification-evidence/latest-status.json)
+The [verified status receipt](cls-awf-neutral-qualification-evidence/status-20261110-212952.json)
 is dated **2026-11-10 21:29:52, Asia/Shanghai**. Each live frontier was copied
 immutably and bound to its checkpoint checksum, accepted ledger, reference,
 all native histories and exact process-start identity.
@@ -355,8 +399,8 @@ projection activates the selected constitutive modification, and interface
 and within-element divergence errors remain. Their causal shares have not
 been uniquely separated, nor has the refined steady root been qualified.
 
-The priority is to finish the already running refined steady-window assessment.
-The next discriminating experiment is one same-mesh velocity–pressure-space
+The refined steady-window assessment is now complete. The next discriminating
+experiment is one same-mesh velocity–pressure-space
 comparison, especially in the inner region where strong divergence is
 localized. A quadratic inner pressure space would give an estimated 2994
 unknowns on this refined pilot, subject to native dimension/compatibility
@@ -442,13 +486,13 @@ reference/history/checkpoint identities, runtime closures and raw native
 reports remain in the [content-addressed artifact index](cls-awf-neutral-qualification-evidence/artifact-index.json).
 The [compact native evidence](cls-awf-neutral-qualification-evidence/native.json)
 contains field/balance tables, source receipts and histories; the separate
-dated status receipt below records advancing frontiers. Build configuration,
+dated status receipts record advancing frontiers and the completed dispositions. Build configuration,
 commands and dependency identities remain in configure/build logs and frozen
 runtime manifests. No Mac-only numerical result is substituted for Linux.
 
 There is no unresolved infrastructure or numerical blocker to the completed
-bounded pilots. Remaining scientific gates are the refined steady-window
-assessment, separation of outer/interface/pressure-space errors, and spatial
+bounded pilots. Remaining scientific gates are separation of
+outer/interface/pressure-space errors and spatial
 accuracy beyond two meshes. Active-projection robustness is not extended by
 these inactive-bound runs. Faithful Original-CLS evolution and continuum
 accuracy remain separate qualifications.

@@ -1,14 +1,22 @@
 {
-  "captured_Asia_Shanghai": "2026-11-10T21:29:52.409862+08:00",
+  "captured_Asia_Shanghai": "2026-11-11T09:00:39.615191+08:00",
   "source_revision": "188fcdb",
   "campaigns": {
     "refined05": {
       "last_actual_step_norm_semantics": "refreshed_original_block_norms is the uncancelled SELECTED stage residual with alpha/history storage; not the alpha=0 spatial residual or Original-CLS counterfactual",
-      "status": "running",
-      "accepted_steps": 996,
-      "accepted_time": 0.6224999999999895,
+      "status": "stopped_at_checkpoint",
+      "accepted_steps": 6432,
+      "accepted_time": 4.01999999999975,
       "dt": 0.000625,
-      "completed_targets": [],
+      "completed_targets": [
+        1600,
+        2400,
+        3200,
+        4000,
+        4800,
+        5600,
+        6400
+      ],
       "requested_targets": [
         1600,
         2400,
@@ -22,18 +30,18 @@
         8800,
         9600
       ],
-      "next_target": 1600,
-      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six/trajectory/steps-000993-001024/checkpoint",
-      "immutable_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/status-212952/refined05",
-      "checkpoint_sha256": "6101d81b4dfaf094898290651147365be13686d1639a64087156a5aed707d9fe",
-      "state_sha256": "2c458bb603ef335fb846b44bc544039961ac8ca8edc8385a62ccfd5432ffff8c",
+      "next_target": 7200,
+      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six/trajectory/steps-006401-006432/checkpoint.3",
+      "immutable_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/status-090039/refined05",
+      "checkpoint_sha256": "a8dad94dfff868867dcb76b775ec277d00121354f77127e9dda87b4732d6803f",
+      "state_sha256": "b8ed6d4cdde4594c384b705b9dd81c0814f8c6c0f10969a44cfb3df423acb7f8",
       "reference_sha256": "9d5958775eab1e493a1c46fb1220b11e2dd1344021e43480614639ec46506004",
       "defect_sha256": "b3d3a11360fcdd2cdd8d639cabbfd21de9193ea14e8ba1551247230a1e9e001c",
       "native_history_sha256": [
-        "e7c881f8f64e156ef8c4db16d69b990d463765399f619c645f7a356ebabf6ea1",
+        "cf0c7e816521713b6eccaf3ba7fd9be40ab5dcae93c9838c85222f96f621118c",
         "98aa85556c7b888bbe0ed12839fca9bd73c0f02ea1a93ae0985aadc157346a61"
       ],
-      "native_history_times_sha256": "bcbb175e9f983a4ab798f23a3a59958244a8ed0065612036c2767cef1f6f3fc7",
+      "native_history_times_sha256": "aa08a30e7dd6322c998028479f92651a9857a25319738863e9242e38debc0a54",
       "signature_sha256": "c86cf98915d0db4e8645adf18727397b2fc778eca69f60a6a003071f103e6307",
       "supervisor": {
         "recorded": {
@@ -42,44 +50,29 @@
           "executable": "/usr/bin/python3.10",
           "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six"
         },
-        "actual": {
-          "pid": 493128,
-          "start": "44358996",
-          "executable": "/usr/bin/python3.10",
-          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six"
-        },
-        "matches": true
+        "actual": null,
+        "matches": false
       },
       "driver": {
         "recorded": {
           "pid": 493131,
           "start": "44359064"
         },
-        "actual": {
-          "pid": 493131,
-          "start": "44359064",
-          "executable": "/usr/bin/python3.10",
-          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six"
-        },
-        "matches": true
+        "actual": null,
+        "matches": false
       },
       "native": {
         "recorded": {
-          "pid": 500831,
-          "start": "44503150",
+          "pid": 565712,
+          "start": "48553108",
           "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six/trajectory/runtime/IncNavierStokesSolver",
-          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six/trajectory/steps-000993-001024"
+          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six/trajectory/steps-006401-006432"
         },
-        "actual": {
-          "pid": 500831,
-          "start": "44503150",
-          "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six/trajectory/runtime/IncNavierStokesSolver",
-          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six/trajectory/steps-000993-001024"
-        },
-        "matches": true
+        "actual": null,
+        "matches": false
       },
       "last_actual_step": {
-        "time": 0.6224999999999895,
+        "time": 4.01999999999975,
         "alpha": 1600,
         "outer_sweeps": 1,
         "momentum_predictor_solves": 1,
@@ -91,18 +84,18 @@
         "bound_activations": 0,
         "additional_governing_equation_solves": 0,
         "additional_correction_or_restoration_solves": 0,
-        "frozen_momentum_defect": 1.6584234387655812e-09,
-        "momentum_splitting_identity_defect": 7.404920843574704e-20,
-        "refreshed_trace_defect": 4.6755376133245097e-07,
+        "frozen_momentum_defect": 3.449071421623844e-11,
+        "momentum_splitting_identity_defect": 1.5290950610925562e-21,
+        "refreshed_trace_defect": 4.861382621652345e-08,
         "refreshed_original_block_norms": [
-          3.81751558380485e-06,
-          5.618601449459919e-07,
-          2.0379183719086023e-07,
-          1.955490308959437e-08,
-          1.0261344196609676e-16,
-          2.1759849222551412e-16,
-          4.489274620447791e-18,
-          1.6092393393728297e-06
+          6.964703966313547e-08,
+          9.475416623633037e-09,
+          2.5455143206879358e-08,
+          1.9664080081693087e-09,
+          1.52918947397432e-16,
+          1.9638302697403916e-16,
+          8.046812998915852e-18,
+          1.673203983262107e-07
         ]
       },
       "last_bound": {
@@ -117,7 +110,7 @@
               ],
               "lower": 0,
               "upper": 0.01,
-              "k_integral": 0.05397049143060475,
+              "k_integral": 0.05411786803929968,
               "correction_signed": 0,
               "correction_positive": 0,
               "correction_negative": 0,
@@ -136,7 +129,7 @@
               ],
               "lower": 0,
               "upper": 0.1,
-              "k_integral": 0.36818126923072175,
+              "k_integral": 0.36908075855925837,
               "correction_signed": 0,
               "correction_positive": 0,
               "correction_negative": 0,
@@ -155,7 +148,7 @@
               ],
               "lower": 0,
               "upper": 0.5,
-              "k_integral": 1.6022007368319335,
+              "k_integral": 1.60344523364113,
               "correction_signed": 0,
               "correction_positive": 0,
               "correction_negative": 0,
@@ -174,7 +167,7 @@
               ],
               "lower": 0,
               "upper": 0.0025,
-              "k_integral": 0.014732109626513513,
+              "k_integral": 0.014770005736875093,
               "correction_signed": 0,
               "correction_positive": 0,
               "correction_negative": 0,
@@ -193,7 +186,7 @@
               ],
               "lower": 0,
               "upper": 4,
-              "k_integral": 12.322636513931142,
+              "k_integral": 12.323946930001785,
               "correction_signed": 0,
               "correction_positive": 0,
               "correction_negative": 0,
@@ -255,30 +248,30 @@
         "arithmetic_reserve": 4.643043330905913e-13,
         "raw_minimum_scope": "static and available pre-k ray locations; no inadmissible raw normalization evaluation",
         "raw_minimum": {
-          "value": 0.5102255702857642,
+          "value": 0.510246547095209,
           "functional_kind": "Point",
           "coordinate": [
-            1,
+            1.625,
             0,
-            0.9679350371274016
+            0.9375
           ],
-          "geometry": 43,
-          "inventory": "reconstruction_native"
+          "geometry": 44,
+          "inventory": "reconstruction_dense"
         },
         "corrected_minimum": {
-          "value": 0.5102255702857642,
+          "value": 0.510246547095209,
           "functional_kind": "Point",
           "coordinate": [
-            1,
+            1.625,
             0,
-            0.9679350371274016
+            0.9375
           ],
-          "geometry": 43,
-          "inventory": "reconstruction_native"
+          "geometry": 44,
+          "inventory": "reconstruction_dense"
         },
         "raw_ground": {
           "admissible": true,
-          "minimum": 0.9894192366610634,
+          "minimum": 0.9789219024418887,
           "arithmetic_scale": 0,
           "point": [
             -2,
@@ -290,7 +283,7 @@
         },
         "corrected_ground": {
           "admissible": true,
-          "minimum": 0.9894192366610634,
+          "minimum": 0.9789219024418887,
           "arithmetic_scale": 0,
           "point": [
             -2,
@@ -300,11 +293,11 @@
           "geometry": 1,
           "extrema_checked": 20
         },
-        "raw_sha256": "2c458bb603ef335fb846b44bc544039961ac8ca8edc8385a62ccfd5432ffff8c",
-        "corrected_sha256": "2c458bb603ef335fb846b44bc544039961ac8ca8edc8385a62ccfd5432ffff8c",
+        "raw_sha256": "b8ed6d4cdde4594c384b705b9dd81c0814f8c6c0f10969a44cfb3df423acb7f8",
+        "corrected_sha256": "b8ed6d4cdde4594c384b705b9dd81c0814f8c6c0f10969a44cfb3df423acb7f8",
         "mass_norm_correction": 0,
-        "mass_norm_raw_step": 1.4202157792343231e-06,
-        "mass_norm_accepted_step": 1.4202157792343231e-06,
+        "mass_norm_raw_step": 7.80232768795147e-08,
+        "mass_norm_accepted_step": 7.80232768795147e-08,
         "mass_inner_product_raw_bound": 0,
         "mass_norm_increment_identity_defect": 0,
         "correction_to_step_ratio_defined": true,
@@ -341,19 +334,19 @@
             0,
             1
           ],
-          "minimum_inner_k": 0.5103627047984897,
-          "minimum_outer_k": 0.5102255702857642,
+          "minimum_inner_k": 0.5102664393111068,
+          "minimum_outer_k": 0.510246547095209,
           "minimum_outer_epsilon": 0.03631791663093067,
-          "minimum_sampled_K": 0.5103651887233963,
+          "minimum_sampled_K": 0.510293290212791,
           "minimum_projected_trace_epsilon": 1e+300,
           "minimum_b": null,
           "minimum_lambda": null,
           "normalization_applicable": false,
-          "minimum_budget_ratio": 4.531094243588623,
+          "minimum_budget_ratio": 4.531088780758427,
           "maximum_budget_relative_defect": 0,
           "cutoff_range": [
-            0.014636323582114027,
-            0.01463643334436998
+            0.01463626832080699,
+            0.014636513300938393
           ],
           "inventory_counts": {
             "budget_awf_reporting_volume": 15360,
@@ -409,17 +402,17 @@
         "dual_objective": 0,
         "primal_dual_gap_working_set": 0,
         "dual_feasibility_defect": 0,
-        "seconds_total": 1.11290386,
+        "seconds_total": 1.123649259,
         "seconds_algebra": 0,
         "seconds_factorization": 0,
-        "seconds_separation": 0.009766959,
-        "seconds_inventory": 0.994100494,
+        "seconds_separation": 0.010299798,
+        "seconds_inventory": 1.0019830189999999,
         "trace_events": 2,
         "bounded_trace": [
           {
             "kind": "correction_start",
-            "time": 0.6224999999999895,
-            "raw_sha256": "2c458bb603ef335fb846b44bc544039961ac8ca8edc8385a62ccfd5432ffff8c",
+            "time": 4.01999999999975,
+            "raw_sha256": "b8ed6d4cdde4594c384b705b9dd81c0814f8c6c0f10969a44cfb3df423acb7f8",
             "controls": {
               "schema": 1,
               "per_add_completed_work": 2000,
@@ -438,7 +431,7 @@
             "kind": "correction_end",
             "success": true,
             "failure": "",
-            "seconds": 1.09094958
+            "seconds": 1.101937245
           }
         ],
         "full_diagnostic_dump": "None",
@@ -450,44 +443,46 @@
       "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six/trajectory/runtime/IncNavierStokesSolver",
       "executable_sha256": "177ce5e54e7de514fa019122e46d3a5d709455cd091bd3023fbfa745c48c9bfc",
       "completed_block_receipt_cost": {
-        "steps": 192,
-        "seconds": 1422.4725093430607,
-        "seconds_per_step": 7.408710986161775
+        "steps": 5632,
+        "seconds": 41899.72005470662,
+        "seconds_per_step": 7.439580975622624
       },
       "latest_completed_segment": {
-        "start_step": 960,
-        "end_step": 992,
-        "time": 0.6199999999999896,
-        "requested_end_step": 992,
-        "seconds": 241.54869164701086,
+        "start_step": 6400,
+        "end_step": 6432,
+        "time": 4.01999999999975,
+        "requested_end_step": 6432,
+        "seconds": 246.56899736000923,
         "exit_code": 0,
         "failure": "",
-        "report_sha256": "b20dd09fe132314f08de8791ad8bcc057e26437467171cf8452d9dcf5f0d6e1d",
-        "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six/trajectory/steps-000961-000992/checkpoint.3"
+        "report_sha256": "8ade6e1106469524fb3b7e32f955ca0730e5d54e37e7b6a9640bafb0759b1e1d",
+        "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six/trajectory/steps-006401-006432/checkpoint.3"
       }
     },
     "H2": {
       "last_actual_step_norm_semantics": "refreshed_original_block_norms is the uncancelled SELECTED stage residual with alpha/history storage; not the alpha=0 spatial residual or Original-CLS counterfactual",
-      "status": "running",
-      "accepted_steps": 8650,
-      "accepted_time": 5.406250000000459,
+      "status": "targets_completed",
+      "accepted_steps": 9600,
+      "accepted_time": 6.000000000000763,
       "dt": 0.000625,
-      "completed_targets": [],
+      "completed_targets": [
+        9600
+      ],
       "requested_targets": [
         9600
       ],
-      "next_target": 9600,
-      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six/trajectory/steps-008641-008672/checkpoint",
-      "immutable_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/status-212952/H2",
-      "checkpoint_sha256": "06593d90d6da18c64d3cc62f9e723870e6432148c18bacfc54713d6c8a76e32d",
-      "state_sha256": "eabf90454f7b3f9256b6c4b01b905a2018f67dfbf9c905f8631855b88be3f6b4",
+      "next_target": null,
+      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six/trajectory/steps-009569-009600/checkpoint.3",
+      "immutable_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/status-090039/H2",
+      "checkpoint_sha256": "73001b027b9763e656115e55ac040a2465a215f8c5873b95588a67907946a934",
+      "state_sha256": "8bdc1fafd354fba8baf7a90f0cddb10b78672edbea6f782bb6b62707475dad0a",
       "reference_sha256": "e0bb0399b224a54d017ade3ec51933b2daedd475e069131ac3217dcedd3b60e3",
       "defect_sha256": "41bf68b6bc977bd487c5d9b12bd2ad383db80415216ee9f2ef70236de7c31099",
       "native_history_sha256": [
-        "0450650ffb6cf8938c30c8047446be9b8a684c657f7044db56e91a7956bb2586",
+        "b3fd39b6e8fc7e8c61c0c706b73aceca33ee4c22b432f3a82306ba9cd656da57",
         "16d9418a34ec1c61edc2ad9b1be5daa4ff3694dfcc5077b8ecfd4d8185b646d2"
       ],
-      "native_history_times_sha256": "17f5bfea71978238e3206d654b64e0aff0e7ddc4ed005f41a6bf01ead3bcd9df",
+      "native_history_times_sha256": "e1001ba1fdedade031e57696f3a8cb0113b0d956baf38f373e8a795317594d26",
       "signature_sha256": "4894fa11d49305c47e69947a221db27180b72e3e0246a752424c0b9427226fb0",
       "supervisor": {
         "recorded": {
@@ -496,44 +491,29 @@
           "executable": "/usr/bin/python3.10",
           "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six"
         },
-        "actual": {
-          "pid": 475888,
-          "start": "43952371",
-          "executable": "/usr/bin/python3.10",
-          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six"
-        },
-        "matches": true
+        "actual": null,
+        "matches": false
       },
       "driver": {
         "recorded": {
           "pid": 475889,
           "start": "43952425"
         },
-        "actual": {
-          "pid": 475889,
-          "start": "43952425",
-          "executable": "/usr/bin/python3.10",
-          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six"
-        },
-        "matches": true
+        "actual": null,
+        "matches": false
       },
       "native": {
         "recorded": {
-          "pid": 500511,
-          "start": "44497531",
+          "pid": 532693,
+          "start": "45327088",
           "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six/trajectory/runtime/IncNavierStokesSolver",
-          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six/trajectory/steps-008641-008672"
+          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six/trajectory/steps-009569-009600"
         },
-        "actual": {
-          "pid": 500511,
-          "start": "44497531",
-          "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six/trajectory/runtime/IncNavierStokesSolver",
-          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six/trajectory/steps-008641-008672"
-        },
-        "matches": true
+        "actual": null,
+        "matches": false
       },
       "last_actual_step": {
-        "time": 5.406250000000459,
+        "time": 6.000000000000763,
         "alpha": 1600,
         "outer_sweeps": 1,
         "momentum_predictor_solves": 1,
@@ -545,18 +525,18 @@
         "bound_activations": 0,
         "additional_governing_equation_solves": 0,
         "additional_correction_or_restoration_solves": 0,
-        "frozen_momentum_defect": 1.265092810745521e-09,
-        "momentum_splitting_identity_defect": 1.649067269185716e-20,
-        "refreshed_trace_defect": 1.2390558370989346e-09,
+        "frozen_momentum_defect": 1.2337847162932335e-09,
+        "momentum_splitting_identity_defect": 4.5564416861870976e-20,
+        "refreshed_trace_defect": 1.2070179751522137e-09,
         "refreshed_original_block_norms": [
-          7.1474633560805175e-06,
-          2.4947513220757305e-07,
-          2.9580727386664076e-08,
-          1.4416840582588276e-09,
-          5.968188625202847e-16,
-          6.985446412382716e-16,
-          2.0159384144652345e-17,
-          1.7058465243070622e-08
+          6.969382506064301e-06,
+          2.432756117385942e-07,
+          3.127135959291371e-08,
+          1.4066652744441898e-09,
+          7.543703439232655e-16,
+          9.273405966631303e-16,
+          1.9820570965750625e-17,
+          1.661739008074378e-08
         ]
       },
       "last_bound": {
@@ -571,7 +551,7 @@
               ],
               "lower": 0,
               "upper": 0.01,
-              "k_integral": 0.05593086643312698,
+              "k_integral": 0.05597078597031946,
               "correction_signed": 0,
               "correction_positive": 0,
               "correction_negative": 0,
@@ -590,7 +570,7 @@
               ],
               "lower": 0,
               "upper": 0.1,
-              "k_integral": 0.3815262861159224,
+              "k_integral": 0.3817623092889124,
               "correction_signed": 0,
               "correction_positive": 0,
               "correction_negative": 0,
@@ -609,7 +589,7 @@
               ],
               "lower": 0,
               "upper": 2,
-              "k_integral": 6.234848805152348,
+              "k_integral": 6.235159020553842,
               "correction_signed": 0,
               "correction_positive": 0,
               "correction_negative": 0,
@@ -628,7 +608,7 @@
               ],
               "lower": 0,
               "upper": 0.0025,
-              "k_integral": 0.015234723134063606,
+              "k_integral": 0.015244979940369026,
               "correction_signed": 0,
               "correction_positive": 0,
               "correction_negative": 0,
@@ -647,7 +627,7 @@
               ],
               "lower": 0,
               "upper": 4,
-              "k_integral": 12.360850513848087,
+              "k_integral": 12.36115928475209,
               "correction_signed": 0,
               "correction_positive": 0,
               "correction_negative": 0,
@@ -709,7 +689,7 @@
         "arithmetic_reserve": 4.643043330905913e-13,
         "raw_minimum_scope": "static and available pre-k ray locations; no inadmissible raw normalization evaluation",
         "raw_minimum": {
-          "value": 0.510436499153895,
+          "value": 0.5104359784468391,
           "functional_kind": "Point",
           "coordinate": [
             1.7627662049581645,
@@ -720,19 +700,19 @@
           "inventory": "budget_awf_reporting_volume"
         },
         "corrected_minimum": {
-          "value": 0.5104332716506068,
+          "value": 0.5104326803390233,
           "functional_kind": "Point",
           "coordinate": [
             1.6666666666666665,
             0,
-            1.8843415246882926
+            1.8843418320565974
           ],
           "geometry": 49,
           "inventory": "constitutive_budget_awf_ray"
         },
         "raw_ground": {
           "admissible": true,
-          "minimum": 0.9816717598750551,
+          "minimum": 0.9777078536937845,
           "arithmetic_scale": 0,
           "point": [
             -2,
@@ -744,7 +724,7 @@
         },
         "corrected_ground": {
           "admissible": true,
-          "minimum": 0.9816717598750551,
+          "minimum": 0.9777078536937845,
           "arithmetic_scale": 0,
           "point": [
             -2,
@@ -754,11 +734,11 @@
           "geometry": 1,
           "extrema_checked": 20
         },
-        "raw_sha256": "eabf90454f7b3f9256b6c4b01b905a2018f67dfbf9c905f8631855b88be3f6b4",
-        "corrected_sha256": "eabf90454f7b3f9256b6c4b01b905a2018f67dfbf9c905f8631855b88be3f6b4",
+        "raw_sha256": "8bdc1fafd354fba8baf7a90f0cddb10b78672edbea6f782bb6b62707475dad0a",
+        "corrected_sha256": "8bdc1fafd354fba8baf7a90f0cddb10b78672edbea6f782bb6b62707475dad0a",
         "mass_norm_correction": 0,
-        "mass_norm_raw_step": 7.060494972375701e-07,
-        "mass_norm_accepted_step": 7.060494972375701e-07,
+        "mass_norm_raw_step": 6.886115530466805e-07,
+        "mass_norm_accepted_step": 6.886115530466805e-07,
         "mass_inner_product_raw_bound": 0,
         "mass_norm_increment_identity_defect": 0,
         "correction_to_step_ratio_defined": true,
@@ -787,7 +767,7 @@
           "scope": "declared finite scalar evaluation sets only",
           "phase": "k_inventory_complete",
           "failure": "",
-          "minimum_dimensionless_margin": 0.9998480656759797,
+          "minimum_dimensionless_margin": 0.9998428502720353,
           "limiting_functional_kind": "Point",
           "limiting_inventory": "reconstruction_dense",
           "limiting_point": [
@@ -795,19 +775,19 @@
             0,
             2.2083333333333335
           ],
-          "minimum_inner_k": 0.5104332716506068,
-          "minimum_outer_k": 0.5104692921920283,
+          "minimum_inner_k": 0.5104326803390233,
+          "minimum_outer_k": 0.5104683176145418,
           "minimum_outer_epsilon": 0.03631791663093067,
-          "minimum_sampled_K": 0.510473934944573,
+          "minimum_sampled_K": 0.510472751178332,
           "minimum_projected_trace_epsilon": 1e+300,
           "minimum_b": null,
           "minimum_lambda": null,
           "normalization_applicable": false,
-          "minimum_budget_ratio": 5.909279790337766,
+          "minimum_budget_ratio": 5.909279698087629,
           "maximum_budget_relative_defect": 0,
           "cutoff_range": [
-            0.014755568024232718,
-            0.014755599962440297
+            0.014755567099620568,
+            0.014755601323646474
           ],
           "inventory_counts": {
             "budget_awf_reporting_volume": 14080,
@@ -863,17 +843,17 @@
         "dual_objective": 0,
         "primal_dual_gap_working_set": 0,
         "dual_feasibility_defect": 0,
-        "seconds_total": 1.29709485,
+        "seconds_total": 1.352252245,
         "seconds_algebra": 0,
         "seconds_factorization": 0,
-        "seconds_separation": 0.011310211,
-        "seconds_inventory": 1.155853314,
+        "seconds_separation": 0.012489524,
+        "seconds_inventory": 1.204294246,
         "trace_events": 2,
         "bounded_trace": [
           {
             "kind": "correction_start",
-            "time": 5.406250000000459,
-            "raw_sha256": "eabf90454f7b3f9256b6c4b01b905a2018f67dfbf9c905f8631855b88be3f6b4",
+            "time": 6.000000000000763,
+            "raw_sha256": "8bdc1fafd354fba8baf7a90f0cddb10b78672edbea6f782bb6b62707475dad0a",
             "controls": {
               "schema": 1,
               "per_add_completed_work": 2000,
@@ -892,7 +872,7 @@
             "kind": "correction_end",
             "success": true,
             "failure": "",
-            "seconds": 1.271821968
+            "seconds": 1.328493808
           }
         ],
         "full_diagnostic_dump": "None",
@@ -904,34 +884,29 @@
       "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six/trajectory/runtime/IncNavierStokesSolver",
       "executable_sha256": "177ce5e54e7de514fa019122e46d3a5d709455cd091bd3023fbfa745c48c9bfc",
       "completed_block_receipt_cost": {
-        "steps": 640,
-        "seconds": 5407.563681788102,
-        "seconds_per_step": 8.44931825279391
+        "steps": 1600,
+        "seconds": 13924.985669116839,
+        "seconds_per_step": 8.703116043198024
       },
       "latest_completed_segment": {
-        "start_step": 8608,
-        "end_step": 8640,
-        "time": 5.400000000000456,
-        "requested_end_step": 8640,
-        "seconds": 287.3127392400056,
+        "start_step": 9568,
+        "end_step": 9600,
+        "time": 6.000000000000763,
+        "requested_end_step": 9600,
+        "seconds": 280.0418852189905,
         "exit_code": 0,
         "failure": "",
-        "report_sha256": "625368e5f94c48b20043824fda67bc7538cdd93a33878a21598c4975c46fe701",
-        "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six/trajectory/steps-008609-008640/checkpoint.3"
+        "report_sha256": "c738b36ed5be1d77fa516dd768cd2dfc15e99d0c41c207f9fffb4f639afd7576",
+        "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/h2-to-six/trajectory/steps-009569-009600/checkpoint.3"
       }
     }
   },
   "governing_solves": 0,
   "history_advancements": 0,
   "scientific_observer": {
-    "status": "observing",
-    "accepted_steps": 995.0,
-    "identity": {
-      "pid": 494690,
-      "start": "44400517",
-      "executable": "/usr/bin/python3.10",
-      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-to-six"
-    },
+    "status": "stopped_at_checkpoint",
+    "accepted_steps": 6432.0,
+    "identity": null,
     "recorded_identity": {
       "pid": 494690,
       "start": "44400517",
@@ -941,7 +916,12 @@
     "source_sha256": "8a90cf008c9fb236aa2d29aadff9343496b04145448c32541ad549d39747807b",
     "maximum_step": 9600,
     "stopping_policy": "First three passing unchanged half-unit windows, INCLUDING full transported epsilon, or maximum authorized endpoint. Stop only at a completed native block.",
-    "assessed_steps": []
+    "assessed_steps": [
+      4000,
+      4800,
+      5600,
+      6400
+    ]
   },
   "completed": {
     "spatial_pilot": {
