@@ -186,7 +186,7 @@ There is no T4, mesh/timestep replacement, tolerance/reserve reduction or new
 ledger. The T3 finite-strip scientific qualification remains open.
 
 Final closed totals, resource peaks, combined historical WJ-6/WJ-7 costs and
-all zero solve/bound counts are in `wj7-linux/final-seal.json`. No new governing
+all zero solve/bound counts are in `wj7-linux/final-seal.json.gz`. No new governing
 attempt is scheduled. Resource ceilings remain 8GiB RSS,8GiB invocation output,
 32GiB per-policy output and 72 total workers. Six numerical thread controls are 1.
 Source/inspection work predating monitoring has a separate conservative 313s
@@ -254,8 +254,8 @@ future exporter code copies ledger bytes directly. A preliminary local tar
 filter matched no member and returned nonzero; the complete transfer was then
 verified independently. Neither event changed native data or any ledger.
 
-Entry points: [contract](wj7-contract.md), [semantic correction](wj7-linux/correction.json),
-[final seal](wj7-linux/final-seal.json), [byte/role verification](wj7-linux/local-verification.json),
+Entry points: [contract](wj7-contract.md), [semantic correction](wj7-linux/correction.json.gz),
+[final seal](wj7-linux/final-seal.json.gz), [byte/role verification](wj7-linux/local-verification.json),
 [Git source verification](wj7-linux/local-git-verification.json), and
 [retained divergence figure](wj7-linux/figures/divergence.png).
 
