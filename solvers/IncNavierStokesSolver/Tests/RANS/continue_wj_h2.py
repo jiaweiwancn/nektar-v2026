@@ -19,7 +19,11 @@ from wj_h2_profiles import Completion,QE,KAPPA
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--solver',type=Path,required=True)
-    p.add_argument('--observer',type=Path,required=True);a=p.parse_args();root=a.root.resolve();out=root/'study-v2';out.mkdir(exist_ok=False)
+    p.add_argument('--observer',type=Path,required=True)
+    p.add_argument('--execute-approved-proposal',action='store_true',help='requires separate approval of the retained, previously denied continuation')
+    a=p.parse_args()
+    if not a.execute_approved_proposal:p.error('study-v2 launch was denied by automatic approval review; separate approval is required')
+    root=a.root.resolve();out=root/'study-v2';out.mkdir(exist_ok=False)
     old=load(root/'study-v1/progress.json');diagnosis=load(root/'diagnosis-v1/result.json');measure=load(root/'observations-v3/summary.json')
     assert old['status']=='OBSTRUCTED' and diagnosis['qualification']=='PASS' and diagnosis['accepted_steps']==8
     for key in ('time08-q8','time08-q10','normal-fine08-q8','normal-fine08-q10'):

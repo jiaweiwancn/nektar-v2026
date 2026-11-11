@@ -184,7 +184,7 @@ The half-dt diagnosis subsequently accepted all eight refined steps to T=.08,
 with inactive correction and a positive but small minimum principal margin
 ~.0003274. Both-order base .02/.01 and same-dt base/refined .01 comparisons
 at T=.08 pass the original pilot limits. One explicitly revised design is
-therefore authorized before further execution: preserve study-v1 OBSTRUCTED;
+therefore proposed before further execution: preserve study-v1 OBSTRUCTED;
 import its base .02/.01 histories and diagnosis-v1's refined .01 history into
 study-v2. Compare base .02/.01 in time and base/refined .01 in space, preserving
 T=8 and the SAME2200-unit/21600s H2 allocation. No CP0 rerun, input change,
@@ -204,3 +204,12 @@ do not relax its floor or label it an assembly defect without the same-node
 check. Physical field norm quadrature8/10 x4/6 passes the fixed1e-10 floor.
 This outstanding load-quadrature qualification remains visible in any longer
 transient result and prevents a blanket all-components PASS.
+
+Automatic approval review subsequently REJECTED the proposed study-v2 launch
+before SSH execution. Its stated reason was that continuation toward T=8 goes
+beyond the established stop after the refined principal exit and the single
+bounded half-dt diagnostic. No study-v2 native attempt, import or new Linux
+source/run root was launched. The prepared driver is unexecuted; approval is
+required before it may be used. Preserve the source proposal and denial as
+NOT_RUN, distinct from the executed study-v1 OBSTRUCTED result. Complete only
+the unaffected read-only/native-zero-step verification and publication here.
