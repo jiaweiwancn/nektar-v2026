@@ -67,6 +67,13 @@ eta interval is connected and physical z increases, giving injectivity.
 Validate the whole tunnel, simple boundary, interface/cofactors and both feet.
 No full-height normal-ray extension or relaxed reach certificate is allowed.
 
+For completeness the two region interiors do not overlap. The offset interface
+is a graph with slope f' and global Lipschitz bound M. Each outer segment obeys
+z(eta)-z_H(x(eta)) >= eta*[Z-z_H(s)-M*|s-x_H(s)|] > 0, because
+(1+M*|f'|)/sqrt(1+f'^2)<=sqrt(1+M^2) and the certified ceiling bracket is
+positive. The normal tube lies below that interface. This also certifies the
+inclined-plane union when its lateral chart edges bend at H.
+
 Keep full 3D WJ tensor/cubic surrogate, Original, DevStrainRawWorkV1,
 physical epsilon, Praw=-R:Graw and independent Cd scalar diffusion. Constants
 remain c1=1.8,c2=5/9,Ce1=1.44,Ce2=1.82,sigma_k=1,sigma_epsilon=1.3,

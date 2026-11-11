@@ -43,7 +43,8 @@ def main():
         entry=dict(units=a.units,reserved_seconds=a.seconds,status='RESERVED',allocation=allocation)
         book['entries'][a.label]=entry;save(journal,book)
         argv=['ctest','--test-dir',str(a.build.resolve()),'-j','1','--output-on-failure','-R',a.select]
-        env=dict(os.environ,**THREADS,NUMEXPR_NUM_THREADS='1',VECLIB_MAXIMUM_THREADS='1',
+        env=dict(os.environ);env.update(THREADS)
+        env.update(NUMEXPR_NUM_THREADS='1',VECLIB_MAXIMUM_THREADS='1',
             NEKTAR_RANS_TIMING_FILE=str(out/'native-timing.jsonl'))
         inventory=subprocess.run(['ctest','--test-dir',str(a.build.resolve()),'--show-only=json-v1'],env=env,
             capture_output=True,text=True,check=True)
