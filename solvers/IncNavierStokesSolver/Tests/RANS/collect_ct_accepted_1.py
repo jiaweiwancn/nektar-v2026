@@ -115,7 +115,8 @@ def main():
         runtime_ranks=1,compiled_MPI='ON',project_workers=16,compiler_workers=4,aggregate_limit=72,startup_reserve=16))
     for name in ('dataset-audit.json','feasibility-execution-v1.json','feasibility-execution-v2.json',
         'build-execution-v1.json','build-execution-v2.json','build-execution-v3.json','build-execution-v4.json','build-execution-v5.json',
-        'native-pipeline-v2-execution.json','native-pipeline-v3-execution.json','pilot-execution-v2.json','postmortem-execution-v1.json','ctest-execution-v1.json','worker-guard-status.json'):
+        'native-pipeline-v2-execution.json','native-pipeline-v3-execution.json','pilot-execution-v2.json','postmortem-execution-v1.json','ctest-execution-v1.json','worker-guard-status.json',
+        'resource-control-incident.json','resource-helper-proof.json','initial-polynomial-audit.json'):
         f=r/name
         if f.exists():files[str(f)]=sha(f);shutil.copy2(f,out/name)
     old_source_scope=s/'docs/plans/a93-a95-e94e95-awf-directional-resolution-qualification-evidence/source-scope.json'
@@ -136,9 +137,18 @@ def main():
         A93_smoke=pilot['cases']['A93-dt-0.001']['status'],E94E95_smoke=pilot['cases']['E94E95-dt-0.001']['status'],
         A95_common_prefix='diagnostic only, does not qualify planned endpoint or full advection transit',
         diagnostic_postmortem=receipts['postmortem']['status'],experimental_prediction_validation='not_attempted',
+        aggregate_resource_compliance=bound(r/'resource-control-incident.json')['status'],
         native_curved_or_hill_evolution='not_attempted and guarded',readiness='small conservative flat prototype ready within verified scope; physical A95 precursor/benchmark not admitted',
         next_gate='diagnose finite-depth/delta constitutive-domain loss with signed pressure/strain and inlet/normal representation evidence before longer unforced development; use this small case to specify scalable conservative backend and curved coupling',
         historical_failures_and_eight_unresolved_epsilon_orders='unchanged')
+    preparation=[]
+    for label in ('boundary-verification-v1','boundary-verification-v2','boundary-verification-v3','pilot-v1','pilot-v2'):
+        f=r/label/'results.json'
+        if f.exists():
+            d=bound(f);preparation.append(dict(label=label,status=d['status'],failure=d.get('failure'),
+                cases={k:dict(status=v['status'],failure=v.get('failure')) for k,v in d.get('cases',{}).items()},
+                results_sha256=sha(f),scope='archived preparation/fixture/export failure; no successful physical pilot inferred'))
+    write_json(out/'preparation-failures.json',preparation)
     write_json(out/'decision.json',decision);write_json(out/'actual-loaded-library-maps.json',mapped)
     write_json(out/'raw-artifact-hashes.json',files)
     write_json(out/'hashes.json',{p.name:sha(p) for p in sorted(out.iterdir()) if p.is_file()})
