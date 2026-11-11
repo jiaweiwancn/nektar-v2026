@@ -523,10 +523,27 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
     for(const auto &e:fields[0]->Elements())elements.push_back(J::Object({{"geometry",J::Number(e.geometry)},
         {"degree",J::Number(e.degree)},{"degrees",J::Numbers(e.degrees)},
         {"lower",J::Numbers(e.lower)},{"upper",J::Numbers(e.upper)}}));
+    std::vector<std::string> fieldBasis;
+    for(int b=0;b<Gauge();++b)
+    {
+        std::vector<std::string> nativeElements;
+        for(int e=0;e<fields[b]->Field()->GetExpSize();++e)
+        {
+            const auto exp=fields[b]->Field()->GetExp(e);std::vector<std::string> axes;
+            for(int d=0;d<m_dimension;++d)
+                axes.push_back(J::Numbers(Vector{double(exp->GetBasis(d)->GetBasisType()),
+                    double(exp->GetBasisNumModes(d)),double(exp->GetBasis(d)->GetPointsType()),
+                    double(exp->GetBasis(d)->GetNumPoints())}));
+            nativeElements.push_back(J::Object({{"geometry",J::Number(exp->GetGeom()->GetGlobalID())},
+                {"axes_type_modes_pointsType_points",J::List(axes)}}));
+        }
+        fieldBasis.push_back(J::List(nativeElements));
+    }
     return J::Object({{"schema","2"},{"read_only","true"},{"time",J::Number(time)},{"identity",J::Quote(PreservationIdentity())},
         {"numerical_operator",J::Quote(RANSWallNumericalOperatorIdentity())},
         {"resolved_descriptor",J::Quote(m_parameters.model.Signature())},{"state",J::Numbers(state)},
         {"offsets",J::Numbers(offset)},{"sizes",J::Numbers(size)},{"elements",J::List(elements)},
+        {"field_basis_configuration",J::List(fieldBasis)},
         {"actual_quadrature",J::Object({{"wall_normal",J::Number(m_parameters.normalOrder)},
             {"wall_tangential",J::Number(m_parameters.tangentialOrder)},
             {"outer_volume",J::Number(m_volumeOrder?m_volumeOrder:m_parameters.tangentialOrder)},

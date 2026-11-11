@@ -3,6 +3,7 @@
 #define NEKTAR_RANS_TENSOR_VALIDATION_H
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
+#include <StdRegions/StdSegExp.h>
 #include <numeric>
 #include <set>
 
@@ -64,8 +65,9 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
             defects[5]=std::max(defects[5],std::abs(mass[i][j]-independentMass[i][j]));
         for(int kind=0;kind<3;++kind)
         {
-            const RANSWallFunction f=[kind](const RANSWallCoordinate &p)
-            {return kind==0?1.:kind==1?1.+.25*p[0]-.3*p[2]:1.+p[0]*p[2]+.125*p[0]*p[0]*p[2]*p[2];};
+            const bool quadratic=std::min(field.Elements().front().degrees[0],field.Elements().front().degrees[1])>=2;
+            const RANSWallFunction f=[kind,quadratic](const RANSWallCoordinate &p)
+            {return kind==0?1.:kind==1?1.+.25*p[0]-.3*p[2]:1.+p[0]*p[2]+(quadratic?.125*p[0]*p[0]*p[2]*p[2]:0.);};
             const auto c=field.Project(f);const auto copy=field.RestrictCoefficients(field,c);
             RANSWallAlgebra::Require(c==copy,"signed native self restriction differs");
             for(const auto &q:field.Quadrature(7))
@@ -105,7 +107,39 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
             {"mode_checks",J::Number(modeChecks)},{"defects_value_dx_dz_dxz_dzz_mass_polynomial_faces",J::Numbers(defects)},
             {"mass",J::Rows(mass)},{"radial_projection_samples",J::List(samples)},{"integrated_volume",J::Number(volume)}}));
     }
+    std::vector<std::string> ground;
+    const auto &kf=*patch.fields[patch.K()];const auto native=kf.Field();
+    if(kf.Elements().front().degrees[0]==6)
+    {
+        auto state=patch.Reference();const auto cg=native->GetLocalToGlobalMap();
+        for(int fixture=0;fixture<7;++fixture)
+        {
+            const std::string name=std::vector<std::string>{"positive_sextic","narrow_negative_sextic","endpoint_minimum",
+                "repeated_stationary_minimum","positive_tiny_constant","zero_constant","negative_tiny_constant"}[fixture];
+            for(int e=0;e<kf.Elements().size();++e)if(kf.Elements()[e].lower[2]==0)
+            {
+                StdRegions::StdSegExp segment(native->GetExp(e)->GetBasis(0)->GetBasisKey());
+                const int n=segment.GetTotPoints(),nc=segment.GetNcoeffs();
+                Array<OneD,NekDouble> physical(n),coefficients(nc,0.);const auto x=segment.GetBasis(0)->GetZ();
+                for(int j=0;j<n;++j)
+                {
+                    const double y=x[j]-.123456789;
+                    physical[j]=fixture==0?y*y*(1+x[j]*x[j]+std::pow(x[j],4))+1e-6:
+                        fixture==1?y*y*(1+x[j]*x[j]+std::pow(x[j],4))-1e-12:
+                        fixture==2?x[j]+1+.1*std::pow(x[j]+1,6)+1e-8:
+                                   std::pow(y,4)+.001*std::pow(y,6)-1e-8;
+                }
+                if(fixture>=4)coefficients[0]=coefficients[1]=fixture==4?1e-20:fixture==5?0.:-1e-20;
+                else segment.FwdTransBndConstrained(physical,coefficients);
+                const int start=native->GetCoeff_Offset(e);
+                for(int j=0;j<nc;++j)state[patch.offset[patch.K()]+cg->GetLocalToGlobalMap(start+j)]=cg->GetLocalToGlobalSign(start+j)*coefficients[j];
+            }
+            ground.push_back(J::Object({{"name",J::Quote(name)},{"expected_admissible",J::Boolean(fixture==0 || fixture==2 || fixture==4 || fixture==5)},
+                {"diagnostic",patch.ContinuousGroundDiagnostic(state)}}));
+        }
+    }
     return J::Object({{"schema",J::Quote("NativeDirectionalTensorChecksV1")},{"fields",J::List(fields)},
+        {"continuous_ground_fixtures",J::List(ground)},
         {"scope",J::Quote("independent Nektar BwdTrans/PhysDeriv/Integral, signed CG packing, native faces and restriction; all individual modes; constants, affine and mixed polynomials")}});
 }
 }

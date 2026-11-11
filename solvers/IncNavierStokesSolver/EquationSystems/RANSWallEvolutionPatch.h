@@ -374,6 +374,8 @@ public:
         const Vector &previous,double alpha,double time,const RANSWallEvolutionData &data) const;
     std::string MixedSpaceRankPacket(const Vector &state,double time,
         const RANSWallEvolutionData &data) const;
+    std::string ContinuousGroundDiagnostic(const Vector &state) const
+    { bool admissible=false;return WallTraceJSON(state,admissible); }
     const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
     int m_massOrder=0,m_volumeOrder=0,m_interfaceOrder=0;

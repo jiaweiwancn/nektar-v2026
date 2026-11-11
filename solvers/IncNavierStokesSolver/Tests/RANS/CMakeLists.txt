@@ -625,6 +625,11 @@ if(Python3_Interpreter_FOUND)
             --probe $<TARGET_FILE:RANSPreservationProbe> --descriptor-probe $<TARGET_FILE:RANSNewModelsProbe>)
         set_tests_properties(RANSNativeOwnershipGeometry PROPERTIES PROCESSORS 1 TIMEOUT 1800
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;PYTHONDONTWRITEBYTECODE=1;TMPDIR=$ENV{TMPDIR}")
+        add_test(NAME RANSDirectionalNativeLayout COMMAND ${Python3_EXECUTABLE} -B
+            ${CMAKE_CURRENT_LIST_DIR}/check_rans_directional_layout.py
+            --runtime $<TARGET_FILE_DIR:RANSPreservationProbe>)
+        set_tests_properties(RANSDirectionalNativeLayout PROPERTIES PROCESSORS 1 TIMEOUT 1200
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;PYTHONDONTWRITEBYTECODE=1;TMPDIR=$ENV{TMPDIR}")
         add_test(NAME RANSForwardInterfaceTolerance COMMAND ${Python3_EXECUTABLE} -B
             ${CMAKE_CURRENT_LIST_DIR}/check_rans_forward_interface_tolerance.py
             --probe $<TARGET_FILE:RANSPreservationProbe> --descriptor-probe $<TARGET_FILE:RANSNewModelsProbe>)
