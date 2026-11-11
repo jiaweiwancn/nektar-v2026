@@ -147,18 +147,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         auto abGz=Multiply(a,bGz);Vector identity(nv),constraints(np);
         for(int i=0;i<nv;++i)identity[i]=defect[i]-(Gz[i]-abGz[i]);
         for(int i=0;i<np;++i)constraints[i]=defect[nv+i];
-        const auto native=Residual(s,history,alpha,time,data);
-        Vector regional(3);for(int b=InnerPressure();b<=Gauge();++b)
-            for(int i=0;i<(b==Gauge()?1:size[b]);++i)
-                regional[b-InnerPressure()]=std::max(regional[b-InnerPressure()],std::abs(native[offset[b]+i]));
         double boundary=0;for(auto [row,value]:external)boundary=std::max(boundary,std::abs(s[row]-value));
-        Require(Maximum(identity)<=1e-9*std::max(1.,Maximum(Gz)) && Maximum(constraints)<1e-10 && Maximum(regional)<1e-10 && boundary<1e-13,
-            "PIMPLE pressure constraint, boundary or momentum splitting identity failure");
         put("pressure_inverse",J::Quote("alpha^-1 consistent free-velocity mass inverse"));
         put("velocity_size",J::Number(nv));put("pressure_gauge_size",J::Number(np));
         put("predictor_linear_residual",J::Number(Maximum(predictorDefect)));
         put("pressure_linear_residual",J::Number(Maximum(pressureDefect)));
-        put("corrected_continuity_gauge",J::Numbers(regional));put("boundary_defect",J::Number(boundary));
+        put("algebraic_corrected_continuity",J::Numbers(constraints));put("boundary_defect",J::Number(boundary));
         put("momentum_splitting_identity_defect",J::Number(Maximum(identity)));
         put("frozen_momentum_defect",J::Number(Maximum(Vector(defect.begin(),defect.begin()+nv))));
         auto pressureDirection=Vector(Size());
@@ -167,6 +161,61 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         Vector actionError(nv);for(int i=0;i<nv;++i)actionError[i]=action[flow.rows[i]]-Gz[i];
         put("native_full_G_action_defect",J::Number(Maximum(actionError)));
         Require(Maximum(actionError)<1e-10,"PIMPLE omitted native pressure action");
+        // Read-only telemetry must survive a constitutive-domain exception in
+        // Residual below. All quantities come from the already completed solves;
+        // no stress at the corrected state and no additional solve is needed.
+        if(m_pimpleSnapshots)
+        {
+            RANSWallTiming::Scope snapshotTiming("io.flow_attempt_snapshot");
+            std::filesystem::create_directories(m_pimpleSnapshotDirectory);
+            const auto stem=(std::filesystem::path(m_pimpleSnapshotDirectory)/
+                ("flow-t"+J::Number(time)+"-"+RANSWallR3::Hash(history).substr(0,12))).string();
+            auto saveMatrix=[&](const WallMatrix &matrix,const std::string &name)
+            {
+                const auto path=stem+"."+name+".bin";std::ofstream out(path,std::ios::binary);
+                for(const auto &row:matrix)out.write(reinterpret_cast<const char*>(row.data()),row.size()*sizeof(double));
+                out.close();Require(out.good(),"could not save frozen flow matrix");
+                return J::Object({{"file",J::Quote(std::filesystem::absolute(path).string())},
+                    {"sha256",J::Quote(RANSWallR3::HashFile(path))},{"rows",J::Number(matrix.size())},
+                    {"columns",J::Number(matrix.empty()?0:matrix.front().size())}});
+            };
+            auto predictorState=base;
+            for(int i=0;i<nv;++i)predictorState[flow.rows[i]]+=predictor[i];
+            const auto packet=stem+".json";std::ofstream out(packet);
+            out<<J::Object({{"schema",J::Quote("PimpleComputedFlowSnapshotV1")},
+                {"time",J::Number(time)},{"alpha",J::Number(alpha)},
+                {"input",J::Numbers(base)},{"history",J::Numbers(history)},
+                {"momentum_predictor",J::Numbers(predictorState)},{"corrected_flow",J::Numbers(s)},
+                {"rows",J::Numbers(flow.rows)},{"velocity_size",J::Number(nv)},
+                {"external_constraints",J::Constraints(external)},
+                {"fixed_reference",J::Numbers(m_reference)},
+                {"fixed_boundary",J::Constraints(data.fixedBoundary)},
+                {"frozen_flow_residual",J::Numbers(flow.residual)},
+                {"frozen_flow_matrix",saveMatrix(flow.matrix,"system")},
+                {"free_velocity_mass",saveMatrix(m,"mass")},
+                {"pressure_operator",J::Rows(schur)},
+                {"predictor_increment",J::Numbers(predictor)},
+                {"pressure_increment",J::Numbers(dz)},
+                {"subtracted_mass_velocity_correction",J::Numbers(bGz)},
+                {"velocity_increment",J::Numbers(du)},
+                {"full_pressure_action",J::Numbers(action)},
+                {"frozen_momentum_and_continuity_defect",J::Numbers(defect)},
+                {"splitting_identity_defect",J::Numbers(identity)},
+                {"predictor_linear_residual",J::Numbers(predictorDefect)},
+                {"pressure_linear_residual",J::Numbers(pressureDefect)},
+                {"matrix_encoding",J::Quote("row-major native IEEE754 binary64")},
+                {"scope",J::Quote("computed flow stages before constitutive residual; physical corrected stress may be undefined")}})<<'\n';
+            out.close();Require(out.good(),"could not save computed flow snapshot");
+            put("flow_snapshot",J::Quote(std::filesystem::absolute(packet).string()));
+            put("flow_snapshot_sha256",J::Quote(RANSWallR3::HashFile(packet)));
+        }
+        const auto native=Residual(s,history,alpha,time,data);
+        Vector regional(3);for(int b=InnerPressure();b<=Gauge();++b)
+            for(int i=0;i<(b==Gauge()?1:size[b]);++i)
+                regional[b-InnerPressure()]=std::max(regional[b-InnerPressure()],std::abs(native[offset[b]+i]));
+        put("corrected_continuity_gauge",J::Numbers(regional));
+        Require(Maximum(identity)<=1e-9*std::max(1.,Maximum(Gz)) && Maximum(constraints)<1e-10 && Maximum(regional)<1e-10 && boundary<1e-13,
+            "PIMPLE pressure constraint, boundary or momentum splitting identity failure");
         // Verification is opt-in and its extra solves are outside the trajectory counts.
         if(m_pimpleVerify)
         {

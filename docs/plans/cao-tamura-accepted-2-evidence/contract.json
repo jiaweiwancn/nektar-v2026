@@ -1,0 +1,124 @@
+{
+  "schema": "CT-Accepted-2-v1",
+  "starting_revision": "eedb3738017f46f9c71b857bf814213ad070d7f7",
+  "starting_status": "clean; fetched GitHub SSH head identical; HTTPS fetch failed without changing branch",
+  "physics": "CT-Accepted-1 unchanged; Natural; original high-Re, finite inner nu, AcceptedOpenFlatV1, no forcing, regularization or trace repair",
+  "operator": "GeneratedVolumeOwnerV1; consistent free-mass one-sweep PIMPLE; instrumentation only unless an independently demonstrated defect is found",
+  "matrix": {
+    "layouts": {
+      "B": {
+        "add_x": [],
+        "add_z": [],
+        "predicted_slots": 1085
+      },
+      "X": {
+        "add_x": [
+          0.1875
+        ],
+        "add_z": [],
+        "predicted_slots": 1545
+      },
+      "Zplus": {
+        "add_x": [],
+        "add_z": [
+          6.5
+        ],
+        "predicted_slots": 1172
+      },
+      "XZplus": {
+        "add_x": [
+          0.1875
+        ],
+        "add_z": [
+          6.5
+        ],
+        "predicted_slots": 1669
+      }
+    },
+    "dt": [
+      0.002,
+      0.001
+    ],
+    "endpoint": 0.008,
+    "physical_functions": "copy sealed CT1 XML FUNCTION expressions unchanged; do not regenerate epsilon from mesh knots",
+    "initialization": "fresh zero-step native history per layout/dt; identical actual coefficients for same-space dt controls",
+    "conditional_companion": {
+      "name": "Zminus",
+      "add_z": [
+        5.125
+      ],
+      "activation": "native zero-step pressure/weak-load evidence supports projection spillover and primary matrix leaves mechanism unresolved",
+      "dt": [
+        0.002,
+        0.001
+      ],
+      "endpoint": 0.008
+    },
+    "continuation": [
+      0.02,
+      0.2
+    ],
+    "continuation_gate": "both dt reach prior horizon with native and independent dense-grid domain, boundary, mass, scalar and temporal checks; retain signatures and histories"
+  },
+  "diagnostics": {
+    "flow": "save computed input/predictor/pressure increment/mass correction/corrected flow and frozen system BEFORE complete constitutive residual; no extra governing solves",
+    "sampling": "native volume plus fixed x/z physical grid around delta and original witness; side and owner identities retained",
+    "trace_removal": "diagnostic only; subtract planar divergence/2 from xx and zz, never evolve it",
+    "pressure": "independent constrained mass projection and weak load/traction comparisons; include roughness-volume pressure action"
+  },
+  "limits": {
+    "stored_slots": 3000,
+    "linear_scaled": 1e-10,
+    "pressure_action": 2e-10,
+    "mass_scaled": 1e-8,
+    "scalar_physical_defect": 0.02,
+    "temporal_scaled_RMS": 0.001,
+    "domain": "unchanged actual gates; no artificial margin; dense physical sampling must also be admissible",
+    "quadrature": "native32/8/10/10/10; frozen48/64 and other12/16; physicalface16/32"
+  },
+  "wall": {
+    "models": [
+      "A93",
+      "A95",
+      "E94E95"
+    ],
+    "heights_mm": [
+      5,
+      8,
+      11
+    ],
+    "K": "q_m*utau^2",
+    "fit": "once per extraction scenario at16mm; fixed across heights/columns",
+    "extraction": "both axes +/-0.5 PDF-point transformed envelope; rebracket each scenario; propagate40mm normalization and16mm anchor jointly, including shared shifts and conservative independent endpoint bounds; deterministic envelopes not confidence intervals",
+    "unknown_uncertainties": "displacement, physical and experimental measurement uncertainties remain separate unquantified",
+    "thin_thresholds": [
+      0.1,
+      0.25
+    ],
+    "curved": "same independent metric-weighted machinery/stations; no native curved qualification",
+    "smooth": "historical negative-k references remain unresolved SS preparation"
+  },
+  "resources": {
+    "root": "/media/jay/新加卷/nektar-v2026-runs/ct-accepted-2-20261112",
+    "project_workers": 16,
+    "compiler_jobs": 4,
+    "native_families": 1,
+    "library_threads": 1,
+    "aggregate_limit": 72,
+    "startup_reserve": 16,
+    "launcher": "ct_accepted_command.py for ALL numerical families including read-only NumPy/SciPy",
+    "historical_79_thread_failure": "unchanged"
+  },
+  "stopping": "stop each trajectory on first genuine rejection; preserve accepted history and failed candidate; no input retuning or mesh search",
+  "deferred": [
+    "EP",
+    "A93 perturbations",
+    "old campaigns",
+    "long responses",
+    "native curved",
+    "hill prediction",
+    "MPI/3D",
+    "backend rewrite",
+    "input epsilon increase"
+  ]
+}

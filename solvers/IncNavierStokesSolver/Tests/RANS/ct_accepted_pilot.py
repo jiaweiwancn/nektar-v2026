@@ -104,7 +104,9 @@ def budget_classification(packet,construction):
     for name,row in dict(**b['equations'],whole_k=total_k).items():
         # Sources/storage have units scalar*volume/time. Keep the same fixed
         # Hh/U(Hh) scales, rather than a local source that may vanish.
-        scale=(eH if name=='outer_epsilon' else K)*c['Z']*.25
+        volume=(c['x'][-1]-c['x'][0])*(c['knots'][-1]-c['knots'][0])
+        require(volume>0,'nonpositive_physical_budget_geometry')
+        scale=(eH if name=='outer_epsilon' else K)*volume
         equations[name]=dict(**row,physical_scale=scale,scaled_frozen_defect=abs(row['frozen_stage_physical_defect'])/scale,
             accuracy_limit=.02,status='pass' if abs(row['frozen_stage_physical_defect'])/scale<=.02 else 'fail')
     rec=b['reconciliation'];reconstruction={}
@@ -115,7 +117,7 @@ def budget_classification(packet,construction):
     return dict(reconstruction_status='pass' if reconstruction and all(r['status']=='pass' for r in reconstruction.values()) else 'fail',
         accuracy_status='pass' if all(r['status']=='pass' for r in equations.values()) else 'fail',equations=equations,
         reconstruction=reconstruction,interface_frozen_k_fluxes=interfaces,interface_current_k_fluxes=current_interfaces,
-        face_order=b['face_order'],actual_quadrature=packet['observation']['actual_quadrature'],
+        face_order=b['face_order'],actual_quadrature=packet['observation']['actual_quadrature'],physical_volume=volume,
         scope='independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching')
 
 
