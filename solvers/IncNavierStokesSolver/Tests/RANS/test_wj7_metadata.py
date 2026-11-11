@@ -15,6 +15,11 @@ from wj_immutable import file_identity
 
 
 class Metadata(unittest.TestCase):
+    def test_discrete_native_counts_preserve_exact_parsed_integers(self):
+        from run_wj7_native import native_counts
+        self.assertEqual(native_counts(32.,2.,0.),(32,2,0))
+        for values in ((1.5,2,0),(0,1.5,0),(0,3,0),(33,2,0),(0,float('nan'),0),(0,2,float('inf'))):
+            with self.assertRaises(ValueError):native_counts(*values)
     def test_streamed_boundary_estimate_omits_only_zero_mask_interior_rows(self):
         from wj4_measure import boundary_rule
         from wj5_measure import boundary_uncertainty

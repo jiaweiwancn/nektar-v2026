@@ -30,6 +30,13 @@ SCRIPTS=Path(__file__).resolve().parent
 PARENT_TRANSPORT='74649d94ba88f1ddb20e5f2ca4642a7a0bfb36da47290b195cf862cda79017df'
 
 
+def native_counts(steps,nx,reject):
+    require(all(not isinstance(v,bool) and math.isfinite(v) and int(v)==v for v in (steps,nx,reject)),
+            'native counts must be finite exact integers')
+    require(0<=steps<=32 and nx in (1,2) and reject>=0,'unsupported native count/column route')
+    return int(steps),int(nx),int(reject)
+
+
 @contextlib.contextmanager
 def session(ledger,label):
     key=label+'-'+uuid.uuid4().hex;ledger.begin_session(key)
@@ -78,7 +85,7 @@ def verify_parent(parent,source):
 
 class Study(WJ6Study):
     def __init__(self,a,policy):
-        self.a=copy.copy(a);self.a.policy=policy;self.a.output=a.root/'study'
+        self.a=copy.copy(a);self.a.policy=policy;self.a.output=a.root/a.study_name
         self.root=self.a.output/policy;self.root.mkdir(parents=True,exist_ok=True)
         self.summary=self.root/'summary.json'
         self.ledger=Ledger(a.root,policy,cap=800)
@@ -104,6 +111,10 @@ class Study(WJ6Study):
         self.s['components']['transactions']=component('PASS','reused unchanged-runtime WJ-6 actual-capacity transaction',
             evidence=file_identity(a.parent/'study'/policy/'transaction-result.json'))
         self.s['design_sha256']=file_hash(self.root/'design.json');self.save()
+
+    def native(self,name,steps=0,cp=None,dt=3.2e-5,nx=2,reject=0,arithmetic=False,role='primary'):
+        steps,nx,reject=native_counts(steps,nx,reject)
+        return super().native(name,steps,cp,dt,nx,reject,arithmetic,role)
 
     def execute(self,folder,argv,inputs,settings,steps=0,outputs=(),measurement=False):
         argv=list(map(str,argv));folder.mkdir(parents=True,exist_ok=True)
@@ -248,7 +259,7 @@ class Study(WJ6Study):
 
 
 def projection(a,policy,end):
-    folder=a.root/'study'/policy;s=read(folder/'summary.json');ledger=Ledger(a.root,policy,cap=800)
+    folder=a.root/a.study_name/policy;s=read(folder/'summary.json');ledger=Ledger(a.root,policy,cap=800)
     old=read(a.parent/'study'/policy/'T3-resource-projection.json')
     rates=dict(old['native_seconds_per_step_bounds'])
     current_receipts={}
@@ -320,6 +331,7 @@ def main():
     p.add_argument('--solver',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
     p.add_argument('--mode',choices=('prepare','prepare-caches','cached-replay','production-profile','import','replay','admit','cadence'),required=True)
     p.add_argument('--replay-name',default='retained-replay')
+    p.add_argument('--study-name',default='study')
     p.add_argument('--end',type=int,choices=(32,64,96,128),default=32);a=p.parse_args()
     require(platform.system()=='Linux','Linux is authoritative');os.environ.update(THREADS)
     for name in ('root','parent','solver','probe'):setattr(a,name,getattr(a,name).resolve())
@@ -428,8 +440,8 @@ def main():
     if a.mode in ('replay','cadence'):
         end=32 if a.mode=='replay' else a.end
         gate=component('PASS' if joint_ready(results,end) else aggregate({k:r['gate'] for k,r in results.items()})['status'],
-            end=end,policies={k:dict(end=r['end'],gate=r['gate'],evidence=file_identity(a.root/'study'/k/('qualification-'+str(end)+'.json'))
-                if (a.root/'study'/k/('qualification-'+str(end)+'.json')).exists() else None) for k,r in results.items()})
+            end=end,policies={k:dict(end=r['end'],gate=r['gate'],evidence=file_identity(a.root/a.study_name/k/('qualification-'+str(end)+'.json'))
+                if (a.root/a.study_name/k/('qualification-'+str(end)+'.json')).exists() else None) for k,r in results.items()})
         if set(results)!={'EP','Budget'} and gate['status']=='PASS':gate['status']='NOT_RUN'
         write_once(a.root/'joint'/('barrier-'+str(end)+'.json'),gate)
     elif a.mode=='admit':
