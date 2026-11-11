@@ -37,6 +37,9 @@ def main():
     require(RequestManifest(a.binding.parent,br,True).completed(a.binding.parent),'axis_control_unsealed_failure')
     h=load(a.hypothesis);identity(h['configuration'],cfg)
     require(h['schema']=='PhysicalBudgetAxisHypothesisV1' and h['control']==a.control,'axis_control_hypothesis_identity')
+    require(h['mesh_sha256']==sha(a.mesh_file),'axis_control_predeclared_mesh_changed')
+    require(h['source_primary_budget_sha256']==sha(Path(h['source_primary_budget'])),
+            'axis_control_diagnosis_source_changed')
     base_path=r/'meshes/A95-N-Accepted/Balanced5V1.json';base=load(base_path)
     require(h['base_mesh_sha256']==sha(base_path),'axis_control_base_mesh_changed')
     spec=load(a.mesh_file)
