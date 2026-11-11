@@ -920,8 +920,27 @@ void RANSEquilibriumWallEvolution::WriteMappedField(const std::string &name,cons
     const int dimension=m_patch->Dimension(),points=native->GetTotPoints();int cells=0;
     for(int e=0;e<native->GetExpSize();++e){const auto exp=native->GetExp(e);int count=1;for(int a=0;a<dimension;++a)count*=exp->GetNumPoints(a)-1;cells+=count;}
     out<<"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\"><UnstructuredGrid><Piece NumberOfPoints=\""<<points<<"\" NumberOfCells=\""<<cells<<"\"><Points><DataArray type=\"Float64\" NumberOfComponents=\"3\" format=\"ascii\">\n";
-    Array<OneD,NekDouble> x(points),y(points),z(points);native->GetCoords(x,y,z);
-    for(int j=0;j<points;++j){const auto p=m_patch->Physical({x[j],dimension==3?y[j]:0.,dimension==3?z[j]:y[j]});out<<p[0]<<' '<<p[1]<<' '<<p[2]<<'\n';}
+    // The canonical quads/hexes are certified affine. Evaluate their tensor
+    // coordinates directly, retaining exact endpoints instead of reconstructing
+    // them with a floating-point geometric BwdTrans in GetCoords.
+    int written=0;
+    for(int e=0;e<native->GetExpSize();++e)
+    {
+        const auto exp=native->GetExp(e);const auto &element=field->Elements()[e];
+        const int nx=exp->GetNumPoints(0),ny=exp->GetNumPoints(1),nz=dimension==3?exp->GetNumPoints(2):1;
+        for(int k=0;k<nz;++k)for(int j=0;j<ny;++j)for(int i=0;i<nx;++i)
+        {
+            const std::array<int,3> index{i,j,k};RANSWallCoordinate q{};
+            for(int d=0;d<dimension;++d)
+            {
+                const int axis=dimension==2 && d==1?2:d;const double xi=exp->GetBasis(d)->GetZ()[index[d]];
+                q[axis]=xi==-1?element.lower[axis]:xi==1?element.upper[axis]:
+                    element.lower[axis]+(xi+1)*(element.upper[axis]-element.lower[axis])/2;
+            }
+            const auto p=m_patch->Physical(q);out<<p[0]<<' '<<p[1]<<' '<<p[2]<<'\n';++written;
+        }
+    }
+    Require(written==points,"mapped VTU tensor point count differs");
     out<<"</DataArray></Points><PointData Scalars=\""<<name<<"\"><DataArray type=\"Float64\" Name=\""<<name<<"\" format=\"ascii\">\n";
     for(int j=0;j<points;++j)out<<native->GetPhys()[j]<<'\n';
     out<<"</DataArray></PointData><Cells><DataArray type=\"Int32\" Name=\"connectivity\" format=\"ascii\">\n";
