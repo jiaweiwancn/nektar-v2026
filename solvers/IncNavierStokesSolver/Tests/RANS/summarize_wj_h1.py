@@ -15,7 +15,9 @@ from wj_h1_cases import NU, US, HW
 
 
 def load(path):
-    return json.loads(Path(path).read_text())
+    # Native JSON may spell signed zero as -0. Preserve its binary64 sign when
+    # replaying hashes; other integer metadata retain their natural type.
+    return json.loads(Path(path).read_text(), parse_int=lambda s: -0. if s == '-0' else int(s))
 
 
 def identity(path):
@@ -104,6 +106,14 @@ def main():
         folder = unique_run(args.build, name)
         report_path = folder / 'report.json'
         report, result = load(report_path), load(folder / 'result.json')
+        for callback in report['callbacks']:
+            for field_name in ('state', 'history'):
+                actual = hashlib.sha256(np.asarray(callback[field_name], dtype='<f8').tobytes()).hexdigest()
+                assert actual == callback[field_name + '_sha256'], 'callback payload/identity mismatch'
+        assert np.array_equal(report['state'], report['callbacks'][-1]['state'])
+        for attempt in report['pimple_attempts']:
+            snapshot = load(attempt['k_snapshot'])
+            assert np.asarray(snapshot['raw'], dtype='<f8').tobytes() == np.asarray(snapshot['corrected'], dtype='<f8').tobytes()
         save(args.output / (name + '-independent.json'), result)
         heavy += [identity(p) for p in folder.rglob('*') if p.is_file()]
         packets = [dict(step=0, time=0, interface=report['startup_interface'])] + report['events']
@@ -118,6 +128,9 @@ def main():
                     traction_x=row['traction_defect'][0], traction_z=row['traction_defect'][2],
                     k_flux_sum=row['k_flux_inner'] + row['k_flux_outer'],
                     mechanical_jump=row['mechanical_jump'], jump_target=row['normal_traction_jump_target'],
+                    inner_covariance_min=float(np.linalg.eigvalsh(row['R_inner'])[0]),
+                    outer_covariance_min=float(np.linalg.eigvalsh(row['R_outer'])[0]),
+                    production_inner=row['production_inner'], production_outer=row['production_outer'],
                     nu_over_nut_H=row['nu_over_nut_H']))
         audits = [report['startup_audit']] + [v['audit'] for v in report['callbacks']]
         summary = dict(report=identity(report_path), design=load(folder / 'design.json'),
@@ -140,6 +153,7 @@ def main():
                 if isinstance(a.get(domain), dict):
                     a[domain].pop('profile_branch_pattern', None)
         summary['timing'] = timing(args.root / 'operations' / ('native-' + name + '-v3') / 'native-timing.jsonl')
+        assert summary['timing']['terms']['pimple.sweep']['calls'] == report['steps']
         summary['weak_fields'] = {}
         for phase, path in [('startup', folder / 'report.json.startup-weak.json'), ('final', Path(report['final_weak']))]:
             weak = load(path)
@@ -189,7 +203,7 @@ def main():
                 operations[str(p.relative_to(args.root))] = load(p)
     save(args.output / 'command-receipts.json', operations)
     save(args.output / 'ledger.json', load(args.root / 'checks-accounting.json'))
-    for p in (args.root / 'runtime-v3-prelaunch.json', args.root / 'source-v1.json',
+    for p in (args.root / 'runtime-v3-prelaunch.json', args.root / 'runtime-v3-postbuild.json', args.root / 'source-v1.json',
               args.root / 'source-v2.json', args.root / 'source-v3.json'):
         save(args.output / p.name, load(p)); heavy.append(identity(p))
     save(args.output / 'heavy-index.json', heavy)
