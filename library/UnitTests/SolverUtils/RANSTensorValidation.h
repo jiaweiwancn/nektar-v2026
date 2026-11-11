@@ -26,6 +26,7 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
         const auto &field=*patch.fields[b];const auto native=field.Field();
         const auto cg=native->GetLocalToGlobalMap();
         Vector defects(8);int modeChecks=0;Matrix independentMass(field.Size(),Vector(field.Size()));
+        double outerRestrictionDefect=0;std::vector<std::string> restrictedExports;
         for(int e=0;e<native->GetExpSize();++e)
         {
             const auto exp=native->GetExp(e);const auto &el=field.Elements()[e];
@@ -72,6 +73,31 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
             {return kind==0?1.:kind==1?1.+.25*p[0]-.3*p[2]:1.+p[0]*p[2]+(quadratic?.125*p[0]*p[0]*p[2]*p[2]:0.);};
             const auto c=field.Project(f);const auto copy=field.RestrictCoefficients(field,c);
             RANSWallAlgebra::Require(c==copy,"signed native self restriction differs");
+            if(b<3)
+            {
+                // Exercise the actual full-to-outer export restriction, then
+                // independently unpack with Nektar's signed CG map and apply
+                // its native transforms, without using custom evaluation rows.
+                const auto target=patch.outerVelocity;
+                const auto restricted=target->RestrictCoefficients(field,c);
+                const auto expansion=target->Field();const auto map=expansion->GetLocalToGlobalMap();
+                for(int e=0;e<expansion->GetExpSize();++e)
+                {
+                    const auto exp=expansion->GetExp(e);const int nc=exp->GetNcoeffs(),nq=exp->GetTotPoints();
+                    const int start=expansion->GetCoeff_Offset(e);
+                    Array<OneD,NekDouble> coefficients(nc),physical(nq),dx(nq),dz(nq),x(nq),y(nq),z(nq);
+                    for(int j=0;j<nc;++j)coefficients[j]=map->GetLocalToGlobalSign(start+j)*restricted[map->GetLocalToGlobalMap(start+j)];
+                    exp->BwdTrans(coefficients,physical);exp->PhysDeriv(0,physical,dx);exp->PhysDeriv(1,physical,dz);exp->GetCoords(x,y,z);
+                    for(int q=0;q<nq;++q)
+                    {
+                        const RANSWallCoordinate p{x[q],0.,y[q]};
+                        const double gx=kind==0?0.:kind==1?.25:p[2]+(quadratic?.25*p[0]*p[2]*p[2]:0.);
+                        const double gz=kind==0?0.:kind==1?-.3:p[0]+(quadratic?.25*p[0]*p[0]*p[2]:0.);
+                        outerRestrictionDefect=std::max({outerRestrictionDefect,std::abs(physical[q]-f(p)),std::abs(dx[q]-gx),std::abs(dz[q]-gz)});
+                    }
+                }
+                restrictedExports.push_back(J::Object({{"polynomial",J::Number(kind)},{"coefficients",J::Numbers(restricted)}}));
+            }
             for(const auto &q:field.Quadrature(7))
             {
                 const auto n=field.NativeEvaluate(c,q.coordinate);const auto g=q.Gradient(c);
@@ -107,7 +133,9 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
         fields.push_back(J::Object({{"block",J::Number(b)},{"size",J::Number(field.Size())},
             {"axis_degrees",J::Numbers(field.Elements().front().degrees)},
             {"mode_checks",J::Number(modeChecks)},{"defects_value_dx_dz_dxz_dzz_mass_polynomial_faces",J::Numbers(defects)},
-            {"mass",J::Rows(mass)},{"radial_projection_samples",J::List(samples)},{"integrated_volume",J::Number(volume)}}));
+            {"mass",J::Rows(mass)},{"radial_projection_samples",J::List(samples)},{"integrated_volume",J::Number(volume)},
+            {"outer_native_restriction_maximum_defect",J::Number(outerRestrictionDefect)},
+            {"outer_native_restriction_exports",J::List(restrictedExports)}}));
     }
     std::vector<std::string> ground;
     const auto &kf=*patch.fields[patch.K()];const auto native=kf.Field();
@@ -156,7 +184,7 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
                 {"diagnostic",patch.ContinuousGroundDiagnostic(state)}}));
         }
     }
-    return J::Object({{"schema",J::Quote("NativeDirectionalTensorChecksV1")},{"fields",J::List(fields)},
+    return J::Object({{"schema",J::Quote("NativeDirectionalTensorChecksV2")},{"fields",J::List(fields)},
         {"continuous_ground_fixtures",J::List(ground)},
         {"scope",J::Quote("independent Nektar BwdTrans/PhysDeriv/Integral, signed CG packing, native faces and restriction; all individual modes; constants, affine and mixed polynomials")}});
 }

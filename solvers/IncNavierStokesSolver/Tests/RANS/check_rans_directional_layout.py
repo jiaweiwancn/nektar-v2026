@@ -17,7 +17,7 @@ from rans_duration_contract import require
 
 def classify(packet):
     o=packet['observation'];v=packet['tensor_validation'];mixed=packet['mixed_space'];checks=[]
-    require(v['schema']=='NativeDirectionalTensorChecksV1' and len(v['fields'])==6,'tensor_check_coverage')
+    require(v['schema'] in ('NativeDirectionalTensorChecksV1','NativeDirectionalTensorChecksV2') and len(v['fields'])==6,'tensor_check_coverage')
     for row in v['fields']:
         b=int(row['block']);degrees=row['axis_degrees'];n=len(o['field_basis_configuration'][b])
         require(row['mode_checks']==25*n*(degrees[0]+1)*(degrees[1]+1),'individual_mode_coverage')
@@ -26,6 +26,10 @@ def classify(packet):
         require(d.shape==limits.shape and np.isfinite(d).all() and (d<=limits).all(),'native_tensor_row_or_face_mismatch:'+str(b))
         m=np.array(row['mass']);require(np.max(abs(m-m.T))<=3e-12,'native_mass_not_symmetric');cholesky(m,lower=True)
         checks.append(dict(block=b,defects=d.tolist(),limits=limits.tolist(),mass_positive=True,mode_checks=row['mode_checks']))
+        if v['schema']=='NativeDirectionalTensorChecksV2':
+            require(row['outer_native_restriction_maximum_defect']<=5e-12 and
+                len(row['outer_native_restriction_exports'])==(3 if b<3 else 0),'outer_native_restriction_or_export_failed')
+            checks[-1]['outer_native_restriction_maximum_defect']=row['outer_native_restriction_maximum_defect']
     for ground in v['continuous_ground_fixtures']:
         g=ground['diagnostic'];require(g['admissible']==ground['expected_admissible'],'native_continuous_ground_trace:'+ground['name'])
         require(g['admissible']==(g['minimum']>=g['arithmetic_scale']),'ground_arithmetic_classification')
@@ -76,7 +80,7 @@ def classify(packet):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--output',type=Path);a=p.parse_args()
     if a.output is None:a.output=Path(tempfile.mkdtemp(prefix='rans-directional-native-',dir=os.environ.get('TMPDIR')))/'verification'
-    os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
+    if (a.runtime/'lib').exists():os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     layout={'P3':([3,3],[1,1]),'P4':([4,4],[2,2]),'P5':([5,5],[3,3]),'X6Z5':([6,5],[4,3])}
     manifest=RequestManifest(a.output,dict(schema='DirectionalNativeQualificationV2',layouts=layout,knots=[0.,2.,4.],
         fixture='read-only projected scalar/pressure seed, velocity multiplied by .01; its own fixed boundary and reference, no evolution or neutral-equilibrium claim',

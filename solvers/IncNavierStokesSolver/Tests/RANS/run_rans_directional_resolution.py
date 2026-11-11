@@ -20,11 +20,14 @@ def main():
     r=a.root.resolve();old=a.old_root.resolve();s=Path(__file__).parent;runtime=r/'runtime';cfg=dict(model='A95',policy='Natural',wall='Accepted')
     os.environ.update(THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'),PYTHONDONTWRITEBYTECODE='1',NEKTAR_RANS_PROBE_TIMEOUT='14400')
     contract=load(a.contract);require(contract['schema']=='DirectionalResolutionExperimentV1','directional_contract_version')
-    prerequisites=['directional-layout-v2/results.json','isotropic-compatibility-v1/results.json','directional-history-v3/results.json',
+    prerequisites=['directional-layout-v2/results.json','directional-export-layout-v1/results.json','isotropic-compatibility-v1/results.json','directional-history-v3/results.json',
         'directional-geometry-v1/results.json','frozen-scalar-reconciliation-v1/results.json']
     proofs={}
     for name in prerequisites:
         data=load(r/name);require(data['status']=='pass','directional_prerequisite_failed:'+name);proofs[name]=sha(r/name)
+    export_checks=load(r/'directional-export-layout-v1/results.json')
+    require(all('outer_native_restriction_maximum_defect' in row for layout in export_checks['layouts'].values() for row in layout['tensor_checks']),
+            'directional_subset_export_checks_missing')
     regression=load(r/'compatibility-v1-execution.json')
     require(len(regression['events'])==4 and all(regression['events'][i]['exit_code']==0 for i in (0,2,3)),
             'directional_shared_regressions_failed')
