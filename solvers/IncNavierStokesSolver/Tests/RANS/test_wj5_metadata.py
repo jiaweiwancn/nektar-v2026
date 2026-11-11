@@ -84,7 +84,7 @@ class ConstraintUncertainty(unittest.TestCase):
         fixed=dict(block=0,row=[[0,1.]],free_row=[],free_row_L2=0.,gross_row_L2=1.,absolute_accumulation=1.,prescribed_accumulation=1.)
         epsilon=dict(fixed,block=3,row=[[30,1.]],free_row=[[20,3.],[30,4.]],free_row_L2=5.)
         pressure=dict(fixed,block=4,row=[[100,1.]],free_row=[[100,1.]],free_row_L2=1.)
-        m=dict(observations=[dict(position=[0.,0.,1.],inner=False,constraint_rows=[fixed,fixed,fixed,epsilon,pressure])],
+        m=dict(observations=[dict(position=[0.,0.,1.],geometry=0,inner=False,constraint_rows=[fixed,fixed,fixed,epsilon,pressure])],
             dependent_trace_action=[dict(row=300,free_K_action=[[20,3.]])],arithmetic_evaluation_sensitivity=[0.]*6,
             passive_diagnostics=dict(pressure_regions=[dict(offset=100,gauge_mean_row=[.5]),dict(offset=200,gauge_mean_row=[.5])]))
         packet=dict(systems={k:dict(physical_metric_min_eigenvalue=1.) for k in ('momentum','k','epsilon')},
