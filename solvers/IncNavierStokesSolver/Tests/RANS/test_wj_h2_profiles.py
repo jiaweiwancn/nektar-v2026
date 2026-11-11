@@ -54,6 +54,7 @@ class Profiles(unittest.TestCase):
                 info={e.get('PROPERTY'):e.get('VALUE') for e in r.findall('./CONDITIONS/SOLVERINFO/I')}
                 self.assertEqual(info['SolverType'],'RANSEquilibriumWallEvolution')
                 self.assertEqual(info['RANSWallBoundaryMode'],'OpenTunnelV1')
+                self.assertEqual(info['RANSWallMap'],'Plane')
                 self.assertEqual(info['RANSWallFunctionCoordinates'],'Physical')
                 self.assertIsNone(r.find('./CONDITIONS/FUNCTION[@NAME="BoundaryValuesOuter"]/E[@VAR="p"]'))
                 self.assertIn(.5,design['chart_z'])

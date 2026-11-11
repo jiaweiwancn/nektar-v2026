@@ -119,7 +119,7 @@ def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',spa
         if node.text=='eps_tilde':node.text='epsilon'
     info=dict(EQTYPE='UnsteadyNavierStokes',SolverType='RANSEquilibriumWallEvolution',Projection='Galerkin',GlobalSysSoln='DirectFull',
         TurbulenceModel='WJHighRe',RANSWJGradientPolicy='DevStrainRawWorkV1',RANSWallFormulation='WJCalibratedBudgetAWF',
-        RANSWallNativeGeometry='BudgetTerrainV1',RANSWallMapContinuation='CompositeTunnelV1',RANSWallMap='CosineHill',
+        RANSWallNativeGeometry='BudgetTerrainV1',RANSWallMapContinuation='CompositeTunnelV1',RANSWallMap='Plane',
         RANSWallTemporalCoupling='PimpleSingleSweep',RANSWallNonlinearPolicy='Legacy',RANSWallVariant='Original',
         RANSWallInnerStress='Linear',RANSWallDestruction='Original',RANSWallTransition='Fixed',RANSWallKSampling='InterfaceTrace',
         RANSWallPhysicalRangeGuard='WJNativeV1',RANSWallCondense='False',RANSWallReference='Functions',RANSWallFunctionCoordinates='Physical',
