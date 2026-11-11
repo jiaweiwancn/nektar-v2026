@@ -395,7 +395,10 @@ std::string RANSWallEvolutionPatch::OpenFrozenSystemsPacket(const Vector &state,
     const RANSWallEvolutionData &data) const
 {
     Require(OpenBoundary() && Size()<500,"open frozen-system export requires a small verification fixture");
-    const auto external=ExternalConstraints(time,data);
+    auto external=ExternalConstraints(time,data);
+    // Match the governing one-sweep corner precedence: the dependent trace
+    // is an epsilon row, including its compatible inlet corner.
+    for(int id:m_traceIds)external.erase(offset[Epsilon()]+id);
     std::vector<std::string> blocks,masses;
     for(int b:{0,Epsilon(),K()})
     {

@@ -133,7 +133,7 @@ def probe(runtime,folder,request,name='sample'):
 
 def sampling_request():
     return dict(operation='functions',grid=[[.25,0,.3],[.75,0,2.],[.75,0,2.],[.75,0,3.]],grid_sides=[0,-1,1,0],
-        export_basis=True,export_constitutive=True,export_open_verification=True,export_mixed_space=True,
+        export_basis=True,export_constitutive=True,export_resolution=True,export_open_verification=True,export_mixed_space=True,
         export_tensor_validation=True)
 
 
@@ -201,6 +201,24 @@ def classify(packet):
     r,A,loads=independent_operator(packet);native=np.array(f['raw_residual']);scale=max(1.,np.max(abs(native)))
     defects=dict(raw_weak=float(np.max(abs(r-native)))/scale)
     require(defects['raw_weak']<=2e-10,'independent_conservative_weak_load')
+    n=int(o['sizes'][0]);vol=np.zeros((3,n));face_load=np.zeros((3,n));wrong=0;unity=0.;constant_gradient=0.
+    elements={e['geometry']:e for e in o['elements']};total=0.
+    for q in o['volume']:
+        row=q['velocity_k'];ids=np.array(row['ids'],int);d=np.array(row['derivative']);ph=np.array(row['phi']);c0=np.array(row['constant']);element=elements[row['geometry']]
+        wrong+=int(row['geometry']!=q['generating_geometry'] or row['geometry']!=q['pressure']['geometry'] or
+            (q['region']==1 and row['geometry']!=q['epsilon']['geometry']) or any(not element['lower'][a]<=q['coordinate'][a]<=element['upper'][a] for a in (0,2)))
+        unity=max(unity,abs(ph@c0-1));constant_gradient=max(constant_gradient,max(abs(d[a]@c0)*(element['upper'][a]-element['lower'][a]) for a in (0,2)))
+        vol[:,ids]+=q['weight']*d;total+=q['weight']
+    for q in o['faces']:
+        row=q['velocity_k'];face_load[:,np.array(row['ids'],int)]+=q['weight']*np.outer(q['area'],row['phi'])
+    defects.update(partition=float(unity),constant_gradient=float(constant_gradient),global_stokes=float(np.max(abs(vol-face_load))),volume=abs(total-4.))
+    require(wrong==0 and max(defects[k] for k in ('partition','constant_gradient','global_stokes','volume'))<=2e-9,'multicolumn_ownership_or_internal_face_cancellation')
+    for field in packet['tensor_validation']['fields']:
+        require(max(field['defects_value_dx_dz_dxz_dzz_mass_polynomial_faces'])<=2e-10,'independent_native_basis_face_or_mass')
+        cholesky(np.array(field['mass']),lower=True)
+    terms=packet['resolution'];physical=sum((np.array(terms['terms'][k]) for k in terms['physical_term_names']),np.zeros(len(native)))
+    defects['production_term_sum']=float(np.max(abs(physical-native)))
+    require(defects['production_term_sum']<=2e-10,'open_physical_terms_do_not_reconstruct_native')
     for name,load in loads.items():
         defect=float(np.max(abs(load-np.array(packet['open_boundary'][name+'_load' if name!='diffusion' else 'diffusive_load']))))
         defects[name+'_outlet']=defect;require(defect<=2e-10,'outlet_'+name+'_sign')
