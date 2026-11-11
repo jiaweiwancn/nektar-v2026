@@ -59,8 +59,10 @@ def main():
         parent_outcome='WJ6 Tx PASS; T3 RESOURCE_LIMIT/NOT_RUN, unchanged',closure_transport_reserve_seconds=180,
         closed_ledgers=artifacts([l.file for l in ledgers.values()]),code=file_identity(__file__),governing_attempts=0)
     write_once(a.compact/'final-seal.json',final)
+    with (a.compact/'final-command-receipts.json').open('xb') as stream:stream.write((root/'command-receipts.json').read_bytes())
     write_once(a.compact/'publication.json',dict(inner_receipt=file_identity(a.compact/'receipt.json'),final_seal=file_identity(a.compact/'final-seal.json'),
-        command_receipts=file_identity(root/'command-receipts.json'),figures=artifacts(a.figures.rglob('*')),parent_transport=file_identity(a.parent/'export-v1/transport.json')))
+        command_receipts=file_identity(a.compact/'final-command-receipts.json'),figures=artifacts(a.figures.rglob('*')),
+        files=artifacts(f for f in a.compact.rglob('*') if f.suffix!='.lock'),parent_transport=file_identity(a.parent/'export-v1/transport.json')))
     files={}
     def export(f,name):
         if f.suffix=='.lock' or not f.is_file():return
