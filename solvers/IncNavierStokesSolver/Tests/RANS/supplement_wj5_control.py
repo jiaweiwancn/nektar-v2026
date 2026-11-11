@@ -8,6 +8,7 @@ comparison passing its sensitivity budget does not qualify its adverse states.
 import argparse
 import csv
 from pathlib import Path
+import sys
 import time
 
 from run_cls_epawf_picard import require
@@ -28,9 +29,9 @@ def main():
     inputs = artifacts([compact / name for name in
                         ('EP.json', 'Budget.json', 'manifest.json', 'receipt.json')])
     verify_artifacts(read(compact / 'receipt.json')['files'])
-    code = artifacts([Path(__file__), *[Path(__file__).with_name(name) for name in
-        ('wj5_measure.py', 'wj4_qualification.py', 'wj_immutable.py')]])
-    label = 'publication/control-sensitivity-v1'
+    code = artifacts([Path(__file__), *[Path(sys.modules[name].__file__) for name in
+        ('wj5_measure', 'wj4_qualification', 'wj_immutable')]])
+    label = 'publication/control-sensitivity-v2'
     ledgers = {policy: Ledger(root, policy, cap=800) for policy in ('EP', 'Budget')}
     for ledger in ledgers.values():
         ledger.reserve(label, dict(inputs=inputs, code=code), 0, 240)
@@ -51,8 +52,11 @@ def main():
             for trajectory in trajectories.values():
                 for record in [trajectory['initial']] + trajectory['trajectory']:
                     for key in ('report', 'checkpoint'):
-                        require(file_hash(record[key]) == record[key + '_sha256'],
-                                'changed control producer bytes: ' + record[key])
+                        path = Path(record[key])
+                        if key == 'checkpoint':
+                            path = path / 'State.bin'
+                        require(file_hash(path) == record[key + '_sha256'],
+                                'changed control producer bytes: ' + str(path))
             a, b = coarse['trajectory'][0], fine['trajectory'][0]
             require(abs(a['time'] - b['time']) <= 2e-15,
                     'control states do not share the frozen physical target')
