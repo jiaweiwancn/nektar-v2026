@@ -70,7 +70,9 @@ def main():
         timing=p.parent/'timing.jsonl'
         if timing.exists():manifest['files'].append(identity(timing))
     for p in sorted((r/'receipts').iterdir()):
-        if p.is_file():manifest['files'].append(identity(p))
+        # The current stdout/time receipt is still open. Its closed bytes are
+        # bound by the post-publication verification bridge, never prehashed.
+        if p.is_file() and p.name!=out.name+'.log':manifest['files'].append(identity(p))
     for p in (r/'build-v1/compile_commands.json',r/'build-v1/CMakeCache.txt',r/'build-v1/CMakeFiles/IncNavierStokesSolver.dir/flags.make',
         r/'build-v1/CMakeFiles/IncNavierStokesSolver.dir/link.txt',r/'loaded-runtime-v2/summary.json'):
         manifest['files'].append(identity(p))
