@@ -120,6 +120,7 @@ def main():
         sealed=json.loads((f.parent/'completed-artifacts.json').read_text())
         require(all(sha(f.parent/name)==value for name,value in sealed['files'].items()),'changed_boundary_verification_artifact')
     manifest=RequestManifest(a.output,dict(schema='CTAcceptedOpenPilotV1',contract_sha256=sha(a.contract),feasibility_sha256=sha(a.feasibility),
+        code_sha256={name:sha(Path(__file__).with_name(name)) for name in ('ct_accepted_open.py','ct_accepted_pilot.py','ct_accepted_feasibility.py')},
         required_verification={str(f):sha(f) for f in (a.verification,a.controls)},
         runtime={n:runtime_identity(a.runtime/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},
         horizons={'A95':.2,'A93':.002,'E94E95':.002},dt={'A95':[.002,.001],'A93':[.001],'E94E95':[.001]},

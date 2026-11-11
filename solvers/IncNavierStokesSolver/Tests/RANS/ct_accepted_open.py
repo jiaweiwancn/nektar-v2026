@@ -117,6 +117,9 @@ def pilot_case(folder,runtime,feasibility,model='A95',steps=0,dt=.002,restart=No
     xml=case_xml(folder,model,'Natural','Accepted',steps=steps,dt=dt,descriptor_probe=runtime/'RANSNewModelsProbe',
         radial_knots=knots,degree=3,xknots=[0.,.125,.25],cache='Off',restart=restart,quadrature=[32,8,10,10,10])
     root=ET.parse(xml).getroot()
+    require(not any(root.find("./CONDITIONS/FUNCTION[@NAME='"+name+"']") is not None
+        for name in ('BodyForceInner','BodyForceOuter','ScalarSourceInner','ScalarSourceOuter')),
+        'unforced_pilot_inherited_verification_forcing')
     for key,value in dict(RANSWallBoundaryPolicy='AcceptedOpenFlatV1',RANSOpenTop='DirichletCompatibleV1',
         RANSOpenBackflow='RejectV1',RANSWallReference='Functions',RANSWallFunctionCoordinates='Physical',RANSWallPimpleSnapshots='On').items():set_info(root,key,value)
     for key,value in dict(RANSWallHeight=H,RANSWallSampleHeight=H,RANSWallTailStart=H,RANSWallRoughness=hr,
