@@ -1,0 +1,140 @@
+[
+  {
+    "label": "pilot-EP",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/run_wj6_native.py",
+      "--solver",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/IncNavierStokesSolver",
+      "--probe",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/RANSWallResolutionProbe",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study",
+      "--policy",
+      "EP",
+      "--mode",
+      "pilot"
+    ],
+    "started_utc": "2026-11-11T04:33:26.774112+00:00",
+    "seconds": 616.5213997364044,
+    "exit_code": 0.0,
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/pilot-EP.log",
+    "log_sha256": "abc2e01fec133021fc8ce9a3fc94b628bf8d32f203364fb2d00a8a288f387165",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  },
+  {
+    "label": "primary-EP",
+    "command": [
+      "/usr/bin/time",
+      "-v",
+      "-o",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/primary-EP-whole-resource.txt",
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/run_wj6_native.py",
+      "--solver",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/IncNavierStokesSolver",
+      "--probe",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/RANSWallResolutionProbe",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study",
+      "--policy",
+      "EP",
+      "--mode",
+      "primary"
+    ],
+    "started_utc": "2026-11-11T04:53:08.757228+00:00",
+    "seconds": 1739.3803327083588,
+    "exit_code": 0.0,
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/primary-EP.log",
+    "log_sha256": "abc2e01fec133021fc8ce9a3fc94b628bf8d32f203364fb2d00a8a288f387165",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  },
+  {
+    "label": "transactions-EP",
+    "command": [
+      "/usr/bin/time",
+      "-v",
+      "-o",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/transactions-EP-whole-resource.txt",
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/run_wj6_native.py",
+      "--solver",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/IncNavierStokesSolver",
+      "--probe",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/RANSWallResolutionProbe",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study",
+      "--policy",
+      "EP",
+      "--mode",
+      "transactions"
+    ],
+    "started_utc": "2026-11-11T05:23:20.948520+00:00",
+    "seconds": 16.26377296447754,
+    "exit_code": 1.0,
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/transactions-EP.log",
+    "log_sha256": "585118997ba94ae30f6a41a14a127ca0737a620974eff22ed07d3ff039b02154",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  },
+  {
+    "label": "transactions-resume-EP",
+    "command": [
+      "/usr/bin/time",
+      "-v",
+      "-o",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/transactions-resume-EP-whole-resource.txt",
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/observer-v3-source/solvers/IncNavierStokesSolver/Tests/RANS/resume_wj6_transaction.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111",
+      "--study",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study",
+      "--driver-scripts",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS",
+      "--solver",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/IncNavierStokesSolver",
+      "--probe",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/RANSWallResolutionProbe",
+      "--policy",
+      "EP"
+    ],
+    "started_utc": "2026-11-11T05:41:21.972882+00:00",
+    "seconds": 271.45532727241516,
+    "exit_code": 0.0,
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/transactions-resume-EP.log",
+    "log_sha256": "abc2e01fec133021fc8ce9a3fc94b628bf8d32f203364fb2d00a8a288f387165",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  }
+]

@@ -1,0 +1,465 @@
+{
+  "schema": "WJ6RegressionSealV1",
+  "status": "PASS",
+  "registered": 62,
+  "selected_unique": 38,
+  "names": [
+    "RANSAWFEquilibriumSmoke",
+    "RANSAWFOriginalSmoke",
+    "RANSAcceptedAWFCases",
+    "RANSAcceptedAWFKernel",
+    "RANSCLSEPAWFM1Oracle",
+    "RANSCLSEPAWFM2Oracle",
+    "RANSCLSTransportSmoke",
+    "RANSEquilibriumProfilesNative",
+    "RANSEquilibriumTimeNative",
+    "RANSEquilibriumWallEvolutionSmoke",
+    "RANSEquilibriumWallStageSmoke",
+    "RANSHistoryRejectionChecks",
+    "RANSKBoundQPChecks",
+    "RANSKernelUnitTests",
+    "RANSObservationKernels",
+    "RANSProfileBranchChecks",
+    "RANSReducedModelChecks",
+    "RANSReturnedFieldsChecks",
+    "RANSStandardAWFEquilibriumSmoke",
+    "RANSStandardTransportSmoke",
+    "RANSStressTangentOracle",
+    "RANSWJSharedLegacyTransaction",
+    "RANSWallTimingChecks",
+    "WJCompositeObservationBudget",
+    "WJCompositeObservationEP",
+    "WJDenseCapacityBudget",
+    "WJDenseCapacityEP",
+    "WJDenseCapacityMetadata",
+    "WJIndependentOracle",
+    "WJKernelContracts",
+    "WJLocalNormalMetadata",
+    "WJLocalNormalObservationBudget",
+    "WJLocalNormalObservationEP",
+    "WJNativeBudget",
+    "WJNativeEP",
+    "WJQualificationMetadata",
+    "WJReadOnlyStageBudget",
+    "WJReadOnlyStageEP"
+  ],
+  "selections": [
+    {
+      "label": "wj6-regression-controls",
+      "names": [
+        "RANSKBoundQPChecks",
+        "RANSReducedModelChecks",
+        "RANSAcceptedAWFKernel",
+        "RANSProfileBranchChecks",
+        "RANSHistoryRejectionChecks",
+        "RANSEquilibriumTimeNative",
+        "RANSEquilibriumWallEvolutionSmoke",
+        "RANSEquilibriumWallStageSmoke",
+        "RANSStandardTransportSmoke",
+        "RANSCLSTransportSmoke",
+        "RANSAWFOriginalSmoke",
+        "RANSAWFEquilibriumSmoke",
+        "RANSStandardAWFEquilibriumSmoke",
+        "RANSKernelUnitTests",
+        "RANSObservationKernels",
+        "RANSWallTimingChecks",
+        "RANSAcceptedAWFCases",
+        "RANSEquilibriumProfilesNative",
+        "RANSCLSEPAWFM1Oracle",
+        "RANSCLSEPAWFM2Oracle",
+        "RANSStressTangentOracle",
+        "WJKernelContracts",
+        "WJIndependentOracle",
+        "RANSReturnedFieldsChecks"
+      ],
+      "count": 24,
+      "receipt": {
+        "label": "ctest-wj6-regression-controls",
+        "command": [
+          "ctest",
+          "--test-dir",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/checks-v4",
+          "-j",
+          "1",
+          "--output-on-failure",
+          "-R",
+          "^(WJKernelContracts|WJIndependentOracle|RANSKernelUnitTests|RANSCLSEPAWFM1Oracle|RANSCLSEPAWFM2Oracle|RANSAcceptedAWFKernel|RANSEquilibriumProfilesNative|RANSProfileBranchChecks|RANSKBoundQPChecks|RANSHistoryRejectionChecks|RANSAcceptedAWFCases|RANSStressTangentOracle|RANSReturnedFieldsChecks|RANSObservationKernels|RANSWallTimingChecks|RANSEquilibriumTimeNative|RANSReducedModelChecks|RANSStandardTransportSmoke|RANSCLSTransportSmoke|RANSAWFOriginalSmoke|RANSAWFEquilibriumSmoke|RANSStandardAWFEquilibriumSmoke|RANSEquilibriumWallEvolutionSmoke|RANSEquilibriumWallStageSmoke)$"
+        ],
+        "started_utc": "2026-11-11T04:16:20.379016+00:00",
+        "seconds": 89.68535423278809,
+        "exit_code": 0.0,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/ctest-wj6-regression-controls.log",
+        "log_sha256": "7f8d8ff173ea84c9020c8e1012d1f147f570ab298afaa5a6d8a554389c6d41d6",
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        }
+      },
+      "inventory": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/wj6-regression-controls-inventory.json",
+        "bytes": 24272,
+        "sha256": "057a235a040c432571d782dc6467f7e152b339d440d5488d89d3e06a8961a11c"
+      }
+    },
+    {
+      "label": "wj6-regression-native",
+      "names": [
+        "WJNativeEP",
+        "WJNativeBudget",
+        "RANSWJSharedLegacyTransaction"
+      ],
+      "count": 3,
+      "receipt": {
+        "label": "ctest-wj6-regression-native",
+        "command": [
+          "ctest",
+          "--test-dir",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/checks-v4",
+          "-j",
+          "1",
+          "--output-on-failure",
+          "-R",
+          "^(WJNativeEP|WJNativeBudget|RANSWJSharedLegacyTransaction)$"
+        ],
+        "started_utc": "2026-11-11T04:17:52.131480+00:00",
+        "seconds": 466.4720878601074,
+        "exit_code": 0.0,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/ctest-wj6-regression-native.log",
+        "log_sha256": "5d40eaf79404d7f81694abebe1150cd6ca3d29443cf7ed77a81de8a7aaec6b2a",
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        }
+      },
+      "inventory": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/wj6-regression-native-inventory.json",
+        "bytes": 4690,
+        "sha256": "98a0273ac9f98ca52577568ccb13e3b1fd5955b01bfe694aae181bf5e5fa8190"
+      }
+    },
+    {
+      "label": "wj6-regression-readonly",
+      "names": [
+        "WJReadOnlyStageEP",
+        "WJReadOnlyStageBudget"
+      ],
+      "count": 2,
+      "receipt": {
+        "label": "ctest-wj6-regression-readonly",
+        "command": [
+          "ctest",
+          "--test-dir",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/checks-v4",
+          "-j",
+          "1",
+          "--output-on-failure",
+          "-R",
+          "^(WJReadOnlyStageEP|WJReadOnlyStageBudget)$"
+        ],
+        "started_utc": "2026-11-11T04:25:41.244655+00:00",
+        "seconds": 95.74583888053894,
+        "exit_code": 0.0,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/ctest-wj6-regression-readonly.log",
+        "log_sha256": "9ad8b49eb254e0ce4adf01c6933854135a81badb3a269baf93b3ecba295d6062",
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        }
+      },
+      "inventory": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/wj6-regression-readonly-inventory.json",
+        "bytes": 3308,
+        "sha256": "eaf277a88025760b70b11992f7d4ac7f604470767e290e43be0f0857e853912d"
+      }
+    },
+    {
+      "label": "wj6-regression-metadata",
+      "names": [
+        "WJQualificationMetadata"
+      ],
+      "count": 1,
+      "receipt": {
+        "label": "ctest-wj6-regression-metadata",
+        "command": [
+          "ctest",
+          "--test-dir",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/checks-v4",
+          "-j",
+          "1",
+          "--output-on-failure",
+          "-R",
+          "^(WJQualificationMetadata)$"
+        ],
+        "started_utc": "2026-11-11T04:27:18.541257+00:00",
+        "seconds": 3.1559808254241943,
+        "exit_code": 0.0,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/ctest-wj6-regression-metadata.log",
+        "log_sha256": "8f4cecb423df093765efe42d10ab4bcc3eeb9294a026c71f03f6a1b8b92ed0ec",
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        }
+      },
+      "inventory": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/wj6-regression-metadata-inventory.json",
+        "bytes": 1021,
+        "sha256": "a19dba8436c846b0b3e3f3d1a35fc7cfdd2aeeadfd5e3329a2cdfb0ed3f5faf1"
+      }
+    },
+    {
+      "label": "wj6-regression-composite",
+      "names": [
+        "WJCompositeObservationEP",
+        "WJCompositeObservationBudget"
+      ],
+      "count": 2,
+      "receipt": {
+        "label": "ctest-wj6-regression-composite",
+        "command": [
+          "ctest",
+          "--test-dir",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/checks-v4",
+          "-j",
+          "1",
+          "--output-on-failure",
+          "-R",
+          "^(WJCompositeObservationEP|WJCompositeObservationBudget)$"
+        ],
+        "started_utc": "2026-11-11T04:27:22.762801+00:00",
+        "seconds": 140.51793432235718,
+        "exit_code": 0.0,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/ctest-wj6-regression-composite.log",
+        "log_sha256": "4b06f67efe03ec6463621bdf188a145f0a6a080b6d03a03457221ece1b92f2b4",
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        }
+      },
+      "inventory": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/wj6-regression-composite-inventory.json",
+        "bytes": 3360,
+        "sha256": "4f89d22ee02144113d92119130525811845d22cf6ee5f5bf6c48f09185903ce9"
+      }
+    },
+    {
+      "label": "legacy-local-controls",
+      "names": [
+        "WJLocalNormalMetadata",
+        "WJLocalNormalObservationEP",
+        "WJLocalNormalObservationBudget"
+      ],
+      "count": 3,
+      "receipt": {
+        "label": "legacy-local-controls",
+        "command": [
+          "ctest",
+          "--test-dir",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/checks-v4",
+          "-j",
+          "1",
+          "--output-on-failure",
+          "-R",
+          "^WJLocalNormal(Metadata|ObservationEP|ObservationBudget)$"
+        ],
+        "started_utc": "2026-11-11T04:29:43.689115+00:00",
+        "seconds": 142.14686918258667,
+        "exit_code": 0.0,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/legacy-local-controls.log",
+        "log_sha256": "8eb08e4c4190123692eacd8efac95f62ef3a2ec29d9c7cf9c88d3052fbd98625",
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        }
+      },
+      "inventory": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/legacy-local-controls-inventory.json",
+        "bytes": 4419,
+        "sha256": "f206cc7f856dfbe21a19f8059858cd1419abbf9b829ab8bdf798a9bde42e12e4"
+      }
+    },
+    {
+      "label": "capacity-EP",
+      "names": [
+        "WJDenseCapacityEP"
+      ],
+      "count": 1,
+      "receipt": {
+        "label": "capacity-EP",
+        "command": [
+          "ctest",
+          "--test-dir",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/checks-v4",
+          "-j",
+          "1",
+          "--output-on-failure",
+          "-R",
+          "^WJDenseCapacityEP$"
+        ],
+        "started_utc": "2026-11-11T04:10:14.812568+00:00",
+        "seconds": 114.90952038764954,
+        "exit_code": 0.0,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/capacity-EP.log",
+        "log_sha256": "86e6988013c7614e78aab40ed2b5c3d8107d45dc61c75c3eeaa4579fefb4ad95",
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        }
+      }
+    },
+    {
+      "label": "capacity-Budget",
+      "names": [
+        "WJDenseCapacityBudget",
+        "WJDenseCapacityMetadata"
+      ],
+      "count": 2,
+      "receipt": {
+        "label": "capacity-Budget",
+        "command": [
+          "ctest",
+          "--test-dir",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/checks-v4",
+          "-j",
+          "1",
+          "--output-on-failure",
+          "-R",
+          "^WJDenseCapacity(Budget|Metadata)$"
+        ],
+        "started_utc": "2026-11-11T04:14:00.941778+00:00",
+        "seconds": 137.26426792144775,
+        "exit_code": 0.0,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/capacity-Budget.log",
+        "log_sha256": "0682552452094d87480ed9c2fe7fd769424ae6ded2cef2c7272d5a26362c4ab9",
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        }
+      }
+    }
+  ],
+  "latest_metadata": {
+    "label": "metadata-final-v7",
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/test_wj6_metadata.py"
+    ],
+    "started_utc": "2026-11-11T04:33:20.705110+00:00",
+    "seconds": 5.50335431098938,
+    "exit_code": 0.0,
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/metadata-final-v7.log",
+    "log_sha256": "8c83b4977f1d87672f5cfa5226c44a981be6b5213809c1e4943bd5e75d6493bf",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  },
+  "independent_order_metadata": {
+    "label": "observation-metadata-v2",
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/observer-v2-source/solvers/IncNavierStokesSolver/Tests/RANS/test_wj6_metadata.py"
+    ],
+    "started_utc": "2026-11-11T05:23:13.550711+00:00",
+    "seconds": 6.3845274448394775,
+    "exit_code": 0.0,
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/observation-metadata-v2.log",
+    "log_sha256": "13a4eda8f54e536fb7ac8f2a6712f58e15cb5b2fe2428e4e2691413bfeba22a2",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  },
+  "resumption_metadata": [
+    {
+      "label": "transaction-resumption-metadata-v3",
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/observer-v3-source/solvers/IncNavierStokesSolver/Tests/RANS/test_wj6_metadata.py"
+      ],
+      "started_utc": "2026-11-11T05:28:57.373807+00:00",
+      "seconds": 5.67682147026062,
+      "exit_code": 0.0,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/transaction-resumption-metadata-v3.log",
+      "log_sha256": "113a65ae2dacb491b3dd991a1341f935c2d23a419007d2529851662024802fe5",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      }
+    },
+    {
+      "label": "observation-resume-metadata-v4",
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/observer-v4-source/solvers/IncNavierStokesSolver/Tests/RANS/test_wj6_metadata.py"
+      ],
+      "started_utc": "2026-11-11T05:58:49.867038+00:00",
+      "seconds": 6.8358752727508545,
+      "exit_code": 0.0,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/observation-resume-metadata-v4.log",
+      "log_sha256": "101d3ac9e7734e17f8e3eedbe355be9a00f37a373d5e3522f218789a4f68739d",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      }
+    }
+  ],
+  "allocation_denials": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/allocation-primary-Budget-1.json",
+      "bytes": 15402,
+      "sha256": "c5395927b1b326cff2f0cef67a8fc976cb1a7afa3b9b0229e1df2c94d64bd374"
+    }
+  ]
+}

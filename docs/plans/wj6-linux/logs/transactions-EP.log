@@ -1,0 +1,16 @@
+EXACT CERTIFICATE: D >= nu_eff/250 on all incompressible rank-one increments.
+Exact positive LDL pivots: ['35607/250', '2902757/300250', '3295566703/12201000', '3188912170563/3295566703000', '2212408252197/24379099000', '609851247/332332000', '3616758816461/553102063049250', '355627/143000']
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/run_wj6_native.py", line 389, in <module>
+    if __name__=='__main__':main()
+  File "/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/run_wj6_native.py", line 381, in main
+    elif a.mode!='report':getattr(s,a.mode)()
+  File "/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/run_wj6_native.py", line 322, in transactions
+    frozen,r,folder=self.native('transaction-readback24',cp=copy_path,role='transaction_frozen_readback');self.valid(frozen,r)
+  File "/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/run_wj4_native.py", line 140, in valid
+    def valid(self,d,r):WJ3Study.valid(self,d,dict(exit_code=r['exit_code']))
+  File "/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/run_wj3_native.py", line 134, in valid
+    require(report is not None and receipt['exit_code']==0 and not report.get('failure'),
+  File "/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py", line 29, in require
+    raise ValueError(message)
+ValueError: native obstruction: {'exit_code': 125}

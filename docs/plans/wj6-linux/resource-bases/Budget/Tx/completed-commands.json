@@ -1,0 +1,33 @@
+[
+  {
+    "label": "pilot-Budget",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/run_wj6_native.py",
+      "--solver",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/IncNavierStokesSolver",
+      "--probe",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/build-v2/RANSWallResolutionProbe",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study",
+      "--policy",
+      "Budget",
+      "--mode",
+      "pilot"
+    ],
+    "started_utc": "2026-11-11T04:44:25.787838+00:00",
+    "seconds": 753.9821319580078,
+    "exit_code": 0.0,
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/pilot-Budget.log",
+    "log_sha256": "823e58493110ed61c3f5dc403e96e5ae91e008d2b26b78d307db1a7483145de1",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  }
+]

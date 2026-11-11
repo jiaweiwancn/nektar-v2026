@@ -1,0 +1,131 @@
+{
+  "schema": "WJ6MeasuredResourceProjectionV2",
+  "phase": "T3",
+  "status": "RESOURCE_LIMIT",
+  "parent_resource": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/resource-design.json",
+    "bytes": 14851,
+    "sha256": "374d7ea9aef85a7af76ce33df0e1b8250ba906a7aee5195da03cbc7dfc49a4a2"
+  },
+  "target": {
+    "T": 0.004096,
+    "coarse": 128.0,
+    "fine": 256.0,
+    "baseline": 128.0
+  },
+  "native_seconds_per_step_bound": 24.244916931875196,
+  "native_seconds_per_step_bounds": {
+    "coarse": 24.244916931875196,
+    "fine": 21.94167798671515,
+    "baseline": 11.358563491248788
+  },
+  "measured_observation_seconds": {
+    "coarse": [
+      31.780619839963038,
+      35.32156462199055,
+      36.103689365962055,
+      33.0773334139958,
+      35.961317926994525
+    ],
+    "fine": [
+      34.064012322050985,
+      35.407827446993906,
+      36.51931699097622,
+      35.49152417998994,
+      33.718525830016006
+    ],
+    "baseline": [
+      22.364104012027383,
+      25.724480126053095,
+      21.813354780024383,
+      23.715760948951356
+    ]
+  },
+  "measured_svd_seconds": {
+    "coarse": [
+      14.06723848101683,
+      14.361476760008372,
+      12.121249267016537
+    ],
+    "fine": [
+      13.568060984020121,
+      12.537948273995426,
+      12.976340303954203
+    ],
+    "baseline": [
+      6.016913055966143,
+      6.385769079031888,
+      6.861778684018645
+    ]
+  },
+  "remaining_by_tag": {
+    "coarse": 96,
+    "fine": 192,
+    "baseline": 96
+  },
+  "remaining_native_attempts": 384,
+  "transaction_attempts_held": 0,
+  "remaining_observation_allowance": {
+    "coarse": 3,
+    "fine": 3,
+    "baseline": 3
+  },
+  "remaining_svd_allowance": {
+    "coarse": 2,
+    "fine": 2,
+    "baseline": 2
+  },
+  "measured_whole_phase_seconds": 3330.1866643428802,
+  "measured_child_process_seconds": 2585.632262913976,
+  "measured_parent_algebra_verification_IO_seconds": 744.5544014289044,
+  "parent_seconds_per_observation_pair": 53.18245724492174,
+  "remaining_parent_seconds_bound": 598.3026440053696,
+  "remaining_order10_row_qualification_seconds": 649.7591839517866,
+  "order10_row_cost_basis": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/row-qualified-v2/Budget/qualification.json",
+    "bytes": 849876,
+    "sha256": "4696a8b78997dfa85884e9655cd70f0215102b428e201133d6cb35c36cd2993e"
+  },
+  "headroom": 1.25,
+  "closure_seconds_held": 600,
+  "projected_remaining_seconds": 9934.579487407702,
+  "work_totals": {
+    "attempts": 170.0,
+    "seconds": 5139.550764322281,
+    "command_seconds": 3748.229183161864
+  },
+  "actual_policy_bytes": 3985496212,
+  "resource": {
+    "native_seconds": 600.0,
+    "observation_seconds": 480.0,
+    "arithmetic_seconds": 600.0,
+    "rss_bytes": 8589934592,
+    "invocation_output_bytes": 8589934592,
+    "policy_output_bytes": 34359738368,
+    "server_workers": 72
+  },
+  "source": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/observer-v5-source/solvers/IncNavierStokesSolver/Tests/RANS/wj6_resource_projection.py": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/observer-v5-source/solvers/IncNavierStokesSolver/Tests/RANS/wj6_resource_projection.py",
+      "bytes": 7370,
+      "sha256": "2e9549ae22d3d9d096d76e0f2e0ccff17908f229c8a3434d647fc9fb9bf5df4f"
+    }
+  },
+  "basis": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/resource-projections-v1/Budget/T3/ledger-basis.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/resource-projections-v1/Budget/T3/ledger-basis.json",
+      "bytes": 73494,
+      "sha256": "ffa0d4a747e8cbae4635a42dd863cadc3e9acd275719bd73f9d1dbfde22ddc4e"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/resource-projections-v1/Budget/T3/completed-commands.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/resource-projections-v1/Budget/T3/completed-commands.json",
+      "bytes": 3955,
+      "sha256": "c968d6380feb92e683e7140f09c8a9286dcb3fd79be340e72fbbe62d89bb8de8"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/design.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/design.json",
+      "bytes": 17550,
+      "sha256": "dde2c0564f7dade57a1c487f18a4e2fbc49614c968d5c6910029a1371c4c2ef3"
+    }
+  }
+}

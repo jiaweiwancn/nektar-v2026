@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "accepted_states_including_startup": 9,
+  "scheduled_attempts": 8,
+  "exact_all_step_state_time_audits": true,
+  "exact_all_step_callback_history_incoming_counts": true,
+  "exact_all_step_raw_corrected_k": true,
+  "exact_final_primary_gauge_glm_history_time_samples": true,
+  "sequence_sha256": {
+    "accepted_states": "e501790a9f0c6865e95d51249fadba4e6431a0916dd3736ef137cad135132709",
+    "audit_times": "ae8b139c5c4ebc046f272a6440ee585dbc712972202f45273f0882203263303b",
+    "state_audits": "21d2757e65555c976835736112d880b055b1c14b7c9ab8abd2a2e2e0b97a43a3",
+    "wj_audit_packets": "f8da8edf53eba51a1f1d91c208a6bb0d7a28b86fda8db080c107b607b5f2fe0c"
+  },
+  "reference_producer": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/coarse-32/case.evolution.json",
+    "bytes": 4100938,
+    "sha256": "77460083fcc0daa838f5d35e1198c779a27fc44dee5efcf61c388afe7fec17b9"
+  },
+  "reference_steps": [
+    24,
+    32
+  ],
+  "reference_accepted_indices": [
+    0,
+    8
+  ],
+  "separately_executed_reference": true,
+  "original_input_lineage": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/coarse-24/checkpoint.8/State.bin": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/coarse-24/checkpoint.8/State.bin",
+      "bytes": 238161,
+      "sha256": "ef879bd3a923adb19c3835becfdb284878903a96797a90834789bc1fc08eb0e7"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/coarse-24/case.evolution.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/coarse-24/case.evolution.json",
+      "bytes": 4099405,
+      "sha256": "e60ad58e51f20a5e5fe40563f5850caa2984654a3624966923a9f2af2fcaeecb"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/coarse-32/case.evolution.json": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/coarse-32/case.evolution.json",
+      "bytes": 4100938,
+      "sha256": "77460083fcc0daa838f5d35e1198c779a27fc44dee5efcf61c388afe7fec17b9"
+    }
+  },
+  "rollback_exact": true,
+  "postsolve_rejection_step": 25,
+  "rejected_report": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/transaction-reject25/case.evolution.json",
+    "bytes": 2508639,
+    "sha256": "2e8c2dd7a518db9321cdac3f966686a975bc84e39c1a86b117dd0c6222ec9027"
+  },
+  "failed_candidate_sha256": "b693828ce8d75561454f937b303010ef6bbdc8a633feb29fc46100e81031bde9",
+  "failed_candidate_matches_reference_step25": true,
+  "all_retained_substages_and_frozen_k_matrices_equal": true,
+  "start_completed_stage_producer": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/study/Budget/coarse-24/case.evolution.json",
+    "bytes": 4099405,
+    "sha256": "e60ad58e51f20a5e5fe40563f5850caa2984654a3624966923a9f2af2fcaeecb"
+  },
+  "reference_start_scope": "native restart-startup packet within actually executed24->32 report; completed CP24 stage uses its own producer"
+}

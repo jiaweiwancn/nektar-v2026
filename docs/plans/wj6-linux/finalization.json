@@ -1,0 +1,49 @@
+{
+  "schema": "WJ6OuterReceiptBridgeV1",
+  "publication": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/compact-v3/publication.json",
+    "bytes": 4321242,
+    "sha256": "8c3eb6b22ca64dbb13cde6445bbca6bed0e1749e2f2ab8286e0126909422c0bd"
+  },
+  "seal_command": {
+    "label": "seal-v1",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/observer-v6-source/solvers/IncNavierStokesSolver/Tests/RANS/seal_wj6.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111",
+      "--compact",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/compact-v3",
+      "--figures",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/figures-v3"
+    ],
+    "started_utc": "2026-11-11T06:38:18.727476+00:00",
+    "seconds": 35.354307651519775,
+    "exit_code": 0.0,
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/seal-v1.log",
+    "log_sha256": "95ecc72d11cba8283db45d6e9898c7f4a09c162baf07476babbfa6f224dbf1c4",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  },
+  "final_command_receipts": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/compact-v3/final-command-receipts.json",
+    "bytes": 41868,
+    "sha256": "c7c88ab9a8eafd06ce2efd11d2036eac22ec661c7941f08fb075bc4173faa3ce"
+  },
+  "governing_attempts": 0,
+  "transport_coverage": "180-second conservative passive/I/O reserve in closed ledger",
+  "code": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/observer-v6-source/solvers/IncNavierStokesSolver/Tests/RANS/export_wj6.py": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj6-20261111/observer-v6-source/solvers/IncNavierStokesSolver/Tests/RANS/export_wj6.py",
+      "bytes": 5723,
+      "sha256": "06529fc28d3021eb2ec21a6a14c523b03ac4c04f42cb18b7594c6bb8a9258ee3"
+    }
+  }
+}

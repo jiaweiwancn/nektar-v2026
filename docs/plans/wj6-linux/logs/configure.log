@@ -1,0 +1,65 @@
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+CMake Warning at CMakeLists.txt:288 (add_executable):
+  Cannot generate a safe runtime search path for target IncNavierStokesSolver
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/build/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:292 (add_executable):
+  Cannot generate a safe runtime search path for target RANSFieldAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/build/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:294 (add_executable):
+  Cannot generate a safe runtime search path for target RANSWallFieldAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/build/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:297 (add_executable):
+  Cannot generate a safe runtime search path for target RANSObservationAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/build/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+-- Generating done
+-- Build files have been written to: /media/jay/新加卷/nektar-v2026-runs/wj6-20261111/build

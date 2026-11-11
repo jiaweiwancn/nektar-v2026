@@ -1,0 +1,10 @@
+EXACT CERTIFICATE: D >= nu_eff/250 on all incompressible rank-one increments.
+Exact positive LDL pivots: ['35607/250', '2902757/300250', '3295566703/12201000', '3188912170563/3295566703000', '2212408252197/24379099000', '609851247/332332000', '3616758816461/553102063049250', '355627/143000']
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/observer-v6-source/solvers/IncNavierStokesSolver/Tests/RANS/publish_wj6.py", line 224, in <module>
+    if __name__=='__main__':main()
+  File "/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/observer-v6-source/solvers/IncNavierStokesSolver/Tests/RANS/publish_wj6.py", line 145, in main
+    packet=v[key];verify_artifacts({packet['path']:packet});data=read(packet['path'])
+  File "/media/jay/新加卷/nektar-v2026-runs/wj6-20261111/observer-v6-source/solvers/IncNavierStokesSolver/Tests/RANS/wj_immutable.py", line 77, in verify_artifacts
+    if not Path(p).is_file() or file_identity(p)!=identity:raise ValueError('immutable artifact mismatch: '+p)
+ValueError: immutable artifact mismatch: /media/jay/新加卷/nektar-v2026-runs/wj6-20261111/study/EP/coarse-4/pimple-states/arithmetic-momentum-t0.00012799999999999999-2c6a1a69c851.json
