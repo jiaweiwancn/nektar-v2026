@@ -24,7 +24,8 @@ std::string Weak(const RANSWallEvolutionPatch &p,const Vector &s,const Vector &h
         std::vector<std::string> modes;
         for(int mode=0;mode<3;++mode)
         {Vector values;for(int b=0;b<p.Gauge();++b){long double v=0;
-         for(int j=0;j<p.size[b];++j)v+=(long double)tests[mode][b][j]*r[p.offset[b]+j];values.push_back(v);}
+         for(int j=0;j<p.size[b];++j){v+=(long double)tests[mode][b][j]*r[p.offset[b]+j];}
+         values.push_back(v);}
          modes.push_back(J::Numbers(values));}return J::List(modes);
     };
     const auto components=p.ResidualResolutionComponents(s,h,alpha,time,data,false);

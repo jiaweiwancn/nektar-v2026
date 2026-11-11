@@ -9,6 +9,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallKBoundProjection.h>
 #include <LibUtilities/Communication/CommSerial.h>
+#include <LibUtilities/Foundations/ManagerAccess.h>
 #include <SpatialDomains/MeshGraphIO.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <algorithm>
