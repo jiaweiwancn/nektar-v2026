@@ -158,7 +158,7 @@ def main():
                 folder=a.output/name;pilot_case(folder,a.runtime,a.feasibility,model,round(T/dt),dt,Path(native['checkpoint']))
                 e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');result['executions'].append(dict(case=name,phase='evolution',**e))
                 report=json.loads((folder/'case.evolution.json').read_text());row.update(exit_code=e['exit_code'],time=report['time'],steps=report['steps'],
-                    failure=report['failure'],report_sha256=sha(folder/'case.evolution.json'),state_sha256=exact_vector_hash(report['state']),
+                    failure=report['failure'],native_failure=report['failure'],report_sha256=sha(folder/'case.evolution.json'),state_sha256=exact_vector_hash(report['state']),
                     extrema=audited_extrema(report),initialization_receipt=report['initialization_receipt'],
                     checkpoint=report['checkpoint'],history_sha256=artifact_hash(report['checkpoint']) if report['checkpoint'] else None,
                     pimple_stage_count=len(report['pimple_attempts']),zero_correction_calls=all(x.get('bound_calls',0)==0 for x in report['pimple_attempts']))
