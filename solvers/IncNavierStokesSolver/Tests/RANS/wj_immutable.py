@@ -80,7 +80,8 @@ def execution_intent(argv,inputs,code,runtime_identity,settings):
     return dict(argv=list(map(str,argv)),inputs=artifacts(inputs),code=code,runtime=runtime_identity,settings=settings)
 
 class Ledger:
-    def __init__(self,root,policy,cap=1500,wall_cap=10800):
+    def __init__(self,root,policy,cap=None,wall_cap=10800):
+        if cap is None:cap=int(os.environ.get('WJ_PACKAGE_ATTEMPT_CAP','1500'))
         self.file=Path(root)/('ledger-'+policy+'.json');self.cap=cap;self.wall_cap=wall_cap
         self.file.parent.mkdir(parents=True,exist_ok=True)
         with self.lock():

@@ -11,10 +11,10 @@ from test_wj2_native import independent,CSTAR,KAPPA
 AMP=dict(u=.5,v=.5,velocity=.5,k=K0,outer_epsilon=.125/KAPPA,reduced_pressure=.25,mechanical_pressure=.25)
 BUDGET=dict(L2=1e-4,sampled_Linf=1e-3,traction=1e-3,k_flux=1e-4,pressure_offset=1e-4,divergence=1e-3)
 
-def rule(xmeshes=((0.,1.),(0.,.5,1.)),order=6,xorder=4):
+def rule(xmeshes=((0.,1.),(0.,.5,1.)),order=6,xorder=4,zmeshes=None,all_faces=False):
     _,zv,_,_,zc=wall(K0)
     xs=sorted(set([x for knots in xmeshes for x in knots]+[.25,.75]))
-    zs=sorted(set(normal_knots(2)+[z for z in (zc,zv,.1,.5,1) if 0<z<2]))
+    zs=sorted(set((normal_knots(2) if zmeshes is None else [z for knots in zmeshes for z in knots])+[z for z in (zc,zv,.1,.5,1) if 0<z<2]))
     gx,wx=np.polynomial.legendre.leggauss(xorder);gz,wz=np.polynomial.legendre.leggauss(order)
     rows=[]
     for xl,xh in zip(xs,xs[1:]):
@@ -36,12 +36,16 @@ def rule(xmeshes=((0.,1.),(0.,.5,1.)),order=6,xorder=4):
         for z in zs:
             for side in ((-1,1) if z==1 else (0,)):
                 for xside in ((-1,1) if x in xs[1:-1] else (0,)):
-                    rows.append([float(x),0.,float(z),0.,side,xside])
+                    if all_faces:
+                        for normal_side in ((-1,1) if z in zs[1:-1] and z!=1 else (side,)):
+                            rows.append([float(x),0.,float(z),0.,side,xside,normal_side])
+                    else:rows.append([float(x),0.,float(z),0.,side,xside])
+    if all_faces:rows=[r+[0] if len(r)==6 else r for r in rows]
     return rows
 
-def boundary_rule(order=6,xorder=4):
+def boundary_rule(order=6,xorder=4,xmeshes=((0.,1.),(0.,.5,1.)),zmeshes=None):
     _,zv,_,_,zc=wall(K0)
-    xs=[0,.25,.5,.75,1];zs=sorted(set(normal_knots(2)+[z for z in (zc,zv,.1,.5,1) if 0<z<2]))
+    xs=sorted(set([x for knots in xmeshes for x in knots]+[.25,.75]));zs=sorted(set((normal_knots(2) if zmeshes is None else [z for knots in zmeshes for z in knots])+[z for z in (zc,zv,.1,.5,1) if 0<z<2]))
     gx,wx=np.polynomial.legendre.leggauss(xorder);gz,wz=np.polynomial.legendre.leggauss(order);weights={}
     for lo,hi in zip(zs,zs[1:]):
         for z,w in zip(lo+(gz+1)*(hi-lo)/2,wz*(hi-lo)/2):
@@ -50,20 +54,21 @@ def boundary_rule(order=6,xorder=4):
         for x,w in zip(lo+(gx+1)*(hi-lo)/2,wx*(hi-lo)/2):weights[(float(x),2.)]=float(w)
     return weights
 
-def owned_rule(physical,level,xknots):
-    zknots=normal_knots(level);nx=len(xknots)-1;result=[]
-    for x,y,z,w,side,xside in physical:
+def owned_rule(physical,level,xknots,zknots=None):
+    zknots=normal_knots(level) if zknots is None else zknots;nx=len(xknots)-1;result=[]
+    for row in physical:
+        x,y,z,w,side,xside=row[:6];normal_side=row[6] if len(row)>6 else side
         def choose(knots,value,selection):
             candidates=[i for i,(a,b) in enumerate(zip(knots,knots[1:])) if a-1e-14<=value<=b+1e-14]
             if not candidates:raise ValueError('observation outside physical domain')
             # Negative selection approaches the face from smaller coordinates.
             return min(candidates) if selection<0 else max(candidates)
-        ix=choose(xknots,x,xside);iz=choose(zknots,z,side)
-        result.append([x,y,z,w,side,iz*nx+ix,xside])
+        ix=choose(xknots,x,xside);iz=choose(zknots,z,normal_side)
+        result.append([x,y,z,w,side,iz*nx+ix,xside]+([normal_side] if len(row)>6 else []))
     return result
 
 def same_rule(a,b):
-    key=lambda r:(r['position'],r['weight'],r['side'],r.get('requested_x_side',0))
+    key=lambda r:(r['position'],r['weight'],r['side'],r.get('requested_x_side',0),r.get('requested_normal_side',0))
     if [key(r) for r in a['observations']]!=[key(r) for r in b['observations']]:raise ValueError('unequal common physical observation rule')
 
 def physical_norms(d,w,outer,rows,mask=None,gauge=None):
@@ -82,24 +87,31 @@ def physical_norms(d,w,outer,rows,mask=None,gauge=None):
                 ('position','geometry','element','side','requested_x_side','face_sides_xz','provenance')})
     return dict(fields=result,overall_pressure_gauge_shift=shift)
 
-def comparison(a,b,policy):
+def comparison(a,b,policy,rule_settings=None):
     same_rule(a,b);av,_,_,w,outer=arrays(a,policy);bv,_,_,_,_=arrays(b,policy)
-    return regional_norms(av-bv,w,outer,a['observations'])
+    return regional_norms(av-bv,w,outer,a['observations'],rule_settings=rule_settings)
 
-def regional_norms(d,w,outer,rows,xorder=4):
+def regional_norms(d,w,outer,rows,xorder=4,rule_settings=None):
     allnorm=physical_norms(d,w,outer,rows);g=allnorm['overall_pressure_gauge_shift']
     x=np.array([r['position'][0] for r in rows]);z=np.array([r['position'][2] for r in rows]);
     central=(x>=.25)&(x<=.75)
     boundary=(x==min(x))|(x==max(x))|(z==2)
-    weights=boundary_rule(xorder=xorder)
-    bw=np.array([weights.get((r['position'][0],r['position'][2]),0.) for r in rows])
+    settings=dict(rule_settings or {});settings.pop('all_faces',None);settings['xorder']=xorder
+    weights=boundary_rule(**settings)
+    # Face-owner duplicates are maximum/provenance samples. Integrate each
+    # physical boundary quadrature point once, independently of their count.
+    seen=set();bw=[]
+    for r in rows:
+        key=(r['position'][0],r['position'][2]);bw.append(weights.get(key,0.) if key not in seen else 0.)
+        seen.add(key)
+    bw=np.array(bw)
     return dict(full=allnorm,central=physical_norms(d,w,outer,rows,central,g),
         constrained_boundary=physical_norms(d,bw,outer,rows,boundary,g),
         boundary_scope='physical trace L2 on both lateral boundaries and top; own surface measure (5; epsilon3); pressure sampled there is an algebraic multiplier')
 
-def evaluate(m,policy,xorder=4):
+def evaluate(m,policy,xorder=4,rule_settings=None):
     v,initial,ref,w,outer=arrays(m,policy)
-    metrics={key:regional_norms(d,w,outer,m['observations'],xorder) for key,d in
+    metrics={key:regional_norms(d,w,outer,m['observations'],xorder,rule_settings) for key,d in
         (('continuum_error',v-ref),('initial_drift',v-initial),('initial_representation',initial-ref))}
     flux=m['interfaces'];jump=-K0/(81/20)
     metrics['interface']=dict(traction=max(np.linalg.norm(np.array(f['inner_outward_traction'])+f['outer_outward_traction']) for f in flux)/.25,

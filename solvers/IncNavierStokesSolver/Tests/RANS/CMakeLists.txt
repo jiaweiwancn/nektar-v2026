@@ -639,6 +639,11 @@ if(Python3_Interpreter_FOUND)
     add_test(NAME WJQualificationMetadata COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_wj4_metadata.py)
     set_tests_properties(WJQualificationMetadata PROPERTIES PROCESSORS 1 TIMEOUT 30)
 endif()
+if(Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
+    add_test(NAME WJLocalNormalMetadata COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_wj5_metadata.py)
+    set_tests_properties(WJLocalNormalMetadata PROPERTIES PROCESSORS 1 TIMEOUT 60
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+endif()
 if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
     foreach(wj_policy EP Budget)
         add_test(NAME WJCompositeObservation${wj_policy} COMMAND ${Python3_EXECUTABLE} -B

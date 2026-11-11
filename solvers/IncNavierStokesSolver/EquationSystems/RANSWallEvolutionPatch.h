@@ -357,7 +357,13 @@ public:
     std::string WJAuditPacket(const Diagnostic &,const Vector &state,const Vector &history,
         double alpha,double time,const std::string &phase) const;
     std::string WJMeasurements(const Vector &state,const Vector &stageHistory,double stageAlpha,double time,
-        const RANSWallEvolutionData &,const std::vector<std::array<double,7>> &observations) const;
+        const RANSWallEvolutionData &,const std::vector<std::array<double,8>> &observations,
+        bool passiveDiagnostics=false) const;
+    /** Passive pressure-test, divergence and signed near-roughness loads.
+     * Any exported mass projection is offline diagnostic algebra, never a
+     * governing correction or a modification of the accepted state. */
+    std::string WJPassiveDiagnostics(const Vector &,const Vector &,double,double,
+        const RANSWallEvolutionData &) const;
     std::string WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data,double time,
         const Vector &acceptedHistory={},double acceptedAlpha=0) const;
     std::string WJWeakLoads(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &) const;

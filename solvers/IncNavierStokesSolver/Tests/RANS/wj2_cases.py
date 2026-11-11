@@ -16,7 +16,25 @@ def normal_knots(level=0):
     return knots
 
 
-def case_xml(folder,policy='EP',steps=0,restart=None,refined=False,normal=16,dt=1e-6,hard_reject=0,level=None,xknots=None):
+def validated_knots(knots,lo,hi,required=()):
+    import math
+    values=list(map(float,knots))
+    if len(values)<2 or not all(math.isfinite(v) for v in values) or values[0]!=lo or values[-1]!=hi:
+        raise ValueError('invalid WJ knot endpoints/nonfinite values')
+    if any(a>=b for a,b in zip(values,values[1:])) or any(v not in values for v in required):
+        raise ValueError('WJ knots must be strictly increasing and retain physical interfaces')
+    return values
+
+
+def local_normal_knots(mesh):
+    if mesh=='L1':return normal_knots(1)
+    if mesh not in ('M1','M2'):raise ValueError('unknown WJ local mesh')
+    knots=normal_knots(1)+[.085,.095,.125,.175]
+    if mesh=='M2':knots += [.0825,.0875,.0925,.0975,.1125,.1375,.1625,.1875]
+    return sorted(set(knots))
+
+
+def case_xml(folder,policy='EP',steps=0,restart=None,refined=False,normal=16,dt=1e-6,hard_reject=0,level=None,xknots=None,zknots=None):
     folder=Path(folder);folder.mkdir(parents=True,exist_ok=False)
     root=ET.parse(Path(__file__).with_name('EquilibriumWallFlat.xml')).getroot()
     conditions=root.find('CONDITIONS')
@@ -27,8 +45,9 @@ def case_xml(folder,policy='EP',steps=0,restart=None,refined=False,normal=16,dt=
     ET.SubElement(scheme,'METHOD').text='IMEX';ET.SubElement(scheme,'ORDER').text='1'
     if level is None:level=int(refined)
     if refined and level!=1:raise ValueError('refined=True is the level-1 compatibility spelling')
-    knots=normal_knots(level)
-    tensor_mesh(root,knots,3,2,1.,1.,points=[8,8],xknots=[0.,1.] if xknots is None else xknots)
+    knots=normal_knots(level) if zknots is None else validated_knots(zknots,0.,2.,(.1,1.))
+    xknots=[0.,1.] if xknots is None else validated_knots(xknots,float(xknots[0]),float(xknots[-1]))
+    tensor_mesh(root,knots,3,2,1.,1.,points=[8,8],xknots=xknots)
     for e in root.findall('./EXPANSIONS/E'):e.set('FIELDS',e.get('FIELDS').replace('eps_tilde','epsilon'))
     for v in conditions.findall('./VARIABLES/V'):
         if v.text=='eps_tilde':v.text='epsilon'
