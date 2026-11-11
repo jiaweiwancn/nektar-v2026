@@ -1,0 +1,78 @@
+{
+  "version": "CaoTamuraBudgetH2aV1",
+  "case": "rough-flat-finite-profile-developing-v1",
+  "physical_steps": 16,
+  "dt": 5e-06,
+  "endpoint_time": 8e-05,
+  "scaling": "SI U(Hh)=1, Hh=.04, Re_H=10500",
+  "Hw": 0.015,
+  "z_K": 0.015,
+  "z_m": 0.015,
+  "h_eff": 0.0008783118592928004,
+  "mesh": {
+    "x": [
+      -0.2,
+      -0.1,
+      0.0,
+      0.1,
+      0.2
+    ],
+    "z": [
+      0.0,
+      0.00025,
+      0.001,
+      0.003,
+      0.015,
+      0.03,
+      0.06,
+      0.1,
+      0.2,
+      0.25,
+      0.3,
+      0.4,
+      0.5,
+      0.8
+    ],
+    "velocity_scalar_degree": 3,
+    "pressure_degree": 1,
+    "points": [
+      8,
+      8
+    ],
+    "revision": "completion-tail-v1",
+    "added_outer_knots": [
+      0.25,
+      0.4
+    ],
+    "reason": "preserved coarse T0 epsilon undershoot near .304; resolve steep measured-to-freestream completion, no field clipping"
+  },
+  "native_size_estimate": 2000,
+  "native_field_sizes": [
+    520,
+    520,
+    520,
+    364,
+    25,
+    50,
+    1
+  ],
+  "profile_sha256": "9375601441e2c70fb87cf8f31de305afd4b67fd2f82a750f9274f6bb68eed697",
+  "fresh_native_initialization": false,
+  "boundary_scope": "inlet finite/AWF essential, ground no-slip/natural k, facility slip top/natural scalars, total-traction upwind outlet",
+  "physical_map": "affine flat; hill production remains guarded",
+  "initialization": "native finite profile projection, AWF inner U/k completion, dependent epsilon trace Lift once during setup",
+  "restart": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v2/primary-step144/checkpoint.32",
+  "xml_sha256": "53fc23e019890c589d4d88f320c946de1a9040355b4db3ee9aa2cb4355090245",
+  "boundary": "RoughFlatOpenV1",
+  "observation_x": 0.0,
+  "numerical_inlet_x": -0.2,
+  "physical_hill_height_scale": 0.04,
+  "boundary_pressure": "absolute selected total traction; no mean pressure gauge",
+  "backflow": "native fixed reference, upwind incoming turbulence and momentum; positive prescribed scalars",
+  "top": "impermeable selected-stress slip, natural scalars, floor-only Yap",
+  "optimized": true,
+  "packets": "SelectedV1",
+  "original_generated_definition": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v2/primary-step160/h2a-definition.json",
+  "original_generated_definition_sha256": "8c988dcceb90dff619ffc26fd1cff55d49f34c302a9918e63b698752e41c7fca",
+  "metadata_erratum": "initial H2a template retained H1 compatibility case/scope text and pre-edit XML digest; native XML/signature and receipts were correct. This explicit manifest supersedes only those metadata fields; original bytes retained."
+}

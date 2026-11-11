@@ -1,0 +1,561 @@
+{
+  "policy": {
+    "version": "H2aStartupTemporalV1",
+    "steps": "IMEX1 sequential candidate, expected smooth order1",
+    "dt": [
+      4e-05,
+      2e-05,
+      1e-05
+    ],
+    "conditional_extra_dt": 5e-06,
+    "conditional_extra_reason": "only if finest primary level fails measured accuracy/sensitivity screen",
+    "common_times": [
+      0.0002,
+      0.0004
+    ],
+    "milestones_tstar": [
+      0.02,
+      0.1,
+      1.0
+    ],
+    "normalization": "physical area RMS: U_H=1, K=completed K(Hw), epsilon=E_C(Hw); absolute pressure datum, no mean subtraction",
+    "scaled_error_targets": {
+      "velocity": 0.0001,
+      "k": 0.0001,
+      "epsilon": 0.001,
+      "pressure": 0.001,
+      "mean_traction": 0.0001
+    },
+    "response_relative_target": 0.01,
+    "numerical_floor": 1e-12,
+    "coherent_order_band": [
+      0.8,
+      1.2
+    ],
+    "primary_wall_cap_seconds": 1800.0,
+    "rule": "choose largest dt satisfying absolute and response-relative targets at both common times; coherent Richardson estimates, otherwise conservative 4x adjacent sensitivity for coarse/middle and 2x for finest; no stability-only selection"
+  },
+  "normalizations": {
+    "U": 0.5656854249492381,
+    "W": 0.5656854249492381,
+    "velocity": 0.5656854249492381,
+    "k": 0.01415038311356876,
+    "epsilon": 0.0588627370548703,
+    "pressure": 0.5656854249492381,
+    "mean_traction": 0.005515726603512427,
+    "wall_stress": 0.003488451803576752,
+    "wall_K": 0.015820609274802434
+  },
+  "temporal": {
+    "0.0002": {
+      "fields": {
+        "U": {
+          "coarse_middle": 1.4283433324783036e-07,
+          "middle_fine": 7.432448438750137e-08,
+          "order": 0.9424333484187091,
+          "fine_Richardson": 8.063262540149482e-08,
+          "middle_Richardson": 1.5495710978899618e-07,
+          "normalized_difference": 1.3138836729648971e-07,
+          "response_relative": 0.0064175398744249984
+        },
+        "W": {
+          "coarse_middle": 2.771809898655031e-08,
+          "middle_fine": 6.778267543087726e-09,
+          "order": 2.031839828045688,
+          "fine_Richardson": null,
+          "middle_Richardson": null,
+          "normalized_difference": 1.1982397361035022e-08,
+          "response_relative": 0.001293855178145666
+        },
+        "velocity": {
+          "coarse_middle": 1.4549893389911988e-07,
+          "middle_fine": 7.463292765498088e-08,
+          "order": 0.9631243967386561,
+          "fine_Richardson": 7.860008183845248e-08,
+          "middle_Richardson": 1.5323300949343336e-07,
+          "normalized_difference": 1.3193362311160496e-07,
+          "response_relative": 0.005871415971703868
+        },
+        "k": {
+          "coarse_middle": 3.5607183738253004e-08,
+          "middle_fine": 1.8475436567750734e-08,
+          "order": 0.9465598787068887,
+          "fine_Richardson": 1.9924515168932045e-08,
+          "middle_Richardson": 3.839995173668278e-08,
+          "normalized_difference": 1.3056492124255416e-06,
+          "response_relative": 0.0031093259589681766
+        },
+        "epsilon": {
+          "coarse_middle": 5.6593647802500766e-08,
+          "middle_fine": 2.8319030431272645e-08,
+          "order": 0.9988682586261708,
+          "fine_Richardson": 2.836351325423833e-08,
+          "middle_Richardson": 5.668254368551097e-08,
+          "normalized_difference": 4.811028478827681e-07,
+          "response_relative": 0.014803683672462056
+        },
+        "pressure": {
+          "coarse_middle": 7.26758980760287e-07,
+          "middle_fine": 3.6554403309882513e-07,
+          "order": 0.9914317918839567,
+          "fine_Richardson": 3.6992500171778245e-07,
+          "middle_Richardson": 7.354690348166075e-07,
+          "normalized_difference": 6.461966615661474e-07,
+          "response_relative": 0.0004062386105394385
+        },
+        "mean_traction": {
+          "coarse_middle": 1.7041592066096428e-06,
+          "middle_fine": 9.017200059214039e-07,
+          "order": 0.9183086865719768,
+          "fine_Richardson": 1.0132842069299647e-06,
+          "middle_Richardson": 1.915004212851369e-06,
+          "normalized_difference": 0.0001634816354652507,
+          "response_relative": 0.015363545667999636
+        },
+        "wall_stress": {
+          "coarse_middle": 1.0868008563683734e-06,
+          "middle_fine": 5.750472499307586e-07,
+          "order": 0.9183351994538062,
+          "fine_Richardson": 6.46169045988423e-07,
+          "middle_Richardson": 1.2212162959191815e-06,
+          "normalized_difference": 0.00016484311158926023,
+          "response_relative": 0.01536537039736849
+        },
+        "wall_K": {
+          "coarse_middle": 2.6136043964013727e-08,
+          "middle_fine": 1.3152435749557417e-08,
+          "order": 0.9907107842421238,
+          "fine_Richardson": 1.3323458570910043e-08,
+          "middle_Richardson": 2.6475894320467462e-08,
+          "normalized_difference": 8.313482446283133e-07,
+          "response_relative": 0.004614876733079437
+        }
+      },
+      "drift_from_native_h0": [
+        {
+          "U": 1.1408291583695025e-05,
+          "W": 5.229102783523385e-06,
+          "k": 5.925554374288408e-06,
+          "epsilon": 1.8885114409347502e-06,
+          "pi_inner": 0.00019200094273907743,
+          "pi_outer": 0.0008796568772026611,
+          "velocity": 1.2549606877478622e-05,
+          "pressure": 0.0009003669161084453,
+          "wall_stress": 3.576338593255293e-05,
+          "wall_K": 2.8107735084673397e-06,
+          "mean_traction": 5.6086301967987404e-05
+        },
+        {
+          "U": 1.1522458181680472e-05,
+          "W": 5.236162267202739e-06,
+          "k": 5.936319237864216e-06,
+          "epsilon": 1.904420015354455e-06,
+          "pi_inner": 0.00019191784523737534,
+          "pi_outer": 0.0008791212852656578,
+          "velocity": 1.2656399086511651e-05,
+          "pressure": 0.000899825924014028,
+          "wall_stress": 3.684994593872207e-05,
+          "wall_K": 2.836873832473897e-06,
+          "mean_traction": 5.7790461174597046e-05
+        },
+        {
+          "U": 1.1581460472680075e-05,
+          "W": 5.2388147124798295e-06,
+          "k": 5.94194266267335e-06,
+          "epsilon": 1.9129718695591934e-06,
+          "pi_inner": 0.00019187769943432344,
+          "pi_outer": 0.0008788464112885007,
+          "velocity": 1.27112315009973e-05,
+          "pressure": 0.0008995488125582098,
+          "wall_stress": 3.742488694117277e-05,
+          "wall_K": 2.850008030611253e-06,
+          "mean_traction": 5.869218118051845e-05
+        }
+      ]
+    },
+    "0.0004": {
+      "fields": {
+        "U": {
+          "coarse_middle": 1.6212000198877446e-07,
+          "middle_fine": 8.209477876849991e-08,
+          "order": 0.9816997236292876,
+          "fine_Richardson": 8.421785569404654e-08,
+          "middle_Richardson": 1.6631263446254647e-07,
+          "normalized_difference": 1.451244369180392e-07,
+          "response_relative": 0.003918315981083276
+        },
+        "W": {
+          "coarse_middle": 2.1861579149196247e-08,
+          "middle_fine": 6.378079719456603e-09,
+          "order": 1.7772035813757816,
+          "fine_Richardson": null,
+          "middle_Richardson": null,
+          "normalized_difference": 1.127495855144039e-08,
+          "response_relative": 0.0006172268651252751
+        },
+        "velocity": {
+          "coarse_middle": 1.635873579704031e-07,
+          "middle_fine": 8.23421678240055e-08,
+          "order": 0.9903579249924327,
+          "fine_Richardson": 8.345395696335042e-08,
+          "middle_Richardson": 1.6579612478735594e-07,
+          "normalized_difference": 1.4556176311488756e-07,
+          "response_relative": 0.00352473498530185
+        },
+        "k": {
+          "coarse_middle": 2.4400364799087653e-08,
+          "middle_fine": 1.2266544028417964e-08,
+          "order": 0.9921738751654907,
+          "fine_Richardson": 1.2400719051729637e-08,
+          "middle_Richardson": 2.46672630801476e-08,
+          "normalized_difference": 8.668701002629118e-07,
+          "response_relative": 0.0010542420409339146
+        },
+        "epsilon": {
+          "coarse_middle": 5.106469789928002e-08,
+          "middle_fine": 2.5510117193315784e-08,
+          "order": 1.0012567436117834,
+          "fine_Richardson": 2.5465731044642886e-08,
+          "middle_Richardson": 5.097584823795867e-08,
+          "normalized_difference": 4.3338312945821603e-07,
+          "response_relative": 0.0067729614305214484
+        },
+        "pressure": {
+          "coarse_middle": 4.262080314536722e-07,
+          "middle_fine": 1.9711478852661473e-07,
+          "order": 1.1125217609254219,
+          "fine_Richardson": 1.696001128599987e-07,
+          "middle_Richardson": 3.6671490138661344e-07,
+          "normalized_difference": 3.484530090983038e-07,
+          "response_relative": 0.00022009497778487913
+        },
+        "mean_traction": {
+          "coarse_middle": 6.849809291399264e-07,
+          "middle_fine": 3.305263120917737e-07,
+          "order": 1.051298697494321,
+          "fine_Richardson": 3.082133444749212e-07,
+          "middle_Richardson": 6.387396565666949e-07,
+          "normalized_difference": 5.9924346482527576e-05,
+          "response_relative": 0.004785048059170882
+        },
+        "wall_stress": {
+          "coarse_middle": 4.380861412621889e-07,
+          "middle_fine": 2.1144482326543976e-07,
+          "order": 1.0509333363437927,
+          "fine_Richardson": 1.972672665378444e-07,
+          "middle_Richardson": 4.0871208980328414e-07,
+          "normalized_difference": 6.061279764525994e-05,
+          "response_relative": 0.004800287914096238
+        },
+        "wall_K": {
+          "coarse_middle": 5.0463027795082026e-08,
+          "middle_fine": 2.5408258931048482e-08,
+          "order": 0.9899292510801149,
+          "fine_Richardson": 2.576673628124916e-08,
+          "middle_Richardson": 5.1174995212297646e-08,
+          "normalized_difference": 1.6060227826697134e-06,
+          "response_relative": 0.004911254823894944
+        }
+      },
+      "drift_from_native_h0": [
+        {
+          "U": 2.073305016209006e-05,
+          "W": 1.0319839031078495e-05,
+          "k": 1.1623069944181308e-05,
+          "epsilon": 3.7425123608911355e-06,
+          "pi_inner": 0.0001912282481610202,
+          "pi_outer": 0.0008752122428406544,
+          "velocity": 2.3159413780385586e-05,
+          "pressure": 0.0008958597618561185,
+          "wall_stress": 4.3400589289203465e-05,
+          "wall_K": 5.097700902169986e-06,
+          "mean_traction": 6.805930831016004e-05
+        },
+        {
+          "U": 2.0878077846951666e-05,
+          "W": 1.0329358058091117e-05,
+          "k": 1.1631288024575797e-05,
+          "epsilon": 3.758314634997064e-06,
+          "pi_inner": 0.00019116884424350428,
+          "pi_outer": 0.0008749487585170854,
+          "velocity": 2.329355645829176e-05,
+          "pressure": 0.0008955896700163453,
+          "wall_stress": 4.383751507559604e-05,
+          "wall_K": 5.148100129920199e-06,
+          "mean_traction": 6.874428923929997e-05
+        },
+        {
+          "U": 2.0951546318580364e-05,
+          "W": 1.033344476696114e-05,
+          "k": 1.163541535258021e-05,
+          "epsilon": 3.7664642645620036e-06,
+          "pi_inner": 0.00019114133918104139,
+          "pi_outer": 0.0008748247992056114,
+          "velocity": 2.336123656597516e-05,
+          "pressure": 0.0008954626965145227,
+          "wall_stress": 4.404836273351928e-05,
+          "wall_K": 5.173475993839408e-06,
+          "mean_traction": 6.907481555139174e-05
+        }
+      ]
+    }
+  },
+  "conditional_temporal": {
+    "0.0002": {
+      "fields": {
+        "U": {
+          "coarse_middle": 7.432448438750137e-08,
+          "middle_fine": 3.793272296220226e-08,
+          "order": 0.970394611979361,
+          "fine_Richardson": 3.953893449979827e-08,
+          "middle_Richardson": 7.747165746200052e-08,
+          "normalized_difference": 6.705621408860969e-08,
+          "response_relative": 0.0032668324087322953
+        },
+        "W": {
+          "coarse_middle": 6.778267543087726e-09,
+          "middle_fine": 1.8808138022267336e-09,
+          "order": 1.8495595508912617,
+          "fine_Richardson": null,
+          "middle_Richardson": null,
+          "normalized_difference": 3.324840484259443e-09,
+          "response_relative": 0.0003589397127581711
+        },
+        "velocity": {
+          "coarse_middle": 7.463292765498088e-08,
+          "middle_fine": 3.7979322425312344e-08,
+          "order": 0.9745981132531406,
+          "fine_Richardson": 3.9352989231146286e-08,
+          "middle_Richardson": 7.733231165645863e-08,
+          "normalized_difference": 6.713859107952167e-08,
+          "response_relative": 0.002981335131443814
+        },
+        "k": {
+          "coarse_middle": 1.8475436567750734e-08,
+          "middle_fine": 9.395361854871041e-09,
+          "order": 0.9755878230485672,
+          "fine_Richardson": 9.721596702145483e-09,
+          "middle_Richardson": 1.9116958557016524e-08,
+          "normalized_difference": 6.639651929891465e-07,
+          "response_relative": 0.0015804298978834845
+        },
+        "epsilon": {
+          "coarse_middle": 2.8319030431272645e-08,
+          "middle_fine": 1.4165713079060368e-08,
+          "order": 0.9993686457263008,
+          "fine_Richardson": 1.4178119662306312e-08,
+          "middle_Richardson": 2.834383274136668e-08,
+          "normalized_difference": 2.406567174383254e-07,
+          "response_relative": 0.007387997801421633
+        },
+        "pressure": {
+          "coarse_middle": 3.6554403309882513e-07,
+          "middle_fine": 1.839480834587769e-07,
+          "order": 0.9907465573082277,
+          "fine_Richardson": 1.8633068344986335e-07,
+          "middle_Richardson": 3.702787669086402e-07,
+          "normalized_difference": 3.251773429999253e-07,
+          "response_relative": 0.00020448927383456874
+        },
+        "mean_traction": {
+          "coarse_middle": 9.017200059214039e-07,
+          "middle_fine": 4.640716686358029e-07,
+          "order": 0.9583319058594229,
+          "fine_Richardson": 4.92090327513062e-07,
+          "middle_Richardson": 9.561619961488648e-07,
+          "normalized_difference": 8.413608976563143e-05,
+          "response_relative": 0.007844845579032271
+        },
+        "wall_stress": {
+          "coarse_middle": 5.750472499307586e-07,
+          "middle_fine": 2.9594668587499434e-07,
+          "order": 0.9583432018912642,
+          "fine_Richardson": 3.138096161743808e-07,
+          "middle_Richardson": 6.097563020493752e-07,
+          "normalized_difference": 8.48361114152578e-05,
+          "response_relative": 0.007845719464868063
+        },
+        "wall_K": {
+          "coarse_middle": 1.3152435749557417e-08,
+          "middle_fine": 6.5998500452508556e-09,
+          "order": 0.9948248518584674,
+          "fine_Richardson": 6.647455307783314e-09,
+          "middle_Richardson": 1.324730535303417e-08,
+          "normalized_difference": 4.1716788087058513e-07,
+          "response_relative": 0.0023103875688553505
+        }
+      },
+      "drift_from_native_h0": [
+        {
+          "U": 1.1522458181680472e-05,
+          "W": 5.236162267202739e-06,
+          "k": 5.936319237864216e-06,
+          "epsilon": 1.904420015354455e-06,
+          "pi_inner": 0.00019191784523737534,
+          "pi_outer": 0.0008791212852656578,
+          "velocity": 1.2656399086511651e-05,
+          "pressure": 0.000899825924014028,
+          "wall_stress": 3.684994593872207e-05,
+          "wall_K": 2.836873832473897e-06,
+          "mean_traction": 5.7790461174597046e-05
+        },
+        {
+          "U": 1.1581460472680075e-05,
+          "W": 5.2388147124798295e-06,
+          "k": 5.94194266267335e-06,
+          "epsilon": 1.9129718695591934e-06,
+          "pi_inner": 0.00019187769943432344,
+          "pi_outer": 0.0008788464112885007,
+          "velocity": 1.27112315009973e-05,
+          "pressure": 0.0008995488125582098,
+          "wall_stress": 3.742488694117277e-05,
+          "wall_K": 2.850008030611253e-06,
+          "mean_traction": 5.869218118051845e-05
+        },
+        {
+          "U": 1.16114689142937e-05,
+          "W": 5.239915605253456e-06,
+          "k": 5.9448140455032725e-06,
+          "epsilon": 1.9173954107477583e-06,
+          "pi_inner": 0.00019185795402303264,
+          "pi_outer": 0.0008787069984517363,
+          "velocity": 1.2739031591835686e-05,
+          "pressure": 0.0008994083964751295,
+          "wall_stress": 3.772078356869609e-05,
+          "wall_K": 2.856598665184413e-06,
+          "mean_traction": 5.915625284915425e-05
+        }
+      ]
+    },
+    "0.0004": {
+      "fields": {
+        "U": {
+          "coarse_middle": 8.209477876849991e-08,
+          "middle_fine": 4.130280646553121e-08,
+          "order": 0.9910506554517274,
+          "fine_Richardson": 4.182003775789422e-08,
+          "middle_Richardson": 8.312284422342543e-08,
+          "normalized_difference": 7.301373633453172e-08,
+          "response_relative": 0.001967876666870803
+        },
+        "W": {
+          "coarse_middle": 6.378079719456603e-09,
+          "middle_fine": 2.6559694240264813e-09,
+          "order": 1.263883591682797,
+          "fine_Richardson": null,
+          "middle_Richardson": null,
+          "normalized_difference": 4.695134975883133e-09,
+          "response_relative": 0.00025697988912578483
+        },
+        "velocity": {
+          "coarse_middle": 8.23421678240055e-08,
+          "middle_fine": 4.138811418161608e-08,
+          "order": 0.9924149162740737,
+          "fine_Richardson": 4.182677520687421e-08,
+          "middle_Richardson": 8.321488938849029e-08,
+          "normalized_difference": 7.31645404958596e-08,
+          "response_relative": 0.0017690838292683038
+        },
+        "k": {
+          "coarse_middle": 1.2266544028417964e-08,
+          "middle_fine": 6.150747120576516e-09,
+          "order": 0.9958952740099147,
+          "fine_Richardson": 6.185897064824686e-09,
+          "middle_Richardson": 1.2336644185401201e-08,
+          "normalized_difference": 4.3467000654410435e-07,
+          "response_relative": 0.0005285290281760838
+        },
+        "epsilon": {
+          "coarse_middle": 2.5510117193315784e-08,
+          "middle_fine": 1.2749100374932051e-08,
+          "order": 1.0006740780672156,
+          "fine_Richardson": 1.2737195059247583e-08,
+          "middle_Richardson": 2.5486295434179635e-08,
+          "normalized_difference": 2.1659034242746262e-07,
+          "response_relative": 0.0033811856472312414
+        },
+        "pressure": {
+          "coarse_middle": 1.9711478852661473e-07,
+          "middle_fine": 9.459817586529789e-08,
+          "order": 1.0591517490748652,
+          "fine_Richardson": 8.729136327012621e-08,
+          "middle_Richardson": 1.818895391354241e-07,
+          "normalized_difference": 1.672275291055743e-07,
+          "response_relative": 0.00010564167132088197
+        },
+        "mean_traction": {
+          "coarse_middle": 3.305263120917737e-07,
+          "middle_fine": 1.6151177694833513e-07,
+          "order": 1.0331257587245428,
+          "fine_Richardson": 1.543420752000421e-07,
+          "middle_Richardson": 3.158538521483772e-07,
+          "normalized_difference": 2.9282049049618244e-05,
+          "response_relative": 0.0023327606067606145
+        },
+        "wall_stress": {
+          "coarse_middle": 2.1144482326543976e-07,
+          "middle_fine": 1.0334031879936159e-07,
+          "order": 1.0328780002481257,
+          "fine_Richardson": 9.878609168320724e-08,
+          "middle_Richardson": 2.0212641048256883e-07,
+          "normalized_difference": 2.9623547813791065e-05,
+          "response_relative": 0.002340589963088952
+        },
+        "wall_K": {
+          "coarse_middle": 2.5408258931048482e-08,
+          "middle_fine": 1.2749913157746184e-08,
+          "order": 0.9948100992890259,
+          "fine_Richardson": 1.284214291830493e-08,
+          "middle_Richardson": 2.5592056076051114e-08,
+          "normalized_difference": 8.059053185804314e-07,
+          "response_relative": 0.0024584261310594065
+        }
+      },
+      "drift_from_native_h0": [
+        {
+          "U": 2.0878077846951666e-05,
+          "W": 1.0329358058091117e-05,
+          "k": 1.1631288024575797e-05,
+          "epsilon": 3.758314634997064e-06,
+          "pi_inner": 0.00019116884424350428,
+          "pi_outer": 0.0008749487585170854,
+          "velocity": 2.329355645829176e-05,
+          "pressure": 0.0008955896700163453,
+          "wall_stress": 4.383751507559604e-05,
+          "wall_K": 5.148100129920199e-06,
+          "mean_traction": 6.874428923929997e-05
+        },
+        {
+          "U": 2.0951546318580364e-05,
+          "W": 1.033344476696114e-05,
+          "k": 1.163541535258021e-05,
+          "epsilon": 3.7664642645620036e-06,
+          "pi_inner": 0.00019114133918104139,
+          "pi_outer": 0.0008748247992056114,
+          "velocity": 2.336123656597516e-05,
+          "pressure": 0.0008954626965145227,
+          "wall_stress": 4.404836273351928e-05,
+          "wall_K": 5.173475993839408e-06,
+          "mean_traction": 6.907481555139174e-05
+        },
+        {
+          "U": 2.098851374217898e-05,
+          "W": 1.0335320141438985e-05,
+          "k": 1.1637482129983112e-05,
+          "epsilon": 3.7706005245148056e-06,
+          "pi_inner": 0.00019112813744873768,
+          "pi_outer": 0.0008747649240366984,
+          "velocity": 2.3395224972880046e-05,
+          "pressure": 0.0008954013833189863,
+          "wall_stress": 4.415139790780784e-05,
+          "wall_K": 5.186209582084079e-06,
+          "mean_traction": 6.923632732834008e-05
+        }
+      ]
+    }
+  },
+  "selected_level": "extra-fine",
+  "selected_dt": 5e-06,
+  "reused_temporal_root": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v1",
+  "reused_temporal_progress_sha256": "67c512cc686a5b7217b5ce11db406ca0fc2c51fcff86ae96ccfacf3cfb05191b"
+}

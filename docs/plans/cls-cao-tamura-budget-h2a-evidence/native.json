@@ -1,0 +1,84 @@
+{
+  "status": "bounded_cost_stop",
+  "captured_UTC": "2026-11-11T17:08:07.403064+00:00",
+  "implementation_commit": "4f5898f22fa2e7f2d7ecc38f74a379b3c024776a",
+  "runtime_sha256": "6601b0e187b22764a9455e87f69ff90689655e193c08d20c57b36bbb76433d7d",
+  "model": "CLSCalibratedBudgetAWF / Regularized outer / Linear inner / immutable FiniteInflowV1",
+  "boundary": "RoughFlatOpenV1",
+  "dt": 5e-06,
+  "accepted_steps": 160.0,
+  "accepted_time": 0.0008000000000000018,
+  "completed_tstar": 0.02,
+  "next_tstar": 0.1,
+  "forecast_to_next_seconds": 2686.73582129,
+  "primary_elapsed_seconds": 331.5060463149566,
+  "primary_wall_cap": 1800.0,
+  "checkpoint": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v2/primary-step160/checkpoint.16",
+  "checkpoint_sha256": "7485f1b78243f6cb09d7406f3c685caa8779cf868c5826f9d8f9aca025dd6605",
+  "one_equation_solve_and_one_logical_bound_per_step": true,
+  "positivity_activations": 0,
+  "cumulative_signed_bound_supply": 0.0,
+  "cumulative_absolute_bound_supply": 0.0,
+  "native_histories": "full native slots/time labels retained; each dt fresh h0; selected leg continued only within same dt/signature",
+  "startup_temporal_classification": "near-first-order U/k/epsilon/pressure/mean-traction at short horizon; W ratios not asymptotic; selected 5us meets declared absolute/response-relative targets",
+  "scales": {
+    "bulk_velocity": 1.3835987160912857,
+    "domain_flow_through": 0.28910116448359674,
+    "inlet_to_observation_time": 0.14455058224179837,
+    "wall_time": 0.2019714081103131,
+    "elapsed_domain_flow_through": 0.0027671974321825774,
+    "elapsed_inlet_to_observation": 0.005534394864365155
+  },
+  "scientific_status": {
+    "implementation_verification": "passed",
+    "physical_hard_admissibility": "passed through retained endpoint",
+    "startup_evolution": "160 steps, tstar=.02 completed",
+    "developed_flow": "not established",
+    "experimental_discrepancy": "reported, not calibrated",
+    "steady_convergence": "not claimed; selected residuals and strong divergence remain nonzero",
+    "mapped_evolution": "guarded, not implemented"
+  },
+  "final": {
+    "mean_wall_traction": 0.006186942422801937,
+    "mean_traction_reference": 0.005515726603512825,
+    "relative_traction_change_from_h0": -0.011331856180099464,
+    "relative_k_integral_change": -0.0007602782809635888,
+    "relative_epsilon_integral_change": 0.0004903280588701708,
+    "strong_divergence": [
+      0.004389225831279544,
+      0.0013242488376048708
+    ],
+    "net_volume_flux": -2.220446101057879e-16,
+    "covariance": [
+      0.00964433003571592,
+      1.9037083749113626e-05
+    ],
+    "spatial_blocks": [
+      0.17355039521233534,
+      0.1152341243011584,
+      0.5695733723261566,
+      0.04976320551919583,
+      5.517516896077048e-17,
+      8.634812982143174e-17,
+      0.0,
+      1.0756548288540861e-05
+    ],
+    "matching_defect": 6.667863705969723e-07
+  },
+  "reporting_interruption": {
+    "previous_root": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v1",
+    "reason": "missing h0 physical sample arrays; no numerical rejection",
+    "recovery": "strict zero-Lift readback, hash-validated completed legs reused, no governing rerun",
+    "original_progress_sha256": "67c512cc686a5b7217b5ce11db406ca0fc2c51fcff86ae96ccfacf3cfb05191b"
+  },
+  "rank": 1,
+  "computational_thread_controls": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "explicit_build_workers": 4
+}

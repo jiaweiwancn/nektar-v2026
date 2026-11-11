@@ -1,0 +1,1340 @@
+{
+  "H1-off": {
+    "constitutive.refresh": {
+      "calls": 129,
+      "wall": 0.7711218599999998,
+      "CPU": 0.7709989999999998,
+      "exclusive_wall": 0.7711218599999998,
+      "exclusive_CPU": 0.7709989999999998
+    },
+    "startup.object": {
+      "calls": 1,
+      "wall": 2.376233534,
+      "CPU": 2.374486,
+      "exclusive_wall": 2.345998228,
+      "exclusive_CPU": 2.3442790000000002
+    },
+    "matching.constraints": {
+      "calls": 138,
+      "wall": 0.12027418199999992,
+      "CPU": 0.120223,
+      "exclusive_wall": 0.12027418199999992,
+      "exclusive_CPU": 0.120223
+    },
+    "domain.compute": {
+      "calls": 35,
+      "wall": 14.346954353000003,
+      "CPU": 14.338751,
+      "exclusive_wall": 14.338982296,
+      "exclusive_CPU": 14.330828
+    },
+    "domain.scalar": {
+      "calls": 78,
+      "wall": 15.176629795999995,
+      "CPU": 15.168188000000004,
+      "exclusive_wall": 0.8293690119999992,
+      "exclusive_CPU": 0.829131
+    },
+    "residual": {
+      "calls": 77,
+      "wall": 2.3257041469999997,
+      "CPU": 2.322835,
+      "exclusive_wall": 2.2372913380000004,
+      "exclusive_CPU": 2.2344079999999993
+    },
+    "dense.factorization": {
+      "calls": 46,
+      "wall": 0.19964912899999993,
+      "CPU": 0.19961700000000002,
+      "exclusive_wall": 0.19964912899999993,
+      "exclusive_CPU": 0.19961700000000002
+    },
+    "dense.triangular_solve": {
+      "calls": 886,
+      "wall": 0.13897338,
+      "CPU": 0.13898899999999992,
+      "exclusive_wall": 0.13897338,
+      "exclusive_CPU": 0.13898899999999992
+    },
+    "residual.mass_dual_norms": {
+      "calls": 38,
+      "wall": 0.09778150299999998,
+      "CPU": 0.097229,
+      "exclusive_wall": 0.05315642199999999,
+      "exclusive_CPU": 0.05259599999999999
+    },
+    "native.explicit": {
+      "calls": 9,
+      "wall": 0.400870024,
+      "CPU": 0.24515000000000003,
+      "exclusive_wall": 0.24579241899999998,
+      "exclusive_CPU": 0.09064599999999998
+    },
+    "k.bound": {
+      "calls": 9,
+      "wall": 6.50846079,
+      "CPU": 6.507779,
+      "exclusive_wall": 0.8618850380000002,
+      "exclusive_CPU": 0.8618879999999999
+    },
+    "audit.physical": {
+      "calls": 9,
+      "wall": 3.2825663779999994,
+      "CPU": 3.1313609999999996,
+      "exclusive_wall": 2.2727967849999997,
+      "exclusive_CPU": 2.123796
+    },
+    "audit.complete": {
+      "calls": 9,
+      "wall": 11.874735285,
+      "CPU": 11.722211,
+      "exclusive_wall": 8.578368114,
+      "exclusive_CPU": 8.577048
+    },
+    "native.acceptance_audit": {
+      "calls": 9,
+      "wall": 11.895704892000001,
+      "CPU": 11.743156,
+      "exclusive_wall": 0.020969606999999835,
+      "exclusive_CPU": 0.020945000000000435
+    },
+    "output.project_fields": {
+      "calls": 2,
+      "wall": 0.075985902,
+      "CPU": 0.07599,
+      "exclusive_wall": 0.075985902,
+      "exclusive_CPU": 0.07599
+    },
+    "startup.initialize": {
+      "calls": 1,
+      "wall": 3.55855874,
+      "CPU": 3.461641,
+      "exclusive_wall": 0.430093791,
+      "exclusive_CPU": 0.33963800000000033
+    },
+    "pimple.check.input": {
+      "calls": 8,
+      "wall": 4.602441028,
+      "CPU": 4.601408999999999,
+      "exclusive_wall": 0.0013053220000001087,
+      "exclusive_CPU": 0.0013010000000000521
+    },
+    "flow.assembly": {
+      "calls": 8,
+      "wall": 1.2838349980000001,
+      "CPU": 1.2838210000000003,
+      "exclusive_wall": 1.283181677,
+      "exclusive_CPU": 1.2831720000000002
+    },
+    "momentum.factorize": {
+      "calls": 8,
+      "wall": 0.090792052,
+      "CPU": 0.090793,
+      "exclusive_wall": 0.005005675000000003,
+      "exclusive_CPU": 0.0050040000000000015
+    },
+    "pressure.mass_factorize": {
+      "calls": 8,
+      "wall": 0.08975981599999999,
+      "CPU": 0.08972100000000001,
+      "exclusive_wall": 0.0049678759999999995,
+      "exclusive_CPU": 0.004967000000000001
+    },
+    "momentum.solve_validate": {
+      "calls": 8,
+      "wall": 0.013164074000000001,
+      "CPU": 0.013129000000000002,
+      "exclusive_wall": 0.011633671000000002,
+      "exclusive_CPU": 0.011597
+    },
+    "pressure.build": {
+      "calls": 8,
+      "wall": 0.816555698,
+      "CPU": 0.180178,
+      "exclusive_wall": 0.7228999009999999,
+      "exclusive_CPU": 0.086516
+    },
+    "pressure.solve_validate": {
+      "calls": 8,
+      "wall": 0.00170663,
+      "CPU": 0.0017059999999999998,
+      "exclusive_wall": 0.0013014720000000001,
+      "exclusive_CPU": 0.0013
+    },
+    "pimple.check.flow": {
+      "calls": 8,
+      "wall": 0.0022210399999999996,
+      "CPU": 0.0022199999999999998,
+      "exclusive_wall": 0.001048787,
+      "exclusive_CPU": 0.0010470000000000002
+    },
+    "flow.correction_validate": {
+      "calls": 8,
+      "wall": 0.39308127700000006,
+      "CPU": 0.393095,
+      "exclusive_wall": 0.073831473,
+      "exclusive_CPU": 0.07383300000000001
+    },
+    "flow.total": {
+      "calls": 8,
+      "wall": 2.74288014,
+      "CPU": 2.1064230000000004,
+      "exclusive_wall": 0.053985595,
+      "exclusive_CPU": 0.05398000000000011
+    },
+    "epsilon.assembly": {
+      "calls": 8,
+      "wall": 0.085094632,
+      "CPU": 0.08509900000000001,
+      "exclusive_wall": 0.08455307899999999,
+      "exclusive_CPU": 0.08455900000000001
+    },
+    "epsilon.solve_validate": {
+      "calls": 8,
+      "wall": 0.010744827,
+      "CPU": 0.010636,
+      "exclusive_wall": 0.003451061,
+      "exclusive_CPU": 0.0033429999999999996
+    },
+    "pimple.check.epsilon": {
+      "calls": 8,
+      "wall": 3.98779205,
+      "CPU": 3.9870720000000004,
+      "exclusive_wall": 0.001237294000000222,
+      "exclusive_CPU": 0.0012330000000000951
+    },
+    "epsilon.total": {
+      "calls": 8,
+      "wall": 4.244983936000001,
+      "CPU": 4.0887780000000005,
+      "exclusive_wall": 0.16039046700000004,
+      "exclusive_CPU": 0.005192000000000141
+    },
+    "k.assembly": {
+      "calls": 8,
+      "wall": 0.29533387899999997,
+      "CPU": 0.295221,
+      "exclusive_wall": 0.294668408,
+      "exclusive_CPU": 0.294556
+    },
+    "k.solve_validate": {
+      "calls": 8,
+      "wall": 0.020939645,
+      "CPU": 0.02094,
+      "exclusive_wall": 0.005262383999999999,
+      "exclusive_CPU": 0.00526
+    },
+    "k.bound_accounting": {
+      "calls": 8,
+      "wall": 0.010585297999999998,
+      "CPU": 0.010582999999999999,
+      "exclusive_wall": 0.010585297999999998,
+      "exclusive_CPU": 0.010582999999999999
+    },
+    "io.attempt_snapshot": {
+      "calls": 8,
+      "wall": 0.85247805,
+      "CPU": 0.275268,
+      "exclusive_wall": 0.85247805,
+      "exclusive_CPU": 0.275268
+    },
+    "pimple.check.k": {
+      "calls": 8,
+      "wall": 0.11839821100000002,
+      "CPU": 0.11822500000000001,
+      "exclusive_wall": 0.0012633319999999972,
+      "exclusive_CPU": 0.001084000000000005
+    },
+    "k.total": {
+      "calls": 8,
+      "wall": 7.411363954,
+      "CPU": 6.832972000000001,
+      "exclusive_wall": 0.008089774999999966,
+      "exclusive_CPU": 0.007956000000000296
+    },
+    "pimple.final_refresh_diagnostics": {
+      "calls": 8,
+      "wall": 0.956683166,
+      "CPU": 0.9557420000000001,
+      "exclusive_wall": 0.001307040999999995,
+      "exclusive_CPU": 0.0007469999999999977
+    },
+    "pimple.sweep": {
+      "calls": 8,
+      "wall": 20.332945246999998,
+      "CPU": 18.603042000000002,
+      "exclusive_wall": 0.3745930229999992,
+      "exclusive_CPU": 0.017718000000000345
+    },
+    "native.physical_samples": {
+      "calls": 8,
+      "wall": 0.12474601600000002,
+      "CPU": 0.124701,
+      "exclusive_wall": 0.12474601600000002,
+      "exclusive_CPU": 0.124701
+    },
+    "native.implicit": {
+      "calls": 8,
+      "wall": 34.544489194,
+      "CPU": 32.661646,
+      "exclusive_wall": 3.439126921999999,
+      "exclusive_CPU": 3.438462
+    },
+    "native.advance": {
+      "calls": 8,
+      "wall": 35.009075667000005,
+      "CPU": 32.970491,
+      "exclusive_wall": 0.06789648000000081,
+      "exclusive_CPU": 0.0678759999999996
+    },
+    "io.checkpoint": {
+      "calls": 9,
+      "wall": 0.185932948,
+      "CPU": 0.0118,
+      "exclusive_wall": 0.185932948,
+      "exclusive_CPU": 0.0118
+    },
+    "native.step": {
+      "calls": 8,
+      "wall": 35.213692946,
+      "CPU": 33.004949,
+      "exclusive_wall": 0.024622242999997823,
+      "exclusive_CPU": 0.02410800000000135
+    },
+    "native.solve_block": {
+      "calls": 1,
+      "wall": 35.416279592,
+      "CPU": 33.203019,
+      "exclusive_wall": 0.030999093000005473,
+      "exclusive_CPU": 0.03096199999999527
+    },
+    "output.report": {
+      "calls": 1,
+      "wall": 0.331619185,
+      "CPU": 0.108731,
+      "exclusive_wall": 0.331619185,
+      "exclusive_CPU": 0.108731
+    },
+    "output.fields_and_report": {
+      "calls": 1,
+      "wall": 1.010751307,
+      "CPU": 0.276558,
+      "exclusive_wall": 0.6791321220000001,
+      "exclusive_CPU": 0.16782700000000003
+    },
+    "process": {
+      "calls": 1,
+      "wall": 43.809514448,
+      "CPU": 39.644515,
+      "exclusive_wall": 1.447691275000004,
+      "exclusive_CPU": 0.32881100000000174
+    }
+  },
+  "H1-on": {
+    "constitutive.refresh": {
+      "calls": 129,
+      "wall": 0.7813820179999997,
+      "CPU": 0.7814070000000001,
+      "exclusive_wall": 0.7813820179999997,
+      "exclusive_CPU": 0.7814070000000001
+    },
+    "startup.object": {
+      "calls": 1,
+      "wall": 2.566667083,
+      "CPU": 2.564551,
+      "exclusive_wall": 2.533842767,
+      "exclusive_CPU": 2.5317279999999998
+    },
+    "matching.constraints": {
+      "calls": 138,
+      "wall": 0.10801470299999998,
+      "CPU": 0.107966,
+      "exclusive_wall": 0.10801470299999998,
+      "exclusive_CPU": 0.107966
+    },
+    "domain.compute": {
+      "calls": 35,
+      "wall": 13.687509784999996,
+      "CPU": 13.68457,
+      "exclusive_wall": 13.678837945999998,
+      "exclusive_CPU": 13.675958999999999
+    },
+    "domain.scalar": {
+      "calls": 78,
+      "wall": 14.380008085,
+      "CPU": 14.376448999999997,
+      "exclusive_wall": 0.6922026669999998,
+      "exclusive_CPU": 0.6915839999999998
+    },
+    "residual": {
+      "calls": 77,
+      "wall": 2.2736557800000003,
+      "CPU": 2.218452999999999,
+      "exclusive_wall": 2.1912100130000005,
+      "exclusive_CPU": 2.1359980000000016
+    },
+    "dense.factorization": {
+      "calls": 39,
+      "wall": 0.12542262599999995,
+      "CPU": 0.125427,
+      "exclusive_wall": 0.12542262599999995,
+      "exclusive_CPU": 0.125427
+    },
+    "dense.triangular_solve": {
+      "calls": 886,
+      "wall": 0.12807614700000008,
+      "CPU": 0.12805400000000045,
+      "exclusive_wall": 0.12807614700000008,
+      "exclusive_CPU": 0.12805400000000045
+    },
+    "residual.mass_dual_norms": {
+      "calls": 38,
+      "wall": 0.083205791,
+      "CPU": 0.082235,
+      "exclusive_wall": 0.051999171999999996,
+      "exclusive_CPU": 0.051024
+    },
+    "native.explicit": {
+      "calls": 9,
+      "wall": 0.39564359499999996,
+      "CPU": 0.21499200000000002,
+      "exclusive_wall": 0.25923126500000004,
+      "exclusive_CPU": 0.07916799999999999
+    },
+    "k.bound": {
+      "calls": 9,
+      "wall": 6.257653594000001,
+      "CPU": 6.169122999999999,
+      "exclusive_wall": 0.8729580939999999,
+      "exclusive_CPU": 0.785305
+    },
+    "audit.physical": {
+      "calls": 9,
+      "wall": 2.820000322,
+      "CPU": 2.7110580000000004,
+      "exclusive_wall": 1.8381362389999998,
+      "exclusive_CPU": 1.7837
+    },
+    "audit.complete": {
+      "calls": 9,
+      "wall": 10.989387204,
+      "CPU": 10.87893,
+      "exclusive_wall": 8.161180394999999,
+      "exclusive_CPU": 8.159664000000001
+    },
+    "native.acceptance_audit": {
+      "calls": 9,
+      "wall": 11.008503555,
+      "CPU": 10.897808,
+      "exclusive_wall": 0.019116350999999865,
+      "exclusive_CPU": 0.01887799999999973
+    },
+    "output.project_fields": {
+      "calls": 2,
+      "wall": 0.076767662,
+      "CPU": 0.076772,
+      "exclusive_wall": 0.076767662,
+      "exclusive_CPU": 0.076772
+    },
+    "startup.initialize": {
+      "calls": 1,
+      "wall": 3.153194979,
+      "CPU": 3.098224,
+      "exclusive_wall": 0.24478927699999975,
+      "exclusive_CPU": 0.24410000000000043
+    },
+    "pimple.check.input": {
+      "calls": 8,
+      "wall": 4.419795934,
+      "CPU": 4.418455,
+      "exclusive_wall": 0.0014419730000000963,
+      "exclusive_CPU": 0.0014320000000002109
+    },
+    "flow.assembly": {
+      "calls": 8,
+      "wall": 1.21925745,
+      "CPU": 1.21912,
+      "exclusive_wall": 1.2186371459999998,
+      "exclusive_CPU": 1.218507
+    },
+    "momentum.factorize": {
+      "calls": 8,
+      "wall": 0.090352857,
+      "CPU": 0.09034799999999998,
+      "exclusive_wall": 0.004559304000000005,
+      "exclusive_CPU": 0.004551999999999999
+    },
+    "pressure.mass_factorize": {
+      "calls": 8,
+      "wall": 0.019883706,
+      "CPU": 0.019888,
+      "exclusive_wall": 0.009333981000000002,
+      "exclusive_CPU": 0.009338
+    },
+    "momentum.solve_validate": {
+      "calls": 8,
+      "wall": 0.051456551999999996,
+      "CPU": 0.013623,
+      "exclusive_wall": 0.049983929,
+      "exclusive_CPU": 0.01215
+    },
+    "pressure.build": {
+      "calls": 8,
+      "wall": 0.330415412,
+      "CPU": 0.18075000000000002,
+      "exclusive_wall": 0.23420867699999998,
+      "exclusive_CPU": 0.08456900000000002
+    },
+    "pressure.solve_validate": {
+      "calls": 8,
+      "wall": 0.001475462,
+      "CPU": 0.001477,
+      "exclusive_wall": 0.001100541,
+      "exclusive_CPU": 0.0011
+    },
+    "pimple.check.flow": {
+      "calls": 8,
+      "wall": 0.0026630819999999998,
+      "CPU": 0.0024630000000000003,
+      "exclusive_wall": 0.001180379,
+      "exclusive_CPU": 0.001177
+    },
+    "flow.correction_validate": {
+      "calls": 8,
+      "wall": 0.36665061400000004,
+      "CPU": 0.366115,
+      "exclusive_wall": 0.07253428200000002,
+      "exclusive_CPU": 0.07224899999999998
+    },
+    "flow.total": {
+      "calls": 8,
+      "wall": 2.130734517,
+      "CPU": 1.9425500000000002,
+      "exclusive_wall": 0.05124246400000007,
+      "exclusive_CPU": 0.05122899999999994
+    },
+    "epsilon.assembly": {
+      "calls": 8,
+      "wall": 0.074715115,
+      "CPU": 0.07472,
+      "exclusive_wall": 0.07412542200000001,
+      "exclusive_CPU": 0.07412999999999999
+    },
+    "epsilon.solve_validate": {
+      "calls": 8,
+      "wall": 0.009785982,
+      "CPU": 0.009617999999999998,
+      "exclusive_wall": 0.002973516,
+      "exclusive_CPU": 0.0028060000000000008
+    },
+    "pimple.check.epsilon": {
+      "calls": 8,
+      "wall": 3.6886337859999996,
+      "CPU": 3.6874800000000003,
+      "exclusive_wall": 0.0013339679999999632,
+      "exclusive_CPU": 0.0013230000000000741
+    },
+    "epsilon.total": {
+      "calls": 8,
+      "wall": 3.906838333,
+      "CPU": 3.776894,
+      "exclusive_wall": 0.1328864509999999,
+      "exclusive_CPU": 0.004259999999999986
+    },
+    "k.assembly": {
+      "calls": 8,
+      "wall": 0.2939819,
+      "CPU": 0.293929,
+      "exclusive_wall": 0.29339856599999997,
+      "exclusive_CPU": 0.29334699999999997
+    },
+    "k.solve_validate": {
+      "calls": 8,
+      "wall": 0.020254237999999997,
+      "CPU": 0.020256000000000003,
+      "exclusive_wall": 0.004132486,
+      "exclusive_CPU": 0.004135
+    },
+    "k.bound_accounting": {
+      "calls": 8,
+      "wall": 0.011114731,
+      "CPU": 0.011113000000000001,
+      "exclusive_wall": 0.011114731,
+      "exclusive_CPU": 0.011113000000000001
+    },
+    "io.attempt_snapshot": {
+      "calls": 2,
+      "wall": 0.33136308000000003,
+      "CPU": 0.09865,
+      "exclusive_wall": 0.33136308000000003,
+      "exclusive_CPU": 0.09865
+    },
+    "pimple.check.k": {
+      "calls": 8,
+      "wall": 0.09162237399999999,
+      "CPU": 0.091614,
+      "exclusive_wall": 0.0010855440000000008,
+      "exclusive_CPU": 0.0010819999999999996
+    },
+    "k.total": {
+      "calls": 8,
+      "wall": 7.010316077,
+      "CPU": 6.4114,
+      "exclusive_wall": 0.2853360439999999,
+      "exclusive_CPU": 0.007707999999999826
+    },
+    "pimple.final_refresh_diagnostics": {
+      "calls": 8,
+      "wall": 0.9602637779999998,
+      "CPU": 0.959534,
+      "exclusive_wall": 0.0009960790000000525,
+      "exclusive_CPU": 0.0007689999999999364
+    },
+    "pimple.sweep": {
+      "calls": 8,
+      "wall": 18.648996664000002,
+      "CPU": 17.52104,
+      "exclusive_wall": 0.22104802499999976,
+      "exclusive_CPU": 0.012206999999999635
+    },
+    "native.physical_samples": {
+      "calls": 8,
+      "wall": 0.131126922,
+      "CPU": 0.131131,
+      "exclusive_wall": 0.131126922,
+      "exclusive_CPU": 0.131131
+    },
+    "native.implicit": {
+      "calls": 8,
+      "wall": 31.845922490999996,
+      "CPU": 30.660686000000002,
+      "exclusive_wall": 3.2309175109999995,
+      "exclusive_CPU": 3.2305619999999986
+    },
+    "native.advance": {
+      "calls": 8,
+      "wall": 32.270931113,
+      "CPU": 30.904602,
+      "exclusive_wall": 0.03350080400000133,
+      "exclusive_CPU": 0.03305999999999942
+    },
+    "io.checkpoint": {
+      "calls": 9,
+      "wall": 0.049935406,
+      "CPU": 0.01356,
+      "exclusive_wall": 0.049935406,
+      "exclusive_CPU": 0.01356
+    },
+    "native.step": {
+      "calls": 8,
+      "wall": 32.340108755,
+      "CPU": 30.940644000000002,
+      "exclusive_wall": 0.024883135000000944,
+      "exclusive_CPU": 0.024169999999999803
+    },
+    "native.solve_block": {
+      "calls": 1,
+      "wall": 32.546300749,
+      "CPU": 31.142885,
+      "exclusive_wall": 0.028615102999992814,
+      "exclusive_CPU": 0.02861000000000047
+    },
+    "output.report": {
+      "calls": 1,
+      "wall": 0.137759215,
+      "CPU": 0.101428,
+      "exclusive_wall": 0.137759215,
+      "exclusive_CPU": 0.101428
+    },
+    "output.fields_and_report": {
+      "calls": 1,
+      "wall": 0.662296919,
+      "CPU": 0.285411,
+      "exclusive_wall": 0.524537704,
+      "exclusive_CPU": 0.183983
+    },
+    "process": {
+      "calls": 1,
+      "wall": 40.437363131,
+      "CPU": 37.421861,
+      "exclusive_wall": 1.5089034010000049,
+      "exclusive_CPU": 0.33078999999999326
+    }
+  },
+  "open8-off": {
+    "constitutive.refresh": {
+      "calls": 130,
+      "wall": 0.6028951160000001,
+      "CPU": 0.6026009999999997,
+      "exclusive_wall": 0.6028951160000001,
+      "exclusive_CPU": 0.6026009999999997
+    },
+    "startup.object": {
+      "calls": 1,
+      "wall": 3.280121464,
+      "CPU": 3.27556,
+      "exclusive_wall": 3.250014727,
+      "exclusive_CPU": 3.245457
+    },
+    "matching.constraints": {
+      "calls": 139,
+      "wall": 0.06481608400000001,
+      "CPU": 0.06473299999999996,
+      "exclusive_wall": 0.06481608400000001,
+      "exclusive_CPU": 0.06473299999999996
+    },
+    "domain.compute": {
+      "calls": 35,
+      "wall": 12.303296828000002,
+      "CPU": 12.298510999999998,
+      "exclusive_wall": 12.297821333999998,
+      "exclusive_CPU": 12.293136
+    },
+    "domain.scalar": {
+      "calls": 78,
+      "wall": 12.909547111000002,
+      "CPU": 12.834414999999998,
+      "exclusive_wall": 0.6061035149999998,
+      "exclusive_CPU": 0.5357580000000003
+    },
+    "boundary.assembly": {
+      "calls": 86,
+      "wall": 0.023564540999999994,
+      "CPU": 0.023542000000000004,
+      "exclusive_wall": 0.023564540999999994,
+      "exclusive_CPU": 0.023542000000000004
+    },
+    "residual": {
+      "calls": 78,
+      "wall": 2.1595043350000003,
+      "CPU": 2.15742,
+      "exclusive_wall": 2.0832437,
+      "exclusive_CPU": 2.081258
+    },
+    "dense.factorization": {
+      "calls": 46,
+      "wall": 0.26007818499999996,
+      "CPU": 0.26008,
+      "exclusive_wall": 0.26007818499999996,
+      "exclusive_CPU": 0.26008
+    },
+    "dense.triangular_solve": {
+      "calls": 878,
+      "wall": 0.14629179099999987,
+      "CPU": 0.1461659999999999,
+      "exclusive_wall": 0.14629179099999987,
+      "exclusive_CPU": 0.1461659999999999
+    },
+    "residual.mass_dual_norms": {
+      "calls": 38,
+      "wall": 0.22299793199999998,
+      "CPU": 0.08487900000000002,
+      "exclusive_wall": 0.18765786100000006,
+      "exclusive_CPU": 0.04954300000000001
+    },
+    "native.explicit": {
+      "calls": 9,
+      "wall": 0.174485914,
+      "CPU": 0.173844,
+      "exclusive_wall": 0.07434179199999999,
+      "exclusive_CPU": 0.07385699999999999
+    },
+    "k.bound": {
+      "calls": 9,
+      "wall": 5.564496946,
+      "CPU": 5.562519999999999,
+      "exclusive_wall": 0.6419438359999998,
+      "exclusive_CPU": 0.6416699999999999
+    },
+    "audit.physical": {
+      "calls": 9,
+      "wall": 2.884083465,
+      "CPU": 2.882328,
+      "exclusive_wall": 1.9571966210000002,
+      "exclusive_CPU": 1.956522
+    },
+    "audit.complete": {
+      "calls": 9,
+      "wall": 10.984034125,
+      "CPU": 10.971223,
+      "exclusive_wall": 8.092096136,
+      "exclusive_CPU": 8.08104
+    },
+    "native.acceptance_audit": {
+      "calls": 9,
+      "wall": 10.998504449,
+      "CPU": 10.985657,
+      "exclusive_wall": 0.014470323999999923,
+      "exclusive_CPU": 0.01443400000000028
+    },
+    "output.project_fields": {
+      "calls": 2,
+      "wall": 0.074569925,
+      "CPU": 0.074574,
+      "exclusive_wall": 0.074569925,
+      "exclusive_CPU": 0.074574
+    },
+    "startup.initialize": {
+      "calls": 1,
+      "wall": 2.93226317,
+      "CPU": 2.921351,
+      "exclusive_wall": 0.24294989499999975,
+      "exclusive_CPU": 0.24250000000000016
+    },
+    "pimple.check.input": {
+      "calls": 8,
+      "wall": 4.025490085,
+      "CPU": 4.023905,
+      "exclusive_wall": 0.001130234999999924,
+      "exclusive_CPU": 0.001120000000000121
+    },
+    "flow.assembly": {
+      "calls": 8,
+      "wall": 1.725943832,
+      "CPU": 1.34918,
+      "exclusive_wall": 1.7220859130000001,
+      "exclusive_CPU": 1.345329
+    },
+    "momentum.factorize": {
+      "calls": 8,
+      "wall": 0.116598501,
+      "CPU": 0.116597,
+      "exclusive_wall": 0.005119660999999998,
+      "exclusive_CPU": 0.005118000000000001
+    },
+    "pressure.mass_factorize": {
+      "calls": 8,
+      "wall": 0.116371966,
+      "CPU": 0.116374,
+      "exclusive_wall": 0.004925894999999998,
+      "exclusive_CPU": 0.0049250000000000006
+    },
+    "momentum.solve_validate": {
+      "calls": 8,
+      "wall": 0.015767009000000002,
+      "CPU": 0.015769,
+      "exclusive_wall": 0.013957824,
+      "exclusive_CPU": 0.013961999999999999
+    },
+    "pressure.build": {
+      "calls": 8,
+      "wall": 0.9667539219999999,
+      "CPU": 0.213132,
+      "exclusive_wall": 0.8525313059999999,
+      "exclusive_CPU": 0.09903200000000001
+    },
+    "pressure.solve_validate": {
+      "calls": 8,
+      "wall": 0.0016724980000000001,
+      "CPU": 0.0014199999999999998,
+      "exclusive_wall": 0.001211395,
+      "exclusive_CPU": 0.0009620000000000001
+    },
+    "pimple.check.flow": {
+      "calls": 8,
+      "wall": 0.071622007,
+      "CPU": 0.002103,
+      "exclusive_wall": 0.0011127320000000056,
+      "exclusive_CPU": 0.0011090000000000002
+    },
+    "flow.correction_validate": {
+      "calls": 8,
+      "wall": 0.43980030200000003,
+      "CPU": 0.37009499999999995,
+      "exclusive_wall": 0.080220686,
+      "exclusive_CPU": 0.08015300000000003
+    },
+    "flow.total": {
+      "calls": 8,
+      "wall": 3.4482848130000003,
+      "CPU": 2.247595,
+      "exclusive_wall": 0.06537678300000038,
+      "exclusive_CPU": 0.06502800000000003
+    },
+    "epsilon.assembly": {
+      "calls": 8,
+      "wall": 0.092161547,
+      "CPU": 0.09216600000000001,
+      "exclusive_wall": 0.089868269,
+      "exclusive_CPU": 0.08987300000000001
+    },
+    "epsilon.solve_validate": {
+      "calls": 8,
+      "wall": 0.011294819000000001,
+      "CPU": 0.011212,
+      "exclusive_wall": 0.0030733490000000004,
+      "exclusive_CPU": 0.0029889999999999995
+    },
+    "pimple.check.epsilon": {
+      "calls": 8,
+      "wall": 3.284464554000001,
+      "CPU": 3.174156,
+      "exclusive_wall": 0.10931010600000007,
+      "exclusive_CPU": 0.0012319999999999554
+    },
+    "epsilon.total": {
+      "calls": 8,
+      "wall": 3.393282208,
+      "CPU": 3.282755,
+      "exclusive_wall": 0.004638478999999751,
+      "exclusive_CPU": 0.0046319999999999695
+    },
+    "k.assembly": {
+      "calls": 8,
+      "wall": 0.290733048,
+      "CPU": 0.290739,
+      "exclusive_wall": 0.2882366699999999,
+      "exclusive_CPU": 0.28824800000000006
+    },
+    "k.solve_validate": {
+      "calls": 8,
+      "wall": 0.026107187,
+      "CPU": 0.026109,
+      "exclusive_wall": 0.005217512999999999,
+      "exclusive_CPU": 0.005219999999999999
+    },
+    "k.bound_accounting": {
+      "calls": 8,
+      "wall": 0.012239389000000002,
+      "CPU": 0.012240000000000001,
+      "exclusive_wall": 0.012239389000000002,
+      "exclusive_CPU": 0.012240000000000001
+    },
+    "io.attempt_snapshot": {
+      "calls": 8,
+      "wall": 0.534954525,
+      "CPU": 0.23407999999999998,
+      "exclusive_wall": 0.534954525,
+      "exclusive_CPU": 0.23407999999999998
+    },
+    "pimple.check.k": {
+      "calls": 8,
+      "wall": 0.06839464699999999,
+      "CPU": 0.068261,
+      "exclusive_wall": 0.0010533689999999993,
+      "exclusive_CPU": 0.0009180000000000013
+    },
+    "k.total": {
+      "calls": 8,
+      "wall": 6.247209507,
+      "CPU": 5.943582,
+      "exclusive_wall": 0.007333424000000477,
+      "exclusive_CPU": 0.00700400000000001
+    },
+    "pimple.final_refresh_diagnostics": {
+      "calls": 8,
+      "wall": 0.9364718059999999,
+      "CPU": 0.798507,
+      "exclusive_wall": 0.00047815399999998065,
+      "exclusive_CPU": 0.00043799999999999395
+    },
+    "pimple.sweep": {
+      "calls": 8,
+      "wall": 18.062614973,
+      "CPU": 16.305169,
+      "exclusive_wall": 0.01187655399999965,
+      "exclusive_CPU": 0.00882499999999986
+    },
+    "native.physical_samples": {
+      "calls": 8,
+      "wall": 0.12175407499999999,
+      "CPU": 0.12175899999999999,
+      "exclusive_wall": 0.12175407499999999,
+      "exclusive_CPU": 0.12175899999999999
+    },
+    "native.implicit": {
+      "calls": 8,
+      "wall": 30.510701934,
+      "CPU": 28.749131000000002,
+      "exclusive_wall": 2.5361177600000007,
+      "exclusive_CPU": 2.5351320000000004
+    },
+    "native.advance": {
+      "calls": 8,
+      "wall": 30.705659554999997,
+      "CPU": 28.943324,
+      "exclusive_wall": 0.024798111999998707,
+      "exclusive_CPU": 0.024675000000000225
+    },
+    "io.checkpoint": {
+      "calls": 9,
+      "wall": 0.033232677,
+      "CPU": 0.009531,
+      "exclusive_wall": 0.033232677,
+      "exclusive_CPU": 0.009531
+    },
+    "native.step": {
+      "calls": 8,
+      "wall": 30.758728166000004,
+      "CPU": 28.974536,
+      "exclusive_wall": 0.024079734000000297,
+      "exclusive_CPU": 0.023187000000000513
+    },
+    "native.solve_block": {
+      "calls": 1,
+      "wall": 30.958691613,
+      "CPU": 29.171673,
+      "exclusive_wall": 0.028897872999998242,
+      "exclusive_CPU": 0.028803000000003465
+    },
+    "output.report": {
+      "calls": 1,
+      "wall": 0.107227118,
+      "CPU": 0.0875,
+      "exclusive_wall": 0.07341552,
+      "exclusive_CPU": 0.053688999999999994
+    },
+    "output.fields_and_report": {
+      "calls": 1,
+      "wall": 0.262716853,
+      "CPU": 0.238138,
+      "exclusive_wall": 0.15548973499999996,
+      "exclusive_CPU": 0.150638
+    },
+    "process": {
+      "calls": 1,
+      "wall": 38.516007034,
+      "CPU": 35.886712,
+      "exclusive_wall": 1.082213933999995,
+      "exclusive_CPU": 0.27999000000000507
+    }
+  },
+  "open8-on": {
+    "constitutive.refresh": {
+      "calls": 130,
+      "wall": 0.6192657599999999,
+      "CPU": 0.619107,
+      "exclusive_wall": 0.6192657599999999,
+      "exclusive_CPU": 0.619107
+    },
+    "startup.object": {
+      "calls": 1,
+      "wall": 3.135276775,
+      "CPU": 3.129291,
+      "exclusive_wall": 3.104571135,
+      "exclusive_CPU": 3.098589
+    },
+    "matching.constraints": {
+      "calls": 139,
+      "wall": 0.063039624,
+      "CPU": 0.06295899999999997,
+      "exclusive_wall": 0.063039624,
+      "exclusive_CPU": 0.06295899999999997
+    },
+    "domain.compute": {
+      "calls": 35,
+      "wall": 12.542312731999997,
+      "CPU": 12.528135000000004,
+      "exclusive_wall": 12.5366516,
+      "exclusive_CPU": 12.522572999999998
+    },
+    "domain.scalar": {
+      "calls": 78,
+      "wall": 13.092572495999999,
+      "CPU": 13.078058000000006,
+      "exclusive_wall": 0.550117438,
+      "exclusive_CPU": 0.549781
+    },
+    "boundary.assembly": {
+      "calls": 86,
+      "wall": 0.02342407,
+      "CPU": 0.023389000000000007,
+      "exclusive_wall": 0.02342407,
+      "exclusive_CPU": 0.023389000000000007
+    },
+    "residual": {
+      "calls": 78,
+      "wall": 2.0574279850000003,
+      "CPU": 2.0301059999999995,
+      "exclusive_wall": 1.9802075130000003,
+      "exclusive_CPU": 1.952909000000001
+    },
+    "dense.factorization": {
+      "calls": 39,
+      "wall": 0.16400128200000003,
+      "CPU": 0.16400599999999999,
+      "exclusive_wall": 0.16400128200000003,
+      "exclusive_CPU": 0.16400599999999999
+    },
+    "dense.triangular_solve": {
+      "calls": 878,
+      "wall": 0.14015657599999978,
+      "CPU": 0.14034399999999994,
+      "exclusive_wall": 0.14015657599999978,
+      "exclusive_CPU": 0.14034399999999994
+    },
+    "residual.mass_dual_norms": {
+      "calls": 38,
+      "wall": 0.13914229100000003,
+      "CPU": 0.07879200000000001,
+      "exclusive_wall": 0.10417512300000001,
+      "exclusive_CPU": 0.043628999999999994
+    },
+    "native.explicit": {
+      "calls": 9,
+      "wall": 0.32022875900000003,
+      "CPU": 0.170361,
+      "exclusive_wall": 0.16790692999999998,
+      "exclusive_CPU": 0.077486
+    },
+    "k.bound": {
+      "calls": 9,
+      "wall": 5.58867701,
+      "CPU": 5.587057,
+      "exclusive_wall": 0.6323986030000001,
+      "exclusive_CPU": 0.6320319999999998
+    },
+    "audit.physical": {
+      "calls": 9,
+      "wall": 2.619081942,
+      "CPU": 2.591664,
+      "exclusive_wall": 1.6984549469999999,
+      "exclusive_CPU": 1.697919
+    },
+    "audit.complete": {
+      "calls": 9,
+      "wall": 10.641682182999999,
+      "CPU": 10.58835,
+      "exclusive_wall": 8.012220408000001,
+      "exclusive_CPU": 7.986307
+    },
+    "native.acceptance_audit": {
+      "calls": 9,
+      "wall": 10.656282767,
+      "CPU": 10.602908,
+      "exclusive_wall": 0.014600583999999639,
+      "exclusive_CPU": 0.014558000000000071
+    },
+    "output.project_fields": {
+      "calls": 2,
+      "wall": 0.076368393,
+      "CPU": 0.07631,
+      "exclusive_wall": 0.076368393,
+      "exclusive_CPU": 0.07631
+    },
+    "startup.initialize": {
+      "calls": 1,
+      "wall": 2.967138383,
+      "CPU": 2.956309,
+      "exclusive_wall": 0.25240904099999995,
+      "exclusive_CPU": 0.25147100000000044
+    },
+    "pimple.check.input": {
+      "calls": 8,
+      "wall": 4.138888811999999,
+      "CPU": 4.126358,
+      "exclusive_wall": 0.0017045299999999264,
+      "exclusive_CPU": 0.0013020000000000254
+    },
+    "flow.assembly": {
+      "calls": 8,
+      "wall": 1.321757896,
+      "CPU": 1.3215000000000001,
+      "exclusive_wall": 1.317949511,
+      "exclusive_CPU": 1.3176990000000002
+    },
+    "momentum.factorize": {
+      "calls": 8,
+      "wall": 0.11671142799999999,
+      "CPU": 0.116435,
+      "exclusive_wall": 0.005260799,
+      "exclusive_CPU": 0.004981999999999999
+    },
+    "pressure.mass_factorize": {
+      "calls": 8,
+      "wall": 0.025819270000000002,
+      "CPU": 0.025823000000000002,
+      "exclusive_wall": 0.011954170000000002,
+      "exclusive_CPU": 0.011958
+    },
+    "momentum.solve_validate": {
+      "calls": 8,
+      "wall": 0.016626600000000002,
+      "CPU": 0.016630000000000002,
+      "exclusive_wall": 0.014741003,
+      "exclusive_CPU": 0.014741999999999998
+    },
+    "pressure.build": {
+      "calls": 8,
+      "wall": 0.19951777999999998,
+      "CPU": 0.196329,
+      "exclusive_wall": 0.09210684699999999,
+      "exclusive_CPU": 0.08892700000000003
+    },
+    "pressure.solve_validate": {
+      "calls": 8,
+      "wall": 0.001212987,
+      "CPU": 0.001214,
+      "exclusive_wall": 0.000783114,
+      "exclusive_CPU": 0.0007859999999999999
+    },
+    "pimple.check.flow": {
+      "calls": 8,
+      "wall": 0.001760288,
+      "CPU": 0.001676,
+      "exclusive_wall": 0.001058521,
+      "exclusive_CPU": 0.000975
+    },
+    "flow.correction_validate": {
+      "calls": 8,
+      "wall": 0.329907276,
+      "CPU": 0.329692,
+      "exclusive_wall": 0.07110601800000002,
+      "exclusive_CPU": 0.07110900000000003
+    },
+    "flow.total": {
+      "calls": 8,
+      "wall": 2.07774881,
+      "CPU": 2.073697,
+      "exclusive_wall": 0.06619557299999995,
+      "exclusive_CPU": 0.06607399999999977
+    },
+    "epsilon.assembly": {
+      "calls": 8,
+      "wall": 0.07589295900000001,
+      "CPU": 0.075896,
+      "exclusive_wall": 0.07360143000000001,
+      "exclusive_CPU": 0.07360699999999999
+    },
+    "epsilon.solve_validate": {
+      "calls": 8,
+      "wall": 0.012275337,
+      "CPU": 0.011681,
+      "exclusive_wall": 0.00357652,
+      "exclusive_CPU": 0.0029809999999999997
+    },
+    "pimple.check.epsilon": {
+      "calls": 8,
+      "wall": 3.2646164710000005,
+      "CPU": 3.263578,
+      "exclusive_wall": 0.0010020030000000846,
+      "exclusive_CPU": 0.0009949999999999681
+    },
+    "epsilon.total": {
+      "calls": 8,
+      "wall": 3.358071006,
+      "CPU": 3.35633,
+      "exclusive_wall": 0.004820934999999915,
+      "exclusive_CPU": 0.0047100000000000475
+    },
+    "k.assembly": {
+      "calls": 8,
+      "wall": 0.270137709,
+      "CPU": 0.26999,
+      "exclusive_wall": 0.267775749,
+      "exclusive_CPU": 0.267633
+    },
+    "k.solve_validate": {
+      "calls": 8,
+      "wall": 0.027576029999999998,
+      "CPU": 0.027575999999999996,
+      "exclusive_wall": 0.005296616,
+      "exclusive_CPU": 0.005293000000000001
+    },
+    "k.bound_accounting": {
+      "calls": 8,
+      "wall": 0.012146559000000003,
+      "CPU": 0.012147000000000002,
+      "exclusive_wall": 0.012146559000000003,
+      "exclusive_CPU": 0.012147000000000002
+    },
+    "io.attempt_snapshot": {
+      "calls": 2,
+      "wall": 0.521561075,
+      "CPU": 0.065372,
+      "exclusive_wall": 0.521561075,
+      "exclusive_CPU": 0.065372
+    },
+    "pimple.check.k": {
+      "calls": 8,
+      "wall": 0.073764569,
+      "CPU": 0.073767,
+      "exclusive_wall": 0.001011672,
+      "exclusive_CPU": 0.001009000000000002
+    },
+    "k.total": {
+      "calls": 8,
+      "wall": 6.188625289,
+      "CPU": 5.730622,
+      "exclusive_wall": 0.007344356000000052,
+      "exclusive_CPU": 0.006947999999999732
+    },
+    "pimple.final_refresh_diagnostics": {
+      "calls": 8,
+      "wall": 1.082368377,
+      "CPU": 0.791499,
+      "exclusive_wall": 0.29117523600000006,
+      "exclusive_CPU": 0.0006920000000000259
+    },
+    "pimple.sweep": {
+      "calls": 8,
+      "wall": 16.97177691,
+      "CPU": 16.087387,
+      "exclusive_wall": 0.1260746160000008,
+      "exclusive_CPU": 0.008881000000000139
+    },
+    "native.physical_samples": {
+      "calls": 8,
+      "wall": 0.134042573,
+      "CPU": 0.133996,
+      "exclusive_wall": 0.134042573,
+      "exclusive_CPU": 0.133996
+    },
+    "native.implicit": {
+      "calls": 8,
+      "wall": 29.206316626,
+      "CPU": 28.189499,
+      "exclusive_wall": 2.646412976999999,
+      "exclusive_CPU": 2.558800000000001
+    },
+    "native.advance": {
+      "calls": 8,
+      "wall": 29.549946198999997,
+      "CPU": 28.383228999999996,
+      "exclusive_wall": 0.02772456099999898,
+      "exclusive_CPU": 0.0276929999999993
+    },
+    "io.checkpoint": {
+      "calls": 9,
+      "wall": 0.03768695500000001,
+      "CPU": 0.010315,
+      "exclusive_wall": 0.03768695500000001,
+      "exclusive_CPU": 0.010315
+    },
+    "native.step": {
+      "calls": 8,
+      "wall": 30.043323438,
+      "CPU": 28.417533,
+      "exclusive_wall": 0.4619547360000018,
+      "exclusive_CPU": 0.025571000000000232
+    },
+    "native.solve_block": {
+      "calls": 1,
+      "wall": 30.238373562,
+      "CPU": 28.607712,
+      "exclusive_wall": 0.026394055999997335,
+      "exclusive_CPU": 0.026389000000001772
+    },
+    "output.report": {
+      "calls": 1,
+      "wall": 0.745956977,
+      "CPU": 0.129848,
+      "exclusive_wall": 0.7143139589999999,
+      "exclusive_CPU": 0.09820499999999999
+    },
+    "output.fields_and_report": {
+      "calls": 1,
+      "wall": 1.289660934,
+      "CPU": 0.283262,
+      "exclusive_wall": 0.5437039570000001,
+      "exclusive_CPU": 0.15341400000000002
+    },
+    "process": {
+      "calls": 1,
+      "wall": 38.863357567,
+      "CPU": 35.263471,
+      "exclusive_wall": 1.2329079130000054,
+      "exclusive_CPU": 0.2868970000000033
+    }
+  }
+}

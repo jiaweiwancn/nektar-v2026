@@ -1,0 +1,1077 @@
+{
+  "status": "passed",
+  "source_summary": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/H1-native-budgets-v2/summary.json",
+  "source_summary_sha256": "2953f81ba56d9ae0f75cac5290d73fb17f9080a39686ab66f0c80285ed96851d",
+  "observations": {
+    "initial": {
+      "checkpoint": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/initial/checkpoint",
+      "checkpoint_sha256": "6d6e3c1757eb0eb542c68051171354a6935eaf8b5463d161a6954ed330f911f7",
+      "time": 0.0,
+      "step": 0,
+      "state_sha256": "6e433cb953ba1ddf4cef5e9753cb269d18e7ee529dbbae2e52c742e7409fd5eb",
+      "reference_sha256": "6e433cb953ba1ddf4cef5e9753cb269d18e7ee529dbbae2e52c742e7409fd5eb",
+      "native_selected_spatial_blocks": [
+        0.34134954844131254,
+        0.2914812861104589,
+        0.6681337056553672,
+        0.05361400346907202,
+        8.94793335878346e-17,
+        2.860358698093242e-17,
+        0.0,
+        0.0
+      ],
+      "resolution_error": 4.517613116858532e-16,
+      "native_turbulence_budget": {
+        "rate_columns": "Pk,Ek,P_epsilon,D_epsilon,Yap,p_A0,prescribed_k,prescribed_epsilon",
+        "inner_rates": [
+          0.001266888917029141,
+          0.002549285848818175,
+          0.0,
+          0.0,
+          0.0,
+          0.0025492858488181795,
+          0.0,
+          0.0
+        ],
+        "outer_rates": [
+          0.0013738937142146704,
+          0.001135903020787092,
+          0.0035301015886259257,
+          0.003995094687081967,
+          1.8343710353762313e-06,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "regional_weak_balances": [
+          {
+            "region": 0.0,
+            "block": 2.0,
+            "physical_storage_rate": 0.0,
+            "source_rate": -0.001282396931789034,
+            "explicit_open_outward_flux": 0.0,
+            "unmasked_constant_test_residual": 0.0012823969317890367,
+            "free_interior_row_projection": 0.0008223072971484675,
+            "constrained_row_reaction_projection": 0.0003205992329472589,
+            "free_interface_row_projection": 0.00013949040169331035,
+            "exact_weak_balance_error": -2.6020852139652106e-18,
+            "row_partition_error": 0.0
+          },
+          {
+            "region": 1.0,
+            "block": 2.0,
+            "physical_storage_rate": 0.0,
+            "source_rate": 0.00023799069342757837,
+            "explicit_open_outward_flux": 0.0,
+            "unmasked_constant_test_residual": -0.00023799069342758664,
+            "free_interior_row_projection": -0.00017553294322059153,
+            "constrained_row_reaction_projection": -5.9449308155992856e-05,
+            "free_interface_row_projection": -3.008442051002153e-06,
+            "exact_weak_balance_error": 8.267041565201971e-18,
+            "row_partition_error": 1.0842021724855044e-19
+          },
+          {
+            "region": 1.0,
+            "block": 3.0,
+            "physical_storage_rate": 0.0,
+            "source_rate": -0.0004631587274206652,
+            "explicit_open_outward_flux": 0.0,
+            "unmasked_constant_test_residual": 0.00046315872742072156,
+            "free_interior_row_projection": -0.0005173997859156402,
+            "constrained_row_reaction_projection": 0.0009805585133363613,
+            "free_interface_row_projection": 0.0,
+            "exact_weak_balance_error": -5.637851296924623e-17,
+            "row_partition_error": -3.7947076036992655e-19
+          }
+        ],
+        "independent_source_integration": [
+          {
+            "Gauss_order": 16.0,
+            "inner": [
+              0.001266888917029144,
+              0.002549285848818192,
+              0.0,
+              0.0,
+              0.0,
+              0.002549285848818176,
+              0.0,
+              0.0
+            ],
+            "outer": [
+              0.001369227286079541,
+              0.0011359030207870869,
+              0.0035199883810680217,
+              0.003995094687901098,
+              1.6636541763362467e-06,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "Gauss_order": 32.0,
+            "inner": [
+              0.0012668889170291326,
+              0.002549285848818176,
+              0.0,
+              0.0,
+              0.0,
+              0.002549285848818172,
+              0.0,
+              0.0
+            ],
+            "outer": [
+              0.0013692272863990579,
+              0.0011359030207870775,
+              0.003519988381140586,
+              0.003995094687901198,
+              1.667745175450784e-06,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "physical_face_columns": "region,block,axis,side,outward_advection,outward_diffusion",
+        "physical_faces": [
+          [
+            0.0,
+            2.0,
+            0.0,
+            -1.0,
+            -0.00024175224132712452,
+            -3.016334034041762e-22
+          ],
+          [
+            0.0,
+            2.0,
+            0.0,
+            1.0,
+            0.00024175224132712452,
+            -4.241063453162592e-22
+          ],
+          [
+            0.0,
+            2.0,
+            2.0,
+            -1.0,
+            0.0,
+            -1.816781875888264e-18
+          ],
+          [
+            0.0,
+            2.0,
+            2.0,
+            1.0,
+            0.0,
+            -7.796936767151826e-06
+          ],
+          [
+            1.0,
+            2.0,
+            0.0,
+            -1.0,
+            -0.0026342467915528474,
+            -5.865291574429644e-20
+          ],
+          [
+            1.0,
+            2.0,
+            0.0,
+            1.0,
+            0.0026342467915528474,
+            -8.240729388122086e-20
+          ],
+          [
+            1.0,
+            2.0,
+            2.0,
+            -1.0,
+            0.0,
+            -1.847565044327877e-05
+          ],
+          [
+            1.0,
+            2.0,
+            2.0,
+            1.0,
+            0.0,
+            2.3307679474922164e-12
+          ],
+          [
+            1.0,
+            3.0,
+            0.0,
+            -1.0,
+            -0.002893980105164163,
+            -1.0586982866664348e-19
+          ],
+          [
+            1.0,
+            3.0,
+            0.0,
+            1.0,
+            0.002893980105164163,
+            -1.4874165287167723e-19
+          ],
+          [
+            1.0,
+            3.0,
+            2.0,
+            -1.0,
+            0.0,
+            0.001072360487423082
+          ],
+          [
+            1.0,
+            3.0,
+            2.0,
+            1.0,
+            0.0,
+            1.2399687490309972e-12
+          ]
+        ],
+        "weak_components": [
+          {
+            "block": 2.0,
+            "term": "inner_momentum_stress",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "outer_momentum_stress",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "conservative_advection",
+            "constant_test_projection": -2.3047766494789512e-18,
+            "free_mass_dual_norm": 2.0587914685208207e-16,
+            "signed_projection_on_total_residual": -5.9051334926171564e-18
+          },
+          {
+            "block": 2.0,
+            "term": "k_diffusion",
+            "constant_test_projection": -1.789459134742328e-19,
+            "free_mass_dual_norm": 0.023786866914756677,
+            "signed_projection_on_total_residual": 0.01464053549727454
+          },
+          {
+            "block": 2.0,
+            "term": "epsilon_diffusion",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "inner_k_production",
+            "constant_test_projection": -0.001266888917029142,
+            "free_mass_dual_norm": 0.028131225096647075,
+            "signed_projection_on_total_residual": -0.023849100153258033
+          },
+          {
+            "block": 2.0,
+            "term": "inner_k_destruction",
+            "constant_test_projection": 0.002549285848818175,
+            "free_mass_dual_norm": 0.05123976208613092,
+            "signed_projection_on_total_residual": 0.04211416656470546
+          },
+          {
+            "block": 2.0,
+            "term": "outer_k_production",
+            "constant_test_projection": -0.001373893714214676,
+            "free_mass_dual_norm": 0.007828401229568755,
+            "signed_projection_on_total_residual": 4.271244827234887e-05
+          },
+          {
+            "block": 2.0,
+            "term": "outer_k_destruction",
+            "constant_test_projection": 0.0011359030207870912,
+            "free_mass_dual_norm": 0.006577198692605836,
+            "signed_projection_on_total_residual": -1.512514625191923e-05
+          },
+          {
+            "block": 2.0,
+            "term": "epsilon_production",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "epsilon_destruction",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "epsilon_yap",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "prescribed_scalar_source",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "roughness_force",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "prescribed_body",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "continuity",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "gauge",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "external_advection",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "external_traction",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "external_diffusion",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "time_mass",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "inner_momentum_stress",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "outer_momentum_stress",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "conservative_advection",
+            "constant_test_projection": -2.260969164238143e-18,
+            "free_mass_dual_norm": 1.8711320836876673e-16,
+            "signed_projection_on_total_residual": 1.194357013630141e-17
+          },
+          {
+            "block": 3.0,
+            "term": "k_diffusion",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "epsilon_diffusion",
+            "constant_test_projection": -8.717127160126375e-20,
+            "free_mass_dual_norm": 0.010135884073173429,
+            "signed_projection_on_total_residual": 0.00839009938372826
+          },
+          {
+            "block": 3.0,
+            "term": "inner_k_production",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "inner_k_destruction",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "outer_k_production",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "outer_k_destruction",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "epsilon_production",
+            "constant_test_projection": -0.003530101588625918,
+            "free_mass_dual_norm": 0.02764947497156101,
+            "signed_projection_on_total_residual": 0.004239808305044789
+          },
+          {
+            "block": 3.0,
+            "term": "epsilon_destruction",
+            "constant_test_projection": 0.003995094687082008,
+            "free_mass_dual_norm": 0.03268389309184573,
+            "signed_projection_on_total_residual": -0.0034095933557735563
+          },
+          {
+            "block": 3.0,
+            "term": "epsilon_yap",
+            "constant_test_projection": -1.8343710353762296e-06,
+            "free_mass_dual_norm": 1.4244195752775708e-05,
+            "signed_projection_on_total_residual": 4.5062345347382846e-07
+          },
+          {
+            "block": 3.0,
+            "term": "prescribed_scalar_source",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "roughness_force",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "prescribed_body",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "continuity",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "gauge",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "external_advection",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "external_traction",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "external_diffusion",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "time_mass",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          }
+        ],
+        "native_component_sum_max_error": 4.517613116858532e-16,
+        "ideal_seed_ratio": 0.49497607317368947,
+        "independent_analytical_P_over_E": 0.4949760731736898,
+        "native_inner_P_over_E": 0.496958360952915,
+        "history_alpha": 0.0,
+        "physical_time": 0.0,
+        "governing_solves": 0.0,
+        "physical_commits": 0.0,
+        "scope": "Native physical quadrature and saved callback history. Exact weak row partition is separate from gradient-based face flux estimates; interface CG row projections are not unique conservative control-volume fluxes. Source and diffusion are separate; net destruction counted once. No Lift or epsilon substitution."
+      }
+    },
+    "whole8": {
+      "checkpoint": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved/whole8/checkpoint.8",
+      "checkpoint_sha256": "6c0f3b91b5fed45fc7bb071e82ea932f9061ad270c053fa2b99aa05820d6044b",
+      "time": 8e-05,
+      "step": 8,
+      "state_sha256": "e5121b965260846d10ec0690b3664d7630b7674a441d45e760b414a3d276b3a3",
+      "reference_sha256": "6e433cb953ba1ddf4cef5e9753cb269d18e7ee529dbbae2e52c742e7409fd5eb",
+      "native_selected_spatial_blocks": [
+        0.2802562618765991,
+        0.0346363149790293,
+        0.601034719633924,
+        0.05311952081819758,
+        3.4291907538232175e-17,
+        9.918155733386034e-17,
+        2.8256306647893504e-17,
+        5.1831509687953856e-05
+      ],
+      "resolution_error": 2.1574945606103735e-16,
+      "native_turbulence_budget": {
+        "rate_columns": "Pk,Ek,P_epsilon,D_epsilon,Yap,p_A0,prescribed_k,prescribed_epsilon",
+        "inner_rates": [
+          0.00126728135625886,
+          0.002549591351129811,
+          0.0,
+          0.0,
+          0.0,
+          0.0025495913511298166,
+          0.0,
+          0.0
+        ],
+        "outer_rates": [
+          0.0013731266392091625,
+          0.0011359584052352168,
+          0.003525885033706796,
+          0.003995436901638283,
+          1.7745094998185089e-06,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "regional_weak_balances": [
+          {
+            "region": 0.0,
+            "block": 2.0,
+            "physical_storage_rate": -0.0012232751044177863,
+            "source_rate": -0.001282309994870951,
+            "explicit_open_outward_flux": 0.0,
+            "unmasked_constant_test_residual": 5.903489045316512e-05,
+            "free_interior_row_projection": 1.9879023027282342e-08,
+            "constrained_row_reaction_projection": 4.534638349851834e-05,
+            "free_interface_row_projection": 1.3668627931619508e-05,
+            "exact_weak_balance_error": -4.472333961502706e-19,
+            "row_partition_error": 6.776263578034403e-21
+          },
+          {
+            "region": 1.0,
+            "block": 2.0,
+            "physical_storage_rate": 0.00021186436596708338,
+            "source_rate": 0.00023716823397394574,
+            "explicit_open_outward_flux": 0.0,
+            "unmasked_constant_test_residual": -2.5303868006861268e-05,
+            "free_interior_row_projection": -2.9916853858411894e-09,
+            "constrained_row_reaction_projection": -1.1636682568267219e-05,
+            "free_interface_row_projection": -1.3664193753208335e-05,
+            "exact_weak_balance_error": -1.094366567852556e-18,
+            "row_partition_error": -1.2536087619363645e-19
+          },
+          {
+            "region": 1.0,
+            "block": 3.0,
+            "physical_storage_rate": 0.0006990437532137328,
+            "source_rate": -0.0004677773584316685,
+            "explicit_open_outward_flux": 0.0,
+            "unmasked_constant_test_residual": 0.0011668211116454125,
+            "free_interior_row_projection": 5.762045560727857e-10,
+            "constrained_row_reaction_projection": 0.0011668205354408564,
+            "free_interface_row_projection": 0.0,
+            "exact_weak_balance_error": -1.1058862159352145e-17,
+            "row_partition_error": 0.0
+          }
+        ],
+        "independent_source_integration": [
+          {
+            "Gauss_order": 16.0,
+            "inner": [
+              0.001267281356258861,
+              0.0025495913511298074,
+              0.0,
+              0.0,
+              0.0,
+              0.002549591351129806,
+              0.0,
+              0.0
+            ],
+            "outer": [
+              0.0013684603222765693,
+              0.0011359584052352135,
+              0.0035157719487753348,
+              0.003995436902453305,
+              1.6070020235097578e-06,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "Gauss_order": 32.0,
+            "inner": [
+              0.0012672813562588628,
+              0.0025495913511298014,
+              0.0,
+              0.0,
+              0.0,
+              0.002549591351129814,
+              0.0,
+              0.0
+            ],
+            "outer": [
+              0.001368460322021692,
+              0.0011359584052352122,
+              0.0035157719469114503,
+              0.003995436902453343,
+              1.60875550264388e-06,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "physical_face_columns": "region,block,axis,side,outward_advection,outward_diffusion",
+        "physical_faces": [
+          [
+            0.0,
+            2.0,
+            0.0,
+            -1.0,
+            -0.00024175224132712452,
+            2.432755937991026e-09
+          ],
+          [
+            0.0,
+            2.0,
+            0.0,
+            1.0,
+            0.00024175224132712452,
+            2.4366854055337307e-09
+          ],
+          [
+            0.0,
+            2.0,
+            2.0,
+            -1.0,
+            0.0,
+            -1.190759171253158e-05
+          ],
+          [
+            0.0,
+            2.0,
+            2.0,
+            1.0,
+            1.3438402479213248e-16,
+            -6.826534032731641e-06
+          ],
+          [
+            1.0,
+            2.0,
+            0.0,
+            -1.0,
+            -0.0026342467915528474,
+            -3.5947239947087004e-09
+          ],
+          [
+            1.0,
+            2.0,
+            0.0,
+            1.0,
+            0.0026342467915528474,
+            -3.6056785414612903e-09
+          ],
+          [
+            1.0,
+            2.0,
+            2.0,
+            -1.0,
+            -1.3438402479172858e-16,
+            -1.7838508797428384e-05
+          ],
+          [
+            1.0,
+            2.0,
+            2.0,
+            1.0,
+            -2.4352786653067718e-30,
+            2.384775500964868e-12
+          ],
+          [
+            1.0,
+            3.0,
+            0.0,
+            -1.0,
+            -0.002893980105164163,
+            -7.659889315242067e-09
+          ],
+          [
+            1.0,
+            3.0,
+            0.0,
+            1.0,
+            0.0028939801051641634,
+            -7.681215433315308e-09
+          ],
+          [
+            1.0,
+            3.0,
+            2.0,
+            -1.0,
+            -6.652325952744758e-16,
+            0.0010775512711058987
+          ],
+          [
+            1.0,
+            3.0,
+            2.0,
+            1.0,
+            -9.144982070916289e-32,
+            1.2398821225357393e-12
+          ]
+        ],
+        "weak_components": [
+          {
+            "block": 2.0,
+            "term": "inner_momentum_stress",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "outer_momentum_stress",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "conservative_advection",
+            "constant_test_projection": -5.03645790437407e-18,
+            "free_mass_dual_norm": 9.00065540995334e-06,
+            "signed_projection_on_total_residual": -2.5249121718146466e-07
+          },
+          {
+            "block": 2.0,
+            "term": "k_diffusion",
+            "constant_test_projection": -2.063323100678601e-19,
+            "free_mass_dual_norm": 0.01886891155202174,
+            "signed_projection_on_total_residual": 0.005795527057643823
+          },
+          {
+            "block": 2.0,
+            "term": "epsilon_diffusion",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "inner_k_production",
+            "constant_test_projection": -0.0012672813562588602,
+            "free_mass_dual_norm": 0.02813097620594059,
+            "signed_projection_on_total_residual": -0.025262253367429998
+          },
+          {
+            "block": 2.0,
+            "term": "inner_k_destruction",
+            "constant_test_projection": 0.002549591351129813,
+            "free_mass_dual_norm": 0.05124662192441938,
+            "signed_projection_on_total_residual": 0.04792069103333035
+          },
+          {
+            "block": 2.0,
+            "term": "outer_k_production",
+            "constant_test_projection": -0.0013731266392091612,
+            "free_mass_dual_norm": 0.007820078102999485,
+            "signed_projection_on_total_residual": -0.0002633404000094839
+          },
+          {
+            "block": 2.0,
+            "term": "outer_k_destruction",
+            "constant_test_projection": 0.0011359584052352174,
+            "free_mass_dual_norm": 0.006577435283091735,
+            "signed_projection_on_total_residual": 0.0002521938279042546
+          },
+          {
+            "block": 2.0,
+            "term": "epsilon_production",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "epsilon_destruction",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "epsilon_yap",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "prescribed_scalar_source",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "roughness_force",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "prescribed_body",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "continuity",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "gauge",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "external_advection",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "external_traction",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "external_diffusion",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 2.0,
+            "term": "time_mass",
+            "constant_test_projection": -0.001011410738450705,
+            "free_mass_dual_norm": 0.02962511825781259,
+            "signed_projection_on_total_residual": -0.028441863964153005
+          },
+          {
+            "block": 3.0,
+            "term": "inner_momentum_stress",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "outer_momentum_stress",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "conservative_advection",
+            "constant_test_projection": -3.624983376893185e-18,
+            "free_mass_dual_norm": 9.36502247182102e-06,
+            "signed_projection_on_total_residual": -1.680226302783764e-06
+          },
+          {
+            "block": 3.0,
+            "term": "k_diffusion",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "epsilon_diffusion",
+            "constant_test_projection": -4.957437550054066e-19,
+            "free_mass_dual_norm": 0.01008844496381644,
+            "signed_projection_on_total_residual": 0.0002864530070800106
+          },
+          {
+            "block": 3.0,
+            "term": "inner_k_production",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "inner_k_destruction",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "outer_k_production",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "outer_k_destruction",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "epsilon_production",
+            "constant_test_projection": -0.003525885033706789,
+            "free_mass_dual_norm": 0.027605384440888392,
+            "signed_projection_on_total_residual": -0.014242552916892278
+          },
+          {
+            "block": 3.0,
+            "term": "epsilon_destruction",
+            "constant_test_projection": 0.00399543690163829,
+            "free_mass_dual_norm": 0.032685260081139235,
+            "signed_projection_on_total_residual": 0.01688527903151518
+          },
+          {
+            "block": 3.0,
+            "term": "epsilon_yap",
+            "constant_test_projection": -1.7745094998185082e-06,
+            "free_mass_dual_norm": 1.3474506633750437e-05,
+            "signed_projection_on_total_residual": -9.024723832576028e-06
+          },
+          {
+            "block": 3.0,
+            "term": "prescribed_scalar_source",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "roughness_force",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "prescribed_body",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "continuity",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "gauge",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "external_advection",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "external_traction",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "external_diffusion",
+            "constant_test_projection": 0.0,
+            "free_mass_dual_norm": 0.0,
+            "signed_projection_on_total_residual": 0.0
+          },
+          {
+            "block": 3.0,
+            "term": "time_mass",
+            "constant_test_projection": 0.0006990437532137328,
+            "free_mass_dual_norm": 0.009135443830324231,
+            "signed_projection_on_total_residual": -0.0029176041705689985
+          }
+        ],
+        "native_component_sum_max_error": 2.287099071869754e-16,
+        "ideal_seed_ratio": 0.49497607317368947,
+        "independent_analytical_P_over_E": 0.4949760731736898,
+        "native_inner_P_over_E": 0.49705273580304715,
+        "history_alpha": 99999.99999999999,
+        "physical_time": 8e-05,
+        "governing_solves": 0.0,
+        "physical_commits": 0.0,
+        "scope": "Native physical quadrature and saved callback history. Exact weak row partition is separate from gradient-based face flux estimates; interface CG row projections are not unique conservative control-volume fluxes. Source and diffusion are separate; net destruction counted once. No Lift or epsilon substitution."
+      }
+    }
+  }
+}

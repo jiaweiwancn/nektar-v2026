@@ -1,0 +1,72 @@
+{
+  "captured_UTC": "2026-11-11T17:13:25.418749+00:00",
+  "campaign_progress": {
+    "status": "running",
+    "accepted_steps": 7117,
+    "accepted_time": 4.448124999999969,
+    "completed_targets": [
+      1600,
+      2400,
+      3200,
+      4000,
+      4800,
+      5600,
+      6400
+    ],
+    "next_target": 7200,
+    "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/steps-007105-007136/checkpoint",
+    "checkpoint_sha256": "13c3addef5b7e8f318cb9a2723e641b46f10c6d22aeb2c9ceab441c271c0b202",
+    "stop_reason": null,
+    "failure": null,
+    "driver_identity": null,
+    "native_identity": {
+      "pid": 770570,
+      "start": "54478620",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/runtime/IncNavierStokesSolver",
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory/steps-007105-007136"
+    }
+  },
+  "campaign_progress_sha256": "31126eb434814af3a55b29b32de64b6476e3f310d4226bce4cf3887551c25395",
+  "observer": {
+    "status": "observing",
+    "accepted_steps": 7117.0,
+    "accepted_time": 4.448124999999969,
+    "assessed_steps": [
+      4000,
+      4800,
+      5600,
+      6400
+    ],
+    "maximum_step": 9600,
+    "stopping_policy": "First three passing unchanged half-unit windows, all fields on native-element panels INCLUDING full transported epsilon, or maximum authorized endpoint. Stop only at a completed native block.",
+    "updated_UTC": "2026-11-11T17:13:21.350076+00:00"
+  },
+  "observer_progress_sha256": "17e1e81d986f773dc4075610cdb6749ffcc7381ea9a5bf566cbd5b4e40124214",
+  "actual_assessments": {
+    "4000": {
+      "passing_windows": 0.0,
+      "summary_sha256": "081798cb03662fa549a54e552d4d6172d360cdf9d83c39dd86e40acbb77336c6",
+      "actually_assessed_endpoint_step": 4000.0,
+      "folder": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final/step-004000"
+    },
+    "4800": {
+      "passing_windows": 0.0,
+      "summary_sha256": "6aafbe4afcdf3751f425d6670972ded73814251f70607dbdd37f05d37d88b80e",
+      "actually_assessed_endpoint_step": 4800.0,
+      "folder": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final/step-004800"
+    },
+    "5600": {
+      "passing_windows": 1.0,
+      "summary_sha256": "1124742d08051c3e30a8cd8eb0482f19e25acf7e6ac7bf54c97fe0ff9bfa06e9",
+      "actually_assessed_endpoint_step": 5600.0,
+      "folder": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final/step-005600"
+    },
+    "6400": {
+      "passing_windows": 2.0,
+      "summary_sha256": "a1d9a4d43d342ecbc3325901bfa29723a48ef4a6e8e91feac04d7a468e81485a",
+      "actually_assessed_endpoint_step": 6400.0,
+      "folder": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final/step-006400"
+    }
+  },
+  "preserved_processes": "    PID    PPID STAT                  STARTED COMMAND\n 626365       1 Ss   Wed Nov 11 11:42:49 2026 python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/supervise_cls_epawf_pimple.py --solver /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/runtime-matched/solver/IncNavierStokesSolver --output /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady --wall-policy CLSCalibratedBudgetAWF --accepted-awf-case Accepted-AWF-05G --accepted-awf-companion regularized --accepted-awf-companion-reason matched inner-pressure P2 sensitivity; faithful covariance blocker retained --inner-refinement cutoff-v1 --pressure-space inner-p2-v1 --inventory AcceptedBudgetV1 --bound-solver RetainedPool --evaluation-reuse ExactStepV1 --audit-revision NativeElementSideV2 --targets 1600 2400 3200 4000 4800 5600 6400 7200 8000 8800 9600 --block-steps 32 --timeout 7200 --bound-max-add 2000 --bound-max-total 20000 --bound-max-separations 2000 --bound-max-seconds 900 --checkpoint /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/parent-800/checkpoint --prefix-report /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/parent-800/case.evolution.json --prefix-campaign /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot-matched/trajectory\n 626371  626365 Sl   Wed Nov 11 11:42:49 2026 /usr/bin/python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/source/solvers/IncNavierStokesSolver/Tests/RANS/continue_cls_epawf_pimple.py --solver /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/runtime-matched/solver/IncNavierStokesSolver --output /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory --inventory AcceptedBudgetV1 --bound-solver RetainedPool --wall-policy CLSCalibratedBudgetAWF --block-steps 32 --timeout 7200.0 --targets 1600 2400 3200 4000 4800 5600 6400 7200 8000 8800 9600 --bound-max-add 2000 --bound-max-total 20000 --bound-max-separations 2000 --bound-max-seconds 900.0 --evaluation-reuse ExactStepV1 --audit-revision NativeElementSideV2 --accepted-awf-case Accepted-AWF-05G --accepted-awf-companion regularized --accepted-awf-companion-reason matched inner-pressure P2 sensitivity; faithful covariance blocker retained --accepted-awf-perturbation 0.0 --inner-refinement cutoff-v1 --pressure-space inner-p2-v1 --checkpoint /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/parent-800/checkpoint --prefix-report /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/parent-800/case.evolution.json --prefix-campaign /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/pilot-matched/trajectory\n 689309       1 Ss   Wed Nov 11 16:39:54 2026 python3 -B /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/observer-source-v3/solvers/IncNavierStokesSolver/Tests/RANS/watch_cls_awf_qualification_windows.py --campaign /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory --policy /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/observer-source-v3/docs/plans/cls-accepted-budget-awf-evidence/covariance/convergence-policy.json --probe /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/runtime-matched/probe/RANSWallResolutionProbe --output /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final --maximum-step 9600\n"
+}

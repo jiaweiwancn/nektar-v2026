@@ -1,0 +1,500 @@
+{
+  "matched_focused": {
+    "H1_regression_and_optimization": {
+      "status": "passed",
+      "baseline": {
+        "code": 0,
+        "seconds": 44.1250663009705,
+        "usage": "43.93 37.93 1.80 862228",
+        "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/focused-v1/H1-off/case.evolution.json",
+        "report_sha256": "9bba3f1771f21ada3c8a342e597c14ccb6f014ffb12efcfb84294deb5e7e11b0",
+        "xml_sha256": "de6700a2c227a58679c8e0af1ac5960f26598fe91987e39fabd089648026952f",
+        "failure": ""
+      },
+      "optimized": {
+        "code": 0,
+        "seconds": 40.72595855197869,
+        "usage": "40.55 35.81 1.71 875052",
+        "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/focused-v1/H1-on/case.evolution.json",
+        "report_sha256": "4d45cced7266720e5b4417dabe879e43d78702c485c293ded8d933a2d242a71c",
+        "xml_sha256": "835375aa9ed89e738702e2271e8d5cebc32cd6d0fa2aed05e48be80b860d562c",
+        "failure": ""
+      },
+      "bitwise_state_history_stages": true,
+      "speedup": 1.0834629280647505
+    },
+    "fresh_origin": true,
+    "backflow_outflow_fixture": true,
+    "open_cache_bitwise": true,
+    "open_baseline": {
+      "code": 0,
+      "seconds": 38.782761707901955,
+      "usage": "38.61 34.57 1.40 893000",
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/focused-v1/open8-off/case.evolution.json",
+      "report_sha256": "dd733c20fb0fa4204d061c013a38ee2d550edf2884e4a83af269cdf98cc3bc3a",
+      "xml_sha256": "abdbd52916e9cc9961563c59f596be001ae17315e1bacfb0081f51b2d85b5c2a",
+      "failure": ""
+    },
+    "open_optimized": {
+      "code": 0,
+      "seconds": 39.2239419890102,
+      "usage": "39.08 33.89 1.47 883096",
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/focused-v1/open8-on/case.evolution.json",
+      "report_sha256": "5c6899f3d9e499a541dab977b9a73b4cd0eed7642adf53bb42e2ce4ca92d7354",
+      "xml_sha256": "9cf1d503ae6219f6175183af994d212842640540862ff5dc22df4bee9bcf450f",
+      "failure": ""
+    },
+    "restart_bitwise": true,
+    "rollback_bitwise": true,
+    "deferred_rejected_packet": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/focused-v1/rejection9-unselected/pimple-states/k-t9.0000000000000006e-05-6181a5583790.json",
+    "boundary_interpretation_restart_rejected": true
+  },
+  "pre_change": {
+    "exclusive_cpu_inclusive_wall_count": {
+      "constitutive.refresh": [
+        0.6040310000000002,
+        0.604083204,
+        129
+      ],
+      "startup.object": [
+        3.007503,
+        3.043806171,
+        1
+      ],
+      "matching.constraints": [
+        0.08683900000000006,
+        0.08693793800000002,
+        138
+      ],
+      "domain.compute": [
+        12.275786000000002,
+        12.292031826999995,
+        35
+      ],
+      "domain.scalar": [
+        0.5841329999999999,
+        12.876922204000003,
+        78
+      ],
+      "residual": [
+        2.062436000000001,
+        2.1252046129999997,
+        77
+      ],
+      "dense.factorization": [
+        0.19808499999999998,
+        0.19814440999999997,
+        46
+      ],
+      "dense.triangular_solve": [
+        0.11703500000000011,
+        0.11685251199999994,
+        886
+      ],
+      "residual.mass_dual_norms": [
+        0.03496500000000001,
+        0.11704527800000002,
+        38
+      ],
+      "native.explicit": [
+        0.072211,
+        0.22751532399999996,
+        9
+      ],
+      "k.bound": [
+        0.6303710000000002,
+        5.464040029,
+        9
+      ],
+      "audit.physical": [
+        1.9410869999999998,
+        2.8802778480000004,
+        9
+      ],
+      "audit.complete": [
+        8.109481,
+        11.012891072,
+        9
+      ],
+      "native.acceptance_audit": [
+        0.01644299999999954,
+        11.029390323000001,
+        9
+      ],
+      "output.project_fields": [
+        0.07561999999999999,
+        0.075629113,
+        2
+      ],
+      "startup.initialize": [
+        0.26985199999999976,
+        3.044583083,
+        1
+      ],
+      "pimple.check.input": [
+        0.0012190000000000256,
+        4.056176209,
+        8
+      ],
+      "flow.assembly": [
+        1.0282619999999998,
+        1.0290249040000001,
+        8
+      ],
+      "momentum.factorize": [
+        0.0041970000000000045,
+        0.089273789,
+        8
+      ],
+      "pressure.mass_factorize": [
+        0.004066999999999998,
+        0.08857106699999998,
+        8
+      ],
+      "momentum.solve_validate": [
+        0.011534,
+        0.013416326000000001,
+        8
+      ],
+      "pressure.build": [
+        0.08370800000000002,
+        0.278748444,
+        8
+      ],
+      "pressure.solve_validate": [
+        0.0008089999999999999,
+        0.001172619,
+        8
+      ],
+      "pimple.check.flow": [
+        0.0011009999999999998,
+        0.0024222080000000003,
+        8
+      ],
+      "flow.correction_validate": [
+        0.06784199999999999,
+        0.35119178300000004,
+        8
+      ],
+      "flow.total": [
+        0.054594000000000004,
+        1.9062814380000002,
+        8
+      ],
+      "epsilon.assembly": [
+        0.08533,
+        0.18952717400000002,
+        8
+      ],
+      "epsilon.solve_validate": [
+        0.0023269999999999996,
+        0.00947992,
+        8
+      ],
+      "pimple.check.epsilon": [
+        0.0010980000000000434,
+        3.204522219,
+        8
+      ],
+      "epsilon.total": [
+        0.00381999999999999,
+        3.408524534,
+        8
+      ],
+      "k.assembly": [
+        0.26818099999999995,
+        0.26867192700000003,
+        8
+      ],
+      "k.solve_validate": [
+        0.004287,
+        0.019827122999999995,
+        8
+      ],
+      "k.bound_accounting": [
+        0.010333,
+        0.010332381,
+        8
+      ],
+      "io.attempt_snapshot": [
+        0.277645,
+        1.019127791,
+        8
+      ],
+      "pimple.check.k": [
+        0.001206999999999998,
+        0.076749494,
+        8
+      ],
+      "k.total": [
+        0.0037649999999999073,
+        6.696840121000001,
+        8
+      ],
+      "pimple.final_refresh_diagnostics": [
+        0.0006090000000000262,
+        0.794902883,
+        8
+      ],
+      "pimple.sweep": [
+        0.007250000000001089,
+        16.933460422,
+        8
+      ],
+      "native.physical_samples": [
+        0.12318799999999999,
+        0.123313715,
+        8
+      ],
+      "native.implicit": [
+        2.533902,
+        29.411920659,
+        8
+      ],
+      "native.advance": [
+        0.0642700000000005,
+        29.699830472000002,
+        8
+      ],
+      "io.checkpoint": [
+        0.008437,
+        0.032700647,
+        9
+      ],
+      "native.step": [
+        0.022612999999999772,
+        29.757908834,
+        8
+      ],
+      "native.solve_block": [
+        0.029009999999995983,
+        29.96193258,
+        1
+      ],
+      "output.report": [
+        0.044319,
+        0.062119082,
+        1
+      ],
+      "output.fields_and_report": [
+        0.219433,
+        0.71634377,
+        1
+      ],
+      "process": [
+        0.28794100000000356,
+        37.60421127,
+        1
+      ]
+    },
+    "usage": "37.72 33.77 1.68 838620\n"
+  },
+  "startup_costs": {
+    "coarse-h0": {
+      "driver_wall": 10.355567210004665,
+      "process_wall": 9.86,
+      "user_CPU": 6.4,
+      "system_CPU": 0.57,
+      "peak_RSS_KiB": 474452,
+      "local_steps": 0,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v1/coarse-h0/case.evolution.json",
+      "report_sha256": "d97ec4df410b38e4cfba1a2bd64da70cf9e3901413072adb7974118b7684d2a6",
+      "mass_factor_hits": 0,
+      "persisted_complete_packets": 0
+    },
+    "extra-fine-h0": {
+      "driver_wall": 7.394410590059124,
+      "process_wall": 7.31,
+      "user_CPU": 5.9,
+      "system_CPU": 0.49,
+      "peak_RSS_KiB": 480096,
+      "local_steps": 0,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v2/extra-fine-h0/case.evolution.json",
+      "report_sha256": "9cab64343fe0ebd0472b7b2c56542701f0efdfed0334952124088fadc59b044b",
+      "mass_factor_hits": 0,
+      "persisted_complete_packets": 0
+    },
+    "fine-h0": {
+      "driver_wall": 9.609117785003036,
+      "process_wall": 9.3,
+      "user_CPU": 6.17,
+      "system_CPU": 0.54,
+      "peak_RSS_KiB": 478228,
+      "local_steps": 0,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v1/fine-h0/case.evolution.json",
+      "report_sha256": "ce4351df25a082686759d4ef9599160479d532a741c490c5b31844145ef45a09",
+      "mass_factor_hits": 0,
+      "persisted_complete_packets": 0
+    },
+    "middle-h0": {
+      "driver_wall": 10.035221250960603,
+      "process_wall": 9.56,
+      "user_CPU": 6.28,
+      "system_CPU": 0.68,
+      "peak_RSS_KiB": 476204,
+      "local_steps": 0,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v1/middle-h0/case.evolution.json",
+      "report_sha256": "d8a559844e6572cc1c2617e1f0bc0fcd467be01d1f0d06f054a8c74d2f36520f",
+      "mass_factor_hits": 0,
+      "persisted_complete_packets": 0
+    },
+    "extra-fine-step32": {
+      "driver_wall": 141.4427843580488,
+      "process_wall": 141.24,
+      "user_CPU": 131.39,
+      "system_CPU": 4.08,
+      "peak_RSS_KiB": 896480,
+      "local_steps": 32,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v2/extra-fine-step32/case.evolution.json",
+      "report_sha256": "2d493836e65014e9726b6b574048535356b9253b8fa9a7fbb4c67d867ffa2500",
+      "mass_factor_hits": 31,
+      "persisted_complete_packets": 2
+    },
+    "coarse-step5": {
+      "driver_wall": 29.58726271300111,
+      "process_wall": 29.18,
+      "user_CPU": 24.17,
+      "system_CPU": 1.93,
+      "peak_RSS_KiB": 872932,
+      "local_steps": 5,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v1/coarse-step5/case.evolution.json",
+      "report_sha256": "df6e7d5b2f9fc660c912702a352bf540d678a60a06bd0801237f45269b11c0d2",
+      "mass_factor_hits": 4,
+      "persisted_complete_packets": 2
+    },
+    "fine-step20": {
+      "driver_wall": 85.8728317989735,
+      "process_wall": 85.63,
+      "user_CPU": 77.21,
+      "system_CPU": 2.8,
+      "peak_RSS_KiB": 894416,
+      "local_steps": 20,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v1/fine-step20/case.evolution.json",
+      "report_sha256": "22dfeba200f13dd27688d8a218590b06eb87ee47e3bc024ad5bbf440e2d4b433",
+      "mass_factor_hits": 19,
+      "persisted_complete_packets": 2
+    },
+    "middle-step10": {
+      "driver_wall": 51.42408997891471,
+      "process_wall": 51.31,
+      "user_CPU": 44.57,
+      "system_CPU": 2.49,
+      "peak_RSS_KiB": 875556,
+      "local_steps": 10,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v1/middle-step10/case.evolution.json",
+      "report_sha256": "f6127c02e4df8fb7f1866f993fa524f8e16e23c7efed9d8a024c184ba0a45324",
+      "mass_factor_hits": 9,
+      "persisted_complete_packets": 2
+    },
+    "extra-fine-step40": {
+      "driver_wall": 44.569872389081866,
+      "process_wall": 44.37,
+      "user_CPU": 38.71,
+      "system_CPU": 1.8,
+      "peak_RSS_KiB": 871700,
+      "local_steps": 8,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v2/extra-fine-step40/case.evolution.json",
+      "report_sha256": "a81d1d5affe5693b2734542651859a8d8be97e71d7f8bacdf06cdd028694b6be",
+      "mass_factor_hits": 7,
+      "persisted_complete_packets": 1
+    },
+    "extra-fine-step72": {
+      "driver_wall": 146.50873463402968,
+      "process_wall": 146.3,
+      "user_CPU": 133.69,
+      "system_CPU": 4.86,
+      "peak_RSS_KiB": 885376,
+      "local_steps": 32,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v2/extra-fine-step72/case.evolution.json",
+      "report_sha256": "fb6ef50e269c2fd34f4e3194136e193d6a09771cbee5dc454e65881cdbe9037f",
+      "mass_factor_hits": 31,
+      "persisted_complete_packets": 1
+    },
+    "coarse-step10": {
+      "driver_wall": 26.917359448969364,
+      "process_wall": 26.73,
+      "user_CPU": 23.71,
+      "system_CPU": 1.26,
+      "peak_RSS_KiB": 871380,
+      "local_steps": 5,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v1/coarse-step10/case.evolution.json",
+      "report_sha256": "ebff87b5a48f5b5d71d4061a7d63693a69126c9064e4b31977edd67cbd97d0c2",
+      "mass_factor_hits": 4,
+      "persisted_complete_packets": 1
+    },
+    "middle-step20": {
+      "driver_wall": 44.101101861917414,
+      "process_wall": 43.94,
+      "user_CPU": 40.32,
+      "system_CPU": 1.6,
+      "peak_RSS_KiB": 872920,
+      "local_steps": 10,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v1/middle-step20/case.evolution.json",
+      "report_sha256": "a04b664ecabc410a3edb0548bcbe446dca6b402ce0551e3a698dd187c480b440",
+      "mass_factor_hits": 9,
+      "persisted_complete_packets": 1
+    },
+    "fine-step40": {
+      "driver_wall": 90.08516273705754,
+      "process_wall": 89.91,
+      "user_CPU": 83.7,
+      "system_CPU": 2.8,
+      "peak_RSS_KiB": 876460,
+      "local_steps": 20,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v1/fine-step40/case.evolution.json",
+      "report_sha256": "46b36a1773d2b6675d50ec2a0a374a86d6a3bd3ae6eae7fb92b2cb6856736211",
+      "mass_factor_hits": 19,
+      "persisted_complete_packets": 1
+    },
+    "extra-fine-step80": {
+      "driver_wall": 37.753494628937915,
+      "process_wall": 37.56,
+      "user_CPU": 34.08,
+      "system_CPU": 1.36,
+      "peak_RSS_KiB": 873652,
+      "local_steps": 8,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v2/extra-fine-step80/case.evolution.json",
+      "report_sha256": "8562bb5d04a57d4aa8f5c13fd682b25ed0679ed89d56a17d0bd666928528bd10",
+      "mass_factor_hits": 7,
+      "persisted_complete_packets": 1
+    },
+    "primary-step112": {
+      "driver_wall": 126.21358929004055,
+      "process_wall": 125.97,
+      "user_CPU": 116.49,
+      "system_CPU": 3.88,
+      "peak_RSS_KiB": 886984,
+      "local_steps": 32,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v2/primary-step112/case.evolution.json",
+      "report_sha256": "a24bfb3c2b39598a2e85c117a91564d1a0e24d914beab7e17b29e84db07c721a",
+      "mass_factor_hits": 31,
+      "persisted_complete_packets": 1
+    },
+    "primary-step144": {
+      "driver_wall": 125.17871367093176,
+      "process_wall": 124.98,
+      "user_CPU": 113.43,
+      "system_CPU": 4.01,
+      "peak_RSS_KiB": 889952,
+      "local_steps": 32,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v2/primary-step144/case.evolution.json",
+      "report_sha256": "8fc040cac1d611703a4544bc27935fd6ea7ead928c8b23a7845c05a1bf962c9d",
+      "mass_factor_hits": 31,
+      "persisted_complete_packets": 1
+    },
+    "primary-step160": {
+      "driver_wall": 68.75166968500707,
+      "process_wall": 68.59,
+      "user_CPU": 62.81,
+      "system_CPU": 2.46,
+      "peak_RSS_KiB": 886216,
+      "local_steps": 16,
+      "report": "/media/jay/新加卷/nektar-v2026-runs/cls-cao-tamura-budget-h2a-20261111/startup-v2/primary-step160/case.evolution.json",
+      "report_sha256": "61d5ede1da02af9ea3814204634c7f7346cee15997a14302f62ea318a7f011e3",
+      "mass_factor_hits": 15,
+      "persisted_complete_packets": 1
+    }
+  },
+  "end_to_end_open_speedup_demonstrated": false,
+  "accounting": "timing.jsonl exclusive entries must not be summed with inclusive children; packet/mass/reference exact reuse does not remove domain/audit hard work"
+}
