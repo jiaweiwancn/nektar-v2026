@@ -1,0 +1,230 @@
+{
+  "schema": "CT-Accepted-1-v1",
+  "starting_revision": "b127d307edb423f93a93aa9d861ce4b6a486573c",
+  "starting_status": "clean; local and fetched remote equal reviewed b127d307edb423f93a93aa9d861ce4b6a486573c",
+  "specifications": {
+    "docs/literature/A93_A95_E94_E95_neutral_ABL_EP_AWF_combined.tex": "056a85c2aea5ce4ca168caf561613e662416bb6b7d7177451ba5038d2cf68a64",
+    "docs/literature/accepted_awf_appendix_A93_A95_E94_E95.tex": "17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40"
+  },
+  "paper_sha256": "adffb5c1d740be791211d82ce35778a37a3315a6dc72c56c80b70cc6642a43df",
+  "paper_verified_local": "/Users/jay/Documents/nektar-v2026/docs/literature/Experimental study on roughness effects on turbulent boundary layer flow over a two-dimensional steep hill.pdf",
+  "frozen_dataset": {
+    "version": "cao-tamura-2006-v1.1",
+    "hashes": {
+      "source_manifest.json": "8c0cab03d1fe4c1301386539d584a20754d9a0641feaf98e3fdd2f2079e778f8",
+      "scores.json": "a681bad718a6a72d6543abcad73d91b183d5d955db6933348b866ef35da1afe9",
+      "uncertainty.json": "b87ba465738bc0665702fd31eebccbe811149acbcc43913e2bde8209719e28ad",
+      "snapshot.json": "2432937f6ab1b7dd41351e56e3cd4ce31a24e8cc2f63449404af2c3a688b7429",
+      "profiles.csv": "f696657990c1d207a303777f17dd574049239143e6fa2c286f0d87650fd614f2",
+      "series.json": "8cef4a13b83c7e9f6afcaecbf7ecc58d861ee54e31df29fa7e8584924e320905",
+      "extraction.json": "7e5e5fe15fb43c0e6c6c1102197f018ed7cdc758d45e630100977e9de9c370a3",
+      "reported_scalars.csv": "d746b30d04bb2b5556adc7b1609dd898c57a3c6660b61f636dbe6ed5e2fd3641",
+      "README.md": "c1286f22350a0412a20d6a0b823277b538f06dc2d486380a3b9a8d26fa5d9528"
+    },
+    "roles_and_weights_unchanged": true
+  },
+  "physics": {
+    "models": [
+      "A93",
+      "A95",
+      "E94E95"
+    ],
+    "kappa": "Natural, resolved per model",
+    "wall": "AcceptedBudgetAWF",
+    "outer": "original high-Re; outer molecular diffusion zero; E destruction denominator k",
+    "inner": "finite physical nu; transported nonconstant k; prescribed uncapped frozen sink; no inner epsilon equation",
+    "extension": "DeviatoricStrainV1 with signed full production",
+    "ownership": "GeneratedVolumeOwnerV1",
+    "eta": 0,
+    "corrections": "Off",
+    "unknown_limit": 3000
+  },
+  "benchmark": {
+    "Hh_m": 0.04,
+    "L_m": 0.1,
+    "hill": "exact compact cosine-squared, C1 feet with one-sided curvature",
+    "delta_m": 0.25,
+    "roof_m": 0.8,
+    "primary": [
+      "SS",
+      "RR"
+    ],
+    "Re_H": {
+      "S": 12000,
+      "R": 10500
+    },
+    "utau_over_Uinf": {
+      "S": 0.033,
+      "R": 0.051
+    },
+    "reported_z0_m": {
+      "S": 4e-06,
+      "R": 0.0002
+    },
+    "rough_cube_m": 0.005,
+    "observational_d_m": {
+      "S": 0,
+      "R": 0.0035
+    },
+    "scaling": "Hh*=U(Hh)*=1; nu*=1/Re_H; Uinf/U(Hh) from frozen visible Fig3a linear interpolation at 40mm, no selected air viscosity or measured dimensional velocity"
+  },
+  "feasibility": {
+    "heights_m": [
+      0.002,
+      0.004,
+      0.008,
+      0.016
+    ],
+    "endpoint_K_factors": [
+      0.8,
+      1,
+      1.2
+    ],
+    "reference_height_m": 0.016,
+    "reference_K": "q_m*utau^2",
+    "roughness_scenarios": [
+      "smooth h_r=0",
+      "common h_r=1mm: analysis input, not measured",
+      "common h_r=5mm: cube-height proxy only, not an equivalent-roughness measurement",
+      "model-conditioned h_r fitted once to visible flat U at 16mm",
+      "model-conditioned h_r fitted once to reported z0 as a separate unshifted-intercept scenario"
+    ],
+    "fit_bracket_m": [
+      0,
+      0.0144
+    ],
+    "hold_fitted_hr_fixed": true,
+    "interpolation": "linear in log(y-d) on bracketing visible Fig3a points; source extraction bounds propagated; compare adjacent three-point log-linear extrapolation at 8mm, explicitly below rough coverage; no hill data or reserved Fig3d fitting",
+    "base_quadrature_order": 48,
+    "tight_quadrature_order": 96,
+    "breakpoints": "0, positive z_v, h_r, cutoff, H; geometric panels at the viscosity scale; independent counterfactual p0",
+    "extrema": "partition at all analytic roots of E-p0 and breakpoints, bracket every interior Q or Q_J root on monotone intervals; no sparse sampling substitute",
+    "curved": {
+      "heights": "same predeclared set",
+      "K_factors": [
+        1
+      ],
+      "surfaces": [
+        "smooth",
+        "model-conditioned flat-velocity rough fit"
+      ],
+      "stations": "33 uniform x/Hh in [-2.5,2.5], crest, both inflections, exact and both limits at each foot; outer flat controls",
+      "J": "1-curvature*r",
+      "minimum_stretch": 0.2,
+      "thin_max_abs_curvature_times_H": 0.1,
+      "global_reach": "sufficient global C1,1 graph bound 1/sup|h_second|, justified by unique nearest footpoint inequality; local stretch and thin adequacy separate",
+      "scope": "frozen normal columns only; no native hill evolution or curved covariance certificate"
+    }
+  },
+  "boundary": {
+    "identity": "AcceptedOpenFlatV1",
+    "route": "opt-in original new-model Accepted, serial canonical affine flat2D, uniform isotropic p3/p1 or p4/p2, >=2 columns",
+    "inlet": "prescribed velocity/k/outer epsilon; ground no slip; natural zero k diffusion datum",
+    "top": "prescribed compatible velocity/k/epsilon, no pressure condition",
+    "outlet": "free velocity/scalars; prescribed full total traction and scalar outward diffusive flux; retain advective momentum and scalar flux",
+    "pressure": "traction fixes level; all physical pressure tests free; unused gauge slot fixed zero and excluded, no mean constraint or outlet pressure",
+    "corner": "ground/top velocity precedence at corners; dependent epsilon H trace takes precedence over inlet epsilon and requires compatible inlet datum; outlet has no essential rows",
+    "backflow": "reject detected outward-normal velocity below -1e-12*U(Hh), witness point/side/stage; retain actual signed numerical flux; internal reversal/shear not rejected",
+    "cache": "Off only; explicit rejection of ExactStepV1 for new policy",
+    "history": "fresh independent native IMEX1 histories; boundary functions/parameters/policy included in signatures"
+  },
+  "verification": {
+    "native_row_absolute_scaled": 2e-10,
+    "matrix_residual_consistency": 2e-10,
+    "physical_IBP": 2e-09,
+    "pressure_offset": 2e-10,
+    "finite_rank_relative": 1e-11,
+    "mass_flux_scaled": 1e-08,
+    "restart_state_history": "bitwise equality",
+    "closed_compatibility": "frozen numerical equality under old and new runtime where unchanged",
+    "manufactured_forcing": "verification only; none in physical pilot"
+  },
+  "pilot": {
+    "model": "A95",
+    "surface": "R",
+    "roughness": "once-fitted 16mm visible flat-velocity case, if admissible",
+    "wall_height_m": 0.016,
+    "columns": 2,
+    "x_extent_Hh": [
+      0,
+      0.25
+    ],
+    "top_Hh": 20,
+    "delta_Hh": 6.25,
+    "degree": 3,
+    "pressure_degree": 1,
+    "dt": [
+      0.002,
+      0.001
+    ],
+    "T": 0.2,
+    "initial": "finite-depth Hermite mean using compatible interface shear, observed U(Hh), Uinf at delta; positive inferred k taper to 1.5*(0.003 Uinf)^2, epsilon from resolved branch length scale; nonconstant inner k represented by breakpoint-resolved Hermite interpolation of independent reference, then transported; no measured k/epsilon claim",
+    "pressure": "initial total normal traction constant, complete original model normal stresses; nonzero initial total outlet traction prescribed and held fixed",
+    "orders": {
+      "wall_normal": 32,
+      "tangential": 8,
+      "mass": 10,
+      "outer": 10,
+      "interface": 10
+    },
+    "frozen_quadrature": {
+      "wall_normal": [
+        48,
+        64
+      ],
+      "other_orders": [
+        12,
+        16
+      ],
+      "face": [
+        16,
+        32
+      ]
+    },
+    "dt_RMS_limit_scaled": 0.001,
+    "physical_scalar_budget_scaled_target": 0.02,
+    "mass_flux_scaled_target": 1e-08,
+    "stopping": "first hard physical/outlet-backflow failure; preserve last accepted/rejected state and history; no adaptive dt/regularization; accuracy classifications separate",
+    "smokes": {
+      "models": [
+        "A93",
+        "E94E95"
+      ],
+      "steps": 2,
+      "dt": 0.001,
+      "parameters": "same physical surface/depth/domain, own resolved coefficients and fixed model-conditioned rough fit"
+    },
+    "transit": "report bulk and interface transit estimates and actual T; no developed precursor claim"
+  },
+  "resources": {
+    "linux_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111",
+    "maximum_project_workers": 16,
+    "native_families_at_once": 1,
+    "compiler_jobs": 4,
+    "aggregate_limit": 72,
+    "startup_reserve": 16,
+    "library_threads": 1,
+    "process_CPU_budget_seconds": 10800,
+    "owned_processes_only": true
+  },
+  "outcomes": [
+    "boundary implementation verified",
+    "experimental reference/candidate feasible or inadmissible",
+    "experimental prediction validation not attempted"
+  ],
+  "deferred": [
+    "EP/transition",
+    "production hill evolution",
+    "developed precursors",
+    "sparse/backend expansion",
+    "curved native evolution",
+    "MPI/3D",
+    "regularization/positivity changes",
+    "common kappa",
+    "mixed surfaces",
+    "spectra/intermittency",
+    "old A93 donor search",
+    "old response extension"
+  ],
+  "historical_decisions_unchanged": true
+}

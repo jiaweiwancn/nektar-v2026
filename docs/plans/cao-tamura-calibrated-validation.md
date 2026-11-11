@@ -1,5 +1,13 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+Current priority (CT-Accepted-1): the user has reprioritized experimental work
+to A93/A95/E94E95 Natural policies with the Accepted budget AWF. Follow the
+[Accepted feasibility/open-floor package](cao-tamura-accepted-1.md) and its
+versioned contract on `codex/a93-a95-e94e95-awf`. The older standard/CLS,
+EP-transition plan and all its receipts below remain historical evidence for
+their stated routes; they do not qualify the new wall formulation. The frozen
+dataset, observation roles, weights and extraction bounds remain unchanged.
+
 ## Material Passport
 
 - Origin Skill: academic-research-suite / experiment-agent
