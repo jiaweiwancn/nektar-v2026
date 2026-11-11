@@ -108,7 +108,10 @@ old WJ-4/WJ-5 states remain context, not an unproved runtime-equivalence claim.
 2. Per-policy actual4331 pilot: coarse four accepted steps, complete passive
    observation and frozen-system arithmetic/SVD. Fine pilot is eight steps to
    the same time. Pilot states count in the trajectory; no early Nx1 callback
-   is fabricated. Native startup observations are required on every mesh/dt.
+   is fabricated. The fresh Nx1 baseline also executes its own first4 steps
+   and genuine observation/SVD for measured mesh costs and a common pilot
+   comparison; these4 are included in its32-step target. Native startup
+   observations are required on every mesh/dt.
 3. Freeze conservative measured cost projection before primary continuation.
    Primary target is Tx=.001024: coarse32 TOTAL, fine64 TOTAL, coarse Nx1
    baseline32 TOTAL. Retain CP24 and accepted24->32 exactly. Hard/material
