@@ -13,7 +13,7 @@ from run_cls_epawf_picard import require
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--compact',type=Path,required=True);p.add_argument('--figures',type=Path,required=True);a=p.parse_args();r=a.root.resolve();out=a.compact.resolve();start=time.time()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--compact',type=Path,required=True);p.add_argument('--figures',type=Path,required=True);p.add_argument('--source',type=Path,default=Path(__file__).resolve().parents[4]);a=p.parse_args();r=a.root.resolve();out=a.compact.resolve();start=time.time()
     commands=json.loads((r/'command-receipts.json').read_text());inventory=json.loads((r/'inventory.log').read_text());registered={t['name']:t for t in inventory['tests']};executed={};suites=[]
     for label,count in (('wj5-regression-controls',24),('wj5-capacity-retry-native',3),('wj5-capacity-retry-readonly',2),('wj5-capacity-retry-metadata',1),('wj5-capacity-retry-composite',2)):
         inv=json.loads((r/(label+'-inventory.json')).read_text());account=read(r/(label+'-accounting.json'));require(len(inv['tests'])==count and account['exit_code']==0,'missing/failed required regression selection: '+label)
@@ -33,7 +33,7 @@ def main():
         allocation_rejections=[file_identity(f) for f in r.glob('*allocation*.json') if json.loads(f.read_text()).get('allowed') is False]))
     # Verify every original retained-case artifact against the sealed WJ-4
     # index, including fields/options as well as checkpoints and reports.
-    source=Path(__file__).resolve().parents[4];old=read(source/'docs/plans/wj4-linux/manifest.json');index_meta=old['artifact_index'];require(file_hash(index_meta['path'])==index_meta['sha256'],'WJ-4 sealed index changed')
+    source=a.source.resolve();old=read(source/'docs/plans/wj4-linux/manifest.json');index_meta=old['artifact_index'];require(file_hash(index_meta['path'])==index_meta['sha256'],'WJ-4 sealed index changed')
     old_index=read(index_meta['path']);oldroot=Path('/media/jay/新加卷/nektar-v2026-runs/wj4-20261110')
     prefixes=[str(oldroot/'study'/p/n)+'/' for p in ('EP','Budget') for n in ('horizontal-Nx1-cp0','horizontal-Nx1-32','horizontal-Nx2-cp0','horizontal-Nx2-32','longer-coarse-32')]
     checked={}
@@ -60,6 +60,22 @@ def main():
                 with path.open('xb') as stream:stream.write(data)
             development.append(dict(revision=revision,relative=relative,archive=file_identity(path),scope='retained development code; not qualified immutable reuse'))
     write_once(out/'development-code-bridge.json',development)
+    # The publication inventory contains immutable cases plus three explicitly
+    # mutable package-progress paths. Verify every immutable artifact; bind the
+    # final write-once replacements for those progress files below. Original
+    # publication receipts and inventory bytes remain unchanged.
+    heavy_meta=read(out/'manifest.json')['heavy_artifact_index']
+    require(file_hash(heavy_meta['path'])==heavy_meta['sha256'],'WJ-5 heavy index changed')
+    heavy_index=read(heavy_meta['path']);progress={str(r/name):out/replacement for name,replacement in (
+        ('command-receipts.json','command-receipts-before-seal.json'),
+        ('ledger-EP.json','final-ledger-EP.json'),('ledger-Budget.json','final-ledger-Budget.json'))}
+    require(set(progress)<=set(heavy_index),'missing indexed package-progress identity')
+    immutable_count=0
+    for name,identity in heavy_index.items():
+        if name in progress:continue
+        require(Path(name).is_file() and file_hash(name)==identity['sha256'],
+                'immutable WJ-5 heavy artifact changed: '+name)
+        immutable_count+=1
     ledgers={p:Ledger(r,p,cap=800) for p in ('EP','Budget')};accounting={}
     shared=[];specific={p:[] for p in ledgers}
     for c in commands:
@@ -79,6 +95,10 @@ def main():
         l.finish(label,0,extra,str(out/'publication.json'));totals=l.totals();require(totals['attempts']<=800 and totals['seconds']<=10800,'RESOURCE_LIMIT: final package accounting exceeds caps')
         snapshot=out/('final-ledger-'+policy+'.json');write_once(snapshot,read(l.file));accounting[policy]=dict(totals=totals,ledger=file_identity(snapshot),outer_process_seconds=desired,added_seconds=extra)
     write_once(out/'command-receipts-before-seal.json',commands)
+    write_once(out/'progress-index-bridge.json',dict(schema='WJ5ProgressSnapshotBridgeV1',
+        original_index=heavy_meta,verified_immutable_artifacts=immutable_count,
+        progress={name:dict(publication_time_identity=heavy_index[name],final_snapshot=file_identity(path)) for name,path in progress.items()},
+        meaning='only these three live progress paths continue after publication; final snapshots supersede their inventory-time identities; outer seal receipt is bound separately'))
     compact_files=artifacts([f for f in out.iterdir() if f.is_file()]);figure_files=artifacts([f for f in a.figures.iterdir() if f.is_file()])
     policies={}
     for policy in ledgers:
