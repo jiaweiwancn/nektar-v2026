@@ -77,8 +77,11 @@ def run_limited(argv, folder, log, limits, kind='native', seconds=None):
     if not math.isfinite(timeout) or timeout <= 0:
         raise ValueError('invalid finite process timeout')
     allocation = scientific_workers()
-    if allocation['workers']+4 > 72:
-        raise RuntimeError('RESOURCE_LIMIT: current scientific workers plus4 exceed72')
+    # A serial MPI-enabled native executable can create three application
+    # threads plus four orted helper threads, despite numerical threads=1.
+    additional=8 if kind in ('native','observation') else 2
+    if allocation['workers']+additional > 72:
+        raise RuntimeError('RESOURCE_LIMIT: current scientific workers plus declared process/helper reservation exceed72')
     start = time.monotonic()
     peak_rss = peak_threads = 0
     reason = None
@@ -126,4 +129,5 @@ def run_limited(argv, folder, log, limits, kind='native', seconds=None):
         sampled_process_tree_peak_rss_bytes=peak_rss,wait4_maximum_rss_bytes=measured_peak,
         peak_process_threads=peak_threads, output_bytes=volume(folder),
         timeout_seconds=timeout, limits=limits, allocation=allocation, threads=THREADS,
+        additional_workers_reserved=additional,
         launcher=launcher,resource_time_file=str(time_file.resolve()))
