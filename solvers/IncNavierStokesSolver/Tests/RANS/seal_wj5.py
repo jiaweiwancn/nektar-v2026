@@ -23,12 +23,13 @@ def main():
     focused=next(c for c in commands if c['label']=='wj5-focused-final');require(focused['exit_code']==0 and file_hash(focused['log'])==focused['log_sha256'],'focused native test receipt changed')
     for name in ('WJLocalNormalMetadata','WJLocalNormalObservationEP','WJLocalNormalObservationBudget'):executed[name]=registered[name]
     metadata=next(c for c in commands if c['label']=='measurement-metadata-fixed');require(metadata['exit_code']==0,'corrected metadata selection did not pass')
+    orders=next(c for c in commands if c['label']=='publication-metadata-orders');require(orders['exit_code']==0,'serialized quadrature-order fixture did not pass')
     closures={}
     for test in executed.values():
         path=Path(test['command'][0]).resolve()
         if path.is_file() and str(path) not in closures:closures[str(path)]=runtime(path)
     write_once(out/'regression-verification.json',dict(schema='WJ5RegressionSealV1',status='PASS',registered=len(registered),selected_unique=len(executed),
-        names=sorted(executed),required32=suites,focused=focused,metadata_supplement=metadata,runtime_closures=closures,
+        names=sorted(executed),required32=suites,focused=focused,metadata_supplements=[metadata,orders],runtime_closures=closures,
         allocation_rejections=[file_identity(f) for f in r.glob('*allocation*.json') if json.loads(f.read_text()).get('allowed') is False]))
     # Verify every original retained-case artifact against the sealed WJ-4
     # index, including fields/options as well as checkpoints and reports.

@@ -11,7 +11,13 @@ from test_wj2_native import independent,CSTAR,KAPPA
 AMP=dict(u=.5,v=.5,velocity=.5,k=K0,outer_epsilon=.125/KAPPA,reduced_pressure=.25,mechanical_pressure=.25)
 BUDGET=dict(L2=1e-4,sampled_Linf=1e-3,traction=1e-3,k_flux=1e-4,pressure_offset=1e-4,divergence=1e-3)
 
+def quadrature_order(value):
+    if isinstance(value,bool) or not math.isfinite(value) or value<1 or int(value)!=value:
+        raise ValueError('quadrature order must be a finite positive integer')
+    return int(value)
+
 def rule(xmeshes=((0.,1.),(0.,.5,1.)),order=6,xorder=4,zmeshes=None,all_faces=False):
+    order=quadrature_order(order);xorder=quadrature_order(xorder)
     _,zv,_,_,zc=wall(K0)
     xs=sorted(set([x for knots in xmeshes for x in knots]+[.25,.75]))
     zs=sorted(set((normal_knots(2) if zmeshes is None else [z for knots in zmeshes for z in knots])+[z for z in (zc,zv,.1,.5,1) if 0<z<2]))
@@ -44,6 +50,7 @@ def rule(xmeshes=((0.,1.),(0.,.5,1.)),order=6,xorder=4,zmeshes=None,all_faces=Fa
     return rows
 
 def boundary_rule(order=6,xorder=4,xmeshes=((0.,1.),(0.,.5,1.)),zmeshes=None):
+    order=quadrature_order(order);xorder=quadrature_order(xorder)
     _,zv,_,_,zc=wall(K0)
     xs=sorted(set([x for knots in xmeshes for x in knots]+[.25,.75]));zs=sorted(set((normal_knots(2) if zmeshes is None else [z for knots in zmeshes for z in knots])+[z for z in (zc,zv,.1,.5,1) if 0<z<2]))
     gx,wx=np.polynomial.legendre.leggauss(xorder);gz,wz=np.polynomial.legendre.leggauss(order);weights={}

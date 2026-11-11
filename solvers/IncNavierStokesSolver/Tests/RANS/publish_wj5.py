@@ -86,7 +86,7 @@ def requalify(s,design):
             old_dt=a['dt'],new_dt=b['dt'],old_signature=a['signature'],new_signature=b['signature'])
     updated['components']['measurement_requalification']=component('PASS','versioned constraint-aware estimates applied to every required available observation; original native files unchanged')
     updated['qualification']=aggregate(updated['components'])
-    return updated,dict(schema='WJ5ConstraintRequalificationV1',lineage=lineage,code=artifacts([Path(__file__),Path(__file__).with_name('wj5_measure.py'),Path(__file__).with_name('wj4_qualification.py')]),
+    return updated,dict(schema='WJ5ConstraintRequalificationV1',lineage=lineage,code=artifacts([Path(__file__),*[Path(__file__).with_name(n) for n in ('wj5_measure.py','wj4_measure.py','wj4_qualification.py','wj3_measure.py','publish_wj4.py','wj_immutable.py')]]),
         governing_attempts=0,change='dependent epsilon trace uses separate k and epsilon coefficient estimates through their own free rows; pressure uses its own full-gauge row')
 
 

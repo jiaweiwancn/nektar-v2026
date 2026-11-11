@@ -12,6 +12,12 @@ from wj4_measure import rule,boundary_rule,owned_rule
 from wj_immutable import write_once,xml_identity
 
 class Meshes(unittest.TestCase):
+    def test_serialized_integral_quadrature_orders(self):
+        self.assertEqual(rule(order=8,xorder=4),rule(order=8.,xorder=4.))
+        self.assertEqual(boundary_rule(order=8,xorder=4),boundary_rule(order=8.,xorder=4.))
+        for value in (0,-1,4.5,float('nan'),float('inf'),True):
+            with self.assertRaisesRegex(ValueError,'quadrature order'):rule(order=value)
+            with self.assertRaisesRegex(ValueError,'quadrature order'):boundary_rule(xorder=value)
     def test_retained_metadata_integer_fingerprint(self):
         from run_wj5_native import read_execution_intent
         from wj_immutable import digest,read
