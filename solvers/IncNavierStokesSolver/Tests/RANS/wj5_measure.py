@@ -129,8 +129,9 @@ def diagnose(m):
         forcing=dict(range=[float(min(force)),float(max(force))],pressure_gradient_range=[float(min(parts[:,0])),float(max(parts[:,0]))],
             conservative_convection_range=[float(min(parts[:,1])),float(max(parts[:,1]))],samples=forcing),
         near_h_signed_loads=loads.tolist(),near_h_terms=d['near_h_terms'],near_h_test=d['near_h_test'],
-        normal_trace_observations=sum(r['requested_normal_side']!=0 for r in rows),
-        x_trace_observations=sum(r['requested_x_side']!=0 for r in rows),governing_solves=0)
+        normal_trace_observations=sum(r['requested_normal_side']!=0 and r['face_sides_xz'][1]!=0 for r in rows),
+        x_trace_observations=sum(r['requested_x_side']!=0 and r['face_sides_xz'][0]!=0 for r in rows),
+        physical_breakpoint_duplicates='requested sides at a breakpoint inside an element share its one geometry; only actual faces contribute to trace counts',governing_solves=0)
 
 
 def independent_near_h(checks,measurement):

@@ -8,7 +8,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 from run_wj5_native import Study
 from wj5_measure import constraint_estimate
-from wj_immutable import write_once
+from wj_immutable import write_once,file_hash
 
 
 def main():
@@ -22,6 +22,14 @@ def main():
             records.append(dict(mesh=mesh,nx=nx,size=count,report=str(f/'case.evolution.json')))
             if mesh=='M1' and nx==2:initial=d;producer=f
         m,c=s.measure('actual-maps',initial,producer,mesh='M1',nx=2,assembly=True)
+        xml_hash=file_hash(producer/'case.xml');execution_count=len(s.s['execution'])
+        rejected_intents=[]
+        for changed in (dict(mesh='M2',nx=2,role='focused_control'),dict(mesh='M1',nx=2,role='changed_comparison')):
+            try:s.native('cp0-M1-2',**changed)
+            except ValueError as error:
+                assert 'immutable intent/design mismatch' in str(error);rejected_intents.append(str(error))
+            else:raise AssertionError('changed mesh/role reused a cached native execution')
+        assert file_hash(producer/'case.xml')==xml_hash and len(s.s['execution'])==execution_count
         corner=[r for r in m['observations'] if r['position']==[.5,0.,.1]]
         assert len(corner)==4 and len({r['geometry'] for r in corner})==4
         assert {(r['requested_x_side'],r['requested_normal_side']) for r in corner}=={(-1,-1),(-1,1),(1,-1),(1,1)}
@@ -49,6 +57,7 @@ def main():
         assert min(fixed_count,free_count,pressure_count,dependent_count)>0
         write_once(s.root/'focused-result.json',dict(status='PASS',meshes=records,corner=corner,maximum_free_action_defect=maximum,
             fixed_rows=fixed_count,free_rows=free_count,pressure_rows=pressure_count,dependent_rows=dependent_count,
+            rejected_changed_native_intents=rejected_intents,
             diagnosis=c['diagnosis'],independent_loads=c['independent_loads'],governing_diagnostic_solves=0))
         print(s.root/'focused-result.json')
     finally:s.ledger.finish_session(s.session);s.save()
