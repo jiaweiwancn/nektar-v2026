@@ -13,7 +13,7 @@ while not (r/'worker-guard.stop').exists():
  for line in subprocess.check_output(['ps','-eo','pid,ppid,nlwp,stat,comm,args'],text=True).splitlines()[1:]:
   p=line.split(None,5)
   if len(p)==6:rows[int(p[0])]=dict(parent=int(p[1]),threads=int(p[2]),state=p[3],name=p[4],args=p[5])
- relevant=lambda d:d['name'].startswith(('IncNavier','RANS','Nek','cc1plus','f951','orted','mpiexec')) or (d['name'].startswith('python') and 'nektar' in d['args'])
+ relevant=lambda d:d['name'].startswith(('IncNavier','RANS','Nek','cc1plus','f951','orted','mpiexec','gdb','lldb')) or (d['name'].startswith('python') and 'nektar' in d['args'])
  try:leases=json.loads((r/'worker-leases.json').read_text()) if (r/'worker-leases.json').exists() else []
  except (json.JSONDecodeError,FileNotFoundError):time.sleep(.05);continue
  families=[];covered=set()
@@ -55,7 +55,8 @@ while not (r/'worker-guard.stop').exists():
    elif pid in chosen and pid not in held_roots and (pid in paused or rows[pid]['state'].startswith('T')):
     try:os.kill(pid,signal.SIGCONT);paused.discard(pid);events.append(['resume',root,pid])
     except ProcessLookupError:pass
- active=sum(d['threads'] for pid,d in rows.items() if relevant(d) and not d['state'].startswith(('T','Z')));maximum=max(maximum,active)
+ # Count every owned helper thread, irrespective of its executable's name.
+ active=sum(d['threads'] for pid,d in rows.items() if (pid in covered or relevant(d)) and not d['state'].startswith(('T','Z')));maximum=max(maximum,active)
  if events:
   with (r/'worker-guard-events.jsonl').open('a') as f:f.write(json.dumps(dict(time_unix=time.time(),external=external,active_before_actions=active,allowed_families=allowed,events=events))+'\n')
  if int(time.time()-started)%10==0:(r/'worker-guard-status.json').write_text(json.dumps(dict(external=external,active_before_actions=active,allowed_families=allowed,paused_pids=sorted(paused),maximum_observed_active_before_actions=maximum,time_unix=time.time()))+'\n')

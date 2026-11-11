@@ -22,7 +22,7 @@ def spawn(root, command, **kwargs):
             more={pid for pid,(parent,*_) in processes.items() if parent in covered}-covered
             if not more:break
             covered.update(more)
-        other=sum(threads for pid,(parent,threads,name,args) in processes.items() if pid not in covered and (name.startswith(('IncNavier','RANS','Nek','cc1plus','f951','orted','mpiexec')) or (name.startswith('python') and 'nektar' in args)))
+        other=sum(threads for pid,(parent,threads,name,args) in processes.items() if pid not in covered and (name.startswith(('IncNavier','RANS','Nek','cc1plus','f951','orted','mpiexec','gdb','lldb')) or (name.startswith('python') and 'nektar' in args)))
         # A runner/probe family needs <=8 threads (Python + solver + ORTE).
         # Keep sixteen threads unallocated for unrelated campaign startup.
         booked=other+8*len(leases)
