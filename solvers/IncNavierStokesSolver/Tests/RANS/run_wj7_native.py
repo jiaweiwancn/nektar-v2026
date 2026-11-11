@@ -266,7 +266,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root',type=Path,required=True);p.add_argument('--parent',type=Path,required=True)
     p.add_argument('--solver',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
-    p.add_argument('--mode',choices=('prepare','import','replay','admit','cadence'),required=True)
+    p.add_argument('--mode',choices=('prepare','retained-replay','import','replay','admit','cadence'),required=True)
     p.add_argument('--end',type=int,choices=(32,64,96,128),default=32);a=p.parse_args()
     require(platform.system()=='Linux','Linux is authoritative');os.environ.update(THREADS)
     for name in ('root','parent','solver','probe'):setattr(a,name,getattr(a,name).resolve())
@@ -278,6 +278,26 @@ def main():
             eq=verify_parent(a.parent,SCRIPTS.parents[3]);write_once(a.root/'native-equivalence.json',eq)
             correct_stage_map(a.parent,a.root/'correction.json')
         print('semantic correction and native equivalence PASS');return
+    if a.mode=='retained-replay':
+        for policy in ('EP','Budget'):
+            ledger=Ledger(a.root,policy,cap=800)
+            with session(ledger,'retained-replay'):
+                old,q10,supp=sealed_prefix(a.parent,policy);index={}
+                for tag,t in old['trajectories'].items():
+                    for c in [t['initial']]+t['trajectory']:
+                        step=int(c['steps']);index[tag,step,8]=c;index[tag,step,10]=q10[tag+'/'+str(step)]
+                start=time.time();result=qualify(index,policy,dict(amplitudes=AMP,budgets=BUDGET,sensitivity_fraction=.1),32)
+                changes=[]
+                for row in result['sensitivity']:
+                    order,group,step,scope,field,norm=row['key']
+                    prior=supp['gate']['components'][group+'_order'+str(order)+'_sensitivity']['components'][str(step)]['components'][scope+'/'+field+'/'+norm]
+                    require(prior['status']==row['status'],'retained replay decision differs')
+                    changes.extend((abs(prior['value']-row['value']),abs(prior['uncertainty']-row['uncertainty'])))
+                require(max(changes)<=1e-15,'retained arithmetic ordering differs; unchanged budgets required')
+                result.update(seconds=time.time()-start,retained_replay=dict(leaves=504,decisions_exact=True,
+                    maximum_absolute_value_or_uncertainty_difference=max(changes)),code=artifacts([SCRIPTS/'wj7_qualification.py',Path(__file__)]))
+                write_once(a.root/'retained-replay'/(policy+'.json'),result)
+        print('both retained-data qualifications complete');return
     results={}
     if a.mode=='cadence':
         require(a.end in (64,96,128),'scientific cadence invalid')
@@ -288,7 +308,16 @@ def main():
         s=Study(a,policy)
         with session(s.ledger,a.mode+'-'+str(a.end)):
             if a.mode=='import':s.import_endpoints();results[policy]=s.s['components']['imports']
-            elif a.mode=='replay':results[policy]=s.replay(32)
+            elif a.mode=='replay':
+                retained=a.root/'retained-replay'/(policy+'.json')
+                if retained.exists():
+                    value=read(retained);verify_artifacts(value['code'])
+                    require(value['gate']['status']=='PASS' and len(s.index(32))==len(value['record_index']),'retained replay/import coverage differs')
+                    for (tag,step,order),c in s.index(32).items():
+                        old=value['record_index'][tag+'/'+str(step)+'/'+str(order)]
+                        require(all(old[k]==c[k] for k in ('path','sha256','report','report_sha256')),'retained replay/import record differs')
+                    write_once(s.root/'qualification-32.json',value);s.s['components']['prefix_32']=value['gate'];s.save();results[policy]=value
+                else:results[policy]=s.replay(32)
             elif a.mode=='admit':results[policy]=projection(a,policy,a.end)
             elif a.mode=='cadence':
                 try:results[policy]=s.row(a.end)

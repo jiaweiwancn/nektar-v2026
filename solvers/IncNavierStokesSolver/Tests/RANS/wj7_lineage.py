@@ -35,6 +35,8 @@ def correct_stage_map(parent, output):
                 stage_fields_sha256=fields,callbacks=callbacks,last_stage_time=d['last_stage_time'],
                 last_stage_alpha=d['last_stage_alpha'],state_sha256=state_hash(d['state']),
                 original_stage_packet_sha256=digest(old[key]),corrected=key!=report_identity['path'])
+            entry['native_retained_packets_sha256']={k:digest(d[k]) for k in ('accepted_states','native_history','native_history_times',
+                'stage_audits','step_audits','explicit_audits','pimple_attempts','audit_times','state_audits')}
             if entry['corrected']:
                 require(allocations and old[key]['report']['path']==allocations[-1]['path'] and
                     old[key]['report']['sha256']==allocations[-1]['sha256'],
@@ -46,6 +48,7 @@ def correct_stage_map(parent, output):
     result=dict(schema='WJ7StageLineageCorrectionV1',status='PASS',entries=entries,corrected_bindings=corrected,
         verified_entries=36,corrected_count=18,parent=artifacts([old_path,parent/'compact-v3/publication.json',
             parent/'export-v1/finalization.json',parent/'export-v1/transport.json']),sealed_snapshots=snapshots,
+        code=artifacts([Path(__file__),Path(__file__).with_name('publish_wj6.py')]),
         semantic_scope='report role validated from native schema and sealed execution receipt; all original stage contents and callback contexts compared; no native rerun')
     write_once(output,result);return result
 
