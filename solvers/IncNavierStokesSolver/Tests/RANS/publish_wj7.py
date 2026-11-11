@@ -15,6 +15,11 @@ from wj7_qualification import expected_tuples,tuple_gate
 from publish_wj6 import table,execution_stage_binding
 
 
+def copy_exact(source,target):
+    target.parent.mkdir(parents=True,exist_ok=True)
+    with target.open('xb') as stream:stream.write(source.read_bytes())
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True)
     p.add_argument('--parent',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
@@ -104,7 +109,7 @@ def main():
     for name,data in rows.items():table(out/(name+'.csv'),data)
     for name in ('correction.json','native-equivalence.json','command-receipts.json','preflight.json','setup-cost-allowance.json',
                  'prefix-row-cache-index-EP.json','prefix-row-cache-index-Budget.json'):
-        write_once(out/name,read(root/name))
+        copy_exact(root/name,out/name)
     for f in (root/'study').rglob('*'):
         if f.is_file() and f.suffix!='.lock':heavy[str(f)]=file_identity(f)
     write_once(out/'endpoints.json',endpoints);write_once(out/'accepted-stage-lineage.json',stages)
