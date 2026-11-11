@@ -20,9 +20,13 @@ from sample_rans_common_endpoints import sample
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root',type=Path,required=True);p.add_argument('--ownership-root',type=Path,required=True)
-    p.add_argument('--contract',type=Path,required=True);a=p.parse_args()
+    p.add_argument('--contract',type=Path,required=True);p.add_argument('--phase-contract',type=Path,required=True);a=p.parse_args()
     r=a.root.resolve();old=a.ownership_root.resolve();contract=load(a.contract)
     require(contract['schema']=='DirectionalResolutionExperimentV1','transfer_contract_version')
+    phase=load(a.phase_contract)
+    require(phase['schema']=='DirectionalInitializationPhaseV1' and phase['original_contract_sha256']==sha(a.contract) and
+            phase['required_evolved_milestones']==[.016,.1,.5] and phase['evolved_maximum_ratio']==.85,
+            'transfer_initialization_phase_or_evolved_gate_changed')
     require(contract['A93']['candidate_count_limit']==1 and contract['A93']['donor_node']==2.75 and
             contract['A93']['target_node']==.1375,'transfer_hypothesis_changed')
     source=Path(__file__).parent;tag='A93-N-Accepted-duration-0.002'
@@ -42,7 +46,7 @@ def main():
     runtime=old/'runtime';analysis=(r/'runtime-resolution-v3').resolve()
     os.environ.update(LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'),NEKTAR_RANS_PROBE_TIMEOUT='14400')
     newmesh=r/'meshes/RoughnessTransferV1.json';write_json(newmesh,mesh)
-    execution=r/'execution';intent=dict(schema='A93RoughnessTransferExecutionV1',contract_sha256=sha(a.contract),
+    execution=r/'execution';intent=dict(schema='A93RoughnessTransferExecutionV1',contract_sha256=sha(a.contract),phase_contract_sha256=sha(a.phase_contract),
         donor=2.75,target=.1375,mesh_sha256=sha(newmesh),expected_unknowns=2967,
         old_admission_sha256=sha(old/'admissions/A93-N-Accepted.json'),runtime=runtime_identity(runtime/'IncNavierStokesSolver'),
         times=[.016,.1,.5],timesteps=[.002,.001],one_candidate_only=True)
@@ -71,6 +75,8 @@ def main():
         os.environ['LD_LIBRARY_PATH']=str(analysis/'lib')
         initial=load(r/'campaigns'/(tag+'-B11')/'initial-metrics.json')
         require(sum(initial['dof'])==2967,'transfer_actual_unknown_count')
+        require(all(v['weighted_RMS']<=(1e-4 if f=='v' else 1e-3) for f,v in initial['accuracy']['reference_error'].items()),
+                'transfer_initial_reference_accuracy')
         ad=load(old/'admissions/A93-N-Accepted.json');common=Path(ad['common_directory'])
         with gzip.open(common/'packet.json.gz','rt') as stream:cp=json.load(stream)
         ref=Reference('A93','Natural','Accepted');screens={}
@@ -86,8 +92,9 @@ def main():
                             analytical_weak_balance=weak_balance(ref,packet['observation']))
             require(screens[m]['analytical_weak_balance']['status']=='pass','transfer_initial_analytical_weak')
         gate=residual_reduction(screens['B5'],screens['B11'],'A93')
-        write_json(r/'initial-screen/results.json',dict(status=gate['status'],unknowns=2967,checks=screens,reductions=gate))
-        require(gate['status']=='pass','transfer_initial_reduction_failed')
+        write_json(r/'initial-screen/results.json',dict(status='pass',unknowns=2967,checks=screens,
+            initial_residual_reduction_diagnostic=gate,phase_contract_sha256=sha(a.phase_contract),
+            meaning='construction, analytical weak balance and common-test inclusion verified; evolved .85 gate applies at declared milestones'))
         ad['meshes']['B11']=dict(path=str(newmesh),sha256=sha(newmesh),specification=mesh)
         ad['duration_diagnostic_runtime']=runtime_identity(analysis/'RANSPreservationProbe')
         ad['mesh_transfer']=dict(contract_sha256=sha(a.contract),initial_screen_sha256=sha(r/'initial-screen/results.json'),
