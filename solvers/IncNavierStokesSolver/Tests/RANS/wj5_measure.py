@@ -120,3 +120,77 @@ def diagnose(m):
         near_h_signed_loads=loads.tolist(),near_h_terms=d['near_h_terms'],near_h_test=d['near_h_test'],
         normal_trace_observations=sum(r['requested_normal_side']!=0 for r in rows),
         x_trace_observations=sum(r['requested_x_side']!=0 for r in rows),governing_solves=0)
+
+
+def independent_near_h(checks,measurement):
+    """New split Gauss assembly on represented fields, not reference values."""
+    from wj3_measure import wall
+    samples=measurement['passive_diagnostics']['forcing_at_H'];columns={}
+    for r in samples:
+        # F is polynomial in x within each Q3/Q1 column: mechanical pressure
+        # derivative plus conservative 2 U Ux. Eight retained native samples
+        # determine its at-most-degree-five polynomial independently of wall
+        # quadrature. Check higher coefficients before using ten-point assembly.
+        columns.setdefault(int(r['geometry']),[]).append(r)
+    fits=[]
+    for column in columns.values():
+        x=np.array([r['position'][0] for r in column]);f=np.array([r['actual_F_x'] for r in column])
+        # Native geometry at H is a single horizontal column per group.
+        lo=0. if max(x)<=.5 else .5
+        if len(columns)==1:lo=0.;hi=1.
+        else:hi=lo+.5
+        coef=np.polynomial.legendre.legfit(2*(x-lo)/(hi-lo)-1,f,5)
+        defect=float(max(abs(np.polynomial.legendre.legval(2*(x-lo)/(hi-lo)-1,coef)-f)))
+        require(defect<2e-12,'forcing is not resolved by its declared per-column polynomial')
+        fits.append((lo,hi,coef,defect))
+    loads=np.zeros((2,5))
+    for q in checks['independent_quadrature']:
+        x,_,z=q['coordinate']
+        if not q['inner'] or z<.08 or z>.2:continue
+        a,zv,t,A,c=wall(q['sampled_K']);nt=a*max(z-zv,0);D=1.5e-5+nt
+        G=np.array(q['G']).reshape(3,3);u=np.array(q['velocity'])[[0,2]];pi=q['reduced_pressure'];w=q['weight']
+        hat=(z-.08)/.02 if z<=.1 else (.2-z)/.1;dh=50. if z<=.1 else -10.
+        phi=x*(1-x)*hat;grad=np.array([(1-2*x)*hat,x*(1-x)*dh]);history=q['accepted_history_values'];alpha=q['accepted_stage_alpha']
+        lo,hi,coef,_=next(f for f in fits if f[0]<=x<=f[1]);Fx=np.polynomial.legendre.legval(2*(x-lo)/(hi-lo)-1,coef)
+        for j,pa in enumerate((0,2)):
+            loads[j,0]+=w*alpha*(u[j]-(history[j] if history else u[j]))*phi
+            loads[j,1]-=w*u[j]*float(grad@u)
+            loads[j,2]+=w*D*float(grad@(G+G.T)[pa,[0,2]])
+            loads[j,3]-=w*pi*grad[j]
+            if z<=.1 and j==0:loads[j,4]-=w*Fx*phi
+    expected=np.sum([r['signed_momentum_loads'] for r in measurement['passive_diagnostics']['near_h_loads']],axis=0)
+    assert_allclose(loads,expected,rtol=3e-8,atol=3e-10,err_msg='independent signed near-h momentum loads')
+    return dict(status='PASS',native=expected.tolist(),independent=loads.tolist(),maximum_absolute_error=float(np.max(abs(loads-expected))),
+        forcing_polynomial_replay_defect=max(f[3] for f in fits),scope='actual represented fields; independent split x10/z>=24 quadrature; compact-support test has zero prescribed exterior reaction')
+
+
+def flow_decomposition(report,checks):
+    """Replay saved predictor/correction algebra only where actual packets exist."""
+    from wj_immutable import read,file_hash
+    from run_cls_epawf_picard import state_hash
+    a=report['pimple_attempts'][-1]
+    if not all(name+'_arithmetic' in a for name in ('momentum','pressure')):
+        return dict(status='NOT_RUN',reason='actual passive predictor/pressure packets were not retained; no callbacks or solves reconstructed')
+    packets={}
+    for name in ('momentum','pressure'):
+        e=a[name+'_arithmetic'];require(file_hash(e['path'])==e['sha256'],'saved arithmetic packet changed');packets[name]=read(e['path'])
+    mom,pre=packets['momentum'],packets['pressure'];meta=pre['mass_or_correction_map'];require(file_hash(meta['path'])==meta['sha256'],'saved pressure correction map changed')
+    bg=np.fromfile(meta['path'],dtype='<f8').reshape(tuple(map(int,meta['shape'])))
+    incoming=np.array(report['accepted_states'][-2]);require(state_hash(incoming)==a['incoming_sha256'],'incoming accepted state does not match actual flow callback')
+    rows=np.array(mom['rows'],int);predictor=np.zeros(len(incoming));predictor[rows]=mom['solution'];correction=np.zeros(len(incoming));correction[rows]=-bg.T@np.array(pre['solution'])
+    accepted=np.array(report['state']);flowEnd=int(report['offsets'][2]);defect=float(max(abs((incoming+predictor+correction-accepted)[:flowEnd])))
+    require(defect<2e-12,'saved predictor/correction do not replay accepted velocity')
+    coefficients=dict(incoming=incoming,predictor_increment=predictor,pressure_correction=correction,accepted=accepted)
+    result={name:dict(velocity_L2_squared=0.,divergence_L2_squared=0.,divergence_sampled_Linf=0.) for name in coefficients}
+    for q in checks['independent_quadrature']:
+        ids=np.array(q['ids'],int);phi=np.array(q['phi']);d=np.array(q['derivative_xz']);w=q['weight']
+        for name,c in coefficients.items():
+            u=c[ids];v=c[ids+int(report['offsets'][1])];div=d[0]@u+d[1]@v
+            result[name]['velocity_L2_squared']+=w*((phi@u)**2+(phi@v)**2)
+            result[name]['divergence_L2_squared']+=w*div*div
+            result[name]['divergence_sampled_Linf']=max(result[name]['divergence_sampled_Linf'],float(abs(div)))
+    for r in result.values():
+        for f in ('velocity','divergence'):r[f+'_L2']=math.sqrt(r.pop(f+'_L2_squared'))
+    return dict(status='PASS',maximum_accepted_velocity_replay_defect=defect,components=result,
+        incoming_sha256=a['incoming_sha256'],history_sha256=a['history_sha256'],packet_sha256={n:a[n+'_arithmetic']['sha256'] for n in packets},
+        scope='offline replay of retained actual incoming velocity, completed predictor increment and pressure correction; no governing solve, no missing callbacks fabricated')

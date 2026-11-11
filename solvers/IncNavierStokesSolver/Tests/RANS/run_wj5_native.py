@@ -17,7 +17,7 @@ from wj2_cases import case_xml,local_normal_knots
 from wj3_measure import checkpoint_payload,replay_witnesses,FIELDS
 from wj4_measure import rule,boundary_rule,owned_rule,evaluate,comparison,independent_weak,AMP,BUDGET
 from wj4_qualification import sensitivity_sequence,arithmetic_floors
-from wj5_measure import diagnose,boundary_uncertainty
+from wj5_measure import diagnose,boundary_uncertainty,independent_near_h,flow_decomposition
 from wj_immutable import (Ledger,write_once,atomic,read,file_hash,artifacts,verify_artifacts,
                           runtime,execution_intent,digest,xml_identity)
 from wj_qualification import component,aggregate
@@ -124,6 +124,8 @@ class Study(WJ4Study):
         if assembly:
             checks=raw['assembly_checks'];checks['policy']=self.a.policy;c['independent_loads']=independent_loads(checks,self.a.policy,d['offsets']);c['independent_weak_modes']=independent_weak(checks,m['weak_modes'])
             if d['steps']==0:c['continuum_hypotheses']=reference_comparison(checks,self.a.policy)['continuum']
+            if diagnostics:c['independent_near_h']=independent_near_h(checks,m)
+            if d['steps']>0:c['flow_decomposition']=flow_decomposition(d,checks)
         write_once(folder/'comparison.json',c);return m,c
 
     def observe_arithmetic(self,name,d,m,c):
