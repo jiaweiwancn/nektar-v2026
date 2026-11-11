@@ -14,7 +14,7 @@ from rans_duration_contract import MEMBERS,require
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--old-root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     r=a.root.resolve();old=a.old_root.resolve();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
-    start=time.monotonic();bodies={};index={};native=[];costs=[]
+    start=time.monotonic();bodies={};index={};native=[];costs=[];manifests={}
     excluded={'source','build','dependency','runtime','runtime-resolution-v3','runtime-budget-v5','runtime-export-check-v2','tmp'}
     def file_sha(path):
         h=hashlib.sha256()
@@ -22,14 +22,16 @@ def main():
             for part in iter(lambda:f.read(1024*1024),b''):h.update(part)
         return h.hexdigest()
     for base,dirs,files in os.walk(r,followlinks=False):
-        folder=Path(base);dirs[:]=[d for d in dirs if d not in excluded and not d.startswith('a93-python-support') and not (folder/d).is_symlink() and folder/d!=out]
+        folder=Path(base);dirs[:]=[d for d in dirs if d not in excluded and not d.startswith(('a93-python-support','runtime-')) and not (folder/d).is_symlink() and folder/d!=out]
         for name in files:
             path=folder/name;relative=str(path.relative_to(r))
             if path.is_symlink():continue
-            if name.endswith(('.json','.json.gz','.xml','.opt','.bin','.npz','.py','.log')) or name in ('SHA256SUMS',):
+            if name.endswith(('.json','.json.gz','.jsonl','.xml','.opt','.bin','.npz','.py','.log')) or name in ('SHA256SUMS',):
                 index[relative]=dict(path=str(path),sha256=file_sha(path),bytes=path.stat().st_size)
             if name=='results.json' or name.endswith('-execution.json') or name in ('metrics.json','initial-metrics.json','initialization-only.json','screen.json','runtime-identity.json','export-check-runtime-identity.json','neutral-comparison.json'):
                 bodies[relative]=load(path)
+            if name in ('request-manifest.json','completed-artifacts.json','admission.json','hypothesis.json') or name.endswith(('-hypothesis.json','-mesh.json')):
+                manifests[relative]=load(path)
             if name=='case.evolution.json':
                 d=load(path);states=d.get('accepted_states',[]);times=d.get('audit_times',[])
                 row={k:v for k,v in d.items() if k not in ('state','accepted_states','native_history','last_stage_history','rejected_state','initial','raw_reference','reference')}
@@ -51,6 +53,8 @@ def main():
     regression=result('compatibility-v1-execution.json')
     if len(regression.get('events',[]))!=4 or any(regression['events'][i]['exit_code'] for i in (0,2,3)):
         gates['required_short_verification']['status']='failed_or_unresolved'
+    scope_ctest=result('scope-ctest-execution.json')
+    if scope_ctest.get('status')!='pass':gates['required_short_verification']['status']='failed_or_unresolved'
     cohort='A95-N-Accepted-directional-dt-0.002';experiment=r/'directional-resolution-v1'
     analysis_root=r/'directional-resolution-supplement-v1' if (r/'directional-resolution-supplement-v1').exists() else experiment
     analysis_label=str(analysis_root.relative_to(r))
@@ -97,8 +101,11 @@ def main():
     decision=classify(scope);write_json(out/'required-scope-input.json',scope);write_json(out/'decision.json',decision)
     with gzip.open(out/'complete-results.json.gz','wt') as f:json.dump(bodies,f,allow_nan=False)
     with gzip.open(out/'native-state-stage-receipts.json.gz','wt') as f:json.dump(native,f,allow_nan=False)
+    with gzip.open(out/'request-and-completion-manifests.json.gz','wt') as f:json.dump(manifests,f,allow_nan=False)
     write_json(out/'artifact-index.json',index);write_json(out/'process-cost-receipts.json',costs)
-    for name in ('runtime-identity.json','export-check-runtime-identity.json','worker-guard-status.json','actual-owned-runtime-maps.json','actual-owned-runtime-maps-supplement.json','scope-negative-execution.json'):
+    for name in ('runtime-identity.json','export-check-runtime-identity.json','face-probe-runtime-identity.json',
+        'worker-guard-status.json','worker-bookings.jsonl','worker-guard-events.jsonl',
+        'actual-owned-runtime-maps.json','actual-owned-runtime-maps-supplement.json','actual-owned-runtime-maps-faces.json','scope-negative-execution.json'):
         path=r/name
         if path.exists():
             with gzip.open(out/(name+'.gz'),'wb') as f:f.write(path.read_bytes())
