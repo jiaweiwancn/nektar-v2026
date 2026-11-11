@@ -129,7 +129,7 @@ def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',spa
         RANSWallPimpleSnapshots='On',RANSWallCheckpoint=str(folder/'CP'))
     if restart:info['RANSWallRestart']=str(Path(restart).resolve())
     for key,value in info.items():set_info(root,key,value)
-    for key,value in dict(Time=0.,TimeStep=dt,NumSteps=steps,IO_CheckSteps=1,Kinvis=NU,RANSWallHeight=H,
+    for key,value in dict(Time=0.,TimeStep=dt,NumSteps=steps,IO_CheckSteps=1,RANSWallDiagnostics=1,Kinvis=NU,RANSWallHeight=H,
         RANSWallRoughness=c.h,RANSWallSampleHeight=H,RANSWallTailStart=H,RANSWallChi=0.,RANSWallFrictionVelocity=US,
         RANSWallMapDisplacement=D0,RANSWallMapTunnelTop=TOP,RANSWallMapAmplitude=0.,RANSWallMapLengthX=2.5,
         RANSWallEta=0.,RANSWallTangentialOrder=8,RANSWallNormalOrder=16,RANSWallPimpleKBoundMaxSeconds=60.,

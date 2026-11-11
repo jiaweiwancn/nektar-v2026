@@ -316,6 +316,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             m_initialScalarDomain=RANSWallEvolutionPatch::ScalarDomainJSON(domain,true);
             Require(domain.admissible,"initial R2 scalar inventory is outside its evaluation domain: "+domain.failure);
         }
+        if(m_patch->OpenBoundary())m_patch->ValidateOutlet(m_state,"startup");
         if(m_diagnostics)RecordAudit(m_state,m_state,0,m_time);
         if(m_patch->PimpleSingleSweep())m_physicalSamples=m_patch->PhysicalSamples(m_state,m_time,m_data);
         UpdateFields();
