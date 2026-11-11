@@ -9,7 +9,7 @@ from pathlib import Path
 import shutil
 import subprocess
 from qualify_rans_preservation import load
-from rans_request_manifest import sha
+from rans_request_manifest import sha, RequestManifest
 from rans_ownership_contract import SCHEMA, OPERATOR, classify_scope
 from rans_qualification import write_json
 
@@ -18,17 +18,27 @@ def collect(root,output,previous_attempts):
     r=root.resolve();output.mkdir(parents=True,exist_ok=False);bodies={};index=[];costs=[]
     def include(path):
         if not path.exists():return None
+        request=path.parent/'request-manifest.json'
+        if request.exists() and (path.parent/'completed-artifacts.json').exists():
+            if not RequestManifest(path.parent,load(request)['request'],True).completed(path.parent):
+                raise ValueError('unsealed completed receipt: '+str(path))
         value=load(path);key=str(path.relative_to(r));bodies[key]=value
         index.append(dict(path=str(path),sha256=sha(path)));return value
     geometry=include(r/'geometric-regressions-v1/results.json')
     compat=include(r/'compatibility-v1/results.json');prescribed=include(r/'selected-prescribed-results.json')
+    prescribed_supplement=include(r/'selected-prescribed-results-v2.json')
+    if prescribed_supplement:prescribed=prescribed_supplement
+    include(r/'build/a93-a95-e94e95-kernels.json')
     short=include(r/'ownership-short-qualification/results.json')
-    for glob in ('short-audits/*/results.json','initial-gate-*.json','admissions/*.json',
+    supplement=include(r/'ownership-short-qualification-v2/results.json')
+    if supplement:short=supplement
+    for glob in ('short-audits/*/results.json','short-audits-v2/*/results.json','initial-gate-*.json','admissions/*.json',
         'duration-schedules/*/results.json','duration-audits/*/results.json','comparisons/*.json',
         'common-inner-qualification/*/results.json','response-cohorts/*/results.json',
         'response-cohorts/*/T-*/results.json','response-audits/*/results.json',
         'physical-budget-analyses/*/results.json','physical-budget-accuracy/*/results.json',
         'physical-budget-bindings/*/results.json','physical-budget-diagnosis/*/results.json',
+        'physical-postprocessing/*.json','common-wall-response/results.json',
         'corrective-duration-response/*.json','duration-residual-diagnosis/*/results.json',
         'selected-frozen-operator-comparison/*/results.json'):
         for path in sorted(r.glob(glob)):include(path)
@@ -60,9 +70,15 @@ def collect(root,output,previous_attempts):
     weak_rows=[body for key,body in bodies.items() if key.startswith('response-audits/')]
     budget_rows=[body for key,body in bodies.items() if key.startswith('physical-budget-bindings/')]
     simple=lambda v:dict(status=v.get('status','not_attempted') if v else 'not_attempted')
+    response_coverage={(v.get('configuration',{}).get('wall'),v.get('amplitude')) for v in field_rows}
+    response_complete=(len(field_rows)==3 and response_coverage=={('Accepted',2e-5),('Accepted',1e-5),('EP',2e-5)} and
+        all(v.get('configuration',{}).get('model')=='A95' and v.get('configuration',{}).get('policy')=='Natural' and
+            abs(v.get('time',-1)-.016)<=1e-13 and len(v.get('fields',{}))==17 for v in field_rows))
+    half=bodies.get('physical-postprocessing/half-amplitude.json',{})
     gates=dict(ownership_geometry=simple(geometry),history_cache_CLS=simple(compat),natural_short_matrix=simple(short),
         selected_prescribed=simple(prescribed),A93_neutral=schedules['A93'],A95_neutral=schedules['A95'],
-        A95_response_fields=dict(status='pass' if len(field_rows)==3 and all(x['status']=='pass' for x in field_rows) else 'failed_unresolved_or_incomplete'),
+        A95_response_fields=dict(status='pass' if response_complete and all(x['status']=='pass' for x in field_rows) and
+            half.get('status')=='pass' and len(half.get('checks',[]))==68 else 'failed_unresolved_or_incomplete'),
         A95_response_native_weak=dict(status='pass' if len(weak_rows)==3 and all(x['status']=='pass' for x in weak_rows) else 'failed_unresolved_or_incomplete'),
         physical_budget_reconstruction=dict(status='pass' if len(budget_rows)==1 and budget_rows[0]['reconstruction_status']=='pass' else 'not_qualified'),
         physical_budget_accuracy=dict(status=budget_rows[0]['accuracy_status'] if len(budget_rows)==1 else 'not_qualified'))

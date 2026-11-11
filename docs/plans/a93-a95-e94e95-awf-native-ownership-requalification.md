@@ -7,9 +7,13 @@ remain unchanged. Specifications retain hashes
 `056a85c2aea5ce4ca168caf561613e662416bb6b7d7177451ba5038d2cf68a64`
 and `17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40`.
 
-The new authoritative Linux root is
-`/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111`.
-Source, build, dependency, frozen runtime, tmp and trajectories are separate.
+The authoritative corrected-runtime run root is
+`/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-ownership-20261111-corrected-v3`.
+Its source/build/dependency symlinks name this package's isolated
+`a93-a95-e94e95-ownership-20261111-export-v2` source/build/dependency area.
+Frozen runtime, tmp and trajectories have fresh destinations. Earlier attempts
+under `a93-a95-e94e95-ownership-20261111` and its `-export-v2` sibling retain
+their frozen binaries, inputs, checkpoints and execution failures.
 Numerical libraries use one thread, native execution is serial flat 2D, and
 the owner-aware resource guard reserves startup headroom within 72 workers.
 
@@ -17,7 +21,7 @@ the owner-aware resource guard reserves startup headroom within 72 workers.
 
 The legacy operator is labelled `LegacyCoordinateToleranceV1` in this report;
 its checkpoints did not carry a separate ownership tag. The corrected numerical
-operator will be `GeneratedVolumeOwnerV1`, separate from the physical resolved
+operator is `GeneratedVolumeOwnerV1`, separate from the physical resolved
 model descriptor. Its checkpoint and replay identities must reject old evolved
 histories. Explicit read-only legacy-state evaluation records both identities
 and cannot advance or resume a history.
@@ -97,4 +101,66 @@ observations remain unresolved under their original criteria.
 
 ## Results
 
-Pending corrected production implementation and staged Linux qualification.
+The production correction retains the panel endpoints in
+`AWFProfileQuadraturePoint`. Each wall ray has an immutable native column/interval
+catalog. `Refresh` chooses the generating panel's owner before evaluating its
+rounded Gauss coordinates and maps that geometry into velocity/k/pressure.
+Outer volume integration retains its existing generating geometry for all
+participating fields, including epsilon. The evaluation cache retains field,
+geometry, native element, exact side and coordinate bits. No source, cutoff,
+point coordinate or quadrature-weight arithmetic changed.
+
+`LocateElement` uses strict physical containment; only exact shared endpoints
+can have multiple containing elements. Radial-side selection is separate from
+interior containment. `ElementPoint` rejects a point outside the requested
+native owner. A physically contained point's local-coordinate arithmetic may
+exceed an endpoint by at most eight machine epsilons; any such local correction
+is recorded with the raw local coordinate and an axis mask. No physical point
+is snapped or accepted in a tolerance-expanded neighbour.
+
+The strict rule exposed two additional coordinate searches in field export and
+the driver's represented-reference error calculation. They now restrict native
+coefficients through matching geometry, basis and signed CG maps, then use the
+native backward transform. This is exact restriction of the existing polynomial,
+not a change to the solution, its reference or a governing equation. Driver
+errors still refer to the represented reference; the qualification's analytical
+errors and independent weak oracle remain distinct.
+
+The final native build succeeds at source
+`7cb6757e06e6b1a619b01a98a2475dddb40a293d`, GCC 11.4 Release,
+`-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS`.
+Solver SHA256 is
+`99828f96dcc95e0d529f315a136e72cec63b62f8e500e6c9017aa71712d4f914`;
+preservation probe is
+`56503e8e57d3b27b7583c05ef2a859a223d1c9be7ebb829bdac673f13be8d14b`.
+Subsequent controller/report commits are recorded separately from compilation.
+
+All focused geometry controls pass. The old committed interior witness selects
+geometry 4; the corrected path selects its containing geometry 5. Permuted IDs,
+cutoff below/at/above a node, exact-H/nearby samples and shared field ownership
+pass. The smallest retained panel is `1.5612511283791264e-17`; no panel was
+removed. Maximum constant-gradient, Stokes and gauge-volume defects across the
+recorded controls are approximately `1.14e-14`, `5.87e-15` and `3.02e-14`,
+against the predeclared `2e-12` primitive limits. Both frozen nonlinear Accepted
+and EP witnesses pass the unchanged analytical weak tests on actual production
+rows, with bitwise unchanged coordinates and weights. Their perturbed-state
+spatial residuals are not required to vanish.
+
+Same-version native restart, cache-on/off state and complete history equality,
+and complete rollback pass. The real old-operator evolved checkpoint is rejected
+with `checkpoint signature mismatch`. Ordinary CLS restart/cache/rollback
+controls pass. All 11 targeted CTests pass, including native admissibility,
+frozen boundary/interface controls, independent constitutive checks and the
+required-scope negative controls.
+
+Earlier output-stage failures are execution failures, retained separately from
+physical or accuracy failures. A short-controller missing comparison-directory
+failure is supplemented through explicitly identity-checked sealed reuse, not
+by overwriting its failed job. A first debugger launch created 129 threads; the
+owner-aware guard suspended it, it was terminated, and the reproduction used
+one debugger worker. That debugger attempt is not claimed compliant with the
+72-worker rule and supplies no qualification result. Scientific builds/runs
+retain their independent worker censuses, CPU costs and suspension records.
+
+Fresh staged numerical qualification remains in progress; no corrected-operator
+duration or response qualification is claimed by the implementation checks.

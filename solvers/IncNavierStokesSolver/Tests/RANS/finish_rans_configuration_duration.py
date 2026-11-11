@@ -45,13 +45,16 @@ def finish(r, admission_path, dt, T, resume=False):
             if m in MEMBERS[:2]:
                 dest=r/'evolved-audits'/(tag+'-'+str(T)+'-'+m)
                 if not dest.exists():run('spatial-'+m,[source/'audit_rans_balanced_evolved.py','--root',r,'--analysis-runtime',runtime,'--campaign-root',r,'--label',label,'--output-label',dest.name,'--times',str(T),'--common-directory',common,'--constitutive-samples'])
-                current=validate_audit(dest/'results.json',folder,config,[T],common)
+                current=validate_audit(dest/'results.json',folder,config,[T],common,
+                    expected_runtime=ad['duration_diagnostic_runtime'] if owned else None)
                 combined=[]
                 for t in times:
-                    path=r/'evolved-audits'/(tag+'-'+str(t)+'-'+m)/'results.json';a=validate_audit(path,folder,config,[t],common);combined.extend(a['checks']);files.append(path)
+                    path=r/'evolved-audits'/(tag+'-'+str(t)+'-'+m)/'results.json';a=validate_audit(path,folder,config,[t],common,
+                        expected_runtime=ad['duration_diagnostic_runtime'] if owned else None);combined.extend(a['checks']);files.append(path)
                 required_times(combined,times);audits[m]=dict(status='pass',configuration=config,checks=combined)
                 packet_path=dest/('T-'+format(T,'.4f'))/'packet.json.gz'
                 with gzip.open(packet_path,'rt') as f:packet=json.load(f)
+                if owned:require(packet.get('numerical_operator')==ad['numerical_operator'],'old_operator_spatial_packet')
                 stress[m]=constitutive(packet,config,req['evaluation']['weights']);files.append(packet_path)
             obsdir=folder/('scalar-observations-'+str(T))
             if not obsdir.exists():run('scalars-'+m,[source/'audit_rans_pilot_samples.py','--root',r,'--label',label,'--through-time',str(T),'--output-label',obsdir.name])
