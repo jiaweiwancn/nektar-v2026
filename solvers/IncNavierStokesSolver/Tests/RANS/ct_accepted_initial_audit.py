@@ -50,7 +50,7 @@ def audit(expression,lower,upper):
         rows.append(dict(lower=lo,upper=hi,minimum=values[i],location=candidates[i],arithmetic_bound=float(error),stationary_points=candidates[2:]))
     rows.sort(key=lambda x:x['lower']);assert rows[0]['lower']==lower and rows[-1]['upper']==upper
     assert all(a['upper']==b['lower'] for a,b in zip(rows[:-1],rows[1:]))
-    return dict(minimum=min(x['minimum'] for x in rows),certified_lower_bound=min(x['minimum']-x['arithmetic_bound'] for x in rows),pieces=rows)
+    return dict(minimum=min(x['minimum'] for x in rows),arithmetic_adjusted_lower_estimate=min(x['minimum']-x['arithmetic_bound'] for x in rows),pieces=rows)
 
 
 def main():
@@ -61,9 +61,9 @@ def main():
             for variable in variables:
                 expression=root.find("./CONDITIONS/FUNCTION[@NAME='InitialConditions"+region+"']/E[@VAR='"+variable+"']").get('VALUE')
                 row=audit(expression,lo,hi);rows[region+'/'+variable]=row
-                if variable!='u' and row['certified_lower_bound']<=0:result['status']='fail'
+                if variable!='u' and row['arithmetic_adjusted_lower_estimate']<=0:result['status']='fail'
         result['cases'][folder.name]=dict(xml_sha256=sha(folder/'case.xml'),fields=rows,
-            scope='exact emitted cubic input and derivative stationary roots; physical-domain endpoints included, polynomial endpoint extension leaves this domain unchanged; no evolved positivity claim')
+            scope='emitted cubic input and derivative stationary roots with conservative evaluation-roundoff estimate; physical endpoints included; floating numerical audit, not an interval-arithmetic theorem or evolved positivity claim')
     assert len(result['cases'])==4
     write_json(a.output,result);print(result['status']);return 0 if result['status']=='pass' else 1
 if __name__=='__main__':raise SystemExit(main())
