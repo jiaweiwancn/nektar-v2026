@@ -25,7 +25,8 @@ inline std::string RANSWallPhysicsSignature(const RANSWallEvolutionPatch &patch,
     for(const auto &[name,value]:session->GetParameters())
         if(!(patch.ColumnAverageK() && name=="RANSWALLSAMPLEHEIGHT") && !RANSWallEvolutionPatch::PimpleKBoundWorkParameter(name) && name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT" && name!="RANSWALLPIMPLEREJECTSTEP" && name!="RANSWALLPIMPLEHARDAUDITREJECTSTEP" && name!="RANSWALLPIMPLEKFLOORRELATIVE" && name!="RANSWALLPIMPLEBUDGETTIME")s<<'|'<<name<<'='<<value;
     const std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","InitialPerturbationInner","InitialPerturbationOuter","BoundaryValuesInner","BoundaryValuesOuter",
-        "BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","ExactSolutionInner","ExactSolutionOuter"};
+        "BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","ExactSolutionInner","ExactSolutionOuter",
+        "OutletTractionInner","OutletTractionOuter","TopTractionOuter","TopDiffusiveFluxOuter"};
     for(const auto &name:names)for(const auto &variable:session->GetVariables())if(session->DefinesFunction(name,variable))
         s<<'|'<<name<<'/'<<variable<<'='<<session->GetFunction(name,variable)->GetExpression();
     return s.str();

@@ -889,7 +889,7 @@ std::string RANSWallEvolutionPatch::WJPassiveDiagnostics(const Vector &state,con
     for(int region=0;region<2;++region)
     {
         const int b=InnerPressure()+region;Vector gauge,actual;
-        for(int i=0;i<size[b];++i){gauge.push_back(state[offset[Gauge()]]*m_pressureMean[region][i]);actual.push_back(residual[offset[b]+i]);}
+        for(int i=0;i<size[b];++i){gauge.push_back(GaugeValue(state)*m_pressureMean[region][i]);actual.push_back(residual[offset[b]+i]);}
         regions.push_back(J::Object({{"region",J::Number(region)},{"offset",J::Number(offset[b])},
             {"pressure_mass",J::Rows(m_mass[b])},{"constant_coefficients",J::Numbers(m_constants[b])},
             {"gauge_mean_row",J::Numbers(m_pressureMean[region])},{"B_U",J::Numbers(moments[region])},
@@ -943,7 +943,7 @@ std::string RANSWallEvolutionPatch::WJPassiveDiagnostics(const Vector &state,con
     Require(before==RANSWallR3::Hash(state) && hist==RANSWallR3::Hash(history),"passive diagnostics changed state/history");
     return J::Object({{"schema",J::Quote("WJPassiveDivergenceV1")},{"state_sha256",J::Quote(before)},
         {"history_sha256",J::Quote(hist)},{"alpha_mass",J::Number(alpha)},{"governing_solves","0"},
-        {"pressure_regions",J::List(regions)},{"pressure_gauge",J::Number(state[offset[Gauge()]])},
+        {"pressure_regions",J::List(regions)},{"pressure_gauge",J::Number(GaugeValue(state))},
         {"divergence_integral",J::Numbers(divIntegral)},{"outward_net_flux",J::Numbers(netFlux)},
         {"projection_quadrature_order","8"},{"quadrature",J::List(quadrature)},
         {"projection_scope",J::Quote("exported actual regional continuous Q1 pressure mass and B*U; projection/complement computed offline without correcting velocity")},

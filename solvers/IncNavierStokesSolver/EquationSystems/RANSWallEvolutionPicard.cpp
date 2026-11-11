@@ -57,7 +57,9 @@ std::string RANSWallEvolutionPatch::WJTerrainAssemblyChecks(const Vector &state,
         for(int mode=0;mode<5;++mode)
         {
             Vector direction(Size());
-            if(mode==2)direction[offset[Gauge()]]=1;
+            if(mode==2 && HasGauge())direction[offset[Gauge()]]=1;
+            else if(mode==2)for(int side=0;side<2;++side)for(int j=0;j<size[InnerPressure()+side];++j)
+                direction[offset[InnerPressure()+side]+j]=m_constants[InnerPressure()+side][j];
             else if(mode==4)
             {
                 const auto v=fields[OuterPressure()]->Project([](const RANSWallCoordinate &p){return p[0]+.13*p[0]*p[2];});
@@ -329,6 +331,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     for (const auto &q : m_outer)
         evaluate(q, nullptr, {}, nullptr);
 
+    ExteriorPicard(block,s,time,data,system,index);
     const auto body = flow ? OwnedBodyLoad(time, data) : Vector{};
     for (int b = flow ? 0 : block; b < (flow ? K() : block + 1); ++b)
     {
@@ -355,7 +358,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             }
         }
     }
-    if (flow)
+    if (flow && HasGauge())
     {
         const int gauge = index[offset[Gauge()]];
         for (int side = 0; side < 2; ++side)
@@ -369,7 +372,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 system.residual[gauge] += s[id] * w;
             }
     }
-    else if (block == Epsilon())
+    if (!flow && block == Epsilon())
     {
         // Hold Phi fixed for this scalar solve. Free transport rows retain
         // the columns of the matching trace, including its update.

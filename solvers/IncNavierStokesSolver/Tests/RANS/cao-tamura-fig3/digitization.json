@@ -1,0 +1,170 @@
+{
+  "schema": "CaoTamuraFig3RoughV1",
+  "pdf_sha256": "adffb5c1d740be791211d82ce35778a37a3315a6dc72c56c80b70cc6642a43df",
+  "pdf_page": 7,
+  "page_size_points": [
+    467.716034,
+    680.315002
+  ],
+  "panels": {
+    "a": {
+      "box": [
+        100,
+        240,
+        450,
+        615
+      ],
+      "legend": [
+        129.6305,
+        575.863
+      ],
+      "x_ticks": [
+        [
+          106.554,
+          0
+        ],
+        [
+          222.474,
+          1
+        ]
+      ],
+      "y_ticks": [
+        [
+          457.518,
+          0
+        ],
+        [
+          500.562,
+          100
+        ]
+      ],
+      "value": "U/U_infinity",
+      "height": "y_mm"
+    },
+    "b": {
+      "box": [
+        265,
+        405,
+        450,
+        615
+      ],
+      "legend": [
+        320.0905,
+        577.5245
+      ],
+      "x_ticks": [
+        [
+          273.171,
+          0
+        ],
+        [
+          299.466,
+          0.001
+        ]
+      ],
+      "y_ticks": [
+        [
+          519.912,
+          0.5
+        ],
+        [
+          584.506,
+          1
+        ]
+      ],
+      "value": "-R_xz/U_infinity^2",
+      "height": "y/delta"
+    },
+    "c": {
+      "box": [
+        100,
+        240,
+        275,
+        430
+      ],
+      "legend": [
+        157.117,
+        399.451
+      ],
+      "x_ticks": [
+        [
+          106.019,
+          0
+        ],
+        [
+          233.999,
+          3
+        ]
+      ],
+      "y_ticks": [
+        [
+          331.884,
+          0.5
+        ],
+        [
+          390.017,
+          1
+        ]
+      ],
+      "value": "sigma_u/u_tau",
+      "height": "(y-d)/delta"
+    },
+    "d": {
+      "box": [
+        265,
+        405,
+        275,
+        430
+      ],
+      "legend": [
+        323.1015,
+        399.746
+      ],
+      "x_ticks": [
+        [
+          272.324,
+          0
+        ],
+        [
+          335.926,
+          1
+        ]
+      ],
+      "y_ticks": [
+        [
+          332.553,
+          0.5
+        ],
+        [
+          390.365,
+          1
+        ]
+      ],
+      "value": "sigma_vertical/u_tau",
+      "height": "(y-d)/delta"
+    }
+  },
+  "resolution": {
+    "a": {
+      "value_reading_resolution": 0.0012939958592133038,
+      "height_mm_reading_resolution": 0.34848062447713346
+    },
+    "b": {
+      "value_reading_resolution": 5.704506560181427e-06,
+      "height_mm_reading_resolution": 0.29027463851116764
+    },
+    "c": {
+      "value_reading_resolution": 0.0035161744022507158,
+      "height_mm_reading_resolution": 0.32253625307487876
+    },
+    "d": {
+      "value_reading_resolution": 0.002358416401999186,
+      "height_mm_reading_resolution": 0.3243271293156269
+    }
+  },
+  "source_selection": "hollow white-filled four-Bezier circles, excluding legends; excludes smooth filled circles and Raupach crosses",
+  "reading_assumption": "conservative +/-0.15 PDF-point center/tick reading resolution; not an experimental uncertainty or confidence interval",
+  "physical_conversion": "delta=250mm and d=3.5mm assumed as reported; preserve panel-specific raw heights",
+  "data_plane": "virtual crest with hill absent,5m downstream of tunnel contraction; not arbitrary upstream inlet",
+  "excluded_error_claim": "probe voltage calibration +/-1.5% is not a universal velocity uncertainty"
+}

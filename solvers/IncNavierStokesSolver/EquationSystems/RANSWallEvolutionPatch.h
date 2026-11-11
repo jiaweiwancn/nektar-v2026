@@ -24,6 +24,10 @@ using RANSWallEvolutionFunction=std::function<double(const RANSWallCoordinate&,d
 struct RANSWallEvolutionData
 {
     std::vector<RANSWallEvolutionFunction> innerBody,outerBody,boundary;
+    // Physical exterior mean tractions and outward diffusive scalar fluxes.
+    // Session functions/data are immutable within generation; Touch on changes.
+    std::vector<RANSWallEvolutionFunction> outletInner,outletOuter,topTraction;
+    RANSWallEvolutionFunction topKFlux,topEpsilonFlux;
     // Sensors retain the physical body force when an IMEX stage moves its
     // prescribed load to the explicit side. Empty means use outerBody.
     std::vector<RANSWallEvolutionFunction> sensorBody;
@@ -74,7 +78,11 @@ public:
     int OuterPressure() const { return m_dimension+3; }
     int Gauge() const { return m_dimension+4; }
     int DifferentialSize() const { return offset[InnerPressure()]; }
-    int Size() const { return offset[Gauge()]+1; }
+    int Size() const { return offset[Gauge()]+size[Gauge()]; }
+    bool HasGauge() const { return size[Gauge()]!=0; }
+    double GaugeValue(const Vector &s) const { return HasGauge()?s[offset[Gauge()]]:0.; }
+    bool OpenBoundary() const { return m_boundaryMode=="OpenTunnelV1"; }
+    void LoadOpenBoundaryData(const LibUtilities::SessionReaderSharedPtr &,RANSWallEvolutionData &) const;
     int PhysicalAxis(int a) const { return m_dimension==2 && a==1?2:a; }
     const RANSWallPatchParameters &Parameters() const { return m_parameters; }
     const LibUtilities::CommSharedPtr &Comm() const { return m_comm; }
@@ -85,6 +93,13 @@ public:
     RANSWallGlobalPoint Point(int block,const RANSWallCoordinate &chart,int side=0) const;
     std::vector<RANSWallGlobalPoint> Quadrature(int block,int order=0) const;
     struct FacePoint { RANSWallGlobalPoint test;SolverUtils::RANSVector area;double weight; };
+    struct ExteriorPoint { FacePoint face;std::string role;bool inner; };
+    std::vector<ExteriorPoint> Exterior(int order=0) const;
+    Vector ExteriorResidual(const Vector &,double,const RANSWallEvolutionData &,int region=-1) const;
+    Vector ExteriorPressureAction(const Vector &,int region=-1) const;
+    void ValidateOutlet(const Vector &,const std::string &phase) const;
+    std::map<int,double> OpenConstraints(double,const RANSWallEvolutionData &) const;
+    std::string OpenBoundaryDiagnostic(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &) const;
     std::vector<FacePoint> Surface(int block,int axis,double position,int side,int order=0) const;
     double Distance(const RANSWallCoordinate &chart) const;
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart) const;
@@ -381,6 +396,7 @@ public:
     std::string WJWeakLoads(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &) const;
     const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
+    std::string m_boundaryMode="PrescribedV1",m_openTop="SlipV1";
     class Factor
     {
     public:
@@ -397,6 +413,8 @@ private:
         WallMatrix matrix;
         Vector residual;
     };
+    void ExteriorPicard(int,const Vector &,double,const RANSWallEvolutionData &,
+        PicardBlock &,const std::vector<int> &) const;
     struct PicardFlowResult
     {
         PicardBlock block;

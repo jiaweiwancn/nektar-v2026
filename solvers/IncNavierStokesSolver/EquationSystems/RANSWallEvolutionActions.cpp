@@ -73,13 +73,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::AffinePressureAction(
     Vector result(Size());for(int i=0;i<Size();++i)result[i]=static_cast<double>(owned[i]);
     m_comm->AllReduce(result,LibUtilities::ReduceSum);
     // The mean/gauge block is replicated. Add it only after owned assembly.
-    for(int side=0;side<2;++side)if(region<0 || side==region)
+    for(int side=0;HasGauge() && side<2;++side)if(region<0 || side==region)
         for(int i=0;i<static_cast<int>(m_pressureMean[side].size());++i)
         {
             const int row=offset[InnerPressure()+side]+i;
             result[row]+=direction[offset[Gauge()]]*m_pressureMean[side][i];
             result[offset[Gauge()]]+=direction[row]*m_pressureMean[side][i];
         }
+    if(OpenBoundary()){const auto exterior=ExteriorPressureAction(direction,region);for(int i=0;i<Size();++i)result[i]+=exterior[i];}
     for(auto [row,value]:constraints){(void)value;result.at(row)=0.;}
     Finite(result);return result;
 }

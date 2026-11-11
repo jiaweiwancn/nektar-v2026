@@ -224,6 +224,9 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
             const auto boundary=Functions("BoundaryValues",false);
             for(int b=0;b<m_patch->InnerPressure();++b)m_data.boundary[b]=boundary[b];
         }
+        if(m_patch->OpenBoundary())
+        {Require(!m_neutral && !m_chartFunctions,"OpenTunnelV1 requires physical session Functions");
+         m_patch->LoadOpenBoundaryData(m_serialSession,m_data);}
         m_fields=Array<OneD,MultiRegions::ExpListSharedPtr>(expected.size());
         for(int a=0;a<dim;++a)m_fields[a]=MemoryManager<MultiRegions::ContField>::AllocateSharedPtr(*m_patch->outerVelocity->Field());
         m_fields[dim]=m_patch->fields[m_patch->K()]->Field();m_fields[dim+1]=m_patch->fields[m_patch->Epsilon()]->Field();m_fields[dim+2]=m_patch->fields[m_patch->OuterPressure()]->Field();
@@ -351,6 +354,7 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
         if(m_patch->SegregatedPicard() || m_patch->PimpleSingleSweep())m_rejectedState=m_patch->LastFeasibleState();
         throw;
     }
+    if(m_patch->OpenBoundary())m_patch->ValidateOutlet(candidate,"before_commit");
     const auto residual=m_patch->Residual(candidate,fullHistory,1/lambda,time,m_implicitData);
     const auto norms=m_patch->Norms(residual,m_patch->Constraints(candidate,time,m_implicitData),m_ustar);
     if(m_patch->SegregatedPicard())
@@ -892,7 +896,7 @@ void RANSEquilibriumWallEvolution::v_Output()
         native->Store(values);auto field=native->Field();auto definitions=field->GetFieldDefinitions();std::vector<std::vector<NekDouble>> data(definitions.size());
         for(int j=0;j<definitions.size();++j){definitions[j]->m_fields.push_back(name);field->AppendFieldData(definitions[j],data[j],field->UpdateCoeffs());}
         LibUtilities::FieldMetaDataMap meta;meta["Time"]=std::to_string(m_time);meta["PressureConvention"]="pi=p/rho+2k/3";
-        if(m_patch->Mapped()){meta["CoordinateRepresentation"]="normal chart; physical geometry in VTU";meta["PhysicalMap"]=m_patch->Mapping().Signature();}
+        if(m_patch->Mapped()){meta["CoordinateRepresentation"]=m_patch->Mapping().compositeTunnel?"composite inner r / outer eta; physical geometry in VTU":"normal chart; physical geometry in VTU";meta["PhysicalMap"]=m_patch->Mapping().Signature();}
         io->Write(m_sessionName+"-"+name+(m_patch->Mapped()?".chart.fld":".fld"),definitions,data,meta,false);
         if(m_patch->Mapped())WriteMappedField(name,native,values);
     };
@@ -1099,6 +1103,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
             Write(out,Vector(s.convection.begin(),s.convection.end()));out<<"]}";
         }out<<']';
     }
+    out<<",\"open_boundary\":"<<m_patch->OpenBoundaryDiagnostic(m_state,m_lastHistory.empty()?m_state:m_lastHistory,m_stageAlpha,m_time,m_stageAlpha?m_implicitData:m_data);
     out<<",\"fields\":[";
     for(int b=0;b<m_patch->Gauge();++b)
     {

@@ -103,6 +103,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     try
     {
         s=ExternalLift(s,time,data);m_lastFeasibleState=s;
+        if(OpenBoundary())ValidateOutlet(s,"incoming");
         auto external=ExternalConstraints(time,data);
         for(int id:m_traceIds)external.erase(offset[Epsilon()]+id);
         put("history_sha256",J::Quote(RANSWallR3::Hash(history)));
@@ -175,11 +176,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         for(int i=0;i<np;++i)constraints[i]=defect[nv+i];
         const auto native=Residual(s,history,alpha,time,data);
         Vector regional(3);for(int b=InnerPressure();b<=Gauge();++b)
-            for(int i=0;i<(b==Gauge()?1:size[b]);++i)
+            for(int i=0;i<size[b];++i)
                 regional[b-InnerPressure()]=std::max(regional[b-InnerPressure()],std::abs(native[offset[b]+i]));
         double boundary=0;for(auto [row,value]:external)boundary=std::max(boundary,std::abs(s[row]-value));
         Require(Maximum(identity)<=1e-9*std::max(1.,Maximum(Gz)) && Maximum(constraints)<1e-10 && Maximum(regional)<1e-10 && boundary<1e-13,
             "PIMPLE pressure constraint, boundary or momentum splitting identity failure");
+        if(OpenBoundary())ValidateOutlet(s,"after_flow");
         put("pressure_inverse",J::Quote("alpha^-1 consistent free-velocity mass inverse"));
         put("velocity_size",J::Number(nv));put("pressure_gauge_size",J::Number(np));
         put("assembled_flow_size",J::Number(flow.rows.size()));

@@ -80,7 +80,7 @@ const std::vector<std::string> &RANSWallResolutionSpatialTerms()
         "k_diffusion","epsilon_diffusion","inner_k_production","inner_k_destruction",
         "outer_k_production","outer_k_destruction","epsilon_production",
         "epsilon_destruction","epsilon_yap","prescribed_scalar_source",
-        "roughness_force","prescribed_body","continuity","gauge"};
+        "roughness_force","prescribed_body","continuity","gauge","exterior_boundary"};
     return names;
 }
 
@@ -191,13 +191,15 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     const auto prescribed=OwnedBodyLoad(time,data);
     for(int row=0;row<Size();++row)
     {Bucket(buckets,"prescribed_body",Size()).Add(row,-prescribed[row],-prescribed[row]);Bucket(buckets,"legacy_spatial",Size()).Add(row,-prescribed[row],-prescribed[row]);}
-    for(int side=0;side<2;++side)for(int j=0;j<m_pressureMean[side].size();++j)
+    for(int side=0;HasGauge() && side<2;++side)for(int j=0;j<m_pressureMean[side].size();++j)
     {
         const int row=offset[InnerPressure()+side]+j;const double w=m_pressureMean[side][j];
         for(const std::string name:{"gauge","legacy_spatial"})
         {Bucket(buckets,name,Size()).Add(row,s[offset[Gauge()]]*w,(long double)s[offset[Gauge()]]*w);
          Bucket(buckets,name,Size()).Add(offset[Gauge()],s[row]*w,(long double)s[row]*w);}
     }
+    if(OpenBoundary()){const auto exterior=ExteriorResidual(s,time,data);for(int i=0;i<Size();++i)
+        for(const std::string name:{"exterior_boundary","legacy_spatial"})Bucket(buckets,name,Size()).Add(i,exterior[i],exterior[i]);}
     auto &mass=Bucket(buckets,"time_mass",Size());
     auto &massWideDelta=Bucket(buckets,"diagnostic_time_mass_extended_subtraction",Size());
     for(int block=0;block<InnerPressure();++block)
