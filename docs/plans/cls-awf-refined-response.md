@@ -337,7 +337,7 @@ and focused software validation are complete. No new physical run rejected.
 Expected checkpoint-incompatibility and deliberate rollback rejections remain
 in their separate test directories.
 
-**Final handoff capture:** 2026-11-11 18:26:51 Asia/Shanghai,
+**Earlier handoff capture:** 2026-11-11 18:26:51 Asia/Shanghai,
 step**3904**, **T=2.44000000**, checkpoint
 `9bcdf1c2c7e31d9cadd0ba78be045d806f39a26f9efdad00b3c69635b81dec7d`. Driver/native/supervisor and observer remain live;
 next target is4000/T=2.5, cap9600/T=6. See
@@ -357,9 +357,9 @@ remains terminal. No physical setting or runtime was changed.
 The latest complete-block metrics in this capture are separately labelled:
 step3744/T=2.34, traction0.159548853388, U/W/k/epsilon
 spatial blocks `0.000939598, 0.000524848, 0.0019089, 0.000554867`.
-The k residual still fails the necessary1e-3 gate. Three eligible P2 windows
-are not yet available; neither a settled P2 benefit nor failure at its cap is
-claimed. The observer will perform complete-field assessment and strict
+The k residual still fails the necessary1e-3 gate. At that earlier capture,
+three eligible P2 windows were not yet available; neither a settled P2 benefit
+nor failure at its cap was claimed. The observer will perform strict
 selected/Original diagnostics at the actual terminal checkpoint.
 
 The successor ledger verifies2975 added U/p/epsilon/k solves and logical
@@ -369,6 +369,33 @@ callback counts are2944, with31 later accepted steps in the then-live block.
 Median implicit callback cost is4.128s; whole-block cost remains about8s/step.
 At that cost the T=6 cap is roughly13 more wall hours from this capture;
 scientific stopping can occur sooner. This is a forecast, not a completion claim.
+
+**Updated P2 milestone, 2026-11-11 18:44:46 Asia/Shanghai:** step4000/T=2.5
+completed, and the corrected observer assessed all three eligible windows.
+The readback used every native element panel and full transported epsilon;
+independent GL4/GL16 dimensional differences were at most `2.25e-18`.
+
+| P2 window | U | W | k | Full outer epsilon | Pressure | Complete screen |
+|---|---:|---:|---:|---:|---:|---|
+| 1–1.5 | 1.205292e-4 | 9.624664e-5 | 2.494550e-4 | 7.956647e-5 | 7.952621e-4 | Fail |
+| 1.5–2 | 1.007222e-4 | 5.783363e-5 | 2.088628e-4 | 5.556866e-5 | 5.044378e-4 | Fail |
+| 2–2.5 | 8.205986e-5 | 3.444722e-5 | 1.549483e-4 | 5.266488e-5 | 2.508488e-4 | Fail |
+
+These are scientific-screen failures from continuing drift/residuals, not
+numerical rejections. In the latest window, k drift still exceeds `1e-4`;
+at T=2.5 the normalized selected k residual is `1.561482e-3`, above `1e-3`.
+U/W/epsilon residuals are `7.228497e-4,5.950132e-4,5.037128e-4`.
+Traction is `.159549154090`, with matching defect `6.00231e-8`, positive
+covariance margins, and zero correction supply. No passing windows are claimed.
+
+The verified live capture is **step4045/T=2.528125**, checkpoint SHA256
+`03aa4a7ddd0c57056a97c79f068aa5c68b9c58dc21242730459470494f655cec`.
+Driver/native/supervisor identities match, and the observer remains live.
+The next automatic target is **step4800/T=3**; the unchanged cap is T=6.
+The frozen runtime and the numerical stopping policy are preserved. The
+[milestone receipt](cls-awf-refined-response-evidence/P2-step4000-assessment.json)
+contains the immutable checkpoint, history, complete-window and process
+identities. The endpoint T=2.5 and live frontier T=2.528125 are distinct.
 
 The supported conclusion is that spatial projection/differentiation introduces
 a large part of the reference departure before evolution; the selected
