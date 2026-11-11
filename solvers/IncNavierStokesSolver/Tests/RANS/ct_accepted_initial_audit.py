@@ -55,6 +55,7 @@ def audit(expression,lower,upper):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--pilot',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();result=dict(status='pass',cases={})
+    if a.output.exists():raise FileExistsError('immutable audit destination already exists')
     for folder in sorted(a.pilot.glob('*-zero')):
         c=json.loads((folder/'construction.json').read_text());root=ET.parse(folder/'case.xml').getroot();rows={}
         for region,lo,hi,variables in [('Inner',0.,c['H'],('u','k')),('Outer',c['H'],c['Z'],('u','k','eps_tilde'))]:

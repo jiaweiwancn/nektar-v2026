@@ -9,6 +9,7 @@ from rans_request_manifest import sha
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();r=a.root;rows={}
+    if a.output.exists():raise FileExistsError('immutable receipt destination already exists')
     for name in ('A95-dt-0.002','A95-dt-0.001','A93-dt-0.001','E94E95-dt-0.001'):
         folder=r/'pilot-v3'/name;zero=r/'pilot-v3'/(name+'-zero')
         n=json.loads((folder/'case.evolution.json').read_text());z=json.loads((zero/'case.evolution.json').read_text());q=json.loads((zero/'initial.json').read_text())
