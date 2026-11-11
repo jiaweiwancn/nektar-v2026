@@ -11,6 +11,9 @@ namespace Nektar
 // The finite-QP numerical backend is a SolverInfo execution control, recorded
 // in PimpleKBoundControls: it solves the same raw-centered mass QP. The floor,
 // inventory, metric and mathematical correction policy retain strict identity.
+// RANSWallDenseEvolutionCapacity/ResourceDesign are execution-only SolverInfo
+// controls, reported separately. They do not enter patch.Signature or this
+// Parameters loop; no additional physical parameter is excluded.
 inline std::string RANSWallPhysicsSignature(const RANSWallEvolutionPatch &patch,
     const LibUtilities::SessionReaderSharedPtr &session,double eta,bool neutral,
     double ustar,const std::array<double,2> &direction,bool chartFunctions)

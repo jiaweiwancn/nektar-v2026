@@ -951,6 +951,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"inner_stress_model\":"<<Quoted(m_patch->InnerStressName())
        <<",\"nonlinear_policy\":"<<Quoted(m_patch->NonlinearPolicyName())
        <<",\"temporal_coupling\":"<<Quoted(m_patch->TemporalCouplingName())
+       <<",\"dense_evolution_capacity\":"<<m_patch->DenseEvolutionCapacityJSON()
        <<",\"k_bound_mode\":"<<Quoted(m_patch->PimpleKBoundMode())
        <<",\"k_bound_signature\":"<<Quoted(m_patch->PimpleKBoundSignature())
        <<",\"k_bound_work_controls\":"<<m_patch->PimpleKBoundControls()

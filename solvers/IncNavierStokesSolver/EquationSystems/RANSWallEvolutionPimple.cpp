@@ -26,7 +26,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     const RANSWallEvolutionData &data, int &iterations) const
 {
     RANSWallTiming::Scope timing("pimple.sweep");
-    Require(!WJ() || Size()<=3000,"WJ PIMPLE retains the 3000-unknown dense evolution guard; larger meshes permit reference audits only");
+    if(WJ())CheckDenseEvolutionCapacity(false);
     Require(s.size()==Size() && history.size()==s.size() &&
         std::isfinite(alpha) && alpha>0 && std::isfinite(time),"invalid PIMPLE stage input");
     const auto start=std::chrono::steady_clock::now();
@@ -182,6 +182,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             "PIMPLE pressure constraint, boundary or momentum splitting identity failure");
         put("pressure_inverse",J::Quote("alpha^-1 consistent free-velocity mass inverse"));
         put("velocity_size",J::Number(nv));put("pressure_gauge_size",J::Number(np));
+        put("assembled_flow_size",J::Number(flow.rows.size()));
         put("predictor_linear_residual",J::Number(Maximum(predictorDefect)));
         put("pressure_linear_residual",J::Number(Maximum(pressureDefect)));
         put("corrected_continuity_gauge",J::Numbers(regional));put("boundary_defect",J::Number(boundary));
@@ -267,6 +268,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             if(b==K()) {budget("last_accepted",base);budget("post_flow",flowState);budget("pre_k",preScalar);}
             for(int i=0;i<block.rows.size();++i)s[block.rows[i]]+=delta[i];
             const std::string name=b==Epsilon()?"epsilon":"k";
+            put(name+"_solve_size",J::Number(block.rows.size()));
             if(m_pimpleArithmetic)
             {
                 WallMatrix metric(block.rows.size(),Vector(block.rows.size()));

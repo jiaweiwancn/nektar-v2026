@@ -428,6 +428,12 @@ int main(int argc,char **argv)
             const auto rawReference=patch.NeutralReference(us,{1.,0.});data.fixedBoundary=patch.FixedReferenceBoundary(rawReference);
             reference=patch.Lift(rawReference,0,data);patch.SetReference(reference,data,0,0);
         }
+        if(operation=="dense_capacity_preflight")
+        {
+            std::ofstream out(argv[3]);out<<patch.DenseEvolutionPreflight(reference,0.,data,
+                packet.get<bool>("condensed",false),packet.get<bool>("enforce",true))<<'\n';
+            Require(out.good(),"capacity preflight write failed");world->Finalise();return 0;
+        }
         auto history=formedHistory.empty()?Read(packet,"history"):formedHistory;
         auto state=Read(packet,"state");std::string transfer="null";
         if(packet.get_optional<std::string>("transfer_source_xml"))

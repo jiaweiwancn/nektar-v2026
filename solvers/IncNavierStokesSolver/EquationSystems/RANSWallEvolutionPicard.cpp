@@ -1269,6 +1269,34 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
 
 namespace Nektar
 {
+std::string RANSWallEvolutionPatch::DenseEvolutionPreflight(const Vector &state,double time,
+    const RANSWallEvolutionData &data,bool condensed,bool enforce) const
+{
+    if(enforce)CheckDenseEvolutionCapacity(condensed);
+    const auto hash=RANSWallR3::Hash(state);
+    auto external=ExternalConstraints(time,data);
+    for(int id:m_traceIds)external.erase(offset[Epsilon()]+id);
+    int velocity=0,pressure=0,flow=0,k=0,epsilon=0;
+    for(int block:{0,K(),Epsilon()})
+    {
+        const auto frozen=AssemblePicardBlock(block,state,state,1.,time,data,external);
+        if(block==0)
+        {
+            flow=frozen.rows.size();
+            velocity=std::lower_bound(frozen.rows.begin(),frozen.rows.end(),DifferentialSize())-frozen.rows.begin();
+            pressure=flow-velocity;
+        }
+        else if(block==K())k=frozen.rows.size();
+        else epsilon=frozen.rows.size();
+    }
+    Require(hash==RANSWallR3::Hash(state),"capacity preflight changed supplied state");
+    return J::Object({{"capacity",DenseEvolutionCapacityJSON()},{"state_size",J::Number(Size())},
+        {"velocity_size",J::Number(velocity)},{"pressure_gauge_size",J::Number(pressure)},
+        {"assembled_flow_size",J::Number(flow)},{"k_solve_size",J::Number(k)},
+        {"epsilon_solve_size",J::Number(epsilon)},{"evolution_guard_enforced",J::Boolean(enforce)},
+        {"state_sha256",J::Quote(hash)},{"state_unchanged","true"},{"governing_solves","0"},
+        {"scope",J::Quote("actual frozen-block assembly only; no factor application or governing step")}});
+}
 std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data,double time,
     const Vector &acceptedHistory,double acceptedAlpha) const
 {

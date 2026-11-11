@@ -35,6 +35,11 @@ def read_execution_intent(path):
     # zero; applying that policy to metadata changes canonical integer hashes.
     return json.loads(Path(path).read_text())
 
+def executed_m1_obstruction(siblings):
+    return any(s.get('screens',{}).get('M1',{}).get('status') in ('OBSTRUCTED','UNRESOLVED','FAIL') and
+        s.get('screens',{}).get('M1',{}).get('terminal',{}).get('steps')==32 and
+        bool(s.get('screens',{}).get('M1',{}).get('terminal',{}).get('sha256')) for s in siblings)
+
 class Study(WJ4Study):
     def __init__(self,a):
         require(platform.system()=='Linux','compiled Linux is authoritative')
@@ -165,7 +170,7 @@ class Study(WJ4Study):
     def screen(self,mesh):
         if mesh=='M2':
             siblings=[read(self.a.output.resolve()/p/'summary.json') for p in ('EP','Budget')]
-            require(any(s.get('screens',{}).get('M1',{}).get('terminal',{}).get('errors',{}).get('accuracy_gate',{}).get('status')!='PASS' for s in siblings),'M2 is not authorized when both M1 policies qualify')
+            require(executed_m1_obstruction(siblings),'M2 requires an executed failing/unresolved M1 result; missing M1 is not authorization')
         name='screen-'+mesh
         z,r,f=self.native(name+'-cp0',mesh=mesh);self.valid(z,r)
         require(len(z['state'])==dict(M1=2447,M2=2975)[mesh],'unexpected custom mesh size')

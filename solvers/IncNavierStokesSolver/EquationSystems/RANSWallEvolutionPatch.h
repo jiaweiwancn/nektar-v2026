@@ -229,6 +229,13 @@ public:
     bool AdaptiveR7() const { return m_r7Policy=="Adaptive"; }
     bool GroundSafeguard() const { return CoupledR4() || JointRestorationR5(); }
     bool PimpleSingleSweep() const { return m_temporalCoupling=="PimpleSingleSweep"; }
+    // Execution-only dense capacity. No constructor size restriction or
+    // physical checkpoint identity change accompanies this finite opt-in.
+    int DenseEvolutionCapacity(bool condensed) const;
+    void CheckDenseEvolutionCapacity(bool condensed) const;
+    std::string DenseEvolutionCapacityJSON() const;
+    std::string DenseEvolutionPreflight(const Vector &,double,
+        const RANSWallEvolutionData &,bool condensed,bool enforce) const;
     const std::string &TemporalCouplingName() const { return m_temporalCoupling; }
     Vector InitializationWork() const { return {double(m_liftCalls),double(m_liftIterations)}; }
     const std::vector<std::string> &PimpleRecords() const { return m_pimpleRecords; }
@@ -600,6 +607,8 @@ private:
     mutable std::string m_solveInvalidContext;
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
     std::string m_temporalCoupling="ConvergedStage";
+    std::string m_denseCapacityRequest="3000",m_denseResourceDesign="None";
+    int m_denseCapacity=3000;
     bool m_pimpleVerify=false;
     std::string m_pimpleKBound="Off",m_pimpleSnapshotDirectory="pimple-states";
     std::string m_pimpleKInventory="LegacyV1";

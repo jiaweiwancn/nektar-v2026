@@ -243,6 +243,29 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     session->LoadSolverInfo("RANSWallTemporalCoupling",m_temporalCoupling,"ConvergedStage");
     Require(m_temporalCoupling=="ConvergedStage" || PimpleSingleSweep(),"unknown temporal coupling mode");
     Require(!(AcceptedAWF() || WJ()) || PimpleSingleSweep(),"accepted wall formulation currently supports only the one-sweep temporal path");
+    Require(!session->DefinesParameter("RANSWallDenseEvolutionCapacity") &&
+        !session->DefinesParameter("RANSWallDenseEvolutionResourceDesign"),
+        "dense_capacity_configuration: execution capacity/resource design must use SolverInfo");
+    session->LoadSolverInfo("RANSWallDenseEvolutionCapacity",m_denseCapacityRequest,"3000");
+    session->LoadSolverInfo("RANSWallDenseEvolutionResourceDesign",m_denseResourceDesign,"None");
+    double requested=0.;std::size_t consumed=0;
+    try { requested=std::stod(m_denseCapacityRequest,&consumed); }
+    catch(const std::exception &) { Require(false,"dense_capacity_invalid: expected finite exact integer in [3000,4331]"); }
+    Require(consumed==m_denseCapacityRequest.size() && std::isfinite(requested) &&
+        requested==std::floor(requested) && requested>=3000. && requested<=4331.,
+        "dense_capacity_invalid: expected finite exact integer in [3000,4331]");
+    m_denseCapacity=static_cast<int>(requested); // Cast only after exact validation.
+    if(m_denseCapacity>3000 || m_denseResourceDesign!="None")
+    {
+        double eta=0.;session->LoadParameter("RANSWallEta",eta,0.);
+        std::string condensed;session->LoadSolverInfo("RANSWallCondense",condensed,"False");
+        Require(WJ() && m_dimension==2 && !Mapped() && m_comm->GetSize()==1 &&
+            PimpleSingleSweep() && eta==0. && condensed=="False",
+            "dense_capacity_route: opt-in requires serial flat2D WJ PimpleSingleSweep, eta=0, uncondensed evolution");
+        Require(m_denseResourceDesign.size()==64 && std::all_of(m_denseResourceDesign.begin(),m_denseResourceDesign.end(),
+            [](char c){return (c>='0' && c<='9') || (c>='a' && c<='f');}),
+            "dense_capacity_resource_design: opt-in requires a64-hex immutable resource-design SHA256");
+    }
     Require(!ColumnAverageK() || PimpleSingleSweep(),"ColumnAverage K is supported only by the PIMPLE pilot");
     if(PimpleSingleSweep())
     {
@@ -985,10 +1008,33 @@ std::vector<int> RANSWallEvolutionPatch::CondensableVelocity(const std::map<int,
         if(!outerIds.count(i) && !constraints.count(offset[b]+i))result.push_back(offset[b]+i);
     Require(!result.empty(),"no free inner velocity modes to condense");return result;
 }
+int RANSWallEvolutionPatch::DenseEvolutionCapacity(bool condensed) const
+{
+    if(m_denseCapacity>3000)
+        Require(WJ() && m_dimension==2 && !Mapped() && m_comm->GetSize()==1 &&
+            PimpleSingleSweep() && m_eta==0. && !condensed,
+            "dense_capacity_route: extended capacity is restricted to the declared WJ one-sweep route");
+    return m_denseCapacity;
+}
+void RANSWallEvolutionPatch::CheckDenseEvolutionCapacity(bool condensed) const
+{
+    Require(Size()<=DenseEvolutionCapacity(condensed),
+        "dense_evolution_capacity_exceeded: replicated dense evolution exceeds effective limit; legacy default3000, finite WJ maximum4331; larger reference audits/readbacks remain available");
+}
+std::string RANSWallEvolutionPatch::DenseEvolutionCapacityJSON() const
+{
+    namespace J=RANSWallSolveJson;
+    return J::Object({{"setting",J::Quote("RANSWallDenseEvolutionCapacity")},
+        {"requested",J::Quote(m_denseCapacityRequest)},{"effective",J::Number(m_denseCapacity)},
+        {"legacy_default","3000"},{"hard_maximum","4331"},
+        {"extended",J::Boolean(m_denseCapacity>3000)},
+        {"resource_design_sha256",m_denseResourceDesign=="None"?"null":J::Quote(m_denseResourceDesign)},
+        {"checkpoint_identity",J::Quote("execution-only SolverInfo; excluded from physical identity")}});
+}
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vector &history,double alpha,double time,
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
-    Require(Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
+    CheckDenseEvolutionCapacity(condensed);
     if(PimpleSingleSweep())
     {
         Require(!condensed && m_eta==0.,"PimpleSingleSweep requires uncondensed eta-zero physical equations");
