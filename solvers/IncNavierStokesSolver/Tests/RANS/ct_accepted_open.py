@@ -7,6 +7,7 @@ from rans_qualification import THREADS,write_json,exact_vector_hash
 os.environ.update(THREADS)
 import numpy as np
 from scipy.linalg import block_diag,cholesky,solve_triangular,svdvals
+from scipy.interpolate import CubicHermiteSpline
 from run_a93_a95_e94e95_matrix import case_xml
 from run_cls_epawf_picard import set_info,set_parameter,write
 from cls_epawf_m4_cases import tensor_mesh
@@ -44,6 +45,75 @@ def fixture(folder,runtime,model='A95',steps=0,dt=1e-7,pressure=0.,traction_shif
         functions(root,'OutletTotalTraction'+suffix,dict(u=repr(-pressure-traction_shift),v='.01'))
         functions(root,'OutletDiffusiveFlux'+suffix,dict(k=repr(.003+flux_shift),eps_tilde=repr(.004+2*flux_shift)))
     write(root,path);return path
+
+
+def cubic_expression(knots,values,derivatives):
+    spline=CubicHermiteSpline(knots,values,derivatives);terms=[];grad=[]
+    for j,(a,b) in enumerate(zip(knots[:-1],knots[1:])):
+        mask=f'((y>={a:.17g})&&(y{ "<=" if j==len(knots)-2 else "<"}{b:.17g}))'
+        x=f'(y-({a:.17g}))';c=spline.c[:,j]
+        poly='+'.join(f'({value:.17g})*{x}^{3-i}' for i,value in enumerate(c))
+        dp='+'.join(f'({(3-i)*value:.17g})*{x}^{2-i}' for i,value in enumerate(c[:-1]))
+        terms.append(mask+'*('+poly+')');grad.append(mask+'*('+dp+')')
+    return '('+'+'.join(terms)+')','('+'+'.join(grad)+')'
+
+
+def pilot_case(folder,runtime,feasibility,model='A95',steps=0,dt=.002,restart=None):
+    """Unforced finite-depth rough floor; inlet is this declared inference.
+
+    No profile preservation is imposed in the volume. The outlet holds the
+    analytical initial total traction, including its nonzero shear component.
+    """
+    data=json.loads(Path(feasibility).read_text());ref=data['incident']['R'];p=parameters(model)
+    us=ref['ustar'];K=p['q']*us*us;H=.4;Z=20.;delta=6.25;Uinf=ref['Uinf_over_U_H'];nu=ref['nu']
+    hr=data['fits'][model+':model-velocity-fit']['hr'];c=Column(model,K,H,hr,nu)
+    require(c.cutoff is not None and c.k_extrema()['minimum_over_K']>0,'pilot_reference_inadmissible')
+    inner=sorted(set([0.,.002,.01,.04,.1,.2,H,hr,c.cutoff]+([c.zv] if 0<c.zv<H else [])))
+    outer=[H,1.,2.,4.,delta,10.,Z];knots=inner+outer[1:]
+    ui=[c.t0*c.integrate(lambda r:1/c.D(r),0.,z) if z else 0. for z in inner]
+    gi=[c.t0/c.D(z) for z in inner];ki=[c.k(z) for z in inner];gki=[float(c.Q(z))/c.D(z) for z in inner]
+    uinner,_=cubic_expression(inner,ui,gi);kinner,_=cubic_expression(inner,ki,gki)
+    mean=CubicHermiteSpline([H,1.,delta,Z],[ui[-1],1.,Uinf,Uinf],[us/(p['kappa']*H),.18,0.,0.])
+    uouter,gouter=cubic_expression(outer,mean(outer),mean(outer,1))
+    kinf=1.5*(.003*Uinf)**2
+    ks=CubicHermiteSpline([H,delta,Z],[K,kinf,kinf],[0.,0.,0.]);ko=ks(outer);gko=ks(outer,1)
+    kouter,_=cubic_expression(outer,ko,gko)
+    eo=(ko/p['q'])**1.5/(p['kappa']*np.minimum(outer,delta))
+    geo=eo*(1.5*gko/ko-1/np.minimum(outer,delta));geo[np.asarray(outer)>=delta]=0.
+    eouter,_=cubic_expression(outer,eo,geo)
+    eta=f'(abs({gouter})*{kouter}/{eouter})'
+    if model=='A93':
+        base=f'({kouter}*{eta}^2/(1000+{eta}^3))';qxx=f'(28/3*{base})';qzz=f'(-17/3*{base})';cmu=f'((2/3)/(1.25+1.9*{eta}))'
+    elif model=='A95':
+        cmu=f'(1/(6.5+3/sqrt(2)*{eta}))';qxx=f'({kouter}*{eta}^2*sqrt(1-4.5*{cmu}^2*{eta}^2)/(1+3*{eta}^2))';qzz=f'(-{qxx})'
+    else:qxx=qzz='0';cmu=f'(1/(4+3/sqrt(2)*{eta}))'
+    # Pi=2k/3-Rzz=-Qzz makes the analytical initial total normal Tzz zero.
+    pi=f'(-{qzz})';normal=f'({qzz}-{qxx})';shear=f'({cmu}*{kouter}^2/{eouter}*{gouter})'
+    xml=case_xml(folder,model,'Natural','Accepted',steps=steps,dt=dt,descriptor_probe=runtime/'RANSNewModelsProbe',
+        radial_knots=knots,degree=3,xknots=[0.,.125,.25],cache='Off',restart=restart,quadrature=[32,8,10,10,10])
+    root=ET.parse(xml).getroot()
+    for key,value in dict(RANSWallBoundaryPolicy='AcceptedOpenFlatV1',RANSOpenTop='DirichletCompatibleV1',
+        RANSOpenBackflow='RejectV1',RANSWallReference='Functions',RANSWallPimpleSnapshots='On').items():set_info(root,key,value)
+    for key,value in dict(RANSWallHeight=H,RANSWallSampleHeight=H,RANSWallTailStart=H,RANSWallRoughness=hr,
+        Kinvis=nu,RANSWallFrictionVelocity=us,K0=K,RANSOpenVelocityScale=1.).items():set_parameter(root,key,value)
+    # Region selection uses RANSWallHeight on this conforming topology.
+    for suffix,values in [('Inner',dict(u=uinner,v='0',k=kinner,eps_tilde=repr(c.A/H),p='0')),
+                          ('Outer',dict(u=uouter,v='0',k=kouter,eps_tilde=eouter,p=pi))]:
+        functions(root,'InitialConditions'+suffix,values);functions(root,'BoundaryValues'+suffix,values)
+        functions(root,'OutletDiffusiveFlux'+suffix,dict(k='0',eps_tilde='0'))
+    functions(root,'OutletTotalTractionInner',dict(u='0',v=repr(c.t0)))
+    functions(root,'OutletTotalTractionOuter',dict(u=normal,v=shear));write(root,xml)
+    construction=dict(schema='CTAcceptedFiniteDepthInitialV1',model=model,policy='Natural',wall='AcceptedBudgetAWF',
+        H=H,Z=Z,delta=delta,x=[0.,.125,.25],knots=knots,degree=3,pressure_degree=1,nu=nu,ustar=us,K0=K,
+        roughness_input=hr,roughness_status='model-conditioned once at visible 16mm anchor; not a measured surface property',
+        reference_column=c.result(),Uinf=Uinf,outer_k_inference=kinf,
+        epsilon='positive model-resolved length-scale samples with C1 Hermite finite-depth cap; not measured',
+        initial_k='nonconstant independent Accepted inner reference Hermite representation, transported thereafter',
+        velocity='C1 Hermite compatible wall/H slope; UH=1, Uinf at delta; roof prescribed',
+        outlet='initial analytical full traction held fixed; scalar outward diffusive datum zero, advective flux active',
+        quadrature=[32,8,10,10,10],dt=dt,steps=steps,target_time=dt*steps,
+        forcing='none; no reference restoration',feasibility_sha256=sha(feasibility),xml_sha256=sha(xml))
+    write_json(folder/'construction.json',construction);return xml
 
 
 def run(command,folder,log):
