@@ -338,6 +338,39 @@ RANSWallGlobalField::WallMatrix RANSWallGlobalField::Mass() const
     for(int i=0;i<Size();++i)for(int j=0;j<Size();++j)result[i][j]=mass[i][j];
     return result;
 }
+RANSWallGlobalField::Vector RANSWallGlobalField::RestrictCoefficients(
+    const RANSWallGlobalField &source,const Vector &state,int offset) const
+{
+    Require(m_dimension==source.m_dimension && offset>=0 &&
+            state.size()>=static_cast<std::size_t>(offset+source.Size()),
+            "native coefficient restriction has incompatible state/dimension");
+    const auto targetMap=m_field->GetLocalToGlobalMap();
+    const auto sourceMap=source.m_field->GetLocalToGlobalMap();
+    Vector result(Size());std::vector<bool> assigned(Size(),false);
+    for(std::size_t e=0;e<m_elements.size();++e)
+    {
+        const auto &target=m_elements[e];int owner=-1;
+        for(std::size_t j=0;j<source.m_elements.size();++j)
+            if(source.m_elements[j].geometry==target.geometry){owner=j;break;}
+        Require(owner>=0,"native restriction geometry is absent in source");
+        const auto &from=source.m_elements[owner];
+        Require(target.degree==from.degree && target.lower==from.lower && target.upper==from.upper,
+                "native restriction geometry/basis differs");
+        const int count=m_field->GetExp(e)->GetNcoeffs();
+        Require(count==source.m_field->GetExp(owner)->GetNcoeffs(),"native restriction coefficient shape differs");
+        for(int j=0;j<count;++j)
+        {
+            const int to=m_field->GetCoeff_Offset(e)+j,fr=source.m_field->GetCoeff_Offset(owner)+j;
+            const int id=targetMap->GetLocalToGlobalMap(to);
+            const double value=targetMap->GetLocalToGlobalSign(to)*sourceMap->GetLocalToGlobalSign(fr)*
+                state[offset+sourceMap->GetLocalToGlobalMap(fr)];
+            Require(!assigned[id] || result[id]==value,"native restriction shared coefficient differs");
+            result[id]=value;assigned[id]=true;
+        }
+    }
+    Require(std::all_of(assigned.begin(),assigned.end(),[](bool x){return x;}),"unmapped restriction coefficient");
+    return result;
+}
 RANSWallGlobalField::Vector RANSWallGlobalField::Project(const RANSWallFunction &function) const
 {
     Require(static_cast<bool>(function),"missing projection function");

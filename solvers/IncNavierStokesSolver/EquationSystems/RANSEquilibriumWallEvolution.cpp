@@ -888,11 +888,11 @@ void RANSEquilibriumWallEvolution::v_Output()
     {
         const auto native=b<m_patch->Dimension()?m_patch->outerVelocity:m_patch->fields[b];
         const std::string name=b<m_patch->Dimension()?m_session->GetVariable(b):(b==m_patch->K()?"k":(b==m_patch->Epsilon()?"eps_tilde":(b==m_patch->InnerPressure()?"pi_w":"p")));
-        const auto values=native->Project([&](const RANSWallCoordinate &p){return m_patch->fields[b]->Point(p).Value(m_state,m_patch->offset[b]);});save(name,native,values);
+        const auto values=native->RestrictCoefficients(*m_patch->fields[b],m_state,m_patch->offset[b]);save(name,native,values);
     }
     for(int b=0;b<m_patch->Dimension();++b)
     {
-        const auto values=m_patch->innerVelocity->Project([&](const RANSWallCoordinate &p){return m_patch->fields[b]->Point(p).Value(m_state,m_patch->offset[b]);});
+        const auto values=m_patch->innerVelocity->RestrictCoefficients(*m_patch->fields[b],m_state,m_patch->offset[b]);
         save(m_session->GetVariable(b)+"_w",m_patch->innerVelocity,values);
     }
     WriteReport();

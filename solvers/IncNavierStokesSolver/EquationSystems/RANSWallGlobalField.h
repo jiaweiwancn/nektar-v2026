@@ -79,6 +79,10 @@ public:
     std::vector<RANSWallGlobalPoint> Quadrature(int order=0) const;
     WallMatrix Mass() const;
     Vector Project(const RANSWallFunction &function) const;
+    /** Exact signed native coefficient restriction to the same geometries and
+     * basis, avoiding a coordinate search/reprojection during field export. */
+    Vector RestrictCoefficients(const RANSWallGlobalField &source,
+                                const Vector &state,int offset=0) const;
     std::map<int,double> Boundary(const RANSWallFunction &function,
                                   const BoundaryPredicate &predicate) const;
     void Store(const Vector &state, int offset=0) const;
