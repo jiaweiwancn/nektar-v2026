@@ -60,6 +60,8 @@ Vector MapParameters(const RANSWallNormalMap &map)
 {return {double(map.kind),double(map.dimension),map.height,map.heightSlopeX,map.heightSlopeY,map.heightAmplitude,
     map.heightWaveX,map.heightWaveY,map.slopeX,map.slopeY,map.radius,map.amplitude,map.lengthX,map.lengthY};}
 
+#include "RANSWallOpenWeakChecks.h"
+
 Vector ConstructContact(const RANSWallEvolutionPatch &patch,const Vector &history)
 {
     Require(patch.Dimension()==2 && !patch.Mapped(),"constructed contact requires flat2D");
@@ -181,13 +183,71 @@ int main(int argc,char **argv)
         std::string model;serial->LoadSolverInfo("TurbulenceModel",model,"CLSHighRe");
         if(model=="WJHighRe")LoadWJNativeConfiguration(serial,p);
         RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
-        Require(patch.Dimension()==2 && !patch.Mapped() && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
+        const auto operation=packet.get<std::string>("operation","");
+        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.OpenBoundary() && operation=="open_checks")) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
         Require(patch.InnerStressName()==packet.get<std::string>("inner_stress_model"),"packet law differs from session");
         for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
-        const auto operation=packet.get<std::string>("operation","");
+        if(operation=="open_checks")
+        {
+            Require(patch.OpenBoundary(),"open checks require OpenTunnelV1");
+            patch.LoadOpenBoundaryData(serial,data);
+            const auto reportPath=packet.get<std::string>("native_report");
+            const auto reportHash=RANSWallR3::HashFile(reportPath);
+            Require(reportHash==packet.get<std::string>("native_report_sha256"),"open producing report SHA256 differs");
+            Tree native;boost::property_tree::read_json(reportPath,native);
+            Require(native.get<std::string>("failure").empty(),"open readback requires an accepted native producer");
+            const auto signature=RANSWallPhysicsSignature(patch,serial,0.,false,us,{1.,0.},false);
+            Require(signature==native.get<std::string>("signature"),"open native physical signature differs");
+            const auto cpPath=packet.get<std::string>("native_checkpoint");
+            const auto checkpointHash=RANSWallR3::HashFile(cpPath+"/State.bin");
+            Require(checkpointHash==packet.get<std::string>("checkpoint_sha256"),"open checkpoint bytes differ");
+            double dt;serial->LoadParameter("TimeStep",dt);
+            const auto cp=RANSWallTimeIntegration::ReadCheckpoint(cpPath,signature,1,dt,patch.Size(),patch.DifferentialSize());
+            const auto &state=cp.coupledState;const double time=cp.integration.time;
+            Require(cp.integration.steps==native.get<std::size_t>("steps") && time==native.get<double>("time") &&
+                RANSWallR3::Hash(state)==RANSWallR3::Hash(Read(native,"state")),"open state/time producer differs");
+            Require(RANSWallR3::Hash(cp.fixedReference)==RANSWallR3::Hash(Read(native,"fixed_reference")),"open fixed reference differs");
+            std::size_t slot=0;for(const auto &v:native.get_child("native_history"))
+            {Vector h;for(const auto &x:v.second)h.push_back(x.second.get_value<double>());
+                Require(slot<cp.integration.history.size() && RANSWallR3::Hash(h)==RANSWallR3::Hash(cp.integration.history[slot++]),"open native GLM history differs");}
+            Require(slot==cp.integration.history.size() && Read(native,"native_history_times")==cp.integration.times,"open native history time labels differ");
+            patch.RestoreReference(cp.fixedReference,cp.fixedDefect,cp.eta,data,time);
+            Vector history=state;double alpha=0;
+            if(cp.integration.steps>0)
+            {
+                history=Read(native,"last_stage_history");alpha=native.get<double>("last_stage_alpha");
+                Require(history.size()==state.size() && alpha==1/dt && native.get<double>("last_stage_time")==time &&
+                    native.get<int>("implicit_callback_count")>0,"open completed callback must come from its producing report");
+                const auto &audit=native.get_child("wj_audit_packets").back().second;
+                Require(audit.get<std::string>("state_sha256")==RANSWallR3::Hash(state) &&
+                    audit.get<std::string>("stage_history_sha256")==RANSWallR3::Hash(history),"open accepted audit/callback binding differs");
+            }
+            std::string diagnostics,assembly,reuse="null",domain,weak="null";
+            Vector spatial,stage;
+            {
+                RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,time);
+                patch.ValidateOutlet(state,"immutable_readback");
+                domain=patch.ScalarDomainJSON(patch.ScalarDomain(state,time,data,true),true);
+                diagnostics=patch.OpenBoundaryDiagnostic(state,history,alpha,time,data);
+                spatial=patch.Residual(state,state,0.,time,data,false);
+                stage=alpha>0?patch.Residual(state,history,alpha,time,data,false):Vector{};
+                if(packet.get<bool>("weak",false))weak=Weak(patch,state,history,alpha,time,data);
+                assembly=packet.get<bool>("assembly",true)?patch.WJTerrainAssemblyChecks(state,history,alpha>0?alpha:1/dt,time,data):"null";
+            }
+            if(packet.get<bool>("reuse",false))reuse=patch.EvaluationReuseChecks(state,history,time,data);
+            Require(patch.InitializationWork()==Vector({0.,0.}) && reportHash==RANSWallR3::HashFile(reportPath) &&
+                checkpointHash==RANSWallR3::HashFile(cpPath+"/State.bin"),"open passive reader changed saved bytes or lifted state");
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},
+                {"report_sha256",J::Quote(reportHash)},{"checkpoint_sha256",J::Quote(checkpointHash)},
+                {"state_sha256",J::Quote(RANSWallR3::Hash(state))},{"callback_history_sha256",J::Quote(RANSWallR3::Hash(history))},
+                {"open_boundary",diagnostics},{"weak_checks",weak},{"scalar_domain",domain},{"assembly_checks",assembly},{"reuse_checks",reuse},
+                {"spatial_residual",J::Numbers(spatial)},{"actual_completed_stage_residual",J::Numbers(stage)},
+                {"initialization_work",J::Numbers(patch.InitializationWork())},{"governing_solves","0"}})<<'\n';
+            Require(out.good(),"open immutable checks write failed");world->Finalise();return 0;
+        }
         if(operation=="archived_report_stages")
         {
             // Older short runs retained only periodic checkpoints. This is a

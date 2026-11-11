@@ -252,27 +252,72 @@ std::string RANSWallEvolutionPatch::OpenBoundaryDiagnostic(const Vector &s,const
             {"ids",J::Numbers(f.face.test.ids)},{"phi",J::Numbers(f.face.test.phi)},
             {"epsilon_ids",J::Numbers(v.epsilon.ids)},{"epsilon_phi",J::Numbers(v.epsilon.phi)}}));
     }
-    for(double fraction:{0.,.25,.5,.75,1.})for(int i=0;i<=160;++i)
+    const double H=m_parameters.geometry.height;
+    std::set<double> heights{Mapping().displacement,Mapping().displacement+H,Mapping().tunnelTop};
+    for(int i=0;i<=160;++i)heights.insert(Mapping().displacement+(Mapping().tunnelTop-Mapping().displacement)*i/160.);
+    for(double r:{.01,.05,.1,.1685751788867232,.29536404609237266,.41840674658489085,
+        .6690223956881336,.9196090047393375,1.0449458693429963,1.1694696124895443,
+        1.41851709878264,1.92056151844624,2.419498652541585,2.9199749093950347,
+        3.9193302202397513,4.9202827339466575,6.171037775299688,7.4203117739986935})
+        heights.insert(Mapping().displacement+r);
+    for(double fraction:{0.,.25,.5,.75,1.})for(double physicalHeight:heights)
     {
-        const double physicalHeight=Mapping().displacement+(Mapping().tunnelTop-Mapping().displacement)*i/160.;
         const auto q=Mapping().Inverse({lower[0]+fraction*(upper[0]-lower[0]),0,physicalHeight});
-        const auto v=Point(0,q);const bool inner=q[2]<=m_parameters.geometry.height;
-        RANSVector u{};RANSTensor G{},R{};
-        for(int b=0;b<m_dimension;++b){u[PhysicalAxis(b)]=v.Value(s,offset[b]);G[PhysicalAxis(b)]=v.Gradient(s,offset[b]);}
-        const double k=v.Value(s,offset[K()]);double epsilon=0,cutoff=0,K=0;
-        if(inner){const auto p=StateProfile(s,q,time,data);K=p->K();cutoff=p->Reference().cutoff;
-            epsilon=p->Dissipation(q[2]);R=InnerStress(k,p->Original().EddyViscosity(q[2]),G).reynoldsStress;}
-        else{epsilon=Point(Epsilon(),q).Value(s,offset[Epsilon()]);R=OuterClosure(k,epsilon,G,q).reynoldsStress;}
-        stations.push_back(J::Object({{"physical",J::Numbers(Physical(q))},{"chart",J::Numbers(q)},
-            {"inner",J::Boolean(inner)},{"geometry",J::Number(v.geometry)},{"U",J::Numbers(u)},
-            {"G",J::Rows(G)},{"R",J::Rows(R)},{"k",J::Number(k)},{"epsilon",J::Number(epsilon)},
-            {"K",J::Number(K)},{"cutoff",J::Number(cutoff)}}));
+        for(int side:std::abs(q[2]-H)<1e-11?std::vector<int>{-1,1}:std::vector<int>{0})
+        {
+            const auto v=Point(0,q,side);const bool inner=q[2]<H-1e-11 || (std::abs(q[2]-H)<1e-11 && side<0);
+            RANSVector u{};RANSTensor G{},R{};
+            for(int b=0;b<m_dimension;++b){u[PhysicalAxis(b)]=v.Value(s,offset[b]);G[PhysicalAxis(b)]=v.Gradient(s,offset[b]);}
+            const double k=v.Value(s,offset[K()]);double epsilon=0,cutoff=0,K=0,P=0,P0=0,E=0,nt=0,nud=0;
+            auto anchor=q;anchor[2]=H;const auto profile=StateProfile(s,anchor,time,data);K=profile->K();cutoff=profile->Reference().cutoff;
+            if(inner){epsilon=profile->Dissipation(q[2]);nt=profile->Original().EddyViscosity(q[2]);
+                const auto law=InnerStress(k,nt,G);R=law.reynoldsStress;P=law.production;P0=profile->ReferenceProduction(q[2]);E=epsilon;}
+            else{epsilon=GeometryPoint(Epsilon(),v.geometry,q).Value(s,offset[Epsilon()]);const auto law=OuterClosure(k,epsilon,G,q);
+                R=law.reynoldsStress;P=law.production;E=epsilon;nt=law.eddyViscosity;nud=law.scalarViscosity;}
+            const auto pressure=GeometryPoint(inner?InnerPressure():OuterPressure(),v.geometry,q);
+            const double pi=pressure.Value(s,offset[inner?InnerPressure():OuterPressure()]);
+            stations.push_back(J::Object({{"physical",J::Numbers(Physical(q))},{"chart",J::Numbers(q)},
+                {"inner",J::Boolean(inner)},{"normal_side",J::Number(side)},{"geometry",J::Number(v.geometry)},
+                {"element",J::Number(v.element)},{"U",J::Numbers(u)},
+                {"G",J::Rows(G)},{"R",J::Rows(R)},{"covariance_eigenvalues",J::Numbers(J::Eigenvalues(R))},
+                {"k",J::Number(k)},{"epsilon",J::Number(epsilon)},{"pi",J::Number(pi)},
+                {"mechanical_pressure",J::Number(pi-2*k/3)},{"actual_production",J::Number(P)},
+                {"counterfactual_production",inner?J::Number(P0):"null"},{"destruction",J::Number(E)},
+                {"nu_eff",J::Number(nt)},{"nu_d",inner?"null":J::Number(nud)},
+                {"K",J::Number(K)},{"cutoff",J::Number(cutoff)}}));
+        }
+    }
+    std::vector<std::string> interfaces;
+    for(const auto &f:Surface(0,2,H,-1,8))
+    {
+        const auto q=f.test.coordinate;const auto vi=Point(0,q,-1),vo=Point(0,q,1);
+        const auto profile=StateProfile(s,q,time,data);const auto n=Mapping().At(q).normal;
+        RANSVector ui{},uo{};RANSTensor gi{},go{};
+        for(int b=0;b<m_dimension;++b){const int d=PhysicalAxis(b);ui[d]=vi.Value(s,offset[b]);uo[d]=vo.Value(s,offset[b]);gi[d]=vi.Gradient(s,offset[b]);go[d]=vo.Gradient(s,offset[b]);}
+        const double k=vi.Value(s,offset[K()]),ko=vo.Value(s,offset[K()]),e=Point(Epsilon(),q,1).Value(s,offset[Epsilon()]);
+        const double pii=Point(InnerPressure(),q,-1).Value(s,offset[InnerPressure()]),pio=Point(OuterPressure(),q,1).Value(s,offset[OuterPressure()]);
+        const double nt=profile->Original().EddyViscosity(H),D=m_parameters.geometry.molecularNu+nt;
+        const auto li=InnerStress(k,nt,gi);const auto ti=RANSWallInnerMeanStress(li,m_parameters.geometry.molecularNu,pii);
+        const auto lo=OuterClosure(ko,e,go,q);RANSVector traction{},innerTraction{},outerTraction{};
+        double targetJump=SolverUtils::WJInterfacePressureJump(k,D,li.strain,lo.reynoldsStress,n);
+        for(int a=0;a<3;++a)for(int b=0;b<3;++b){innerTraction[a]+=ti[a][b]*n[b];outerTraction[a]+=(lo.reynoldsStress[a][b]+(a==b?pio-2*ko/3:0))*n[b];}
+        for(int a=0;a<3;++a)traction[a]=innerTraction[a]+outerTraction[a];
+        const auto gki=vi.Gradient(s,offset[K()]),gko=vo.Gradient(s,offset[K()]);
+        const double ji=-(m_parameters.geometry.molecularNu+nt/SigmaK())*Dot(gki,n),jo=lo.kDiffusion*Dot(gko,n);
+        interfaces.push_back(J::Object({{"physical",J::Numbers(Physical(q))},{"chart",J::Numbers(q)},
+            {"geometry_inner_outer",J::Numbers(std::array<int,2>{vi.geometry,vo.geometry})},
+            {"outward_inner_normal",J::Numbers(n)},{"inner_outward_traction",J::Numbers(innerTraction)},
+            {"outer_outward_traction",J::Numbers(outerTraction)},{"traction_defect",J::Numbers(traction)},
+            {"mass_flux_defect",J::Number(Dot(ui,n)-Dot(uo,n))},{"k_flux_inner_outer",J::Numbers(std::array<double,2>{ji,jo})},
+            {"shared_k_defect",J::Number(k-ko)},{"K",J::Number(profile->K())},{"cutoff",J::Number(profile->Reference().cutoff)},
+            {"epsilon_trace_target",J::Numbers(std::array<double,2>{e,profile->Dissipation(H)})},
+            {"mechanical_jump_actual_target",J::Numbers(std::array<double,2>{pii-2*k/3-pio+2*ko/3,targetJump})}}));
     }
     Require(hash==RANSWallR3::Hash(s) && work==InitializationWork(),"open diagnostic mutated state or Lift count");
     return J::Object({{"schema",J::Quote("WJOpenTunnelV1")},{"state_sha256",J::Quote(hash)},
         {"gauge_unknowns",J::Number(size[Gauge()])},{"mass_flux",J::Number(totalMass)},
         {"boundary_flux_correction",J::Number(m_boundaryCorrection)},{"boundary_rows",J::List(rows)},
-        {"stations",J::List(stations)},{"boundary_load",J::Numbers(ExteriorResidual(s,time,data))},
+        {"stations",J::List(stations)},{"interface",J::List(interfaces)},{"boundary_load",J::Numbers(ExteriorResidual(s,time,data))},
         {"alpha_mass",J::Number(alpha)},{"time",J::Number(time)},{"history_sha256",J::Quote(RANSWallR3::Hash(history))},
         {"scope",J::Quote("physical fluxes and region-owned fields; prescribed natural and actual pointwise tractions distinct; no governing solve/Lift")}});
 }

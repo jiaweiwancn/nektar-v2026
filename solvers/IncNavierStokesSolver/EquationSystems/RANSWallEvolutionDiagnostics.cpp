@@ -620,8 +620,29 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         auto h=history;h[0]+=1e-5;
         values.push_back(J::Numbers(Residual(state,h,1600.,time,input)));
         values.push_back(J::Numbers(Residual(state,history,800.,time,input,false,false,0)));
-        input.innerKSource=[](const RANSWallCoordinate&,double){return .001;};input.Touch();
-        values.push_back(J::Numbers(Residual(state,history,1600.,time,input)));
+        if(OpenBoundary())
+        {
+            const auto outlet=input.outletInner[0],top=input.topKFlux;
+            input.outletInner[0]=[outlet](const RANSWallCoordinate &q,double t){return outlet(q,t)+1e-4;};
+            input.topKFlux=[top](const RANSWallCoordinate &q,double t){return top(q,t)+1e-7;};input.Touch();
+            values.push_back(J::Numbers(Residual(state,history,1600.,time,input)));
+            input=data;input.Touch();values.push_back(J::Numbers(Residual(state,history,1600.,time,input)));
+            auto invalidK=state;for(int j=offset[K()];j<offset[Epsilon()];++j)invalidK[j]*=1e-10;
+            const auto cutoff=ScalarDomain(invalidK,time,input,true);
+            Require(!cutoff.admissible,"open cache cutoff-failure fixture was not adverse");
+            values.push_back(ScalarDomainJSON(cutoff,true));
+            auto invalidE=state;for(int j=offset[Epsilon()];j<offset[InnerPressure()];++j)invalidE[j]*=.01;
+            const auto adverse=CompleteRestrictedAudit(invalidE,history,1600.,time,input,true);
+            Require(adverse.at("wj_hard_admissible")[0]==0,"open cache constitutive-failure fixture was not adverse");
+            std::vector<std::pair<std::string,std::string>> failed;
+            for(const auto &[key,value]:adverse)failed.push_back({key,J::Numbers(value)});
+            values.push_back(J::Object(failed));
+        }
+        else
+        {
+            input.innerKSource=[](const RANSWallCoordinate&,double){return .001;};input.Touch();
+            values.push_back(J::Numbers(Residual(state,history,1600.,time,input)));
+        }
         std::vector<std::pair<std::string,std::string>> audit;
         for(const auto &[key,value]:CompleteRestrictedAudit(state,history,1600.,time,input))audit.push_back({key,J::Numbers(value)});
         values.push_back(J::Object(audit));
@@ -825,7 +846,10 @@ std::string RANSWallEvolutionPatch::WJWeakLoads(const Vector &state,const Vector
             const double t=(v.coordinate[0]-lower[0])/L,b=t*(1-t),db=(1-2*t)/L;
             const double x=mode==0?b:b*(2*t-1),dx=mode==0?db:db*(2*t-1)+2*b/L;
             const double r=inner?(z-lo)/(H-lo):(hi-z)/(hi-H),dr=inner?1/(H-lo):-1/(hi-H);
-            const double phi=x*r;const RANSVector dphi{dx*r,0,x*dr};
+            const double phi=x*r;const RANSVector chartGradient{dx*r,0,x*dr};
+            auto physicalGradient=[&](const RANSVector &g){RANSVector result{};const auto inverse=m_mapping.At(v.coordinate).inverse;
+                for(int a=0;a<3;++a)for(int b=0;b<3;++b)result[a]+=g[b]*inverse[b][a];return result;};
+            const auto dphi=physicalGradient(chartGradient);
             RANSTensor G{},stress{};RANSVector u{};for(int a=0;a<m_dimension;++a){u[PhysicalAxis(a)]=v.Value(state,offset[a]);G[PhysicalAxis(a)]=v.Gradient(state,offset[a]);}
             const double k=v.Value(state,offset[K()]),pi=q.p.Value(state,offset[inner?InnerPressure():OuterPressure()]);
             double sk=0,se=0,dk=0,de=0,epsilon=0;
@@ -840,7 +864,7 @@ std::string RANSWallEvolutionPatch::WJWeakLoads(const Vector &state,const Vector
                 const int block=f<2?f:f==2?K():Epsilon();const auto &row=f==3?q.e:v;
                 const double value=f<2?u[PhysicalAxis(f)]:f==2?k:epsilon;
                 const double test=f==3?phi*(1-r):phi;RANSVector gradient=dphi;
-                if(f==3){gradient[0]=dx*r*(1-r);gradient[2]=x*dr*(1-2*r);}
+                if(f==3)gradient=physicalGradient({dx*r*(1-r),0,x*dr*(1-2*r)});
                 a[f][0]+=q.weight*test*alpha*(value-row.Value(history,offset[block]));
                 for(int axis=0;axis<3;++axis){a[f][1]-=q.weight*gradient[axis]*u[axis]*value;
                     a[f][2]+=q.weight*gradient[axis]*(f<2?stress[PhysicalAxis(f)][axis]:f==2?dk*gk[axis]:de*ge[axis]);}
