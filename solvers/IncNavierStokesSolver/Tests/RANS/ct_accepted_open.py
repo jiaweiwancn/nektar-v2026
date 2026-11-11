@@ -344,5 +344,6 @@ def verify(runtime,output):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--output',type=Path);a=p.parse_args()
     if a.output is None:a.output=Path(tempfile.mkdtemp(prefix='ct-accepted-open-',dir=os.environ.get('TMPDIR')))/'verification'
-    os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');r=verify(a.runtime,a.output);print(json.dumps(dict(status=r['status'],failure=r.get('failure'))));return 0 if r['status']=='pass' else 1
+    if (a.runtime/'lib').is_dir():os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
+    r=verify(a.runtime,a.output);print(json.dumps(dict(status=r['status'],failure=r.get('failure'))));return 0 if r['status']=='pass' else 1
 if __name__=='__main__':raise SystemExit(main())

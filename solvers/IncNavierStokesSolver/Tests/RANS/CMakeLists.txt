@@ -631,7 +631,7 @@ if(Python3_Interpreter_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/ct_accepted_open.py
             --runtime $<TARGET_FILE_DIR:RANSPreservationProbe>)
         set_tests_properties(CTAcceptedOpenConservativeNative PROPERTIES PROCESSORS 8 TIMEOUT 600
-            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;PYTHONDONTWRITEBYTECODE=1;TMPDIR=$ENV{TMPDIR}")
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;PYTHONDONTWRITEBYTECODE=1;TMPDIR=$ENV{TMPDIR};LD_LIBRARY_PATH=$<TARGET_FILE_DIR:RANSSpatialDomains>:$ENV{LD_LIBRARY_PATH}")
         add_test(NAME RANSNativeOwnershipGeometry COMMAND ${Python3_EXECUTABLE} -B
             ${CMAKE_CURRENT_LIST_DIR}/check_rans_native_ownership.py
             --probe $<TARGET_FILE:RANSPreservationProbe> --descriptor-probe $<TARGET_FILE:RANSNewModelsProbe>)
