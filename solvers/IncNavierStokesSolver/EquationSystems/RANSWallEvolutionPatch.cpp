@@ -248,10 +248,10 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         "dense_capacity_configuration: execution capacity/resource design must use SolverInfo");
     session->LoadSolverInfo("RANSWallDenseEvolutionCapacity",m_denseCapacityRequest,"3000");
     session->LoadSolverInfo("RANSWallDenseEvolutionResourceDesign",m_denseResourceDesign,"None");
-    double requested=0.;std::size_t consumed=0;
-    try { requested=std::stod(m_denseCapacityRequest,&consumed); }
+    double requested=0.;std::size_t capacityConsumed=0;
+    try { requested=std::stod(m_denseCapacityRequest,&capacityConsumed); }
     catch(const std::exception &) { Require(false,"dense_capacity_invalid: expected finite exact integer in [3000,4331]"); }
-    Require(consumed==m_denseCapacityRequest.size() && std::isfinite(requested) &&
+    Require(capacityConsumed==m_denseCapacityRequest.size() && std::isfinite(requested) &&
         requested==std::floor(requested) && requested>=3000. && requested<=4331.,
         "dense_capacity_invalid: expected finite exact integer in [3000,4331]");
     m_denseCapacity=static_cast<int>(requested); // Cast only after exact validation.
