@@ -54,7 +54,7 @@ def main():
             mesh=a.mesh
             if mesh=='M2':
                 siblings=[read(a.output.resolve()/q/'summary.json') for q in ('EP','Budget')]
-                require(any(t.get('screens',{}).get('M1',{}).get('status')!='PASS' for t in siblings),'M2 escalation is not authorized')
+                require(any(t.get('screens',{}).get('M1',{}).get('status') in ('OBSTRUCTED','UNRESOLVED','FAIL') for t in siblings),'M2 escalation requires an executed failing/unresolved M1 screen')
             name='screen-'+mesh
             z,r,f=s.native(name+'-cp0',mesh=mesh);s.valid(z,r)
             require(len(z['state'])==dict(M1=2447,M2=2975)[mesh],'unexpected native custom mesh size')
