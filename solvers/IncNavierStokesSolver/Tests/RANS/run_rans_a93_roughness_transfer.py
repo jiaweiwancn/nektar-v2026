@@ -14,6 +14,7 @@ from diagnose_rans_balanced_spatial import run_probe
 from run_a93_a95_e94e95_matrix import case_xml
 from compare_rans_balanced_evolution import compare
 from finish_rans_configuration_duration import finish
+from sample_rans_common_endpoints import sample
 
 
 def main():
@@ -62,7 +63,9 @@ def main():
     try:
         for m in ('B5','B5-dt2'):
             folder=old/'campaigns'/(tag+'-'+m);req=load(folder/'request-manifest.json')['request']
-            for T in (.016,.1,.5):require(RequestManifest(folder,req,True).completed(folder/('T-'+format(T,'.4f'))),'transfer_coarse_unsealed')
+            for T in (.016,.1,.5):
+                require(RequestManifest(folder,req,True).completed(folder/('T-'+format(T,'.4f'))),'transfer_coarse_unsealed')
+                require((folder/('scalar-observations-'+str(T))/'results.json').exists(),'transfer_coarse_observer_missing')
             (r/'campaigns'/(tag+'-'+m)).symlink_to(folder,target_is_directory=True)
         run('initialize-new-fine',pilot('B11',.016,True))
         os.environ['LD_LIBRARY_PATH']=str(analysis/'lib')
@@ -95,7 +98,8 @@ def main():
         for T in (.016,.1,.5):
             for m in ('B11','B11-dt2'):run(m+'-'+str(T),pilot(m,T))
             labels=[tag+'-'+m for m in ('B5','B11','B5-dt2','B11-dt2')]
-            comparison=compare(r,labels,T);write_json(r/'comparisons'/(tag+'-'+str(T)+'.json'),comparison)
+            samples=sample(r,labels,T,r/'common-sampling'/str(T),analysis)
+            comparison=compare(r,labels,T,common_sampling=samples);write_json(r/'comparisons'/(tag+'-'+str(T)+'.json'),comparison)
             audit=finish(r,admission,.002,T)
             row=dict(time=T,status='pass' if comparison['status']=='pass' and audit['status']=='pass' else 'failed_or_unresolved',
                 comparison=comparison,audit=audit)

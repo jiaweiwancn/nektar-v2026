@@ -9,7 +9,7 @@ from rans_request_manifest import RequestManifest
 from rans_preservation_oracle import Reference
 from run_rans_neutral_pilot import scaled,FIELDS
 
-def compare(root,labels,T,inputs_only=False):
+def compare(root,labels,T,inputs_only=False,common_sampling=None):
     folders=[root/'campaigns'/label for label in labels];reqs=[load(f/'request-manifest.json')['request'] for f in folders];metrics=[];samples=[];provenance=[]
     for key in ('model','policy','wall','descriptor','boundary_policy','runtime','velocity_amplitude'):
         if any(q[key]!=reqs[0][key] for q in reqs[1:]):raise ValueError('physics/runtime identity differs '+key)
@@ -38,6 +38,18 @@ def compare(root,labels,T,inputs_only=False):
         if not admission.completed(endpoint):raise ValueError('incomplete endpoint '+str(endpoint))
         m=load(endpoint/'metrics.json');s=load(endpoint/'endpoint-samples.json');assert m['status']=='pass' and abs(m['time']-T)<1e-13
         metrics.append(m);samples.append(s);provenance.append(dict(label=folder.name,request_sha256=admission.payload['sha256'],space={k:request[k] for k in ('knots','degree','pressure_degree','quadrature','columns')},dt=request['dt'],time=m['time'],history=m['history_identity'],state_sha256=m['final_state_sha256'],metrics_sha256=hashlib.sha256((endpoint/'metrics.json').read_bytes()).hexdigest(),source=str(endpoint)))
+    if common_sampling is not None:
+        from run_rans_neutral_pilot import accuracy
+        if len(common_sampling)!=4:raise ValueError('common sampling companion coverage')
+        ref=Reference(reqs[0]['model'],reqs[0]['policy'],reqs[0]['wall'])
+        for i,row in enumerate(common_sampling):
+            endpoint=folders[i]/('T-'+format(T,'.4f'));sample=row['final'];initial=row['initial']
+            if row['native_report_sha256']!=hashlib.sha256((endpoint/'case.evolution.json').read_bytes()).hexdigest():raise ValueError('foreign common-grid native report')
+            if exact_vector_hash(sample['state'])!=metrics[i]['final_state_sha256'] or abs(sample['time']-T)>1e-13:raise ValueError('common-grid endpoint state/time differs')
+            expected=reqs[i].get('actual_initial',{}).get('state_sha256',reqs[i]['raw_neutral_sha256'])
+            if exact_vector_hash(initial['state'])!=expected or initial['time']!=0:raise ValueError('common-grid actual initial differs')
+            weights=sample['grid_weights'];metrics[i]=dict(metrics[i],**accuracy(ref,sample,initial,weights));samples[i]=sample
+            provenance[i]['common_sampling']=row['provenance']
     if inputs_only:
         for sample in samples:compare_samples(samples[0],sample,samples[0]['grid_weights'])
         return dict(status='verified_inputs',requests=reqs,metrics=metrics,samples=samples,provenance=provenance,scope='input/endpoint identities only; no neutral error-reduction criterion applied')
