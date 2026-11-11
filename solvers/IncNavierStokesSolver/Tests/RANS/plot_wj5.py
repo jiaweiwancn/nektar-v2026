@@ -57,20 +57,23 @@ def main():
                 energy+=vol*np.array(e['Legendre_x_z'])[2]**2/np.outer([1,3,5,7],[1,3,5,7])
             ax=axes[row,col];image=ax.imshow(np.log10(np.maximum(energy,1e-30)),origin='lower',vmin=-28,vmax=-7,cmap='viridis')
             ax.axhline(1.5,color='white',ls=':');ax.axvline(1.5,color='white',ls=':');ax.set_xticks(range(4));ax.set_yticks(range(4));ax.set_xlabel('normal Legendre degree');ax.set_ylabel('horizontal Legendre degree');ax.set_title(key.replace('/terminal',''),fontsize=9)
-    fig.colorbar(image,ax=axes.ravel().tolist(),label='log10 elementwise divergence L2 energy',shrink=.8)
     # A global continuous Q1 projection differs from independent element Q1
     # projections. Low element degrees may also cancel against global tests.
     fig.subplots_adjust(right=.83,wspace=.45,hspace=.5)
+    color_axis=fig.add_axes([.87,.17,.025,.66])
+    fig.colorbar(image,cax=color_axis,label='log10 elementwise divergence L2 energy')
     for suffix in ('png','pdf','svg'):fig.savefig(out/('element-divergence-modes.'+suffix),dpi=180,bbox_inches='tight')
     plt.close(fig)
-    fig,axes=plt.subplots(1,2,figsize=(10,3.7))
+    fig,axes=plt.subplots(1,2,figsize=(10,4.8))
     for ax,policy in zip(axes,('EP','Budget')):
         keys=[policy+'/retained-Nx2-32']+[key for key in diagnoses if key.startswith(policy+'/screen/') and key.endswith('/terminal')]
         for j,key in enumerate(keys):
             q=sorted(diagnoses[key]['forcing']['samples'],key=lambda r:r['position'][0]);x=[r['position'][0] for r in q]
             for term,style in (('actual_F_x','-'),('mechanical_pressure_gradient_x','--'),('conservative_tangential_convection_x',':')):
-                ax.plot(x,[r[term] for r in q],style,color=plt.cm.tab10(j),label=key.split('/',1)[1].replace('/terminal','')+' '+term)
-        ax.set_xlabel('x [m], outer one-sided H sampler');ax.set_ylabel('acceleration [m/s²]');ax.set_title(policy+' evolved forcing at Tx');ax.grid(alpha=.2);ax.legend(fontsize=6)
+                label=key.split('/',1)[1].replace('/terminal','')+' '+dict(actual_F_x='total',mechanical_pressure_gradient_x='pressure gradient',conservative_tangential_convection_x='convection')[term]
+                ax.plot(x,[r[term] for r in q],style,color=plt.cm.tab10(j),label=label)
+        ax.set_xlabel('x [m], outer one-sided H sampler');ax.set_ylabel('acceleration [m/s²]');ax.set_title(policy+' evolved forcing at Tx');ax.grid(alpha=.2)
+        ax.legend(fontsize=6,ncol=2,loc='upper center',bbox_to_anchor=(.5,-.23))
     save(fig,out,'evolved-roughness-forcing')
     fig,axes=plt.subplots(1,2,figsize=(10,3.7))
     terms=['storage','conservative_advection','viscous_stress','reduced_pressure','roughness_force']
