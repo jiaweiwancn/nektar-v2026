@@ -130,7 +130,8 @@ std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(i
     std::vector<FacePoint> result;
     for(int e=0;e<fields[block]->Elements().size();++e)
     {
-        const auto &element=fields[block]->Elements()[e];if(!Same(side<0?element.lower[axis]:element.upper[axis],position))continue;
+        const auto &element=fields[block]->Elements()[e];
+        if((side<0?element.lower[axis]:element.upper[axis])!=position)continue;
         for(int j=0;j<(m_dimension==3?order:1);++j)for(int i=0;i<order;++i)
         {
             RANSWallCoordinate p{};p[axis]=position;double weight=1;const std::array<int,2> index{i,j};
@@ -420,12 +421,12 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             bottom=std::min(bottom,point[2]);top=std::max(top,point[2]);
             for(int a=0;a<3;++a){lower[a]=std::min(lower[a],point[a]);upper[a]=std::max(upper[a],point[a]);}
         }
-        Require(bottom>=-1e-12 && !(bottom<parameters.geometry.height-1e-12 && top>parameters.geometry.height+1e-12),
+        Require(bottom>=0 && !(bottom<parameters.geometry.height && top>parameters.geometry.height),
                 "evolution element crosses ground or H");
-        all.push_back(e);if(top<=parameters.geometry.height+1e-12)inner.push_back(e);else outer.push_back(e);
+        all.push_back(e);if(top<=parameters.geometry.height)inner.push_back(e);else outer.push_back(e);
         Require(full->GetExp(e)->GetBasisNumModes(normal)>=4,"evolution velocity/scalar degree must be at least three");
     }
-    Require(!inner.empty() && !outer.empty() && Same(lower[2],0),"incomplete wall/outer physical domains");
+    Require(!inner.empty() && !outer.empty() && lower[2]==0,"incomplete wall/outer physical domains");
     m_mapping.Validate(lower,upper,.1);
     std::string transition;session->LoadSolverInfo("RANSWallTransition",transition,"Fixed");
     Require(transition=="Fixed" || transition=="Upstream" || transition=="UniformEPFlat","unknown RANSWallTransition");
