@@ -55,7 +55,8 @@ def verify_parent(parent,source):
     require(actual==manifest['runtime'],'native executable/dependency closure differs')
     old=read(parent/'producer-source-content.json');checked={};registration=[]
     for name,wanted in old.items():
-        if not (name.endswith(('.cpp','.h','.hpp','.hxx','.c','.cc','.cmake')) or Path(name).name=='CMakeLists.txt'):continue
+        # Match the sealed producer's declared 1800-input selection exactly.
+        if not (name.endswith(('.cpp','.h','.hpp')) or name.endswith('CMakeLists.txt')):continue
         got=file_hash(source/name)
         if got!=wanted:
             require(name=='solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt','native source input changed: '+name)
