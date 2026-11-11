@@ -179,3 +179,28 @@ histories retain full report equality checks; earlier native checkpoint historie
 retain their checksum/signature and primary-state checks and are reported as
 such. Never use a zero-step report to fabricate a preceding callback or promote
 the rejected candidate to an accepted checkpoint.
+
+The half-dt diagnosis subsequently accepted all eight refined steps to T=.08,
+with inactive correction and a positive but small minimum principal margin
+~.0003274. Both-order base .02/.01 and same-dt base/refined .01 comparisons
+at T=.08 pass the original pilot limits. One explicitly revised design is
+therefore authorized before further execution: preserve study-v1 OBSTRUCTED;
+import its base .02/.01 histories and diagnosis-v1's refined .01 history into
+study-v2. Compare base .02/.01 in time and base/refined .01 in space, preserving
+T=8 and the SAME2200-unit/21600s H2 allocation. No CP0 rerun, input change,
+new timestep search or further halving is included. Advance the tighter-margin
+refined trajectory first, in blocks<=32, with joint comparisons at T=.5,1,...,8.
+Any new hard/correction exit or failed comparison stops this final design.
+The old candidate is never retried. Admission must include1980 remaining steps,
+the measured short-run cost (including startup),25% headroom, observers/I/O,
+600s closure and32 units reserved for a small missing-input control only if the
+base completes. An unlaunched phase remains NOT_RUN.
+
+Same-node independent weak algebra is distinguished from increased-order
+quadrature sensitivity. The evolved base outer-stress moment differs by
+3.81e-9 between production order8 and independent order24, marginally beyond
+the original2e-9 absolute floor. Keep that local quadrature result UNRESOLVED;
+do not relax its floor or label it an assembly defect without the same-node
+check. Physical field norm quadrature8/10 x4/6 passes the fixed1e-10 floor.
+This outstanding load-quadrature qualification remains visible in any longer
+transient result and prevents a blanket all-components PASS.
