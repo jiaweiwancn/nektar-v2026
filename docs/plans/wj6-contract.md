@@ -182,3 +182,44 @@ WJ-4/WJ-5 negatives and stationarity NOT_REACHED remain unchanged. The scope is
 a finite serial flat2D reference-Dirichlet strip, not exact discrete equilibrium,
 general nonlinear stability/realizability, scalable production or long-time
 homogeneous ABL validation.
+
+## Recorded implementation and passive-measurement addendum
+
+The producing run retains the contract bytes archived in `source-v7`
+(`4f7520aabee2604efd5b0194a5fa8592d672816a`); this addendum records the
+completed implementation without retroactively changing that frozen input.
+The matched native build is `30ffa4000353d8055d19abec3c7dc189b7004c4a`.
+Actual dimensions match the table above for both policies. Source trees,
+all source-content hashes and execution/physical signature controls are
+bound in the sealed evidence.
+
+The original order10 quadrature observations did not export native constraint
+row maps. A separate versioned passive observer exports those maps, verifies
+bitwise equality of the original physical samples and applies each trajectory's
+own worst coefficient/basis/evaluation envelope to both observation orders.
+All 504 required sensitivity leaves per policy pass. No governing step was
+rerun for this measurement repair. Budget's interrupted supplemental observer
+retains its failed result; a new output lineage verifies and reuses six complete
+readbacks and executes only eight missing ones. Receipt/argv/XML/checkpoint/
+runtime and observer-code identities are checked before reuse.
+
+Two worker-allocation denials occurred before process launch and record zero
+native attempts. Transaction resumption uses a fresh external process and
+private output name after verifying that specific zero-launch receipt. The
+actual injected physical rejection remains one process abort at step25,
+followed by fresh native 4+4 restarts from immutable CP24/CP28. No in-process
+retry mechanism was added. Allocation waits and failed passive work remain
+charged. Both transactions compare all nine states and eight callback histories.
+
+Each policy completed 128 core steps plus nine transaction attempts, with one
+solve of each declared block and one logical bound operation per attempt.
+Correction is inactive. Including controls, each closed ledger charges 170
+units, below 800; numerical-study charges are 5030.391243 seconds EP and
+5875.989613 seconds budget, below 10800. Primary Tx is PASS for both policies.
+The measured, write-once remaining-cost projections exceed the unchanged time
+ceiling for both policies, so joint T3 admission is RESOURCE_LIMIT and no T3
+step is launched. Targets, mesh vectors, accuracy budgets and physical settings
+remain unchanged. WJ-4/WJ-5 outcomes and seals remain intact.
+
+The full results, exact commands and byte/receipt verification scope are in
+[the WJ-6 Linux report](wj6-linux-evidence.md) and its compact evidence directory.

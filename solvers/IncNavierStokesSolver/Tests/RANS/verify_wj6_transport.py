@@ -71,8 +71,14 @@ def main():
                         'transported producer/observer/receipt link differs: '+path)
                 checked.add(path)
             else:remote.add((path,identity['sha256']))
-    manifest=packets['manifest.json'];blobs=GitBlobs(a.repository);source_count=archive_count=0
+    manifest=packets['manifest.json'];blobs=GitBlobs(a.repository);source_count=archive_count=driver_count=0
+    trees={}
+    def tree(revision,wanted):
+        actual=subprocess.check_output(['git','-C',str(a.repository),'rev-parse',revision+'^{tree}'],text=True).strip()
+        require(actual==wanted,'Git tree identity differs: '+revision);trees[revision]=actual
     try:
+        tree(manifest['native_source_revision'],manifest['native_tree'])
+        tree(manifest['driver_source_revision'],manifest['driver_tree'])
         source=packets['identity/producer-source-content.json'];revision=manifest['native_source_revision']
         raw=subprocess.check_output(['git','-C',str(a.repository),'ls-tree','-r','-z',revision])
         modes={item.split(b'\t',1)[1].decode():item.split(None,1)[0].decode() for item in raw.split(b'\0') if item}
@@ -85,12 +91,23 @@ def main():
             require(actual==wanted,'producer source/Git blob differs: '+name);source_count+=1
         for key,packet in packets.items():
             if key.startswith('identity/observer-') and key.endswith('-source.json'):
+                tree(packet['revision'],packet['tree'])
                 for name,wanted in packet['members'].items():
                     require(blobs.hash(packet['revision'],name)==wanted,'observer code/Git blob differs: '+name);archive_count+=1
+        driver_prefix=manifest['driver_source_path']+'/'
+        seen=set()
+        for packet in packets.values():
+            for identity in identities(packet):
+                path=identity['path']
+                if path.startswith(driver_prefix) and path not in seen:
+                    require(blobs.hash(manifest['driver_source_revision'],path[len(driver_prefix):])==identity['sha256'],
+                            'frozen driver input/Git blob differs: '+path)
+                    seen.add(path);driver_count+=1
     finally:blobs.close()
     result=dict(schema='WJ6IndependentLocalVerificationV1',status='PASS',transport_sha256=hashlib.sha256((root/'transport.json').read_bytes()).hexdigest(),
         transported_files=len(transport['files']),encoded_bytes=encoded_bytes,decoded_bytes=raw_bytes,
         verified_receipt_links=len(checked),producer_git_blobs=source_count,observer_git_blobs=archive_count,
+        driver_input_git_blobs=driver_count,git_trees=trees,code=dict(path=str(Path(__file__).resolve()),sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()),
         remote_only_identity_count=len(remote),seconds=time.time()-start,
         scope='all transported encoded/decoded bytes and available receipt links read locally; producer/observer source checked against local Git objects; heavy fields/binaries remain remotely verified recorded identities')
     a.output.parent.mkdir(parents=True,exist_ok=True)
