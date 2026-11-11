@@ -50,9 +50,9 @@ def fixture(folder,runtime,model='A95',steps=0,dt=1e-7,pressure=0.,traction_shif
     write(root,path);return path
 
 
-def manufactured_fixture(folder,runtime):
+def manufactured_fixture(folder,runtime,steps=0,dt=1e-7):
     """Independent steady weak identity; forcing is verification-only."""
-    path=fixture(folder,runtime);root=ET.parse(path).getroot();c=Column('A95',1.,2.,0.,1.5e-5)
+    path=fixture(folder,runtime,steps=steps,dt=dt);root=ET.parse(path).getroot();c=Column('A95',1.,2.,0.,1.5e-5)
     eps=c.A/2;G=(1/c.D(2.)-6.5*eps)/(3/math.sqrt(2));gradient=np.zeros((3,3));gradient[0,2]=G
     law=oracle('A95',1.,eps,gradient);Q=law['Q'];pi=-Q[2,2]
     tensor_mesh(root,[0.,c.zv,2.,4.],3,2,1.,1.,points=[8,8],xknots=[0.,.5,1.])
