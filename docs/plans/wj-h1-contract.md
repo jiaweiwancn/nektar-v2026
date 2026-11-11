@@ -173,3 +173,13 @@ Specifications remain byte-identical to the originals:
 main1959e96ea0b61f9deb9ff9ad1f5b26488a932a8451c2de6d3b6f7b7c9dbd9124;
 appendix0ab52e0d813b8fb344973f75ca6d8da97ff389ef9f93476500ca9d1df1fbc47c.
 Retain literal quad/\\quad erratum and correct (d+a*h)/a^2 coefficient.
+
+The first flat Budget regression completed its native transaction but failed
+the old curved-selector message assertion. The new named terrain route still
+rejects that cylinder input; update only the expected exact reason. Retain the
+failed CTest receipt and its five charged attempts. Re-run with the unchanged
+source-v3 native binaries and a separate CTest metadata epoch pointing to the
+corrected Python fixture; do not overwrite the original source/build metadata.
+The additional five attempts keep the planned total at32, below40. All current
+native sources remain at b50aaa8; later publisher/fixture commits do not require
+recompiling or reopening the already-passed terrain trajectories.

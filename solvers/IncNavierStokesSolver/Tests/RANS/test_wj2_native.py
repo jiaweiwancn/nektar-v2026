@@ -308,7 +308,7 @@ def main():
             ('sampling',lambda t:set_info(t,'RANSWallKSampling','Point'),'WJ requires InterfaceTrace sampling',{}),
             ('physical-cap',lambda t:set_info(t,'RANSWallDestruction','Capped'),'WJ requires Original outer, Linear full-strain inner and uncapped destruction',{}),
             ('transition',lambda t:set_info(t,'RANSWallTransition','Upstream'),'WJ transitions are unsupported',{}),
-            ('curved',lambda t:set_info(t,'RANSWallMap','Cylinder'),'WJ native supports serial flat 2D only',{}),
+            ('curved',lambda t:set_info(t,'RANSWallMap','Cylinder'),'WJ native requires serial flat2D or explicit BudgetTerrainV1',{}),
             ('evaluation-reuse',lambda t:set_info(t,'RANSWallEvaluationReuse','ExactStepV1'),'WJ requires explicit WJNativeV1 MassProjection and evaluation reuse Off',{}),
             ('extra-verification-solves',lambda t:set_info(t,'RANSWallPimpleVerify','On'),'WJ production route forbids RANSWallPimpleVerify=On',{})]:
             report,rc,folder=native('incompatible-'+name,0,cp1,mutate=mutate,**options)
