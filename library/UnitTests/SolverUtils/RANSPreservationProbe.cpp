@@ -245,17 +245,29 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
             const double k=v.Value(state,patch.offset[patch.K()]);RANSVector u{};u[0]=v.Value(state,patch.offset[0]);u[2]=v.Value(state,patch.offset[1]);
             double frozen=0,current=0;
             for(int a=0;a<3;++a){frozen+=face.area[a]*(c[0]*gk[a]-u[a]*k);current+=face.area[a]*(c[1]*gk[a]-u[a]*k);}
+            // Diagnostic components only. Keep the original net-flux and
+            // budget accumulation above unchanged; no row reaction is used.
+            double ka=0,kdf=0,kdc=0;
+            for(int a=0;a<3;++a){ka+=face.area[a]*u[a]*k;kdf+=face.area[a]*c[0]*gk[a];kdc+=face.area[a]*c[1]*gk[a];}
             sum[region][3]+=face.weight*frozen;sum[region][4]+=face.weight*current;
-            double ef=0,ec=0;
+            double ef=0,ec=0,ea=0,edf=0,edc=0;
             if(region==1)
             {
                 const auto e=patch.GeometryPoint(patch.Epsilon(),v.geometry,v.coordinate);const auto ge=e.Gradient(state,patch.offset[patch.Epsilon()]);const double value=e.Value(state,patch.offset[patch.Epsilon()]);
                 for(int a=0;a<3;++a){ef+=face.area[a]*(c[2]*ge[a]-u[a]*value);ec+=face.area[a]*(c[3]*ge[a]-u[a]*value);}
+                for(int a=0;a<3;++a){ea+=face.area[a]*u[a]*value;edf+=face.area[a]*c[2]*ge[a];edc+=face.area[a]*c[3]*ge[a];}
                 sum[2][3]+=face.weight*ef;sum[2][4]+=face.weight*ec;
             }
             faces.push_back(J::Object({{"coordinate",J::Numbers(v.coordinate)},{"geometry",J::Number(v.geometry)},
                 {"region",J::Number(region)},{"axis",J::Number(axis)},{"outward_side",J::Number(side)},
                 {"weight",J::Number(face.weight)},{"area",J::Numbers(face.area)},
+                {"component_schema",J::Quote("SeparatePhysicalFaceFluxV1")},
+                {"k_advective_outward",J::Number(ka)},
+                {"k_frozen_diffusive_outward",J::Number(kdf)},
+                {"k_current_diffusive_outward",J::Number(kdc)},
+                {"epsilon_advective_outward",region?J::Number(ea):"null"},
+                {"epsilon_frozen_diffusive_outward",region?J::Number(edf):"null"},
+                {"epsilon_current_diffusive_outward",region?J::Number(edc):"null"},
                 {"k_frozen_flux",J::Number(frozen)},{"k_current_flux",J::Number(current)},
                 {"epsilon_frozen_flux",region?J::Number(ef):"null"},{"epsilon_current_flux",region?J::Number(ec):"null"}}));
         }
