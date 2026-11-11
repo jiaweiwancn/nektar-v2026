@@ -343,7 +343,26 @@ RANSWallGlobalField::Vector RANSWallGlobalField::Project(const RANSWallFunction 
         const auto exp=m_field->GetExp(e);const int n=exp->GetTotPoints();
         Array<OneD,NekDouble> x(n,0.),y(n,0.),z(n,0.),values(n),coeff(exp->GetNcoeffs());
         exp->GetCoords(x,y,z);
-        for(int q=0;q<n;++q)values[q]=Sample(function,Physical(x[q],y[q],z[q],m_dimension));
+        for(int q=0;q<n;++q)
+        {
+            auto point=Physical(x[q],y[q],z[q],m_dimension);
+            // Native GetCoords reconstructs an affine canonical quad/hex by
+            // floating-point basis evaluation. Its endpoint can be a few ulps
+            // outside the exact element and hence outside a certified map.
+            // Canonicalize only exterior roundoff, never an interior sample or
+            // an actual out-of-element request. Physical geometry guards stay
+            // strict; no field value or constitutive state is clipped.
+            const auto &element=m_elements[e];
+            for(int axis=0;axis<3;++axis)if(m_dimension==3 || axis!=1)
+            {
+                const double lo=element.lower[axis],hi=element.upper[axis];
+                const double tol=16*std::numeric_limits<double>::epsilon()*std::max({1.,std::abs(lo),std::abs(hi)});
+                if(point[axis]<lo && lo-point[axis]<=tol)point[axis]=lo;
+                if(point[axis]>hi && point[axis]-hi<=tol)point[axis]=hi;
+                Require(point[axis]>=lo && point[axis]<=hi,"native projection coordinate outside canonical affine element");
+            }
+            values[q]=Sample(function,point);
+        }
         exp->FwdTrans(values,coeff);
         for(int j=0;j<exp->GetNcoeffs();++j)
         {

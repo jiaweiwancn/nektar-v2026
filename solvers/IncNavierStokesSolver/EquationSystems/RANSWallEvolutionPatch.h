@@ -99,7 +99,8 @@ public:
     Vector ExteriorPressureAction(const Vector &,int region=-1) const;
     void ValidateOutlet(const Vector &,const std::string &phase) const;
     std::map<int,double> OpenConstraints(double,const RANSWallEvolutionData &) const;
-    std::string OpenBoundaryDiagnostic(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &) const;
+    std::string OpenBoundaryDiagnostic(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &,
+        const std::vector<RANSWallCoordinate> &physicalLocations={}) const;
     std::vector<FacePoint> Surface(int block,int axis,double position,int side,int order=0) const;
     double Distance(const RANSWallCoordinate &chart) const;
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart) const;

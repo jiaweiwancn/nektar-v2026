@@ -149,3 +149,13 @@ equal windows. Otherwise label the attained interval transient. Report T and
 T/L_fetch, never infer stationarity from a small stage defect. Preserve all
 unreached targets and terminal PASS/OBSTRUCTED/UNRESOLVED/RESOURCE_LIMIT/NOT_RUN
 components. No hill prediction or experimental validation claim belongs to H2.
+
+The first production CP0 attempts (no governing steps) exposed and retain input
+parser/map-selector errors and an affine native GetCoords endpoint just outside
+the certified computational ceiling. The fix canonicalizes only out-of-element
+projection-coordinate roundoff within16 binary64 eps times the element scale;
+actual out-of-element coordinates and all physical map/cutoff/state guards remain
+strict. No interior sample or field is clipped. Source-built Budget and legacy
+controls qualify the shared projection change. Measurement packets can request
+physical coordinates directly; production code contains no experimental point
+list. Preserve producer/observer identities across this development correction.

@@ -232,7 +232,10 @@ int main(int argc,char **argv)
                 RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,time);
                 patch.ValidateOutlet(state,"immutable_readback");
                 domain=patch.ScalarDomainJSON(patch.ScalarDomain(state,time,data,true),true);
-                diagnostics=patch.OpenBoundaryDiagnostic(state,history,alpha,time,data);
+                std::vector<RANSWallCoordinate> locations;
+                if(auto requested=packet.get_child_optional("physical_observations"))for(const auto &entry:*requested)
+                {RANSWallCoordinate q{};int i=0;for(const auto &v:entry.second){Require(i<3,"physical observation shape");q[i++]=v.second.get_value<double>();}Require(i==3,"physical observation shape");locations.push_back(q);}
+                diagnostics=patch.OpenBoundaryDiagnostic(state,history,alpha,time,data,locations);
                 spatial=patch.Residual(state,state,0.,time,data,false);
                 stage=alpha>0?patch.Residual(state,history,alpha,time,data,false):Vector{};
                 if(packet.get<bool>("weak",false))weak=Weak(patch,state,history,alpha,time,data);

@@ -233,7 +233,8 @@ void RANSWallEvolutionPatch::ExteriorPicard(int block,const Vector &s,double tim
 }
 
 std::string RANSWallEvolutionPatch::OpenBoundaryDiagnostic(const Vector &s,const Vector &history,
-    double alpha,double time,const RANSWallEvolutionData &data) const
+    double alpha,double time,const RANSWallEvolutionData &data,
+    const std::vector<RANSWallCoordinate> &physicalLocations) const
 {
     if(!OpenBoundary())return "null";
     const auto hash=RANSWallR3::Hash(s);const auto work=InitializationWork();
@@ -255,14 +256,14 @@ std::string RANSWallEvolutionPatch::OpenBoundaryDiagnostic(const Vector &s,const
     const double H=m_parameters.geometry.height;
     std::set<double> heights{Mapping().displacement,Mapping().displacement+H,Mapping().tunnelTop};
     for(int i=0;i<=160;++i)heights.insert(Mapping().displacement+(Mapping().tunnelTop-Mapping().displacement)*i/160.);
-    for(double r:{.01,.05,.1,.1685751788867232,.29536404609237266,.41840674658489085,
-        .6690223956881336,.9196090047393375,1.0449458693429963,1.1694696124895443,
-        1.41851709878264,1.92056151844624,2.419498652541585,2.9199749093950347,
-        3.9193302202397513,4.9202827339466575,6.171037775299688,7.4203117739986935})
-        heights.insert(Mapping().displacement+r);
-    for(double fraction:{0.,.25,.5,.75,1.})for(double physicalHeight:heights)
+    std::vector<RANSWallCoordinate> locations=physicalLocations;
+    if(locations.empty())for(double fraction:{0.,.25,.5,.75,1.})for(double z:heights)
+        locations.push_back({lower[0]+fraction*(upper[0]-lower[0]),0,z});
+    for(const auto &physicalPoint:locations)
     {
-        const auto q=Mapping().Inverse({lower[0]+fraction*(upper[0]-lower[0]),0,physicalHeight});
+        Require(physicalPoint[0]>=lower[0] && physicalPoint[0]<=upper[0] && physicalPoint[1]==0 &&
+            physicalPoint[2]>=Mapping().displacement && physicalPoint[2]<=Mapping().tunnelTop,"open observation outside physical tunnel");
+        const auto q=Mapping().Inverse(physicalPoint);
         for(int side:std::abs(q[2]-H)<1e-11?std::vector<int>{-1,1}:std::vector<int>{0})
         {
             const auto v=Point(0,q,side);const bool inner=q[2]<H-1e-11 || (std::abs(q[2]-H)<1e-11 && side<0);
