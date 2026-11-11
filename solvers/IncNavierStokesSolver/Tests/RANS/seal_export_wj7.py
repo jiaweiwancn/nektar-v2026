@@ -48,7 +48,8 @@ def main():
         require(all(e['status']=='FINISHED' or k=='final-seal-transport-reserve' for k,e in d['entries'].items()),'unreconciled attempt remains charged; cannot seal PASS')
         l.finish('final-seal-transport-reserve',0,time.time()-start+180,str(out/'finalization.json'))
         totals=l.totals();require(totals['attempts']<=800 and totals['seconds']<=10800,'RESOURCE_LIMIT: final ledger')
-        write_once(a.compact/('final-ledger-'+policy+'.json'),read(l.file));resource[policy]['totals']=totals
+        with (a.compact/('final-ledger-'+policy+'.json')).open('xb') as stream:stream.write(l.file.read_bytes())
+        resource[policy]['totals']=totals
     barriers={f.stem:read(f) for f in (root/'joint').glob('*.json')}
     terminal=barriers.get('barrier-128',component('NOT_RUN','T3 unlaunched/unreached'))
     first_limit=next((dict(name=k,gate=v) for k,v in sorted(barriers.items()) if v['status']!='PASS'),None)
