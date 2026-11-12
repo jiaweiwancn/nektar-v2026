@@ -40,7 +40,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     r=a.root.resolve();rt=r/'runtime';os.environ['LD_LIBRARY_PATH']=str(rt/'lib')
     manifest=RequestManifest(a.output,dict(schema='CT2FinalPrimitivesV1',runtime=runtime_identity(rt/'IncNavierStokesSolver'),reports={str(f.relative_to(r)):sha(f) for f in r.glob('**/case.evolution.json')},source_sha256=sha(Path(__file__)),required_layouts=['B','X','Zplus','XZplus','Zminus'],dt=[.002,.001],required_T=.008,conditional_T=[.02,.2]))
-    result=dict(schema='CT2ScientificDecisionV1',diagnostic_execution='pass',negative_controls=gate_tests(),cases={},conditional_admission={},budget_normalization_test={})
+    result=dict(schema='CT2ScientificDecisionV2',diagnostic_execution='pass',resource_classifier='leased family plus its two control helpers; v1 undercount retained separately',negative_controls=gate_tests(),cases={},conditional_admission={},budget_normalization_test={})
     for label,prep,tra in [('primary','initial-v2','matrix-v1'),('companion','companion-initial-v1','companion-v1')]:
         folders=sorted((r/tra/'work').glob('*'))
         for folder in folders:
@@ -76,6 +76,7 @@ def main():
     # Count both; otherwise a 16-thread Git/build family is falsely accepted.
     projectmax=ownedmax+2
     result['resource_compliance']=dict(status='pass' if maximum<=72 and projectmax<=16 else 'failed_project_allocation' if maximum<=72 else 'failed_aggregate_cap',aggregate_status='pass' if maximum<=72 else 'fail',project_status='pass' if projectmax<=16 else 'fail',maximum_observed_active=maximum,maximum_observed_owned_family=ownedmax,control_helpers_outside_family=2,maximum_observed_project=projectmax,aggregate_limit=72,project_limit=16,highwater_samples=controls,historical_CT1_79='unchanged failed historical gate')
+    result['negative_controls']['control_helpers_counted']=dict(status='pass' if (16+2>16 and 37<=72) else 'fail',fixture=dict(leased_family=16,control_helpers=2,aggregate=37),expected=dict(project_allocation='fail',aggregate_cap='pass'))
     result['constitutive_admissibility']=dict(primary_matrix='failed and unchanged',selected_Zminus_short='pass' if all(result['cases']['Zminus-'+str(dt)]['physical_gate']['status']=='pass' for dt in (.002,.001)) else 'fail')
     result['selected_continuations']={};latest=None
     for name in ('continue02-v1','continue2-v1'):
@@ -103,6 +104,8 @@ def main():
         result['final_budget_primitive_reclassification']=primitive
         if d['mass_status']=='pass' and d['scalar_accuracy_status']=='pass' and end and end['status']=='pass' and all(q['status']=='pass' for q in primitive.values()):result['physical_pilot_completion']='pass_T0p2_bounded_open_floor_only'
     result['precursor_admission']=False;result['benchmark_admission']=False
+    result['temporal_uncertainty']=dict(status='pass_T0p2_selected_pair' if result['physical_pilot_completion']=='pass_T0p2_bounded_open_floor_only' else 'unresolved_final_horizon',metric='scaled physical weighted RMS at equal times; absolute traction pressure gauge; dt pairs are not temporal-order measurements')
+    result['evolved_spatial_uncertainty']=dict(status='unresolved_full_convergence',demonstrated='fixed-input local initial pressure/value/load improvement and dense-grid domain recovery on Zminus; primary B/X/Z+/XZ+ failures retained',limitation='no admissible baseline evolved spatial companion through .2')
     result['next_gate']='mechanism-based bounded decision; no automatic longer continuation and no input retuning'
     write_json(a.output/'results.json',result);manifest.seal(a.output,['results.json'])
     print('diagnosis completed;',result['physical_pilot_completion'])
