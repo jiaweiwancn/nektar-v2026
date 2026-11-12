@@ -123,6 +123,9 @@ def attempt_diagnosis(initial,report,c):
 
 def audits(a,initial_packet,report,c,folder,audit_folder=None):
     result=dict(budgets={},native_report_sha256=sha(folder/'case.evolution.json'),state_sha256=exact_vector_hash(report['state']),time=report['time'])
+    result['budget_binding']=dict(state_sha256=result['state_sha256'],native_report_sha256=result['native_report_sha256'],
+        time=report['time'],dt=report['dt'],verification_identity=initial_packet['observation']['identity'],model=c['model'],
+        configuration_sha256=sha(folder/'case.xml'),functions_sha256=hashlib.sha256(canonical(function_identity(ET.parse(folder/'case.xml').getroot()))).hexdigest())
     result['domain']=domain(initial_packet,report,c);result['mass']=mass(initial_packet,report['state'],c)
     result['outlet_traction']=outlet(initial_packet,report['state'],folder/'case.xml',c['model'])
     n=a.initial_receipt['global_count'];weights=a.initial_receipt['global_weights']
@@ -153,7 +156,10 @@ def audits(a,initial_packet,report,c,folder,audit_folder=None):
             write(root,sub/'case.xml')
             packet,e=probe(a.runtime,sub,replay(initial_packet,report['state'],report['time'],[],export_physical_scalar_budget=True,
                 previous_state=previous,stage_history=snapshot['history'],export_frozen_scalar_reconciliation=True,physical_face_order=face),'budget')
-            result['budgets'][label]=dict(budget_classification(packet,c),execution=e,packet_sha256=sha(sub/'budget.json')) if e['exit_code']==0 else dict(status='failed_probe',execution=e,packet=packet)
+            if e['exit_code']==0:
+                require(packet['observation']['state']==report['state'] and packet['observation']['identity']==initial_packet['observation']['identity'],'budget_consumed_state_or_configuration_mismatch')
+                result['budgets'][label]=dict(budget_classification(packet,c),execution=e,packet_sha256=sha(sub/'budget.json'),binding=result['budget_binding'])
+            else:result['budgets'][label]=dict(status='failed_probe',execution=e,packet=packet)
     result['budget_gate']=physical_budgets(result)
     result['attempt_diagnosis']=attempt_diagnosis(initial_packet,report,c)
     return result
@@ -162,6 +168,12 @@ def audits(a,initial_packet,report,c,folder,audit_folder=None):
 def advance(a):
     a.initial_receipt=json.loads((a.initial/'results.json').read_text());ir=a.initial_receipt
     require(ir['status']=='pass' and ir['case']==a.case,'foreign_or_failed_initialization')
+    sealed=json.loads((a.initial/'completed-artifacts.json').read_text())
+    require(all(sha(a.initial/f)==h for f,h in sealed['files'].items()),'changed_initialization_receipt')
+    for name,q in ir['members'].items():
+        zero=a.initial/name
+        require(sha(zero/'case.evolution.json')==q['native_report_sha256'] and sha(zero/'initial.json')==q['packet_sha256'],'changed_zero_step_artifact')
+        require(q['identity']['runtime']==runtime_identity(a.runtime/'IncNavierStokesSolver'),'foreign_initial_runtime')
     c=ir['construction'];degree=c['degree']
     if a.target==.008:require(a.parent is None,'first_segment_must_use_fresh_zero_history');start=0.
     else:
@@ -173,6 +185,11 @@ def advance(a):
         seal=json.loads((a.parent/'completed-artifacts.json').read_text())
         require(all(sha(a.parent/f)==h for f,h in seal['files'].items()),'changed_parent_evidence')
         require(parent['qualification']==qualify(parent,start),'parent_primitives_do_not_reclassify')
+        for dt,q in parent['members'].items():
+            f=Path(q['directory']);native=json.loads((f/'case.evolution.json').read_text())
+            require(sha(f/'case.evolution.json')==q['native_report_sha256'] and exact_vector_hash(native['state'])==q['state_sha256'],'parent_native_state_binding_mismatch')
+            require(sha(f/'case.xml')==q['identity']['configuration_sha256'] and q['identity']['runtime']==runtime_identity(a.runtime/'IncNavierStokesSolver'),'parent_configuration_runtime_binding_mismatch')
+            require(artifact_hash(native['checkpoint'])==q['history_sha256'],'parent_native_history_changed')
     recovered={}
     if a.recover_from:
         previous=json.loads((a.recover_from/'request-manifest.json').read_text())['request']

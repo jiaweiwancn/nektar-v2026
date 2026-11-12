@@ -20,6 +20,8 @@ def physical_budgets(row):
         reasons.append('missing_or_foreign_budget_control')
     for label, budget in budgets.items():
         errors = []
+        if 'budget_binding' in row and budget.get('binding') != row['budget_binding']:
+            errors.append('state_configuration_budget_identity_mismatch')
         if set(budget.get('equations', {})) != EQUATIONS:
             errors.append('missing_or_foreign_budget_equation')
         if set(budget.get('reconstruction', {})) != RECONSTRUCTION:
