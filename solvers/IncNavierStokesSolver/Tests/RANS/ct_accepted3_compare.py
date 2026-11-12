@@ -102,12 +102,14 @@ def radicands(sampled):
 def spatial(a,b,ba,bb,ca,cb,points,weights,n,t):
     av,sa=sample_summary(ba,a,ca,n,weights);bv,sb=sample_summary(bb,b,cb,n,weights)
     local={}
-    if ca['model']=='A95':
+    if ca['model']=='A95' and (sa['domain']['domain_failure_count'] or sb['domain']['domain_failure_count']):
+        local=dict(status='failed_actual_domain_on_common_grid',reason='original scalar/constitutive evaluation undefined',radicand_comparison='unavailable')
+    elif ca['model']=='A95':
         ar,ix=radicands(av);br,bx=radicands(bv);require(np.array_equal(ix,bx),'local_side_inventory_mismatch')
         j=int(np.argmax(abs(ar-br)));difference=float(abs(ar[j]-br[j]));index=int(ix[j]);margin=float(min(ar.min(),br.min()))
         local=dict(maximum_absolute_radicand_difference=difference,minimum_margin_both_spaces=margin,
             difference_over_margin=difference/margin if margin>0 else None,coordinate=points[index],side=ba['observation']['grid_sides'][index],
-            status='below_evaluation_floor' if difference<=1e-10 else 'bounded_on_declared_grid' if margin>0 and difference<=.25*margin else 'unresolved_spatial_domain_sensitivity',
+            status='failed_actual_domain_on_common_grid' if margin<0 else 'below_evaluation_floor' if difference<=1e-10 else 'bounded_on_declared_grid' if margin>0 and difference<=.25*margin else 'unresolved_spatial_domain_sensitivity',
             declared_limit_fraction=.25,evaluation_absolute_floor=1e-10)
     for q in (av,bv):
         q['observation']['time']=t
@@ -164,10 +166,17 @@ def main():
                 q=samples[name][dt][t];o=q['observation'];small={k:v[:n] if isinstance(v,list) else v for k,v in o.items()};small['time']=t;ps.append(dict(observation=small))
             comparison=compare(*ps,weights,c)
             if c['model']=='A95':
-                ar,ix=radicands(samples[name]['0.002'][t]);br,bx=radicands(samples[name]['0.001'][t])
-                require(np.array_equal(ix,bx),'temporal_local_side_inventory_mismatch')
-                j=int(np.argmax(abs(ar-br)));comparison['maximum_radicand_dt_difference']=float(abs(ar[j]-br[j]));comparison['radicand_dt_location']=points[int(ix[j])]
+                valid=all(not row['states'][dt+'@'+str(t)]['observations']['domain']['domain_failure_count'] for dt in ('0.002','0.001'))
+                if valid:
+                    ar,ix=radicands(samples[name]['0.002'][t]);br,bx=radicands(samples[name]['0.001'][t])
+                    require(np.array_equal(ix,bx),'temporal_local_side_inventory_mismatch')
+                    j=int(np.argmax(abs(ar-br)));comparison['maximum_radicand_dt_difference']=float(abs(ar[j]-br[j]));comparison['radicand_dt_location']=points[int(ix[j])]
+                else:comparison['radicand_comparison']='unavailable_original_domain'
             row['temporal'].append(comparison)
+        bad=[dict(sample=k,time=v['time'],domain=v['observations']['domain']) for k,v in row['states'].items()
+             if v['observations']['domain']['domain_failure_count'] or v['observations']['domain']['minima'].get('covariance',{}).get('value',-1)<-1e-10*c['K0']]
+        row['common_grid_domain']=dict(status='pass' if not bad else 'fail',first_failure=bad[0] if bad else None,
+            scope='additional common physical inventory; historical CT2 receipt unchanged')
         result['spaces'][name]=row;write_json(a.output/'progress.json',result)
     for label,coarse,fine in [('streamwise_P3','A95-Zminus-P3-CT2','A95-XZminus-P3'),('degree_same_partition','A95-XZminus-P3','A95-XZminus-P4')]:
         if coarse not in spaces or fine not in spaces:continue
@@ -184,10 +193,10 @@ def main():
                 dtmax=max(x['fields'][field]['scaled_weighted_RMS'] for x in (ta,tb));limit=max(1e-7,.1*d['scaled_weighted_RMS'])
                 uncertainty[field]=dict(maximum_dt_difference=dtmax,limit=limit,status='pass' if dtmax<=limit else 'unresolved_temporal_uncertainty')
             localdt=max(ta.get('maximum_radicand_dt_difference',0.),tb.get('maximum_radicand_dt_difference',0.))
-            if q['local']:
+            if 'maximum_absolute_radicand_difference' in q['local']:
                 q['local']['maximum_dt_radicand_difference']=localdt
                 q['local']['dt_uncertainty_limit']=max(1e-10,.1*q['local']['maximum_absolute_radicand_difference'])
-                if localdt>q['local']['dt_uncertainty_limit']:q['local']['status']='unresolved_temporal_uncertainty'
+                if localdt>q['local']['dt_uncertainty_limit'] and q['local']['status']!='failed_actual_domain_on_common_grid':q['local']['status']='unresolved_temporal_uncertainty'
             q['field_spatial_interpretation_uncertainty']=uncertainty
         evolved=[q for q in rows['0.001'] if q['time']>0]
         result['contrasts'][label]=dict(coarse=coarse,fine=fine,common_times=times,comparisons=rows,

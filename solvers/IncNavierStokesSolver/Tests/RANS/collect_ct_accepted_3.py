@@ -125,6 +125,10 @@ def main():
     save('fresh-resources.json',resources);save('resource-highwater.json',highwater);save('resource-events.json',events)
     comparisons=json.loads((a.comparisons/'results.json').read_text());save('equal-time-comparisons.json',comparisons)
     decision['spatial_uncertainty']=comparisons['evolved_spatial_status']
+    decision['common_physical_domain']={k:v['common_grid_domain'] for k,v in comparisons['spaces'].items()}
+    for case,row in decision['cases'].items():
+        if comparisons['spaces'].get(case,{}).get('common_grid_domain',{}).get('status')=='fail':
+            row['pilot_completion']='failed_additional_common_grid_domain'
     decision['diagnostic_execution']='pass' if all(r['initialization']=='pass' and '0.008' in r['milestones'] and r['milestones']['0.008']['status'] in ('pass','fail') for r in decision['cases'].values()) else 'incomplete_required_case_diagnostics'
     controls=json.loads((a.root/'controls-v1/results.json').read_text());save('degree-pressure-and-coverage-controls.json',controls)
     decision['boundary_pressure_implementation']=controls['status'];decision['admission_negatives']=controls['coverage']['status']

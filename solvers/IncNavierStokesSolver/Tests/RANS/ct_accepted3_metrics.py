@@ -10,6 +10,14 @@ from validate_a93_a95_e94e95 import oracle
 
 
 def point(row, state, offsets, model):
+    k0=float(row_value(row['velocity_k'],state,offsets[2])[0]);e0=float(row_value(row['epsilon'],state,offsets[3])[0])
+    if not np.isfinite(k0) or not np.isfinite(e0) or k0<=0 or e0<=0:
+        G=np.zeros((3,3))
+        for b,a in enumerate((0,2)):G[a]=row_value(row['velocity_k'],state,offsets[b])[1]
+        p,dp=row_value(row['pressure'],state,offsets[5])
+        return dict(status='actual_outer_scalar_domain_failure',raw_gradient=G.tolist(),raw_divergence=float(np.trace(G)),
+            k=k0,epsilon=e0,tau=None if e0==0 else k0/e0,Pi=float(p),pressure_gradient=dp.tolist(),radicand=None,
+            isotropic_production_work=float(-2*k0*np.trace(G)/3),full_stress_and_production='undefined')
     if model=='A95':return a95_at(row,state,offsets)
     G=np.zeros((3,3))
     for b,a in enumerate((0,2)):G[a]=row_value(row['velocity_k'],state,offsets[b])[1]
