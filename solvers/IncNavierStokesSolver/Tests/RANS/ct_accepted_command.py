@@ -34,6 +34,8 @@ def main():
         (root/'worker-guard.stop').write_text('owned command complete\n');guard.wait(timeout=5)
     after=resource.getrusage(resource.RUSAGE_CHILDREN)
     write_json(root/'execution.json',dict(command=command,exit_code=code,threads=THREADS,
+        control_parent_pid=os.getpid(),guard_pid=guard.pid,owned_family_pid=child.pid,
+        control_helpers_outside_leased_family=2,
         wall_seconds=time.monotonic()-start,allocation_wait_seconds=wait,
         process_cpu_seconds=after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,
         process_cpu_scope='owned command family plus its short-lived resource monitor',

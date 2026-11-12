@@ -72,7 +72,10 @@ def main():
         for line in f.read_text().splitlines():
             q=json.loads(line);controls.append(dict(control=f.parent.name,**q))
     maximum=max(q['active_before_actions'] for q in controls);ownedmax=max(sum(p['threads'] for p in q['processes'] if p['owned']) for q in controls)
-    result['resource_compliance']=dict(status='pass' if maximum<=72 and ownedmax<=16 else 'fail',maximum_observed_active=maximum,maximum_observed_owned=ownedmax,aggregate_limit=72,project_limit=16,highwater_samples=controls,historical_CT1_79='unchanged failed historical gate')
+    # The launcher parent and its monitor are outside the leased child family.
+    # Count both; otherwise a 16-thread Git/build family is falsely accepted.
+    projectmax=ownedmax+2
+    result['resource_compliance']=dict(status='pass' if maximum<=72 and projectmax<=16 else 'failed_project_allocation' if maximum<=72 else 'failed_aggregate_cap',aggregate_status='pass' if maximum<=72 else 'fail',project_status='pass' if projectmax<=16 else 'fail',maximum_observed_active=maximum,maximum_observed_owned_family=ownedmax,control_helpers_outside_family=2,maximum_observed_project=projectmax,aggregate_limit=72,project_limit=16,highwater_samples=controls,historical_CT1_79='unchanged failed historical gate')
     result['constitutive_admissibility']=dict(primary_matrix='failed and unchanged',selected_Zminus_short='pass' if all(result['cases']['Zminus-'+str(dt)]['physical_gate']['status']=='pass' for dt in (.002,.001)) else 'fail')
     result['selected_continuations']={};latest=None
     for name in ('continue02-v1','continue2-v1'):

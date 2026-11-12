@@ -13,7 +13,7 @@ def main():
     dep=r/'dependency/libSpatialDomains.so.5.9.0';shutil.copy2(a.previous/'dependency'/dep.name,dep)
     os.environ.update(TMPDIR=str(r/'tmp'),LD_LIBRARY_PATH=str(dep.parent))
     commands=[['cmake','-S',str(s),'-B',str(r/'build'),'-DCMAKE_BUILD_TYPE=Release','-DRANS_BUILD_SOLVER=ON','-DRANS_PREBUILT_SPATIAL_LIBRARY='+str(dep),'-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake'],
-      ['cmake','--build',str(r/'build'),'--parallel','4','--target','IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks']]
+      ['cmake','--build',str(r/'build'),'--parallel','2','--target','IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks']]
     receipts=[]
     for n,c in enumerate(commands):
         t=time.monotonic();b=resource.getrusage(resource.RUSAGE_CHILDREN)
@@ -26,8 +26,8 @@ def main():
     shutil.copytree(a.previous/'runtime-v2/lib',rt/'lib',symlinks=True)
     for name in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks'):shutil.copy2(r/'build'/name,rt/name)
     os.environ['LD_LIBRARY_PATH']=str(rt/'lib')
-    write_json(r/'runtime-identity.json',dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r/'source',text=True).strip(),
-        source_status=subprocess.check_output(['git','status','--porcelain'],cwd=r/'source',text=True),runtimes={n:runtime_identity(rt/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks')},
+    write_json(r/'runtime-identity.json',dict(source_revision=subprocess.check_output(['git','-c','index.threads=1','rev-parse','HEAD'],cwd=r/'source',text=True).strip(),
+        source_status=subprocess.check_output(['git','-c','index.threads=1','status','--porcelain'],cwd=r/'source',text=True),runtimes={n:runtime_identity(rt/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks')},
         reused_frozen_libraries={p.name:sha(p) for p in (rt/'lib').iterdir() if p.is_file()},dependency_sha256=sha(dep),threads=THREADS,compiler=subprocess.check_output(['c++','--version'],text=True),build_receipt_sha256=sha(r/'build-execution.json')))
     return 0
 if __name__=='__main__':raise SystemExit(main())
