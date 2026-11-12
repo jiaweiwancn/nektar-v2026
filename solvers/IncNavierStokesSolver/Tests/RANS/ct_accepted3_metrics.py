@@ -33,9 +33,14 @@ def point(row, state, offsets, model):
 
 
 def inventory(rows,coords,state,offsets,model,sides=None):
-    extrema={};rad=None;failures=[];d2=0.;count=0;divmax=0.
+    extrema={};rad=None;failures=[];d2=0.;count=0;divmax=0.;inner=None
     for i,q in enumerate(rows):
-        if q.get('epsilon') is None:continue
+        if q.get('epsilon') is None:
+            k=float(row_value(q['velocity_k'],state,offsets[2])[0])
+            loc=dict(coordinate=coords[i],geometry=q['velocity_k']['geometry'],side=sides[i] if sides is not None else 0,sample_index=i)
+            if inner is None or k<inner['value']:inner=dict(loc,value=k)
+            if not np.isfinite(k) or k<0:failures.append(dict(loc,status='actual_inner_k_domain_failure',k=k))
+            continue
         v=point(q,state,offsets,model);count+=1
         loc=dict(coordinate=coords[i],geometry=q['velocity_k']['geometry'],side=sides[i] if sides is not None else 0,sample_index=i)
         d2+=v['raw_divergence']**2;divmax=max(divmax,abs(v['raw_divergence']))
@@ -43,7 +48,7 @@ def inventory(rows,coords,state,offsets,model,sides=None):
             if name not in extrema or value<extrema[name]['value']:extrema[name]=dict(loc,value=value)
         if v.get('radicand') is not None and (rad is None or v['radicand']<rad['radicand']):rad=dict(v,**loc)
         if v['status']!='admissible':failures.append(dict(v,**loc))
-    return dict(count=count,domain_failure_count=len(failures),first_failures=failures[:4],minimum_radicand=rad,
+    return dict(count=count,domain_failure_count=len(failures),first_failures=failures[:4],minimum_radicand=rad,minimum_inner_k=inner,
                 minima=extrema,divergence_unweighted_RMS=float(np.sqrt(d2/count)) if count else None,
                 divergence_maximum=divmax)
 
