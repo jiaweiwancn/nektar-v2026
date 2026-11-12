@@ -105,6 +105,7 @@ void RANSWallEvolutionPatch::InvalidateCoverageToken() const
 
 int RANSWallEvolutionPatch::GeometryElement(int block,int geometry) const
 {
+    RANSWallTiming::Scope timing("geometry.owner_catalog",true,true);
     if(m_evaluationReuse)
     {
         if(m_geometryCatalog.empty())
@@ -123,6 +124,7 @@ int RANSWallEvolutionPatch::GeometryElement(int block,int geometry) const
 std::shared_ptr<const RANSWallGlobalPoint> RANSWallEvolutionPatch::EvaluationRow(int block,int element,
     const RANSWallCoordinate &coordinate) const
 {
+    RANSWallTiming::Scope timing("geometry.evaluation_row",true,true);
     const auto &el=fields.at(block)->Elements().at(element);
     const int side=coordinate[2]==m_parameters.geometry.height?
         (el.upper[2]<=m_parameters.geometry.height?-1:1):0;
