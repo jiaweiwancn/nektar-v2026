@@ -1,0 +1,4586 @@
+{
+  "tangential": {
+    "status": "passed",
+    "scope": "independent indexed tensor and analytic radial construction, not an equilibrium residual or ellipticity certificate",
+    "results": {
+      "55-hill": {
+        "witnesses": [
+          {
+            "region": "inner",
+            "coordinate": [
+              -0.1,
+              0.0,
+              0.0055
+            ],
+            "physical_coordinate": [
+              -0.1,
+              0.0055
+            ],
+            "geometry": 31.0,
+            "radial_side": -1.0,
+            "tangential_side": 1.0,
+            "native_tensor_replay_error": 1.734723475976807e-18,
+            "native_replay": {
+              "tensor": [
+                [
+                  0.011047482642682321,
+                  0.0,
+                  -0.008142885232755888
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.008142885232755888,
+                  0.0,
+                  0.012384959097623084
+                ]
+              ],
+              "eigenvalues": [
+                0.0035459215653099356,
+                0.011732594287252845,
+                0.019886520174995467
+              ],
+              "critical_eigenvector": [
+                0.7354760042581184,
+                -1.1102230246251565e-16,
+                0.6775507709098355
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252849,
+                "linear": -0.008186672721942909,
+                "quadratic": 0.0,
+                "cubic": 0.0,
+                "regularization": 0.0
+              },
+              "production": 0.3693064237994793
+            },
+            "analytical_radial_target": {
+              "tensor": [
+                [
+                  0.011732594288599678,
+                  0.0,
+                  -0.007962653144730117
+                ],
+                [
+                  0.0,
+                  0.01173259428725285,
+                  0.0
+                ],
+                [
+                  -0.007962653144730117,
+                  0.0,
+                  0.011732594287252849
+                ]
+              ],
+              "eigenvalues": [
+                0.0037699411431961465,
+                0.011732594287252849,
+                0.01969524743265638
+              ],
+              "critical_eigenvector": [
+                -0.7071067811566469,
+                1.1102230246251565e-16,
+                -0.7071067812164481
+              ],
+              "critical_terms": {
+                "isotropic": 0.01173259428725285,
+                "linear": -0.007962653144056704,
+                "quadratic": 0.0,
+                "cubic": 0.0,
+                "regularization": 0.0
+              },
+              "production": 0.3517842419927136
+            },
+            "analytical_gradient": [
+              [
+                -3.736305566015741e-09,
+                0.0,
+                29.96951741218723
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                14.209757454469077,
+                0.0,
+                3.39945505647034e-15
+              ]
+            ],
+            "gradient_step_halving_max": 2.220446049250313e-08,
+            "analytical_divergence": -3.736302166560685e-09,
+            "native_1D_target": {
+              "inner": true,
+              "coordinate": [
+                -0.1,
+                0.0,
+                0.0055
+              ],
+              "physical_coordinate": [
+                -0.1,
+                0.0,
+                0.0055
+              ],
+              "geometry": 31.0,
+              "element": 31.0,
+              "represented_gradient": [
+                [
+                  1.9006061867620156,
+                  0.0,
+                  29.575846528944634
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  15.603411987878797,
+                  0.0,
+                  -1.809761378954154
+                ]
+              ],
+              "target_gradient": [
+                [
+                  2.4908688399709646e-09,
+                  0.0,
+                  29.96951738998277
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  14.209757448096196,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "target_gradient_step_halving_max": 3.113586049963706e-09,
+              "target_divergence": 2.4908688399709646e-09,
+              "target_tensor": [
+                [
+                  0.011732594286354963,
+                  0.0,
+                  -0.007962653139579478
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.007962653139579478,
+                  0.0,
+                  0.011732594287252847
+                ]
+              ],
+              "target_eigenvalues": [
+                0.003769941147224427,
+                0.011732594287252847,
+                0.019695247426383386
+              ],
+              "native_eigenvalues": [
+                0.0035459215653099417,
+                0.011732594287252847,
+                0.019886520174995467
+              ],
+              "native_tensor": [
+                [
+                  0.011047482642682323,
+                  0.0,
+                  -0.008142885232755888
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.008142885232755888,
+                  0.0,
+                  0.012384959097623084
+                ]
+              ],
+              "audit_minimum_eigenvalue": 0.0035459215653099417,
+              "is_audit_minimizer": true,
+              "k": 0.01759889143087927,
+              "epsilon": 0.0,
+              "scope": "unprojected physical streamfunction velocity at the SAME represented scalar fields and recorded one-sided element; independent step-halved chart differentiation; not an equilibrium residual"
+            },
+            "actual_2D": {
+              "coordinate": [
+                -0.1,
+                0.0,
+                0.0055
+              ],
+              "physical_coordinate": [
+                -0.1,
+                0.0,
+                0.0055
+              ],
+              "geometry": 31.0,
+              "element": 31.0,
+              "inner": true,
+              "inventory": "reconstruction_native",
+              "gradient_element_region": "inner",
+              "constitutive_region": "inner",
+              "gradient_region_matches_law": true,
+              "k": 0.01759889143087927,
+              "epsilon": 0.1690605791621442,
+              "epsilon_retained": 0.1690605791621442,
+              "epsilon_semantics": "actual retained field; inner epsilon dependent",
+              "endpoint_K": 0.01759889143087927,
+              "cutoff": 0.0008259990711944475,
+              "budget_ratio": 2.8959097221621444,
+              "velocity_gradient": [
+                [
+                  1.9006061867620156,
+                  0.0,
+                  29.575846528944634
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  15.603411987878797,
+                  0.0,
+                  -1.809761378954154
+                ]
+              ],
+              "divergence": 0.09084480780786164,
+              "velocity_evaluation_row": {
+                "geometry": 31.0,
+                "element": 31.0,
+                "content_sha256": "18abebc83e4006872001ce30111a495c233ca5b8a2038130b445f116a7897ee3"
+              },
+              "epsilon_evaluation_row": null,
+              "endpoint_evaluation_row": {
+                "geometry": 30.0,
+                "element": 30.0,
+                "content_sha256": "d414d2438cc086e6914216c01fc0789b6c2e821dac6c7060122a9044f5f30a93"
+              },
+              "epsilon_H_retained": 0.1690605791621442,
+              "epsilon_H_refreshed_projected": 0.1690605791621442,
+              "epsilon_H_current_unprojected": 0.1690605791621442,
+              "selected": {
+                "tensor": [
+                  [
+                    0.011047482642682323,
+                    0.0,
+                    -0.008142885232755888
+                  ],
+                  [
+                    0.0,
+                    0.011732594287252847,
+                    0.0
+                  ],
+                  [
+                    -0.008142885232755888,
+                    0.0,
+                    0.012384959097623084
+                  ]
+                ],
+                "eigenvalues": [
+                  0.0035459215653099417,
+                  0.011732594287252847,
+                  0.019886520174995467
+                ],
+                "critical_eigenvector": [
+                  0.7354760042581184,
+                  0.0,
+                  0.6775507709098354
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  ],
+                  "inner_stress_remainder": [
+                    [
+                      7.589415207398531e-19,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      1.0842021724855044e-19
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252847,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252847,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252847
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      -0.0006851116445705249,
+                      -0.0,
+                      -0.008142885232755888
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.008142885232755888,
+                      -0.0,
+                      0.0006523648103702368
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": 0.0,
+                  "inner_stress_remainder": 4.603034226606655e-19,
+                  "isotropic": 0.011732594287252849,
+                  "linear": -0.008186672721942909,
+                  "quadratic": 0.0
+                },
+                "c_mu": 0.09822789532821126,
+                "eddy_viscosity": 0.00018023503483846943,
+                "strain_invariant": 4.718919658562931,
+                "rotation_invariant": 1.4545044133407685,
+                "invariant_branch": "not_applicable_to_inner_law",
+                "production": 0.3693064237994793,
+                "k_source": 0.2002458446373351,
+                "epsilon_production": null,
+                "epsilon_source": null,
+                "yap": null,
+                "k_diffusion": 0.00018404455864799325,
+                "epsilon_diffusion": null
+              },
+              "same_state_Original": null,
+              "same_state_Regularized": null
+            },
+            "analytical_k": 0.017598891430879275,
+            "analytical_epsilon": 0.1690605791621442,
+            "semantics": "exact incoming AWF/log radial streamfunction; unprojected analytic scalars extended in chart, physical incoming gamma/strain; compared with native 1D target at fixed represented scalars and final projected native state"
+          },
+          {
+            "region": "outer",
+            "coordinate": [
+              0.1,
+              0.0,
+              0.1
+            ],
+            "physical_coordinate": [
+              0.1,
+              0.1
+            ],
+            "geometry": 58.0,
+            "radial_side": 0.0,
+            "tangential_side": -1.0,
+            "native_tensor_replay_error": 9.202165938970719e-18,
+            "native_replay": {
+              "tensor": [
+                [
+                  7.297563118507802e-05,
+                  0.0,
+                  -0.09077789543862858
+                ],
+                [
+                  0.0,
+                  0.004449118695766154,
+                  0.0
+                ],
+                [
+                  -0.09077789543862858,
+                  0.0,
+                  0.030845700195324396
+                ]
+              ],
+              "eigenvalues": [
+                -0.07661327714975774,
+                0.0044491186957661515,
+                0.10753195297626722
+              ],
+              "critical_eigenvector": [
+                0.7639080993200474,
+                0.0,
+                0.6453250466185487
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252845,
+                "linear": -0.0019870085989147817,
+                "quadratic": -0.00034078766694742475,
+                "cubic": -2.4810240823601574e-05,
+                "regularization": -0.08599326493032478
+              },
+              "production": 2.575649353549293
+            },
+            "analytical_radial_target": {
+              "tensor": [
+                [
+                  -0.005471227718914851,
+                  0.0,
+                  -0.10730979181011671
+                ],
+                [
+                  0.0,
+                  0.0028507487764627033,
+                  0.0
+                ],
+                [
+                  -0.10730979181011671,
+                  0.0,
+                  0.037818261837365225
+                ]
+              ],
+              "eigenvalues": [
+                -0.0932974215265082,
+                0.0028507487764627,
+                0.12564445564495857
+              ],
+              "critical_eigenvector": [
+                0.7738608975595677,
+                0.0,
+                0.6333555961924554
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252852,
+                "linear": -0.0018356681540321264,
+                "quadratic": 0.00016129399834360555,
+                "cubic": -1.5711930669932178e-05,
+                "regularization": -0.10333992972740262
+              },
+              "production": 3.6384362696930808
+            },
+            "analytical_gradient": [
+              [
+                -4.981737565654842e-09,
+                0.0,
+                1.685785466776224
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                32.22012571193991,
+                0.0,
+                1.1802665421809673e-15
+              ]
+            ],
+            "gradient_step_halving_max": 4.440892098500626e-08,
+            "analytical_divergence": -4.981736385388299e-09,
+            "native_1D_target": {
+              "inner": false,
+              "coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "physical_coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "geometry": 58.0,
+              "element": 58.0,
+              "represented_gradient": [
+                [
+                  -0.5967872500428302,
+                  0.0,
+                  1.7767220247216282
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  26.790033977636373,
+                  0.0,
+                  0.5713660791692269
+                ]
+              ],
+              "target_gradient": [
+                [
+                  4.981737679941929e-09,
+                  0.0,
+                  1.7333328772295429
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  24.360178338799592,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "target_gradient_step_halving_max": 1.1102230246251565e-08,
+              "target_divergence": 4.981737679941929e-09,
+              "target_tensor": [
+                [
+                  -0.003178584896227609,
+                  0.0,
+                  -0.08201628433578068
+                ],
+                [
+                  0.0,
+                  0.0050276001528552754,
+                  0.0
+                ],
+                [
+                  -0.08201628433578068,
+                  0.0,
+                  0.033348767571707905
+                ]
+              ],
+              "target_eigenvalues": [
+                -0.06894009991956568,
+                0.0050276001528552754,
+                0.09911028259504596
+              ],
+              "native_eigenvalues": [
+                -0.07661327714975777,
+                0.004449118695766149,
+                0.10753195297626725
+              ],
+              "native_tensor": [
+                [
+                  7.297563118506882e-05,
+                  0.0,
+                  -0.09077789543862858
+                ],
+                [
+                  0.0,
+                  0.004449118695766149,
+                  0.0
+                ],
+                [
+                  -0.09077789543862858,
+                  0.0,
+                  0.030845700195324403
+                ]
+              ],
+              "audit_minimum_eigenvalue": -0.07661327714975777,
+              "is_audit_minimizer": true,
+              "k": 0.01759889143087928,
+              "epsilon": 0.0092698547306096,
+              "scope": "unprojected physical streamfunction velocity at the SAME represented scalar fields and recorded one-sided element; independent step-halved chart differentiation; not an equilibrium residual"
+            },
+            "actual_2D": {
+              "coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "physical_coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "geometry": 58.0,
+              "element": 58.0,
+              "inner": false,
+              "inventory": "reconstruction_native",
+              "gradient_element_region": "outer",
+              "constitutive_region": "outer",
+              "gradient_region_matches_law": true,
+              "k": 0.01759889143087928,
+              "epsilon": 0.0092698547306096,
+              "epsilon_retained": 0.0092698547306096,
+              "epsilon_semantics": "actual retained field; inner epsilon dependent",
+              "endpoint_K": 0.01759889143087927,
+              "cutoff": 0.0008259990711944475,
+              "budget_ratio": 2.8959097221621444,
+              "velocity_gradient": [
+                [
+                  -0.5967872500428302,
+                  0.0,
+                  1.7767220247216282
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  26.790033977636373,
+                  0.0,
+                  0.5713660791692269
+                ]
+              ],
+              "divergence": -0.025421170873603294,
+              "velocity_evaluation_row": {
+                "geometry": 58.0,
+                "element": 58.0,
+                "content_sha256": "d448603660fee2a5a9a74f0ede9521c00f60f3d1d6a70b4e1cdb565aa150bfb7"
+              },
+              "epsilon_evaluation_row": {
+                "geometry": 58.0,
+                "element": 22.0,
+                "content_sha256": "be2d070c1e557762c2c12d5d0c9f6093e60083b7840da3b18f74041e49fe9e11"
+              },
+              "endpoint_evaluation_row": {
+                "geometry": 34.0,
+                "element": 34.0,
+                "content_sha256": "f80733e3040bd6228ee6d188bc48a763f6ad8dcb964b9dc34cb3fb54bf3a0b77"
+              },
+              "epsilon_H_retained": 0.1690605791621442,
+              "epsilon_H_refreshed_projected": 0.1690605791621442,
+              "epsilon_H_current_unprojected": 0.1690605791621442,
+              "selected": {
+                "tensor": [
+                  [
+                    7.297563118506882e-05,
+                    0.0,
+                    -0.09077789543862858
+                  ],
+                  [
+                    0.0,
+                    0.004449118695766149,
+                    0.0
+                  ],
+                  [
+                    -0.09077789543862858,
+                    0.0,
+                    0.030845700195324403
+                  ]
+                ],
+                "eigenvalues": [
+                  -0.07661327714975777,
+                  0.004449118695766149,
+                  0.10753195297626725
+                ],
+                "critical_eigenvector": [
+                  0.7639080993200474,
+                  0.0,
+                  0.6453250466185491
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      1.4000529744561446e-06,
+                      -0.0,
+                      -2.5420518443559287e-05
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -2.5420518443559287e-05,
+                      -0.0,
+                      -1.3547856690127834e-06
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252852,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252852,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252852
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      8.486999733076881e-05,
+                      -0.0,
+                      -0.0020312603071654506
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.0020312603071654506,
+                      -0.0,
+                      -8.12548150291481e-05
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.015651148703793524,
+                      0.0,
+                      -0.0007692863160003523
+                    ],
+                    [
+                      0.0,
+                      -0.0072834755914867036,
+                      0.0
+                    ],
+                    [
+                      -0.0007692863160003523,
+                      0.0,
+                      0.022934624295280225
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      0.003905259997420514,
+                      0.0,
+                      -0.0879519282970192
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      -0.0879519282970192,
+                      0.0,
+                      -0.003738908786510514
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -2.4810240823601635e-05,
+                  "isotropic": 0.011732594287252852,
+                  "linear": -0.001987008598914784,
+                  "quadratic": -0.0003407876669474178,
+                  "regularization": -0.08599326493032482
+                },
+                "c_mu": 0.002128173155730135,
+                "eddy_viscosity": 7.110573937754021e-05,
+                "strain_invariant": 54.27955550021858,
+                "rotation_invariant": 47.48796763043911,
+                "invariant_branch": "strain",
+                "production": 2.575649353549293,
+                "k_source": 2.566379498818683,
+                "epsilon_production": 1.9536053978716155,
+                "epsilon_source": 1.9445442955512018,
+                "yap": 0.0003136925388575734,
+                "k_diffusion": 7.110573937754021e-05,
+                "epsilon_diffusion": 5.4696722598107855e-05
+              },
+              "same_state_Original": {
+                "tensor": [
+                  [
+                    -0.0038301842867737614,
+                    0.0,
+                    -0.002864097919274701
+                  ],
+                  [
+                    0.0,
+                    0.004449118695766149,
+                    0.0
+                  ],
+                  [
+                    -0.002864097919274701,
+                    0.0,
+                    0.0345825768033314
+                  ]
+                ],
+                "eigenvalues": [
+                  -0.004042560409761695,
+                  0.004449118695766149,
+                  0.03479495292631934
+                ],
+                "critical_eigenvector": [
+                  0.997262089708466,
+                  0.0,
+                  0.07394811985644799
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      3.5001324361403615e-06,
+                      -0.0,
+                      -6.355129610889821e-05
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -6.355129610889821e-05,
+                      -0.0,
+                      -3.3869641725319583e-06
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252852,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252852,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252852
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      8.486999733076881e-05,
+                      -0.0,
+                      -0.0020312603071654506
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.0020312603071654506,
+                      -0.0,
+                      -8.12548150291481e-05
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.015651148703793524,
+                      0.0,
+                      -0.0007692863160003523
+                    ],
+                    [
+                      0.0,
+                      -0.0072834755914867036,
+                      0.0
+                    ],
+                    [
+                      -0.0007692863160003523,
+                      0.0,
+                      0.022934624295280225
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      1.5835280948919145e-18,
+                      0.0,
+                      1.6263032587282567e-19
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      1.6263032587282567e-19,
+                      0.0,
+                      8.931962428796597e-19
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -5.9107925532885805e-06,
+                  "isotropic": 0.011732594287252854,
+                  "linear": -0.00021563167694234697,
+                  "quadratic": -0.015553612227518911,
+                  "regularization": 1.6037396966695175e-18
+                },
+                "c_mu": 0.002128173155730135,
+                "eddy_viscosity": 7.110573937754021e-05,
+                "strain_invariant": 54.27955550021858,
+                "rotation_invariant": 47.48796763043911,
+                "invariant_branch": "strain",
+                "production": 0.05977286996343254,
+                "k_source": 0.05050301523282294,
+                "epsilon_production": 0.04533715012329809,
+                "epsilon_source": 0.03627604780288429,
+                "yap": 0.0003136925388575734,
+                "k_diffusion": 7.110573937754021e-05,
+                "epsilon_diffusion": 5.4696722598107855e-05
+              },
+              "same_state_Regularized": {
+                "tensor": [
+                  [
+                    7.297563118506882e-05,
+                    0.0,
+                    -0.09077789543862858
+                  ],
+                  [
+                    0.0,
+                    0.004449118695766149,
+                    0.0
+                  ],
+                  [
+                    -0.09077789543862858,
+                    0.0,
+                    0.030845700195324403
+                  ]
+                ],
+                "eigenvalues": [
+                  -0.07661327714975777,
+                  0.004449118695766149,
+                  0.10753195297626725
+                ],
+                "critical_eigenvector": [
+                  0.7639080993200474,
+                  0.0,
+                  0.6453250466185491
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      1.4000529744561446e-06,
+                      -0.0,
+                      -2.5420518443559287e-05
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -2.5420518443559287e-05,
+                      -0.0,
+                      -1.3547856690127834e-06
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252852,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252852,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252852
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      8.486999733076881e-05,
+                      -0.0,
+                      -0.0020312603071654506
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.0020312603071654506,
+                      -0.0,
+                      -8.12548150291481e-05
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.015651148703793524,
+                      0.0,
+                      -0.0007692863160003523
+                    ],
+                    [
+                      0.0,
+                      -0.0072834755914867036,
+                      0.0
+                    ],
+                    [
+                      -0.0007692863160003523,
+                      0.0,
+                      0.022934624295280225
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      0.003905259997420514,
+                      0.0,
+                      -0.0879519282970192
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      -0.0879519282970192,
+                      0.0,
+                      -0.003738908786510514
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -2.4810240823601635e-05,
+                  "isotropic": 0.011732594287252852,
+                  "linear": -0.001987008598914784,
+                  "quadratic": -0.0003407876669474178,
+                  "regularization": -0.08599326493032482
+                },
+                "c_mu": 0.002128173155730135,
+                "eddy_viscosity": 7.110573937754021e-05,
+                "strain_invariant": 54.27955550021858,
+                "rotation_invariant": 47.48796763043911,
+                "invariant_branch": "strain",
+                "production": 2.575649353549293,
+                "k_source": 2.566379498818683,
+                "epsilon_production": 1.9536053978716155,
+                "epsilon_source": 1.9445442955512018,
+                "yap": 0.0003136925388575734,
+                "k_diffusion": 7.110573937754021e-05,
+                "epsilon_diffusion": 5.4696722598107855e-05
+              }
+            },
+            "analytical_k": 0.017598891430879275,
+            "analytical_epsilon": 0.009298331853917931,
+            "semantics": "exact incoming AWF/log radial streamfunction; unprojected analytic scalars extended in chart, physical incoming gamma/strain; compared with native 1D target at fixed represented scalars and final projected native state"
+          }
+        ],
+        "referenceK_independent_ground": 0.029634496352378914,
+        "scalar_budget": {
+          "admissible": true,
+          "scope": "declared finite scalar evaluation sets only",
+          "phase": "complete",
+          "failure": "",
+          "minimum_dimensionless_margin": 0.9948570343283689,
+          "limiting_functional_kind": "Point",
+          "limiting_inventory": "reconstruction_native",
+          "limiting_point": [
+            -0.1949600266546736,
+            0.0,
+            0.012
+          ],
+          "minimum_inner_k": 0.01759889143087927,
+          "minimum_outer_k": 0.017598891430878782,
+          "minimum_outer_epsilon": 0.001162291481739741,
+          "minimum_sampled_K": 0.01759889143087927,
+          "minimum_projected_trace_epsilon": 0.1690605791621442,
+          "minimum_b": null,
+          "minimum_lambda": null,
+          "normalization_applicable": false,
+          "minimum_budget_ratio": 2.8347054476309057,
+          "maximum_budget_relative_defect": 3.32756283346945e-16,
+          "cutoff_range": [
+            0.0008195770750818476,
+            0.0008323663165595516
+          ],
+          "inventory_counts": {
+            "actual_lifted_outer_epsilon": 48563.0,
+            "budget_awf_reporting_volume": 33792.0,
+            "constitutive_budget_awf_ray": 80864.0,
+            "constitutive_budget_reporting_source_ray": 112896.0,
+            "constitutive_foot_minus_budget_ray": 448.0,
+            "constitutive_foot_plus_budget_ray": 448.0,
+            "constitutive_matching_K": 361.0,
+            "interface_inner": 48.0,
+            "interface_outer": 96.0,
+            "mass_volume": 30720.0,
+            "matching_trace_nodes": 96.0,
+            "open_boundary_native": 464.0,
+            "physical_matching_transfer": 722.0,
+            "physical_sampled_K": 722.0,
+            "prescribed_source_inner": 24576.0,
+            "projected_dependent_trace": 607.0,
+            "reconstruction_dense": 12888.0,
+            "reconstruction_native": 30720.0,
+            "source_volume_outer": 21504.0,
+            "trace_budget_awf_ray": 9632.0,
+            "volume_normalization_ray": 21504.0
+          },
+          "profile_branch_pattern": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        }
+      },
+      "60-hill": {
+        "witnesses": [
+          {
+            "region": "inner",
+            "coordinate": [
+              -0.1,
+              0.0,
+              0.006
+            ],
+            "physical_coordinate": [
+              -0.1,
+              0.006
+            ],
+            "geometry": 31.0,
+            "radial_side": -1.0,
+            "tangential_side": 1.0,
+            "native_tensor_replay_error": 1.734723475976807e-18,
+            "native_replay": {
+              "tensor": [
+                [
+                  0.0109569562726767,
+                  0.0,
+                  -0.008519649686118421
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.008519649686118421,
+                  0.0,
+                  0.01241361072015224
+                ]
+              ],
+              "eigenvalues": [
+                0.003134558888580623,
+                0.011732594287252847,
+                0.020236008104248318
+              ],
+              "critical_eigenvector": [
+                -0.7366061538865233,
+                0.0,
+                -0.6763219455677182
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252847,
+                "linear": -0.008598035398672224,
+                "quadratic": 0.0,
+                "cubic": 0.0,
+                "regularization": 0.0
+              },
+              "production": 0.36910944423768977
+            },
+            "analytical_radial_target": {
+              "tensor": [
+                [
+                  0.01173259428824316,
+                  0.0,
+                  -0.008300164820081146
+                ],
+                [
+                  0.0,
+                  0.01173259428725285,
+                  0.0
+                ],
+                [
+                  -0.008300164820081146,
+                  0.0,
+                  0.011732594287252849
+                ]
+              ],
+              "eigenvalues": [
+                0.0034324294676668574,
+                0.011732594287252849,
+                0.02003275910782915
+              ],
+              "critical_eigenvector": [
+                -0.7071067811654559,
+                1.1102230246251565e-16,
+                -0.7071067812076391
+              ],
+              "critical_terms": {
+                "isotropic": 0.01173259428725285,
+                "linear": -0.008300164819585992,
+                "quadratic": 0.0,
+                "cubic": 0.0,
+                "regularization": 0.0
+              },
+              "production": 0.35044433079022697
+            },
+            "analytical_gradient": [
+              [
+                -2.518757610707603e-09,
+                0.0,
+                27.524088197505847
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                14.697281902618187,
+                0.0,
+                3.2488004928009123e-15
+              ]
+            ],
+            "gradient_step_halving_max": 2.7755575615628914e-08,
+            "analytical_divergence": -2.51875436190711e-09,
+            "native_1D_target": {
+              "inner": true,
+              "coordinate": [
+                -0.1,
+                0.0,
+                0.006
+              ],
+              "physical_coordinate": [
+                -0.1,
+                0.0,
+                0.006
+              ],
+              "geometry": 31.0,
+              "element": 31.0,
+              "represented_gradient": [
+                [
+                  1.9727620105756378,
+                  0.0,
+                  27.190342210109918
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  16.147505931259253,
+                  0.0,
+                  -1.73210095708861
+                ]
+              ],
+              "target_gradient": [
+                [
+                  2.5187554928163296e-09,
+                  0.0,
+                  27.524088197505847
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  14.697281896026688,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "target_gradient_step_halving_max": 2.220446049250313e-08,
+              "target_divergence": 2.5187554928163296e-09,
+              "target_tensor": [
+                [
+                  0.011732594286262539,
+                  0.0,
+                  -0.008300164818785342
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.008300164818785342,
+                  0.0,
+                  0.011732594287252847
+                ]
+              ],
+              "target_eigenvalues": [
+                0.003432429467972351,
+                0.011732594287252847,
+                0.020032759105543037
+              ],
+              "native_eigenvalues": [
+                0.003134558888580624,
+                0.011732594287252847,
+                0.020236008104248318
+              ],
+              "native_tensor": [
+                [
+                  0.0109569562726767,
+                  0.0,
+                  -0.008519649686118421
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.008519649686118421,
+                  0.0,
+                  0.012413610720152238
+                ]
+              ],
+              "audit_minimum_eigenvalue": 0.003134558888580624,
+              "is_audit_minimizer": true,
+              "k": 0.01759889143087927,
+              "epsilon": 0.0,
+              "scope": "unprojected physical streamfunction velocity at the SAME represented scalar fields and recorded one-sided element; independent step-halved chart differentiation; not an equilibrium residual"
+            },
+            "actual_2D": {
+              "coordinate": [
+                -0.1,
+                0.0,
+                0.006
+              ],
+              "physical_coordinate": [
+                -0.1,
+                0.0,
+                0.006
+              ],
+              "geometry": 31.0,
+              "element": 31.0,
+              "inner": true,
+              "inventory": "reconstruction_native",
+              "gradient_element_region": "inner",
+              "constitutive_region": "inner",
+              "gradient_region_matches_law": true,
+              "k": 0.01759889143087927,
+              "epsilon": 0.15497219756529884,
+              "epsilon_retained": 0.15497219756529884,
+              "epsilon_semantics": "actual retained field; inner epsilon dependent",
+              "endpoint_K": 0.01759889143087927,
+              "cutoff": 0.0008288562481167473,
+              "budget_ratio": 2.9794680120716,
+              "velocity_gradient": [
+                [
+                  1.9727620105756378,
+                  0.0,
+                  27.190342210109918
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  16.147505931259253,
+                  0.0,
+                  -1.73210095708861
+                ]
+              ],
+              "divergence": 0.24066105348702793,
+              "velocity_evaluation_row": {
+                "geometry": 31.0,
+                "element": 31.0,
+                "content_sha256": "2afb5cb01be791575cc6f0bcd65a79a5293012323a90456d6571244599b83132"
+              },
+              "epsilon_evaluation_row": null,
+              "endpoint_evaluation_row": {
+                "geometry": 30.0,
+                "element": 30.0,
+                "content_sha256": "69820bc500c22f0d2d75abefc144797bead3bcd1356785a45092c289d933a700"
+              },
+              "epsilon_H_retained": 0.15497219756529884,
+              "epsilon_H_refreshed_projected": 0.15497219756529884,
+              "epsilon_H_current_unprojected": 0.15497219756529884,
+              "selected": {
+                "tensor": [
+                  [
+                    0.0109569562726767,
+                    0.0,
+                    -0.008519649686118421
+                  ],
+                  [
+                    0.0,
+                    0.011732594287252847,
+                    0.0
+                  ],
+                  [
+                    -0.008519649686118421,
+                    0.0,
+                    0.012413610720152238
+                  ]
+                ],
+                "eigenvalues": [
+                  0.003134558888580624,
+                  0.011732594287252847,
+                  0.020236008104248318
+                ],
+                "critical_eigenvector": [
+                  0.7366061538865233,
+                  0.0,
+                  0.6763219455677183
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  ],
+                  "inner_stress_remainder": [
+                    [
+                      -7.589415207398531e-19,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      -8.673617379884035e-19
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252847,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252847,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252847
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      -0.0007756380145761472,
+                      -0.0,
+                      -0.008519649686118421
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.008519649686118421,
+                      -0.0,
+                      0.0006810164328993921
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": 0.0,
+                  "inner_stress_remainder": -8.085341612870174e-19,
+                  "isotropic": 0.011732594287252849,
+                  "linear": -0.008598035398672226,
+                  "quadratic": 0.0
+                },
+                "c_mu": 0.09822789532821126,
+                "eddy_viscosity": 0.00019658681848547498,
+                "strain_invariant": 4.939542122609174,
+                "rotation_invariant": 1.2540422076584428,
+                "invariant_branch": "not_applicable_to_inner_law",
+                "production": 0.36910944423768977,
+                "k_source": 0.21413724667239092,
+                "epsilon_production": null,
+                "epsilon_source": null,
+                "yap": null,
+                "k_diffusion": 0.0002003963422949988,
+                "epsilon_diffusion": null
+              },
+              "same_state_Original": null,
+              "same_state_Regularized": null
+            },
+            "analytical_k": 0.017598891430879275,
+            "analytical_epsilon": 0.15497219756529884,
+            "semantics": "exact incoming AWF/log radial streamfunction; unprojected analytic scalars extended in chart, physical incoming gamma/strain; compared with native 1D target at fixed represented scalars and final projected native state"
+          },
+          {
+            "region": "outer",
+            "coordinate": [
+              0.1,
+              0.0,
+              0.1
+            ],
+            "physical_coordinate": [
+              0.1,
+              0.1
+            ],
+            "geometry": 58.0,
+            "radial_side": 0.0,
+            "tangential_side": -1.0,
+            "native_tensor_replay_error": 1.0408340855860843e-17,
+            "native_replay": {
+              "tensor": [
+                [
+                  0.00033784183699727115,
+                  0.0,
+                  -0.08751973119183461
+                ],
+                [
+                  0.0,
+                  0.004744131939682033,
+                  0.0
+                ],
+                [
+                  -0.08751973119183461,
+                  0.0,
+                  0.030077399114709306
+                ]
+              ],
+              "eigenvalues": [
+                -0.07356632651682904,
+                0.004744131939682036,
+                0.10398156746853562
+              ],
+              "critical_eigenvector": [
+                0.7640358647991369,
+                0.0,
+                0.6451737729485255
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252807,
+                "linear": -0.0020238220265630215,
+                "quadratic": -0.00046116255713731825,
+                "cubic": -2.723530095776166e-05,
+                "regularization": -0.08278670091942375
+              },
+              "production": 2.39312885960389
+            },
+            "analytical_radial_target": {
+              "tensor": [
+                [
+                  -0.005306749989966341,
+                  0.0,
+                  -0.10536830584205356
+                ],
+                [
+                  0.0,
+                  0.002997204458340832,
+                  0.0
+                ],
+                [
+                  -0.10536830584205356,
+                  0.0,
+                  0.037507328410154556
+                ]
+              ],
+              "eigenvalues": [
+                -0.09142059807855073,
+                0.002997204458340834,
+                0.12362117649873891
+              ],
+              "critical_eigenvector": [
+                0.7743050315730643,
+                -1.1102230246251565e-16,
+                0.632812545767414
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252845,
+                "linear": -0.0018512878454608325,
+                "quadratic": 0.00010562696626749413,
+                "cubic": -1.639997821705736e-05,
+                "regularization": -0.10139113150839313
+              },
+              "production": 3.509531658698078
+            },
+            "analytical_gradient": [
+              [
+                -2.5187553784572687e-09,
+                0.0,
+                1.6857855333896055
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                31.6214943992707,
+                0.0,
+                1.1497753462587305e-15
+              ]
+            ],
+            "gradient_step_halving_max": 3.3306690738754696e-08,
+            "analytical_divergence": -2.5187542286819223e-09,
+            "native_1D_target": {
+              "inner": false,
+              "coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "physical_coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "geometry": 58.0,
+              "element": 58.0,
+              "represented_gradient": [
+                [
+                  -0.5884717044996284,
+                  0.0,
+                  1.7800163844734298
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  25.765798119782435,
+                  0.0,
+                  0.5942080152020358
+                ]
+              ],
+              "target_gradient": [
+                [
+                  -5.037510985632659e-09,
+                  0.0,
+                  1.7333689150689224
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  23.402154418957558,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "target_gradient_step_halving_max": 1.2593777464081646e-09,
+              "target_divergence": -5.037510985632659e-09,
+              "target_tensor": [
+                [
+                  -0.0028692452471536767,
+                  0.0,
+                  -0.07892382873599287
+                ],
+                [
+                  0.0,
+                  0.005311780885253373,
+                  0.0
+                ],
+                [
+                  -0.07892382873599287,
+                  0.0,
+                  0.03275524725750445
+                ]
+              ],
+              "target_eigenvalues": [
+                -0.06596587897039927,
+                0.005311780885253373,
+                0.09585188098075002
+              ],
+              "native_eigenvalues": [
+                -0.07356632651682901,
+                0.004744131939682034,
+                0.10398156746853558
+              ],
+              "native_tensor": [
+                [
+                  0.00033784183699727847,
+                  0.0,
+                  -0.08751973119183461
+                ],
+                [
+                  0.0,
+                  0.004744131939682034,
+                  0.0
+                ],
+                [
+                  -0.08751973119183461,
+                  0.0,
+                  0.030077399114709295
+                ]
+              ],
+              "audit_minimum_eigenvalue": -0.07356632651682901,
+              "is_audit_minimizer": true,
+              "k": 0.017598891430879202,
+              "epsilon": 0.009269800720613796,
+              "scope": "unprojected physical streamfunction velocity at the SAME represented scalar fields and recorded one-sided element; independent step-halved chart differentiation; not an equilibrium residual"
+            },
+            "actual_2D": {
+              "coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "physical_coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "geometry": 58.0,
+              "element": 58.0,
+              "inner": false,
+              "inventory": "reconstruction_native",
+              "gradient_element_region": "outer",
+              "constitutive_region": "outer",
+              "gradient_region_matches_law": true,
+              "k": 0.017598891430879202,
+              "epsilon": 0.009269800720613796,
+              "epsilon_retained": 0.009269800720613796,
+              "epsilon_semantics": "actual retained field; inner epsilon dependent",
+              "endpoint_K": 0.01759889143087927,
+              "cutoff": 0.0008288562481167473,
+              "budget_ratio": 2.9794680120716,
+              "velocity_gradient": [
+                [
+                  -0.5884717044996284,
+                  0.0,
+                  1.7800163844734298
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  25.765798119782435,
+                  0.0,
+                  0.5942080152020358
+                ]
+              ],
+              "divergence": 0.005736310702407432,
+              "velocity_evaluation_row": {
+                "geometry": 58.0,
+                "element": 58.0,
+                "content_sha256": "3b3f305b0d0e4b08d22ad346d4cb8e83f7f01cd5685fda11879e2fc1f757b769"
+              },
+              "epsilon_evaluation_row": {
+                "geometry": 58.0,
+                "element": 22.0,
+                "content_sha256": "396200d2c8a540b7705aae4ce7c837f48cad10e19c8cd3edca2890b5c427e77b"
+              },
+              "endpoint_evaluation_row": {
+                "geometry": 34.0,
+                "element": 34.0,
+                "content_sha256": "081ac24a6d5351d3cc8e0e6e0b748505d7cbb205d1b53b3e70d50969bd124f02"
+              },
+              "epsilon_H_retained": 0.15497219756529884,
+              "epsilon_H_refreshed_projected": 0.15497219756529884,
+              "epsilon_H_current_unprojected": 0.15497219756529884,
+              "selected": {
+                "tensor": [
+                  [
+                    0.00033784183699727847,
+                    0.0,
+                    -0.08751973119183461
+                  ],
+                  [
+                    0.0,
+                    0.004744131939682034,
+                    0.0
+                  ],
+                  [
+                    -0.08751973119183461,
+                    0.0,
+                    0.030077399114709295
+                  ]
+                ],
+                "eigenvalues": [
+                  -0.07356632651682901,
+                  0.004744131939682034,
+                  0.10398156746853558
+                ],
+                "critical_eigenvector": [
+                  0.7640358647991368,
+                  0.0,
+                  0.6451737729485253
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      1.1052317432907736e-06,
+                      -0.0,
+                      -2.780849251391536e-05
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -2.780849251391536e-05,
+                      -0.0,
+                      -1.116812287743501e-06
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252802,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252802,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252802
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      8.833628145215179e-05,
+                      -0.0,
+                      -0.002067469688237362
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.002067469688237362,
+                      -0.0,
+                      -8.91973667903767e-05
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.015335038643915121,
+                      0.0,
+                      -0.0008129462729686635
+                    ],
+                    [
+                      0.0,
+                      -0.006988462347570767,
+                      0.0
+                    ],
+                    [
+                      -0.0008129462729686635,
+                      0.0,
+                      0.02232350099148589
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      0.0038508446804641563,
+                      0.0,
+                      -0.08461150673811468
+                    ],
+                    [
+                      0.0,
+                      -8.673617379884035e-19,
+                      0.0
+                    ],
+                    [
+                      -0.08461150673811468,
+                      0.0,
+                      -0.0038883819849512796
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -2.723530095776161e-05,
+                  "isotropic": 0.011732594287252804,
+                  "linear": -0.0020238220265630202,
+                  "quadratic": -0.0004611625571373252,
+                  "regularization": -0.08278670091942372
+                },
+                "c_mu": 0.0022463804253751796,
+                "eddy_viscosity": 7.505567453516159e-05,
+                "strain_invariant": 52.344428932741266,
+                "rotation_invariant": 45.53745882646308,
+                "invariant_branch": "strain",
+                "production": 2.39312885960389,
+                "k_source": 2.3838590588832766,
+                "epsilon_production": 1.8151547731710829,
+                "epsilon_source": 1.8060938088477136,
+                "yap": 0.00031372129337980004,
+                "k_diffusion": 7.505567453516159e-05,
+                "epsilon_diffusion": 5.773513425781661e-05
+              },
+              "same_state_Original": {
+                "tensor": [
+                  [
+                    -0.003511344995851941,
+                    0.0,
+                    -0.002949937192490814
+                  ],
+                  [
+                    0.0,
+                    0.004744131939682034,
+                    0.0
+                  ],
+                  [
+                    -0.002949937192490814,
+                    0.0,
+                    0.03396410588122895
+                  ]
+                ],
+                "eigenvalues": [
+                  -0.0037421325208984494,
+                  0.004744131939682034,
+                  0.03419489340627546
+                ],
+                "critical_eigenvector": [
+                  0.9969536411134935,
+                  0.0,
+                  0.07799639395861624
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      2.763079358226934e-06,
+                      -0.0,
+                      -6.95212312847884e-05
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -6.95212312847884e-05,
+                      -0.0,
+                      -2.7920307193587526e-06
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252802,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252802,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252802
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      8.833628145215179e-05,
+                      -0.0,
+                      -0.002067469688237362
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.002067469688237362,
+                      -0.0,
+                      -8.91973667903767e-05
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.015335038643915121,
+                      0.0,
+                      -0.0008129462729686635
+                    ],
+                    [
+                      0.0,
+                      -0.006988462347570767,
+                      0.0
+                    ],
+                    [
+                      -0.0008129462729686635,
+                      0.0,
+                      0.02232350099148589
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      7.652942678442604e-19,
+                      0.0,
+                      -1.3552527156068805e-19
+                    ],
+                    [
+                      0.0,
+                      -8.673617379884035e-19,
+                      0.0
+                    ],
+                    [
+                      -1.3552527156068805e-19,
+                      0.0,
+                      -7.259495874442981e-18
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -8.082488308714425e-06,
+                  "isotropic": 0.011732594287252804,
+                  "linear": -0.00023427161169535548,
+                  "quadratic": -0.015232372708147179,
+                  "regularization": 6.953993968218233e-19
+                },
+                "c_mu": 0.0022463804253751796,
+                "eddy_viscosity": 7.505567453516159e-05,
+                "strain_invariant": 52.344428932741266,
+                "rotation_invariant": 45.53745882646308,
+                "invariant_branch": "strain",
+                "production": 0.0590103515849652,
+                "k_source": 0.0497405508643514,
+                "epsilon_production": 0.04475852644377981,
+                "epsilon_source": 0.03569756212041048,
+                "yap": 0.00031372129337980004,
+                "k_diffusion": 7.505567453516159e-05,
+                "epsilon_diffusion": 5.773513425781661e-05
+              },
+              "same_state_Regularized": {
+                "tensor": [
+                  [
+                    0.00033784183699727847,
+                    0.0,
+                    -0.08751973119183461
+                  ],
+                  [
+                    0.0,
+                    0.004744131939682034,
+                    0.0
+                  ],
+                  [
+                    -0.08751973119183461,
+                    0.0,
+                    0.030077399114709295
+                  ]
+                ],
+                "eigenvalues": [
+                  -0.07356632651682901,
+                  0.004744131939682034,
+                  0.10398156746853558
+                ],
+                "critical_eigenvector": [
+                  0.7640358647991368,
+                  0.0,
+                  0.6451737729485253
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      1.1052317432907736e-06,
+                      -0.0,
+                      -2.780849251391536e-05
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -2.780849251391536e-05,
+                      -0.0,
+                      -1.116812287743501e-06
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252802,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252802,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252802
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      8.833628145215179e-05,
+                      -0.0,
+                      -0.002067469688237362
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.002067469688237362,
+                      -0.0,
+                      -8.91973667903767e-05
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.015335038643915121,
+                      0.0,
+                      -0.0008129462729686635
+                    ],
+                    [
+                      0.0,
+                      -0.006988462347570767,
+                      0.0
+                    ],
+                    [
+                      -0.0008129462729686635,
+                      0.0,
+                      0.02232350099148589
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      0.0038508446804641563,
+                      0.0,
+                      -0.08461150673811468
+                    ],
+                    [
+                      0.0,
+                      -8.673617379884035e-19,
+                      0.0
+                    ],
+                    [
+                      -0.08461150673811468,
+                      0.0,
+                      -0.0038883819849512796
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -2.723530095776161e-05,
+                  "isotropic": 0.011732594287252804,
+                  "linear": -0.0020238220265630202,
+                  "quadratic": -0.0004611625571373252,
+                  "regularization": -0.08278670091942372
+                },
+                "c_mu": 0.0022463804253751796,
+                "eddy_viscosity": 7.505567453516159e-05,
+                "strain_invariant": 52.344428932741266,
+                "rotation_invariant": 45.53745882646308,
+                "invariant_branch": "strain",
+                "production": 2.39312885960389,
+                "k_source": 2.3838590588832766,
+                "epsilon_production": 1.8151547731710829,
+                "epsilon_source": 1.8060938088477136,
+                "yap": 0.00031372129337980004,
+                "k_diffusion": 7.505567453516159e-05,
+                "epsilon_diffusion": 5.773513425781661e-05
+              }
+            },
+            "analytical_k": 0.017598891430879275,
+            "analytical_epsilon": 0.009298331853917931,
+            "semantics": "exact incoming AWF/log radial streamfunction; unprojected analytic scalars extended in chart, physical incoming gamma/strain; compared with native 1D target at fixed represented scalars and final projected native state"
+          }
+        ],
+        "referenceK_independent_ground": 0.02987206561873871,
+        "scalar_budget": {
+          "admissible": true,
+          "scope": "declared finite scalar evaluation sets only",
+          "phase": "complete",
+          "failure": "",
+          "minimum_dimensionless_margin": 0.9952476486226,
+          "limiting_functional_kind": "Point",
+          "limiting_inventory": "reconstruction_native",
+          "limiting_point": [
+            -0.1949600266546736,
+            0.0,
+            0.4
+          ],
+          "minimum_inner_k": 0.017598831038747032,
+          "minimum_outer_k": 0.017598891430878803,
+          "minimum_outer_epsilon": 0.001162291481739741,
+          "minimum_sampled_K": 0.01759889143087927,
+          "minimum_projected_trace_epsilon": 0.15497219756529884,
+          "minimum_b": null,
+          "minimum_lambda": null,
+          "normalization_applicable": false,
+          "minimum_budget_ratio": 2.9093331078100877,
+          "maximum_budget_relative_defect": 3.2417186920238235e-16,
+          "cutoff_range": [
+            0.0008221100617931598,
+            0.000835546978122519
+          ],
+          "inventory_counts": {
+            "actual_lifted_outer_epsilon": 48563.0,
+            "budget_awf_reporting_volume": 33792.0,
+            "constitutive_budget_awf_ray": 80864.0,
+            "constitutive_budget_reporting_source_ray": 112896.0,
+            "constitutive_foot_minus_budget_ray": 448.0,
+            "constitutive_foot_plus_budget_ray": 448.0,
+            "constitutive_matching_K": 361.0,
+            "interface_inner": 48.0,
+            "interface_outer": 96.0,
+            "mass_volume": 30720.0,
+            "matching_trace_nodes": 96.0,
+            "open_boundary_native": 464.0,
+            "physical_matching_transfer": 722.0,
+            "physical_sampled_K": 722.0,
+            "prescribed_source_inner": 26112.0,
+            "projected_dependent_trace": 607.0,
+            "reconstruction_dense": 12888.0,
+            "reconstruction_native": 30720.0,
+            "source_volume_outer": 21504.0,
+            "trace_budget_awf_ray": 9632.0,
+            "volume_normalization_ray": 21504.0
+          },
+          "profile_branch_pattern": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        }
+      },
+      "65-hill": {
+        "witnesses": [
+          {
+            "region": "inner",
+            "coordinate": [
+              -0.1,
+              0.0,
+              0.0065
+            ],
+            "physical_coordinate": [
+              -0.1,
+              0.0065
+            ],
+            "geometry": 31.0,
+            "radial_side": -1.0,
+            "tangential_side": 1.0,
+            "native_tensor_replay_error": 1.734723475976807e-18,
+            "native_replay": {
+              "tensor": [
+                [
+                  0.010884103333981146,
+                  0.0,
+                  -0.008907400132520574
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.008907400132520574,
+                  0.0,
+                  0.01242210559871899
+                ]
+              ],
+              "eigenvalues": [
+                0.00271257093291862,
+                0.011732594287252849,
+                0.02059363799978152
+              ],
+              "critical_eigenvector": [
+                0.7368897103912853,
+                1.1102230246251565e-16,
+                0.6760129841352515
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252847,
+                "linear": -0.009020023354334227,
+                "quadratic": 0.0,
+                "cubic": 0.0,
+                "regularization": 0.0
+              },
+              "production": 0.37102895439443156
+            },
+            "analytical_radial_target": {
+              "tensor": [
+                [
+                  0.011732594287795267,
+                  0.0,
+                  -0.008648919782150393
+                ],
+                [
+                  0.0,
+                  0.01173259428725285,
+                  0.0
+                ],
+                [
+                  -0.008648919782150393,
+                  0.0,
+                  0.011732594287252849
+                ]
+              ],
+              "eigenvalues": [
+                0.003083674505373664,
+                0.011732594287252849,
+                0.02038151406967445
+              ],
+              "critical_eigenvector": [
+                -0.7071067811754609,
+                1.1102230246251565e-16,
+                -0.707106781197634
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252849,
+                "linear": -0.008648919781879184,
+                "quadratic": 0.0,
+                "cubic": 0.0,
+                "regularization": 0.0
+              },
+              "production": 0.35129087353548066
+            },
+            "analytical_gradient": [
+              [
+                -1.2736387723194422e-09,
+                0.0,
+                25.44748994859347
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                15.169243975281088,
+                0.0,
+                3.1253288279435825e-15
+              ]
+            ],
+            "gradient_step_halving_max": 8.495414149933822e-09,
+            "analytical_divergence": -1.2736356469906142e-09,
+            "native_1D_target": {
+              "inner": true,
+              "coordinate": [
+                -0.1,
+                0.0,
+                0.0065
+              ],
+              "physical_coordinate": [
+                -0.1,
+                0.0,
+                0.0065
+              ],
+              "geometry": 31.0,
+              "element": 31.0,
+              "represented_gradient": [
+                [
+                  1.992325755927108,
+                  0.0,
+                  25.160507586614834
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  16.67009210084358,
+                  0.0,
+                  -1.619028629050309
+                ]
+              ],
+              "target_gradient": [
+                [
+                  2.547273628431633e-09,
+                  0.0,
+                  25.44748994859347
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  15.169243968477915,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "target_gradient_step_halving_max": 3.82091044264745e-09,
+              "target_divergence": 2.547273628431633e-09,
+              "target_tensor": [
+                [
+                  0.011732594286168015,
+                  0.0,
+                  -0.008648919780701725
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.008648919780701725,
+                  0.0,
+                  0.011732594287252847
+                ]
+              ],
+              "target_eigenvalues": [
+                0.003083674506008706,
+                0.011732594287252847,
+                0.020381514067412156
+              ],
+              "native_eigenvalues": [
+                0.00271257093291862,
+                0.011732594287252847,
+                0.020593637999781512
+              ],
+              "native_tensor": [
+                [
+                  0.010884103333981146,
+                  0.0,
+                  -0.008907400132520572
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.008907400132520572,
+                  0.0,
+                  0.012422105598718989
+                ]
+              ],
+              "audit_minimum_eigenvalue": 0.00271257093291862,
+              "is_audit_minimizer": true,
+              "k": 0.01759889143087927,
+              "epsilon": 0.0,
+              "scope": "unprojected physical streamfunction velocity at the SAME represented scalar fields and recorded one-sided element; independent step-halved chart differentiation; not an equilibrium residual"
+            },
+            "actual_2D": {
+              "coordinate": [
+                -0.1,
+                0.0,
+                0.0065
+              ],
+              "physical_coordinate": [
+                -0.1,
+                0.0,
+                0.0065
+              ],
+              "geometry": 31.0,
+              "element": 31.0,
+              "inner": true,
+              "inventory": "reconstruction_native",
+              "gradient_element_region": "inner",
+              "constitutive_region": "inner",
+              "gradient_region_matches_law": true,
+              "k": 0.01759889143087927,
+              "epsilon": 0.1430512592910451,
+              "epsilon_retained": 0.1430512592910451,
+              "epsilon_semantics": "actual retained field; inner epsilon dependent",
+              "endpoint_K": 0.01759889143087927,
+              "cutoff": 0.0008312858196541346,
+              "budget_ratio": 3.056583773528824,
+              "velocity_gradient": [
+                [
+                  1.992325755927108,
+                  0.0,
+                  25.160507586614834
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  16.67009210084358,
+                  0.0,
+                  -1.619028629050309
+                ]
+              ],
+              "divergence": 0.37329712687679883,
+              "velocity_evaluation_row": {
+                "geometry": 31.0,
+                "element": 31.0,
+                "content_sha256": "bd65fc1085c3b4b153b7365a4758d72da58513b215ad8152233d8b6fdcff24e3"
+              },
+              "epsilon_evaluation_row": null,
+              "endpoint_evaluation_row": {
+                "geometry": 30.0,
+                "element": 30.0,
+                "content_sha256": "4f208b9f0fc9550cdb19d52ccb7517376b9ae85b081c528682608e999196c93d"
+              },
+              "epsilon_H_retained": 0.1430512592910451,
+              "epsilon_H_refreshed_projected": 0.1430512592910451,
+              "epsilon_H_current_unprojected": 0.1430512592910451,
+              "selected": {
+                "tensor": [
+                  [
+                    0.010884103333981146,
+                    0.0,
+                    -0.008907400132520572
+                  ],
+                  [
+                    0.0,
+                    0.011732594287252847,
+                    0.0
+                  ],
+                  [
+                    -0.008907400132520572,
+                    0.0,
+                    0.012422105598718989
+                  ]
+                ],
+                "eigenvalues": [
+                  0.00271257093291862,
+                  0.011732594287252847,
+                  0.020593637999781512
+                ],
+                "critical_eigenvector": [
+                  0.7368897103912851,
+                  0.0,
+                  0.6760129841352516
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  ],
+                  "inner_stress_remainder": [
+                    [
+                      2.168404344971009e-19,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      -7.589415207398531e-19
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252847,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252847,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252847
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      -0.0008484909532717017,
+                      -0.0,
+                      -0.008907400132520572
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.008907400132520572,
+                      -0.0,
+                      0.0006895113114661421
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": 0.0,
+                  "inner_stress_remainder": -2.290856298577279e-19,
+                  "isotropic": 0.011732594287252845,
+                  "linear": -0.009020023354334227,
+                  "quadratic": 0.0
+                },
+                "c_mu": 0.09822789532821126,
+                "eddy_viscosity": 0.0002129398143720893,
+                "strain_invariant": 5.16555936109193,
+                "rotation_invariant": 1.044533973889303,
+                "invariant_branch": "not_applicable_to_inner_law",
+                "production": 0.3710289543944315,
+                "k_source": 0.22797769510338642,
+                "epsilon_production": null,
+                "epsilon_source": null,
+                "yap": null,
+                "k_diffusion": 0.00021674933818161313,
+                "epsilon_diffusion": null
+              },
+              "same_state_Original": null,
+              "same_state_Regularized": null
+            },
+            "analytical_k": 0.017598891430879275,
+            "analytical_epsilon": 0.1430512592910451,
+            "semantics": "exact incoming AWF/log radial streamfunction; unprojected analytic scalars extended in chart, physical incoming gamma/strain; compared with native 1D target at fixed represented scalars and final projected native state"
+          },
+          {
+            "region": "outer",
+            "coordinate": [
+              0.1,
+              0.0,
+              0.1
+            ],
+            "physical_coordinate": [
+              0.1,
+              0.1
+            ],
+            "geometry": 58.0,
+            "radial_side": 0.0,
+            "tangential_side": -1.0,
+            "native_tensor_replay_error": 1.0408340855860843e-17,
+            "native_replay": {
+              "tensor": [
+                [
+                  0.0004667066743563246,
+                  0.0,
+                  -0.08493630107167807
+                ],
+                [
+                  0.0,
+                  0.0049781290972451585,
+                  0.0
+                ],
+                [
+                  -0.08493630107167807,
+                  0.0,
+                  0.029556540759919467
+                ]
+              ],
+              "eigenvalues": [
+                -0.07116105090492626,
+                0.004978129097245161,
+                0.10118429833920205
+              ],
+              "critical_eigenvector": [
+                0.7644566836078303,
+                0.0,
+                0.6446750956003479
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252936,
+                "linear": -0.0020542588782491516,
+                "quadratic": -0.0005562461245382632,
+                "cubic": -2.9349554048726907e-05,
+                "regularization": -0.08025379063534305
+              },
+              "production": 2.2538774634298746
+            },
+            "analytical_radial_target": {
+              "tensor": [
+                [
+                  -0.0051927819789086465,
+                  0.0,
+                  -0.10403478928066447
+                ],
+                [
+                  0.0,
+                  0.003098856796667009,
+                  0.0
+                ],
+                [
+                  -0.10403478928066447,
+                  0.0,
+                  0.03729170811186375
+                ]
+              ],
+              "eigenvalues": [
+                -0.09013184581244188,
+                0.003098856796667007,
+                0.12223077194539696
+              ],
+              "critical_eigenvector": [
+                -0.7746148557689556,
+                0.0,
+                -0.6324332575237012
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252852,
+                "linear": -0.0018622536545037202,
+                "quadratic": 6.722273906880315e-05,
+                "cubic": -1.6897304039395065e-05,
+                "regularization": -0.10005251188022041
+              },
+              "production": 3.422330704417472
+            },
+            "analytical_gradient": [
+              [
+                -1.0189094399295419e-08,
+                0.0,
+                1.685785422367303
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                31.21023645775241,
+                0.0,
+                1.1253201355765294e-15
+              ]
+            ],
+            "gradient_step_halving_max": 6.661338147750939e-08,
+            "analytical_divergence": -1.0189093273975283e-08,
+            "native_1D_target": {
+              "inner": false,
+              "coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "physical_coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "geometry": 58.0,
+              "element": 58.0,
+              "represented_gradient": [
+                [
+                  -0.5693855994098036,
+                  0.0,
+                  1.781413546763158
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  24.959883427556623,
+                  0.0,
+                  0.5986872290422619
+                ]
+              ],
+              "target_gradient": [
+                [
+                  1.0189094513726533e-08,
+                  0.0,
+                  1.7333901647376135
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  22.632380995083423,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "target_gradient_step_halving_max": 1.52836417705898e-08,
+              "target_divergence": 1.0189094513726533e-08,
+              "target_tensor": [
+                [
+                  -0.0026154691252482224,
+                  0.0,
+                  -0.07644089095239515
+                ],
+                [
+                  0.0,
+                  0.00554555724948066,
+                  0.0
+                ],
+                [
+                  -0.07644089095239515,
+                  0.0,
+                  0.03226769466898237
+                ]
+              ],
+              "target_eigenvalues": [
+                -0.06357936272997365,
+                0.00554555724948066,
+                0.0932315882737078
+              ],
+              "native_eigenvalues": [
+                -0.07116105090492628,
+                0.004978129097245162,
+                0.10118429833920206
+              ],
+              "native_tensor": [
+                [
+                  0.0004667066743563327,
+                  0.0,
+                  -0.08493630107167807
+                ],
+                [
+                  0.0,
+                  0.004978129097245162,
+                  0.0
+                ],
+                [
+                  -0.08493630107167807,
+                  0.0,
+                  0.029556540759919456
+                ]
+              ],
+              "audit_minimum_eigenvalue": -0.07116105090492628,
+              "is_audit_minimizer": true,
+              "k": 0.017598891430879404,
+              "epsilon": 0.009269769941424482,
+              "scope": "unprojected physical streamfunction velocity at the SAME represented scalar fields and recorded one-sided element; independent step-halved chart differentiation; not an equilibrium residual"
+            },
+            "actual_2D": {
+              "coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "physical_coordinate": [
+                0.1,
+                0.0,
+                0.1
+              ],
+              "geometry": 58.0,
+              "element": 58.0,
+              "inner": false,
+              "inventory": "reconstruction_native",
+              "gradient_element_region": "outer",
+              "constitutive_region": "outer",
+              "gradient_region_matches_law": true,
+              "k": 0.017598891430879404,
+              "epsilon": 0.009269769941424482,
+              "epsilon_retained": 0.009269769941424482,
+              "epsilon_semantics": "actual retained field; inner epsilon dependent",
+              "endpoint_K": 0.01759889143087927,
+              "cutoff": 0.0008312858196541346,
+              "budget_ratio": 3.056583773528824,
+              "velocity_gradient": [
+                [
+                  -0.5693855994098036,
+                  0.0,
+                  1.781413546763158
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  24.959883427556623,
+                  0.0,
+                  0.5986872290422619
+                ]
+              ],
+              "divergence": 0.029301629632458304,
+              "velocity_evaluation_row": {
+                "geometry": 58.0,
+                "element": 58.0,
+                "content_sha256": "fcf5d95c5fb30fa69c5f74e9d6578edb28fc03672c22001efede61f6364e8ec8"
+              },
+              "epsilon_evaluation_row": {
+                "geometry": 58.0,
+                "element": 22.0,
+                "content_sha256": "3735a7f8857d2e2ded07f72a603ecedae219c60a483aedcd215a0a34efc6753f"
+              },
+              "endpoint_evaluation_row": {
+                "geometry": 34.0,
+                "element": 34.0,
+                "content_sha256": "7bf64119fa8a0d05ab137bfaa546d66a16dc55124694bee77da61106cc36d1c6"
+              },
+              "epsilon_H_retained": 0.1430512592910451,
+              "epsilon_H_refreshed_projected": 0.1430512592910451,
+              "epsilon_H_current_unprojected": 0.1430512592910451,
+              "selected": {
+                "tensor": [
+                  [
+                    0.0004667066743563327,
+                    0.0,
+                    -0.08493630107167807
+                  ],
+                  [
+                    0.0,
+                    0.004978129097245162,
+                    0.0
+                  ],
+                  [
+                    -0.08493630107167807,
+                    0.0,
+                    0.029556540759919456
+                  ]
+                ],
+                "eigenvalues": [
+                  -0.07116105090492628,
+                  0.004978129097245162,
+                  0.10118429833920206
+                ],
+                "critical_eigenvector": [
+                  0.7644566836078303,
+                  0.0,
+                  0.644675095600348
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      8.192216228617943e-07,
+                      -0.0,
+                      -2.988946664374571e-05
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -2.988946664374571e-05,
+                      -0.0,
+                      -8.846807197809262e-07
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252936,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252936,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252936
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      8.932232139364196e-05,
+                      -0.0,
+                      -0.002097519436124582
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.002097519436124582,
+                      -0.0,
+                      -9.391901225147337e-05
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.015081978067058284,
+                      0.0,
+                      -0.0008296887571961165
+                    ],
+                    [
+                      0.0,
+                      -0.006754465190007774,
+                      0.0
+                    ],
+                    [
+                      -0.0008296887571961165,
+                      0.0,
+                      0.021836443257066056
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      0.003725948911145176,
+                      0.0,
+                      -0.08197920341171362
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      -0.08197920341171362,
+                      0.0,
+                      -0.003917693091428283
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -2.9349554048726897e-05,
+                  "isotropic": 0.011732594287252936,
+                  "linear": -0.002054258878249151,
+                  "quadratic": -0.0005562461245382597,
+                  "regularization": -0.08025379063534306
+                },
+                "c_mu": 0.002347587878549121,
+                "eddy_viscosity": 7.843746091069829e-05,
+                "strain_invariant": 50.81746566170294,
+                "rotation_invariant": 44.0049081631586,
+                "invariant_branch": "strain",
+                "production": 2.253877463429875,
+                "k_source": 2.2446076934884505,
+                "epsilon_production": 1.709528860250587,
+                "epsilon_source": 1.7004679745687694,
+                "yap": 0.0003137376801424992,
+                "k_diffusion": 7.843746091069829e-05,
+                "epsilon_diffusion": 6.033650839284483e-05
+              },
+              "same_state_Original": {
+                "tensor": [
+                  [
+                    -0.0032580134043545517,
+                    0.0,
+                    -0.0030019318599300627
+                  ],
+                  [
+                    0.0,
+                    0.004978129097245162,
+                    0.0
+                  ],
+                  [
+                    -0.0030019318599300627,
+                    0.0,
+                    0.033472906830268066
+                  ]
+                ],
+                "eigenvalues": [
+                  -0.003501737047010134,
+                  0.004978129097245162,
+                  0.033716630472923656
+                ],
+                "critical_eigenvector": [
+                  0.9967203833022603,
+                  0.0,
+                  0.08092266375864861
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      2.0480540571544857e-06,
+                      -0.0,
+                      -7.472366660936428e-05
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -7.472366660936428e-05,
+                      -0.0,
+                      -2.2117017994523154e-06
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252936,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252936,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252936
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      8.932232139364196e-05,
+                      -0.0,
+                      -0.002097519436124582
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.002097519436124582,
+                      -0.0,
+                      -9.391901225147337e-05
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.015081978067058284,
+                      0.0,
+                      -0.0008296887571961165
+                    ],
+                    [
+                      0.0,
+                      -0.006754465190007774,
+                      0.0
+                    ],
+                    [
+                      -0.0008296887571961165,
+                      0.0,
+                      0.021836443257066056
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      -6.132518538121134e-19,
+                      0.0,
+                      2.574980159653073e-19
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      2.574980159653073e-19,
+                      0.0,
+                      -1.531435568635775e-18
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -1.0033854531239218e-05,
+                  "isotropic": 0.011732594287252937,
+                  "linear": -0.0002502380067911496,
+                  "quadratic": -0.01497405947294068,
+                  "regularization": -5.777263860258637e-19
+                },
+                "c_mu": 0.002347587878549121,
+                "eddy_viscosity": 7.843746091069829e-05,
+                "strain_invariant": 50.81746566170294,
+                "rotation_invariant": 44.0049081631586,
+                "invariant_branch": "strain",
+                "production": 0.058380683609735355,
+                "k_source": 0.04911091366831088,
+                "epsilon_production": 0.04428078506101368,
+                "epsilon_source": 0.035219899379196236,
+                "yap": 0.0003137376801424992,
+                "k_diffusion": 7.843746091069829e-05,
+                "epsilon_diffusion": 6.033650839284483e-05
+              },
+              "same_state_Regularized": {
+                "tensor": [
+                  [
+                    0.0004667066743563327,
+                    0.0,
+                    -0.08493630107167807
+                  ],
+                  [
+                    0.0,
+                    0.004978129097245162,
+                    0.0
+                  ],
+                  [
+                    -0.08493630107167807,
+                    0.0,
+                    0.029556540759919456
+                  ]
+                ],
+                "eigenvalues": [
+                  -0.07116105090492628,
+                  0.004978129097245162,
+                  0.10118429833920206
+                ],
+                "critical_eigenvector": [
+                  0.7644566836078303,
+                  0.0,
+                  0.644675095600348
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      8.192216228617943e-07,
+                      -0.0,
+                      -2.988946664374571e-05
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -2.988946664374571e-05,
+                      -0.0,
+                      -8.846807197809262e-07
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252936,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252936,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252936
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      8.932232139364196e-05,
+                      -0.0,
+                      -0.002097519436124582
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.002097519436124582,
+                      -0.0,
+                      -9.391901225147337e-05
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.015081978067058284,
+                      0.0,
+                      -0.0008296887571961165
+                    ],
+                    [
+                      0.0,
+                      -0.006754465190007774,
+                      0.0
+                    ],
+                    [
+                      -0.0008296887571961165,
+                      0.0,
+                      0.021836443257066056
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      0.003725948911145176,
+                      0.0,
+                      -0.08197920341171362
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      -0.08197920341171362,
+                      0.0,
+                      -0.003917693091428283
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -2.9349554048726897e-05,
+                  "isotropic": 0.011732594287252936,
+                  "linear": -0.002054258878249151,
+                  "quadratic": -0.0005562461245382597,
+                  "regularization": -0.08025379063534306
+                },
+                "c_mu": 0.002347587878549121,
+                "eddy_viscosity": 7.843746091069829e-05,
+                "strain_invariant": 50.81746566170294,
+                "rotation_invariant": 44.0049081631586,
+                "invariant_branch": "strain",
+                "production": 2.253877463429875,
+                "k_source": 2.2446076934884505,
+                "epsilon_production": 1.709528860250587,
+                "epsilon_source": 1.7004679745687694,
+                "yap": 0.0003137376801424992,
+                "k_diffusion": 7.843746091069829e-05,
+                "epsilon_diffusion": 6.033650839284483e-05
+              }
+            },
+            "analytical_k": 0.017598891430879275,
+            "analytical_epsilon": 0.009298331853917931,
+            "semantics": "exact incoming AWF/log radial streamfunction; unprojected analytic scalars extended in chart, physical incoming gamma/strain; compared with native 1D target at fixed represented scalars and final projected native state"
+          }
+        ],
+        "referenceK_independent_ground": 0.03008008950853283,
+        "scalar_budget": {
+          "admissible": true,
+          "scope": "declared finite scalar evaluation sets only",
+          "phase": "complete",
+          "failure": "",
+          "minimum_dimensionless_margin": 0.9952475688591296,
+          "limiting_functional_kind": "Point",
+          "limiting_inventory": "reconstruction_native",
+          "limiting_point": [
+            -0.1949600266546736,
+            0.0,
+            0.4
+          ],
+          "minimum_inner_k": 0.017598460508469284,
+          "minimum_outer_k": 0.017598891430878717,
+          "minimum_outer_epsilon": 0.001162291481739741,
+          "minimum_sampled_K": 0.01759889143087927,
+          "minimum_projected_trace_epsilon": 0.1430512592910451,
+          "minimum_b": null,
+          "minimum_lambda": null,
+          "normalization_applicable": false,
+          "minimum_budget_ratio": 2.977243048280183,
+          "maximum_budget_relative_defect": 3.1675203927182606e-16,
+          "cutoff_range": [
+            0.0008242388740683781,
+            0.0008382768632845283
+          ],
+          "inventory_counts": {
+            "actual_lifted_outer_epsilon": 48563.0,
+            "budget_awf_reporting_volume": 33792.0,
+            "constitutive_budget_awf_ray": 80864.0,
+            "constitutive_budget_reporting_source_ray": 112896.0,
+            "constitutive_foot_minus_budget_ray": 448.0,
+            "constitutive_foot_plus_budget_ray": 448.0,
+            "constitutive_matching_K": 361.0,
+            "interface_inner": 48.0,
+            "interface_outer": 96.0,
+            "mass_volume": 30720.0,
+            "matching_trace_nodes": 96.0,
+            "open_boundary_native": 464.0,
+            "physical_matching_transfer": 722.0,
+            "physical_sampled_K": 722.0,
+            "prescribed_source_inner": 26112.0,
+            "projected_dependent_trace": 607.0,
+            "reconstruction_dense": 12888.0,
+            "reconstruction_native": 30720.0,
+            "source_volume_outer": 21504.0,
+            "trace_budget_awf_ray": 9632.0,
+            "volume_normalization_ray": 21504.0
+          },
+          "profile_branch_pattern": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        }
+      }
+    }
+  },
+  "physical_height": {
+    "status": "passed",
+    "scope": "independent indexed tensor and analytic radial construction, not an equilibrium residual or ellipticity certificate",
+    "results": {
+      "65-hill": {
+        "witnesses": [
+          {
+            "region": "inner",
+            "coordinate": [
+              0.059553093889933906,
+              0.0,
+              0.0065
+            ],
+            "physical_coordinate": [
+              0.0628982729605252,
+              0.019660446464796585
+            ],
+            "geometry": 34.0,
+            "radial_side": -1.0,
+            "tangential_side": 0.0,
+            "native_tensor_replay_error": 3.469446951953614e-18,
+            "native_replay": {
+              "tensor": [
+                [
+                  0.004549573387697586,
+                  0.0,
+                  -0.008178321205967438
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.008178321205967438,
+                  0.0,
+                  0.01620960540916547
+                ]
+              ],
+              "eigenvalues": [
+                0.0003359832515642189,
+                0.011732594287252849,
+                0.020423195545298842
+              ],
+              "critical_eigenvector": [
+                0.8889517403523478,
+                5.551115123125783e-17,
+                0.4580008769910077
+              ],
+              "critical_terms": {
+                "isotropic": 0.01173259428725285,
+                "linear": -0.01139661103568863,
+                "quadratic": 0.0,
+                "cubic": 0.0,
+                "regularization": 0.0
+              },
+              "production": 0.4077696295988512
+            },
+            "analytical_radial_target": {
+              "tensor": [
+                [
+                  0.005145904384810726,
+                  0.0,
+                  -0.007151197353272368
+                ],
+                [
+                  0.0,
+                  0.01173259428725285,
+                  0.0
+                ],
+                [
+                  -0.007151197353272368,
+                  0.0,
+                  0.018319284194880516
+                ]
+              ],
+              "eigenvalues": [
+                0.0020102433657872665,
+                0.011732594287252849,
+                0.02145494521390397
+              ],
+              "critical_eigenvector": [
+                0.9158272588525329,
+                -5.551115123125783e-17,
+                0.4015724491827794
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252854,
+                "linear": -0.009722350921465587,
+                "quadratic": 0.0,
+                "cubic": 0.0,
+                "regularization": 0.0
+              },
+              "production": 0.4439005819540519
+            },
+            "analytical_gradient": [
+              [
+                15.466083507832396,
+                0.0,
+                33.19212866339416
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.3910571506801563,
+                0.0,
+                -15.466083520008464
+              ]
+            ],
+            "gradient_step_halving_max": 5.335886044122162e-08,
+            "analytical_divergence": -1.2176068153735287e-08,
+            "native_1D_target": {
+              "inner": true,
+              "coordinate": [
+                0.059553093889933906,
+                0.0,
+                0.0065
+              ],
+              "physical_coordinate": [
+                0.0628982729605252,
+                0.0,
+                0.01966044646479658
+              ],
+              "geometry": 34.0,
+              "element": 34.0,
+              "represented_gradient": [
+                [
+                  16.866317181538694,
+                  0.0,
+                  36.18910326647188
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  2.21762320731336,
+                  0.0,
+                  -10.5123861761463
+                ]
+              ],
+              "target_gradient": [
+                [
+                  14.50022548420641,
+                  0.0,
+                  32.37929366336951
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  -1.3246124214109232,
+                  0.0,
+                  -16.759730570587816
+                ]
+              ],
+              "target_gradient_step_halving_max": 3.406969995012332e-08,
+              "target_divergence": -2.259505086381406,
+              "target_tensor": [
+                [
+                  0.0055572436413321435,
+                  0.0,
+                  -0.0066127780590470656
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.0066127780590470656,
+                  0.0,
+                  0.01887022212050725
+                ]
+              ],
+              "target_eigenvalues": [
+                0.002830893083984061,
+                0.011732594287252847,
+                0.02159657267785533
+              ],
+              "native_eigenvalues": [
+                0.0003359832515642189,
+                0.011732594287252847,
+                0.020423195545298835
+              ],
+              "native_tensor": [
+                [
+                  0.004549573387697587,
+                  0.0,
+                  -0.008178321205967438
+                ],
+                [
+                  0.0,
+                  0.011732594287252847,
+                  0.0
+                ],
+                [
+                  -0.008178321205967438,
+                  0.0,
+                  0.016209605409165467
+                ]
+              ],
+              "audit_minimum_eigenvalue": 0.0003359832515642189,
+              "is_audit_minimizer": true,
+              "k": 0.01759889143087927,
+              "epsilon": 0.0,
+              "scope": "unprojected physical streamfunction velocity at the SAME represented scalar fields and recorded one-sided element; independent step-halved chart differentiation; not an equilibrium residual"
+            },
+            "actual_2D": {
+              "coordinate": [
+                0.059553093889933906,
+                0.0,
+                0.0065
+              ],
+              "physical_coordinate": [
+                0.0628982729605252,
+                0.0,
+                0.01966044646479658
+              ],
+              "geometry": 34.0,
+              "element": 34.0,
+              "inner": true,
+              "inventory": "physical_sampled_K",
+              "gradient_element_region": "inner",
+              "constitutive_region": "inner",
+              "gradient_region_matches_law": true,
+              "k": 0.01759889143087927,
+              "epsilon": 0.1430512592910451,
+              "epsilon_retained": 0.1430512592910451,
+              "epsilon_semantics": "actual retained field; inner epsilon dependent",
+              "endpoint_K": 0.01759889143087927,
+              "cutoff": 0.0008299768803315316,
+              "budget_ratio": 3.0725071458018642,
+              "velocity_gradient": [
+                [
+                  16.866317181538694,
+                  0.0,
+                  36.18910326647188
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  2.21762320731336,
+                  0.0,
+                  -10.5123861761463
+                ]
+              ],
+              "divergence": 6.353931005392393,
+              "velocity_evaluation_row": {
+                "geometry": 34.0,
+                "element": 34.0,
+                "content_sha256": "46cdf38f9b38635e915c8be9fbfddd966bd96253b62faae48b9ec9e52c96e18c"
+              },
+              "epsilon_evaluation_row": null,
+              "endpoint_evaluation_row": {
+                "geometry": 34.0,
+                "element": 34.0,
+                "content_sha256": "46cdf38f9b38635e915c8be9fbfddd966bd96253b62faae48b9ec9e52c96e18c"
+              },
+              "epsilon_H_retained": 0.1430512592910451,
+              "epsilon_H_refreshed_projected": 0.1430512592910451,
+              "epsilon_H_current_unprojected": 0.1430512592910451,
+              "selected": {
+                "tensor": [
+                  [
+                    0.004549573387697587,
+                    0.0,
+                    -0.008178321205967438
+                  ],
+                  [
+                    0.0,
+                    0.011732594287252847,
+                    0.0
+                  ],
+                  [
+                    -0.008178321205967438,
+                    0.0,
+                    0.016209605409165467
+                  ]
+                ],
+                "eigenvalues": [
+                  0.0003359832515642189,
+                  0.011732594287252847,
+                  0.020423195545298835
+                ],
+                "critical_eigenvector": [
+                  0.8889517403523477,
+                  0.0,
+                  0.4580008769910078
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  ],
+                  "inner_stress_remainder": [
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      -1.734723475976807e-18
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252847,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252847,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252847
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      -0.00718302089955526,
+                      -0.0,
+                      -0.008178321205967438
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      -0.008178321205967438,
+                      -0.0,
+                      0.004477011121912622
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": 0.0,
+                  "inner_stress_remainder": -3.6388392876072386e-19,
+                  "isotropic": 0.011732594287252847,
+                  "linear": -0.011396611035688627,
+                  "quadratic": 0.0
+                },
+                "c_mu": 0.09822789532821126,
+                "eddy_viscosity": 0.0002129398143720893,
+                "strain_invariant": 5.855066096374438,
+                "rotation_invariant": 4.179343769991101,
+                "invariant_branch": "not_applicable_to_inner_law",
+                "production": 0.40776962959885116,
+                "k_source": 0.2647183703078061,
+                "epsilon_production": null,
+                "epsilon_source": null,
+                "yap": null,
+                "k_diffusion": 0.00021674933818161313,
+                "epsilon_diffusion": null
+              },
+              "same_state_Original": null,
+              "same_state_Regularized": null
+            },
+            "analytical_k": 0.017598891430879275,
+            "analytical_epsilon": 0.1430512592910451,
+            "semantics": "exact incoming AWF/log radial streamfunction; unprojected analytic scalars extended in chart, physical incoming gamma/strain; compared with native 1D target at fixed represented scalars and final projected native state"
+          },
+          {
+            "region": "outer",
+            "coordinate": [
+              -0.02246684316195127,
+              0.0,
+              0.1
+            ],
+            "physical_coordinate": [
+              -0.02492007275608746,
+              0.13064731043132694
+            ],
+            "geometry": 56.0,
+            "radial_side": 0.0,
+            "tangential_side": 0.0,
+            "native_tensor_replay_error": 1.3877787807814457e-17,
+            "native_replay": {
+              "tensor": [
+                [
+                  -0.04181750162182511,
+                  0.0,
+                  0.0344824556811887
+                ],
+                [
+                  0.0,
+                  0.013641332097812101,
+                  0.0
+                ],
+                [
+                  0.0344824556811887,
+                  0.0,
+                  0.04881697463254232
+                ]
+              ],
+              "eigenvalues": [
+                -0.05344490170826969,
+                0.013641332097812098,
+                0.0604443747189869
+              ],
+              "critical_eigenvector": [
+                -0.9475790746640567,
+                0.0,
+                0.3195213564987641
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252936,
+                "linear": -0.0035671281500485002,
+                "quadratic": -0.0030878349135117565,
+                "cubic": -0.0003613143123937426,
+                "regularization": -0.05816121861956865
+              },
+              "production": 0.6342547168694163
+            },
+            "analytical_radial_target": {
+              "tensor": [
+                [
+                  -0.035515580336070066,
+                  0.0,
+                  0.02389529686377973
+                ],
+                [
+                  0.0,
+                  0.012168452401743798,
+                  0.0
+                ],
+                [
+                  0.02389529686377973,
+                  0.0,
+                  0.058544911140139086
+                ]
+              ],
+              "eigenvalues": [
+                -0.04123786274965377,
+                0.012168452401743801,
+                0.06426719355372279
+              ],
+              "critical_eigenvector": [
+                -0.9725034476497647,
+                -2.7755575615628914e-17,
+                0.2328884804135268
+              ],
+              "critical_terms": {
+                "isotropic": 0.011732594287252854,
+                "linear": -0.003224470372173722,
+                "quadratic": -0.0006686485353327731,
+                "cubic": -0.0002838100102408997,
+                "regularization": -0.048793528119159255
+              },
+              "production": 0.5713169914136018
+            },
+            "analytical_gradient": [
+              [
+                4.685872670345731,
+                0.0,
+                0.4618218462784388
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                -5.925721441255327,
+                0.0,
+                -4.685872707754399
+              ]
+            ],
+            "gradient_step_halving_max": 4.644224960159704e-08,
+            "analytical_divergence": -3.740866816315247e-08,
+            "native_1D_target": {
+              "inner": false,
+              "coordinate": [
+                -0.02246684316195127,
+                0.0,
+                0.1
+              ],
+              "physical_coordinate": [
+                -0.02492007275608746,
+                0.0,
+                0.1306473104313269
+              ],
+              "geometry": 56.0,
+              "element": 56.0,
+              "represented_gradient": [
+                [
+                  5.132685255667005,
+                  0.0,
+                  -0.8953253622097413
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  -6.25686057660953,
+                  0.0,
+                  -3.543720386391294
+                ]
+              ],
+              "target_gradient": [
+                [
+                  4.6860172986053445,
+                  0.0,
+                  0.46732590304932586
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  -5.932522087011326,
+                  0.0,
+                  -4.686017299893295
+                ]
+              ],
+              "target_gradient_step_halving_max": 2.9026406167531604e-08,
+              "target_divergence": -1.2879501909424107e-09,
+              "target_tensor": [
+                [
+                  -0.035518764526933276,
+                  0.0,
+                  0.023874156526503595
+                ],
+                [
+                  0.0,
+                  0.012154474817826775,
+                  0.0
+                ],
+                [
+                  0.023874156526503595,
+                  0.0,
+                  0.05856207258270923
+                ]
+              ],
+              "target_eigenvalues": [
+                -0.04123037273568544,
+                0.012154474817826775,
+                0.0642736807914614
+              ],
+              "native_eigenvalues": [
+                -0.053444901708269675,
+                0.013641332097812101,
+                0.060444374718986886
+              ],
+              "native_tensor": [
+                [
+                  -0.0418175016218251,
+                  0.0,
+                  0.03448245568118869
+                ],
+                [
+                  0.0,
+                  0.013641332097812101,
+                  0.0
+                ],
+                [
+                  0.03448245568118869,
+                  0.0,
+                  0.04881697463254231
+                ]
+              ],
+              "audit_minimum_eigenvalue": -0.053444901708269675,
+              "is_audit_minimizer": true,
+              "k": 0.017598891430879404,
+              "epsilon": 0.00926976994142448,
+              "scope": "unprojected physical streamfunction velocity at the SAME represented scalar fields and recorded one-sided element; independent step-halved chart differentiation; not an equilibrium residual"
+            },
+            "actual_2D": {
+              "coordinate": [
+                -0.02246684316195127,
+                0.0,
+                0.1
+              ],
+              "physical_coordinate": [
+                -0.02492007275608746,
+                0.0,
+                0.1306473104313269
+              ],
+              "geometry": 56.0,
+              "element": 56.0,
+              "inner": false,
+              "inventory": "reconstruction_native",
+              "gradient_element_region": "outer",
+              "constitutive_region": "outer",
+              "gradient_region_matches_law": true,
+              "k": 0.017598891430879404,
+              "epsilon": 0.00926976994142448,
+              "epsilon_retained": 0.00926976994142448,
+              "epsilon_semantics": "actual retained field; inner epsilon dependent",
+              "endpoint_K": 0.01759889143087927,
+              "cutoff": 0.0008355179493047707,
+              "budget_ratio": 3.007458733941383,
+              "velocity_gradient": [
+                [
+                  5.132685255667005,
+                  0.0,
+                  -0.8953253622097413
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  -6.25686057660953,
+                  0.0,
+                  -3.543720386391294
+                ]
+              ],
+              "divergence": 1.5889648692757112,
+              "velocity_evaluation_row": {
+                "geometry": 56.0,
+                "element": 56.0,
+                "content_sha256": "4be2345b7954ecca7d5def6dc8855697bed2fb939cde8018e4642f5e8a5b824b"
+              },
+              "epsilon_evaluation_row": {
+                "geometry": 56.0,
+                "element": 20.0,
+                "content_sha256": "dbe2f1abfbd6f6361bb2bb24bd30dea808aa76be9d9ba4e5cbc96bade5ce4017"
+              },
+              "endpoint_evaluation_row": {
+                "geometry": 32.0,
+                "element": 32.0,
+                "content_sha256": "376d2cc3651a941515c167be3473c7d6c18a4c0f7ce278a65d70f6aa87a715f7"
+              },
+              "epsilon_H_retained": 0.1430512592910451,
+              "epsilon_H_refreshed_projected": 0.1430512592910451,
+              "epsilon_H_current_unprojected": 0.1430512592910451,
+              "selected": {
+                "tensor": [
+                  [
+                    -0.0418175016218251,
+                    0.0,
+                    0.03448245568118869
+                  ],
+                  [
+                    0.0,
+                    0.013641332097812101,
+                    0.0
+                  ],
+                  [
+                    0.03448245568118869,
+                    0.0,
+                    0.04881697463254231
+                  ]
+                ],
+                "eigenvalues": [
+                  -0.053444901708269675,
+                  0.013641332097812101,
+                  0.060444374718986886
+                ],
+                "critical_eigenvector": [
+                  0.9475790746640566,
+                  0.0,
+                  -0.3195213564987641
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      -0.00035362375112792577,
+                      -0.0,
+                      0.0001170194628397689
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      0.0001170194628397689,
+                      -0.0,
+                      0.0002651185619470031
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252936,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252936,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252936
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      -0.0028552599165037307,
+                      -0.0,
+                      0.001989343668009355
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      0.001989343668009355,
+                      -0.0,
+                      0.0019713351336687964
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.00646031251247906,
+                      0.0,
+                      -0.003712749137303768
+                    ],
+                    [
+                      0.0,
+                      0.0019087378105591662,
+                      0.0
+                    ],
+                    [
+                      -0.003712749137303768,
+                      0.0,
+                      0.004551574701919894
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      -0.04388089972896731,
+                      0.0,
+                      0.036088841687643335
+                    ],
+                    [
+                      0.0,
+                      -6.505213034913027e-19,
+                      0.0
+                    ],
+                    [
+                      0.036088841687643335,
+                      0.0,
+                      0.03029635194775368
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -0.0003613143123937422,
+                  "isotropic": 0.011732594287252936,
+                  "linear": -0.003567128150048498,
+                  "quadratic": -0.0030878349135117556,
+                  "regularization": -0.058161218619568605
+                },
+                "c_mu": 0.008324714557835396,
+                "eddy_viscosity": 0.0002781448476069358,
+                "strain_invariant": 21.559639302007085,
+                "rotation_invariant": 10.179009483223357,
+                "invariant_branch": "strain",
+                "production": 0.634254716869416,
+                "k_source": 0.6249849469279916,
+                "epsilon_production": 0.4810717356338953,
+                "epsilon_source": 0.4721048661171737,
+                "yap": 0.00040775384523837035,
+                "k_diffusion": 0.0002781448476069358,
+                "epsilon_diffusion": 0.0002139575750822583
+              },
+              "same_state_Original": {
+                "tensor": [
+                  [
+                    0.0015329624804503307,
+                    0.0,
+                    -0.0014308568121949908
+                  ],
+                  [
+                    0.0,
+                    0.013641332097812101,
+                    0.0
+                  ],
+                  [
+                    -0.0014308568121949908,
+                    0.0,
+                    0.018918300527709132
+                  ]
+                ],
+                "eigenvalues": [
+                  0.0014159864504257006,
+                  0.013641332097812101,
+                  0.019035276557733762
+                ],
+                "critical_eigenvector": [
+                  0.9966749275918827,
+                  0.0,
+                  0.0814806032728983
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      -0.0008840593778198144,
+                      -0.0,
+                      0.00029254865709942224
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      0.00029254865709942224,
+                      -0.0,
+                      0.0006627964048675077
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252936,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252936,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252936
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      -0.0028552599165037307,
+                      -0.0,
+                      0.001989343668009355
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      0.001989343668009355,
+                      -0.0,
+                      0.0019713351336687964
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.00646031251247906,
+                      0.0,
+                      -0.003712749137303768
+                    ],
+                    [
+                      0.0,
+                      0.0019087378105591662,
+                      0.0
+                    ],
+                    [
+                      -0.003712749137303768,
+                      0.0,
+                      0.004551574701919894
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      1.1926223897340549e-18,
+                      0.0,
+                      5.421010862427522e-20
+                    ],
+                    [
+                      0.0,
+                      -6.505213034913027e-19,
+                      0.0
+                    ],
+                    [
+                      5.421010862427522e-20,
+                      0.0,
+                      -7.589415207398531e-19
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -0.0008262741026982296,
+                  "isotropic": 0.011732594287252936,
+                  "linear": -0.002500107820832944,
+                  "quadratic": -0.006990225913296062,
+                  "regularization": 1.188470554347311e-18
+                },
+                "c_mu": 0.008324714557835396,
+                "eddy_viscosity": 0.0002781448476069358,
+                "strain_invariant": 21.559639302007085,
+                "rotation_invariant": 10.179009483223357,
+                "invariant_branch": "strain",
+                "production": 0.04893919936237712,
+                "k_source": 0.03966942942095264,
+                "epsilon_production": 0.03711957507229576,
+                "epsilon_source": 0.028152705555574194,
+                "yap": 0.00040775384523837035,
+                "k_diffusion": 0.0002781448476069358,
+                "epsilon_diffusion": 0.0002139575750822583
+              },
+              "same_state_Regularized": {
+                "tensor": [
+                  [
+                    -0.0418175016218251,
+                    0.0,
+                    0.03448245568118869
+                  ],
+                  [
+                    0.0,
+                    0.013641332097812101,
+                    0.0
+                  ],
+                  [
+                    0.03448245568118869,
+                    0.0,
+                    0.04881697463254231
+                  ]
+                ],
+                "eigenvalues": [
+                  -0.053444901708269675,
+                  0.013641332097812101,
+                  0.060444374718986886
+                ],
+                "critical_eigenvector": [
+                  0.9475790746640566,
+                  0.0,
+                  -0.3195213564987641
+                ],
+                "terms": {
+                  "cubic": [
+                    [
+                      -0.00035362375112792577,
+                      -0.0,
+                      0.0001170194628397689
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      0.0001170194628397689,
+                      -0.0,
+                      0.0002651185619470031
+                    ]
+                  ],
+                  "isotropic": [
+                    [
+                      0.011732594287252936,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.011732594287252936,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.011732594287252936
+                    ]
+                  ],
+                  "linear": [
+                    [
+                      -0.0028552599165037307,
+                      -0.0,
+                      0.001989343668009355
+                    ],
+                    [
+                      -0.0,
+                      -0.0,
+                      -0.0
+                    ],
+                    [
+                      0.001989343668009355,
+                      -0.0,
+                      0.0019713351336687964
+                    ]
+                  ],
+                  "quadratic": [
+                    [
+                      -0.00646031251247906,
+                      0.0,
+                      -0.003712749137303768
+                    ],
+                    [
+                      0.0,
+                      0.0019087378105591662,
+                      0.0
+                    ],
+                    [
+                      -0.003712749137303768,
+                      0.0,
+                      0.004551574701919894
+                    ]
+                  ],
+                  "regularization": [
+                    [
+                      -0.04388089972896731,
+                      0.0,
+                      0.036088841687643335
+                    ],
+                    [
+                      0.0,
+                      -6.505213034913027e-19,
+                      0.0
+                    ],
+                    [
+                      0.036088841687643335,
+                      0.0,
+                      0.03029635194775368
+                    ]
+                  ]
+                },
+                "critical_term_contractions": {
+                  "cubic": -0.0003613143123937422,
+                  "isotropic": 0.011732594287252936,
+                  "linear": -0.003567128150048498,
+                  "quadratic": -0.0030878349135117556,
+                  "regularization": -0.058161218619568605
+                },
+                "c_mu": 0.008324714557835396,
+                "eddy_viscosity": 0.0002781448476069358,
+                "strain_invariant": 21.559639302007085,
+                "rotation_invariant": 10.179009483223357,
+                "invariant_branch": "strain",
+                "production": 0.634254716869416,
+                "k_source": 0.6249849469279916,
+                "epsilon_production": 0.4810717356338953,
+                "epsilon_source": 0.4721048661171737,
+                "yap": 0.00040775384523837035,
+                "k_diffusion": 0.0002781448476069358,
+                "epsilon_diffusion": 0.0002139575750822583
+              }
+            },
+            "analytical_k": 0.017598891430879275,
+            "analytical_epsilon": 0.009298331853917931,
+            "semantics": "exact incoming AWF/log radial streamfunction; unprojected analytic scalars extended in chart, physical incoming gamma/strain; compared with native 1D target at fixed represented scalars and final projected native state"
+          }
+        ],
+        "referenceK_independent_ground": 0.03008008950853283,
+        "scalar_budget": {
+          "admissible": true,
+          "scope": "declared finite scalar evaluation sets only",
+          "phase": "complete",
+          "failure": "",
+          "minimum_dimensionless_margin": 0.9952475688591296,
+          "limiting_functional_kind": "Point",
+          "limiting_inventory": "reconstruction_native",
+          "limiting_point": [
+            -0.1949600266546736,
+            0.0,
+            0.4
+          ],
+          "minimum_inner_k": 0.017598460508469284,
+          "minimum_outer_k": 0.017598891430878717,
+          "minimum_outer_epsilon": 0.001162291481739741,
+          "minimum_sampled_K": 0.01759889143087927,
+          "minimum_projected_trace_epsilon": 0.1430512592910451,
+          "minimum_b": null,
+          "minimum_lambda": null,
+          "normalization_applicable": false,
+          "minimum_budget_ratio": 2.977243048280183,
+          "maximum_budget_relative_defect": 3.1675203927182606e-16,
+          "cutoff_range": [
+            0.0008242388740683781,
+            0.0008382768632845283
+          ],
+          "inventory_counts": {
+            "actual_lifted_outer_epsilon": 48563.0,
+            "budget_awf_reporting_volume": 33792.0,
+            "constitutive_budget_awf_ray": 80864.0,
+            "constitutive_budget_reporting_source_ray": 112896.0,
+            "constitutive_foot_minus_budget_ray": 448.0,
+            "constitutive_foot_plus_budget_ray": 448.0,
+            "constitutive_matching_K": 361.0,
+            "interface_inner": 48.0,
+            "interface_outer": 96.0,
+            "mass_volume": 30720.0,
+            "matching_trace_nodes": 96.0,
+            "open_boundary_native": 464.0,
+            "physical_matching_transfer": 722.0,
+            "physical_sampled_K": 722.0,
+            "prescribed_source_inner": 26112.0,
+            "projected_dependent_trace": 607.0,
+            "reconstruction_dense": 12888.0,
+            "reconstruction_native": 30720.0,
+            "source_volume_outer": 21504.0,
+            "trace_budget_awf_ray": 9632.0,
+            "volume_normalization_ray": 21504.0
+          },
+          "profile_branch_pattern": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        }
+      }
+    }
+  }
+}

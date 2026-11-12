@@ -1,0 +1,53 @@
+{
+  "flat-h0": {
+    "usage_wall_user_system_RSS_KiB": [
+      14.5,
+      13.1,
+      0.84,
+      989260.0
+    ]
+  },
+  "flat8": {
+    "usage_wall_user_system_RSS_KiB": [
+      70.41,
+      67.11,
+      2.8,
+      1636688.0
+    ]
+  },
+  "flat4": {
+    "usage_wall_user_system_RSS_KiB": [
+      42.3,
+      39.88,
+      1.87,
+      1584232.0
+    ]
+  },
+  "flat4-restart": {
+    "usage_wall_user_system_RSS_KiB": [
+      43.38,
+      40.98,
+      1.91,
+      1564012.0
+    ]
+  },
+  "mapped_native_zero_steps": {
+    "code": 1.0,
+    "seconds": 14.567629666998982,
+    "usage": "Command exited with non-zero status 1\n14.52 13.01 1.01 1025336\n",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%e %U %S %M",
+      "-o",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/native-seed-v1/hill-h0/usage.txt",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/native-seed-v1/runtime/IncNavierStokesSolver",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/native-seed-v1/hill-h0/case.xml"
+    ],
+    "xml_sha256": "a8adfd5795eca79538a9f20aa5b869228da302daebad22fd652cf86480416d20",
+    "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/native-seed-v1/hill-h0/case.evolution.json",
+    "report_sha256": "d19e4c2c09c44dd37611c415a89fcd7dfdb97257dffa28049eb5f2d0877cb391",
+    "failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit"
+  },
+  "mapped_physical_step_cost": "not measured: initialization rejected"
+}

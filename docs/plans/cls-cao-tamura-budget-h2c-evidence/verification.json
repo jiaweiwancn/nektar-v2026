@@ -1,0 +1,785 @@
+{
+  "final_runtime": {
+    "passed": true,
+    "state_history_stages_bitwise": true,
+    "physical_steps": 4.0,
+    "time": 8e-06,
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%e %U %S %M",
+      "-o",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/usage.txt",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/IncNavierStokesSolver",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/restart4/case.xml"
+    ],
+    "xml_sha256": "b0ea7331df52246f51b886c0bfaeb09019f818f09604921145832aca516b3707",
+    "runtime": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/IncNavierStokesSolver",
+      "sha256": "3b1ba4f2b2b1b48fbe6e980d82482f382f68917d541e4e68918310f2dc9ab2d8",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffce3cc0000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libSpatialDomains.so.5.9.0 (0x00007ba9f8049000)\n\tlibSolverUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libSolverUtils.so.5.9.0 (0x00007ba9f7c05000)\n\tlibFieldUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libFieldUtils.so.5.9.0 (0x00007ba9f784f000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libmpi_cxx.so.40 (0x00007ba9f7835000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libmpi.so.40 (0x00007ba9f76fc000)\n\tlibGlobalMapping.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libGlobalMapping.so.5.9.0 (0x00007ba9f7667000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libMultiRegions.so.5.9.0 (0x00007ba9f728f000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libLocalRegions.so.5.9.0 (0x00007ba9f7082000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libStdRegions.so.5.9.0 (0x00007ba9f6dcd000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libLibUtilities.so.5.9.0 (0x00007ba9f694a000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/liblapack.so.3 (0x00007ba9f6285000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libblas.so.3 (0x00007ba9f6223000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libstdc++.so.6 (0x00007ba9f5ff7000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libm.so.6 (0x00007ba9f5f10000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libgcc_s.so.1 (0x00007ba9f5eee000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libc.so.6 (0x00007ba9f5cc5000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libptscotch-6.1.so (0x00007ba9f5bf2000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libz.so.1 (0x00007ba9f5bd6000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libboost_program_options.so.1.74.0 (0x00007ba9f5b91000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libopen-pal.so.40 (0x00007ba9f5adc000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libopen-rte.so.40 (0x00007ba9f5a1f000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libhwloc.so.15 (0x00007ba9f59c3000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libCollections.so.5.9.0 (0x00007ba9f5850000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libfftw3.so.3 (0x00007ba9f5633000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libboost_iostreams.so.1.74.0 (0x00007ba9f561b000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libopenblas.so.0 (0x00007ba9f31c8000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libgfortran.so.5 (0x00007ba9f2eed000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007ba9f88e7000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libptscotcherr-6.1.so (0x00007ba9f5616000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libbz2.so.1.0 (0x00007ba9f2ed8000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/liblzma.so.5 (0x00007ba9f2ead000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libevent_core-2.1.so.7 (0x00007ba9f2e78000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libevent_pthreads-2.1.so.7 (0x00007ba9f2e73000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libudev.so.1 (0x00007ba9f2e49000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libMatrixFreeOps.so.5.9.0 (0x00007ba9f016e000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libzstd.so.1 (0x00007ba9f009d000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libquadmath.so.0 (0x00007ba9f0055000)\n",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/final-runtime-check/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+      }
+    },
+    "parent_sha256": "ad31b427cd386da5c18ca1659d84c3fc11fc937c8d4265e6e3639d7ee3aeccdb",
+    "report_sha256": "b9853663e949134f60c75c9e206843757a367668be4c0e8322fa2c3085afcf79",
+    "usage": "42.92 40.42 1.94 1545416\n"
+  },
+  "analytical_free_tests": {
+    "status": "completed",
+    "probe": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/RANSWallResolutionProbe",
+      "sha256": "59035e0ea945732c344c3819e62a7142c96b74cf3960f44527040589005c8889",
+      "ldd": "\tlinux-vdso.so.1 (0x00007fff77baa000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libmpi_cxx.so.40 (0x00007c3ea219b000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libmpi.so.40 (0x00007c3ea2064000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libMultiRegions.so.5.9.0 (0x00007c3ea1c8c000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libLocalRegions.so.5.9.0 (0x00007c3ea1a7f000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libSpatialDomains.so.5.9.0 (0x00007c3ea1875000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libStdRegions.so.5.9.0 (0x00007c3ea15c0000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libLibUtilities.so.5.9.0 (0x00007c3ea113f000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/liblapack.so.3 (0x00007c3ea0a7a000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libstdc++.so.6 (0x00007c3ea084e000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libm.so.6 (0x00007c3ea0765000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libgcc_s.so.1 (0x00007c3ea0745000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libc.so.6 (0x00007c3ea051c000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libopen-pal.so.40 (0x00007c3ea0469000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libopen-rte.so.40 (0x00007c3ea03ac000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libhwloc.so.15 (0x00007c3ea034e000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libCollections.so.5.9.0 (0x00007c3ea01db000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libptscotch-6.1.so (0x00007c3ea0108000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libblas.so.3 (0x00007c3ea00a6000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libz.so.1 (0x00007c3ea008a000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libfftw3.so.3 (0x00007c3e9fe6d000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libboost_iostreams.so.1.74.0 (0x00007c3e9fe55000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libboost_program_options.so.1.74.0 (0x00007c3e9fe10000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libopenblas.so.0 (0x00007c3e9d9c0000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libgfortran.so.5 (0x00007c3e9d6e5000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007c3ea2573000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libevent_core-2.1.so.7 (0x00007c3e9d6b0000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libevent_pthreads-2.1.so.7 (0x00007c3e9d6ab000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libudev.so.1 (0x00007c3e9d681000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libMatrixFreeOps.so.5.9.0 (0x00007c3e9a9a6000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libptscotcherr-6.1.so (0x00007c3e9a9a1000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libbz2.so.1.0 (0x00007c3e9a98c000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/liblzma.so.5 (0x00007c3e9a961000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libzstd.so.1 (0x00007c3e9a892000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libquadmath.so.0 (0x00007c3e9a84a000)\n",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+      }
+    },
+    "results": {
+      "flat-h0": {
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/flat-v1/flat-h0/case.xml",
+            "input.json",
+            "result.json"
+          ],
+          "exit_code": 0.0,
+          "seconds": 12.242877633005264,
+          "input_sha256": "aedff693f0ee88b5849c0efbd0c25c33a745bcd6fe1b7688bde9a6f4da5a03a5",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/flat-h0/result.json",
+          "output_sha256": "5f7fcb5569b324d5839d25b8176319bd339464e94e07cfcb4b89465ba29d23a0"
+        },
+        "analytical": {
+          "first_four_scaled_free_test_load_norms": [
+            1.8289334267654035e-13,
+            5.747769532866791e-15,
+            9.899641676256092e-15,
+            6.734597270778507e-16
+          ],
+          "definition": "analytical AWF/log values AND analytical gradients under native tests/quadrature; essential rows zeroed; not a residual of the retained coefficient field",
+          "state_unchanged": true
+        },
+        "represented": [
+          0.1342977314154306,
+          0.004721204609822981,
+          0.047614930316132766,
+          0.001789776898368124,
+          1.3536838226788089e-17,
+          9.05536526509751e-18,
+          1.5356688395594293e-18,
+          0.0
+        ],
+        "state_sha256": "b6206d2731bbaa3a7d951d635b4074e6e2be0c216c878f49c31f48e87972f922"
+      },
+      "flat8": {
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/runtime/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/flat-v1/flat8/case.xml",
+            "input.json",
+            "result.json"
+          ],
+          "exit_code": 0.0,
+          "seconds": 12.945187179997447,
+          "input_sha256": "b2bb57938f2667ce7cafac7fdb491f4367e45343f23959f6b164548c7c65514d",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/analytical-free-tests-v1/flat8/result.json",
+          "output_sha256": "8790545f6f6c86bec74f231c49148b6b323e0504da85c6a02e4eb172482c0e8d"
+        },
+        "analytical": {
+          "first_four_scaled_free_test_load_norms": [
+            2.193123985355408e-09,
+            1.0179680737412887e-09,
+            3.5085804568583203e-10,
+            6.734597270778507e-16
+          ],
+          "definition": "analytical AWF/log values AND analytical gradients under native tests/quadrature; essential rows zeroed; not a residual of the retained coefficient field",
+          "state_unchanged": true
+        },
+        "represented": [
+          0.08333724474253439,
+          0.0040584697540600465,
+          0.021680072634969478,
+          0.001788264769665388,
+          7.893616522991436e-17,
+          2.7820996036186605e-17,
+          6.142675358237717e-19,
+          5.135177955921918e-06
+        ],
+        "state_sha256": "fbbfe2053518d83fba9ab932a99666040896864b1aa04bcf0ad34309a8731446"
+      }
+    }
+  },
+  "kernel_checks": "Internal ctest changing into directory: /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/build\nTest project /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/build\n    Start 1: RANSKBoundQPChecks\n1/3 Test #1: RANSKBoundQPChecks ...............   Passed    0.00 sec\n    Start 3: RANSCaoTamuraBudgetH2cChecks\n2/3 Test #3: RANSCaoTamuraBudgetH2cChecks .....   Passed    0.16 sec\n    Start 4: RANSCaoTamuraBudgetH1Checks\n3/3 Test #4: RANSCaoTamuraBudgetH1Checks ......   Passed    0.17 sec\n\n100% tests passed, 0 tests failed out of 3\n\nTotal Test time (real) =   0.34 sec\n",
+  "old_mode_regressions": {
+    "status": "passed",
+    "runtime": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/IncNavierStokesSolver",
+      "sha256": "904753366de611a9b80c6db6181a6d534d43442ecf7f817b2c544af615881f79",
+      "ldd": "\tlinux-vdso.so.1 (0x00007fffeeffd000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libSpatialDomains.so.5.9.0 (0x000078ba01abb000)\n\tlibSolverUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libSolverUtils.so.5.9.0 (0x000078ba01677000)\n\tlibFieldUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libFieldUtils.so.5.9.0 (0x000078ba012c1000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libmpi_cxx.so.40 (0x000078ba012a7000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libmpi.so.40 (0x000078ba0116e000)\n\tlibGlobalMapping.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libGlobalMapping.so.5.9.0 (0x000078ba010d9000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libMultiRegions.so.5.9.0 (0x000078ba00d01000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libLocalRegions.so.5.9.0 (0x000078ba00af4000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libStdRegions.so.5.9.0 (0x000078ba0083f000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libLibUtilities.so.5.9.0 (0x000078ba003bc000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/liblapack.so.3 (0x000078b9ffcf7000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libblas.so.3 (0x000078b9ffc95000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libstdc++.so.6 (0x000078b9ffa69000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libm.so.6 (0x000078b9ff982000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libgcc_s.so.1 (0x000078b9ff960000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libc.so.6 (0x000078b9ff737000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libptscotch-6.1.so (0x000078b9ff664000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libz.so.1 (0x000078b9ff648000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libboost_program_options.so.1.74.0 (0x000078b9ff603000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libopen-pal.so.40 (0x000078b9ff54e000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libopen-rte.so.40 (0x000078b9ff491000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libhwloc.so.15 (0x000078b9ff435000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libCollections.so.5.9.0 (0x000078b9ff2c2000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libfftw3.so.3 (0x000078b9ff0a5000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libboost_iostreams.so.1.74.0 (0x000078b9ff08d000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libopenblas.so.0 (0x000078b9fcc38000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libgfortran.so.5 (0x000078b9fc95d000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000078ba02359000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libptscotcherr-6.1.so (0x000078b9ff088000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libbz2.so.1.0 (0x000078b9fc94a000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/liblzma.so.5 (0x000078b9fc91f000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libevent_core-2.1.so.7 (0x000078b9fc8ea000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libevent_pthreads-2.1.so.7 (0x000078b9fc8e5000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libudev.so.1 (0x000078b9fc8bb000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libMatrixFreeOps.so.5.9.0 (0x000078b9f9bde000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libzstd.so.1 (0x000078b9f9b0f000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libquadmath.so.0 (0x000078b9f9ac7000)\n",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+      }
+    },
+    "baseline": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/IncNavierStokesSolver",
+      "sha256": "2a4fc727c6273548d1b77c05f8fb95aa49233344b29662ea174cdac1e8f5aac9",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffffe092000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libSpatialDomains.so.5.9.0 (0x00007aff6e2c9000)\n\tlibSolverUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libSolverUtils.so.5.9.0 (0x00007aff6de85000)\n\tlibFieldUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libFieldUtils.so.5.9.0 (0x00007aff6dacf000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libmpi_cxx.so.40 (0x00007aff6dab3000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libmpi.so.40 (0x00007aff6d97c000)\n\tlibGlobalMapping.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libGlobalMapping.so.5.9.0 (0x00007aff6d8e7000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libMultiRegions.so.5.9.0 (0x00007aff6d50f000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libLocalRegions.so.5.9.0 (0x00007aff6d302000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libStdRegions.so.5.9.0 (0x00007aff6d04d000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libLibUtilities.so.5.9.0 (0x00007aff6cbca000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/liblapack.so.3 (0x00007aff6c505000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libblas.so.3 (0x00007aff6c4a3000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libstdc++.so.6 (0x00007aff6c277000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libm.so.6 (0x00007aff6c190000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libgcc_s.so.1 (0x00007aff6c16e000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libc.so.6 (0x00007aff6bf45000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libptscotch-6.1.so (0x00007aff6be72000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libz.so.1 (0x00007aff6be56000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libboost_program_options.so.1.74.0 (0x00007aff6be11000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libopen-pal.so.40 (0x00007aff6bd5c000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libopen-rte.so.40 (0x00007aff6bc9f000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libhwloc.so.15 (0x00007aff6bc43000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libCollections.so.5.9.0 (0x00007aff6bad0000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libfftw3.so.3 (0x00007aff6b8b3000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libboost_iostreams.so.1.74.0 (0x00007aff6b89b000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libopenblas.so.0 (0x00007aff69448000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libgfortran.so.5 (0x00007aff6916d000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007aff6eb5d000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libptscotcherr-6.1.so (0x00007aff6b896000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libbz2.so.1.0 (0x00007aff69158000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/liblzma.so.5 (0x00007aff6912d000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libevent_core-2.1.so.7 (0x00007aff690f8000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libevent_pthreads-2.1.so.7 (0x00007aff690f3000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libudev.so.1 (0x00007aff690c9000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libMatrixFreeOps.so.5.9.0 (0x00007aff663ec000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libzstd.so.1 (0x00007aff6631d000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libquadmath.so.0 (0x00007aff662d5000)\n",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+      }
+    },
+    "tests": {
+      "NeutralLogV1-state-history-stages-bitwise": true,
+      "FiniteInflowV1-state-history-stages-bitwise": true,
+      "neutral-split-restart-bitwise": true
+    },
+    "runs": {
+      "NeutralLogV1-baseline2": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/NeutralLogV1-baseline2/case.xml"
+        ],
+        "seconds": 36.53346788899944,
+        "xml_sha256": "cbe6e2d35769a88c3944b47fa4c58c7c409bbd060ca6d07c745189c2de507c9f",
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/NeutralLogV1-baseline2/case.evolution.json",
+        "report_sha256": "0ac9d3aefef4bee58a6755a1f10e59105f2e0118bed8d80a2d746e1806d08a15"
+      },
+      "NeutralLogV1-new2": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/NeutralLogV1-new2/case.xml"
+        ],
+        "seconds": 38.838617536996026,
+        "xml_sha256": "f5b4c546e55634ccd41a8371b8c78b500e8d860e3ebf3bb043f02120a9171a26",
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/NeutralLogV1-new2/case.evolution.json",
+        "report_sha256": "594e1434bc213aeab0204a372752f5181f34f01185abf515f9ee801a4155d9e9"
+      },
+      "FiniteInflowV1-baseline2": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/baseline-runtime/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/FiniteInflowV1-baseline2/case.xml"
+        ],
+        "seconds": 15.148014744001557,
+        "xml_sha256": "9e18123d00055c5fb018ed6c574c13c7dd9734cbbc663cb0c3d37cfa9b1fb042",
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/FiniteInflowV1-baseline2/case.evolution.json",
+        "report_sha256": "43e80d6d6f1894f4c47fac93a8221e7cae149c6a25222524069d038a98955b8d"
+      },
+      "FiniteInflowV1-new2": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/FiniteInflowV1-new2/case.xml"
+        ],
+        "seconds": 15.394326585999806,
+        "xml_sha256": "63b23bd8673a7e277eac3523899a193ceca4ba88dc74139b48787fd838a28f8c",
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/FiniteInflowV1-new2/case.evolution.json",
+        "report_sha256": "c6fb50f184aadb5e68809f2da56dcf5a108e1db210d6c7b67770855603053926"
+      },
+      "neutral-new1": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/neutral-new1/case.xml"
+        ],
+        "seconds": 25.452490294999734,
+        "xml_sha256": "6f40315b3893dbc0d8a84d52f4ccd0d74bab50cead79da8d780c43f9af2d2553",
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/neutral-new1/case.evolution.json",
+        "report_sha256": "e033ae7ade031a2aecfba32db358f194c934090ed5aa5a9c319c87bc6db61444"
+      },
+      "neutral-new1-restart": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/new-runtime/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/neutral-new1-restart/case.xml"
+        ],
+        "seconds": 29.416056853995542,
+        "xml_sha256": "8efa83eacdbe0d4a2d170fad2f63a103fe58765b5936e8bc55081d8d7bd2191a",
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/regressions-final-v2/neutral-new1-restart/case.evolution.json",
+        "report_sha256": "b13db5d6aefa6dc8ea78693f05ef4b29a7ee0d5141065a5d210575be90f6ffc8"
+      }
+    }
+  },
+  "moving_foot_fixture": {
+    "passed": true,
+    "point": [
+      -0.1,
+      0.0,
+      0.003912188650388843
+    ],
+    "sides": [
+      {
+        "tangential_side": -1.0,
+        "geometry": 30.0,
+        "element": 30.0,
+        "minimum_covariance": 0.011833394518497846
+      },
+      {
+        "tangential_side": 1.0,
+        "geometry": 31.0,
+        "element": 31.0,
+        "minimum_covariance": -1.395438625369339
+      }
+    ],
+    "off_fixed_reconstruction_grid": true,
+    "minus_plus_inventory_geometries": [
+      30.0,
+      31.0
+    ],
+    "audit": {
+      "accepted_awf_hard_admissible": [
+        0.0
+      ]
+    },
+    "physical_solves": 0.0
+  },
+  "cache_on_off_state_audit_scalar_target_bitwise": true,
+  "actual_native_seed_matches_probe": true,
+  "old_H2b_seed_hash_retained": true,
+  "physical_mass_projection": {
+    "physical_bands": null,
+    "mode": "MassProjection",
+    "algorithm": "MassQR-AcceptedBudgetV2",
+    "inventory_policy": "AcceptedBudgetV2",
+    "projection_only": true,
+    "work_controls": {
+      "schema": 1.0,
+      "per_add_completed_work": 2000.0,
+      "total_completed_work": 20000.0,
+      "separation_passes": 2000.0,
+      "wall_seconds": 900.0,
+      "trace": "Summary",
+      "finite_qp_solver": "RetainedPool",
+      "finite_qp_version": "retained-pool-v1",
+      "trace_file": "None",
+      "dump_file": "None",
+      "mathematics": "same raw-centered physical mass QP and constraints; finite-QP solver implementation and work controls are recorded separately from physical checkpoint identity"
+    },
+    "telemetry_schema": 1.0,
+    "separation_passes": 2.0,
+    "inventory_rebuilds": 1.0,
+    "inventory_counts": {
+      "budget_awf_reporting_volume": 33792.0,
+      "constitutive_budget_awf_ray": 83088.0,
+      "constitutive_budget_reporting_source_ray": 115120.0,
+      "constitutive_foot_minus_budget_ray": 448.0,
+      "constitutive_foot_plus_budget_ray": 448.0,
+      "constitutive_matching_K": 371.0,
+      "interface_inner": 48.0,
+      "interface_outer": 96.0,
+      "mass_volume": 30720.0,
+      "matching_trace_nodes": 96.0,
+      "open_boundary_native": 464.0,
+      "physical_matching_transfer": 722.0,
+      "physical_sampled_K": 732.0,
+      "prescribed_source_inner": 26112.0,
+      "reconstruction_dense": 12888.0,
+      "reconstruction_native": 30720.0,
+      "source_volume_outer": 21504.0,
+      "trace_budget_awf_ray": 9632.0,
+      "volume_normalization_ray": 21504.0
+    },
+    "discovered_constraint_families": {
+      "reconstruction_native": 1.0
+    },
+    "calls": 1.0,
+    "activations": 1.0,
+    "success": true,
+    "failure": "",
+    "floor_relative": 1e-08,
+    "K0": 0.017598891430879275,
+    "floor": 1.7598891430879276e-10,
+    "arithmetic_reserve": 1.600609851346169e-14,
+    "raw_minimum_scope": "static and available pre-k ray locations; no inadmissible raw normalization evaluation",
+    "raw_minimum": {
+      "value": -9.99999999999994e-05,
+      "physical_coordinate": [
+        0.6,
+        0.0,
+        0.0
+      ],
+      "functional_kind": "Point",
+      "coordinate": [
+        0.6,
+        0.0,
+        0.0
+      ],
+      "geometry": 5.0,
+      "inventory": "reconstruction_native"
+    },
+    "corrected_minimum": {
+      "value": 1.7600491897251658e-10,
+      "physical_coordinate": [
+        0.6,
+        0.0,
+        0.0
+      ],
+      "functional_kind": "Point",
+      "coordinate": [
+        0.6,
+        0.0,
+        0.0
+      ],
+      "geometry": 5.0,
+      "inventory": "reconstruction_native"
+    },
+    "raw_ground": {
+      "admissible": false,
+      "minimum": -9.99999999999994e-05,
+      "arithmetic_scale": 0.0,
+      "point": [
+        0.6,
+        0.0,
+        0.0
+      ],
+      "physical_point": [
+        0.6,
+        0.0,
+        0.0
+      ],
+      "geometry": 5.0,
+      "extrema_checked": 12.0
+    },
+    "corrected_ground": {
+      "admissible": true,
+      "minimum": 1.7600492035487435e-10,
+      "arithmetic_scale": 0.0,
+      "point": [
+        0.6,
+        0.0,
+        0.0
+      ],
+      "physical_point": [
+        0.6,
+        0.0,
+        0.0
+      ],
+      "geometry": 5.0,
+      "extrema_checked": 22.0
+    },
+    "raw_sha256": "731a5c914303049bd30864aa338b12fcf67ddc6dc738594aad3117c36f7fb9d3",
+    "corrected_sha256": "bbfcfc3a71f8ba1c78416283646a4f6ff0fe3f49fad5861a17c9d650316178a3",
+    "mass_norm_correction": 1.7886408264949725e-08,
+    "mass_norm_raw_step": 2.8069896430187637e-05,
+    "mass_norm_accepted_step": 2.8066462152614902e-05,
+    "mass_inner_product_raw_bound": -9.655388044826156e-14,
+    "mass_norm_increment_identity_defect": -5.715139486145186e-26,
+    "correction_to_step_ratio_defined": true,
+    "correction_to_step_ratio": 0.0006372096280951671,
+    "integral_total": 3.199223899979765e-12,
+    "integrals_inner_outer_near_positive_negative": [
+      3.1991118250074542e-12,
+      1.1207497248472445e-16,
+      3.758907116501968e-12,
+      1.4863996578863917e-11,
+      -1.1664772678883984e-11
+    ],
+    "near_ground_height": 1.5570612247636407e-05,
+    "active_constraints": [
+      {
+        "physical_coordinate": [
+          0.6,
+          0.0,
+          0.0
+        ],
+        "functional_kind": "Point",
+        "coordinate": [
+          0.6,
+          0.0,
+          0.0
+        ],
+        "geometry": 5.0,
+        "inventory": "reconstruction_native",
+        "raw": -9.99999999999994e-05,
+        "corrected": 1.7600491897251658e-10,
+        "floor": 1.7598891430879276e-10,
+        "normalized_dual_multiplier": 1.7886408264949768e-08
+      }
+    ],
+    "active_set_iterations": 1.0,
+    "mass_factorizations": 1.0,
+    "mass_factor_applications": 2.0,
+    "mass_matrix_applications": 3.0,
+    "kkt_solves": 1.0,
+    "governing_equation_solves": 0.0,
+    "primal_floor_defect": 0.0,
+    "active_row_floor_defect": 0.0,
+    "current_inventory_passed": true,
+    "current_inventory": {
+      "admissible": true,
+      "scope": "declared finite scalar evaluation sets only",
+      "phase": "k_inventory_complete",
+      "failure": "",
+      "minimum_dimensionless_margin": 1.00009094131745e-08,
+      "limiting_functional_kind": "Point",
+      "limiting_inventory": "reconstruction_native",
+      "limiting_point": [
+        0.6,
+        0.0,
+        0.0
+      ],
+      "minimum_inner_k": 1.7600491897251658e-10,
+      "minimum_outer_k": 0.017598891428614587,
+      "minimum_outer_epsilon": 0.001162291481739741,
+      "minimum_sampled_K": 0.017598891428614587,
+      "minimum_projected_trace_epsilon": 1e+300,
+      "minimum_b": null,
+      "minimum_lambda": null,
+      "normalization_applicable": false,
+      "minimum_budget_ratio": 2.9772430482793073,
+      "maximum_budget_relative_defect": 3.167529482355065e-16,
+      "cutoff_range": [
+        0.0008242388740683855,
+        0.0008382768632853041
+      ],
+      "inventory_counts": {
+        "budget_awf_reporting_volume": 33792.0,
+        "constitutive_budget_awf_ray": 83088.0,
+        "constitutive_budget_reporting_source_ray": 115120.0,
+        "constitutive_foot_minus_budget_ray": 448.0,
+        "constitutive_foot_plus_budget_ray": 448.0,
+        "constitutive_matching_K": 371.0,
+        "interface_inner": 48.0,
+        "interface_outer": 96.0,
+        "mass_volume": 30720.0,
+        "matching_trace_nodes": 96.0,
+        "open_boundary_native": 464.0,
+        "physical_matching_transfer": 722.0,
+        "physical_sampled_K": 732.0,
+        "prescribed_source_inner": 26112.0,
+        "reconstruction_dense": 12888.0,
+        "reconstruction_native": 30720.0,
+        "source_volume_outer": 21504.0,
+        "trace_budget_awf_ray": 9632.0,
+        "volume_normalization_ray": 21504.0
+      },
+      "profile_branch_pattern": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "current_inventory_exception": "",
+    "ground_passed": true,
+    "ground_floor_defect": 0.0,
+    "finite_pool_normalized_violation": 0.0,
+    "completed_primal_dual_coherent": true,
+    "unfinished_working_set": false,
+    "finite_pool_scans": 1.0,
+    "finite_pool_reentries": 0.0,
+    "exact_cut_reuses": 0.0,
+    "finite_pool_complete": true,
+    "last_completed_add": 1.0,
+    "adds": 1.0,
+    "maximum_work_one_add": 1.0,
+    "work_guard_checks": 1.0,
+    "rejected_total_limit_checks": 0.0,
+    "rejected_add_limit_checks": 0.0,
+    "rejected_time_limit_checks": 0.0,
+    "legacy_guard_counter": 1.0,
+    "unique_evaluation_rows": 1.0,
+    "repeated_rows": 0.0,
+    "repeated_identical_constraints": 0.0,
+    "rediscovered_identical_constraints": 0.0,
+    "repeated_working_sets": 0.0,
+    "dependent_entries": 0.0,
+    "maximum_active_size": 1.0,
+    "minimum_observed_qr_residual": 0.9999999999999999,
+    "last_completed_qr_diagonal_range": [
+      0.9999999999999999,
+      0.9999999999999999
+    ],
+    "primal_objective": 1.5996180031023167e-16,
+    "dual_objective": 1.5996180031023162e-16,
+    "primal_dual_gap_working_set": 4.930380657631324e-32,
+    "dual_feasibility_defect": 0.0,
+    "seconds_total": 2.328061735,
+    "seconds_algebra": 0.000931199,
+    "seconds_factorization": 0.11731585,
+    "seconds_separation": 0.055062864,
+    "seconds_inventory": 1.9217257099999998,
+    "trace_events": 5.0,
+    "bounded_trace": [
+      {
+        "kind": "correction_start",
+        "time": 0.0,
+        "raw_sha256": "731a5c914303049bd30864aa338b12fcf67ddc6dc738594aad3117c36f7fb9d3",
+        "controls": {
+          "schema": 1.0,
+          "per_add_completed_work": 2000.0,
+          "total_completed_work": 20000.0,
+          "separation_passes": 2000.0,
+          "wall_seconds": 900.0,
+          "trace": "Summary",
+          "finite_qp_solver": "RetainedPool",
+          "finite_qp_version": "retained-pool-v1",
+          "trace_file": "None",
+          "dump_file": "None",
+          "mathematics": "same raw-centered physical mass QP and constraints; finite-QP solver implementation and work controls are recorded separately from physical checkpoint identity"
+        }
+      },
+      {
+        "kind": "separation",
+        "sequence": 2.0,
+        "pass": 1.0,
+        "inventory_rebuilds": 0.0,
+        "floor_violation_known_inventory": 0.0001000001759889137,
+        "ground_minimum": -9.99999999999994e-05,
+        "entering_family": "reconstruction_native",
+        "entering_coordinate": [
+          0.6,
+          0.0,
+          0.0
+        ],
+        "last_completed_primal_objective": 0.0,
+        "seconds": 1.113998623
+      },
+      {
+        "kind": "add",
+        "sequence": 3.0,
+        "add": 1.0,
+        "per_add_work": 0.0,
+        "total_work": 0.0,
+        "entering": {
+          "cut": 0.0,
+          "witness": 0.0,
+          "row_identity": "10a5655b7f2db77a",
+          "constraint_identity": "6e6b9f788ad9e922",
+          "family": "reconstruction_native",
+          "coordinate": [
+            0.6,
+            0.0,
+            0.0
+          ]
+        },
+        "leaving": null,
+        "multiplier_step": 0.0,
+        "active_size": 1.0,
+        "active_fingerprint": "a56bc30f362c4aec",
+        "qr_min_diagonal": 0.0,
+        "qr_max_diagonal": 0.0,
+        "last_completed_primal_objective": 0.0,
+        "working_dual_violation": 0.0,
+        "seconds": 1.114968794
+      },
+      {
+        "kind": "solved",
+        "sequence": 4.0,
+        "add": 1.0,
+        "per_add_work": 1.0,
+        "total_work": 1.0,
+        "entering": {
+          "cut": 0.0,
+          "witness": 0.0,
+          "row_identity": "10a5655b7f2db77a",
+          "constraint_identity": "6e6b9f788ad9e922",
+          "family": "reconstruction_native",
+          "coordinate": [
+            0.6,
+            0.0,
+            0.0
+          ]
+        },
+        "leaving": null,
+        "multiplier_step": 1.0,
+        "active_size": 1.0,
+        "active_fingerprint": "a56bc30f362c4aec",
+        "qr_min_diagonal": 0.9999999999999999,
+        "qr_max_diagonal": 0.9999999999999999,
+        "last_completed_primal_objective": 1.5996180031023167e-16,
+        "working_dual_violation": 0.0,
+        "seconds": 1.115902123
+      },
+      {
+        "kind": "correction_end",
+        "success": true,
+        "failure": "",
+        "seconds": 2.327629832
+      }
+    ],
+    "full_diagnostic_dump": "None",
+    "stationarity_mass_dual": 1.2188568481014306e-24,
+    "complementarity": 5.918116057989875e-32,
+    "scope": "declared k inventories and continuous cubic ground; no volume-wide polynomial certificate"
+  },
+  "projection_objective": 1.599618003102309e-16,
+  "independent_GL32_objective": 1.599618003102329e-16,
+  "interface_actual_epsilon_rejection": {
+    "admissible": false,
+    "scope": "declared finite scalar evaluation sets only",
+    "phase": "fixed_fields_and_samplers",
+    "failure": "nonpositive_epsilon",
+    "minimum_dimensionless_margin": -6.990501201855546e-05,
+    "limiting_functional_kind": "Point",
+    "limiting_inventory": "reconstruction_native",
+    "limiting_point": [
+      0.0,
+      0.0,
+      0.0065
+    ],
+    "minimum_inner_k": 0.017598460508469284,
+    "minimum_outer_k": 0.017598891430878717,
+    "minimum_outer_epsilon": -1.0000000000010001e-05,
+    "minimum_sampled_K": 1e+300,
+    "minimum_projected_trace_epsilon": 1e+300,
+    "minimum_b": null,
+    "minimum_lambda": null,
+    "normalization_applicable": false,
+    "minimum_budget_ratio": 1e+300,
+    "maximum_budget_relative_defect": 0.0,
+    "cutoff_range": [
+      1e+300,
+      -1e+300
+    ],
+    "inventory_counts": {
+      "budget_awf_reporting_volume": 33792.0,
+      "interface_inner": 48.0,
+      "interface_outer": 96.0,
+      "mass_volume": 30720.0,
+      "open_boundary_native": 464.0,
+      "prescribed_source_inner": 26112.0,
+      "reconstruction_dense": 6408.0,
+      "reconstruction_native": 10272.0,
+      "source_volume_outer": 21504.0
+    },
+    "profile_branch_pattern": ""
+  },
+  "zero_PDE_projection_fixture": true
+}
