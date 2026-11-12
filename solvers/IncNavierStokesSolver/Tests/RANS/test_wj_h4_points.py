@@ -140,4 +140,27 @@ class OwnedPhysicalPoints(unittest.TestCase):
                     self.assertEqual(load(folder/'completed-passive-recovery.json')['new_native_attempts'],0)
                     self.assertTrue(load(d/'execution-mode.json')['strict_required'])
 
+    def test_passive_packet_recovery_keeps_unknown_exit_and_original_bytes(self):
+        from unittest.mock import patch
+        import wj_h4_results as results
+        from run_wj_h4 import save,sha
+        from wj_h4_points import vector_hash
+        with tempfile.TemporaryDirectory()as tmp:
+            d=Path(tmp);cp=d/'CP';cp.mkdir();(cp/'State.bin').write_bytes(b'original checkpoint')
+            save(d/'report.json',dict(open_boundary={}))
+            state=[1.,2.];history=[3.,4.];hs=vector_hash(state);hh=vector_hash(history)
+            save(d/'request.json',dict(native_report=str(d/'report.json'),native_report_sha256=sha(d/'report.json'),
+                native_checkpoint=str(cp),checkpoint_sha256=sha(cp/'State.bin')))
+            save(d/'native.json',dict(initialization_work=[0,0],governing_solves=0,report_sha256=sha(d/'report.json'),
+                checkpoint_sha256=sha(cp/'State.bin'),selected_absolute_step=1,state_sha256=hs,callback_history_sha256=hh,
+                physical_mass_dual_norms={},weak_checks={},open_boundary={}))
+            (d/'command.log').write_text('retained native output')
+            before={str(p):sha(p)for p in d.iterdir()if p.is_file()};before[str(cp/'State.bin')]=sha(cp/'State.bin')
+            with patch.object(results,'state_context',return_value=(state,history,100.,.01,dict(state_sha256=hs,stage_history_sha256=hh))),\
+                 patch.object(results,'pressure_complement',return_value={}),patch.object(results,'independent_weak',return_value=dict(status='PASS')):
+                v=results.finish_readback(d,'recovered complete packet',d/'versioned-receipt.json')
+            self.assertEqual(v['process_exit'],'NOT_RECORDED');self.assertTrue(v['recovered_complete_packet'])
+            self.assertFalse((d/'receipt.json').exists())
+            self.assertEqual(before,{p:sha(p)for p in before})
+
 if __name__=='__main__':unittest.main()
