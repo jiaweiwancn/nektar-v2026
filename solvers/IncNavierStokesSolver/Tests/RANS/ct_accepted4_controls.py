@@ -47,6 +47,7 @@ def main():
                 result['negative_controls'][key+'-missing-pressure-offset']=dict(status='pass',expected='full normal traction reference comparison fails',
                     defect=-pi,normalized=abs(pi)/c['ustar']**2)
     initial=ir/'A95-6.0-P3/0.002';c=json.loads((initial/'construction.json').read_text());zero=json.loads((initial/'case.evolution.json').read_text())
+    require(json.loads((initial.parent/'results.json').read_text())['status']=='pass','primary_initialization_not_admitted_for_history_evolution')
     for name,change,reason in [('wrong_model_equilibrium',lambda root:set_parameter(root,'RANSOpenEquilibriumQ',3.4012654174),'wrong model equilibrium data'),
                               ('unknown_provider',lambda root:set_info(root,'RANSOpenReference','NeutralCompositeV999'),'unknown open reference provider version')]:
         folder=a.output/name;make(folder,rt,c,.002,0,template=initial/'case.xml');root=ET.parse(folder/'case.xml').getroot();change(root);write(root,folder/'case.xml')
@@ -71,5 +72,11 @@ def main():
     e=run([rt/'IncNavierStokesSolver','case.xml'],folder,'solver.log');text=(folder/'solver.log').read_text()
     require(e['exit_code']!=0 and 'checkpoint signature mismatch' in text,'changed_physical_reference_history_not_rejected')
     result['history']['changed_physical_identity']=dict(status='pass',expected_reason='checkpoint signature mismatch',execution=e)
+    old=r/'initial-v2/A95-6.0-P3/0.002/case.evolution.json'
+    if old.exists() and 'checkpoint' in json.loads(old.read_text()):
+        folder=a.output/'old_projection_history';make(folder,rt,c,.002,0,Path(json.loads(old.read_text())['checkpoint']),initial/'case.xml')
+        e=run([rt/'IncNavierStokesSolver','case.xml'],folder,'solver.log')
+        require(e['exit_code']!=0 and 'checkpoint signature mismatch' in (folder/'solver.log').read_text(),'old_projection_history_not_rejected')
+        result['history']['old_projection_history']=dict(status='pass',expected_reason='checkpoint signature mismatch',source_report_sha256=sha(old),execution=e)
     result['implementation']='pass';write_json(a.output/'results.json',result);manifest.seal(a.output,['results.json']);print('CT4 provider controls pass');return 0
 if __name__=='__main__':raise SystemExit(main())
