@@ -8,7 +8,7 @@ os.environ.update(THREADS)
 from ct_accepted3_run import CASES
 from ct_accepted_open import require
 from ct_accepted_pilot import budget_classification, artifact_hash
-from ct_accepted_budget_gate import physical_budgets, paired_coverage
+from ct_accepted_budget_gate import physical_budgets, paired_coverage, required_times
 from ct_accepted2_diagnosis import function_identity
 from rans_request_manifest import RequestManifest, sha, runtime_identity, canonical
 from ct_accepted2_storage import canonical_location
@@ -107,7 +107,8 @@ def main():
             save(case+'-T'+str(t)+'-derived.json',derived)
             row['milestones'][str(t)]=dict(status=derived['status'],physical_completion=derived['physical_completion'],reasons=derived['reasons'],complete_body=name,
                 times={dt:r['time'] for dt,r in q['members'].items()},failures={dt:r['failure'] for dt,r in q['members'].items()})
-        row['pilot_completion']='pass_T0p2_bounded_flat_only' if row['milestones'].get('0.2',{}).get('status')=='pass' else 'not_qualified_T0p2'
+        row['required_time_coverage']=required_times(list(segments))
+        row['pilot_completion']='pass_T0p2_bounded_flat_only' if row['required_time_coverage']['status']=='pass' and all(q['status']=='pass' for q in row['milestones'].values()) else 'not_qualified_T0p2'
     for f in sorted(a.root.rglob('request-manifest.json')):
         requests[str(f.relative_to(a.root))]=dict(sha256=sha(f),body=json.loads(f.read_text()))
     for f in sorted(a.root.rglob('completed-artifacts.json')):

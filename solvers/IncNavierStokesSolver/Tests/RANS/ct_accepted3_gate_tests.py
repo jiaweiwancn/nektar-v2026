@@ -5,7 +5,7 @@ import argparse,copy,json,os,xml.etree.ElementTree as ET
 from pathlib import Path
 from rans_qualification import THREADS,write_json
 os.environ.update(THREADS)
-from ct_accepted_budget_gate import physical_budgets
+from ct_accepted_budget_gate import physical_budgets,required_times
 from ct_accepted3_controls import negatives
 from ct_accepted_open import require
 from rans_request_manifest import RequestManifest,sha
@@ -17,6 +17,9 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--ct2',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     manifest=RequestManifest(a.output,dict(schema='CT3CompleteBudgetNegativesV1',source_sha256=sha(Path(__file__))))
     result=dict(status='pass',existing_negatives=negatives(a.ct2),historical_CT2={},additional_negatives={})
+    require(required_times([.008,.02,.2])['status']=='pass','complete_milestone_positive')
+    missing=required_times([.02,.2]);require(missing['status']=='fail' and missing['missing_required_times']==[.008],'missing_time_pass_label_not_rejected')
+    result['additional_negatives']['missing_required_milestone_with_pass_label']=dict(status='pass',enclosing_status='pass',observed=missing)
     for folder in ('companion-audits-v1','continue02-audits-v1','continue2-audits-v1'):
         data=json.loads((a.ct2/folder/'results.json').read_text());rows={}
         for dt in ('0.002','0.001'):

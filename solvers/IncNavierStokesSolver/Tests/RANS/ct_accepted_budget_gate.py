@@ -91,3 +91,12 @@ def paired_coverage(members, horizon, expected):
         reasons.append('same_space_initial_coefficients_differ_or_missing')
     return dict(status='pass' if not reasons else 'fail', reasons=reasons,
                 required_horizon=horizon, required_dt=[.002, .001])
+
+
+def required_times(actual, expected=(.008,.02,.2)):
+    matches={t:sum(isinstance(v,(int,float)) and math.isfinite(v) and abs(v-t)<1e-13 for v in actual) for t in expected}
+    missing=[t for t,n in matches.items() if n==0]
+    duplicate=[t for t,n in matches.items() if n>1]
+    foreign=[v for v in actual if not isinstance(v,(int,float)) or not math.isfinite(v) or not any(abs(v-t)<1e-13 for t in expected)]
+    return dict(status='pass' if not missing and not duplicate and not foreign else 'fail',missing_required_times=missing,
+                duplicate_times=duplicate,foreign_times=foreign,required=list(expected))
