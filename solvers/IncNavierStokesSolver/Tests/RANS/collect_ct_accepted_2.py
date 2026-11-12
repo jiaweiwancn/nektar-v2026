@@ -66,6 +66,13 @@ def main():
         for f in sorted((r/name).rglob('*')):
             if f.is_file() and (f.suffix in ('.xml','.json','.bin','.fld') or any('checkpoint' in part for part in f.parts)):hashes[str(f.relative_to(r))]=sha(f)
     dump(out/'raw-artifact-hashes.json',hashes)
+    coupling={}
+    for group in ('matrix-v1','companion-v1','continue02-v1','continue2-v1','shared-smokes-v1'):
+        for f in sorted((r/group/'work').glob('*/case.evolution.json')):
+            native=json.loads(f.read_text());attempts=native['pimple_attempts']
+            if not attempts:continue
+            coupling[group+'/'+f.parent.name]=dict(native_report_sha256=sha(f),time=native['time'],steps=native['steps'],failure=native['failure'],signature=native['signature'],initialization_receipt=native['initialization_receipt'],final_state_audit=native['state_audits'][-1],last_attempt=attempts[-1],maximum_refreshed_trace_lag=max((a.get('refreshed_trace_defect',0.) for a in attempts),default=0.),bound_calls=sum(a.get('bound_calls',0) for a in attempts),additional_governing_solves=sum(a.get('additional_governing_equation_solves',0) for a in attempts))
+    dump(out/'native-coupling-endpoints.json',coupling)
     source=r/'source-after-reboot';cpp=source/'solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp'
     dump(out/'source-scope.json',dict(starting_revision='eedb3738017f46f9c71b857bf814213ad070d7f7',build_revision=json.loads((r/'runtime-identity.json').read_text())['source_revision'],CPP_diagnostic_commit=subprocess.check_output(['git','-c','index.threads=1','rev-parse','3c6b826'],cwd=source,text=True).strip(),export_source_revision=subprocess.check_output(['git','-c','index.threads=1','rev-parse','HEAD'],cwd=source,text=True).strip(),source_status=subprocess.check_output(['git','-c','index.threads=1','status','--porcelain'],cwd=source,text=True),Pimple_cpp_sha256=sha(cpp),CPP_changes='computed-stage diagnostics only; no constitutive, momentum/scalar/outlet/pressure operator equation change',diagnostic_budget_change='physical geometry replaces hardcoded .25 normalization; baseline geometry unchanged',historical_results='unchanged',reused='CT1 functions, original kernel/analytical evidence via byte identities, pinned runtime across explicit mount bridge; primary trajectories reused read-only after collector failure'))
     dump(out/'export-provenance.json',copied)
