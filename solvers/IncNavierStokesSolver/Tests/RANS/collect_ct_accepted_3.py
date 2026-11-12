@@ -30,6 +30,9 @@ def reclassify(root,receipt,initial,ct1,runtime):
         require(exact_vector_hash(report['state'])==row['state_sha256'],'changed_actual_state')
         require(artifact_hash(report['checkpoint'])==row['history_sha256'],'changed_native_history')
         require(sha(directory/'case.xml')==row['identity']['configuration_sha256'],'changed_actual_configuration')
+        root=ET.parse(directory/'case.xml').getroot()
+        params={n.text.split('=',1)[0].strip():n.text.split('=',1)[1].strip() for n in root.findall('./CONDITIONS/PARAMETERS/P') if n.text and '=' in n.text}
+        require(abs(float(params['TimeStep'])-report['dt'])<1e-15,'actual_XML_timestep_differs')
         require(row['identity']['runtime']==runtime_identity(runtime/'IncNavierStokesSolver'),'foreign_evolution_runtime')
         model=c['model'];frozen=ct1/'pilot-v3'/(model+'-dt-'+('0.002' if model=='A95' else '0.001')+'-zero')/'case.xml'
         require(function_identity(ET.parse(directory/'case.xml').getroot())==function_identity(ET.parse(frozen).getroot()),'changed_frozen_physical_functions')
@@ -51,6 +54,10 @@ def reclassify(root,receipt,initial,ct1,runtime):
                 if key not in maxima or value>maxima[key]['maximum_absolute']:
                     maxima[key]=dict(maximum_absolute=value,time=t,witness=audit.get(witness),stage='accepted_native_inventory')
         bindings[dt]=dict(identity=identity,budget_gate=physical_budgets(members[dt]),budgets=budgets,native_divergence_and_isotropic_work=maxima,
+            actual_execution_metadata=dict(native_dt=report['dt'],XML_dt=float(params['TimeStep']),XML_segment_steps=int(params['NumSteps']),
+                native_absolute_time=report['time'],native_total_accepted_steps=report['steps'],
+                original_construction_metadata={k:json.loads((directory/'construction.json').read_text()).get(k) for k in ('dt','steps','target_time','xml_sha256')},
+                scope='actual consumed XML/report/history are authoritative; pre-fix CT3 construction JSON copied transient CT1 template fields; original artifacts preserved'),
             functions_sha256=hashlib.sha256(canonical(function_identity(ET.parse(frozen).getroot()))).hexdigest())
     coverage=paired_coverage(members,receipt['target'],expected)
     reasons=coverage['reasons'][:]

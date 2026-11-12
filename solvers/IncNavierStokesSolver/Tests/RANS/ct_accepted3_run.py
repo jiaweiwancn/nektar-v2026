@@ -37,7 +37,10 @@ def make_case(folder, source, c, degree, dt, steps, restart=None):
     set_info(root,'RANSWallCheckpoint',str(folder/'checkpoint'))
     set_info(root,'RANSWallPimpleSnapshotDirectory',str(folder/'pimple-states'))
     require(function_identity(root)==functions,'mesh_builder_changed_physical_functions')
-    write(root,folder/'case.xml');write_json(folder/'construction.json',c)
+    write(root,folder/'case.xml')
+    actual=dict(c,dt=dt,steps=steps,target_time=dt*steps,segment_duration=dt*steps,
+        target_time_semantics='segment duration; absolute endpoint belongs to native report',xml_sha256=sha(folder/'case.xml'))
+    write_json(folder/'construction.json',actual)
     return folder/'case.xml'
 
 
@@ -51,7 +54,9 @@ def initial(a):
     model,degree,xadd,predicted=CASES[a.case]
     source=a.ct1/'pilot-v3'/(model+'-dt-'+('0.002' if model=='A95' else '0.001')+'-zero')/'case.xml'
     old=a.ct1/'pilot-v3'/(model+'-dt-'+('0.002' if model=='A95' else '0.001'))/'construction.json'
-    c=json.loads(old.read_text());c.update(x=sorted(set(c['x']+xadd)),knots=sorted(set(c['knots']+[5.125])),degree=degree,pressure_degree=degree-2)
+    c=json.loads(old.read_text())
+    c['source_template_execution_metadata']={key:c.pop(key) for key in ('dt','steps','target_time','xml_sha256') if key in c}
+    c.update(x=sorted(set(c['x']+xadd)),knots=sorted(set(c['knots']+[5.125])),degree=degree,pressure_degree=degree-2)
     points,sides,weights,n=grid(c)
     manifest=RequestManifest(a.output,dict(schema='CT3FreshInitializationV1',case=a.case,contract_sha256=sha(a.contract),
         source_XML_sha256=sha(source),source_construction_sha256=sha(old),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),

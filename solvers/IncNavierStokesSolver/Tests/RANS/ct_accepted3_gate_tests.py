@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Lightweight complete CT2 preservation and stale/forged primitive controls."""
-import argparse,copy,json,os
+import argparse,copy,json,os,xml.etree.ElementTree as ET
 from pathlib import Path
 from rans_qualification import THREADS,write_json
 os.environ.update(THREADS)
@@ -9,6 +9,8 @@ from ct_accepted_budget_gate import physical_budgets
 from ct_accepted3_controls import negatives
 from ct_accepted_open import require
 from rans_request_manifest import RequestManifest,sha
+from ct_accepted3_run import make_case
+from ct_accepted2_diagnosis import function_identity
 
 
 def main():
@@ -33,5 +35,13 @@ def main():
         q=copy.deepcopy(good);change(q);got=physical_budgets(q)
         require(got['status']=='fail' and reason in json.dumps(got),'wrong_negative_reason:'+name)
         result['additional_negatives'][name]=dict(status='pass',intended_reason=reason,observed=got)
+    source=a.ct2/'companion-initial-v1/work/Zminus-0.002'
+    c=json.loads((source/'construction.json').read_text())
+    out=a.output/'metadata-only-no-evolution';make_case(out,source/'case.xml',c,3,.001,12)
+    actual=json.loads((out/'construction.json').read_text());root=ET.parse(out/'case.xml').getroot()
+    require(actual['dt']==.001 and actual['steps']==12 and actual['segment_duration']==.012 and actual['xml_sha256']==sha(out/'case.xml'),'construction_execution_metadata_not_actual')
+    require(function_identity(root)==function_identity(ET.parse(source/'case.xml').getroot()),'metadata_fix_changed_physical_functions')
+    result['construction_metadata_control']=dict(status='pass',actual_dt=actual['dt'],segment_steps=actual['steps'],segment_duration=actual['segment_duration'],
+        physical_functions='identical',role='writer-only regression; no native solve, new candidate, or trajectory rerun')
     write_json(a.output/'results.json',result);manifest.seal(a.output,['results.json']);print('complete CT2 records pass; missing/stale/forged primitives reject');return 0
 if __name__=='__main__':raise SystemExit(main())
