@@ -115,3 +115,10 @@ Function approximation error5.51347e-11, above the frozen2e-11 limit. The new
 family uses degree16 piecewise expressions; the old analytic caller keeps its
 degree12 default. No field equation, data fit, mesh, native quadrature or
 tolerance changes. No CP0 was consumed by this fixture failure.
+
+Passive correction after the three planned initializations: the old exterior
+weak oracle substituted the analytic hat for its native Q3 projection. H/2 is
+not a face on these low-H meshes. Reconstruct the exported projected test
+trace independently per face/field. Retain the first unresolved assessment and
+publish a separate weak-v2 bridge from unchanged native bytes. No native
+initialization, quadrature or field changes accompany this correction.
