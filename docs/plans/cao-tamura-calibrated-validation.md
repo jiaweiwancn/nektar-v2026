@@ -1,5 +1,21 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-4 (2026-11-12) takes priority: use the explicit neutral-equilibrium
+> composite inlet, original Natural A93/A95/E94E95 and Accepted budget AWF.
+> Equal-weight rough mean fits to frozen Fig.3a IDs0–3 reproduce nine separate
+> model/height roughness inputs at 5.5/6/6.5 mm. All central flat mathematical
+> references and provider/history/weak controls pass. All 20 short timestep
+> members reach T=.008 with passing domain, mass, budgets and field comparisons,
+> but the declared ground-traction accuracy gate fails, including the fixed P4
+> control. No pair is admitted to T=.02. The selected spatial contrast retains
+> unresolved pressure uncertainty; smooth preparation, physical roughness-sublayer
+> adequacy and the historical .1 thin-layer criterion remain open.
+> Next: one bounded near-ground representation/load control with the same
+> continuous input, then conservative curved Accepted verification. Geometry-row
+> caching and further old Hermite qualification are deferred. See
+> [CT-Accepted-4](cao-tamura-accepted-4.md). CT1–CT3 records below are unchanged;
+> no developed precursor, hill prediction or native curved capability is admitted.
+
 > CT-Accepted-3 (2026-11-12): A95 XZminus P3/P1 and P4/P2, and E94E95
 > Zminus P3/P1, pass paired .002/.001 bounded flat pilots through T=.2.
 > A93 passes .02, then stops on full-tensor covariance at attempted .064/.054.

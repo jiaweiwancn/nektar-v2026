@@ -1,0 +1,2662 @@
+{
+  "A95-6.0-P3": {
+    "0.002": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.008519387517639115,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.008519387517639115
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.0004362003739225504,
+            "scale": 0.1405407295257937,
+            "scaled_weighted_RMS": 0.003103729256240226
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 7.201205860116253e-06,
+            "scale": 0.04505828418827663,
+            "scaled_weighted_RMS": 0.00015981979762091963
+          },
+          "Pi": {
+            "weighted_RMS": 5.3372793769984116e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 5.3372793769984116e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.004856810099062207,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.004856810099062207
+              },
+              "w": {
+                "weighted_RMS": 4.7041191355381396e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 4.7041191355381396e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0003140848433223118,
+                "scale": 0.1405407295257937,
+                "scaled_weighted_RMS": 0.0022348314569170303
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 6.453763008480978e-06,
+                "scale": 0.04505828418827663,
+                "scaled_weighted_RMS": 0.0001432314417813569
+              },
+              "Pi": {
+                "weighted_RMS": 1.3988047495052515e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.3988047495052515e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544433,
+              "normalized_wall_traction_error": 1.5725248916997314e-16,
+              "normalized_interface_traction_RMS": 8.77307736520116e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0009270538256055768,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005489267483232536,
+              "normalized_wall_traction_error": 0.004797032596737594,
+              "normalized_interface_traction_RMS": 0.000545811661357325,
+              "normalized_outlet_reconstruction_RMS": 0.0007675770406857249,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.00547859456954996,
+              "normalized_wall_traction_error": 0.0067320294611068225,
+              "normalized_interface_traction_RMS": 0.0008923471778606158,
+              "normalized_outlet_reconstruction_RMS": 0.0007192608013767865,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005473585929385116,
+              "normalized_wall_traction_error": 0.007640094803146296,
+              "normalized_interface_traction_RMS": 0.001112251647520625,
+              "normalized_outlet_reconstruction_RMS": 0.0006959905826672681,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005470930316476918,
+              "normalized_wall_traction_error": 0.008121556829652739,
+              "normalized_interface_traction_RMS": 0.0012497696744720114,
+              "normalized_outlet_reconstruction_RMS": 0.0006823660471216308,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    },
+    "0.001": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.008519387517639115,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.008519387517639115
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.0004362003739225504,
+            "scale": 0.1405407295257937,
+            "scaled_weighted_RMS": 0.003103729256240226
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 7.201205860116253e-06,
+            "scale": 0.04505828418827663,
+            "scaled_weighted_RMS": 0.00015981979762091963
+          },
+          "Pi": {
+            "weighted_RMS": 5.3372793769984116e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 5.3372793769984116e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.004858316977653142,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.004858316977653142
+              },
+              "w": {
+                "weighted_RMS": 4.8293234928644775e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 4.8293234928644775e-05
+              },
+              "k": {
+                "weighted_RMS": 0.000313552331012612,
+                "scale": 0.1405407295257937,
+                "scaled_weighted_RMS": 0.0022310424321162012
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 6.439721096027634e-06,
+                "scale": 0.04505828418827663,
+                "scaled_weighted_RMS": 0.00014291980291835296
+              },
+              "Pi": {
+                "weighted_RMS": 1.2237347175520515e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.2237347175520515e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544433,
+              "normalized_wall_traction_error": 1.5725248916997314e-16,
+              "normalized_interface_traction_RMS": 8.77307736520116e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0009270538256055768,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.001,
+              "status": "fail",
+              "mean_wall_shear": 0.005496591894561567,
+              "normalized_wall_traction_error": 0.003469118460398139,
+              "normalized_interface_traction_RMS": 0.00034930645403505984,
+              "normalized_outlet_reconstruction_RMS": 0.0008071021674664788,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005486324138802768,
+              "normalized_wall_traction_error": 0.005330660283772915,
+              "normalized_interface_traction_RMS": 0.0006111204383505466,
+              "normalized_outlet_reconstruction_RMS": 0.0007583129789381279,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.003,
+              "status": "fail",
+              "mean_wall_shear": 0.005480332747636646,
+              "normalized_wall_traction_error": 0.006416898162617641,
+              "normalized_interface_traction_RMS": 0.0008128333682839164,
+              "normalized_outlet_reconstruction_RMS": 0.000731594135600294,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.0054765676241438025,
+              "normalized_wall_traction_error": 0.007099514210052671,
+              "normalized_interface_traction_RMS": 0.0009694316534312194,
+              "normalized_outlet_reconstruction_RMS": 0.0007142365464300481,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.005,
+              "status": "fail",
+              "mean_wall_shear": 0.005474056352140776,
+              "normalized_wall_traction_error": 0.007554807262723634,
+              "normalized_interface_traction_RMS": 0.0010910593829472307,
+              "normalized_outlet_reconstruction_RMS": 0.0007019107466720672,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005472302825694688,
+              "normalized_wall_traction_error": 0.007872721215340767,
+              "normalized_interface_traction_RMS": 0.0011851948427856562,
+              "normalized_outlet_reconstruction_RMS": 0.0006927042772406239,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.007,
+              "status": "fail",
+              "mean_wall_shear": 0.005471035021709598,
+              "normalized_wall_traction_error": 0.008102573794378263,
+              "normalized_interface_traction_RMS": 0.0012575656087314147,
+              "normalized_outlet_reconstruction_RMS": 0.0006856026332093713,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005470093573041294,
+              "normalized_wall_traction_error": 0.008273258227449851,
+              "normalized_interface_traction_RMS": 0.0013126500300091532,
+              "normalized_outlet_reconstruction_RMS": 0.0006799988016353953,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    }
+  },
+  "A93-6.0-P3": {
+    "0.002": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.017297543077008,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.017297543077008
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.00034360598632517494,
+            "scale": 0.12506966765635474,
+            "scaled_weighted_RMS": 0.0027473166976766683
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 6.793289494585796e-06,
+            "scale": 0.042505932279447135,
+            "scaled_weighted_RMS": 0.00015981979762082647
+          },
+          "Pi": {
+            "weighted_RMS": 1.0934303602788301e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 1.0934303602788301e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.009215319885721735,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.009215319885721735
+              },
+              "w": {
+                "weighted_RMS": 7.978913452459938e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 7.978913452459938e-05
+              },
+              "k": {
+                "weighted_RMS": 0.000279223250412855,
+                "scale": 0.12506966765635474,
+                "scaled_weighted_RMS": 0.002232541715710458
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 6.541452830960583e-06,
+                "scale": 0.042505932279447135,
+                "scaled_weighted_RMS": 0.00015389505605841204
+              },
+              "Pi": {
+                "weighted_RMS": 2.6230453584305906e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 2.6230453584305906e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544433,
+              "normalized_wall_traction_error": 1.5725248916997314e-16,
+              "normalized_interface_traction_RMS": 6.8271270219342395e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0015391399818438505,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005471506127727675,
+              "normalized_wall_traction_error": 0.00801716237863214,
+              "normalized_interface_traction_RMS": 0.002232409430165376,
+              "normalized_outlet_reconstruction_RMS": 0.0011110836912162844,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005452580728491716,
+              "normalized_wall_traction_error": 0.011448333028714279,
+              "normalized_interface_traction_RMS": 0.0035873511121952005,
+              "normalized_outlet_reconstruction_RMS": 0.000978609627506612,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.00544318012958785,
+              "normalized_wall_traction_error": 0.013152659508171296,
+              "normalized_interface_traction_RMS": 0.004479893513867774,
+              "normalized_outlet_reconstruction_RMS": 0.0009292387726773372,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005437932856458174,
+              "normalized_wall_traction_error": 0.014103988953380556,
+              "normalized_interface_traction_RMS": 0.005099578048225818,
+              "normalized_outlet_reconstruction_RMS": 0.0009074318523643149,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    },
+    "0.001": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.017297543077008,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.017297543077008
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.00034360598632517494,
+            "scale": 0.12506966765635474,
+            "scaled_weighted_RMS": 0.0027473166976766683
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 6.793289494585796e-06,
+            "scale": 0.042505932279447135,
+            "scaled_weighted_RMS": 0.00015981979762082647
+          },
+          "Pi": {
+            "weighted_RMS": 1.0934303602788301e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 1.0934303602788301e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.009224003169608412,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.009224003169608412
+              },
+              "w": {
+                "weighted_RMS": 8.239607939725405e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 8.239607939725405e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0002792665836541795,
+                "scale": 0.12506966765635474,
+                "scaled_weighted_RMS": 0.002232888188537455
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 6.607900609340251e-06,
+                "scale": 0.042505932279447135,
+                "scaled_weighted_RMS": 0.00015545831499231378
+              },
+              "Pi": {
+                "weighted_RMS": 2.5454971204791506e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 2.5454971204791506e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544433,
+              "normalized_wall_traction_error": 1.5725248916997314e-16,
+              "normalized_interface_traction_RMS": 6.8271270219342395e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0015391399818438505,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.001,
+              "status": "fail",
+              "mean_wall_shear": 0.005484275624721668,
+              "normalized_wall_traction_error": 0.005702055428663437,
+              "normalized_interface_traction_RMS": 0.0014569027066901666,
+              "normalized_outlet_reconstruction_RMS": 0.0012227274143407094,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005466690269213628,
+              "normalized_wall_traction_error": 0.008890276450484888,
+              "normalized_interface_traction_RMS": 0.0024790189678827613,
+              "normalized_outlet_reconstruction_RMS": 0.0010786135385996995,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.003,
+              "status": "fail",
+              "mean_wall_shear": 0.005456023377217719,
+              "normalized_wall_traction_error": 0.01082418158440764,
+              "normalized_interface_traction_RMS": 0.00326160722757371,
+              "normalized_outlet_reconstruction_RMS": 0.00100402722638732,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005449076926686412,
+              "normalized_wall_traction_error": 0.012083571512625393,
+              "normalized_interface_traction_RMS": 0.0038775811561809156,
+              "normalized_outlet_reconstruction_RMS": 0.0009624034750680376,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.005,
+              "status": "fail",
+              "mean_wall_shear": 0.0054442904130663355,
+              "normalized_wall_traction_error": 0.012951365361762307,
+              "normalized_interface_traction_RMS": 0.004369948988526395,
+              "normalized_outlet_reconstruction_RMS": 0.0009377049198128043,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005440847033309503,
+              "normalized_wall_traction_error": 0.01357564934179491,
+              "normalized_interface_traction_RMS": 0.0047681698909670745,
+              "normalized_outlet_reconstruction_RMS": 0.0009221189206351573,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.007,
+              "status": "fail",
+              "mean_wall_shear": 0.0054382881772880925,
+              "normalized_wall_traction_error": 0.014039569366359991,
+              "normalized_interface_traction_RMS": 0.005093490183173992,
+              "normalized_outlet_reconstruction_RMS": 0.0009116540787221694,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.0054363390230838015,
+              "normalized_wall_traction_error": 0.014392950587800248,
+              "normalized_interface_traction_RMS": 0.00536157829553869,
+              "normalized_outlet_reconstruction_RMS": 0.0009042031803381013,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    }
+  },
+  "E94E95-6.0-P3": {
+    "0.002": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.010718970808268124,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.010718970808268124
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.0004129801936412007,
+            "scale": 0.12224712469831546,
+            "scaled_weighted_RMS": 0.0033782405488911385
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 7.060943628603503e-06,
+            "scale": 0.0441806568003048,
+            "scaled_weighted_RMS": 0.00015981979762136062
+          },
+          "Pi": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.005950608772175989,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.005950608772175989
+              },
+              "w": {
+                "weighted_RMS": 5.3761361810375425e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 5.3761361810375425e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0003046916630135488,
+                "scale": 0.12224712469831546,
+                "scaled_weighted_RMS": 0.002492423963062318
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 6.337215890279112e-06,
+                "scale": 0.0441806568003048,
+                "scaled_weighted_RMS": 0.0001434386980465938
+              },
+              "Pi": {
+                "weighted_RMS": 1.6840850529817773e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.6840850529817773e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544433,
+              "normalized_wall_traction_error": 1.5725248916997314e-16,
+              "normalized_interface_traction_RMS": 6.377017840509146e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0009991336924278968,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005484212775048978,
+              "normalized_wall_traction_error": 0.005713450060270048,
+              "normalized_interface_traction_RMS": 0.0007165323004700906,
+              "normalized_outlet_reconstruction_RMS": 0.0008039101817911872,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005471234282777385,
+              "normalized_wall_traction_error": 0.008066447807339793,
+              "normalized_interface_traction_RMS": 0.0012123587793005611,
+              "normalized_outlet_reconstruction_RMS": 0.0007466556504077413,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005465020853299658,
+              "normalized_wall_traction_error": 0.009192941182434675,
+              "normalized_interface_traction_RMS": 0.0015517611909173438,
+              "normalized_outlet_reconstruction_RMS": 0.0007203592309572855,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005461666594931582,
+              "normalized_wall_traction_error": 0.009801067474611718,
+              "normalized_interface_traction_RMS": 0.001779601961214111,
+              "normalized_outlet_reconstruction_RMS": 0.000705842392203965,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    },
+    "0.001": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.010718970808268124,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.010718970808268124
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.0004129801936412007,
+            "scale": 0.12224712469831546,
+            "scaled_weighted_RMS": 0.0033782405488911385
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 7.060943628603503e-06,
+            "scale": 0.0441806568003048,
+            "scaled_weighted_RMS": 0.00015981979762136062
+          },
+          "Pi": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.005954123541196987,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.005954123541196987
+              },
+              "w": {
+                "weighted_RMS": 5.521870262631623e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 5.521870262631623e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0003042419996562775,
+                "scale": 0.12224712469831546,
+                "scaled_weighted_RMS": 0.002488745648677575
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 6.327687419649122e-06,
+                "scale": 0.0441806568003048,
+                "scaled_weighted_RMS": 0.0001432230274042795
+              },
+              "Pi": {
+                "weighted_RMS": 1.4445889915888632e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.4445889915888632e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544433,
+              "normalized_wall_traction_error": 1.5725248916997314e-16,
+              "normalized_interface_traction_RMS": 6.377017840509146e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0009991336924278968,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.001,
+              "status": "fail",
+              "mean_wall_shear": 0.005493066996359419,
+              "normalized_wall_traction_error": 0.004108181716340248,
+              "normalized_interface_traction_RMS": 0.0004407832778512696,
+              "normalized_outlet_reconstruction_RMS": 0.0008510946241669154,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.0054807305290778185,
+              "normalized_wall_traction_error": 0.006344780476270271,
+              "normalized_interface_traction_RMS": 0.0007991815240644815,
+              "normalized_outlet_reconstruction_RMS": 0.0007920905573483696,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.003,
+              "status": "fail",
+              "mean_wall_shear": 0.005473432883815643,
+              "normalized_wall_traction_error": 0.007667841930673331,
+              "normalized_interface_traction_RMS": 0.001090885284956027,
+              "normalized_outlet_reconstruction_RMS": 0.0007603573653744605,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005468788774480386,
+              "normalized_wall_traction_error": 0.008509817914811733,
+              "normalized_interface_traction_RMS": 0.001327259969937765,
+              "normalized_outlet_reconstruction_RMS": 0.0007402130723414481,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.005,
+              "status": "fail",
+              "mean_wall_shear": 0.0054656554308808725,
+              "normalized_wall_traction_error": 0.00907789240884117,
+              "normalized_interface_traction_RMS": 0.0015176962223054093,
+              "normalized_outlet_reconstruction_RMS": 0.0007263263307718023,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005463444492697124,
+              "normalized_wall_traction_error": 0.009478735007226612,
+              "normalized_interface_traction_RMS": 0.0016700839577314661,
+              "normalized_outlet_reconstruction_RMS": 0.0007162950926865301,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.007,
+              "status": "fail",
+              "mean_wall_shear": 0.005461830583011055,
+              "normalized_wall_traction_error": 0.009771336472468143,
+              "normalized_interface_traction_RMS": 0.0017910777153704346,
+              "normalized_outlet_reconstruction_RMS": 0.000708816787440516,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005460621500020414,
+              "normalized_wall_traction_error": 0.009990542948341074,
+              "normalized_interface_traction_RMS": 0.0018862864436821648,
+              "normalized_outlet_reconstruction_RMS": 0.0007031046390690969,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    }
+  },
+  "A95-5.5-P3": {
+    "0.002": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.007018213548485944,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.007018213548485944
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.00043076210685830563,
+            "scale": 0.153317159482684,
+            "scaled_weighted_RMS": 0.002809614450931416
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 8.180653418697464e-06,
+            "scale": 0.0536230820091887,
+            "scaled_weighted_RMS": 0.00015255843402092498
+          },
+          "Pi": {
+            "weighted_RMS": 5.419038932679175e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 5.419038932679175e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.004130157481707344,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.004130157481707344
+              },
+              "w": {
+                "weighted_RMS": 4.0125030861769235e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 4.0125030861769235e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0003068376373087841,
+                "scale": 0.153317159482684,
+                "scaled_weighted_RMS": 0.002001326129078455
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 7.293091624923757e-06,
+                "scale": 0.0536230820091887,
+                "scaled_weighted_RMS": 0.00013600657313345087
+              },
+              "Pi": {
+                "weighted_RMS": 1.1607248285911835e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.1607248285911835e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544432,
+              "normalized_wall_traction_error": 0.0,
+              "normalized_interface_traction_RMS": 8.49878898136227e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0008831644335536233,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005492729537869103,
+              "normalized_wall_traction_error": 0.0041693628651846455,
+              "normalized_interface_traction_RMS": 0.0004511127377676307,
+              "normalized_outlet_reconstruction_RMS": 0.0007437716008634181,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.00548411367264416,
+              "normalized_wall_traction_error": 0.005731417304105951,
+              "normalized_interface_traction_RMS": 0.0006320649348174829,
+              "normalized_outlet_reconstruction_RMS": 0.0007033288511346619,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005480308661177782,
+              "normalized_wall_traction_error": 0.00642126503222434,
+              "normalized_interface_traction_RMS": 0.0006973685393097692,
+              "normalized_outlet_reconstruction_RMS": 0.0006827887928694267,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005478390621306466,
+              "normalized_wall_traction_error": 0.0067690052320529236,
+              "normalized_interface_traction_RMS": 0.0007110245067868616,
+              "normalized_outlet_reconstruction_RMS": 0.0006698423182687344,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    },
+    "0.001": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.007018213548485944,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.007018213548485944
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.00043076210685830563,
+            "scale": 0.153317159482684,
+            "scaled_weighted_RMS": 0.002809614450931416
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 8.180653418697464e-06,
+            "scale": 0.0536230820091887,
+            "scaled_weighted_RMS": 0.00015255843402092498
+          },
+          "Pi": {
+            "weighted_RMS": 5.419038932679175e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 5.419038932679175e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.004130450628406065,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.004130450628406065
+              },
+              "w": {
+                "weighted_RMS": 4.115829730572773e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 4.115829730572773e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0003062638235095021,
+                "scale": 0.153317159482684,
+                "scaled_weighted_RMS": 0.0019975834703883375
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 7.272718774259572e-06,
+                "scale": 0.0536230820091887,
+                "scaled_weighted_RMS": 0.00013562664624561005
+              },
+              "Pi": {
+                "weighted_RMS": 1.05501079879241e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.05501079879241e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544432,
+              "normalized_wall_traction_error": 0.0,
+              "normalized_interface_traction_RMS": 8.49878898136227e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0008831644335536233,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.001,
+              "status": "fail",
+              "mean_wall_shear": 0.005498752794596352,
+              "normalized_wall_traction_error": 0.0030773477672319852,
+              "normalized_interface_traction_RMS": 0.00032864368027104673,
+              "normalized_outlet_reconstruction_RMS": 0.000777012665584398,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005490148122953667,
+              "normalized_wall_traction_error": 0.004637372812192742,
+              "normalized_interface_traction_RMS": 0.0005179550127480422,
+              "normalized_outlet_reconstruction_RMS": 0.0007363137414407832,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.003,
+              "status": "fail",
+              "mean_wall_shear": 0.005485355164656839,
+              "normalized_wall_traction_error": 0.005506335079783619,
+              "normalized_interface_traction_RMS": 0.0006270893843380285,
+              "normalized_outlet_reconstruction_RMS": 0.0007143013173273135,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005482455907940689,
+              "normalized_wall_traction_error": 0.006031969674197281,
+              "normalized_interface_traction_RMS": 0.000687637099957262,
+              "normalized_outlet_reconstruction_RMS": 0.0006996154823316833,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.005,
+              "status": "fail",
+              "mean_wall_shear": 0.005480583861979927,
+              "normalized_wall_traction_error": 0.006371371188325672,
+              "normalized_interface_traction_RMS": 0.0007185762009277839,
+              "normalized_outlet_reconstruction_RMS": 0.0006887273465790656,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005479313652105494,
+              "normalized_wall_traction_error": 0.006601659954563099,
+              "normalized_interface_traction_RMS": 0.0007314896087878378,
+              "normalized_outlet_reconstruction_RMS": 0.0006802209418638219,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.007,
+              "status": "fail",
+              "mean_wall_shear": 0.005478418979462562,
+              "normalized_wall_traction_error": 0.006763863904693132,
+              "normalized_interface_traction_RMS": 0.000733538033163965,
+              "normalized_outlet_reconstruction_RMS": 0.0006733877423853604,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005477770494387839,
+              "normalized_wall_traction_error": 0.0068814341037502285,
+              "normalized_interface_traction_RMS": 0.0007291923043772634,
+              "normalized_outlet_reconstruction_RMS": 0.0006678063223303228,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    }
+  },
+  "A93-5.5-P3": {
+    "0.002": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.013934031704631688,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.013934031704631688
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.00031621863877913495,
+            "scale": 0.13643963744329607,
+            "scaled_weighted_RMS": 0.0023176449652364
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 7.717255693967528e-06,
+            "scale": 0.050585572299507324,
+            "scaled_weighted_RMS": 0.00015255843401899575
+          },
+          "Pi": {
+            "weighted_RMS": 1.1100960833543268e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 1.1100960833543268e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.007558437450923936,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.007558437450923936
+              },
+              "w": {
+                "weighted_RMS": 6.256061239435514e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 6.256061239435514e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0002556058617431258,
+                "scale": 0.13643963744329607,
+                "scaled_weighted_RMS": 0.001873398863650271
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 7.071935828321518e-06,
+                "scale": 0.050585572299507324,
+                "scaled_weighted_RMS": 0.00013980143955770558
+              },
+              "Pi": {
+                "weighted_RMS": 1.8127498573925727e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.8127498573925727e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.0055157266035444335,
+              "normalized_wall_traction_error": 3.145049783399463e-16,
+              "normalized_interface_traction_RMS": 5.780671023406606e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0011269124139464382,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005476623327428801,
+              "normalized_wall_traction_error": 0.0070894152169367515,
+              "normalized_interface_traction_RMS": 0.0013363675989130938,
+              "normalized_outlet_reconstruction_RMS": 0.0008665438382382375,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.00546096135830224,
+              "normalized_wall_traction_error": 0.009928926717832538,
+              "normalized_interface_traction_RMS": 0.0022118591343577246,
+              "normalized_outlet_reconstruction_RMS": 0.0007918623976259339,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005453587348814286,
+              "normalized_wall_traction_error": 0.011265832989295548,
+              "normalized_interface_traction_RMS": 0.0027974313535807133,
+              "normalized_outlet_reconstruction_RMS": 0.0007609137895423715,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005449651018841649,
+              "normalized_wall_traction_error": 0.011979488733238133,
+              "normalized_interface_traction_RMS": 0.003192636641996363,
+              "normalized_outlet_reconstruction_RMS": 0.0007458853391697721,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    },
+    "0.001": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.013934031704631688,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.013934031704631688
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.00031621863877913495,
+            "scale": 0.13643963744329607,
+            "scaled_weighted_RMS": 0.0023176449652364
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 7.717255693967528e-06,
+            "scale": 0.050585572299507324,
+            "scaled_weighted_RMS": 0.00015255843401899575
+          },
+          "Pi": {
+            "weighted_RMS": 1.1100960833543268e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 1.1100960833543268e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.007565989869612403,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.007565989869612403
+              },
+              "w": {
+                "weighted_RMS": 6.399219446166665e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 6.399219446166665e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0002554608941200235,
+                "scale": 0.13643963744329607,
+                "scaled_weighted_RMS": 0.0018723363599246763
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 7.084350432278671e-06,
+                "scale": 0.050585572299507324,
+                "scaled_weighted_RMS": 0.00014004685743859163
+              },
+              "Pi": {
+                "weighted_RMS": 1.661555540730772e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.661555540730772e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.0055157266035444335,
+              "normalized_wall_traction_error": 3.145049783399463e-16,
+              "normalized_interface_traction_RMS": 5.780671023406606e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0011269124139464382,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.001,
+              "status": "fail",
+              "mean_wall_shear": 0.005487373056734648,
+              "normalized_wall_traction_error": 0.005140491697243301,
+              "normalized_interface_traction_RMS": 0.0008545574054155456,
+              "normalized_outlet_reconstruction_RMS": 0.0009287971175151163,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005472307096795016,
+              "normalized_wall_traction_error": 0.007871946865806322,
+              "normalized_interface_traction_RMS": 0.0014912013973534437,
+              "normalized_outlet_reconstruction_RMS": 0.0008495402207651855,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.003,
+              "status": "fail",
+              "mean_wall_shear": 0.005463534540915519,
+              "normalized_wall_traction_error": 0.009462409285364869,
+              "normalized_interface_traction_RMS": 0.001997911108691567,
+              "normalized_outlet_reconstruction_RMS": 0.0008078826517604684,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.0054580080406888875,
+              "normalized_wall_traction_error": 0.010464362540821743,
+              "normalized_interface_traction_RMS": 0.0024058031609591685,
+              "normalized_outlet_reconstruction_RMS": 0.0007828843926279093,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.005,
+              "status": "fail",
+              "mean_wall_shear": 0.005454305638611171,
+              "normalized_wall_traction_error": 0.011135607209717579,
+              "normalized_interface_traction_RMS": 0.0027339991299545545,
+              "normalized_outlet_reconstruction_RMS": 0.0007668685274474627,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005451708176410437,
+              "normalized_wall_traction_error": 0.011606526525962361,
+              "normalized_interface_traction_RMS": 0.002997226072540757,
+              "normalized_outlet_reconstruction_RMS": 0.0007561388194347805,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.007,
+              "status": "fail",
+              "mean_wall_shear": 0.0054498221357656956,
+              "normalized_wall_traction_error": 0.011948465273167397,
+              "normalized_interface_traction_RMS": 0.0032075786607293397,
+              "normalized_outlet_reconstruction_RMS": 0.000748661922582637,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005448416373124121,
+              "normalized_wall_traction_error": 0.012203329725780223,
+              "normalized_interface_traction_RMS": 0.0033750763230261036,
+              "normalized_outlet_reconstruction_RMS": 0.0007432505272839602,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    }
+  },
+  "E94E95-5.5-P3": {
+    "0.002": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.008718315997790159,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.008718315997790159
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.00039705978086830893,
+            "scale": 0.13336049967088956,
+            "scaled_weighted_RMS": 0.0029773417304837877
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 8.021313896239022e-06,
+            "scale": 0.05257863288631314,
+            "scaled_weighted_RMS": 0.00015255843402362535
+          },
+          "Pi": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.004965973931150242,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.004965973931150242
+              },
+              "w": {
+                "weighted_RMS": 4.498270017799888e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 4.498270017799888e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0002912247832289348,
+                "scale": 0.13336049967088956,
+                "scaled_weighted_RMS": 0.0021837409423901884
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 7.144056116002875e-06,
+                "scale": 0.05257863288631314,
+                "scaled_weighted_RMS": 0.0001358737518232917
+              },
+              "Pi": {
+                "weighted_RMS": 1.321929980456413e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.321929980456413e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544434,
+              "normalized_wall_traction_error": 4.717574675099195e-16,
+              "normalized_interface_traction_RMS": 5.687110437217918e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0008971587586446696,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005488177653464513,
+              "normalized_wall_traction_error": 0.004994618490012866,
+              "normalized_interface_traction_RMS": 0.000435485134472343,
+              "normalized_outlet_reconstruction_RMS": 0.0007373777420532276,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005477612703099872,
+              "normalized_wall_traction_error": 0.006910041628979078,
+              "normalized_interface_traction_RMS": 0.0006965988266334923,
+              "normalized_outlet_reconstruction_RMS": 0.0006929819564394977,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.0054728413777061875,
+              "normalized_wall_traction_error": 0.00777508185606698,
+              "normalized_interface_traction_RMS": 0.000854529851523629,
+              "normalized_outlet_reconstruction_RMS": 0.0006720591992444894,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005470387848658825,
+              "normalized_wall_traction_error": 0.008219906123786494,
+              "normalized_interface_traction_RMS": 0.0009465105355932205,
+              "normalized_outlet_reconstruction_RMS": 0.000659786608985628,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    },
+    "0.001": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.008718315997790159,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.008718315997790159
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.00039705978086830893,
+            "scale": 0.13336049967088956,
+            "scaled_weighted_RMS": 0.0029773417304837877
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 8.021313896239022e-06,
+            "scale": 0.05257863288631314,
+            "scaled_weighted_RMS": 0.00015255843402362535
+          },
+          "Pi": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.0049681926318164635,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.0049681926318164635
+              },
+              "w": {
+                "weighted_RMS": 4.6190448180628294e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 4.6190448180628294e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0002907185835374229,
+                "scale": 0.13336049967088956,
+                "scaled_weighted_RMS": 0.00217994521807331
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 7.1236222881275515e-06,
+                "scale": 0.05257863288631314,
+                "scaled_weighted_RMS": 0.0001354851181378266
+              },
+              "Pi": {
+                "weighted_RMS": 1.1631441925683272e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.1631441925683272e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544434,
+              "normalized_wall_traction_error": 4.717574675099195e-16,
+              "normalized_interface_traction_RMS": 5.687110437217918e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0008971587586446696,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.001,
+              "status": "fail",
+              "mean_wall_shear": 0.005495516761898403,
+              "normalized_wall_traction_error": 0.0036640397718484038,
+              "normalized_interface_traction_RMS": 0.0002845278789260733,
+              "normalized_outlet_reconstruction_RMS": 0.0007746586533832353,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.00548510083844517,
+              "normalized_wall_traction_error": 0.005552444365096293,
+              "normalized_interface_traction_RMS": 0.0004945018145618735,
+              "normalized_outlet_reconstruction_RMS": 0.0007284065112185616,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.003,
+              "status": "fail",
+              "mean_wall_shear": 0.005479207788231455,
+              "normalized_wall_traction_error": 0.006620853051257079,
+              "normalized_interface_traction_RMS": 0.0006522345681106411,
+              "normalized_outlet_reconstruction_RMS": 0.0007040776592262126,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005475591819035179,
+              "normalized_wall_traction_error": 0.007276427458072655,
+              "normalized_interface_traction_RMS": 0.0007705769811087146,
+              "normalized_outlet_reconstruction_RMS": 0.0006884918368316513,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.005,
+              "status": "fail",
+              "mean_wall_shear": 0.005473226639802876,
+              "normalized_wall_traction_error": 0.007705233924075418,
+              "normalized_interface_traction_RMS": 0.0008587562713661637,
+              "normalized_outlet_reconstruction_RMS": 0.0006774367837998139,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005471603036395214,
+              "normalized_wall_traction_error": 0.00799959285887437,
+              "normalized_interface_traction_RMS": 0.0009236508788551574,
+              "normalized_outlet_reconstruction_RMS": 0.000669152168777087,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.007,
+              "status": "fail",
+              "mean_wall_shear": 0.005470447346495275,
+              "normalized_wall_traction_error": 0.00820911917934078,
+              "normalized_interface_traction_RMS": 0.0009705236396464073,
+              "normalized_outlet_reconstruction_RMS": 0.0006627375761540505,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005469601600198477,
+              "normalized_wall_traction_error": 0.008362452793855774,
+              "normalized_interface_traction_RMS": 0.0010034712885380374,
+              "normalized_outlet_reconstruction_RMS": 0.0006576621388722117,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    }
+  },
+  "A95-6.5-P3": {
+    "0.002": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.010318666787590683,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.010318666787590683
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.00047905756638211413,
+            "scale": 0.1297299041776557,
+            "scaled_weighted_RMS": 0.003692730441903969
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 6.4083214358691075e-06,
+            "scale": 0.038392857533206114,
+            "scaled_weighted_RMS": 0.00016691441709767313
+          },
+          "Pi": {
+            "weighted_RMS": 5.2812037480848644e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 5.2812037480848644e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.005746916011089336,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.005746916011089336
+              },
+              "w": {
+                "weighted_RMS": 5.534220470656104e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 5.534220470656104e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0003411685766875508,
+                "scale": 0.1297299041776557,
+                "scaled_weighted_RMS": 0.002629837575616684
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 5.791077554076952e-06,
+                "scale": 0.038392857533206114,
+                "scaled_weighted_RMS": 0.00015083736731677836
+              },
+              "Pi": {
+                "weighted_RMS": 1.7896699833221982e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.7896699833221982e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544433,
+              "normalized_wall_traction_error": 1.5725248916997314e-16,
+              "normalized_interface_traction_RMS": 9.869784466501685e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0010479328732202905,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005485858991030101,
+              "normalized_wall_traction_error": 0.005414991470958353,
+              "normalized_interface_traction_RMS": 0.0008754696086244986,
+              "normalized_outlet_reconstruction_RMS": 0.0008531868476803304,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005473025518488256,
+              "normalized_wall_traction_error": 0.00774169717344869,
+              "normalized_interface_traction_RMS": 0.0014750730154459975,
+              "normalized_outlet_reconstruction_RMS": 0.000790447268738312,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005466684265930437,
+              "normalized_wall_traction_error": 0.008891364844385161,
+              "normalized_interface_traction_RMS": 0.0018833849250871361,
+              "normalized_outlet_reconstruction_RMS": 0.0007602686189820228,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005463174925343623,
+              "normalized_wall_traction_error": 0.00952760750814563,
+              "normalized_interface_traction_RMS": 0.0021596905650619657,
+              "normalized_outlet_reconstruction_RMS": 0.0007432653892372695,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    },
+    "0.001": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.010318666787590683,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.010318666787590683
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.00047905756638211413,
+            "scale": 0.1297299041776557,
+            "scaled_weighted_RMS": 0.003692730441903969
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 6.4083214358691075e-06,
+            "scale": 0.038392857533206114,
+            "scaled_weighted_RMS": 0.00016691441709767313
+          },
+          "Pi": {
+            "weighted_RMS": 5.2812037480848644e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 5.2812037480848644e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.005748965697649705,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.005748965697649705
+              },
+              "w": {
+                "weighted_RMS": 5.6829329120703795e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 5.6829329120703795e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0003406851852738962,
+                "scale": 0.1297299041776557,
+                "scaled_weighted_RMS": 0.0026261114384803098
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 5.786605569999494e-06,
+                "scale": 0.038392857533206114,
+                "scaled_weighted_RMS": 0.0001507208877326893
+              },
+              "Pi": {
+                "weighted_RMS": 1.5498727211458507e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.5498727211458507e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544433,
+              "normalized_wall_traction_error": 1.5725248916997314e-16,
+              "normalized_interface_traction_RMS": 9.869784466501685e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0010479328732202905,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.001,
+              "status": "fail",
+              "mean_wall_shear": 0.005494522529878266,
+              "normalized_wall_traction_error": 0.0038442938148057783,
+              "normalized_interface_traction_RMS": 0.0005395111543414008,
+              "normalized_outlet_reconstruction_RMS": 0.0009031424022345282,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.0054825811061909,
+              "normalized_wall_traction_error": 0.0060092712594261325,
+              "normalized_interface_traction_RMS": 0.0009685454198984305,
+              "normalized_outlet_reconstruction_RMS": 0.0008411228668367891,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.003,
+              "status": "fail",
+              "mean_wall_shear": 0.005475332800707642,
+              "normalized_wall_traction_error": 0.007323387422943069,
+              "normalized_interface_traction_RMS": 0.001315074957891713,
+              "normalized_outlet_reconstruction_RMS": 0.0008061591135750584,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005470628417301261,
+              "normalized_wall_traction_error": 0.008176291082699828,
+              "normalized_interface_traction_RMS": 0.0015958178633515604,
+              "normalized_outlet_reconstruction_RMS": 0.0007833196410969698,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.005,
+              "status": "fail",
+              "mean_wall_shear": 0.0054674037971698935,
+              "normalized_wall_traction_error": 0.008760913991546609,
+              "normalized_interface_traction_RMS": 0.0018230054662857968,
+              "normalized_outlet_reconstruction_RMS": 0.0007672916794347422,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005465097231887782,
+              "normalized_wall_traction_error": 0.009179093761484694,
+              "normalized_interface_traction_RMS": 0.002006404094368492,
+              "normalized_outlet_reconstruction_RMS": 0.0007555859749923365,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.007,
+              "status": "fail",
+              "mean_wall_shear": 0.0054633924827137146,
+              "normalized_wall_traction_error": 0.009488164405590197,
+              "normalized_interface_traction_RMS": 0.0021539691548952402,
+              "normalized_outlet_reconstruction_RMS": 0.0007468027813442065,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005462100359152448,
+              "normalized_wall_traction_error": 0.009722426118350922,
+              "normalized_interface_traction_RMS": 0.002272218659111487,
+              "normalized_outlet_reconstruction_RMS": 0.00074006959241435,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    }
+  },
+  "A93-6.5-P3": {
+    "0.002": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.02131791211519693,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.02131791211519693
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.0004613962605391202,
+            "scale": 0.11544892399048129,
+            "scaled_weighted_RMS": 0.003996540154650226
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 6.045318455570236e-06,
+            "scale": 0.036218072474795186,
+            "scaled_weighted_RMS": 0.00016691441709873662
+          },
+          "Pi": {
+            "weighted_RMS": 1.0980479547033976e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 1.0980479547033976e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.011118775587252442,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.011118775587252442
+              },
+              "w": {
+                "weighted_RMS": 0.00010436867463729887,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.00010436867463729887
+              },
+              "k": {
+                "weighted_RMS": 0.0003353466079983417,
+                "scale": 0.11544892399048129,
+                "scaled_weighted_RMS": 0.0029047183499604627
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 6.342764755977049e-06,
+                "scale": 0.036218072474795186,
+                "scaled_weighted_RMS": 0.00017512706564909257
+              },
+              "Pi": {
+                "weighted_RMS": 5.410611909204591e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 5.410611909204591e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544433,
+              "normalized_wall_traction_error": 1.5725248916997314e-16,
+              "normalized_interface_traction_RMS": 7.532415004907584e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0026098021771697602,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005466582443627251,
+              "normalized_wall_traction_error": 0.00890982520518709,
+              "normalized_interface_traction_RMS": 0.003431980755677363,
+              "normalized_outlet_reconstruction_RMS": 0.0014959478269115473,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.00544432595917615,
+              "normalized_wall_traction_error": 0.012944920860000484,
+              "normalized_interface_traction_RMS": 0.005211514993666873,
+              "normalized_outlet_reconstruction_RMS": 0.0012910633256433392,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.0054327559864117084,
+              "normalized_wall_traction_error": 0.015042554335344686,
+              "normalized_interface_traction_RMS": 0.00639968780676999,
+              "normalized_outlet_reconstruction_RMS": 0.0012270049452739837,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005426048387232328,
+              "normalized_wall_traction_error": 0.016258640566861337,
+              "normalized_interface_traction_RMS": 0.007280922695294006,
+              "normalized_outlet_reconstruction_RMS": 0.0011946438827521693,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    },
+    "0.001": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.02131791211519693,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.02131791211519693
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.0004613962605391202,
+            "scale": 0.11544892399048129,
+            "scaled_weighted_RMS": 0.003996540154650226
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 6.045318455570236e-06,
+            "scale": 0.036218072474795186,
+            "scaled_weighted_RMS": 0.00016691441709873662
+          },
+          "Pi": {
+            "weighted_RMS": 1.0980479547033976e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 1.0980479547033976e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.011126478646211076,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.011126478646211076
+              },
+              "w": {
+                "weighted_RMS": 0.00010789386063795763,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.00010789386063795763
+              },
+              "k": {
+                "weighted_RMS": 0.0003355382256348081,
+                "scale": 0.11544892399048129,
+                "scaled_weighted_RMS": 0.0029063781110898277
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 6.486341476245004e-06,
+                "scale": 0.036218072474795186,
+                "scaled_weighted_RMS": 0.00017909129429124
+              },
+              "Pi": {
+                "weighted_RMS": 4.9094417721843336e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 4.9094417721843336e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.005515726603544433,
+              "normalized_wall_traction_error": 1.5725248916997314e-16,
+              "normalized_interface_traction_RMS": 7.532415004907584e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0026098021771697602,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.001,
+              "status": "fail",
+              "mean_wall_shear": 0.005481374521915704,
+              "normalized_wall_traction_error": 0.0062280247187474665,
+              "normalized_interface_traction_RMS": 0.002397388930998104,
+              "normalized_outlet_reconstruction_RMS": 0.001698720744020412,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.0054613198849660614,
+              "normalized_wall_traction_error": 0.009863925913842123,
+              "normalized_interface_traction_RMS": 0.0037825269897182805,
+              "normalized_outlet_reconstruction_RMS": 0.0014216617818925527,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.003,
+              "status": "fail",
+              "mean_wall_shear": 0.005448725399023668,
+              "normalized_wall_traction_error": 0.012147303399285317,
+              "normalized_interface_traction_RMS": 0.004776902560580838,
+              "normalized_outlet_reconstruction_RMS": 0.0013206242825093632,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005440289620609229,
+              "normalized_wall_traction_error": 0.013676708139726613,
+              "normalized_interface_traction_RMS": 0.005557805246036221,
+              "normalized_outlet_reconstruction_RMS": 0.0012713420316962849,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.005,
+              "status": "fail",
+              "mean_wall_shear": 0.0054343368973801915,
+              "normalized_wall_traction_error": 0.014755935530223491,
+              "normalized_interface_traction_RMS": 0.006200307701515042,
+              "normalized_outlet_reconstruction_RMS": 0.0012411537559228855,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005429963034280205,
+              "normalized_wall_traction_error": 0.015548915932329717,
+              "normalized_interface_traction_RMS": 0.006743036950193174,
+              "normalized_outlet_reconstruction_RMS": 0.0012200694971545847,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.007,
+              "status": "fail",
+              "mean_wall_shear": 0.005426648719229226,
+              "normalized_wall_traction_error": 0.01614980051004779,
+              "normalized_interface_traction_RMS": 0.007208485787158828,
+              "normalized_outlet_reconstruction_RMS": 0.0012041777378498262,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005424077399728199,
+              "normalized_wall_traction_error": 0.016615980160680707,
+              "normalized_interface_traction_RMS": 0.007611211114365975,
+              "normalized_outlet_reconstruction_RMS": 0.001191583047610625,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    }
+  },
+  "E94E95-6.5-P3": {
+    "0.002": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.013045456992512411,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.013045456992512411
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.0004690773207763351,
+            "scale": 0.11284349972152195,
+            "scaled_weighted_RMS": 0.004156883842967792
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 6.283502692653221e-06,
+            "scale": 0.03764505668191651,
+            "scaled_weighted_RMS": 0.00016691441709720193
+          },
+          "Pi": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.007106123506332553,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.007106123506332553
+              },
+              "w": {
+                "weighted_RMS": 6.456906941628949e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 6.456906941628949e-05
+              },
+              "k": {
+                "weighted_RMS": 0.00034065772262171845,
+                "scale": 0.11284349972152195,
+                "scaled_weighted_RMS": 0.00301885109432446
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 5.731624958983808e-06,
+                "scale": 0.03764505668191651,
+                "scaled_weighted_RMS": 0.0001522543851484516
+              },
+              "Pi": {
+                "weighted_RMS": 2.18366519205792e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 2.18366519205792e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.0055157266035444335,
+              "normalized_wall_traction_error": 3.145049783399463e-16,
+              "normalized_interface_traction_RMS": 6.890907303227443e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0011876641725608779,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005480338272129401,
+              "normalized_wall_traction_error": 0.006415896573316386,
+              "normalized_interface_traction_RMS": 0.001194387813205701,
+              "normalized_outlet_reconstruction_RMS": 0.0009354525309002987,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.0054648473256779405,
+              "normalized_wall_traction_error": 0.009224401701454173,
+              "normalized_interface_traction_RMS": 0.0020268479687909563,
+              "normalized_outlet_reconstruction_RMS": 0.0008544548935003569,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.005457055010171988,
+              "normalized_wall_traction_error": 0.010637146760454215,
+              "normalized_interface_traction_RMS": 0.0026043412756799234,
+              "normalized_outlet_reconstruction_RMS": 0.0008169714354948768,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005452672158931056,
+              "normalized_wall_traction_error": 0.011431756710504186,
+              "normalized_interface_traction_RMS": 0.003002289536838436,
+              "normalized_outlet_reconstruction_RMS": 0.0007969663138721234,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    },
+    "0.001": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.013045456992512411,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.013045456992512411
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 0.0004690773207763351,
+            "scale": 0.11284349972152195,
+            "scaled_weighted_RMS": 0.004156883842967792
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 6.283502692653221e-06,
+            "scale": 0.03764505668191651,
+            "scaled_weighted_RMS": 0.00016691441709720193
+          },
+          "Pi": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.0071099272800037696,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.0071099272800037696
+              },
+              "w": {
+                "weighted_RMS": 6.636807494342573e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 6.636807494342573e-05
+              },
+              "k": {
+                "weighted_RMS": 0.0003402586599305646,
+                "scale": 0.11284349972152195,
+                "scaled_weighted_RMS": 0.003015314668281855
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 5.740659724852902e-06,
+                "scale": 0.03764505668191651,
+                "scaled_weighted_RMS": 0.00015249438388043474
+              },
+              "Pi": {
+                "weighted_RMS": 1.8744430984692334e-05,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 1.8744430984692334e-05
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.0055157266035444335,
+              "normalized_wall_traction_error": 3.145049783399463e-16,
+              "normalized_interface_traction_RMS": 6.890907303227443e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0011876641725608779,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.001,
+              "status": "fail",
+              "mean_wall_shear": 0.005490738671649989,
+              "normalized_wall_traction_error": 0.004530306465586072,
+              "normalized_interface_traction_RMS": 0.0007293937183821717,
+              "normalized_outlet_reconstruction_RMS": 0.0009999555272303944,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005476485014866378,
+              "normalized_wall_traction_error": 0.0071144912535797454,
+              "normalized_interface_traction_RMS": 0.0013246515161503744,
+              "normalized_outlet_reconstruction_RMS": 0.0009189940267853627,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.003,
+              "status": "fail",
+              "mean_wall_shear": 0.00546772789607193,
+              "normalized_wall_traction_error": 0.008702154933070446,
+              "normalized_interface_traction_RMS": 0.0018109091293340381,
+              "normalized_outlet_reconstruction_RMS": 0.0008737301301737417,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005461980457024791,
+              "normalized_wall_traction_error": 0.009744164347287082,
+              "normalized_interface_traction_RMS": 0.0022073419345334084,
+              "normalized_outlet_reconstruction_RMS": 0.0008447126164774189,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.005,
+              "status": "fail",
+              "mean_wall_shear": 0.005458000353135465,
+              "normalized_wall_traction_error": 0.010465756292538497,
+              "normalized_interface_traction_RMS": 0.002529668081820654,
+              "normalized_outlet_reconstruction_RMS": 0.0008248636078326986,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.0054551265402821795,
+              "normalized_wall_traction_error": 0.010986777920303444,
+              "normalized_interface_traction_RMS": 0.0027909805106096372,
+              "normalized_outlet_reconstruction_RMS": 0.0008107933691823403,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.007,
+              "status": "fail",
+              "mean_wall_shear": 0.005452984098782986,
+              "normalized_wall_traction_error": 0.011375202085093714,
+              "normalized_interface_traction_RMS": 0.00300218591229609,
+              "normalized_outlet_reconstruction_RMS": 0.000800567206724924,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005451347156754536,
+              "normalized_wall_traction_error": 0.011671979308859357,
+              "normalized_interface_traction_RMS": 0.0031723449373994377,
+              "normalized_outlet_reconstruction_RMS": 0.0007929754022667424,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    }
+  },
+  "A95-6.0-P4": {
+    "0.002": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.0011131105131623334,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0011131105131623334
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 6.885078746083121e-05,
+            "scale": 0.1405407295257937,
+            "scaled_weighted_RMS": 0.0004898991750871401
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 4.4301391033367814e-07,
+            "scale": 0.04505828418827663,
+            "scaled_weighted_RMS": 9.83201909070791e-06
+          },
+          "Pi": {
+            "weighted_RMS": 5.3098427348268665e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 5.3098427348268665e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.00068401572172686,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.00068401572172686
+              },
+              "w": {
+                "weighted_RMS": 8.09360481900297e-06,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 8.09360481900297e-06
+              },
+              "k": {
+                "weighted_RMS": 4.8891554925981865e-05,
+                "scale": 0.1405407295257937,
+                "scaled_weighted_RMS": 0.000347881749945013
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 4.3607091194179294e-07,
+                "scale": 0.04505828418827663,
+                "scaled_weighted_RMS": 9.67792981462998e-06
+              },
+              "Pi": {
+                "weighted_RMS": 3.26378359126837e-06,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 3.26378359126837e-06
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.00551572660354443,
+              "normalized_wall_traction_error": 3.145049783399463e-16,
+              "normalized_interface_traction_RMS": 8.825586548638443e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0001385961266408782,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005510073322866233,
+              "normalized_wall_traction_error": 0.0010249385229801219,
+              "normalized_interface_traction_RMS": 2.442002139937959e-05,
+              "normalized_outlet_reconstruction_RMS": 0.00010774598613409512,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005508475217901335,
+              "normalized_wall_traction_error": 0.0013146745958070743,
+              "normalized_interface_traction_RMS": 5.0695267164760734e-05,
+              "normalized_outlet_reconstruction_RMS": 0.00010127299497327158,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.0055079239570094245,
+              "normalized_wall_traction_error": 0.0014146180722578359,
+              "normalized_interface_traction_RMS": 6.827770742856775e-05,
+              "normalized_outlet_reconstruction_RMS": 9.886995534549155e-05,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005507705249208453,
+              "normalized_wall_traction_error": 0.0014542697476745766,
+              "normalized_interface_traction_RMS": 7.778879295669523e-05,
+              "normalized_outlet_reconstruction_RMS": 9.769244450769324e-05,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    },
+    "0.001": {
+      "initial": {
+        "fields": {
+          "u": {
+            "weighted_RMS": 0.0011131105131623334,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0011131105131623334
+          },
+          "w": {
+            "weighted_RMS": 0.0,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 0.0
+          },
+          "k": {
+            "weighted_RMS": 6.885078746083121e-05,
+            "scale": 0.1405407295257937,
+            "scaled_weighted_RMS": 0.0004898991750871401
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 4.4301391033367814e-07,
+            "scale": 0.04505828418827663,
+            "scaled_weighted_RMS": 9.83201909070791e-06
+          },
+          "Pi": {
+            "weighted_RMS": 5.3098427348268665e-17,
+            "scale": 1.0,
+            "scaled_weighted_RMS": 5.3098427348268665e-17
+          }
+        },
+        "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+      },
+      "milestones": {
+        "0.008": {
+          "final_gradients": {
+            "fields": {
+              "u": {
+                "weighted_RMS": 0.0006842733012502577,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 0.0006842733012502577
+              },
+              "w": {
+                "weighted_RMS": 8.257047345587356e-06,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 8.257047345587356e-06
+              },
+              "k": {
+                "weighted_RMS": 4.882575663556267e-05,
+                "scale": 0.1405407295257937,
+                "scaled_weighted_RMS": 0.00034741357043120794
+              },
+              "outer_epsilon": {
+                "weighted_RMS": 4.3606476045975197e-07,
+                "scale": 0.04505828418827663,
+                "scaled_weighted_RMS": 9.67779329185394e-06
+              },
+              "Pi": {
+                "weighted_RMS": 3.265209625079585e-06,
+                "scale": 1.0,
+                "scaled_weighted_RMS": 3.265209625079585e-06
+              }
+            },
+            "scope": "actual represented gradients minus continuous physical reference; separate from continuous-provider agreement and field-value errors"
+          },
+          "accepted_state_traction": [
+            {
+              "time": 0,
+              "status": "pass",
+              "mean_wall_shear": 0.00551572660354443,
+              "normalized_wall_traction_error": 3.145049783399463e-16,
+              "normalized_interface_traction_RMS": 8.825586548638443e-15,
+              "normalized_outlet_reconstruction_RMS": 0.0001385961266408782,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.001,
+              "status": "pass",
+              "mean_wall_shear": 0.005511260836032797,
+              "normalized_wall_traction_error": 0.0008096426513897112,
+              "normalized_interface_traction_RMS": 9.693143379349926e-06,
+              "normalized_outlet_reconstruction_RMS": 0.00011380055389996345,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.002,
+              "status": "fail",
+              "mean_wall_shear": 0.005509452058944643,
+              "normalized_wall_traction_error": 0.0011375735330602706,
+              "normalized_interface_traction_RMS": 2.6423614853280432e-05,
+              "normalized_outlet_reconstruction_RMS": 0.00010604713707587621,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.003,
+              "status": "fail",
+              "mean_wall_shear": 0.005508602597905747,
+              "normalized_wall_traction_error": 0.001291580629487103,
+              "normalized_interface_traction_RMS": 4.346571913182274e-05,
+              "normalized_outlet_reconstruction_RMS": 0.00010249264658965785,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.004,
+              "status": "fail",
+              "mean_wall_shear": 0.005508161299124314,
+              "normalized_wall_traction_error": 0.0013715879998940233,
+              "normalized_interface_traction_RMS": 5.743883803867831e-05,
+              "normalized_outlet_reconstruction_RMS": 0.00010051605478306171,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.005,
+              "status": "fail",
+              "mean_wall_shear": 0.00550791627663684,
+              "normalized_wall_traction_error": 0.0014160105220901952,
+              "normalized_interface_traction_RMS": 6.770382270168997e-05,
+              "normalized_outlet_reconstruction_RMS": 9.928674071929192e-05,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.006,
+              "status": "fail",
+              "mean_wall_shear": 0.00550777341095194,
+              "normalized_wall_traction_error": 0.001441912038820293,
+              "normalized_interface_traction_RMS": 7.469784981415362e-05,
+              "normalized_outlet_reconstruction_RMS": 9.846257670190295e-05,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.007,
+              "status": "fail",
+              "mean_wall_shear": 0.005507686596994716,
+              "normalized_wall_traction_error": 0.0014576513898547912,
+              "normalized_interface_traction_RMS": 7.916669575117624e-05,
+              "normalized_outlet_reconstruction_RMS": 9.787841662099022e-05,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            },
+            {
+              "time": 0.008,
+              "status": "fail",
+              "mean_wall_shear": 0.005507631779237013,
+              "normalized_wall_traction_error": 0.001467589837070009,
+              "normalized_interface_traction_RMS": 8.183721775477615e-05,
+              "normalized_outlet_reconstruction_RMS": 9.744596025030184e-05,
+              "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+            }
+          ],
+          "scope": "read-only reconstruction; first accuracy crossing is not a production constitutive rejection; continuation stays stopped at the declared paired milestone"
+        }
+      }
+    }
+  }
+}
