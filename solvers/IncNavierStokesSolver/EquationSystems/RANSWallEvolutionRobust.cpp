@@ -53,7 +53,7 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
     Require(reuse=="Off" || reuse=="ExactHeightV1","unknown immutable reference reuse");
     m_finiteReferenceReuse=reuse=="ExactHeightV1";
     std::string mode;session->LoadSolverInfo("RANSWallRegularizedReference",mode,"NeutralLogV1");
-    Require(mode=="NeutralLogV1" || mode=="FiniteInflowV1","unknown prescribed Regularized reference mode");
+    Require(mode=="NeutralLogV1" || mode=="FiniteInflowV1" || mode=="AnalyticalNeutralInflowV1","unknown prescribed Regularized reference mode");
     if(mode=="FiniteInflowV1")
     {
         Require(AcceptedAWF() && m_variantName=="Regularized" && m_regularizationGamma==0,
@@ -79,6 +79,35 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
         m_finiteInflowIdentity=m_finiteInflow->Interpretation()+":content-sha256="+expected;
     }
 
+    if(mode=="AnalyticalNeutralInflowV1")
+    {
+        Require(AcceptedAWF() && m_variantName=="Regularized" && m_regularizationGamma==0,
+            "analytical neutral inlet requires Regularized accepted AWF and gamma0=0");
+        RANSVector origin{},flow{1,0,0},normal{0,0,1};
+        for(int a=0;a<3;++a)
+        {const std::string axis=a==0?"X":a==1?"Y":"Z";
+         session->LoadParameter("RANSWallReferenceOrigin"+axis,origin[a],0.);
+         session->LoadParameter("RANSWallReferenceFlow"+axis,flow[a],a==0?1.:0.);
+         session->LoadParameter("RANSWallReferenceNormal"+axis,normal[a],a==2?1.:0.);}
+        Require(origin[2]==0 && flow==RANSVector({1,0,0}) && normal==RANSVector({0,0,1}),
+            "analytical neutral setup requires zero normal origin and fixed horizontal incoming frame");
+        double z0;session->LoadParameter("RANSWallNeutralZ0",z0,0.);
+        std::string fit;session->LoadSolverInfo("RANSWallNeutralFitSHA256",fit,"");
+        Require(fit.size()==64,"analytical neutral inlet requires frozen fit identity");
+        m_neutralInflow=std::make_shared<const RANSAnalyticalNeutralInflow>(m_parameters.model,m_robustUstar,
+            m_parameters.geometry.height,z0,m_regularizationScale,origin,flow,normal);
+        m_referenceFlow=flow;m_referenceNormal=normal;
+        m_finiteInflowIdentity=m_neutralInflow->Interpretation()+":fit-sha256="+fit;
+        const auto &c=m_parameters.model.Parameters();
+        m_finiteInflowIdentity+=":model-parameters="+RANSWallSolveJson::Numbers(Vector{
+            c.cMu,c.cEpsilon1,c.cEpsilon2,c.sigmaK,c.sigmaEpsilon,c.yapCoefficient,c.yapLength});
+        if(Composite())
+        {
+            session->LoadSolverInfo("RANSWallCompositeSeed",m_compositeSeedPolicy,"TangentialNeutralV1");
+            Require(m_compositeSeedPolicy=="TangentialNeutralV1" || m_compositeSeedPolicy=="PhysicalHeightInterfaceV1","unsupported neutral mapped seed policy");
+            m_finiteInflowIdentity+=":composite-seed="+m_compositeSeedPolicy+":blend-global-z=.2:physical-mass-native-continuity";
+        }
+    }
 }
 
 std::string RANSWallEvolutionPatch::InnerStressName() const
@@ -112,15 +141,15 @@ RANSClosureValues RANSWallEvolutionPatch::OuterClosure(double k,double epsilon,
 RANSRobustVariant RANSWallEvolutionPatch::RegularizedReferenceAt(const RANSWallCoordinate &p) const
 {
     auto variant=m_robust;
-    if(m_finiteInflow)
+    if(PrescribedInflow())
     {
-        const double z=m_finiteInflow->Height(Physical(p));std::uint64_t key;std::memcpy(&key,&z,sizeof key);
+        const double z=InflowHeight(Physical(p));std::uint64_t key;std::memcpy(&key,&z,sizeof key);
         RANSFiniteInflowReference::Value fixed;
         const auto old=m_fixedReferenceValues.find(key);
         if(m_finiteReferenceReuse && old!=m_fixedReferenceValues.end()){fixed=old->second;++m_fixedReferenceHits;}
         else
         {
-            fixed=m_finiteInflow->AtHeight(z);++m_fixedReferenceMisses;
+            fixed=InflowAtHeight(z);++m_fixedReferenceMisses;
             // This caches the immutable mathematical height function, NOT a
             // native field/gradient row. Geometry/side cannot affect it once
             // the physical incoming height is formed. Each patch owns its
@@ -144,42 +173,57 @@ RANSRobustVariant RANSWallEvolutionPatch::RegularizedReferenceAt(const RANSWallC
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FiniteInflowSeed() const
 {
     if(Composite())return CompositeSeed();
-    Require(m_finiteInflow && !Mapped() && AcceptedAWF(),"finite-profile seed currently requires the affine accepted-AWF pilot");
+    Require(PrescribedInflow() && !Mapped() && AcceptedAWF(),"finite-profile seed currently requires the affine accepted-AWF pilot");
     return FlatFiniteSeed();
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FlatFiniteSeed() const
 {
     const double H=m_parameters.geometry.height;
-    const auto endpoint=m_finiteInflow->AtHeight(H);
+    const auto endpoint=InflowAtHeight(H);
     // The radial seed is the flat inlet completion, not the curved crest
     // budget. Composite setup subsequently applies its physical lift.
     const auto wall=Profile(endpoint.k,Composite()?RANSWallCoordinate{lower[0],0,0}:RANSWallCoordinate{0,0,0},1);
     Require(m_dimension==2 && m_referenceFlow==RANSVector({1,0,0}) && m_referenceNormal==RANSVector({0,0,1}),
         "finite compatibility seed requires the horizontal Cartesian incoming frame");
     std::vector<double> breaks{wall->Reference().cutoff,wall->Original().ViscosityInterceptHeight(),m_parameters.geometry.roughness};
-    for(const auto &q:m_finiteInflow->Knots())if(q.z>0 && q.z<upper[2])breaks.push_back(q.z);
-    const auto velocity=[&](double r){return r<H?endpoint.U*wall->Original().Integrals(r).j0/wall->Original().Integrals().j0:m_finiteInflow->AtHeight(r).U;};
+    for(double z:InflowBreakpoints())if(z>0 && z<upper[2])breaks.push_back(z);
+    const auto velocity=[&](double r){return r<H?endpoint.U*wall->Original().Integrals(r).j0/wall->Original().Integrals().j0:InflowAtHeight(r).U;};
     Vector s(Size());
-    const auto u=fields[0]->RadialProject(velocity,{{0,0,0},{H,0,endpoint.U},{upper[2],0,velocity(upper[2])}},breaks);
+    std::vector<std::array<double,3>> conditions{{0,0,0},{H,0,endpoint.U},{upper[2],0,velocity(upper[2])}};
+    if(AnalyticalNeutralInflow())
+    {conditions.push_back({H,-1,m_robustUstar*m_robustUstar/wall->Original().TotalViscosity(H)});
+     conditions.push_back({H,1,endpoint.dU});conditions.push_back({upper[2],-1,InflowAtHeight(upper[2]).dU});}
+    const auto u=fields[0]->RadialProject(velocity,conditions,breaks);
     std::copy(u.begin(),u.end(),s.begin()+offset[0]);
-    const auto k=fields[K()]->RadialProject([&](double r){return r<H?wall->ReferenceK(r):m_finiteInflow->AtHeight(r).k;},
-        {{0,1,0},{H,0,endpoint.k},{upper[2],0,m_finiteInflow->AtHeight(upper[2]).k}},breaks);
+    std::vector<std::array<double,3>> kConditions{{0,1,0},{H,0,endpoint.k},{upper[2],0,InflowAtHeight(upper[2]).k}};
+    if(AnalyticalNeutralInflow())
+    {kConditions.push_back({H,-1,0});kConditions.push_back({H,1,0});kConditions.push_back({upper[2],-1,0});}
+    const auto k=fields[K()]->RadialProject([&](double r){return r<H?wall->ReferenceK(r):InflowAtHeight(r).k;},kConditions,breaks);
     std::copy(k.begin(),k.end(),s.begin()+offset[K()]);
-    const auto epsilon=fields[Epsilon()]->RadialProject([&](double r){return m_finiteInflow->AtHeight(r).epsilon;},
-        {{H,0,wall->Dissipation(H)},{upper[2],0,m_finiteInflow->AtHeight(upper[2]).epsilon}},breaks);
+    std::vector<std::array<double,3>> eConditions{{H,0,wall->Dissipation(H)},{upper[2],0,InflowAtHeight(upper[2]).epsilon}};
+    if(AnalyticalNeutralInflow())eConditions.push_back({upper[2],-1,-InflowAtHeight(upper[2]).epsilon/upper[2]});
+    const auto epsilon=fields[Epsilon()]->RadialProject([&](double r){return InflowAtHeight(r).epsilon;},eConditions,breaks);
     std::copy(epsilon.begin(),epsilon.end(),s.begin()+offset[Epsilon()]);
+    if(AnalyticalNeutralInflow())
+    {
+        RANSTensor G{};G[0][2]=endpoint.dU;
+        const auto c=EvaluateRANSClosure(m_parameters.model.Model(),endpoint.k,endpoint.epsilon,G,H,m_parameters.model.Parameters(),0);
+        const double jump=c.reynoldsStress[2][2]-2*endpoint.k/3;
+        for(int b=InnerPressure();b<=OuterPressure();++b)
+            for(int i=0;i<size[b];++i)s[offset[b]+i]=(b==InnerPressure()?jump*(upper[2]-H)/upper[2]:-jump*H/upper[2])*m_constants[b][i];
+    }
     return s;
 }
 
 std::string RANSWallEvolutionPatch::FiniteInflowChecks(const Vector &s) const
 {
     namespace J=RANSWallSolveJson;
-    Require(bool(m_finiteInflow),"finite-reference diagnostic needs its explicit provider");
+    Require(PrescribedInflow(),"finite-reference diagnostic needs its explicit provider");
     double workError=0,epsilonError=0,trace=0,symmetry=0,minGamma=1e100,maxGamma=0;
     double minK=1e100,minE=1e100;int points=0;
     for(const auto &q:m_outer)
     {
-        const auto fixed=m_finiteInflow->At(Physical(q.v.coordinate));
+        const auto fixed=InflowAt(Physical(q.v.coordinate));
         minGamma=std::min(minGamma,fixed.gamma);maxGamma=std::max(maxGamma,fixed.gamma);
         const auto v=RegularizedReferenceAt(q.v.coordinate);
         Require(v.gamma==fixed.gamma && v.referenceStrain==fixed.strain,"provider/assembly reference differs");
@@ -200,21 +244,44 @@ std::string RANSWallEvolutionPatch::FiniteInflowChecks(const Vector &s) const
     std::vector<std::string> samples;
     for(double z:{m_parameters.geometry.height,.04,.1,.25,.4,.8,1.})
     {
-        const auto v=m_finiteInflow->AtHeight(z);
+        const auto v=InflowAtHeight(z);
         samples.push_back(J::Numbers(Vector{z,v.U,v.dU,v.k,v.epsilon,v.nuT,v.gamma}));
     }
-    const double referenceK=m_finiteInflow->AtHeight(m_parameters.geometry.height).k;
+    const double referenceK=InflowAtHeight(m_parameters.geometry.height).k;
     const auto inletWall=Profile(referenceK,{lower[0],0,0},1);
     const auto &wallParameters=inletWall->Original().Parameters();
+    Vector errors(6);double traction=0,area=0;
+    if(AnalyticalNeutralInflow() && (!Mapped() || m_mapping.amplitude==0))
+    {
+        const double H=m_parameters.geometry.height,UH=InflowAtHeight(H).U;
+        for(const auto &q:Quadrature(0,32))
+        {
+            const double r=q.coordinate[2];const bool inner=r<H;
+            const double u=inner?inletWall->Original().Velocity(r,{UH,0},{0,0})[0]:InflowAtHeight(r).U;
+            const double du=inner?inletWall->Original().VelocityGradient(r,{UH,0},{0,0})[0]:InflowAtHeight(r).dU;
+            const double k=inner?inletWall->ReferenceK(r):referenceK,dk=inner?inletWall->ReferenceKGradient(r):0.;
+            const Vector d{q.Value(s,offset[0])-u,q.Gradient(s,offset[0])[2]-du,
+                q.Value(s,offset[K()])-k,q.Gradient(s,offset[K()])[2]-dk};
+            for(int j=0;j<4;++j)errors[j]+=q.weight*d[j]*d[j];
+        }
+        for(const auto &q:Quadrature(Epsilon(),32))
+        {const double d=q.Value(s,offset[Epsilon()])-InflowAtHeight(q.coordinate[2]).epsilon;errors[4]+=q.weight*d*d;}
+        for(const auto &f:SurfaceView(0,2,0,-1,32))
+        {traction+=f.weight*inletWall->Original().TotalViscosity(0)*f.test.Gradient(s,offset[0])[2];area+=f.weight;}
+        for(int j=0;j<5;++j)errors[j]=std::sqrt(errors[j]);
+        errors[5]=traction/area;
+    }
     return J::Object({{"wall_reference_scales",J::Object({{"K",J::Number(referenceK)},
         {"positive_viscosity_intercept",J::Number(inletWall->Original().ViscosityInterceptHeight())},
         {"molecular_to_linear_eddy_scale",J::Number(m_parameters.geometry.molecularNu/(wallParameters.cMu*wallParameters.cLength*std::sqrt(referenceK)))},
         {"cutoff",J::Number(inletWall->Reference().cutoff)},
         {"scope",J::Quote("flat incoming budget-AWF reference, not actual hill production")}})},
+        {"flat_reference_error_columns",J::Quote("U_L2,dUdz_L2,k_L2,dkdz_L2,outer_epsilon_L2,mean_sampled_traction; only affine/zero-amplitude analytical family")},
+        {"flat_reference_errors",J::Numbers(errors)},
         {"reference_reuse_mode",J::Quote(m_finiteReferenceReuse?"ExactHeightV1":"Off")},
         {"reference_reuse_hits_misses_entries_clears",J::Numbers(Vector{double(m_fixedReferenceHits),double(m_fixedReferenceMisses),double(m_fixedReferenceValues.size()),double(m_fixedReferenceClears)})},
-        {"mode",J::Quote("FiniteInflowV1")},{"identity",J::Quote(m_finiteInflowIdentity)},
-        {"comparison_reference",J::Quote("native finite-profile initialized seed; not analytical neutral equilibrium")},
+        {"mode",J::Quote(AnalyticalNeutralInflow()?"AnalyticalNeutralInflowV1":"FiniteInflowV1")},{"identity",J::Quote(m_finiteInflowIdentity)},
+        {"comparison_reference",J::Quote(AnalyticalNeutralInflow()?"exact neutral outer law; accepted nonconstant inner ReferenceK; native represented seed":"native finite-profile initialized seed; not analytical neutral equilibrium")},
         {"frame_height",J::Quote("dot(physical-X_in,n_in); independent of wall distance and outer chart")},
         {"outer_native_points",J::Number(points)},{"gamma_min_max",J::Numbers(Vector{minGamma,maxGamma})},
         {"strain_trace_symmetry_defects",J::Numbers(Vector{trace,symmetry})},

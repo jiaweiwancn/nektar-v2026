@@ -129,8 +129,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         std::string coordinates;m_session->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
         Require(coordinates=="Physical" || coordinates=="Chart","unknown wall function coordinate convention");m_chartFunctions=coordinates=="Chart";
         std::string mode,condensation;m_session->LoadSolverInfo("RANSWallReference",mode,"Neutral");
-        Require(mode=="Neutral" || mode=="Functions" || mode=="FiniteInflowV1","unknown native reference initializer");m_neutral=mode=="Neutral";
-        Require((mode=="FiniteInflowV1")==m_patch->FiniteInflowReference(),"finite reference/provider initializer must be selected consistently");
+        Require(mode=="Neutral" || mode=="Functions" || mode=="FiniteInflowV1" || mode=="AnalyticalNeutralInflowV1","unknown native reference initializer");m_neutral=mode=="Neutral";
+        Require((mode=="FiniteInflowV1")==m_patch->FiniteInflowReference() && (mode=="AnalyticalNeutralInflowV1")==m_patch->AnalyticalNeutralInflow(),"finite reference/provider initializer must be selected consistently");
         m_session->LoadSolverInfo("RANSWallCondense",condensation,"False");Require(condensation=="True" || condensation=="False","invalid condensation selector");m_condensed=condensation=="True";
         m_session->LoadParameter("RANSWallEta",m_eta,0.);m_session->LoadParameter("RANSWallFrictionVelocity",m_ustar,.4);
         m_session->LoadParameter("RANSWallDirectionX",m_direction[0],1.);m_session->LoadParameter("RANSWallDirectionY",m_direction[1],0.);
@@ -221,7 +221,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         // FiniteInflowV1 constructs and freezes native external traces from
         // its own constrained seed. It must not require unrelated analytic
         // BoundaryValues expressions from the legacy Functions initializer.
-        if(!m_neutral && !m_patch->FiniteInflowReference())
+        if(!m_neutral && !m_patch->PrescribedInflow())
         {
             for(int b=0;b<dim;++b)
             {
@@ -297,13 +297,13 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
         }
         else
         {
-        m_state=m_patch->FiniteInflowReference()?m_patch->FiniteInflowSeed():
+        m_state=m_patch->PrescribedInflow()?m_patch->FiniteInflowSeed():
             (m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time));
-        if(m_neutral || m_patch->FiniteInflowReference())m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
+        if(m_neutral || m_patch->PrescribedInflow())m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
         else if(m_patch->Mapped() || m_patch->MatchingEnabled() || m_patch->CappedDestruction())
             m_state=m_patch->Lift(m_state,m_time,m_data);
         if(m_neutral && m_patch->MatchingEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
-        if(m_patch->FiniteInflowReference())
+        if(m_patch->PrescribedInflow())
         {
             const auto domain=m_patch->ScalarDomain(m_state,m_time,m_data);
             Require(domain.admissible,"finite-profile native initialization: "+m_patch->ScalarDomainJSON(domain));
@@ -929,7 +929,7 @@ void RANSEquilibriumWallEvolution::v_EvaluateExactSolution(unsigned int field,Ar
     for(int i=0;i<nq;++i)
     {
         const RANSWallCoordinate point{x[i],m_patch->Dimension()==3?y[i]:0.,m_patch->Dimension()==3?z[i]:y[i]};
-        out[i]=(m_neutral || m_patch->FiniteInflowReference())?m_patch->fields[block]->Point(point).Value(m_patch->Reference(),m_patch->offset[block]):exact[block](point,time);
+        out[i]=(m_neutral || m_patch->PrescribedInflow())?m_patch->fields[block]->Point(point).Value(m_patch->Reference(),m_patch->offset[block]):exact[block](point,time);
     }
 }
 void RANSEquilibriumWallEvolution::v_Output()
@@ -997,7 +997,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"time\":"<<m_time<<",\"dt\":"<<m_timestep<<",\"steps\":"<<snapshot.steps<<",\"order\":"<<m_order
        <<",\"chi\":"<<(m_patch->AcceptedAWF()?"null":RANSWallSolveJson::Number(m_patch->Parameters().chi))<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
        <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
-    if(m_patch->FiniteInflowReference())out<<",\"finite_inflow_reference\":"<<m_patch->FiniteInflowChecks(m_state);
+    if(m_patch->PrescribedInflow())out<<",\"finite_inflow_reference\":"<<m_patch->FiniteInflowChecks(m_state);
     if(m_patch->OpenBoundary())out<<",\"developing_boundary\":"<<m_patch->DevelopingChecks(m_state,m_time,m_data);
     out<<",\"attempt_packet_status\":"<<m_patch->AttemptPacketStatus()<<",\"rollback_receipt\":"<<m_rollbackReceipt;
     out<<",\"wall_formulation\":"<<m_patch->FormulationMetadata()<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())

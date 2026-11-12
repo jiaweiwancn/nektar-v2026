@@ -237,30 +237,38 @@ int main(int argc,char **argv)
         serial->LoadParameter("RANSWallTangentialOrder",p.tangentialOrder,8);serial->LoadParameter("RANSWallNormalOrder",p.normalOrder,16);
         RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
         const auto operation=packet.get<std::string>("operation","");
-        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.Composite() && (operation=="h2b_operators" || operation=="h2b_checkpoint"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
+        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.Composite() && (operation=="h2b_operators" || operation=="h2c_seed" || operation=="h2b_checkpoint" || operation=="h2c_checkpoint"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
         Require(patch.InnerStressName()==packet.get<std::string>("inner_stress_model"),"packet law differs from session");
         for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
-        if(operation=="h2b_operators")
+        if(operation=="h2b_operators" || operation=="h2c_seed")
         {
-            Require(patch.FiniteInflowReference() && !packet.get_optional<std::string>("native_checkpoint") && RANSWallR3::HashFile(argv[1])==packet.get<std::string>("xml_sha256"),"H2b operator fixture XML/initialization contract differs");
+            Require(patch.PrescribedInflow() && !packet.get_optional<std::string>("native_checkpoint") && RANSWallR3::HashFile(argv[1])==packet.get<std::string>("xml_sha256"),"H2b operator fixture XML/initialization contract differs");
             const auto state=patch.FiniteInflowSeed();const auto hash=RANSWallR3::Hash(state);data.fixedBoundary=patch.FixedReferenceBoundary(state);
             const auto domain=patch.ScalarDomain(state,0,data,true);
             Require(domain.admissible,"H2b setup scalar/budget gate: "+patch.ScalarDomainJSON(domain,true));
             patch.SetReference(state,data,0,0);
             RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,0);
-            const auto checks=patch.CompositeChecks(state,0,data);const auto audit=patch.CompleteRestrictedAudit(state,state,0,0,data);
+            const auto checks=operation=="h2c_seed"?patch.FiniteInflowChecks(state):patch.CompositeChecks(state,0,data);const auto audit=patch.CompleteRestrictedAudit(state,state,0,0,data);
             std::string budget;
             try{budget=patch.FiniteTurbulenceBudget(state,state,0,0,data);}
             catch(const std::exception &error)
             {budget=J::Object({{"status",J::Quote("additional_diagnostic_failed")},{"failure",J::Quote(error.what())},
                 {"native_operator_and_hard_audit_preserved","true"},{"governing_solves","0"},{"physical_commits","0"}});}
+            std::string footFixture="null";
+            if(operation=="h2c_seed" && patch.Composite() && patch.Mapping().amplitude!=0)
+            {
+                try{footFixture=patch.MovingFootChecks(state,data);}
+                catch(const std::exception &error)
+                {footFixture=J::Object({{"passed","false"},{"failure",J::Quote(error.what())},{"native_seed_audit_preserved","true"}});}
+            }
             std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"checks",checks},{"audit",Maps(audit)},
                 {"state",J::Numbers(state)},{"state_sha256",J::Quote(hash)},{"seed_setup",patch.CompositeSeedInfo()},
                 {"scalar_inventory",patch.ScalarDomainJSON(domain)},
-                {"seed_target_witnesses",MappedSeedWitnesses(patch,state,audit)},
+                {"seed_target_witnesses",patch.Composite() && patch.Mapping().amplitude!=0?MappedSeedWitnesses(patch,state,audit):"[]"},
+                {"moving_foot_fixture",footFixture},
                 {"seed_constitutive",patch.ConstitutiveStateDiagnostic(state,0,data,{})},{"physical_samples",Maps(patch.PhysicalSamples(state,0,data))},
                 {"native_budget",budget},
                 {"evaluation_reuse",patch.EvaluationReuseJSON()},
@@ -284,8 +292,8 @@ int main(int argc,char **argv)
                 {"scope",J::Quote("exact retained uncommitted setup candidate; scalar/sampling applicability only; not an accepted checkpoint or migration")}})<<'\n';
             Require(out.good(),"initial domain diagnostic write failed");world->Finalise();return 0;
         }
-        const bool finiteH1=operation=="finite_inflow_h1" || operation=="h2b_checkpoint";
-        Require(!finiteH1 || (patch.FiniteInflowReference() && packet.get_optional<std::string>("native_checkpoint")),"finite H1 readback requires its immutable compatible checkpoint");
+        const bool finiteH1=operation=="finite_inflow_h1" || operation=="h2b_checkpoint" || operation=="h2c_checkpoint";
+        Require(!finiteH1 || ((operation=="h2c_checkpoint"?patch.AnalyticalNeutralInflow():patch.FiniteInflowReference()) && packet.get_optional<std::string>("native_checkpoint")),"finite H1 readback requires its immutable compatible checkpoint");
         Require(operation!="native_epsilon_metric" || packet.get_optional<std::string>("native_checkpoint"),
             "native epsilon metric requires an immutable native checkpoint");
         if(operation=="archived_report_stages")
@@ -399,7 +407,7 @@ int main(int argc,char **argv)
             serial->LoadParameter("RANSWallDirectionX",dx,1.);serial->LoadParameter("RANSWallDirectionY",dy,0.);
             std::string mode,coordinates;serial->LoadSolverInfo("RANSWallReference",mode,"Neutral");
             serial->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
-            Require(((mode=="Neutral" && !patch.FiniteInflowReference()) || (finiteH1 && mode=="FiniteInflowV1")) && eta==0,
+            Require(((mode=="Neutral" && !patch.FiniteInflowReference()) || (finiteH1 && mode==(operation=="h2c_checkpoint"?"AnalyticalNeutralInflowV1":"FiniteInflowV1"))) && eta==0,
                 "native replay requires neutral eta=0, or the explicit finite-H1 immutable operation");
             const bool neutral=mode=="Neutral";
             const auto signature=RANSWallPhysicsSignature(patch,serial,eta,neutral,us,{dx,dy},coordinates=="Chart");
@@ -640,12 +648,24 @@ int main(int argc,char **argv)
             const auto &resolved=components.terms.at("total_constrained");
             for(int i=0;i<patch.Size();++i)residualError=std::max(residualError,std::abs(resolved[i]-native[i]));
             Require(residualError<2e-9,"finite-reference stable decomposition differs from native residual");
-            if(operation=="h2b_checkpoint")
+            if(operation=="h2b_checkpoint" || operation=="h2c_checkpoint")
             {
+                std::string analytical="null";
+                if(operation=="h2c_checkpoint" && !patch.Mapped())
+                {
+                    const auto exact=patch.ResidualResolutionComponents(state,state,0,time,data,false,false,true);
+                    auto free=exact.terms.at("total_constrained");
+                    for(auto [row,value]:exact.constraints){(void)value;free[row]=0.;}
+                    const auto norms=patch.Norms(free,exact.constraints,us);
+                    analytical=J::Object({{"first_four_scaled_free_test_load_norms",J::Numbers(Vector(norms.begin(),norms.begin()+4))},
+                        {"definition",J::Quote("analytical AWF/log values AND analytical gradients under native tests/quadrature; essential rows zeroed; not a residual of the retained coefficient field")},
+                        {"state_unchanged",J::Boolean(before==RANSWallR3::Hash(state))}});
+                }
                 std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"native_replay_context",replayContext},
                     {"state_sha256",J::Quote(before)},{"reference_sha256",J::Quote(referenceHash)},{"physical_samples",Maps(patch.PhysicalSamples(state,time,data))},
                     {"audit",Maps(audit)},{"native_turbulence_budget",turbulence},{"developing_boundary",boundaryStatus},
                     {"selected_spatial_block_norms",J::Numbers(patch.Norms(native,components.constraints,us))},
+                    {"analytical_free_test_loads",analytical},
                     {"geometry_identity",J::Quote(patch.GeometrySignature())},{"provider",patch.FiniteInflowChecks(state)},
                     {"governing_solves","0"},{"physical_commits","0"},{"initialization_work",J::Numbers(patch.InitializationWork())},
                     {"native_history_advanced","false"},{"selected_state_unchanged","true"}})<<'\n';world->Finalise();return 0;

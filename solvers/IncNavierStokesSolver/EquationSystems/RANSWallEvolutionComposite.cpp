@@ -101,7 +101,7 @@ double RANSWallEvolutionPatch::SeedRadial(int block,double z,int derivative) con
         if(z<c[0])break;
         const long double h=c[1]-c[0],t=std::min(1.L,(z-c[0])/h);
         if(derivative<0){integral+=h*t*(c[2]+t*(c[3]/2+t*(c[4]/3+t*c[5]/4)));if(z<=c[1])return integral;}
-        else if(z<=c[1]+1e-14)return derivative?(c[3]+t*(2*c[4]+3*t*c[5]))/h:c[2]+t*(c[3]+t*(c[4]+t*c[5]));
+        else if(z<=c[1]+1e-14)return derivative==2?(2*c[4]+6*t*c[5])/(h*h):derivative?(c[3]+t*(2*c[4]+3*t*c[5]))/h:c[2]+t*(c[3]+t*(c[4]+t*c[5]));
     }
     if(derivative<0)return integral;
     throw std::runtime_error("seed radial evaluation outside represented panels");
@@ -111,10 +111,41 @@ RANSVector RANSWallEvolutionPatch::CompositeSeedVelocity(const RANSWallCoordinat
 {
     const auto p=CompositeChartCoordinate(raw);
     if(m_compositeFlatSeed.empty())Require(false,"composite seed target needs its explicit radial setup projection");
-    const double H=m_parameters.geometry.height,B=.4,z=Physical(p)[2];
+    const double H=m_parameters.geometry.height,B=AnalyticalNeutralInflow()?.2:.4,z=Physical(p)[2];
     auto value=[&](double r){return SeedRadial(0,r);};
     auto derivative=[&](double r){return SeedRadial(0,r,1);};
     const auto g=m_composite->Inner(p[0],std::min(p[2],H));
+    if(m_compositeSeedPolicy=="PhysicalHeightInterfaceV1")
+    {
+        // A setup choice, not a wall-law/source change: interface speed may
+        // follow the incoming profile at its PHYSICAL height. The complete
+        // streamfunction (including its normal velocity) is then projected.
+        const auto gh=m_composite->Inner(p[0],H);
+        const double h=gh.point[2],hs=gh.jacobian[2][0],dx=gh.jacobian[0][0],nz=gh.normal[2],UH=value(H);
+        const double fp=gh.tangent1[2]/gh.tangent1[0],q=gh.baseArea,kappa=gh.kappa1;
+        const double fpp=-kappa*q*q*q;
+        const double fppp=std::abs(p[0])<m_mapping.lengthX?m_mapping.amplitude*std::pow(std::acos(-1.)/m_mapping.lengthX,3)/2*std::sin(std::acos(-1.)*p[0]/m_mapping.lengthX):0.;
+        const double nzs=fp*kappa,nzss=-(fpp*fpp+fp*fppp)/(q*q*q)+3*fp*fp*fpp*fpp/std::pow(q,5);
+        const double hss=fpp+H*nzss;
+        const double a=value(h)/(UH*nz);
+        const double as=derivative(h)*hs/(UH*nz)-value(h)*nzs/(UH*nz*nz);
+        const double ass=(SeedRadial(0,h,2)*hs*hs+derivative(h)*hss)/(UH*nz)-2*derivative(h)*hs*nzs/(UH*nz*nz)-value(h)*nzss/(UH*nz*nz)+2*value(h)*nzs*nzs/(UH*nz*nz*nz);
+        const double FH=SeedRadial(0,H,-1);
+        if(p[2]<=H)
+        {
+            const double ps=as*SeedRadial(0,p[2],-1),pr=a*value(p[2]);
+            return {ps*g.inverse[0][2]+pr*g.inverse[2][2],0,-ps*g.inverse[0][0]-pr*g.inverse[2][0]};
+        }
+        if(z>=B)return {value(z),0,0};
+        const double J=1+H*kappa,kappas=-fppp/std::pow(q,3)+3*fp*fpp*fpp/std::pow(q,5),qs=fp*fpp/q;
+        const double I=gh.inverse[0][2],Is=fpp/(q*q*J)-fp*(2*q*qs*J+q*q*H*kappas)/(q*q*q*q*J*J);
+        const double delta=B-h,t=(z-h)/delta,ts=-hs*(1-t)/delta;
+        const double C=a*FH-SeedRadial(0,h,-1),Cs=as*FH-value(h)*hs,D=as*FH*I,Ds=ass*FH*I+as*FH*Is;
+        const double h00=1-3*t*t+2*t*t*t,h10=t-2*t*t+t*t*t,d00=-6*t+6*t*t,d10=1-4*t+3*t*t;
+        const double u=value(z)+C*d00/delta+D*d10;
+        const double ps=Cs*h00+C*d00*ts+(-hs*D+delta*Ds)*h10+delta*D*d10*ts;
+        return {u,0,-ps/dx};
+    }
     if(p[2]<=H)return {value(p[2])*g.tangent1[0],0,value(p[2])*g.tangent1[2]};
     if(z>=B)return {value(z),0,0};
     auto integral=[&](double top){return SeedRadial(0,top,-1);};
@@ -132,9 +163,9 @@ RANSVector RANSWallEvolutionPatch::CompositeSeedVelocity(const RANSWallCoordinat
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CompositeSeed() const
 {
-    Require(Composite() && m_finiteInflow && AcceptedAWF() && OpenBoundary(),"mapped seed requires the composite finite/open accepted-AWF contract");
+    Require(Composite() && PrescribedInflow() && AcceptedAWF() && OpenBoundary(),"mapped seed requires the composite finite/open accepted-AWF contract");
     RANSWallTiming::Scope timing("startup.composite_seed");m_compositeFlatSeed=FlatFiniteSeed();
-    const double H=m_parameters.geometry.height,B=.4;auto s=m_compositeFlatSeed;
+    const double H=m_parameters.geometry.height,B=AnalyticalNeutralInflow()?.2:.4;auto s=m_compositeFlatSeed;
     if(m_mapping.amplitude==0){m_compositeSeedInfo=J::Object({{"method",J::Quote("exact composite-flat radial seed")},{"governing_solves","0"}});return s;}
     for(int block:{0,K(),Epsilon()})
     {
@@ -161,15 +192,20 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CompositeSeed() const
     {
         auto boundary=fields[b]->Boundary([](const auto&){return 0.;},[&](int axis,int side,const auto &el)
         {return (axis==0 && !side && el.lower[0]==lower[0]) || (axis==2 && !side && b<K() && el.lower[2]==0.) ||
+            (AnalyticalNeutralInflow() && axis==2 && side && b==1 && el.upper[2]==upper[2]) ||
             (axis==2 && !side && b==Epsilon() && el.lower[2]==H);});
         for(auto [id,v]:boundary)fixed[offset[b]+id]=m_compositeFlatSeed[offset[b]+id];
     }
     // Keep the intended inner budget-reference k exactly. This is seed setup,
     // not a prescribed ground-k condition in physical evolution.
     for(const auto &q:Quadrature(K(),4))if(q.coordinate[2]<H)for(int id:q.ids)fixed[offset[K()]+id]=m_compositeFlatSeed[offset[K()]+id];
-    for(int b=0;b<2;++b)for(int e=0;e<fields[b]->Elements().size();++e)
+    // Only the historical finite completion has an exactly constant tail
+    // whose coefficients may be frozen wholesale. A represented logarithm
+    // above a curved chart is not exactly divergence free; leave its velocity
+    // coefficients available to the physical-mass continuity projection.
+    if(!AnalyticalNeutralInflow())for(int b=0;b<2;++b)for(int e=0;e<fields[b]->Elements().size();++e)
         if(fields[b]->Elements()[e].lower[2]>=B)for(int id:fields[b]->ElementPoint(e,fields[b]->Elements()[e].lower).ids)
-            fixed[offset[b]+id]=(b==0?FixedInflow().AtHeight(B).U:0.)*m_constants[b][id];
+            fixed[offset[b]+id]=AnalyticalNeutralInflow()?(b==0?s[offset[b]+id]:0.):(b==0?InflowAtHeight(B).U:0.)*m_constants[b][id];
     // Consistent physical L2 projection with the exact setup constraints.
     for(int b=0;b<InnerPressure();++b)
     {
@@ -217,7 +253,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CompositeSeed() const
     auto remaining=Multiply(D,delta);
     for(int i=0;i<D.size();++i)remaining[i]+=defect[i];
     Require(Maximum(remaining)<1e-10,"mapped seed native continuity projection failed");
-    m_compositeSeedInfo=J::Object({{"method",J::Quote("physical streamfunction lift; unstrained tail above z=.4; physical consistent-mass constrained native projection")},
+    m_compositeSeedInfo=J::Object({{"initializer_policy",J::Quote(m_compositeSeedPolicy)},{"method",J::Quote(AnalyticalNeutralInflow()?"physical streamfunction lift blending to exact incoming neutral law above z=.2; no constant tail; physical-mass/native continuity setup":"physical streamfunction lift; unstrained tail above z=.4; physical consistent-mass constrained native projection")},
         {"setup_radial_projections","3"},{"setup_field_projections","2"},{"setup_continuity_mass_factors","1"},
         {"setup_physical_projection_mass_solves","6"},{"setup_fixed_constraint_mass_solves","4"},
         {"setup_continuity_schur_solves","1"},{"independent_continuity_rows",J::Number(Q.size())},
@@ -225,9 +261,49 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CompositeSeed() const
         {"governing_solves","0"},{"physical_steps","0"}});return s;
 }
 
+std::string RANSWallEvolutionPatch::MovingFootChecks(const Vector &s,const RANSWallEvolutionData &data) const
+{
+    const double H=m_parameters.geometry.height,x=-m_mapping.lengthX;
+    const auto wall=Profile(SampleK(s,{x,0,0}),{x,0,0},1,+1);
+    const auto nearest=std::min_element(wall->Quadrature().begin(),wall->Quadrature().end(),
+        [&](const auto &a,const auto &b){return std::abs(a.r-.6*H)<std::abs(b.r-.6*H);});
+    const double r=nearest->r;
+    const RANSWallCoordinate p{x,0,r};auto test=s;
+    std::fill(test.begin()+offset[0],test.begin()+offset[0]+size[0],0.);
+    const auto v=fields[1]->Project([&](const RANSWallCoordinate &c)
+        {return 1e9*std::max(0.,c[0]-x)*c[2]*(H-c[2]);});
+    std::copy(v.begin(),v.end(),test.begin()+offset[1]);
+    std::vector<std::string> sides;double eigen[2];int i=0;
+    for(int foot:{-1,1})
+    {
+        const auto row=RayObservationRow(0,p,foot);RANSTensor g{};
+        for(int a=0;a<2;++a)g[PhysicalAxis(a)]=row.Gradient(test,offset[a]);
+        const auto profile=Profile(SampleK(test,p),p,1,foot);
+        const double k=row.Value(test,offset[K()]);
+        const auto stress=InnerStress(k,profile->Original().EddyViscosity(r),g);
+        eigen[i++]=J::Eigenvalues(stress.reynoldsStress)[0];
+        sides.push_back(J::Object({{"tangential_side",J::Number(foot)},{"geometry",J::Number(row.geometry)},
+            {"element",J::Number(row.element)},{"minimum_covariance",J::Number(eigen[i-1])}}));
+    }
+    Require(eigen[0]>0 && eigen[1]<0,"moving foot fixture did not separate the one-sided gradients");
+    const auto domain=ScalarDomain(test,0,data,true);Require(domain.admissible,"foot fixture changed scalar admissibility");
+    int minus=0,plus=0;bool offGrid=true;
+    for(const auto &o:domain.observations)
+        if(o.coordinate==p && o.inventory=="constitutive_foot_minus_budget_ray")minus=o.geometry+1;
+        else if(o.coordinate==p && o.inventory=="constitutive_foot_plus_budget_ray")plus=o.geometry+1;
+    for(const auto &o:ReconstructionLocations(K(),true))if(o.row.coordinate==p)offGrid=false;
+    Require(minus && plus && minus!=plus && offGrid,"moving foot sides absent, aliased or on fixed grid");
+    const auto before=RANSWallR3::Hash(test);const auto audit=CompleteRestrictedAudit(test,test,0,0,data);
+    Require(before==RANSWallR3::Hash(test) && audit.at("accepted_awf_hard_admissible")[0]==0,"negative moving covariance escaped hard audit");
+    return J::Object({{"passed","true"},{"point",J::Numbers(p)},{"sides",J::List(sides)},
+        {"off_fixed_reconstruction_grid",J::Boolean(offGrid)},{"minus_plus_inventory_geometries",J::Numbers(Vector{double(minus-1),double(plus-1)})},
+        {"audit",J::Object({{"accepted_awf_hard_admissible",J::Numbers(audit.at("accepted_awf_hard_admissible"))}})},
+        {"physical_solves","0"}});
+}
+
 std::string RANSWallEvolutionPatch::CompositeChecks(const Vector &s,double time,const RANSWallEvolutionData &data) const
 {
-    Require(AcceptedAWF() && FiniteInflowReference() && OpenBoundary(),"H2b operators require the declared finite/open budget AWF");
+    Require(AcceptedAWF() && PrescribedInflow() && OpenBoundary(),"H2b operators require the declared finite/open budget AWF");
     const auto before=RANSWallR3::Hash(s);const double H=m_parameters.geometry.height;
     if(Composite())
     {

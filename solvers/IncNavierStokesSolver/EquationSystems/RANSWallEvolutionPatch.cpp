@@ -270,8 +270,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         "ExactStepV1 is restricted to the serial flat2D one-sweep pilot");
     session->LoadSolverInfo("RANSWallPimpleKInventory",m_pimpleKInventory,"LegacyV1");
     Require(m_pimpleKInventory=="LegacyV1" || (PimpleKBoundEnabled() &&
-        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3" || (AcceptedAWF() && m_pimpleKInventory=="AcceptedBudgetV1"))),"invalid PIMPLE k inventory policy");
-    Require(!AcceptedAWF() || (PimpleKBoundEnabled() && m_pimpleKInventory=="AcceptedBudgetV1"),"accepted AWF requires its model-aware inventory");
+        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3" || (AcceptedAWF() && (m_pimpleKInventory=="AcceptedBudgetV1" || m_pimpleKInventory=="AcceptedBudgetV2")))),"invalid PIMPLE k inventory policy");
+    Require(!AcceptedAWF() || (PimpleKBoundEnabled() && (m_pimpleKInventory=="AcceptedBudgetV1" || m_pimpleKInventory=="AcceptedBudgetV2")),"accepted AWF requires its model-aware inventory");
     session->LoadParameter("RANSWallPimpleKFloorRelative",m_pimpleKFloorRelative,1e-8);
     Require(std::isfinite(m_pimpleKFloorRelative) && m_pimpleKFloorRelative>0 && m_pimpleKFloorRelative<=1.,"invalid k floor relative to K0");
     session->LoadParameter("RANSWallPimpleKBoundMaxAdd",m_kBoundMaxAdd,2000);
@@ -519,7 +519,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             Point(Epsilon(),q.coordinate),q.weight*(Mapped()?GeometryAt(q.coordinate).determinant:1.)});
     m_solver=std::make_shared<SolverCache>();m_solver->free.resize(Gauge());m_solver->massFactors.resize(Gauge());
     InitialiseRobust(session);
-    Require(!Composite() || (AcceptedAWF() && FiniteInflowReference() && OpenBoundary() &&
+    Require(!Composite() || (AcceptedAWF() && PrescribedInflow() && OpenBoundary() &&
         PimpleSingleSweep() && VariantName()=="Regularized" && InnerStressName()=="Linear" &&
         m_robust.beta==.4 && m_regularizationScale==1. && m_regularizationGamma==0.),
         "CompositeHillV1 is restricted to the finite/open Regularized(beta=.4,Gamma=1,gamma0=0)/Linear budget-AWF one-sweep pilot");
@@ -688,7 +688,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Project(const std::vector
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::NeutralReference(double us,const std::array<double,2> &direction) const
 {
     Require(m_mapping.PlanarConstantHeight(),"neutral reference requires a planar constant-height map");
-    Require(!FiniteInflowReference(),"neutral initializer is not the finite experimental reference");
+    Require(!PrescribedInflow(),"neutral initializer is not the finite experimental reference");
     return FlatReference(us,direction);
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FlatReference(double us,const std::array<double,2> &direction) const
@@ -1658,7 +1658,7 @@ std::string RANSWallEvolutionPatch::Signature() const
         for(double v:m_referenceNormal)text<<':'<<v;
         text<<':'<<m_robustUstar<<":incoming-flat-strain-extension";
     }
-    if(m_finiteInflow)text<<":regularized-reference="<<m_finiteInflowIdentity;
+    if(PrescribedInflow())text<<":regularized-reference="<<m_finiteInflowIdentity;
     if(OpenBoundary())text<<":boundary="<<BoundaryPolicyJSON();
     if(m_uniformEP)text<<":wall_policy=UniformEPFlat-v1:chi=1:full_EP_trace:require_intrinsic_admissibility";
     if(m_transitionEnabled)

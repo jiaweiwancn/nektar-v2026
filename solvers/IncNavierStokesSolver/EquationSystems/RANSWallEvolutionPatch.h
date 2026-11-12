@@ -10,6 +10,7 @@
 #include <LibUtilities/Communication/Comm.h>
 #include <SolverUtils/Turbulence/RANSWallNormalMap.h>
 #include <SolverUtils/Turbulence/RANSFiniteInflowReference.h>
+#include <SolverUtils/Turbulence/RANSAnalyticalNeutralInflow.h>
 #include <SolverUtils/Turbulence/RANSTwoRegionHill.h>
 #include <SolverUtils/Turbulence/EquilibriumAWFTransition.h>
 #include <SolverUtils/Turbulence/RANSRobustVariant.h>
@@ -158,6 +159,16 @@ public:
     Vector Project(const std::vector<RANSWallEvolutionFunction> &functions,double time) const;
     Vector NeutralReference(double ustar,const std::array<double,2> &direction) const;
     bool FiniteInflowReference() const { return bool(m_finiteInflow); }
+    bool AnalyticalNeutralInflow() const { return bool(m_neutralInflow); }
+    bool PrescribedInflow() const { return FiniteInflowReference() || AnalyticalNeutralInflow(); }
+    SolverUtils::RANSFiniteInflowReference::Value InflowAtHeight(double z) const
+    { return m_neutralInflow?m_neutralInflow->AtHeight(z):FixedInflow().AtHeight(z); }
+    SolverUtils::RANSFiniteInflowReference::Value InflowAt(const RANSWallCoordinate &physical) const
+    { return m_neutralInflow?m_neutralInflow->At(physical):FixedInflow().At(physical); }
+    double InflowHeight(const RANSWallCoordinate &physical) const
+    { return m_neutralInflow?m_neutralInflow->Height(physical):FixedInflow().Height(physical); }
+    std::vector<double> InflowBreakpoints() const
+    { std::vector<double> v;if(m_finiteInflow)for(const auto &k:m_finiteInflow->Knots())v.push_back(k.z);return v; }
     const SolverUtils::RANSFiniteInflowReference &FixedInflow() const
     { if(!m_finiteInflow)throw std::invalid_argument("no finite incoming reference selected");return *m_finiteInflow; }
     Vector FiniteInflowSeed() const;
@@ -194,13 +205,16 @@ public:
         double value=0,scale=1,weight=0;
         bool strict=false,dependentTrace=false;
         std::shared_ptr<RANSWallGlobalPoint> functional;
+        int tangentialSide=0;
     };
-    static const char *AuditRevision() { return "NativeElementSideV2"; }
+    const char *AuditRevision() const { return m_pimpleKInventory=="AcceptedBudgetV2"?"NativeTangentialSideV3":"NativeElementSideV2"; }
+    RANSWallGlobalPoint RayObservationRow(int block,const RANSWallCoordinate&,int footSide=0) const;
+    std::string MovingFootChecks(const Vector&,const RANSWallEvolutionData&) const;
     struct ObservationProvenance
     {
         std::shared_ptr<const RANSWallGlobalPoint> velocity;
         bool inner=false;
-        int radialSide=0;
+        int radialSide=0,tangentialSide=0;
     };
     ObservationProvenance ResolveObservation(const ScalarObservation &point) const;
     RANSWallGlobalPoint GeometryPoint(int block,int geometry,const RANSWallCoordinate &coordinate) const;
@@ -273,7 +287,7 @@ public:
         return values;
     }
     bool ConstitutiveKInventory() const { return PimpleKBoundEnabled() &&
-        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3" || m_pimpleKInventory=="AcceptedBudgetV1"); }
+        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3" || (m_pimpleKInventory=="AcceptedBudgetV1" || m_pimpleKInventory=="AcceptedBudgetV2")); }
     bool ProspectiveKInventory() const { return PimpleKBoundEnabled() && m_pimpleKInventory=="ConstitutiveV3"; }
     std::string BranchCoverageDiagnostic(const Vector &state,double time,
         const RANSWallEvolutionData &data,const std::vector<RANSWallCoordinate> &anchors) const;
@@ -611,7 +625,9 @@ private:
     SolverUtils::RANSWallInnerStressModel m_innerStress=SolverUtils::RANSWallInnerStressModel::Linear;
     double m_regularizationGamma=0,m_regularizationScale=0,m_robustUstar=.4;
     std::shared_ptr<const SolverUtils::RANSFiniteInflowReference> m_finiteInflow;
+    std::shared_ptr<const SolverUtils::RANSAnalyticalNeutralInflow> m_neutralInflow;
     std::string m_finiteInflowIdentity;
+    std::string m_compositeSeedPolicy="HistoricalFiniteV1";
     SolverUtils::RANSVector m_referenceFlow{1,0,0},m_referenceNormal{0,0,1};
     bool m_transitionEnabled=false,m_transitionReady=false,m_uniformEP=false;
     SolverUtils::AWFTransitionControls m_transition;

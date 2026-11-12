@@ -362,14 +362,17 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         else if(dependent)result.minimumTraceEpsilon=std::min(result.minimumTraceEpsilon,value);
         else result.minimumOuterEpsilon=std::min(result.minimumOuterEpsilon,value);
         if(margin<result.minimumMargin || !std::isfinite(value))
-        {result.minimumMargin=margin;result.limitingPoint=q.coordinate;result.limitingInventory=name;result.limitingFunctional=q.columnAverage?std::make_shared<RANSWallGlobalPoint>(q):nullptr;}
+        {result.minimumMargin=margin;result.limitingPoint=q.coordinate;result.limitingInventory=name;result.limitingFunctional=(q.columnAverage || (block==K() && m_pimpleKInventory=="AcceptedBudgetV2" && Composite() && (Same(q.coordinate[0],-m_mapping.lengthX) || Same(q.coordinate[0],m_mapping.lengthX))))?std::make_shared<RANSWallGlobalPoint>(q):nullptr;}
+        int foot=0;
+        if(Composite() && !q.columnAverage)for(double x:{-m_mapping.lengthX,m_mapping.lengthX})if(Same(q.coordinate[0],x))
+        {const auto &el=fields[block]->Elements().at(q.element);foot=(el.lower[0]+el.upper[0])/2<x?-1:1;}
         if(retain)result.observations.push_back({name,q.coordinate,block,q.geometry,side,value,scale,weight,strict,dependent,
-            q.columnAverage?std::make_shared<RANSWallGlobalPoint>(q):nullptr});
+            (q.columnAverage || (block==K() && m_pimpleKInventory=="AcceptedBudgetV2" && Composite() && (Same(q.coordinate[0],-m_mapping.lengthX) || Same(q.coordinate[0],m_mapping.lengthX))))?std::make_shared<RANSWallGlobalPoint>(q):nullptr,foot});
         if(!std::isfinite(value) || (strict?value<=0:value<0))
         {
             result.failure=ConstitutiveKInventory() && !std::isfinite(value)?"nonfinite_physical_evaluation":
                 block==K()?(strict?"nonpositive_K_or_outer_k":"negative_inner_k"):"nonpositive_epsilon";
-            result.limitingPoint=q.coordinate;result.limitingInventory=name;result.limitingFunctional=q.columnAverage?std::make_shared<RANSWallGlobalPoint>(q):nullptr;return false;
+            result.limitingPoint=q.coordinate;result.limitingInventory=name;result.limitingFunctional=(q.columnAverage || (block==K() && m_pimpleKInventory=="AcceptedBudgetV2" && Composite() && (Same(q.coordinate[0],-m_mapping.lengthX) || Same(q.coordinate[0],m_mapping.lengthX))))?std::make_shared<RANSWallGlobalPoint>(q):nullptr;return false;
         }
         return true;
     };
@@ -389,7 +392,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         auto &pending=result.pendingProfiles;
         result.phase="moving_ray_k_before_normalization";
         auto ray=[&](const RANSWallCoordinate &p,const std::shared_ptr<EquilibriumAWFProfiles> &profile,
-                     const std::string &name,bool source,double horizontalWeight)
+                     const std::string &name,bool source,double horizontalWeight,int footSide=0)
         {
             result.minimumCutoff=std::min(result.minimumCutoff,profile->Reference().cutoff);
             result.maximumCutoff=std::max(result.maximumCutoff,profile->Reference().cutoff);
@@ -401,14 +404,14 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             for(const auto &q:profile->Quadrature())
             {
                 auto point=p;point[2]=q.r/scale;
-                const auto row=EvaluationRow(K(),fields[K()]->LocateElement(point),point);
-                if(!check(name,*row,K(),false,result.effectiveState,0,false,
+                const auto row=RayObservationRow(K(),point,footSide);
+                if(!check(name,row,K(),false,result.effectiveState,0,false,
                     source?horizontalWeight*q.weight*q.jacobian:0.))return false;
             }
             if(AcceptedAWF())for(double top:{.01,.1,m_parameters.geometry.height})if(top<=m_parameters.geometry.height)
                 for(const auto &q:profile->IntegrationQuadrature(top,{.01,.1}))
                 {auto point=p;point[2]=q.r/GeometryAt(p).scale;
-                 if(!check("constitutive_budget_reporting_source_ray",*EvaluationRow(K(),fields[K()]->LocateElement(point),point),K(),false,result.effectiveState))return false;}
+                 if(!check("constitutive_budget_reporting_source_ray",RayObservationRow(K(),point,footSide),K(),false,result.effectiveState))return false;}
             pending.push_back({p,profile,source});return true;
         };
         // Check every physical k BEFORE calling WallNormalization or a
@@ -447,7 +450,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                 if(!ray(p,StateProfile(result.effectiveState,p,time,data),AcceptedAWF()?"constitutive_budget_awf_ray":"constitutive_current_normalization_ray",false,0))return result;
                 if(Composite() && (Same(p[0],-m_mapping.lengthX) || Same(p[0],m_mapping.lengthX)))
                     for(int side:{-1,1})if(!ray(p,Profile(SampleK(result.effectiveState,p),p,1.,side),
-                        side<0?"constitutive_foot_minus_budget_ray":"constitutive_foot_plus_budget_ray",false,0))return result;
+                        side<0?"constitutive_foot_minus_budget_ray":"constitutive_foot_plus_budget_ray",false,0,m_pimpleKInventory=="AcceptedBudgetV2"?side:0))return result;
                 if(ProspectiveKInventory())
                 {
                     // Only positivity constraints: never normalize this
@@ -516,7 +519,7 @@ std::string RANSWallEvolutionPatch::ScalarDomainJSON(const ScalarDomainResult &d
     std::vector<std::pair<std::string,std::string>> fields{
         {"admissible",J::Boolean(d.admissible)},{"scope",J::Quote("declared finite scalar evaluation sets only")},
         {"phase",J::Quote(d.phase)},{"failure",J::Quote(d.failure)},{"minimum_dimensionless_margin",J::Number(d.minimumMargin)},
-        {"limiting_functional_kind",J::Quote(d.limitingFunctional?"ColumnAverage":"Point")},{"limiting_inventory",J::Quote(d.limitingInventory)},{"limiting_point",J::Numbers(d.limitingPoint)},
+        {"limiting_functional_kind",J::Quote(d.limitingFunctional && d.limitingFunctional->columnAverage?"ColumnAverage":"Point")},{"limiting_inventory",J::Quote(d.limitingInventory)},{"limiting_point",J::Numbers(d.limitingPoint)},
         {"minimum_inner_k",J::Number(d.minimumInnerK)},{"minimum_outer_k",J::Number(d.minimumOuterK)},
         {"minimum_outer_epsilon",J::Number(d.minimumOuterEpsilon)},{"minimum_sampled_K",J::Number(d.minimumSampledK)},
         {"minimum_projected_trace_epsilon",J::Number(d.minimumTraceEpsilon)},
@@ -531,8 +534,9 @@ std::string RANSWallEvolutionPatch::ScalarDomainJSON(const ScalarDomainResult &d
         for(const auto &p:d.observations)points.push_back(J::Object({
             {"inventory",J::Quote(p.inventory)},{"coordinate",J::Numbers(p.coordinate)},
             {"geometry",J::Number(p.geometry)},{"block",J::Number(p.block)},{"side",J::Number(p.side)},
+            {"tangential_side",J::Number(p.tangentialSide)},
             {"value",J::Number(p.value)},{"scale",J::Number(p.scale)},{"weight",J::Number(p.weight)},
-            {"functional_kind",J::Quote(p.functional?"ColumnAverage":"Point")},{"strict",J::Boolean(p.strict)},{"dependent_trace",J::Boolean(p.dependentTrace)}}));
+            {"functional_kind",J::Quote(p.functional && p.functional->columnAverage?"ColumnAverage":"Point")},{"strict",J::Boolean(p.strict)},{"dependent_trace",J::Boolean(p.dependentTrace)}}));
         fields.push_back({"observations",J::List(points)});
         fields.push_back({"effective_state",J::Numbers(d.effectiveState)});
         fields.push_back({"trace_target_state",J::Numbers(d.traceState)});
@@ -955,6 +959,19 @@ std::string RANSWallEvolutionPatch::WallTraceJSON(const Vector &state,bool &admi
         {"physical_point",J::Numbers(Physical(worst->row.coordinate))},{"geometry",J::Number(worst->row.geometry)},{"extrema_checked",J::Number(points.size())}});
 }
 
+RANSWallGlobalPoint RANSWallEvolutionPatch::RayObservationRow(int block,const RANSWallCoordinate &p,int footSide) const
+{
+    if(!footSide)return *EvaluationRow(block,fields[block]->LocateElement(p),p);
+    Require(Composite() && (Same(p[0],-m_mapping.lengthX) || Same(p[0],m_mapping.lengthX)),"explicit tangential side is not a hill foot");
+    for(int e=0;e<fields[block]->Elements().size();++e)
+    {
+        const auto &el=fields[block]->Elements()[e];
+        if(p[2]<el.lower[2]-1e-12 || p[2]>el.upper[2]+1e-12)continue;
+        if(footSide<0?Same(el.upper[0],p[0]):Same(el.lower[0],p[0]))return *EvaluationRow(block,e,p);
+    }
+    throw std::runtime_error("moving foot observation has no native element on its requested tangential side");
+}
+
 bool RANSWallEvolutionPatch::RestrictedInner(const ScalarObservation &p) const
 {
     return ResolveObservation(p).inner;
@@ -994,7 +1011,10 @@ RANSWallEvolutionPatch::ObservationProvenance RANSWallEvolutionPatch::ResolveObs
     const bool atInterface=Same(Distance(p.coordinate),GeometryAt(p.coordinate).height);
     const int side=atInterface?(inner?-1:1):0;
     Require(!atInterface || p.side==0 || p.side==side,"observation radial side disagrees with its native element");
-    return {v,inner,side};
+    int foot=0;
+    if(Composite())for(double x:{-m_mapping.lengthX,m_mapping.lengthX})if(Same(p.coordinate[0],x))
+        foot=(element.lower[0]+element.upper[0])/2<x?-1:1;
+    return {v,inner,side,foot};
 }
 
 double RANSWallEvolutionPatch::OuterBound::Action(const Vector &step,int offset) const

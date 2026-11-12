@@ -207,7 +207,7 @@ std::string RANSWallEvolutionPatch::DevelopingBoundaryFixture(const Vector &s,
 std::string RANSWallEvolutionPatch::FiniteTurbulenceBudget(const Vector &s,const Vector &history,
     double alpha,double time,const RANSWallEvolutionData &data) const
 {
-    Require(FiniteInflowReference() && AcceptedAWF() && (!Mapped() || Composite()),"finite native budget is the affine accepted-AWF diagnostic");
+    Require(PrescribedInflow() && AcceptedAWF() && (!Mapped() || Composite()),"finite native budget is the affine accepted-AWF diagnostic");
     EvaluationScope evaluation(*this,data,time);Refresh(s,time,&data);
     std::array<Vector,2> rates{Vector(8),Vector(8)};
     // columns: k production, k sink, epsilon production, destruction, Yap,
@@ -245,9 +245,9 @@ std::string RANSWallEvolutionPatch::FiniteTurbulenceBudget(const Vector &s,const
             // regional chart is linear in its vertical coordinate at fixed s;
             // never treat an outer zHat knot as physical reference height.
             const double physicalLo=Physical({x,0,el.lower[2]})[2],physicalHi=Physical({x,0,el.upper[2]})[2];
-            for(const auto &k:FixedInflow().Knots())
+            for(double knot:InflowBreakpoints())
             {
-                const double chart=Composite()?el.lower[2]+(k.z-physicalLo)*(el.upper[2]-el.lower[2])/(physicalHi-physicalLo):k.z;
+                const double chart=Composite()?el.lower[2]+(knot-physicalLo)*(el.upper[2]-el.lower[2])/(physicalHi-physicalLo):knot;
                 if(chart>el.lower[2] && chart<el.upper[2])panels.push_back(chart);
             }
             for(double z:{profile->Reference().cutoff,profile->Original().ViscosityInterceptHeight(),m_parameters.geometry.roughness})
@@ -334,7 +334,7 @@ std::string RANSWallEvolutionPatch::FiniteTurbulenceBudget(const Vector &s,const
              {"free_mass_dual_norm",J::Number(own)},{"signed_projection_on_total_residual",norm>1e-30?J::Number(std::inner_product(load.begin(),load.end(),dual.begin(),0.)/norm):"null"}}));}
     }
     // Independent analytical parallel seed, using physical GL64 panels.
-    const double H=m_parameters.geometry.height,K=FixedInflow().AtHeight(H).k;
+    const double H=m_parameters.geometry.height,K=InflowAtHeight(H).k;
     const auto p=Profile(K,{lower[0],0,0},1.);const double UH=m_robustUstar*m_robustUstar*p->Original().Integrals().j0;
     std::vector<double> panels{0.,H,p->Reference().cutoff};for(double v:{p->Original().ViscosityInterceptHeight(),m_parameters.geometry.roughness})if(v>0 && v<H)panels.push_back(v);
     std::sort(panels.begin(),panels.end());panels.erase(std::unique(panels.begin(),panels.end()),panels.end());
@@ -362,7 +362,9 @@ std::string RANSWallEvolutionPatch::FiniteGroundReaction(const Vector &s,double 
     // The same physical comparison lifting is used on both flat meshes. It
     // vanishes at side corners and above the common .00025 native interface.
     // This is a weak-load diagnostic, not a new wall-traction condition.
-    const double height=.00025;
+    // The neutral family has its own shared fitted physical panel. Preserve
+    // the old finite-family lifting exactly; neither is a first-cell budget.
+    const double height=AnalyticalNeutralInflow()?.0002:.00025;
     const auto weight=[&](const RANSWallCoordinate &p)
     {const double x=(p[0]-lower[0])/(upper[0]-lower[0]);return 4*x*(1-x);};
     const auto function=[&](const RANSWallCoordinate &p)
@@ -385,7 +387,8 @@ std::string RANSWallEvolutionPatch::FiniteGroundReaction(const Vector &s,double 
         const double scale=std::hypot(face.area[0],face.area[2]),w=face.weight*scale*weight(q.coordinate);
         measure+=w;sampled+=w*(stress[0][0]*(-face.area[0]/scale)+stress[0][2]*(-face.area[2]/scale));
     }
-    return J::Object({{"lifting",J::Quote("global-x Q2(s) times max(0,1-r/.00025), zero side corners")},
+    return J::Object({{"lifting",J::Quote("global-x Q2(s) times max(0,1-r/lifting_height), zero side corners")},
+        {"lifting_height",J::Number(height)},
         {"weighted_surface_measure",J::Number(measure)},{"weighted_sampled_global_x_traction",J::Number(sampled/measure)},
         {"full_spatial_lifting_work",J::Number(total)},{"free_row_lifting_work",J::Number(free)},
         {"prescribed_row_reaction",J::Number(total-free)},{"inferred_ground_traction",J::Number(-(total-free)/measure)},

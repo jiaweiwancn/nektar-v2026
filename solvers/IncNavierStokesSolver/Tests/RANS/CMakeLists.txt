@@ -31,6 +31,10 @@ add_library(RANSKernels STATIC
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallGeometry.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallNormalMap.cpp)
 target_compile_definitions(RANSKernels PRIVATE SOLVER_UTILS_EXPORTS)
+add_executable(RANSCaoTamuraBudgetH2cChecks test_cao_tamura_budget_h2c.cpp)
+target_include_directories(RANSCaoTamuraBudgetH2cChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_link_libraries(RANSCaoTamuraBudgetH2cChecks RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+add_test(NAME RANSCaoTamuraBudgetH2cChecks COMMAND RANSCaoTamuraBudgetH2cChecks ${RANS_SOURCE_ROOT}/docs/plans/cao-tamura-validation-data/profiles.csv ${CMAKE_CURRENT_BINARY_DIR}/cao-tamura-h2c-preflight.json)
 add_executable(RANSCaoTamuraBudgetH1Checks test_cao_tamura_budget_h1.cpp)
 target_include_directories(RANSCaoTamuraBudgetH1Checks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_link_libraries(RANSCaoTamuraBudgetH1Checks RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
