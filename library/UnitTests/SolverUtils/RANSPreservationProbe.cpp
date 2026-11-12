@@ -364,7 +364,7 @@ int main(int argc,char **argv)
         else if(operation=="functions")
         {
             Require(open && referenceMode=="Functions" && time==0.,"Functions verification is a fresh open-policy initialization only");
-            state=patch.Lift(patch.Project(RANSAcceptedOpenInitialFunctions(session,patch),time),time,data);reference=state;
+            state=patch.Lift(data.projectedReference.empty()?patch.Project(RANSAcceptedOpenInitialFunctions(session,patch),time):data.projectedReference,time,data);reference=state;
             data.fixedBoundary=patch.FixedReferenceBoundary(state);
         }
         else

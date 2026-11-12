@@ -258,7 +258,8 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
     RANSWallTiming::Scope timing("startup.initialize");
     try
     {
-        (void)dump;m_state=m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time);
+        (void)dump;m_state=!m_data.projectedReference.empty()?m_data.projectedReference:
+            m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time);
         if(m_neutral)m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
         else if(m_patch->Mapped() || m_patch->MatchingEnabled() || m_patch->CappedDestruction())
             m_state=m_patch->Lift(m_state,m_time,m_data);

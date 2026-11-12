@@ -39,6 +39,11 @@ struct RANSWallEvolutionData
     std::string openBoundaryIdentity;
     // Optional fixed native external traces, e.g. the stored neutral target.
     std::map<int,double> fixedBoundary;
+    // Opt-in NeutralCompositeV1/ConstrainedRadialV1 representation only.
+    // Immutable initial FE projection and its prescribed inlet/top rows.
+    // These never restore interior coefficients after initialization.
+    std::vector<double> projectedReference;
+    std::map<int,double> projectedReferenceBoundary;
     // Callers changing a callable or its captured data inside an evaluation
     // scope must advance this immutable-data generation. Scope-local reuse
     // also compares fixed-boundary bytes and exact physical time.

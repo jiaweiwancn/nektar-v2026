@@ -43,7 +43,7 @@ def make(folder,rt,c,dt,steps,parent=None,template=None):
         root=ET.parse(xml).getroot();conditions=root.find('CONDITIONS')
         for f in list(conditions.findall('FUNCTION')):conditions.remove(f)
         for key,value in dict(RANSWallBoundaryPolicy='AcceptedOpenFlatV1',RANSOpenTop='DirichletCompatibleV1',RANSOpenBackflow='RejectV1',
-            RANSWallReference='Functions',RANSOpenReference='NeutralCompositeV1',RANSWallFunctionCoordinates='Physical',RANSWallPimpleSnapshots='On').items():set_info(root,key,value)
+            RANSWallReference='Functions',RANSOpenReference='NeutralCompositeV1',RANSOpenReferenceProjection='ConstrainedRadialV1',RANSWallFunctionCoordinates='Physical',RANSWallPimpleSnapshots='On').items():set_info(root,key,value)
         for key,value in dict(RANSWallHeight=c['H'],RANSWallSampleHeight=c['H'],RANSWallTailStart=c['H'],RANSWallRoughness=c['roughness_input'],
             Kinvis=c['nu'],RANSWallFrictionVelocity=c['ustar'],RANSOpenReferenceLength=1.,RANSOpenMeanIntercept=c['B'],
             RANSOpenEquilibriumQ=parameters(c['model'])['q'],RANSOpenNaturalKappa=parameters(c['model'])['kappa'],

@@ -811,6 +811,12 @@ std::map<int,double> RANSWallEvolutionPatch::ExternalConstraints(double time,con
         }
         return data.fixedBoundary;
     }
+    if(!data.projectedReferenceBoundary.empty())
+    {
+        Require(OpenBoundary() && m_openBoundaryIdentity.find("projection=ConstrainedRadialV1")!=std::string::npos &&
+            data.projectedReference.size()==static_cast<std::size_t>(Size()),"invalid immutable continuous-reference boundary projection");
+        return data.projectedReferenceBoundary;
+    }
     std::map<int,double> result;
     for(int b=0;b<InnerPressure();++b)
     {

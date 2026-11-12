@@ -83,6 +83,27 @@ public:
         }
         cache.emplace(key,v);return v;
     }
+    RANSWallEvolutionPatch::Vector Project() const
+    {
+        using V=RANSWallEvolutionPatch::Vector;const double Z=patch.upper[2];V state(patch.Size());
+        const auto at=[&](double z){return At(z,z>H);};
+        const auto u=patch.fields[0]->RadialProject([&](double z){return at(z)[0];},
+            {{0,0,0},{0,1,At(0,false)[4]},{H,0,UH},{H,-1,At(H,false)[4]},
+             {H,1,At(H,true)[4]},{Z,0,At(Z,true)[0]},{Z,-1,At(Z,true)[4]}},
+            {profile->Reference().cutoff,profile->Original().ViscosityInterceptHeight(),profile->Geometry().roughness});
+        const auto k=patch.fields[patch.K()]->RadialProject([&](double z){return at(z)[1];},
+            {{0,1,0},{H,0,K},{H,-1,0},{H,1,0},{Z,0,K},{Z,-1,0}},
+            {profile->Reference().cutoff,profile->Original().ViscosityInterceptHeight(),profile->Geometry().roughness});
+        // Only an outer epsilon representation. H value is dependent; no
+        // independent inner equation or two-sided epsilon-flux condition.
+        const auto e=patch.fields[patch.Epsilon()]->RadialProject([&](double z){return A/z;},
+            {{H,0,A/H},{Z,0,A/Z},{Z,-1,-A/(Z*Z)}});
+        std::copy(u.begin(),u.end(),state.begin()+patch.offset[0]);
+        std::copy(k.begin(),k.end(),state.begin()+patch.offset[patch.K()]);
+        std::copy(e.begin(),e.end(),state.begin()+patch.offset[patch.Epsilon()]);
+        const auto p=patch.fields[patch.OuterPressure()]->Project([&](const RANSWallCoordinate &){return PiOuter;});
+        std::copy(p.begin(),p.end(),state.begin()+patch.offset[patch.OuterPressure()]);return state;
+    }
 };
 RANSWallEvolutionFunction Load(const LibUtilities::SessionReaderSharedPtr &s,
     const std::string &name,const std::string &variable,bool required)
@@ -99,7 +120,12 @@ RANSWallEvolutionFunction Load(const LibUtilities::SessionReaderSharedPtr &s,
 std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSharedPtr &s)
 {
     std::ostringstream out;out<<std::setprecision(17)<<"AcceptedOpenFlatV1:top=DirichletCompatibleV1:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero";
-    if(RANSUsesNeutralComposite(s))out<<":reference=NeutralCompositeV1:coordinate=physical-z-unshifted:Pi_inner=0:Pi_outer=-Qzz:no-finite-depth-cap";
+    if(RANSUsesNeutralComposite(s))
+    {
+        std::string projection;s->LoadSolverInfo("RANSOpenReferenceProjection",projection,"FunctionsL2V1");
+        Require(projection=="FunctionsL2V1" || projection=="ConstrainedRadialV1","unknown neutral reference projection");
+        out<<":reference=NeutralCompositeV1:projection="<<projection<<":coordinate=physical-z-unshifted:Pi_inner=0:Pi_outer=-Qzz:no-finite-depth-cap";
+    }
     const std::set<std::string> work{"NUMSTEPS","TIMESTEP","TIME","IO_CHECKSTEPS","IO_INFOSTEPS","IO_TIMER_LEVEL",
         "RANSWALLNORMALORDER","RANSWALLTANGENTIALORDER","RANSWALLMASSORDER","RANSWALLVOLUMEORDER","RANSWALLINTERFACEORDER",
         "RANSWALLPIMPLEREJECTSTEP","RANSWALLPIMPLEHARDAUDITREJECTSTEP"};
@@ -124,6 +150,12 @@ RANSWallEvolutionData LoadRANSAcceptedOpenData(const LibUtilities::SessionReader
         data.boundary[1]=[](const RANSWallCoordinate&,double){return 0.;};
         data.boundary[patch.K()]=[ref](const RANSWallCoordinate &p,double){return ref->At(p[2],p[2]>ref->H)[1];};
         data.boundary[patch.Epsilon()]=[ref](const RANSWallCoordinate &p,double){return ref->At(p[2],true)[2];};
+        std::string projection;s->LoadSolverInfo("RANSOpenReferenceProjection",projection,"FunctionsL2V1");
+        if(projection=="ConstrainedRadialV1")
+        {
+            data.projectedReference=ref->Project();
+            data.projectedReferenceBoundary=patch.FixedReferenceBoundary(data.projectedReference);
+        }
         for(int region=0;region<2;++region)
         {
             data.outletTraction[region][0]=[ref,region](const RANSWallCoordinate&,double){return region?ref->Q[2][2]-ref->Q[0][0]:0.;};

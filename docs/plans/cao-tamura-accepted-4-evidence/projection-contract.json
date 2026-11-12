@@ -1,0 +1,12 @@
+{
+  "schema": "CT4ProjectionContractV1",
+  "parent_contract_sha256": "a32c9dc1b0f7a9ea1d818700b741c2b0653473e39ab132531b1e6942d5c1a091",
+  "prior_result": "FunctionsL2V1 A95 6mm P3 initial field RMS passes; wall traction error .011439701857773932 and interface traction RMS .0020028078659562643 fail unchanged1e-3 target. No evolution admitted. All original preparation receipts retained.",
+  "new_projection": "ConstrainedRadialV1; existing RadialProject continuous split mass projection; initial no-slip/value, ground velocity derivative, two one-sided H derivatives and endpoint K/flux constraints; existing outer epsilon value prescription only; Pi_w0/Pi_o-Qzz; exactly same mesh, spaces, continuous functions and scales",
+  "live_inlet_top": "native boundary coefficients from the same immutable FE reference projection; actual continuous functions retained in data and exported independently; both explicit and implicit data install same map",
+  "evolution": "only initial interior coefficients and prescribed boundary rows use reference projection; never restore interior state, wall traction, sources, gradients or dependent epsilon after steps",
+  "restart": "projection identity included in absolute open boundary signature; old FunctionsL2V1 histories incompatible; all new histories fresh",
+  "limits": "all original accuracy/domain/budget limits unchanged; representative P3/P4 contrast remains on identical partition; no mesh or coefficient search",
+  "stopping": "each fresh case stops at its own initial or paired milestone gate",
+  "status": "declared before any native evolution; initial failed representation remains an independent failed decision"
+}
