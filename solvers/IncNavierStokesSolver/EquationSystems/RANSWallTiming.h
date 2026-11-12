@@ -59,8 +59,7 @@ class Scope
     State *s=nullptr;Scope *parent=nullptr;std::string name;
     long id=0,step=-1;double time=-1,childrenWall=0,childrenCpu=0;bool buffered=false;
     Clock::time_point begin;std::clock_t cpu;
-public:
-    explicit Scope(const std::string &label,bool aggregate=false,bool detailOnly=false)
+    void Start(const char *label,bool aggregate,bool detailOnly)
     {
         auto &state=Get();if(!state.enabled || (detailOnly && !state.detailed))return;
         buffered=aggregate;
@@ -68,6 +67,11 @@ public:
         parent=s->stack.empty()?nullptr:s->stack.back();s->stack.push_back(this);
         begin=Clock::now();cpu=std::clock();
     }
+public:
+    explicit Scope(const char *label,bool aggregate=false,bool detailOnly=false)
+    {Start(label,aggregate,detailOnly);}
+    explicit Scope(const std::string &label,bool aggregate=false,bool detailOnly=false)
+    {Start(label.c_str(),aggregate,detailOnly);}
     Scope(const Scope&)=delete;Scope &operator=(const Scope&)=delete;
     ~Scope(){Stop();}
     void Stop() noexcept
