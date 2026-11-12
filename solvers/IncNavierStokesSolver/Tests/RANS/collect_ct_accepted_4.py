@@ -151,6 +151,7 @@ def main():
     export('provider-history-controls.json',a.root/'controls-v1/results.json');export('legacy-compatibility.json',a.root/'legacy-controls-v1/results.json')
     export('native-weak-and-degree-analysis.json',a.analysis/'results.json');export('pre-evolution-weak.json',a.root/'pre-evolution-weak-v1/results.json')
     export('all-reference-weak.json',a.root/'all-reference-weak-v1/results.json')
+    export('conditional-six-selections.json',a.root/'conditional-six-v1/results.json')
     for v in ('build-v1','build-v2','build-v3'):export(v+'.json',a.root/v/'results.json')
     save('prior-preparation-representations.json',initial_representations);save('native-failure-witnesses.json',failures)
     save('represented-gradients-and-traction.json',representations);save('costs.json',costs)
