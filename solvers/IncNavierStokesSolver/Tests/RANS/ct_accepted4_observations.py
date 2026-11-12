@@ -47,8 +47,24 @@ def main():
         summary[str(mm)]=dict(total=len(samples),inner=sum(q['interface_nominal'][str(mm)]=='inner' for q in samples),
             unavailable_or_inside=sum(q['interface_nominal'][str(mm)]=='unavailable_or_inside' for q in samples),
             scope='nominal closest-normal observation mapping only; C1 foot limits and possible multiple normal roots retained; no native curved capability or roughness-sublayer certificate')
+    duplicate={}
+    for model,f in refs['fits'].items():
+        points=[];num=den=0.
+        for r in rows:
+            if r['series_id']!='f3e_R' or r['quality']!='visible':continue
+            # Published axis is (y-d) in mm; the frozen physical-height column
+            # already adds the authors' assumed d. Never displace the log law.
+            z=float(r['y_over_H']);require(z>6.5/40,'duplicate_point_below_all_ct4_outer_interfaces')
+            from ct_accepted4_reference import parameters
+            pred=f['B']/f['ustar']+np.log(z)/parameters(model)['kappa'];delta=pred-float(r['value']);w=float(r['weight']);num+=w*delta*delta;den+=w
+            points.append(dict(point_id=r['point_id'],physical_z_over_Hh=z,observed_U_over_utau=float(r['value']),predicted_U_over_utau=pred,
+                residual=delta,extraction_bound=float(r['value_bound']),weight=w))
+        require(len(points)==15,'missing_duplicate_flat_mean_coverage')
+        duplicate[model]=dict(points=points,weighted_RMS_discrepancy=float(np.sqrt(num/den)),
+            role='unchanged duplicate_crosscheck; not part of the CT4 four-point fit; original Fig3a/Fig3e normalization discrepancy remains visible')
     result=dict(schema='CT4UnusedObservationsV1',diagnostic_execution='pass',data_audit=json.loads((a.output/'data-audit.json').read_text()),
         flat_turbulence=checks,height_audit=heights,turbulence_height_summary=summary,
+        duplicate_flat_mean=duplicate,
         flat_height_envelopes=refs['observation_heights']['flat'],Fig11='no physical height invented from unspecified delta75',
         normalization='reported utau/Uinf held fixed; no fitting of K or stresses; dimensional Fig12 RMS not scored without independent velocity scale',
         uncertainty='coordinate and velocity extraction are deterministic envelopes; shared-source dependence in CT4 fit/40mm normalization retained; probe, measurement, displacement and physical parameter uncertainty remain separately unquantified')
