@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport subprocess,json,hashlib\nr=Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112');repo=r/'observer-source-v3';d=r/'plot-source-v1';d.mkdir()\nsubprocess.run(['git','fetch','git@github.com:jiaweiwancn/nektar-v2026.git','codex/wj-earsm-awf'],cwd=repo,check=True)\nrevision=subprocess.check_output(['git','rev-parse','921fa5e'],cwd=repo,text=True).strip()\np=d/'plot_wj_h4.py';p.write_bytes(subprocess.check_output(['git','show',revision+':solvers/IncNavierStokesSolver/Tests/RANS/plot_wj_h4.py'],cwd=repo))\n(d/'source.json').write_text(json.dumps(dict(revision=revision,path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()),indent=2)+'\\n')\n"
+  ],
+  "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112",
+  "units": 0,
+  "kind": "passive",
+  "seconds_limit": 40,
+  "expected_reason": null,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "driver_sha256": "ca714dc79152f7ed9d553fd98346174d180b297d93c326e7e03c918654a3499b",
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    }
+  },
+  "loader": ""
+}

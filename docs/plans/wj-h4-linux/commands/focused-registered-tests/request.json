@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "import subprocess,json,pathlib,re\nr=pathlib.Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112');b=r/'focused-config'\ndata=json.loads(subprocess.check_output(['ctest','--test-dir',str(b),'--show-only=json-v1'],text=True))\n(r/'receipts/focused-test-inventory.json').write_text(json.dumps(data,indent=2)+'\\n')\nselected=[v['name']for v in data['tests']if re.fullmatch('WJH4PhysicalOwners|WJH3PassiveAlgebra',v['name'])]\nassert len(selected)==2\nprint('registered',len(data['tests']),'selected',selected)\nsubprocess.run(['ctest','--test-dir',str(b),'-R','^(WJH4PhysicalOwners|WJH3PassiveAlgebra)$','--output-on-failure','-j','1'],check=True)\n"
+  ],
+  "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112",
+  "units": 0,
+  "kind": "passive",
+  "seconds_limit": 30,
+  "expected_reason": null,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "driver_sha256": "ca714dc79152f7ed9d553fd98346174d180b297d93c326e7e03c918654a3499b",
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    }
+  },
+  "loader": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib"
+}

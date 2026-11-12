@@ -1,0 +1,42 @@
+Internal ctest changing into directory: /media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112/focused-config
+Test project /media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112/focused-config
+    Start 70: WJH4PhysicalOwners
+1/2 Test #70: WJH4PhysicalOwners ...............   Passed    1.27 sec
+    Start 72: WJH3PassiveAlgebra
+2/2 Test #72: WJH3PassiveAlgebra ...............   Passed    0.25 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   1.52 sec
+registered 76 selected ['WJH4PhysicalOwners', 'WJH3PassiveAlgebra']
+	Command being timed: "/usr/bin/python3 -B -c import subprocess,json,pathlib,re
+r=pathlib.Path('/media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112');b=r/'focused-config'
+data=json.loads(subprocess.check_output(['ctest','--test-dir',str(b),'--show-only=json-v1'],text=True))
+(r/'receipts/focused-test-inventory.json').write_text(json.dumps(data,indent=2)+'\n')
+selected=[v['name']for v in data['tests']if re.fullmatch('WJH4PhysicalOwners|WJH3PassiveAlgebra',v['name'])]
+assert len(selected)==2
+print('registered',len(data['tests']),'selected',selected)
+subprocess.run(['ctest','--test-dir',str(b),'-R','^(WJH4PhysicalOwners|WJH3PassiveAlgebra)$','--output-on-failure','-j','1'],check=True)
+"
+	User time (seconds): 1.41
+	System time (seconds): 0.16
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.58
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 89088
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 30022
+	Voluntary context switches: 52
+	Involuntary context switches: 12
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 1184
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

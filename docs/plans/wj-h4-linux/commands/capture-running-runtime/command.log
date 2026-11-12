@@ -1,0 +1,36 @@
+native process already finished; earlier capture retained
+	Command being timed: "/usr/bin/python3 -B -c from pathlib import Path
+import hashlib,json
+r=Path('/media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112')
+for p in Path('/proc').glob('[0-9]*'):
+ try:
+  argv=(p/'cmdline').read_bytes().split(b'\0')
+  if argv[0].endswith(b'IncNavierStokesSolver') and any(str(r).encode()in a for a in argv):
+   files=sorted(set(line.split()[-1]for line in(p/'maps').read_text().splitlines()if len(line.split())>=6 and line.split()[-1].startswith('/')))
+   data=[dict(path=x,sha256=hashlib.sha256(Path(x).read_bytes()).hexdigest(),bytes=Path(x).stat().st_size)for x in files if Path(x).is_file()]
+   (r/'receipts/actual-native-mappings-running.json').write_text(json.dumps(dict(pid=int(p.name),argv=[a.decode()for a in argv if a],mapped_files=data),indent=2)+'\n');print('mapped',len(data));break
+ except(FileNotFoundError,PermissionError,ProcessLookupError):pass
+else:print('native process already finished; earlier capture retained')
+"
+	User time (seconds): 0.02
+	System time (seconds): 0.02
+	Percent of CPU this job got: 96%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.05
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 13312
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1557
+	Voluntary context switches: 1
+	Involuntary context switches: 0
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 8
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "import pathlib,hashlib,json,os,time\nr=pathlib.Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112');start=time.monotonic()\nwhile time.monotonic()-start<30:\n found=False\n for p in pathlib.Path('/proc').glob('[0-9]*'):\n  try:\n   argv=(p/'cmdline').read_bytes().split(b'\\0')\n   if argv[0].endswith(b'IncNavierStokesSolver') and any(str(r).encode()in x for x in argv[1:]):\n    files=sorted(set(line.split()[-1]for line in (p/'maps').read_text().splitlines()if len(line.split())>=6 and line.split()[-1].startswith('/')))\n    data=[dict(path=x,sha256=hashlib.sha256(pathlib.Path(x).read_bytes()).hexdigest(),bytes=pathlib.Path(x).stat().st_size)for x in files if pathlib.Path(x).is_file()]\n    (r/'receipts/actual-native-mappings.json').write_text(json.dumps(dict(pid=int(p.name),argv=[os.fsdecode(x)for x in argv if x],mapped_files=data),indent=2)+'\\n');found=True;break\n  except(FileNotFoundError,ProcessLookupError,PermissionError):pass\n if found:print('captured',len(data));break\n time.sleep(.5)\nelse:print('not observed within bounded passive window')\n"
+  ],
+  "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112",
+  "units": 0,
+  "kind": "passive",
+  "seconds_limit": 35,
+  "expected_reason": null,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "driver_sha256": "ca714dc79152f7ed9d553fd98346174d180b297d93c326e7e03c918654a3499b",
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    }
+  },
+  "loader": ""
+}

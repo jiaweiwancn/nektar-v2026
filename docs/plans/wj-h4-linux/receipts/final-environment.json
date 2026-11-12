@@ -1,0 +1,28 @@
+{
+  "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "numpy": "1.21.5",
+  "scipy": "1.8.0",
+  "matplotlib": "3.5.1",
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+  "specifications": {
+    "wj_earsm_neutral_abl_ep_awf_note.tex": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112/source/docs/literature/wj_earsm_neutral_abl_ep_awf_note.tex",
+      "bytes": 138078,
+      "sha256": "1959e96ea0b61f9deb9ff9ad1f5b26488a932a8451c2de6d3b6f7b7c9dbd9124"
+    },
+    "wj_earsm_budget_cutoff_awf_appendix.tex": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112/source/docs/literature/wj_earsm_budget_cutoff_awf_appendix.tex",
+      "bytes": 53271,
+      "sha256": "0ab52e0d813b8fb344973f75ca6d8da97ff389ef9f93476500ca9d1df1fbc47c"
+    }
+  },
+  "arithmetic_policy": [
+    "-O3",
+    "-DNDEBUG",
+    "-ffp-contract=off",
+    "-fno-fast-math"
+  ],
+  "native_compiler": "GNU 11.4 / C++17, reused source-built native",
+  "ldd": "\tlinux-vdso.so.1 (0x00007fff07fbc000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib/libSpatialDomains.so.5.9.0 (0x000071994af2a000)\n\tlibSolverUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0 (0x000071994aa00000)\n\tlibFieldUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0 (0x000071994a600000)\n\tlibmpi_cxx.so.40 => /lib/x86_64-linux-gnu/libmpi_cxx.so.40 (0x000071994aeee000)\n\tlibmpi.so.40 => /lib/x86_64-linux-gnu/libmpi.so.40 (0x000071994a4c9000)\n\tlibGlobalMapping.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0 (0x000071994ae57000)\n\tlibMultiRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0 (0x000071994a000000)\n\tlibLocalRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0 (0x0000719949c00000)\n\tlibStdRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0 (0x0000719949800000)\n\tlibLibUtilities.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0 (0x0000719949200000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x0000719948a00000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x000071994a467000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x0000719948600000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x0000719949f19000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000071994a9e0000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000719948200000)\n\tlibptscotch-6.1.so => /lib/x86_64-linux-gnu/libptscotch-6.1.so (0x0000719949e46000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000071994a9c4000)\n\tlibboost_program_options.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0 (0x000071994a422000)\n\tlibopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x0000719949b4d000)\n\tlibopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x0000719949743000)\n\tlibhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x0000719949af1000)\n\tlibCollections.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0 (0x000071994888d000)\n\tlibfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x0000719947e00000)\n\tlibboost_iostreams.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0 (0x000071994a40a000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x00007199459b0000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x0000719945600000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000071994b7c4000)\n\tlibptscotcherr-6.1.so => /lib/x86_64-linux-gnu/libptscotcherr-6.1.so (0x000071994ae4a000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x000071994a3f7000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x0000719949e1b000)\n\tlibevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x0000719949abc000)\n\tlibevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x000071994a9bf000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x0000719949719000)\n\tlibMatrixFreeOps.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0 (0x0000719942800000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x0000719949131000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007199496d1000)\n",
+  "loader": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib"
+}

@@ -1,0 +1,42 @@
+EXACT CERTIFICATE: D >= nu_eff/250 on all incompressible rank-one increments.
+Exact positive LDL pivots: ['35607/250', '2902757/300250', '3295566703/12201000', '3188912170563/3295566703000', '2212408252197/24379099000', '609851247/332332000', '3616758816461/553102063049250', '355627/143000']
+Traceback (most recent call last):
+  File "/media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/wj_h4_study.py", line 249, in <module>
+    else:globals()[a.mode](a.root,a.case)
+  File "/media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/wj_h4_study.py", line 218, in prepare
+    rp,r,record=native_call(root,name,'cp0',cfg,0);result=register_scan(root,name+'-cp0',rp)
+  File "/media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/wj_h4_study.py", line 157, in register_scan
+    r=load(rp);new=inventory([r],active_inventory(root));refresh(root,new,label)
+  File "/media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/wj_h4_study.py", line 131, in active_inventory
+    def active_inventory(root):return load(load(root/'active-inventory.json')['path'])
+  File "/media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h4.py", line 22, in load
+    return json.loads(Path(p).read_text(),parse_int=lambda v:-0.0 if v=='-0' else int(v))
+  File "/usr/lib/python3.10/pathlib.py", line 1134, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.10/pathlib.py", line 1119, in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+FileNotFoundError: [Errno 2] No such file or directory: '/media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112/active-inventory.json'
+Command exited with non-zero status 1
+	Command being timed: "python3 -B wj_h4_study.py --root /media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112 --mode prepare --case base-x1-half"
+	User time (seconds): 17.00
+	System time (seconds): 0.50
+	Percent of CPU this job got: 96%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:18.08
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 307532
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 166931
+	Voluntary context switches: 1472
+	Involuntary context switches: 202
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 8648
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

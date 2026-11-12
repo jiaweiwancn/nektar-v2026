@@ -1,0 +1,28 @@
+{
+  "workers": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 1956,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2111,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 30303,
+        "parent": 30302,
+        "threads": 1,
+        "args": "python3 -"
+      }
+    ]
+  },
+  "mount": "/dev/sda2 /media/jay/\u65b0\u52a0\u53771 5AB8A669B8A642FD\n",
+  "memory": "               total        used        free      shared  buff/cache   available\nMem:     270257852416  4085792768 240236531712    66060288 25935527936 264216956928\nSwap:     2147479552           0  2147479552\n",
+  "git_main": "## codex/hit-inflow-generator...origin/codex/hit-inflow-generator [ahead 33]\n"
+}

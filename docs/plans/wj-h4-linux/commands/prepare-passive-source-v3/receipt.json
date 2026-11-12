@@ -1,0 +1,98 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "import subprocess,pathlib\nr=pathlib.Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112');s=r/'observer-source-v3';repo=r/'observer-source-v2'\nsubprocess.run(['git','fetch','git@github.com:jiaweiwancn/nektar-v2026.git','codex/wj-earsm-awf'],cwd=repo,check=True)\nsubprocess.run(['git','worktree','add','--detach',str(s),'4d6dca2'],cwd=repo,check=True)\n"
+  ],
+  "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112",
+  "units": 0,
+  "kind": "passive",
+  "seconds_limit": 60,
+  "expected_reason": null,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "driver_sha256": "ca714dc79152f7ed9d553fd98346174d180b297d93c326e7e03c918654a3499b",
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    }
+  },
+  "loader": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib",
+  "reserved_seconds": 60,
+  "status": "PASS",
+  "allocation": {
+    "workers": 10,
+    "processes": [
+      {
+        "pid": 1956,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2111,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 41529,
+        "parent": 41528,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/launch-remaining-cases-v1 -- python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_suite.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112 --ct1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111 --ct2 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/remaining-cases-v1"
+      },
+      {
+        "pid": 41530,
+        "parent": 41529,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/launch-remaining-cases-v1 --project-limit 16"
+      },
+      {
+        "pid": 41533,
+        "parent": 41529,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/launch-remaining-cases-v1 -- python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_suite.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112 --ct1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111 --ct2 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/remaining-cases-v1"
+      },
+      {
+        "pid": 41534,
+        "parent": 41533,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_suite.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112 --ct1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111 --ct2 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/remaining-cases-v1"
+      },
+      {
+        "pid": 41545,
+        "parent": 41534,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_jobs.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112 --ct1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111 --ct2 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112 --case A95-XZminus-P4 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P4/campaign-v1"
+      },
+      {
+        "pid": 41761,
+        "parent": 41545,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_run.py --case A95-XZminus-P4 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime --ct1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111 --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/docs/plans/cao-tamura-accepted-3-evidence/contract.json --mode advance --initial /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P4/campaign-v1/initial --target 0.008 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P4/campaign-v1/T0p008"
+      },
+      {
+        "pid": 43025,
+        "parent": 43024,
+        "threads": 1,
+        "args": "python3 -"
+      }
+    ]
+  },
+  "seconds": 11.402180526998563,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 195235840,
+  "peak_tree_threads": 6,
+  "root_bytes": 8329551299,
+  "output_bytes": 308299469,
+  "log_sha256": "d6a8df4a5d13c03f3823a6910d845fa49c49e3961cbd5772b4b71d38f9e51ad7"
+}

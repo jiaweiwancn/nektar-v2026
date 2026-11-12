@@ -1,0 +1,65 @@
+verified 454 heavy identities; 111 packet bindings; 63 core common-time records
+	Command being timed: "/usr/bin/python3 -B -c from pathlib import Path
+import json,hashlib,sys,gzip,csv,numpy as np,subprocess
+r=Path('/media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112');s=r/'observer-source-v3/solvers/IncNavierStokesSolver/Tests/RANS';sys.path.insert(0,str(s))
+from run_wj_h4 import load,save,sha
+from wj_h3_analysis import state_context
+from wj_h4_points import vector_hash,aligned
+p=r/'publication-v1';manifest=load(p/'manifest.json');heavy=load(p/'heavy-index.json')
+for f in list(manifest['compact'].values())+list(heavy.values()):
+ q=Path(f['path']);assert q.stat().st_size==f['bytes'] and sha(q)==f['sha256'],str(q)
+for f in load(r/'source/docs/plans/wj-h2-linux/native-source-inputs.json'):
+ assert sha(r/'observer-source-v3'/f['path'])==f['sha256']
+cat=load(r/'catalog.json');accepted=rejected=0
+for e in cat:
+ v=load(e['path']);rp=Path(v['producer']['path']);d=load(rp);bad=e['native_status']=='rejected candidate'
+ state,h,alpha,t,packet=state_context(d,e['step'],bad)
+ assert vector_hash(state)==v['state_sha256']==packet['state_sha256']
+ assert v['callback_history_sha256']==packet['stage_history_sha256']
+ if alpha:assert vector_hash(h)==v['callback_history_sha256']
+ aligned(d['steps']+1 if bad else e['step'],d['dt'],t)
+ rejected+=bad;accepted+=not bad
+assert len(cat)==111 and accepted==108 and rejected==3
+c=load(p/'comparison-summary.json')
+core=['time-base-x1','time-refined-x1','time-base-x3','normal-dt01','normal-dt005','horizontal-dt01','horizontal-dt005']
+assert all(c[k]['status']=='COMPLETE_DATA' and len(c[k]['records'])==9 for k in core)
+assert c['local-dt005']['missing_actual_common_times']==[.06,.07,.08]
+g=load(p/'component-gates.json');assert g['attempts']==74 and g['solve_bound_counts']==[74]*5 and g['numerical_corrections']==0
+views=load(load(r/'native-observation-view.json')['path']);assert len(views)==8
+for v in views.values():
+ assert v['independent_weak']['status']=='PASS'
+ assert sha(v['producer']['path'])==v['producer']['sha256'] and sha(v['checkpoint']['path'])==v['checkpoint']['sha256']
+for v in load(r/'receipts/reused-native-bindings.json')['trajectories'].values():
+ for key in ('report','checkpoint','original_cp0'):
+  assert sha(v[key]['path'])==v[key]['sha256']
+desc=load(p/'compressed-identities.json');data=gzip.decompress(Path(desc['file']['path']).read_bytes())
+assert hashlib.sha256(data).hexdigest()==desc['decoded_sha256'] and len(data)==desc['decoded_bytes']
+save(r/'receipts/final-verification.json',dict(status='PASS',remote_heavy_files_verified=len(heavy),compact_files_verified=len(manifest['compact']),native_inputs=340,
+ accepted_states_including_startups=accepted,rejected_candidates_including_retained_A=rejected,core_common_records=63,
+ original_H3_checkpoints_unchanged=True,all_governing_attempts=74,charged_scientific_units=80,
+ decoded_comparison_identity_verified=True,full_inventory_points=len(load(p/'inventory.json')['points']),
+ scope='Linux independently read/hash-verified heavy and compact bytes, producer packets and integer-aligned times; Mac has not read heavy fields'))
+print('verified',len(heavy),'heavy identities; 111 packet bindings; 63 core common-time records')
+"
+	User time (seconds): 26.11
+	System time (seconds): 1.65
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:27.77
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 296744
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 441369
+	Voluntary context switches: 1
+	Involuntary context switches: 94
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 24
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

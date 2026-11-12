@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json,hashlib,sys,gzip,csv,numpy as np,subprocess\nr=Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112');s=r/'observer-source-v3/solvers/IncNavierStokesSolver/Tests/RANS';sys.path.insert(0,str(s))\nfrom run_wj_h4 import load,save,sha\nfrom wj_h3_analysis import state_context\nfrom wj_h4_points import vector_hash,aligned\np=r/'publication-v1';manifest=load(p/'manifest.json');heavy=load(p/'heavy-index.json')\nfor f in list(manifest['compact'].values())+list(heavy.values()):\n q=Path(f['path']);assert q.stat().st_size==f['bytes'] and sha(q)==f['sha256'],str(q)\nfor f in load(r/'source/docs/plans/wj-h2-linux/native-source-inputs.json'):\n assert sha(r/'observer-source-v3'/f['path'])==f['sha256']\ncat=load(r/'catalog.json');accepted=rejected=0\nfor e in cat:\n v=load(e['path']);rp=Path(v['producer']['path']);d=load(rp);bad=e['native_status']=='rejected candidate'\n state,h,alpha,t,packet=state_context(d,e['step'],bad)\n assert vector_hash(state)==v['state_sha256']==packet['state_sha256']\n assert v['callback_history_sha256']==packet['stage_history_sha256']\n if alpha:assert vector_hash(h)==v['callback_history_sha256']\n aligned(d['steps']+1 if bad else e['step'],d['dt'],t)\n rejected+=bad;accepted+=not bad\nassert len(cat)==111 and accepted==108 and rejected==3\nc=load(p/'comparison-summary.json')\ncore=['time-base-x1','time-refined-x1','time-base-x3','normal-dt01','normal-dt005','horizontal-dt01','horizontal-dt005']\nassert all(c[k]['status']=='COMPLETE_DATA' and len(c[k]['records'])==9 for k in core)\nassert c['local-dt005']['missing_actual_common_times']==[.06,.07,.08]\ng=load(p/'component-gates.json');assert g['attempts']==74 and g['solve_bound_counts']==[74]*5 and g['numerical_corrections']==0\nviews=load(load(r/'native-observation-view.json')['path']);assert len(views)==8\nfor v in views.values():\n assert v['independent_weak']['status']=='PASS'\n assert sha(v['producer']['path'])==v['producer']['sha256'] and sha(v['checkpoint']['path'])==v['checkpoint']['sha256']\nfor v in load(r/'receipts/reused-native-bindings.json')['trajectories'].values():\n for key in ('report','checkpoint','original_cp0'):\n  assert sha(v[key]['path'])==v[key]['sha256']\ndesc=load(p/'compressed-identities.json');data=gzip.decompress(Path(desc['file']['path']).read_bytes())\nassert hashlib.sha256(data).hexdigest()==desc['decoded_sha256'] and len(data)==desc['decoded_bytes']\nsave(r/'receipts/final-verification.json',dict(status='PASS',remote_heavy_files_verified=len(heavy),compact_files_verified=len(manifest['compact']),native_inputs=340,\n accepted_states_including_startups=accepted,rejected_candidates_including_retained_A=rejected,core_common_records=63,\n original_H3_checkpoints_unchanged=True,all_governing_attempts=74,charged_scientific_units=80,\n decoded_comparison_identity_verified=True,full_inventory_points=len(load(p/'inventory.json')['points']),\n scope='Linux independently read/hash-verified heavy and compact bytes, producer packets and integer-aligned times; Mac has not read heavy fields'))\nprint('verified',len(heavy),'heavy identities; 111 packet bindings; 63 core common-time records')\n"
+  ],
+  "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112",
+  "units": 0,
+  "kind": "passive",
+  "seconds_limit": 100,
+  "expected_reason": null,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "driver_sha256": "ca714dc79152f7ed9d553fd98346174d180b297d93c326e7e03c918654a3499b",
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    }
+  },
+  "loader": ""
+}

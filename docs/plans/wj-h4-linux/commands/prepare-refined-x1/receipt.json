@@ -1,0 +1,67 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "wj_h4_study.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112",
+    "--mode",
+    "prepare",
+    "--case",
+    "refined-x1"
+  ],
+  "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS",
+  "units": 0,
+  "kind": "passive",
+  "seconds_limit": 120,
+  "expected_reason": null,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "driver_sha256": "ca714dc79152f7ed9d553fd98346174d180b297d93c326e7e03c918654a3499b",
+  "inputs": {
+    "wj_h4_study.py": {
+      "sha256": "5e9514ac93ae5e0311402577bfbebc9c876e2ff684bd3e0a16c61c8e649fd587",
+      "bytes": 21388
+    }
+  },
+  "loader": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h1-20261111/build-v1/geometry-lib",
+  "reserved_seconds": 120,
+  "status": "PASS",
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 1956,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2111,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 33637,
+        "parent": 33636,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "seconds": 57.161594713999875,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 560504832,
+  "peak_tree_threads": 9,
+  "root_bytes": 1386617760,
+  "output_bytes": 398197152,
+  "log_sha256": "c3b73eb2d34f0c1a093c0bab29aca5d9736f19da36d7e073d8861b6b0c22f891"
+}

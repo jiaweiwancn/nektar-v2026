@@ -1,0 +1,33 @@
+	Command being timed: "/usr/bin/python3 -B -c from pathlib import Path
+import sys,json,hashlib,subprocess,platform,numpy,scipy,matplotlib,os
+r=Path('/media/jay/新加卷1/nektar-v2026-runs/wj-h4-20261112')
+files={}
+for n in ('wj_earsm_neutral_abl_ep_awf_note.tex','wj_earsm_budget_cutoff_awf_appendix.tex'):
+ p=r/'source/docs/literature'/n;files[n]=dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+d=dict(python=sys.version,numpy=numpy.__version__,scipy=scipy.__version__,matplotlib=matplotlib.__version__,platform=platform.platform(),specifications=files,
+ arithmetic_policy=['-O3','-DNDEBUG','-ffp-contract=off','-fno-fast-math'],native_compiler='GNU 11.4 / C++17, reused source-built native',
+ ldd=subprocess.check_output(['ldd',str(r.parent/'wj-h2-20261111/runtime-v4/IncNavierStokesSolver')],text=True),loader=os.environ['LD_LIBRARY_PATH'])
+p=r/'receipts/final-environment.json';assert not p.exists();p.write_text(json.dumps(d,indent=2)+'\n')
+"
+	User time (seconds): 0.12
+	System time (seconds): 0.04
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.16
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 43008
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 7820
+	Voluntary context switches: 33
+	Involuntary context switches: 2
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 24
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
