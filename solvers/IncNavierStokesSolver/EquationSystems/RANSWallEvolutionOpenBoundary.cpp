@@ -155,6 +155,12 @@ RANSWallEvolutionData LoadRANSAcceptedOpenData(const LibUtilities::SessionReader
         {
             data.projectedReference=ref->Project();
             data.projectedReferenceBoundary=patch.FixedReferenceBoundary(data.projectedReference);
+            // Apply the existing dependent-trace initialization once before
+            // defining the immutable live corner rows. This records the same
+            // numerical corner in initialization and replay, including ulps.
+            // No such reference operation occurs after advancing k.
+            data.projectedReference=patch.Lift(data.projectedReference,0.,data);
+            data.projectedReferenceBoundary=patch.FixedReferenceBoundary(data.projectedReference);
         }
         for(int region=0;region<2;++region)
         {

@@ -16,7 +16,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--phase',choices=['initial','evolve'],required=True)
     for k in ('root','output'):p.add_argument('--'+k,type=Path,required=True)
     p.add_argument('--runtime',type=Path);p.add_argument('--initial-root',type=Path);p.add_argument('--evolution-root',type=Path)
-    a=p.parse_args();r=a.root;rt=a.runtime or r/'build-v1/runtime';ir=a.initial_root or r/'initial-v1';er=a.evolution_root or r/'evolution-v1';s=Path(__file__).parent;refs=r/'reference-v1/results.json';contract=r/'source/docs/plans/cao-tamura-accepted-4-evidence/native-contract.json'
+    a=p.parse_args();r=a.root;rt=a.runtime or r/'build-v1/runtime';ir=a.initial_root or r/'initial-v1';er=a.evolution_root or r/'evolution-v1';s=Path(__file__).parent;refs=r/'reference-v1/results.json';contract=r/'source/docs/plans/cao-tamura-accepted-4-evidence/projection-contract.json'
     m=RequestManifest(a.output,dict(schema='CT4FixedIndependentCasesV1',phase=a.phase,cases=CASES,reference_sha256=sha(refs),contract_sha256=sha(contract),
         initial_root=str(ir),evolution_root=str(er),runtime=runtime_identity(rt/'IncNavierStokesSolver'),source_sha256={f:sha(s/f) for f in ('ct_accepted4_jobs.py','ct_accepted4_run.py')}))
     result=dict(diagnostic_execution='incomplete',cases={})
