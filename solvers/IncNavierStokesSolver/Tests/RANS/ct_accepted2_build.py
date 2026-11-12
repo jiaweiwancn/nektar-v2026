@@ -26,8 +26,8 @@ def main():
     shutil.copytree(a.previous/'runtime-v2/lib',rt/'lib',symlinks=True)
     for name in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks'):shutil.copy2(r/'build'/name,rt/name)
     os.environ['LD_LIBRARY_PATH']=str(rt/'lib')
-    write_json(r/'runtime-identity.json',dict(source_revision=subprocess.check_output(['git','-c','index.threads=1','rev-parse','HEAD'],cwd=r/'source',text=True).strip(),
-        source_status=subprocess.check_output(['git','-c','index.threads=1','status','--porcelain'],cwd=r/'source',text=True),runtimes={n:runtime_identity(rt/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks')},
+    write_json(r/'runtime-identity.json',dict(source_revision=subprocess.check_output(['git','-c','index.threads=1','-c','core.preloadIndex=false','rev-parse','HEAD'],cwd=r/'source',text=True).strip(),
+        source_status=subprocess.check_output(['git','-c','index.threads=1','-c','core.preloadIndex=false','status','--porcelain'],cwd=r/'source',text=True),runtimes={n:runtime_identity(rt/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks')},
         reused_frozen_libraries={p.name:sha(p) for p in (rt/'lib').iterdir() if p.is_file()},dependency_sha256=sha(dep),threads=THREADS,compiler=subprocess.check_output(['c++','--version'],text=True),build_receipt_sha256=sha(r/'build-execution.json')))
     return 0
 if __name__=='__main__':raise SystemExit(main())
