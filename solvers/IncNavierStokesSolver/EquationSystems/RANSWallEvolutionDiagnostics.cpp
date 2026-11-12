@@ -566,7 +566,9 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
             {"outer_volume",J::Number(m_volumeOrder?m_volumeOrder:m_parameters.tangentialOrder)},
             {"mass_override",J::Number(m_massOrder)},{"mass_default",J::Quote("max(8,p+3) per native field")},
             {"interface",J::Number(m_interfaceOrder?m_interfaceOrder:8)},
-            {"reference_projection",J::Quote("Gauss32 on native radial elements, supplied breakpoints and geometric 1e-4*1.5^j subpanels")},
+            {"reference_projection",J::Quote(OpenBoundary()?
+                "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data":
+                "Gauss32 on native radial elements, supplied breakpoints and geometric 1e-4*1.5^j subpanels")},
             {"inner_volume_points",J::Number(ni)},{"outer_volume_points",J::Number(no)}})},
         {"profiles",J::List(profiles)},{"volume",J::List(volume)},{"faces",J::List(faces)},{"pressure_mass",J::List(mass)},
         {"audit_alpha_zero",J::Object(diagnostic)},
