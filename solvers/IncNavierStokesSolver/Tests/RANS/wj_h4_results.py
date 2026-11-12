@@ -70,9 +70,15 @@ def group_name(case):
 def samples(root):
     inv=active_inventory(root);catalog=load(root/'catalog.json');groups={}
     for entry in catalog:
-        p=load(entry['path']);r=load(p['producer']['path']);name=group_name(entry['case'])
+        assert sha(entry['path'])==entry['sha256'],'scan bytes differ from sealed catalog'
+        p=load(entry['path']);assert sha(p['producer']['path'])==p['producer']['sha256'],'wrong producer bytes'
+        r=load(p['producer']['path']);name=group_name(entry['case'])
         step=entry['step'] if entry['step'] is not None else r['steps']+1
         intended=aligned(step,r['dt'],entry['time']);role='rejected' if entry['native_status']=='rejected candidate' else 'accepted'
+        state,history,alpha,t,packet=state_context(r,step,role=='rejected')
+        assert vector_hash(state)==p['state_sha256']==packet['state_sha256']
+        assert p['callback_history_sha256']==packet['stage_history_sha256']
+        if step:assert vector_hash(history)==p['callback_history_sha256']
         assert p['inventory_sha256']==inv['sha256'],'stale scan in final catalog'
         key=(int(step),role)
         if key in groups.setdefault(name,{}):raise ValueError('duplicate native stage binding')

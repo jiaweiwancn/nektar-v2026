@@ -153,16 +153,18 @@ def publish(root):
     required=[v for k,v in comparisons.items()if k!='retained-A-time']
     core_names={'base-x1-half','refined-x1','refined-x1-half','base-x3-half'}
     core={v['case']:v['status']for v in runs if v['case']in core_names}
+    expected_readbacks={v['case']for v in runs}|{'base-x1-half-cp0','local-x3-cp0'}
     gates=dict(schema='WJH4ComponentGatesV1',core='PASS'if set(core)==core_names and all(v=='PASS_SHORT_CONTROL'for v in core.values())else 'INCOMPLETE',
         fresh_cases={v['case']:v['status']for v in runs},expanded_native_accepted='PASS'if all(v['expanded_status']=='PASS'for v in minima if v['role']=='accepted')else 'OBSTRUCTED',
         common_points='PASS'if all(v['status']=='COMPLETE_DATA'for v in required)else 'UNRESOLVED',
         evolved_quadrature='PASS'if all(v['status']=='PASS'for v in quadrature)else 'UNRESOLVED',
-        independent_weak='PASS'if all(v['independent_weak']['status']=='PASS'for v in native.values())else 'UNRESOLVED',
+        independent_weak='PASS'if set(native)==expected_readbacks and all(v['independent_weak']['status']=='PASS'for v in native.values())else 'UNRESOLVED',
         attempts=sum(v['accounting']['attempts']for v in runs),solve_bound_counts=counts,
         numerical_corrections=sum(v['accounting']['corrections']for v in runs),
         execution_path_check='NOT_RUN:no inventory gap',max_time=max(v['accepted_time']for v in runs),
         H2_T8='DENIED_NOT_RUN_UNCHANGED',later_T04='NOT_RUN_OUT_OF_SCOPE',developed_precursor='NOT_QUALIFIED',
         scope='finite physical union, all owners and local angular action; sensitivity, not asymptotic order or global stability')
+    gates['matched_local_admissibility']='OBSTRUCTED'if any(v['status']=='OBSTRUCTED'for v in runs)else 'PASS_FINITE_INVENTORY'if all(v['status']=='PASS_SHORT_CONTROL'for v in runs)and len(runs)==6 else 'INCOMPLETE'
     save(out/'component-gates.json',gates)
     commands=[]
     for p in sorted((root/'operations').glob('*/receipt.json')):
