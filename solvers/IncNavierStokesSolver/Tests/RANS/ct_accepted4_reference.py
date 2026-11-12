@@ -65,18 +65,10 @@ def reference(c,z,outer=None):
 
 
 def normal_distance(x,z):
-    def h(t):return math.cos(math.pi*t/5)**2 if abs(t)<2.5 else 0.
-    def hp(t):return -math.pi/5*math.sin(math.pi*t/2.5) if abs(t)<2.5 else 0.
-    if z<h(x):return dict(status='inside_terrain',distance=None)
-    f=lambda t:t-hp(t)*(z-h(t))-x
-    ts=np.linspace(-2.5+1e-12,2.5-1e-12,129);roots=[]
-    for a,b in zip(ts[:-1],ts[1:]):
-        if f(a)*f(b)<0:roots.append(brentq(f,a,b,xtol=1e-13))
-    candidates=[-2.5,2.5,*roots]
-    if abs(x)>=2.5:candidates.append(x)
-    t=min(candidates,key=lambda t:(t-x)**2+(h(t)-z)**2)
-    return dict(status='closest_normal' if t in roots or t==x else 'foot_limit',footpoint_x=t,
-        distance=math.hypot(t-x,z-h(t)),vertical=z-h(x),normal_root_count=len(roots))
+    # Observation-only repair. CT4's sealed outputs and fitted physical inputs
+    # retain their original identities; no native reference formula is changed.
+    from ct_accepted5_geometry import closest_normal
+    return closest_normal(x,z)
 
 
 def heights(data):
