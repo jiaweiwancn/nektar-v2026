@@ -33,14 +33,15 @@ def main():
     cache=a.root/'profile-build-v1/build/CMakeCache.txt'
     compiler={line.split(':',1)[0]:line.split('=',1)[1] for line in cache.read_text().splitlines()
         if '=' in line and line.startswith(('CMAKE_CXX_','CMAKE_BUILD_TYPE:','RANS_','Nektar++_DIR:'))}
-    provenance=dict(schema='CT3FinalProvenanceV1',starting_revision=previous.get('source_revision_before_evidence_commit'),
-        CT3_starting_revision='db37c6b11882e7a06413a29eb6623ab212c4d4a5',source_revision=revision,
+    flags=a.root/'profile-build-v1/build/CMakeFiles/IncNavierStokesSolver.dir/flags.make'
+    provenance=dict(schema='CT3FinalProvenanceV1',starting_revision='db37c6b11882e7a06413a29eb6623ab212c4d4a5',
+        CT2_final_source=previous.get('source_revision_before_evidence_commit'),source_revision=revision,
         source_status=subprocess.check_output(git+['status','--porcelain'],cwd=source,text=True),
         specifications=specs,frozen_dataset=data,unchanged_kernels=kernels,
         environment=dict(python=sys.version,python_executable=sys.executable,numpy=np.__version__,scipy=scipy.__version__,
             platform=platform.platform(),threads={k:os.environ.get(k) for k in THREADS},
             compiler=subprocess.check_output([compiler['CMAKE_CXX_COMPILER'],'--version'],text=True).splitlines()[0],
-            CMake_cache=compiler,CMake_cache_sha256=sha(cache),
+            CMake_cache=compiler,CMake_cache_sha256=sha(cache),actual_target_flags=flags.read_text(),actual_target_flags_sha256=sha(flags),
             actual_mount=json.loads(subprocess.check_output(['findmnt','-T',str(a.root),'-J'],text=True)),
             MPI='MPI-enabled build; all supported native tests one serial rank; library/helper threads counted'),
         runtime_scope=dict(primary_source='a897896524b8761d3a954d491f96d1b33941d94f',
