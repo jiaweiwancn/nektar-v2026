@@ -1,0 +1,67 @@
+{
+  "schema": "CT2FinalSourceSpecificationBridgeV1",
+  "starting_revision": "eedb3738017f46f9c71b857bf814213ad070d7f7",
+  "starting_status": "clean; fetched GitHub SSH head identical; no intervening commits",
+  "source_revision_before_evidence_commit": "216ab4000205f980c784eae97af4a7beb2af858b",
+  "specifications": {
+    "docs/literature/A93_A95_E94_E95_neutral_ABL_EP_AWF_combined.tex": "056a85c2aea5ce4ca168caf561613e662416bb6b7d7177451ba5038d2cf68a64",
+    "docs/literature/accepted_awf_appendix_A93_A95_E94_E95.tex": "17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40"
+  },
+  "frozen_dataset": {
+    "version": "cao-tamura-2006-v1.1",
+    "hashes": {
+      "source_manifest.json": "8c0cab03d1fe4c1301386539d584a20754d9a0641feaf98e3fdd2f2079e778f8",
+      "scores.json": "a681bad718a6a72d6543abcad73d91b183d5d955db6933348b866ef35da1afe9",
+      "uncertainty.json": "b87ba465738bc0665702fd31eebccbe811149acbcc43913e2bde8209719e28ad",
+      "snapshot.json": "2432937f6ab1b7dd41351e56e3cd4ce31a24e8cc2f63449404af2c3a688b7429",
+      "profiles.csv": "f696657990c1d207a303777f17dd574049239143e6fa2c286f0d87650fd614f2",
+      "series.json": "8cef4a13b83c7e9f6afcaecbf7ecc58d861ee54e31df29fa7e8584924e320905",
+      "extraction.json": "7e5e5fe15fb43c0e6c6c1102197f018ed7cdc758d45e630100977e9de9c370a3",
+      "reported_scalars.csv": "d746b30d04bb2b5556adc7b1609dd898c57a3c6660b61f636dbe6ed5e2fd3641",
+      "README.md": "c1286f22350a0412a20d6a0b823277b538f06dc2d486380a3b9a8d26fa5d9528"
+    },
+    "roles_and_weights_unchanged": true
+  },
+  "prior_contract_sha256": "8f2924943468a8091296090c18a39536c7d38a73a7b2037088446aee848a77d5",
+  "unchanged_reused_kernel_sources": {
+    "library/SolverUtils/Turbulence/RANSModels.h": "424b9a01dce61dcce49de6c20c75990bc76e7a79c458ce70763132815c7ec84e",
+    "library/SolverUtils/Turbulence/RANSModels.cpp": "7ce8af638c7b8f8701460ec0002e3aad3e34482444393f0df337662ab65d344f",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.h": "fcadc9f92cb1747b91f48e3a50db1ed8fcf10338d0a6c4aae5f0551a663a7154",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp": "5baf29819fed6b81ad1b042bc09258a3e0779d15de13076b688bf32f80ddcf7e",
+    "library/SolverUtils/Turbulence/EquilibriumAWFProfiles.h": "f391331b1996c8ac922f0297183bddfd921412e5ba7596dd5437e50c890e680d",
+    "library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp": "40429007c15840da733d70cbc7532896ba5a9bf240261db1b97cb2b9d2c0d400"
+  },
+  "physical_function_maps_identical_all_ten_initializations": true,
+  "physical_function_map_sha256": "d0cd6059d99807ea16fce67705a6a51d73b94688a929877f3554d7ec111134e6",
+  "initial_state_same_within_every_dt_pair": true,
+  "governing_runtime_source": "a897896524b8761d3a954d491f96d1b33941d94f",
+  "reporting_runtime_source": "8ba59b9d2016eb289006261474d80f1959963ba1",
+  "report_sha256": "9418b69b0dae0b3ac4f400ea7859bd8fb34108045ef671cc7ba6f223a600680f",
+  "current_source_files": {
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp": "4b05cf0026d2bb34a724533394f93c6f4050f1ba68f6b83814d707de48cfe899",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp": "14b1fcce3604d63789b814d7811cb4810e131e2be81be026e52413197c3f0391",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_audit.py": "f60f07d30869f135f37062e983c3082251569cd75a5ef45860265f9ce17c3540",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_build.py": "774c843e241cb6d331dd9f17965a751a925713bcb78b96a764abcf08d2d58e4d",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_continue.py": "ecd78cbe8a04692317d1e14f22b5bb5a1bde11906a841c09f97992358acfda44",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_diagnosis.py": "9fb86577a8e839b7bea174cccd63be2d84d58b1e8205f253f49af83d76fcdf17",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_extras.py": "6a9a855d3ddf4774491cfa3c2e5cc582c72f04f62b262c06b7f247598866e861",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_finish.py": "628a8d6759d12485f71f81879c5e4e2927ed2d44ba3bfebe4fa45322c53652f1",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_reporting_control.py": "508465d0965d633d141b4e5d73931bdbd931753379d6be57677cde9377df98ce",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_resource_control.py": "07764177dddd47770c66076bf8200756123883feaa377c9d925049ce440e8088",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_run.py": "3c8050a06a52e38e9e761812b941da150b90f205bb210c87de5975e5dfbda1e3",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_storage.py": "e9cb4fd542508aeefce082e1455ceab735eb5eefb46b03ef6c576b026755630e",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_wall.py": "ee6a9f57bf60fe00a8e7fa758b0fc5cd6fb6b479ce8089c40b092e05d37dc75d",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_pilot_diagnostics.py": "f3aacdf915907b6588e687c584f607fd82b8d08add59b89317e77816e7907bfd",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_pilot.py": "34f7ac26e2fbc5846f7afb0c32288341089e09cc6b48c5bb1feab715b86c9099",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_receipts.py": "998267aa0e76d7063cf7e95792fc72b0c064b995ee61fc1a18b10567530db172",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_open.py": "76f5d08b447f33aa82a7747ef852b217ba667ff8b187491f7ee001ecda2a2d62",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_feasibility.py": "82f32108287e239203560d54f83aef8f35c5fbc7dac5c07c53c2dc3bd1d9fdf5",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_command.py": "250f7152530ae6a512f216aa2da9109bc53aa6249e5be4a1feae5589a30dfde4",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_open_supplement.py": "29dab1efafdf94ce699fca07c78cd2d98959adf65affb5b47272300f5ccafad1",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_open_controls.py": "1384f64dfbace185826c449990162584d942cfb54801220c76458a9948bcd8ef",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_initial_audit.py": "b65d0ea9600d2e0b4bafd1c4d26896ce049078eda05f91778461eddfdbdf8ca2",
+    "solvers/IncNavierStokesSolver/Tests/RANS/collect_ct_accepted_2.py": "d727b4bf2f769fc1e2e5f48053c9cf1659e78d4bdb6adae8b2d09795c52379dc"
+  },
+  "historical_scope": "all old qualification decisions and eight unresolved epsilon-order observations unchanged",
+  "project_plan_sha256": "8f943949a017bb3d227d1f702485f89804099de0172995c7146eeb06bfe9727b"
+}

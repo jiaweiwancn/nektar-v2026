@@ -1,5 +1,15 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-2 (2026-11-12): the fixed-input below-delta Zminus A95/Accepted
+> pilot passes paired .002/.001 histories through T=.2; full evolved spatial
+> convergence remains unresolved. B/X/Z+/XZ+ failures and CT1 results remain
+> unchanged. The 5 mm frozen rough reference meets the retained thin criterion,
+> with physical interface qualifications; SS preparation remains unresolved.
+> Resource gates are separately failed (private helper accounting and a later
+> foreign debugger excursion), with corrective controls preserved. See
+> [CT-Accepted-2](cao-tamura-accepted-2.md). No precursor/hill prediction is admitted.
+
+
 Current priority (CT-Accepted-1): the user has reprioritized experimental work
 to A93/A95/E94E95 Natural policies with the Accepted budget AWF. Follow the
 [Accepted feasibility/open-floor package](cao-tamura-accepted-1.md) and its

@@ -1,0 +1,333 @@
+{
+  "launch-build": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_build.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112",
+      "--previous",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111"
+    ],
+    "exit_code": 0,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "wall_seconds": 278.48393792903516,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 855.367917,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  },
+  "launch-final-v1": {
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "from pathlib import Path\nimport os,json,subprocess\nfrom ct_accepted_open import run\nfrom ct_accepted_feasibility import write_json\nr=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\");s=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/source-after-reboot/solvers/IncNavierStokesSolver/Tests/RANS\");rt=r/'runtime'\nlogs=r/'logs-final';logs.mkdir();jobs=[]\nfor name,script,args in [('extras','ct_accepted2_extras.py',['--root',r,'--output',r/'extras-v1']),('finish','ct_accepted2_finish.py',['--root',r,'--output',r/'final-v1']),('compact','collect_ct_accepted_2.py',['--root',r,'--output',r/'compact-v1'])]:\n print('starting',name,flush=True);e=run(['python3','-B',str(s/script),*map(str,args)],logs,name+'.log');jobs.append(dict(name=name,**e));write_json(r/'final-execution.json',jobs);print('finished',name,e['exit_code'],flush=True)\n if e['exit_code'] and name!='finish':raise SystemExit(e['exit_code'])\nreporting=r/'reporting';reporting.mkdir();(reporting/'tmp').mkdir()\nsubprocess.run(['git','clone','--shared','--no-checkout',str(r/'source-after-reboot'),str(reporting/'source')],check=True)\nsubprocess.run(['git','checkout','--detach',subprocess.check_output(['git','rev-parse','HEAD'],cwd=r/'source-after-reboot',text=True).strip()],cwd=reporting/'source',check=True)\nprint('starting reporting build',flush=True)\ne=run(['python3','-B',str(reporting/'source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_build.py'),'--root',str(reporting),'--previous',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111\"],logs,'reporting-build.log');jobs.append(dict(name='reporting-build',**e));write_json(r/'final-execution.json',jobs);raise SystemExit(e['exit_code'])\n"
+    ],
+    "exit_code": 0,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "wall_seconds": 221.46213265700044,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 761.92418,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  },
+  "launch-followup-v1": {
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "from pathlib import Path\nimport json,os\nfrom ct_accepted_open import run\nfrom ct_accepted_feasibility import write_json\nr=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\");s=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/source-after-reboot/solvers/IncNavierStokesSolver/Tests/RANS\");rt=r/'runtime';old=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111\")\nlog=r/'logs-followup';log.mkdir();executions=[]\ndef execute(name,script,*args):\n c=['python3','-B',str(s/script),*map(str,args)];print('starting',name,flush=True);e=run(c,log,name+'.log');executions.append(dict(name=name,**e));write_json(r/'followup-execution.json',executions);print('finished',name,e['exit_code'],flush=True)\nexecute('continue02','ct_accepted2_continue.py','--root',r,'--parent',r/'companion-v1','--audits',r/'companion-audits-v1','--target','.02','--output',r/'continue02-v1')\nd=json.loads((r/'continue02-v1/results.json').read_text())\nif d.get('cases'):\n execute('audit02','ct_accepted2_audit.py','--runtime',rt,'--preparation',r/'companion-initial-v1','--trajectories',r/'continue02-v1','--output',r/'continue02-audits-v1')\nif d.get('physical_completion')=='pass':\n execute('continue2','ct_accepted2_continue.py','--root',r,'--parent',r/'continue02-v1','--audits',r/'continue02-audits-v1','--target','.2','--output',r/'continue2-v1')\n d2=json.loads((r/'continue2-v1/results.json').read_text())\n if d2.get('cases'):execute('audit2','ct_accepted2_audit.py','--runtime',rt,'--preparation',r/'companion-initial-v1','--trajectories',r/'continue2-v1','--output',r/'continue2-audits-v1')\nelse:\n write_json(r/'continue2-stopping.json',dict(status='not_attempted',reason='T=.02 physical/admission gate not passed',parent_sha256=__import__('rans_request_manifest').sha(r/'continue02-v1/results.json')))\nexecute('wall-heights-v2','ct_accepted2_wall.py','--runtime',rt,'--previous',old,'--data',s.parents[3]/'docs/plans/cao-tamura-validation-data','--output',r/'wall-heights-v2')\n"
+    ],
+    "exit_code": 0,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "wall_seconds": 2095.8597533849997,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 3007.094851,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  },
+  "launch-initial-v1": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_diagnosis.py",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112/runtime",
+      "--previous",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111",
+      "--mode",
+      "initial",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112/initial-v1"
+    ],
+    "exit_code": 1,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "wall_seconds": 16.876725869020447,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 20.852468000000002,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  },
+  "launch-initial-v2": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_diagnosis.py",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112/runtime",
+      "--previous",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111",
+      "--mode",
+      "initial",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112/initial-v2"
+    ],
+    "exit_code": 0,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "wall_seconds": 149.30051950598136,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 182.7775,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  },
+  "launch-matrix-v1": {
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "import json,subprocess; from pathlib import Path; r=Path(\"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112\"); d=json.loads((r/'initial-v2/results.json').read_text()); print(json.dumps({k:{'slots':v['0.002']['slots'],'dPi_dz':v['0.002']['pressure_projection']['native_gradient_at_witness'],'common':v['0.002']['pressure_projection']['signed_common_test'],'fixed_radicand':v['0.002']['fixed_grid_domain']['minimum']['radicand']} for k,v in d['layouts'].items()}),flush=True); raise SystemExit(subprocess.run(['python3','-B',\"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_diagnosis.py\",'--runtime',str(r/'runtime'),'--previous',\"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111\",'--mode','advance','--preparation',str(r/'initial-v2'),'--output',str(r/'matrix-v1')]).returncode)"
+    ],
+    "exit_code": 1,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "wall_seconds": 110.80038702196907,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 131.641112,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  },
+  "launch-read-after-reboot": {
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "import json;from pathlib import Path;r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\");d=json.loads((r/'matrix-v1/work/results.json').read_text());print(json.dumps({k:{'time':v['time'],'failure':v['failure'],'losses':[(x['time'],x['earliest_sampled_domain_loss'],x['stages']['corrected_flow']['native']['minimum']['radicand'],x['stages']['corrected_flow']['fixed']['minimum']['radicand']) for x in v['attempts']],'unchanged':v.get('sealed_baseline_bitwise_equality')}for k,v in d['cases'].items()},indent=2))"
+    ],
+    "exit_code": 0,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "wall_seconds": 0.6374950820001004,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 0.239309,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  },
+  "launch-read-companion": {
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "import json;from pathlib import Path;r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\"); d=json.loads((r/'companion-v1/results.json').read_text()); print(json.dumps({'companion':{k:{'time':v['time'],'failure':v['failure'],'losses':[(x['time'],x['earliest_sampled_domain_loss'],x['stages']['corrected_flow']['native']['minimum'].get('radicand'),x['stages']['corrected_flow']['fixed']['minimum'].get('radicand'))for x in v['attempts']]}for k,v in d['cases'].items()},'projection':json.loads((r/'companion-initial-v1/results.json').read_text())['layouts']['Zminus']['0.002']['pressure_projection'],'smokes':json.loads((r/'shared-smokes-v1/results.json').read_text())['shared_path_smoke_status']},indent=2))"
+    ],
+    "exit_code": 0,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "wall_seconds": 0.6413816969998152,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 0.222114,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  },
+  "launch-remaining-v1": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/source-after-reboot/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_run.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112",
+      "--previous",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111"
+    ],
+    "exit_code": 1,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "wall_seconds": 755.4794151200001,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 1108.8961459999998,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  },
+  "launch-rough-v1": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted2_diagnosis.py",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112/runtime",
+      "--previous",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-1-20261111",
+      "--mode",
+      "rough",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/ct-accepted-2-20261112/rough-v1"
+    ],
+    "exit_code": 0,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "wall_seconds": 8.526085400953889,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 10.124166,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  },
+  "launch-runtime-bridge": {
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "import json,os;from pathlib import Path;from rans_request_manifest import runtime_identity,sha;from ct_accepted2_storage import canonical_location;r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\");old=json.loads((r/'runtime-identity.json').read_text());current={n:runtime_identity(r/'runtime'/n) for n in old['runtimes']};ok=canonical_location(current)==canonical_location(old['runtimes']);print('relocated runtime exact-byte compatibility:',ok,flush=True);assert ok;from rans_qualification import write_json;write_json(r/'relocation-runtime-bridge.json',dict(schema='CT2MountRuntimeBridgeV1',status='pass',disk_uuid='5AB8A669B8A642FD',original_runtime_receipt_sha256=sha(r/'runtime-identity.json'),current=current,canonical_prefix_only_equal=ok));"
+    ],
+    "exit_code": 0,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "wall_seconds": 2.2877184129999932,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 1.02975,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  },
+  "launch-supplement-v1": {
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "from pathlib import Path\nimport json\nfrom ct_accepted_open import run\nfrom ct_accepted_feasibility import write_json\nr=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\");s=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/source-after-reboot/solvers/IncNavierStokesSolver/Tests/RANS\");logs=r/'logs-supplement';logs.mkdir();executions=[]\nfor name,script,args in [('reporting','ct_accepted2_reporting_control.py',['--root',r,'--output',r/'reporting-control-v1']),('resource','ct_accepted2_resource_control.py',['--root',r,'--output',r/'resource-control-v1']),('final','ct_accepted2_finish.py',['--root',r,'--output',r/'final-v2']),('compact','collect_ct_accepted_2.py',['--root',r,'--decision',r/'final-v2','--output',r/'compact-v2'])]:\n print('starting',name,flush=True);e=run(['python3','-B',str(s/script),*map(str,args)],logs,name+'.log');executions.append(dict(name=name,**e));write_json(r/'supplement-execution.json',executions);print('finished',name,e['exit_code'],flush=True)\n if e['exit_code']:raise SystemExit(e['exit_code'])\n"
+    ],
+    "exit_code": 1,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "control_parent_pid": 25215,
+    "guard_pid": 25236,
+    "owned_family_pid": 25239,
+    "control_helpers_outside_leased_family": 2,
+    "wall_seconds": 18.512998214999243,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 26.410887,
+    "process_cpu_scope": "owned command family plus its short-lived resource monitor",
+    "family_reservation": 8,
+    "project_limit": 16,
+    "aggregate_limit": 72,
+    "startup_reserve": 16
+  }
+}

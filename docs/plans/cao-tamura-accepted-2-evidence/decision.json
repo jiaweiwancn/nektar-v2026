@@ -1,0 +1,3869 @@
+{
+  "schema": "CT2ScientificDecisionV2",
+  "diagnostic_execution": "pass",
+  "resource_classifier": "leased family plus its two control helpers; v1 undercount retained separately",
+  "negative_controls": {
+    "native_rejection": {
+      "status": "pass",
+      "expected_rejection": {
+        "status": "fail",
+        "reasons": [
+          "native_physical_rejection"
+        ]
+      }
+    },
+    "short_horizon": {
+      "status": "pass",
+      "expected_rejection": {
+        "status": "fail",
+        "reasons": [
+          "required_horizon_not_reached"
+        ]
+      }
+    },
+    "dense_domain": {
+      "status": "pass",
+      "expected_rejection": {
+        "status": "fail",
+        "reasons": [
+          "independent_fixed_grid_constitutive_failure"
+        ]
+      }
+    },
+    "exactly_incompressible_A95": {
+      "status": "pass",
+      "expected": "negative radicand despite exact zero divergence",
+      "witness": {
+        "status": "constitutive_domain_failure",
+        "raw_gradient": [
+          [
+            -6.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            6.0
+          ]
+        ],
+        "raw_divergence": 0.0,
+        "strain_eigenvalues": [
+          -6.0,
+          0.0,
+          6.0
+        ],
+        "strain_norm": 8.48528137423857,
+        "rotation_norm": 0.0,
+        "k": 1.0,
+        "epsilon": 1.0,
+        "tau": 1.0,
+        "Cmu": 0.04081632653061224,
+        "radicand": -0.07955018742190711,
+        "isotropic_production_work": -0.0,
+        "full_stress_and_production": "undefined: original negative A95 radicand"
+      },
+      "threshold_a_tau": 5.230796051808374
+    },
+    "control_helpers_counted": {
+      "status": "pass",
+      "fixture": {
+        "leased_family": 16,
+        "control_helpers": 2,
+        "aggregate": 37
+      },
+      "expected": {
+        "project_allocation": "fail",
+        "aggregate_cap": "pass"
+      }
+    }
+  },
+  "cases": {
+    "B-0.001": {
+      "time": 0.003,
+      "failure": "EP-AWF patch: inadmissible evolution volume/sampler state on a collective rank: A95 negative square-root radicand; no constitutive clipping",
+      "steps": 3,
+      "state_sha256": "4d8f7802117f9d77a08357990fbc703bb5e539e186d33959999f9a75207fea61",
+      "native_report_sha256": "d60639ef7b999271ef2fe44a608de7d3ebd60fe550a3665583f8d22e09c5ea00",
+      "fixed_domain_failures": 0,
+      "actual_endpoint_native": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -0.0011976627928511618,
+              0.0,
+              7.203858044845141e-06
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.2010601310274371e-05,
+              0.0,
+              -1.2037066341155577e-06
+            ]
+          ],
+          "raw_divergence": -0.0011988664994852774,
+          "strain_eigenvalues": [
+            -0.0007981177647328106,
+            0.0003984955982377183,
+            0.0003996221664950925
+          ],
+          "strain_norm": 0.0009774909637184205,
+          "rotation_norm": 3.398880758407778e-06,
+          "k": 2.8639660317815483e-05,
+          "epsilon": 8.246383948334322e-09,
+          "tau": 3472.996224436091,
+          "Cmu": 0.09377622220497867,
+          "radicand": 0.08785874105551528,
+          "isotropic_production_work": 2.2890086207777903e-08,
+          "full_stress_and_production": "defined",
+          "Pi": -8.697249646476629e-05,
+          "pressure_gradient": [
+            -4.4718400276274814e-05,
+            0.0,
+            2.773737195716395e-05
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -0.0005982295431085231,
+                0.0,
+                7.203858044845141e-06
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.2010601310274371e-05,
+                0.0,
+                0.0005982295431085231
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.0005983066814852644,
+              0.0,
+              0.0005983066814852644
+            ],
+            "strain_norm": 0.0008461334234149006,
+            "rotation_norm": 3.398880758407778e-06,
+            "k": 2.8639660317815483e-05,
+            "epsilon": 8.246383948334322e-09,
+            "tau": 3472.996224436091,
+            "Cmu": 0.07853114818327836,
+            "radicand": 0.5206941524574514,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              3.397291893238279e-05,
+              0.0,
+              -6.539472120396812e-07
+            ],
+            [
+              0.0,
+              1.1638161383057418e-05,
+              0.0
+            ],
+            [
+              -6.539472120396812e-07,
+              0.0,
+              1.1668240320190754e-05
+            ]
+          ],
+          "Q": [
+            [
+              -7.623808008268399e-09,
+              0.0,
+              -4.7472448714184867e-07
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -4.7472448714184867e-07,
+              0.0,
+              7.623808008268399e-09
+            ]
+          ],
+          "production": 4.0714711350271677e-08,
+          "total_stress": [
+            [
+              7.209268441092716e-05,
+              0.0,
+              6.539472120396812e-07
+            ],
+            [
+              0.0,
+              9.442744196025253e-05,
+              0.0
+            ],
+            [
+              6.539472120396812e-07,
+              0.0,
+              9.439736302311919e-05
+            ]
+          ],
+          "coordinate": [
+            0.24836915803232323,
+            0,
+            6.2989252590303035
+          ],
+          "geometry": 25,
+          "element": 25,
+          "side": 0,
+          "sample_index": 9613
+        },
+        "domain_failure_count": 0,
+        "count": 1200,
+        "divergence_unweighted_RMS": 0.0004083989373125001,
+        "divergence_maximum": 0.003944910703136924,
+        "covariance_minimum": {
+          "coordinate": [
+            0.12336915803232323,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 22,
+          "side": 0,
+          "value": 8.631506158611124e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.05319535381364805,
+            0,
+            7.845860614409442
+          ],
+          "geometry": 24,
+          "side": 0,
+          "value": 2.8626095601806507e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 22,
+          "side": 0,
+          "value": 7.944954479327994e-09
+        }
+      },
+      "actual_endpoint_fixed": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -0.0012849930097331708,
+              0.0,
+              8.030559463606726e-06
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.375570573471229e-05,
+              0.0,
+              -1.294674321022069e-06
+            ]
+          ],
+          "raw_divergence": -0.0012862876840541927,
+          "strain_eigenvalues": [
+            -0.0008563228780370189,
+            0.0004275603166856213,
+            0.00042876256135139756
+          ],
+          "strain_norm": 0.0010487773976733685,
+          "rotation_norm": 4.0482897515836206e-06,
+          "k": 2.8640794361775035e-05,
+          "epsilon": 8.258415811373613e-09,
+          "tau": 3468.073661576898,
+          "Cmu": 0.09123277091776054,
+          "radicand": 0.00896839368583302,
+          "isotropic_production_work": 2.456020069938666e-08,
+          "full_stress_and_production": "defined",
+          "Pi": -8.8403650707267e-05,
+          "pressure_gradient": [
+            -4.543445258274495e-05,
+            0.0,
+            2.7761240372258123e-05
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -0.0006418491677060744,
+                0.0,
+                8.030559463606726e-06
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.375570573471229e-05,
+                0.0,
+                0.0006418491677060743
+              ]
+            ],
+            "raw_divergence": -1.0842021724855044e-19,
+            "strain_eigenvalues": [
+              -0.0006419415973613201,
+              -4.577227518278193e-36,
+              0.0006419415973613201
+            ],
+            "strain_norm": 0.0009078425132398275,
+            "rotation_norm": 4.0482897515836206e-06,
+            "k": 2.8640794361775035e-05,
+            "epsilon": 8.258415811373613e-09,
+            "tau": 3468.073661576898,
+            "Cmu": 0.07587847176336147,
+            "radicand": 0.4863381406137275,
+            "isotropic_production_work": 2.0701607645831387e-24,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              3.460907530388212e-05,
+              0.0,
+              -3.809516168803935e-07
+            ],
+            [
+              0.0,
+              1.1322967025607354e-05,
+              0.0
+            ],
+            [
+              -3.809516168803935e-07,
+              0.0,
+              1.13495463940606e-05
+            ]
+          ],
+          "Q": [
+            [
+              -3.114681335121832e-09,
+              0.0,
+              -1.835243998381001e-07
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -1.835243998381001e-07,
+              0.0,
+              3.114681335121832e-09
+            ]
+          ],
+          "production": 4.4495413318042156e-08,
+          "total_stress": [
+            [
+              7.288843831123489e-05,
+              0.0,
+              3.809516168803935e-07
+            ],
+            [
+              0.0,
+              9.617454658950966e-05,
+              0.0
+            ],
+            [
+              3.809516168803935e-07,
+              0.0,
+              9.614796722105642e-05
+            ]
+          ],
+          "coordinate": [
+            0.25,
+            0,
+            6.25000001
+          ],
+          "geometry": 25,
+          "element": null,
+          "side": 0,
+          "sample_index": 1814
+        },
+        "domain_failure_count": 0,
+        "count": 1519,
+        "divergence_unweighted_RMS": 0.000657144371790561,
+        "divergence_maximum": 0.0027273621408525676,
+        "covariance_minimum": {
+          "coordinate": [
+            0.17,
+            0,
+            6.2124999999999995
+          ],
+          "geometry": 23,
+          "side": 0,
+          "value": 8.560011842624659e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.041251184775946484,
+            0,
+            7.655033173726501
+          ],
+          "geometry": 24,
+          "side": 0,
+          "value": 2.8626073907978075e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.25,
+            0,
+            6.2
+          ],
+          "geometry": 23,
+          "side": 0,
+          "value": 7.890253374239344e-09
+        }
+      },
+      "physical_gate": {
+        "status": "fail",
+        "reasons": [
+          "native_physical_rejection",
+          "required_horizon_not_reached"
+        ]
+      },
+      "last_attempt_time": 0.004
+    },
+    "B-0.002": {
+      "time": 0.002,
+      "failure": "EP-AWF patch: inadmissible evolution volume/sampler state on a collective rank: A95 negative square-root radicand; no constitutive clipping",
+      "steps": 1,
+      "state_sha256": "c3c63ef3dd62eb72c540bc6de6c3a03f13b872be6118f06ec21f9b83380d175c",
+      "native_report_sha256": "41b82d61665c1a4bf05d20e30f88827314a895165302b52952d1281b9e93e346",
+      "fixed_domain_failures": 0,
+      "actual_endpoint_native": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -9.97010445757951e-07,
+              0.0,
+              0.004682976832527664
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              4.2137933801227525e-05,
+              0.0,
+              -1.2870468348877152e-07
+            ]
+          ],
+          "raw_divergence": -1.1257151292467225e-06,
+          "strain_eigenvalues": [
+            -0.0023627450422434777,
+            3.7523837641557417e-07,
+            0.0023623698038670623
+          ],
+          "strain_norm": 0.003341160781176637,
+          "rotation_norm": 0.0032815686556837724,
+          "k": 7.04252518728998e-05,
+          "epsilon": 1.564565040845302e-08,
+          "tau": 4501.267127562208,
+          "Cmu": 0.019525807927308094,
+          "radicand": 0.223887176916716,
+          "isotropic_production_work": 5.28525143428896e-11,
+          "full_stress_and_production": "defined",
+          "Pi": 5.218034132397229e-05,
+          "pressure_gradient": [
+            -0.00020840008869656742,
+            0.0,
+            -0.0008314619093550633
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -4.341528811345897e-07,
+                0.0,
+                0.004682976832527664
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                4.2137933801227525e-05,
+                0.0,
+                4.341528811345897e-07
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.00236255742305527,
+              0.0,
+              0.00236255742305527
+            ],
+            "strain_norm": 0.0033411607495699926,
+            "rotation_norm": 0.0032815686556837724,
+            "k": 7.04252518728998e-05,
+            "epsilon": 1.564565040845302e-08,
+            "tau": 4501.267127562208,
+            "Cmu": 0.019524454020330116,
+            "radicand": 0.22399481819601286,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              5.8057176878967903e-05,
+              0.0,
+              -2.924517887458636e-05
+            ],
+            [
+              0.0,
+              4.694552266141014e-05,
+              0.0
+            ],
+            [
+              -2.924517887458636e-05,
+              0.0,
+              3.584780420542157e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.1099311752316687e-05,
+              0.0,
+              2.0396533901009124e-09
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              2.0396533901009124e-09,
+              0.0,
+              -1.1099311752316687e-05
+            ]
+          ],
+          "production": 1.3824932393633136e-07,
+          "total_stress": [
+            [
+              -6.328735028767366e-05,
+              -0.0,
+              2.924517887458636e-05
+            ],
+            [
+              -0.0,
+              -5.2175696070115895e-05,
+              -0.0
+            ],
+            [
+              2.924517887458636e-05,
+              -0.0,
+              -4.1077977614127326e-05
+            ]
+          ],
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.0981962875251075
+          ],
+          "geometry": 22,
+          "element": 22,
+          "side": 0,
+          "sample_index": 9384
+        },
+        "domain_failure_count": 0,
+        "count": 1200,
+        "divergence_unweighted_RMS": 0.0002659675884935403,
+        "divergence_maximum": 0.002599783875125578,
+        "covariance_minimum": {
+          "coordinate": [
+            0.17819535381364804,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 23,
+          "side": 0,
+          "value": 8.74744333322285e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.05319535381364805,
+            0,
+            7.845860614409442
+          ],
+          "geometry": 24,
+          "side": 0,
+          "value": 2.862684506972428e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 22,
+          "side": 0,
+          "value": 7.942221166911535e-09
+        }
+      },
+      "actual_endpoint_fixed": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -1.1986661196061732e-05,
+              0.0,
+              0.00541014406754628
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -1.597927930822042e-06,
+              0.0,
+              -1.1435043869820038e-06
+            ]
+          ],
+          "raw_divergence": -1.3130165583043736e-05,
+          "strain_eigenvalues": [
+            -0.002706466865374847,
+            4.376721861014579e-06,
+            0.0027020901435138318
+          ],
+          "strain_norm": 0.0038244310939982693,
+          "rotation_norm": 0.0038266794630338772,
+          "k": 8.40778212452555e-05,
+          "epsilon": 2.1219120653316947e-08,
+          "tau": 3962.3612410211995,
+          "Cmu": 0.0192537796816895,
+          "radicand": 0.23384556490003128,
+          "isotropic_production_work": 7.359704765411715e-10,
+          "full_stress_and_production": "defined",
+          "Pi": 2.9253400330334677e-05,
+          "pressure_gradient": [
+            -0.00022352739083298008,
+            0.0,
+            -0.0006623051444508495
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -5.421578404539864e-06,
+                0.0,
+                0.00541014406754628
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                -1.597927930822042e-06,
+                0.0,
+                5.421578404539864e-06
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.0027042785044443397,
+              0.0,
+              0.0027042785044443397
+            ],
+            "strain_norm": 0.003824427337419215,
+            "rotation_norm": 0.0038266794630338772,
+            "k": 8.40778212452555e-05,
+            "epsilon": 2.1219120653316947e-08,
+            "tau": 3962.3612410211995,
+            "Cmu": 0.019240139354167986,
+            "radicand": 0.23493224656607048,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              6.969230915302086e-05,
+              0.0,
+              -3.466506601273699e-05
+            ],
+            [
+              0.0,
+              5.599573332578725e-05,
+              0.0
+            ],
+            [
+              -3.466506601273699e-05,
+              0.0,
+              4.2467600011702885e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.3542802950314177e-05,
+              0.0,
+              2.715087053600783e-08
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              2.715087053600783e-08,
+              0.0,
+              -1.3542802950314177e-05
+            ]
+          ],
+          "production": 1.883715489474101e-07,
+          "total_stress": [
+            [
+              -4.2893828653185204e-05,
+              0.0,
+              3.466506601273699e-05
+            ],
+            [
+              0.0,
+              -2.9197252825951593e-05,
+              0.0
+            ],
+            [
+              3.466506601273699e-05,
+              0.0,
+              -1.566911951186723e-05
+            ]
+          ],
+          "coordinate": [
+            0.18749999,
+            0,
+            6.075
+          ],
+          "geometry": 23,
+          "element": null,
+          "side": 0,
+          "sample_index": 1042
+        },
+        "domain_failure_count": 0,
+        "count": 1519,
+        "divergence_unweighted_RMS": 0.00042879424333069595,
+        "divergence_maximum": 0.0017883795539017518,
+        "covariance_minimum": {
+          "coordinate": [
+            0.17,
+            0,
+            6.2124999999999995
+          ],
+          "geometry": 23,
+          "side": 0,
+          "value": 8.6391553137125e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.041251184775946484,
+            0,
+            7.655033173726501
+          ],
+          "geometry": 24,
+          "side": 0,
+          "value": 2.86268296646948e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.25,
+            0,
+            6.2
+          ],
+          "geometry": 23,
+          "side": 0,
+          "value": 7.866577066525704e-09
+        }
+      },
+      "physical_gate": {
+        "status": "fail",
+        "reasons": [
+          "native_physical_rejection",
+          "required_horizon_not_reached"
+        ]
+      },
+      "last_attempt_time": 0.004
+    },
+    "X-0.001": {
+      "time": 0,
+      "failure": "EP-AWF patch: PIMPLE flow scalar/continuous-ground domain exit: std::domain_error: A95 negative square-root radicand; no constitutive clipping",
+      "steps": 0,
+      "state_sha256": "927ec1d5795266d531fcb5368052043daba78437fc98dddfd910cc453b13c087",
+      "native_report_sha256": "f9ce9b231f5913ceaaf5b3272bb907083bb4c20036de5836d7ab66d44db36fd0",
+      "fixed_domain_failures": 0,
+      "actual_endpoint_native": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -1.0658141036401503e-13,
+              0.0,
+              0.004682722155953805
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -1.0658141036401503e-13,
+          "strain_eigenvalues": [
+            -0.002341361077994666,
+            3.552713678800501e-14,
+            0.002341361077959139
+          ],
+          "strain_norm": 0.0033111845908874254,
+          "rotation_norm": 0.0033111845908874254,
+          "k": 7.042087625805282e-05,
+          "epsilon": 1.564650886806358e-08,
+          "tau": 4500.740507154945,
+          "Cmu": 0.019528066069243982,
+          "radicand": 0.23775301724250408,
+          "isotropic_production_work": 5.003704207102034e-18,
+          "full_stress_and_production": "defined",
+          "Pi": -4.430445843172585e-07,
+          "pressure_gradient": [
+            4.336808689942018e-19,
+            0.0,
+            -0.00060630154296503
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -5.3290705182007514e-14,
+                0.0,
+                0.004682722155953805
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                5.3290705182007514e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.0023413610779769024,
+              0.0,
+              0.0023413610779769024
+            ],
+            "strain_norm": 0.0033111845908874254,
+            "rotation_norm": 0.0033111845908874254,
+            "k": 7.042087625805282e-05,
+            "epsilon": 1.564650886806358e-08,
+            "tau": 4500.740507154945,
+            "Cmu": 0.01952806606911463,
+            "radicand": 0.237753017252602,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              5.838438986752895e-05,
+              0.0,
+              -2.8982979179542263e-05
+            ],
+            [
+              0.0,
+              4.69472508382621e-05,
+              0.0
+            ],
+            [
+              -2.8982979179542263e-05,
+              0.0,
+              3.5510111810314585e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.1437139027947513e-05,
+              0.0,
+              2.603157666696275e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              2.603157666696275e-16,
+              0.0,
+              -1.1437139027947513e-05
+            ]
+          ],
+          "production": 1.3571923875581307e-07,
+          "total_stress": [
+            [
+              -1.0994094444509813e-05,
+              0.0,
+              2.8982979179542263e-05
+            ],
+            [
+              0.0,
+              4.43044584757038e-07,
+              0.0
+            ],
+            [
+              2.8982979179542263e-05,
+              0.0,
+              1.188018361270455e-05
+            ]
+          ],
+          "coordinate": [
+            0.18328323020903076,
+            0,
+            6.0981962875251075
+          ],
+          "geometry": 34,
+          "element": 34,
+          "side": 0,
+          "sample_index": 14144
+        },
+        "domain_failure_count": 0,
+        "count": 1800,
+        "divergence_unweighted_RMS": 4.914474448586101e-14,
+        "divergence_maximum": 1.3500311979441904e-13,
+        "covariance_minimum": {
+          "coordinate": [
+            0.24918457901616162,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 35,
+          "side": 0,
+          "value": 8.92478887622371e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.18668457901616162,
+            0,
+            7.845860614409442
+          ],
+          "geometry": 37,
+          "side": 0,
+          "value": 2.8628338772555748e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 33,
+          "side": 0,
+          "value": 7.936459433035023e-09
+        }
+      },
+      "actual_endpoint_fixed": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -1.8474111129762605e-13,
+              0.0,
+              0.005401000928767096
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -1.8474111129762605e-13,
+          "strain_eigenvalues": [
+            -0.002700500464414338,
+            6.158037043254201e-14,
+            0.002700500464352758
+          ],
+          "strain_norm": 0.003819084381926055,
+          "rotation_norm": 0.003819084381926055,
+          "k": 8.40194696594508e-05,
+          "epsilon": 2.1238559795876946e-08,
+          "tau": 3955.987151057274,
+          "Cmu": 0.019295801190237175,
+          "radicand": 0.23511455983967544,
+          "isotropic_production_work": 1.034790013034941e-17,
+          "full_stress_and_production": "defined",
+          "Pi": 1.3620900333215659e-05,
+          "pressure_gradient": [
+            -2.6020852139652106e-18,
+            0.0,
+            -0.0006063015429650298
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -9.237055564881302e-14,
+                0.0,
+                0.005401000928767096
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                9.237055564881302e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.002700500464383548,
+              0.0,
+              0.002700500464383548
+            ],
+            "strain_norm": 0.003819084381926055,
+            "rotation_norm": 0.003819084381926055,
+            "k": 8.40194696594508e-05,
+            "epsilon": 2.1238559795876946e-08,
+            "tau": 3955.987151057274,
+            "Cmu": 0.019295801190044762,
+            "radicand": 0.2351145598549299,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              6.958302992889535e-05,
+              0.0,
+              -3.463952085083158e-05
+            ],
+            [
+              0.0,
+              5.60129797721773e-05,
+              0.0
+            ],
+            [
+              -3.463952085083158e-05,
+              0.0,
+              4.2442929617828934e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.3570050154348365e-05,
+              0.0,
+              4.641632502831485e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              4.641632502831485e-16,
+              0.0,
+              -1.3570050154348365e-05
+            ]
+          ],
+          "production": 1.8708808430024338e-07,
+          "total_stress": [
+            [
+              -2.7190950489143815e-05,
+              0.0,
+              3.463952085083158e-05
+            ],
+            [
+              0.0,
+              -1.3620900332425761e-05,
+              0.0
+            ],
+            [
+              3.463952085083158e-05,
+              0.0,
+              -5.085017807739437e-08
+            ]
+          ],
+          "coordinate": [
+            0.18750001,
+            0,
+            6.075
+          ],
+          "geometry": 35,
+          "element": null,
+          "side": 0,
+          "sample_index": 1168
+        },
+        "domain_failure_count": 0,
+        "count": 1519,
+        "divergence_unweighted_RMS": 1.4811206269576182e-13,
+        "divergence_maximum": 2.6290081223123707e-13,
+        "covariance_minimum": {
+          "coordinate": [
+            0.25,
+            0,
+            6.2124999999999995
+          ],
+          "geometry": 35,
+          "side": 0,
+          "value": 8.770377362116014e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.18316050973731415,
+            0,
+            7.655033173726501
+          ],
+          "geometry": 37,
+          "side": 0,
+          "value": 2.862833877255575e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.22,
+            0,
+            6.2
+          ],
+          "geometry": 35,
+          "side": 0,
+          "value": 7.818300562799131e-09
+        }
+      },
+      "physical_gate": {
+        "status": "fail",
+        "reasons": [
+          "native_physical_rejection",
+          "required_horizon_not_reached"
+        ]
+      },
+      "last_attempt_time": 0.001
+    },
+    "X-0.002": {
+      "time": 0,
+      "failure": "EP-AWF patch: inadmissible evolution volume/sampler state on a collective rank: A95 negative square-root radicand; no constitutive clipping",
+      "steps": 0,
+      "state_sha256": "927ec1d5795266d531fcb5368052043daba78437fc98dddfd910cc453b13c087",
+      "native_report_sha256": "058897f9bacfc264b366f75c9af64b39805a9e62da64a9fa847c8f02367883dc",
+      "fixed_domain_failures": 0,
+      "actual_endpoint_native": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -1.0658141036401503e-13,
+              0.0,
+              0.004682722155953805
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -1.0658141036401503e-13,
+          "strain_eigenvalues": [
+            -0.002341361077994666,
+            3.552713678800501e-14,
+            0.002341361077959139
+          ],
+          "strain_norm": 0.0033111845908874254,
+          "rotation_norm": 0.0033111845908874254,
+          "k": 7.042087625805282e-05,
+          "epsilon": 1.564650886806358e-08,
+          "tau": 4500.740507154945,
+          "Cmu": 0.019528066069243982,
+          "radicand": 0.23775301724250408,
+          "isotropic_production_work": 5.003704207102034e-18,
+          "full_stress_and_production": "defined",
+          "Pi": -4.430445843172585e-07,
+          "pressure_gradient": [
+            4.336808689942018e-19,
+            0.0,
+            -0.00060630154296503
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -5.3290705182007514e-14,
+                0.0,
+                0.004682722155953805
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                5.3290705182007514e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.0023413610779769024,
+              0.0,
+              0.0023413610779769024
+            ],
+            "strain_norm": 0.0033111845908874254,
+            "rotation_norm": 0.0033111845908874254,
+            "k": 7.042087625805282e-05,
+            "epsilon": 1.564650886806358e-08,
+            "tau": 4500.740507154945,
+            "Cmu": 0.01952806606911463,
+            "radicand": 0.237753017252602,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              5.838438986752895e-05,
+              0.0,
+              -2.8982979179542263e-05
+            ],
+            [
+              0.0,
+              4.69472508382621e-05,
+              0.0
+            ],
+            [
+              -2.8982979179542263e-05,
+              0.0,
+              3.5510111810314585e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.1437139027947513e-05,
+              0.0,
+              2.603157666696275e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              2.603157666696275e-16,
+              0.0,
+              -1.1437139027947513e-05
+            ]
+          ],
+          "production": 1.3571923875581307e-07,
+          "total_stress": [
+            [
+              -1.0994094444509813e-05,
+              0.0,
+              2.8982979179542263e-05
+            ],
+            [
+              0.0,
+              4.43044584757038e-07,
+              0.0
+            ],
+            [
+              2.8982979179542263e-05,
+              0.0,
+              1.188018361270455e-05
+            ]
+          ],
+          "coordinate": [
+            0.18328323020903076,
+            0,
+            6.0981962875251075
+          ],
+          "geometry": 34,
+          "element": 34,
+          "side": 0,
+          "sample_index": 14144
+        },
+        "domain_failure_count": 0,
+        "count": 1800,
+        "divergence_unweighted_RMS": 4.914474448586101e-14,
+        "divergence_maximum": 1.3500311979441904e-13,
+        "covariance_minimum": {
+          "coordinate": [
+            0.24918457901616162,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 35,
+          "side": 0,
+          "value": 8.92478887622371e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.18668457901616162,
+            0,
+            7.845860614409442
+          ],
+          "geometry": 37,
+          "side": 0,
+          "value": 2.8628338772555748e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 33,
+          "side": 0,
+          "value": 7.936459433035023e-09
+        }
+      },
+      "actual_endpoint_fixed": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -1.8474111129762605e-13,
+              0.0,
+              0.005401000928767096
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -1.8474111129762605e-13,
+          "strain_eigenvalues": [
+            -0.002700500464414338,
+            6.158037043254201e-14,
+            0.002700500464352758
+          ],
+          "strain_norm": 0.003819084381926055,
+          "rotation_norm": 0.003819084381926055,
+          "k": 8.40194696594508e-05,
+          "epsilon": 2.1238559795876946e-08,
+          "tau": 3955.987151057274,
+          "Cmu": 0.019295801190237175,
+          "radicand": 0.23511455983967544,
+          "isotropic_production_work": 1.034790013034941e-17,
+          "full_stress_and_production": "defined",
+          "Pi": 1.3620900333215659e-05,
+          "pressure_gradient": [
+            -2.6020852139652106e-18,
+            0.0,
+            -0.0006063015429650298
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -9.237055564881302e-14,
+                0.0,
+                0.005401000928767096
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                9.237055564881302e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.002700500464383548,
+              0.0,
+              0.002700500464383548
+            ],
+            "strain_norm": 0.003819084381926055,
+            "rotation_norm": 0.003819084381926055,
+            "k": 8.40194696594508e-05,
+            "epsilon": 2.1238559795876946e-08,
+            "tau": 3955.987151057274,
+            "Cmu": 0.019295801190044762,
+            "radicand": 0.2351145598549299,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              6.958302992889535e-05,
+              0.0,
+              -3.463952085083158e-05
+            ],
+            [
+              0.0,
+              5.60129797721773e-05,
+              0.0
+            ],
+            [
+              -3.463952085083158e-05,
+              0.0,
+              4.2442929617828934e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.3570050154348365e-05,
+              0.0,
+              4.641632502831485e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              4.641632502831485e-16,
+              0.0,
+              -1.3570050154348365e-05
+            ]
+          ],
+          "production": 1.8708808430024338e-07,
+          "total_stress": [
+            [
+              -2.7190950489143815e-05,
+              0.0,
+              3.463952085083158e-05
+            ],
+            [
+              0.0,
+              -1.3620900332425761e-05,
+              0.0
+            ],
+            [
+              3.463952085083158e-05,
+              0.0,
+              -5.085017807739437e-08
+            ]
+          ],
+          "coordinate": [
+            0.18750001,
+            0,
+            6.075
+          ],
+          "geometry": 35,
+          "element": null,
+          "side": 0,
+          "sample_index": 1168
+        },
+        "domain_failure_count": 0,
+        "count": 1519,
+        "divergence_unweighted_RMS": 1.4811206269576182e-13,
+        "divergence_maximum": 2.6290081223123707e-13,
+        "covariance_minimum": {
+          "coordinate": [
+            0.25,
+            0,
+            6.2124999999999995
+          ],
+          "geometry": 35,
+          "side": 0,
+          "value": 8.770377362116014e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.18316050973731415,
+            0,
+            7.655033173726501
+          ],
+          "geometry": 37,
+          "side": 0,
+          "value": 2.862833877255575e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.22,
+            0,
+            6.2
+          ],
+          "geometry": 35,
+          "side": 0,
+          "value": 7.818300562799131e-09
+        }
+      },
+      "physical_gate": {
+        "status": "fail",
+        "reasons": [
+          "native_physical_rejection",
+          "required_horizon_not_reached"
+        ]
+      },
+      "last_attempt_time": 0.002
+    },
+    "XZplus-0.001": {
+      "time": 0,
+      "failure": "EP-AWF patch: inadmissible evolution volume/sampler state on a collective rank: A95 negative square-root radicand; no constitutive clipping",
+      "steps": 0,
+      "state_sha256": "86a44bfdb612e8480d8528c4d0bfb3d8f8331a9cf8786ed649da35f061435331",
+      "native_report_sha256": "a512b801866d51c80dcfceafe88db896d85a22cd9f8fc71b71b510e564498cb8",
+      "fixed_domain_failures": 0,
+      "actual_endpoint_native": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -1.0658141036401503e-13,
+              0.0,
+              0.0046827221559539245
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -1.0658141036401503e-13,
+          "strain_eigenvalues": [
+            -0.002341361077994726,
+            3.552713678800501e-14,
+            0.0023413610779591987
+          ],
+          "strain_norm": 0.0033111845908875095,
+          "rotation_norm": 0.0033111845908875095,
+          "k": 7.042087625805323e-05,
+          "epsilon": 1.564650886806456e-08,
+          "tau": 4500.740507154689,
+          "Cmu": 0.019528066069244506,
+          "radicand": 0.23775301724251108,
+          "isotropic_production_work": 5.0037042071020626e-18,
+          "full_stress_and_production": "defined",
+          "Pi": -0.00012461398416703577,
+          "pressure_gradient": [
+            8.239936510889834e-18,
+            0.0,
+            -0.0006841957158949052
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -5.3290705182007514e-14,
+                0.0,
+                0.0046827221559539245
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                5.3290705182007514e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.0023413610779769623,
+              0.0,
+              0.0023413610779769623
+            ],
+            "strain_norm": 0.0033111845908875095,
+            "rotation_norm": 0.0033111845908875095,
+            "k": 7.042087625805323e-05,
+            "epsilon": 1.564650886806456e-08,
+            "tau": 4500.740507154689,
+            "Cmu": 0.019528066069115155,
+            "radicand": 0.2377530172526089,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              5.838438986752946e-05,
+              0.0,
+              -2.8982979179542304e-05
+            ],
+            [
+              0.0,
+              4.694725083826237e-05,
+              0.0
+            ],
+            [
+              -2.8982979179542304e-05,
+              0.0,
+              3.551011181031462e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.1437139027947748e-05,
+              0.0,
+              2.603157666696262e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              2.603157666696262e-16,
+              0.0,
+              -1.1437139027947748e-05
+            ]
+          ],
+          "production": 1.3571923875581675e-07,
+          "total_stress": [
+            [
+              0.00011317684513820846,
+              0.0,
+              2.8982979179542304e-05
+            ],
+            [
+              0.0,
+              0.00012461398416747555,
+              0.0
+            ],
+            [
+              2.8982979179542304e-05,
+              0.0,
+              0.0001360511231954233
+            ]
+          ],
+          "coordinate": [
+            0.18328323020903076,
+            0,
+            6.0981962875251075
+          ],
+          "geometry": 34,
+          "element": 34,
+          "side": 0,
+          "sample_index": 14144
+        },
+        "domain_failure_count": 0,
+        "count": 2100,
+        "divergence_unweighted_RMS": 5.0137438592716525e-14,
+        "divergence_maximum": 1.2789769243681803e-13,
+        "covariance_minimum": {
+          "coordinate": [
+            0.18668457901616162,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 34,
+          "side": 0,
+          "value": 8.924788876208062e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.18668457901616162,
+            0,
+            6.3563907076272965
+          ],
+          "geometry": 37,
+          "side": 0,
+          "value": 2.862833877255559e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 33,
+          "side": 0,
+          "value": 7.9364594330352e-09
+        }
+      },
+      "actual_endpoint_fixed": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -1.8474111129762605e-13,
+              0.0,
+              0.005401000928767263
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -1.8474111129762605e-13,
+          "strain_eigenvalues": [
+            -0.0027005004644144216,
+            6.158037043254201e-14,
+            0.0027005004643528415
+          ],
+          "strain_norm": 0.0038190843819261733,
+          "rotation_norm": 0.0038190843819261733,
+          "k": 8.401946965945134e-05,
+          "epsilon": 2.1238559795876522e-08,
+          "tau": 3955.9871510573785,
+          "Cmu": 0.01929580119023621,
+          "radicand": 0.235114559839664,
+          "isotropic_production_work": 1.0347900130349476e-17,
+          "full_stress_and_production": "defined",
+          "Pi": -0.00010874318361769104,
+          "pressure_gradient": [
+            1.6046192152785466e-17,
+            0.0,
+            -0.000684195715894905
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -9.237055564881302e-14,
+                0.0,
+                0.005401000928767263
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                9.237055564881302e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.0027005004643836316,
+              0.0,
+              0.0027005004643836316
+            ],
+            "strain_norm": 0.0038190843819261733,
+            "rotation_norm": 0.0038190843819261733,
+            "k": 8.401946965945134e-05,
+            "epsilon": 2.1238559795876522e-08,
+            "tau": 3955.9871510573785,
+            "Cmu": 0.019295801190043798,
+            "radicand": 0.23511455985491847,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              6.958302992889548e-05,
+              0.0,
+              -3.463952085083206e-05
+            ],
+            [
+              0.0,
+              5.601297977217767e-05,
+              0.0
+            ],
+            [
+              -3.463952085083206e-05,
+              0.0,
+              4.2442929617829544e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.3570050154348123e-05,
+              0.0,
+              4.641632502831259e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              4.641632502831259e-16,
+              0.0,
+              -1.3570050154348123e-05
+            ]
+          ],
+          "production": 1.8708808430025177e-07,
+          "total_stress": [
+            [
+              9.517313346176312e-05,
+              0.0,
+              3.463952085083206e-05
+            ],
+            [
+              0.0,
+              0.00010874318361848092,
+              0.0
+            ],
+            [
+              3.463952085083206e-05,
+              0.0,
+              0.00012231323377282904
+            ]
+          ],
+          "coordinate": [
+            0.18750001,
+            0,
+            6.075
+          ],
+          "geometry": 35,
+          "element": null,
+          "side": 0,
+          "sample_index": 1168
+        },
+        "domain_failure_count": 0,
+        "count": 1519,
+        "divergence_unweighted_RMS": 1.5028832552012967e-13,
+        "divergence_maximum": 2.7355895326763857e-13,
+        "covariance_minimum": {
+          "coordinate": [
+            0.18749999,
+            0,
+            6.2124999999999995
+          ],
+          "geometry": 34,
+          "side": 0,
+          "value": 8.770377362109499e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.18749999,
+            0,
+            6.34505
+          ],
+          "geometry": 37,
+          "side": 0,
+          "value": 2.8628338772555562e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.17,
+            0,
+            6.2
+          ],
+          "geometry": 34,
+          "side": 0,
+          "value": 7.81830056280199e-09
+        }
+      },
+      "physical_gate": {
+        "status": "fail",
+        "reasons": [
+          "native_physical_rejection",
+          "required_horizon_not_reached"
+        ]
+      },
+      "last_attempt_time": 0.001
+    },
+    "XZplus-0.002": {
+      "time": 0,
+      "failure": "EP-AWF patch: inadmissible evolution volume/sampler state on a collective rank: A95 negative square-root radicand; no constitutive clipping",
+      "steps": 0,
+      "state_sha256": "86a44bfdb612e8480d8528c4d0bfb3d8f8331a9cf8786ed649da35f061435331",
+      "native_report_sha256": "c03e6658363ce3323d114822239fe04b67e87b0c614a9a6b9aaca9ce7e0f7482",
+      "fixed_domain_failures": 0,
+      "actual_endpoint_native": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -1.0658141036401503e-13,
+              0.0,
+              0.0046827221559539245
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -1.0658141036401503e-13,
+          "strain_eigenvalues": [
+            -0.002341361077994726,
+            3.552713678800501e-14,
+            0.0023413610779591987
+          ],
+          "strain_norm": 0.0033111845908875095,
+          "rotation_norm": 0.0033111845908875095,
+          "k": 7.042087625805323e-05,
+          "epsilon": 1.564650886806456e-08,
+          "tau": 4500.740507154689,
+          "Cmu": 0.019528066069244506,
+          "radicand": 0.23775301724251108,
+          "isotropic_production_work": 5.0037042071020626e-18,
+          "full_stress_and_production": "defined",
+          "Pi": -0.00012461398416703577,
+          "pressure_gradient": [
+            8.239936510889834e-18,
+            0.0,
+            -0.0006841957158949052
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -5.3290705182007514e-14,
+                0.0,
+                0.0046827221559539245
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                5.3290705182007514e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.0023413610779769623,
+              0.0,
+              0.0023413610779769623
+            ],
+            "strain_norm": 0.0033111845908875095,
+            "rotation_norm": 0.0033111845908875095,
+            "k": 7.042087625805323e-05,
+            "epsilon": 1.564650886806456e-08,
+            "tau": 4500.740507154689,
+            "Cmu": 0.019528066069115155,
+            "radicand": 0.2377530172526089,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              5.838438986752946e-05,
+              0.0,
+              -2.8982979179542304e-05
+            ],
+            [
+              0.0,
+              4.694725083826237e-05,
+              0.0
+            ],
+            [
+              -2.8982979179542304e-05,
+              0.0,
+              3.551011181031462e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.1437139027947748e-05,
+              0.0,
+              2.603157666696262e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              2.603157666696262e-16,
+              0.0,
+              -1.1437139027947748e-05
+            ]
+          ],
+          "production": 1.3571923875581675e-07,
+          "total_stress": [
+            [
+              0.00011317684513820846,
+              0.0,
+              2.8982979179542304e-05
+            ],
+            [
+              0.0,
+              0.00012461398416747555,
+              0.0
+            ],
+            [
+              2.8982979179542304e-05,
+              0.0,
+              0.0001360511231954233
+            ]
+          ],
+          "coordinate": [
+            0.18328323020903076,
+            0,
+            6.0981962875251075
+          ],
+          "geometry": 34,
+          "element": 34,
+          "side": 0,
+          "sample_index": 14144
+        },
+        "domain_failure_count": 0,
+        "count": 2100,
+        "divergence_unweighted_RMS": 5.0137438592716525e-14,
+        "divergence_maximum": 1.2789769243681803e-13,
+        "covariance_minimum": {
+          "coordinate": [
+            0.18668457901616162,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 34,
+          "side": 0,
+          "value": 8.924788876208062e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.18668457901616162,
+            0,
+            6.3563907076272965
+          ],
+          "geometry": 37,
+          "side": 0,
+          "value": 2.862833877255559e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 33,
+          "side": 0,
+          "value": 7.9364594330352e-09
+        }
+      },
+      "actual_endpoint_fixed": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -1.8474111129762605e-13,
+              0.0,
+              0.005401000928767263
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -1.8474111129762605e-13,
+          "strain_eigenvalues": [
+            -0.0027005004644144216,
+            6.158037043254201e-14,
+            0.0027005004643528415
+          ],
+          "strain_norm": 0.0038190843819261733,
+          "rotation_norm": 0.0038190843819261733,
+          "k": 8.401946965945134e-05,
+          "epsilon": 2.1238559795876522e-08,
+          "tau": 3955.9871510573785,
+          "Cmu": 0.01929580119023621,
+          "radicand": 0.235114559839664,
+          "isotropic_production_work": 1.0347900130349476e-17,
+          "full_stress_and_production": "defined",
+          "Pi": -0.00010874318361769104,
+          "pressure_gradient": [
+            1.6046192152785466e-17,
+            0.0,
+            -0.000684195715894905
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -9.237055564881302e-14,
+                0.0,
+                0.005401000928767263
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                9.237055564881302e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.0027005004643836316,
+              0.0,
+              0.0027005004643836316
+            ],
+            "strain_norm": 0.0038190843819261733,
+            "rotation_norm": 0.0038190843819261733,
+            "k": 8.401946965945134e-05,
+            "epsilon": 2.1238559795876522e-08,
+            "tau": 3955.9871510573785,
+            "Cmu": 0.019295801190043798,
+            "radicand": 0.23511455985491847,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              6.958302992889548e-05,
+              0.0,
+              -3.463952085083206e-05
+            ],
+            [
+              0.0,
+              5.601297977217767e-05,
+              0.0
+            ],
+            [
+              -3.463952085083206e-05,
+              0.0,
+              4.2442929617829544e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.3570050154348123e-05,
+              0.0,
+              4.641632502831259e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              4.641632502831259e-16,
+              0.0,
+              -1.3570050154348123e-05
+            ]
+          ],
+          "production": 1.8708808430025177e-07,
+          "total_stress": [
+            [
+              9.517313346176312e-05,
+              0.0,
+              3.463952085083206e-05
+            ],
+            [
+              0.0,
+              0.00010874318361848092,
+              0.0
+            ],
+            [
+              3.463952085083206e-05,
+              0.0,
+              0.00012231323377282904
+            ]
+          ],
+          "coordinate": [
+            0.18750001,
+            0,
+            6.075
+          ],
+          "geometry": 35,
+          "element": null,
+          "side": 0,
+          "sample_index": 1168
+        },
+        "domain_failure_count": 0,
+        "count": 1519,
+        "divergence_unweighted_RMS": 1.5028832552012967e-13,
+        "divergence_maximum": 2.7355895326763857e-13,
+        "covariance_minimum": {
+          "coordinate": [
+            0.18749999,
+            0,
+            6.2124999999999995
+          ],
+          "geometry": 34,
+          "side": 0,
+          "value": 8.770377362109499e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.18749999,
+            0,
+            6.34505
+          ],
+          "geometry": 37,
+          "side": 0,
+          "value": 2.8628338772555562e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.17,
+            0,
+            6.2
+          ],
+          "geometry": 34,
+          "side": 0,
+          "value": 7.81830056280199e-09
+        }
+      },
+      "physical_gate": {
+        "status": "fail",
+        "reasons": [
+          "native_physical_rejection",
+          "required_horizon_not_reached"
+        ]
+      },
+      "last_attempt_time": 0.002
+    },
+    "Zplus-0.001": {
+      "time": 0,
+      "failure": "EP-AWF patch: PIMPLE flow scalar/continuous-ground domain exit: std::domain_error: A95 negative square-root radicand; no constitutive clipping",
+      "steps": 0,
+      "state_sha256": "68a02c2bb30b668fb7d02597d0817e720ff4a595166dd19c8e8be9fe92bcd634",
+      "native_report_sha256": "b11745eaf90b96b40fcc5512e697fd1ec6d5aa51f6755b0fc47c18b247d1ad55",
+      "fixed_domain_failures": 0,
+      "actual_endpoint_native": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -5.1514348342607263e-14,
+              0.0,
+              0.004682722155953741
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -5.1514348342607263e-14,
+          "strain_eigenvalues": [
+            -0.002341361077985456,
+            1.7171449447535753e-14,
+            0.0023413610779682847
+          ],
+          "strain_norm": 0.00331118459088738,
+          "rotation_norm": 0.00331118459088738,
+          "k": 7.042087625805333e-05,
+          "epsilon": 1.5646508868065778e-08,
+          "tau": 4500.740507154345,
+          "Cmu": 0.01952806606917965,
+          "radicand": 0.23775301724775033,
+          "isotropic_production_work": 2.418457033432667e-18,
+          "full_stress_and_production": "defined",
+          "Pi": -0.00012461398416703558,
+          "pressure_gradient": [
+            5.854691731421724e-18,
+            0.0,
+            -0.0006841957158949048
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -2.5757174171303632e-14,
+                0.0,
+                0.004682722155953741
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                2.5757174171303632e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.0023413610779768703,
+              0.0,
+              0.0023413610779768703
+            ],
+            "strain_norm": 0.00331118459088738,
+            "rotation_norm": 0.00331118459088738,
+            "k": 7.042087625805333e-05,
+            "epsilon": 1.5646508868065778e-08,
+            "tau": 4500.740507154345,
+            "Cmu": 0.01952806606911713,
+            "radicand": 0.23775301725263098,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              5.838438986720112e-05,
+              0.0,
+              -2.8982979179577235e-05
+            ],
+            [
+              0.0,
+              4.6947250838489665e-05,
+              0.0
+            ],
+            [
+              -2.8982979179577235e-05,
+              0.0,
+              3.551011181041589e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.1437139028073776e-05,
+              0.0,
+              1.2581928722504408e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.2581928722504408e-16,
+              0.0,
+              -1.1437139028073776e-05
+            ]
+          ],
+          "production": 1.3571923875275992e-07,
+          "total_stress": [
+            [
+              0.00011317684513853668,
+              0.0,
+              2.8982979179577235e-05
+            ],
+            [
+              0.0,
+              0.00012461398416724814,
+              0.0
+            ],
+            [
+              2.8982979179577235e-05,
+              0.0,
+              0.0001360511231953219
+            ]
+          ],
+          "coordinate": [
+            0.11656646041806153,
+            0,
+            6.0981962875251075
+          ],
+          "geometry": 22,
+          "element": 22,
+          "side": 0,
+          "sample_index": 9392
+        },
+        "domain_failure_count": 0,
+        "count": 1400,
+        "divergence_unweighted_RMS": 2.900694719913244e-14,
+        "divergence_maximum": 6.572520305780927e-14,
+        "covariance_minimum": {
+          "coordinate": [
+            0.24836915803232323,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 23,
+          "side": 0,
+          "value": 8.92478887633658e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.21458721213307796,
+            0,
+            6.3563907076272965
+          ],
+          "geometry": 25,
+          "side": 0,
+          "value": 2.862833877255562e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 22,
+          "side": 0,
+          "value": 7.936459433035147e-09
+        }
+      },
+      "actual_endpoint_fixed": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -9.414691248821327e-14,
+              0.0,
+              0.00540100092876698
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -9.414691248821327e-14,
+          "strain_eigenvalues": [
+            -0.002700500464399181,
+            3.138230416273776e-14,
+            0.002700500464367799
+          ],
+          "strain_norm": 0.003819084381925973,
+          "rotation_norm": 0.003819084381925973,
+          "k": 8.401946965945106e-05,
+          "epsilon": 2.1238559795877574e-08,
+          "tau": 3955.9871510571693,
+          "Cmu": 0.019295801190143624,
+          "radicand": 0.23511455984716545,
+          "isotropic_production_work": 5.273449104889619e-18,
+          "full_stress_and_production": "defined",
+          "Pi": -0.00010874318361769083,
+          "pressure_gradient": [
+            6.179952383167375e-18,
+            0.0,
+            -0.0006841957158949048
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -4.707345624410664e-14,
+                0.0,
+                0.00540100092876698
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                4.707345624410664e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.00270050046438349,
+              0.0,
+              0.00270050046438349
+            ],
+            "strain_norm": 0.003819084381925973,
+            "rotation_norm": 0.003819084381925973,
+            "k": 8.401946965945106e-05,
+            "epsilon": 2.1238559795877574e-08,
+            "tau": 3955.9871510571693,
+            "Cmu": 0.019295801190045567,
+            "radicand": 0.23511455985493923,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              6.958302992833702e-05,
+              0.0,
+              -3.4639520850889706e-05
+            ],
+            [
+              0.0,
+              5.601297977256483e-05,
+              0.0
+            ],
+            [
+              -3.4639520850889706e-05,
+              0.0,
+              4.244292961800027e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.3570050154564555e-05,
+              0.0,
+              2.365447333211473e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              2.365447333211473e-16,
+              0.0,
+              -1.3570050154564555e-05
+            ]
+          ],
+          "production": 1.870880842942495e-07,
+          "total_stress": [
+            [
+              9.51731334623212e-05,
+              0.0,
+              3.4639520850889706e-05
+            ],
+            [
+              0.0,
+              0.00010874318361809339,
+              0.0
+            ],
+            [
+              3.4639520850889706e-05,
+              0.0,
+              0.00012231323377265795
+            ]
+          ],
+          "coordinate": [
+            0.12500001,
+            0,
+            6.075
+          ],
+          "geometry": 23,
+          "element": null,
+          "side": 0,
+          "sample_index": 790
+        },
+        "domain_failure_count": 0,
+        "count": 1519,
+        "divergence_unweighted_RMS": 6.52432566527871e-14,
+        "divergence_maximum": 1.4033219031261979e-13,
+        "covariance_minimum": {
+          "coordinate": [
+            0.25,
+            0,
+            6.2124999999999995
+          ],
+          "geometry": 23,
+          "side": 0,
+          "value": 8.77037736236142e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.22,
+            0,
+            6.34505
+          ],
+          "geometry": 25,
+          "side": 0,
+          "value": 2.8628338772555613e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.17,
+            0,
+            6.2
+          ],
+          "geometry": 23,
+          "side": 0,
+          "value": 7.818300562800454e-09
+        }
+      },
+      "physical_gate": {
+        "status": "fail",
+        "reasons": [
+          "native_physical_rejection",
+          "required_horizon_not_reached"
+        ]
+      },
+      "last_attempt_time": 0.001
+    },
+    "Zplus-0.002": {
+      "time": 0,
+      "failure": "EP-AWF patch: inadmissible evolution volume/sampler state on a collective rank: A95 negative square-root radicand; no constitutive clipping",
+      "steps": 0,
+      "state_sha256": "68a02c2bb30b668fb7d02597d0817e720ff4a595166dd19c8e8be9fe92bcd634",
+      "native_report_sha256": "fcbf2d33485fc802f843eca9a8947e63ec2b5d435a5309a0bc57246c37a202e2",
+      "fixed_domain_failures": 0,
+      "actual_endpoint_native": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -5.1514348342607263e-14,
+              0.0,
+              0.004682722155953741
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -5.1514348342607263e-14,
+          "strain_eigenvalues": [
+            -0.002341361077985456,
+            1.7171449447535753e-14,
+            0.0023413610779682847
+          ],
+          "strain_norm": 0.00331118459088738,
+          "rotation_norm": 0.00331118459088738,
+          "k": 7.042087625805333e-05,
+          "epsilon": 1.5646508868065778e-08,
+          "tau": 4500.740507154345,
+          "Cmu": 0.01952806606917965,
+          "radicand": 0.23775301724775033,
+          "isotropic_production_work": 2.418457033432667e-18,
+          "full_stress_and_production": "defined",
+          "Pi": -0.00012461398416703558,
+          "pressure_gradient": [
+            5.854691731421724e-18,
+            0.0,
+            -0.0006841957158949048
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -2.5757174171303632e-14,
+                0.0,
+                0.004682722155953741
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                2.5757174171303632e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.0023413610779768703,
+              0.0,
+              0.0023413610779768703
+            ],
+            "strain_norm": 0.00331118459088738,
+            "rotation_norm": 0.00331118459088738,
+            "k": 7.042087625805333e-05,
+            "epsilon": 1.5646508868065778e-08,
+            "tau": 4500.740507154345,
+            "Cmu": 0.01952806606911713,
+            "radicand": 0.23775301725263098,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              5.838438986720112e-05,
+              0.0,
+              -2.8982979179577235e-05
+            ],
+            [
+              0.0,
+              4.6947250838489665e-05,
+              0.0
+            ],
+            [
+              -2.8982979179577235e-05,
+              0.0,
+              3.551011181041589e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.1437139028073776e-05,
+              0.0,
+              1.2581928722504408e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.2581928722504408e-16,
+              0.0,
+              -1.1437139028073776e-05
+            ]
+          ],
+          "production": 1.3571923875275992e-07,
+          "total_stress": [
+            [
+              0.00011317684513853668,
+              0.0,
+              2.8982979179577235e-05
+            ],
+            [
+              0.0,
+              0.00012461398416724814,
+              0.0
+            ],
+            [
+              2.8982979179577235e-05,
+              0.0,
+              0.0001360511231953219
+            ]
+          ],
+          "coordinate": [
+            0.11656646041806153,
+            0,
+            6.0981962875251075
+          ],
+          "geometry": 22,
+          "element": 22,
+          "side": 0,
+          "sample_index": 9392
+        },
+        "domain_failure_count": 0,
+        "count": 1400,
+        "divergence_unweighted_RMS": 2.900694719913244e-14,
+        "divergence_maximum": 6.572520305780927e-14,
+        "covariance_minimum": {
+          "coordinate": [
+            0.24836915803232323,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 23,
+          "side": 0,
+          "value": 8.92478887633658e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.21458721213307796,
+            0,
+            6.3563907076272965
+          ],
+          "geometry": 25,
+          "side": 0,
+          "value": 2.862833877255562e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.220644844581818
+          ],
+          "geometry": 22,
+          "side": 0,
+          "value": 7.936459433035147e-09
+        }
+      },
+      "actual_endpoint_fixed": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -9.414691248821327e-14,
+              0.0,
+              0.00540100092876698
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "raw_divergence": -9.414691248821327e-14,
+          "strain_eigenvalues": [
+            -0.002700500464399181,
+            3.138230416273776e-14,
+            0.002700500464367799
+          ],
+          "strain_norm": 0.003819084381925973,
+          "rotation_norm": 0.003819084381925973,
+          "k": 8.401946965945106e-05,
+          "epsilon": 2.1238559795877574e-08,
+          "tau": 3955.9871510571693,
+          "Cmu": 0.019295801190143624,
+          "radicand": 0.23511455984716545,
+          "isotropic_production_work": 5.273449104889619e-18,
+          "full_stress_and_production": "defined",
+          "Pi": -0.00010874318361769083,
+          "pressure_gradient": [
+            6.179952383167375e-18,
+            0.0,
+            -0.0006841957158949048
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -4.707345624410664e-14,
+                0.0,
+                0.00540100092876698
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                4.707345624410664e-14
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.00270050046438349,
+              0.0,
+              0.00270050046438349
+            ],
+            "strain_norm": 0.003819084381925973,
+            "rotation_norm": 0.003819084381925973,
+            "k": 8.401946965945106e-05,
+            "epsilon": 2.1238559795877574e-08,
+            "tau": 3955.9871510571693,
+            "Cmu": 0.019295801190045567,
+            "radicand": 0.23511455985493923,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              6.958302992833702e-05,
+              0.0,
+              -3.4639520850889706e-05
+            ],
+            [
+              0.0,
+              5.601297977256483e-05,
+              0.0
+            ],
+            [
+              -3.4639520850889706e-05,
+              0.0,
+              4.244292961800027e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.3570050154564555e-05,
+              0.0,
+              2.365447333211473e-16
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              2.365447333211473e-16,
+              0.0,
+              -1.3570050154564555e-05
+            ]
+          ],
+          "production": 1.870880842942495e-07,
+          "total_stress": [
+            [
+              9.51731334623212e-05,
+              0.0,
+              3.4639520850889706e-05
+            ],
+            [
+              0.0,
+              0.00010874318361809339,
+              0.0
+            ],
+            [
+              3.4639520850889706e-05,
+              0.0,
+              0.00012231323377265795
+            ]
+          ],
+          "coordinate": [
+            0.12500001,
+            0,
+            6.075
+          ],
+          "geometry": 23,
+          "element": null,
+          "side": 0,
+          "sample_index": 790
+        },
+        "domain_failure_count": 0,
+        "count": 1519,
+        "divergence_unweighted_RMS": 6.52432566527871e-14,
+        "divergence_maximum": 1.4033219031261979e-13,
+        "covariance_minimum": {
+          "coordinate": [
+            0.25,
+            0,
+            6.2124999999999995
+          ],
+          "geometry": 23,
+          "side": 0,
+          "value": 8.77037736236142e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.22,
+            0,
+            6.34505
+          ],
+          "geometry": 25,
+          "side": 0,
+          "value": 2.8628338772555613e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.17,
+            0,
+            6.2
+          ],
+          "geometry": 23,
+          "side": 0,
+          "value": 7.818300562800454e-09
+        }
+      },
+      "physical_gate": {
+        "status": "fail",
+        "reasons": [
+          "native_physical_rejection",
+          "required_horizon_not_reached"
+        ]
+      },
+      "last_attempt_time": 0.002
+    },
+    "Zminus-0.001": {
+      "time": 0.008,
+      "failure": "",
+      "steps": 8,
+      "state_sha256": "76abc09db35a2e8232aaadf9234d07c2bfbbfea4af14a1bc8d294a992b98a8ba",
+      "native_report_sha256": "822ddcbadb50cc3db70872c7d85b6227eac2f97a1df74c105cb089af34968fae",
+      "fixed_domain_failures": 0,
+      "actual_endpoint_native": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -9.51291707558255e-05,
+              0.0,
+              0.005567010089671764
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.00015163005705768045,
+              0.0,
+              -5.029819413647021e-07
+            ]
+          ],
+          "raw_divergence": -9.56321526971902e-05,
+          "strain_eigenvalues": [
+            -0.0028756501829573333,
+            3.1877384232396734e-05,
+            0.002843772798724937
+          ],
+          "strain_norm": 0.0040444312175058564,
+          "rotation_norm": 0.003829251943763645,
+          "k": 8.742790683650651e-05,
+          "epsilon": 2.2832227768038858e-08,
+          "tau": 3829.144826546026,
+          "Cmu": 0.019422436549898083,
+          "radicand": 0.1857300174404789,
+          "isotropic_production_work": 5.573945957723007e-09,
+          "full_stress_and_production": "defined",
+          "Pi": 0.00010155369902604748,
+          "pressure_gradient": [
+            -0.0002391363906390847,
+            0.0,
+            -0.000590333889785546
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -4.73130944072304e-05,
+                0.0,
+                0.005567010089671764
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.00015163005705768045,
+                0.0,
+                4.73130944072304e-05
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.002859711490841135,
+              0.0,
+              0.002859711490841135
+            ],
+            "strain_norm": 0.004044242774821716,
+            "rotation_norm": 0.003829251943763645,
+            "k": 8.742790683650651e-05,
+            "epsilon": 2.2832227768038858e-08,
+            "tau": 3829.144826546026,
+            "Cmu": 0.0193274124815009,
+            "radicand": 0.19375327786854524,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              7.165572837626238e-05,
+              0.0,
+              -3.697570620485281e-05
+            ],
+            [
+              0.0,
+              5.787072949228639e-05,
+              0.0
+            ],
+            [
+              -3.697570620485281e-05,
+              0.0,
+              4.5329355804464246e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.2547914594806341e-05,
+              0.0,
+              2.0763001434089864e-07
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              2.0763001434089864e-07,
+              0.0,
+              -1.2547914594806341e-05
+            ]
+          ],
+          "production": 2.1829010782446616e-07,
+          "total_stress": [
+            [
+              -0.00011492415617797219,
+              -0.0,
+              3.697570620485281e-05
+            ],
+            [
+              -0.0,
+              -0.0001011391572939962,
+              -0.0
+            ],
+            [
+              3.697570620485281e-05,
+              -0.0,
+              -8.859778360617405e-05
+            ]
+          ],
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.0696678821682015
+          ],
+          "geometry": 24,
+          "element": 24,
+          "side": 0,
+          "sample_index": 9574
+        },
+        "domain_failure_count": 0,
+        "count": 1400,
+        "divergence_unweighted_RMS": 0.0005970801889138184,
+        "divergence_maximum": 0.007695047350876991,
+        "covariance_minimum": {
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.174098143762554
+          ],
+          "geometry": 24,
+          "side": 0,
+          "value": 9.282712970690635e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.05319535381364805,
+            0,
+            7.845860614409442
+          ],
+          "geometry": 26,
+          "side": 0,
+          "value": 2.8623183997441527e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.05319535381364805,
+            0,
+            6.235322422290909
+          ],
+          "geometry": 24,
+          "side": 0,
+          "value": 8.038493416300055e-09
+        }
+      },
+      "actual_endpoint_fixed": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -0.00013752594801808016,
+              0.0,
+              0.005411155123198865
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -3.593308660896068e-06,
+              0.0,
+              -3.5817512442088626e-06
+            ]
+          ],
+          "raw_divergence": -0.000141107699262289,
+          "strain_eigenvalues": [
+            -0.0027281281725292225,
+            4.703589975409633e-05,
+            0.002681092272775126
+          ],
+          "strain_norm": 0.0038253302441420404,
+          "rotation_norm": 0.0038288053345872613,
+          "k": 8.425745743188812e-05,
+          "epsilon": 2.1516731738443638e-08,
+          "tau": 3915.904072055075,
+          "Cmu": 0.019583537308148144,
+          "radicand": 0.2254905059156762,
+          "isotropic_production_work": 7.926250642602658e-09,
+          "full_stress_and_production": "defined",
+          "Pi": 5.448595333291942e-05,
+          "pressure_gradient": [
+            -0.00024199257615436625,
+            0.0,
+            -0.00039080348335428217
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -6.697209838693565e-05,
+                0.0,
+                0.005411155123198865
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                -3.593308660896068e-06,
+                0.0,
+                6.697209838693564e-05
+              ]
+            ],
+            "raw_divergence": -1.3552527156068805e-20,
+            "strain_eigenvalues": [
+              -0.002704610222652174,
+              -4.204023327335454e-40,
+              0.002704610222652174
+            ],
+            "strain_norm": 0.003824896457807621,
+            "rotation_norm": 0.0038288053345872613,
+            "k": 8.425745743188812e-05,
+            "epsilon": 2.1516731738443638e-08,
+            "tau": 3915.904072055075,
+            "Cmu": 0.019433796764341437,
+            "radicand": 0.23746237491652167,
+            "isotropic_production_work": 7.612676532979834e-25,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              7.066233673034025e-05,
+              0.0,
+              -3.4610848762750217e-05
+            ],
+            [
+              0.0,
+              5.556379589566912e-05,
+              0.0
+            ],
+            [
+              -3.4610848762750217e-05,
+              0.0,
+              4.228878223776686e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.3321300435791681e-05,
+              0.0,
+              3.29965878902855e-07
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              3.29965878902855e-07,
+              0.0,
+              -1.3321300435791681e-05
+            ]
+          ],
+          "production": 1.9702967688460582e-07,
+          "total_stress": [
+            [
+              -6.897665177533425e-05,
+              0.0,
+              3.4610848762750217e-05
+            ],
+            [
+              0.0,
+              -5.387811094066313e-05,
+              0.0
+            ],
+            [
+              3.4610848762750217e-05,
+              0.0,
+              -4.060309728276087e-05
+            ]
+          ],
+          "coordinate": [
+            0.18749999,
+            0,
+            6.075
+          ],
+          "geometry": 25,
+          "element": null,
+          "side": 0,
+          "sample_index": 1042
+        },
+        "domain_failure_count": 0,
+        "count": 1519,
+        "divergence_unweighted_RMS": 0.0004483044639733418,
+        "divergence_maximum": 0.0052401571333528995,
+        "covariance_minimum": {
+          "coordinate": [
+            0.12500001,
+            0,
+            6.2
+          ],
+          "geometry": 25,
+          "side": 0,
+          "value": 8.787972495737555e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.12933949026268585,
+            0,
+            7.655033173726501
+          ],
+          "geometry": 27,
+          "side": 0,
+          "value": 2.8623247068829354e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.18750001,
+            0,
+            6.2
+          ],
+          "geometry": 25,
+          "side": 0,
+          "value": 7.863834611681008e-09
+        }
+      },
+      "physical_gate": {
+        "status": "pass",
+        "reasons": []
+      },
+      "last_attempt_time": 0.008
+    },
+    "Zminus-0.002": {
+      "time": 0.008,
+      "failure": "",
+      "steps": 4,
+      "state_sha256": "5f33cf9f5c48dcc56be1849e99cec49251cceb0d79284f4e226b1be2be97ad9a",
+      "native_report_sha256": "fb31890ff604b1ea52f0b1a51bbcc6b5aefad267469a304c957df0787fad9442",
+      "fixed_domain_failures": 0,
+      "actual_endpoint_native": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -8.031393903351614e-05,
+              0.0,
+              0.0055668647120433856
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.00014826287201132824,
+              0.0,
+              -4.861800225840503e-07
+            ]
+          ],
+          "raw_divergence": -8.080011905610018e-05,
+          "strain_eigenvalues": [
+            -0.0028713092194846963,
+            2.6933373018700056e-05,
+            0.0028443758464659972
+          ],
+          "strain_norm": 0.004041734280780855,
+          "rotation_norm": 0.0038315301056365716,
+          "k": 8.74275055062487e-05,
+          "epsilon": 2.283175568064217e-08,
+          "tau": 3829.206423243826,
+          "Cmu": 0.01940844083334063,
+          "radicand": 0.18796101681433397,
+          "isotropic_production_work": 4.7094352357885e-09,
+          "full_stress_and_production": "defined",
+          "Pi": 0.00010133917509913009,
+          "pressure_gradient": [
+            -0.00023693487331053744,
+            0.0,
+            -0.0005899839150456502
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -3.9913879505466044e-05,
+                0.0,
+                0.0055668647120433856
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.00014826287201132824,
+                0.0,
+                3.9913879505466044e-05
+              ]
+            ],
+            "raw_divergence": 0.0,
+            "strain_eigenvalues": [
+              -0.0028578425329753463,
+              0.0,
+              0.0028578425329753463
+            ],
+            "strain_norm": 0.004041599669260414,
+            "rotation_norm": 0.0038315301056365716,
+            "k": 8.74275055062487e-05,
+            "epsilon": 2.283175568064217e-08,
+            "tau": 3829.206423243826,
+            "Cmu": 0.0193282083266068,
+            "radicand": 0.1947145551432744,
+            "isotropic_production_work": -0.0,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              7.160234489350743e-05,
+              0.0,
+              -3.6957821543881805e-05
+            ],
+            [
+              0.0,
+              5.793500350060962e-05,
+              0.0
+            ],
+            [
+              -3.6957821543881805e-05,
+              0.0,
+              4.531766261838037e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.2623658809454523e-05,
+              0.0,
+              1.7632474139141077e-07
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.7632474139141077e-07,
+              0.0,
+              -1.2623658809454523e-05
+            ]
+          ],
+          "production": 2.169913642566797e-07,
+          "total_stress": [
+            [
+              -0.00011465651632180503,
+              -0.0,
+              3.6957821543881805e-05
+            ],
+            [
+              -0.0,
+              -0.00010098917492890723,
+              -0.0
+            ],
+            [
+              3.6957821543881805e-05,
+              -0.0,
+              -8.837183404667798e-05
+            ]
+          ],
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.0696678821682015
+          ],
+          "geometry": 24,
+          "element": 24,
+          "side": 0,
+          "sample_index": 9574
+        },
+        "domain_failure_count": 0,
+        "count": 1400,
+        "divergence_unweighted_RMS": 0.0005612965925421634,
+        "divergence_maximum": 0.007308648026053343,
+        "covariance_minimum": {
+          "coordinate": [
+            0.001630841967676773,
+            0,
+            6.174098143762554
+          ],
+          "geometry": 24,
+          "side": 0,
+          "value": 9.282433285694206e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.05319535381364805,
+            0,
+            7.845860614409442
+          ],
+          "geometry": 26,
+          "side": 0,
+          "value": 2.862324023353242e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.07180464618635195,
+            0,
+            6.235322422290909
+          ],
+          "geometry": 24,
+          "side": 0,
+          "value": 8.038708077752188e-09
+        }
+      },
+      "actual_endpoint_fixed": {
+        "minimum": {
+          "status": "admissible",
+          "raw_gradient": [
+            [
+              -0.00012961872527661455,
+              0.0,
+              0.005411110505157506
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -4.768055665250681e-06,
+              0.0,
+              -3.5553723264672213e-06
+            ]
+          ],
+          "raw_divergence": -0.00013317409760308177,
+          "strain_eigenvalues": [
+            -0.0027261016839876446,
+            4.439136586769392e-05,
+            0.0026817103181199513
+          ],
+          "strain_norm": 0.003824287020493477,
+          "rotation_norm": 0.0038296044564406113,
+          "k": 8.425749726096343e-05,
+          "epsilon": 2.1516594674381828e-08,
+          "tau": 3915.930868060754,
+          "Cmu": 0.01957536370074579,
+          "radicand": 0.22654833208139868,
+          "isotropic_production_work": 7.480610776015292e-09,
+          "full_stress_and_production": "defined",
+          "Pi": 5.4508206172706424e-05,
+          "pressure_gradient": [
+            -0.0002425206917073616,
+            0.0,
+            -0.0003907281535598246
+          ],
+          "diagnostic_planar_trace_removed": {
+            "status": "admissible",
+            "raw_gradient": [
+              [
+                -6.303167647507367e-05,
+                0.0,
+                0.005411110505157506
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                -4.768055665250681e-06,
+                0.0,
+                6.303167647507366e-05
+              ]
+            ],
+            "raw_divergence": -1.3552527156068805e-20,
+            "strain_eigenvalues": [
+              -0.002703906001053797,
+              -3.958733443648193e-40,
+              0.0027039060010537962
+            ],
+            "strain_norm": 0.0038239005380722806,
+            "rotation_norm": 0.0038296044564406113,
+            "k": 8.425749726096343e-05,
+            "epsilon": 2.1516594674381828e-08,
+            "tau": 3915.930868060754,
+            "Cmu": 0.019434114662358844,
+            "radicand": 0.23782405437846477,
+            "isotropic_production_work": 7.612680131544e-25,
+            "full_stress_and_production": "defined"
+          },
+          "R": [
+            [
+              7.062574875642093e-05,
+              0.0,
+              -3.46072468055618e-05
+            ],
+            [
+              0.0,
+              5.559823285428584e-05,
+              0.0
+            ],
+            [
+              -3.46072468055618e-05,
+              0.0,
+              4.22910129112201e-05
+            ]
+          ],
+          "Q": [
+            [
+              1.3353146987110274e-05,
+              0.0,
+              3.113643831032887e-07
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              3.113643831032887e-07,
+              0.0,
+              -1.3353146987110274e-05
+            ]
+          ],
+          "production": 1.964034072874406e-07,
+          "total_stress": [
+            [
+              -6.896229008848506e-05,
+              0.0,
+              3.46072468055618e-05
+            ],
+            [
+              0.0,
+              -5.393477418634997e-05,
+              0.0
+            ],
+            [
+              3.46072468055618e-05,
+              0.0,
+              -4.062755424328423e-05
+            ]
+          ],
+          "coordinate": [
+            0.18749999,
+            0,
+            6.075
+          ],
+          "geometry": 25,
+          "element": null,
+          "side": 0,
+          "sample_index": 1042
+        },
+        "domain_failure_count": 0,
+        "count": 1519,
+        "divergence_unweighted_RMS": 0.0004289913916626636,
+        "divergence_maximum": 0.004959749239274292,
+        "covariance_minimum": {
+          "coordinate": [
+            0.12500001,
+            0,
+            6.2
+          ],
+          "geometry": 25,
+          "side": 0,
+          "value": 8.782388540364438e-06
+        },
+        "k_minimum": {
+          "coordinate": [
+            0.12933949026268585,
+            0,
+            7.655033173726501
+          ],
+          "geometry": 27,
+          "side": 0,
+          "value": 2.8623255978027854e-05
+        },
+        "epsilon_minimum": {
+          "coordinate": [
+            0.18750001,
+            0,
+            6.2
+          ],
+          "geometry": 25,
+          "side": 0,
+          "value": 7.863827304211332e-09
+        }
+      },
+      "physical_gate": {
+        "status": "pass",
+        "reasons": []
+      },
+      "last_attempt_time": 0.008
+    }
+  },
+  "conditional_admission": {
+    "B": {
+      "status": "not_admitted",
+      "required_T": 0.008,
+      "extension_attempted": false
+    },
+    "X": {
+      "status": "not_admitted",
+      "required_T": 0.008,
+      "extension_attempted": false
+    },
+    "Zplus": {
+      "status": "not_admitted",
+      "required_T": 0.008,
+      "extension_attempted": false
+    },
+    "XZplus": {
+      "status": "not_admitted",
+      "required_T": 0.008,
+      "extension_attempted": false
+    },
+    "Zminus": {
+      "status": "requires_full_temporal_scalar_representation_gate",
+      "required_T": 0.008,
+      "extension_attempted": false
+    }
+  },
+  "budget_normalization_test": {
+    "status": "pass",
+    "actual_volume": 5.0,
+    "synthetic_doubled_volume": 10.0,
+    "scope": "unit check only; actual pilot budgets retain actual geometry"
+  },
+  "boundary_pressure_implementation": {
+    "status": "pass",
+    "receipt_sha256": "b5193f156418e11dfa13557ce2212a2e097ca704d4a8fe2425b4348289afff39"
+  },
+  "history_rollback_closed_compatibility": {
+    "status": "pass",
+    "receipt_sha256": "fc3a73b9dcc219178f9cd27df6816f89799252edaad28aefa8b46398c14667b3"
+  },
+  "wall_reference_study": {
+    "status": "pass",
+    "receipt_sha256": "1bf37f9597e603e33a433511c3b3b717754e523badcd9ec64e15ae1aeab11ce0"
+  },
+  "shared_model_smokes": {
+    "status": "pass",
+    "receipt_sha256": "b70ee43842abd09d984dfe7772b82dc12b039e8a78f361ef2b27679bed2c3a9c"
+  },
+  "independent_projection_and_flow_replay": {
+    "status": "pass",
+    "receipt_sha256": "594599ac9099199b75d024e9aaa45d6d2ff748d1eb38e90156e2eb60cc9e6913"
+  },
+  "resource_compliance": {
+    "status": "failed_aggregate_cap",
+    "aggregate_status": "fail",
+    "project_status": "fail",
+    "maximum_observed_active": 147,
+    "maximum_observed_owned_family": 16,
+    "control_helpers_outside_family": 2,
+    "maximum_observed_project": 18,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "historical_CT1_79": "unchanged failed historical gate"
+  },
+  "constitutive_admissibility": {
+    "primary_matrix": "failed and unchanged",
+    "selected_Zminus_short": "pass"
+  },
+  "selected_continuations": {
+    "continue02-v1": {
+      "status": "pass",
+      "receipt_sha256": "34fdcffcd7ee389528aa3516615e15cadc1b8097988f9e5ca6cd4dba5e72d72e",
+      "complete_body": "continuation02.json"
+    },
+    "continue2-v1": {
+      "status": "pass",
+      "receipt_sha256": "09c91e5ff47c345adaae21e2f420ba4dbc5d2e29364a7cc4d06f14e782dec53c",
+      "complete_body": "continuation2.json"
+    }
+  },
+  "physical_pilot_completion": "pass_T0p2_bounded_open_floor_only",
+  "temporal_and_representation_uncertainty": "short/milestone receipts classified at their actual times; no order inferred from dt pairs",
+  "scalar_budget_accuracy": {
+    "primary-audits-v1": {
+      "status": "failed_or_unresolved",
+      "mass_status": "pass",
+      "receipt_sha256": "62bb7a31da16ff3c42af63bd0899315aa5733525b72cc32764c60d4a66c34011"
+    },
+    "companion-audits-v1": {
+      "status": "pass",
+      "mass_status": "pass",
+      "receipt_sha256": "c22f6a0a58395ed25cccc0b8ea288b64f8959b13ab730b925949e8f8af512dac"
+    },
+    "continue02-audits-v1": {
+      "status": "pass",
+      "mass_status": "pass",
+      "receipt_sha256": "59d9c9710da12e320d08c03259fe08f57e5bad590131098c0d2a64b5c74fd828"
+    },
+    "continue2-audits-v1": {
+      "status": "pass",
+      "mass_status": "pass",
+      "receipt_sha256": "1701726b84eab072bd5d1b759923b7026df7671c5ee363a44b1435b0442261bc"
+    }
+  },
+  "final_budget_primitive_reclassification": {
+    "Zminus-0.002": {
+      "status": "pass",
+      "controls": {
+        "native": {
+          "status": "pass"
+        },
+        "q48f16": {
+          "status": "pass"
+        },
+        "q64f16": {
+          "status": "pass"
+        },
+        "q64f32": {
+          "status": "pass"
+        }
+      },
+      "scaled_signed_defect_spreads": {
+        "inner_k": 8.232482620953996e-17,
+        "outer_k": 2.2726389906016639e-10,
+        "outer_epsilon": 1.8508058516222663e-13,
+        "whole_k": 2.2726397928943308e-10
+      },
+      "uncertainty_limit": 0.02
+    },
+    "Zminus-0.001": {
+      "status": "pass",
+      "controls": {
+        "native": {
+          "status": "pass"
+        },
+        "q48f16": {
+          "status": "pass"
+        },
+        "q64f16": {
+          "status": "pass"
+        },
+        "q64f32": {
+          "status": "pass"
+        }
+      },
+      "scaled_signed_defect_spreads": {
+        "inner_k": 1.2525160894344065e-16,
+        "outer_k": 2.3104512412704201e-10,
+        "outer_epsilon": 1.7919897811187295e-13,
+        "whole_k": 2.3104524910167118e-10
+      },
+      "uncertainty_limit": 0.02
+    }
+  },
+  "precursor_admission": false,
+  "benchmark_admission": false,
+  "temporal_uncertainty": {
+    "status": "pass_T0p2_selected_pair",
+    "metric": "scaled physical weighted RMS at equal times; absolute traction pressure gauge; dt pairs are not temporal-order measurements"
+  },
+  "evolved_spatial_uncertainty": {
+    "status": "unresolved_full_convergence",
+    "demonstrated": "fixed-input local initial pressure/value/load improvement and dense-grid domain recovery on Zminus; primary B/X/Z+/XZ+ failures retained",
+    "limitation": "no admissible baseline evolved spatial companion through .2"
+  },
+  "next_gate": "mechanism-based bounded decision; no automatic longer continuation and no input retuning"
+}
