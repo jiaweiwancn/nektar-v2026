@@ -1,0 +1,49 @@
+{
+  "schema": "CT-Accepted-5-V1",
+  "starting_revision": "b9882937a5096aa9c73219dd3b6288cd8a346983",
+  "starting_state": "clean Mac implementation worktree; fetched remote identical, no intervening commits",
+  "immutable_physics": "CT4 full-precision fits and physical functions, Natural q/kappa/original coefficients, Accepted budget AWF, finite inner nu and zero outer molecular diffusion, transported nonconstant inner k, total epsilon/dependent inner sink, NeutralCompositeV1, ConstrainedRadialV1, absolute pressure and full outlet traction, GeneratedVolumeOwnerV1, unchanged consistent-free-mass one-sweep PIMPLE and current endpoint K",
+  "primary": {
+    "model": "A95", "H_mm": 6.0, "degree": 4, "pressure_degree": 2,
+    "domain": {"x": [0, 0.125, 0.25], "z_top": 2, "Hh_m": 0.04},
+    "source_case": "CT4 initial-v3/A95-6.0-P4 and evolution-v1/A95-6.0-P4/T0.008",
+    "source_runtime": "CT4 build-v3/runtime, native source123f31c974e0b75e551e43a5203749a89378fade; verify executable/actual libraries before reuse",
+    "runtime_policy": "reuse exact immutable governing runtime; rebuild only for observational necessity and demonstrate matching state/history",
+    "proposed_split": {"interval_mm": [0, 0.1875], "point_mm": 0.09375, "point_normalized": "H/64", "baseline_slots": 2839, "predicted_slots": 2957},
+    "selection_rule": "Use the initialized represented-minus-continuous momentum load on identical native rows. Reconcile every physical volume and open-face contribution before masking. Aggregate both columns by radial slab. Rank signed contributions delta_r_slab^T M_free^-1 delta_r_total, retaining negative shares and full sums. Select first slab if its share is maximal and positive and early stage traction attribution supports a gradient mechanism. Otherwise choose exactly one maximal positive supported slab whose bisection fits3000 slots. Record the selection before constructing the new trajectory; no mesh search.",
+    "constraints": "unchanged degrees, all original mesh nodes, active physical breaks, quadrature and continuous functions; two-column conforming split; fresh projected inlet/top traces per space"
+  },
+  "diagnostics": {
+    "accepted_times": [0, 0.001, 0.002, 0.004, 0.008],
+    "stages": ["input", "momentum_predictor", "corrected_flow", "post_flow", "post_epsilon", "post_k"],
+    "traction": "D(K_H)*(dU/dz+dw/dx), actual coefficient state and explicit native geometry; also label frozen-K counterfactual separately",
+    "decomposition": "D0*DeltaS + S0*DeltaD + DeltaD*DeltaS; evaluate pointwise then integrate; preserve coefficient/history hashes",
+    "residual": "native alpha=0 unmasked and constrained loads, pressure/stress/advection/roughness/open fluxes, shared interface rows once; prescribed reactions separate; continuous-reference differences diagnostic only",
+    "limits": {"row_reconstruction": 2e-10, "traction_decomposition_scaled": 2e-10, "continuous_weak_scaled": 2e-9}
+  },
+  "evolution": {
+    "dt": [0.002, 0.001], "first_target": 0.008, "conditional_target": 0.02,
+    "native_unknown_limit": 3000, "quadrature": [32,8,10,10,10],
+    "frozen_budget_controls": ["native", "q48f16", "q64f16", "q64f32"],
+    "required_budget_equations": ["inner_k", "outer_k", "outer_epsilon", "whole_k"],
+    "required_reconstruction": ["k", "outer_epsilon"],
+    "limits": {"mean_wall_traction_scaled": 0.001, "full_interface_traction_RMS_scaled": 0.001, "field_reference_scaled_RMS": 0.001, "vertical_velocity_RMS": 0.0001, "mass_scaled": 1e-8, "physical_scalar_budget": 0.02, "scalar_reconstruction": 2e-10, "field_timestep_scaled_RMS": 0.001},
+    "scales": "unchanged CT4 U(Hh)=1, k=K, epsilon=utau^3/(kappa*H), absolute Pi=U(Hh)^2, traction=utau^2; physical geometry in budgets",
+    "traction_uncertainty": "Compare signed means and full one-sided interface traction profiles on identical physical points, sides and weights. Let s be the maximum normalized mean/profile timestep spread. Admission requires both member errors<=.001 and worst error+2*s<=.001. Resolved failure if best error-2*s>.001. Otherwise ambiguous. Spatial improvement must exceed4*max(baseline/refined timestep spreads,2e-7); preserve signed profile differences.",
+    "conditional_half_step": "one fresh dt=.0005 history only if .002/.001 decision is ambiguous under the traction rule or spatial improvement cannot be distinguished. No changed-dt restart. If activated, require .001/.0005 admission with the same rule; retain all original results.",
+    "continuation": "only complete primitive-admitted, traction-unambiguous new pairs continue with unchanged native histories to .02; stop first genuine native rejection; accuracy is a paired milestone gate and earlier accepted-state accuracy crossings remain visible",
+    "transfer": "only after A95 representative success and supported diagnosis, use the same selected H-fraction split and P4/P2 recipe for A93 and E94E95 at6mm with their own frozen fits. Each has independent initialization, count, paired gate and conditional .02. Heights5.5/6.5 deferred. If the one split fails, stop expansion.",
+    "spatial_interpretation": "matched common physical grid and absolute pressure, separate initial projections and drift; no formal order from two spaces; retain unresolved CT4 pressure interpretation unless relevant new evidence resolves it"
+  },
+  "observation_audit": {
+    "version": "ClosestGraphNormalV2 / CT5ObservationAuditV1",
+    "root_rule": "isolate all monotone stationarity intervals using analytic roots of F'=1+a^2+a^2*(2z-1)*cos(2at)-2*a^2*cos(2at)^2; include exact/endpoint and critical tangential roots with explicit arithmetic tolerances; deduplicate, compare all graph/flat candidates, never clamp distance to vertical",
+    "coverage": "all CT4 exported points/envelopes plus all36 visible Fig7 crest RMS and shear ratios; convert Fig7 yprime/delta bounds with6.25; frozen roles/values/weights untouched",
+    "tests": ["crest on/above graph", "flat upstream/downstream", "symmetry", "foot branches", "continuity near x=0", "closest<=vertical", "tangential roots and competing candidates", "extraction envelope extrema"],
+    "high_Re_labels": "inner auxiliary nu/nut_A(H) separately from outer nu/(kappa*utau*H); no refit",
+    "uncertainty": "extraction envelopes only; no invented Fig11 height or experimental/probe-position uncertainty"
+  },
+  "resources": {"root": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-5-20261112", "project_including_helpers": 16, "aggregate": 72, "numeric_library_threads": 1, "compiler_jobs_if_needed": 2, "families": 1, "Git": "index.threads=1; core.preloadIndex=false; pack.threads=1"},
+  "excluded": ["EP", "physical/input retuning", "reference cancellation/restoration", "constant inner k", "clipping/floors/projection remedies", "post-k epsilon repair", "imposed evolving wall gradient/traction", "T=.2", "nine-case native repetition", "developed precursor", "curved production", "hill predictions", "geometry-row optimization", "backend expansion"],
+  "historical_records": "CT1-CT4 results, sealed artifacts, failed preparations and resource failures unchanged; new correction notice will delimit CT4 height-audit claims"
+}
