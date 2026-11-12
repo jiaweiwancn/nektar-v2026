@@ -56,7 +56,7 @@ def finish_readback(folder,role,receipt_path=None):
         recovered_complete_packet=completed is None,producer=identity(rp),checkpoint=identity(cp/'State.bin'),
         request=identity(folder/'request.json'),native=identity(folder/'native.json'),log=identity(folder/'command.log'),
         callback_history_sha256=p['callback_history_sha256'],stage_norms=p['physical_mass_dual_norms'],
-        offline_pressure_projection=pressure_complement(r,r['state']),
+        offline_pressure_projection=pressure_complement(r,state),
         independent_weak=independent_weak(p['weak_checks'],dict(r,open_boundary=p['open_boundary']),enforce=False))
     save(receipt_path or folder/'receipt.json',result);return result
 
