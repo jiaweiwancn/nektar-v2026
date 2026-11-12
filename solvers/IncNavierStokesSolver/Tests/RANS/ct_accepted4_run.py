@@ -144,12 +144,12 @@ def traction(initial,state,c):
         scope='actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately')
 
 
-def initial(a):
-    ref=json.loads(a.references.read_text());c=construction(ref,a.model,a.height,a.degree);pts,sides,weights,n=grid(c)
+def initial(a,case=None,timesteps=(.002,.001)):
+    ref=json.loads(a.references.read_text());c=construction(ref,a.model,a.height,a.degree) if case is None else case;pts,sides,weights,n=grid(c)
     m=RequestManifest(a.output,dict(schema='CT4FreshInitialV1',contract_sha256=sha(a.contract),reference_sha256=sha(a.references),case=c,
-        runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),source_sha256=sha(Path(__file__))))
+        runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),source_sha256=sha(Path(__file__)),timesteps=list(timesteps)))
     result=dict(schema='CT4InitialV1',case=c,global_count=n,weights=weights,members={},status='fail')
-    for dt in (.002,.001):
+    for dt in timesteps:
         folder=a.output/str(dt);make(folder,a.runtime,c,dt,0)
         e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'zero.log');row=dict(status='fail',execution=e,directory=str(folder));result['members'][str(dt)]=row
         if not (folder/'case.evolution.json').exists():row['reason']='native_zero_initialization_failed';continue
@@ -173,7 +173,8 @@ def initial(a):
         row['status']='pass' if all(x['status']=='pass' for x in (d,tr,err,row['continuous_oracle'],row['constitutive'])) else 'fail'
         write_json(a.output/'progress.json',result)
     rows=list(result['members'].values());result['identical_pair_initial_coefficients']=len(rows)==2 and all('state_sha256' in q for q in rows) and rows[0]['state_sha256']==rows[1]['state_sha256']
-    result['status']='pass' if result['identical_pair_initial_coefficients'] and all(q['status']=='pass' for q in rows) else 'fail'
+    result['same_space_equal_initial_coefficients']=len(rows)==len(timesteps) and all('state_sha256' in q for q in rows) and len({q['state_sha256'] for q in rows})==1
+    result['status']='pass' if result['same_space_equal_initial_coefficients'] and all(q['status']=='pass' for q in rows) else 'fail'
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return result
 
 
