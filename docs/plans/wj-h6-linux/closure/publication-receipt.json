@@ -1,0 +1,66 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h6-neutral-projection-20261112/publisher-22654e3/solvers/IncNavierStokesSolver/Tests/RANS/publish_wj_h6.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h6-neutral-projection-20261112"
+  ],
+  "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h6-neutral-projection-20261112/publisher-22654e3/solvers/IncNavierStokesSolver/Tests/RANS",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "reserved_seconds": 80,
+  "cp0": false,
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h6-neutral-projection-20261112/publisher-22654e3/solvers/IncNavierStokesSolver/Tests/RANS/publish_wj_h6.py": {
+      "sha256": "6905f02d58d1259e2e4167b9aaad4467c216fb63b723f52a2251a21d78f0d231",
+      "bytes": 11498
+    }
+  },
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 1956,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2111,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 80600,
+        "parent": 80599,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 80631,
+        "parent": 80600,
+        "threads": 1,
+        "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h6 import execute;import sys;sys.exit(0 if execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h6-neutral-projection-20261112'),'publication',['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h6-neutral-projection-20261112/publisher-22654e3/solvers/IncNavierStokesSolver/Tests/RANS/publish_wj_h6.py', '--root', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h6-neutral-projection-20261112'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h6-neutral-projection-20261112/publisher-22654e3/solvers/IncNavierStokesSolver/Tests/RANS',seconds=80) else 1)"
+      }
+    ]
+  },
+  "driver_sha256": "72ad45aeb30bb22a7dbab19fc85743c848041ff5b65afb2da291477b980492a0",
+  "status": "PASS",
+  "seconds": 36.26812148400495,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 2519105536,
+  "root_bytes": 2009254496,
+  "log_sha256": "00f1137c4a1b15a903d77946291130e693e3e3c3c95210bc3827f4f3702e8c9a"
+}

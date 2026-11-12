@@ -1,0 +1,50 @@
+EXACT CERTIFICATE: D >= nu_eff/250 on all incompressible rank-one increments.
+Exact positive LDL pivots: ['35607/250', '2902757/300250', '3295566703/12201000', '3188912170563/3295566703000', '2212408252197/24379099000', '609851247/332332000', '3616758816461/553102063049250', '355627/143000']
+Traceback (most recent call last):
+  File "/media/jay/新加卷1/nektar-v2026-runs/wj-h6-neutral-projection-20261112/source-39d1e21/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h6.py", line 191, in <module>
+    elif a.mode=='replay':replay(a.root,a.height_mm,a.coarse)
+  File "/media/jay/新加卷1/nektar-v2026-runs/wj-h6-neutral-projection-20261112/source-39d1e21/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h6.py", line 107, in replay
+    save(out/'reconstruction.json',dict(meta,producer=before,xml=identity(xml),XML_continuum_max_errors=xml_errors))
+  File "/media/jay/新加卷1/nektar-v2026-runs/wj-h6-neutral-projection-20261112/source-39d1e21/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h4.py", line 24, in save
+    tmp=Path(str(p)+'.tmp');tmp.write_text(json.dumps(v,indent=2,allow_nan=False)+'\n');os.replace(tmp,p)
+  File "/usr/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+  File "/usr/lib/python3.10/json/encoder.py", line 201, in encode
+    chunks = list(chunks)
+  File "/usr/lib/python3.10/json/encoder.py", line 431, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/usr/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/usr/lib/python3.10/json/encoder.py", line 325, in _iterencode_list
+    yield from chunks
+  File "/usr/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/usr/lib/python3.10/json/encoder.py", line 438, in _iterencode
+    o = _default(o)
+  File "/usr/lib/python3.10/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type bool_ is not JSON serializable
+Command exited with non-zero status 1
+	Command being timed: "/usr/bin/python3 /media/jay/新加卷1/nektar-v2026-runs/wj-h6-neutral-projection-20261112/source-39d1e21/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h6.py --root /media/jay/新加卷1/nektar-v2026-runs/wj-h6-neutral-projection-20261112 --mode replay --height-mm 5 --coarse"
+	User time (seconds): 0.80
+	System time (seconds): 0.07
+	Percent of CPU this job got: 98%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.88
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 106432
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 22194
+	Voluntary context switches: 4
+	Involuntary context switches: 4
+	Swaps: 0
+	File system inputs: 64
+	File system outputs: 8
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
