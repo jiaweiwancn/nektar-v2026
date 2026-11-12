@@ -38,7 +38,14 @@ def reclassify(root,receipt,initial,ct1,runtime):
         require(function_identity(ET.parse(directory/'case.xml').getroot())==function_identity(ET.parse(frozen).getroot()),'changed_frozen_physical_functions')
         budgets={}
         for control,b in row['budgets'].items():
-            path=Path(b['execution']['command'][-1]);require(sha(path)==b['packet_sha256'],'changed_physical_budget_packet')
+            path=Path(b['execution']['command'][-1])
+            if b.get('status')=='failed_probe':
+                require(report['failure'],'unexpected_failed_budget_probe_on_admitted_endpoint')
+                require(json.loads(path.read_text())==b['packet'],'changed_failed_physical_budget_packet')
+                budgets[control]=dict(status='failed_probe',raw_packet_path=str(path),raw_packet_sha256=sha(path),
+                    reason='independent frozen audit did not return admissible budget primitives; no passing classification supplied')
+                continue
+            require(sha(path)==b['packet_sha256'],'changed_physical_budget_packet')
             packet=json.loads(path.read_text())
             require(packet['observation']['state']==report['state'],'budget_actual_state_identity')
             budgets[control]=budget_classification(packet,c)
@@ -83,6 +90,13 @@ def main():
     def compact(value):
         if isinstance(value,list):return [compact(v) for v in value]
         if not isinstance(value,dict):return value
+        if value.get('status')=='failed_probe' and isinstance(value.get('packet'),dict):
+            packet=value['packet'];path=Path(value['execution']['command'][-1])
+            require(json.loads(path.read_text())==packet,'changed_failed_probe_packet_before_export')
+            return dict(status='failed_probe',execution=compact(value['execution']),
+                external_packet=dict(path=str(path),sha256=sha(path),
+                    status=packet.get('status'),physical_admissibility=packet.get('physical_admissibility'),
+                    scope='complete failed packet, coefficient vectors and basis arrays retained on Linux; native failure witness exported separately'))
         result={}
         for k,v in value.items():
             if k=='functions' and isinstance(v,dict):
@@ -155,9 +169,6 @@ def main():
     decision['timing_runtime_compatibility']=json.loads((a.root/'profile-compatibility-v1/results.json').read_text())['status']
     decision['timing_bitwise_equivalence']={tag:json.loads((a.root/('profile-'+tag+'-v1')/'results.json').read_text())['bitwise_accepted_state_history_equivalence'] for tag in ('P3','P4')}
     decision['independent_failure_diagnosis']='pass' if json.loads((a.root/'failures-v1/results.json').read_text())['diagnostic_execution']=='pass' else 'fail'
-    for f in a.root.glob('profile*/**/results.json'):
-        if f.name=='results.json':
-            name='profile-'+hashlib.sha256(str(f).encode()).hexdigest()[:8]+'.json';save(name,json.loads(f.read_text()));exports[name]=dict(source=str(f),sha256=sha(f))
     # Pin selected heavy reports/configurations and histories, not full matrices
     # or repeated per-step fields in Git. Stage JSON already carries array hashes.
     for f in sorted(a.root.glob('**/case.evolution.json')):
