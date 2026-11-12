@@ -93,7 +93,18 @@ def inventory(reports,c,dense=False):
 
 def replay(root,height,coarse=False):
     c=configuration(height);r,rp,xml=record(root,height,coarse);out=root/'replays'/('coarse'if coarse else 'refined')/f'H{height:g}mm';out.mkdir(parents=True)
-    before=identity(rp);stages,meta=reconstruct(r,xml);save(out/'reconstruction.json',dict(meta,producer=before,xml=identity(xml)))
+    before=identity(rp);stages,meta=reconstruct(r,xml)
+    functions=Functions(xml,r);g=np.polynomial.legendre.leggauss(16)[0];xml_errors=dict(U=0.,k=0.,epsilon=0.)
+    for e in r['fields'][0]['mesh']:
+        rr=(e['lower'][2]+e['upper'][2])/2+(e['upper'][2]-e['lower'][2])/2*g;x=np.full_like(rr,4.)
+        zz=np.array([physical(r,[4.,0,v])[2]-c.d0 for v in rr]);inside=e['upper'][2]<=c.H
+        expected_u=np.array([c.U_inner(v)if inside else c.U_outer(v)for v in zz])
+        expected_k=np.array([c.k_inner(v)if inside else c.K for v in zz])
+        xml_errors['U']=max(xml_errors['U'],float(np.max(abs(functions.block(0,x,rr)-expected_u))))
+        xml_errors['k']=max(xml_errors['k'],float(np.max(abs(functions.block(2,x,rr)-expected_k))))
+        if not inside:xml_errors['epsilon']=max(xml_errors['epsilon'],float(np.max(abs(functions.block(3,x,rr)-c.A/zz))))
+    assert max(xml_errors.values())<2e-11,'XML approximation differs from the frozen continuum'
+    save(out/'reconstruction.json',dict(meta,producer=before,xml=identity(xml),XML_continuum_max_errors=xml_errors))
     np.savez_compressed(out/'reconstructed-stages.npz',**stages)
     if meta['status']!='PASS':print('UNRESOLVED final coefficient replay; attribution withheld',flush=True);return
     inv=inventory([r],c);rows=[];grad_errors=[];field_errors=[];witness=[]

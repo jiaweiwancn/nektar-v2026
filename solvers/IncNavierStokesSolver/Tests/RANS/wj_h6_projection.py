@@ -66,16 +66,25 @@ def local_rule(el,order=16):
 def project_field(report,b,function,order=16):
     """Assemble physical mass/load equations directly from exported CG maps."""
     space=report['fields'][b];n=space['size'];M=np.zeros((n,n));load=np.zeros(n)
-    H,d0,top,J=mapping(report)
+    H,d0,top,J=mapping(report);panels=[]
     for el in space['mesh']:
         x,r,B,w=local_rule(el,order);w=w*(1 if el['upper'][2]<=H else J)
         ids=np.asarray(el['ids'],int);M[np.ix_(ids,ids)]+=B.T@(w[:,None]*B)
-        load[ids]+=B.T@(w*function(x,r))
+        f=function(x,r);load[ids]+=B.T@(w*f);panels.append((ids,B,w,f))
     factor=cho_factor(M,check_finite=False);c=cho_solve(factor,load,check_finite=False)
+    # Refine the *integral* defect, avoiding cancellation of assembled M*c and
+    # load on the hierarchical basis. This is offline projection algebra, not
+    # a velocity correction or governing solve. Equations/quadrature stay fixed.
+    for _ in range(2):
+        correction=np.zeros(n,dtype=np.longdouble)
+        for ids,B,w,f in panels:
+            defect=np.asarray(f,dtype=np.longdouble)-np.asarray(B,dtype=np.longdouble)@np.asarray(c[ids],dtype=np.longdouble)
+            correction[ids]+=np.asarray(B,dtype=np.longdouble).T@(np.asarray(w,dtype=np.longdouble)*defect)
+        c+=cho_solve(factor,np.asarray(correction,dtype=float),check_finite=False)
     defect=M@c-load
     backward=float(np.max(abs(defect))/max(np.linalg.norm(M,np.inf)*np.linalg.norm(c,np.inf)+np.linalg.norm(load,np.inf),1e-300))
     return c,dict(order=order,backward_residual=backward,load_max=float(np.max(abs(load))),
-        residual_max=float(np.max(abs(defect))),physical_mass_shape=list(M.shape))
+        residual_max=float(np.max(abs(defect))),physical_mass_shape=list(M.shape),integral_defect_refinements=2)
 
 
 @lru_cache(None)
