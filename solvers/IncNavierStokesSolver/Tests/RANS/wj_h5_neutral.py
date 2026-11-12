@@ -174,13 +174,15 @@ def feasibility(fit):
             z*1.01,1.,xtol=1e-14,rtol=1e-14)
     primary=threshold(z0);printed=threshold(.2/SCALE_MM)
     lower3=SCALE_MM*DEFAULT_NU/(KAPPA*us*.03);lower2=SCALE_MM*DEFAULT_NU/(KAPPA*us*.02)
+    upper7=7-d0
+    interval=lambda lower,upper:[lower,upper]if lower<upper else 'EMPTY'
     return dict(minima=minima,fig3_conservative_ceiling_mm=ceiling,fig12=dict(page=15,figure='12',height_mm=7.,height_source_page=13,
         r_mm=7-d0,requirement='H_w<7mm-d0 if all rms samples must be outside AWF',digitized_values='not extracted in H5'),
         primary_h_equals_H_mm=primary,printed_h_equals_H_mm=printed,
-        primary_fig3_strict_interval_mm=[primary,ceiling],printed_fig3_strict_interval_mm=[printed,ceiling],
+        primary_fig3_strict_interval_mm=interval(primary,ceiling),printed_fig3_strict_interval_mm=interval(printed,ceiling),
         three_percent_lower_mm=lower3,two_percent_lower_mm=lower2,
-        primary_three_percent_interval_mm=[max(primary,lower3),ceiling],primary_two_percent_interval='EMPTY'if lower2>=ceiling else [max(primary,lower2),ceiling],
-        all_7mm_outside=dict(primary='EMPTY',printed='EMPTY',required_upper_mm=7-d0,
+        primary_three_percent_interval_mm=interval(max(primary,lower3),ceiling),primary_two_percent_interval=interval(max(primary,lower2),ceiling),
+        all_7mm_outside=dict(primary=interval(primary,upper7),printed=interval(printed,upper7),required_upper_mm=upper7,
             primary_required_h_at_3p5mm=SCALE_MM*required_roughness((7-d0)/SCALE_MM,z0,u_tau=us)['h']),
         qualification='Fig.3-only reference candidates; no whole-experiment matching-height selection')
 

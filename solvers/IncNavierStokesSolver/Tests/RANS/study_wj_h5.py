@@ -122,24 +122,42 @@ def assess(root,height,observer):
     c=next(c for c in configurations()if abs(c.H*SCALE_MM-height)<1e-12)
     folder=root/'cases'/f'H{height:g}mm';rp=folder/'case.evolution.json';r=load(rp)
     assert r['steps']==0 and r['time']==0 and not r['pimple_attempts'] and r['implicit_callback_count']==0
-    assert r['last_stage_alpha']==0 and not r['failure']
+    assert r['last_stage_alpha']==0
     assert len(r['state'])<=3000 and r['parameters'][:3]==[c.nu,c.H,c.h]
-    cp=Path(r['checkpoint']);original={str(p):sha(p)for p in (rp,folder/'case.xml',cp/'State.bin')}
+    failed=bool(r['failure']);cp=Path(r['checkpoint'])if r['checkpoint']else None
+    original={str(p):sha(p)for p in (rp,folder/'case.xml')}
+    if cp:original[str(cp/'State.bin')]=sha(cp/'State.bin')
+    if failed:
+        event=r['physical_range_events'][-1];packet=event['wj_packet']
+        assert not r['accepted_states'] and not r['wj_audit_packets'] and cp is None
+        assert event['alpha']==0 and event['time']==0 and vector_hash(event['state'])==vector_hash(r['state'])
+    else:
+        assert len(r['wj_audit_packets'])==1;packet=r['wj_audit_packets'][0]
     out=root/'observations'/f'H{height:g}mm';out.mkdir(parents=True,exist_ok=False)
     zs=sorted(set([c.d0,c.d0+c.H,c.d0+c.w['rc'],c.d0+c.h,7/SCALE_MM,250/SCALE_MM,c.top]+[
         row['z_mm']/SCALE_MM for row in measurements()]))
     pts=[[x,0,z]for x in (0.,4.,8.)for z in zs]
-    request=dict(operation='open_checks',inner_stress_model='Linear',native_report=str(rp),native_report_sha256=sha(rp),
-        native_checkpoint=str(cp),checkpoint_sha256=sha(cp/'State.bin'),physical_observations=pts,
-        weak=True,weak_outer_order=32,assembly=False,reuse=False)
-    save(out/'request.json',request)
-    subprocess.run([str(observer),str(folder/'case.xml'),str(out/'request.json'),str(out/'native.json')],check=True)
-    p=load(out/'native.json')
-    assert p['initialization_work']==[0,0] and p['governing_solves']==0 and p['selected_absolute_step']==0
-    assert not p['actual_completed_stage_residual'] and not p['physical_mass_dual_norms']['completed_stage']
-    assert p['state_sha256']==vector_hash(r['state'])
+    for w in packet['principal_witnesses'].values():
+        p=list(w['position']);pts.append(p)
+        for axis in (0,2):
+            for sign in (-1,1):
+                q=p.copy();q[axis]+=sign*1e-6
+                if 0<=q[0]<=8 and c.d0<=q[2]<=c.top:pts.append(q)
+    pts=[list(v)for v in sorted(set(tuple(v)for v in pts))]
+    p=None
+    if not failed:
+        request=dict(operation='open_checks',inner_stress_model='Linear',native_report=str(rp),native_report_sha256=sha(rp),
+            native_checkpoint=str(cp),checkpoint_sha256=sha(cp/'State.bin'),physical_observations=pts,
+            weak=True,weak_outer_order=32,assembly=False,reuse=False)
+        save(out/'request.json',request)
+        subprocess.run([str(observer),str(folder/'case.xml'),str(out/'request.json'),str(out/'native.json')],check=True)
+        p=load(out/'native.json')
+        assert p['initialization_work']==[0,0] and p['governing_solves']==0 and p['selected_absolute_step']==0
+        assert not p['actual_completed_stage_residual'] and not p['physical_mass_dual_norms']['completed_stage']
+        assert p['state_sha256']==vector_hash(r['state'])
     assert all(sha(k)==v for k,v in original.items()),'read-only observer changed producing bytes'
-    weak=independent_weak(p['weak_checks'],dict(r,open_boundary=p['open_boundary']),enforce=False)
+    weak=independent_weak(p['weak_checks'],dict(r,open_boundary=p['open_boundary']),enforce=False)if p else dict(
+        status='NOT_RUN',reason='startup rejected before native checkpoint/accepted lineage; strict immutable reader cannot admit it')
     # q12 is fixed, with no adaptive governing order or historical rerun.
     views={q:outer_loads(r,r['state'],r['state'],0.,q)for q in (12,24,32)}
     quadrature={f'{q}-32':compare_loads(views[q],views[32])for q in (12,24)}
@@ -171,7 +189,23 @@ def assess(root,height,observer):
     minimum=lambda field,region:min(float(v[field])for v in region)
     principal_min=min(min(v['principal']['in_plane'],v['principal']['transverse'])for v in outer)
     cov_min=min(min(v['covariance'])for v in rows)
-    native_audits=r['wj_audit_packets'];assert len(native_audits)==1
+    kernel=Probe(str(root.parent/'wj-h2-20261111/build-v1/WJKernelProbe'));witnesses={}
+    try:
+        for name,w in packet['principal_witnesses'].items():
+            v=next(v for v in rows if v['owner']['geometry']==w['geometry']and
+                np.max(abs(np.asarray(v['physical'])-w['position']))<1e-14)
+            G=np.asarray(v['G']);H=np.asarray(w['H_row_major']).reshape(3,3)
+            assert_allclose(G.ravel(),w['raw_G_row_major'],rtol=2e-11,atol=2e-12)
+            value=kernel.closure(v['k'],v['epsilon'],G);action=kernel.closure(v['k'],v['epsilon'],G,(0.,0.,H))
+            replay=-np.sum(H*action['R'])/value['scalar'][1]
+            assert_allclose(replay,w['minimum_over_nu_eff'],rtol=2e-9,atol=2e-11)
+            rphys=w['position'][2]-c.d0;Gc=np.zeros((3,3));Gc[0,2]=c.u_tau/(KAPPA*rphys)
+            from wj_h3_analysis import principal
+            witnesses[name]=dict(native=w,compiled_replay=float(replay),independent_principal=v['principal'],
+                independent_coefficient_row=v,continuum_G=Gc.tolist(),continuum_epsilon=c.epsilon(rphys),
+                continuum_principal=principal(c.K,c.epsilon(rphys),Gc),
+                note='same physical point and declared owner; no replacement of rejected coefficients or admitted checkpoint')
+    finally:kernel.close()
     represent=dict(min_k=minimum('k',rows),min_epsilon=minimum('epsilon',outer),min_covariance=cov_min,
         min_planar_principal_over_nu_eff=principal_min,max_root_residual=max(abs(v['root_residual'])for v in outer),
         max_raw_divergence=max(abs(v['raw_divergence'])for v in rows),
@@ -179,15 +213,17 @@ def assess(root,height,observer):
         scope='declared finite physical sample set, all legitimate owners; startup projection, no evolved-flow claim')
     gates=dict(native_initialization=not r['failure'],positive_scalars=represent['min_k']>0 and represent['min_epsilon']>0,
         covariance=cov_min>0,principal=principal_min>0,root=represent['max_root_residual']<1e-12,
-        independent_weak=weak['status']=='PASS',quadrature=all(v['status']=='PASS'for v in quadrature.values()),
+        independent_weak=weak['status']=='PASS'if p else None,quadrature=all(v['status']=='PASS'for v in quadrature.values()),
         exact_shared_traces=all(v['shared_U_max']<2e-13 and abs(v['shared_k'])<2e-13 and abs(v['epsilon_trace']-v['epsilon_target'])<2e-13 for v in interface))
-    result=dict(status='PASS'if all(gates.values())else 'UNRESOLVED',gates=gates,producer=identity(rp),xml=identity(folder/'case.xml'),
-        checkpoint=identity(cp/'State.bin'),native=identity(out/'native.json'),source_sha256=sha(__file__),
+    result=dict(status='OBSTRUCTED'if failed else 'PASS'if all(gates.values())else 'UNRESOLVED',gates=gates,producer=identity(rp),xml=identity(folder/'case.xml'),
+        checkpoint=identity(cp/'State.bin')if cp else None,native=identity(out/'native.json')if p else None,source_sha256=sha(__file__),
         state_size=len(r['state']),normal_cells=len(r['fields'][0]['mesh']),rank=1,threads=1,steps=0,
         governing_solves=0,completed_stage='NOT_APPLICABLE at CP0',native_initialization_work=r['initialization_lift_calls_iterations'],
-        passive_initialization_work=p['initialization_work'],spatial_norms=p['physical_mass_dual_norms'],
-        native_audit=native_audits[0],represented=represent,interface=interface,independent_weak=weak,
-        quadrature=quadrature,open_boundary=p['open_boundary'],scalar_domain=p['scalar_domain'],
+        passive_initialization_work=p['initialization_work']if p else 'NOT_RUN:no accepted checkpoint',
+        spatial_norms=p['physical_mass_dual_norms']if p else dict(native_startup_coupled_norms=event['audit']['coupled_norms'],
+            completed_stage='NOT_APPLICABLE',scope='native startup alpha_mass=0, eta=0; reader-scaled packet unavailable'),
+        native_audit=packet,principal_witness_replays=witnesses,represented=represent,interface=interface,independent_weak=weak,
+        quadrature=quadrature,open_boundary=p['open_boundary']if p else r['open_boundary'],scalar_domain=p['scalar_domain']if p else None,
         literal_reference=c.summary(),original_bytes_unchanged=original)
     save(out/'result.json',result)
     print(json.dumps(dict(height_mm=height,status=result['status'],gates=gates,state_size=len(r['state']),represented=represent)),flush=True)
@@ -217,7 +253,30 @@ def plot(root):
     for c in cfg:ax.plot(c.H*SCALE_MM,c.h*SCALE_MM,'o',color='tab:blue')
     ax.set(xlabel='matching height H_w [mm from effective wall]',ylabel='sand-grain roughness h_s [mm]',title='Separate observation scopes: no all-7mm-outside solution')
     ax.grid(alpha=.2);ax.legend(fontsize=8);fig.savefig(out/'height-feasibility.png',dpi=170);fig.savefig(out/'height-feasibility.pdf');plt.close(fig)
-    print('Three compact continuum/calibration plots written; no governing run',flush=True)
+    stress=[];c=cfg[1]
+    for row in measurements():
+        if row['panel']=='a':continue
+        panel=row['panel'];model=c.u_tau**2 if panel=='b'else math.sqrt(c.Rc[0,0]if panel=='c'else c.Rc[2,2])/c.u_tau
+        stress.append(dict(row,model=model,model_minus_digitized=model-row['value'],
+            normalization='-R_xz/U_infinity^2'if panel=='b'else 'sigma_x/u_tau'if panel=='c'else 'sigma_vertical/u_tau',
+            scope='exact neutral outer stress; Fig.3 samples above all three candidate interfaces'))
+    write_csv(out/'neutral-stress-discrepancy.csv',stress)
+    fig,ax=plt.subplots(1,2,figsize=(8.8,3.6),constrained_layout=True)
+    for panel,label,color in (('c','longitudinal','tab:blue'),('d','vertical','tab:orange')):
+        rows=[v for v in stress if v['panel']==panel]
+        ax[0].plot([v['value']for v in rows],[v['z_mm']for v in rows],'o',mfc='none',color=color,label=f'Fig.3 {label}')
+        ax[0].axvline(rows[0]['model'],color=color,ls='--',label=f'neutral {label}')
+    ax[0].set(xlabel=r'$\sigma/u_\tau$',ylabel='physical height z [mm]',title='Normal-stress bias remains visible');ax[0].legend(fontsize=7)
+    rows=[v for v in stress if v['panel']=='b'];ax[1].plot([v['value']for v in rows],[v['z_mm']for v in rows],'o',mfc='none',label='Fig.3 shear')
+    ax[1].axvline(c.u_tau**2,ls='--',label='neutral constant shear');ax[1].set(xlabel=r'$-R_{xz}/U_\infty^2$',ylabel='physical height z [mm]',title='Idealized equilibrium is not a finite layer')
+    ax[1].legend(fontsize=8)
+    for a in ax:a.grid(alpha=.2)
+    fig.savefig(out/'neutral-stress-discrepancy.png',dpi=170);fig.savefig(out/'neutral-stress-discrepancy.pdf');plt.close(fig)
+    save(out/'seven-mm-model-regions.json',[dict(H_w_mm=c.H*SCALE_MM,physical_z_mm=7.,r_mm=7.-c.d0*SCALE_MM,
+        region='inner AWF',R=c.covariance_inner(7/SCALE_MM-c.d0).tolist(),
+        longitudinal_rms_over_utau=math.sqrt(c.covariance_inner(7/SCALE_MM-c.d0)[0,0])/c.u_tau,
+        scope='reference prediction only, no Fig.12 rms value fitted or digitized')for c in cfg])
+    print('Compact calibration/profile/stress plots written; Fig.12 7mm target retained inside AWF',flush=True)
 
 
 if __name__=='__main__':
