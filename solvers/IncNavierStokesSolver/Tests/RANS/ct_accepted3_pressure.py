@@ -53,6 +53,22 @@ def projection(root, c, degree, o, witness_row):
                 scope='continuous nodal P1/P2 mass projection of unchanged analytical Pi; no P1 shortcut for P2')
 
 
+def projected_normal_load(root, c, projected, order):
+    """Independent radial integral, analytical Qzz=-Pi vs represented pressure.
+
+    This is the initial supplied continuum/pressure-projection diagnostic, not
+    the actual evolved stress load or an artificial governing residual.
+    """
+    z=np.array(projected['nodes']);coeff=np.array(projected['coefficients']);degree=projected['degree']
+    g,w=leggauss(order);total=0.
+    for i,(a,b) in enumerate(zip(z[:-1],z[1:])):
+        t=(g+1)/2;y=a+(b-a)*t
+        native=lagrange(t,degree).T@coeff[i*degree:i*degree+degree+1]
+        derivative=-2*(y-6.25)/1.5**2*np.exp(-((y-6.25)/1.5)**2)
+        total+=(b-a)/2*(w@((analytic(root,'Outer','p',y)-native)*derivative))
+    return float(total*(c['x'][-1]-c['x'][0])**3/6)
+
+
 class TensorPressure:
     def __init__(self, o, state, degree):
         require(degree in (1,2), 'pressure_oracle_only_P1_P2')

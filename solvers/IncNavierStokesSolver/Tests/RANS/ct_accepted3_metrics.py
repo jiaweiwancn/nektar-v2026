@@ -32,12 +32,12 @@ def point(row, state, offsets, model):
     return v
 
 
-def inventory(rows,coords,state,offsets,model):
+def inventory(rows,coords,state,offsets,model,sides=None):
     extrema={};rad=None;failures=[];d2=0.;count=0;divmax=0.
     for i,q in enumerate(rows):
         if q.get('epsilon') is None:continue
         v=point(q,state,offsets,model);count+=1
-        loc=dict(coordinate=coords[i],geometry=q['velocity_k']['geometry'],side=q.get('side',0),sample_index=i)
+        loc=dict(coordinate=coords[i],geometry=q['velocity_k']['geometry'],side=sides[i] if sides is not None else 0,sample_index=i)
         d2+=v['raw_divergence']**2;divmax=max(divmax,abs(v['raw_divergence']))
         for name,value in [('k',v['k']),('epsilon',v['epsilon'])]+([('covariance',float(np.linalg.eigvalsh(v['R'])[0]))] if 'R' in v else []):
             if name not in extrema or value<extrema[name]['value']:extrema[name]=dict(loc,value=value)
@@ -50,6 +50,19 @@ def inventory(rows,coords,state,offsets,model):
 
 def grid(c):
     points,weights,n=ct2_grids(c)
+    # Six points integrate squares of represented P4 fields exactly on every
+    # union cell. CT2's original P3/four-point packets remain unchanged.
+    tail=points[n:]
+    from numpy.polynomial.legendre import leggauss
+    g,w=leggauss(6);points=[];weights=[]
+    xs=[0.,.125,.1875,.25];zs=sorted(set(c['knots']+[5.125,6.5]))
+    for a,b in zip(xs[:-1],xs[1:]):
+        for d,e in zip(zs[:-1],zs[1:]):
+            for i in range(6):
+                for j in range(6):
+                    points.append([(a+b)/2+(b-a)*g[i]/2,0.,(d+e)/2+(e-d)*g[j]/2])
+                    weights.append((b-a)*(e-d)*w[i]*w[j]/4)
+    n=len(points);points+=tail
     # CT2's final entry was the original witness; keep it LAST for projection.
     points.pop();sides=[0]*len(points)
     for x in (0.,1e-8,.0625,.125-1e-8,.125+1e-8,.1875-1e-8,.1875+1e-8,.22,.24836915803232323,.25):
@@ -63,7 +76,7 @@ def grid(c):
 def domain(initial,report,c):
     o=initial['observation'];s=np.array(report['state']);off=o['offsets']
     result=dict(native=inventory(o['volume'],[q['coordinate'] for q in o['volume']],s,off,c['model']),
-                fixed=inventory(initial['test_basis'],o['grid'],s,off,c['model']))
+                fixed=inventory(initial['test_basis'],o['grid'],s,off,c['model'],o['grid_sides']))
     result['status']='pass' if all(x['domain_failure_count']==0 and 'covariance' in x['minima']
         and np.isfinite(x['minima']['covariance']['value']) and x['minima']['covariance']['value']>=-1e-10*c['K0']
         for x in (result['native'],result['fixed'])) else 'fail'

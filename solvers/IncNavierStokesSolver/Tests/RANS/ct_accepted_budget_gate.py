@@ -7,6 +7,12 @@ EQUATIONS = {'inner_k', 'outer_k', 'outer_epsilon', 'whole_k'}
 RECONSTRUCTION = {'k', 'outer_epsilon'}
 
 
+def finite_numbers(value):
+    if isinstance(value, dict):return all(finite_numbers(v) for v in value.values())
+    if isinstance(value, (list, tuple)):return all(finite_numbers(v) for v in value)
+    return math.isfinite(value) if isinstance(value, (float, int)) else True
+
+
 def physical_budgets(row):
     reasons, controls, values = [], {}, {}
     budgets = row.get('budgets', {})
@@ -19,6 +25,7 @@ def physical_budgets(row):
         if set(budget.get('reconstruction', {})) != RECONSTRUCTION:
             errors.append('missing_or_foreign_reconstruction')
         for name, q in budget.get('equations', {}).items():
+            if not finite_numbers(q):errors.append('nonfinite_equation_primitive:' + name)
             keys = ('physical_scale', 'storage_backward_difference', 'stage_source',
                     'stage_physical_boundary_flux', 'frozen_stage_physical_defect')
             if any(not isinstance(q.get(k), (float, int)) or not math.isfinite(q[k]) for k in keys):
@@ -35,6 +42,7 @@ def physical_budgets(row):
                 errors.append('physical_budget_accuracy:' + name)
             values.setdefault(name, []).append(defect/scale)
         for name, q in budget.get('reconstruction', {}).items():
+            if not finite_numbers(q):errors.append('nonfinite_reconstruction_primitive:' + name)
             v = q.get('scaled_defect')
             if not isinstance(v, (float, int)) or not math.isfinite(v) or v < 0 or v > 2e-10:
                 errors.append('missing_or_failed_reconstruction_primitive:' + name)
