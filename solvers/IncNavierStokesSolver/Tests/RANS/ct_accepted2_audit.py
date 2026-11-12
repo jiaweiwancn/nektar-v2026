@@ -12,6 +12,7 @@ from ct_accepted_feasibility import write_json
 from ct_accepted2_diagnosis import at,grids,make_case
 from run_cls_epawf_picard import set_parameter,write
 from rans_request_manifest import RequestManifest,sha,runtime_identity
+from ct_accepted2_storage import artifact
 
 def values(initial,state,n):
     o=initial['observation'];off=np.array(o['offsets'],int);s=np.array(state);vs=[];gs=[]
@@ -61,7 +62,7 @@ def main():
         g=np.array(end['observation']['grid_gradients']);w=np.array(weights);d=g[:,0,0]+g[:,1,2]
         row['pointwise_divergence']=dict(weighted_RMS=float(np.sqrt(w@(d*d)/w.sum())),maximum=float(np.max(abs(d))),signed_mean=float(w@d/w.sum()))
         if report['steps']>0:
-            attempt=next(x for x in reversed(report['pimple_attempts']) if x['scheduled_complete']);snapshot=json.loads(Path(attempt['k_snapshot']).read_text())
+            attempt=next(x for x in reversed(report['pimple_attempts']) if x['scheduled_complete']);snapshot=json.loads(artifact(attempt['k_snapshot'],attempt['k_snapshot_sha256']).read_text())
             index=next(i for i,t in enumerate(report['audit_times']) if abs(t-report['time'])<1e-13);previous=report['accepted_states'][index-1]
             for label,orders,face in [('native',[32,8,10,10,10],16),('q48f16',[48,12,12,12,12],16),('q64f16',[64,16,16,16,16],16),('q64f32',[64,16,16,16,16],32)]:
                 sub=a.output/name/label;sub.mkdir(parents=True);root=ET.parse(folder/'case.xml').getroot()

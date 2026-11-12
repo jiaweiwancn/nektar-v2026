@@ -17,6 +17,7 @@ from run_cls_epawf_picard import set_parameter,set_info,write
 from rans_request_manifest import RequestManifest,runtime_identity,sha
 from compare_cls_epawf_pimple import same_history
 from validate_a93_a95_e94e95 import oracle
+from ct_accepted2_storage import artifact,canonical_location
 
 WITNESS=[.24836915803232323,0.,6.2989252590303035]
 LAYOUTS={'B':([],[],1085),'X':([.1875],[],1545),'Zplus':([],[6.5],1172),'XZplus':([.1875],[6.5],1669),'Zminus':([],[5.125],1172)}
@@ -159,7 +160,7 @@ def analyze_attempt(initial,report,folder):
     o=initial['observation'];off=np.array(o['offsets'],int);attempts=[]
     for attempt in report['pimple_attempts']:
         require('flow_snapshot' in attempt,'missing_computed_flow_snapshot')
-        path=Path(attempt['flow_snapshot']);f=json.loads(path.read_text());row=dict(time=f['time'],snapshot_sha256=sha(path),stages={})
+        path=artifact(attempt['flow_snapshot'],attempt['flow_snapshot_sha256']);f=json.loads(path.read_text());row=dict(time=f['time'],snapshot_sha256=sha(path),stages={})
         for name in ('input','momentum_predictor','corrected_flow'):
             s=np.array(f[name]);row['stages'][name]=dict(native=inventory(o['volume'],[q['coordinate'] for q in o['volume']],s,off),fixed=inventory(initial['test_basis'],o['grid'],s,off))
         row['earliest_sampled_domain_loss']=next((x for x in ('input','momentum_predictor','corrected_flow') if any(row['stages'][x][kind]['domain_failure_count'] for kind in ('native','fixed'))),'none')
@@ -223,7 +224,7 @@ def recover(runtime,preparation,trajectories,output):
     # process, stored result, request, coefficient or history is overwritten.
     from ct_accepted2_audit import values
     request=json.loads((trajectories/'request-manifest.json').read_text())['request']
-    require(request['runtime']['IncNavierStokesSolver']==runtime_identity(runtime/'IncNavierStokesSolver'),'foreign_recovery_runtime')
+    require(canonical_location(request['runtime']['IncNavierStokesSolver'])==canonical_location(runtime_identity(runtime/'IncNavierStokesSolver')),'foreign_recovery_runtime')
     require(request['preparation_sha256']==sha(preparation/'results.json'),'foreign_recovery_initialization')
     result=json.loads((trajectories/'work/results.json').read_text())
     require(set(result['cases'])=={x+'-'+str(dt) for x in request['layouts'] for dt in (.002,.001)},'incomplete_native_matrix_coverage')
@@ -245,13 +246,34 @@ def recover(runtime,preparation,trajectories,output):
     result['recovery']=dict(original_request_sha256=sha(trajectories/'request-manifest.json'),original_progress_sha256=sha(trajectories/'work/results.json'),fix='convert stored list to array in comparison only; all eight native trajectories reused without mutation',unmasked_load_label='V1 initial receipts named raw unmasked coefficient loads free_w; corrected source and final supplement use unmasked_w')
     return result
 
+def smokes(runtime,previous,output,layout):
+    from ct_accepted_pilot import constitutive_comparison
+    from ct_accepted2_audit import mass
+    output.mkdir();result=dict(schema='CT2ModelSpecificSharedPathSmokesV1',diagnostic_execution='pass',cases={})
+    for model in ('A93','E94E95'):
+        old=previous/('pilot-v3/'+model+'-dt-0.001-zero');c=json.loads((old/'construction.json').read_text())
+        zero=output/(model+'-zero');c=make_case(zero,old/'case.xml',c,layout,.001,0)
+        e=run([runtime/'IncNavierStokesSolver','case.xml'],zero,'solver.log');require(e['exit_code']==0,'smoke_zero_failed:'+model)
+        r0=json.loads((zero/'case.evolution.json').read_text())
+        initial,pe=probe(runtime,zero,dict(operation='functions',grid=[WITNESS],grid_sides=[0],export_basis=True),'initial')
+        require(pe['exit_code']==0 and initial['observation']['state']==r0['state'],'smoke_actual_initial_mismatch')
+        folder=output/model;make_case(folder,zero/'case.xml',c,'B',.001,2,Path(r0['checkpoint']))
+        e=run([runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');r=json.loads((folder/'case.evolution.json').read_text())
+        row=dict(status='pass' if e['exit_code']==0 and not r['failure'] and abs(r['time']-.002)<1e-13 else 'physical_failure',time=r['time'],failure=r['failure'],execution=e,slots=len(r['state']),report_sha256=sha(folder/'case.evolution.json'),state_sha256=exact_vector_hash(r['state']),mass=mass(initial,r['state'],c))
+        if row['status']=='pass':
+            packet,pe=probe(runtime,folder,replay(initial,r['state'],r['time'],[WITNESS],export_constitutive=True),'endpoint')
+            row['independent_constitutive']=constitutive_comparison(packet,c) if pe['exit_code']==0 else dict(status='failed_actual_probe',packet=packet)
+        result['cases'][model]=row;write_json(output/'results.json',result)
+    result['shared_path_smoke_status']='pass' if all(r['status']=='pass' and r['mass']['status']=='pass' and r.get('independent_constitutive',{}).get('status')=='pass' for r in result['cases'].values()) else 'fail'
+    return result
+
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--previous',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--mode',choices=['initial','advance','rough','recover'],required=True);p.add_argument('--preparation',type=Path);p.add_argument('--trajectories',type=Path);p.add_argument('--layouts',nargs='+',default=['B','X','Zplus','XZplus']);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--previous',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--mode',choices=['initial','advance','rough','recover','smoke'],required=True);p.add_argument('--preparation',type=Path);p.add_argument('--trajectories',type=Path);p.add_argument('--layouts',nargs='+',default=['B','X','Zplus','XZplus']);a=p.parse_args()
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     req=dict(schema='CTAccepted2DiagnosisV1',mode=a.mode,layouts=a.layouts,runtime={n:runtime_identity(a.runtime/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe')},previous=str(a.previous),source_sha256=sha(Path(__file__)),preparation_sha256=sha(a.preparation/'results.json') if a.preparation else None,recovered_request_sha256=sha(a.trajectories/'request-manifest.json') if a.trajectories else None)
     manifest=RequestManifest(a.output,req)
     # RequestManifest creates output, so subdirectories hold immutable work.
-    result=recover(a.runtime,a.preparation,a.trajectories,a.output) if a.mode=='recover' else rough_control(a.runtime,a.output/'work') if a.mode=='rough' else initialize(a.runtime,a.previous,a.output/'work',a.layouts) if a.mode=='initial' else advance(a.runtime,a.previous,a.preparation/'work',a.output/'work',a.layouts)
+    result=smokes(a.runtime,a.previous,a.output/'work',a.layouts[0]) if a.mode=='smoke' else recover(a.runtime,a.preparation,a.trajectories,a.output) if a.mode=='recover' else rough_control(a.runtime,a.output/'work') if a.mode=='rough' else initialize(a.runtime,a.previous,a.output/'work',a.layouts) if a.mode=='initial' else advance(a.runtime,a.previous,a.preparation/'work',a.output/'work',a.layouts)
     write_json(a.output/'results.json',result);manifest.seal(a.output,['results.json'])
     print('diagnostics completed;',result.get('physical_completion',result.get('status')))
     return 0 if result.get('diagnostic_execution',result.get('status'))=='pass' else 1
