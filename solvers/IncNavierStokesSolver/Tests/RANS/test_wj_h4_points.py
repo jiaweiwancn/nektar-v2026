@@ -72,6 +72,16 @@ class OwnedPhysicalPoints(unittest.TestCase):
         assert_allclose(g[2],(uu-ul)/(2*h),atol=3e-9,rtol=0)
         self.assertNotEqual(p[2],o['chart'][2]);assert_allclose(g[2],3.5,atol=1e-13,rtol=0)
 
+    def test_equal_mesh_pairs_match_sides_without_hiding_adverse_owner(self):
+        r,s=fixture();p=physical(r,[1.,0,1.]);inv=dict(points=[dict(id=0,physical=p,tags=[])],sha256='fixture')
+        a=scan(r,s,inv);pairs=pair_rows(a,a,0,.01,0.,0,.005,0.)
+        self.assertEqual(len(pairs),4)
+        self.assertTrue(any(v['margin_a']<0 for v in pairs))
+        for v in pairs:
+            assert_allclose(v['delta_G'],np.zeros((3,3)),atol=0,rtol=0)
+            self.assertEqual(v['owner_a']['x_side'],v['owner_b']['x_side'])
+            self.assertEqual(v['owner_a']['normal_side'],v['owner_b']['normal_side'])
+
     def test_optional_physical_knots_preserve_defaults(self):
         from wj_h2_cases import case_xml
         with tempfile.TemporaryDirectory() as d:
@@ -93,5 +103,16 @@ class OwnedPhysicalPoints(unittest.TestCase):
         self.assertTrue(v['no_extra_solves']);self.assertEqual(v['complete'],0)
         r['failure']='';self.assertFalse(attempt_counts(r)['success_counts_valid'])
         r['pimple_attempts'][0][COUNTERS[0]]=2;self.assertFalse(attempt_counts(r)['no_extra_solves'])
+
+    def test_missing_catalog_is_reconstructed_from_verified_preflight_only(self):
+        from wj_h4_study import initialize_catalog
+        from run_wj_h4 import save,sha,load
+        with tempfile.TemporaryDirectory() as d:
+            d=Path(d);save(d/'inventory-v0.json',dict(points=[]));save(d/'scan.json',dict(status='PASS'))
+            save(d/'preflight.json',dict(strict_path_required=False,inventory=dict(path=str(d/'inventory-v0.json'),sha256=sha(d/'inventory-v0.json')),
+                cases={'case':dict(states=[dict(path=str(d/'scan.json'),sha256=sha(d/'scan.json'))])}))
+            initialize_catalog(d);self.assertEqual(len(load(d/'catalog.json')),1);self.assertFalse(load(d/'execution-mode.json')['strict_required'])
+            (d/'active-inventory.json').unlink()
+            with self.assertRaises(RuntimeError):initialize_catalog(d)
 
 if __name__=='__main__':unittest.main()

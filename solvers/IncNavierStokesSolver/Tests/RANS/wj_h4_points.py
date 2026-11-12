@@ -200,6 +200,11 @@ def pair_rows(a,b,step_a,dt_a,time_a,step_b,dt_b,time_b):
         # Explicit one-to-many owner relations; never select a lowest ID or
         # require matching element bounds on independently refined meshes.
         for x,y in itertools.product(aa[key],bb[key]):
+            # If BOTH meshes have a face here, compare the same physical side.
+            # Opposite-side pairs would confuse a gradient jump with a time/grid
+            # difference. Face-versus-interior remains explicitly one-to-many.
+            if any(x['owner'][axis]!='interior' and y['owner'][axis]!='interior' and
+                   x['owner'][axis]!=y['owner'][axis] for axis in ('x_side','normal_side')):continue
             result.append(dict(point_id=key[0],region=key[1],physical=x['physical'],owner_a=x['owner'],owner_b=y['owner'],
                 intended_time=float(ta),recorded_time_a=time_a,recorded_time_b=time_b,
                 margin_a=None if x['principal'] is None else x['principal']['in_plane'],

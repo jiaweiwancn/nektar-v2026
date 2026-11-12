@@ -131,6 +131,20 @@ def attempt_counts(report):
 def active_inventory(root):return load(load(root/'active-inventory.json')['path'])
 
 
+def initialize_catalog(root):
+    files=[root/v for v in ('catalog.json','active-inventory.json','execution-mode.json')]
+    if all(p.exists()for p in files):return
+    if any(p.exists()for p in files):raise RuntimeError('partial catalog metadata: inspect, do not reset')
+    p=load(root/'preflight.json');inv=p['inventory'];assert sha(inv['path'])==inv['sha256']
+    catalog=[]
+    for name,record in p['cases'].items():
+        for v in record['states']:
+            assert sha(v['path'])==v['sha256'];catalog.append(dict(case='retained-'+name,**v))
+    save(files[0],catalog);save(files[1],inv)
+    save(files[2],dict(strict_required=p['strict_path_required'],path_qualified=False,source='verified retained preflight'))
+    save(root/'catalog-bootstrap.json',dict(preflight=identity(root/'preflight.json'),bindings=len(catalog),governing_attempts=0))
+
+
 def refresh(root,new,tag):
     old=active_inventory(root)
     if new['sha256']==old['sha256']:return
@@ -213,12 +227,47 @@ def outer_check(r):
 
 
 def prepare(root,name):
+    initialize_catalog(root)
     cfg=CASES[name]
     if name.startswith('local-') and not load(root/'optional-activation.json')['activated']:raise ValueError('optional design inactive')
-    rp,r,record=native_call(root,name,'cp0',cfg,0);result=register_scan(root,name+'-cp0',rp)
+    completed=root/'cases'/name/'cp0/receipt.json'
+    if completed.exists():
+        # Recover only an actually completed zero-step initialization after a
+        # harness failure. This is NOT a zero-launch claim or a governing retry.
+        record=load(completed);rp=Path(record['producer']['path']);assert sha(rp)==record['producer']['sha256']
+        assert sha(record['xml']['path'])==record['xml']['sha256'] and record['steps']==0 and record['exit']==0
+        r=load(rp);assert not r['pimple_attempts'] and r['steps']==0 and r['dt']==cfg['dt'] and len(r['state'])==cfg['size']
+        saved=load(rp.with_name('case-design.json'))
+        assert saved['refined']==cfg['refined'] and saved['tangential_order']==12 and len(saved['x'])==cfg['nx']+1
+        assert saved.get('extra_physical_z',[])==cfg.get('extra_physical_z',[])
+        save(root/'cases'/name/'completed-cp0-recovery.json',dict(original=identity(completed),role='completed startup recovered; no new native attempt'))
+    else:rp,r,record=native_call(root,name,'cp0',cfg,0)
+    result=register_scan(root,name+'-cp0',rp)
     save(root/'cases'/name/'prepared.json',dict(configuration=cfg,cp0=record,expanded=result,
         ready=not r['failure'] and result['earliest_extra_failure'] is None))
     print(name,'CP0',result['states'][-1]['expanded_status'],flush=True)
+
+
+def reuse(root):
+    from measure_wj_h2 import checkpoint_for
+    from wj3_measure import checkpoint_payload
+    published=load(SOURCE/'docs/plans/wj-h3-linux/runs.json');obs=load(PARENT/'native-observations-v1/index.json');result={}
+    for name in ('B-zero-x1','B-zero-x3'):
+        rec=next(v for v in published if v['case']==name);rp=actual(rec['producer']['path']);assert sha(rp)==rec['producer']['sha256'];r=load(rp)
+        cp,payload=checkpoint_for(dict(xml=str(rp.with_name('case.xml')),report=str(rp)),r['steps'])
+        assert sha(Path(cp)/'State.bin')==obs[name]['checkpoint']['sha256']
+        for key in ('native_history','native_history_times'):
+            assert np.asarray(payload[key],dtype='<f8').tobytes()==np.asarray(r[key],dtype='<f8').tobytes()
+        assert payload['reference_sha256']==vector_hash(r['fixed_reference']) and payload['time']==r['time'] and payload['dt']==.01
+        initial=next(v for v in published if v['case']==name+'-cp0');ir=load(initial['producer']['path'])
+        icp=Path(ir['checkpoint']);ip=checkpoint_payload(icp)
+        assert vector_hash(ip['state'])==vector_hash(r['initial']) and ip['reference_sha256']==payload['reference_sha256']
+        result[name]=dict(report=identity(rp),checkpoint=identity(Path(cp)/'State.bin'),original_cp0=identity(icp/'State.bin'),
+            time=r['time'],dt=r['dt'],steps=r['steps'],signature=r['signature'],reference_sha256=payload['reference_sha256'],
+            genuine_completed_callback_sha256=r['wj_audit_packets'][-1]['stage_history_sha256'],
+            reused_native_readback=obs[name]['native'],native_readback_sha_verified=sha(obs[name]['native']['path'])==obs[name]['native']['sha256'])
+        assert result[name]['native_readback_sha_verified']
+    save(root/'receipts/reused-native-bindings.json',dict(status='PASS',trajectories=result,new_governing_attempts=0))
 
 
 def evolve(root,name):
@@ -243,7 +292,7 @@ def evolve(root,name):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('preflight','prepare','evolve'),required=True)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('preflight','prepare','evolve','reuse'),required=True)
     p.add_argument('--case',choices=tuple(CASES));a=p.parse_args()
-    if a.mode=='preflight':preflight(a.root)
+    if a.mode in ('preflight','reuse'):globals()[a.mode](a.root)
     else:globals()[a.mode](a.root,a.case)
