@@ -1,0 +1,280 @@
+{
+  "status": "PASS",
+  "role": "post-control passive confirmation; fixed q_star12 unchanged",
+  "producer": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/study-v1/base-pilot-on/case.evolution.json",
+    "sha256": "253e2dbd3f68fa42e69bb1dff70efbbf31d2d762f6ffa9d3137e17bc529028b6",
+    "bytes": 3473289
+  },
+  "callback_history_sha256": "2469609c262d9e9ae1e8f25ad6a1441897f9635808dcab8ba105ac3ca7f83a22",
+  "same_node_native_packet": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/observations-v3/base08-nativeweak/native.json",
+    "sha256": "f70e9f90851d9f44c47593a458749b2cf89811c8be7626578f824532365ebc81",
+    "bytes": 51370485
+  },
+  "q_star": 12,
+  "reference_status": "PASS",
+  "comparisons": {
+    "8-32": {
+      "status": "UNRESOLVED",
+      "conditions": {
+        "time_mass": true,
+        "outer_momentum_stress": false,
+        "conservative_advection": true,
+        "k_diffusion": true,
+        "epsilon_diffusion": true,
+        "outer_k_production": true,
+        "outer_k_destruction": true,
+        "epsilon_production": true,
+        "epsilon_destruction": true,
+        "continuity": true,
+        "regional_sum": true
+      },
+      "component_errors": {
+        "time_mass": 6.006696876004192e-14,
+        "outer_momentum_stress": 3.813354852374995e-09,
+        "conservative_advection": 1.4210854715202004e-14,
+        "k_diffusion": 2.6504182198088828e-12,
+        "epsilon_diffusion": 8.33414346441185e-15,
+        "outer_k_production": 7.728559112130107e-12,
+        "outer_k_destruction": 3.469446951953614e-18,
+        "epsilon_production": 4.3299565322119093e-14,
+        "epsilon_destruction": 7.930114898080376e-14,
+        "continuity": 3.115378709671844e-16
+      },
+      "regional_max": 3.813354804670099e-09,
+      "worst_component": [
+        3.813354852374995e-09,
+        "outer_momentum_stress"
+      ],
+      "worst_element": [
+        4.361700942059555e-09,
+        "21",
+        "outer_momentum_stress"
+      ]
+    },
+    "12-32": {
+      "status": "PASS",
+      "conditions": {
+        "time_mass": true,
+        "outer_momentum_stress": true,
+        "conservative_advection": true,
+        "k_diffusion": true,
+        "epsilon_diffusion": true,
+        "outer_k_production": true,
+        "outer_k_destruction": true,
+        "epsilon_production": true,
+        "epsilon_destruction": true,
+        "continuity": true,
+        "regional_sum": true
+      },
+      "component_errors": {
+        "time_mass": 8.789410171905487e-14,
+        "outer_momentum_stress": 2.8209197477924164e-10,
+        "conservative_advection": 3.552713678800501e-15,
+        "k_diffusion": 1.1103764662317384e-13,
+        "epsilon_diffusion": 3.3830281756276166e-16,
+        "outer_k_production": 3.504401629994547e-14,
+        "outer_k_destruction": 8.673617379884035e-19,
+        "epsilon_production": 5.220433460517704e-16,
+        "epsilon_destruction": 2.0968470015869656e-16,
+        "continuity": 7.102540669316759e-17
+      },
+      "regional_max": 2.8209192013545215e-10,
+      "worst_component": [
+        2.8209197477924164e-10,
+        "outer_momentum_stress"
+      ],
+      "worst_element": [
+        2.8408852775097767e-10,
+        "21",
+        "outer_momentum_stress"
+      ]
+    },
+    "16-32": {
+      "status": "PASS",
+      "conditions": {
+        "time_mass": true,
+        "outer_momentum_stress": true,
+        "conservative_advection": true,
+        "k_diffusion": true,
+        "epsilon_diffusion": true,
+        "outer_k_production": true,
+        "outer_k_destruction": true,
+        "epsilon_production": true,
+        "epsilon_destruction": true,
+        "continuity": true,
+        "regional_sum": true
+      },
+      "component_errors": {
+        "time_mass": 1.2789682507508005e-14,
+        "outer_momentum_stress": 1.4771890308185043e-11,
+        "conservative_advection": 3.552713678800501e-15,
+        "k_diffusion": 1.6949866722618253e-15,
+        "epsilon_diffusion": 7.204201745625955e-18,
+        "outer_k_production": 2.688821387764051e-15,
+        "outer_k_destruction": 1.734723475976807e-18,
+        "epsilon_production": 3.2526065174565133e-19,
+        "epsilon_destruction": 1.1926223897340549e-18,
+        "continuity": 1.9031051555614895e-16
+      },
+      "regional_max": 1.477190418597285e-11,
+      "worst_component": [
+        1.4771890308185043e-11,
+        "outer_momentum_stress"
+      ],
+      "worst_element": [
+        1.4740207078485962e-11,
+        "21",
+        "outer_momentum_stress"
+      ]
+    },
+    "24-32": {
+      "status": "PASS",
+      "conditions": {
+        "time_mass": true,
+        "outer_momentum_stress": true,
+        "conservative_advection": true,
+        "k_diffusion": true,
+        "epsilon_diffusion": true,
+        "outer_k_production": true,
+        "outer_k_destruction": true,
+        "epsilon_production": true,
+        "epsilon_destruction": true,
+        "continuity": true,
+        "regional_sum": true
+      },
+      "component_errors": {
+        "time_mass": 4.1926098010014456e-14,
+        "outer_momentum_stress": 7.835398996292042e-14,
+        "conservative_advection": 1.1519648082658485e-19,
+        "k_diffusion": 2.0668629616964494e-16,
+        "epsilon_diffusion": 6.781739513689504e-19,
+        "outer_k_production": 1.214306433183765e-17,
+        "outer_k_destruction": 8.673617379884035e-19,
+        "epsilon_production": 1.0842021724855044e-19,
+        "epsilon_destruction": 1.3552527156068805e-20,
+        "continuity": 7.04748352774523e-17
+      },
+      "regional_max": 7.834705106901652e-14,
+      "worst_component": [
+        7.835398996292042e-14,
+        "outer_momentum_stress"
+      ],
+      "worst_element": [
+        7.835152890869218e-14,
+        "21",
+        "outer_momentum_stress"
+      ]
+    }
+  },
+  "original_H2_errors": {
+    "base08": {
+      "original_q8_vs_q24_error": 3.813433140445466e-09,
+      "independently_reconstructed_error": 3.813433206364958e-09,
+      "original_regional_gate": true,
+      "original_status": "UNRESOLVED"
+    },
+    "refined-fine08": {
+      "original_q8_vs_q24_error": 4.353532897030665e-09,
+      "independently_reconstructed_error": 4.353532867540366e-09,
+      "original_regional_gate": false,
+      "original_status": "UNRESOLVED"
+    }
+  },
+  "unapplied_counterfactuals": {
+    "pure_shear_diagnostic_only": {
+      "G": [
+        [
+          0.0,
+          0.0,
+          0.3042558380861338
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "principal": {
+        "in_plane": -0.017996275159942177,
+        "angle": 1.7193363552851042,
+        "xi": [
+          -0.14799439611802342,
+          0.0,
+          0.9889881994835235
+        ],
+        "polarization": [
+          -0.9889881994835235,
+          0.0,
+          -0.14799439611802342
+        ],
+        "a_dot_xi": 0.0,
+        "transverse": 0.9470899696699623,
+        "transverse_xi": [
+          -0.22537152648613412,
+          0,
+          -0.9742728955735707
+        ],
+        "scope": "all real stationary directions of the local planar quartic, floating point roots; transverse symmetric 2x2 action"
+      },
+      "compiled_form": -0.017996275159942697,
+      "applied_to_state": false
+    },
+    "planar_tracefree_diagnostic_only": {
+      "G": [
+        [
+          -0.032377156944552135,
+          0.0,
+          0.3042558380861338
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -0.00040757082497914327,
+          0.0,
+          0.032377156944552135
+        ]
+      ],
+      "principal": {
+        "in_plane": -0.021882327480977917,
+        "angle": 1.818734087964466,
+        "xi": [
+          -0.24540530576828865,
+          0.0,
+          0.9694205670918957
+        ],
+        "polarization": [
+          -0.9694205670918957,
+          0.0,
+          -0.24540530576828865
+        ],
+        "a_dot_xi": 0.0,
+        "transverse": 0.9345058267137553,
+        "transverse_xi": [
+          -0.13057164745448815,
+          0,
+          -0.991438876018598
+        ],
+        "scope": "all real stationary directions of the local planar quartic, floating point roots; transverse symmetric 2x2 action"
+      },
+      "compiled_form": -0.021882327480978004,
+      "applied_to_state": false
+    }
+  },
+  "governing_solves": 0,
+  "full_views": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h3-20261112/retained-supplement-v1/base08-full-views.json",
+    "sha256": "39c271a1f664f876b1aa917c63d3631146bac07c30f771ee1d69344684071eab",
+    "bytes": 400906
+  },
+  "command_sha256": "8317e310317ed4195ef5d4c7bc6a8b5a14c81a5e8c2839ec3afb46b4ce72f64e"
+}

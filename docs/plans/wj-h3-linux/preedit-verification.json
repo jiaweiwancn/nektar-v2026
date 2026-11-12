@@ -1,0 +1,44 @@
+{
+  "K": 0.012618181994557477,
+  "Rzz": 0.0056162152115941805,
+  "current_pi": 0.002795906118110805,
+  "required_pi": -0.002795906118110805,
+  "predicted_normal_error": 0.00559181223622161,
+  "retained": {
+    "base-cp0": {
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/study-v1/base-cp0/case.evolution.json",
+      "sha256": "c8cd33a77f522171217a839f37143476c917a233bfbb3b29f8aefadbcf73494a",
+      "normal_error": 0.005591598549377207
+    },
+    "refined-cp0": {
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/study-v1/refined-cp0/case.evolution.json",
+      "sha256": "03f6872dabadaa380b7da9718117e2241f94d3a3e9c193e36c236984e931e22f",
+      "normal_error": 0.005591162480535834
+    }
+  },
+  "native_inputs_verified": 340,
+  "libraries_verified": 133,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 1956,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2111,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 6600,
+        "parent": 6599,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  }
+}
