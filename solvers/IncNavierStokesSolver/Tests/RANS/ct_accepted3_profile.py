@@ -17,6 +17,7 @@ from compare_cls_epawf_pimple import same_history
 
 
 def build(a):
+    os.environ['CMAKE_BUILD_PARALLEL_LEVEL']='2'
     runtime=a.output/'runtime'
     m=RequestManifest(a.output,dict(schema='CT3DetailedTimingBuildV1',source_sha256=sha(Path(__file__)),
         source_revision=subprocess.check_output(['git','-c','index.threads=1','-c','core.preloadIndex=false','rev-parse','HEAD'],cwd=a.root/'source',text=True).strip(),

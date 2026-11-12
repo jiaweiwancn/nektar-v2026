@@ -46,6 +46,13 @@ def physical_budgets(row):
         for name, q in budget.get('reconstruction', {}).items():
             if not finite_numbers(q):errors.append('nonfinite_reconstruction_primitive:' + name)
             v = q.get('scaled_defect')
+            if 'normalization' in q:
+                normal=q['normalization'];maximum=q.get('maximum_defect')
+                if not isinstance(normal,(float,int)) or not math.isfinite(normal) or normal<=0 or not isinstance(maximum,(float,int)) or not math.isfinite(maximum) or maximum<0:
+                    errors.append('invalid_reconstruction_scale:' + name)
+                elif not isinstance(v,(float,int)) or abs(maximum/normal-v)>2e-14*max(1.,abs(v)):
+                    errors.append('inconsistent_reconstruction_primitives:' + name)
+                elif maximum/normal>2e-10:errors.append('reconstruction_accuracy:' + name)
             if not isinstance(v, (float, int)) or not math.isfinite(v) or v < 0 or v > 2e-10:
                 errors.append('missing_or_failed_reconstruction_primitive:' + name)
         controls[label] = dict(status='pass' if not errors else 'fail', reasons=errors)

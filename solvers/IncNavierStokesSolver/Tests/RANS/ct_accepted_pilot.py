@@ -113,7 +113,7 @@ def budget_classification(packet,construction):
     if rec:
         for name,row in rec['assembled'].items():
             defect=max(abs(x) for x in row['reconstruction_defect']);normal=max(1.,max(abs(x) for x in row['native_raw_frozen_load']))
-            reconstruction[name]=dict(maximum_defect=defect,scaled_defect=defect/normal,status='pass' if defect/normal<=2e-10 else 'fail')
+            reconstruction[name]=dict(maximum_defect=defect,normalization=normal,scaled_defect=defect/normal,status='pass' if defect/normal<=2e-10 else 'fail')
     return dict(reconstruction_status='pass' if reconstruction and all(r['status']=='pass' for r in reconstruction.values()) else 'fail',
         accuracy_status='pass' if all(r['status']=='pass' for r in equations.values()) else 'fail',equations=equations,
         reconstruction=reconstruction,interface_frozen_k_fluxes=interfaces,interface_current_k_fluxes=current_interfaces,
