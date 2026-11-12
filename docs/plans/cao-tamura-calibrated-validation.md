@@ -1,5 +1,17 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-3 (2026-11-12): A95 XZminus P3/P1 and P4/P2, and E94E95
+> Zminus P3/P1, pass paired .002/.001 bounded flat pilots through T=.2.
+> A93 passes .02, then stops on full-tensor covariance at attempted .064/.054.
+> Evolved spatial sensitivity remains unresolved: small global differences do
+> not bound the local A95 radicand changes. Degree-correct pressure and budget
+> coverage controls pass; fresh resource accounting passes separately from
+> unchanged historical failures. Next: bounded immutable geometry-row reuse
+> with full state/history/domain equivalence, followed by the unresolved spatial
+> and physical-input gates. See [CT-Accepted-3](cao-tamura-accepted-3.md).
+> Accepted-only experimental priority remains in force; no precursor/hill
+> prediction or native curved capability is admitted.
+
 > CT-Accepted-2 (2026-11-12): the fixed-input below-delta Zminus A95/Accepted
 > pilot passes paired .002/.001 histories through T=.2; full evolved spatial
 > convergence remains unresolved. B/X/Z+/XZ+ failures and CT1 results remain

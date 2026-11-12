@@ -1,0 +1,1023 @@
+{
+  "launch-A95-XZminus-P3-T0008-v1": {
+    "maximum_aggregate": 11,
+    "maximum_project": 11,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_run.py",
+        "--mode",
+        "advance",
+        "--case",
+        "A95-XZminus-P3",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime",
+        "--ct1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111",
+        "--contract",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/docs/plans/cao-tamura-accepted-3-evidence/contract.json",
+        "--initial",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P3/initial-v1",
+        "--target",
+        ".008",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P3/T0008-v1"
+      ],
+      "exit_code": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 33440,
+      "guard_pid": 33441,
+      "owned_family_pid": 33444,
+      "wall_seconds": 36.81928284899914,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 46.744129,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-A95-XZminus-P3-continuation-v1": {
+    "maximum_aggregate": 22,
+    "maximum_project": 12,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_jobs.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112",
+        "--ct1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111",
+        "--ct2",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112",
+        "--case",
+        "A95-XZminus-P3",
+        "--initial",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P3/initial-v1",
+        "--parent",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P3/T0008-recovery-v1",
+        "--first-target",
+        ".02",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P3/continuation-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 35002,
+      "guard_pid": 35003,
+      "owned_family_pid": 35006,
+      "wall_seconds": 2012.0842115729993,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 2643.424669,
+      "resource": {
+        "maximum_aggregate": 22,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-A95-XZminus-P3-initial-v1": {
+    "maximum_aggregate": 11,
+    "maximum_project": 11,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_run.py",
+        "--mode",
+        "initial",
+        "--case",
+        "A95-XZminus-P3",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime",
+        "--ct1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111",
+        "--contract",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/docs/plans/cao-tamura-accepted-3-evidence/contract.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P3/initial-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 33212,
+      "guard_pid": 33213,
+      "owned_family_pid": 33216,
+      "wall_seconds": 41.25357626300138,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 51.53881,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-A95-XZminus-P3-recovery-v1": {
+    "maximum_aggregate": 19,
+    "maximum_project": 11,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_run.py",
+        "--mode",
+        "advance",
+        "--case",
+        "A95-XZminus-P3",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime",
+        "--ct1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111",
+        "--contract",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/docs/plans/cao-tamura-accepted-3-evidence/contract.json",
+        "--initial",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P3/initial-v1",
+        "--target",
+        ".008",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P3/T0008-recovery-v1",
+        "--recover-from",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P3/T0008-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 33847,
+      "guard_pid": 33848,
+      "owned_family_pid": 33851,
+      "wall_seconds": 278.6243444190004,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 358.64770400000003,
+      "resource": {
+        "maximum_aggregate": 19,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-compact-v1": {
+    "maximum_aggregate": 5,
+    "maximum_project": 5,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/collect_ct_accepted_3.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112",
+        "--ct1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111",
+        "--ct2",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112",
+        "--comparisons",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/comparison-classification-v1",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/compact-v1"
+      ],
+      "exit_code": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 60049,
+      "guard_pid": 60050,
+      "owned_family_pid": 60053,
+      "wall_seconds": 6.737879346001137,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 7.084980999999999,
+      "resource": {
+        "maximum_aggregate": 5,
+        "maximum_project": 5,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-comparison-classification-v1": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_compare_classify.py",
+        "--input",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/comparisons-v1/results.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/comparison-classification-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 59950,
+      "guard_pid": 59951,
+      "owned_family_pid": 59954,
+      "wall_seconds": 1.1721749880016432,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 0.761971,
+      "resource": {
+        "maximum_aggregate": 3,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-comparisons-v1": {
+    "maximum_aggregate": 11,
+    "maximum_project": 11,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_compare.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112",
+        "--ct2",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/comparisons-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 56591,
+      "guard_pid": 56592,
+      "owned_family_pid": 56595,
+      "wall_seconds": 216.6542050099997,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 248.41736300000002,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-controls-v1": {
+    "maximum_aggregate": 19,
+    "maximum_project": 11,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_controls.py",
+        "--ct2",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/controls-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 32572,
+      "guard_pid": 32573,
+      "owned_family_pid": 32576,
+      "wall_seconds": 61.40720306399999,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 76.489516,
+      "resource": {
+        "maximum_aggregate": 19,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-cost-summary-v1": {
+    "maximum_aggregate": 4,
+    "maximum_project": 4,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_costs.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/costs-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 59996,
+      "guard_pid": 59997,
+      "owned_family_pid": 60000,
+      "wall_seconds": 4.00500336499681,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 4.0011969999999994,
+      "resource": {
+        "maximum_aggregate": 4,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-failures-v1": {
+    "maximum_aggregate": 11,
+    "maximum_project": 11,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_failures.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112",
+        "--ct2",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/failures-v1",
+        "--reproduce"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 56438,
+      "guard_pid": 56439,
+      "owned_family_pid": 56442,
+      "wall_seconds": 32.387403497003106,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 40.024385,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-gate-tests-v1": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_gate_tests.py",
+        "--ct2",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/gate-tests-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 56432,
+      "guard_pid": 56433,
+      "owned_family_pid": 56436,
+      "wall_seconds": 0.6414838770033384,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 0.47898999999999997,
+      "resource": {
+        "maximum_aggregate": 3,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-profile-build-v1": {
+    "maximum_aggregate": 13,
+    "maximum_project": 13,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_profile.py",
+        "--mode",
+        "build",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112",
+        "--ct2",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/profile-build-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 57193,
+      "guard_pid": 57194,
+      "owned_family_pid": 57197,
+      "wall_seconds": 254.9056081130002,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 549.453716,
+      "resource": {
+        "maximum_aggregate": 13,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-profile-checks-v1": {
+    "maximum_aggregate": 12,
+    "maximum_project": 12,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "bash",
+        "-c",
+        "'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_profile.py' '--mode' 'profile' '--root' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112' '--ct2' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/profile-build-v1/runtime' '--parent' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P3/T0008-v1/0.002' '--reference' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P3/continuation-v1/T0p02/0.002' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/profile-P3-v1' && 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_profile.py' '--mode' 'profile' '--root' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112' '--ct2' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/profile-build-v1/runtime' '--parent' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P4/campaign-v1/T0p008/0.002' '--reference' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/A95-XZminus-P4/campaign-v1/T0p02/0.002' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/profile-P4-v1' && 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_open_controls.py' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/profile-build-v1/runtime' '--old-runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/profile-compatibility-v1'"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 58310,
+      "guard_pid": 58311,
+      "owned_family_pid": 58314,
+      "wall_seconds": 514.9803747440019,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 680.1444299999999,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-remaining-cases-v1": {
+    "maximum_aggregate": 21,
+    "maximum_project": 13,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_suite.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112",
+        "--ct1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-1-20261111",
+        "--ct2",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/remaining-cases-v1"
+      ],
+      "exit_code": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 41529,
+      "guard_pid": 41530,
+      "owned_family_pid": 41533,
+      "wall_seconds": 5644.235704742001,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 7366.319127,
+      "resource": {
+        "maximum_aggregate": 21,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-report-inspection-v1": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-c",
+        "import json;from pathlib import Path\nr=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112\")\na=json.loads((r/'A93-Zminus-P3/campaign-v1/T0p2/results.json').read_text())\nfor dt,q in a['members'].items():\n print('failure budgets',dt,{k:{j:v.get(j) for j in ('status','packet_sha256','packet')} for k,v in q['budgets'].items()})\np=json.loads((r/'costs-v1/results.json').read_text())\nfor q in p['primary_segments']:\n if q['start']==.008 and q['case'].startswith('A95'):\n  print('COST',q['case'],q['dt'],q['process'],q['accepted_timing']['by_category'])\nfor q in p['detailed_profiles']:print('DETAIL',q.get('reference_native_sha256'),q['detailed_telemetry_CPU_overhead_ratio'])\nprint('CONTROLS',json.loads((r/'controls-v1/results.json').read_text()).keys())\nprint('PROFILEBUILD',json.loads((r/'profile-build-v1/results.json').read_text()).keys())\n"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 60296,
+      "guard_pid": 60297,
+      "owned_family_pid": 60300,
+      "wall_seconds": 0.607046253997396,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 0.36642399999999997,
+      "resource": {
+        "maximum_aggregate": 3,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-reporting-sync-v1": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "python3",
+        "-c",
+        "import subprocess; from pathlib import Path; s=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source\"); g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','pack.threads=1']; print(subprocess.check_output(g+['status','--porcelain'],cwd=s,text=True)); subprocess.run(g+['fetch',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/reporting-tools.bundle\",'HEAD'],cwd=s,check=True); subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=s,check=True); print(subprocess.check_output(g+['rev-parse','HEAD'],cwd=s,text=True)); print(subprocess.check_output(g+['status','--porcelain'],cwd=s,text=True))"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 59897,
+      "guard_pid": 59898,
+      "owned_family_pid": 59901,
+      "wall_seconds": 0.6488377220011898,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 0.34846699999999997,
+      "resource": {
+        "maximum_aggregate": 3,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-sync-v1": {
+    "maximum_aggregate": 4,
+    "maximum_project": 4,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "bash",
+        "-c",
+        "set -e; git -c index.threads=1 -c core.preloadIndex=false -c pack.threads=1 clone --no-hardlinks --no-checkout /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/source-after-reboot /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source; git -c index.threads=1 -c core.preloadIndex=false -c pack.threads=1 -C /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source fetch /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source.bundle HEAD; git -c index.threads=1 -c core.preloadIndex=false -C /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source checkout --detach FETCH_HEAD"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 32517,
+      "guard_pid": 32518,
+      "owned_family_pid": 32521,
+      "wall_seconds": 2.3118628410011297,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 2.053489,
+      "resource": {
+        "maximum_aggregate": 4,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-sync-v2": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "bash",
+        "-c",
+        "set -e; git -c index.threads=1 -c core.preloadIndex=false -c pack.threads=1 -C /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source fetch /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/runs.bundle HEAD; git -c index.threads=1 -c core.preloadIndex=false -C /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source checkout --detach FETCH_HEAD"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 33160,
+      "guard_pid": 33161,
+      "owned_family_pid": 33164,
+      "wall_seconds": 0.6122154679997038,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 0.5719799999999999,
+      "resource": {
+        "maximum_aggregate": 3,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-sync-v3": {
+    "maximum_aggregate": 4,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "bash",
+        "-c",
+        "set -e; git -c index.threads=1 -c core.preloadIndex=false -c pack.threads=1 -C '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source' fetch '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/recovery.bundle' HEAD; git -c index.threads=1 -c core.preloadIndex=false -C '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source' checkout --detach FETCH_HEAD"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 33789,
+      "guard_pid": 33790,
+      "owned_family_pid": 33793,
+      "wall_seconds": 0.6364962180014118,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 0.25112999999999996,
+      "resource": {
+        "maximum_aggregate": 4,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-sync-v4": {
+    "maximum_aggregate": 11,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "bash",
+        "-c",
+        "set -e; git -c index.threads=1 -c core.preloadIndex=false -c pack.threads=1 -C '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source' fetch '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/milestones.bundle' HEAD; git -c index.threads=1 -c core.preloadIndex=false -C '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source' checkout --detach FETCH_HEAD"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 34942,
+      "guard_pid": 34943,
+      "owned_family_pid": 34946,
+      "wall_seconds": 0.6368928749998304,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 0.247724,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-sync-v5": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "bash",
+        "-c",
+        "set -e; git -c index.threads=1 -c core.preloadIndex=false -c pack.threads=1 -C '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source' fetch '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/next.bundle' HEAD; git -c index.threads=1 -c core.preloadIndex=false -C '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source' checkout --detach FETCH_HEAD"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 41477,
+      "guard_pid": 41478,
+      "owned_family_pid": 41481,
+      "wall_seconds": 0.6178369079989352,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 0.289153,
+      "resource": {
+        "maximum_aggregate": 3,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "launch-sync-v6": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2,
+    "execution": {
+      "command": [
+        "bash",
+        "-c",
+        "set -e; git -c index.threads=1 -c core.preloadIndex=false -c pack.threads=1 -C '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source' fetch '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/final-tools.bundle' HEAD; git -c index.threads=1 -c core.preloadIndex=false -C '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source' checkout --detach FETCH_HEAD"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 56382,
+      "guard_pid": 56383,
+      "owned_family_pid": 56386,
+      "wall_seconds": 0.6456803759974719,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 0.258131,
+      "resource": {
+        "maximum_aggregate": 3,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  }
+}

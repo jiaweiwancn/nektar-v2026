@@ -1,0 +1,32 @@
+{
+  "command": [
+    "python3",
+    "-c",
+    "import subprocess\nfrom pathlib import Path\ns=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/source\");g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','pack.threads=1']\nsubprocess.run(g+['fetch',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/finish-v2.bundle\",'HEAD'],cwd=s,check=True)\nsubprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=s,check=True)\nsubprocess.run(['python3','-B',str(s/'solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_finish.py'),'--root',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112\",'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--compact',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/compact-v2\",'--output',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/final-supplement-v1\"],check=True)\n"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 60898,
+  "guard_pid": 60899,
+  "owned_family_pid": 60902,
+  "wall_seconds": 2.8331637540031807,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 3.010043,
+  "resource": {
+    "maximum_aggregate": 5,
+    "maximum_project": 5,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}

@@ -1,0 +1,836 @@
+{
+  "status": "pass",
+  "existing_negatives": {
+    "status": "pass",
+    "historical_complete_CT2": "both final members retain primitive pass; no historical reclassification",
+    "ct2_receipt_sha256": "1701726b84eab072bd5d1b759923b7026df7671c5ee363a44b1435b0442261bc",
+    "tests": {
+      "missing_outer_epsilon": {
+        "status": "pass",
+        "observed_rejection": {
+          "status": "fail",
+          "reasons": [
+            "native:missing_or_foreign_budget_equation"
+          ],
+          "controls": {
+            "native": {
+              "status": "fail",
+              "reasons": [
+                "missing_or_foreign_budget_equation"
+              ]
+            },
+            "q48f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f32": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "inner_k": 8.232482620953996e-17,
+            "outer_k": 2.2726389906016639e-10,
+            "whole_k": 2.2726397928943308e-10,
+            "outer_epsilon": 1.8508058516222663e-13
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        }
+      },
+      "missing_reconstruction": {
+        "status": "pass",
+        "observed_rejection": {
+          "status": "fail",
+          "reasons": [
+            "q48f16:missing_or_foreign_reconstruction"
+          ],
+          "controls": {
+            "native": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q48f16": {
+              "status": "fail",
+              "reasons": [
+                "missing_or_foreign_reconstruction"
+              ]
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f32": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "inner_k": 8.232482620953996e-17,
+            "outer_k": 2.2726389906016639e-10,
+            "outer_epsilon": 1.8508058516222663e-13,
+            "whole_k": 2.2726397928943308e-10
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        }
+      },
+      "missing_control": {
+        "status": "pass",
+        "observed_rejection": {
+          "status": "fail",
+          "reasons": [
+            "missing_or_foreign_budget_control"
+          ],
+          "controls": {
+            "native": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q48f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "inner_k": 2.7587016059125308e-17,
+            "outer_k": 5.334071109342007e-12,
+            "outer_epsilon": 6.8701622624352254e-15,
+            "whole_k": 5.334096818486022e-12
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        }
+      },
+      "nonfinite_primitive": {
+        "status": "pass",
+        "observed_rejection": {
+          "status": "fail",
+          "reasons": [
+            "native:nonfinite_equation_primitive:inner_k",
+            "native:missing_or_nonfinite_equation_primitive:inner_k"
+          ],
+          "controls": {
+            "native": {
+              "status": "fail",
+              "reasons": [
+                "nonfinite_equation_primitive:inner_k",
+                "missing_or_nonfinite_equation_primitive:inner_k"
+              ]
+            },
+            "q48f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f32": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "outer_k": 2.2726389906016639e-10,
+            "outer_epsilon": 1.8508058516222663e-13,
+            "whole_k": 2.2726397928943308e-10,
+            "inner_k": 8.232482620953996e-17
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        }
+      },
+      "nonpositive_scale": {
+        "status": "pass",
+        "observed_rejection": {
+          "status": "fail",
+          "reasons": [
+            "native:nonpositive_physical_scale:outer_k"
+          ],
+          "controls": {
+            "native": {
+              "status": "fail",
+              "reasons": [
+                "nonpositive_physical_scale:outer_k"
+              ]
+            },
+            "q48f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f32": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "inner_k": 8.232482620953996e-17,
+            "outer_epsilon": 1.8508058516222663e-13,
+            "whole_k": 2.2726397928943308e-10,
+            "outer_k": 2.2308621889248665e-10
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        }
+      },
+      "pass_label_failed_accuracy": {
+        "status": "pass",
+        "observed_rejection": {
+          "status": "fail",
+          "reasons": [
+            "native:inconsistent_physical_defect:outer_k",
+            "native:physical_budget_accuracy:outer_k",
+            "quadrature_or_face_uncertainty"
+          ],
+          "controls": {
+            "native": {
+              "status": "fail",
+              "reasons": [
+                "inconsistent_physical_defect:outer_k",
+                "physical_budget_accuracy:outer_k"
+              ]
+            },
+            "q48f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f32": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "inner_k": 8.232482620953996e-17,
+            "outer_k": 9.483766666313095,
+            "outer_epsilon": 1.8508058516222663e-13,
+            "whole_k": 2.2726397928943308e-10
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        }
+      },
+      "missing_member": {
+        "status": "pass",
+        "observed_rejection": {
+          "status": "fail",
+          "reasons": [
+            "missing_or_foreign_timestep_member"
+          ],
+          "required_horizon": 0.2,
+          "required_dt": [
+            0.002,
+            0.001
+          ]
+        }
+      },
+      "incomplete_endpoint": {
+        "status": "pass",
+        "observed_rejection": {
+          "status": "fail",
+          "reasons": [
+            "0.001:incomplete_required_endpoint"
+          ],
+          "required_horizon": 0.2,
+          "required_dt": [
+            0.002,
+            0.001
+          ]
+        }
+      },
+      "foreign_identity": {
+        "status": "pass",
+        "observed_rejection": {
+          "status": "fail",
+          "reasons": [
+            "0.002:state_configuration_identity_mismatch"
+          ],
+          "required_horizon": 0.2,
+          "required_dt": [
+            0.002,
+            0.001
+          ]
+        }
+      }
+    }
+  },
+  "historical_CT2": {
+    "companion-audits-v1": {
+      "receipt_sha256": "c22f6a0a58395ed25cccc0b8ea288b64f8959b13ab730b925949e8f8af512dac",
+      "members": {
+        "Zminus-0.002": {
+          "status": "pass",
+          "reasons": [],
+          "controls": {
+            "native": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q48f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f32": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "inner_k": 5.751173717355408e-17,
+            "outer_k": 1.2227663041711016e-11,
+            "outer_epsilon": 2.85058384367912e-14,
+            "whole_k": 1.2227707141634382e-11
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        },
+        "Zminus-0.001": {
+          "status": "pass",
+          "reasons": [],
+          "controls": {
+            "native": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q48f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f32": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "inner_k": 8.324089234199548e-17,
+            "outer_k": 1.3120535074259785e-11,
+            "outer_epsilon": 3.624545122046276e-14,
+            "whole_k": 1.3120452105688536e-11
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        }
+      }
+    },
+    "continue02-audits-v1": {
+      "receipt_sha256": "59d9c9710da12e320d08c03259fe08f57e5bad590131098c0d2a64b5c74fd828",
+      "members": {
+        "Zminus-0.002": {
+          "status": "pass",
+          "reasons": [],
+          "controls": {
+            "native": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q48f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f32": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "inner_k": 6.017417348501116e-17,
+            "outer_k": 2.943935011049153e-11,
+            "outer_epsilon": 2.0921495262680827e-13,
+            "whole_k": 2.943934310314678e-11
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        },
+        "Zminus-0.001": {
+          "status": "pass",
+          "reasons": [],
+          "controls": {
+            "native": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q48f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f32": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "inner_k": 9.895165944766825e-17,
+            "outer_k": 3.122681855313993e-11,
+            "outer_epsilon": 2.2926987389214164e-13,
+            "whole_k": 3.122687306923921e-11
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        }
+      }
+    },
+    "continue2-audits-v1": {
+      "receipt_sha256": "1701726b84eab072bd5d1b759923b7026df7671c5ee363a44b1435b0442261bc",
+      "members": {
+        "Zminus-0.002": {
+          "status": "pass",
+          "reasons": [],
+          "controls": {
+            "native": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q48f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f32": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "inner_k": 8.232482620953996e-17,
+            "outer_k": 2.2726389906016639e-10,
+            "outer_epsilon": 1.8508058516222663e-13,
+            "whole_k": 2.2726397928943308e-10
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        },
+        "Zminus-0.001": {
+          "status": "pass",
+          "reasons": [],
+          "controls": {
+            "native": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q48f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f16": {
+              "status": "pass",
+              "reasons": []
+            },
+            "q64f32": {
+              "status": "pass",
+              "reasons": []
+            }
+          },
+          "scaled_signed_defect_spreads": {
+            "inner_k": 1.2525160894344065e-16,
+            "outer_k": 2.3104512412704201e-10,
+            "outer_epsilon": 1.7919897811187295e-13,
+            "whole_k": 2.3104524910167118e-10
+          },
+          "uncertainty_limit": 0.02,
+          "required_controls": [
+            "native",
+            "q48f16",
+            "q64f16",
+            "q64f32"
+          ],
+          "required_equations": [
+            "inner_k",
+            "outer_epsilon",
+            "outer_k",
+            "whole_k"
+          ],
+          "required_reconstruction": [
+            "k",
+            "outer_epsilon"
+          ]
+        }
+      }
+    }
+  },
+  "additional_negatives": {
+    "missing_required_milestone_with_pass_label": {
+      "status": "pass",
+      "enclosing_status": "pass",
+      "observed": {
+        "status": "fail",
+        "missing_required_times": [
+          0.008
+        ],
+        "duplicate_times": [],
+        "foreign_times": [],
+        "required": [
+          0.008,
+          0.02,
+          0.2
+        ]
+      }
+    },
+    "foreign_budget_state": {
+      "status": "pass",
+      "intended_reason": "state_configuration_budget_identity_mismatch",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "native:state_configuration_budget_identity_mismatch"
+        ],
+        "controls": {
+          "native": {
+            "status": "fail",
+            "reasons": [
+              "state_configuration_budget_identity_mismatch"
+            ]
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 8.232482620953996e-17,
+          "outer_k": 2.2726389906016639e-10,
+          "outer_epsilon": 1.8508058516222663e-13,
+          "whole_k": 2.2726397928943308e-10
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      }
+    },
+    "forged_reconstruction_label": {
+      "status": "pass",
+      "intended_reason": "inconsistent_reconstruction_primitives",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "q64f16:inconsistent_reconstruction_primitives:k"
+        ],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "fail",
+            "reasons": [
+              "inconsistent_reconstruction_primitives:k"
+            ]
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 8.232482620953996e-17,
+          "outer_k": 2.2726389906016639e-10,
+          "outer_epsilon": 1.8508058516222663e-13,
+          "whole_k": 2.2726397928943308e-10
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      }
+    },
+    "nonfinite_other_required_source": {
+      "status": "pass",
+      "intended_reason": "nonfinite_equation_primitive",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "native:nonfinite_equation_primitive:whole_k"
+        ],
+        "controls": {
+          "native": {
+            "status": "fail",
+            "reasons": [
+              "nonfinite_equation_primitive:whole_k"
+            ]
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 8.232482620953996e-17,
+          "outer_k": 2.2726389906016639e-10,
+          "outer_epsilon": 1.8508058516222663e-13,
+          "whole_k": 2.2726397928943308e-10
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      }
+    }
+  },
+  "construction_metadata_control": {
+    "status": "pass",
+    "actual_dt": 0.001,
+    "segment_steps": 12,
+    "segment_duration": 0.012,
+    "physical_functions": "identical",
+    "role": "writer-only regression; no native solve, new candidate, or trajectory rerun"
+  }
+}

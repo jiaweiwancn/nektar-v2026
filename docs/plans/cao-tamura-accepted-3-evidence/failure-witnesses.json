@@ -1,0 +1,2974 @@
+{
+  "diagnostic_execution": "pass",
+  "failures": [
+    {
+      "case": "A93-Zminus-P3",
+      "dt": 0.001,
+      "last_accepted_time": 0.05300000000000004,
+      "attempted_time": 0.05400000000000004,
+      "failure": "accepted AWF hard audit exit; candidate/history retained: model_aware_covariance_exit",
+      "reasons": [
+        "model_aware_covariance_exit",
+        "accepted_awf_inner_minimum_point:[0.25,0,0.40000000000000002,0.018733045852287255,0.018733045852287255,0.012760995701567837,0.0078989522324752429,0.012488697234858169,0.006638706319670673]",
+        "accepted_awf_outer_minimum_point:[0.12251811603109602,0,5.1309619740671968,0.0018269297526610788,5.4470260227152069e-06,-4.5226396311722856e-05]"
+      ],
+      "coordinate": [
+        0.12251811603109602,
+        0,
+        5.130961974067197
+      ],
+      "geometry": 24,
+      "native_element": 24,
+      "side": 0,
+      "region": "outer",
+      "independent_native_audit_inputs": {
+        "k": 0.0018269297526610788,
+        "epsilon": 5.447026022715207e-06,
+        "raw_gradient": [
+          [
+            0.022038707519090404,
+            0.0,
+            0.03503341345055975
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -0.026783138923017976,
+            0.0,
+            0.00015863414747095548
+          ]
+        ],
+        "R": [
+          [
+            0.0020271352295799234,
+            0.0,
+            -0.00132118854328382
+          ],
+          [
+            0.0,
+            -4.522639631172236e-05,
+            0.0
+          ],
+          [
+            -0.00132118854328382,
+            0.0,
+            0.0016719506720539565
+          ]
+        ],
+        "Q": [
+          [
+            0.0012237098730809846,
+            0.0,
+            -0.001204383106801031
+          ],
+          [
+            0.0,
+            -0.0014726893754837811,
+            0.0
+          ],
+          [
+            -0.001204383106801031,
+            0.0,
+            0.0002489795024027963
+          ]
+        ],
+        "production": -3.4040500711096364e-05,
+        "divergence": 0.02219734166656136,
+        "isotropic_work": -2.7035322613749603e-05,
+        "covariance_eigenvalues": [
+          -4.522639631172236e-05,
+          0.0005164719908224423,
+          0.0031826139108114375
+        ],
+        "minimum_eigenvector": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "tensor_defect": 6.505213034913027e-19
+      },
+      "stages_at_same_physical_point": {
+        "last_accepted": {
+          "raw_gradient": [
+            [
+              0.022168424781703777,
+              0.0,
+              0.03499376875194517
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.02625695409828791,
+              0.0,
+              0.00018686665209882827
+            ]
+          ],
+          "raw_divergence": 0.022355291433802604,
+          "k": 0.0018268531996304769,
+          "epsilon": 5.446468631983802e-06,
+          "tau": 335.41975967739495,
+          "strain_eigenvalues": [
+            -0.008101214400069943,
+            -0.007451763811267534,
+            0.01555297821133748
+          ],
+          "strain_norm": 0.019053965201426066,
+          "rotation_norm": 0.04331080147997763,
+          "Pi": 0.0006940493768621446,
+          "pressure_gradient": [
+            0.00021771345943489683,
+            0.0,
+            -0.0006659383878666281
+          ],
+          "isotropic_production_work": -2.7226557123009388e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0020176208467734837,
+              0.0,
+              -0.001306384586520771
+            ],
+            [
+              0.0,
+              1.5821239024241002e-06,
+              0.0
+            ],
+            [
+              -0.001306384586520771,
+              0.0,
+              0.0016345034285850468
+            ]
+          ],
+          "Q": [
+            [
+              0.0012175211449456296,
+              0.0,
+              -0.001182366563305747
+            ],
+            [
+              0.0,
+              -0.00142787377425197,
+              0.0
+            ],
+            [
+              -0.001182366563305747,
+              0.0,
+              0.00021035262930634095
+            ]
+          ],
+          "production": -3.3619270164412554e-05,
+          "total_stress": [
+            [
+              -0.0014937680905486436,
+              0.0,
+              0.001306384586520771
+            ],
+            [
+              0.0,
+              0.0005222706323224159,
+              0.0
+            ],
+            [
+              0.001306384586520771,
+              0.0,
+              -0.001110650672360207
+            ]
+          ],
+          "nu_t": 0.014194878583478905,
+          "covariance_eigenvalues": [
+            1.5821239024241002e-06,
+            0.0005057078568406376,
+            0.003146416418517893
+          ]
+        },
+        "input": {
+          "raw_gradient": [
+            [
+              0.022168424781703777,
+              0.0,
+              0.03499376875194517
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.02625695409828791,
+              0.0,
+              0.00018686665209882827
+            ]
+          ],
+          "raw_divergence": 0.022355291433802604,
+          "k": 0.0018268531996304769,
+          "epsilon": 5.446468631983802e-06,
+          "tau": 335.41975967739495,
+          "strain_eigenvalues": [
+            -0.008101214400069943,
+            -0.007451763811267534,
+            0.01555297821133748
+          ],
+          "strain_norm": 0.019053965201426066,
+          "rotation_norm": 0.04331080147997763,
+          "Pi": 0.0006940493768621446,
+          "pressure_gradient": [
+            0.00021771345943489683,
+            0.0,
+            -0.0006659383878666281
+          ],
+          "isotropic_production_work": -2.7226557123009388e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0020176208467734837,
+              0.0,
+              -0.001306384586520771
+            ],
+            [
+              0.0,
+              1.5821239024241002e-06,
+              0.0
+            ],
+            [
+              -0.001306384586520771,
+              0.0,
+              0.0016345034285850468
+            ]
+          ],
+          "Q": [
+            [
+              0.0012175211449456296,
+              0.0,
+              -0.001182366563305747
+            ],
+            [
+              0.0,
+              -0.00142787377425197,
+              0.0
+            ],
+            [
+              -0.001182366563305747,
+              0.0,
+              0.00021035262930634095
+            ]
+          ],
+          "production": -3.3619270164412554e-05,
+          "total_stress": [
+            [
+              -0.0014937680905486436,
+              0.0,
+              0.001306384586520771
+            ],
+            [
+              0.0,
+              0.0005222706323224159,
+              0.0
+            ],
+            [
+              0.001306384586520771,
+              0.0,
+              -0.001110650672360207
+            ]
+          ],
+          "nu_t": 0.014194878583478905,
+          "covariance_eigenvalues": [
+            1.5821239024241002e-06,
+            0.0005057078568406376,
+            0.003146416418517893
+          ]
+        },
+        "momentum_predictor": {
+          "raw_gradient": [
+            [
+              0.022036407870567487,
+              0.0,
+              0.0350334144712228
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.026783162999770613,
+              0.0,
+              0.00015850782152071127
+            ]
+          ],
+          "raw_divergence": 0.0221949156920882,
+          "k": 0.0018268531996304769,
+          "epsilon": 5.446468631983802e-06,
+          "tau": 335.41975967739495,
+          "strain_eigenvalues": [
+            -0.007991753678629778,
+            -0.007398305230696066,
+            0.015390058909325842
+          ],
+          "strain_norm": 0.018853566250949902,
+          "rotation_norm": 0.04371092111948301,
+          "Pi": 0.0006940493768621446,
+          "pressure_gradient": [
+            0.00021771345943489683,
+            0.0,
+            -0.0006659383878666281
+          ],
+          "isotropic_production_work": -2.703123516508e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0020272681368006737,
+              0.0,
+              -0.0013212111958966276
+            ],
+            [
+              0.0,
+              -4.547540239561261e-05,
+              0.0
+            ],
+            [
+              -0.0013212111958966276,
+              0.0,
+              0.0016719136648558936
+            ]
+          ],
+          "Q": [
+            [
+              0.001223847075311647,
+              0.0,
+              -0.0012044073602162483
+            ],
+            [
+              0.0,
+              -0.0014728621630650844,
+              0.0
+            ],
+            [
+              -0.0012044073602162483,
+              0.0,
+              0.0002490150877534377
+            ]
+          ],
+          "production": -3.403839430528681e-05,
+          "total_stress": [
+            [
+              -0.0015034153805758336,
+              0.0,
+              0.0013212111958966276
+            ],
+            [
+              0.0,
+              0.0005693281586204526,
+              0.0
+            ],
+            [
+              0.0013212111958966276,
+              0.0,
+              -0.0011480609086310534
+            ]
+          ],
+          "nu_t": 0.014157609144951282,
+          "covariance_eigenvalues": [
+            -4.547540239561261e-05,
+            0.0005164861696291985,
+            0.003182695632027369
+          ]
+        },
+        "corrected_flow": {
+          "raw_gradient": [
+            [
+              0.022038707519122624,
+              0.0,
+              0.03503341345055183
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.02678313892301797,
+              0.0,
+              0.00015863414747095559
+            ]
+          ],
+          "raw_divergence": 0.02219734166659358,
+          "k": 0.0018268531996304769,
+          "epsilon": 5.446468631983802e-06,
+          "tau": 335.41975967739495,
+          "strain_eigenvalues": [
+            -0.007992370190652598,
+            -0.007399113888864528,
+            0.015391484079517119
+          ],
+          "strain_norm": 0.018855308265176923,
+          "rotation_norm": 0.043710903372924576,
+          "Pi": 0.0007008062899766435,
+          "pressure_gradient": [
+            0.0002761139850609891,
+            0.0,
+            -0.0006733598101900746
+          ],
+          "isotropic_production_work": -2.7034189764604925e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0020271045768676184,
+              0.0,
+              -0.00132118798792617
+            ],
+            [
+              0.0,
+              -4.529059402958932e-05,
+              0.0
+            ],
+            [
+              -0.00132118798792617,
+              0.0,
+              0.0016718924164229247
+            ]
+          ],
+          "Q": [
+            [
+              0.0012237139711130142,
+              0.0,
+              -0.0012043871401126367
+            ],
+            [
+              0.0,
+              -0.0014726943073134686,
+              0.0
+            ],
+            [
+              -0.0012043871401126367,
+              0.0,
+              0.0002489803362004541
+            ]
+          ],
+          "production": -3.403982050553168e-05,
+          "total_stress": [
+            [
+              -0.0015100087337572773,
+              0.0,
+              0.00132118798792617
+            ],
+            [
+              0.0,
+              0.0005623864371399305,
+              0.0
+            ],
+            [
+              0.00132118798792617,
+              0.0,
+              -0.0011547965733125836
+            ]
+          ],
+          "nu_t": 0.01415720742670207,
+          "covariance_eigenvalues": [
+            -4.529059402958932e-05,
+            0.0005164262483509984,
+            0.003182570744939545
+          ]
+        },
+        "post_epsilon_pre_k": {
+          "raw_gradient": [
+            [
+              0.022038707519122624,
+              0.0,
+              0.03503341345055183
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.02678313892301797,
+              0.0,
+              0.00015863414747095559
+            ]
+          ],
+          "raw_divergence": 0.02219734166659358,
+          "k": 0.0018268531996304769,
+          "epsilon": 5.447026022715207e-06,
+          "tau": 335.38543638530956,
+          "strain_eigenvalues": [
+            -0.007992370190652598,
+            -0.007399113888864528,
+            0.015391484079517119
+          ],
+          "strain_norm": 0.018855308265176923,
+          "rotation_norm": 0.043710903372924576,
+          "Pi": 0.0007008062899766435,
+          "pressure_gradient": [
+            0.0002761139850609891,
+            0.0,
+            -0.0006733598101900746
+          ],
+          "isotropic_production_work": -2.7034189764604925e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0020270126384735335,
+              0.0,
+              -0.0013210951751128222
+            ],
+            [
+              0.0,
+              -4.5178666815913785e-05,
+              0.0
+            ],
+            [
+              -0.0013210951751128222,
+              0.0,
+              0.001671872427603334
+            ]
+          ],
+          "Q": [
+            [
+              0.0012236201950553975,
+              0.0,
+              -0.0012042948451151864
+            ],
+            [
+              0.0,
+              -0.001472581451311597,
+              0.0
+            ],
+            [
+              -0.0012042948451151864,
+              0.0,
+              0.00024896125625619906
+            ]
+          ],
+          "production": -3.40385568624351e-05,
+          "total_stress": [
+            [
+              -0.0015099167953631924,
+              0.0,
+              0.0013210951751128222
+            ],
+            [
+              0.0,
+              0.000562274509926255,
+              0.0
+            ],
+            [
+              0.0013210951751128222,
+              0.0,
+              -0.0011547765844929928
+            ]
+          ],
+          "nu_t": 0.01415714466322727,
+          "covariance_eigenvalues": [
+            -4.5178666815913785e-05,
+            0.0005164670628775567,
+            0.003182418003199311
+          ]
+        },
+        "post_k_raw": {
+          "raw_gradient": [
+            [
+              0.022038707519122624,
+              0.0,
+              0.03503341345055183
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.02678313892301797,
+              0.0,
+              0.00015863414747095559
+            ]
+          ],
+          "raw_divergence": 0.02219734166659358,
+          "k": 0.0018269297526610786,
+          "epsilon": 5.447026022715207e-06,
+          "tau": 335.3994904820373,
+          "strain_eigenvalues": [
+            -0.007992370190652598,
+            -0.007399113888864528,
+            0.015391484079517119
+          ],
+          "strain_norm": 0.018855308265176923,
+          "rotation_norm": 0.043710903372924576,
+          "Pi": 0.0007008062899766435,
+          "pressure_gradient": [
+            0.0002761139850609891,
+            0.0,
+            -0.0006733598101900746
+          ],
+          "isotropic_production_work": -2.7035322613788844e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0020271352295769735,
+              0.0,
+              -0.001321188543283441
+            ],
+            [
+              0.0,
+              -4.5226396308882186e-05,
+              0.0
+            ],
+            [
+              -0.001321188543283441,
+              0.0,
+              0.0016719506720540651
+            ]
+          ],
+          "Q": [
+            [
+              0.001223709873078519,
+              0.0,
+              -0.001204383106800799
+            ],
+            [
+              0.0,
+              -0.001472689375481182,
+              0.0
+            ],
+            [
+              -0.001204383106800799,
+              0.0,
+              0.0002489795024026627
+            ]
+          ],
+          "production": -3.4040500711110255e-05,
+          "total_stress": [
+            [
+              -0.0015099883511128982,
+              0.0,
+              0.001321188543283441
+            ],
+            [
+              0.0,
+              0.0005623732747729577,
+              0.0
+            ],
+            [
+              0.001321188543283441,
+              0.0,
+              -0.0011548037935899895
+            ]
+          ],
+          "nu_t": 0.01415776361051069,
+          "covariance_eigenvalues": [
+            -4.5226396308882186e-05,
+            0.000516471990821601,
+            0.0031826139108094374
+          ]
+        },
+        "rejected_candidate": {
+          "raw_gradient": [
+            [
+              0.022038707519122624,
+              0.0,
+              0.03503341345055183
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.02678313892301797,
+              0.0,
+              0.00015863414747095559
+            ]
+          ],
+          "raw_divergence": 0.02219734166659358,
+          "k": 0.0018269297526610786,
+          "epsilon": 5.447026022715207e-06,
+          "tau": 335.3994904820373,
+          "strain_eigenvalues": [
+            -0.007992370190652598,
+            -0.007399113888864528,
+            0.015391484079517119
+          ],
+          "strain_norm": 0.018855308265176923,
+          "rotation_norm": 0.043710903372924576,
+          "Pi": 0.0007008062899766435,
+          "pressure_gradient": [
+            0.0002761139850609891,
+            0.0,
+            -0.0006733598101900746
+          ],
+          "isotropic_production_work": -2.7035322613788844e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0020271352295769735,
+              0.0,
+              -0.001321188543283441
+            ],
+            [
+              0.0,
+              -4.5226396308882186e-05,
+              0.0
+            ],
+            [
+              -0.001321188543283441,
+              0.0,
+              0.0016719506720540651
+            ]
+          ],
+          "Q": [
+            [
+              0.001223709873078519,
+              0.0,
+              -0.001204383106800799
+            ],
+            [
+              0.0,
+              -0.001472689375481182,
+              0.0
+            ],
+            [
+              -0.001204383106800799,
+              0.0,
+              0.0002489795024026627
+            ]
+          ],
+          "production": -3.4040500711110255e-05,
+          "total_stress": [
+            [
+              -0.0015099883511128982,
+              0.0,
+              0.001321188543283441
+            ],
+            [
+              0.0,
+              0.0005623732747729577,
+              0.0
+            ],
+            [
+              0.001321188543283441,
+              0.0,
+              -0.0011548037935899895
+            ]
+          ],
+          "nu_t": 0.01415776361051069,
+          "covariance_eigenvalues": [
+            -4.5226396308882186e-05,
+            0.000516471990821601,
+            0.0031826139108094374
+          ]
+        }
+      },
+      "actual_initial_state_sha256": "e14a0cdd997bae63caae3f5b681cd9071ba9b3c202210d1053c8bcb59a3d54a4",
+      "rejected_state_sha256": "a13497fe31b992a5ad14ed5bb4f0fd00b6bb616a7dc21eae566f93faf353ee78",
+      "last_accepted_state_sha256": "dde2ac1a1c96d9645ad6d81641d957fef9df295cdb3acb699fe22f0592a288b8",
+      "native_report_sha256": "95c4fbeb7204354008228c77d84122bf27c816cb226039bd78cd0e1fc038ff64",
+      "native_event_audit": {
+        "accepted_awf_covariance": [
+          0.006638706319670673,
+          -4.5226396311722856e-05
+        ],
+        "accepted_awf_hard_admissible": [
+          0
+        ],
+        "accepted_awf_inner_minimum_point": [
+          0.25,
+          0,
+          0.4,
+          0.018733045852287255,
+          0.018733045852287255,
+          0.012760995701567837,
+          0.007898952232475243,
+          0.01248869723485817,
+          0.006638706319670673
+        ],
+        "accepted_awf_outer_minimum_point": [
+          0.12251811603109602,
+          0,
+          5.130961974067197,
+          0.0018269297526610788,
+          5.447026022715207e-06,
+          -4.5226396311722856e-05
+        ],
+        "accepted_awf_reference_departure": [
+          1.5791579338978001,
+          0.0015245330812260214,
+          1.0008228018484968,
+          5.782555006477395e-05,
+          1,
+          0.9985392516789094,
+          1
+        ],
+        "accepted_awf_scalar_domain": [
+          1,
+          5.7825550064773965e-05,
+          0.018733045852287255,
+          2.8600926869842583e-05,
+          8.848544094193208e-09,
+          0.018733045852287255,
+          0.002385721720996783,
+          3.8442187653699165,
+          0
+        ],
+        "accepted_awf_sources": [
+          0.0009177813289351043,
+          0.0009186283266294023,
+          0,
+          0.00016005663722882263,
+          -8.469976942980387e-07
+        ],
+        "admissible": [
+          1
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          1.1102230246251565e-16,
+          0,
+          6.23552667421319e-08
+        ],
+        "constitutive_modification": [
+          0,
+          0,
+          0
+        ],
+        "coupled_norms": [
+          0.020000021743195543,
+          0.01092291007804426,
+          8.590406296472565e-06,
+          3.5253765856359064e-06,
+          1.0066812027913443e-15,
+          1.8247280158762075e-15,
+          0,
+          2.6079608562340307e-05
+        ],
+        "energy": [
+          55.210238955993944,
+          0.00018821433976390546,
+          0.0015189276169163047,
+          2.4994451146728016e-05,
+          -5.3725480931079694e-05,
+          0,
+          0.0016784109268958586,
+          55.20856054506705,
+          4.875328331890608,
+          55.21023344457114,
+          0,
+          5.511422806137034e-06
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          0.25000000000000006,
+          -0.0004009771125451991,
+          0.0003287846979701329,
+          0.0003322401148307343,
+          0.0007245944789300313,
+          7.310094471014265e-06,
+          -3.887663172874365e-05,
+          6.717980293866627e-05
+        ],
+        "interface_inner": [
+          20,
+          0.018733909278596313,
+          0.0023858866636322536,
+          0.006680783038248783,
+          0,
+          0
+        ],
+        "interface_outer": [
+          20,
+          0.018733909278596313,
+          0.002385948470752738,
+          0.00703946738328131,
+          0,
+          0
+        ],
+        "mass_volume": [
+          3000,
+          2.8601926755917182e-05,
+          8.873361106469569e-09,
+          -3.3185368335404205e-05,
+          0,
+          0
+        ],
+        "momentum_k_load_and_boundary_reaction": [
+          38.902474181699716,
+          -0.019995241714641825,
+          0.06846080632102437,
+          38.902470000540966,
+          -0.02000533784029792,
+          0.06846083313483055
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.01154387328527337,
+          0,
+          -0.005537994616792672,
+          0,
+          0.01248869723485817,
+          0,
+          -0.005537994616792672,
+          0,
+          0.012891171238947128
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.037019993254472965,
+          0,
+          0.44013900132257794,
+          0,
+          0,
+          0,
+          -0.006160748660658765,
+          0,
+          -0.01576969436795238
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          15,
+          15,
+          -1,
+          2
+        ],
+        "native_k_inner_outer_shared_interface_constant_test": [
+          -6.77368391501492e-09,
+          -1.2416679226957957e-08,
+          -7.623443011322455e-09
+        ],
+        "native_k_inner_outer_shared_interface_dual": [
+          5.915423239186743e-06,
+          6.215342167221671e-06,
+          4.6455461124727556e-06
+        ],
+        "native_k_inner_outer_shared_interface_max_row": [
+          7.199267873747827e-10,
+          3.98416104939464e-09,
+          4.7593655311508796e-09
+        ],
+        "native_k_inner_outer_shared_interface_row_counts": [
+          144,
+          120,
+          6
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.002027135229579924,
+          0,
+          -0.0013211885432838208,
+          0,
+          -4.5226396311722856e-05,
+          0,
+          -0.0013211885432838208,
+          0,
+          0.0016719506720539567
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          0.022038707519090404,
+          0,
+          0.03503341345055975,
+          0,
+          0,
+          0,
+          -0.026783138923017976,
+          0,
+          0.00015863414747095548
+        ],
+        "native_outer_isotropic_production_work_maximum": [
+          0.0006244954346430943
+        ],
+        "native_outer_isotropic_production_work_witness": [
+          0.25,
+          0,
+          0.4,
+          -0.0006244954346430943,
+          17,
+          1
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          24,
+          24,
+          0,
+          2
+        ],
+        "native_raw_divergence_maximum_witness": [
+          0.125,
+          0,
+          0.01,
+          -0.07378937256938183,
+          3,
+          0,
+          0
+        ],
+        "native_raw_divergence_range": [
+          -0.07378937256938183,
+          0.056753878302667767
+        ],
+        "outer_constitutive_range": [
+          1.5791579338978001,
+          0.0015245330812260214,
+          1.0008228018484968,
+          5.782555006477395e-05,
+          1,
+          0.9985392516789094,
+          1,
+          1.573918602459347
+        ],
+        "outer_tangent_diagnostic_available": [
+          0
+        ],
+        "physical_sample_K": [
+          16,
+          0.018734351731678367,
+          0.0023859711881000253,
+          0.00670204801696348,
+          0,
+          0
+        ],
+        "physical_sample_outer": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "prescribed_source_inner": [
+          10240,
+          0.018734468926256197,
+          0.002386913200409912,
+          0.006704485162392029,
+          0,
+          0
+        ],
+        "r4_outer_gradient_witness": [
+          0.125,
+          0,
+          4.140625,
+          0,
+          0,
+          -1.5791579338978001,
+          22,
+          0
+        ],
+        "reconstruction_dense": [
+          3838,
+          2.860105098852537e-05,
+          8.851727423564532e-09,
+          1.0713402107385277e-05,
+          0,
+          0
+        ],
+        "reconstruction_native": [
+          1920,
+          2.8600926869842583e-05,
+          8.848544094193208e-09,
+          9.501812284332025e-06,
+          0,
+          0
+        ],
+        "roughness": [
+          0.00014355402965959097,
+          0,
+          0,
+          5.3725480931079694e-05,
+          0
+        ],
+        "scalar_minimum_point_0": [
+          0.25,
+          0,
+          0.4
+        ],
+        "scalar_minimum_point_1": [
+          0.25,
+          0,
+          7.732563966432853
+        ],
+        "scalar_minimum_point_2": [
+          0.09948126133957139,
+          0,
+          6.25
+        ],
+        "source_volume_inner": [
+          9216,
+          0.018734368524916195,
+          0.0023861059567462034,
+          0.006702397463417548,
+          0,
+          0
+        ],
+        "source_volume_outer": [
+          1400,
+          2.8601926755917182e-05,
+          8.873361106469569e-09,
+          -3.3185368335404205e-05,
+          0,
+          0
+        ],
+        "strong_continuity": [
+          0.0021479433055598893,
+          0.008557455685700247,
+          2.818713890225498e-18,
+          1.2953793355982763e-17,
+          6.217248933103215e-15
+        ],
+        "wall_cutoff_activity": [
+          31,
+          31,
+          0,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          0.25,
+          0,
+          0.4
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          3.8442187653699165,
+          0
+        ]
+      },
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/RANSPreservationProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/failures-v1/A93-Zminus-P3-0.001/case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/failures-v1/A93-Zminus-P3-0.001/witness-basis-request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/failures-v1/A93-Zminus-P3-0.001/witness-basis.json"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 5.159396528000798,
+        "process_cpu_seconds": 4.6547789999999996,
+        "peak_RSS_KiB": 164824,
+        "actual_mapped_files": {
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/RANSPreservationProbe": "43ecbaed68ecc2e6424e05df1b8090646f58cf9914ca82abd2758f6862d17475",
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_ess_singleton.so": "9e36ea68ba070279c6c964e08c5af596f774c5944c3aad1743e85b573af3ec1a",
+          "/usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0": "458dd70122be79952cd517f469e3714ee6a972c0d96cd67954b1e37fb4830b27",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_orte.so": "9a9fe6e13bb9b5db1acf7aa10485c9286cb03a9e1b66c1b244142c81f2aac054",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_slurm.so": "de18ee69766665d6c1063e714806e6449caa48a63f730749dca0ce311d8a2b48",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_flux.so": "3d6050004330107889696420382517358e08664a9be3f90cd1f71acdbdceedc1",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_ompi.so": "982d5490f7e0465af0228c7c27b416f51095b766f5d37c22d1c1ab6439780ff0",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_reachable_netlink.so": "5a606b631dfea7dbed5c0ccd81f84bc26f25080872068d0a9e382fbcf90fdda8",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_shmem_mmap.so": "47b116b3a5eff9c50f16dbbe3fd912efd10bcdfb18791edb2a19adffb2ed3317",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_jsm.so": "452bf398f565aa69bfe2155a97f8fa5af0659ddff5fcb8b30ee36603bb66615b",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+          "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": "7cc817ff1841b59516d684f357bc0c3fc2cc52c3fa9b4ffb8ce8bdc215f02915",
+          "/usr/lib/x86_64-linux-gnu/libresolv.so.2": "7230adfc1d3676f2485bec78f2d5c916d6becb15bc554ff95901f46800215194",
+          "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900",
+          "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf",
+          "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f",
+          "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25": "344870a9ff3cfee1df28f518e9e93073df8d0522a288f016f06fdacbfa49eed8",
+          "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1": "3160dcc37106767e1afb341ee3cb3cd25bb79246691ffd137131f37a23597288",
+          "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1": "c62a2a983e0d9c1de76ab2f4cf21a4d81da007af9e0351b8c04740459d231d3f",
+          "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3": "9386cfdeb2f894869cdd0190b4f110a65ec0c257ac50ddefaefd6cbaeaab3c35",
+          "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358",
+          "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0": "883ecfef9c8d3a2f17a1b8a3116e9e32d272f1c43e2088bf7837b98d2c50f5e2",
+          "/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1": "4dc20a901c6951e678e216e959da2534bcef7053e6efdf1492509baf142282b0",
+          "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4": "47d56894948545036bd49aed718393bf6edb93fce222874dad30b59f085ad9ee",
+          "/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a",
+          "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5",
+          "/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.15": "3d6d7558e2764fa0a2ee3ee9bf1754bff872bed23148d673bdb648f737ec39ff",
+          "/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.15": "f7c5ddb238bc12a13c4d4b4f8e6ea8af61f8bd144651728936d31b65bec7bbdc",
+          "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2": "e367a86cae4e1e81d9bba594a9daea3b90eb50fadb62bb45e38a322184484867",
+          "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0": "dcadda7f0f82c54ca157b6ca0a5fdc8e1128db4d778109c8e197e2f84c2ac9ba",
+          "/usr/lib/x86_64-linux-gnu/libnettle.so.8.4": "2d3bda6cfa2d477cd91b8178843d19e081b911a124f04b4be06b6e32c9fabc73",
+          "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5",
+          "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7": "e7162733430abba6f51e4a5186b9c61a6c706a63d4461182d5f66ce55f35507e",
+          "/usr/lib/x86_64-linux-gnu/librtmp.so.1": "2401c4fc99c7b93e79648071224a6eb230dcb800184ccacc8e1854e33fc61445",
+          "/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a",
+          "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2",
+          "/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0": "1dc53d91b473c3ebcc65b196c83baa7b1a6c4009f590bcf5c640cf35ba343d6f",
+          "/usr/lib/x86_64-linux-gnu/pmix2/lib/libpmix.so.2.5.2": "651d3664e655fa125fe81101a00fea58dd0f3f5adf3aac84d7f59c93c995203a",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56460/pmix_dstor_ds21_56460/initial-pmix_shared-segment-0": "912fa562cb2f87ef40b03feb6e1e9e9ff97eca1fbb0d2ecef2716ee63aada9eb",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56460/pmix_dstor_ds21_56460/smlockseg-2684092417": "a2df0db3b28431f048fc4dd6c6f67596babc8847df30e18ff874f39efd2a5f83",
+          "/usr/lib/x86_64-linux-gnu/pmix2/lib/pmix/mca_pcompress_zlib.so": "1132fb7e3ae88daab3bf16d3fc67637ef641eab0480735ea047233b89f19ef4a",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pmix_ext3x.so": "a44d4cc1c9f9fde978a0d519b8305f609138283cc20694be4d1eb3105aab5722",
+          "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56460/pmix_dstor_ds12_56460/initial-pmix_shared-segment-0": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56460/pmix_dstor_ds12_56460/dstore_sm.lock": "e20ed79c05591f80d16c43795665a54df6c037c063714e6ac243d082e3b1dba6",
+          "/usr/lib/x86_64-linux-gnu/libicudata.so.70.1": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8",
+          "/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a",
+          "/usr/local/cuda-12.5/targets/x86_64-linux/lib/libOpenCL.so.1.0.0": "1552ec44b469da72e585a29ac7fd2aa98d7f99b9362b7fb8f3dcb2d6b603d3fb",
+          "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56460/pmix_dstor_ds21_56460/smdataseg-2684092417-0": "00177f6da71c9b85b070fc64fdd777945f8943ca246a426c431b7711c3d78e99",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56460/pmix_dstor_ds21_56460/smseg-2684092417-0": "8b3a2ed339840e5cb41d38d5109e510024f4f2eaa4e2c4b3bb870b48402ae4f5",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_xml_libxml.so": "d1f058e867eb4b7c619ebb268b75f68c4393bcce8b339901e856d1a44c125506",
+          "/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06",
+          "/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d",
+          "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d",
+          "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46",
+          "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064",
+          "/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465",
+          "/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98",
+          "/usr/lib/x86_64-linux-gnu/libpthread.so.0": "fbed9505adacada2abb37c6b43be2df6de81e742712c6025694ba48de62c7e78",
+          "/usr/lib/x86_64-linux-gnu/libdl.so.2": "3eaaa4aefd9c28f3867c96a427c3cbec9191cb61c4c9d0a2cb4a765d66064499",
+          "/usr/lib/x86_64-linux-gnu/libpciaccess.so.0.11.1": "f1ca739f568225439e4a7957e09dd483359bf715f01d13396c436c74076cca53",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_pci.so": "e7b1dd3d2f88011fed33735e83b67ea82495b5fd60676f8b7a64f3df27abd0e6",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_state_app.so": "9da7b32c694270f7f811f6962adfb6c36bdb91f6adc62c6fa121ea91427ef7bd",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_opencl.so": "bc26e4d7970e376af2643d5be346adcb14cc4de4a2b297ff9927386e2f82d678",
+          "/usr/lib/x86_64-linux-gnu/libXNVCtrl.so.0.0.0": "331363807c5e2d1d0166d08d8e99740dc083c7d84590d8e29c7d783aa2da1284",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_errmgr_default_app.so": "6231acb4ce2eb2281bb7051b4950c0c3f0c6a8e10e6f122acfe3c15f16b0855a",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_gl.so": "f3758a7666bd979a2eacdd92b6264e2f160cd58e0bbbc88f82492121d07e2df5",
+          "/usr/lib/x86_64-linux-gnu/libcuda.so.555.42.02": "7916043d99f754caedfe4f343869da51c31cba661ed1867d68ba1976951f808e",
+          "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.555.42.02": "71cc9fa5f8377db1fd177d9fc6cb45ca97586f81c2f30797194905e4ea825604",
+          "/usr/lib/libpsm1/libpsm_infinipath.so.1.16": "bb44c7e69c8c93eb7c0392485636170443ef29181abfeb53bf7c7e1e1c388208",
+          "/etc/ld.so.cache": "3195d708e1fb33877a298168d35b39602b0ca215c34214f59057cb579d01e5f7",
+          "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17",
+          "/usr/lib/x86_64-linux-gnu/libinfinipath.so.4.0": "ba9d11f98daf1ed203b1c1d3c0d62c5709f13e06cc8bfa186154dde69d868b0f",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm.so": "77fcec2b00102887a50f55c23575761655359a610890258166d6686d6b79a000",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_cm.so": "78bbef9dbecc1e11d7c36425d176b653e32eada4d33e578a27b4ed99b7bed392",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_ob1.so": "0ad5a81720593262e7c09ba98d3153527b18011ef68dba40984806c897beb880",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_tcp.so": "c8c2cff0d5c056f4acf9400bc28614a15881404ccd7954c419636c2aa33b6887",
+          "/usr/lib/x86_64-linux-gnu/libmca_common_monitoring.so.50.20.0": "04d8c353ddc54d1da3e0950d7578de424ec28a7d55370810c4ad3011c32324ab",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_monitoring.so": "3904969c7ac96b24f637e36e0eac9d6daa2002fd590a39aa66ffaa28ca725a9b",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_sm.so": "b23fd800bdfe2daff3fe74cb99dc1de9c19f437352bce579cef7d9585037d0df",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_self.so": "052b8eb02b650de08fbdd0fe1724a7da86c29cbaf4a0ce8a5e89717cde49aee2",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_op_avx.so": "8240052b353a7ebfa9f894163c2a491fd1f47a742cca9490c4d4a7de76259e7b",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_bml_r2.so": "4a40fd9fea463b44580aac7303d4176806a39295a61a2a344a48055d96ff457f",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mpool_hugepage.so": "286f789d85c8c499ad670678ee957e3e84f122c6c3e7647b0ac81ac1874cfa08",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_rcache_grdma.so": "81066b828f2f070e0a9f8d9bd403c5c977f71a8957cc956cf37efb09862665b0",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_bucket.so": "840f38ddad79015cd9b462034f6050d496040c34ae65d28cd63b648ada9a60e9",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_basic.so": "73dd820c7ce28b37ecc288e106008c7e25eb444910ceecc9c39e751c34494590",
+          "/usr/lib/x86_64-linux-gnu/librt.so.1": "5f20d34fb3bb4d84b4edeb6ca11fa5b48c705207253741619acab7cc758185fb",
+          "/usr/lib/x86_64-linux-gnu/libpsm2.so.2.2": "bc6e727a5385af004c2eac85e70681905790798529cb9ec90b789c9915a68f19",
+          "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": "3582bce922d99959ee3eb6b7d686c0b99e14c2135616ad4d9d608b2118a7e78c",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm2.so": "abdf7c98aadd279811dfd3821bc44a4e2da5f2880bd03fee268fc323e64cac69",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_sm.so": "1e808a24af4ba80f1727cb5df31f25c2bac49632db11a7ee57a23d7d1ad11e7f",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_rdma.so": "7ae12dfa0db4604fd69ea793e112a067817fbb24e6a9b89fe1b81bedb4147cd0",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_adapt.so": "b9f1c8a26f7b8ad1529f085f26885c229f375246d3bab7e9d8350eb3d10b0d75",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_han.so": "362a195703a4d7b8d3851d43a8a89520adf778ff1e8fd6b00b751f8e31476c76",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sync.so": "c14550b0cdb5407c5ea840dae1727db0bc608aac2f30d6a3e72a9841f7868b25",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_tuned.so": "54b234d1dff42ef92f4437be095d557d990153b960702f2edb98c78649ac5b3a",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_inter.so": "6b5e029e8acf72559f6dd8acc6e828dd72af8eb3d69fe98e0b0a94e96e8bec46",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_self.so": "61826f87d8596e8b88146cf9a14043582d378fe277d99ab081b74f714bd528e9",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_libnbc.so": "7c471ad91a2538e0e315af2697fde25747b4b4d42f3be4a0a588976b2f2fa726",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_basic.so": "4f7a2151e1b566de99307a8faac82456088a5debab1bad6db2a0bd71802cb2a3",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sm.so": "756d7c20c69ced45843f3200f4582deaae403243f123749236801a8ffc4dd248",
+          "/usr/lib/x86_64-linux-gnu/libmca_common_sm.so.40.30.0": "738da2e4239bca8526a41eac96cd6034cc2cf87182f60cbb15d4decd38a01ba1"
+        }
+      },
+      "stopping": "native original covariance gate, no clipping or retry; diagnostic intermediate values do not add a rejection rule",
+      "native_audit_epsilon_minus_raw_rejected_field": 0.0,
+      "epsilon_scope": "native audit may include the declared refreshed dependent trace; raw frozen-stage field retained separately, never repaired",
+      "predictor_gradient_increment": [
+        [
+          -0.0001320169111362901,
+          0.0,
+          3.964571927763533e-05
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -0.0005262089014827012,
+          0.0,
+          -2.8358830578117e-05
+        ]
+      ],
+      "pressure_mass_correction_gradient_increment": [
+        [
+          2.2996485551374235e-06,
+          0.0,
+          -1.0206709713522777e-09
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          2.4076752643681365e-08,
+          0.0,
+          1.2632595024431254e-07
+        ]
+      ],
+      "minimal_native_reproducer": {
+        "status": "expected_physical_rejection_reproduced",
+        "unchanged_last_accepted_state_history": true,
+        "rejected_state_bitwise_equal": true,
+        "report_sha256": "5f270b25e3cbb6aa54affdaf690cffbe68d7532037ae7aa2954579f659bda6c3",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 8.838661731002503,
+          "process_cpu_seconds": 8.333385,
+          "peak_RSS_KiB": 200048,
+          "actual_mapped_files": {
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/IncNavierStokesSolver": "858c9cdb8f343d0f68f109d4992123021f4d87d6e1a32d9cf4a7cb902f11984b",
+            "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_ess_singleton.so": "9e36ea68ba070279c6c964e08c5af596f774c5944c3aad1743e85b573af3ec1a",
+            "/usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0": "458dd70122be79952cd517f469e3714ee6a972c0d96cd67954b1e37fb4830b27",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_orte.so": "9a9fe6e13bb9b5db1acf7aa10485c9286cb03a9e1b66c1b244142c81f2aac054",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_slurm.so": "de18ee69766665d6c1063e714806e6449caa48a63f730749dca0ce311d8a2b48",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_flux.so": "3d6050004330107889696420382517358e08664a9be3f90cd1f71acdbdceedc1",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_ompi.so": "982d5490f7e0465af0228c7c27b416f51095b766f5d37c22d1c1ab6439780ff0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_reachable_netlink.so": "5a606b631dfea7dbed5c0ccd81f84bc26f25080872068d0a9e382fbcf90fdda8",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_shmem_mmap.so": "47b116b3a5eff9c50f16dbbe3fd912efd10bcdfb18791edb2a19adffb2ed3317",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_jsm.so": "452bf398f565aa69bfe2155a97f8fa5af0659ddff5fcb8b30ee36603bb66615b",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/usr/lib/x86_64-linux-gnu/libicudata.so.70.1": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8",
+            "/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a",
+            "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225",
+            "/usr/local/cuda-12.5/targets/x86_64-linux/lib/libOpenCL.so.1.0.0": "1552ec44b469da72e585a29ac7fd2aa98d7f99b9362b7fb8f3dcb2d6b603d3fb",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_xml_libxml.so": "d1f058e867eb4b7c619ebb268b75f68c4393bcce8b339901e856d1a44c125506",
+            "/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56479/pmix_dstor_ds21_56479/smdataseg-2683240449-0": "feeb6775fda5a59ee2639b74bec16bd52a3f0d2ddd75cfe82e74031785a56894",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56479/pmix_dstor_ds21_56479/smseg-2683240449-0": "8b3a2ed339840e5cb41d38d5109e510024f4f2eaa4e2c4b3bb870b48402ae4f5",
+            "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3": "9386cfdeb2f894869cdd0190b4f110a65ec0c257ac50ddefaefd6cbaeaab3c35",
+            "/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06",
+            "/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d",
+            "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46",
+            "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064",
+            "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d",
+            "/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465",
+            "/usr/lib/x86_64-linux-gnu/libpthread.so.0": "fbed9505adacada2abb37c6b43be2df6de81e742712c6025694ba48de62c7e78",
+            "/usr/lib/x86_64-linux-gnu/libdl.so.2": "3eaaa4aefd9c28f3867c96a427c3cbec9191cb61c4c9d0a2cb4a765d66064499",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_opencl.so": "bc26e4d7970e376af2643d5be346adcb14cc4de4a2b297ff9927386e2f82d678",
+            "/usr/lib/x86_64-linux-gnu/libpciaccess.so.0.11.1": "f1ca739f568225439e4a7957e09dd483359bf715f01d13396c436c74076cca53",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_pci.so": "e7b1dd3d2f88011fed33735e83b67ea82495b5fd60676f8b7a64f3df27abd0e6",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_state_app.so": "9da7b32c694270f7f811f6962adfb6c36bdb91f6adc62c6fa121ea91427ef7bd",
+            "/usr/lib/x86_64-linux-gnu/libresolv.so.2": "7230adfc1d3676f2485bec78f2d5c916d6becb15bc554ff95901f46800215194",
+            "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900",
+            "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf",
+            "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0": "883ecfef9c8d3a2f17a1b8a3116e9e32d272f1c43e2088bf7837b98d2c50f5e2",
+            "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": "7cc817ff1841b59516d684f357bc0c3fc2cc52c3fa9b4ffb8ce8bdc215f02915",
+            "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f",
+            "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25": "344870a9ff3cfee1df28f518e9e93073df8d0522a288f016f06fdacbfa49eed8",
+            "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1": "3160dcc37106767e1afb341ee3cb3cd25bb79246691ffd137131f37a23597288",
+            "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1": "c62a2a983e0d9c1de76ab2f4cf21a4d81da007af9e0351b8c04740459d231d3f",
+            "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358",
+            "/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1": "4dc20a901c6951e678e216e959da2534bcef7053e6efdf1492509baf142282b0",
+            "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4": "47d56894948545036bd49aed718393bf6edb93fce222874dad30b59f085ad9ee",
+            "/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a",
+            "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5",
+            "/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.15": "3d6d7558e2764fa0a2ee3ee9bf1754bff872bed23148d673bdb648f737ec39ff",
+            "/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.15": "f7c5ddb238bc12a13c4d4b4f8e6ea8af61f8bd144651728936d31b65bec7bbdc",
+            "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2": "e367a86cae4e1e81d9bba594a9daea3b90eb50fadb62bb45e38a322184484867",
+            "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0": "dcadda7f0f82c54ca157b6ca0a5fdc8e1128db4d778109c8e197e2f84c2ac9ba",
+            "/usr/lib/x86_64-linux-gnu/libnettle.so.8.4": "2d3bda6cfa2d477cd91b8178843d19e081b911a124f04b4be06b6e32c9fabc73",
+            "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5",
+            "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7": "e7162733430abba6f51e4a5186b9c61a6c706a63d4461182d5f66ce55f35507e",
+            "/usr/lib/x86_64-linux-gnu/librtmp.so.1": "2401c4fc99c7b93e79648071224a6eb230dcb800184ccacc8e1854e33fc61445",
+            "/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a",
+            "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2",
+            "/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0": "1dc53d91b473c3ebcc65b196c83baa7b1a6c4009f590bcf5c640cf35ba343d6f",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/libpmix.so.2.5.2": "651d3664e655fa125fe81101a00fea58dd0f3f5adf3aac84d7f59c93c995203a",
+            "/usr/lib/x86_64-linux-gnu/libXNVCtrl.so.0.0.0": "331363807c5e2d1d0166d08d8e99740dc083c7d84590d8e29c7d783aa2da1284",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_errmgr_default_app.so": "6231acb4ce2eb2281bb7051b4950c0c3f0c6a8e10e6f122acfe3c15f16b0855a",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_gl.so": "f3758a7666bd979a2eacdd92b6264e2f160cd58e0bbbc88f82492121d07e2df5",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56479/pmix_dstor_ds21_56479/initial-pmix_shared-segment-0": "2ed062c6f4865c2c857587995bd84d9202c88ce4644d695fdffa45ec3929b3bf",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56479/pmix_dstor_ds21_56479/smlockseg-2683240449": "a2df0db3b28431f048fc4dd6c6f67596babc8847df30e18ff874f39efd2a5f83",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56479/pmix_dstor_ds12_56479/initial-pmix_shared-segment-0": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/pmix/mca_pcompress_zlib.so": "1132fb7e3ae88daab3bf16d3fc67637ef641eab0480735ea047233b89f19ef4a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pmix_ext3x.so": "a44d4cc1c9f9fde978a0d519b8305f609138283cc20694be4d1eb3105aab5722",
+            "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56479/pmix_dstor_ds12_56479/dstore_sm.lock": "e20ed79c05591f80d16c43795665a54df6c037c063714e6ac243d082e3b1dba6",
+            "/usr/lib/x86_64-linux-gnu/libcuda.so.555.42.02": "7916043d99f754caedfe4f343869da51c31cba661ed1867d68ba1976951f808e",
+            "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.555.42.02": "71cc9fa5f8377db1fd177d9fc6cb45ca97586f81c2f30797194905e4ea825604",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_monitoring.so": "3904969c7ac96b24f637e36e0eac9d6daa2002fd590a39aa66ffaa28ca725a9b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_sm.so": "b23fd800bdfe2daff3fe74cb99dc1de9c19f437352bce579cef7d9585037d0df",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_tcp.so": "c8c2cff0d5c056f4acf9400bc28614a15881404ccd7954c419636c2aa33b6887",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_self.so": "052b8eb02b650de08fbdd0fe1724a7da86c29cbaf4a0ce8a5e89717cde49aee2",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_bml_r2.so": "4a40fd9fea463b44580aac7303d4176806a39295a61a2a344a48055d96ff457f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_op_avx.so": "8240052b353a7ebfa9f894163c2a491fd1f47a742cca9490c4d4a7de76259e7b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mpool_hugepage.so": "286f789d85c8c499ad670678ee957e3e84f122c6c3e7647b0ac81ac1874cfa08",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_rcache_grdma.so": "81066b828f2f070e0a9f8d9bd403c5c977f71a8957cc956cf37efb09862665b0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_bucket.so": "840f38ddad79015cd9b462034f6050d496040c34ae65d28cd63b648ada9a60e9",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_basic.so": "73dd820c7ce28b37ecc288e106008c7e25eb444910ceecc9c39e751c34494590",
+            "/usr/lib/x86_64-linux-gnu/librt.so.1": "5f20d34fb3bb4d84b4edeb6ca11fa5b48c705207253741619acab7cc758185fb",
+            "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17",
+            "/usr/lib/x86_64-linux-gnu/libinfinipath.so.4.0": "ba9d11f98daf1ed203b1c1d3c0d62c5709f13e06cc8bfa186154dde69d868b0f",
+            "/usr/lib/libpsm1/libpsm_infinipath.so.1.16": "bb44c7e69c8c93eb7c0392485636170443ef29181abfeb53bf7c7e1e1c388208",
+            "/etc/ld.so.cache": "3195d708e1fb33877a298168d35b39602b0ca215c34214f59057cb579d01e5f7",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm.so": "77fcec2b00102887a50f55c23575761655359a610890258166d6686d6b79a000",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_cm.so": "78bbef9dbecc1e11d7c36425d176b653e32eada4d33e578a27b4ed99b7bed392",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_monitoring.so.50.20.0": "04d8c353ddc54d1da3e0950d7578de424ec28a7d55370810c4ad3011c32324ab",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_ob1.so": "0ad5a81720593262e7c09ba98d3153527b18011ef68dba40984806c897beb880",
+            "/usr/lib/x86_64-linux-gnu/libpsm2.so.2.2": "bc6e727a5385af004c2eac85e70681905790798529cb9ec90b789c9915a68f19",
+            "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": "3582bce922d99959ee3eb6b7d686c0b99e14c2135616ad4d9d608b2118a7e78c",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm2.so": "abdf7c98aadd279811dfd3821bc44a4e2da5f2880bd03fee268fc323e64cac69",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_han.so": "362a195703a4d7b8d3851d43a8a89520adf778ff1e8fd6b00b751f8e31476c76",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_tuned.so": "54b234d1dff42ef92f4437be095d557d990153b960702f2edb98c78649ac5b3a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_libnbc.so": "7c471ad91a2538e0e315af2697fde25747b4b4d42f3be4a0a588976b2f2fa726",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_monitoring.so": "e890d01228e8cb2da199270e8128bc322ba72b60b517ceb3c82c0c947ee360e8",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sync.so": "c14550b0cdb5407c5ea840dae1727db0bc608aac2f30d6a3e72a9841f7868b25",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_sm.so.40.30.0": "738da2e4239bca8526a41eac96cd6034cc2cf87182f60cbb15d4decd38a01ba1",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_inter.so": "6b5e029e8acf72559f6dd8acc6e828dd72af8eb3d69fe98e0b0a94e96e8bec46",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_self.so": "61826f87d8596e8b88146cf9a14043582d378fe277d99ab081b74f714bd528e9",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_basic.so": "4f7a2151e1b566de99307a8faac82456088a5debab1bad6db2a0bd71802cb2a3",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sm.so": "756d7c20c69ced45843f3200f4582deaae403243f123749236801a8ffc4dd248",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_sm.so": "1e808a24af4ba80f1727cb5df31f25c2bac49632db11a7ee57a23d7d1ad11e7f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_rdma.so": "7ae12dfa0db4604fd69ea793e112a067817fbb24e6a9b89fe1b81bedb4147cd0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_adapt.so": "b9f1c8a26f7b8ad1529f085f26885c229f375246d3bab7e9d8350eb3d10b0d75"
+          }
+        }
+      }
+    },
+    {
+      "case": "A93-Zminus-P3",
+      "dt": 0.002,
+      "last_accepted_time": 0.06200000000000004,
+      "attempted_time": 0.06400000000000004,
+      "failure": "accepted AWF hard audit exit; candidate/history retained: model_aware_covariance_exit",
+      "reasons": [
+        "model_aware_covariance_exit",
+        "accepted_awf_inner_minimum_point:[0.25,0,0.40000000000000002,0.018729808418987325,0.018729808418987325,0.012759886521881651,0.0078862342481370827,0.012486538945991549,0.0066405804316323983]",
+        "accepted_awf_outer_minimum_point:[0.125,0,5.125,0.0018452961534666731,5.5409088771408934e-06,-1.1619021963040614e-05]"
+      ],
+      "coordinate": [
+        0.125,
+        0,
+        5.125
+      ],
+      "geometry": 24,
+      "native_element": 24,
+      "side": 0,
+      "region": "outer",
+      "independent_native_audit_inputs": {
+        "k": 0.0018452961534666731,
+        "epsilon": 5.5409088771408934e-06,
+        "raw_gradient": [
+          [
+            0.023234556207862692,
+            0.0,
+            0.03501744169910265
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -0.027790674578919657,
+            0.0,
+            0.0003425632494283399
+          ]
+        ],
+        "R": [
+          [
+            0.001953969176766312,
+            0.0,
+            -0.0013338261492140718
+          ],
+          [
+            0.0,
+            -1.161902196304015e-05,
+            0.0
+          ],
+          [
+            -0.0013338261492140718,
+            0.0,
+            0.0017482421521300747
+          ]
+        ],
+        "Q": [
+          [
+            0.001154257337482938,
+            0.0,
+            -0.0012326581924823003
+          ],
+          [
+            0.0,
+            -0.0014618548197545575,
+            0.0
+          ],
+          [
+            -0.0012326581924823003,
+            0.0,
+            0.00030759748227161956
+          ]
+        ],
+        "production": -3.6359239219248796e-05,
+        "divergence": 0.023577119457291032,
+        "isotropic_work": -2.9004511896242265e-05,
+        "covariance_eigenvalues": [
+          -1.161902196304015e-05,
+          0.0005133190228294111,
+          0.003188892306066975
+        ],
+        "minimum_eigenvector": [
+          -3.4430400446292374e-16,
+          0.9999999999999997,
+          -1.1102230246251565e-16
+        ],
+        "tensor_defect": 4.641740550953566e-19
+      },
+      "stages_at_same_physical_point": {
+        "last_accepted": {
+          "raw_gradient": [
+            [
+              0.023588955701008274,
+              0.0,
+              0.03495258694319365
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.027133372844204307,
+              0.0,
+              0.0003895798251351395
+            ]
+          ],
+          "raw_divergence": 0.023978535526143412,
+          "k": 0.0018451593767529481,
+          "epsilon": 5.539938709343512e-06,
+          "tau": 333.06494413755007,
+          "strain_eigenvalues": [
+            -0.008244402038900955,
+            -0.007992845175381139,
+            0.016237247214282095
+          ],
+          "strain_norm": 0.019887280761189032,
+          "rotation_norm": 0.043901403182144395,
+          "Pi": 0.0007019917668053093,
+          "pressure_gradient": [
+            0.0005816670805943776,
+            0.0,
+            -0.0006719781796735747
+          ],
+          "isotropic_production_work": -2.9496146444578137e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0019302699770759673,
+              0.0,
+              -0.0013126876749196296
+            ],
+            [
+              0.0,
+              5.996431760780488e-05,
+              0.0
+            ],
+            [
+              -0.0013126876749196296,
+              0.0,
+              0.0017000844588221232
+            ]
+          ],
+          "Q": [
+            [
+              0.0011373996413502727,
+              0.0,
+              -0.0012030821027804038
+            ],
+            [
+              0.0,
+              -0.0013942208134526397,
+              0.0
+            ],
+            [
+              -0.0012030821027804038,
+              0.0,
+              0.00025682117210236633
+            ]
+          ],
+          "production": -3.593118561111304e-05,
+          "total_stress": [
+            [
+              -0.0014021554927126445,
+              0.0,
+              0.0013126876749196296
+            ],
+            [
+              0.0,
+              0.0004681501667555179,
+              0.0
+            ],
+            [
+              0.0013126876749196296,
+              0.0,
+              -0.0011719699744588005
+            ]
+          ],
+          "nu_t": 0.014017466557590825,
+          "covariance_eigenvalues": [
+            5.996431760780488e-05,
+            0.0004974536979763043,
+            0.0031329007379217863
+          ]
+        },
+        "input": {
+          "raw_gradient": [
+            [
+              0.023588955701008274,
+              0.0,
+              0.03495258694319365
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.027133372844204307,
+              0.0,
+              0.0003895798251351395
+            ]
+          ],
+          "raw_divergence": 0.023978535526143412,
+          "k": 0.0018451593767529481,
+          "epsilon": 5.539938709343512e-06,
+          "tau": 333.06494413755007,
+          "strain_eigenvalues": [
+            -0.008244402038900955,
+            -0.007992845175381139,
+            0.016237247214282095
+          ],
+          "strain_norm": 0.019887280761189032,
+          "rotation_norm": 0.043901403182144395,
+          "Pi": 0.0007019917668053093,
+          "pressure_gradient": [
+            0.0005816670805943776,
+            0.0,
+            -0.0006719781796735747
+          ],
+          "isotropic_production_work": -2.9496146444578137e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0019302699770759673,
+              0.0,
+              -0.0013126876749196296
+            ],
+            [
+              0.0,
+              5.996431760780488e-05,
+              0.0
+            ],
+            [
+              -0.0013126876749196296,
+              0.0,
+              0.0017000844588221232
+            ]
+          ],
+          "Q": [
+            [
+              0.0011373996413502727,
+              0.0,
+              -0.0012030821027804038
+            ],
+            [
+              0.0,
+              -0.0013942208134526397,
+              0.0
+            ],
+            [
+              -0.0012030821027804038,
+              0.0,
+              0.00025682117210236633
+            ]
+          ],
+          "production": -3.593118561111304e-05,
+          "total_stress": [
+            [
+              -0.0014021554927126445,
+              0.0,
+              0.0013126876749196296
+            ],
+            [
+              0.0,
+              0.0004681501667555179,
+              0.0
+            ],
+            [
+              0.0013126876749196296,
+              0.0,
+              -0.0011719699744588005
+            ]
+          ],
+          "nu_t": 0.014017466557590825,
+          "covariance_eigenvalues": [
+            5.996431760780488e-05,
+            0.0004974536979763043,
+            0.0031329007379217863
+          ]
+        },
+        "momentum_predictor": {
+          "raw_gradient": [
+            [
+              0.023221300964758385,
+              0.0,
+              0.035017512467130724
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.027791009489291127,
+              0.0,
+              0.000342118757936451
+            ]
+          ],
+          "raw_divergence": 0.023563419722694837,
+          "k": 0.0018451593767529481,
+          "epsilon": 5.539938709343512e-06,
+          "tau": 333.06494413755007,
+          "strain_eigenvalues": [
+            -0.008069422536808788,
+            -0.007854473240898278,
+            0.015923895777707066
+          ],
+          "strain_norm": 0.01950330194374331,
+          "rotation_norm": 0.04441233179169005,
+          "Pi": 0.0007019917668053093,
+          "pressure_gradient": [
+            0.0005816670805943776,
+            0.0,
+            -0.0006719781796735747
+          ],
+          "isotropic_production_work": -2.8985509899797154e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.001954828277769233,
+              0.0,
+              -0.0013339995771793852
+            ],
+            [
+              0.0,
+              -1.2822239337684227e-05,
+              0.0
+            ],
+            [
+              -0.0013339995771793852,
+              0.0,
+              0.0017483127150743475
+            ]
+          ],
+          "Q": [
+            [
+              0.0011550040084769917,
+              0.0,
+              -0.0012328259947322925
+            ],
+            [
+              0.0,
+              -0.0014628592643407374,
+              0.0
+            ],
+            [
+              -0.0012328259947322925,
+              0.0,
+              0.00030785525586374577
+            ]
+          ],
+          "production": -3.635163443014181e-05,
+          "total_stress": [
+            [
+              -0.0014267137934059102,
+              0.0,
+              0.0013339995771793852
+            ],
+            [
+              0.0,
+              0.000540936723701007,
+              0.0
+            ],
+            [
+              0.0013339995771793852,
+              0.0,
+              -0.0012201982307110247
+            ]
+          ],
+          "nu_t": 0.014000351588776227,
+          "covariance_eigenvalues": [
+            -1.2822239337684227e-05,
+            0.0005135805707035227,
+            0.0031895604221400574
+          ]
+        },
+        "corrected_flow": {
+          "raw_gradient": [
+            [
+              0.02323455620799031,
+              0.0,
+              0.035017441699092884
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.027790674578919657,
+              0.0,
+              0.0003425632494283399
+            ]
+          ],
+          "raw_divergence": 0.02357711945741865,
+          "k": 0.0018451593767529481,
+          "epsilon": 5.539938709343512e-06,
+          "tau": 333.06494413755007,
+          "strain_eigenvalues": [
+            -0.008073287101959523,
+            -0.007859039819139548,
+            0.015932326921099076
+          ],
+          "strain_norm": 0.019513623769824642,
+          "rotation_norm": 0.04441204493373585,
+          "Pi": 0.0007167476326011841,
+          "pressure_gradient": [
+            0.0007168349732191758,
+            0.0,
+            -0.0006873906445201379
+          ],
+          "isotropic_production_work": -2.900236202912027e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.001953902773927511,
+              0.0,
+              -0.0013338134585905471
+            ],
+            [
+              0.0,
+              -1.1718892472365296e-05,
+              0.0
+            ],
+            [
+              -0.0013338134585905471,
+              0.0,
+              0.0017481348720507497
+            ]
+          ],
+          "Q": [
+            [
+              0.001154252067274362,
+              0.0,
+              -0.0012326525643113642
+            ],
+            [
+              0.0,
+              -0.001461848145090865,
+              0.0
+            ],
+            [
+              -0.0012326525643113642,
+              0.0,
+              0.0003075960778165027
+            ]
+          ],
+          "production": -3.6357751340988934e-05,
+          "total_stress": [
+            [
+              -0.0014405441553600631,
+              0.0,
+              0.0013338134585905471
+            ],
+            [
+              0.0,
+              0.0005250775110398132,
+              0.0
+            ],
+            [
+              0.0013338134585905471,
+              0.0,
+              -0.0012347762534833018
+            ]
+          ],
+          "nu_t": 0.013998084149798666,
+          "covariance_eigenvalues": [
+            -1.1718892472365296e-05,
+            0.0005132432627108122,
+            0.0031887943832674486
+          ]
+        },
+        "post_epsilon_pre_k": {
+          "raw_gradient": [
+            [
+              0.02323455620799031,
+              0.0,
+              0.035017441699092884
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.027790674578919657,
+              0.0,
+              0.0003425632494283399
+            ]
+          ],
+          "raw_divergence": 0.02357711945741865,
+          "k": 0.0018451593767529481,
+          "epsilon": 5.5409088771408934e-06,
+          "tau": 333.00662719164757,
+          "strain_eigenvalues": [
+            -0.008073287101959523,
+            -0.007859039819139548,
+            0.015932326921099076
+          ],
+          "strain_norm": 0.019513623769824642,
+          "rotation_norm": 0.04441204493373585,
+          "Pi": 0.0007167476326011841,
+          "pressure_gradient": [
+            0.0007168349732191758,
+            0.0,
+            -0.0006873906445201379
+          ],
+          "isotropic_production_work": -2.900236202912027e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0019537667626373977,
+              0.0,
+              -0.0013336640143272512
+            ],
+            [
+              0.0,
+              -1.154420383160876e-05,
+              0.0
+            ],
+            [
+              -0.0013336640143272512,
+              0.0,
+              0.0017480961947001067
+            ]
+          ],
+          "Q": [
+            [
+              0.0011541128365910962,
+              0.0,
+              -0.0012325038766341884
+            ],
+            [
+              0.0,
+              -0.0014616718108898335,
+              0.0
+            ],
+            [
+              -0.0012325038766341884,
+              0.0,
+              0.000307558974298737
+            ]
+          ],
+          "production": -3.6355657928473245e-05,
+          "total_stress": [
+            [
+              -0.0014404081440699498,
+              0.0,
+              0.0013336640143272512
+            ],
+            [
+              0.0,
+              0.0005249028223990567,
+              0.0
+            ],
+            [
+              0.0013336640143272512,
+              0.0,
+              -0.0012347375761326588
+            ]
+          ],
+          "nu_t": 0.01399797945760261,
+          "covariance_eigenvalues": [
+            -1.154420383160876e-05,
+            0.0005133086623485495,
+            0.003188554294988955
+          ]
+        },
+        "post_k_raw": {
+          "raw_gradient": [
+            [
+              0.02323455620799031,
+              0.0,
+              0.035017441699092884
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.027790674578919657,
+              0.0,
+              0.0003425632494283399
+            ]
+          ],
+          "raw_divergence": 0.02357711945741865,
+          "k": 0.0018452961534666731,
+          "epsilon": 5.5409088771408934e-06,
+          "tau": 333.0313120794084,
+          "strain_eigenvalues": [
+            -0.008073287101959523,
+            -0.007859039819139548,
+            0.015932326921099076
+          ],
+          "strain_norm": 0.019513623769824642,
+          "rotation_norm": 0.04441204493373585,
+          "Pi": 0.0007167476326011841,
+          "pressure_gradient": [
+            0.0007168349732191758,
+            0.0,
+            -0.0006873906445201379
+          ],
+          "isotropic_production_work": -2.900451189639926e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0019539691767565467,
+              0.0,
+              -0.0013338261492123
+            ],
+            [
+              0.0,
+              -1.1619021952244315e-05,
+              0.0
+            ],
+            [
+              -0.0013338261492123,
+              0.0,
+              0.0017482421521290436
+            ]
+          ],
+          "Q": [
+            [
+              0.0011542573374749136,
+              0.0,
+              -0.0012326581924808158
+            ],
+            [
+              0.0,
+              -0.0014618548197446249,
+              0.0
+            ],
+            [
+              -0.0012326581924808158,
+              0.0,
+              0.00030759748226971093
+            ]
+          ],
+          "production": -3.6359239219296744e-05,
+          "total_stress": [
+            [
+              -0.001440519373713282,
+              0.0,
+              0.0013338261492123
+            ],
+            [
+              0.0,
+              0.000525068824995509,
+              0.0
+            ],
+            [
+              0.0013338261492123,
+              0.0,
+              -0.001234792349085779
+            ]
+          ],
+          "nu_t": 0.013999061412824273,
+          "covariance_eigenvalues": [
+            -1.1619021952244315e-05,
+            0.0005133190228261153,
+            0.0031888923060594747
+          ]
+        },
+        "rejected_candidate": {
+          "raw_gradient": [
+            [
+              0.02323455620799031,
+              0.0,
+              0.035017441699092884
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -0.027790674578919657,
+              0.0,
+              0.0003425632494283399
+            ]
+          ],
+          "raw_divergence": 0.02357711945741865,
+          "k": 0.0018452961534666731,
+          "epsilon": 5.5409088771408934e-06,
+          "tau": 333.0313120794084,
+          "strain_eigenvalues": [
+            -0.008073287101959523,
+            -0.007859039819139548,
+            0.015932326921099076
+          ],
+          "strain_norm": 0.019513623769824642,
+          "rotation_norm": 0.04441204493373585,
+          "Pi": 0.0007167476326011841,
+          "pressure_gradient": [
+            0.0007168349732191758,
+            0.0,
+            -0.0006873906445201379
+          ],
+          "isotropic_production_work": -2.900451189639926e-05,
+          "radicand": null,
+          "status": "admissible",
+          "R": [
+            [
+              0.0019539691767565467,
+              0.0,
+              -0.0013338261492123
+            ],
+            [
+              0.0,
+              -1.1619021952244315e-05,
+              0.0
+            ],
+            [
+              -0.0013338261492123,
+              0.0,
+              0.0017482421521290436
+            ]
+          ],
+          "Q": [
+            [
+              0.0011542573374749136,
+              0.0,
+              -0.0012326581924808158
+            ],
+            [
+              0.0,
+              -0.0014618548197446249,
+              0.0
+            ],
+            [
+              -0.0012326581924808158,
+              0.0,
+              0.00030759748226971093
+            ]
+          ],
+          "production": -3.6359239219296744e-05,
+          "total_stress": [
+            [
+              -0.001440519373713282,
+              0.0,
+              0.0013338261492123
+            ],
+            [
+              0.0,
+              0.000525068824995509,
+              0.0
+            ],
+            [
+              0.0013338261492123,
+              0.0,
+              -0.001234792349085779
+            ]
+          ],
+          "nu_t": 0.013999061412824273,
+          "covariance_eigenvalues": [
+            -1.1619021952244315e-05,
+            0.0005133190228261153,
+            0.0031888923060594747
+          ]
+        }
+      },
+      "actual_initial_state_sha256": "e14a0cdd997bae63caae3f5b681cd9071ba9b3c202210d1053c8bcb59a3d54a4",
+      "rejected_state_sha256": "e5380c8405237ad4ec2a9bb3023ee552cd1faeb49502dc44ad189f57cc91b6d8",
+      "last_accepted_state_sha256": "5a90fc2a5f58031654120d7cb70afb6f1b5674a256ba17dc76975697fff30cd1",
+      "native_report_sha256": "66ee3e66d4c122df5a2ec8f92d181ec6315865b8a62febba781ef4c997d37d85",
+      "native_event_audit": {
+        "accepted_awf_covariance": [
+          0.006640580431632398,
+          -1.1619021963040614e-05
+        ],
+        "accepted_awf_hard_admissible": [
+          0
+        ],
+        "accepted_awf_inner_minimum_point": [
+          0.25,
+          0,
+          0.4,
+          0.018729808418987325,
+          0.018729808418987325,
+          0.01275988652188165,
+          0.007886234248137083,
+          0.01248653894599155,
+          0.006640580431632398
+        ],
+        "accepted_awf_outer_minimum_point": [
+          0.125,
+          0,
+          5.125,
+          0.0018452961534666731,
+          5.5409088771408934e-06,
+          -1.1619021963040614e-05
+        ],
+        "accepted_awf_reference_departure": [
+          1.3788346874796418,
+          0.0015242756432400008,
+          1.0011129416372886,
+          5.7733195208253144e-05,
+          1,
+          0.9983666847482479,
+          1
+        ],
+        "accepted_awf_scalar_domain": [
+          1,
+          5.77331952082542e-05,
+          0.018729808418987325,
+          2.8596097217339554e-05,
+          8.834411828796465e-09,
+          0.018729808418987325,
+          0.002385103299307836,
+          3.8441571862470987,
+          0
+        ],
+        "accepted_awf_sources": [
+          0.0009175596545699688,
+          0.0009185072659788265,
+          0,
+          0.00016007157205073964,
+          -9.476114088576276e-07
+        ],
+        "admissible": [
+          1
+        ],
+        "common_velocity_k_dependent_epsilon_trace_defects": [
+          1.1102230246251565e-16,
+          0,
+          1.1897281688901667e-07
+        ],
+        "constitutive_modification": [
+          0,
+          0,
+          0
+        ],
+        "coupled_norms": [
+          0.029823713540909486,
+          0.015456443403983368,
+          1.6769806744346773e-05,
+          6.853340697758119e-06,
+          1.0359714007607947e-15,
+          1.8712999681907012e-15,
+          0,
+          4.9759461487927275e-05
+        ],
+        "energy": [
+          55.21023759853264,
+          0.00017500725106503985,
+          0.0015189505007813403,
+          2.8233199361307924e-05,
+          -5.202733631700976e-05,
+          0,
+          0.0016701636148906784,
+          55.208567434917754,
+          4.875330041900086,
+          55.21022879558989,
+          0,
+          8.802942751628962e-06
+        ],
+        "inner_zero_covariance": [
+          0,
+          0,
+          0
+        ],
+        "interface": [
+          0.25000000000000006,
+          -0.00040132176180728783,
+          0.00031729704103409146,
+          0.00032159360472853494,
+          0.00071376848600334,
+          8.641127128262879e-06,
+          -4.1597801902382504e-05,
+          6.444517004354265e-05
+        ],
+        "interface_inner": [
+          20,
+          0.018730694426461466,
+          0.0023852725411089484,
+          0.00668361546358733,
+          0,
+          0
+        ],
+        "interface_outer": [
+          20,
+          0.018730694426461466,
+          0.0023853907049850957,
+          0.0070263511641790915,
+          0,
+          0
+        ],
+        "mass_volume": [
+          3000,
+          2.8597245499299052e-05,
+          8.858840861962092e-09,
+          -4.066118040435295e-06,
+          0,
+          0
+        ],
+        "momentum_k_load_and_boundary_reaction": [
+          38.90247440259395,
+          -0.019937269772156836,
+          0.06846019852306956,
+          38.90246764654492,
+          -0.01995298798065627,
+          0.06846025006178892
+        ],
+        "native_inner_covariance_tensor_row_major": [
+          0.011535487585773602,
+          0,
+          -0.005528543788890442,
+          0,
+          0.01248653894599155,
+          0,
+          -0.005528543788890442,
+          0,
+          0.012884783940134202
+        ],
+        "native_inner_covariance_witness_gradient_row_major": [
+          0.03726723425741325,
+          0,
+          0.43897147386662,
+          0,
+          0,
+          0,
+          -0.005696163822940289,
+          0,
+          -0.01560535015181015
+        ],
+        "native_inner_minimum_geometry_element_side_block": [
+          15,
+          15,
+          -1,
+          2
+        ],
+        "native_k_inner_outer_shared_interface_constant_test": [
+          -1.3287760890593141e-08,
+          -2.345718562667201e-08,
+          -1.4793772841027603e-08
+        ],
+        "native_k_inner_outer_shared_interface_dual": [
+          1.1654492642651862e-05,
+          1.2030702501239489e-05,
+          9.018761332687307e-06
+        ],
+        "native_k_inner_outer_shared_interface_max_row": [
+          1.3905482111330972e-09,
+          7.49548076379761e-09,
+          9.065825381979312e-09
+        ],
+        "native_k_inner_outer_shared_interface_row_counts": [
+          144,
+          120,
+          6
+        ],
+        "native_outer_covariance_tensor_row_major": [
+          0.001953969176766312,
+          0,
+          -0.0013338261492140718,
+          0,
+          -1.1619021963040614e-05,
+          0,
+          -0.0013338261492140718,
+          0,
+          0.001748242152130075
+        ],
+        "native_outer_covariance_witness_gradient_row_major": [
+          0.023234556207862692,
+          0,
+          0.03501744169910265,
+          0,
+          0,
+          0,
+          -0.027790674578919657,
+          0,
+          0.0003425632494283399
+        ],
+        "native_outer_isotropic_production_work_maximum": [
+          0.0006442098155521317
+        ],
+        "native_outer_isotropic_production_work_witness": [
+          0.25,
+          0,
+          0.4,
+          -0.0006442098155521317,
+          17,
+          1
+        ],
+        "native_outer_minimum_geometry_element_side_block": [
+          24,
+          24,
+          0,
+          2
+        ],
+        "native_raw_divergence_maximum_witness": [
+          0.125,
+          0,
+          0.01,
+          -0.08327684497256231,
+          3,
+          0,
+          0
+        ],
+        "native_raw_divergence_range": [
+          -0.08327684497256231,
+          0.06566273133481798
+        ],
+        "outer_constitutive_range": [
+          1.3788346874796418,
+          0.0015242756432400008,
+          1.0011129416372886,
+          5.7733195208253144e-05,
+          1,
+          0.9983666847482479,
+          1,
+          1.3753992016742123
+        ],
+        "outer_tangent_diagnostic_available": [
+          0
+        ],
+        "physical_sample_K": [
+          16,
+          0.01873114883537952,
+          0.0023853593421370185,
+          0.006705364661856612,
+          0,
+          0
+        ],
+        "physical_sample_outer": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "prescribed_source_inner": [
+          10240,
+          0.018731276662037145,
+          0.0023863011128821988,
+          0.0067078034081679535,
+          0,
+          0
+        ],
+        "r4_outer_gradient_witness": [
+          0.125,
+          0,
+          4.072146166463346,
+          0,
+          0,
+          -1.3788346874796418,
+          22,
+          0
+        ],
+        "reconstruction_dense": [
+          3838,
+          2.8596247976198883e-05,
+          8.834411828796305e-09,
+          -1.1619021963040614e-05,
+          0,
+          0
+        ],
+        "reconstruction_native": [
+          1920,
+          2.8596097217339554e-05,
+          8.834482942018118e-09,
+          -1.1619021963040614e-05,
+          0,
+          0
+        ],
+        "roughness": [
+          0.00013898194226457327,
+          0,
+          0,
+          5.202733631700976e-05,
+          0
+        ],
+        "scalar_minimum_point_0": [
+          0.25,
+          0,
+          0.4
+        ],
+        "scalar_minimum_point_1": [
+          0.25,
+          0,
+          7.732563966432853
+        ],
+        "scalar_minimum_point_2": [
+          0.109375,
+          0,
+          6.25
+        ],
+        "source_volume_inner": [
+          9216,
+          0.01873116711494493,
+          0.0023854938087198023,
+          0.006705713646793271,
+          0,
+          0
+        ],
+        "source_volume_outer": [
+          1400,
+          2.8597245499299052e-05,
+          8.858840861962092e-09,
+          -4.066118040435295e-06,
+          0,
+          0
+        ],
+        "strong_continuity": [
+          0.002378301432978699,
+          0.007768113229013912,
+          -4.708550274668249e-18,
+          -9.567230728587575e-18,
+          -2.4424906595034096e-15
+        ],
+        "wall_cutoff_activity": [
+          31,
+          31,
+          0,
+          0
+        ],
+        "wall_cutoff_limiting_point": [
+          0.25,
+          0,
+          0.4
+        ],
+        "wall_cutoff_required_budget": [
+          1,
+          3.8441571862470987,
+          0
+        ]
+      },
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/RANSPreservationProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/failures-v1/A93-Zminus-P3-0.002/case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/failures-v1/A93-Zminus-P3-0.002/witness-basis-request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/failures-v1/A93-Zminus-P3-0.002/witness-basis.json"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 5.046726019001653,
+        "process_cpu_seconds": 4.539147999999999,
+        "peak_RSS_KiB": 164572,
+        "actual_mapped_files": {
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/RANSPreservationProbe": "43ecbaed68ecc2e6424e05df1b8090646f58cf9914ca82abd2758f6862d17475",
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_ess_singleton.so": "9e36ea68ba070279c6c964e08c5af596f774c5944c3aad1743e85b573af3ec1a",
+          "/usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0": "458dd70122be79952cd517f469e3714ee6a972c0d96cd67954b1e37fb4830b27",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_orte.so": "9a9fe6e13bb9b5db1acf7aa10485c9286cb03a9e1b66c1b244142c81f2aac054",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_slurm.so": "de18ee69766665d6c1063e714806e6449caa48a63f730749dca0ce311d8a2b48",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_flux.so": "3d6050004330107889696420382517358e08664a9be3f90cd1f71acdbdceedc1",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_ompi.so": "982d5490f7e0465af0228c7c27b416f51095b766f5d37c22d1c1ab6439780ff0",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_reachable_netlink.so": "5a606b631dfea7dbed5c0ccd81f84bc26f25080872068d0a9e382fbcf90fdda8",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_shmem_mmap.so": "47b116b3a5eff9c50f16dbbe3fd912efd10bcdfb18791edb2a19adffb2ed3317",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_jsm.so": "452bf398f565aa69bfe2155a97f8fa5af0659ddff5fcb8b30ee36603bb66615b",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+          "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": "7cc817ff1841b59516d684f357bc0c3fc2cc52c3fa9b4ffb8ce8bdc215f02915",
+          "/usr/lib/x86_64-linux-gnu/libresolv.so.2": "7230adfc1d3676f2485bec78f2d5c916d6becb15bc554ff95901f46800215194",
+          "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900",
+          "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf",
+          "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f",
+          "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25": "344870a9ff3cfee1df28f518e9e93073df8d0522a288f016f06fdacbfa49eed8",
+          "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1": "3160dcc37106767e1afb341ee3cb3cd25bb79246691ffd137131f37a23597288",
+          "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1": "c62a2a983e0d9c1de76ab2f4cf21a4d81da007af9e0351b8c04740459d231d3f",
+          "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3": "9386cfdeb2f894869cdd0190b4f110a65ec0c257ac50ddefaefd6cbaeaab3c35",
+          "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358",
+          "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0": "883ecfef9c8d3a2f17a1b8a3116e9e32d272f1c43e2088bf7837b98d2c50f5e2",
+          "/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1": "4dc20a901c6951e678e216e959da2534bcef7053e6efdf1492509baf142282b0",
+          "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4": "47d56894948545036bd49aed718393bf6edb93fce222874dad30b59f085ad9ee",
+          "/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a",
+          "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5",
+          "/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.15": "3d6d7558e2764fa0a2ee3ee9bf1754bff872bed23148d673bdb648f737ec39ff",
+          "/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.15": "f7c5ddb238bc12a13c4d4b4f8e6ea8af61f8bd144651728936d31b65bec7bbdc",
+          "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2": "e367a86cae4e1e81d9bba594a9daea3b90eb50fadb62bb45e38a322184484867",
+          "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0": "dcadda7f0f82c54ca157b6ca0a5fdc8e1128db4d778109c8e197e2f84c2ac9ba",
+          "/usr/lib/x86_64-linux-gnu/libnettle.so.8.4": "2d3bda6cfa2d477cd91b8178843d19e081b911a124f04b4be06b6e32c9fabc73",
+          "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5",
+          "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7": "e7162733430abba6f51e4a5186b9c61a6c706a63d4461182d5f66ce55f35507e",
+          "/usr/lib/x86_64-linux-gnu/librtmp.so.1": "2401c4fc99c7b93e79648071224a6eb230dcb800184ccacc8e1854e33fc61445",
+          "/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a",
+          "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2",
+          "/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0": "1dc53d91b473c3ebcc65b196c83baa7b1a6c4009f590bcf5c640cf35ba343d6f",
+          "/usr/lib/x86_64-linux-gnu/pmix2/lib/libpmix.so.2.5.2": "651d3664e655fa125fe81101a00fea58dd0f3f5adf3aac84d7f59c93c995203a",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56506/pmix_dstor_ds21_56506/initial-pmix_shared-segment-0": "d4560ed9439aa040dc4bc145a906bdf33a23a3c4e0a5a20f2db4f071d6dd1a22",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56506/pmix_dstor_ds21_56506/smlockseg-2680815617": "a2df0db3b28431f048fc4dd6c6f67596babc8847df30e18ff874f39efd2a5f83",
+          "/usr/lib/x86_64-linux-gnu/pmix2/lib/pmix/mca_pcompress_zlib.so": "1132fb7e3ae88daab3bf16d3fc67637ef641eab0480735ea047233b89f19ef4a",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pmix_ext3x.so": "a44d4cc1c9f9fde978a0d519b8305f609138283cc20694be4d1eb3105aab5722",
+          "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56506/pmix_dstor_ds12_56506/initial-pmix_shared-segment-0": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56506/pmix_dstor_ds12_56506/dstore_sm.lock": "e20ed79c05591f80d16c43795665a54df6c037c063714e6ac243d082e3b1dba6",
+          "/usr/lib/x86_64-linux-gnu/libicudata.so.70.1": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8",
+          "/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a",
+          "/usr/local/cuda-12.5/targets/x86_64-linux/lib/libOpenCL.so.1.0.0": "1552ec44b469da72e585a29ac7fd2aa98d7f99b9362b7fb8f3dcb2d6b603d3fb",
+          "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56506/pmix_dstor_ds21_56506/smdataseg-2680815617-0": "390c125f9f3dc7350621d2b207acf6307aeb808a9a0fa78f58333447ecc10170",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56506/pmix_dstor_ds21_56506/smseg-2680815617-0": "8b3a2ed339840e5cb41d38d5109e510024f4f2eaa4e2c4b3bb870b48402ae4f5",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_xml_libxml.so": "d1f058e867eb4b7c619ebb268b75f68c4393bcce8b339901e856d1a44c125506",
+          "/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06",
+          "/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d",
+          "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46",
+          "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064",
+          "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d",
+          "/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465",
+          "/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98",
+          "/usr/lib/x86_64-linux-gnu/libpthread.so.0": "fbed9505adacada2abb37c6b43be2df6de81e742712c6025694ba48de62c7e78",
+          "/usr/lib/x86_64-linux-gnu/libdl.so.2": "3eaaa4aefd9c28f3867c96a427c3cbec9191cb61c4c9d0a2cb4a765d66064499",
+          "/usr/lib/x86_64-linux-gnu/libpciaccess.so.0.11.1": "f1ca739f568225439e4a7957e09dd483359bf715f01d13396c436c74076cca53",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_pci.so": "e7b1dd3d2f88011fed33735e83b67ea82495b5fd60676f8b7a64f3df27abd0e6",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_state_app.so": "9da7b32c694270f7f811f6962adfb6c36bdb91f6adc62c6fa121ea91427ef7bd",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_opencl.so": "bc26e4d7970e376af2643d5be346adcb14cc4de4a2b297ff9927386e2f82d678",
+          "/usr/lib/x86_64-linux-gnu/libXNVCtrl.so.0.0.0": "331363807c5e2d1d0166d08d8e99740dc083c7d84590d8e29c7d783aa2da1284",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_errmgr_default_app.so": "6231acb4ce2eb2281bb7051b4950c0c3f0c6a8e10e6f122acfe3c15f16b0855a",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_gl.so": "f3758a7666bd979a2eacdd92b6264e2f160cd58e0bbbc88f82492121d07e2df5",
+          "/usr/lib/x86_64-linux-gnu/libcuda.so.555.42.02": "7916043d99f754caedfe4f343869da51c31cba661ed1867d68ba1976951f808e",
+          "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.555.42.02": "71cc9fa5f8377db1fd177d9fc6cb45ca97586f81c2f30797194905e4ea825604",
+          "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17",
+          "/usr/lib/libpsm1/libpsm_infinipath.so.1.16": "bb44c7e69c8c93eb7c0392485636170443ef29181abfeb53bf7c7e1e1c388208",
+          "/usr/lib/x86_64-linux-gnu/libinfinipath.so.4.0": "ba9d11f98daf1ed203b1c1d3c0d62c5709f13e06cc8bfa186154dde69d868b0f",
+          "/etc/ld.so.cache": "3195d708e1fb33877a298168d35b39602b0ca215c34214f59057cb579d01e5f7",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm.so": "77fcec2b00102887a50f55c23575761655359a610890258166d6686d6b79a000",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_cm.so": "78bbef9dbecc1e11d7c36425d176b653e32eada4d33e578a27b4ed99b7bed392",
+          "/usr/lib/x86_64-linux-gnu/libmca_common_monitoring.so.50.20.0": "04d8c353ddc54d1da3e0950d7578de424ec28a7d55370810c4ad3011c32324ab",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_ob1.so": "0ad5a81720593262e7c09ba98d3153527b18011ef68dba40984806c897beb880",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_monitoring.so": "3904969c7ac96b24f637e36e0eac9d6daa2002fd590a39aa66ffaa28ca725a9b",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_op_avx.so": "8240052b353a7ebfa9f894163c2a491fd1f47a742cca9490c4d4a7de76259e7b",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_sm.so": "b23fd800bdfe2daff3fe74cb99dc1de9c19f437352bce579cef7d9585037d0df",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_tcp.so": "c8c2cff0d5c056f4acf9400bc28614a15881404ccd7954c419636c2aa33b6887",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_self.so": "052b8eb02b650de08fbdd0fe1724a7da86c29cbaf4a0ce8a5e89717cde49aee2",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_bml_r2.so": "4a40fd9fea463b44580aac7303d4176806a39295a61a2a344a48055d96ff457f",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mpool_hugepage.so": "286f789d85c8c499ad670678ee957e3e84f122c6c3e7647b0ac81ac1874cfa08",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_rcache_grdma.so": "81066b828f2f070e0a9f8d9bd403c5c977f71a8957cc956cf37efb09862665b0",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_bucket.so": "840f38ddad79015cd9b462034f6050d496040c34ae65d28cd63b648ada9a60e9",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_basic.so": "73dd820c7ce28b37ecc288e106008c7e25eb444910ceecc9c39e751c34494590",
+          "/usr/lib/x86_64-linux-gnu/librt.so.1": "5f20d34fb3bb4d84b4edeb6ca11fa5b48c705207253741619acab7cc758185fb",
+          "/usr/lib/x86_64-linux-gnu/libpsm2.so.2.2": "bc6e727a5385af004c2eac85e70681905790798529cb9ec90b789c9915a68f19",
+          "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": "3582bce922d99959ee3eb6b7d686c0b99e14c2135616ad4d9d608b2118a7e78c",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm2.so": "abdf7c98aadd279811dfd3821bc44a4e2da5f2880bd03fee268fc323e64cac69",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_sm.so": "1e808a24af4ba80f1727cb5df31f25c2bac49632db11a7ee57a23d7d1ad11e7f",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_rdma.so": "7ae12dfa0db4604fd69ea793e112a067817fbb24e6a9b89fe1b81bedb4147cd0",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_adapt.so": "b9f1c8a26f7b8ad1529f085f26885c229f375246d3bab7e9d8350eb3d10b0d75",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_han.so": "362a195703a4d7b8d3851d43a8a89520adf778ff1e8fd6b00b751f8e31476c76",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_tuned.so": "54b234d1dff42ef92f4437be095d557d990153b960702f2edb98c78649ac5b3a",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_libnbc.so": "7c471ad91a2538e0e315af2697fde25747b4b4d42f3be4a0a588976b2f2fa726",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sync.so": "c14550b0cdb5407c5ea840dae1727db0bc608aac2f30d6a3e72a9841f7868b25",
+          "/usr/lib/x86_64-linux-gnu/libmca_common_sm.so.40.30.0": "738da2e4239bca8526a41eac96cd6034cc2cf87182f60cbb15d4decd38a01ba1",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_inter.so": "6b5e029e8acf72559f6dd8acc6e828dd72af8eb3d69fe98e0b0a94e96e8bec46",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_self.so": "61826f87d8596e8b88146cf9a14043582d378fe277d99ab081b74f714bd528e9",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_basic.so": "4f7a2151e1b566de99307a8faac82456088a5debab1bad6db2a0bd71802cb2a3",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sm.so": "756d7c20c69ced45843f3200f4582deaae403243f123749236801a8ffc4dd248"
+        }
+      },
+      "stopping": "native original covariance gate, no clipping or retry; diagnostic intermediate values do not add a rejection rule",
+      "native_audit_epsilon_minus_raw_rejected_field": 0.0,
+      "epsilon_scope": "native audit may include the declared refreshed dependent trace; raw frozen-stage field retained separately, never repaired",
+      "predictor_gradient_increment": [
+        [
+          -0.0003676547362498894,
+          0.0,
+          6.492552393707468e-05
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -0.0006576366450868204,
+          0.0,
+          -4.746106719868851e-05
+        ]
+      ],
+      "pressure_mass_correction_gradient_increment": [
+        [
+          1.3255243231924396e-05,
+          0.0,
+          -7.076803783950814e-08
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          3.3491037147032054e-07,
+          0.0,
+          4.444914918889063e-07
+        ]
+      ],
+      "minimal_native_reproducer": {
+        "status": "expected_physical_rejection_reproduced",
+        "unchanged_last_accepted_state_history": true,
+        "rejected_state_bitwise_equal": true,
+        "report_sha256": "3219d7a45302043b9422f3d2b366eba1aef8d8154350d3a563ed926401cdaa8e",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 8.863151428002311,
+          "process_cpu_seconds": 8.335465000000001,
+          "peak_RSS_KiB": 199744,
+          "actual_mapped_files": {
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/IncNavierStokesSolver": "858c9cdb8f343d0f68f109d4992123021f4d87d6e1a32d9cf4a7cb902f11984b",
+            "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_ess_singleton.so": "9e36ea68ba070279c6c964e08c5af596f774c5944c3aad1743e85b573af3ec1a",
+            "/usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0": "458dd70122be79952cd517f469e3714ee6a972c0d96cd67954b1e37fb4830b27",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_orte.so": "9a9fe6e13bb9b5db1acf7aa10485c9286cb03a9e1b66c1b244142c81f2aac054",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_slurm.so": "de18ee69766665d6c1063e714806e6449caa48a63f730749dca0ce311d8a2b48",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_flux.so": "3d6050004330107889696420382517358e08664a9be3f90cd1f71acdbdceedc1",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_ompi.so": "982d5490f7e0465af0228c7c27b416f51095b766f5d37c22d1c1ab6439780ff0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_reachable_netlink.so": "5a606b631dfea7dbed5c0ccd81f84bc26f25080872068d0a9e382fbcf90fdda8",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_shmem_mmap.so": "47b116b3a5eff9c50f16dbbe3fd912efd10bcdfb18791edb2a19adffb2ed3317",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_jsm.so": "452bf398f565aa69bfe2155a97f8fa5af0659ddff5fcb8b30ee36603bb66615b",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/usr/lib/x86_64-linux-gnu/libicudata.so.70.1": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8",
+            "/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a",
+            "/usr/local/cuda-12.5/targets/x86_64-linux/lib/libOpenCL.so.1.0.0": "1552ec44b469da72e585a29ac7fd2aa98d7f99b9362b7fb8f3dcb2d6b603d3fb",
+            "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56526/pmix_dstor_ds21_56526/smdataseg-2680029185-0": "b09e60d091c9f66320ada62a1f31800b9d42baf8063cb79184e21fb279b8f734",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56526/pmix_dstor_ds21_56526/smseg-2680029185-0": "8b3a2ed339840e5cb41d38d5109e510024f4f2eaa4e2c4b3bb870b48402ae4f5",
+            "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": "7cc817ff1841b59516d684f357bc0c3fc2cc52c3fa9b4ffb8ce8bdc215f02915",
+            "/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06",
+            "/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d",
+            "/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_xml_libxml.so": "d1f058e867eb4b7c619ebb268b75f68c4393bcce8b339901e856d1a44c125506",
+            "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46",
+            "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064",
+            "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d",
+            "/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465",
+            "/usr/lib/x86_64-linux-gnu/libpthread.so.0": "fbed9505adacada2abb37c6b43be2df6de81e742712c6025694ba48de62c7e78",
+            "/usr/lib/x86_64-linux-gnu/libdl.so.2": "3eaaa4aefd9c28f3867c96a427c3cbec9191cb61c4c9d0a2cb4a765d66064499",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_opencl.so": "bc26e4d7970e376af2643d5be346adcb14cc4de4a2b297ff9927386e2f82d678",
+            "/usr/lib/x86_64-linux-gnu/libpciaccess.so.0.11.1": "f1ca739f568225439e4a7957e09dd483359bf715f01d13396c436c74076cca53",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_pci.so": "e7b1dd3d2f88011fed33735e83b67ea82495b5fd60676f8b7a64f3df27abd0e6",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_state_app.so": "9da7b32c694270f7f811f6962adfb6c36bdb91f6adc62c6fa121ea91427ef7bd",
+            "/usr/lib/x86_64-linux-gnu/libresolv.so.2": "7230adfc1d3676f2485bec78f2d5c916d6becb15bc554ff95901f46800215194",
+            "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900",
+            "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf",
+            "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f",
+            "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25": "344870a9ff3cfee1df28f518e9e93073df8d0522a288f016f06fdacbfa49eed8",
+            "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1": "3160dcc37106767e1afb341ee3cb3cd25bb79246691ffd137131f37a23597288",
+            "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1": "c62a2a983e0d9c1de76ab2f4cf21a4d81da007af9e0351b8c04740459d231d3f",
+            "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3": "9386cfdeb2f894869cdd0190b4f110a65ec0c257ac50ddefaefd6cbaeaab3c35",
+            "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358",
+            "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0": "883ecfef9c8d3a2f17a1b8a3116e9e32d272f1c43e2088bf7837b98d2c50f5e2",
+            "/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1": "4dc20a901c6951e678e216e959da2534bcef7053e6efdf1492509baf142282b0",
+            "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4": "47d56894948545036bd49aed718393bf6edb93fce222874dad30b59f085ad9ee",
+            "/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a",
+            "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5",
+            "/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.15": "3d6d7558e2764fa0a2ee3ee9bf1754bff872bed23148d673bdb648f737ec39ff",
+            "/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.15": "f7c5ddb238bc12a13c4d4b4f8e6ea8af61f8bd144651728936d31b65bec7bbdc",
+            "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2": "e367a86cae4e1e81d9bba594a9daea3b90eb50fadb62bb45e38a322184484867",
+            "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0": "dcadda7f0f82c54ca157b6ca0a5fdc8e1128db4d778109c8e197e2f84c2ac9ba",
+            "/usr/lib/x86_64-linux-gnu/libnettle.so.8.4": "2d3bda6cfa2d477cd91b8178843d19e081b911a124f04b4be06b6e32c9fabc73",
+            "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5",
+            "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7": "e7162733430abba6f51e4a5186b9c61a6c706a63d4461182d5f66ce55f35507e",
+            "/usr/lib/x86_64-linux-gnu/librtmp.so.1": "2401c4fc99c7b93e79648071224a6eb230dcb800184ccacc8e1854e33fc61445",
+            "/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a",
+            "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2",
+            "/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0": "1dc53d91b473c3ebcc65b196c83baa7b1a6c4009f590bcf5c640cf35ba343d6f",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/libpmix.so.2.5.2": "651d3664e655fa125fe81101a00fea58dd0f3f5adf3aac84d7f59c93c995203a",
+            "/usr/lib/x86_64-linux-gnu/libXNVCtrl.so.0.0.0": "331363807c5e2d1d0166d08d8e99740dc083c7d84590d8e29c7d783aa2da1284",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_errmgr_default_app.so": "6231acb4ce2eb2281bb7051b4950c0c3f0c6a8e10e6f122acfe3c15f16b0855a",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_gl.so": "f3758a7666bd979a2eacdd92b6264e2f160cd58e0bbbc88f82492121d07e2df5",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56526/pmix_dstor_ds21_56526/initial-pmix_shared-segment-0": "9011788149915bb10cf0d4831db5b63f28b195e9e4b7a3d2449feab4ff1e13e6",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56526/pmix_dstor_ds21_56526/smlockseg-2680029185": "a2df0db3b28431f048fc4dd6c6f67596babc8847df30e18ff874f39efd2a5f83",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56526/pmix_dstor_ds12_56526/initial-pmix_shared-segment-0": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/pmix/mca_pcompress_zlib.so": "1132fb7e3ae88daab3bf16d3fc67637ef641eab0480735ea047233b89f19ef4a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pmix_ext3x.so": "a44d4cc1c9f9fde978a0d519b8305f609138283cc20694be4d1eb3105aab5722",
+            "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112/tmp/ompi.jay-Super-Server.1000/pid.56526/pmix_dstor_ds12_56526/dstore_sm.lock": "e20ed79c05591f80d16c43795665a54df6c037c063714e6ac243d082e3b1dba6",
+            "/usr/lib/x86_64-linux-gnu/libcuda.so.555.42.02": "7916043d99f754caedfe4f343869da51c31cba661ed1867d68ba1976951f808e",
+            "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.555.42.02": "71cc9fa5f8377db1fd177d9fc6cb45ca97586f81c2f30797194905e4ea825604",
+            "/usr/lib/x86_64-linux-gnu/librt.so.1": "5f20d34fb3bb4d84b4edeb6ca11fa5b48c705207253741619acab7cc758185fb",
+            "/usr/lib/x86_64-linux-gnu/libinfinipath.so.4.0": "ba9d11f98daf1ed203b1c1d3c0d62c5709f13e06cc8bfa186154dde69d868b0f",
+            "/usr/lib/libpsm1/libpsm_infinipath.so.1.16": "bb44c7e69c8c93eb7c0392485636170443ef29181abfeb53bf7c7e1e1c388208",
+            "/etc/ld.so.cache": "3195d708e1fb33877a298168d35b39602b0ca215c34214f59057cb579d01e5f7",
+            "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm.so": "77fcec2b00102887a50f55c23575761655359a610890258166d6686d6b79a000",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_cm.so": "78bbef9dbecc1e11d7c36425d176b653e32eada4d33e578a27b4ed99b7bed392",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_op_avx.so": "8240052b353a7ebfa9f894163c2a491fd1f47a742cca9490c4d4a7de76259e7b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_ob1.so": "0ad5a81720593262e7c09ba98d3153527b18011ef68dba40984806c897beb880",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_monitoring.so.50.20.0": "04d8c353ddc54d1da3e0950d7578de424ec28a7d55370810c4ad3011c32324ab",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_monitoring.so": "3904969c7ac96b24f637e36e0eac9d6daa2002fd590a39aa66ffaa28ca725a9b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_sm.so": "b23fd800bdfe2daff3fe74cb99dc1de9c19f437352bce579cef7d9585037d0df",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_tcp.so": "c8c2cff0d5c056f4acf9400bc28614a15881404ccd7954c419636c2aa33b6887",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_self.so": "052b8eb02b650de08fbdd0fe1724a7da86c29cbaf4a0ce8a5e89717cde49aee2",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_bml_r2.so": "4a40fd9fea463b44580aac7303d4176806a39295a61a2a344a48055d96ff457f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mpool_hugepage.so": "286f789d85c8c499ad670678ee957e3e84f122c6c3e7647b0ac81ac1874cfa08",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_rcache_grdma.so": "81066b828f2f070e0a9f8d9bd403c5c977f71a8957cc956cf37efb09862665b0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_bucket.so": "840f38ddad79015cd9b462034f6050d496040c34ae65d28cd63b648ada9a60e9",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_basic.so": "73dd820c7ce28b37ecc288e106008c7e25eb444910ceecc9c39e751c34494590",
+            "/usr/lib/x86_64-linux-gnu/libpsm2.so.2.2": "bc6e727a5385af004c2eac85e70681905790798529cb9ec90b789c9915a68f19",
+            "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": "3582bce922d99959ee3eb6b7d686c0b99e14c2135616ad4d9d608b2118a7e78c",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm2.so": "abdf7c98aadd279811dfd3821bc44a4e2da5f2880bd03fee268fc323e64cac69",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_sm.so": "1e808a24af4ba80f1727cb5df31f25c2bac49632db11a7ee57a23d7d1ad11e7f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_rdma.so": "7ae12dfa0db4604fd69ea793e112a067817fbb24e6a9b89fe1b81bedb4147cd0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_adapt.so": "b9f1c8a26f7b8ad1529f085f26885c229f375246d3bab7e9d8350eb3d10b0d75",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_han.so": "362a195703a4d7b8d3851d43a8a89520adf778ff1e8fd6b00b751f8e31476c76",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_tuned.so": "54b234d1dff42ef92f4437be095d557d990153b960702f2edb98c78649ac5b3a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_libnbc.so": "7c471ad91a2538e0e315af2697fde25747b4b4d42f3be4a0a588976b2f2fa726",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_basic.so": "4f7a2151e1b566de99307a8faac82456088a5debab1bad6db2a0bd71802cb2a3",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sync.so": "c14550b0cdb5407c5ea840dae1727db0bc608aac2f30d6a3e72a9841f7868b25",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_inter.so": "6b5e029e8acf72559f6dd8acc6e828dd72af8eb3d69fe98e0b0a94e96e8bec46",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_self.so": "61826f87d8596e8b88146cf9a14043582d378fe277d99ab081b74f714bd528e9",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sm.so": "756d7c20c69ced45843f3200f4582deaae403243f123749236801a8ffc4dd248",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_sm.so.40.30.0": "738da2e4239bca8526a41eac96cd6034cc2cf87182f60cbb15d4decd38a01ba1"
+          }
+        }
+      }
+    }
+  ]
+}
