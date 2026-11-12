@@ -24,7 +24,7 @@ def main():
         control=json.loads((r/'controls-v1/results.json').read_text());require(control['implementation']=='pass','common_implementation_controls_not_admitted')
     for model,height,degree in CASES:
         name=label(model,height,degree);row={};result['cases'][name]=row;initial=ir/name
-        targets=[0.] if a.phase=='initial' else [.008,.02] if height==6 and degree==3 else [.008]
+        targets=[0.] if a.phase=='initial' else [.008,.02] if height==6 else [.008]
         parent=None
         for target in targets:
             if a.phase=='evolve':

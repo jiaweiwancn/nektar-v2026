@@ -94,7 +94,7 @@ def main():
     for model,h,degree in CASES:
         key=label(model,h,degree);ini_file=a.initial_root/key/'results.json';ini=read(ini_file)
         require(ini['case']['model']==model and ini['case']['H_mm']==h and ini['case']['degree']==degree,'foreign_initial_case')
-        export(key+'-initial.json',ini_file);row=dict(initialization=ini['status'],slots={dt:v.get('slots') for dt,v in ini['members'].items()},milestones={},required_times=[.008,.02] if h==6. and degree==3 else [.008]);decision['cases'][key]=row
+        export(key+'-initial.json',ini_file);row=dict(initialization=ini['status'],slots={dt:v.get('slots') for dt,v in ini['members'].items()},milestones={},required_times=[.008,.02] if h==6. else [.008]);decision['cases'][key]=row
         representations[key]={}
         for dt,v in ini['members'].items():
             folder=a.initial_root/key/dt;packet=read(folder/'initial.json')
