@@ -91,8 +91,9 @@ def inventory(reports,c,dense=False):
     v['sha256']=digest(v);return v
 
 
-def replay(root,height,coarse=False):
-    c=configuration(height);r,rp,xml=record(root,height,coarse);out=root/'replays'/('coarse'if coarse else 'refined')/f'H{height:g}mm';out.mkdir(parents=True)
+def replay(root,height,coarse=False,version='v2'):
+    if not version.replace('-','').isalnum():raise ValueError('simple immutable replay version required')
+    c=configuration(height);r,rp,xml=record(root,height,coarse);out=root/('replays-'+version)/('coarse'if coarse else 'refined')/f'H{height:g}mm';out.mkdir(parents=True)
     before=identity(rp);stages,meta=reconstruct(r,xml)
     functions=Functions(xml,r);g=np.polynomial.legendre.leggauss(16)[0];xml_errors=dict(U=0.,k=0.,epsilon=0.)
     for e in r['fields'][0]['mesh']:
@@ -113,8 +114,12 @@ def replay(root,height,coarse=False):
         for owner in owners(r,p):
             native=evaluate(r,r['state'],p,owner);final=evaluate(r,stages['dependent_epsilon_lift'],p,owner)
             grad_errors.append(float(np.max(abs(np.asarray(native['G'])-final['G']))))
-            field_errors.append(abs(native['U'][0]-final['U'][0]))
+            field_errors.extend([float(np.max(abs(np.asarray(native['U'])-final['U']))),
+                abs(native['k']-final['k'])/c.K,abs(native['pi']-final['pi'])/c.u_tau**2,
+                float(np.max(abs(np.asarray(native['R'])-final['R'])))/c.K])
             if native['epsilon'] is not None:field_errors.append(abs(native['epsilon']-final['epsilon'])/c.epsilon(c.H))
+            if native['principal']is not None:
+                assert max(abs(native['principal'][key]-final['principal'][key])for key in ('in_plane','transverse'))<2e-11
             for name,s in dict(stages,native=np.asarray(r['state'])).items():
                 v=evaluate(r,s,p,owner);rows.append(dict(stage=name,**v))
     assert max(grad_errors)<2e-11 and max(field_errors)<2e-11,'final field/gradient replay differs; no attribution allowed'
@@ -138,7 +143,7 @@ def replay(root,height,coarse=False):
     save(out/'stage-rows.json',rows);save(out/'witnesses.json',witness)
     save(out/'result.json',dict(status='PASS',reconstruction=identity(out/'reconstruction.json'),stages=identity(out/'reconstructed-stages.npz'),
         inventory=inv,field_replay_max=max(field_errors),physical_G_replay_max=max(grad_errors),witnesses=witness,
-        stage_label='passive reconstruction only',producer=before))
+        stage_label='passive reconstruction only',replay_version=version,producer=before))
     print(f'PASS: {height:g}mm '+('H5'if coarse else 'H6')+' final coefficients/fields/gradients replay and compiled witnesses',flush=True)
 
 
@@ -184,10 +189,10 @@ def compare(root,height):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('import','generate','replay','observe','compare'),required=True)
-    p.add_argument('--height-mm',type=float);p.add_argument('--coarse',action='store_true');p.add_argument('--observer',type=Path)
+    p.add_argument('--height-mm',type=float);p.add_argument('--coarse',action='store_true');p.add_argument('--observer',type=Path);p.add_argument('--replay-version',default='v2')
     a=p.parse_args()
     if a.mode=='import':import_h5(a.root)
     elif a.mode=='generate':generate(a.root)
-    elif a.mode=='replay':replay(a.root,a.height_mm,a.coarse)
+    elif a.mode=='replay':replay(a.root,a.height_mm,a.coarse,a.replay_version)
     elif a.mode=='observe':assess(a.root,a.height_mm,a.observer)
     else:compare(a.root,a.height_mm)

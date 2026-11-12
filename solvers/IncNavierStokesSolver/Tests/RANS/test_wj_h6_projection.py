@@ -92,6 +92,7 @@ class ProjectionChecks(unittest.TestCase):
                 self.assertAlmostEqual(eps,(k/(81/(2*np.sqrt(143))))**1.5/(.381917863546733*H),places=12)
             self.assertNotAlmostEqual(values(r,dv,2,1,[8.],[H])[0][0],K,places=10)
             r.update(state=dv.tolist(),accepted_states=[dv.tolist()]);_,meta=reconstruct(r,p);self.assertEqual(meta['status'],'PASS')
+            json.dumps(meta,allow_nan=False)
             r.update(failure='native startup exit',checkpoint='',accepted_states=[],physical_range_events=[dict(state=dv.tolist(),alpha=0,time=0)])
             _,meta=reconstruct(r,p);self.assertIn('uncommitted',meta['native_lineage'])
             r['checkpoint']='invented accepted checkpoint'

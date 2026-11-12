@@ -153,7 +153,7 @@ def reconstruct(report,xml):
     errors=[];native=np.asarray(report['state'])
     for b in range(6):
         a,z=offset[b:b+2];error=float(np.max(abs(final[a:z]-native[a:z])))
-        errors.append(dict(block=b,absolute_max=error,scale=float(scales[b]),scaled=error/scales[b],passed=error<=2e-11*scales[b]+1e-15))
+        errors.append(dict(block=b,absolute_max=error,scale=float(scales[b]),scaled=float(error/scales[b]),passed=bool(error<=2e-11*scales[b]+1e-15)))
     lineage='uncommitted native startup candidate'if report['failure']else 'accepted native CP0'
     if report['failure']:
         ev=report['physical_range_events'][-1];assert vector_hash(ev['state'])==vector_hash(native)and ev['alpha']==0 and ev['time']==0
