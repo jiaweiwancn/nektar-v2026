@@ -86,4 +86,12 @@ class OwnedPhysicalPoints(unittest.TestCase):
             for bad in ([float('nan')],[.2],[20.],knots[::-1],[.8,.9,1.]):
                 with self.assertRaises(ValueError):case_xml(d/'invalid',steps=0,extra_physical_z=bad)
 
+    def test_partial_failure_preserves_original_reason_and_counts(self):
+        from wj_h4_study import attempt_counts,COUNTERS
+        r=dict(failure='original principal/input exit',pimple_attempts=[dict(zip(COUNTERS,[1,1,0,0,0]))])
+        v=attempt_counts(r);self.assertEqual(v['native_failure'],r['failure']);self.assertEqual(v['partial'],[[1,1,0,0,0]])
+        self.assertTrue(v['no_extra_solves']);self.assertEqual(v['complete'],0)
+        r['failure']='';self.assertFalse(attempt_counts(r)['success_counts_valid'])
+        r['pimple_attempts'][0][COUNTERS[0]]=2;self.assertFalse(attempt_counts(r)['no_extra_solves'])
+
 if __name__=='__main__':unittest.main()

@@ -169,6 +169,22 @@ def aligned(step,dt,recorded):
     return target
 
 
+def extend_scan(report,state,old,old_inventory,new_inventory):
+    """Evaluate only new physical points; retain every old owner/result."""
+    n=len(old_inventory['points'])
+    if [v['physical']for v in old_inventory['points']]!=[v['physical']for v in new_inventory['points'][:n]]:
+        raise ValueError('inventory is not a physical-coordinate prefix extension')
+    if old['state_sha256']!=vector_hash(state):raise ValueError('stale state for incremental scan')
+    addition=scan(report,state,dict(new_inventory,points=new_inventory['points'][n:]))
+    minima=[v for v in (old['minimum'],addition['minimum']) if v is not None]
+    failures=old['failures']+addition['failures']
+    result=dict(old,rows=old['rows']+addition['rows'],failures=failures,
+        minimum=min(minima,key=lambda v:v['margin']) if minima else None,inventory_sha256=new_inventory['sha256'],
+        status='PASS' if not failures else 'FAIL' if any(v['category']!='principal_sign_unresolved' for v in failures) else 'UNRESOLVED')
+    result.pop('compiled_in_plane_replay',None)
+    return result
+
+
 def pair_rows(a,b,step_a,dt_a,time_a,step_b,dt_b,time_b):
     ta=aligned(step_a,dt_a,time_a);tb=aligned(step_b,dt_b,time_b)
     if ta!=tb:raise ValueError('different intended times; no interpolation')

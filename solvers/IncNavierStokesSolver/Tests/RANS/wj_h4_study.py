@@ -6,11 +6,12 @@ import os
 from pathlib import Path
 import subprocess
 import time
+import xml.etree.ElementTree as ET
 import numpy as np
 from numpy.testing import assert_allclose
 from run_wj_h4 import load,save,sha,THREADS
-from wj_h3_analysis import actual,identity,state_context
-from wj_h4_points import inventory,scan,owners,evaluate,owner_point,vector_hash,aligned
+from wj_h3_analysis import actual,identity,state_context,outer_loads
+from wj_h4_points import inventory,scan,owners,evaluate,owner_point,vector_hash,aligned,extend_scan
 from validate_wj1 import Probe
 
 PARENT=actual('/media/jay/新加卷/nektar-v2026-runs/wj-h3-20261112')
@@ -57,10 +58,11 @@ def assess_report(root,label,rp,inv,first_step=None):
         state,context=bind(report,step,rejected);packet=scan(report,state,inv)
         # Independently replay every state's limiting outer action, including
         # accepted states newly found inadmissible by the expanded inventory.
-        w=packet['minimum']['row'];G=np.array(w['G']);h=np.outer(w['principal']['polarization'],w['principal']['xi'])
-        c=probe.closure(w['k'],w['epsilon'],G);d=probe.closure(w['k'],w['epsilon'],G,(0,0,h))
-        replay=float(-np.sum(h*d['R'])/c['scalar'][1]);assert_allclose(replay,w['principal']['in_plane'],rtol=2e-9,atol=2e-11)
-        packet['compiled_in_plane_replay']=replay
+        if packet['minimum'] is not None:
+            w=packet['minimum']['row'];G=np.array(w['G']);h=np.outer(w['principal']['polarization'],w['principal']['xi'])
+            c=probe.closure(w['k'],w['epsilon'],G);d=probe.closure(w['k'],w['epsilon'],G,(0,0,h))
+            replay=float(-np.sum(h*d['R'])/c['scalar'][1]);assert_allclose(replay,w['principal']['in_plane'],rtol=2e-9,atol=2e-11)
+            packet['compiled_in_plane_replay']=replay
         if packet['status']!='PASS' and not rejected and earliest is None:earliest=context['time']
         packet.update(context,producer=identity(rp),prefix_qualified=earliest is None,
             qualification='PASS' if packet['status']=='PASS' and earliest is None else 'FAIL' if packet['status']!='PASS' else 'UNQUALIFIED_AFTER_EARLIER_EXPANDED_FAILURE')
@@ -107,8 +109,141 @@ def preflight(root):
         evidence='retained limiting B neighborhood and A normal-face sign/timestep sensitivity',
         preflight_sha256=sha(root/'preflight.json'),no_fresh_evolution_before_choice=True))
     print('Retained expanded preflight',missed,'points',len(inv['points']),flush=True)
+    catalog=[]
+    for name,record in result.items():
+        catalog.extend(dict(case='retained-'+name,**v)for v in record['states'])
+    save(root/'catalog.json',catalog);save(root/'active-inventory.json',identity(root/'inventory-v0.json'))
+    save(root/'execution-mode.json',dict(strict_required=missed,path_qualified=False,source='retained expanded preflight'))
+
+
+COUNTERS=('momentum_predictor_solves','pressure_system_solves','k_transport_solves','epsilon_transport_solves','bound_calls')
+def attempt_counts(report):
+    records=report.get('pimple_attempts',[]);rows=[[v.get(k,0) for k in COUNTERS]for v in records]
+    # A partial hard exit retains its ORIGINAL failure. Only a falsely successful
+    # report requires the all-solves invariant; do not mask the native witness.
+    return dict(attempts=len(rows),counts=[sum(v[i]for v in rows)for i in range(5)],
+        complete=sum(v==[1]*5 for v in rows),partial=[v for v in rows if v!=[1]*5],
+        no_extra_solves=all(all(n in (0,1)for n in v)for v in rows),
+        success_counts_valid=bool(report.get('failure')) or all(v==[1]*5 for v in rows),
+        native_failure=report.get('failure',''),corrections=sum(v.get('bound_activations',0)for v in records))
+
+
+def active_inventory(root):return load(load(root/'active-inventory.json')['path'])
+
+
+def refresh(root,new,tag):
+    old=active_inventory(root)
+    if new['sha256']==old['sha256']:return
+    folder=root/'inventories';folder.mkdir(exist_ok=True);dest=folder/(tag+'.json');save(dest,new)
+    catalog=load(root/'catalog.json');updated=[];mode=load(root/'execution-mode.json')
+    out=root/'scan-extensions'/tag;out.mkdir(parents=True)
+    for i,entry in enumerate(catalog):
+        prev=load(entry['path']);rp=prev['producer']['path'];r=load(rp);rejected=entry['native_status']=='rejected candidate'
+        state=state_context(r,entry['step'],rejected)[0];v=extend_scan(r,state,prev,old,new)
+        if not rejected and v['status']!='PASS':mode.update(strict_required=True,source='expanded inventory extension '+tag)
+        path=out/(str(i)+'.json');save(path,v)
+        updated.append(dict(entry,path=str(path),sha256=sha(path),expanded_status=v['status'],minimum=v['minimum'],failures=len(v['failures'])))
+    earliest={}
+    def trajectory(entry):
+        return next((name for name in sorted(CASES,key=len,reverse=True) if entry['case'].startswith(name+'-')),entry['case'])
+    for entry in updated:
+        if entry['native_status']!='rejected candidate' and entry['expanded_status']!='PASS':
+            key=trajectory(entry);earliest[key]=min(earliest.get(key,float('inf')),entry['time'])
+    for entry in updated:entry['prefix_qualified']=entry['time']<earliest.get(trajectory(entry),float('inf'))
+    save(root/'catalog.json',updated);save(root/'active-inventory.json',identity(dest));save(root/'execution-mode.json',mode)
+
+
+def register_scan(root,label,rp,first_step=None):
+    r=load(rp);new=inventory([r],active_inventory(root));refresh(root,new,label)
+    result=assess_report(root,label,rp,new,first_step)
+    catalog=load(root/'catalog.json');catalog.extend(dict(case=label,**v)for v in result['states']);save(root/'catalog.json',catalog)
+    if result['earliest_extra_failure'] is not None:
+        mode=load(root/'execution-mode.json');mode.update(strict_required=True,source=label);save(root/'execution-mode.json',mode)
+    return result
+
+
+def native_call(root,name,label,cfg,steps,restart=None):
+    from wj_h2_cases import case_xml
+    from cls_epawf_m3_cases import set_info,set_parameter,write
+    folder=root/'cases'/name/label;folder.parent.mkdir(parents=True,exist_ok=True)
+    if restart is None:
+        xml=case_xml(folder,'physical',steps,cfg['dt'],cfg['refined'],'ExactStepV1',pressure_seed='VerticalBalanceV1',
+            outlet='ZeroTractionV1',xknots=np.linspace(0,8,cfg['nx']+1).tolist(),tangential_order=12,
+            extra_physical_z=cfg.get('extra_physical_z'))
+    else:
+        folder.mkdir();template=root/'cases'/name/'cp0/case.xml';r=ET.parse(template).getroot()
+        set_info(r,'RANSWallRestart',str(Path(restart).resolve()));set_info(r,'RANSWallCheckpoint',str(folder/'CP'))
+        set_parameter(r,'NumSteps',steps);xml=folder/'case.xml';write(r,xml)
+    verify=ET.parse(xml).getroot().find('./CONDITIONS/SOLVERINFO/I[@PROPERTY="RANSWallPimpleVerify"]')
+    assert verify.get('VALUE')=='Off'
+    request=dict(argv=[str(RUNTIME),str(xml)],runtime=identity(RUNTIME),xml=identity(xml),steps=steps,dt=cfg['dt'],
+        restart=identity(Path(restart)/'State.bin') if restart else None,threads=THREADS,role='fresh native CP0' if restart is None else 'governing attempt block')
+    save(folder/'request.json',request);start=time.monotonic();env=dict(os.environ,**THREADS,NEKTAR_RANS_TIMING_FILE=str(folder/'timing.jsonl'))
+    with (folder/'command.log').open('x') as f:
+        child=subprocess.run([str(RUNTIME),str(xml)],cwd=folder,env=env,stdout=f,stderr=subprocess.STDOUT,timeout=600)
+    rp=xml.with_suffix('.evolution.json');r=load(rp) if rp.exists() else None
+    record=dict(request,seconds=time.monotonic()-start,exit=child.returncode,log=identity(folder/'command.log'),
+        producer=identity(rp) if r else None,accounting=attempt_counts(r) if r else None)
+    record['raw_corrected_equal']=True
+    if r:
+        for a in r['pimple_attempts']:
+            if a.get('k_snapshot'):
+                snapshot=load(a['k_snapshot'])
+                record['raw_corrected_equal'] &= np.asarray(snapshot['raw'],dtype='<f8').tobytes()==np.asarray(snapshot['corrected'],dtype='<f8').tobytes()
+    save(folder/'receipt.json',record)
+    if r is None:raise RuntimeError('native report absent; preserve command receipt and stop this configuration')
+    assert len(r['state'])==cfg['size'] and len(r['state'])<=3000
+    return rp,r,record
+
+
+def outer_check(r):
+    result={}
+    for rejected in ([False,True] if r['failure'] and r['physical_range_events'] else [False]):
+        state,h,alpha,t,p=state_context(r,rejected=rejected)
+        v={q:outer_loads(r,state,h,alpha,q)for q in (12,24,32)};comparisons={}
+        for q in (12,24):
+            errors={name:float(np.max(abs(np.array(a)-v[32]['components'][name])))for name,a in v[q]['components'].items()}
+            reg=float(np.max(abs(np.array(v[q]['regional'])-v[32]['regional'])))
+            # An absolute-floor-only test is a STRONGER sufficient condition for
+            # the original mixed tolerances with any identical exterior load.
+            comparisons[str(q)+'-32']=dict(status='PASS' if max(errors.values())<=2e-9 and reg<=4e-9 else 'UNRESOLVED',
+                errors=errors,regional_error=reg,original_component_floor=2e-9,original_regional_floor=4e-9)
+        result['rejected' if rejected else 'accepted']=dict(time=t,views=v,comparisons=comparisons)
+    return result
+
+
+def prepare(root,name):
+    cfg=CASES[name]
+    if name.startswith('local-') and not load(root/'optional-activation.json')['activated']:raise ValueError('optional design inactive')
+    rp,r,record=native_call(root,name,'cp0',cfg,0);result=register_scan(root,name+'-cp0',rp)
+    save(root/'cases'/name/'prepared.json',dict(configuration=cfg,cp0=record,expanded=result,
+        ready=not r['failure'] and result['earliest_extra_failure'] is None))
+    print(name,'CP0',result['states'][-1]['expanded_status'],flush=True)
+
+
+def evolve(root,name):
+    prepared=load(root/'cases'/name/'prepared.json');assert prepared['ready'],'CP0 not qualified'
+    mode=load(root/'execution-mode.json')
+    if mode['strict_required'] and not mode['path_qualified']:raise RuntimeError('strict execution path requires bounded 2 vs1+1 qualification before launch')
+    cfg=CASES[name];cp0=load(prepared['cp0']['producer']['path']);cp=cp0['checkpoint'];calls=[];stop=None;remaining=cfg['steps']
+    while remaining:
+        count=1 if mode['strict_required'] else remaining
+        start=cfg['steps']-remaining;rp,r,record=native_call(root,name,f'run-{start:02d}',cfg,count,restart=cp);calls.append(record)
+        assessment=register_scan(root,name+f'-run-{start:02d}',rp,first_step=start+1)
+        if r['failure'] or record['accounting']['corrections'] or not record['raw_corrected_equal'] or not record['accounting']['success_counts_valid'] or not record['accounting']['no_extra_solves']:
+            stop='native_hard_or_correction_exit';break
+        if assessment['earliest_extra_failure'] is not None:
+            stop='expanded_retrospective_failure';break
+        remaining-=count;cp=r['checkpoint']
+    result=dict(configuration=cfg,execution_path='strict_one_step' if mode['strict_required'] else 'whole_trajectory',calls=calls,
+        accepted_steps=r['steps'],accepted_time=r['time'],requested_target=.08,stop=stop,
+        accounting=attempt_counts(r) if len(calls)==1 else dict(attempts=sum(v['accounting']['attempts']for v in calls)),
+        outer_checks=outer_check(r),status='PASS_SHORT_CONTROL' if stop is None else 'OBSTRUCTED')
+    save(root/'cases'/name/'trajectory.json',result);print(name,result['status'],r['time'],flush=True)
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('preflight',),required=True)
-    a=p.parse_args();preflight(a.root)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('preflight','prepare','evolve'),required=True)
+    p.add_argument('--case',choices=tuple(CASES));a=p.parse_args()
+    if a.mode=='preflight':preflight(a.root)
+    else:globals()[a.mode](a.root,a.case)
