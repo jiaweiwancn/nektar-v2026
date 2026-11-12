@@ -145,17 +145,38 @@ def initialize_catalog(root):
     save(root/'catalog-bootstrap.json',dict(preflight=identity(root/'preflight.json'),bindings=len(catalog),governing_attempts=0))
 
 
-def refresh(root,new,tag):
+def refresh(root,new,tag,resume_completed=False):
     old=active_inventory(root)
     if new['sha256']==old['sha256']:return
-    folder=root/'inventories';folder.mkdir(exist_ok=True);dest=folder/(tag+'.json');save(dest,new)
+    folder=root/'inventories';folder.mkdir(exist_ok=True);dest=folder/(tag+'.json')
+    if dest.exists():
+        assert resume_completed and load(dest)==new,'different immutable extension intent'
+    else:save(dest,new)
     catalog=load(root/'catalog.json');updated=[];mode=load(root/'execution-mode.json')
-    out=root/'scan-extensions'/tag;out.mkdir(parents=True)
+    out=root/'scan-extensions'/tag;out.mkdir(parents=True,exist_ok=resume_completed)
+    recovered=[]
     for i,entry in enumerate(catalog):
-        prev=load(entry['path']);rp=prev['producer']['path'];r=load(rp);rejected=entry['native_status']=='rejected candidate'
-        state=state_context(r,entry['step'],rejected)[0];v=extend_scan(r,state,prev,old,new)
+        assert sha(entry['path'])==entry['sha256'],'stale parent scan'
+        prev=load(entry['path']);rp=prev['producer']['path'];rejected=entry['native_status']=='rejected candidate'
+        path=out/(str(i)+'.json')
+        if resume_completed and path.exists():
+            # Atomic, completed passive calculations from the interrupted pass.
+            # Bind inputs and every old row before sealing; never relaunch the
+            # completed native CP0 or treat an unfinished scan as complete.
+            v=load(path)
+            assert v['producer']==prev['producer'] and sha(rp)==v['producer']['sha256']
+            assert v['state_sha256']==prev['state_sha256'] and v['inventory_sha256']==new['sha256']
+            assert v['callback_history_sha256']==prev['callback_history_sha256']
+            assert v['rows'][:len(prev['rows'])]==prev['rows']
+            r=load(rp)
+            expected={(p['id'],o['geometry'])for p in new['points'][len(old['points']):]for o in owners(r,p['physical'])}
+            actual={(v['point_id'],v['owner']['geometry'])for v in v['rows'][len(prev['rows']):]}
+            assert actual==expected and len(actual)==len(v['rows'])-len(prev['rows'])
+            recovered.append(dict(path=str(path),sha256=sha(path),parent=identity(entry['path'])))
+        else:
+            r=load(rp);state=state_context(r,entry['step'],rejected)[0];v=extend_scan(r,state,prev,old,new)
+            save(path,v)
         if not rejected and v['status']!='PASS':mode.update(strict_required=True,source='expanded inventory extension '+tag)
-        path=out/(str(i)+'.json');save(path,v)
         updated.append(dict(entry,path=str(path),sha256=sha(path),expanded_status=v['status'],minimum=v['minimum'],failures=len(v['failures'])))
     earliest={}
     def trajectory(entry):
@@ -165,10 +186,11 @@ def refresh(root,new,tag):
             key=trajectory(entry);earliest[key]=min(earliest.get(key,float('inf')),entry['time'])
     for entry in updated:entry['prefix_qualified']=entry['time']<earliest.get(trajectory(entry),float('inf'))
     save(root/'catalog.json',updated);save(root/'active-inventory.json',identity(dest));save(root/'execution-mode.json',mode)
+    if recovered:save(out/'completed-passive-recovery.json',dict(old_inventory_sha256=old['sha256'],new_inventory_sha256=new['sha256'],completed=recovered,new_native_attempts=0))
 
 
-def register_scan(root,label,rp,first_step=None):
-    r=load(rp);new=inventory([r],active_inventory(root));refresh(root,new,label)
+def register_scan(root,label,rp,first_step=None,resume_completed=False):
+    r=load(rp);new=inventory([r],active_inventory(root));refresh(root,new,label,resume_completed)
     result=assess_report(root,label,rp,new,first_step)
     catalog=load(root/'catalog.json');catalog.extend(dict(case=label,**v)for v in result['states']);save(root/'catalog.json',catalog)
     if result['earliest_extra_failure'] is not None:
@@ -242,7 +264,7 @@ def prepare(root,name):
         assert saved.get('extra_physical_z',[])==cfg.get('extra_physical_z',[])
         save(root/'cases'/name/'completed-cp0-recovery.json',dict(original=identity(completed),role='completed startup recovered; no new native attempt'))
     else:rp,r,record=native_call(root,name,'cp0',cfg,0)
-    result=register_scan(root,name+'-cp0',rp)
+    result=register_scan(root,name+'-cp0',rp,resume_completed=completed.exists())
     save(root/'cases'/name/'prepared.json',dict(configuration=cfg,cp0=record,expanded=result,
         ready=not r['failure'] and result['earliest_extra_failure'] is None))
     print(name,'CP0',result['states'][-1]['expanded_status'],flush=True)

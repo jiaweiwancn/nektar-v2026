@@ -115,4 +115,29 @@ class OwnedPhysicalPoints(unittest.TestCase):
             (d/'active-inventory.json').unlink()
             with self.assertRaises(RuntimeError):initialize_catalog(d)
 
+    def test_completed_passive_extension_recovery_binds_parent_state_and_owners(self):
+        from wj_h4_study import refresh
+        from wj_h3_analysis import identity
+        from run_wj_h4 import save,load
+        from wj_h4_points import extend_scan
+        for corrupt in (False,True):
+            with self.subTest(corrupt=corrupt),tempfile.TemporaryDirectory()as tmp:
+                d=Path(tmp);r,s=fixture();save(d/'report.json',r)
+                old=dict(points=[dict(id=0,physical=physical(r,[.5,0,.75]),tags=[])],sha256='old')
+                new=dict(points=old['points']+[dict(id=1,physical=physical(r,[1.,0,1.]),tags=[])],sha256='new')
+                v=scan(r,s,old);v.update(producer=identity(d/'report.json'),callback_history_sha256='callback')
+                save(d/'old.json',old);save(d/'parent.json',v);save(d/'active-inventory.json',identity(d/'old.json'))
+                save(d/'catalog.json',[dict(case='fixture',step=0,time=0.,native_status='accepted',**identity(d/'parent.json'))])
+                save(d/'execution-mode.json',dict(strict_required=False,path_qualified=False))
+                folder=d/'scan-extensions/recovery';folder.mkdir(parents=True)
+                result=extend_scan(r,s,v,old,new)
+                if corrupt:result['state_sha256']='wrong state'
+                save(folder/'0.json',result)
+                if corrupt:
+                    with self.assertRaises(AssertionError):refresh(d,new,'recovery',resume_completed=True)
+                else:
+                    refresh(d,new,'recovery',resume_completed=True)
+                    self.assertEqual(load(folder/'completed-passive-recovery.json')['new_native_attempts'],0)
+                    self.assertTrue(load(d/'execution-mode.json')['strict_required'])
+
 if __name__=='__main__':unittest.main()
