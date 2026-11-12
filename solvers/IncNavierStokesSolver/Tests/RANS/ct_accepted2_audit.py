@@ -46,7 +46,7 @@ def outlet_tractions(initial,state,xml):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--preparation',type=Path,required=True);p.add_argument('--trajectories',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
-    prep=a.preparation/'work';tra=a.trajectories/'work';results=json.loads((a.trajectories/'results.json').read_text());pr=json.loads((a.preparation/'results.json').read_text())
+    prep=a.preparation/'work';results=json.loads((a.trajectories/'results.json').read_text());tra=Path(results.get('trajectory_directory',a.trajectories/'work'));pr=json.loads((a.preparation/'results.json').read_text())
     manifest=RequestManifest(a.output,dict(schema='CT2AcceptedStateAuditsV1',runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),preparation_sha256=sha(a.preparation/'results.json'),trajectories_sha256=sha(a.trajectories/'results.json'),source_sha256=sha(Path(__file__)),limits=dict(temporal=1e-3,mass=1e-8,scalar=.02),geometry='actual x extent and native radial extent',frozen_controls=[[48,12,12,12,12,16],[64,16,16,16,16,16],[64,16,16,16,16,32]]))
     n=pr['global_count'];weights=pr['global_weights'];res=dict(schema='CT2PhysicalAuditsV1',diagnostic_execution='pass',cases={},representation_comparisons={});observed={}
     for name in results['cases']:

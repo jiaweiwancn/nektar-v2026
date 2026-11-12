@@ -134,7 +134,7 @@ def pressure_projection(xml,c,o,basis):
         x,_,h=q['coordinate'];v=np.exp(-((h-6.25)/1.5)**2)*x*(.25-x)
         dx=np.exp(-((h-6.25)/1.5)**2)*(.25-2*x);dz=-2*(h-6.25)/1.5**2*v
         common+=q['weight']*np.array([-p*dz,-Q[2,2]*dz-Q[2,0]*dx,0.])
-    return dict(status='pass',independent_gradient_at_witness=float(gradient),native_gradient_at_witness=float(native),gradient_defect=float(abs(native-gradient)),nodes=z.tolist(),independent_nodal_projection=coeff.tolist(),free_w_pressure_load_l2=float(np.linalg.norm(pressure_load)),free_w_Q_load_l2=float(np.linalg.norm(stress_load)),signed_common_test=dict(pressure=float(common[0]),nonlinear_stress=float(common[1]),sum=float(common[:2].sum())),common_test='phi=x*(.25-x)*exp(-((z-6.25)/1.5)^2), full volume without residual subtraction',analytical_Pi_above_delta=0.,projection_order=8)
+    return dict(status='pass',independent_gradient_at_witness=float(gradient),native_gradient_at_witness=float(native),gradient_defect=float(abs(native-gradient)),nodes=z.tolist(),independent_nodal_projection=coeff.tolist(),unmasked_w_pressure_load_l2=float(np.linalg.norm(pressure_load)),unmasked_w_Q_load_l2=float(np.linalg.norm(stress_load)),signed_common_test=dict(pressure=float(common[0]),nonlinear_stress=float(common[1]),sum=float(common[:2].sum())),common_test='phi=x*(.25-x)*exp(-((z-6.25)/1.5)^2), full volume without residual subtraction',analytical_Pi_above_delta=0.,projection_order=8)
 
 def initialize(runtime,previous,output,layouts):
     output.mkdir();construction=json.loads((previous/'pilot-v3/A95-dt-0.002/construction.json').read_text());source=previous/'pilot-v3/A95-dt-0.002-zero/case.xml'
@@ -206,7 +206,7 @@ def advance(runtime,previous,preparation,output,layouts,T=.008):
         for t in common:
             packets=[]
             for name in (a,b):
-                s,ini,c,r=endpoints[name][t];o=ini['observation'];off=np.array(o['offsets'],int);values=[]
+                s,ini,c,r=endpoints[name][t];s=np.asarray(s);o=ini['observation'];off=np.array(o['offsets'],int);values=[]
                 for i,q in enumerate(ini['test_basis'][:ng]):
                     region=0 if o['grid'][i][2]<c['H'] else 1
                     values.append([row_value(q['velocity_k'],s,off[j])[0] for j in (0,1,2)]+[row_value(q['epsilon'],s,off[3])[0] if region else 0.,row_value(q['pressure'],s,off[4+region])[0]])
@@ -218,13 +218,40 @@ def advance(runtime,previous,preparation,output,layouts,T=.008):
     write_json(output/'results.json',result)
     return result
 
+def recover(runtime,preparation,trajectories,output):
+    # Read-only completion after the V1 collector's list/array error. No native
+    # process, stored result, request, coefficient or history is overwritten.
+    from ct_accepted2_audit import values
+    request=json.loads((trajectories/'request-manifest.json').read_text())['request']
+    require(request['runtime']['IncNavierStokesSolver']==runtime_identity(runtime/'IncNavierStokesSolver'),'foreign_recovery_runtime')
+    require(request['preparation_sha256']==sha(preparation/'results.json'),'foreign_recovery_initialization')
+    result=json.loads((trajectories/'work/results.json').read_text())
+    require(set(result['cases'])=={x+'-'+str(dt) for x in request['layouts'] for dt in (.002,.001)},'incomplete_native_matrix_coverage')
+    pr=json.loads((preparation/'results.json').read_text());n=pr['global_count'];weights=pr['global_weights'];reports={};initials={}
+    for name,row in result['cases'].items():
+        f=trajectories/'work'/name/'case.evolution.json'
+        require(sha(f)==row['native_report_sha256'],'changed_native_matrix_report')
+        reports[name]=json.loads(f.read_text());initials[name]=json.loads((preparation/'work'/name/'initial.json').read_text())
+    for layout in request['layouts']:
+        a,b=layout+'-0.002',layout+'-0.001';times=[];observed={}
+        for name in (a,b):
+            report=reports[name];observed[name]={}
+            for t,s in zip(report['audit_times'],report['accepted_states'],strict=True):
+                q=values(initials[name],s,n);q['observation']['time']=t;observed[name][round(t,12)]=q
+        c=json.loads((trajectories/'work'/a/'construction.json').read_text())
+        result['comparisons'][layout]=[compare(observed[a][t],observed[b][t],weights,c) for t in sorted(set(observed[a])&set(observed[b]))]
+    result['physical_completion']='pass' if all(r['status']=='pass' for r in result['cases'].values()) else 'fail'
+    result['trajectory_directory']=str(trajectories/'work')
+    result['recovery']=dict(original_request_sha256=sha(trajectories/'request-manifest.json'),original_progress_sha256=sha(trajectories/'work/results.json'),fix='convert stored list to array in comparison only; all eight native trajectories reused without mutation',unmasked_load_label='V1 initial receipts named raw unmasked coefficient loads free_w; corrected source and final supplement use unmasked_w')
+    return result
+
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--previous',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--mode',choices=['initial','advance','rough'],required=True);p.add_argument('--preparation',type=Path);p.add_argument('--layouts',nargs='+',default=['B','X','Zplus','XZplus']);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--previous',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--mode',choices=['initial','advance','rough','recover'],required=True);p.add_argument('--preparation',type=Path);p.add_argument('--trajectories',type=Path);p.add_argument('--layouts',nargs='+',default=['B','X','Zplus','XZplus']);a=p.parse_args()
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
-    req=dict(schema='CTAccepted2DiagnosisV1',mode=a.mode,layouts=a.layouts,runtime={n:runtime_identity(a.runtime/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe')},previous=str(a.previous),source_sha256=sha(Path(__file__)),preparation_sha256=sha(a.preparation/'results.json') if a.preparation else None)
+    req=dict(schema='CTAccepted2DiagnosisV1',mode=a.mode,layouts=a.layouts,runtime={n:runtime_identity(a.runtime/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe')},previous=str(a.previous),source_sha256=sha(Path(__file__)),preparation_sha256=sha(a.preparation/'results.json') if a.preparation else None,recovered_request_sha256=sha(a.trajectories/'request-manifest.json') if a.trajectories else None)
     manifest=RequestManifest(a.output,req)
     # RequestManifest creates output, so subdirectories hold immutable work.
-    result=rough_control(a.runtime,a.output/'work') if a.mode=='rough' else initialize(a.runtime,a.previous,a.output/'work',a.layouts) if a.mode=='initial' else advance(a.runtime,a.previous,a.preparation/'work',a.output/'work',a.layouts)
+    result=recover(a.runtime,a.preparation,a.trajectories,a.output) if a.mode=='recover' else rough_control(a.runtime,a.output/'work') if a.mode=='rough' else initialize(a.runtime,a.previous,a.output/'work',a.layouts) if a.mode=='initial' else advance(a.runtime,a.previous,a.preparation/'work',a.output/'work',a.layouts)
     write_json(a.output/'results.json',result);manifest.seal(a.output,['results.json'])
     print('diagnostics completed;',result.get('physical_completion',result.get('status')))
     return 0 if result.get('diagnostic_execution',result.get('status'))=='pass' else 1
