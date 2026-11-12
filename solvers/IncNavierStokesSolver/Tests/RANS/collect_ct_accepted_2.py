@@ -6,10 +6,12 @@ from pathlib import Path
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def dump(p,x):p.write_text(json.dumps(x,indent=2,allow_nan=False)+'\n')
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--decision',type=Path);a=p.parse_args()
     r=a.root.resolve();out=a.output.resolve();out.mkdir(exist_ok=False);copied={}
     sources={'rough-pressure-control.json':'rough-v1/results.json','primary-initial.json':'initial-v2/results.json','companion-initial.json':'companion-initial-v1/results.json','primary-trajectories.json':'recovered-primary-v1/results.json','companion-trajectories.json':'companion-v1/results.json','primary-audits.json':'primary-audits-v1/results.json','companion-audits.json':'companion-audits-v1/results.json','boundary-verification.json':'boundary-verification-v1/results.json','history-controls.json':'history-controls-v1/results.json','shared-model-smokes.json':'shared-smokes-v1/results.json','continuation02.json':'continue02-v1/results.json','continuation02-audits.json':'continue02-audits-v1/results.json','continuation2.json':'continue2-v1/results.json','continuation2-audits.json':'continue2-audits-v1/results.json','extras.json':'extras-v1/results.json','decision.json':'final-v1/results.json','runtime-build-identity.json':'runtime-identity.json','relocation-runtime-bridge.json':'relocation-runtime-bridge.json','build-execution.json':'build-execution.json','post-reboot-execution.json':'post-reboot-execution.json','followup-execution.json':'followup-execution.json','dataset-audit.json':'dataset-audit.json'}
     required={'rough-pressure-control.json','primary-initial.json','companion-initial.json','primary-trajectories.json','companion-trajectories.json','primary-audits.json','companion-audits.json','boundary-verification.json','history-controls.json','shared-model-smokes.json','extras.json','decision.json','runtime-build-identity.json','relocation-runtime-bridge.json','dataset-audit.json'}
+    if a.decision:sources['decision.json']=str(a.decision/'results.json')
+    sources.update({'reporting-runtime-identity.json':'reporting/runtime-identity.json','reporting-regression.json':'reporting-control-v1/results.json','corrective-resource-control.json':'resource-control-v1/results.json'})
     for name,source in sources.items():
         f=r/source
         if not f.exists():
