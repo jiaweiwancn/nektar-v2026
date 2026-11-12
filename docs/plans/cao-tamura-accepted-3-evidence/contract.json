@@ -1,0 +1,144 @@
+{
+  "schema": "CT-Accepted-3-V1",
+  "starting_revision": "db37c6b11882e7a06413a29eb6623ab212c4d4a5",
+  "starting_status": "clean implementation worktree; fetched remote identical; unrelated root worktree preserved",
+  "specifications": {
+    "docs/literature/A93_A95_E94_E95_neutral_ABL_EP_AWF_combined.tex": "056a85c2aea5ce4ca168caf561613e662416bb6b7d7177451ba5038d2cf68a64",
+    "docs/literature/accepted_awf_appendix_A93_A95_E94_E95.tex": "17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40"
+  },
+  "ct2_decision_sha256": "9b3246c3a3432b7ee1fab18a8384aec09444641ad3b451e439a4bf7bf9c192c4",
+  "ct2_provenance_sha256": "e4a3f834e10c92cfc3d26b59cfd6b567c02d7a42ba494a80a64efb405ba8ba59",
+  "physics": "original Natural high-Re outer closures; finite inner nu; AcceptedOpenFlatV1; H_A=.4; original frozen model-specific FUNCTION maps and central roughness; no source, coefficient, boundary, stage-order or admissibility modification",
+  "operator": "GeneratedVolumeOwnerV1; existing consistent-free-mass one-sweep PIMPLE; physical pressure level from absolute traction; no mean gauge",
+  "cases": {
+    "A95-XZminus-P3": {
+      "add_x": [
+        0.1875
+      ],
+      "add_z": [
+        5.125
+      ],
+      "degree": 3,
+      "pressure_degree": 1,
+      "predicted_slots": 1669
+    },
+    "A95-XZminus-P4": {
+      "add_x": [
+        0.1875
+      ],
+      "add_z": [
+        5.125
+      ],
+      "degree": 4,
+      "pressure_degree": 2,
+      "predicted_slots": 2981
+    },
+    "A93-Zminus-P3": {
+      "add_x": [],
+      "add_z": [
+        5.125
+      ],
+      "degree": 3,
+      "pressure_degree": 1,
+      "predicted_slots": "native confirmation required"
+    },
+    "E94E95-Zminus-P3": {
+      "add_x": [],
+      "add_z": [
+        5.125
+      ],
+      "degree": 3,
+      "pressure_degree": 1,
+      "predicted_slots": "native confirmation required"
+    }
+  },
+  "reuse": "sealed CT2 A95 Zminus P3/P1 .002/.001, .008/.02/.2; exact runtime bytes and governing C++ source hashes; prefix-only relocation bridge; fresh histories for every new space/model/dt",
+  "dt": [
+    0.002,
+    0.001
+  ],
+  "milestones": [
+    0.008,
+    0.02,
+    0.2
+  ],
+  "continuation": "both members reach exact milestone; complete physical-budget primitives, native/fixed domain, covariance, mass, temporal and boundary/zero-correction checks; independent P4 short may proceed after own zero-step algebraic qualification despite P3 failure",
+  "quadrature": {
+    "native": [
+      32,
+      8,
+      10,
+      10,
+      10
+    ],
+    "basis_points": [
+      8,
+      8
+    ],
+    "frozen": [
+      [
+        48,
+        12,
+        12,
+        12,
+        12,
+        16
+      ],
+      [
+        64,
+        16,
+        16,
+        16,
+        16,
+        16
+      ],
+      [
+        64,
+        16,
+        16,
+        16,
+        16,
+        32
+      ]
+    ],
+    "initial_projection": "Functions default Gauss max(8,p+3), independently verify P1/P2"
+  },
+  "limits": {
+    "stored_slots": 3000,
+    "mass_scaled": 1e-08,
+    "physical_budget": 0.02,
+    "temporal_scaled_weighted_RMS": 0.001,
+    "pressure_action": 2e-10,
+    "projection": 2e-11,
+    "reconstruction_scaled": 2e-10,
+    "covariance_negative_tolerance": 1e-10,
+    "spatial_global_scaled_RMS": 0.001,
+    "spatial_local": "report difference/minimum margin, radicand uncertainty from dt pair; bounded-local eligibility only if difference <= .25*minimum admissible margin and >=10 times evaluation floor, otherwise unresolved",
+    "evaluation_absolute_floor": 1e-10
+  },
+  "observations": "fixed union-partition physical weighted RMS grid plus explicit +/-H traces; original outlet witness, inlet limiting region, near-delta dense grid; native inventories all visible; absolute Pi no gauge shift; gradients, production, isotropic work, covariance/radicand and local pressure/normal traction",
+  "spatial_scope": "bounded contrasts and local sensitivity; not a convergence-order measurement; initial projection and evolution changes separate; compare only equal physical times",
+  "profile": "existing opt-in exclusive CPU/wall scopes; accepted .008-.02 segment where admitted; initialization separately; no nested-inclusive sum; snapshot I/O and uncovered work visible",
+  "resources": {
+    "root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-3-20261112",
+    "project_workers_including_control_helpers": 16,
+    "aggregate": 72,
+    "numerical_families": 1,
+    "numerical_library_threads": 1,
+    "compiler_jobs": 2,
+    "git": "index.threads=1; core.preloadIndex=false; pack.threads=1",
+    "historical_resource_failures": "CT1/CT2 unchanged"
+  },
+  "stopping": "first genuine rejection retained; no new rejection for an undefined diagnostic predictor; no new knots/degrees/input retuning; independent cases continue",
+  "deferred": [
+    "wall-height sweep",
+    "5mm native layer",
+    "EP",
+    "native curved",
+    "hill prediction",
+    "developed precursor",
+    "ExactStepV1 open cache",
+    "backend changes",
+    "MPI/3D"
+  ]
+}

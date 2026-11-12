@@ -3,8 +3,9 @@
 """Pause only this experiment's families when unrelated jobs consume headroom."""
 from pathlib import Path
 import argparse,os,subprocess,json,signal,time
-parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--root',type=Path,required=True);args=parser.parse_args()
+parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--root',type=Path,required=True);parser.add_argument('--project-limit',type=int);args=parser.parse_args()
 r=args.root.resolve();started=time.time();paused=set();maximum=0;active_seconds={};last_clock=time.monotonic()
+projectMaximum=0
 if (r/'worker-guard-status.json').exists():maximum=json.loads((r/'worker-guard-status.json').read_text()).get('maximum_observed_active_before_actions',0)
 initial=r/'resource-paused.json'
 if initial.exists():paused.update(json.loads(initial.read_text())['paused_pids'])
@@ -29,6 +30,16 @@ while not (r/'worker-guard.stop').exists():
  # Each complete serial family reserves eight threads, including ORTE and
  # its waiting Python parent. Keep sixteen of the 72 threads unallocated.
  allowed=max(0,min(4,(56-external)//8))
+ if args.project_limit is not None:
+  # This opt-in package permits one family; both waiting control helpers count.
+  allowed=min(allowed,1)
+  project=2+sum(d['threads'] for pid,d in rows.items() if pid in covered and not d['state'].startswith(('T','Z')))
+  if project>projectMaximum:
+   with (r/'project-highwater.jsonl').open('a') as f:
+    f.write(json.dumps(dict(time_unix=time.time(),project_threads=project,control_helpers=2,
+     processes=[dict(pid=pid,parent=d['parent'],threads=d['threads'],name=d['name'],state=d['state']) for pid,d in rows.items() if pid in covered and not d['state'].startswith(('T','Z'))]))+'\n')
+  projectMaximum=max(projectMaximum,project)
+  if project>args.project_limit:allowed=0
  chosen=set()
  for root,fam in families[:allowed]:chosen.update(fam)
  elapsed=time.monotonic()-last_clock;last_clock=time.monotonic()
@@ -73,3 +84,6 @@ while not (r/'worker-guard.stop').exists():
 for pid in paused:
  try:os.kill(pid,signal.SIGCONT)
  except ProcessLookupError:pass
+if args.project_limit is not None:
+ (r/'resource-final.json').write_text(json.dumps(dict(maximum_aggregate=maximum,maximum_project=projectMaximum,aggregate_limit=72,project_limit=args.project_limit,
+  aggregate_status='pass' if maximum<=72 else 'fail',project_status='pass' if projectMaximum<=args.project_limit else 'fail',control_helpers_counted=2))+'\n')

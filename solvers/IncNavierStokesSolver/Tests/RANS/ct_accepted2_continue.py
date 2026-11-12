@@ -12,26 +12,13 @@ from ct_accepted2_diagnosis import inventory,make_case,analyze_attempt,analytic,
 from ct_accepted2_audit import values
 from ct_accepted_pilot import compare
 from rans_request_manifest import RequestManifest,sha,runtime_identity
+from ct_accepted_budget_gate import physical_budgets
 
 def endpoint_domain(initial,report,c):
     o=initial['observation'];s=np.array(report['state']);off=np.array(o['offsets'],int)
     out=dict(native=inventory(o['volume'],[q['coordinate'] for q in o['volume']],s,off),fixed=inventory(initial['test_basis'],o['grid'],s,off))
     out['status']='pass' if all(x['domain_failure_count']==0 and x['covariance_minimum'] is not None and x['covariance_minimum']['value']>=-1e-10*c['K0'] for x in (out['native'],out['fixed'])) else 'fail'
     return out
-
-def physical_budgets(row):
-    checks={};all_values={}
-    for label,b in row['budgets'].items():
-        ok=b.get('reconstruction_status')=='pass' and b.get('accuracy_status')=='pass'
-        for name,q in b.get('equations',{}).items():
-            scale=q['physical_scale'];defect=q['storage_backward_difference']-q['stage_source']-q['stage_physical_boundary_flux']
-            ok=ok and abs(defect-q['frozen_stage_physical_defect'])<=2e-10*max(1.,scale) and abs(defect)/scale<=.02
-            all_values.setdefault(name,[]).append(defect/scale)
-        for q in b.get('reconstruction',{}).values():ok=ok and q['scaled_defect']<=2e-10
-        checks[label]=dict(status='pass' if ok else 'fail')
-    require(set(checks)=={'native','q48f16','q64f16','q64f32'},'missing_frozen_budget_control')
-    uncertainty={n:max(v)-min(v) for n,v in all_values.items()}
-    return dict(status='pass' if all(c['status']=='pass' for c in checks.values()) and max(uncertainty.values())<=.02 else 'fail',controls=checks,scaled_signed_defect_spreads=uncertainty,uncertainty_limit=.02)
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--parent',type=Path,required=True);p.add_argument('--audits',type=Path,required=True);p.add_argument('--preparation',type=Path);p.add_argument('--baseline-initial',type=Path);p.add_argument('--target',type=float,choices=[.02,.2],required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
