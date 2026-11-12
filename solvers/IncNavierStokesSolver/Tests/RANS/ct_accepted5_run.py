@@ -57,12 +57,16 @@ def basic_gate(rows,temporal,target,dts,initial_hash):
     if not temporal or abs(temporal[-1]['time']-target)>1e-13 or any(q['status']!='pass' for q in temporal):reasons.append('temporal_fields_or_coverage')
     return dict(status='pass' if not reasons else 'fail',reasons=reasons,physical_completion='pass' if len(rows)==2 and all(not r['failure'] and abs(r['time']-target)<1e-13 for r in rows.values()) else 'fail')
 
+def require_unused_halfstep(root):
+    require(not (Path(root)/'initial-quarter').exists(),'single_conditional_halfstep_already_consumed')
+
 class Campaign:
     def __init__(self,a):
         self.a=a;self.root=a.root;self.rt=a.runtime;self.old=a.ct4;self.contract=a.contract;self.model=None;self.c=None
         self.diag=read(a.diagnosis/'results.json');require(self.diag['status']=='pass','diagnosis_not_admitted')
         self.inits={};self.members={};self.initial_hash=None;self.baseline_packet=None;self.quarter=False
     def prepare(self,model,dts=(.002,.001),quarter=False):
+        if quarter:require_unused_halfstep(self.root)
         self.model=model
         source=self.old/('initial-v3/'+model+'-6.0-P'+('4' if model=='A95' else '3'))/'results.json';old=read(source);c=copy.deepcopy(old['case']);before=physical(c)
         c['degree']=4;c['pressure_degree']=2;point=self.diag['selection']['point']/self.diag['selection']['case']['H']*c['H']
