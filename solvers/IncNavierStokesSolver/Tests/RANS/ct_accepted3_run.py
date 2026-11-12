@@ -5,7 +5,7 @@
 Invoke through ct_accepted3_command.py; one family at a time. A failed native
 trajectory is sealed as a failure, never repaired or silently replaced.
 """
-import argparse, hashlib, json, os, xml.etree.ElementTree as ET
+import argparse, hashlib, json, os, shutil, xml.etree.ElementTree as ET
 from pathlib import Path
 from rans_qualification import THREADS, exact_vector_hash, write_json, audited_extrema
 os.environ.update(THREADS)
@@ -121,7 +121,7 @@ def attempt_diagnosis(initial,report,c):
     return out
 
 
-def audits(a,initial_packet,report,c,folder):
+def audits(a,initial_packet,report,c,folder,audit_folder=None):
     result=dict(budgets={},native_report_sha256=sha(folder/'case.evolution.json'),state_sha256=exact_vector_hash(report['state']),time=report['time'])
     result['domain']=domain(initial_packet,report,c);result['mass']=mass(initial_packet,report['state'],c)
     result['outlet_traction']=outlet(initial_packet,report['state'],folder/'case.xml',c['model'])
@@ -131,7 +131,13 @@ def audits(a,initial_packet,report,c,folder):
     result['actual_initial_drift']=compare(q,base,weights,c)
     g=np.array(q['observation']['grid_gradients']);w=np.array(weights);d=g[:,0,0]+g[:,1,2]
     result['divergence']=dict(weighted_RMS=float(np.sqrt(w@(d*d)/w.sum())),maximum=float(np.max(abs(d))),signed_mean=float(w@d/w.sum()))
-    endpoint,e=probe(a.runtime,folder,replay(initial_packet,report['state'],report['time'],[],export_constitutive=True),'constitutive')
+    audit_folder=audit_folder or folder
+    if audit_folder!=folder:
+        audit_folder.mkdir(parents=True,exist_ok=False)
+        shutil.copy2(folder/'case.xml',audit_folder/'case.xml')
+    request=replay(initial_packet,report['state'],report['time'],initial_packet['observation']['grid'],export_constitutive=True)
+    request['grid_sides']=initial_packet['observation']['grid_sides']
+    endpoint,e=probe(a.runtime,audit_folder,request,'constitutive')
     result['constitutive_execution']=e
     if e['exit_code']==0:result['independent_constitutive']=constitutive_comparison(endpoint,c)
     else:result['independent_constitutive']=dict(status='failed_native_actual_domain',packet=endpoint)
@@ -142,7 +148,7 @@ def audits(a,initial_packet,report,c,folder):
         require(i>0,'missing_consecutive_accepted_state')
         previous=report['accepted_states'][i-1]
         for label,orders,face in CONTROLS:
-            sub=folder/label;sub.mkdir();root=ET.parse(folder/'case.xml').getroot()
+            sub=audit_folder/label;sub.mkdir();root=ET.parse(folder/'case.xml').getroot()
             for k,v in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),orders,strict=True):set_parameter(root,k,v)
             write(root,sub/'case.xml')
             packet,e=probe(a.runtime,sub,replay(initial_packet,report['state'],report['time'],[],export_physical_scalar_budget=True,
@@ -167,23 +173,34 @@ def advance(a):
         seal=json.loads((a.parent/'completed-artifacts.json').read_text())
         require(all(sha(a.parent/f)==h for f,h in seal['files'].items()),'changed_parent_evidence')
         require(parent['qualification']==qualify(parent,start),'parent_primitives_do_not_reclassify')
+    recovered={}
+    if a.recover_from:
+        previous=json.loads((a.recover_from/'request-manifest.json').read_text())['request']
+        require(previous['case']==a.case and previous['target']==a.target and previous['initialization_sha256']==sha(a.initial/'results.json')
+            and previous['runtime']==runtime_identity(a.runtime/'IncNavierStokesSolver'),'foreign_recovery_request')
+        recovered={str(dt):sha(a.recover_from/str(dt)/'case.evolution.json') for dt in (.002,.001) if (a.recover_from/str(dt)/'case.evolution.json').exists()}
     manifest=RequestManifest(a.output,dict(schema='CT3MatchedSegmentV1',case=a.case,target=a.target,start=start,dt=[.002,.001],
         initialization_sha256=sha(a.initial/'results.json'),parent_sha256=sha(a.parent/'results.json') if a.parent else None,
-        contract_sha256=sha(a.contract),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),source_sha256=sha(Path(__file__))))
+        contract_sha256=sha(a.contract),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),source_sha256=sha(Path(__file__)),
+        recovery_request_sha256=sha(a.recover_from/'request-manifest.json') if a.recover_from else None,reused_native_reports=recovered))
     result=dict(schema='CT3SegmentV1',case=a.case,target=a.target,start=start,diagnostic_execution='incomplete',members={},temporal={})
     endpoints={}
     for dt in (.002,.001):
         name=str(dt);zero=a.initial/name;initial_packet=json.loads((zero/'initial.json').read_text())
-        source=(a.parent/name if a.parent else zero)
+        source=(Path(parent['members'][name]['directory']) if a.parent else zero)
         p=json.loads((source/'case.evolution.json').read_text())
         require(abs(p['time']-start)<1e-13 and abs(p['dt']-dt)<1e-15,'parent_history_time_or_dt_mismatch')
-        folder=a.output/name;xml=make_case(folder,source/'case.xml',c,degree,dt,round((a.target-start)/dt),Path(p['checkpoint']))
+        reused=name in recovered
+        folder=a.recover_from/name if reused else a.output/name
+        xml=folder/'case.xml' if reused else make_case(folder,source/'case.xml',c,degree,dt,round((a.target-start)/dt),Path(p['checkpoint']))
         require(function_identity(ET.parse(xml).getroot())==function_identity(ET.parse(zero/'case.xml').getroot()),'changed_physical_functions')
-        os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'timing.jsonl')
-        e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');os.environ.pop('NEKTAR_RANS_TIMING_FILE')
+        if reused:e=dict(reused_native_report_sha256=recovered[name],execution='original immutable trajectory; diagnostic collector previously failed; not rerun')
+        else:
+            os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'timing.jsonl')
+            e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');os.environ.pop('NEKTAR_RANS_TIMING_FILE')
         report=json.loads((folder/'case.evolution.json').read_text())
         require(report['accepted_states'][0]==p['state'],'native_history_consumed_different_parent_state')
-        row=dict(time=report['time'],failure=report['failure'],execution=e,steps=report['steps'],
+        row=dict(time=report['time'],failure=report['failure'],execution=e,steps=report['steps'],directory=str(folder),
             state_sha256=exact_vector_hash(report['state']),initial_state_sha256=ir['members'][name]['state_sha256'],
             native_report_sha256=sha(folder/'case.evolution.json'),identity=signature_inputs(c,xml,a.runtime),
             checkpoint=report['checkpoint'],history_sha256=artifact_hash(report['checkpoint']),native_history_times=report['native_history_times'],
@@ -192,7 +209,7 @@ def advance(a):
             corrections=sum(x.get('bound_calls',0) for x in report['pimple_attempts']),
             additional_governing_solves=sum(x.get('additional_governing_equation_solves',0) for x in report['pimple_attempts']))
         # Independent audits of a last accepted prefix remain useful after failure.
-        row.update(audits(a,initial_packet,report,c,folder))
+        row.update(audits(a,initial_packet,report,c,folder,a.output/(name+'-recovered-audits') if reused else None))
         result['members'][name]=row;endpoints[name]=(initial_packet,report)
         write_json(a.output/'progress.json',result)
     aa,bb=endpoints['0.002'],endpoints['0.001']
@@ -231,7 +248,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--mode',choices=['initial','advance'],required=True);p.add_argument('--case',choices=CASES,required=True)
     for x in ('runtime','ct1','contract','output'):p.add_argument('--'+x,type=Path,required=True)
-    p.add_argument('--initial',type=Path);p.add_argument('--parent',type=Path);p.add_argument('--target',type=float,choices=[.008,.02,.2])
+    p.add_argument('--initial',type=Path);p.add_argument('--parent',type=Path);p.add_argument('--recover-from',type=Path);p.add_argument('--target',type=float,choices=[.008,.02,.2])
     a=p.parse_args();os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     r=initial(a) if a.mode=='initial' else advance(a)
     status=r.get('qualification',r)['status'];print(a.case,a.mode,a.target,status)
