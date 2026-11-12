@@ -80,7 +80,9 @@ def publish(root):
             for pair,v in q['comparisons'].items():quadrature.append(dict(case=name,role=role,time=q['time'],pair=pair,status=v['status'],
                 max_component=max(v['errors'].values()),outer_stress=v['errors']['outer_momentum_stress'],regional=v['regional_error']))
     save(out/'runs.json',runs);save(out/'meshes.json',meshes);csvfile(out/'quadrature.csv',quadrature)
-    native=load(root/'native-observations-v1/index.json');budgets={};passive={}
+    view=load(root/'native-observation-view.json')if (root/'native-observation-view.json').exists()else identity(root/'native-observations-v1/index.json')
+    assert sha(view['path'])==view['sha256'];index(view['path'])
+    native=load(view['path']);budgets={};passive={}
     for name,v in native.items():
         index(v['native']['path']);index(v['checkpoint']['path']);index(v['producer']['path']);p=load(v['native']['path']);r=load(v['producer']['path'])
         pref=dest=prod=0.

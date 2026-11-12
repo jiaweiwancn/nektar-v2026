@@ -36,13 +36,29 @@ def native_readback(root,name,rp,folder,role):
     start=time.monotonic()
     with (folder/'command.log').open('x')as f:child=subprocess.run(argv,cwd=folder,stdout=f,stderr=subprocess.STDOUT,timeout=180)
     if child.returncode:raise RuntimeError('native readback failed; retain original log')
-    p=load(folder/'native.json');assert p['initialization_work']==[0,0] and p['weak_checks']['governing_solves']==0
-    result=dict(role=role,argv=argv,seconds=time.monotonic()-start,producer=identity(rp),checkpoint=identity(Path(cp)/'State.bin'),
+    save(folder/'native-completion.json',dict(exit=child.returncode,seconds=time.monotonic()-start,argv=argv))
+    return finish_readback(folder,role)
+
+
+def finish_readback(folder,role,receipt_path=None):
+    """Seal a complete passive packet; a missing process exit stays unknown."""
+    request=load(folder/'request.json');rp=Path(request['native_report']);r=load(rp);cp=Path(request['native_checkpoint'])
+    assert sha(rp)==request['native_report_sha256'] and sha(cp/'State.bin')==request['checkpoint_sha256']
+    p=load(folder/'native.json');assert p['initialization_work']==[0,0] and p['governing_solves']==0
+    assert p['report_sha256']==sha(rp) and p['checkpoint_sha256']==sha(cp/'State.bin')
+    step=p['selected_absolute_step'];state,h,alpha,t,packet=state_context(r,step)
+    assert p['state_sha256']==vector_hash(state)==packet['state_sha256']
+    assert p['callback_history_sha256']==vector_hash(h)
+    if step:assert p['callback_history_sha256']==packet['stage_history_sha256']
+    completed=load(folder/'native-completion.json')if (folder/'native-completion.json').exists()else None
+    result=dict(role=role,argv=[str(OBSERVER),str(rp.with_name('case.xml')),str(folder/'request.json'),str(folder/'native.json')],
+        seconds=None if completed is None else completed['seconds'],process_exit='NOT_RECORDED'if completed is None else completed['exit'],
+        recovered_complete_packet=completed is None,producer=identity(rp),checkpoint=identity(cp/'State.bin'),
         request=identity(folder/'request.json'),native=identity(folder/'native.json'),log=identity(folder/'command.log'),
         callback_history_sha256=p['callback_history_sha256'],stage_norms=p['physical_mass_dual_norms'],
         offline_pressure_projection=pressure_complement(r,r['state']),
         independent_weak=independent_weak(p['weak_checks'],dict(r,open_boundary=p['open_boundary']),enforce=False))
-    save(folder/'receipt.json',result);return result
+    save(receipt_path or folder/'receipt.json',result);return result
 
 
 def observe(root):
@@ -59,6 +75,32 @@ def observe(root):
             results[name]=native_readback(root,name,rp,out/name,'terminal accepted state or accepted predecessor')
         save(out/'index.json',results)
     print('Native readbacks',[(k,v['independent_weak']['status'])for k,v in results.items()],flush=True)
+
+
+def resume_observe(root):
+    """New immutable view of completed v1 packets plus only missing readbacks."""
+    old=root/'native-observations-v1';out=root/'native-observations-v2';out.mkdir();results={}
+    tasks=[]
+    for name in CASES:
+        if not (root/'cases'/name/'prepared.json').exists():continue
+        if name in ('base-x1-half','local-x3'):tasks.append((name+'-cp0',name,root/'cases'/name/'cp0/case.evolution.json','represented startup'))
+        f=root/'cases'/name/'trajectory.json'
+        if f.exists():tasks.append((name,name,Path(load(f)['calls'][-1]['producer']['path']),'terminal accepted state or predecessor'))
+    for key,name,rp,role in tasks:
+        previous=old/key
+        if (previous/'receipt.json').exists():
+            result=load(previous/'receipt.json')
+            for field in ('producer','checkpoint','request','native','log'):
+                assert sha(result[field]['path'])==result[field]['sha256'],'changed completed passive input/output'
+        elif (previous/'native.json').exists():
+            # Full native packet exists; the parent timed out during independent
+            # algebra. Verify it against original inputs; do not invent its exit.
+            # Keep the original folder untouched: the recovered receipt is v2.
+            result=finish_readback(previous,role,out/(key+'-recovery.json'))
+        else:result=native_readback(root,name,rp,out/key,role)
+        results[key]=result;save(out/'index.json',results)
+    save(root/'native-observation-view.json',identity(out/'index.json'))
+    print('Versioned readbacks complete',[(k,v['independent_weak']['status'])for k,v in results.items()],flush=True)
 
 
 def group_name(case):
@@ -170,5 +212,5 @@ def compare(root):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('observe','compare'),required=True)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('observe','resume_observe','compare'),required=True)
     a=p.parse_args();globals()[a.mode](a.root)
