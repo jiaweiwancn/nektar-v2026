@@ -59,6 +59,8 @@ RANSWallEvolutionFunction RANSEquilibriumWallEvolution::Function(const std::stri
 }
 std::vector<RANSWallEvolutionFunction> RANSEquilibriumWallEvolution::Functions(const std::string &name,bool required) const
 {
+    if(m_patch->OpenBoundary() && RANSUsesNeutralComposite(m_serialSession) && name=="InitialConditions")
+        return RANSAcceptedOpenInitialFunctions(m_serialSession,*m_patch);
     std::vector<RANSWallEvolutionFunction> result;const int dim=m_patch->Dimension();
     for(int b=0;b<m_patch->Gauge();++b)
     {
@@ -223,7 +225,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         for(int a=0;a<dim;++a)
         {m_data.innerBody[a]=Function("BodyForceInner",expected[a]);m_data.outerBody[a]=Function("BodyForceOuter",expected[a]);}
         m_data.innerKSource=Function("ScalarSourceInner","k");m_data.outerKSource=Function("ScalarSourceOuter","k");m_data.outerEpsilonSource=Function("ScalarSourceOuter","eps_tilde");
-        if(!m_neutral)
+        if(!m_neutral && !(m_patch->OpenBoundary() && RANSUsesNeutralComposite(m_serialSession)))
         {
             for(int b=0;b<dim;++b)
             {
@@ -238,7 +240,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         if(m_patch->OpenBoundary())
         {
             Require(!m_neutral && m_neutralBoundaryPolicy=="Legacy" && m_pilotAccuracy=="Off",
-                "AcceptedOpenFlatV1 requires explicitly supplied finite-depth Functions, ordinary restart and its own diagnostics");
+                "AcceptedOpenFlatV1 requires its explicit physical-function/provider route, ordinary restart and its own diagnostics");
             m_data=LoadRANSAcceptedOpenData(m_serialSession,*m_patch);
         }
         m_fields=Array<OneD,MultiRegions::ExpListSharedPtr>(expected.size());

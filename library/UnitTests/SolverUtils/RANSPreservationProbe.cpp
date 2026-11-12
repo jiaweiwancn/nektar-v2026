@@ -573,6 +573,10 @@ int main(int argc,char **argv)
             {"resolution",resolution},{"test_basis",testBasis},{"native_constitutive",constitutive},{"physical_scalar_budget",physicalBudget},
             {"tensor_validation",tensorValidation},{"mixed_space",mixedSpace}});
         if(open){output.pop_back();output+=",\"open_boundary\":"+openPacket+",\"open_frozen_systems\":"+openSystems+"}";}
+        if(request.get<bool>("export_neutral_composite_reference",false))
+        {
+            output.pop_back();output+=",\"neutral_composite_reference\":"+RANSAcceptedCompositeReferencePacket(session,patch,grid,sides)+"}";
+        }
         std::ofstream file(argv[3]);Require(bool(file),"cannot write verification output");file<<output<<'\n';
         return physical?0:1;
     }

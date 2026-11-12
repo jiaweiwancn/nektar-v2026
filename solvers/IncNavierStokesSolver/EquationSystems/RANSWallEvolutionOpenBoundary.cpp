@@ -11,8 +11,70 @@ namespace Nektar
 {
 using namespace RANSWallAlgebra;
 namespace J=RANSWallSolveJson;
+bool RANSUsesNeutralComposite(const LibUtilities::SessionReaderSharedPtr &s)
+{
+    std::string mode;s->LoadSolverInfo("RANSOpenReference",mode,"Functions");
+    Require(mode=="Functions" || mode=="NeutralCompositeV1","unknown open reference provider version");
+    return mode=="NeutralCompositeV1";
+}
 namespace
 {
+// Immutable continuous physical reference, shared by initialization, live
+// inlet/top, absolute outlet traction and read-only exports. This never sets
+// the evolving wall traction or replaces the current sampled endpoint K.
+class NeutralComposite
+{
+public:
+    const RANSWallEvolutionPatch &patch;
+    double us,H,Hh,K,A,UH,PiOuter;
+    std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> profile;
+    SolverUtils::RANSTensor Q{};
+    mutable std::map<std::pair<double,bool>,std::array<double,9>> cache;
+    NeutralComposite(const LibUtilities::SessionReaderSharedPtr &s,const RANSWallEvolutionPatch &p):patch(p)
+    {
+        const auto &m=p.Parameters().model;const auto &g=p.Parameters().geometry;
+        Require(p.OpenBoundary() && p.NewModels() && p.AcceptedAWF() && !p.Mapped() && p.Dimension()==2 &&
+            m.KappaPolicy()==SolverUtils::RANSKappaPolicy::Natural,
+            "NeutralCompositeV1 requires original Natural Accepted serial flat2D open route");
+        s->LoadParameter("RANSWallFrictionVelocity",us);s->LoadParameter("RANSOpenReferenceLength",Hh);
+        H=g.height;K=m.Q()*us*us;A=us*us*us/m.Kappa();
+        Require(std::isfinite(us) && us>0 && std::isfinite(Hh) && Hh>0 && g.sampleHeight==H && g.tailStart==H,
+            "invalid neutral physical scales or endpoint sampler");
+        double q,kappa;s->LoadParameter("RANSOpenEquilibriumQ",q,m.Q());s->LoadParameter("RANSOpenNaturalKappa",kappa,m.Kappa());
+        Require(std::abs(q-m.Q())<=2e-13*m.Q() && std::abs(kappa-m.Kappa())<=2e-13*m.Kappa(),
+            "NeutralCompositeV1 wrong model equilibrium data");
+        for(const std::string name:{"InitialConditionsInner","InitialConditionsOuter","BoundaryValuesInner","BoundaryValuesOuter",
+            "OutletTotalTractionInner","OutletTotalTractionOuter","OutletDiffusiveFluxInner","OutletDiffusiveFluxOuter",
+            "BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
+            Require(!s->DefinesFunction(name),"NeutralCompositeV1 forbids a competing physical function "+name);
+        SolverUtils::AWFProfileOptions o;o.formulation=SolverUtils::AWFProfileFormulation::AcceptedBudgetAWF;o.quadratureOrder=96;
+        profile=std::make_shared<SolverUtils::EquilibriumAWFProfiles>(g,K,m,SolverUtils::AWFNormalMetric{},o,SolverUtils::CalibratedAWFParameters(m));
+        UH=profile->Reference().matchingVelocity;
+        double B;s->LoadParameter("RANSOpenMeanIntercept",B);
+        Require(std::abs(UH-(B+us/m.Kappa()*std::log(H/Hh)))<=2e-10*std::max(1.,std::abs(UH)),
+            "NeutralCompositeV1 mean-fit and finite-nu wall mismatch");
+        SolverUtils::RANSTensor G{};G[0][2]=us/(m.Kappa()*H);
+        const auto law=SolverUtils::EvaluateRANSClosure(m.Model(),K,A/H,G,H,m.Parameters(),0);
+        Q=law.quadraticStress;
+        PiOuter=-Q[2][2];
+    }
+    std::array<double,9> At(double z,bool outer) const
+    {
+        Require(std::isfinite(z) && z>=0 && (outer?z>=H:z<=H),"neutral reference coordinate/side mismatch");
+        const auto key=std::make_pair(z,outer);const auto found=cache.find(key);if(found!=cache.end())return found->second;
+        std::array<double,9> v{}; // U,k,epsilon,Pi,U',k',epsilon',Q0,Dk
+        const double kap=patch.Parameters().model.Kappa();
+        if(outer)v={UH+us/kap*std::log(z/H),K,A/z,PiOuter,us/(kap*z),0,-A/(z*z),0,kap*us*z};
+        else
+        {
+            const double cutoff=profile->Reference().cutoff;
+            v={profile->Original().Velocity(z,{UH,0},{0,0})[0],profile->ReferenceK(z),profile->Dissipation(z),0,
+                us*us/profile->Original().TotalViscosity(z),profile->ReferenceKGradient(z),
+                z<cutoff?0.:-A/(z*z),profile->ReferenceKFlux(z),profile->ReferenceKDiffusivity(z)};
+        }
+        cache.emplace(key,v);return v;
+    }
+};
 RANSWallEvolutionFunction Load(const LibUtilities::SessionReaderSharedPtr &s,
     const std::string &name,const std::string &variable,bool required)
 {
@@ -28,6 +90,7 @@ RANSWallEvolutionFunction Load(const LibUtilities::SessionReaderSharedPtr &s,
 std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSharedPtr &s)
 {
     std::ostringstream out;out<<std::setprecision(17)<<"AcceptedOpenFlatV1:top=DirichletCompatibleV1:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero";
+    if(RANSUsesNeutralComposite(s))out<<":reference=NeutralCompositeV1:coordinate=physical-z-unshifted:Pi_inner=0:Pi_outer=-Qzz:no-finite-depth-cap";
     const std::set<std::string> work{"NUMSTEPS","TIMESTEP","TIME","IO_CHECKSTEPS","IO_INFOSTEPS","IO_TIMER_LEVEL",
         "RANSWALLNORMALORDER","RANSWALLTANGENTIALORDER","RANSWALLMASSORDER","RANSWALLVOLUMEORDER","RANSWALLINTERFACEORDER",
         "RANSWALLPIMPLEREJECTSTEP","RANSWALLPIMPLEHARDAUDITREJECTSTEP"};
@@ -45,6 +108,20 @@ RANSWallEvolutionData LoadRANSAcceptedOpenData(const LibUtilities::SessionReader
 {
     Require(patch.OpenBoundary() && patch.Dimension()==2 && !patch.Mapped(),"open data loader requires AcceptedOpenFlatV1");
     RANSWallEvolutionData data(2);data.openBoundaryIdentity=RANSAcceptedOpenBoundaryIdentity(s);
+    if(RANSUsesNeutralComposite(s))
+    {
+        const auto ref=std::make_shared<NeutralComposite>(s,patch);
+        data.boundary[0]=[ref](const RANSWallCoordinate &p,double){return ref->At(p[2],p[2]>ref->H)[0];};
+        data.boundary[1]=[](const RANSWallCoordinate&,double){return 0.;};
+        data.boundary[patch.K()]=[ref](const RANSWallCoordinate &p,double){return ref->At(p[2],p[2]>ref->H)[1];};
+        data.boundary[patch.Epsilon()]=[ref](const RANSWallCoordinate &p,double){return ref->At(p[2],true)[2];};
+        for(int region=0;region<2;++region)
+        {
+            data.outletTraction[region][0]=[ref,region](const RANSWallCoordinate&,double){return region?ref->Q[2][2]-ref->Q[0][0]:0.;};
+            data.outletTraction[region][1]=[ref](const RANSWallCoordinate&,double){return ref->us*ref->us;};
+        }
+        return data; // default zero body/source/diffusive data; advection stays assembled
+    }
     const double H=patch.Parameters().geometry.height;
     for(int b=0;b<patch.InnerPressure();++b)
     {
@@ -81,6 +158,15 @@ std::vector<RANSWallEvolutionFunction> RANSAcceptedOpenInitialFunctions(
 {
     Require(patch.OpenBoundary(),"open initial-function loader requires its policy");
     std::vector<RANSWallEvolutionFunction> functions;
+    if(RANSUsesNeutralComposite(s))
+    {
+        const auto ref=std::make_shared<NeutralComposite>(s,patch);
+        for(int b=0;b<patch.Gauge();++b)functions.push_back([ref,b](const RANSWallCoordinate &p,double){
+            const bool outer=b==ref->patch.Epsilon() || b==ref->patch.OuterPressure() || p[2]>ref->H;
+            const auto v=ref->At(p[2],outer);
+            return b==0?v[0]:b==1?0.:b==ref->patch.K()?v[1]:b==ref->patch.Epsilon()?v[2]:v[3];});
+        return functions;
+    }
     const double H=patch.Parameters().geometry.height;
     for(int b=0;b<patch.Gauge();++b)
     {
@@ -94,6 +180,23 @@ std::vector<RANSWallEvolutionFunction> RANSAcceptedOpenInitialFunctions(
         }
     }
     return functions;
+}
+
+std::string RANSAcceptedCompositeReferencePacket(const LibUtilities::SessionReaderSharedPtr &s,
+    const RANSWallEvolutionPatch &patch,const std::vector<RANSWallCoordinate> &grid,const std::vector<int> &sides)
+{
+    Require(RANSUsesNeutralComposite(s) && grid.size()==sides.size(),"missing neutral provider or side inventory");
+    const NeutralComposite ref(s,patch);std::vector<std::string> rows;
+    for(std::size_t i=0;i<grid.size();++i)
+    {
+        const double z=grid[i][2];Require(z!=ref.H || sides[i]!=0,"ambiguous exact-interface neutral reference request");
+        const bool outer=z>ref.H || (z==ref.H && sides[i]>0);const auto v=ref.At(z,outer);
+        rows.push_back(J::Object({{"coordinate",J::Numbers(grid[i])},{"side",J::Number(sides[i])},
+            {"region",J::Number(outer?1:0)},{"values_U_k_epsilon_Pi_gradients_Q0_D",J::Numbers(v)}}));
+    }
+    return J::Object({{"provider",J::Quote("NeutralCompositeV1")},{"identity",J::Quote(patch.OpenBoundaryIdentity())},
+        {"K",J::Number(ref.K)},{"A",J::Number(ref.A)},{"UH",J::Number(ref.UH)},
+        {"cutoff",J::Number(ref.profile->Reference().cutoff)},{"Q",J::Rows(ref.Q)},{"samples",J::List(rows)}});
 }
 
 RANSWallEvolutionPatch::OpenBoundaryTerms RANSWallEvolutionPatch::OpenBoundaryContributions(

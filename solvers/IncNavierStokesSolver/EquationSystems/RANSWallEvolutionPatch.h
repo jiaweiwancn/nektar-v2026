@@ -18,6 +18,9 @@
 
 namespace Nektar
 {
+bool RANSUsesNeutralComposite(const LibUtilities::SessionReaderSharedPtr &);
+std::string RANSAcceptedCompositeReferencePacket(const LibUtilities::SessionReaderSharedPtr &,
+    const class RANSWallEvolutionPatch &,const std::vector<RANSWallCoordinate> &,const std::vector<int> &);
 namespace RANSWallR3 { class DurableProgress; }
 SolverUtils::RANSWallNormalMap LoadRANSWallNormalMap(const LibUtilities::SessionReaderSharedPtr &session,int dimension,double height);
 using RANSWallEvolutionFunction=std::function<double(const RANSWallCoordinate&,double)>;
