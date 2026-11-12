@@ -57,6 +57,7 @@ def main():
     a=p.parse_args();os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');run=read(a.campaign/'results.json');diag=read(a.root/'diagnosis-v2/results.json');obs=read(a.root/'observations-v1/results.json')
     m=RequestManifest(a.output,dict(schema='CT5RequiredScopeV1',campaign_sha256=sha(a.campaign/'results.json'),diagnosis_sha256=sha(a.root/'diagnosis-v2/results.json'),observation_sha256=sha(a.root/'observations-v1/results.json'),
         runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),sources={f:sha(Path(__file__).with_name(f)) for f in ('collect_ct_accepted_5.py','ct_accepted5_run.py','ct_accepted5_traction.py')}))
+    require(set(run['models'])=={'A93','A95','E94E95'},'required_model_coverage')
     files={};libraries={};cost=[];failures=[]
     def compact(v):
         if isinstance(v,list):return [compact(x) for x in v]
@@ -83,6 +84,7 @@ def main():
             require(q['case']==case and q['target'] in (.008,.02),'foreign_case_or_horizon')
             for dt,member in q['members'].items():
                 f=Path(member['directory']);native=read(f/'case.evolution.json');require(sha(f/'case.evolution.json')==member['native_report_sha256'] and artifact_hash(native['checkpoint'])==member['history_sha256'],'changed_native_state_or_history')
+                require(np.isfinite(native['time']) and abs(native['time']-member['time'])<1e-13 and native['dt']==float(dt) and native['failure']==member['failure'],'native_endpoint_time_or_failure_mismatch')
                 require(exact_vector_hash(native['state'])==member['state_sha256'] and member['identity']['model']==model and member['identity']['runtime']==runtime_identity(a.runtime/'IncNavierStokesSolver'),'foreign_model_state_or_runtime')
                 root_initial=a.root/('initial-quarter' if dt=='0.0005' else 'initial')/model/dt;packet=read(root_initial/'initial.json')
                 require(exact_vector_hash(packet['observation']['state'])==initial_hash,'changed_actual_initial')
@@ -93,6 +95,7 @@ def main():
                     if b.get('status')=='failed_probe':continue
                     raw=read(file);expected=budget_classification(raw,case)
                     require(raw['observation']['state']==native['state'] and all(expected[k]==b[k] for k in ('equations','reconstruction','physical_volume')),'foreign_or_forged_budget_primitives')
+                    require(raw['initialization_receipt']['explicit_boundary_sha256']==raw['initialization_receipt']['implicit_boundary_sha256']==packet['initialization_receipt']['explicit_boundary_sha256'],'changed_consumed_budget_boundary')
                 require(not any(x.get('bound_calls',0) or x.get('additional_governing_equation_solves',0) or x.get('additional_correction_or_restoration_solves',0) for x in native['pimple_attempts']),'forbidden_runtime_correction')
                 if str(f) not in member_seen:
                     member_seen.add(str(f));timing=f/'timing.jsonl';cost.append(dict(model=model,dt=dt,time=native['time'],execution=member['execution'],timing=scopes(timing,native['audit_times'][0],native['time']),native_sha256=sha(f/'case.evolution.json')))
@@ -102,8 +105,11 @@ def main():
                             native_report_sha256=sha(f/'case.evolution.json'),directory=str(f)))
             b=basic_gate(q['members'],q['temporal'],q['target'],q['dts'],initial_hash);t=traction_gate(q['members'],case,q['target'])
             require(b==q['basic'] and t==q['traction_uncertainty'],'primitive_milestone_recomputation_differs')
+            require(q['qualification']==dict(status='pass' if b['status']==t['status']=='pass' else 'fail',physical_completion=b['physical_completion']),'forged_qualification_label')
             decision['models'][model]['milestones'][label]=dict(target=q['target'],dts=q['dts'],basic=b,traction=t,qualification=q['qualification'])
             if negative is None and b['status']=='pass':negative=negative_controls(q,initial_hash)
+        expected_model_status='pass' if all(t in row['milestones'] and row['milestones'][t]['qualification']['status']=='pass' for t in ('0.008','0.02')) and (model!='A95' or row['spatial']['status']=='resolved_improvement') else 'failed_or_unresolved'
+        require(row['status']==expected_model_status,'forged_model_status')
         save(model+'-complete-comparisons.json',row)
     save('native-costs.json',cost);save('native-failure-witnesses.json',failures);save('negative-controls.json',negative or dict(status='not_attempted_no_complete_primitive_fixture'))
     for row in diag['accepted'].values():row['traction']=summarize_profile(row['traction'])
