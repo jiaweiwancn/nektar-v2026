@@ -20,7 +20,7 @@ def helper_equivalence(initial):
         require(canonical(old)==canonical(new),'changed_default_physical_replay_request')
     points=[[0.,0.,.15],[0.,0.,.15]];request=replay(initial,initial['observation']['state'],0.,points,grid_sides=[-1,1]);require(request['grid_sides']==[-1,1],'explicit_interface_sides_not_retained')
     try:replay(initial,[],0.,points,grid_sides=[-1])
-    except RuntimeError as err:require('replay_grid_side_length_mismatch' in str(err),'wrong_side_length_rejection')
+    except (ValueError,RuntimeError) as err:require('replay_grid_side_length_mismatch' in str(err),'wrong_side_length_rejection')
     else:raise RuntimeError('invalid_side_inventory_accepted')
     return dict(status='pass',default_constitutive_and_budget_requests='byte-identical canonical dictionaries',new_explicit_sides=request['grid_sides'],bad_side_length='expected rejection')
 
