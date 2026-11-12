@@ -1,0 +1,13 @@
+{
+  "schema": "CT4NativeContractV1",
+  "parent_contract_sha256": "d88e4afd235fe802e3b3755c5ab9598a08271cee49b4b1d79482432b957e5088",
+  "status": "pre-run numerical representation supplement; no native zero-step/evolution has been constructed",
+  "change": "replace outer {H,.25,.5,1,2} with geometric factor1.25 from H to2; retain every predeclared inner knot and active physical breakpoint",
+  "justification": "P3 endpoint derivative of log on H~.15->.25 has an O((Delta z/z)^3) remainder inconsistent with the declared1e-3 traction accuracy. Choose one fixed graded recipe before native results; do not relax the accuracy criterion or search meshes.",
+  "quadrature_native_physical_face_order": 16,
+  "quadrature_note": "use the exact CT3 native physical-face order16 alongside q48f16/q64f16/q64f32; original native-volume orders unchanged",
+  "primary_space": "P3/P1; two streamwise columns; 8x8 basis points",
+  "representative_degree_control": "A95 6mm P4/P2 on identical partition; predicted2839 slots, subject to actual native count<=3000",
+  "physics": "same continuous input, mean fits, coefficients, heights, pressure, boundary data and stopping criteria as parent",
+  "scope": "no evolved data or historical receipt is reinterpreted"
+}
