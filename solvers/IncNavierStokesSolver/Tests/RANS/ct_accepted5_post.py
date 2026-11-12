@@ -55,7 +55,7 @@ def main():
             prescribed_outer_total_traction=oc['reference_column']['outer_equilibrium']['outlet_traction'],prescribed_inner_total_traction=[0.,oc['ustar']**2],
             scope='actual reconstructed outlet mismatch, distinct from the prescribed natural datum; not added to ground/interface accuracy norms')
     for attempt in native['pimple_attempts']:
-        if attempt['time'] not in (.001,.002,.004,.008):continue
+        if not any(abs(attempt['time']-t)<1e-13 for t in (.001,.002,.004,.008)):continue
         fpath=artifact(attempt['flow_snapshot'],attempt['flow_snapshot_sha256']);kpath=artifact(attempt['k_snapshot'],attempt['k_snapshot_sha256']);f=read(fpath);k=read(kpath)
         states=[('input',f['input']),('predictor',f['momentum_predictor']),('corrected_flow',f['corrected_flow']),('post_flow',k['post_flow']),('post_epsilon',k['pre_k']),('post_k',k['corrected'])]
         pa,rp,owners=pressure_action(ini['observation'],np.array(f['corrected_flow'])-f['momentum_predictor'],oc['roughness_input'],oc['pressure_degree']);ids=np.array(f['rows'],int);nv=f['velocity_size']
@@ -63,5 +63,6 @@ def main():
         out['baseline_stage_scalars'].append(dict(time=attempt['time'],flow_snapshot_sha256=sha(fpath),k_snapshot_sha256=sha(kpath),
             scalar_inventories={name:dict(state_sha256=exact_vector_hash(state),**scalar_inventory(ini,state,oldprep['global_count'],oldprep['weights'])) for name,state in states},
             independent_full_pressure_action_defect=defect,rough_pressure_action_maximum=float(np.max(abs(rp))),trace_geometries=sorted({p['trace_geometry'] for p in owners})))
+    require(len(out['baseline_stage_scalars'])==4,'missing_required_stage_time')
     write_json(a.output/'results.json',out);m.seal(a.output,['results.json']);print('CT5 equal-time/scalar/outlet postchecks pass');return 0
 if __name__=='__main__':raise SystemExit(main())
