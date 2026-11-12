@@ -40,12 +40,20 @@ def execute(root,label,argv,*,cwd=None,seconds=120,cp0=False,generator_fix=None)
     def limits():
         import resource
         resource.setrlimit(resource.RLIMIT_AS,(8*1024**3,8*1024**3));resource.setrlimit(resource.RLIMIT_FSIZE,(8*1024**3,8*1024**3))
-    start=time.monotonic();peak=0;reason=None;groups=set();last=start
+    start=time.monotonic();peak=0;reason=None;groups=set();last=start;mapped=set()
+    def mappings(pid):
+        try:
+            for line in Path(f'/proc/{pid}/maps').read_text().splitlines():
+                fields=line.split(maxsplit=5)
+                if len(fields)==6 and fields[5].startswith('/')and not fields[5].endswith(' (deleted)'):
+                    mapped.add(str(Path(fields[5]).resolve()))
+            for ch in Path(f'/proc/{pid}/task/{pid}/children').read_text().split():mappings(int(ch))
+        except (FileNotFoundError,ProcessLookupError):pass
     with(folder/'command.log').open('x')as f:
         child=subprocess.Popen(['/usr/bin/time','-v',*map(str,argv)],cwd=cwd or root,env=env,stdout=f,stderr=subprocess.STDOUT,
             start_new_session=True,preexec_fn=limits)
         while child.poll()is None:
-            rss,n=tree_usage(child.pid);peak=max(peak,rss);groups|=owned_groups(child.pid)
+            rss,n=tree_usage(child.pid);peak=max(peak,rss);groups|=owned_groups(child.pid);mappings(child.pid)
             if rss>8*1024**3 or time.monotonic()-start>seconds:reason='RESOURCE_LIMIT process memory/time'
             if time.monotonic()-last>=5:
                 last=time.monotonic()
@@ -62,6 +70,8 @@ def execute(root,label,argv,*,cwd=None,seconds=120,cp0=False,generator_fix=None)
                 try:os.killpg(g,signal.SIGKILL)
                 except ProcessLookupError:pass
             code=child.wait()
+    loaded=[dict(path=p,bytes=Path(p).stat().st_size,sha256=sha(p))for p in sorted(mapped)if Path(p).is_file()]
+    save(folder/'loaded-maps.json',loaded)
     entry.update(status='RESOURCE_LIMIT'if reason else 'PASS'if code==0 else 'FAIL',seconds=time.monotonic()-start,exit=code,
         reason=reason,peak_tree_rss_bytes=peak,root_bytes=size(root),log_sha256=sha(folder/'command.log'))
     book['entries'][label]=entry;save(journal,book);save(folder/'receipt.json',dict(request,**entry));print(label,entry['status'],entry['seconds'],flush=True)

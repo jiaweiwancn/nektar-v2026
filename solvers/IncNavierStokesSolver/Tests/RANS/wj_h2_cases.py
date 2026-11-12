@@ -66,16 +66,18 @@ def reduced_normal_offset(K,Rnn):
     return float(Rnn-2*K/3)
 
 
-def analytic_expressions(H,h,*,u_tau=US,nu=NU,d0=D0,top=TOP,z0_e=None):
+def analytic_expressions(H,h,*,u_tau=US,nu=NU,d0=D0,top=TOP,z0_e=None,expression_degree=12):
     """Shared neutral expressions with explicit physical parameters.
 
     The legacy analytic caller retains its own wall-intercept anchor. H5 passes
     its independently fitted common z0_e and never constructs Completion.
     """
+    if isinstance(expression_degree,bool)or not isinstance(expression_degree,int)or not 2<=expression_degree<=24:
+        raise ValueError('finite integer expression degree in [2,24] required')
     K=QE*u_tau**2;w=wall(K,H,h,nu=nu);A=u_tau**3/KAPPA;r=f'(y-({num(d0)}))'
     cuts=sorted(set([0.,H]+[v for v in (w['rc'],h,w['zv'],.001,.005,.02,.05,.1,.25)if 0<v<H]))
-    ui,ue=approximate(lambda z:u_tau**2*float(w['J'](z)),cuts,origin=d0)
-    ki,ke=approximate(w['kref'],cuts,origin=d0)
+    ui,ue=approximate(lambda z:u_tau**2*float(w['J'](z)),cuts,expression_degree,origin=d0)
+    ki,ke=approximate(w['kref'],cuts,expression_degree,origin=d0)
     inner=dict(u=ui,v='0',k=ki,p=num(-K/(81/20)))
     U=f'({num(u_tau**2*w["J0"])})+({num(u_tau/KAPPA)})*log(({r})/{num(H)})'
     if z0_e is not None:

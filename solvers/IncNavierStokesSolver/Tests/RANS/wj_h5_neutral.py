@@ -31,7 +31,8 @@ def measurements(d0_mm=3.5,delta_mm=250.):
     positive(d0_mm=d0_mm,delta_mm=delta_mm)
     import json
     resolution=json.loads(DIGITIZATION.read_text())['resolution'];result=[]
-    for row in csv.DictReader(DATA.open()):
+    with DATA.open()as f:raw_rows=list(csv.DictReader(f))
+    for row in raw_rows:
         panel=row['panel'];raw=float(row['raw_height'])
         z=raw if panel=='a' else raw*delta_mm if panel=='b' else d0_mm+raw*delta_mm
         result.append(dict(panel=panel,point=int(row['point']),z_mm=z,r_mm=z-d0_mm,value=float(row['value']),

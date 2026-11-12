@@ -26,7 +26,7 @@ def mesh_knots(c):
 
 def case_xml(folder,c):
     if not isinstance(c,NeutralReference):raise TypeError('distinct neutral configuration required; no Completion adapter')
-    inner,outer,oi,oo,top,tf,meta=analytic_expressions(c.H,c.h,u_tau=c.u_tau,nu=c.nu,d0=c.d0,top=c.top,z0_e=c.z0_e)
+    inner,outer,oi,oo,top,tf,meta=analytic_expressions(c.H,c.h,u_tau=c.u_tau,nu=c.nu,d0=c.d0,top=c.top,z0_e=c.z0_e,expression_degree=16)
     meta.pop('wall');ik,physical_r,z=mesh_knots(c);folder=Path(folder);folder.mkdir(parents=True,exist_ok=False)
     root=ET.parse(Path(__file__).with_name('EquilibriumWallFlat.xml')).getroot();co=root.find('CONDITIONS')
     for child in list(co):
@@ -64,7 +64,7 @@ def case_xml(folder,c):
     path=folder/'case.xml';write(root,path)
     meta.update(reference=c.summary(),inner_knots=ik,physical_outer_r=physical_r,chart_knots=z,
         physical_knots=[c.d0+r for r in ik]+[c.d0+r for r in physical_r[1:]],
-        xknots=[0.,8.],normal_cells=len(z)-1,steps=0,scope='IDEALIZED EQUILIBRIUM CONTROL; not finite-depth experimental inlet')
+        xknots=[0.,8.],normal_cells=len(z)-1,expression_degree=16,steps=0,scope='IDEALIZED EQUILIBRIUM CONTROL; not finite-depth experimental inlet')
     (folder/'case-design.json').write_text(json.dumps(meta,indent=2,allow_nan=False)+'\n');return path
 
 

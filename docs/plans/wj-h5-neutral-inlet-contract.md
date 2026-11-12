@@ -109,3 +109,9 @@ mixed tolerances above. Rounded tabulated expectations use tolerances matching
 their printed precision. Nonpolynomial represented residuals are measured, not
 required to vanish or erased by forcing. Output explicit continuum/candidate/
 measurement-scope/native-representation statuses and a bounded next decision.
+
+Pre-CP0 generator repair: the first Linux fixture found a degree12 inner
+Function approximation error5.51347e-11, above the frozen2e-11 limit. The new
+family uses degree16 piecewise expressions; the old analytic caller keeps its
+degree12 default. No field equation, data fit, mesh, native quadrature or
+tolerance changes. No CP0 was consumed by this fixture failure.
