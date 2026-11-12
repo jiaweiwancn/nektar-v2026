@@ -14,6 +14,12 @@ observer `e62b5f4d265f068dd5af3f090bfb0e385c3ae53e` after input/library/hash
 checks. Python changes get distinct identities; no native rebuild is planned.
 Retain Release C++17, -ffp-contract=off -fno-fast-math, RANS_BUILD_SOLVER=ON.
 
+The original Mac and tracked specification byte identities remain
+`1959e96ea0b61f9deb9ff9ad1f5b26488a932a8451c2de6d3b6f7b7c9dbd9124`
+(main) and `0ab52e0d813b8fb344973f75ca6d8da97ff389ef9f93476500ca9d1df1fbc47c`
+(appendix). Retain literal `quad` versus `\quad` in eq:integrals-linear and the
+correct `(d+a*h)/a^2` coefficient. No algebra or specification bytes change.
+
 All fresh cases retain VerticalBalanceV1, ZeroTractionV1, q12/NormalOrder16,
 the original H3 U/k/epsilon/roughness/displacement data, domain[0,8] and
 physical ceiling20. Full3D WJ/cubic-N, DevStrainRawWorkV1, physical epsilon,
@@ -23,6 +29,10 @@ budget cutoff, A(K)/H and one outer epsilon trace remain. Q3/Q1 regional
 spaces, coupling, IMEX1/PimpleSingleSweep, zero forcing, eta=0, no condensation,
 ExactStepV1 reuse, PimpleVerify=Off and StopOnBound=On are unchanged.
 Keep the3000-state guard. No clipping, regularization, cap or extra correction.
+The inherited H3 physical inputs are nu=.051*.005/3.97, d0=.0875,
+H_w=.5, h_s=.03721697831176141 and continuous K_H=.012618181994557477.
+The physical interface is z=.5875; outer chart rho is not physical height.
+These record the unchanged H3 completion; they are not a new calibration.
 
 First implement physical-point reconstruction and enumerate ALL closed-element
 owners. Region/H role and horizontal/normal side are separate. At H evaluate

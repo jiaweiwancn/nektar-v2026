@@ -30,7 +30,8 @@ def extract(root):
                     r['U'+axis]=row['U'][a];r['normal_'+axis]=row['normal'][a]
                     r['actual_traction_'+axis]=row['actual_traction'][a];r['applied_traction_'+axis]=row['applied_traction'][a]
                     for b,other in enumerate('xyz'):r['G'+axis+other]=row['G'][a][b];r['R'+axis+other]=row['R'][a][b]
-                for j,block in enumerate(('u','w','k','epsilon')):r['prescribed_weak_flux_'+block]=row['flux'][j]
+                for j,block in enumerate(('u','w','k','epsilon')):
+                    r['prescribed_weak_flux_'+block]=None if row['inner']and block=='epsilon'else row['flux'][j]
                 if writer is None:writer=csv.DictWriter(f,fieldnames=list(r));writer.writeheader()
                 writer.writerow(r);count+=1
             interfaces.extend(dict(case=name,time=p['open_boundary']['time'],**row)for row in p['open_boundary']['interface'])
