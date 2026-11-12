@@ -132,6 +132,12 @@ global stability. The later precursor-development design is a proposal only.
 
 ## Publication
 
+One matched base23/q8 **zero-step** SignCorrectedV1 initialization may be
+compared with the balanced-q8 CP0 to isolate vertical seed projection on the
+same mesh. Verify identical differential coefficients. This adds no evolution,
+parameter search or attempt allocation. Its initialization/readback time is
+charged to this package, alongside the native Nx2 size/signature checks.
+
 Compact H3 code/tests/contract/evidence, scientific tables/figures and receipts
 index immutable heavy data. Distinguish initializer sign, expression/projection,
 integration, outlet/x sensitivity and unresolved constitutive effects.

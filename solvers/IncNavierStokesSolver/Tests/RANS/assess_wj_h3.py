@@ -125,6 +125,32 @@ def count_and_signature(root):
     save(folder/'result.json',dict(status='PASS',original_checkpoint=original,reason='changed supported pressure-seed Function identity'))
 
 
+def startup_pair(root):
+    # One additional zero-step field isolates the two seed choices on identical
+    # base mesh/q8 inputs. No trajectory, new timestep or fitted profile is added.
+    save(root/'matched-startup-intent.json',dict(role='passive initializer comparison only',native_attempts=0,
+        seed='SignCorrectedV1',comparison='balanced-q8-cp0',normal_mesh='base23',q=8,dt=.01,
+        preserves_original_U_k_epsilon_roughness=True))
+    r,v=native(root,'sign-only-base-cp0',dt=.01)
+    folder=root/'matched-startup-observation';folder.mkdir()
+    rp=root/'cases/sign-only-base-cp0/case.evolution.json';cp=Path(r['checkpoint'])
+    request=dict(operation='open_checks',inner_stress_model='Linear',native_report=str(rp),native_report_sha256=sha(rp),
+        native_checkpoint=str(cp),checkpoint_sha256=sha(cp/'State.bin'),physical_observations=[[4.,0,.5875]],
+        weak=False,assembly=False,reuse=False)
+    save(folder/'request.json',request)
+    observer=actual('/media/jay/新加卷/nektar-v2026-runs/wj-h2-20261111/observer-v6/RANSWallResolutionProbe')
+    assert execute(root,'matched-startup-observation',[observer,rp.with_name('case.xml'),folder/'request.json',folder/'native.json'],folder,0,120)
+    p=load(folder/'native.json');assert p['initialization_work']==[0,0]
+    old=load(root/'cases/balanced-q8-cp0/case.evolution.json')
+    for block in range(4):
+        lo,hi=r['offsets'][block:block+2]
+        assert np.asarray(r['state'][int(lo):int(hi)],dtype='<f8').tobytes()==np.asarray(old['state'][int(lo):int(hi)],dtype='<f8').tobytes()
+    save(folder/'result.json',dict(status='PASS',producer=identity(rp),native=identity(folder/'native.json'),
+        minimal_offset_spatial=p['physical_mass_dual_norms'],
+        balanced_spatial=load(root/'native-observations-v1/index.json')['balanced-q8-cp0']['stage_norms'],
+        differential_initial_coefficients_identical=True,scope='same mesh/order/physical completion; pressure initialization only'))
+
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('analyze','observe','count-and-signature'),required=True)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('analyze','observe','count-and-signature','startup-pair'),required=True)
     a=p.parse_args();globals()[a.mode.replace('-','_')](a.root)
