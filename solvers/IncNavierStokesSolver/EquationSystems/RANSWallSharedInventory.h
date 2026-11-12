@@ -16,6 +16,7 @@ public:
     auto end() const {return values->cend();}
     std::size_t size() const {return values->size();}
     bool empty() const {return values->empty();}
+    const T &front() const {return values->front();}
     const T &operator[](std::size_t i) const {return (*values)[i];}
     void push_back(T value){Detach();values->push_back(std::move(value));}
     void clear(){values=std::make_shared<std::vector<T>>();}

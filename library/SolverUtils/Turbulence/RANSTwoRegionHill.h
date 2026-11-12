@@ -14,7 +14,9 @@
 
 namespace Nektar::SolverUtils
 {
-/** H1 geometry kernel, NOT an enabled mapped PIMPLE backend.
+/** Certified two-region geometry kernel. Coupled use is restricted to the
+ * explicit CompositeHillV1 finite/open budget-AWF pilot; kernel verification
+ * alone does not qualify mapped physical evolution.
  * s is base horizontal position (not arclength); r is physical AWF normal
  * distance. Above Gamma_H, eta is a vertical extrusion coordinate, not wall
  * distance. Incoming-frame height is a separate physical reference query.
@@ -108,7 +110,7 @@ public:
      * an explicit distance error, and keeps multiple minimizing witnesses.
      * This is independent of the outer eta and the incoming reference height.
      */
-    WallDistance PhysicalWallDistance(const RANSVector &p,double tolerance=1e-10) const
+    WallDistance PhysicalWallDistance(const RANSVector &p,double tolerance=1e-10,bool chordEnvelope=true) const
     {
         Check(p[1]==0 && std::isfinite(p[0]) && std::isfinite(p[2]) && tolerance>0,"invalid wall-distance query");
         struct Box {double a,b,lower;bool operator<(const Box &q)const{return lower>q.lower;}};
@@ -127,7 +129,21 @@ public:
         {
             const double fa=f(a),fb=f(b),lo=std::min(fa,fb),hi=std::max(fa,fb);
             const double dx=std::max({a-p[0],p[0]-b,0.}),dz=std::max({lo-p[2],p[2]-hi,0.});
-            return Box{a,b,dx*dx+dz*dz};
+            if(!chordEnvelope)return Box{a,b,dx*dx+dz*dz}; // retained diagnostic reference
+            // A rectangle loses correlation between x and z and gives a
+            // first-order distance gap on sloping segments. The cosine has
+            // |f''|<=CurvatureBound(); its graph is within C*(b-a)^2/8 of
+            // the chord. Distance to that segment minus the envelope is a
+            // second independent, certified lower bound. No normal-footpoint
+            // uniqueness or Newton convergence is assumed.
+            const double vx=b-a,vz=fb-fa,length2=vx*vx+vz*vz;
+            const double t=std::clamp(((p[0]-a)*vx+(p[2]-fa)*vz)/length2,0.,1.);
+            const double chord=std::hypot(a+t*vx-p[0],fa+t*vz-p[2]);
+            const double envelope=CurvatureBound()*(b-a)*(b-a)/8;
+            const double correlated=std::max(0.,chord-envelope);
+            const double floating=64*std::numeric_limits<double>::epsilon()*(1+std::abs(p[0])+std::abs(p[2])+m_Hh+m_L);
+            const double lower=std::max(0.,std::sqrt(std::max(dx*dx+dz*dz,correlated*correlated))-floating);
+            return Box{a,b,lower*lower};
         };
         std::priority_queue<Box> queue;queue.push(box(-m_L,0));queue.push(box(0,m_L));
         WallDistance out;
@@ -150,7 +166,8 @@ public:
     std::string Signature() const
     {
         std::ostringstream s;s.imbue(std::locale::classic());s<<std::setprecision(17)<<"CosineNormalVerticalV1:physical-nearest-wall-distance:foot-side-explicit";
-        for(double x:{m_Hh,m_L,m_Hw,m_Z,m_xmin,m_xmax})s<<':'<<x;return s.str();
+        for(double x:{m_Hh,m_L,m_Hw,m_Z,m_xmin,m_xmax})s<<':'<<x;
+        return s.str();
     }
 private:
     static RANSWallNormalMap Map(double H,double L,double Hw)

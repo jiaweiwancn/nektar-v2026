@@ -88,7 +88,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored,
     bool originalOuterCounterfactual,bool analyticalReference) const
 {
-    Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || AcceptedAWF()),
+    Require(m_comm->GetSize()==1 && m_dimension==2 && (!Mapped() || Composite()) && ((m_transitionEnabled && m_cappedDestruction) || AcceptedAWF()),
         "R3 residual-resolution audit requires serial flat2D Upstream+Capped");
     Require(state.size()==Size() && history.size()==Size() && alpha>=0 && m_eta==0,
         "R3 residual-resolution audit requires frozen unanchored valid state/history");
@@ -152,7 +152,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
         else
         {
             epsilon=analyticalReference?us*us*us/(m_parameters.model.Kappa()*Distance(q.v.coordinate)):q.e.Value(s,offset[Epsilon()]);const auto c=originalOuterCounterfactual?
-                EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,G,Distance(q.v.coordinate),m_parameters.model.Parameters(),0):
+                EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,G,OuterWallDistance(q.v.coordinate),m_parameters.model.Parameters(),0):
                 OuterClosure(k,epsilon,G,q.v.coordinate);
             dk=c.kDiffusion;de=c.epsilonDiffusion;sk=c.kSource+data.outerKSource(q.v.coordinate,time);
             se=c.epsilonSource+data.outerEpsilonSource(q.v.coordinate,time);
@@ -211,7 +211,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     for(const auto &ray:m_rays)
     {const auto force=analyticalReference?RANSVector{}:CartesianForcing(s,ray.coordinate,time,data,false);for(const auto &q:ray.points)evaluate(q,true,ray.profile.get(),force,&ray.destruction);}
     for(const auto &q:m_outer)evaluate(q,false,nullptr,{},nullptr);
-    if(DevelopingFlat())
+    if(OpenBoundary())
     {
         const auto f=DevelopingFlux(s);
         for(const auto &term:std::vector<std::pair<std::string,const Vector*>>{{"external_advection",&f.advection},{"external_traction",&f.traction},{"external_diffusion",&f.diffusion}})
@@ -221,7 +221,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     const auto prescribed=OwnedBodyLoad(time,data);
     for(int row=0;row<Size();++row)
     {Bucket(buckets,"prescribed_body",Size()).Add(row,-prescribed[row],-prescribed[row]);Bucket(buckets,"legacy_spatial",Size()).Add(row,-prescribed[row],-prescribed[row]);}
-    if(!DevelopingFlat())for(int side=0;side<2;++side)for(int j=0;j<m_pressureMean[side].size();++j)
+    if(!OpenBoundary())for(int side=0;side<2;++side)for(int j=0;j<m_pressureMean[side].size();++j)
     {
         const int row=offset[InnerPressure()+side]+j;const double w=m_pressureMean[side][j];
         for(const std::string name:{"gauge","legacy_spatial"})

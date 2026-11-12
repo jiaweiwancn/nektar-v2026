@@ -234,7 +234,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
         {
             const auto &c=projection->cuts[projection->solvedActive[i]];const auto &w=witnesses[c.witness];
             const double value=w.row.Value(result.state,offset[K()]);primal=std::max(primal,floor-value);
-            active.push_back(J::Object({{"functional_kind",J::Quote(w.row.columnAverage?"ColumnAverage":"Point")},{"coordinate",J::Numbers(w.row.coordinate)},{"geometry",J::Number(w.row.geometry)},
+            active.push_back(J::Object({{"physical_coordinate",J::Numbers(Physical(w.row.coordinate))},{"functional_kind",J::Quote(w.row.columnAverage?"ColumnAverage":"Point")},{"coordinate",J::Numbers(w.row.coordinate)},{"geometry",J::Number(w.row.geometry)},
                 {"inventory",J::Quote(w.inventory)},{"raw",J::Number(w.row.Value(raw,offset[K()]))},{"corrected",J::Number(value)},
                 {"floor",J::Number(floor)},{"normalized_dual_multiplier",J::Number(projection->solvedLambda[i])}}));
         }
@@ -284,7 +284,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     record(J::Object({{"kind",J::Quote("correction_end")},{"success",J::Boolean(result.success)},
         {"failure",J::Quote(result.failure)},{"seconds",J::Number(seconds())}}));if(traceStream)traceStream.flush();
     auto location=[&](double value,const Location &w){return J::Object({{"value",J::Number(value)},
-        {"functional_kind",J::Quote(w.row.columnAverage?"ColumnAverage":"Point")},{"coordinate",J::Numbers(w.row.coordinate)},{"geometry",J::Number(w.row.geometry)},{"inventory",J::Quote(w.inventory)}});};
+        {"physical_coordinate",J::Numbers(Physical(w.row.coordinate))},{"functional_kind",J::Quote(w.row.columnAverage?"ColumnAverage":"Point")},{"coordinate",J::Numbers(w.row.coordinate)},{"geometry",J::Number(w.row.geometry)},{"inventory",J::Quote(w.inventory)}});};
     std::vector<std::pair<std::string,std::string>> counts,cuts;
     for(auto [name,count]:familyCounts)counts.push_back({name,J::Number(count)});
     for(auto [name,count]:discovered)cuts.push_back({name,J::Number(count)});

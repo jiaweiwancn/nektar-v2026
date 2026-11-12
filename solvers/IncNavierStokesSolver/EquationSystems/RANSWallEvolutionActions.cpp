@@ -52,7 +52,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::AffinePressureAction(
             auto found=forceCache.find(H);
             if(found==forceCache.end())
             {
-                const auto metric=m_mapping.At(H);
+                const auto metric=GeometryAt(H);
                 const auto gradient=Point(OuterPressure(),H,1).Gradient(direction,offset[OuterPressure()]);
                 double normal=0;for(int a=0;a<3;++a)normal+=metric.normal[a]*gradient[a];
                 for(int a=0;a<3;++a)force[a]=gradient[a]-metric.normal[a]*normal;
@@ -73,7 +73,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::AffinePressureAction(
     Vector result(Size());for(int i=0;i<Size();++i)result[i]=static_cast<double>(owned[i]);
     m_comm->AllReduce(result,LibUtilities::ReduceSum);
     // The mean/gauge block is replicated. Add it only after owned assembly.
-    if(!DevelopingFlat())for(int side=0;side<2;++side)if(region<0 || side==region)
+    if(!OpenBoundary())for(int side=0;side<2;++side)if(region<0 || side==region)
         for(int i=0;i<static_cast<int>(m_pressureMean[side].size());++i)
         {
             const int row=offset[InnerPressure()+side]+i;
@@ -101,7 +101,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PressureDirectionalAction
     {
         auto H=point;H[2]=m_parameters.geometry.height;
         const auto input=TransitionInput(s,H,time,data);AWFTransitionInput derivative;
-        const auto metric=m_mapping.At(H);
+        const auto metric=GeometryAt(H);
         const auto gradient=Point(OuterPressure(),H,1).Gradient(direction,offset[OuterPressure()]);
         double normal=0;for(int a=0;a<3;++a)normal+=metric.normal[a]*gradient[a];
         const double K0=SampleK(s,H),viscous=m_parameters.geometry.molecularNu/metric.height;
@@ -126,7 +126,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PressureDirectionalAction
         value.profile=StateProfile(s,point,time,data);
         Require(value.profile->Reference().weight>0 && value.profile->Reference().cutoff>0,
             "nonzero pressure transition derivative requires an active qualified cutoff");
-        const auto &profile=*value.profile;const double scale=m_mapping.At(point).scale;
+        const auto &profile=*value.profile;const double scale=GeometryAt(point).scale;
         RANSCappedDestructionInput input;RANSCappedDestructionDirection derivative;
         input.sampledK=profile.K();
         for(const auto &q:profile.Quadrature())
@@ -161,7 +161,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PressureDirectionalAction
         if(derivative.chi==0)continue;
         const auto &rule=derivative.profile->Quadrature();
         Require(rule.size()==derivative.derivative.destruction.size(),"pressure source direction shape differs");
-        const double scale=m_mapping.At(ray.coordinate).scale;
+        const double scale=GeometryAt(ray.coordinate).scale;
         for(std::size_t i=0;i<rule.size();++i)
         {
             auto point=ray.coordinate;point[2]=rule[i].r/scale;const auto q=Point(K(),point);

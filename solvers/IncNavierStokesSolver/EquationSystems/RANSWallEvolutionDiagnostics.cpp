@@ -118,7 +118,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         else {auto &r=result["physical_sample_K"];++r[0];r[1]=std::min(r[1],SampleK(s,ray.coordinate));}
         if(m_transitionEnabled)
         {
-            const double scale=m_mapping.At(ray.coordinate).scale;
+            const double scale=GeometryAt(ray.coordinate).scale;
             for(double distance:{m_sensorA,m_sensorB})
             {auto p=ray.coordinate;p[2]=distance/scale;sample("physical_sample_outer",Point(0,p),false,true,false);}
         }
@@ -126,7 +126,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     for(const auto &q:m_outer)sample("source_volume_outer",q.v,false,true,true);
     for(const auto &q:m_bodyInner)sample("prescribed_source_inner",q.v,true,false,true);
     for(const auto &q:Quadrature(0))sample("mass_volume",q,q.coordinate[2]<m_parameters.geometry.height,false,false);
-    for(const auto &f:Surface(0,2,m_parameters.geometry.height,1,8))
+    for(const auto &f:SurfaceView(0,2,m_parameters.geometry.height,1,8))
     {
         sample("interface_inner",Point(0,f.test.coordinate,-1),true,true,false);
         sample("interface_outer",Point(0,f.test.coordinate,1),false,true,false);
@@ -165,11 +165,11 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     }
     continuity[0]=std::sqrt(continuity[0]);continuity[1]=std::sqrt(continuity[1]);
     for(int axis:{0,1,2})if(m_dimension==3 || axis!=1)for(int side:{-1,1})
-        for(const auto &f:Surface(0,axis,side<0?lower[axis]:upper[axis],side,8))
+        for(const auto &f:SurfaceView(0,axis,side<0?lower[axis]:upper[axis],side,8))
             for(int a=0;a<m_dimension;++a)continuity[4]+=f.weight*f.test.Value(s,offset[a])*f.area[PhysicalAxis(a)];
     result["strong_continuity"] = continuity;
     Vector face(8);
-    for(const auto &f:Surface(0,2,m_parameters.geometry.height,1,8))
+    for(const auto &f:SurfaceView(0,2,m_parameters.geometry.height,1,8))
     {
         auto p=f.test.coordinate;const double measure=std::hypot(f.area[0],f.area[1],f.area[2]);
         RANSVector n{};for(int a=0;a<3;++a)n[a]=f.area[a]/measure;
@@ -271,7 +271,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     {
         RANSTensor G{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);
         const double k=q.v.Value(s,offset[K()]),eps=q.e.Value(s,offset[Epsilon()]);
-        const auto original=EvaluateRANSClosure(m_parameters.model.Model(),k,eps,G,Distance(q.v.coordinate),m_parameters.model.Parameters(),0);
+        const auto original=EvaluateRANSClosure(m_parameters.model.Model(),k,eps,G,OuterWallDistance(q.v.coordinate),m_parameters.model.Parameters(),0);
         const auto changed=OuterClosure(k,eps,G,q.v.coordinate);
         for(int a=0;a<3;++a)for(int b=0;b<3;++b)
             modification[0]-=q.weight*(changed.reynoldsStress[a][b]-original.reynoldsStress[a][b])*G[a][b];
@@ -345,7 +345,7 @@ std::string LawJSON(const RANSClosureValues &c,double k,const RANSTensor &g,cons
 std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,double time,
     const RANSWallEvolutionData &data,const std::vector<RANSWallCoordinate> &witnesses) const
 {
-    namespace J=RANSWallSolveJson;Require(AcceptedAWF() && !Mapped() && m_dimension==2,"constitutive forensic scope is accepted AWF flat2D");
+    namespace J=RANSWallSolveJson;Require(AcceptedAWF() && (!Mapped() || Composite()) && m_dimension==2,"constitutive forensic scope is accepted AWF flat2D");
     const auto before=RANSWallR3::Hash(s);const auto domain=ScalarDomain(s,time,data,true);
     if(!domain.admissible)return J::Object({{"scalar_budget",ScalarDomainJSON(domain)}, {"covariance_evaluated","false"},{"state_sha256",J::Quote(before)}});
     Refresh(s,time,&data);double minimum[4]={1e300,1e300,1e300,1e300};std::string minima[4]={"null","null","null","null"};std::map<std::string,int> counts;
@@ -373,7 +373,7 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
         }
         else
         {
-            c=OuterClosure(k,epsilon,g,v.coordinate);original=EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,g,Distance(v.coordinate),m_parameters.model.Parameters(),0);
+            c=OuterClosure(k,epsilon,g,v.coordinate);original=EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,g,OuterWallDistance(v.coordinate),m_parameters.model.Parameters(),0);
             RANSRobustVariant variant;
             if(FiniteInflowReference())variant=RegularizedReferenceAt(v.coordinate);
             else
@@ -383,7 +383,7 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
                 for(int a=0;a<3;++a)for(int b=0;b<3;++b)variant.referenceStrain[a][b]=shear*(m_referenceFlow[a]*m_referenceNormal[b]+m_referenceNormal[a]*m_referenceFlow[b]);
             }
             variant.beta=.4;
-            regularized=EvaluateRANSRobustClosure(m_parameters.model.Model(),k,epsilon,g,Distance(v.coordinate),m_parameters.model.Parameters(),0,variant);
+            regularized=EvaluateRANSRobustClosure(m_parameters.model.Model(),k,epsilon,g,OuterWallDistance(v.coordinate),m_parameters.model.Parameters(),0,variant);
         }
         const double eigen=CovarianceSpectrum(c.reynoldsStress).eigenvalues[0];const int region=inner?0:1;++counts[family];
         const double originalEigen=inner?1e300:CovarianceSpectrum(original.reynoldsStress).eigenvalues[0];
@@ -391,7 +391,7 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
         if(!retain && eigen>=minimum[region] && originalEigen>=minimum[2] && regularizedEigen>=minimum[3])return std::string("null");
         const auto kr=SampleKRow(v.coordinate);const auto epsH=Point(Epsilon(),{v.coordinate[0],0,m_parameters.geometry.height},1);
         const bool rowInner=v.element>=0 && fields[0]->Elements().at(v.element).upper[2]<=m_parameters.geometry.height+1e-12;
-        const auto item=J::Object({{"coordinate",J::Numbers(v.coordinate)},{"geometry",J::Number(v.geometry)},
+        const auto item=J::Object({{"coordinate",J::Numbers(v.coordinate)},{"physical_coordinate",J::Numbers(Physical(v.coordinate))},{"geometry",J::Number(v.geometry)},
             {"element",J::Number(v.element)},{"inner",J::Boolean(inner)},{"inventory",J::Quote(family)},
             {"gradient_element_region",J::Quote(rowInner?"inner":"outer")},
             {"constitutive_region",J::Quote(inner?"inner":"outer")},
@@ -423,7 +423,7 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
     {
         const auto &element=fields[0]->Elements()[j];bool contains=true;
         for(int a:{0,2})contains=contains && point[a]>=element.lower[a]-1e-12 && point[a]<=element.upper[a]+1e-12;
-        if(contains)neighbors.push_back(evaluate(fields[0]->ElementPoint(j,point),element.upper[2]<=m_parameters.geometry.height+1e-12,"explicit_one_sided_witness",true));
+        if(contains)neighbors.push_back(evaluate(GeometryPoint(0,element.geometry,point),element.upper[2]<=m_parameters.geometry.height+1e-12,"explicit_one_sided_witness",true));
     }
     Require(before==RANSWallR3::Hash(s),"forensic tensor diagnostic changed selected coefficients");
     std::vector<std::pair<std::string,std::string>> inventory;for(auto [name,n]:counts)inventory.push_back({name,J::Number(n)});
@@ -575,7 +575,7 @@ std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,
         for(const auto &name:RANSWallResolutionSpatialTerms())
         {long double v=0;for(int i=0;i<size[0];++i)v+=(long double)lifting[i]*r.terms.at(name)[offset[0]+i];components.push_back({name,J::Number(v)});}
         double sampled=0,measure=0,gradient=0;
-        for(const auto &face:Surface(0,2,0.,-1,8))
+        for(const auto &face:SurfaceView(0,2,0.,-1,8))
         {
             const auto &q=face.test;const auto profile=StateProfile(s,q.coordinate,time,data);RANSTensor G{};
             for(int b=0;b<m_dimension;++b)G[PhysicalAxis(b)]=q.Gradient(s,offset[b]);
@@ -615,7 +615,7 @@ std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,
             {
                 const double bottom=b==Epsilon()?m_parameters.geometry.height:lower[2];
                 const double value=axis==0?(side<0?lower[0]:upper[0]):(side<0?bottom:upper[2]);
-                for(const auto &f:Surface(b,axis,value,side,8))
+                for(const auto &f:SurfaceView(b,axis,value,side,8))
                 {
                     const auto &q=f.test;const auto v=Point(0,q.coordinate);
                     const double un=side*v.Value(s,offset[axis==0?0:1]);
@@ -670,7 +670,7 @@ std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,
             const auto &s=*values;const double k=q.v.Value(s,offset[K()]),epsilon=q.e.Value(s,offset[Epsilon()]);RANSTensor G{};
             for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);
             const auto c=OuterClosure(k,epsilon,G,q.v.coordinate);
-            const auto o=EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,G,Distance(q.v.coordinate),m_parameters.model.Parameters(),0);
+            const auto o=EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,G,OuterWallDistance(q.v.coordinate),m_parameters.model.Parameters(),0);
             productionMax=std::max(productionMax,std::abs(c.production-o.production));
             double delta=0.;for(int i=0;i<3;++i)for(int j=0;j<3;++j)delta=std::max(delta,std::abs(c.reynoldsStress[i][j]-o.reynoldsStress[i][j]));
             if(delta>stressMax){stressMax=delta;point=q.v.coordinate;geometry=q.v.geometry;selectedTensor=c.reynoldsStress;originalTensor=o.reynoldsStress;gradient=G;}
@@ -700,7 +700,7 @@ std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,
     for(const auto &ray:m_rays)for(const auto &q:ray.points)locate(q,true);
     for(const auto &q:m_outer)locate(q,false);
     std::vector<std::string> wallProfile;
-    for(const auto &face:Surface(0,2,0.,-1,8))
+    for(const auto &face:SurfaceView(0,2,0.,-1,8))
     {
         const auto &q=face.test;const auto profile=StateProfile(state,q.coordinate,time,data);RANSTensor G{};
         for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=q.Gradient(state,offset[a]);
@@ -777,7 +777,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         for(const auto &[axis,position,side]:std::array<std::tuple<int,double,int>,6>{{{2,0.,-1},{2,-0.,-1},
             {2,m_parameters.geometry.height,-1},{2,m_parameters.geometry.height,1},{0,-3.,-1},{0,-3.,1}}})
         {
-            const auto faces=Surface(0,axis,position,side,8);std::vector<std::string> rows;
+            const auto faces=SurfaceView(0,axis,position,side,8);std::vector<std::string> rows;
             for(const auto &face:faces)rows.push_back(J::Object({{"coordinate",J::Numbers(face.test.coordinate)},
                 {"geometry",J::Number(face.test.geometry)},{"element",J::Number(face.test.element)},
                 {"phi",J::Numbers(face.test.phi)},{"derivative",J::Rows(face.test.derivative)}}));

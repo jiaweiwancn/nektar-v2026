@@ -87,9 +87,9 @@ RANSWallNormalMap LoadRANSWallNormalMap(const LibUtilities::SessionReaderSharedP
     return m;
 }
 RANSWallCoordinate RANSWallEvolutionPatch::Physical(const RANSWallCoordinate &p) const
-{return Mapped()?m_mapping.At(p).point:p;}
+{return Mapped()?GeometryAt(p).point:p;}
 double RANSWallEvolutionPatch::Distance(const RANSWallCoordinate &p) const
-{return Mapped()?p[2]*(m_mapping.height+m_mapping.heightSlopeX*p[0]+m_mapping.heightSlopeY*p[1]+
+{if(Composite())return p[2];return Mapped()?p[2]*(m_mapping.height+m_mapping.heightSlopeX*p[0]+m_mapping.heightSlopeY*p[1]+
     m_mapping.heightAmplitude*std::sin(m_mapping.heightWaveX*p[0])*std::cos(m_mapping.heightWaveY*p[1]))/m_mapping.height:p[2];}
 RANSWallGlobalPoint RANSWallEvolutionPatch::Transform(RANSWallGlobalPoint q) const
 {
@@ -98,7 +98,9 @@ RANSWallGlobalPoint RANSWallEvolutionPatch::Transform(RANSWallGlobalPoint q) con
     if(m_mapping.kind==RANSWallNormalMap::Kind::CosineHill)
         for(double foot:{-m_mapping.lengthX,m_mapping.lengthX})if(Same(q.coordinate[0],foot))
             for(const auto &e:fields[0]->Elements())if(e.geometry==q.geometry)side=(e.lower[0]+e.upper[0])/2<foot?-1:1;
-    const auto g=m_mapping.At(q.coordinate,side);const auto old=q.derivative;
+    const auto &element=fields[0]->Elements().at(GeometryElement(0,q.geometry));
+    const int radial=element.upper[2]<=m_parameters.geometry.height? -1:1;
+    const auto g=GeometryAt(q.coordinate,radial,side);const auto old=q.derivative;
     for(int a=0;a<3;++a)for(int i=0;i<q.ids.size();++i)
     {q.derivative[a][i]=0;for(int b=0;b<3;++b)q.derivative[a][i]+=old[b][i]*g.inverse[b][a];}
     q.weight*=g.determinant;return q;
@@ -107,10 +109,11 @@ RANSWallGlobalPoint RANSWallEvolutionPatch::Point(int block,const RANSWallCoordi
 {return m_evaluation?*EvaluationRow(block,fields[block]->LocateElement(p,side),p):Transform(fields[block]->Point(p,side));}
 std::vector<RANSWallGlobalPoint> RANSWallEvolutionPatch::Quadrature(int block,int order) const
 {
-    if(!order && Mapped())order=std::max(m_parameters.normalOrder,m_parameters.tangentialOrder);
+    if(!order && Mapped() && !(Composite() && m_mapping.amplitude==0))
+        order=std::max(m_parameters.normalOrder,m_parameters.tangentialOrder);
     auto q=fields[block]->Quadrature(order);for(auto &p:q)p=Transform(std::move(p));return q;
 }
-std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(int block,int axis,double position,int side,int order) const
+RANSWallSharedInventory<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::SurfaceView(int block,int axis,double position,int side,int order) const
 {
     Require((axis==0 || axis==2 || (m_dimension==3 && axis==1)) && (side==-1 || side==1),"invalid chart face");
     if(!order)order=std::max(m_parameters.normalOrder,m_parameters.tangentialOrder);
@@ -125,7 +128,7 @@ std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(i
     const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(order,LibUtilities::eGaussGaussLegendre)];
     const auto z=rule->GetZ(),w=rule->GetW();std::vector<int> free;
     for(int a=0;a<3;++a)if(a!=axis && (m_dimension==3 || a!=1))free.push_back(a);
-    std::vector<FacePoint> result;
+    RANSWallSharedInventory<FacePoint> result;
     for(int e=0;e<fields[block]->Elements().size();++e)
     {
         const auto &element=fields[block]->Elements()[e];if(!Same(side<0?element.lower[axis]:element.upper[axis],position))continue;
@@ -135,12 +138,14 @@ std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(i
             for(int a=0;a<free.size();++a){const int d=free[a];p[d]=element.lower[d]+(z[index[a]]+1)*(element.upper[d]-element.lower[d])/2;weight*=w[index[a]]*(element.upper[d]-element.lower[d])/2;}
             int footSide=0;if(m_mapping.kind==RANSWallNormalMap::Kind::CosineHill)
                 for(double foot:{-m_mapping.lengthX,m_mapping.lengthX})if(Same(p[0],foot))footSide=(element.lower[0]+element.upper[0])/2<foot?-1:1;
-            result.push_back({Transform(fields[block]->ElementPoint(e,p)),m_mapping.Cofactor(p,axis,side,footSide),weight});
+            result.push_back({Transform(fields[block]->ElementPoint(e,p)),GeometryCofactor(p,axis,side,footSide,element.upper[2]<=m_parameters.geometry.height?-1:1),weight});
         }
     }
     if(fixed)m_surfaceCatalog.emplace(key,result);
     return result;
 }
+std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(int block,int axis,double position,int side,int order) const
+{const auto view=SurfaceView(block,axis,position,side,order);return {view.begin(),view.end()};}
 double RANSWallEvolutionPatch::DependentEpsilon(const Vector &s,const RANSWallCoordinate &p) const
 {
     Require(!m_transitionEnabled,"transition dissipation evaluation requires its current time and forcing data");
@@ -148,7 +153,7 @@ double RANSWallEvolutionPatch::DependentEpsilon(const Vector &s,const RANSWallCo
 }
 RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PhysicalMass(int block,int region) const
 {
-    if(!Mapped() && region<0)return fields[block]->Mass();
+    if((!Mapped() || (Composite() && m_mapping.amplitude==0)) && region<0)return fields[block]->Mass();
     const bool regional=region>=0 && (block<m_dimension || block==K());
     if(regional && !m_regionalMass[region].empty())return m_regionalMass[region];
     const int n=fields[block]->Size();WallMatrix mass(n,Vector(n));
@@ -188,11 +193,14 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require((m_dimension==2 || m_dimension==3) && session->GetComm()->GetSize()==1,
             "evolution requires a full serial native mesh on each collective rank");
     parameters.geometry.Validate();m_mapping.dimension=m_dimension;m_mapping.height=parameters.geometry.height;
+    session->LoadSolverInfo("RANSWallGeometry",m_geometryPolicy,"LegacyV1");
+    Require(m_geometryPolicy=="LegacyV1" || Composite(),"unknown physical geometry policy");
+    Require(!Composite() || (m_dimension==2 && m_mapping.kind==RANSWallNormalMap::Kind::CosineHill && m_mapping.heightSlopeX==0 && m_mapping.heightSlopeY==0 && m_mapping.heightAmplitude==0),"composite geometry requires the constant normal-strip cosine pilot");
     session->LoadSolverInfo("RANSWallFormulation",m_formulation,"EPAWF");
     Require(m_formulation=="EPAWF" || AcceptedAWF(),"unknown wall formulation");
     if(AcceptedAWF())
     {
-        Require(m_dimension==2 && !Mapped() && m_comm->GetSize()==1 && parameters.model.Model()==RANSModel::CLSHighRe,
+        Require(m_dimension==2 && (!Mapped() || Composite()) && m_comm->GetSize()==1 && parameters.model.Model()==RANSModel::CLSHighRe,
             "CLSCalibratedBudgetAWF evolution currently supports serial flat 2D CLS only");
         Require(parameters.geometry.sampleHeight==parameters.geometry.height && parameters.geometry.tailStart==parameters.geometry.height && parameters.chi==0,
             "CLSCalibratedBudgetAWF requires endpoint zK=zm=H and no chi policy");
@@ -200,8 +208,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_options.formulation=AWFProfileFormulation::CLSCalibratedBudgetAWF;
     }
     session->LoadSolverInfo("RANSWallBoundaryPolicy",m_boundaryPolicy,"CompatibilityV1");
-    Require(m_boundaryPolicy=="CompatibilityV1" || DevelopingFlat(),"unknown wall boundary policy");
-    Require(!DevelopingFlat() || (AcceptedAWF() && m_dimension==2 && !Mapped() && m_comm->GetSize()==1),
+    Require(m_boundaryPolicy=="CompatibilityV1" || OpenBoundary(),"unknown wall boundary policy");
+    Require(!OpenBoundary() || (AcceptedAWF() && m_dimension==2 && (!Mapped() || Composite()) && m_comm->GetSize()==1),
         "RoughFlatOpenV1 requires the serial affine accepted-budget pilot");
     session->LoadParameter("RANSWallOutletTotalPressure",m_outletTotalPressure,0.);
     Require(std::isfinite(m_outletTotalPressure),"nonfinite outlet total-traction datum");
@@ -237,7 +245,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(!ColumnAverageK() || PimpleSingleSweep(),"ColumnAverage K is supported only by the PIMPLE pilot");
     if(PimpleSingleSweep())
     {
-        Require(m_nonlinearPolicy=="Legacy" && m_comm->GetSize()==1 && m_dimension==2 && !Mapped(),
+        Require(m_nonlinearPolicy=="Legacy" && m_comm->GetSize()==1 && m_dimension==2 && (!Mapped() || Composite()),
             "PimpleSingleSweep pilot requires Legacy policy, serial flat 2D and the inherited transition implementation");
         std::string verify;session->LoadSolverInfo("RANSWallPimpleVerify",verify,"Off");
         Require(verify=="Off" || verify=="On","invalid PIMPLE verification selector");m_pimpleVerify=verify=="On";
@@ -256,7 +264,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     std::string reuse;session->LoadSolverInfo("RANSWallEvaluationReuse",reuse,"Off");
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
-    Require(!m_evaluationReuse || (m_dimension==2 && !Mapped() && PimpleSingleSweep()),
+    std::string auditReuse;session->LoadSolverInfo("RANSWallAuditReuse",auditReuse,"Off");
+    Require(auditReuse=="Off" || auditReuse=="ExactObservationV1","unknown exact audit reuse");m_auditReuse=auditReuse=="ExactObservationV1";
+    Require(!m_evaluationReuse || (m_dimension==2 && (!Mapped() || Composite()) && PimpleSingleSweep()),
         "ExactStepV1 is restricted to the serial flat2D one-sweep pilot");
     session->LoadSolverInfo("RANSWallPimpleKInventory",m_pimpleKInventory,"LegacyV1");
     Require(m_pimpleKInventory=="LegacyV1" || (PimpleKBoundEnabled() &&
@@ -281,6 +291,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     std::string snapshots;session->LoadSolverInfo("RANSWallPimpleSnapshots",snapshots,"Off");
     Require(snapshots=="Off" || snapshots=="On","invalid PIMPLE snapshot selector");
     m_pimpleSnapshots=snapshots=="On" || PimpleKBoundEnabled();
+    session->LoadSolverInfo("RANSWallPacketFault",m_packetFault,"Off");
+    Require(m_packetFault=="Off" || m_packetFault=="OnFlush","invalid packet fault injection");
     session->LoadSolverInfo("RANSWallAttemptPackets",m_packetPolicy,"EveryAttempt");
     Require(m_packetPolicy=="EveryAttempt" || m_packetPolicy=="SelectedV1","unknown attempt packet output policy");
     session->LoadParameter("RANSWallPacketInterval",m_packetInterval,32);
@@ -429,7 +441,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(full->GetExp(e)->GetBasisNumModes(normal)>=4,"evolution velocity/scalar degree must be at least three");
     }
     Require(!inner.empty() && !outer.empty() && Same(lower[2],0),"incomplete wall/outer physical domains");
-    m_mapping.Validate(lower,upper,.1);
+    if(Composite())m_composite=std::make_shared<const RANSTwoRegionHill>(m_mapping.amplitude,m_mapping.lengthX,parameters.geometry.height,upper[2],lower[0],upper[0]);
+    else m_mapping.Validate(lower,upper,.1);
     std::string transition;session->LoadSolverInfo("RANSWallTransition",transition,"Fixed");
     Require(transition=="Fixed" || transition=="Upstream" || transition=="UniformEPFlat","unknown RANSWallTransition");
     m_uniformEP=transition=="UniformEPFlat";
@@ -441,7 +454,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         "curved corrections require the prescribed upstream transition");
     for(const auto &point:std::vector<RANSWallCoordinate>{lower,upper,{lower[0],upper[1],0},{upper[0],lower[1],0}})
     {
-        const double minH=m_mapping.At(point).height-std::abs(m_mapping.heightAmplitude)*2;
+        const double minH=GeometryAt(point).height-std::abs(m_mapping.heightAmplitude)*2;
         Require(parameters.geometry.roughness<minH && parameters.geometry.sampleHeight<=minH && parameters.geometry.tailStart<=minH,
             "physical h/rK/rm do not fit every mapped ray");
     }
@@ -494,8 +507,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             m_dimension==3?column[2]+(z[j]+1)*(column[3]-column[2])/2:0.,parameters.geometry.sampleHeight};
         ray.weight=w[i]*(column[1]-column[0])/2;
         if(m_dimension==3)ray.weight*=w[j]*(column[3]-column[2])/2;
-        ray.coordinate[2]=(ColumnAverageK()?m_parameters.geometry.sampleHeight:parameters.geometry.sampleHeight)/m_mapping.At(ray.coordinate).scale;
-        ray.weight*=m_mapping.At(ray.coordinate).baseArea;
+        ray.coordinate[2]=(ColumnAverageK()?m_parameters.geometry.sampleHeight:parameters.geometry.sampleHeight)/GeometryAt(ray.coordinate).scale;
+        ray.weight*=GeometryAt(ray.coordinate).baseArea;
         ray.sample=SampleKRow(ray.coordinate);
         auto H=ray.coordinate;H[2]=parameters.geometry.height;
         ray.outerV=Point(0,H,1);ray.outerP=Point(OuterPressure(),H,1);ray.outerK=Point(K(),H,1);
@@ -503,11 +516,15 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     }
     for(const auto &q:outerVelocity->Quadrature(order))if(Owner(q.geometry)==m_comm->GetRank())
         m_outer.push_back({Point(0,q.coordinate),Point(OuterPressure(),q.coordinate),
-            Point(Epsilon(),q.coordinate),q.weight*(Mapped()?m_mapping.At(q.coordinate).determinant:1.)});
+            Point(Epsilon(),q.coordinate),q.weight*(Mapped()?GeometryAt(q.coordinate).determinant:1.)});
     m_solver=std::make_shared<SolverCache>();m_solver->free.resize(Gauge());m_solver->massFactors.resize(Gauge());
     InitialiseRobust(session);
+    Require(!Composite() || (AcceptedAWF() && FiniteInflowReference() && OpenBoundary() &&
+        PimpleSingleSweep() && VariantName()=="Regularized" && InnerStressName()=="Linear" &&
+        m_robust.beta==.4 && m_regularizationScale==1. && m_regularizationGamma==0.),
+        "CompositeHillV1 is restricted to the finite/open Regularized(beta=.4,Gamma=1,gamma0=0)/Linear budget-AWF one-sweep pilot");
     if(SegregatedPicard() || PimpleSingleSweep())
-        Require(m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || (AcceptedAWF() && !m_cappedDestruction)) &&
+        Require(m_dimension==2 && (!Mapped() || Composite()) && ((m_transitionEnabled && m_cappedDestruction) || (AcceptedAWF() && !m_cappedDestruction)) &&
             m_parameters.model.Model()==RANSModel::CLSHighRe && !m_solveDiagnosticReplay,
             "SegregatedPicard requires flat 2D upstream CLS with capped destruction and no legacy replay");
     Vector seed(Size());for(int i=0;i<size[K()];++i)seed[offset[K()]+i]=parameters.model.Q()*.16*m_constants[K()][i];
@@ -524,12 +541,12 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(m_dimension==2 && !Mapped() && m_transitionEnabled && m_cappedDestruction,
             "ScalarFeasibleR2 prototype requires a flat 2D upstream patch and capped destruction");
 }
-std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::Profile(double k,const RANSWallCoordinate &chart,double weight) const
+std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::Profile(double k,const RANSWallCoordinate &chart,double weight,int footSide) const
 {
     if(AcceptedAWF())weight=1; // cutoff applicability flag; not a chi weight
     else if(weight<0)weight=m_transitionEnabled?0:m_parameters.chi;
     Require(k>0 && std::isfinite(k),"invalid physical sampled K");
-    const auto metric=m_mapping.At(chart);auto geometry=m_parameters.geometry;geometry.height=metric.height;
+    const auto metric=GeometryAt(chart,0,footSide);auto geometry=m_parameters.geometry;geometry.height=metric.height;
     auto options=m_options;options.requestedWeight=weight;for(double &r:options.physicalBreakpoints)r*=metric.scale;
     const AWFNormalMetric normal{metric.kappa1,metric.kappa2};
     const auto construct=[&]()
@@ -544,7 +561,7 @@ std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::Profile(double k
             throw;
         }
     };
-    if(!MatchingEnabled())return construct();
+    if(!MatchingEnabled() || footSide!=0)return construct();
     // K and geometry determine the cutoff; velocity, pressure and epsilon
     // change only the analytic gate. Never reuse a previously active cutoff
     // on an inactive branch or solve one before the admissibility gates pass.
@@ -558,7 +575,7 @@ void RANSWallEvolutionPatch::Broadcast(Vector &value) const {m_comm->Bcast(value
 RANSWallGlobalPoint RANSWallEvolutionPatch::SampleKRow(const RANSWallCoordinate &point) const
 {
     if(!ColumnAverageK())
-    {auto p=point;p[2]=m_kSampling=="InterfaceTrace"?m_parameters.geometry.height:m_parameters.geometry.sampleHeight/m_mapping.At(point).scale;
+    {auto p=point;p[2]=m_kSampling=="InterfaceTrace"?m_parameters.geometry.height:m_parameters.geometry.sampleHeight/GeometryAt(point).scale;
      return Point(K(),p,Same(p[2],m_parameters.geometry.height)?-1:0);}
     auto anchor=point;anchor[2]=0;
     const auto old=m_kSamplingRows.find(anchor);if(old!=m_kSamplingRows.end())return old->second;
@@ -600,7 +617,7 @@ double RANSWallEvolutionPatch::SampleK(const Vector &s,const RANSWallCoordinate 
     }
     // InterfaceTrace selects the actual native matching face. Its physical
     // distance is the local map H, rather than a fixed interior point height.
-    auto p=point;p[2]=m_kSampling=="InterfaceTrace"?m_parameters.geometry.height:m_parameters.geometry.sampleHeight/m_mapping.At(point).scale;
+    auto p=point;p[2]=m_kSampling=="InterfaceTrace"?m_parameters.geometry.height:m_parameters.geometry.sampleHeight/GeometryAt(point).scale;
     if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: sampled K");
     const double k=Point(K(),p,Same(p[2],m_parameters.geometry.height)?-1:0).Value(s,offset[K()]);
     Require(k>0 && std::isfinite(k),"invalid physical sampled K");return k;
@@ -608,7 +625,7 @@ double RANSWallEvolutionPatch::SampleK(const Vector &s,const RANSWallCoordinate 
 std::array<double,3> RANSWallEvolutionPatch::CartesianForcing(const Vector &s,const RANSWallCoordinate &point,double time,
     const RANSWallEvolutionData &data,bool includeBody) const
 {
-    auto p=point;p[2]=m_parameters.geometry.height;const auto metric=m_mapping.At(p);
+    auto p=point;p[2]=m_parameters.geometry.height;const auto metric=GeometryAt(p);
     const auto v=Point(0,p,1),pressure=Point(OuterPressure(),p,1),k=Point(K(),p,1);
     RANSTensor G{},P{};RANSVector u{},ut{},base{};
     for(int a=0;a<m_dimension;++a){const int aa=PhysicalAxis(a);u[aa]=v.Value(s,offset[a]);G[aa]=v.Gradient(s,offset[a]);}
@@ -629,7 +646,7 @@ std::array<double,3> RANSWallEvolutionPatch::CartesianForcing(const Vector &s,co
 std::array<double,2> RANSWallEvolutionPatch::Forcing(const Vector &s,const RANSWallCoordinate &point,double time,
     const RANSWallEvolutionData &data,bool includeBody) const
 {
-    const auto f=CartesianForcing(s,point,time,data,includeBody);const auto g=m_mapping.At(point);
+    const auto f=CartesianForcing(s,point,time,data,includeBody);const auto g=GeometryAt(point);
     std::array<double,2> result{};for(int a=0;a<3;++a){result[0]+=g.tangent1[a]*f[a];result[1]+=g.tangent2[a]*f[a];}return result;
 }
 void RANSWallEvolutionPatch::Refresh(const Vector &s,double time,const RANSWallEvolutionData *data) const
@@ -647,7 +664,7 @@ void RANSWallEvolutionPatch::Refresh(const Vector &s,double time,const RANSWallE
         std::vector<VolumePoint> points;
         for(const auto &q:profile->Quadrature())
         {
-            auto p=ray.coordinate;p[2]=q.r/m_mapping.At(ray.coordinate).scale;auto v=Point(0,p);
+            auto p=ray.coordinate;p[2]=q.r/GeometryAt(ray.coordinate).scale;auto v=Point(0,p);
             if(Owner(v.geometry)!=m_comm->GetRank())continue;
             const auto kp=Point(K(),p);Require(kp.ids==v.ids,"native k/velocity maps differ");
             points.push_back({std::move(v),Point(InnerPressure(),p),{},ray.weight*q.weight*q.jacobian});
@@ -665,7 +682,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Project(const std::vector
     }
     double mean=0;for(int side=0;side<2;++side)for(int i=0;i<m_pressureMean[side].size();++i)
         mean+=m_pressureMean[side][i]*s[offset[InnerPressure()+side]+i];
-    if(!DevelopingFlat())for(int b=InnerPressure();b<=OuterPressure();++b)for(int i=0;i<size[b];++i)s[offset[b]+i]-=mean*m_constants[b][i];
+    if(!OpenBoundary())for(int b=InnerPressure();b<=OuterPressure();++b)for(int i=0;i<size[b];++i)s[offset[b]+i]-=mean*m_constants[b][i];
     Broadcast(s);return s;
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::NeutralReference(double us,const std::array<double,2> &direction) const
@@ -721,7 +738,7 @@ std::map<int,double> RANSWallEvolutionPatch::ExternalConstraints(double time,con
     {
         const auto values=fields[b]->Boundary([&](const RANSWallCoordinate &p){return b<m_dimension && Same(p[2],0)?0.:data.boundary[b](p,time);},
             [&](int axis,int side,const RANSWallGlobalField::Element &e){
-                if(DevelopingFlat())
+                if(OpenBoundary())
                 {
                     if(axis==0)return !side && Same(e.lower[0],lower[0]);
                     if(axis==2)return side?(b==1 && Same(e.upper[2],upper[2])):(b<m_dimension && Same(e.lower[2],0));
@@ -731,14 +748,14 @@ std::map<int,double> RANSWallEvolutionPatch::ExternalConstraints(double time,con
                 return side?Same(e.upper[2],upper[2]):(b<m_dimension && Same(e.lower[2],0));});
         for(auto [id,value]:values)result[offset[b]+id]=value;
     }
-    if(DevelopingFlat())result[offset[Gauge()]]=0.; // unused slot; no closed mean gauge
-    if(Mapped())
+    if(OpenBoundary())result[offset[Gauge()]]=0.; // unused slot; no closed mean gauge
+    if(Mapped() && !OpenBoundary())
     {
         if(m_boundaryFlux.empty())
         {
             m_boundaryFlux.assign(DifferentialSize(),0.);
             for(int axis=0;axis<3;++axis)if(m_dimension==3 || axis!=1)for(int side:{-1,1})
-                for(const auto &face:Surface(0,axis,side<0?lower[axis]:upper[axis],side))
+                for(const auto &face:SurfaceView(0,axis,side<0?lower[axis]:upper[axis],side))
                     for(int a=0;a<m_dimension;++a)for(int j=0;j<face.test.ids.size();++j)
                         m_boundaryFlux[offset[a]+face.test.ids[j]]+=face.weight*face.area[PhysicalAxis(a)]*face.test.phi[j];
         }
@@ -755,7 +772,7 @@ std::map<int,double> RANSWallEvolutionPatch::ExternalConstraints(double time,con
             for(auto [id,value]:top)if(!excluded.count(id)){(void)value;index[id]=ids.size();ids.push_back(id);}
             Require(!ids.empty(),"no top interior modes for conservative boundary projection");
             WallMatrix mass(ids.size(),Vector(ids.size()));double area=0;
-            for(const auto &face:Surface(0,2,upper[2],1))
+            for(const auto &face:SurfaceView(0,2,upper[2],1))
             {
                 const double measure=face.weight*std::hypot(face.area[0],face.area[1],face.area[2]);area+=measure;
                 for(int i=0;i<face.test.ids.size();++i)if(index.count(face.test.ids[i]))
@@ -881,7 +898,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
             for(const auto &q:ray.points)evaluate(q,true,ray.profile.get(),force,m_cappedDestruction?&ray.destruction:nullptr);
         }
         if(region!=0)for(const auto &q:m_outer)evaluate(q,false,nullptr,{},nullptr);
-        if(DevelopingFlat())
+        if(OpenBoundary())
         {
             const auto f=DevelopingFlux(s,region);
             for(int i=0;i<Size();++i)r[i]+=f.advection[i]+f.traction[i]+f.diffusion[i];
@@ -909,7 +926,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
             load=Multiply(mass,delta);
         }for(int i=0;i<size[b];++i)r[offset[b]+i]+=alpha*load[i];
     }
-    if(!DevelopingFlat())for(int side=0;side<2;++side)if(region<0 || side==region)for(int i=0;i<m_pressureMean[side].size();++i)
+    if(!OpenBoundary())for(int side=0;side<2;++side)if(region<0 || side==region)for(int i=0;i<m_pressureMean[side].size();++i)
     {
         const int row=offset[InnerPressure()+side]+i;const double w=m_pressureMean[side][i];
         r[row]+=s[offset[Gauge()]]*w;r[offset[Gauge()]]+=s[row]*w;
@@ -1482,7 +1499,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::OwnedBodyLoad(double time
             double body=(inner?data.innerBody:data.outerBody)[a](q.v.coordinate,time);
             if(inner && Distance(q.v.coordinate)<=m_parameters.geometry.roughness)
             {
-                const auto n=m_mapping.At(H).normal;double bn=0;
+                const auto n=GeometryAt(H).normal;double bn=0;
                 for(int b=0;b<m_dimension;++b)bn+=data.outerBody[b](H,time)*n[PhysicalAxis(b)];
                 body-=data.outerBody[a](H,time)-bn*n[PhysicalAxis(a)];
             }
@@ -1517,7 +1534,7 @@ void RANSWallEvolutionPatch::SetReference(const Vector &ref,const RANSWallEvolut
     Require(!m_evaluation,"reference generation cannot change within an evaluation scope");
     Require(eta==0 || eta==1,"only fixed global eta=0 or eta=1 is supported");
     Require(!MatchingEnabled() || eta==0,"every upstream transition/terrain run requires eta=0");
-    if(DevelopingFlat())m_backflowSeed=ref;
+    if(OpenBoundary())m_backflowSeed=ref;
     const auto raw=Residual(ref,ref,0,time,data,false);const auto norms=Norms(raw,Constraints(ref,time,data));
     for(int b=InnerPressure();b<norms.size();++b)
         if(!((Mapped() || MatchingEnabled()) && eta==0 && b<Gauge()))Require(norms[b]<1e-9,"reference violates an algebraic constraint");
@@ -1552,7 +1569,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::RoughnessBudget(const Vec
     const auto s=PimpleSingleSweep()?ExternalLift(state,time,data):Lift(state,time,data);Refresh(s,time,&data);Vector sum(5);double normal=0;
     for(const auto &ray:m_rays)
     {
-        const auto force=CartesianForcing(s,ray.coordinate,time,data,true);const auto n=m_mapping.At(ray.coordinate).normal;
+        const auto force=CartesianForcing(s,ray.coordinate,time,data,true);const auto n=GeometryAt(ray.coordinate).normal;
         double dot=0;for(int a=0;a<3;++a)dot+=force[a]*n[a];normal=std::max(normal,std::abs(dot));
         for(const auto &q:ray.points)if(Distance(q.v.coordinate)<=m_parameters.geometry.roughness)
         {
@@ -1630,7 +1647,7 @@ std::string RANSWallEvolutionPatch::Signature() const
     }
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();
-    if(Mapped())text<<':'<<m_mapping.Signature();
+    if(Mapped())text<<':'<<GeometrySignature();
     if(m_innerStress==RANSWallInnerStressModel::SaturatedR2)
         text<<":M8-R2:InnerStress:SaturatedR2:v1:rho=0.8";
     if(m_variantName!="Original" || m_cappedDestruction)
@@ -1642,7 +1659,7 @@ std::string RANSWallEvolutionPatch::Signature() const
         text<<':'<<m_robustUstar<<":incoming-flat-strain-extension";
     }
     if(m_finiteInflow)text<<":regularized-reference="<<m_finiteInflowIdentity;
-    if(DevelopingFlat())text<<":boundary="<<BoundaryPolicyJSON();
+    if(OpenBoundary())text<<":boundary="<<BoundaryPolicyJSON();
     if(m_uniformEP)text<<":wall_policy=UniformEPFlat-v1:chi=1:full_EP_trace:require_intrinsic_admissibility";
     if(m_transitionEnabled)
     {

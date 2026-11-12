@@ -10,6 +10,7 @@
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <algorithm>
 #include <cmath>
+#include <cstring>
 #include <chrono>
 #include <fstream>
 #include <iostream>
@@ -123,25 +124,36 @@ RANSWallEvolutionPatch::ReconstructionLocations(int block,bool complete) const
 std::vector<RANSWallCoordinate> RANSWallEvolutionPatch::ConstitutiveAnchors(const Vector &state,const std::vector<RANSWallCoordinate> &additional) const
 {
     InitialiseScalarLocations();
-    std::set<RANSWallCoordinate> anchors(m_scalarSamplerAnchors.begin(),m_scalarSamplerAnchors.end());
+    RANSWallTiming::Scope timing("domain.anchor_union");
+    std::set<RANSWallCoordinate> anchors;
     auto add=[&](RANSWallCoordinate p){p[2]=0;anchors.insert(p);};
-    // These are the same generators consumed by Audit, PhysicalSamples and
-    // the continuation profile/flux/contact diagnostic. Both regional meshes
-    // contribute; no hand-copied list of the two observed failure witnesses.
-    for(int b:{0,K()})for(const auto &p:ReconstructionLocations(b,true))add(p.row.coordinate);
-    for(int b:{0,K()})for(int order:{8,16})for(int axis:{0,2})for(int side:{-1,1})
-        for(const auto &p:Surface(b,axis,axis==2?(side<0?0.:upper[2]):(side<0?lower[0]:upper[0]),side,order))add(p.test.coordinate);
+    if(m_auditReuse && m_fixedAnchorsReady){anchors.insert(m_fixedAnchorPrefix.begin(),m_fixedAnchorPrefix.end());++m_anchorHits;}
+    else
+    {
+        ++m_anchorBuilds;anchors.insert(m_scalarSamplerAnchors.begin(),m_scalarSamplerAnchors.end());
+        for(int b:{0,K()})for(const auto &p:ReconstructionLocations(b,true))add(p.row.coordinate);
+        for(int b:{0,K()})for(int order:{8,16})for(int axis:{0,2})for(int side:{-1,1})
+            for(const auto &p:SurfaceView(b,axis,axis==2?(side<0?0.:upper[2]):(side<0?lower[0]:upper[0]),side,order))add(p.test.coordinate);
+        if(m_auditReuse)m_fixedAnchorPrefix.assign(anchors.begin(),anchors.end());
+    }
     for(const auto &p:WallTraceR4(state))add(p.row.coordinate);
     for(const auto &p:additional)add(p);
-    if(ProspectiveKInventory() || AcceptedAWF())for(const auto &[p,w]:PhysicalBandRays())add(p);
-    for(double x:ConstitutiveReportingAbscissae())if(x>=lower[0] && x<=upper[0])add({x,0,0});
+    if(m_auditReuse && m_fixedAnchorsReady)for(const auto &p:m_fixedAnchorSuffix)add(p);
+    else
+    {
+        std::vector<RANSWallCoordinate> suffix;
+        if(ProspectiveKInventory() || AcceptedAWF())for(const auto &[p,w]:PhysicalBandRays())suffix.push_back(p);
+        for(double x:ConstitutiveReportingAbscissae())if(x>=lower[0] && x<=upper[0])suffix.push_back({x,0,0});
+        for(const auto &p:suffix)add(p);
+        if(m_auditReuse){m_fixedAnchorSuffix=std::move(suffix);m_fixedAnchorsReady=true;}
+    }
     return {anchors.begin(),anchors.end()};
 }
 
 std::vector<RANSWallGlobalPoint> RANSWallEvolutionPatch::NormalizationRows(
     const RANSWallCoordinate &anchor,const EquilibriumAWFProfiles &profile) const
 {
-    std::vector<RANSWallGlobalPoint> rows;const double scale=m_mapping.At(anchor).scale;
+    std::vector<RANSWallGlobalPoint> rows;const double scale=GeometryAt(anchor).scale;
     for(const auto &q:profile.Quadrature())
     {auto p=anchor;p[2]=q.r/scale;rows.push_back(Point(K(),p));}
     return rows;
@@ -242,6 +254,8 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
     auto add=[&](const std::string &name,const RANSWallGlobalPoint &v,int block,bool strict,int side=0)
     {
         m_scalarLocations.push_back({name,v,block,side,strict});
+        if(Composite() && v.coordinate[2]>m_parameters.geometry.height)
+            m_staticWallCoordinates.insert(v.coordinate);
         samplers.insert({v.coordinate[0],v.coordinate[1],0});
     };
     auto pair=[&](const std::string &name,const RANSWallGlobalPoint &v,bool inner,int side=0)
@@ -250,8 +264,8 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
         if(!inner)add(name,Point(Epsilon(),v.coordinate,Same(v.coordinate[2],m_parameters.geometry.height)?1:0),Epsilon(),true,side);
     };
     for(const auto &q:Quadrature(0))pair("mass_volume",q,q.coordinate[2]<m_parameters.geometry.height);
-    if(DevelopingFlat())for(int axis:{0,2})for(int side:{-1,1})
-        for(const auto &f:Surface(0,axis,side<0?lower[axis]:upper[axis],side,8))
+    if(OpenBoundary())for(int axis:{0,2})for(int side:{-1,1})
+        for(const auto &f:SurfaceView(0,axis,side<0?lower[axis]:upper[axis],side,8))
         {const auto &el=fields[0]->Elements()[f.test.element];pair("open_boundary_native",f.test,el.upper[2]<=m_parameters.geometry.height,0);}
 
     if(AcceptedAWF())
@@ -275,7 +289,7 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
     }
     for(const auto &q:m_bodyInner)pair("prescribed_source_inner",q.v,true);
     for(const auto &q:m_outer)pair("source_volume_outer",q.v,false);
-    for(const auto &face:Surface(0,2,m_parameters.geometry.height,1,8))
+    for(const auto &face:SurfaceView(0,2,m_parameters.geometry.height,1,8))
     {
         pair("interface_inner",Point(K(),face.test.coordinate,-1),true,-1);
         pair("interface_outer",Point(K(),face.test.coordinate,1),false,1);
@@ -301,7 +315,7 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
     m_scalarSamplerAnchors.assign(samplers.begin(),samplers.end());
     for(auto p:m_scalarSamplerAnchors)
     {
-        const double scale=m_mapping.At(p).scale;
+        const double scale=GeometryAt(p).scale;
         p[2]=m_parameters.geometry.height;
         pair("physical_matching_transfer",Point(K(),p,1),false,1);
         p[2]=m_parameters.geometry.sampleHeight/scale;
@@ -327,7 +341,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         // Endpoint samplers and every native interface row carry their own
         // element. Resolve radial provenance once; a zero selector must not
         // turn an H-minus derivative into an outer constitutive observation.
-        if(!q.columnAverage && Same(Distance(q.coordinate),m_mapping.At(q.coordinate).height))
+        if(!q.columnAverage && Same(Distance(q.coordinate),GeometryAt(q.coordinate).height))
         {
             ScalarObservation provenance;provenance.coordinate=q.coordinate;
             provenance.block=block;provenance.geometry=q.geometry;provenance.side=side;
@@ -341,7 +355,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         if(block==K())
         {
             if(name=="physical_sampled_K")result.minimumSampledK=std::min(result.minimumSampledK,value);
-            if(Distance(q.coordinate)<=m_mapping.At(q.coordinate).height && side<=0)
+            if(Distance(q.coordinate)<=GeometryAt(q.coordinate).height && side<=0)
                 result.minimumInnerK=std::min(result.minimumInnerK,value);
             else result.minimumOuterK=std::min(result.minimumOuterK,value);
         }
@@ -383,7 +397,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             result.minimumBudgetRatio=std::min(result.minimumBudgetRatio,profile->Reference().productionBudget/profile->Reference().minimumBudget);
             result.maximumBudgetRelativeDefect=std::max(result.maximumBudgetRelativeDefect,
                 std::abs(profile->Reference().budgetResidual)/std::max(1e-300,profile->Reference().productionBudget));
-            const double scale=m_mapping.At(p).scale;
+            const double scale=GeometryAt(p).scale;
             for(const auto &q:profile->Quadrature())
             {
                 auto point=p;point[2]=q.r/scale;
@@ -393,7 +407,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             }
             if(AcceptedAWF())for(double top:{.01,.1,m_parameters.geometry.height})if(top<=m_parameters.geometry.height)
                 for(const auto &q:profile->IntegrationQuadrature(top,{.01,.1}))
-                {auto point=p;point[2]=q.r/m_mapping.At(p).scale;
+                {auto point=p;point[2]=q.r/GeometryAt(p).scale;
                  if(!check("constitutive_budget_reporting_source_ray",*EvaluationRow(K(),fields[K()]->LocateElement(point),point),K(),false,result.effectiveState))return false;}
             pending.push_back({p,profile,source});return true;
         };
@@ -415,7 +429,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             const auto anchors=ConstitutiveAnchors(result.effectiveState,additionalAnchors);
             for(auto p:anchors)
             {
-                const double scale=m_mapping.At(p).scale;
+                const double scale=GeometryAt(p).scale;
                 p[2]=m_parameters.geometry.sampleHeight/scale;
                 if(!check("physical_sampled_K",SampleKRow(p),K(),true,result.effectiveState,AcceptedAWF()?-1:0))return result;
                 p[2]=m_parameters.geometry.height;
@@ -431,6 +445,9 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             {
                 if(!AcceptedAWF() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"constitutive_baseline_normalization_ray",false,0))return result;
                 if(!ray(p,StateProfile(result.effectiveState,p,time,data),AcceptedAWF()?"constitutive_budget_awf_ray":"constitutive_current_normalization_ray",false,0))return result;
+                if(Composite() && (Same(p[0],-m_mapping.lengthX) || Same(p[0],m_mapping.lengthX)))
+                    for(int side:{-1,1})if(!ray(p,Profile(SampleK(result.effectiveState,p),p,1.,side),
+                        side<0?"constitutive_foot_minus_budget_ray":"constitutive_foot_plus_budget_ray",false,0))return result;
                 if(ProspectiveKInventory())
                 {
                     // Only positivity constraints: never normalize this
@@ -440,7 +457,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                     const auto active=ProspectiveActiveProfile(result.effectiveState,p,reason);
                     ++result.counts["prospective_branch_"+reason];
                     if(active)for(const auto &q:active->Quadrature())
-                    {auto point=p;point[2]=q.r/m_mapping.At(p).scale;
+                    {auto point=p;point[2]=q.r/GeometryAt(p).scale;
                      if(!check("constitutive_prospective_active_normalization_ray",
                          *EvaluationRow(K(),fields[K()]->LocateElement(point),point),K(),false,result.effectiveState))return result;}
                 }
@@ -877,7 +894,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveFrozenScalars(Vector
 std::vector<RANSWallEvolutionPatch::WallExtremum>
 RANSWallEvolutionPatch::WallTraceR4(const Vector &state) const
 {
-    Require(m_dimension==2 && !Mapped(),"R4 wall trace requires canonical flat 2D");
+    Require(m_dimension==2 && (!Mapped() || Composite()),"R4 wall trace requires canonical flat 2D");
     const auto &field=*fields[K()];
     const auto native=field.Field();
     const auto map=native->GetLocalToGlobalMap();
@@ -918,7 +935,7 @@ RANSWallEvolutionPatch::WallTraceR4(const Vector &state) const
         {
             const double physical=el.lower[0]+(x+1)*(el.upper[0]-el.lower[0])/2;
             const long double value=x==-1?c[0]:x==1?c[1]:a0+x*(a1+x*(a2+x*a3));
-            extrema.push_back({field.ElementPoint(e,{physical,0,0}),value,
+            extrema.push_back({Composite()?Transform(field.ElementPoint(e,{physical,0,0})):field.ElementPoint(e,{physical,0,0}),value,
                 x==-1 || x==1?0.L:error});
         }
     }
@@ -935,7 +952,7 @@ std::string RANSWallEvolutionPatch::WallTraceJSON(const Vector &state,bool &admi
     return J::Object({{"admissible",J::Boolean(admissible)},
         {"minimum",J::Number(worst->value)},{"arithmetic_scale",J::Number(worst->error)},
         {"point",J::Numbers(Vector(worst->row.coordinate.begin(),worst->row.coordinate.end()))},
-        {"geometry",J::Number(worst->row.geometry)},{"extrema_checked",J::Number(points.size())}});
+        {"physical_point",J::Numbers(Physical(worst->row.coordinate))},{"geometry",J::Number(worst->row.geometry)},{"extrema_checked",J::Number(points.size())}});
 }
 
 bool RANSWallEvolutionPatch::RestrictedInner(const ScalarObservation &p) const
@@ -974,7 +991,7 @@ RANSWallEvolutionPatch::ObservationProvenance RANSWallEvolutionPatch::ResolveObs
     const double H=m_parameters.geometry.height;
     const bool inner=element.upper[2]<=H+1e-11;
     Require(inner || element.lower[2]>=H-1e-11,"constitutive element crosses the fitted wall interface");
-    const bool atInterface=Same(Distance(p.coordinate),m_mapping.At(p.coordinate).height);
+    const bool atInterface=Same(Distance(p.coordinate),GeometryAt(p.coordinate).height);
     const int side=atInterface?(inner?-1:1):0;
     Require(!atInterface || p.side==0 || p.side==side,"observation radial side disagrees with its native element");
     return {v,inner,side};
@@ -1027,7 +1044,7 @@ std::vector<RANSWallEvolutionPatch::OuterBound> RANSWallEvolutionPatch::OuterBou
         bounds.push_back({k,1,K(),-1,p.side,p.geometry,false,K0,k.Value(state,offset[K()])/K0,
             1.,.01,.99,1.01,p.inventory});
         const double e0=us*us*us/(m_parameters.model.Kappa()*r);
-        const int side=Same(r,m_mapping.At(p.coordinate).height)?1:0;
+        const int side=Same(r,GeometryAt(p.coordinate).height)?1:0;
         const auto epsilon=Point(Epsilon(),p.coordinate,side);
         const double value=p.dependentTrace?p.value:epsilon.Value(state,offset[Epsilon()]);
         bounds.push_back({epsilon,2,Epsilon(),-1,p.side,p.geometry,p.dependentTrace,e0,value/e0,
@@ -2137,25 +2154,45 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     const double K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
     Vector outer{0,1e300,-1e300,1e300,-1e300,domain.minimumSampledK/K0,-1e300};
     double innerCov=1e300,outerCov=1e300;Vector innerPoint,outerPoint,gradientPoint,innerProvenance,outerProvenance;
+    struct Value { RANSTensor G{};double k=0,e=0,cov=0,nt=0,a=0,c=0,K=0; };
+    using Key=std::tuple<int,int,int,bool,std::array<std::uint64_t,4>>;
+    std::map<Key,Value> memo;
+    auto bits=[](double x){std::uint64_t b;std::memcpy(&b,&x,sizeof b);return b;};
+    RANSWallTiming::Scope constitutiveTiming("audit.constitutive_observations");
     for(const auto &p:domain.observations)
     {
         if(p.block!=K() && !p.dependentTrace)continue;
         const double r=Distance(p.coordinate);const auto provenance=ResolveObservation(p);
         const bool inner=provenance.inner;const auto &row=*provenance.velocity;
-        RANSTensor G{};
-        for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=row.Gradient(domain.effectiveState,offset[a]);
-        const double k=EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[K()]);
+        const Key key{row.geometry,row.element,provenance.radialSide,p.dependentTrace,
+            {bits(p.coordinate[0]),bits(p.coordinate[1]),bits(p.coordinate[2]),bits(p.dependentTrace?p.value:0.)}};
+        ++m_auditQueries;Value v;const auto old=memo.find(key);
+        if(m_auditReuse && old!=memo.end()){v=old->second;++m_auditHits;}
+        else
+        {
+            if(old==memo.end())++m_auditUnique;
+            for(int a=0;a<m_dimension;++a)v.G[PhysicalAxis(a)]=row.Gradient(domain.effectiveState,offset[a]);
+            v.k=EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[K()]);
+            if(inner)
+            {
+                const auto profile=StateProfile(domain.effectiveState,p.coordinate,time,data);v.nt=profile->Original().EddyViscosity(r);v.K=profile->K();
+                const auto law=InnerStress(v.k,v.nt,v.G);v.a=law.a;v.c=law.c;v.cov=J::Eigenvalues(law.reynoldsStress)[0];
+            }
+            else
+            {
+                v.e=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[Epsilon()]);
+                v.cov=J::Eigenvalues(OuterClosure(v.k,v.e,v.G,p.coordinate).reynoldsStress)[0];
+            }
+            memo[key]=v;
+        }
+        const auto &G=v.G;const double k=v.k,epsilon=v.e,cov=v.cov;
         if(inner)
         {
-            const auto profile=StateProfile(domain.effectiveState,p.coordinate,time,data);
-            const double nt=profile->Original().EddyViscosity(r);const auto law=InnerStress(k,nt,G);
-            const double cov=J::Eigenvalues(law.reynoldsStress)[0];
-            if(cov<innerCov){innerCov=cov;innerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,profile->K(),nt,law.a,law.c,cov};
+            if(cov<innerCov){innerCov=cov;innerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,v.K,v.nt,v.a,v.c,cov};
                 innerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};}
             continue;
         }
-        const double epsilon=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[Epsilon()]);
-        const auto law=OuterClosure(k,epsilon,G,p.coordinate);const double cov=J::Eigenvalues(law.reynoldsStress)[0];
+        if(m_assertKCoverage)Require(m_coveredKLocations.count(p.coordinate),"unprotected constitutive k evaluation: cached audit");
         if(cov<outerCov){outerCov=cov;outerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,cov};
             outerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};}
         const double g0=m_robustUstar/(m_parameters.model.Kappa()*r);
@@ -2188,6 +2225,12 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         audit["accepted_awf_scalar_domain"]={1,domain.minimumMargin,domain.minimumInnerK,
             domain.minimumOuterK,domain.minimumOuterEpsilon,domain.minimumSampledK,domain.minimumTraceEpsilon,
             domain.minimumBudgetRatio,domain.maximumBudgetRelativeDefect};
+        if(Composite())
+        {
+            audit["accepted_awf_inner_minimum_physical_point"]={};audit["accepted_awf_outer_minimum_physical_point"]={};
+            if(innerPoint.size()>=3){const auto p=Physical({innerPoint[0],innerPoint[1],innerPoint[2]});audit["accepted_awf_inner_minimum_physical_point"]=Vector(p.begin(),p.end());}
+            if(outerPoint.size()>=3){const auto p=Physical({outerPoint[0],outerPoint[1],outerPoint[2]});audit["accepted_awf_outer_minimum_physical_point"]=Vector(p.begin(),p.end());}
+        }
         audit["accepted_awf_covariance"]=audit.at("r2_covariance");audit.erase("r2_covariance");
         audit["accepted_awf_inner_minimum_point"]=audit.at("r2_inner_minimum_point");audit.erase("r2_inner_minimum_point");
         audit["accepted_awf_outer_minimum_point"]=audit.at("r2_outer_minimum_point");audit.erase("r2_outer_minimum_point");

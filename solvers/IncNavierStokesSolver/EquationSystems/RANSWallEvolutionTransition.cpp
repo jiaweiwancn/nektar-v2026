@@ -84,7 +84,7 @@ void RANSWallEvolutionPatch::InitialiseTransition(const LibUtilities::SessionRea
     {(void)value;m_baselineTraceIds.insert(id);}
     double us,dx,dy;session->LoadParameter("RANSWallFrictionVelocity",us,.4);
     session->LoadParameter("RANSWallDirectionX",dx,1.);session->LoadParameter("RANSWallDirectionY",dy,0.);
-    const auto incoming=m_mapping.At({lower[0],lower[1],0});
+    const auto incoming=GeometryAt({lower[0],lower[1],0});
     const double incomingX=dx*incoming.tangent1[0]+dy*incoming.tangent2[0];
     Require(incomingX>0,"the physical incoming flow must increase the prescribed wall coordinate");
     if(m_mapping.kind==RANSWallNormalMap::Kind::CosineHill)
@@ -106,7 +106,7 @@ void RANSWallEvolutionPatch::InitialiseTransition(const LibUtilities::SessionRea
 std::array<RANSVector,2> RANSWallEvolutionPatch::ForcingParts(const Vector &s,
     const RANSWallCoordinate &point,double time,const RANSWallEvolutionData &data) const
 {
-    auto p=point;p[2]=m_parameters.geometry.height;const auto metric=m_mapping.At(p);
+    auto p=point;p[2]=m_parameters.geometry.height;const auto metric=GeometryAt(p);
     const auto v=Point(0,p,1),pressure=Point(OuterPressure(),p,1),k=Point(K(),p,1);
     RANSTensor G{},P{},gradient{};RANSVector u{},ut{};
     for(int a=0;a<m_dimension;++a){const int aa=PhysicalAxis(a);u[aa]=v.Value(s,offset[a]);G[aa]=v.Gradient(s,offset[a]);}
@@ -138,7 +138,7 @@ AWFTransitionInput RANSWallEvolutionPatch::TransitionInput(const Vector &s,
     input.budgetMargin=base->Reference().margin;input.reynolds=base->Reference().reynolds;
     if(input.coordinate>=m_transition.end)return input;
     Require(m_transitionReady,"transition reference has not been prepared");
-    auto H=point;H[2]=m_parameters.geometry.height;const auto metric=m_mapping.At(H);
+    auto H=point;H[2]=m_parameters.geometry.height;const auto metric=GeometryAt(H);
     Require(std::abs(metric.kappa1)+std::abs(metric.kappa2)<1e-14,
         "nonzero spatial correction support must be exactly flat");
     auto a=H,b=H;a[2]=m_sensorA/metric.scale;b[2]=m_sensorB/metric.scale;
@@ -220,7 +220,7 @@ std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::ProspectiveActiv
     const auto found=m_prospectiveProfileCache.find(key);
     if(found!=m_prospectiveProfileCache.end())
     {reason=found->second?"permitted_active":"intrinsically_unavailable";return found->second;}
-    const auto metric=m_mapping.At(p);auto geometry=m_parameters.geometry;geometry.height=metric.height;
+    const auto metric=GeometryAt(p);auto geometry=m_parameters.geometry;geometry.height=metric.height;
     auto options=m_options;options.requestedWeight=1;
     // Query intrinsic feasibility explicitly; unrelated errors still propagate.
     // This query never changes the actual profile's failure policy or cache.

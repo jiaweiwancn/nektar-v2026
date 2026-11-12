@@ -10,6 +10,7 @@
 #include <LibUtilities/Communication/Comm.h>
 #include <SolverUtils/Turbulence/RANSWallNormalMap.h>
 #include <SolverUtils/Turbulence/RANSFiniteInflowReference.h>
+#include <SolverUtils/Turbulence/RANSTwoRegionHill.h>
 #include <SolverUtils/Turbulence/EquilibriumAWFTransition.h>
 #include <SolverUtils/Turbulence/RANSRobustVariant.h>
 #include <SolverUtils/Turbulence/RANSWallInnerStress.h>
@@ -80,13 +81,26 @@ public:
     const RANSWallPatchParameters &Parameters() const { return m_parameters; }
     const LibUtilities::CommSharedPtr &Comm() const { return m_comm; }
     const SolverUtils::RANSWallNormalMap &Mapping() const { return m_mapping; }
-    bool Mapped() const { return !m_mapping.Identity(); }
+    bool Composite() const { return m_geometryPolicy=="CompositeHillV1"; }
+    bool Mapped() const { return Composite() || !m_mapping.Identity(); }
+    SolverUtils::RANSWallNormalMap::Sample GeometryAt(const RANSWallCoordinate&,int radialSide=0,int footSide=0) const;
+    RANSWallCoordinate CompositeChartCoordinate(const RANSWallCoordinate&) const;
+    SolverUtils::RANSVector GeometryCofactor(const RANSWallCoordinate&,int axis,int side,int footSide=0,int radialSide=0) const;
+    std::string GeometrySignature() const;
+    RANSWallCoordinate ChartFromPhysical(const RANSWallCoordinate&,int radialSide=0) const;
+    RANSWallGlobalPoint PhysicalPoint(int block,const RANSWallCoordinate&,int radialSide=0,int footSide=0) const;
+    double OuterWallDistance(const RANSWallCoordinate&) const;
+    Vector CompositeSeed() const;
+    SolverUtils::RANSVector CompositeSeedVelocity(const RANSWallCoordinate&) const;
+    const std::string &CompositeSeedInfo() const { return m_compositeSeedInfo; }
+    std::string CompositeChecks(const Vector&,double,const RANSWallEvolutionData&) const;
     int Owner(int geometry) const { return (geometry+m_ownershipShift)%m_comm->GetSize(); }
     RANSWallCoordinate Physical(const RANSWallCoordinate &chart) const;
     RANSWallGlobalPoint Point(int block,const RANSWallCoordinate &chart,int side=0) const;
     std::vector<RANSWallGlobalPoint> Quadrature(int block,int order=0) const;
     struct FacePoint { RANSWallGlobalPoint test;SolverUtils::RANSVector area;double weight; };
     std::vector<FacePoint> Surface(int block,int axis,double position,int side,int order=0) const;
+    RANSWallSharedInventory<FacePoint> SurfaceView(int block,int axis,double position,int side,int order=0) const;
     double Distance(const RANSWallCoordinate &chart) const;
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart) const;
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart,double time,
@@ -147,18 +161,23 @@ public:
     const SolverUtils::RANSFiniteInflowReference &FixedInflow() const
     { if(!m_finiteInflow)throw std::invalid_argument("no finite incoming reference selected");return *m_finiteInflow; }
     Vector FiniteInflowSeed() const;
+    Vector FlatFiniteSeed() const;
     SolverUtils::RANSRobustVariant RegularizedReferenceAt(const RANSWallCoordinate &point) const;
     const std::string &RegularizedReferenceIdentity() const { return m_finiteInflowIdentity; }
     std::string FiniteInflowChecks(const Vector &state) const;
-    bool DevelopingFlat() const { return m_boundaryPolicy=="RoughFlatOpenV1"; }
+    bool OpenBoundary() const { return m_boundaryPolicy=="RoughFlatOpenV1"; }
+    bool DevelopingFlat() const { return OpenBoundary() && !Mapped(); }
     std::string BoundaryPolicyJSON() const;
     struct ExternalFluxTerms { Vector advection,traction,diffusion; };
     ExternalFluxTerms DevelopingFlux(const Vector&,int region=-1) const;
     void AddDevelopingMatrix(int,const Vector&,const std::vector<int>&,WallMatrix&) const;
     std::string DevelopingChecks(const Vector&,double,const RANSWallEvolutionData&) const;
     std::string FiniteTurbulenceBudget(const Vector&,const Vector&,double,double,const RANSWallEvolutionData&) const;
+    std::string FiniteGroundReaction(const Vector&,double,const RANSWallEvolutionData&) const;
     std::string DevelopingBoundaryFixture(const Vector&,const RANSWallEvolutionData&) const;
+    void BeginPhysicalAttempt(std::size_t step) const { m_nativeAttempt=step; }
     void FinishAttemptPacket(bool rejected) const;
+    void FlushRejectedPacket() const noexcept;
     std::string AttemptPacketStatus() const;
     std::map<int,double> FixedReferenceBoundary(const Vector &reference) const;
     std::map<int,double> Constraints(const Vector &state,double time,const RANSWallEvolutionData &data) const;
@@ -497,7 +516,7 @@ private:
     bool m_evaluationReuse=false;
     mutable std::shared_ptr<EvaluationCache> m_evaluation;
     mutable std::map<std::pair<int,bool>,RANSWallSharedInventory<ScalarLocation>> m_reconstructionCatalog;
-    mutable std::map<std::tuple<int,int,double,int,int>,std::vector<FacePoint>> m_surfaceCatalog;
+    mutable std::map<std::tuple<int,int,double,int,int>,RANSWallSharedInventory<FacePoint>> m_surfaceCatalog;
     mutable std::vector<std::map<int,int>> m_geometryCatalog;
     struct EvaluationWork
     {
@@ -508,6 +527,10 @@ private:
             stateEvictions=0,inputInvalidations=0,profileReuses=0,scalarFieldReuses=0,peakStates=0,peakRows=0,peakProfiles=0;
     };
     mutable EvaluationWork m_evaluationWork;
+    bool m_auditReuse=false;
+    mutable bool m_fixedAnchorsReady=false;
+    mutable std::vector<RANSWallCoordinate> m_fixedAnchorPrefix,m_fixedAnchorSuffix;
+    mutable std::uint64_t m_anchorBuilds=0,m_anchorHits=0,m_auditQueries=0,m_auditUnique=0,m_auditHits=0;
     void PrepareEvaluation(const RANSWallEvolutionData &,double) const;
     std::shared_ptr<const RANSWallGlobalPoint> EvaluationRow(int block,int element,const RANSWallCoordinate &) const;
     int GeometryElement(int block,int geometry) const;
@@ -543,7 +566,7 @@ private:
     };
     std::map<int,double> ExternalConstraints(double time,const RANSWallEvolutionData &data) const;
     Vector OwnedBodyLoad(double time,const RANSWallEvolutionData &data,int region=-1) const;
-    std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> Profile(double k,const RANSWallCoordinate &chart={},double weight=-1) const;
+    std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> Profile(double k,const RANSWallCoordinate &chart={},double weight=-1,int footSide=0) const;
     RANSWallGlobalPoint Transform(RANSWallGlobalPoint point) const;
     WallMatrix PhysicalMass(int block,int region=-1) const;
     Vector PhysicalProject(int block,const RANSWallEvolutionFunction &function,double time) const;
@@ -558,6 +581,19 @@ private:
     LibUtilities::CommSharedPtr m_comm;
     RANSWallPatchParameters m_parameters;
     SolverUtils::RANSWallNormalMap m_mapping;
+    std::string m_geometryPolicy="LegacyV1";
+    mutable Vector m_compositeFlatSeed;
+    mutable std::array<std::vector<std::array<long double,6>>,3> m_seedRadial;
+    double SeedRadial(int,double,int derivative=0) const;
+    mutable std::string m_compositeSeedInfo="null";
+    mutable std::size_t m_chartEndpointSnaps=0;
+    mutable double m_chartEndpointOvershoot=0;
+    std::shared_ptr<const SolverUtils::RANSTwoRegionHill> m_composite;
+    mutable std::map<RANSWallCoordinate,SolverUtils::RANSTwoRegionHill::WallDistance> m_wallDistances;
+    mutable std::map<RANSWallCoordinate,SolverUtils::RANSTwoRegionHill::WallDistance> m_dynamicWallDistances;
+    mutable std::set<RANSWallCoordinate> m_staticWallCoordinates;
+    mutable std::size_t m_wallDistanceBuilds=0,m_wallDistanceHits=0;
+    mutable double m_wallDistanceSeconds=0;
     int m_ownershipShift=0;
     SolverUtils::AWFProfileOptions m_options;
     std::string m_formulation="EPAWF";
@@ -618,7 +654,9 @@ private:
     std::string m_packetPolicy="EveryAttempt";
     int m_packetInterval=32;
     mutable std::function<void()> m_pendingPacket;
-    mutable std::string m_lastPacketPath,m_lastPacketHash;
+    mutable std::string m_lastPacketPath,m_lastPacketHash,m_packetOutputFailure;
+    std::string m_packetFault="Off";
+    mutable std::size_t m_nativeAttempt=0;
     int m_kBoundMaxAdd=2000,m_kBoundMaxTotal=2000,m_kBoundMaxSeparations=2000;
     double m_kBoundMaxSeconds=900.;
     std::string m_kBoundTrace="Summary",m_kBoundTraceFile="None",m_kBoundDumpFile="None";

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <functional>
+#include <chrono>
 #include <map>
 
 using namespace Nektar::SolverUtils;
@@ -76,6 +77,35 @@ std::string GeometryChecks()
     }
     const auto roofDistance=g.PhysicalWallDistance(g.Outer(.053,.5).point,1e-9);
     Check(std::abs(roofDistance.distance-.5)>1e-3,"outer eta used as physical wall distance");
+    // Independent stationary-point enumeration, in addition to the known
+    // normal-strip distances above. It does not use the interval/chord bound.
+    std::vector<std::string> distanceWork;
+    for(const RANSVector p:{RANSVector{.053,0,.43},RANSVector{-.074,0,.07},RANSVector{.02,0,.2},RANSVector{0,0,.01}})
+    {
+        const double pi=std::acos(-1.),L=.1;
+        auto f=[&](double x){return .02*(1+std::cos(pi*x/L));};
+        auto derivative=[&](double x){return x-p[0]+(f(x)-p[2])*(-.02*pi/L*std::sin(pi*x/L));};
+        auto distance=[&](double x){return std::hypot(x-p[0],f(x)-p[2]);};
+        double independent=std::min(std::hypot(std::min(p[0],-L)-p[0],p[2]),std::hypot(std::max(p[0],L)-p[0],p[2]));
+        for(int i=0;i<2048;++i)
+        {
+            double a=-L+2*L*i/2048,b=-L+2*L*(i+1)/2048;
+            if(derivative(a)*derivative(b)>0)continue;
+            for(int j=0;j<60;++j){const double m=(a+b)/2;if(derivative(a)*derivative(m)<=0)b=m;else a=m;}
+            independent=std::min(independent,distance((a+b)/2));
+        }
+        const auto start=std::chrono::steady_clock::now();const auto certified=g.PhysicalWallDistance(p,1e-10);
+        const double seconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
+        Check(std::abs(certified.distance-independent)<=1.02e-10 && certified.errorBound<=1.01e-10,"wall distance disagrees with independent stationary roots");
+        Check(certified.boxes<10000,"correlated wall-distance bound lost its bounded work improvement");
+        const auto oldStart=std::chrono::steady_clock::now();const auto old=g.PhysicalWallDistance(p,1e-10,false);
+        const double oldSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-oldStart).count();
+        Check(std::abs(old.distance-certified.distance)<=old.errorBound+certified.errorBound+1e-13,"distance-bound choices disagree beyond their certificates");
+        distanceWork.push_back(J::Object({{"point",J::Numbers(p)},{"new_boxes",J::Number(certified.boxes)},{"old_boxes",J::Number(old.boxes)},
+            {"new_seconds",J::Number(seconds)},{"old_seconds",J::Number(oldSeconds)},
+            {"new_distance",J::Number(certified.distance)},{"old_distance",J::Number(old.distance)},
+            {"independent_stationary_distance",J::Number(independent)},{"new_error_bound",J::Number(certified.errorBound)}}));
+    }
     double volume=0,volume32=0,flux=0;
     const std::vector<double> panels{-.2,-.1,0,.1,.2};
     for(int i=0;i<4;++i)
@@ -120,6 +150,7 @@ std::string GeometryChecks()
 
 
     return J::Object({{"version",J::Quote("CosineNormalVerticalV1")},{"signature",J::Quote(g.Signature())},
+        {"physical_distance_bound_comparison",J::List(distanceWork)},
         {"maximum_curvature",J::Number(g.CurvatureBound())},{"curvature_ratio",J::Number(.015*g.CurvatureBound())},
         {"minimum_sampled_outer_J",J::Number(minJ)},{"inverse_error",J::Number(inverse)},{"jacobian_fd_error",J::Number(jac)},
         {"physical_gradient_error",J::Number(gradient)},{"interface_coordinate_error",J::Number(interface)},

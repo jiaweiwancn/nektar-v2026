@@ -46,13 +46,15 @@ private:
     std::shared_ptr<RANSWallEvolutionPatch> m_patch;
     std::unique_ptr<RANSWallTimeIntegration> m_integrator;
     RANSWallEvolutionData m_data{2},m_implicitData{2};
-    Vector m_state,m_initial,m_rawNorms,m_correctedNorms,m_lastHistory;
+    Vector m_state,m_initial,m_rawNorms,m_correctedNorms,m_lastHistory,m_attemptedHistory;
+    double m_attemptedTime=0,m_attemptedAlpha=0;
+    bool m_attemptedCallback=false;
     std::vector<Vector> m_stageAudits,m_stepAudits,m_explicitAudits;
     double m_eta=0,m_ustar=.4,m_tolerance=2e-12,m_stageTime=0,m_stageAlpha=0;
     std::array<double,2> m_direction{1,0};
     int m_maximumIterations=20,m_order=2;
     bool m_condensed=false,m_neutral=true;
-    int m_implicitCallbacks=0,m_pimpleRejectStep=0,m_pimpleHardAuditRejectStep=0;
+    int m_implicitCallbacks=0,m_pimpleRejectStep=0,m_pimpleHardAuditRejectStep=0,m_postAssignRejectStep=0;
     RANSWallEvolutionPatch::Diagnostic m_physicalSamples;
     std::string m_restart,m_checkpointBase,m_lastCheckpoint,m_signature;
     // Explicit new IMEX1 IVP; never a changed-dt production restart.
@@ -82,7 +84,7 @@ private:
     };
     // At most the first restricted-box exit and the first finite physical stop.
     std::vector<PhysicalRangeEvent> m_rangeEvents;
-    std::string m_failure;
+    std::string m_failure,m_rollbackReceipt="null";
     Vector m_rejectedState;
     std::vector<Vector> m_acceptedStates;
     std::vector<double> m_auditTimes;

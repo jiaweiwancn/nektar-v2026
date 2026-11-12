@@ -33,7 +33,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     Require(s.size()==Size() && history.size()==s.size() &&
         std::isfinite(alpha) && alpha>0 && std::isfinite(time),"invalid PIMPLE stage input");
     const auto start=std::chrono::steady_clock::now();
-    iterations=0;m_pendingPacket={};m_lastPacketPath.clear();m_lastPacketHash.clear();
+    iterations=0;m_pendingPacket={};m_lastPacketPath.clear();m_lastPacketHash.clear();m_packetOutputFailure.clear();
     std::vector<std::pair<std::string,std::string>> record;
     int momentum=0,pressure=0,epsilon=0,k=0,massApplications=0;
     int momentumAttempts=0,pressureAttempts=0,epsilonAttempts=0,kAttempts=0;
@@ -310,7 +310,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                     m_lastPacketPath=std::filesystem::absolute(packet).string();m_lastPacketHash=RANSWallR3::HashFile(packet);
 
                     };
-                    const long long global=std::llround(time*alpha);
+                    const long long global=m_nativeAttempt;
                     const bool selected=RANSRetainAttemptPacket(m_packetPolicy,bounded.activated,m_pimpleVerify,global,m_packetInterval);
                     put("attempt_packet_policy",J::Quote(m_packetPolicy));
                     put("attempt_packet_selected",J::Boolean(selected));
@@ -335,8 +335,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     }
     catch(const std::exception &error)
     {
-        FinishAttemptPacket(true);
-        if(m_pimpleSnapshots && m_lastPacketPath.empty())
+        FlushRejectedPacket();
+        try { if(m_pimpleSnapshots && m_lastPacketPath.empty() && m_packetOutputFailure.empty())
         {
             std::filesystem::create_directories(m_pimpleSnapshotDirectory);
             m_lastPacketPath=(std::filesystem::absolute(m_pimpleSnapshotDirectory)/("partial-t"+J::Number(time)+"-"+RANSWallR3::Hash(history).substr(0,12)+".json")).string();
@@ -347,18 +347,31 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                 {"matrix_recovery",J::Quote("no completed post-k packet; frozen configuration/checkpoint/native callback history permit deterministic isolated stage replay")}})<<'\n';
             out.close();Require(out.good(),"could not preserve partial failed attempt");m_lastPacketHash=RANSWallR3::HashFile(m_lastPacketPath);
         }
+        } catch(const std::exception &output){m_packetOutputFailure=output.what();}
         m_lastFeasibleState=s;publish(false,error.what());throw;
     }
 }
 
 void RANSWallEvolutionPatch::FinishAttemptPacket(bool rejected) const
 {
-    if(rejected && m_pendingPacket)m_pendingPacket();
-    m_pendingPacket={};
+    auto writer=std::move(m_pendingPacket);m_pendingPacket={};
+    if(rejected && writer)
+    {
+        if(m_packetFault=="OnFlush")throw std::runtime_error("injected attempt-packet output failure");
+        writer();
+    }
+}
+void RANSWallEvolutionPatch::FlushRejectedPacket() const noexcept
+{
+    try { FinishAttemptPacket(true); }
+    catch(const std::exception &error){m_packetOutputFailure=error.what();}
+    catch(...){m_packetOutputFailure="nonstandard packet output exception";}
 }
 std::string RANSWallEvolutionPatch::AttemptPacketStatus() const
 {
     return J::Object({{"policy",J::Quote(m_packetPolicy)},{"interval",J::Number(m_packetInterval)},
+        {"native_attempt",J::Number(m_nativeAttempt)},{"pending_writer",J::Boolean(bool(m_pendingPacket))},
+        {"output_failure",J::Quote(m_packetOutputFailure)},
         {"last_written_packet",m_lastPacketPath.empty()?"null":J::Quote(m_lastPacketPath)},
         {"sha256",m_lastPacketHash.empty()?"null":J::Quote(m_lastPacketHash)},
         {"crash_recovery",J::Quote("accepted native checkpoint/history authoritative; unselected in-flight packet is not SIGKILL-durable; frozen runtime/config plus checkpoint replay deterministically reconstructs its frozen A_k")}});
@@ -375,7 +388,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::PhysicalSamples(
         for(const auto &q:Quadrature(b))
         {result["weights_"+name].push_back(q.weight);result["values_"+name].push_back(q.Value(s,offset[b]));}
     }
-    for(const auto &q:Surface(0,2,0.,-1,8))
+    for(const auto &q:SurfaceView(0,2,0.,-1,8))
     {
         const auto p=q.test.coordinate;const auto profile=StateProfile(s,p,time,data);
         SolverUtils::RANSCappedDestructionValues normal;
@@ -383,8 +396,11 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::PhysicalSamples(
         SolverUtils::RANSTensor grad{};for(int a=0;a<m_dimension;++a)grad[PhysicalAxis(a)]=q.test.Gradient(s,offset[a]);
         const auto stress=SolverUtils::RANSWallInnerMeanStress(InnerStress(q.test.Value(s,offset[K()]),
             profile->Original().EddyViscosity(0.),grad),m_parameters.geometry.molecularNu,0.);
-        result["wall_weights"].push_back(q.weight);
-        result["wall_stress"].push_back(stress[0][2]);
+        double shear=stress[0][2],measure=q.weight;
+        if(Composite())
+        {const auto g=GeometryAt(p);shear=0.;for(int a=0;a<3;++a)for(int b=0;b<3;++b)shear+=g.tangent1[a]*stress[a][b]*g.normal[b];measure*=std::hypot(q.area[0],q.area[2]);}
+        result["wall_weights"].push_back(measure);
+        result["wall_stress"].push_back(shear);
         if(!AcceptedAWF()){result["wall_B"].push_back(normal.b);result["wall_lambda"].push_back(normal.lambda);}
         result["wall_K"].push_back(profile->K());
     }

@@ -220,7 +220,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                             system.matrix[row][col] += q.weight * value;
                         }
                     }
-                    if (forcingPressure && aa == 0)
+                    if (forcingPressure && (aa == 0 || Composite()))
                     {
                         // Flat tangential pressure gradient in the roughness
                         // load. The mechanical -2 grad(k)/3 and convection
@@ -229,7 +229,11 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                         for (int p = 0; p < fp.ids.size(); ++p)
                             system.matrix[row][index[offset[OuterPressure()] +
                                                      fp.ids[p]]] -=
-                                q.weight * q.v.phi[i] * fp.derivative[0][p];
+                                q.weight * q.v.phi[i] * ([&](){
+                                    if(!Composite())return fp.derivative[0][p];
+                                    const auto n=GeometryAt(q.v.coordinate).normal;double normal=0.;
+                                    for(int c=0;c<3;++c)normal+=n[c]*fp.derivative[c][p];
+                                    return fp.derivative[aa][p]-n[aa]*normal;})() ;
                     }
                 }
                 if (row < 0)
@@ -262,7 +266,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     for (const auto &q : m_outer)
         evaluate(q, nullptr, {}, nullptr);
 
-    if(DevelopingFlat())
+    if(OpenBoundary())
     {
         const auto f=DevelopingFlux(s);
         for(int i=0;i<n;++i)system.residual[i]+=f.advection[system.rows[i]]+f.traction[system.rows[i]]+f.diffusion[system.rows[i]];
@@ -294,7 +298,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             }
         }
     }
-    if (flow && !DevelopingFlat())
+    if (flow && !OpenBoundary())
     {
         const int gauge = index[offset[Gauge()]];
         for (int side = 0; side < 2; ++side)

@@ -29,7 +29,7 @@ std::string RANSWallEvolutionPatch::FormulationMetadata() const
         {"reference",J::Quote("Q_J-integral:nonconstant-inner-k:physical-diffusion:constant-stored-inner-pi")},
         {"stress",J::Quote(InnerStressName())},{"outer_variant",J::Quote(m_variantName)},
         {"outer_molecular_diffusion","false"},{"inner_molecular_diffusion","true"},
-        {"scope",J::Quote("serial-flat2D-PimpleSingleSweep; curved kernel only")}});
+        {"scope",J::Quote(Composite()?"serial-composite2D-PimpleSingleSweep":"serial-flat2D-PimpleSingleSweep; curved kernel only")}});
 }
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::AcceptedPerturbation(const Vector &state,double amplitude) const
@@ -96,7 +96,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::LateInnerKPerturbation(
     {const double v=q.Value(delta);norm+=q.weight*v*v;integral+=q.weight*v;error+=q.weight*(v-shape(q.coordinate))*(v-shape(q.coordinate));if(q.coordinate[2]>H)outer=std::max(outer,std::abs(v));}
     // Surface's sign is the element's outward face, not an approach side:
     // +1 at H selects the INNER element's upper face (H-minus gradient).
-    for(const auto &face:Surface(K(),2,H,1,8))
+    for(const auto &face:SurfaceView(K(),2,H,1,8))
     {
         trace=std::max(trace,std::abs(face.test.Value(delta)));
         traceValueChange=std::max(traceValueChange,std::abs(face.test.Value(s,offset[K()])-face.test.Value(state,offset[K()])));
@@ -491,7 +491,7 @@ std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,doub
     auto flux=[&](double height)
     {
         Vector result(2);
-        for(int a:{0,2})for(int side:{-1,1})for(const auto &face:Surface(K(),a,a==2?(side<0?0.:height):(side<0?lower[0]:upper[0]),side,16))
+        for(int a:{0,2})for(int side:{-1,1})for(const auto &face:SurfaceView(K(),a,a==2?(side<0?0.:height):(side<0?lower[0]:upper[0]),side,16))
         {
             const auto p=face.test.coordinate;if(a==0 && p[2]>height)continue;
             const double k=face.test.Value(s,offset[K()]);RANSVector u{};RANSTensor g{};

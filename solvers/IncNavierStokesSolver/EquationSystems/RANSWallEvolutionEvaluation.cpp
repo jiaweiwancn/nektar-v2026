@@ -237,14 +237,14 @@ std::shared_ptr<const RANSCappedDestructionValues> RANSWallEvolutionPatch::Cache
     if(!m_evaluation || Mapped() || !m_evaluation->profiles.count(&profile))return nullptr;
     auto &c=*m_evaluation;if(c.generation!=c.data->generation){PrepareEvaluation(*c.data,[] (Bits b){double t;std::memcpy(&t,&b,sizeof t);return t;}(c.time));return nullptr;}
     auto &entry=c.Find(s,m_evaluationWork);
-    const auto key=std::make_tuple(&profile,Bit(p[0]),Bit(p[1]),Bit(m_mapping.At(p).scale),m_assertKCoverage);
+    const auto key=std::make_tuple(&profile,Bit(p[0]),Bit(p[1]),Bit(GeometryAt(p).scale),m_assertKCoverage);
     const auto it=entry.normalization.find(key);
     if(it==entry.normalization.end())return nullptr;
     // Coverage is a live acceptance assertion, even when numerical ray work
     // is reused. The owned immutable profile identifies the complete branch,
     // quadrature, coefficients and geometry, not merely sampled K.
     if(m_assertKCoverage)for(const auto &q:profile.Quadrature())
-    {auto point=p;point[2]=q.r/m_mapping.At(p).scale;Require(m_coveredKLocations.count(point),"unprotected constitutive k evaluation: cached normalization ray");}
+    {auto point=p;point[2]=q.r/GeometryAt(p).scale;Require(m_coveredKLocations.count(point),"unprotected constitutive k evaluation: cached normalization ray");}
     ++m_evaluationWork.normalizationHits;return it->second;
 }
 void RANSWallEvolutionPatch::StoreNormalization(const Vector &s,const RANSWallCoordinate &p,
@@ -252,7 +252,7 @@ void RANSWallEvolutionPatch::StoreNormalization(const Vector &s,const RANSWallCo
 {
     if(!m_evaluation || Mapped() || !m_evaluation->profiles.count(&profile))return;
     auto &entry=m_evaluation->Find(s,m_evaluationWork);
-    entry.normalization[{&profile,Bit(p[0]),Bit(p[1]),Bit(m_mapping.At(p).scale),m_assertKCoverage}]=
+    entry.normalization[{&profile,Bit(p[0]),Bit(p[1]),Bit(GeometryAt(p).scale),m_assertKCoverage}]=
         std::make_shared<const RANSCappedDestructionValues>(value);
 }
 
@@ -302,6 +302,11 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
         {"prefix_hits",J::Number(w.prefixHits)},{"row_constructs",J::Number(w.rowConstructs)},{"row_hits",J::Number(w.rowHits)},
         {"row_evictions",J::Number(w.rowEvictions)},{"reconstruction_builds",J::Number(w.reconstructionBuilds)},
         {"reconstruction_hits",J::Number(w.reconstructionHits)},{"surface_builds",J::Number(w.surfaceBuilds)},{"surface_hits",J::Number(w.surfaceHits)},
+        {"audit_reuse",J::Quote(m_auditReuse?"ExactObservationV1":"Off")},{"fixed_anchor_builds",J::Number(m_anchorBuilds)},{"fixed_anchor_hits",J::Number(m_anchorHits)},
+        {"audit_queries",J::Number(m_auditQueries)},{"audit_unique",J::Number(m_auditUnique)},{"audit_hits",J::Number(m_auditHits)},
+        {"wall_distance_builds",J::Number(m_wallDistanceBuilds)},{"wall_distance_hits",J::Number(m_wallDistanceHits)},
+        {"wall_distance_certificate_wall_seconds_inclusive",J::Number(m_wallDistanceSeconds)},
+        {"static_wall_distance_certificates",J::Number(m_wallDistances.size())},{"dynamic_wall_distance_certificates",J::Number(m_dynamicWallDistances.size())},
         {"normalization_calls",J::Number(w.normalizationCalls)},{"normalization_computes",J::Number(w.normalizationComputes)},
         {"normalization_hits",J::Number(w.normalizationHits)},{"residual_calls",J::Number(w.residualCalls)},
         {"residual_hits",J::Number(w.residualHits)},{"constraint_calls",J::Number(w.constraintCalls)},

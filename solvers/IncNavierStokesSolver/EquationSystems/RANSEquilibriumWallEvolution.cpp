@@ -162,7 +162,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
                 "PimpleSingleSweep requires native IMEX1, eta=0, no condensation and complete R2 diagnostics");
             m_session->LoadParameter("RANSWallPimpleRejectStep",m_pimpleRejectStep,0);
             m_session->LoadParameter("RANSWallPimpleHardAuditRejectStep",m_pimpleHardAuditRejectStep,0);
-            Require(m_pimpleRejectStep>=0 && m_pimpleHardAuditRejectStep>=0,"invalid deliberate PIMPLE rejection step");
+            m_session->LoadParameter("RANSWallPimplePostAssignRejectStep",m_postAssignRejectStep,0);
+            Require(m_pimpleRejectStep>=0 && m_pimpleHardAuditRejectStep>=0 && m_postAssignRejectStep>=0,"invalid deliberate PIMPLE rejection step");
         }
         m_session->LoadSolverInfo("RANSWallStageTest",m_stageTest,"Off");
         Require(m_stageTest=="Off" || m_stageTest=="MatchedR2" || m_stageTest=="FrozenScalarR2" ||
@@ -191,7 +192,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         }
         m_session->LoadSolverInfo("RANSWallRestart",m_restart,"None");m_session->LoadSolverInfo("RANSWallCheckpoint",m_checkpointBase,"None");
         m_session->LoadSolverInfo("RANSWallDiagnosticIVP",m_diagnosticIVP,"Off");
-        Require(m_diagnosticIVP=="Off" || m_diagnosticIVP=="LateStateIMEX1V1" || m_diagnosticIVP=="LateStateInnerKIMEX1V1","unknown diagnostic IVP contract");
+        Require(m_diagnosticIVP=="Off" || m_diagnosticIVP=="LateStateIMEX1V1" || m_diagnosticIVP=="LateStateInnerKIMEX1V1" || m_diagnosticIVP=="FiniteDevelopingIMEX1V1","unknown diagnostic IVP contract");
         if(m_diagnosticIVP!="Off")
         {
             std::string parentDt;
@@ -206,11 +207,12 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
             std::size_t used=0;m_ivpParentDt=std::stod(parentDt,&used);
             Require(used==parentDt.size() && std::isfinite(m_ivpParentDt) && m_ivpParentDt>0 &&
                 m_ivpParent!="None" && m_ivpParentHash.size()==64 && m_restart=="None" &&
-                m_patch->AcceptedAWF() && m_patch->PimpleSingleSweep() && m_order==1 && m_neutral &&
+                m_patch->AcceptedAWF() && m_patch->PimpleSingleSweep() && m_order==1 &&
+                (m_diagnosticIVP=="FiniteDevelopingIMEX1V1"?(!m_neutral && m_patch->FiniteInflowReference() && m_patch->DevelopingFlat()):m_neutral) &&
                 m_eta==0 && m_session->GetComm()->GetSize()==1 && !m_patch->Mapped(),
-                "LateStateIMEX1V1 requires an explicit validated flat neutral serial parent, no ordinary restart");
+                "diagnostic IMEX1 IVP requires its explicit validated neutral or finite/developing affine parent, no ordinary restart");
             for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
-                Require(!m_serialSession->DefinesFunction(name),"late IVP supports only the archived unforced problem");
+                if(m_diagnosticIVP!="FiniteDevelopingIMEX1V1")Require(!m_serialSession->DefinesFunction(name),"late IVP supports only the archived unforced problem");
         }
         Require(m_timestep>0,"evolution requires positive fixed TimeStep");m_data=RANSWallEvolutionData(dim);
         for(int a=0;a<dim;++a)
@@ -388,6 +390,8 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
     RANSWallEvolutionPatch::EvaluationScope evaluation(*m_patch,m_implicitData,time);
     ++m_implicitCallbacks;
     auto fullHistory=m_state;std::copy(history.begin(),history.end(),fullHistory.begin());int iterations=0;
+    if(m_patch->PimpleSingleSweep())
+    {m_attemptedHistory=fullHistory;m_attemptedTime=time;m_attemptedAlpha=1/lambda;m_attemptedCallback=true;}
     Vector candidate;
     try
     {
@@ -525,7 +529,10 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Explicit(cons
 {
     RANSWallTiming::Scope timing("native.explicit");
     auto full=m_state;std::copy(state.begin(),state.end(),full.begin());const auto derivative=m_patch->ExplicitBody(full,time,m_data);
-    m_explicitAudits.push_back({time,Maximum(derivative)});return derivative;
+    m_explicitAudits.push_back({time,Maximum(derivative)});
+    if(m_postAssignRejectStep>0 && m_integrator && m_integrator->Steps()+1==m_postAssignRejectStep && time>m_integrator->Time() && m_stageTime==time)
+        throw std::runtime_error("deliberate post-assignment explicit rejection");
+    return derivative;
 }
 void RANSEquilibriumWallEvolution::v_DoSolve()
 {
@@ -542,21 +549,39 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             // (e.g. a nonfinite explicit evaluation). Keep the coupled state
             // and accepted diagnostics transactional as well as native history.
             const bool single=m_patch->PimpleSingleSweep();
-            const auto committedState=single?m_state:Vector{},committedHistory=single?m_lastHistory:Vector{};
-            const auto committedSamples=single?m_physicalSamples:RANSWallEvolutionPatch::Diagnostic{};
+            auto committedState=single?m_state:Vector{},committedHistory=single?m_lastHistory:Vector{};
+            auto committedSamples=single?m_physicalSamples:RANSWallEvolutionPatch::Diagnostic{};
+            m_patch->BeginPhysicalAttempt(m_integrator->Steps()+1);
             const double committedStageTime=m_stageTime,committedStageAlpha=m_stageAlpha;
             const auto stages=m_stageAudits.size(),audits=m_stateAudits.size(),states=m_acceptedStates.size(),times=m_auditTimes.size();
+            const auto explicits=m_explicitAudits.size();
+            m_attemptedCallback=false;m_attemptedHistory.clear();m_attemptedTime=m_attemptedAlpha=0;
             Vector diff;
             try{RANSWallTiming::Scope advanceTiming("native.advance");diff=m_integrator->Advance();}
             catch(...)
             {
                 if(single)
                 {
-                    m_patch->FinishAttemptPacket(true);
+                    const auto assignedHash=RANSWallR3::Hash(m_state);
                     if(m_rejectedState.empty())m_rejectedState=m_state;
-                    m_state=committedState;m_lastHistory=committedHistory;m_physicalSamples=committedSamples;
+                    auto attemptedHistory=std::move(m_attemptedHistory);
+                    const double attemptedTime=m_attemptedTime,attemptedAlpha=m_attemptedAlpha;
+                    // Restore BEFORE any fallible persistence. The native
+                    // integrator has already restored its own transaction.
+                    m_state=std::move(committedState);m_lastHistory=std::move(committedHistory);m_physicalSamples=std::move(committedSamples);
                     m_stageTime=committedStageTime;m_stageAlpha=committedStageAlpha;
-                    m_stageAudits.resize(stages);m_stateAudits.resize(audits);m_acceptedStates.resize(states);m_auditTimes.resize(times);
+                    m_stageAudits.resize(stages);m_stateAudits.resize(audits);m_acceptedStates.resize(states);m_auditTimes.resize(times);m_explicitAudits.resize(explicits);
+                    namespace J=RANSWallSolveJson;
+                    m_rollbackReceipt=J::Object({{"assigned_candidate_sha256",J::Quote(assignedHash)},
+                        {"implicit_callback_entered",J::Boolean(m_attemptedCallback)},
+                        {"attempted_stage_history",J::Numbers(attemptedHistory)},
+                        {"attempted_stage_history_sha256",J::Quote(RANSWallR3::Hash(attemptedHistory))},
+                        {"attempted_stage_time",J::Number(attemptedTime)},{"attempted_stage_alpha",J::Number(attemptedAlpha)},
+                        {"restored_state_sha256",J::Quote(RANSWallR3::Hash(m_state))},
+                        {"restored_stage_time",J::Number(m_stageTime)},{"restored_stage_alpha",J::Number(m_stageAlpha)},
+                        {"accepted_stage_audits",J::Number(stages)},{"accepted_state_audits",J::Number(audits)},
+                        {"accepted_explicit_audits",J::Number(explicits)},{"packet_flush_after_restore","true"}});
+                    m_patch->FlushRejectedPacket();
                 }
                 throw;
             }
@@ -917,7 +942,7 @@ void RANSEquilibriumWallEvolution::v_Output()
         native->Store(values);auto field=native->Field();auto definitions=field->GetFieldDefinitions();std::vector<std::vector<NekDouble>> data(definitions.size());
         for(int j=0;j<definitions.size();++j){definitions[j]->m_fields.push_back(name);field->AppendFieldData(definitions[j],data[j],field->UpdateCoeffs());}
         LibUtilities::FieldMetaDataMap meta;meta["Time"]=std::to_string(m_time);meta["PressureConvention"]="pi=p/rho+2k/3";
-        if(m_patch->Mapped()){meta["CoordinateRepresentation"]="normal chart; physical geometry in VTU";meta["PhysicalMap"]=m_patch->Mapping().Signature();}
+        if(m_patch->Mapped()){meta["CoordinateRepresentation"]=m_patch->Composite()?"inner r; outer zHat, eta=(zHat-Hw)/(Z-Hw); physical geometry in VTU":"normal chart; physical geometry in VTU";meta["PhysicalMap"]=m_patch->GeometrySignature();}
         io->Write(m_sessionName+"-"+name+(m_patch->Mapped()?".chart.fld":".fld"),definitions,data,meta,false);
         if(m_patch->Mapped())WriteMappedField(name,native,values);
     };
@@ -973,8 +998,8 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"chi\":"<<(m_patch->AcceptedAWF()?"null":RANSWallSolveJson::Number(m_patch->Parameters().chi))<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
        <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
     if(m_patch->FiniteInflowReference())out<<",\"finite_inflow_reference\":"<<m_patch->FiniteInflowChecks(m_state);
-    if(m_patch->DevelopingFlat())out<<",\"developing_boundary\":"<<m_patch->DevelopingChecks(m_state,m_time,m_data);
-    out<<",\"attempt_packet_status\":"<<m_patch->AttemptPacketStatus();
+    if(m_patch->OpenBoundary())out<<",\"developing_boundary\":"<<m_patch->DevelopingChecks(m_state,m_time,m_data);
+    out<<",\"attempt_packet_status\":"<<m_patch->AttemptPacketStatus()<<",\"rollback_receipt\":"<<m_rollbackReceipt;
     out<<",\"wall_formulation\":"<<m_patch->FormulationMetadata()<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())
        <<",\"audit_revision\":"<<Quoted(m_patch->AuditRevision())
        <<",\"evaluation_reuse\":"<<m_patch->EvaluationReuseJSON()
@@ -1082,7 +1107,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"last_stage_history\":";Write(out,m_lastHistory);out<<",\"last_stage_time\":"<<m_stageTime<<",\"last_stage_alpha\":"<<m_stageAlpha;
     const auto &mapping=m_patch->Mapping();
     out<<",\"mapped\":"<<(m_patch->Mapped()?"true":"false")<<",\"function_coordinates\":"<<Quoted(m_chartFunctions?"Chart":"Physical")
-       <<",\"geometry_signature\":"<<Quoted(mapping.Signature())<<",\"map_parameters\":";
+       <<",\"geometry_signature\":"<<Quoted(m_patch->GeometrySignature())<<",\"map_parameters\":";
     Write(out,{static_cast<double>(mapping.kind),static_cast<double>(mapping.dimension),mapping.height,mapping.heightSlopeX,mapping.heightSlopeY,
         mapping.heightAmplitude,mapping.heightWaveX,mapping.heightWaveY,mapping.slopeX,mapping.slopeY,mapping.radius,mapping.amplitude,mapping.lengthX,mapping.lengthY});
     out<<",\"boundary_flux_correction\":"<<m_patch->BoundaryFluxCorrection()<<",\"roughness_budget\":";Write(out,m_roughnessBudget);

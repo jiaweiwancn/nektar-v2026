@@ -46,7 +46,7 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
     session->LoadParameter("RANSWallFrictionVelocity",m_robustUstar,.4);
     double dx,dy;session->LoadParameter("RANSWallDirectionX",dx,1.);session->LoadParameter("RANSWallDirectionY",dy,0.);
     const double length=std::hypot(dx,dy);Require(length>0 && m_robustUstar>0,"invalid regularization reference inputs");
-    const auto incoming=m_mapping.At({lower[0],lower[1],0});
+    const auto incoming=GeometryAt({lower[0],lower[1],0});
     m_referenceNormal=incoming.normal;
     for(int a=0;a<3;++a)m_referenceFlow[a]=(dx*incoming.tangent1[a]+dy*incoming.tangent2[a])/length;
     std::string reuse;session->LoadSolverInfo("RANSWallFiniteReferenceReuse",reuse,"Off");
@@ -71,7 +71,7 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
             session->LoadParameter("RANSWallReferenceFlow"+axis,flow[a],a==0?1.:0.);
             session->LoadParameter("RANSWallReferenceNormal"+axis,normal[a],a==2?1.:0.);
         }
-        Require(Mapped() || (origin[2]==0. && normal==RANSVector({0,0,1}) && flow==RANSVector({1,0,0})),
+        Require((Mapped() && !Composite()) || (origin[2]==0. && normal==RANSVector({0,0,1}) && flow==RANSVector({1,0,0})),
             "affine finite initialization/readback requires zero normal origin and horizontal incoming frame");
         m_finiteInflow=std::make_shared<const RANSFiniteInflowReference>(
             RANSFiniteInflowReference::Parse(text),origin,flow,normal,m_regularizationScale,m_parameters.model.Parameters());
@@ -103,9 +103,9 @@ RANSClosureValues RANSWallEvolutionPatch::OuterClosure(double k,double epsilon,
 {
     if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: outer closure");
     if(m_variantName=="Original")return EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,
-        gradient,Distance(p),m_parameters.model.Parameters(),0);
+        gradient,OuterWallDistance(p),m_parameters.model.Parameters(),0);
     const auto variant=RegularizedReferenceAt(p);
-    return EvaluateRANSRobustClosure(m_parameters.model.Model(),k,epsilon,gradient,Distance(p),
+    return EvaluateRANSRobustClosure(m_parameters.model.Model(),k,epsilon,gradient,OuterWallDistance(p),
         m_parameters.model.Parameters(),0,variant);
 }
 
@@ -143,9 +143,17 @@ RANSRobustVariant RANSWallEvolutionPatch::RegularizedReferenceAt(const RANSWallC
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FiniteInflowSeed() const
 {
+    if(Composite())return CompositeSeed();
     Require(m_finiteInflow && !Mapped() && AcceptedAWF(),"finite-profile seed currently requires the affine accepted-AWF pilot");
+    return FlatFiniteSeed();
+}
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FlatFiniteSeed() const
+{
     const double H=m_parameters.geometry.height;
-    const auto endpoint=m_finiteInflow->AtHeight(H);const auto wall=Profile(endpoint.k,{0,0,0},1);
+    const auto endpoint=m_finiteInflow->AtHeight(H);
+    // The radial seed is the flat inlet completion, not the curved crest
+    // budget. Composite setup subsequently applies its physical lift.
+    const auto wall=Profile(endpoint.k,Composite()?RANSWallCoordinate{lower[0],0,0}:RANSWallCoordinate{0,0,0},1);
     Require(m_dimension==2 && m_referenceFlow==RANSVector({1,0,0}) && m_referenceNormal==RANSVector({0,0,1}),
         "finite compatibility seed requires the horizontal Cartesian incoming frame");
     std::vector<double> breaks{wall->Reference().cutoff,wall->Original().ViscosityInterceptHeight(),m_parameters.geometry.roughness};
@@ -182,7 +190,7 @@ std::string RANSWallEvolutionPatch::FiniteInflowChecks(const Vector &s) const
         if(k>0 && e>0)
         {
             RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);
-            const auto c=EvaluateRANSRobustClosure(m_parameters.model.Model(),k,e,g,Distance(q.v.coordinate),m_parameters.model.Parameters(),0,v);
+            const auto c=EvaluateRANSRobustClosure(m_parameters.model.Model(),k,e,g,OuterWallDistance(q.v.coordinate),m_parameters.model.Parameters(),0,v);
             long double work=0;for(int a=0;a<3;++a)for(int b=0;b<3;++b)work-=(long double)c.reynoldsStress[a][b]*g[a][b];
             workError=std::max(workError,std::abs(double(work)-c.production)/std::max(1.,std::abs(c.production)));
             epsilonError=std::max(epsilonError,std::abs(c.epsilonProduction-m_parameters.model.Parameters().cEpsilon1*e/k*c.production)/std::max(1.,std::abs(c.epsilonProduction)));
@@ -195,7 +203,15 @@ std::string RANSWallEvolutionPatch::FiniteInflowChecks(const Vector &s) const
         const auto v=m_finiteInflow->AtHeight(z);
         samples.push_back(J::Numbers(Vector{z,v.U,v.dU,v.k,v.epsilon,v.nuT,v.gamma}));
     }
-    return J::Object({{"reference_reuse_mode",J::Quote(m_finiteReferenceReuse?"ExactHeightV1":"Off")},
+    const double referenceK=m_finiteInflow->AtHeight(m_parameters.geometry.height).k;
+    const auto inletWall=Profile(referenceK,{lower[0],0,0},1);
+    const auto &wallParameters=inletWall->Original().Parameters();
+    return J::Object({{"wall_reference_scales",J::Object({{"K",J::Number(referenceK)},
+        {"positive_viscosity_intercept",J::Number(inletWall->Original().ViscosityInterceptHeight())},
+        {"molecular_to_linear_eddy_scale",J::Number(m_parameters.geometry.molecularNu/(wallParameters.cMu*wallParameters.cLength*std::sqrt(referenceK)))},
+        {"cutoff",J::Number(inletWall->Reference().cutoff)},
+        {"scope",J::Quote("flat incoming budget-AWF reference, not actual hill production")}})},
+        {"reference_reuse_mode",J::Quote(m_finiteReferenceReuse?"ExactHeightV1":"Off")},
         {"reference_reuse_hits_misses_entries_clears",J::Numbers(Vector{double(m_fixedReferenceHits),double(m_fixedReferenceMisses),double(m_fixedReferenceValues.size()),double(m_fixedReferenceClears)})},
         {"mode",J::Quote("FiniteInflowV1")},{"identity",J::Quote(m_finiteInflowIdentity)},
         {"comparison_reference",J::Quote("native finite-profile initialized seed; not analytical neutral equilibrium")},
@@ -219,7 +235,7 @@ RANSCappedDestructionValues RANSWallEvolutionPatch::WallNormalization(const Vect
     // assembling its volume loads, never to the nonlocal normalization.
     for(const auto &q:profile.Quadrature())
     {
-        auto point=p;point[2]=q.r/m_mapping.At(p).scale;
+        auto point=p;point[2]=q.r/GeometryAt(p).scale;
         const auto row=EvaluationRow(K(),fields[K()]->LocateElement(point),point);
         if(m_assertKCoverage)Require(m_coveredKLocations.count(point),
             "unprotected constitutive k evaluation: normalization ray");
