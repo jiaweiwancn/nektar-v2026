@@ -35,9 +35,11 @@ def grid(construction):
 
 def replay(initial,state,time,points,**extra):
     o=initial['observation']
+    sides=extra.pop('grid_sides',[0]*len(points))
+    require(len(sides)==len(points),'replay_grid_side_length_mismatch')
     return dict(operation='replay',identity=o['identity'],descriptor=o['resolved_descriptor'],
         state=state,reference=initial['reference'],fixed_boundary=initial['fixed_boundary'],time=time,
-        grid=points,grid_sides=[0]*len(points),**extra)
+        grid=points,grid_sides=sides,**extra)
 
 
 def physical_observations(packet,weights,construction):
