@@ -86,26 +86,35 @@ def sample_summary(basis,state,c,n,weights):
         isotropic_work_maximum=float(np.max(abs(iso))))
 
 
+def radicands(sampled):
+    o=sampled['observation'];mask=np.array(o['grid_regions'])==1
+    gradients=np.array(o['grid_gradients'])[mask];v=np.array(o['grid_values'])[mask]
+    G=np.zeros((len(v),3,3));G[:,0,:]=gradients[:,0,:];G[:,2,:]=gradients[:,1,:]
+    div=np.trace(G,axis1=1,axis2=2);S=(G+G.transpose(0,2,1))/2-div[:,None,None]*np.eye(3)/3
+    O=(G-G.transpose(0,2,1))/2;sn=np.sqrt(np.sum(S*S,axis=(1,2)));on=np.sqrt(np.sum(O*O,axis=(1,2)))
+    eig=np.linalg.eigvalsh(S);tau=v[:,2]/v[:,3];C=np.empty(len(v));regular=sn!=0
+    C[regular]=1/(6.5+3*eig[regular,-1]/sn[regular]*np.hypot(sn[regular],on[regular])*tau[regular])
+    C[~regular]=1/6.5
+    require(not np.any((~regular)&(on!=0)),'undefined_pure_rotation_in_readonly_rad_comparison')
+    return 1-9*C*C*sn*sn*tau*tau, np.flatnonzero(mask)
+
+
 def spatial(a,b,ba,bb,ca,cb,points,weights,n,t):
     av,sa=sample_summary(ba,a,ca,n,weights);bv,sb=sample_summary(bb,b,cb,n,weights)
+    local={}
+    if ca['model']=='A95':
+        ar,ix=radicands(av);br,bx=radicands(bv);require(np.array_equal(ix,bx),'local_side_inventory_mismatch')
+        j=int(np.argmax(abs(ar-br)));difference=float(abs(ar[j]-br[j]));index=int(ix[j]);margin=float(min(ar.min(),br.min()))
+        local=dict(maximum_absolute_radicand_difference=difference,minimum_margin_both_spaces=margin,
+            difference_over_margin=difference/margin if margin>0 else None,coordinate=points[index],side=ba['observation']['grid_sides'][index],
+            status='below_evaluation_floor' if difference<=1e-10 else 'bounded_on_declared_grid' if margin>0 and difference<=.25*margin else 'unresolved_spatial_domain_sensitivity',
+            declared_limit_fraction=.25,evaluation_absolute_floor=1e-10)
     for q in (av,bv):
         q['observation']['time']=t
         for key in ('grid','grid_sides','grid_regions','grid_values','grid_gradients'):q['observation'][key]=q['observation'][key][:n]
     fields=compare(av,bv,weights,ca)
     # Global field differences and actual local constitutive sensitivity are
     # separate: no positive global RMS can excuse a negative local radicand.
-    local={};margins=[];differences=[]
-    if ca['model']=='A95':
-        for i,(ra,rb) in enumerate(zip(ba['test_basis'],bb['test_basis'],strict=True)):
-            if ra['epsilon'] is None:continue
-            va=point(ra,np.array(a),ba['observation']['offsets'],'A95');vb=point(rb,np.array(b),bb['observation']['offsets'],'A95')
-            margins.extend([va.get('radicand',-1.),vb.get('radicand',-1.)]);differences.append((abs(va['radicand']-vb['radicand']),i))
-        difference,index=max(differences);margin=min(margins)
-        ratio=difference/margin if margin>0 else None
-        local=dict(maximum_absolute_radicand_difference=float(difference),minimum_margin_both_spaces=float(margin),
-            difference_over_margin=float(ratio) if ratio is not None else None,coordinate=points[index],side=ba['observation']['grid_sides'][index],
-            status='bounded_on_declared_grid' if margin>0 and difference<=.25*margin else 'unresolved_spatial_domain_sensitivity',
-            declared_limit_fraction=.25,evaluation_absolute_floor=1e-10)
     return dict(time=t,fields=fields,local=local,coarse=sa,fine=sb,
                 classification='bounded_global_contrast' if fields['status']=='pass' else 'failed_global_difference_limit',
                 convergence_order='not_claimed')
@@ -153,7 +162,12 @@ def main():
             ps=[]
             for dt in ('0.002','0.001'):
                 q=samples[name][dt][t];o=q['observation'];small={k:v[:n] if isinstance(v,list) else v for k,v in o.items()};small['time']=t;ps.append(dict(observation=small))
-            row['temporal'].append(compare(*ps,weights,c))
+            comparison=compare(*ps,weights,c)
+            if c['model']=='A95':
+                ar,ix=radicands(samples[name]['0.002'][t]);br,bx=radicands(samples[name]['0.001'][t])
+                require(np.array_equal(ix,bx),'temporal_local_side_inventory_mismatch')
+                j=int(np.argmax(abs(ar-br)));comparison['maximum_radicand_dt_difference']=float(abs(ar[j]-br[j]));comparison['radicand_dt_location']=points[int(ix[j])]
+            row['temporal'].append(comparison)
         result['spaces'][name]=row;write_json(a.output/'progress.json',result)
     for label,coarse,fine in [('streamwise_P3','A95-Zminus-P3-CT2','A95-XZminus-P3'),('degree_same_partition','A95-XZminus-P3','A95-XZminus-P4')]:
         if coarse not in spaces or fine not in spaces:continue
@@ -163,8 +177,22 @@ def main():
         times=sorted(t for t in common if t in (0.,.002,.004,.006,.008,.02,.2));rows={}
         for dt in ('0.002','0.001'):
             rows[dt]=[spatial(spaces[coarse]['states'][dt][t],spaces[fine]['states'][dt][t],bases[coarse],bases[fine],ca,cb,points,weights,n,t) for t in times]
+        for q in rows['0.001']:
+            t=q['time'];ta=next(x for x in result['spaces'][coarse]['temporal'] if x['time']==t);tb=next(x for x in result['spaces'][fine]['temporal'] if x['time']==t)
+            uncertainty={}
+            for field,d in q['fields']['fields'].items():
+                dtmax=max(x['fields'][field]['scaled_weighted_RMS'] for x in (ta,tb));limit=max(1e-7,.1*d['scaled_weighted_RMS'])
+                uncertainty[field]=dict(maximum_dt_difference=dtmax,limit=limit,status='pass' if dtmax<=limit else 'unresolved_temporal_uncertainty')
+            localdt=max(ta.get('maximum_radicand_dt_difference',0.),tb.get('maximum_radicand_dt_difference',0.))
+            if q['local']:
+                q['local']['maximum_dt_radicand_difference']=localdt
+                q['local']['dt_uncertainty_limit']=max(1e-10,.1*q['local']['maximum_absolute_radicand_difference'])
+                if localdt>q['local']['dt_uncertainty_limit']:q['local']['status']='unresolved_temporal_uncertainty'
+            q['field_spatial_interpretation_uncertainty']=uncertainty
+        evolved=[q for q in rows['0.001'] if q['time']>0]
         result['contrasts'][label]=dict(coarse=coarse,fine=fine,common_times=times,comparisons=rows,
-            status='bounded_on_declared_grid' if rows['0.001'] and all(q['fields']['status']=='pass' and q['local'].get('status')=='bounded_on_declared_grid' for q in rows['0.001']) else 'unresolved_spatial_sensitivity',
+            status='bounded_on_declared_grid' if evolved and all(q['fields']['status']=='pass' and q['local'].get('status')=='bounded_on_declared_grid'
+                and all(x['status']=='pass' for x in q['field_spatial_interpretation_uncertainty'].values()) for q in evolved) else 'unresolved_spatial_sensitivity',
             initial_projection='t=0 reported separately; later differences include evolution; no formal order inferred')
         write_json(a.output/'progress.json',result)
     result['evolved_spatial_status']='bounded_contrasts_only' if result['contrasts'] and all(x['status']=='bounded_on_declared_grid' for x in result['contrasts'].values()) else 'unresolved'

@@ -1,0 +1,10 @@
+{
+  "schema": "CT3SpatialInterpretationV1",
+  "timing": "declared before computing cross-space contrasts; per-case continuation retains CT2 absolute temporal/mass/scalar gates",
+  "global_fields": "physical weighted RMS on six-point union grid; no absolute pressure shift; t=0 projection and subsequent evolution separate",
+  "global_difference_limit": 0.001,
+  "spatial_interpretation_temporal_uncertainty": "max(dt differences on both spaces)<=max(1e-7,0.1*spatial difference); otherwise unresolved interpretation, not a retroactive physical rejection",
+  "local_radicand": "minimum margin positive; spatial radicand difference<=0.25*minimum margin on common declared grid; dt radicand uncertainty<=max(1e-10,0.1*spatial radicand difference); differences below evaluation floor classified unresolved-floor",
+  "evaluation_radicand_floor": 1e-10,
+  "qualification_scope": "bounded contrasts only; two degrees and one mesh contrast do not establish convergence order; native inventories remain separately visible"
+}
