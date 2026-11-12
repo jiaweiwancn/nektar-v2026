@@ -116,6 +116,17 @@ def main():
     for row in diag['stages']:
         row['traction']={k:summarize_profile(v) for k,v in row['traction'].items()}
     save('load-and-stage-diagnosis.json',diag)
+    old_observations=read(a.ct4/'observation-checks-v2/results.json')
+    old_points={(p['series'],p['point_id']):p for p in old_observations['height_audit']};envelopes=[]
+    for point in obs['height_audit']:
+        old_point=old_points.get((point['series'],point['point_id']))
+        if old_point is None:continue
+        for label in ('lower_vertical_envelope','upper_vertical_envelope'):
+            previous,current=old_point[label],point[label]
+            if previous is None or current is None or previous['distance'] is None or current['distance'] is None:continue
+            if abs(previous['distance']-current['distance'])>2e-10:
+                envelopes.append(dict(series=point['series'],point_id=point['point_id'],envelope=label,old_distance_mm=40*previous['distance'],new_distance_mm=40*current['distance']))
+    obs['changed_coordinate_envelopes']=envelopes
     obs['height_audit_inventory']=dict(count=len(obs['height_audit']),sha256=hashlib.sha256(canonical(obs.pop('height_audit'))).hexdigest(),source='full versioned observation results retained on Linux')
     save('observation-correction.json',obs)
     resources={}
