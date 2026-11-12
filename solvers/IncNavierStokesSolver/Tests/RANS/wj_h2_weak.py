@@ -4,6 +4,38 @@ import numpy as np
 from numpy.testing import assert_allclose
 from wj_h2_profiles import wall,constitutive,CD
 from validate_wj_h1 import require
+
+
+def boundary_test_rows(packet,report):
+    """Actual native Q3 test traces, independently evaluated at exterior nodes.
+
+    The interface-hat function is projected into the native field space. Its
+    kink at H/2 need not be a mesh face at low H. The native packet exports
+    that projected polynomial at order24; reconstruct it per face/field rather
+    than silently replacing it by the original analytic hat at order16.
+    """
+    result={}
+    for sample in packet['boundary_mode_samples']:
+        key=(sample['role'],sample['geometry']);result.setdefault(key,[]).append(sample)
+    polynomials={}
+    for key,rows in result.items():
+        role,geometry=key;axis=2 if role in ('inlet','outlet')else 0
+        el=next(e for e in report['fields'][0]['mesh']if e['geometry']==geometry)
+        lo,hi=el['lower'][axis],el['upper'][axis]
+        x=np.array([2*(v['chart'][axis]-lo)/(hi-lo)-1 for v in rows])
+        y=np.array([v['modes']for v in rows]);shape=y.shape[1:]
+        coefficients=np.polynomial.legendre.legfit(x,y.reshape(len(rows),-1),el['degree'])
+        assert_allclose(np.polynomial.legendre.legvander(x,el['degree'])@coefficients,y.reshape(len(rows),-1),
+            rtol=2e-12,atol=2e-13,err_msg='exported test trace must be native polynomial on its face')
+        polynomials[key]=(axis,lo,hi,coefficients,shape)
+    def evaluate(row):
+        axis,lo,hi,c,shape=polynomials[(row['role'],row['geometry'])]
+        x=2*(row['chart'][axis]-lo)/(hi-lo)-1
+        if not -1-1e-12<=x<=1+1e-12:raise ValueError('test trace extrapolation outside face')
+        return np.polynomial.legendre.legval(x,c).reshape(shape)
+    return evaluate
+
+
 def independent_weak(packet,report,enforce=True):
     H=report["parameters"][1];h=report["parameters"][2]
     NU=float(report['parameters'][0])
@@ -58,6 +90,7 @@ def independent_weak(packet,report,enforce=True):
             add('gauge',mode,pb,w*test['p']*row['lambda']/packet['volume'])
     exterior=np.zeros_like(expected)
     support=min(float(v['upper'][2]) for v in report['fields'][0]['mesh'] if float(v['lower'][2])==H)
+    projected=boundary_test_rows(packet,report)if 'boundary_mode_samples'in packet else None
     for row in report['open_boundary']['boundary_rows']:
         x,_,rho=row['chart'];w=row['weight'];inner=row['inner'];side=0 if inner else 1
         hat=0 if rho<H/2 or rho>support else (rho-H/2)/(H/2) if rho<H else (support-rho)/(support-H)
@@ -72,8 +105,9 @@ def independent_weak(packet,report,enforce=True):
             K=report['parameters'][5];je=CD*K*K/1.3/(TOP-D0)
         traction=np.array(row['applied_traction'])
         flux=[u[0]*un-traction[0],u[2]*un-traction[2],k*un+jk,e*un+je]
-        for mode,phi in enumerate((1.,x/5,hat)):
-            for block in range(3 if inner else 4):exterior[side,mode,block]+=w*phi*flux[block]
+        tests=projected(row)if projected else np.repeat(np.array([1.,x/5,hat])[:,None],4,axis=1)
+        for mode in range(3):
+            for block in range(3 if inner else 4):exterior[side,mode,block]+=w*tests[mode,block]*flux[block]
     expected+=exterior
     parts['exterior_boundary']=exterior.sum(axis=0)
     errors={};conditions={}
@@ -98,4 +132,5 @@ def independent_weak(packet,report,enforce=True):
         outer_quadrature_order=packet.get('outer_quadrature_order',24),samples=len(packet['samples']),component_max_errors=errors,
         independent_components={k:v.tolist() for k,v in parts.items()},native_components=packet['native_terms'],
         regional_max_error=float(np.max(abs(actual-expected))),regional_native=actual.tolist(),regional_independent=expected.tolist(),
+        exterior_test_scope='actual projected native per-field test traces'if projected else 'legacy analytic test traces',
         scope='three declared test modes, actual represented fields; raw regional/exterior reaction loads, not a nonlinear Jacobian')

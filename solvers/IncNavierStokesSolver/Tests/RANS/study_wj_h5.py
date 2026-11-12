@@ -279,12 +279,28 @@ def plot(root):
     print('Compact calibration/profile/stress plots written; Fig.12 7mm target retained inside AWF',flush=True)
 
 
+def weak_recheck(root):
+    folder=root/'observations/H5mm';native=folder/'native.json';rp=root/'cases/H5mm/case.evolution.json'
+    p=load(native);r=load(rp);assert sha(rp)==p['report_sha256']
+    cp=Path(r['checkpoint'])/'State.bin';assert sha(cp)==p['checkpoint_sha256']
+    old=identity(folder/'result.json');before=identity(native)
+    v=independent_weak(p['weak_checks'],dict(r,open_boundary=p['open_boundary']),enforce=True)
+    assert identity(native)==before and identity(folder/'result.json')==old
+    save(folder/'independent-weak-v2.json',dict(status=v['status'],source_sha256=sha(Path(__file__).with_name('wj_h2_weak.py')),
+        source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=Path(__file__).parent,text=True).strip(),
+        original_native=before,producer=identity(rp),superseded_assessment=old,independent_weak=v,
+        repair='exterior contractions use the actual projected native test traces; H/2 is not an H5 mesh face',
+        governing_solves=0,native_rerun=False))
+    print(json.dumps(dict(status=v['status'],component_max_errors=v['component_max_errors'],regional_max_error=v['regional_max_error'])),flush=True)
+
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('verify','reference','generate','assess','plot'),required=True)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('verify','reference','generate','assess','plot','weak-recheck'),required=True)
     p.add_argument('--kernel',type=Path);p.add_argument('--observer',type=Path);p.add_argument('--height-mm',type=float)
     a=p.parse_args()
     if a.mode=='verify':verify(a.root)
     elif a.mode=='reference':reference(a.root,a.kernel)
     elif a.mode=='generate':generate(a.root)
     elif a.mode=='assess':assess(a.root,a.height_mm,a.observer)
+    elif a.mode=='weak-recheck':weak_recheck(a.root)
     else:plot(a.root)

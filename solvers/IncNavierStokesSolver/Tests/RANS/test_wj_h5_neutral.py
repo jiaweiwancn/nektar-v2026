@@ -111,5 +111,26 @@ class NeutralInlet(unittest.TestCase):
                 assert_allclose([c.d0+c.H+(q-c.H)*J for q in z[len(ik):]],[c.d0+q for q in outer[1:]],atol=4e-15,rtol=0)
         old_w=dict(rc=.02,zv=.00008);self.assertEqual(inner_normal_knots(.5,old_w,.04),[0.,.001,.005,.02,.04,.05,.1,.25,.5])
 
+    def test_exterior_weak_load_uses_projected_test_trace(self):
+        from wj_h2_weak import independent_weak
+        c=self.config();H=c.H
+        el=dict(geometry=3,degree=3,lower=[0,0,0],upper=[1,0,H])
+        outer=dict(geometry=4,degree=3,lower=[0,0,H],upper=[1,0,H+.1])
+        rule=np.polynomial.legendre.leggauss(24)[0];samples=[]
+        test=lambda t:np.array([[1]*4,[.2]*4,[.2+.3*t-.4*t*t+.1*t**3]*4])
+        for x in rule:samples.append(dict(role='outlet',geometry=3,chart=[1,0,H*(x+1)/2],modes=test((x+1)/2).tolist()))
+        t=.3;flux=np.array([4.,0,2*c.K,0,0,0]);expected=np.zeros((3,6));expected[:,:3]=test(t)[:,:3]*flux[:3]
+        row=dict(role='outlet',geometry=3,inner=True,chart=[1,0,H*t],weight=1.,normal=[1,0,0],
+            U=[2,0,0],k=c.K,epsilon=1.,G=np.zeros((3,3)).tolist(),K=c.K,
+            grad_k=[0,0,0],grad_epsilon=[0,0,0],applied_traction=[0,0,0])
+        report=dict(parameters=[c.nu,H,c.h],geometry_signature='fixture:CompositeTunnelV1:0.0875:20',
+            fields=[dict(mesh=[el,outer])],signature='test',open_boundary=dict(boundary_rows=[row]))
+        packet=dict(alpha_mass=0,samples=[],volume=1,boundary_mode_samples=samples,
+            native_inner=expected.tolist(),native_outer=np.zeros((3,6)).tolist(),native_terms=dict(exterior_boundary=expected.tolist()))
+        v=independent_weak(packet,report)
+        self.assertEqual(v['status'],'PASS');self.assertIn('projected',v['exterior_test_scope'])
+        # An unprojected hat vanishes here; it gives the wrong exterior load.
+        self.assertNotEqual(expected[2,0],0.)
+
 
 if __name__=='__main__':unittest.main()
