@@ -74,7 +74,13 @@ def publish(root):
     save(out/'principal-witnesses.json',witnesses);save(out/'interface-traces.json',interfaces);save(out/'spatial-residuals.json',residuals)
     save(out/'comparisons.json',comparisons)
     shutil.copyfile(root/'imports.json',out/'imports.json');shutil.copyfile(root/'run-intent.json',out/'run-intent.json')
-    save(out/'weak-quadrature.json',{key:{k:load(root/f'observations/H{key}mm/result.json')[k]for k in ('independent_weak','quadrature','scalar_domain','native_audit')}for key in checks})
+    weak_views={}
+    for key in checks:
+        raw=load(root/f'observations/H{key}mm/result.json')
+        weak_views[key]={k:raw[k]for k in ('independent_weak','quadrature','native_audit')}
+        weak_views[key]['scalar_domain']=dict(native_condition=raw['native_audit']['conditions']['scalar_domain'],
+            scope='full scalar inventories retained in the heavy immutable native packet',native_packet=raw['native'])
+    save(out/'weak-quadrature.json',weak_views)
     plot(root,out,staged,quality)
     receipts={};logs=out/'logs';logs.mkdir()
     for path in sorted((root/'operations').glob('*/receipt.json')):
@@ -99,6 +105,32 @@ def publish(root):
     save(out/'seal.json',dict(files=[dict(name=str(p.relative_to(out)),**identity(p))for p in sorted(out.rglob('*'))if p.is_file()],
         source='native startups + independent reconstructed stages and fixed comparison inventory'))
     print(models,flush=True)
+
+
+def compact_existing(root):
+    """Versioned size-only publication repair; no numerical reprocessing."""
+    old=root/'publication';out=root/'publication-compact-v2';out.mkdir(exist_ok=False)
+    original_seal=identity(old/'seal.json')
+    for p in old.iterdir():
+        if p.name in ('weak-quadrature.json','seal.json'):continue
+        if p.is_dir():shutil.copytree(p,out/p.name)
+        else:shutil.copyfile(p,out/p.name)
+    raw=load(old/'weak-quadrature.json')
+    for key,v in raw.items():
+        v['scalar_domain']=dict(native_condition=v['native_audit']['conditions']['scalar_domain'],
+            scope='full inventory remains in original heavy publication/native packet; no numerical result changes')
+    save(out/'weak-quadrature.json',raw)
+    shutil.copyfile(old/'seal.json',out/'parent-publication-seal.json')
+    same=('native-startups.csv','component-gates.json','quality.csv','stage-witnesses.csv','principal-witnesses.json',
+        'interface-traces.json','spatial-residuals.json','comparisons.json')
+    assert all(sha(out/n)==sha(old/n)for n in same)
+    save(out/'compact-bridge.json',dict(original_seal=original_seal,original_weak_inventory=identity(old/'weak-quadrature.json'),
+        compact_weak=identity(out/'weak-quadrature.json'),identical_scientific_results=list(same),
+        source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=Path(__file__).parent,text=True).strip(),
+        source_sha256=sha(__file__),native_reruns=0,reason='retain large scalar-domain inventories outside Git; preserve the first sealed publication'))
+    save(out/'seal.json',dict(files=[dict(name=str(p.relative_to(out)),**identity(p))for p in sorted(out.rglob('*'))if p.is_file()],
+        scope='compact view of unchanged H6 scientific results; parent seal and heavy inventory preserved'))
+    print('PASS: compact view, scientific result bytes unchanged, no numerical reprocessing',flush=True)
 
 
 def plot(root,out,staged,quality):
@@ -133,4 +165,5 @@ def plot(root,out,staged,quality):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);a=p.parse_args();publish(a.root)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--compact-existing',action='store_true');a=p.parse_args()
+    compact_existing(a.root)if a.compact_existing else publish(a.root)
