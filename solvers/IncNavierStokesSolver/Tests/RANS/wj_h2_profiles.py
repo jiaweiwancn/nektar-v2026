@@ -22,28 +22,30 @@ NU=.051*.005/3.97; US=.051; D0=.0875; TOP=20.; DELTA=6.25
 DATA=Path(__file__).with_name('cao-tamura-fig3')/'rough-fig3.csv'
 
 
-def wall(K,H,h):
+def wall(K,H,h,*,nu=NU):
+    if not all(math.isfinite(v)for v in (K,H,h,nu)) or min(K,H,nu)<=0 or not 0<=h<H:
+        raise ValueError('invalid finite-nu wall parameters')
     a=KAPPA*math.sqrt(K/QE); A=(K/QE)**1.5/KAPPA
-    x=h*math.sqrt(K)/(70*NU)
+    x=h*math.sqrt(K)/(70*nu)
     b=10.7 if h==0 else -10.7*math.expm1(max(.5-.4*x**.7,1-.79*x**(-.28))*math.log(x))
-    zv=NU*b/math.sqrt(K); start=min(H,max(0.,zv)); d=NU+a*max(start-zv,0.)
+    zv=nu*b/math.sqrt(K); start=min(H,max(0.,zv)); d=nu+a*max(start-zv,0.)
     def J(r):
         r=np.asarray(r); s=np.minimum(r,start)
-        return s/NU+np.log1p(a*np.maximum(0.,r-start)/d)/a
-    j0=float(J(H)); j2=start/NU**2+(H-start)/(d*(d+a*(H-start)))
-    budget=(K/QE)**2*(j0-NU*j2); lam=budget/A
+        return s/nu+np.log1p(a*np.maximum(0.,r-start)/d)/a
+    j0=float(J(H)); j2=start/nu**2+(H-start)/(d*(d+a*(H-start)))
+    budget=(K/QE)**2*(j0-nu*j2); lam=budget/A
     rc=H*math.exp(1-lam)
     def Q(r):
-        s=min(r,start); dd=NU+a*max(start-zv,0)
-        j2r=s/NU**2+max(0.,r-start)/(dd*(dd+a*max(0.,r-start)))
+        s=min(r,start); dd=nu+a*max(start-zv,0)
+        j2r=s/nu**2+max(0.,r-start)/(dd*(dd+a*max(0.,r-start)))
         E=A*(r/rc if r<rc else 1+math.log(r/rc))
-        return E-(K/QE)**2*(float(J(r))-NU*j2r)
+        return E-(K/QE)**2*(float(J(r))-nu*j2r)
     def kref(r):
         cuts=sorted(set([float(r),H]+[v for v in (rc,h,start) if r<v<H]))
-        return K-sum(quad(lambda z:Q(z)/(NU+a*max(z-zv,0)),l,u,
+        return K-sum(quad(lambda z:Q(z)/(nu+a*max(z-zv,0)),l,u,
             epsabs=2e-13,epsrel=2e-12)[0] for l,u in zip(cuts[:-1],cuts[1:]))
     return dict(a=a,A=A,zv=zv,J=J,J0=j0,Lambda=lam,rc=rc,Q=Q,kref=kref,
-                molecular_fraction_H=NU/(NU+a*max(H-zv,0)))
+                molecular_fraction_H=nu/(nu+a*max(H-zv,0)))
 
 
 def smooth_tail(x,y,target,end=12.5):
@@ -75,6 +77,8 @@ class Completion:
         self.H=min(candidates) if H is None else H
         if h is None:
             inside=self.Udata[0]-D0<=self.H
+            if not np.any(inside):
+                raise ValueError('empty wall mean-fit window; low-H neutral calibration requires the outer-log fit')
             r=self.Udata[0][inside]-D0;U=self.Udata[1][inside];K=self.k(D0+self.H)
             def objective(h):return float(np.sum((US**2*wall(K,self.H,h)['J'](r)-U)**2))
             opt=minimize_scalar(objective,bounds=(1e-7,self.H*(1-1e-9)),method='bounded',options={'xatol':1e-14})

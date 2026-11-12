@@ -12,7 +12,7 @@ import json
 import math
 import numpy as np
 from validate_cls_epawf_m3 import basis
-from wj_h2_profiles import CD,NU,wall,constitutive
+from wj_h2_profiles import CD,wall,constitutive
 from wj_h3_analysis import principal
 
 EPS=np.finfo(float).eps
@@ -95,14 +95,15 @@ def evaluate(report,state,p,owner):
     for block,axis in ((0,0),(1,2)):U[axis],G[axis]=field(report,state,block,owner)
     k,gk=field(report,state,2,owner);pi,gpi=field(report,state,4 if owner['region']=='inner' else 5,owner)
     H=mapping(report)[0];K=field(report,state,2,matching(report,owner))[0]
+    nu=float(report['parameters'][0])
     v=dict(physical=list(map(float,p)),owner=owner,U=U.tolist(),G=G.tolist(),k=k,pi=pi,mechanical_pressure=pi-2*k/3,
         grad_k=gk.tolist(),sampled_K=K,raw_divergence=float(np.trace(G)))
     if not k>0 or not K>0:raise ValueError('nonpositive scalar at expanded point')
     if owner['region']=='inner':
-        w=wall(K,H,report['parameters'][2]);nt=w['a']*max(owner['chart'][2]-w['zv'],0.)
-        R=2*k/3*np.eye(3)-nt*(G+G.T);T=(NU+nt)*(G+G.T)-pi*np.eye(3)
+        w=wall(K,H,report['parameters'][2],nu=nu);nt=w['a']*max(owner['chart'][2]-w['zv'],0.)
+        R=2*k/3*np.eye(3)-nt*(G+G.T);T=(nu+nt)*(G+G.T)-pi*np.eye(3)
         v.update(epsilon=None,epsilon_scope='not_evaluated:no_inner_epsilon_field',tau=None,principal=None,N=None,F_N=None,root_residual=None,
-            nu_eff=nt,nu_d=NU+nt,cutoff=w['rc'],cutoff_margin=H-w['rc'],destruction=w['A']/max(owner['chart'][2],w['rc']))
+            nu_eff=nt,nu_d=nu+nt,cutoff=w['rc'],cutoff_margin=H-w['rc'],destruction=w['A']/max(owner['chart'][2],w['rc']))
     else:
         e,ge=field(report,state,3,owner)
         if not e>0:raise ValueError('nonpositive outer epsilon')

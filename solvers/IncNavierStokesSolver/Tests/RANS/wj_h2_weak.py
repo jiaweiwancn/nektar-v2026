@@ -2,10 +2,13 @@
 """Independent actual-state conservative loads on the H2 flat composite map."""
 import numpy as np
 from numpy.testing import assert_allclose
-from wj_h2_profiles import wall,constitutive,CD,NU,D0,TOP
+from wj_h2_profiles import wall,constitutive,CD
 from validate_wj_h1 import require
 def independent_weak(packet,report,enforce=True):
     H=report["parameters"][1];h=report["parameters"][2]
+    NU=float(report['parameters'][0])
+    if ':CompositeTunnelV1:'not in report['geometry_signature']:raise ValueError('physical composite map required')
+    D0,TOP=map(float,report['geometry_signature'].rsplit(':',2)[-2:])
     alpha=packet['alpha_mass'];expected=np.zeros((2,3,6));parts={}
     def add(name,mode,block,value):
         parts.setdefault(name,np.zeros((3,6)))[mode,block]+=value
@@ -20,7 +23,7 @@ def independent_weak(packet,report,enforce=True):
             expected_force=np.array([row['H_grad_pi'][0]-2*row['H_grad_k'][0]/3+2*uh[0]*gh[0,0],0,0])
             assert_allclose(row['force'],expected_force,rtol=3e-11,atol=3e-12)
             if row['chart'][2]<=h:force=expected_force
-            selected=wall(row['K'],H,h);a,zv,A,rc=selected['a'],selected['zv'],selected['A'],selected['rc']
+            selected=wall(row['K'],H,h,nu=NU);a,zv,A,rc=selected['a'],selected['zv'],selected['A'],selected['rc']
             assert_allclose(row['cutoff'],rc,rtol=3e-11,atol=3e-14)
             nt=a*max(row['chart'][2]-zv,0);dk=NU+nt
             production=.5*nt*np.sum(M*M)-2*k*divergence/3
@@ -61,7 +64,7 @@ def independent_weak(packet,report,enforce=True):
         # Recompute each physical flux, without using the returned native flux.
         n=np.array(row['normal']);u=np.array(row['U']);un=u@n;k=row['k'];e=row['epsilon'];G=np.array(row['G'])
         if inner:
-            v=wall(row['K'],H,h);nt=v['a']*max(rho-v['zv'],0);dk=NU+nt;de=0
+            v=wall(row['K'],H,h,nu=NU);nt=v['a']*max(rho-v['zv'],0);dk=NU+nt;de=0
         else:dk=CD*k*k/e;de=dk/1.3
         jk=-dk*np.array(row['grad_k'])@n if row['role']=='inlet' else 0
         je=-de*np.array(row['grad_epsilon'])@n if row['role']=='inlet' and not inner else 0

@@ -38,18 +38,18 @@ def tail_expression(c,panel,target):
     return piecewise(PPoly(np.column_stack([p.c,t.c]),np.r_[p.x,12.5]),v[0],target)
 
 
-def approximate(fn,knots,degree=12):
+def approximate(fn,knots,degree=12,*,origin=D0):
     """Declared independent expression approximation; native Q3 projection separate."""
     expressions=[];maxerr=0.
     for a,b in zip(knots[:-1],knots[1:]):
         cp=Chebyshev.interpolate(lambda t:np.vectorize(fn,otypes=[float])((a+b)/2+(b-a)/2*t),degree)
         coefficients=cp.convert(kind=Polynomial).coef
-        t=f'(2*(y-({num(D0+a)}))/({num(b-a)})-1)'
+        t=f'(2*(y-({num(origin+a)}))/({num(b-a)})-1)'
         expression=poly(coefficients[::-1],t)
-        mask=f'((y>={num(D0+a)})*(y<{num(D0+b)}))'
+        mask=f'((y>={num(origin+a)})*(y<{num(origin+b)}))'
         expressions.append(f'{mask}*({expression})')
         test=np.linspace(-1,1,101);maxerr=max(maxerr,float(np.max(abs(cp(test)-np.array([fn((a+b)/2+(b-a)/2*s) for s in test])))))
-    expressions.append(f'(y>={num(D0+knots[-1])})*({num(fn(knots[-1]))})')
+    expressions.append(f'(y>={num(origin+knots[-1])})*({num(fn(knots[-1]))})')
     return '('+'+'.join(expressions)+')',maxerr
 
 
@@ -66,27 +66,45 @@ def reduced_normal_offset(K,Rnn):
     return float(Rnn-2*K/3)
 
 
+def analytic_expressions(H,h,*,u_tau=US,nu=NU,d0=D0,top=TOP,z0_e=None):
+    """Shared neutral expressions with explicit physical parameters.
+
+    The legacy analytic caller retains its own wall-intercept anchor. H5 passes
+    its independently fitted common z0_e and never constructs Completion.
+    """
+    K=QE*u_tau**2;w=wall(K,H,h,nu=nu);A=u_tau**3/KAPPA;r=f'(y-({num(d0)}))'
+    cuts=sorted(set([0.,H]+[v for v in (w['rc'],h,w['zv'],.001,.005,.02,.05,.1,.25)if 0<v<H]))
+    ui,ue=approximate(lambda z:u_tau**2*float(w['J'](z)),cuts,origin=d0)
+    ki,ke=approximate(w['kref'],cuts,origin=d0)
+    inner=dict(u=ui,v='0',k=ki,p=num(-K/(81/20)))
+    U=f'({num(u_tau**2*w["J0"])})+({num(u_tau/KAPPA)})*log(({r})/{num(H)})'
+    if z0_e is not None:
+        if not 0<z0_e<H or abs(u_tau**2*w['J0']-u_tau/KAPPA*math.log(H/z0_e))>2e-12:
+            raise ValueError('neutral intercept and finite-nu momentum anchor disagree')
+        U=f'({num(u_tau/KAPPA)})*log(({r})/{num(z0_e)})'
+    outer=dict(u=U,v='0',k=num(K),epsilon=f'{num(A)}/({r})',p='0')
+    from wj_h2_profiles import constitutive
+    G=np.zeros((3,3));G[0,2]=u_tau/KAPPA/H;R,_,_=constitutive(K,A/H,G)
+    oi=dict(u=num(K/(81/20)),v=num(u_tau**2))
+    oo=dict(u=num(2*K/3-R[0,0]),v=num(u_tau**2))
+    top_data=dict(u=num(u_tau**2))  # normal traction is an impermeability reaction
+    top_flux=dict(k='0',epsilon=num(CD*K*K/1.3/(top-d0)))
+    return inner,outer,oi,oo,top_data,top_flux,dict(expression_errors=dict(inner_U=ue,inner_k=ke),K=K,wall=w)
+
+
+def inner_normal_knots(H,w,h):
+    if not math.isfinite(H)or H<=0:raise ValueError('positive finite matching height required')
+    active=[v for v in (w['rc'],h)if 0<v<H]
+    knots=sorted(set([0.,H]+active+[v for v in (.001,.005,.02,.05,.1,.25,w['zv'])if 0<v<H]))
+    # Preserve the historical small virtual-origin exclusion, while never
+    # dropping H or a physical cutoff/roughness breakpoint at low height.
+    return [v for v in knots if v==0 or v==H or v in active or v>=.001]
+
+
 def expressions(c,kind,pressure_seed='SignCorrectedV1',outlet='ZeroTractionV1'):
     H=c.H;r=f'(y-({num(D0)}))';K=c.K;w=c.w
     if kind=='analytic':
-        K=QE*US**2;w=wall(K,H,c.h);A=US**3/KAPPA
-        nt=f'({num(w["a"])})*(({r})-({num(w["zv"])}))'
-        # Include the physical molecular-only segment for positive intercept.
-        d=NU+w['a']*max(-w['zv'],0);start=max(0,w['zv'])
-        J=f'((({r})<{num(start)})*({r})/{num(NU)}+(({r})>={num(start)})*({num(start/NU)}+log(1+({num(w["a"])})*(({r})-({num(start)}))/({num(NU+w["a"]*max(start-w["zv"],0))}))/{num(w["a"])}))'
-        # Negative log argument in inactive branches is avoided by separate
-        # approximation of the finite-nu inner velocity on physical panels.
-        cuts=sorted(set([0.,H]+[v for v in (w['rc'],c.h,w['zv'],.001,.005,.02,.05,.1,.25) if 0<v<H]))
-        ui,ue=approximate(lambda z:US**2*float(w['J'](z)),cuts)
-        ki,ke=approximate(w['kref'],cuts)
-        inner=dict(u=ui,v='0',k=ki,p=num(-K/(81/20)))
-        outer=dict(u=f'({num(US**2*w["J0"])})+({num(US/KAPPA)})*log(({r})/{num(H)})',v='0',k=num(K),epsilon=f'{num(A)}/({r})',p='0')
-        from wj_h2_profiles import constitutive
-        G=np.zeros((3,3));G[0,2]=US/KAPPA/H;R,_,_=constitutive(K,A/H,G)
-        outlet_inner=dict(u=num(K/(81/20)),v=num(US**2))
-        outlet_outer=dict(u=num(2*K/3-R[0,0]),v=num(US**2))
-        top=dict(u=num(US**2));topflux=dict(k='0',epsilon=num(CD*K*K/1.3/(TOP-D0)))
-        return inner,outer,outlet_inner,outlet_outer,top,topflux,dict(expression_errors=dict(inner_U=ue,inner_k=ke),K=K,wall=w)
+        return analytic_expressions(H,c.h)
     U=tail_expression(c,'a',1.);su=tail_expression(c,'c',.003);sw=tail_expression(c,'d',.003)
     k=f'(.5*((1+({num(c.span)}))*({su})^2+(2-({num(c.span)}))*({sw})^2))'
     L=c.length_fraction*6.25
@@ -140,10 +158,7 @@ def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',spa
     ET.SubElement(co,'SOLVERINFO');ET.SubElement(co,'PARAMETERS')
     scheme=ET.SubElement(co,'TIMEINTEGRATIONSCHEME');ET.SubElement(scheme,'METHOD').text='IMEX';ET.SubElement(scheme,'ORDER').text='1'
     # Fit the exact mean-data knots; r is physical normal distance in flat inner.
-    inner_knots=sorted(set([0.,.001,.005,.02,.05,.1,.25,H]+[v for v in (w['zv'],w['rc'],c.h) if 0<v<H]))
-    # Avoid a sub-1e-4 metre cell at the virtual viscosity origin: quadrature
-    # already splits it; the first element resolves molecular diffusion.
-    inner_knots=[v for v in inner_knots if v==0 or v>=.001]
+    inner_knots=inner_normal_knots(H,w,c.h)
     physical_outer=sorted(set([H,12.5-D0,TOP-D0]+[float(v)-D0 for v in c.Udata[0] if v>D0+H]))
     if refined:
         inner_knots=sorted(set(inner_knots+[(a+b)/2 for a,b in zip(inner_knots[:-1],inner_knots[1:]) if b<=.25]))

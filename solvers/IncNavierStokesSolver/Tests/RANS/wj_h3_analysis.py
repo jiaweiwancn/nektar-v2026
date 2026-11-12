@@ -29,7 +29,9 @@ def values(report,state,block,geometry,x,rho):
     pr,dr=basis(p,2*(rho-l[2])/(u[2]-l[2])-1)
     coeff=np.asarray(state)[np.asarray(e['ids'],int)+int(report['offsets'][block])]*e['sign']
     tensor=lambda a,b:np.einsum('ni,nj->nij',a,b).reshape(len(x),-1)@coeff
-    H=report['parameters'][1];J=1 if u[2]<=H else (TOP-D0-H)/(TOP-H)
+    H=report['parameters'][1]
+    origin,ceiling=map(float,report['geometry_signature'].rsplit(':',2)[-2:])
+    J=1 if u[2]<=H else (ceiling-origin-H)/(ceiling-H)
     v=tensor(pr,px);g=np.zeros((len(x),3))
     g[:,0]=tensor(pr,dx)*2/(u[0]-l[0]);g[:,2]=tensor(dr,px)*2/(u[2]-l[2])/J
     return v.reshape(shape),g.reshape((*shape,3))
@@ -104,6 +106,7 @@ def outer_loads(report,state,history,alpha,order):
     and q<=16 their production rule stays16. Explicit per-element signed
     arrays localize discrepancies; separately normed components are not added.
     """
+    D0,TOP=map(float,report['geometry_signature'].rsplit(':',2)[-2:])
     H=report['parameters'][1];J=(TOP-D0-H)/(TOP-H)
     support=min(e['upper'][2] for e in report['fields'][0]['mesh'] if e['lower'][2]==H)
     g,w=np.polynomial.legendre.leggauss(order);parts={};elements={}
