@@ -1,0 +1,19 @@
+{
+  "schema": "CT2PredeclaredCompanionActivationV1",
+  "layout": "Zminus",
+  "add_z": [5.125],
+  "predicted_slots": 1172,
+  "dt": [0.002, 0.001],
+  "requested_endpoint": 0.008,
+  "reason": "Primary B/X/Z+/XZ+ matrix remains inadmissible. Native projection verifies Pi is analytically zero above delta but its P1 gradient is 2.877213723554e-5 in B and 9.468164691212e-4 in Z+. Weak pressure/Q loads are not pointwise measures and do not establish a unique cause. Test the predeclared below-delta source interval without changing any physical FUNCTION expression.",
+  "primary_native_outcomes": {
+    "B": "both fail attempted .004, last accepted .002/.003",
+    "X": "reject first attempt .002/.001",
+    "Zplus": "reject first attempt .002/.001",
+    "XZplus": "reject first attempt .002/.001"
+  },
+  "hypothesis": "Reducing representation error on the below-delta interval may reduce the projected pressure tail and its associated flow-gradient response; it is not a prediction of survival.",
+  "invariants": "Frozen central initial/inlet/top/outlet functions, roughness, epsilon, model, equations and one-sweep method unchanged; fresh histories; original floors and guards",
+  "stop": "first genuine rejection; no further mesh search",
+  "conditional_extension": "only under the original CT2 gates; no primary layout currently admitted"
+}
