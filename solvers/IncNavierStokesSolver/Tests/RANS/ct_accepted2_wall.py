@@ -70,6 +70,14 @@ def main():
     process=subprocess.Popen([str(a.runtime/'RANSNewModelsProbe')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
     stations=sorted(set(np.linspace(-2.5,2.5,33).tolist()+[-3.,-2.5-1e-8,-2.5+1e-8,-1.25,0.,1.25,2.5-1e-8,2.5+1e-8,3.]))
     previous=json.loads((a.previous/'feasibility-v2/results.json').read_text());nu=1/10500
+    # CT1 used the stored y/H column (rounded separately from axis_y). Keep
+    # its central normalization/calibration EXACT; retain the tiny column
+    # representation difference explicitly rather than retuning central hr.
+    central=cases[0];ref=previous['incident']['R']
+    central['axis_column_rounding_comparison']={k:central[k] for k in ('U16_over_Uinf','U40_over_Uinf','U16_over_UH','utau_over_UH')}
+    central.update(U16_over_Uinf=ref['anchors']['0.016']['value'],U40_over_Uinf=ref['U_H_over_Uinf']['value'],
+        U16_over_UH=ref['anchors']['0.016']['value']*ref['Uinf_over_U_H'],Uinf_over_UH=ref['Uinf_over_U_H'],utau_over_UH=ref['ustar'])
+    central['central_input_policy']='sealed CT1 exact values; other deterministic scenarios use frozen axis columns and both transformed extraction bounds'
     try:
         for case in cases:
             for model in ('A93','A95','E94E95'):

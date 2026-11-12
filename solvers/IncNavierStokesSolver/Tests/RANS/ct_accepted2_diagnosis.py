@@ -76,14 +76,20 @@ def at(row,s,off):
     return d
 
 def inventory(rows,coords,s,off,region=None):
-    minimum=None;negative=0;div2=0.;divmax=0.;count=0
+    minimum=None;negative=0;div2=0.;divmax=0.;count=0;cov=None;min_k=None;min_e=None
     for i,row in enumerate(rows):
         if row['epsilon'] is None:continue
         v=at(row,s,off);count+=1;div2+=v['raw_divergence']**2;divmax=max(divmax,abs(v['raw_divergence']))
+        receipt=dict(coordinate=coords[i],geometry=row['velocity_k']['geometry'],side=0)
+        if min_k is None or v['k']<min_k['value']:min_k=dict(receipt,value=v['k'])
+        if min_e is None or v['epsilon']<min_e['value']:min_e=dict(receipt,value=v['epsilon'])
+        if 'R' in v:
+            value=float(np.linalg.eigvalsh(v['R'])[0])
+            if cov is None or value<cov['value']:cov=dict(receipt,value=value)
         if v['status']!='admissible':negative+=1
         if minimum is None or v.get('radicand',-1e300)<minimum.get('radicand',-1e300):
             minimum=dict(v,coordinate=coords[i],geometry=row['velocity_k']['geometry'],element=row['velocity_k'].get('element'),side=0,sample_index=i)
-    return dict(minimum=minimum,domain_failure_count=negative,count=count,divergence_unweighted_RMS=float(np.sqrt(div2/count)),divergence_maximum=divmax)
+    return dict(minimum=minimum,domain_failure_count=negative,count=count,divergence_unweighted_RMS=float(np.sqrt(div2/count)),divergence_maximum=divmax,covariance_minimum=cov,k_minimum=min_k,epsilon_minimum=min_e)
 
 def independent_pressure_action(o,direction,hr):
     off=np.array(o['offsets'],int);s=np.array(direction);result=np.zeros(len(s));rough=np.zeros(len(s))
