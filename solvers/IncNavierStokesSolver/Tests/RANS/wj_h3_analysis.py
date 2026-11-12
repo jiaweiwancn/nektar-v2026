@@ -11,7 +11,7 @@ import numpy as np
 from scipy.optimize import minimize_scalar
 from run_wj_h3 import load,save,sha
 from validate_cls_epawf_m3 import basis
-from wj_h2_profiles import CD,D0,TOP,constitutive
+from wj_h2_profiles import CD,D0,TOP,NU,constitutive,wall
 
 OLD='/media/jay/新加卷/'
 NEW='/media/jay/新加卷1/'
@@ -200,3 +200,29 @@ def pressure_complement(report,state):
             continuous_Q1_complement_L2=math.sqrt(max(0,norm-proj)),broken_Q1_complement_L2=math.sqrt(max(0,norm-broken)),
             maximum_pressure_test_moment=float(max(abs(b))),integrated_net_flux=float(sum(b)),elements=detail)
     return out
+
+
+def interface_view(report,state,x):
+    """Explicit common interface, both regional and horizontal face owners."""
+    H=report['parameters'][1];h=report['parameters'][2];result=[]
+    inner=[el for el in report['fields'][0]['mesh'] if el['upper'][2]==H and el['lower'][0]-1e-12<=x<=el['upper'][0]+1e-12]
+    outer=[el for el in report['fields'][0]['mesh'] if el['lower'][2]==H and el['lower'][0]-1e-12<=x<=el['upper'][0]+1e-12]
+    for ei in inner:
+        eo=next(el for el in outer if el['lower'][0]==ei['lower'][0])
+        ui=np.zeros(3);gi=np.zeros((3,3))
+        for b,axis in ((0,0),(1,2)):ui[axis],gi[axis]=values(report,state,b,ei['geometry'],x,H)
+        ki,gk=values(report,state,2,ei['geometry'],x,H);pi,gpi=values(report,state,4,ei['geometry'],x,H)
+        o=point(report,state,eo['geometry'],x,H);K=o['k'];w=wall(K,H,h);nt=w['a']*max(H-w['zv'],0);D=NU+nt
+        Tw=D*(gi+gi.T)-float(pi)*np.eye(3);To=-np.array(o['R'])+(2*K/3-o['pi'])*np.eye(3)
+        gko=values(report,state,2,eo['geometry'],x,H)[1];epsH=w['A']/H
+        # Initial reference traction mismatch remains visible. No strong row is
+        # added to enforce these pointwise defects in the governing system.
+        result.append(dict(x=x,geometry_inner_outer=[ei['geometry'],eo['geometry']],K=K,cutoff=w['rc'],
+            U_inner=ui.tolist(),U_outer=o['U'],k_inner=float(ki),pi_inner=float(pi),pi_outer=o['pi'],
+            traction_defect=(Tw[:,2]-To[:,2]).tolist(),normal_traction_defect=float(Tw[2,2]-To[2,2]),
+            k_flux_defect=float(D*gk[2]-o['nu_d']*gko[2]),mass_flux_defect=float(ui[2]-o['U'][2]),
+            epsilon_actual=o['epsilon'],epsilon_target=epsH,epsilon_defect=o['epsilon']-epsH,
+            mechanical_jump=float(pi-2*ki/3-o['pi']+2*K/3),
+            roughness_force_x=float(gpi[0]-2*gk[0]/3+2*ui[0]*gi[0,0]),
+            inner_production=float(.5*nt*np.sum((gi+gi.T)**2)-2*ki*np.trace(gi)/3)))
+    return result

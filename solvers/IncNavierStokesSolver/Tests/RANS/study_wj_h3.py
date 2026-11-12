@@ -20,11 +20,12 @@ def locations(r,state):
     H=r['parameters'][1];J=(TOP-D0-H)/(TOP-H);out=[]
     # Include all owners of the failing normal face and the first outer cells.
     heights=[.5875,.6720111978440669,.7565223956881337,.8,1.,2.,6.25,12.5,20.]
+    xs=sorted(set([0.,4.,6.,7.5,7.9,7.99,7.999999,8.]+[v[a][0] for v in r['fields'][3]['mesh'] for a in ('lower','upper')]))
     for z in heights:
         rho=H+(z-D0-H)/J
         for el in r['fields'][3]['mesh']:
             if not el['lower'][2]-1e-12<=rho<=el['upper'][2]+1e-12:continue
-            for x in (0.,4.,6.,7.5,7.9,7.99,7.999999,8.):
+            for x in xs:
                 if not el['lower'][0]-1e-12<=x<=el['upper'][0]+1e-12:continue
                 v=point(r,state,el['geometry'],x,rho);v['principal']=principal(v['k'],v['epsilon'],np.array(v['G']))
                 out.append(v)
