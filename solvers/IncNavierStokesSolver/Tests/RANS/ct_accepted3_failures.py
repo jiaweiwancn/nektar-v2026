@@ -6,17 +6,20 @@ from pathlib import Path
 from rans_qualification import THREADS,write_json,exact_vector_hash
 os.environ.update(THREADS)
 import numpy as np
-from ct_accepted_open import require,probe,row_value
+from ct_accepted_open import require,probe,row_value,run
 from ct_accepted_pilot import replay
 from ct_accepted3_metrics import point
 from validate_a93_a95_e94e95 import oracle
 from ct_accepted2_storage import artifact
 from rans_request_manifest import RequestManifest,sha,runtime_identity
+from ct_accepted3_run import make_case
+from compare_cls_epawf_pimple import same_history
 
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for key in ('root','ct2','output'):p.add_argument('--'+key,type=Path,required=True)
+    p.add_argument('--reproduce',action='store_true',help='one unchanged-method native attempt from each retained last accepted history')
     a=p.parse_args();rt=a.ct2/'runtime';os.environ['LD_LIBRARY_PATH']=str(rt/'lib')
     files=[]
     for f in a.root.glob('**/case.evolution.json'):
@@ -24,7 +27,7 @@ def main():
         r=json.loads(f.read_text())
         if r['failure']:files.append((f,r))
     m=RequestManifest(a.output,dict(schema='CT3IndependentFailureWitnessesV1',runtime=runtime_identity(rt/'RANSPreservationProbe'),
-        reports={str(f):sha(f) for f,_ in files},source_sha256=sha(Path(__file__))))
+        reports={str(f):sha(f) for f,_ in files},source_sha256=sha(Path(__file__)),reproduce=a.reproduce))
     result=dict(diagnostic_execution='pass',failures=[])
     for f,r in files:
         if not r.get('physical_range_events'):continue
@@ -81,6 +84,13 @@ def main():
         if all(name in observations for name in ('input','momentum_predictor','corrected_flow')):
             gi,gp,gc=[np.array(observations[name]['raw_gradient']) for name in ('input','momentum_predictor','corrected_flow')]
             row['predictor_gradient_increment']=(gp-gi).tolist();row['pressure_mass_correction_gradient_increment']=(gc-gp).tolist()
+        if a.reproduce:
+            sub=folder/'single-attempt-reproducer';make_case(sub,f.parent/'case.xml',c,c['degree'],r['dt'],1,Path(r['checkpoint']))
+            execution=run([rt/'IncNavierStokesSolver','case.xml'],sub,'solver.log');repeated=json.loads((sub/'case.evolution.json').read_text())
+            require(execution['exit_code']!=0 and repeated['failure']==r['failure'] and same_history(r,repeated)
+                and exact_vector_hash(repeated['rejected_state'])==exact_vector_hash(r['rejected_state']), 'first_rejection_or_complete_rollback_not_reproducible')
+            row['minimal_native_reproducer']=dict(status='expected_physical_rejection_reproduced',unchanged_last_accepted_state_history=True,
+                rejected_state_bitwise_equal=True,report_sha256=sha(sub/'case.evolution.json'),execution=execution)
         result['failures'].append(row);write_json(a.output/'progress.json',result)
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);print('independent covariance failures',len(result['failures']));return 0
 if __name__=='__main__':raise SystemExit(main())
