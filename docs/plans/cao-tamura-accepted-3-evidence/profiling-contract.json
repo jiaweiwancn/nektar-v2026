@@ -1,0 +1,17 @@
+{
+  "schema": "CT3DetailedAcceptedProfileV1",
+  "role": "timing-only runtime, primary cohorts retain CT2 executable/library bytes",
+  "sources": "optional buffered timing scopes only in row construction, 1D basis lookup/evaluation, locator, outer closure and field projection; no arithmetic/equation/cache changes",
+  "enabled": "NEKTAR_RANS_TIMING_FILE plus NEKTAR_RANS_DETAILED_TIMING=1",
+  "aggregation": "per label/step/time; calls and exclusive CPU/wall; nested inclusive totals not added",
+  "segments": "admitted .008 to .02 accepted segment per available space, unchanged parent native history and dt",
+  "equivalence": "all accepted coefficient vectors and complete native histories bitwise equal to pinned-runtime segment before interpreting profile",
+  "compatibility": "focused open restart/rollback/pressure offset and ordinary CLS controls on separate timing runtime; no historical runtime relabel",
+  "resources": {
+    "compiler_jobs": 2,
+    "project_including_helpers": 16,
+    "aggregate": 72,
+    "numerical_family": 1
+  },
+  "limits": "timing-only instrumentation may add overhead; report it, do not extrapolate startup/failed attempts to accepted evolution; no cache or backend implementation"
+}

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <cmath>
@@ -98,6 +99,7 @@ std::vector<RANSWallEvolutionFunction> RANSAcceptedOpenInitialFunctions(
 RANSWallEvolutionPatch::OpenBoundaryTerms RANSWallEvolutionPatch::OpenBoundaryContributions(
     const Vector &state,double time,const RANSWallEvolutionData &data,int selectedRegion) const
 {
+    RANSWallTiming::Scope timing("assembly.open_faces",true,true);
     Require(OpenBoundary() && state.size()==Size() && selectedRegion>=-1 && selectedRegion<=1,
             "invalid open-boundary contribution request");
     Require(data.openBoundaryIdentity==m_openBoundaryIdentity,"open live boundary definition differs from its immutable policy identity");

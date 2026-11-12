@@ -3,6 +3,7 @@
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <StdRegions/StdSegExp.h>
 #include <algorithm>
@@ -83,6 +84,7 @@ struct RANSWallGlobalField::BasisData
     }
     std::shared_ptr<const Values> Evaluate(double coordinate) const
     {
+        RANSWallTiming::Scope timing("geometry.basis_lookup_evaluate",true,true);
         Require(std::isfinite(coordinate) && coordinate>=-1. && coordinate<=1.,
                 "basis coordinate outside known native owner");
         const auto found=cache.find(coordinate);
@@ -135,6 +137,7 @@ RANSWallGlobalField::RANSWallGlobalField(
     :m_dimension(dimension),m_axes(dimension==2?std::array<int,3>{0,2,-1}:
                                                  std::array<int,3>{0,1,2})
 {
+    RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");
     auto subset=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(*full,elements,true);
@@ -210,6 +213,7 @@ int RANSWallGlobalField::Size() const
 }
 RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &coordinate) const
 {
+    RANSWallTiming::Scope timing("geometry.element_row",true,true);
     const auto &element=m_elements.at(e);
     Require(std::all_of(coordinate.begin(),coordinate.end(),[](double x){return std::isfinite(x);}),
             "nonfinite physical sample");
@@ -294,6 +298,7 @@ RANSWallGlobalPoint RANSWallGlobalField::Point(const Coordinate &coordinate,int 
 }
 int RANSWallGlobalField::LocateElement(const Coordinate &coordinate,int side) const
 {
+    RANSWallTiming::Scope timing("geometry.locate",true,true);
     Require(side>=-1 && side<=1,"unknown radial sampling side");
     int selected=-1;
     for(std::size_t e=0;e<m_elements.size();++e)
@@ -343,6 +348,7 @@ std::vector<RANSWallGlobalPoint> RANSWallGlobalField::Quadrature(int order) cons
 }
 RANSWallGlobalField::WallMatrix RANSWallGlobalField::Mass() const
 {
+    RANSWallTiming::Scope timing("mass.assemble",true,true);
     std::vector<std::vector<long double>> mass(Size(),std::vector<long double>(Size()));
     for(const auto &q:Quadrature())
         for(std::size_t i=0;i<q.ids.size();++i)for(std::size_t j=0;j<q.ids.size();++j)

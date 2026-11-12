@@ -8,8 +8,10 @@
 #include <exception>
 #include <fstream>
 #include <iomanip>
+#include <map>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <vector>
 #include <unistd.h>
 
@@ -21,15 +23,26 @@ namespace Nektar::RANSWallTiming
 class Scope;
 struct State
 {
-    bool enabled=false;std::ofstream out;std::vector<Scope*> stack;
+    bool enabled=false,detailed=false;std::ofstream out;std::vector<Scope*> stack;
     long next=0,step=-1;double time=-1;
+    struct Total {long calls=0;double wall=0,cpu=0,exclusiveWall=0,exclusiveCpu=0;};
+    std::map<std::tuple<std::string,long,double>,Total> totals;
     State()
     {
         const char *path=std::getenv("NEKTAR_RANS_TIMING_FILE");
         if(!path || !*path)return;
         out.open(path,std::ios::app);
         if(!out)throw std::runtime_error("cannot open NEKTAR_RANS_TIMING_FILE");
-        enabled=true;out<<std::setprecision(17);
+        enabled=true;const char *detail=std::getenv("NEKTAR_RANS_DETAILED_TIMING");
+        detailed=detail && std::string(detail)=="1";out<<std::setprecision(17);
+    }
+    ~State()
+    {
+        for(const auto &[key,t]:totals)
+            out<<"{\"schema\":2,\"pid\":"<<getpid()<<",\"aggregated\":true,\"step\":"<<std::get<1>(key)
+               <<",\"time\":"<<std::get<2>(key)<<",\"name\":"<<std::quoted(std::get<0>(key))<<",\"calls\":"<<t.calls
+               <<",\"wall_seconds\":"<<t.wall<<",\"process_cpu_seconds\":"<<t.cpu
+               <<",\"exclusive_wall_seconds\":"<<t.exclusiveWall<<",\"exclusive_process_cpu_seconds\":"<<t.exclusiveCpu<<"}\n";
     }
 };
 inline State &Get(){static State state;return state;}
@@ -44,12 +57,13 @@ class Scope
 {
     using Clock=std::chrono::steady_clock;
     State *s=nullptr;Scope *parent=nullptr;std::string name;
-    long id=0,step=-1;double time=-1,childrenWall=0,childrenCpu=0;
+    long id=0,step=-1;double time=-1,childrenWall=0,childrenCpu=0;bool buffered=false;
     Clock::time_point begin;std::clock_t cpu;
 public:
-    explicit Scope(const std::string &label)
+    explicit Scope(const std::string &label,bool aggregate=false,bool detailOnly=false)
     {
-        auto &state=Get();if(!state.enabled)return;
+        auto &state=Get();if(!state.enabled || (detailOnly && !state.detailed))return;
+        buffered=aggregate;
         s=&state;name=label;id=++s->next;step=s->step;time=s->time;
         parent=s->stack.empty()?nullptr:s->stack.back();s->stack.push_back(this);
         begin=Clock::now();cpu=std::clock();
@@ -64,7 +78,12 @@ public:
         if(s->stack.empty() || s->stack.back()!=this)std::terminate();
         s->stack.pop_back();
         if(parent){parent->childrenWall+=wall;parent->childrenCpu+=processCpu;}
-        s->out<<"{\"schema\":1,\"pid\":"<<getpid()<<",\"id\":"<<id<<",\"parent_id\":"<<(parent?parent->id:0)
+        if(buffered)
+        {
+            auto &t=s->totals[{name,step,time}];++t.calls;t.wall+=wall;t.cpu+=processCpu;
+            t.exclusiveWall+=std::max(0.,wall-childrenWall);t.exclusiveCpu+=std::max(0.,processCpu-childrenCpu);
+        }
+        else s->out<<"{\"schema\":1,\"pid\":"<<getpid()<<",\"id\":"<<id<<",\"parent_id\":"<<(parent?parent->id:0)
             <<",\"step\":"<<step<<",\"time\":"<<time<<",\"name\":"<<std::quoted(name)
             <<",\"wall_seconds\":"<<wall<<",\"process_cpu_seconds\":"<<processCpu
             <<",\"exclusive_wall_seconds\":"<<std::max(0.,wall-childrenWall)

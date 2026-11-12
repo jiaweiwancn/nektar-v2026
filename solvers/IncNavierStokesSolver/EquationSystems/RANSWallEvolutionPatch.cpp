@@ -169,6 +169,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PhysicalMass(int bloc
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PhysicalProject(int block,const RANSWallEvolutionFunction &f,double time) const
 {
+    RANSWallTiming::Scope timing("initialization.field_projection",true,true);
     const auto function=[&](const RANSWallCoordinate &p){return f(p,time);};
     auto values=fields[block]->Project(function);
     if(!Mapped() || m_mapping.PlanarConstantHeight())return values;

@@ -3,6 +3,7 @@
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <cmath>
 
@@ -68,6 +69,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::RobustParameters() const
 RANSClosureValues RANSWallEvolutionPatch::OuterClosure(double k,double epsilon,
     const RANSTensor &gradient,const RANSWallCoordinate &p) const
 {
+    RANSWallTiming::Scope timing("constitutive.outer_law",true,true);
     if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: outer closure");
     if(m_variantName=="Original")return EvaluateRANSClosure(m_parameters.model,k,epsilon,gradient,Distance(p));
     auto variant=m_robust;
