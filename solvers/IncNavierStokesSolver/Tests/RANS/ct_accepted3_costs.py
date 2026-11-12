@@ -55,9 +55,10 @@ def main():
                     timing=scopes(f.parent/dt/'timing.jsonl'),receipt_sha256=sha(f)))
         if q.get('schema')=='CT3SegmentV1':
             for dt,row in q['members'].items():
-                folder=Path(row['directory']);timing=scopes(folder/'timing.jsonl',q['start'],q['target'])
+                folder=Path(row['directory']);timing=scopes(folder/'timing.jsonl',q['start'],row['time'])
                 result['primary_segments'].append(dict(case=q['case'],dt=dt,start=q['start'],target=q['target'],actual_time=row['time'],failure=row['failure'],
                     process=row['execution'],accepted_timing=timing,slots=len(json.loads((folder/'case.evolution.json').read_text())['state']),
+                    rejected_attempt_timing=scopes(folder/'timing.jsonl',row['time'],q['target']) if row['failure'] else None,
                     timing_sha256=sha(folder/'timing.jsonl'),receipt_sha256=sha(f),
                     note='pinned primary runtime has broad scopes; geometry/law subcategories require separate equivalent detailed profile'))
         if q.get('bitwise_accepted_state_history_equivalence'):
