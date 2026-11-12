@@ -1,0 +1,177 @@
+{
+  "schema": "CT-Accepted-4-V1",
+  "starting_revision": "50bd04c315283e996b53c360d8fa7a67877f02f3",
+  "starting_status": "clean implementation worktree; fetched remote identical; no intervening commits",
+  "physics": {
+    "models": [
+      "A93",
+      "A95",
+      "E94E95"
+    ],
+    "policy": "Natural",
+    "wall": "AcceptedBudgetAWF",
+    "provider": "NeutralCompositeV1",
+    "q": "defining equilibrium roots; original sigma_epsilon, kappa^2*q=sigma_epsilon*Delta",
+    "Hh_m": 0.04,
+    "Re_H": {
+      "R": 10500,
+      "S": 12000
+    },
+    "utau_over_Uinf": {
+      "R": 0.051,
+      "S": 0.033
+    },
+    "outer_molecular_diffusion": 0,
+    "inner_molecular_viscosity": "physical nu=1/Re_H in U(Hh),Hh scaling",
+    "K": "q*utau^2; endpoint and constant outer, transported nonconstant inner",
+    "epsilon": "total; no inner equation",
+    "pressure": "Pi_inner=0, Pi_outer=-Qzz; absolute outlet total traction, no gauge",
+    "evolution": "unchanged one-sweep PIMPLE; GeneratedVolumeOwnerV1; eta=0; corrections Off; no forcing"
+  },
+  "mean_fit": {
+    "series": "f3a_R",
+    "point_ids": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "coordinate": "physical flat z above numerical wall, no displacement shift",
+    "B": "mean(U_j-utau/kappa*log(z_j/Hh))",
+    "heights_mm": [
+      5.5,
+      6.0,
+      6.5
+    ],
+    "primary_height_mm": 6.0,
+    "roughness": "separate effective sand-grain h_s(model,H); original intercept correlation; 0<=h_s<H",
+    "normalization": "unchanged piecewise linear physical-height interpolation at 40 mm, same observed points shared with fit; never reset fitted U(Hh) to one",
+    "uncertainty": "joint velocity/coordinate extraction envelopes for points 0..5; fixed fit memberships; all 4096 joint box vertices plus deterministic shared-axis and interior checks; normalize and reselect bracketing observations per scenario. Numerical envelopes, not confidence intervals or exhaustive experimental uncertainty."
+  },
+  "observation_audit": "all turbulence physical heights and lower coordinate envelopes; closest-normal transform of hill profile (vertical!=normal); Fig11 physical distance unavailable; unreported probe/experimental uncertainty separate",
+  "native": {
+    "boundary": "AcceptedOpenFlatV1 + NeutralCompositeV1; compatible top, full total traction outlet, zero streamwise scalar diffusion, original RejectV1",
+    "domain": {
+      "x": [
+        0.0,
+        0.125,
+        0.25
+      ],
+      "z_top": 2.0,
+      "interpretation": "80mm compatible truncation of strict logarithm, not a free-stream cap or actual tunnel roof"
+    },
+    "mesh": "inner sorted union {0,H/32,H/16,H/8,H/4,H/2,H,h_s,cutoff,positive viscosity intercept}; outer {H,.25,.5,1,2}. Every case frozen after central fit; no adapting evolved mesh. All active profile breaks retained by split quadrature.",
+    "degrees": [
+      3,
+      1
+    ],
+    "degree_control": "A95 6mm same partition P4/P2, both dt; no other mesh search",
+    "basis": "Modified_A isotropic, 8x8 points",
+    "quadrature": [
+      32,
+      8,
+      10,
+      10,
+      10
+    ],
+    "frozen_controls": {
+      "native": [
+        32,
+        8,
+        10,
+        10,
+        10,
+        10
+      ],
+      "q48f16": [
+        48,
+        12,
+        12,
+        12,
+        12,
+        16
+      ],
+      "q64f16": [
+        64,
+        16,
+        16,
+        16,
+        16,
+        16
+      ],
+      "q64f32": [
+        64,
+        16,
+        16,
+        16,
+        16,
+        32
+      ]
+    },
+    "dt": [
+      0.002,
+      0.001
+    ],
+    "short_T": 0.008,
+    "primary_conditional_T": 0.02,
+    "order": "A95 6mm, A93 6mm, E94E95 6mm, then height sensitivities; independent stopping",
+    "projection": "continuous provider directly projected; supplied Functions and initialization use same evaluator; no Hermite surrogate",
+    "unknown_limit": 3000
+  },
+  "limits": {
+    "continuous_oracle_scaled": 2e-09,
+    "model_source_oracle": 2e-10,
+    "mass_scaled": 1e-08,
+    "scalar_physical_budget": 0.02,
+    "scalar_reconstruction": 2e-10,
+    "temporal_scaled_RMS": 0.001,
+    "reference_scaled_RMS": 0.001,
+    "vertical_velocity_RMS": 0.0001,
+    "traction_scaled": 0.001,
+    "scales": "U(Hh)=1, k=K, outer epsilon=utau^3/(kappa*H), Pi=U(Hh)^2, traction=utau^2",
+    "integration_vs_projection": "separate; polynomial residual is unanchored and reported, never subtracted",
+    "spatial_interpretation": "compare equal-time physical weighted RMS and local margins; unresolved unless global field differences<=1e-3 and timestep difference<=max(1e-7,.1*spatial difference); no convergence-order claim"
+  },
+  "stopping": "first production-required domain, physical accuracy or complete primitive gate failure stops that case; diagnostic predictor alone does not add rejection. A .02 continuation needs both dt at .008 and their own complete gates; rough sensitivities independent.",
+  "negative_controls": [
+    "wrong equilibrium Q/kappa",
+    "missing Qzz pressure offset",
+    "constant-inner-k substitution",
+    "provider/input restart mismatch"
+  ],
+  "resources": {
+    "root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112",
+    "aggregate": 72,
+    "project_including_helpers": 16,
+    "numerical_threads": 1,
+    "compiler_jobs": 2,
+    "families": 1,
+    "Git": "index.threads=1; core.preloadIndex=false; pack.threads=1",
+    "history": "CT1-CT3 receipts including resource failures unchanged"
+  },
+  "deferred": [
+    "EP",
+    "geometry-row caching",
+    "old Hermite qualification",
+    "T=.2",
+    "native curved evolution",
+    "coefficient/input retuning",
+    "reference restoration",
+    "clipping/floors",
+    "inner epsilon transport",
+    "backend expansion",
+    "developed precursor",
+    "hill validation"
+  ],
+  "specifications": {
+    "docs/literature/A93_A95_E94_E95_neutral_ABL_EP_AWF_combined.tex": "056a85c2aea5ce4ca168caf561613e662416bb6b7d7177451ba5038d2cf68a64",
+    "docs/literature/accepted_awf_appendix_A93_A95_E94_E95.tex": "17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40"
+  },
+  "dataset_snapshot_sha256": "2432937f6ab1b7dd41351e56e3cd4ce31a24e8cc2f63449404af2c3a688b7429"
+}
