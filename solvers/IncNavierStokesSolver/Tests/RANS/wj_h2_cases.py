@@ -122,9 +122,12 @@ def expressions(c,kind,pressure_seed='SignCorrectedV1',outlet='ZeroTractionV1'):
 
 
 def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',span=.5,length=.09,restart=None,reject=0,
-             pressure_seed='SignCorrectedV1',outlet='ZeroTractionV1',xknots=None,tangential_order=8):
+             pressure_seed='SignCorrectedV1',outlet='ZeroTractionV1',xknots=None,tangential_order=8,extra_physical_z=None):
     if kind not in ('physical','analytic') or not math.isfinite(dt) or dt<=0 or not 0<=steps<=32:raise ValueError('bounded H2 case')
     c=Completion(span,length);H=c.H
+    extras=[] if extra_physical_z is None else list(extra_physical_z)
+    if len(extras)>2 or any(isinstance(v,bool) or not math.isfinite(v) or not D0+H<v<TOP for v in extras) or any(a>=b for a,b in zip(extras[:-1],extras[1:])):
+        raise ValueError('at most two strictly increasing finite outer PHYSICAL normal knots')
     xknots=[0.,8.] if xknots is None else list(xknots)
     if len(xknots)<2 or xknots[0]!=0 or xknots[-1]!=8 or not all(math.isfinite(v) for v in xknots) or any(a>=b for a,b in zip(xknots[:-1],xknots[1:])):raise ValueError('strict physical x knots in [0,8]')
     if isinstance(tangential_order,bool) or tangential_order not in (8,12,16):raise ValueError('declared H3 tangential orders8/12/16')
@@ -145,6 +148,9 @@ def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',spa
     if refined:
         inner_knots=sorted(set(inner_knots+[(a+b)/2 for a,b in zip(inner_knots[:-1],inner_knots[1:]) if b<=.25]))
         physical_outer=sorted(set(physical_outer+[(a+b)/2 for a,b in zip(physical_outer[:-1],physical_outer[1:]) if a<6.3]))
+    if extras:
+        if any(abs(z-D0-r)<1e-12 for z in extras for r in physical_outer):raise ValueError('extra physical knot duplicates an existing face')
+        physical_outer=sorted(physical_outer+[z-D0 for z in extras])
     rho=lambda r:H+(r-H)*(TOP-H)/(TOP-D0-H)
     z=inner_knots+[rho(v) for v in physical_outer[1:]]
     tensor_mesh(root,z,3,2,8.,1.,points=[8,8],xknots=xknots)
@@ -182,6 +188,7 @@ def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',spa
     metadata.update(kind=kind,dt=dt,steps=steps,reuse=reuse,refined=refined,chart_z=z,x=xknots,tangential_order=tangential_order,
         physical_outer_r=physical_outer,completion=c.summary(),K=K,
         reference_cutoff=w['rc'],reference_k_min=min(w['kref'](r) for r in np.linspace(0,H,41)))
+    if extras:metadata['extra_physical_z']=extras
     (folder/'case-design.json').write_text(json.dumps(metadata,indent=2,allow_nan=False)+'\n')
     return path
 
@@ -192,6 +199,7 @@ if __name__=='__main__':
     p.add_argument('--pressure-seed',choices=('SignCorrectedV1','VerticalBalanceV1'),default='SignCorrectedV1')
     p.add_argument('--outlet',choices=('ZeroTractionV1','FrozenSeedTractionV1'),default='ZeroTractionV1')
     p.add_argument('--x-knots',type=lambda s:[float(v) for v in s.split(',')]);p.add_argument('--tangential-order',type=int,default=8)
+    p.add_argument('--extra-physical-z',type=lambda s:[float(v) for v in s.split(',')])
     a=p.parse_args()
     print(case_xml(a.output,a.kind,a.steps,a.dt,a.refined,a.reuse,restart=a.restart,pressure_seed=a.pressure_seed,
-        outlet=a.outlet,xknots=a.x_knots,tangential_order=a.tangential_order))
+        outlet=a.outlet,xknots=a.x_knots,tangential_order=a.tangential_order,extra_physical_z=a.extra_physical_z))
