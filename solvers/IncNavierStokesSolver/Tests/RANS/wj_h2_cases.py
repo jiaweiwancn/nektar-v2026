@@ -107,6 +107,9 @@ def expressions(c,kind,pressure_seed='SignCorrectedV1',outlet='ZeroTractionV1'):
     if outlet=='FrozenSeedTractionV1' and pressure_seed!='VerticalBalanceV1':raise ValueError('frozen traction requires the balanced seed')
     # All continuous profile breakpoints, independent of the native mesh.
     cuts=sorted(set([H,12.5-D0,TOP-D0]+[float(v['y_over_H'])-D0 for v in c.rows if D0+H<float(v['y_over_H'])<TOP]))
+    # Only the new nonlinear pressure/traction expressions need extra panels.
+    # Keep the historical velocity/k/epsilon completion expressions unchanged.
+    cuts=sorted(set(cuts+[(a+b)/2 for a,b in zip(cuts[:-1],cuts[1:])]))
     if pressure_seed=='VerticalBalanceV1':
         outer['p'],errors['outer_pi']=approximate(lambda r:2*c.k(D0+r)/3-continuous_outer(c,D0+r)[1][2,2]+C,cuts,18)
     oi,oo=dict(u='0',v='0'),dict(u='0',v='0')
