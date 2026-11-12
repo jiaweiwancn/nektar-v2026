@@ -63,6 +63,9 @@ class OwnedPhysicalPoints(unittest.TestCase):
         self.assertEqual(x['status'],'FAIL');self.assertEqual(len(pair_rows(x,y,2,.01,.02,4,.005,.020000000000000004)),2)
         with self.assertRaises(ValueError):pair_rows(x,y,2,.01,.02,3,.005,.015)
         with self.assertRaises(ValueError):aligned(4,.005,.0200001)
+        for args in ((1.5,.005,.005),(True,.005,.005),(-1,.005,-.005),
+                     (1,float('nan'),.005),(1,0.,0.),(1,.005,float('nan')),(1,.005,float('inf'))):
+            with self.subTest(args=args),self.assertRaises(ValueError):aligned(*args)
 
     def test_chart_scaling_is_not_physical_height(self):
         r,s=fixture();p=physical(r,[.5,0,1.25]);o=owners(r,p)[0];u,g=field(r,s,0,o)

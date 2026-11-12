@@ -164,6 +164,10 @@ def scan(report,state,inv):
 
 
 def aligned(step,dt,recorded):
+    if isinstance(step,bool) or not isinstance(step,(int,np.integer)) or step<0:
+        raise ValueError('nonnegative integer native step required; no truncation')
+    if isinstance(dt,bool) or not math.isfinite(dt) or dt<=0 or isinstance(recorded,bool) or not math.isfinite(recorded):
+        raise ValueError('positive finite timestep and finite recorded time required')
     target=Fraction(str(dt))*int(step);value=float(target);tol=128*EPS*max(1,abs(value))
     if abs(recorded-value)>tol:raise ValueError('recorded time inconsistent with integer steps')
     return target
