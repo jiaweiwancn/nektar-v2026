@@ -1,0 +1,83 @@
+{
+  "capture_Asia_Shanghai": "2026-11-12T12:28:13.705512+08:00",
+  "modified_P2": {
+    "status": "stopped_at_checkpoint",
+    "accepted_steps": 7232.0,
+    "accepted_time": 4.520000000000006,
+    "checkpoint_sha256": "b9d7e139840b757030996028564031d951cc538637fd65d4a0119dc0938f243e",
+    "assessed_steps": [
+      4000.0,
+      4800.0,
+      5600.0,
+      6400.0,
+      7200.0
+    ],
+    "last_assessment": {
+      "commands": [
+        [
+          "/usr/bin/python3",
+          "-B",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/observer-source-v3/solvers/IncNavierStokesSolver/Tests/RANS/check_cls_awf_steady_windows.py",
+          "--campaign",
+          "Refined05=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/to-steady/trajectory",
+          "--policy",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/observer-source-v3/docs/plans/cls-accepted-budget-awf-evidence/covariance/convergence-policy.json",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final/step-007200/common"
+        ],
+        [
+          "/usr/bin/python3",
+          "-B",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/observer-source-v3/solvers/IncNavierStokesSolver/Tests/RANS/confirm_cls_awf_complete_windows.py",
+          "--common-panel",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final/step-007200/common",
+          "--case",
+          "Refined05",
+          "--probe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-inner-pressure-p2-20261111/runtime-matched/probe/RANSWallResolutionProbe",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final/step-007200/complete-fields"
+        ]
+      ],
+      "exit_codes": [
+        0.0,
+        0.0
+      ],
+      "folder": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final/step-007200",
+      "passing_windows": 3.0,
+      "summary_sha256": "db12cb98245e314de268fe923af052baa024e138ff3170e864a848cc1631d51e",
+      "actually_assessed_endpoint_step": 7200.0,
+      "stop_receipt": {
+        "status": "published",
+        "request": {
+          "reason": "three_element_resolved_complete_steady_windows",
+          "qualified_global_step": 7200.0,
+          "scientific_summary": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-refined-qualification-followup-20261111/P2-observer-final/step-007200/complete-fields/summary.json",
+          "scientific_summary_sha256": "db12cb98245e314de268fe923af052baa024e138ff3170e864a848cc1631d51e",
+          "policy_sha256": "5ab70c348311d7352501ea8b9884a67e6acdfb204ea238d68e8923e855890057",
+          "observer_identity": {
+            "pid": 689309.0,
+            "start": "51407785",
+            "executable": "/usr/bin/python3.10",
+            "cwd": "/home/jay"
+          }
+        }
+      }
+    },
+    "scope": "read once at H2b start; runtime/cap/policy unchanged"
+  },
+  "hill": {
+    "status": "initialization_rejected",
+    "accepted_physical_steps": 0,
+    "attempted_time": 0.0,
+    "reason": "inner and outer covariance"
+  },
+  "flat_temporal": {
+    "status": "completed",
+    "physical_start": 0.0008,
+    "physical_end": 0.0012,
+    "steps": 70
+  },
+  "developed_precursor": "not qualified",
+  "experimental_hill_validation": "not attempted; data held out"
+}
