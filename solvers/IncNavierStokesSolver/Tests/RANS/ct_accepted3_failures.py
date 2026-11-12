@@ -40,8 +40,9 @@ def main():
             k,e=native_inputs[3:5];law=oracle(model,k,e,G);expected=law['R'];P=law['production'];Q=law['Q']
         else:
             k,nt=native_inputs[3],native_inputs[5];e=None;expected=np.eye(3)*2*k/3-nt*(G+G.T);P=-np.sum(expected*G);Q=np.zeros((3,3))
-        eig=np.linalg.eigvalsh(expected);defect=float(np.max(abs(expected-native_R)))
+        eig,eigenvectors=np.linalg.eigh(expected);defect=float(np.max(abs(expected-native_R)))
         require(defect<2e-10 and eig[0]<-1e-10*c['K0'],'independent_expected_covariance_exit_not_reproduced')
+        require(exact_vector_hash(event['state'])==exact_vector_hash(r['rejected_state']) and event['stopped_before_history_advance'],'rejected_candidate_or_history_event_mismatch')
         folder=a.output/(case+'-'+dt);folder.mkdir();shutil.copy2(f.parent/'case.xml',folder/'case.xml')
         req=replay(ini,r['state'],r['time'],[coords],export_test_basis=True)
         req.update(grid_sides=[int(provenance[2])],grid_test_geometries=[int(provenance[0])])
@@ -60,12 +61,16 @@ def main():
                 v=point(q,np.array(state),off,model)
                 if 'R' in v:v['covariance_eigenvalues']=np.linalg.eigvalsh(v['R']).tolist()
             else:
-                v=dict(k=float(row_value(q['velocity_k'],np.array(state),off[2])[0]),scope='inner raw field; authoritative native wall viscosity inputs retained separately')
+                Gs=np.zeros((3,3))
+                for b,axis in enumerate((0,2)):Gs[axis]=row_value(q['velocity_k'],np.array(state),off[b])[1]
+                pi,dp=row_value(q['pressure'],np.array(state),off[4])
+                v=dict(k=float(row_value(q['velocity_k'],np.array(state),off[2])[0]),raw_gradient=Gs.tolist(),raw_divergence=float(np.trace(Gs)),
+                    Pi=float(pi),pressure_gradient=dp.tolist(),scope='inner raw field; authoritative native wall viscosity inputs retained separately')
             observations[name]=v
         row=dict(case=case,dt=r['dt'],last_accepted_time=r['time'],attempted_time=event['time'],failure=r['failure'],reasons=event['reasons'],
             coordinate=coords,geometry=int(provenance[0]),native_element=int(provenance[1]),side=int(provenance[2]),region=side,
             independent_native_audit_inputs=dict(k=k,epsilon=e,raw_gradient=G.tolist(),R=expected.tolist(),Q=Q.tolist(),production=float(P),
-                divergence=float(np.trace(G)),isotropic_work=float(-2*k*np.trace(G)/3),covariance_eigenvalues=eig.tolist(),tensor_defect=defect),
+                divergence=float(np.trace(G)),isotropic_work=float(-2*k*np.trace(G)/3),covariance_eigenvalues=eig.tolist(),minimum_eigenvector=eigenvectors[:,0].tolist(),tensor_defect=defect),
             stages_at_same_physical_point=observations,actual_initial_state_sha256=exact_vector_hash(ini['observation']['state']),
             rejected_state_sha256=exact_vector_hash(event['state']),last_accepted_state_sha256=exact_vector_hash(r['state']),
             native_report_sha256=sha(f),native_event_audit=audit,execution=execution,
@@ -73,6 +78,9 @@ def main():
         if region:
             row['native_audit_epsilon_minus_raw_rejected_field']=float(e-observations['rejected_candidate']['epsilon'])
             row['epsilon_scope']='native audit may include the declared refreshed dependent trace; raw frozen-stage field retained separately, never repaired'
+        if all(name in observations for name in ('input','momentum_predictor','corrected_flow')):
+            gi,gp,gc=[np.array(observations[name]['raw_gradient']) for name in ('input','momentum_predictor','corrected_flow')]
+            row['predictor_gradient_increment']=(gp-gi).tolist();row['pressure_mass_correction_gradient_increment']=(gc-gp).tolist()
         result['failures'].append(row);write_json(a.output/'progress.json',result)
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);print('independent covariance failures',len(result['failures']));return 0
 if __name__=='__main__':raise SystemExit(main())
