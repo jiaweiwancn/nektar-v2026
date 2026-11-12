@@ -1,0 +1,455 @@
+{
+  "schema": "CT-Accepted-5-DecisionV1",
+  "observation_audit": "pass",
+  "load_localization": "pass",
+  "models": {
+    "A95": {
+      "initialization": "pass",
+      "native_counts": {
+        "0.002": 2957,
+        "0.001": 2957
+      },
+      "milestones": {
+        "0.008": {
+          "target": 0.008,
+          "dts": [
+            0.002,
+            0.001
+          ],
+          "basic": {
+            "status": "pass",
+            "reasons": [],
+            "physical_completion": "pass"
+          },
+          "traction": {
+            "status": "pass",
+            "signed_profile_difference": {
+              "signed_mean_difference": 1.3388238800487164e-07,
+              "profiles": {
+                "ground": {
+                  "normalized_weighted_RMS": 1.4659331322955016e-07,
+                  "normalized_maximum": 2.6969721001999096e-07
+                },
+                "interface": {
+                  "normalized_weighted_RMS": 3.2857515072189706e-06,
+                  "normalized_maximum": 5.199890068539986e-06
+                }
+              }
+            },
+            "maximum_normalized_spread": 3.2857515072189706e-06,
+            "quantities": {
+              "normalized_wall_traction_error": {
+                "member_errors": [
+                  0.0001629633656317752,
+                  0.00016309724801978007
+                ],
+                "timestep_uncertainty": 3.2857515072189706e-06,
+                "limit": 0.001,
+                "upper": 0.00016966875103421801,
+                "lower": 0.00015639186261733726,
+                "status": "pass"
+              },
+              "normalized_interface_traction_RMS": {
+                "member_errors": [
+                  7.776838529301195e-05,
+                  8.181566020515922e-05
+                ],
+                "timestep_uncertainty": 3.2857515072189706e-06,
+                "limit": 0.001,
+                "upper": 8.838716321959716e-05,
+                "lower": 7.119688227857401e-05,
+                "status": "pass"
+              }
+            },
+            "definition": "signed means and actual two-sided full traction profiles, not a difference of absolute error norms"
+          },
+          "qualification": {
+            "status": "pass",
+            "physical_completion": "pass"
+          }
+        },
+        "0.02": {
+          "target": 0.02,
+          "dts": [
+            0.002,
+            0.001
+          ],
+          "basic": {
+            "status": "pass",
+            "reasons": [],
+            "physical_completion": "pass"
+          },
+          "traction": {
+            "status": "pass",
+            "signed_profile_difference": {
+              "signed_mean_difference": -5.647911537021612e-09,
+              "profiles": {
+                "ground": {
+                  "normalized_weighted_RMS": 2.636240729738715e-08,
+                  "normalized_maximum": 6.008968048356789e-08
+                },
+                "interface": {
+                  "normalized_weighted_RMS": 6.95719109193359e-07,
+                  "normalized_maximum": 1.0566260182868777e-06
+                }
+              }
+            },
+            "maximum_normalized_spread": 6.95719109193359e-07,
+            "quantities": {
+              "normalized_wall_traction_error": {
+                "member_errors": [
+                  0.00016331748572732144,
+                  0.00016331183781578444
+                ],
+                "timestep_uncertainty": 6.95719109193359e-07,
+                "limit": 0.001,
+                "upper": 0.00016470892394570815,
+                "lower": 0.00016192039959739773,
+                "status": "pass"
+              },
+              "normalized_interface_traction_RMS": {
+                "member_errors": [
+                  8.374383407158736e-05,
+                  8.292274677238601e-05
+                ],
+                "timestep_uncertainty": 6.95719109193359e-07,
+                "limit": 0.001,
+                "upper": 8.513527228997409e-05,
+                "lower": 8.153130855399929e-05,
+                "status": "pass"
+              }
+            },
+            "definition": "signed means and actual two-sided full traction profiles, not a difference of absolute error norms"
+          },
+          "qualification": {
+            "status": "pass",
+            "physical_completion": "pass"
+          }
+        }
+      },
+      "status": "pass"
+    },
+    "A93": {
+      "initialization": "pass",
+      "native_counts": {
+        "0.002": 2957,
+        "0.001": 2957
+      },
+      "milestones": {
+        "0.008": {
+          "target": 0.008,
+          "dts": [
+            0.001,
+            0.0005
+          ],
+          "basic": {
+            "status": "pass",
+            "reasons": [],
+            "physical_completion": "pass"
+          },
+          "traction": {
+            "status": "pass",
+            "signed_profile_difference": {
+              "signed_mean_difference": 1.3382012671232959e-07,
+              "profiles": {
+                "ground": {
+                  "normalized_weighted_RMS": 3.324371466244386e-07,
+                  "normalized_maximum": 6.937713370416516e-07
+                },
+                "interface": {
+                  "normalized_weighted_RMS": 9.253250817314129e-06,
+                  "normalized_maximum": 1.444306323386078e-05
+                }
+              }
+            },
+            "maximum_normalized_spread": 9.253250817314129e-06,
+            "quantities": {
+              "normalized_wall_traction_error": {
+                "member_errors": [
+                  0.0003974691394708132,
+                  0.00039760295959752556
+                ],
+                "timestep_uncertainty": 9.253250817314129e-06,
+                "limit": 0.001,
+                "upper": 0.0004161094612321538,
+                "lower": 0.00037896263783618496,
+                "status": "pass"
+              },
+              "normalized_interface_traction_RMS": {
+                "member_errors": [
+                  0.0009400374040868466,
+                  0.0009560621530703945
+                ],
+                "timestep_uncertainty": 9.253250817314129e-06,
+                "limit": 0.001,
+                "upper": 0.0009745686547050227,
+                "lower": 0.0009215309024522184,
+                "status": "pass"
+              }
+            },
+            "definition": "signed means and actual two-sided full traction profiles, not a difference of absolute error norms"
+          },
+          "qualification": {
+            "status": "pass",
+            "physical_completion": "pass"
+          }
+        },
+        "0.008-original-pair": {
+          "target": 0.008,
+          "dts": [
+            0.002,
+            0.001
+          ],
+          "basic": {
+            "status": "pass",
+            "reasons": [],
+            "physical_completion": "pass"
+          },
+          "traction": {
+            "status": "ambiguous",
+            "signed_profile_difference": {
+              "signed_mean_difference": 5.546437202388755e-07,
+              "profiles": {
+                "ground": {
+                  "normalized_weighted_RMS": 8.796098300653493e-07,
+                  "normalized_maximum": 2.1590446260449036e-06
+                },
+                "interface": {
+                  "normalized_weighted_RMS": 3.5103843545824736e-05,
+                  "normalized_maximum": 5.116979732612169e-05
+                }
+              }
+            },
+            "maximum_normalized_spread": 3.5103843545824736e-05,
+            "quantities": {
+              "normalized_wall_traction_error": {
+                "member_errors": [
+                  0.00039691449575057433,
+                  0.0003974691394708132
+                ],
+                "timestep_uncertainty": 3.5103843545824736e-05,
+                "limit": 0.001,
+                "upper": 0.00046767682656246267,
+                "lower": 0.00032670680865892483,
+                "status": "pass"
+              },
+              "normalized_interface_traction_RMS": {
+                "member_errors": [
+                  0.0009029783798248312,
+                  0.0009400374040868466
+                ],
+                "timestep_uncertainty": 3.5103843545824736e-05,
+                "limit": 0.001,
+                "upper": 0.001010245091178496,
+                "lower": 0.0008327706927331817,
+                "status": "ambiguous"
+              }
+            },
+            "definition": "signed means and actual two-sided full traction profiles, not a difference of absolute error norms"
+          },
+          "qualification": {
+            "status": "fail",
+            "physical_completion": "pass"
+          }
+        },
+        "0.02": {
+          "target": 0.02,
+          "dts": [
+            0.001,
+            0.0005
+          ],
+          "basic": {
+            "status": "pass",
+            "reasons": [],
+            "physical_completion": "pass"
+          },
+          "traction": {
+            "status": "pass",
+            "signed_profile_difference": {
+              "signed_mean_difference": 3.3323680049838e-09,
+              "profiles": {
+                "ground": {
+                  "normalized_weighted_RMS": 1.7562415896685897e-07,
+                  "normalized_maximum": 3.9145082439818743e-07
+                },
+                "interface": {
+                  "normalized_weighted_RMS": 4.061078790547276e-06,
+                  "normalized_maximum": 6.534052644628111e-06
+                }
+              }
+            },
+            "maximum_normalized_spread": 4.061078790547276e-06,
+            "quantities": {
+              "normalized_wall_traction_error": {
+                "member_errors": [
+                  0.0003984407381077456,
+                  0.0003984440704757506
+                ],
+                "timestep_uncertainty": 4.061078790547276e-06,
+                "limit": 0.001,
+                "upper": 0.00040656622805684513,
+                "lower": 0.00039031858052665107,
+                "status": "pass"
+              },
+              "normalized_interface_traction_RMS": {
+                "member_errors": [
+                  0.000984728424074404,
+                  0.0009805262821591442
+                ],
+                "timestep_uncertainty": 4.061078790547276e-06,
+                "limit": 0.001,
+                "upper": 0.0009928505816554987,
+                "lower": 0.0009724041245780495,
+                "status": "pass"
+              }
+            },
+            "definition": "signed means and actual two-sided full traction profiles, not a difference of absolute error norms"
+          },
+          "qualification": {
+            "status": "pass",
+            "physical_completion": "pass"
+          }
+        }
+      },
+      "status": "pass"
+    },
+    "E94E95": {
+      "initialization": "pass",
+      "native_counts": {
+        "0.002": 2957,
+        "0.001": 2957
+      },
+      "milestones": {
+        "0.008": {
+          "target": 0.008,
+          "dts": [
+            0.002,
+            0.001
+          ],
+          "basic": {
+            "status": "pass",
+            "reasons": [],
+            "physical_completion": "pass"
+          },
+          "traction": {
+            "status": "pass",
+            "signed_profile_difference": {
+              "signed_mean_difference": 2.1423766443667676e-07,
+              "profiles": {
+                "ground": {
+                  "normalized_weighted_RMS": 2.3313648475071038e-07,
+                  "normalized_maximum": 4.3971002271552424e-07
+                },
+                "interface": {
+                  "normalized_weighted_RMS": 4.010130324285707e-06,
+                  "normalized_maximum": 6.132945675822154e-06
+                }
+              }
+            },
+            "maximum_normalized_spread": 4.010130324285707e-06,
+            "quantities": {
+              "normalized_wall_traction_error": {
+                "member_errors": [
+                  0.00022001763650072428,
+                  0.00022023187416516095
+                ],
+                "timestep_uncertainty": 4.010130324285707e-06,
+                "limit": 0.001,
+                "upper": 0.00022825213481373236,
+                "lower": 0.00021199737585215288,
+                "status": "pass"
+              },
+              "normalized_interface_traction_RMS": {
+                "member_errors": [
+                  0.00017133420162594872,
+                  0.00017636093443918318
+                ],
+                "timestep_uncertainty": 4.010130324285707e-06,
+                "limit": 0.001,
+                "upper": 0.00018438119508775458,
+                "lower": 0.00016331394097737732,
+                "status": "pass"
+              }
+            },
+            "definition": "signed means and actual two-sided full traction profiles, not a difference of absolute error norms"
+          },
+          "qualification": {
+            "status": "pass",
+            "physical_completion": "pass"
+          }
+        },
+        "0.02": {
+          "target": 0.02,
+          "dts": [
+            0.002,
+            0.001
+          ],
+          "basic": {
+            "status": "pass",
+            "reasons": [],
+            "physical_completion": "pass"
+          },
+          "traction": {
+            "status": "pass",
+            "signed_profile_difference": {
+              "signed_mean_difference": 1.0539892117314418e-09,
+              "profiles": {
+                "ground": {
+                  "normalized_weighted_RMS": 2.8813841200714222e-08,
+                  "normalized_maximum": 6.030854717128697e-08
+                },
+                "interface": {
+                  "normalized_weighted_RMS": 1.0071578972871496e-06,
+                  "normalized_maximum": 1.5692256091739206e-06
+                }
+              }
+            },
+            "maximum_normalized_spread": 1.0071578972871496e-06,
+            "quantities": {
+              "normalized_wall_traction_error": {
+                "member_errors": [
+                  0.0002206092084499606,
+                  0.00022061026243917235
+                ],
+                "timestep_uncertainty": 1.0071578972871496e-06,
+                "limit": 0.001,
+                "upper": 0.00022262457823374665,
+                "lower": 0.0002185948926553863,
+                "status": "pass"
+              },
+              "normalized_interface_traction_RMS": {
+                "member_errors": [
+                  0.00017793888374523911,
+                  0.00017666456552264747
+                ],
+                "timestep_uncertainty": 1.0071578972871496e-06,
+                "limit": 0.001,
+                "upper": 0.00017995319953981341,
+                "lower": 0.00017465024972807317,
+                "status": "pass"
+              }
+            },
+            "definition": "signed means and actual two-sided full traction profiles, not a difference of absolute error norms"
+          },
+          "qualification": {
+            "status": "pass",
+            "physical_completion": "pass"
+          }
+        }
+      },
+      "status": "pass"
+    }
+  },
+  "mathematical": "CT4 central rough reference evidence reused at unchanged continuous inputs",
+  "future_terrain_admission": false,
+  "historical_pressure_interpretation": "CT4 unresolved flag retained",
+  "scope": "one selected split and6mm models only; no9case repeat/.2/curved production/hill prediction",
+  "resource_compliance": {
+    "status": "pass",
+    "aggregate_peak": 36,
+    "project_peak": 12,
+    "pending_own_finalizer": true
+  },
+  "bounded_flat_numerical": "pass",
+  "next_capability": "conservative curved Accepted manufactured patch, retaining physical roughness-sublayer and thin-layer qualifications"
+}

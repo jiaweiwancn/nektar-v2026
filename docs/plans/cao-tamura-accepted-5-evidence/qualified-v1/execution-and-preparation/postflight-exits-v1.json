@@ -1,0 +1,34 @@
+[
+  {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted5_post.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112",
+      "--ct4",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112/post-v1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/collect_ct_accepted_5.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112",
+      "--ct4",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime",
+      "--campaign",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112/controller-halfstep-v1",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112/compact-v1"
+    ],
+    "exit_code": 0
+  }
+]

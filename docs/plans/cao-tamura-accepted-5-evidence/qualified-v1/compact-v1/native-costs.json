@@ -1,0 +1,3356 @@
+[
+  {
+    "model": "A95",
+    "dt": "0.002",
+    "time": 0.008,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 27.450912752996373,
+      "process_cpu_seconds": 26.862357999999997,
+      "peak_RSS_KiB": 361620,
+      "actual_mapped_files_sha256": "8d4587609490290b5afbd28292c2f125f8289918de79e5536ac76a1661290373"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.012368999999999998,
+          "exclusive_wall": 0.012416730999999999,
+          "calls": 72
+        },
+        "domain.compute": {
+          "exclusive_CPU": 12.559504,
+          "exclusive_wall": 12.566166845,
+          "calls": 20
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.10893200000000014,
+          "exclusive_wall": 0.10910393499999982,
+          "calls": 20
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.0061149999999997595,
+          "exclusive_wall": 0.0061171720000000596,
+          "calls": 4
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 0.2332279999999998,
+          "exclusive_wall": 0.23343551999999992,
+          "calls": 60
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 0.45333500000000004,
+          "exclusive_wall": 0.45380657,
+          "calls": 4
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 0.34502,
+          "exclusive_wall": 0.34536633699999997,
+          "calls": 32
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.01094599999999999,
+          "exclusive_wall": 0.010954101,
+          "calls": 4
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.010575000000000001,
+          "exclusive_wall": 0.010573837999999995,
+          "calls": 4
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 0.27299100000000004,
+          "exclusive_wall": 0.27297885399999994,
+          "calls": 1012
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.013707,
+          "exclusive_wall": 0.013706865,
+          "calls": 4
+        },
+        "pressure.build": {
+          "exclusive_CPU": 0.4973839999999998,
+          "exclusive_wall": 0.497651298,
+          "calls": 4
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.0007460000000000001,
+          "exclusive_wall": 0.000745517,
+          "calls": 4
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 0.889893,
+          "exclusive_wall": 0.890178732,
+          "calls": 4
+        },
+        "residual": {
+          "exclusive_CPU": 1.602898,
+          "exclusive_wall": 1.6037182650000001,
+          "calls": 36
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.006020000000000025,
+          "exclusive_wall": 0.006019865999999929,
+          "calls": 4
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.06708100000000006,
+          "exclusive_wall": 0.06708647000000001,
+          "calls": 4
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.03915299999999999,
+          "exclusive_wall": 0.039234992999999996,
+          "calls": 4
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.050442,
+          "exclusive_wall": 0.050492165000000006,
+          "calls": 4
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.002012,
+          "exclusive_wall": 0.002012095,
+          "calls": 4
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.005975000000000064,
+          "exclusive_wall": 0.006049335999999905,
+          "calls": 4
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.0021090000000000275,
+          "exclusive_wall": 0.0021155010000000196,
+          "calls": 4
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.18515199999999998,
+          "exclusive_wall": 0.185446542,
+          "calls": 4
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.0052049999999999996,
+          "exclusive_wall": 0.005203023999999999,
+          "calls": 4
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.146729,
+          "exclusive_wall": 0.146804565,
+          "calls": 4
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.005688000000000026,
+          "exclusive_wall": 0.005693594000000135,
+          "calls": 4
+        },
+        "k.total": {
+          "exclusive_CPU": 0.0006509999999998461,
+          "exclusive_wall": 0.0006627099999999553,
+          "calls": 4
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.0023020000000000007,
+          "exclusive_wall": 0.002309254,
+          "calls": 16
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.00037800000000000333,
+          "exclusive_wall": 0.00039599399999999674,
+          "calls": 4
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.0028360000000002827,
+          "exclusive_wall": 0.0028342089999999764,
+          "calls": 4
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.099808,
+          "exclusive_wall": 0.099866233,
+          "calls": 4
+        },
+        "audit.physical": {
+          "exclusive_CPU": 0.9457039999999999,
+          "exclusive_wall": 0.946298767,
+          "calls": 4
+        },
+        "audit.complete": {
+          "exclusive_CPU": 1.9368930000000002,
+          "exclusive_wall": 1.937693658,
+          "calls": 4
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.0010310000000000041,
+          "exclusive_wall": 0.0010396940000001464,
+          "calls": 4
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.0013350000000018625,
+          "exclusive_wall": 0.0013422110000007592,
+          "calls": 4
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.020848,
+          "exclusive_wall": 0.020852053000000002,
+          "calls": 4
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.0009109999999985519,
+          "exclusive_wall": 0.0009122759999993235,
+          "calls": 4
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.002478,
+          "exclusive_wall": 0.002475144,
+          "calls": 4
+        },
+        "native.step": {
+          "exclusive_CPU": 0.016842000000000468,
+          "exclusive_wall": 0.016845060000000522,
+          "calls": 4
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.012368999999999998,
+          "exclusive_wall": 0.012416730999999999
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 12.925461999999998,
+          "exclusive_wall": 12.932586268000001
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 0.688929,
+          "exclusive_wall": 0.689745277
+        },
+        "factorization": {
+          "exclusive_CPU": 0.355966,
+          "exclusive_wall": 0.35632043799999996
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 0.5750399999999999,
+          "exclusive_wall": 0.575311606
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 0.2946610000000001,
+          "exclusive_wall": 0.2946463549999999
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 1.0391,
+          "exclusive_wall": 1.0394584409999998
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 1.690263000000001,
+          "exclusive_wall": 1.691222526000001
+        },
+        "physical_audits": {
+          "exclusive_CPU": 2.983436,
+          "exclusive_wall": 2.984898352
+        }
+      },
+      "total_instrumented_exclusive_CPU": 20.565226000000006,
+      "accepted_steps": 4,
+      "CPU_per_accepted_step": 5.1413065000000016,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "a2e501a9ca22ce0d4b198a13259c6ece0e16fabe156a33a19ca213218d7581fb"
+  },
+  {
+    "model": "A95",
+    "dt": "0.001",
+    "time": 0.008,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 47.98848075600108,
+      "process_cpu_seconds": 47.407802,
+      "peak_RSS_KiB": 376964,
+      "actual_mapped_files_sha256": "66162148ed4df79142af2cab2ebd88c9221cc36f4f02abc10a1f2a1dc9084dd7"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.02560100000000001,
+          "exclusive_wall": 0.025690922999999997,
+          "calls": 144
+        },
+        "domain.compute": {
+          "exclusive_CPU": 25.315645999999997,
+          "exclusive_wall": 25.325320525999995,
+          "calls": 40
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.23510600000000004,
+          "exclusive_wall": 0.2351662309999999,
+          "calls": 40
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.013834000000000013,
+          "exclusive_wall": 0.013839261000000103,
+          "calls": 8
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 0.47422999999999976,
+          "exclusive_wall": 0.474491733,
+          "calls": 120
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 0.909779,
+          "exclusive_wall": 0.910099123,
+          "calls": 8
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 0.6913190000000002,
+          "exclusive_wall": 0.6918666469999999,
+          "calls": 64
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.016877999999999997,
+          "exclusive_wall": 0.016889861,
+          "calls": 8
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.017226999999999992,
+          "exclusive_wall": 0.017229082000000014,
+          "calls": 8
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 0.5638760000000022,
+          "exclusive_wall": 0.5638470219999999,
+          "calls": 2024
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.028738999999999997,
+          "exclusive_wall": 0.028741828999999997,
+          "calls": 8
+        },
+        "pressure.build": {
+          "exclusive_CPU": 0.9952529999999999,
+          "exclusive_wall": 0.995911222,
+          "calls": 8
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.001356,
+          "exclusive_wall": 0.0013512550000000002,
+          "calls": 8
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 1.7969469999999998,
+          "exclusive_wall": 1.7983830980000002,
+          "calls": 8
+        },
+        "residual": {
+          "exclusive_CPU": 3.2465619999999995,
+          "exclusive_wall": 3.2474009810000006,
+          "calls": 72
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.012672000000000239,
+          "exclusive_wall": 0.01267603099999981,
+          "calls": 8
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.12264799999999987,
+          "exclusive_wall": 0.12285308300000009,
+          "calls": 8
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.07398799999999972,
+          "exclusive_wall": 0.07400252100000015,
+          "calls": 8
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.100912,
+          "exclusive_wall": 0.100914384,
+          "calls": 8
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.0036370000000000005,
+          "exclusive_wall": 0.003635998,
+          "calls": 8
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.012874000000000052,
+          "exclusive_wall": 0.012879464000000063,
+          "calls": 8
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.004266999999999688,
+          "exclusive_wall": 0.004283034999999824,
+          "calls": 8
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.36957,
+          "exclusive_wall": 0.36972489499999994,
+          "calls": 8
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.009841999999999998,
+          "exclusive_wall": 0.009844022000000001,
+          "calls": 8
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.29852399999999996,
+          "exclusive_wall": 0.29868036900000006,
+          "calls": 8
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.01396099999999989,
+          "exclusive_wall": 0.013965170000000082,
+          "calls": 8
+        },
+        "k.total": {
+          "exclusive_CPU": 0.0015910000000002311,
+          "exclusive_wall": 0.0016185400000000572,
+          "calls": 8
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.004592999999999998,
+          "exclusive_wall": 0.004611852999999999,
+          "calls": 32
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.0009249999999999814,
+          "exclusive_wall": 0.0009557189999999799,
+          "calls": 8
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.005894000000000954,
+          "exclusive_wall": 0.005895047999999736,
+          "calls": 8
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.20764600000000002,
+          "exclusive_wall": 0.20765348,
+          "calls": 8
+        },
+        "audit.physical": {
+          "exclusive_CPU": 1.8864540000000003,
+          "exclusive_wall": 1.8869020710000002,
+          "calls": 8
+        },
+        "audit.complete": {
+          "exclusive_CPU": 3.8435560000000004,
+          "exclusive_wall": 3.8448120610000007,
+          "calls": 8
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.002274999999999805,
+          "exclusive_wall": 0.002295423999999713,
+          "calls": 8
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.0024750000000022254,
+          "exclusive_wall": 0.0024818869999991833,
+          "calls": 8
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.041902,
+          "exclusive_wall": 0.04190839500000001,
+          "calls": 8
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.0020940000000004844,
+          "exclusive_wall": 0.002095395000000444,
+          "calls": 8
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.004815000000000001,
+          "exclusive_wall": 0.004812179000000001,
+          "calls": 8
+        },
+        "native.step": {
+          "exclusive_CPU": 0.03357499999999991,
+          "exclusive_wall": 0.033576763000002785,
+          "calls": 8
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.02560100000000001,
+          "exclusive_wall": 0.025690922999999997
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 26.07832299999999,
+          "exclusive_wall": 26.088338416
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 1.380261,
+          "exclusive_wall": 1.380738402
+        },
+        "factorization": {
+          "exclusive_CPU": 0.7081970000000002,
+          "exclusive_wall": 0.7087565079999999
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 1.135128,
+          "exclusive_wall": 1.135993387
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 0.6074500000000022,
+          "exclusive_wall": 0.607420126
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 2.1002859999999997,
+          "exclusive_wall": 2.1018756460000003
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 3.4178660000000023,
+          "exclusive_wall": 3.4188301370000027
+        },
+        "physical_audits": {
+          "exclusive_CPU": 5.9399310000000005,
+          "exclusive_wall": 5.9416630360000005
+        }
+      },
+      "total_instrumented_exclusive_CPU": 41.39304299999999,
+      "accepted_steps": 8,
+      "CPU_per_accepted_step": 5.174130374999999,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "4f6148ec133c7098c2bdf4d87cb48c5a01dba5fbab3e06d01f1e0600c13965ef"
+  },
+  {
+    "model": "A95",
+    "dt": "0.002",
+    "time": 0.020000000000000004,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 38.773152927999035,
+      "process_cpu_seconds": 38.199735000000004,
+      "peak_RSS_KiB": 370496,
+      "actual_mapped_files_sha256": "eba5433962f4a69aab5f4697d052ad6759cf39bc0eacf10c7664bbaf43e541db"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.020762000000000003,
+          "exclusive_wall": 0.020824820000000008,
+          "calls": 108
+        },
+        "domain.compute": {
+          "exclusive_CPU": 19.890017,
+          "exclusive_wall": 19.901030339000005,
+          "calls": 30
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.22402600000000006,
+          "exclusive_wall": 0.22408647699999995,
+          "calls": 30
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.01099400000000006,
+          "exclusive_wall": 0.010997763000000216,
+          "calls": 6
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 0.36411499999999997,
+          "exclusive_wall": 0.36462359800000005,
+          "calls": 90
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 0.682598,
+          "exclusive_wall": 0.683046148,
+          "calls": 6
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 0.515977,
+          "exclusive_wall": 0.516059161,
+          "calls": 48
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.016663999999999998,
+          "exclusive_wall": 0.016676469000000006,
+          "calls": 6
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.01571200000000001,
+          "exclusive_wall": 0.015715871000000006,
+          "calls": 6
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 0.4243240000000002,
+          "exclusive_wall": 0.42466687499999956,
+          "calls": 1518
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.021004000000000002,
+          "exclusive_wall": 0.021004504,
+          "calls": 6
+        },
+        "pressure.build": {
+          "exclusive_CPU": 0.7474689999999999,
+          "exclusive_wall": 0.7480760239999998,
+          "calls": 6
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.001152,
+          "exclusive_wall": 0.0011514899999999996,
+          "calls": 6
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 1.3446369999999999,
+          "exclusive_wall": 1.345105954,
+          "calls": 6
+        },
+        "residual": {
+          "exclusive_CPU": 2.4249769999999997,
+          "exclusive_wall": 2.426071124,
+          "calls": 54
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.009556999999999816,
+          "exclusive_wall": 0.00956314299999983,
+          "calls": 6
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.09570100000000004,
+          "exclusive_wall": 0.09571771100000015,
+          "calls": 6
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.06236699999999962,
+          "exclusive_wall": 0.06238256999999958,
+          "calls": 6
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.076017,
+          "exclusive_wall": 0.076074469,
+          "calls": 6
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.0024990000000000004,
+          "exclusive_wall": 0.0025012990000000002,
+          "calls": 6
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.01105299999999998,
+          "exclusive_wall": 0.011057605999999942,
+          "calls": 6
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.0030850000000000044,
+          "exclusive_wall": 0.0030983490000001668,
+          "calls": 6
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.276849,
+          "exclusive_wall": 0.27685051699999996,
+          "calls": 6
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.008652,
+          "exclusive_wall": 0.008653062,
+          "calls": 6
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.22662300000000002,
+          "exclusive_wall": 0.22662747299999997,
+          "calls": 6
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.010552000000000006,
+          "exclusive_wall": 0.010555228000000194,
+          "calls": 6
+        },
+        "k.total": {
+          "exclusive_CPU": 0.0012329999999999286,
+          "exclusive_wall": 0.0012527639999998508,
+          "calls": 6
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.0035599999999999994,
+          "exclusive_wall": 0.0035657520000000006,
+          "calls": 24
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.000697000000000017,
+          "exclusive_wall": 0.0007203799999999649,
+          "calls": 6
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.004530999999999175,
+          "exclusive_wall": 0.004530686999999922,
+          "calls": 6
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.155566,
+          "exclusive_wall": 0.155566321,
+          "calls": 6
+        },
+        "audit.physical": {
+          "exclusive_CPU": 1.430631,
+          "exclusive_wall": 1.4312236500000002,
+          "calls": 6
+        },
+        "audit.complete": {
+          "exclusive_CPU": 2.8936029999999997,
+          "exclusive_wall": 2.8953863689999997,
+          "calls": 6
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.0018689999999998985,
+          "exclusive_wall": 0.001883149000000195,
+          "calls": 6
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.0020439999999997127,
+          "exclusive_wall": 0.0020590900000003742,
+          "calls": 6
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.031554,
+          "exclusive_wall": 0.031660050999999995,
+          "calls": 6
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.0018739999999999313,
+          "exclusive_wall": 0.001872913999998893,
+          "calls": 6
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.003806,
+          "exclusive_wall": 0.0038046130000000005,
+          "calls": 6
+        },
+        "native.step": {
+          "exclusive_CPU": 0.025606000000000684,
+          "exclusive_wall": 0.02570473000000284,
+          "calls": 6
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.020762000000000003,
+          "exclusive_wall": 0.020824820000000008
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 20.520314,
+          "exclusive_wall": 20.53191415400001
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 1.0354640000000002,
+          "exclusive_wall": 1.035971134
+        },
+        "factorization": {
+          "exclusive_CPU": 0.532641,
+          "exclusive_wall": 0.53273563
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 0.858882,
+          "exclusive_wall": 0.859509606
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 0.4576310000000002,
+          "exclusive_wall": 0.4579772299999995
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 1.5750659999999999,
+          "exclusive_wall": 1.57553804
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 2.5615279999999987,
+          "exclusive_wall": 2.5629184110000014
+        },
+        "physical_audits": {
+          "exclusive_CPU": 4.481669,
+          "exclusive_wall": 4.484059489
+        }
+      },
+      "total_instrumented_exclusive_CPU": 32.04395699999999,
+      "accepted_steps": 6,
+      "CPU_per_accepted_step": 5.340659499999998,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "c8dd8aa0903ce0bf42270164dab2bfd560700151f74b4099327182269a6b71bd"
+  },
+  {
+    "model": "A95",
+    "dt": "0.001",
+    "time": 0.02000000000000001,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 69.53112749499996,
+      "process_cpu_seconds": 68.94146400000001,
+      "peak_RSS_KiB": 394544,
+      "actual_mapped_files_sha256": "52fc599c07eb50fda5f4dd470b1a58cf64464cd5b02726d8215b343a5f28a3f6"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.04140900000000001,
+          "exclusive_wall": 0.041546614000000016,
+          "calls": 216
+        },
+        "domain.compute": {
+          "exclusive_CPU": 38.42165599999999,
+          "exclusive_wall": 38.439738193,
+          "calls": 60
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.41076899999999983,
+          "exclusive_wall": 0.4111966429999996,
+          "calls": 60
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.02447599999999983,
+          "exclusive_wall": 0.024487929000000186,
+          "calls": 12
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 0.7370110000000003,
+          "exclusive_wall": 0.7374739370000001,
+          "calls": 180
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 1.3686699999999998,
+          "exclusive_wall": 1.369370892,
+          "calls": 12
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 1.0384919999999995,
+          "exclusive_wall": 1.0386757130000002,
+          "calls": 96
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.023139,
+          "exclusive_wall": 0.023723153000000004,
+          "calls": 12
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.023565000000000003,
+          "exclusive_wall": 0.02357339799999999,
+          "calls": 12
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 0.8408140000000002,
+          "exclusive_wall": 0.8410060739999996,
+          "calls": 3036
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.041871,
+          "exclusive_wall": 0.041873499,
+          "calls": 12
+        },
+        "pressure.build": {
+          "exclusive_CPU": 1.4953389999999995,
+          "exclusive_wall": 1.49656644,
+          "calls": 12
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.0020670000000000003,
+          "exclusive_wall": 0.002063215,
+          "calls": 12
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 2.691757,
+          "exclusive_wall": 2.6935016110000003,
+          "calls": 12
+        },
+        "residual": {
+          "exclusive_CPU": 4.892861999999998,
+          "exclusive_wall": 4.894933261999999,
+          "calls": 108
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.02152200000000004,
+          "exclusive_wall": 0.02153323500000015,
+          "calls": 12
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.18973799999999985,
+          "exclusive_wall": 0.18982686199999999,
+          "calls": 12
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.12006500000000009,
+          "exclusive_wall": 0.12015227199999945,
+          "calls": 12
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.15273,
+          "exclusive_wall": 0.15272552500000003,
+          "calls": 12
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.00511,
+          "exclusive_wall": 0.005110777999999999,
+          "calls": 12
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.02285399999999993,
+          "exclusive_wall": 0.02286972400000009,
+          "calls": 12
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.006716000000000166,
+          "exclusive_wall": 0.00675481099999975,
+          "calls": 12
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.569248,
+          "exclusive_wall": 0.5696327580000001,
+          "calls": 12
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.016463,
+          "exclusive_wall": 0.016466459000000003,
+          "calls": 12
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.450721,
+          "exclusive_wall": 0.450720837,
+          "calls": 12
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.020849000000000006,
+          "exclusive_wall": 0.020880754,
+          "calls": 12
+        },
+        "k.total": {
+          "exclusive_CPU": 0.0026119999999999477,
+          "exclusive_wall": 0.0026789319999999117,
+          "calls": 12
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.008461000000000002,
+          "exclusive_wall": 0.008487156000000003,
+          "calls": 48
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.0012169999999999959,
+          "exclusive_wall": 0.001289641000000008,
+          "calls": 12
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.01397999999999966,
+          "exclusive_wall": 0.01397047400000151,
+          "calls": 12
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.31861599999999995,
+          "exclusive_wall": 0.318615665,
+          "calls": 12
+        },
+        "audit.physical": {
+          "exclusive_CPU": 2.85564,
+          "exclusive_wall": 2.857252465,
+          "calls": 12
+        },
+        "audit.complete": {
+          "exclusive_CPU": 5.8146439999999995,
+          "exclusive_wall": 5.81775528,
+          "calls": 12
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.003695000000000226,
+          "exclusive_wall": 0.003729713999999884,
+          "calls": 12
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.003918999999999784,
+          "exclusive_wall": 0.003956966000000506,
+          "calls": 12
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.064681,
+          "exclusive_wall": 0.064688036,
+          "calls": 12
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.0035580000000017264,
+          "exclusive_wall": 0.0036357120000012344,
+          "calls": 12
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.007653,
+          "exclusive_wall": 0.007653080999999999,
+          "calls": 12
+        },
+        "native.step": {
+          "exclusive_CPU": 0.055233000000002086,
+          "exclusive_wall": 0.055233491000001855,
+          "calls": 12
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.04140900000000001,
+          "exclusive_wall": 0.041546614000000016
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 39.659136999999994,
+          "exclusive_wall": 39.67818041499999
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 2.090648,
+          "exclusive_wall": 2.091729175
+        },
+        "factorization": {
+          "exclusive_CPU": 1.0616309999999995,
+          "exclusive_wall": 1.062398866
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 1.7086419999999993,
+          "exclusive_wall": 1.7099666999999998
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 0.9063250000000002,
+          "exclusive_wall": 0.9065200249999996
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 3.150131,
+          "exclusive_wall": 3.1518755290000002
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 5.173304000000001,
+          "exclusive_wall": 5.175780753000002
+        },
+        "physical_audits": {
+          "exclusive_CPU": 8.992595,
+          "exclusive_wall": 8.997353124
+        }
+      },
+      "total_instrumented_exclusive_CPU": 62.783821999999994,
+      "accepted_steps": 12,
+      "CPU_per_accepted_step": 5.231985166666666,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "65b383496ef27993ba64d267633a429a107abf878c7033e788be11e8f6c1f1e7"
+  },
+  {
+    "model": "A93",
+    "dt": "0.001",
+    "time": 0.008,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 48.59762220599805,
+      "process_cpu_seconds": 48.01073799999995,
+      "peak_RSS_KiB": 380440,
+      "actual_mapped_files_sha256": "cda36ae50ab7d27ac2963eed51513deea1a1bcdde059447b151681ed5aa8c0da"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.027590000000000017,
+          "exclusive_wall": 0.02770263599999999,
+          "calls": 144
+        },
+        "domain.compute": {
+          "exclusive_CPU": 25.818084000000006,
+          "exclusive_wall": 25.831782631000006,
+          "calls": 40
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.25683799999999934,
+          "exclusive_wall": 0.25708522899999975,
+          "calls": 40
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.01324700000000023,
+          "exclusive_wall": 0.013251393,
+          "calls": 8
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 0.505602,
+          "exclusive_wall": 0.5060078510000001,
+          "calls": 120
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 0.899659,
+          "exclusive_wall": 0.9000207580000001,
+          "calls": 8
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 0.6900110000000002,
+          "exclusive_wall": 0.6901956419999996,
+          "calls": 64
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.01821700000000001,
+          "exclusive_wall": 0.018236576000000004,
+          "calls": 8
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.016700999999999994,
+          "exclusive_wall": 0.016701923000000007,
+          "calls": 8
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 0.5558599999999989,
+          "exclusive_wall": 0.5562527959999991,
+          "calls": 2024
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.028222000000000004,
+          "exclusive_wall": 0.028478383000000003,
+          "calls": 8
+        },
+        "pressure.build": {
+          "exclusive_CPU": 0.9960219999999996,
+          "exclusive_wall": 0.9962724119999998,
+          "calls": 8
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.0014370000000000003,
+          "exclusive_wall": 0.0014389579999999997,
+          "calls": 8
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 1.774513,
+          "exclusive_wall": 1.7755748169999996,
+          "calls": 8
+        },
+        "residual": {
+          "exclusive_CPU": 3.1988900000000005,
+          "exclusive_wall": 3.2004633509999993,
+          "calls": 72
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.012583999999999818,
+          "exclusive_wall": 0.012587647000000035,
+          "calls": 8
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.1273810000000003,
+          "exclusive_wall": 0.1274527029999999,
+          "calls": 8
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.07510800000000017,
+          "exclusive_wall": 0.07517928399999985,
+          "calls": 8
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.094591,
+          "exclusive_wall": 0.094867471,
+          "calls": 8
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.003752,
+          "exclusive_wall": 0.0037488870000000002,
+          "calls": 8
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.011731000000000047,
+          "exclusive_wall": 0.011738918000000043,
+          "calls": 8
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.00404400000000027,
+          "exclusive_wall": 0.0040696869999998775,
+          "calls": 8
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.362675,
+          "exclusive_wall": 0.362902586,
+          "calls": 8
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.00963,
+          "exclusive_wall": 0.009635398000000002,
+          "calls": 8
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.29496799999999995,
+          "exclusive_wall": 0.295242465,
+          "calls": 8
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.012155000000000138,
+          "exclusive_wall": 0.012158527000000197,
+          "calls": 8
+        },
+        "k.total": {
+          "exclusive_CPU": 0.001654999999999962,
+          "exclusive_wall": 0.0016956609999998484,
+          "calls": 8
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.004556999999999999,
+          "exclusive_wall": 0.004578160999999999,
+          "calls": 32
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.0010840000000000155,
+          "exclusive_wall": 0.0011208379999999712,
+          "calls": 8
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.00605300000000053,
+          "exclusive_wall": 0.00605066200000115,
+          "calls": 8
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.210439,
+          "exclusive_wall": 0.21049308099999997,
+          "calls": 8
+        },
+        "audit.physical": {
+          "exclusive_CPU": 1.8789779999999998,
+          "exclusive_wall": 1.879839433,
+          "calls": 8
+        },
+        "audit.complete": {
+          "exclusive_CPU": 3.942127,
+          "exclusive_wall": 3.943784842,
+          "calls": 8
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.0023569999999997204,
+          "exclusive_wall": 0.002378261999999909,
+          "calls": 8
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.0025159999999990745,
+          "exclusive_wall": 0.0025369759999982477,
+          "calls": 8
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.044239,
+          "exclusive_wall": 0.044239002,
+          "calls": 8
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.002820000000000711,
+          "exclusive_wall": 0.0028226090000025295,
+          "calls": 8
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.005084999999999999,
+          "exclusive_wall": 0.00508639,
+          "calls": 8
+        },
+        "native.step": {
+          "exclusive_CPU": 0.03387299999999982,
+          "exclusive_wall": 0.03386962999999987,
+          "calls": 8
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.027590000000000017,
+          "exclusive_wall": 0.02770263599999999
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 26.630241000000005,
+          "exclusive_wall": 26.644612196000008
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 1.356925,
+          "exclusive_wall": 1.3577908150000002
+        },
+        "factorization": {
+          "exclusive_CPU": 0.7082280000000002,
+          "exclusive_wall": 0.7084322179999996
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 1.140104,
+          "exclusive_wall": 1.1404270379999997
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 0.5989009999999989,
+          "exclusive_wall": 0.5995544219999992
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 2.074566,
+          "exclusive_wall": 2.075903672
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 3.3748390000000015,
+          "exclusive_wall": 3.3766258610000004
+        },
+        "physical_audits": {
+          "exclusive_CPU": 6.033901,
+          "exclusive_wall": 6.036495617999999
+        }
+      },
+      "total_instrumented_exclusive_CPU": 41.94529499999999,
+      "accepted_steps": 8,
+      "CPU_per_accepted_step": 5.243161874999998,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "f2ac14048a9173bbb12f5491456060a3b6acb3b6dd443f334f09b2d01ce4a449"
+  },
+  {
+    "model": "A93",
+    "dt": "0.0005",
+    "time": 0.008000000000000004,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 91.12765503699484,
+      "process_cpu_seconds": 90.48751000000001,
+      "peak_RSS_KiB": 410584,
+      "actual_mapped_files_sha256": "7f703c12b61b415783db36f9f0e6db93672de2d5a2cc528c439ef2e442128741"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.055910999999999995,
+          "exclusive_wall": 0.05623830700000001,
+          "calls": 288
+        },
+        "domain.compute": {
+          "exclusive_CPU": 52.136959999999995,
+          "exclusive_wall": 52.16310340500003,
+          "calls": 80
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.5514690000000002,
+          "exclusive_wall": 0.5518558550000002,
+          "calls": 80
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.0293469999999999,
+          "exclusive_wall": 0.02936217899999971,
+          "calls": 16
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 1.0319659999999993,
+          "exclusive_wall": 1.0321483329999996,
+          "calls": 240
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 1.7997110000000003,
+          "exclusive_wall": 1.8008872599999999,
+          "calls": 16
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 1.369471,
+          "exclusive_wall": 1.369887354,
+          "calls": 128
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.028129,
+          "exclusive_wall": 0.028167611000000002,
+          "calls": 16
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.026428999999999987,
+          "exclusive_wall": 0.026442274999999994,
+          "calls": 16
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 1.1080530000000048,
+          "exclusive_wall": 1.1090264799999983,
+          "calls": 4048
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.05637199999999999,
+          "exclusive_wall": 0.05656450800000001,
+          "calls": 16
+        },
+        "pressure.build": {
+          "exclusive_CPU": 1.994769,
+          "exclusive_wall": 1.9968832799999998,
+          "calls": 16
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.00264,
+          "exclusive_wall": 0.002641469,
+          "calls": 16
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 3.6051800000000003,
+          "exclusive_wall": 3.608536923999999,
+          "calls": 16
+        },
+        "residual": {
+          "exclusive_CPU": 6.421948000000001,
+          "exclusive_wall": 6.426089053999998,
+          "calls": 144
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.028283999999999976,
+          "exclusive_wall": 0.028302155000000218,
+          "calls": 16
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.2687189999999996,
+          "exclusive_wall": 0.26928598800000025,
+          "calls": 16
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.15414500000000064,
+          "exclusive_wall": 0.15458201600000043,
+          "calls": 16
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.18743500000000005,
+          "exclusive_wall": 0.18748468399999998,
+          "calls": 16
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.007067000000000002,
+          "exclusive_wall": 0.0070658410000000015,
+          "calls": 16
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.027198999999999862,
+          "exclusive_wall": 0.02721101199999998,
+          "calls": 16
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.008560000000000012,
+          "exclusive_wall": 0.008611100999999843,
+          "calls": 16
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.7272040000000001,
+          "exclusive_wall": 0.727290265,
+          "calls": 16
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.019413,
+          "exclusive_wall": 0.019411834000000003,
+          "calls": 16
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.5979939999999999,
+          "exclusive_wall": 0.59828623,
+          "calls": 16
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.027783000000000113,
+          "exclusive_wall": 0.027795477999999707,
+          "calls": 16
+        },
+        "k.total": {
+          "exclusive_CPU": 0.0033400000000000096,
+          "exclusive_wall": 0.003412987000000145,
+          "calls": 16
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.010098,
+          "exclusive_wall": 0.010132487,
+          "calls": 64
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.001959999999999934,
+          "exclusive_wall": 0.0020555360000000106,
+          "calls": 16
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.012738000000000582,
+          "exclusive_wall": 0.012730907999998653,
+          "calls": 16
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.44918199999999997,
+          "exclusive_wall": 0.44918186100000007,
+          "calls": 16
+        },
+        "audit.physical": {
+          "exclusive_CPU": 3.826708,
+          "exclusive_wall": 3.82911174,
+          "calls": 16
+        },
+        "audit.complete": {
+          "exclusive_CPU": 7.943391,
+          "exclusive_wall": 7.947172724000001,
+          "calls": 16
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.005242000000000857,
+          "exclusive_wall": 0.005284185000000052,
+          "calls": 16
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.005529000000000117,
+          "exclusive_wall": 0.005556654999998578,
+          "calls": 16
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.088754,
+          "exclusive_wall": 0.08884028199999999,
+          "calls": 16
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.005299000000002607,
+          "exclusive_wall": 0.005298816999998124,
+          "calls": 16
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.010488,
+          "exclusive_wall": 0.010491009999999999,
+          "calls": 16
+        },
+        "native.step": {
+          "exclusive_CPU": 0.06778300000000126,
+          "exclusive_wall": 0.06778325400000185,
+          "calls": 16
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.055910999999999995,
+          "exclusive_wall": 0.05623830700000001
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 53.83300799999999,
+          "exclusive_wall": 53.85977841700004
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 2.7143500000000005,
+          "exclusive_wall": 2.715662209
+        },
+        "factorization": {
+          "exclusive_CPU": 1.3976000000000002,
+          "exclusive_wall": 1.398054965
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 2.2899169999999995,
+          "exclusive_wall": 2.2926115430000005
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 1.1935450000000047,
+          "exclusive_wall": 1.1947101319999982
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 4.213662,
+          "exclusive_wall": 4.217314163999999
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 6.780154000000006,
+          "exclusive_wall": 6.785093096999996
+        },
+        "physical_audits": {
+          "exclusive_CPU": 12.224523000000001,
+          "exclusive_wall": 12.230750510000004
+        }
+      },
+      "total_instrumented_exclusive_CPU": 84.70266999999998,
+      "accepted_steps": 16,
+      "CPU_per_accepted_step": 5.293916874999999,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "cce792c89d40125a4ccccee824c57f38877840b35348ff53963a348ba126745b"
+  },
+  {
+    "model": "A93",
+    "dt": "0.002",
+    "time": 0.008,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 27.364725890001864,
+      "process_cpu_seconds": 26.844570999999995,
+      "peak_RSS_KiB": 364996,
+      "actual_mapped_files_sha256": "382cf04111e45e3e10c3c3d1cdfb60082027bd5f33f09db8181e815ff3d367ec"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.013756000000000003,
+          "exclusive_wall": 0.013817495000000003,
+          "calls": 72
+        },
+        "domain.compute": {
+          "exclusive_CPU": 12.76236,
+          "exclusive_wall": 12.770482544,
+          "calls": 20
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.11626199999999987,
+          "exclusive_wall": 0.11645836900000017,
+          "calls": 20
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.006319000000000186,
+          "exclusive_wall": 0.006321765000000146,
+          "calls": 4
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 0.24290899999999982,
+          "exclusive_wall": 0.24292376199999996,
+          "calls": 60
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 0.450538,
+          "exclusive_wall": 0.450987247,
+          "calls": 4
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 0.34325399999999995,
+          "exclusive_wall": 0.343263394,
+          "calls": 32
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.010935999999999994,
+          "exclusive_wall": 0.010945382000000003,
+          "calls": 4
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.010696000000000011,
+          "exclusive_wall": 0.010697519000000003,
+          "calls": 4
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 0.27376700000000054,
+          "exclusive_wall": 0.27371576300000033,
+          "calls": 1012
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.014381,
+          "exclusive_wall": 0.014383165,
+          "calls": 4
+        },
+        "pressure.build": {
+          "exclusive_CPU": 0.49837699999999996,
+          "exclusive_wall": 0.4984301749999999,
+          "calls": 4
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.000751,
+          "exclusive_wall": 0.0007526909999999999,
+          "calls": 4
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 0.896237,
+          "exclusive_wall": 0.89665189,
+          "calls": 4
+        },
+        "residual": {
+          "exclusive_CPU": 1.585313,
+          "exclusive_wall": 1.5856901810000001,
+          "calls": 36
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.006264999999999965,
+          "exclusive_wall": 0.006267621999999751,
+          "calls": 4
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.06590300000000004,
+          "exclusive_wall": 0.065910374,
+          "calls": 4
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.03976299999999999,
+          "exclusive_wall": 0.039764855999999904,
+          "calls": 4
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.047021,
+          "exclusive_wall": 0.047019979,
+          "calls": 4
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.0019790000000000003,
+          "exclusive_wall": 0.0020697480000000006,
+          "calls": 4
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.005502000000000007,
+          "exclusive_wall": 0.005507052000000012,
+          "calls": 4
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.0021380000000000843,
+          "exclusive_wall": 0.002146771999999797,
+          "calls": 4
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.178943,
+          "exclusive_wall": 0.17894651099999997,
+          "calls": 4
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.0051400000000000005,
+          "exclusive_wall": 0.005141369000000001,
+          "calls": 4
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.14743,
+          "exclusive_wall": 0.147495681,
+          "calls": 4
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.0061149999999999816,
+          "exclusive_wall": 0.006117547000000001,
+          "calls": 4
+        },
+        "k.total": {
+          "exclusive_CPU": 0.0007269999999998111,
+          "exclusive_wall": 0.0007357880000000705,
+          "calls": 4
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.0025250000000000003,
+          "exclusive_wall": 0.002771104,
+          "calls": 16
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.00043799999999998007,
+          "exclusive_wall": 0.00044523999999998565,
+          "calls": 4
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.0028780000000003803,
+          "exclusive_wall": 0.0028783610000000515,
+          "calls": 4
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.10098599999999999,
+          "exclusive_wall": 0.10098592500000002,
+          "calls": 4
+        },
+        "audit.physical": {
+          "exclusive_CPU": 0.937231,
+          "exclusive_wall": 0.9377937049999999,
+          "calls": 4
+        },
+        "audit.complete": {
+          "exclusive_CPU": 1.957881,
+          "exclusive_wall": 1.9586219740000004,
+          "calls": 4
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.001134999999999886,
+          "exclusive_wall": 0.0011424129999997312,
+          "calls": 4
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.00118199999999824,
+          "exclusive_wall": 0.0011943540000007857,
+          "calls": 4
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.021737999999999997,
+          "exclusive_wall": 0.021746619,
+          "calls": 4
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.001310999999999396,
+          "exclusive_wall": 0.0013109600000005273,
+          "calls": 4
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.0025199999999999997,
+          "exclusive_wall": 0.002518987,
+          "calls": 4
+        },
+        "native.step": {
+          "exclusive_CPU": 0.01675400000000149,
+          "exclusive_wall": 0.01675417399999901,
+          "calls": 4
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.013756000000000003,
+          "exclusive_wall": 0.013817495000000003
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 13.145731999999997,
+          "exclusive_wall": 13.154078661000002
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 0.6765019999999999,
+          "exclusive_wall": 0.6769537369999999
+        },
+        "factorization": {
+          "exclusive_CPU": 0.35418999999999995,
+          "exclusive_wall": 0.354208776
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 0.574976,
+          "exclusive_wall": 0.5750380679999999
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 0.2960180000000005,
+          "exclusive_wall": 0.2960627360000003
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 1.046187,
+          "exclusive_wall": 1.0466665579999999
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 1.6747669999999995,
+          "exclusive_wall": 1.675438409
+        },
+        "physical_audits": {
+          "exclusive_CPU": 2.9972329999999996,
+          "exclusive_wall": 2.998544017
+        }
+      },
+      "total_instrumented_exclusive_CPU": 20.779360999999994,
+      "accepted_steps": 4,
+      "CPU_per_accepted_step": 5.194840249999999,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "f13e2e0d2a00618be70a9a647ecb2d7785707e055baf97b09cf87b839f2c98e3"
+  },
+  {
+    "model": "A93",
+    "dt": "0.001",
+    "time": 0.02000000000000001,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 70.53641356799926,
+      "process_cpu_seconds": 69.95628100000002,
+      "peak_RSS_KiB": 396076,
+      "actual_mapped_files_sha256": "e4a6d8506ff29c45915ee439de79d198aa8d4c7f2fa5e552d322b6e22852fc0c"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.042571,
+          "exclusive_wall": 0.04278211700000001,
+          "calls": 216
+        },
+        "domain.compute": {
+          "exclusive_CPU": 39.204029999999996,
+          "exclusive_wall": 39.21699775999999,
+          "calls": 60
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.4266340000000003,
+          "exclusive_wall": 0.426830952,
+          "calls": 60
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.024033000000000082,
+          "exclusive_wall": 0.024038565999999872,
+          "calls": 12
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 0.7695970000000002,
+          "exclusive_wall": 0.7698489260000001,
+          "calls": 180
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 1.353207,
+          "exclusive_wall": 1.3538246280000001,
+          "calls": 12
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 1.0341829999999999,
+          "exclusive_wall": 1.0343642180000003,
+          "calls": 96
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.028952999999999993,
+          "exclusive_wall": 0.02898994099999999,
+          "calls": 12
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.027841999999999992,
+          "exclusive_wall": 0.027843993999999997,
+          "calls": 12
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 0.8443410000000027,
+          "exclusive_wall": 0.8448159789999998,
+          "calls": 3036
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.041628,
+          "exclusive_wall": 0.041628636000000004,
+          "calls": 12
+        },
+        "pressure.build": {
+          "exclusive_CPU": 1.494012,
+          "exclusive_wall": 1.4950402889999999,
+          "calls": 12
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.002153,
+          "exclusive_wall": 0.0021487600000000004,
+          "calls": 12
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 2.727365,
+          "exclusive_wall": 2.728354115,
+          "calls": 12
+        },
+        "residual": {
+          "exclusive_CPU": 4.819640999999998,
+          "exclusive_wall": 4.821716015,
+          "calls": 108
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.021843000000000168,
+          "exclusive_wall": 0.021860653000000063,
+          "calls": 12
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.1941529999999998,
+          "exclusive_wall": 0.19432197500000026,
+          "calls": 12
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.11091900000000043,
+          "exclusive_wall": 0.11101746299999937,
+          "calls": 12
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.14390799999999998,
+          "exclusive_wall": 0.14399045700000002,
+          "calls": 12
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.005416,
+          "exclusive_wall": 0.005423055,
+          "calls": 12
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.021056000000000075,
+          "exclusive_wall": 0.021068303999999927,
+          "calls": 12
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.0063110000000000666,
+          "exclusive_wall": 0.006354142999999923,
+          "calls": 12
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.545254,
+          "exclusive_wall": 0.5455991459999999,
+          "calls": 12
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.014969999999999999,
+          "exclusive_wall": 0.014971337999999994,
+          "calls": 12
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.453396,
+          "exclusive_wall": 0.453763226,
+          "calls": 12
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.020589999999999775,
+          "exclusive_wall": 0.020597920000000047,
+          "calls": 12
+        },
+        "k.total": {
+          "exclusive_CPU": 0.0024400000000001087,
+          "exclusive_wall": 0.002506271999999976,
+          "calls": 12
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.0073589999999999975,
+          "exclusive_wall": 0.007388085,
+          "calls": 48
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.0014019999999999866,
+          "exclusive_wall": 0.0014734799999999854,
+          "calls": 12
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.014641000000001458,
+          "exclusive_wall": 0.014637728999999489,
+          "calls": 12
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.32026,
+          "exclusive_wall": 0.32042137000000004,
+          "calls": 12
+        },
+        "audit.physical": {
+          "exclusive_CPU": 2.8426199999999993,
+          "exclusive_wall": 2.8434434050000004,
+          "calls": 12
+        },
+        "audit.complete": {
+          "exclusive_CPU": 5.941729,
+          "exclusive_wall": 5.944186123000001,
+          "calls": 12
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.003827000000000025,
+          "exclusive_wall": 0.003867644000000059,
+          "calls": 12
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.004359999999999253,
+          "exclusive_wall": 0.004395109999999924,
+          "calls": 12
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.068748,
+          "exclusive_wall": 0.06880950699999999,
+          "calls": 12
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.004268999999997192,
+          "exclusive_wall": 0.004267462000001387,
+          "calls": 12
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.007903,
+          "exclusive_wall": 0.007904878,
+          "calls": 12
+        },
+        "native.step": {
+          "exclusive_CPU": 0.05129500000000142,
+          "exclusive_wall": 0.051294123000003466,
+          "calls": 12
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.042571,
+          "exclusive_wall": 0.04278211700000001
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 40.48778299999999,
+          "exclusive_wall": 40.501243081
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 2.042369,
+          "exclusive_wall": 2.043414231
+        },
+        "factorization": {
+          "exclusive_CPU": 1.0631359999999999,
+          "exclusive_wall": 1.0633541590000004
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 1.7160069999999996,
+          "exclusive_wall": 1.717206258
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 0.9085080000000026,
+          "exclusive_wall": 0.9089877679999997
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 3.188664,
+          "exclusive_wall": 3.1900222190000003
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 5.091384999999997,
+          "exclusive_wall": 5.093859389000003
+        },
+        "physical_audits": {
+          "exclusive_CPU": 9.108436,
+          "exclusive_wall": 9.111918542000002
+        }
+      },
+      "total_instrumented_exclusive_CPU": 63.64885899999998,
+      "accepted_steps": 12,
+      "CPU_per_accepted_step": 5.304071583333331,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "c28ad29808f347d8a2618aacf4137f3ce47447b01e664e2cdda27bea1d6e475b"
+  },
+  {
+    "model": "A93",
+    "dt": "0.0005",
+    "time": 0.020000000000000014,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 134.56376814499527,
+      "process_cpu_seconds": 133.89963600000002,
+      "peak_RSS_KiB": 443404,
+      "actual_mapped_files_sha256": "e3710cc08f918b57cdb05adb382e3f9829a46d66ee888fb9e4114f9159f59f85"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.08637999999999998,
+          "exclusive_wall": 0.08660526100000003,
+          "calls": 432
+        },
+        "domain.compute": {
+          "exclusive_CPU": 78.63314799999998,
+          "exclusive_wall": 78.67695281500002,
+          "calls": 120
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.8789060000000001,
+          "exclusive_wall": 0.8797222590000013,
+          "calls": 120
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.052377999999999814,
+          "exclusive_wall": 0.05239293099999964,
+          "calls": 24
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 1.5512600000000016,
+          "exclusive_wall": 1.5518243720000005,
+          "calls": 360
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 2.7106310000000002,
+          "exclusive_wall": 2.7129835169999996,
+          "calls": 24
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 2.06472,
+          "exclusive_wall": 2.0662842439999998,
+          "calls": 192
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.04745699999999999,
+          "exclusive_wall": 0.04751520700000002,
+          "calls": 24
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.041845,
+          "exclusive_wall": 0.041846953999999985,
+          "calls": 24
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 1.6754890000000047,
+          "exclusive_wall": 1.6765524740000006,
+          "calls": 6072
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.083314,
+          "exclusive_wall": 0.083318256,
+          "calls": 24
+        },
+        "pressure.build": {
+          "exclusive_CPU": 2.9879799999999994,
+          "exclusive_wall": 2.9902240780000002,
+          "calls": 24
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.004059999999999999,
+          "exclusive_wall": 0.004060823,
+          "calls": 24
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 5.451667,
+          "exclusive_wall": 5.483130175999999,
+          "calls": 24
+        },
+        "residual": {
+          "exclusive_CPU": 9.630671999999999,
+          "exclusive_wall": 9.637023148000004,
+          "calls": 216
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.045672000000000046,
+          "exclusive_wall": 0.045696705999999976,
+          "calls": 24
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.39336000000000026,
+          "exclusive_wall": 0.3937679810000001,
+          "calls": 24
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.20536,
+          "exclusive_wall": 0.2055770570000004,
+          "calls": 24
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.28453100000000003,
+          "exclusive_wall": 0.284686938,
+          "calls": 24
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.010106,
+          "exclusive_wall": 0.010103288999999998,
+          "calls": 24
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.04586399999999968,
+          "exclusive_wall": 0.04589288199999986,
+          "calls": 24
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.012784000000000573,
+          "exclusive_wall": 0.0129480500000001,
+          "calls": 24
+        },
+        "k.assembly": {
+          "exclusive_CPU": 1.0964530000000001,
+          "exclusive_wall": 1.0968397170000002,
+          "calls": 24
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.030284,
+          "exclusive_wall": 0.030290887999999995,
+          "calls": 24
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.906348,
+          "exclusive_wall": 0.9065807439999998,
+          "calls": 24
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.04332400000000014,
+          "exclusive_wall": 0.0433441689999996,
+          "calls": 24
+        },
+        "k.total": {
+          "exclusive_CPU": 0.004577000000000386,
+          "exclusive_wall": 0.004677619000000299,
+          "calls": 24
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.014994000000000004,
+          "exclusive_wall": 0.015040253,
+          "calls": 96
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.0028399999999999814,
+          "exclusive_wall": 0.002948766999999991,
+          "calls": 24
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.024367999999997725,
+          "exclusive_wall": 0.024375856999998557,
+          "calls": 24
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.647379,
+          "exclusive_wall": 0.6477616429999999,
+          "calls": 24
+        },
+        "audit.physical": {
+          "exclusive_CPU": 5.736213,
+          "exclusive_wall": 5.740155119,
+          "calls": 24
+        },
+        "audit.complete": {
+          "exclusive_CPU": 11.965127,
+          "exclusive_wall": 11.971768406,
+          "calls": 24
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.008442000000000505,
+          "exclusive_wall": 0.00849161899999995,
+          "calls": 24
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.008866000000002039,
+          "exclusive_wall": 0.00892516400000165,
+          "calls": 24
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.134648,
+          "exclusive_wall": 0.134665462,
+          "calls": 24
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.008736000000000743,
+          "exclusive_wall": 0.008737505999996564,
+          "calls": 24
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.016124,
+          "exclusive_wall": 0.016122258,
+          "calls": 24
+        },
+        "native.step": {
+          "exclusive_CPU": 0.10184999999999622,
+          "exclusive_wall": 0.1018560819999994,
+          "calls": 24
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.08637999999999998,
+          "exclusive_wall": 0.08660526100000003
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 81.25055199999997,
+          "exclusive_wall": 81.29582613400002
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 4.091615,
+          "exclusive_wall": 4.094510172
+        },
+        "factorization": {
+          "exclusive_CPU": 2.112177,
+          "exclusive_wall": 2.1137994509999998
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 3.4231849999999997,
+          "exclusive_wall": 3.425839013
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 1.8032530000000047,
+          "exclusive_wall": 1.8043257300000006
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 6.3741389999999996,
+          "exclusive_wall": 6.405833177999999
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 10.149694999999998,
+          "exclusive_wall": 10.156774965000002
+        },
+        "physical_audits": {
+          "exclusive_CPU": 18.357161000000005,
+          "exclusive_wall": 18.368176787
+        }
+      },
+      "total_instrumented_exclusive_CPU": 127.64815699999994,
+      "accepted_steps": 24,
+      "CPU_per_accepted_step": 5.318673208333331,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "bc0707adda390af9086ce25f8b8dc1a083ab3869981fdd4c8de05bfb9782b823"
+  },
+  {
+    "model": "E94E95",
+    "dt": "0.002",
+    "time": 0.008,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 27.188020196997968,
+      "process_cpu_seconds": 26.622282000000013,
+      "peak_RSS_KiB": 364468,
+      "actual_mapped_files_sha256": "220a3983170b506801857c6e4619950633e7a844ca329c11135d3ab6985a5d44"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.013516999999999996,
+          "exclusive_wall": 0.013564279000000002,
+          "calls": 72
+        },
+        "domain.compute": {
+          "exclusive_CPU": 12.767674000000003,
+          "exclusive_wall": 12.771465431,
+          "calls": 20
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.11154199999999981,
+          "exclusive_wall": 0.11158200199999979,
+          "calls": 20
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.005679000000000101,
+          "exclusive_wall": 0.005682936000000027,
+          "calls": 4
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 0.24184999999999984,
+          "exclusive_wall": 0.2419598940000001,
+          "calls": 60
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 0.46480299999999997,
+          "exclusive_wall": 0.464797666,
+          "calls": 4
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 0.34455200000000014,
+          "exclusive_wall": 0.3448847490000001,
+          "calls": 32
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.013642999999999995,
+          "exclusive_wall": 0.01365415100000001,
+          "calls": 4
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.013002,
+          "exclusive_wall": 0.013002651999999996,
+          "calls": 4
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 0.27414299999999947,
+          "exclusive_wall": 0.27406610800000025,
+          "calls": 1012
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.013947999999999999,
+          "exclusive_wall": 0.013946572999999999,
+          "calls": 4
+        },
+        "pressure.build": {
+          "exclusive_CPU": 0.49789699999999987,
+          "exclusive_wall": 0.49799615200000014,
+          "calls": 4
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.000841,
+          "exclusive_wall": 0.000841358,
+          "calls": 4
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 0.894468,
+          "exclusive_wall": 0.894535176,
+          "calls": 4
+        },
+        "residual": {
+          "exclusive_CPU": 1.615587,
+          "exclusive_wall": 1.6157500699999998,
+          "calls": 36
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.005434999999999968,
+          "exclusive_wall": 0.00543461199999995,
+          "calls": 4
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.06579400000000002,
+          "exclusive_wall": 0.06580349000000008,
+          "calls": 4
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.044147999999999854,
+          "exclusive_wall": 0.04471560099999983,
+          "calls": 4
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.050688000000000004,
+          "exclusive_wall": 0.050686349000000006,
+          "calls": 4
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.002049,
+          "exclusive_wall": 0.0020517520000000004,
+          "calls": 4
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.00566600000000006,
+          "exclusive_wall": 0.005668606000000076,
+          "calls": 4
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.0020130000000000425,
+          "exclusive_wall": 0.0020270859999999002,
+          "calls": 4
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.18345099999999998,
+          "exclusive_wall": 0.18351359299999997,
+          "calls": 4
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.004964,
+          "exclusive_wall": 0.004967420000000001,
+          "calls": 4
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.147769,
+          "exclusive_wall": 0.147960313,
+          "calls": 4
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.005475000000000119,
+          "exclusive_wall": 0.005478633000000066,
+          "calls": 4
+        },
+        "k.total": {
+          "exclusive_CPU": 0.0007839999999998959,
+          "exclusive_wall": 0.0007924559999998859,
+          "calls": 4
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.0022379999999999987,
+          "exclusive_wall": 0.002244825,
+          "calls": 16
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.0005750000000000061,
+          "exclusive_wall": 0.0005945389999999773,
+          "calls": 4
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.0029479999999995066,
+          "exclusive_wall": 0.0029423580000003113,
+          "calls": 4
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.100577,
+          "exclusive_wall": 0.10057455900000001,
+          "calls": 4
+        },
+        "audit.physical": {
+          "exclusive_CPU": 0.9559760000000002,
+          "exclusive_wall": 0.956193055,
+          "calls": 4
+        },
+        "audit.complete": {
+          "exclusive_CPU": 1.962492,
+          "exclusive_wall": 1.9629735309999998,
+          "calls": 4
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.001146999999999787,
+          "exclusive_wall": 0.001154931999999942,
+          "calls": 4
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.001282999999999923,
+          "exclusive_wall": 0.0012918109999988658,
+          "calls": 4
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.021810000000000003,
+          "exclusive_wall": 0.021813634999999998,
+          "calls": 4
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.0013730000000009568,
+          "exclusive_wall": 0.0013739340000000766,
+          "calls": 4
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.002528,
+          "exclusive_wall": 0.002526495,
+          "calls": 4
+        },
+        "native.step": {
+          "exclusive_CPU": 0.017062000000000133,
+          "exclusive_wall": 0.017062746999999767,
+          "calls": 4
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.013516999999999996,
+          "exclusive_wall": 0.013564279000000002
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 13.143321000000004,
+          "exclusive_wall": 13.147272114
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 0.698942,
+          "exclusive_wall": 0.698997608
+        },
+        "factorization": {
+          "exclusive_CPU": 0.35819500000000015,
+          "exclusive_wall": 0.3585389000000001
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 0.5766929999999999,
+          "exclusive_wall": 0.5768022940000002
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 0.2959449999999995,
+          "exclusive_wall": 0.2958732110000003
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 1.0447650000000002,
+          "exclusive_wall": 1.045021984
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 1.7098210000000005,
+          "exclusive_wall": 1.7106090619999983
+        },
+        "physical_audits": {
+          "exclusive_CPU": 3.0201919999999998,
+          "exclusive_wall": 3.0208960769999997
+        }
+      },
+      "total_instrumented_exclusive_CPU": 20.86139100000001,
+      "accepted_steps": 4,
+      "CPU_per_accepted_step": 5.215347750000002,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "4ea077589006cfe9e858e2dd13f9e3fc05c8ffcc9057b8ee0699ac40e33505fd"
+  },
+  {
+    "model": "E94E95",
+    "dt": "0.001",
+    "time": 0.008,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 48.42221700200025,
+      "process_cpu_seconds": 47.881222000000044,
+      "peak_RSS_KiB": 380120,
+      "actual_mapped_files_sha256": "fb21fc17bd305082cc8afbcdb33c1c075814801d66547a3e71a35c58569f2c66"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.027746,
+          "exclusive_wall": 0.027847524000000002,
+          "calls": 144
+        },
+        "domain.compute": {
+          "exclusive_CPU": 25.802829999999997,
+          "exclusive_wall": 25.810690671999993,
+          "calls": 40
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.2450279999999999,
+          "exclusive_wall": 0.245302947,
+          "calls": 40
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.014135999999999926,
+          "exclusive_wall": 0.014138323999999924,
+          "calls": 8
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 0.4953950000000001,
+          "exclusive_wall": 0.4955746300000003,
+          "calls": 120
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 0.918419,
+          "exclusive_wall": 0.918693578,
+          "calls": 8
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 0.6862219999999997,
+          "exclusive_wall": 0.6865475609999999,
+          "calls": 64
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.01984899999999999,
+          "exclusive_wall": 0.01987097,
+          "calls": 8
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.018712000000000006,
+          "exclusive_wall": 0.018705716999999997,
+          "calls": 8
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 0.5638900000000004,
+          "exclusive_wall": 0.5639344010000004,
+          "calls": 2024
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.027913000000000004,
+          "exclusive_wall": 0.027915082,
+          "calls": 8
+        },
+        "pressure.build": {
+          "exclusive_CPU": 0.9978279999999999,
+          "exclusive_wall": 0.9983023160000001,
+          "calls": 8
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.001462,
+          "exclusive_wall": 0.001460424,
+          "calls": 8
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 1.8221880000000001,
+          "exclusive_wall": 1.822695074,
+          "calls": 8
+        },
+        "residual": {
+          "exclusive_CPU": 3.240915,
+          "exclusive_wall": 3.2419598030000003,
+          "calls": 72
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.012298000000000253,
+          "exclusive_wall": 0.012303583999999868,
+          "calls": 8
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.130726,
+          "exclusive_wall": 0.13086937000000032,
+          "calls": 8
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.08132200000000012,
+          "exclusive_wall": 0.08134564799999966,
+          "calls": 8
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.10070799999999999,
+          "exclusive_wall": 0.100704288,
+          "calls": 8
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.0038330000000000005,
+          "exclusive_wall": 0.003831152,
+          "calls": 8
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.011774999999999869,
+          "exclusive_wall": 0.0118795399999998,
+          "calls": 8
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.0041320000000001356,
+          "exclusive_wall": 0.004162569000000005,
+          "calls": 8
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.37302099999999994,
+          "exclusive_wall": 0.373055794,
+          "calls": 8
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.010203,
+          "exclusive_wall": 0.010202802000000004,
+          "calls": 8
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.301978,
+          "exclusive_wall": 0.302287168,
+          "calls": 8
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.012071000000000054,
+          "exclusive_wall": 0.01207944400000005,
+          "calls": 8
+        },
+        "k.total": {
+          "exclusive_CPU": 0.001566999999999985,
+          "exclusive_wall": 0.0016064669999996672,
+          "calls": 8
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.005182000000000003,
+          "exclusive_wall": 0.005183679,
+          "calls": 32
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.0009479999999999905,
+          "exclusive_wall": 0.0009965449999999737,
+          "calls": 8
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.006011999999999684,
+          "exclusive_wall": 0.00600576200000047,
+          "calls": 8
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.210114,
+          "exclusive_wall": 0.210255479,
+          "calls": 8
+        },
+        "audit.physical": {
+          "exclusive_CPU": 1.9095989999999998,
+          "exclusive_wall": 1.91010006,
+          "calls": 8
+        },
+        "audit.complete": {
+          "exclusive_CPU": 3.9427049999999992,
+          "exclusive_wall": 3.9441105940000005,
+          "calls": 8
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.00254999999999983,
+          "exclusive_wall": 0.0025804530000004267,
+          "calls": 8
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.0024510000000024235,
+          "exclusive_wall": 0.0024714750000045527,
+          "calls": 8
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.044119,
+          "exclusive_wall": 0.044142432,
+          "calls": 8
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.0026960000000002537,
+          "exclusive_wall": 0.0026977719999976557,
+          "calls": 8
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.005204,
+          "exclusive_wall": 0.005206487,
+          "calls": 8
+        },
+        "native.step": {
+          "exclusive_CPU": 0.03372599999999881,
+          "exclusive_wall": 0.033723454999998737,
+          "calls": 8
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.027746,
+          "exclusive_wall": 0.027847524000000002
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 26.593532999999997,
+          "exclusive_wall": 26.601969140999994
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 1.3921479999999997,
+          "exclusive_wall": 1.3924536600000001
+        },
+        "factorization": {
+          "exclusive_CPU": 0.7060709999999997,
+          "exclusive_wall": 0.706418531
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 1.1472660000000001,
+          "exclusive_wall": 1.1478774030000003
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 0.6073010000000003,
+          "exclusive_wall": 0.6073438610000004
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 2.12937,
+          "exclusive_wall": 2.1301887290000003
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 3.423070000000002,
+          "exclusive_wall": 3.4242956070000012
+        },
+        "physical_audits": {
+          "exclusive_CPU": 6.064967999999999,
+          "exclusive_wall": 6.067046586000001
+        }
+      },
+      "total_instrumented_exclusive_CPU": 42.09147299999999,
+      "accepted_steps": 8,
+      "CPU_per_accepted_step": 5.261434124999999,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "706aa503ace3246b488889b0f5e3ee728b544c6a9434b4e3e45227d7aca74a94"
+  },
+  {
+    "model": "E94E95",
+    "dt": "0.002",
+    "time": 0.020000000000000004,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 38.58128641499934,
+      "process_cpu_seconds": 37.995869000000056,
+      "peak_RSS_KiB": 373788,
+      "actual_mapped_files_sha256": "f48607e826f81d3376590a2f3fe903c4446d85eac32ed2707849025360a64330"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.020922999999999997,
+          "exclusive_wall": 0.021003570000000006,
+          "calls": 108
+        },
+        "domain.compute": {
+          "exclusive_CPU": 19.489122,
+          "exclusive_wall": 19.499655298,
+          "calls": 30
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.20392199999999983,
+          "exclusive_wall": 0.203969925,
+          "calls": 30
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.010421000000000014,
+          "exclusive_wall": 0.010426261999999964,
+          "calls": 6
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 0.374959,
+          "exclusive_wall": 0.3753911360000001,
+          "calls": 90
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 0.684959,
+          "exclusive_wall": 0.685434397,
+          "calls": 6
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 0.5103650000000001,
+          "exclusive_wall": 0.510884956,
+          "calls": 48
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.01885199999999998,
+          "exclusive_wall": 0.019008517999999988,
+          "calls": 6
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.016754000000000005,
+          "exclusive_wall": 0.016757777,
+          "calls": 6
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 0.4233670000000011,
+          "exclusive_wall": 0.42310148600000025,
+          "calls": 1518
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.021302,
+          "exclusive_wall": 0.02130438,
+          "calls": 6
+        },
+        "pressure.build": {
+          "exclusive_CPU": 0.7486849999999997,
+          "exclusive_wall": 0.7494938980000001,
+          "calls": 6
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.0012139999999999998,
+          "exclusive_wall": 0.001212176,
+          "calls": 6
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 1.368074,
+          "exclusive_wall": 1.369354256,
+          "calls": 6
+        },
+        "residual": {
+          "exclusive_CPU": 2.4375280000000004,
+          "exclusive_wall": 2.439121772,
+          "calls": 54
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.010309000000000124,
+          "exclusive_wall": 0.010313156000000157,
+          "calls": 6
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.10220300000000004,
+          "exclusive_wall": 0.10221872899999984,
+          "calls": 6
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.05903199999999997,
+          "exclusive_wall": 0.059563401999999765,
+          "calls": 6
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.074644,
+          "exclusive_wall": 0.07475387,
+          "calls": 6
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.0026050000000000005,
+          "exclusive_wall": 0.002604119,
+          "calls": 6
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.00954900000000003,
+          "exclusive_wall": 0.00955426199999998,
+          "calls": 6
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.0030319999999999236,
+          "exclusive_wall": 0.003048797999999908,
+          "calls": 6
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.277193,
+          "exclusive_wall": 0.277509369,
+          "calls": 6
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.007545,
+          "exclusive_wall": 0.007546643000000001,
+          "calls": 6
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.226484,
+          "exclusive_wall": 0.22662808299999998,
+          "calls": 6
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.010158999999999918,
+          "exclusive_wall": 0.010166821999999964,
+          "calls": 6
+        },
+        "k.total": {
+          "exclusive_CPU": 0.0011689999999999756,
+          "exclusive_wall": 0.001200492000000164,
+          "calls": 6
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.003779999999999999,
+          "exclusive_wall": 0.003992083,
+          "calls": 24
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.0006329999999999808,
+          "exclusive_wall": 0.0006641849999999699,
+          "calls": 6
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.004556000000000449,
+          "exclusive_wall": 0.00455293999999995,
+          "calls": 6
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.157444,
+          "exclusive_wall": 0.157752234,
+          "calls": 6
+        },
+        "audit.physical": {
+          "exclusive_CPU": 1.4318489999999997,
+          "exclusive_wall": 1.432464639,
+          "calls": 6
+        },
+        "audit.complete": {
+          "exclusive_CPU": 2.964939,
+          "exclusive_wall": 2.9672574239999996,
+          "calls": 6
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.001706999999999903,
+          "exclusive_wall": 0.0017274410000003293,
+          "calls": 6
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.0019519999999992876,
+          "exclusive_wall": 0.001967559999998869,
+          "calls": 6
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.033253,
+          "exclusive_wall": 0.033252699999999996,
+          "calls": 6
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.0020349999999984547,
+          "exclusive_wall": 0.002037434000000893,
+          "calls": 6
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.003884,
+          "exclusive_wall": 0.0038849569999999996,
+          "calls": 6
+        },
+        "native.step": {
+          "exclusive_CPU": 0.02939800000000048,
+          "exclusive_wall": 0.0294632220000004,
+          "calls": 6
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.020922999999999997,
+          "exclusive_wall": 0.021003570000000006
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 20.108441,
+          "exclusive_wall": 20.119476861
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 1.036796,
+          "exclusive_wall": 1.0376976359999999
+        },
+        "factorization": {
+          "exclusive_CPU": 0.529217,
+          "exclusive_wall": 0.529893474
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 0.8676419999999998,
+          "exclusive_wall": 0.868470404
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 0.45603300000000113,
+          "exclusive_wall": 0.4557688040000003
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 1.598442,
+          "exclusive_wall": 1.599867296
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 2.5763679999999995,
+          "exclusive_wall": 2.5788645879999996
+        },
+        "physical_audits": {
+          "exclusive_CPU": 4.5559389999999995,
+          "exclusive_wall": 4.5592017380000005
+        }
+      },
+      "total_instrumented_exclusive_CPU": 31.749800999999994,
+      "accepted_steps": 6,
+      "CPU_per_accepted_step": 5.291633499999999,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "fb294150c869db9968f1f55ce6ac1f4dd5c4443f95a2f4468acc66478441f198"
+  },
+  {
+    "model": "E94E95",
+    "dt": "0.001",
+    "time": 0.02000000000000001,
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 69.06585158700182,
+      "process_cpu_seconds": 68.48021800000008,
+      "peak_RSS_KiB": 396776,
+      "actual_mapped_files_sha256": "0208c14fa3d0fc7e1811d8cf23f0f3bba879d60a06a8038c4cdf660b5cd682af"
+    },
+    "timing": {
+      "by_scope": {
+        "matching.constraints": {
+          "exclusive_CPU": 0.04133699999999998,
+          "exclusive_wall": 0.041447363999999993,
+          "calls": 216
+        },
+        "domain.compute": {
+          "exclusive_CPU": 39.34340099999999,
+          "exclusive_wall": 39.356118984000005,
+          "calls": 60
+        },
+        "domain.scalar": {
+          "exclusive_CPU": 0.4215870000000004,
+          "exclusive_wall": 0.4216838070000002,
+          "calls": 60
+        },
+        "pimple.check.input": {
+          "exclusive_CPU": 0.022643999999999886,
+          "exclusive_wall": 0.022658124000000224,
+          "calls": 12
+        },
+        "constitutive.refresh": {
+          "exclusive_CPU": 0.7710380000000001,
+          "exclusive_wall": 0.7713820870000003,
+          "calls": 180
+        },
+        "flow.assembly": {
+          "exclusive_CPU": 1.363682,
+          "exclusive_wall": 1.364127074,
+          "calls": 12
+        },
+        "dense.factorization": {
+          "exclusive_CPU": 1.0300429999999998,
+          "exclusive_wall": 1.03042216,
+          "calls": 96
+        },
+        "momentum.factorize": {
+          "exclusive_CPU": 0.033451000000000015,
+          "exclusive_wall": 0.033481298,
+          "calls": 12
+        },
+        "pressure.mass_factorize": {
+          "exclusive_CPU": 0.03286399999999999,
+          "exclusive_wall": 0.03286992999999999,
+          "calls": 12
+        },
+        "dense.triangular_solve": {
+          "exclusive_CPU": 0.8318130000000029,
+          "exclusive_wall": 0.8318422779999995,
+          "calls": 3036
+        },
+        "momentum.solve_validate": {
+          "exclusive_CPU": 0.041878,
+          "exclusive_wall": 0.041882953,
+          "calls": 12
+        },
+        "pressure.build": {
+          "exclusive_CPU": 1.4943719999999996,
+          "exclusive_wall": 1.507703645,
+          "calls": 12
+        },
+        "pressure.solve_validate": {
+          "exclusive_CPU": 0.0022630000000000003,
+          "exclusive_wall": 0.0022647979999999993,
+          "calls": 12
+        },
+        "io.flow_attempt_snapshot": {
+          "exclusive_CPU": 2.714992,
+          "exclusive_wall": 2.715870577,
+          "calls": 12
+        },
+        "residual": {
+          "exclusive_CPU": 4.9212830000000025,
+          "exclusive_wall": 4.922265169000002,
+          "calls": 108
+        },
+        "pimple.check.flow": {
+          "exclusive_CPU": 0.022971999999999992,
+          "exclusive_wall": 0.023016867000000163,
+          "calls": 12
+        },
+        "flow.correction_validate": {
+          "exclusive_CPU": 0.1862480000000002,
+          "exclusive_wall": 0.1863309070000002,
+          "calls": 12
+        },
+        "flow.total": {
+          "exclusive_CPU": 0.10639899999999969,
+          "exclusive_wall": 0.1082641419999999,
+          "calls": 12
+        },
+        "epsilon.assembly": {
+          "exclusive_CPU": 0.155125,
+          "exclusive_wall": 0.15511884899999995,
+          "calls": 12
+        },
+        "epsilon.solve_validate": {
+          "exclusive_CPU": 0.005194000000000001,
+          "exclusive_wall": 0.0051978300000000005,
+          "calls": 12
+        },
+        "pimple.check.epsilon": {
+          "exclusive_CPU": 0.021471999999999936,
+          "exclusive_wall": 0.021483415999999922,
+          "calls": 12
+        },
+        "epsilon.total": {
+          "exclusive_CPU": 0.006484000000000045,
+          "exclusive_wall": 0.006514249999999833,
+          "calls": 12
+        },
+        "k.assembly": {
+          "exclusive_CPU": 0.5577420000000001,
+          "exclusive_wall": 0.558118998,
+          "calls": 12
+        },
+        "k.solve_validate": {
+          "exclusive_CPU": 0.015000000000000003,
+          "exclusive_wall": 0.015001422000000004,
+          "calls": 12
+        },
+        "io.attempt_snapshot": {
+          "exclusive_CPU": 0.451236,
+          "exclusive_wall": 0.45123825799999995,
+          "calls": 12
+        },
+        "pimple.check.k": {
+          "exclusive_CPU": 0.021512999999999893,
+          "exclusive_wall": 0.02151507500000005,
+          "calls": 12
+        },
+        "k.total": {
+          "exclusive_CPU": 0.0024380000000000512,
+          "exclusive_wall": 0.002496598999999655,
+          "calls": 12
+        },
+        "residual.mass_dual_norms": {
+          "exclusive_CPU": 0.007236,
+          "exclusive_wall": 0.0072815080000000025,
+          "calls": 48
+        },
+        "pimple.final_refresh_diagnostics": {
+          "exclusive_CPU": 0.001257000000000022,
+          "exclusive_wall": 0.0013234640000000242,
+          "calls": 12
+        },
+        "pimple.sweep": {
+          "exclusive_CPU": 0.01591900000000024,
+          "exclusive_wall": 0.015915008999998648,
+          "calls": 12
+        },
+        "native.physical_samples": {
+          "exclusive_CPU": 0.32323399999999997,
+          "exclusive_wall": 0.323609249,
+          "calls": 12
+        },
+        "audit.physical": {
+          "exclusive_CPU": 2.916953,
+          "exclusive_wall": 2.917958257,
+          "calls": 12
+        },
+        "audit.complete": {
+          "exclusive_CPU": 5.956583999999999,
+          "exclusive_wall": 5.958907748000001,
+          "calls": 12
+        },
+        "native.acceptance_audit": {
+          "exclusive_CPU": 0.0035809999999998343,
+          "exclusive_wall": 0.0036175779999998436,
+          "calls": 12
+        },
+        "native.implicit": {
+          "exclusive_CPU": 0.003944000000000614,
+          "exclusive_wall": 0.003964551999998456,
+          "calls": 12
+        },
+        "native.explicit": {
+          "exclusive_CPU": 0.066605,
+          "exclusive_wall": 0.066702158,
+          "calls": 12
+        },
+        "native.advance": {
+          "exclusive_CPU": 0.004188999999999332,
+          "exclusive_wall": 0.004191229999998214,
+          "calls": 12
+        },
+        "io.checkpoint": {
+          "exclusive_CPU": 0.008221000000000001,
+          "exclusive_wall": 0.008218676,
+          "calls": 12
+        },
+        "native.step": {
+          "exclusive_CPU": 0.0519930000000004,
+          "exclusive_wall": 0.05199821399999838,
+          "calls": 12
+        }
+      },
+      "by_category": {
+        "interface_and_constraints": {
+          "exclusive_CPU": 0.04133699999999998,
+          "exclusive_wall": 0.041447363999999993
+        },
+        "state_domain_and_constitutive": {
+          "exclusive_CPU": 40.624627,
+          "exclusive_wall": 40.63785836000002
+        },
+        "volume_interface_external_assembly": {
+          "exclusive_CPU": 2.076549,
+          "exclusive_wall": 2.077364921
+        },
+        "factorization": {
+          "exclusive_CPU": 1.063494,
+          "exclusive_wall": 1.0639034580000002
+        },
+        "mass_and_pressure_operations": {
+          "exclusive_CPU": 1.7134839999999998,
+          "exclusive_wall": 1.7269044820000001
+        },
+        "solves_and_linear_validation": {
+          "exclusive_CPU": 0.8961480000000029,
+          "exclusive_wall": 0.8961892809999995
+        },
+        "snapshot_checkpoint_output_IO": {
+          "exclusive_CPU": 3.174449,
+          "exclusive_wall": 3.175327511
+        },
+        "other_exclusive_orchestration_and_residual_work": {
+          "exclusive_CPU": 5.1877470000000026,
+          "exclusive_wall": 5.190916294999996
+        },
+        "physical_audits": {
+          "exclusive_CPU": 9.200351999999999,
+          "exclusive_wall": 9.204092832
+        }
+      },
+      "total_instrumented_exclusive_CPU": 63.978186999999984,
+      "accepted_steps": 12,
+      "CPU_per_accepted_step": 5.331515583333332,
+      "definition": "exclusive intervals only; inclusive/nested parent totals never added"
+    },
+    "native_sha256": "9ee8b0209e048787682a9b95db71a7e0cb7740f83ea1ca28f6336ff6977d80d4"
+  }
+]

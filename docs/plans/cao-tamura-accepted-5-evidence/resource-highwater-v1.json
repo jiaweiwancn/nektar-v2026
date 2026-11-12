@@ -1,0 +1,2964 @@
+{
+  "schema": "CT5CompletedHighwaterV1",
+  "status": "pass",
+  "families": {
+    "launch-bootstrap-v1": {
+      "final_receipt_sha256": "2b8024db79481a7cc99ca4ad20418476fd35a164d0a2143f44b6d05447deb3bd",
+      "limits_and_peaks": {
+        "maximum_aggregate": 3,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "aggregate_highwater": {
+        "source_sha256": "0cae618687563ac163f020c212ebde7eaf2507acdf1b1b2fda58cfd9aa1df612",
+        "records": [
+          {
+            "time_unix": 1794492216.9717588,
+            "active_before_actions": 3,
+            "external": 2,
+            "owned_roots": [
+              78925
+            ],
+            "processes": [
+              {
+                "pid": 78920,
+                "parent": 78919,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 78921,
+                "parent": 78920,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 78925,
+                "parent": 78920,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T14:03:36.971759+00:00"
+          }
+        ]
+      },
+      "project_highwater": {
+        "source_sha256": "d54202cae36854dc461291cc8258d106c1f39f3b5897b2a0af2619aab9ddf507",
+        "records": [
+          {
+            "time_unix": 1794492216.9711454,
+            "project_threads": 3,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 78925,
+                "parent": 78920,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T14:03:36.971145+00:00"
+          }
+        ]
+      },
+      "suspension_events": {
+        "records": [],
+        "note": "no events recorded"
+      }
+    },
+    "launch-campaign-v1": {
+      "final_receipt_sha256": "f0d151891121f4f0fd70dfa838b7be3ab2bed932be5869d7d2218e01b1233071",
+      "limits_and_peaks": {
+        "maximum_aggregate": 18,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "aggregate_highwater": {
+        "source_sha256": "a9e179c3178d595b15880f6803d013b854f0243a51b8034b2853e6308c2b8722",
+        "records": [
+          {
+            "time_unix": 1794494143.9811666,
+            "active_before_actions": 7,
+            "external": 6,
+            "owned_roots": [
+              81330
+            ],
+            "processes": [
+              {
+                "pid": 81265,
+                "parent": 81264,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 81278,
+                "parent": 81277,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 81283,
+                "parent": 81282,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 81288,
+                "parent": 81287,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 81326,
+                "parent": 81325,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 81327,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 81330,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T14:35:43.981167+00:00"
+          },
+          {
+            "time_unix": 1794494144.542371,
+            "active_before_actions": 9,
+            "external": 6,
+            "owned_roots": [
+              81330
+            ],
+            "processes": [
+              {
+                "pid": 81265,
+                "parent": 81264,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 81278,
+                "parent": 81277,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 81283,
+                "parent": 81282,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 81288,
+                "parent": 81287,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 81326,
+                "parent": 81325,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 81327,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 81330,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 81331,
+                "parent": 81330,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 81339,
+                "parent": 81331,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T14:35:44.542371+00:00"
+          },
+          {
+            "time_unix": 1794494192.323143,
+            "active_before_actions": 12,
+            "external": 2,
+            "owned_roots": [
+              81330
+            ],
+            "processes": [
+              {
+                "pid": 81326,
+                "parent": 81325,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 81327,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 81330,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 81331,
+                "parent": 81330,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 81569,
+                "parent": 81331,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              },
+              {
+                "pid": 81592,
+                "parent": 81569,
+                "threads": 3,
+                "name": "IncNavierStokes",
+                "state": "Rl",
+                "owned": true
+              },
+              {
+                "pid": 81593,
+                "parent": 81592,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T14:36:32.323143+00:00"
+          },
+          {
+            "time_unix": 1794494342.934159,
+            "active_before_actions": 13,
+            "external": 3,
+            "owned_roots": [
+              81330
+            ],
+            "processes": [
+              {
+                "pid": 81326,
+                "parent": 81325,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 81327,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 81330,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 81331,
+                "parent": 81330,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 81569,
+                "parent": 81331,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 82201,
+                "parent": 81569,
+                "threads": 3,
+                "name": "RANSPreservatio",
+                "state": "Rl",
+                "owned": true
+              },
+              {
+                "pid": 82202,
+                "parent": 82201,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              },
+              {
+                "pid": 82413,
+                "parent": 82412,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              }
+            ],
+            "UTC": "2026-11-12T14:39:02.934159+00:00"
+          },
+          {
+            "time_unix": 1794494344.6019266,
+            "active_before_actions": 16,
+            "external": 6,
+            "owned_roots": [
+              81330
+            ],
+            "processes": [
+              {
+                "pid": 81326,
+                "parent": 81325,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 81327,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 81330,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 81331,
+                "parent": 81330,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 81569,
+                "parent": 81331,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 82201,
+                "parent": 81569,
+                "threads": 3,
+                "name": "RANSPreservatio",
+                "state": "Rl",
+                "owned": true
+              },
+              {
+                "pid": 82202,
+                "parent": 82201,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              },
+              {
+                "pid": 82450,
+                "parent": 82449,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 82454,
+                "parent": 82451,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 82455,
+                "parent": 82452,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 82456,
+                "parent": 82453,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              }
+            ],
+            "UTC": "2026-11-12T14:39:04.601927+00:00"
+          },
+          {
+            "time_unix": 1794494445.4009326,
+            "active_before_actions": 18,
+            "external": 8,
+            "owned_roots": [
+              81330
+            ],
+            "processes": [
+              {
+                "pid": 81326,
+                "parent": 81325,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 81327,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 81330,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 81331,
+                "parent": 81330,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 81569,
+                "parent": 81331,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 82945,
+                "parent": 82944,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 82952,
+                "parent": 81569,
+                "threads": 3,
+                "name": "RANSPreservatio",
+                "state": "Rl",
+                "owned": true
+              },
+              {
+                "pid": 82954,
+                "parent": 82952,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              },
+              {
+                "pid": 82987,
+                "parent": 82986,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 83037,
+                "parent": 83036,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 83072,
+                "parent": 83039,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 83076,
+                "parent": 83075,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 83079,
+                "parent": 83078,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              }
+            ],
+            "UTC": "2026-11-12T14:40:45.400933+00:00"
+          }
+        ]
+      },
+      "project_highwater": {
+        "source_sha256": "3fbed03dfb538fdcd7e02f6229afb6df56ab0c040cefa630348d745833499fee",
+        "records": [
+          {
+            "time_unix": 1794494143.9803805,
+            "project_threads": 3,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 81330,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T14:35:43.980381+00:00"
+          },
+          {
+            "time_unix": 1794494144.5417824,
+            "project_threads": 5,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 81330,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 81331,
+                "parent": 81330,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 81339,
+                "parent": 81331,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T14:35:44.541782+00:00"
+          },
+          {
+            "time_unix": 1794494191.7648869,
+            "project_threads": 7,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 81330,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 81331,
+                "parent": 81330,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 81569,
+                "parent": 81331,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 81592,
+                "parent": 81569,
+                "threads": 1,
+                "name": "IncNavierStokes",
+                "state": "S"
+              },
+              {
+                "pid": 81593,
+                "parent": 81592,
+                "threads": 1,
+                "name": "orted",
+                "state": "Rs"
+              }
+            ],
+            "UTC": "2026-11-12T14:36:31.764887+00:00"
+          },
+          {
+            "time_unix": 1794494192.3225641,
+            "project_threads": 12,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 81330,
+                "parent": 81326,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 81331,
+                "parent": 81330,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 81569,
+                "parent": 81331,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              },
+              {
+                "pid": 81592,
+                "parent": 81569,
+                "threads": 3,
+                "name": "IncNavierStokes",
+                "state": "Rl"
+              },
+              {
+                "pid": 81593,
+                "parent": 81592,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl"
+              }
+            ],
+            "UTC": "2026-11-12T14:36:32.322564+00:00"
+          }
+        ]
+      },
+      "suspension_events": {
+        "records": [],
+        "note": "no events recorded"
+      }
+    },
+    "launch-diagnosis-v1": {
+      "final_receipt_sha256": "a4139473c7fcd4248f16dfdd5044b68f1a5211bd1a916274cb944307bacc4610",
+      "limits_and_peaks": {
+        "maximum_aggregate": 21,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "aggregate_highwater": {
+        "source_sha256": "c707b4d35959642216ef7b192c382c1952e9f38200fab3348981d21f35363a0f",
+        "records": [
+          {
+            "time_unix": 1794493398.493736,
+            "active_before_actions": 5,
+            "external": 4,
+            "owned_roots": [
+              80006
+            ],
+            "processes": [
+              {
+                "pid": 79949,
+                "parent": 79909,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 79952,
+                "parent": 79951,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 80002,
+                "parent": 80001,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 80003,
+                "parent": 80002,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 80006,
+                "parent": 80002,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T14:23:18.493736+00:00"
+          },
+          {
+            "time_unix": 1794493399.0569165,
+            "active_before_actions": 8,
+            "external": 4,
+            "owned_roots": [
+              80006
+            ],
+            "processes": [
+              {
+                "pid": 79949,
+                "parent": 79909,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 79952,
+                "parent": 79951,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 80002,
+                "parent": 80001,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 80003,
+                "parent": 80002,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 80006,
+                "parent": 80002,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 80007,
+                "parent": 80006,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 80010,
+                "parent": 80007,
+                "threads": 1,
+                "name": "git",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 80011,
+                "parent": 80010,
+                "threads": 1,
+                "name": "git",
+                "state": "D",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T14:23:19.056916+00:00"
+          },
+          {
+            "time_unix": 1794493401.2814536,
+            "active_before_actions": 14,
+            "external": 4,
+            "owned_roots": [
+              80006
+            ],
+            "processes": [
+              {
+                "pid": 79949,
+                "parent": 79909,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 79952,
+                "parent": 79951,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 80002,
+                "parent": 80001,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 80003,
+                "parent": 80002,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 80006,
+                "parent": 80002,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 80007,
+                "parent": 80006,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 80016,
+                "parent": 80007,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              },
+              {
+                "pid": 80042,
+                "parent": 80016,
+                "threads": 3,
+                "name": "RANSPreservatio",
+                "state": "Sl",
+                "owned": true
+              },
+              {
+                "pid": 80043,
+                "parent": 80042,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T14:23:21.281454+00:00"
+          },
+          {
+            "time_unix": 1794493412.463986,
+            "active_before_actions": 21,
+            "external": 11,
+            "owned_roots": [
+              80006
+            ],
+            "processes": [
+              {
+                "pid": 80002,
+                "parent": 80001,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 80003,
+                "parent": 80002,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 80006,
+                "parent": 80002,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 80007,
+                "parent": 80006,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 80016,
+                "parent": 80007,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 80042,
+                "parent": 80016,
+                "threads": 3,
+                "name": "RANSPreservatio",
+                "state": "Rl",
+                "owned": true
+              },
+              {
+                "pid": 80043,
+                "parent": 80042,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              },
+              {
+                "pid": 80122,
+                "parent": 79909,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 80125,
+                "parent": 80124,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 80127,
+                "parent": 80125,
+                "threads": 3,
+                "name": "RANSWallResolut",
+                "state": "Rl",
+                "owned": false
+              },
+              {
+                "pid": 80128,
+                "parent": 80127,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": false
+              }
+            ],
+            "UTC": "2026-11-12T14:23:32.463986+00:00"
+          }
+        ]
+      },
+      "project_highwater": {
+        "source_sha256": "5a324850982dabdc681b903728202909b751917811d350e94ab68aa7d6b78484",
+        "records": [
+          {
+            "time_unix": 1794493398.492744,
+            "project_threads": 3,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 80006,
+                "parent": 80002,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T14:23:18.492744+00:00"
+          },
+          {
+            "time_unix": 1794493399.0562596,
+            "project_threads": 6,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 80006,
+                "parent": 80002,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 80007,
+                "parent": 80006,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 80010,
+                "parent": 80007,
+                "threads": 1,
+                "name": "git",
+                "state": "S"
+              },
+              {
+                "pid": 80011,
+                "parent": 80010,
+                "threads": 1,
+                "name": "git",
+                "state": "D"
+              }
+            ],
+            "UTC": "2026-11-12T14:23:19.056260+00:00"
+          },
+          {
+            "time_unix": 1794493401.280837,
+            "project_threads": 12,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 80006,
+                "parent": 80002,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 80007,
+                "parent": 80006,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 80016,
+                "parent": 80007,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              },
+              {
+                "pid": 80042,
+                "parent": 80016,
+                "threads": 3,
+                "name": "RANSPreservatio",
+                "state": "Sl"
+              },
+              {
+                "pid": 80043,
+                "parent": 80042,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl"
+              }
+            ],
+            "UTC": "2026-11-12T14:23:21.280837+00:00"
+          }
+        ]
+      },
+      "suspension_events": {
+        "records": [],
+        "note": "no events recorded"
+      }
+    },
+    "launch-export-v1": {
+      "final_receipt_sha256": "2b8024db79481a7cc99ca4ad20418476fd35a164d0a2143f44b6d05447deb3bd",
+      "limits_and_peaks": {
+        "maximum_aggregate": 3,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "aggregate_highwater": {
+        "source_sha256": "10e309e7afa22aae2b2b97f40d28929551ad90942c3526f3096dd6fadd0d4d26",
+        "records": [
+          {
+            "time_unix": 1794498283.0165539,
+            "active_before_actions": 3,
+            "external": 2,
+            "owned_roots": [
+              94453
+            ],
+            "processes": [
+              {
+                "pid": 94449,
+                "parent": 94448,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 94450,
+                "parent": 94449,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 94453,
+                "parent": 94449,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:44:43.016554+00:00"
+          }
+        ]
+      },
+      "project_highwater": {
+        "source_sha256": "fa82f686e2d445b5c966f24f54e3087456259e9e40beec64d7081b25bec3b133",
+        "records": [
+          {
+            "time_unix": 1794498283.0159483,
+            "project_threads": 3,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 94453,
+                "parent": 94449,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T15:44:43.015948+00:00"
+          }
+        ]
+      },
+      "suspension_events": {
+        "records": [],
+        "note": "no events recorded"
+      }
+    },
+    "launch-halfstep-v1": {
+      "final_receipt_sha256": "2b8024db79481a7cc99ca4ad20418476fd35a164d0a2143f44b6d05447deb3bd",
+      "limits_and_peaks": {
+        "maximum_aggregate": 3,
+        "maximum_project": 3,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "aggregate_highwater": {
+        "source_sha256": "ec8e527f81795fb54301b70c1489871e6327f92faefb589c7b1a0ed920575bf9",
+        "records": [
+          {
+            "time_unix": 1794497424.1134295,
+            "active_before_actions": 3,
+            "external": 2,
+            "owned_roots": [
+              91798
+            ],
+            "processes": [
+              {
+                "pid": 91794,
+                "parent": 91793,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91795,
+                "parent": 91794,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91798,
+                "parent": 91794,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:30:24.113430+00:00"
+          }
+        ]
+      },
+      "project_highwater": {
+        "source_sha256": "a77c64c07d88f8de6d2457408f3d046471b3a4a7cd3fc80f49f1cb9b38d03474",
+        "records": [
+          {
+            "time_unix": 1794497424.1124372,
+            "project_threads": 3,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 91798,
+                "parent": 91794,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T15:30:24.112437+00:00"
+          }
+        ]
+      },
+      "suspension_events": {
+        "records": [],
+        "note": "no events recorded"
+      }
+    },
+    "launch-halfstep-v2": {
+      "final_receipt_sha256": "d3805dfe71a7d6abc58c8b4c3f37356214c088377c2a91bd5258568e66629f18",
+      "limits_and_peaks": {
+        "maximum_aggregate": 20,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "aggregate_highwater": {
+        "source_sha256": "9a2f86c708f9a18bf8c36d5e16de005f195481468e49775aa9204886a1f85898",
+        "records": [
+          {
+            "time_unix": 1794497459.3170469,
+            "active_before_actions": 3,
+            "external": 2,
+            "owned_roots": [
+              91886
+            ],
+            "processes": [
+              {
+                "pid": 91882,
+                "parent": 91881,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91883,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91886,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:30:59.317047+00:00"
+          },
+          {
+            "time_unix": 1794497459.880626,
+            "active_before_actions": 5,
+            "external": 2,
+            "owned_roots": [
+              91886
+            ],
+            "processes": [
+              {
+                "pid": 91882,
+                "parent": 91881,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91883,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91886,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 91887,
+                "parent": 91886,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 91899,
+                "parent": 91887,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:30:59.880626+00:00"
+          },
+          {
+            "time_unix": 1794497460.996045,
+            "active_before_actions": 12,
+            "external": 2,
+            "owned_roots": [
+              91886
+            ],
+            "processes": [
+              {
+                "pid": 91882,
+                "parent": 91881,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91883,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91886,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 91887,
+                "parent": 91886,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 91899,
+                "parent": 91887,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 91923,
+                "parent": 91899,
+                "threads": 3,
+                "name": "IncNavierStokes",
+                "state": "Sl",
+                "owned": true
+              },
+              {
+                "pid": 91924,
+                "parent": 91923,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:31:00.996045+00:00"
+          },
+          {
+            "time_unix": 1794497564.6430254,
+            "active_before_actions": 13,
+            "external": 3,
+            "owned_roots": [
+              91886
+            ],
+            "processes": [
+              {
+                "pid": 91882,
+                "parent": 91881,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91883,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91886,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 91887,
+                "parent": 91886,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 91899,
+                "parent": 91887,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              },
+              {
+                "pid": 92016,
+                "parent": 91899,
+                "threads": 3,
+                "name": "IncNavierStokes",
+                "state": "Rl",
+                "owned": true
+              },
+              {
+                "pid": 92017,
+                "parent": 92016,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              },
+              {
+                "pid": 92258,
+                "parent": 1,
+                "threads": 1,
+                "name": "python3",
+                "state": "Rs",
+                "owned": false
+              }
+            ],
+            "UTC": "2026-11-12T15:32:44.643025+00:00"
+          },
+          {
+            "time_unix": 1794497565.2109554,
+            "active_before_actions": 20,
+            "external": 10,
+            "owned_roots": [
+              91886
+            ],
+            "processes": [
+              {
+                "pid": 91882,
+                "parent": 91881,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91883,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 91886,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 91887,
+                "parent": 91886,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 91899,
+                "parent": 91887,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 92016,
+                "parent": 91899,
+                "threads": 3,
+                "name": "IncNavierStokes",
+                "state": "Rl",
+                "owned": true
+              },
+              {
+                "pid": 92017,
+                "parent": 92016,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              },
+              {
+                "pid": 92258,
+                "parent": 1,
+                "threads": 1,
+                "name": "python3",
+                "state": "Ss",
+                "owned": false
+              },
+              {
+                "pid": 92259,
+                "parent": 92258,
+                "threads": 3,
+                "name": "RANSWallResolut",
+                "state": "Sl",
+                "owned": false
+              },
+              {
+                "pid": 92260,
+                "parent": 92259,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": false
+              }
+            ],
+            "UTC": "2026-11-12T15:32:45.210955+00:00"
+          }
+        ]
+      },
+      "project_highwater": {
+        "source_sha256": "ac2c393bd2457c8b3fa44919c8610cc83eebec7f20b8725a95688de7f9ee687f",
+        "records": [
+          {
+            "time_unix": 1794497459.3161278,
+            "project_threads": 3,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 91886,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T15:30:59.316128+00:00"
+          },
+          {
+            "time_unix": 1794497459.8800142,
+            "project_threads": 5,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 91886,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 91887,
+                "parent": 91886,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 91899,
+                "parent": 91887,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T15:30:59.880014+00:00"
+          },
+          {
+            "time_unix": 1794497460.9954245,
+            "project_threads": 12,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 91886,
+                "parent": 91882,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 91887,
+                "parent": 91886,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 91899,
+                "parent": 91887,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 91923,
+                "parent": 91899,
+                "threads": 3,
+                "name": "IncNavierStokes",
+                "state": "Sl"
+              },
+              {
+                "pid": 91924,
+                "parent": 91923,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl"
+              }
+            ],
+            "UTC": "2026-11-12T15:31:00.995425+00:00"
+          }
+        ]
+      },
+      "suspension_events": {
+        "records": [],
+        "note": "no events recorded"
+      }
+    },
+    "launch-observation-inspection-v1": {
+      "final_receipt_sha256": "325e3bd9d51cbd6610cfc817f0f473850b9893b563eaa7e70921d84b6d6c7493",
+      "limits_and_peaks": {
+        "maximum_aggregate": 5,
+        "maximum_project": 5,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "aggregate_highwater": {
+        "source_sha256": "ace4af792326b0deff9245f605fef1a102ac3006350a91d8ab8b27786090a26a",
+        "records": [
+          {
+            "time_unix": 1794492673.06759,
+            "active_before_actions": 3,
+            "external": 2,
+            "owned_roots": [
+              79322
+            ],
+            "processes": [
+              {
+                "pid": 79318,
+                "parent": 79317,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 79319,
+                "parent": 79318,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 79322,
+                "parent": 79318,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T14:11:13.067590+00:00"
+          },
+          {
+            "time_unix": 1794492673.6228762,
+            "active_before_actions": 5,
+            "external": 2,
+            "owned_roots": [
+              79322
+            ],
+            "processes": [
+              {
+                "pid": 79318,
+                "parent": 79317,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 79319,
+                "parent": 79318,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 79322,
+                "parent": 79318,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 79323,
+                "parent": 79322,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 79329,
+                "parent": 79323,
+                "threads": 1,
+                "name": "git",
+                "state": "D",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T14:11:13.622876+00:00"
+          }
+        ]
+      },
+      "project_highwater": {
+        "source_sha256": "aa2f504e911d2259580fdf5cfa52e0383a768a781ee27301d84f0f592e6eace9",
+        "records": [
+          {
+            "time_unix": 1794492673.0669591,
+            "project_threads": 3,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 79322,
+                "parent": 79318,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T14:11:13.066959+00:00"
+          },
+          {
+            "time_unix": 1794492673.622257,
+            "project_threads": 5,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 79322,
+                "parent": 79318,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 79323,
+                "parent": 79322,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 79329,
+                "parent": 79323,
+                "threads": 1,
+                "name": "git",
+                "state": "D"
+              }
+            ],
+            "UTC": "2026-11-12T14:11:13.622257+00:00"
+          }
+        ]
+      },
+      "suspension_events": {
+        "records": [],
+        "note": "no events recorded"
+      }
+    },
+    "launch-postflight-v1": {
+      "final_receipt_sha256": "4833c17794fc501abd519f89e5dfa7898628b7e63762bd26f53136fba3cc19a8",
+      "limits_and_peaks": {
+        "maximum_aggregate": 6,
+        "maximum_project": 6,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "aggregate_highwater": {
+        "source_sha256": "5937a60bb7766b726c6a9932c86bae3af1eb98be9442ea5624e567dc2eb2f9ae",
+        "records": [
+          {
+            "time_unix": 1794498186.3987172,
+            "active_before_actions": 3,
+            "external": 2,
+            "owned_roots": [
+              94122
+            ],
+            "processes": [
+              {
+                "pid": 94118,
+                "parent": 94117,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 94119,
+                "parent": 94118,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 94122,
+                "parent": 94118,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:43:06.398717+00:00"
+          },
+          {
+            "time_unix": 1794498186.9561062,
+            "active_before_actions": 5,
+            "external": 2,
+            "owned_roots": [
+              94122
+            ],
+            "processes": [
+              {
+                "pid": 94118,
+                "parent": 94117,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 94119,
+                "parent": 94118,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 94122,
+                "parent": 94118,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 94123,
+                "parent": 94122,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 94132,
+                "parent": 94123,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:43:06.956106+00:00"
+          },
+          {
+            "time_unix": 1794498207.7130504,
+            "active_before_actions": 6,
+            "external": 2,
+            "owned_roots": [
+              94122
+            ],
+            "processes": [
+              {
+                "pid": 94118,
+                "parent": 94117,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 94119,
+                "parent": 94118,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 94122,
+                "parent": 94118,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 94123,
+                "parent": 94122,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 94152,
+                "parent": 94123,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 94242,
+                "parent": 94152,
+                "threads": 1,
+                "name": "ldd",
+                "state": "S",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:43:27.713050+00:00"
+          }
+        ]
+      },
+      "project_highwater": {
+        "source_sha256": "3926163230d00d9dedd2ea3db25506ad5bb6590723030ee94a16ac855ef40da1",
+        "records": [
+          {
+            "time_unix": 1794498186.3981135,
+            "project_threads": 3,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 94122,
+                "parent": 94118,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T15:43:06.398113+00:00"
+          },
+          {
+            "time_unix": 1794498186.955323,
+            "project_threads": 5,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 94122,
+                "parent": 94118,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 94123,
+                "parent": 94122,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 94132,
+                "parent": 94123,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T15:43:06.955323+00:00"
+          },
+          {
+            "time_unix": 1794498207.7124364,
+            "project_threads": 6,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 94122,
+                "parent": 94118,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 94123,
+                "parent": 94122,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 94152,
+                "parent": 94123,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 94242,
+                "parent": 94152,
+                "threads": 1,
+                "name": "ldd",
+                "state": "S"
+              }
+            ],
+            "UTC": "2026-11-12T15:43:27.712436+00:00"
+          }
+        ]
+      },
+      "suspension_events": {
+        "records": [],
+        "note": "no events recorded"
+      }
+    },
+    "launch-recovery-v1": {
+      "final_receipt_sha256": "325e3bd9d51cbd6610cfc817f0f473850b9893b563eaa7e70921d84b6d6c7493",
+      "limits_and_peaks": {
+        "maximum_aggregate": 5,
+        "maximum_project": 5,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "aggregate_highwater": {
+        "source_sha256": "fafaa252a6b13d6ed98b531d7ffd9b1a2b6f97b059a497f7a58d5d5ecc2d2e08",
+        "records": [
+          {
+            "time_unix": 1794495359.0148208,
+            "active_before_actions": 3,
+            "external": 2,
+            "owned_roots": [
+              85065
+            ],
+            "processes": [
+              {
+                "pid": 85061,
+                "parent": 85060,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 85062,
+                "parent": 85061,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 85065,
+                "parent": 85061,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T14:55:59.014821+00:00"
+          },
+          {
+            "time_unix": 1794495359.5792186,
+            "active_before_actions": 5,
+            "external": 2,
+            "owned_roots": [
+              85065
+            ],
+            "processes": [
+              {
+                "pid": 85061,
+                "parent": 85060,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 85062,
+                "parent": 85061,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 85065,
+                "parent": 85061,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 85066,
+                "parent": 85065,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 85074,
+                "parent": 85066,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T14:55:59.579219+00:00"
+          }
+        ]
+      },
+      "project_highwater": {
+        "source_sha256": "dd314b1b8b21ae58e22ce42ccae9e13e6455bb91cbd103d39c767216afcadc05",
+        "records": [
+          {
+            "time_unix": 1794495359.0140846,
+            "project_threads": 3,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 85065,
+                "parent": 85061,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T14:55:59.014085+00:00"
+          },
+          {
+            "time_unix": 1794495359.5786304,
+            "project_threads": 5,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 85065,
+                "parent": 85061,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 85066,
+                "parent": 85065,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 85074,
+                "parent": 85066,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T14:55:59.578630+00:00"
+          }
+        ]
+      },
+      "suspension_events": {
+        "records": [],
+        "note": "no events recorded"
+      }
+    },
+    "launch-recovery-v2": {
+      "final_receipt_sha256": "60380743bac4308fdaf53525c989e4ed019f6e50d48659498f45a0d001d19c28",
+      "limits_and_peaks": {
+        "maximum_aggregate": 36,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "aggregate_highwater": {
+        "source_sha256": "cfcc5644f05f2f5364537e37c3166330f9ed66e800b015158bbf7c9ce74d2cf7",
+        "records": [
+          {
+            "time_unix": 1794495959.7320135,
+            "active_before_actions": 3,
+            "external": 2,
+            "owned_roots": [
+              86213
+            ],
+            "processes": [
+              {
+                "pid": 86209,
+                "parent": 86208,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86210,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86213,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:05:59.732013+00:00"
+          },
+          {
+            "time_unix": 1794495960.2939134,
+            "active_before_actions": 4,
+            "external": 2,
+            "owned_roots": [
+              86213
+            ],
+            "processes": [
+              {
+                "pid": 86209,
+                "parent": 86208,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86210,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86213,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86214,
+                "parent": 86213,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:06:00.293913+00:00"
+          },
+          {
+            "time_unix": 1794495961.4183207,
+            "active_before_actions": 5,
+            "external": 2,
+            "owned_roots": [
+              86213
+            ],
+            "processes": [
+              {
+                "pid": 86209,
+                "parent": 86208,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86210,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86213,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86214,
+                "parent": 86213,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86225,
+                "parent": 86214,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:06:01.418321+00:00"
+          },
+          {
+            "time_unix": 1794495964.7801545,
+            "active_before_actions": 12,
+            "external": 2,
+            "owned_roots": [
+              86213
+            ],
+            "processes": [
+              {
+                "pid": 86209,
+                "parent": 86208,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86210,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86213,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86214,
+                "parent": 86213,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86225,
+                "parent": 86214,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": true
+              },
+              {
+                "pid": 86263,
+                "parent": 86225,
+                "threads": 3,
+                "name": "RANSPreservatio",
+                "state": "Sl",
+                "owned": true
+              },
+              {
+                "pid": 86264,
+                "parent": 86263,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              }
+            ],
+            "UTC": "2026-11-12T15:06:04.780154+00:00"
+          },
+          {
+            "time_unix": 1794496033.355865,
+            "active_before_actions": 14,
+            "external": 4,
+            "owned_roots": [
+              86213
+            ],
+            "processes": [
+              {
+                "pid": 86209,
+                "parent": 86208,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86210,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86213,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86214,
+                "parent": 86213,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86225,
+                "parent": 86214,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86419,
+                "parent": 86225,
+                "threads": 3,
+                "name": "RANSPreservatio",
+                "state": "Rl",
+                "owned": true
+              },
+              {
+                "pid": 86420,
+                "parent": 86419,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              },
+              {
+                "pid": 86553,
+                "parent": 86551,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 86554,
+                "parent": 86552,
+                "threads": 1,
+                "name": "cc1plus",
+                "state": "R",
+                "owned": false
+              }
+            ],
+            "UTC": "2026-11-12T15:07:13.355865+00:00"
+          },
+          {
+            "time_unix": 1794496259.656675,
+            "active_before_actions": 15,
+            "external": 5,
+            "owned_roots": [
+              86213
+            ],
+            "processes": [
+              {
+                "pid": 86209,
+                "parent": 86208,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86210,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 86213,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86214,
+                "parent": 86213,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86225,
+                "parent": 86214,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 87289,
+                "parent": 86225,
+                "threads": 3,
+                "name": "RANSPreservatio",
+                "state": "Rl",
+                "owned": true
+              },
+              {
+                "pid": 87290,
+                "parent": 87289,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              },
+              {
+                "pid": 87366,
+                "parent": 1,
+                "threads": 1,
+                "name": "python3",
+                "state": "Rs",
+                "owned": false
+              },
+              {
+                "pid": 87367,
+                "parent": 1,
+                "threads": 1,
+                "name": "python3",
+                "state": "Rs",
+                "owned": false
+              },
+              {
+                "pid": 87368,
+                "parent": 1,
+                "threads": 1,
+                "name": "python3",
+                "state": "Rs",
+                "owned": false
+              }
+            ],
+            "UTC": "2026-11-12T15:10:59.656675+00:00"
+          },
+          {
+            "time_unix": 1794496260.7946205,
+            "active_before_actions": 36,
+            "external": 26,
+            "owned_roots": [
+              86213
+            ],
+            "processes": [
+              {
+                "pid": 86209,
+                "parent": 86208,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": false
+              },
+              {
+                "pid": 86210,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "R",
+                "owned": false
+              },
+              {
+                "pid": 86213,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86214,
+                "parent": 86213,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 86225,
+                "parent": 86214,
+                "threads": 1,
+                "name": "python3",
+                "state": "S",
+                "owned": true
+              },
+              {
+                "pid": 87289,
+                "parent": 86225,
+                "threads": 3,
+                "name": "RANSPreservatio",
+                "state": "Rl",
+                "owned": true
+              },
+              {
+                "pid": 87290,
+                "parent": 87289,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": true
+              },
+              {
+                "pid": 87366,
+                "parent": 1,
+                "threads": 1,
+                "name": "python3",
+                "state": "Ss",
+                "owned": false
+              },
+              {
+                "pid": 87367,
+                "parent": 1,
+                "threads": 1,
+                "name": "python3",
+                "state": "Ss",
+                "owned": false
+              },
+              {
+                "pid": 87368,
+                "parent": 1,
+                "threads": 1,
+                "name": "python3",
+                "state": "Ss",
+                "owned": false
+              },
+              {
+                "pid": 87551,
+                "parent": 87366,
+                "threads": 3,
+                "name": "RANSWallResolut",
+                "state": "Rl",
+                "owned": false
+              },
+              {
+                "pid": 87552,
+                "parent": 87551,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": false
+              },
+              {
+                "pid": 87553,
+                "parent": 87367,
+                "threads": 3,
+                "name": "RANSWallResolut",
+                "state": "Rl",
+                "owned": false
+              },
+              {
+                "pid": 87554,
+                "parent": 87368,
+                "threads": 3,
+                "name": "RANSWallResolut",
+                "state": "Rl",
+                "owned": false
+              },
+              {
+                "pid": 87555,
+                "parent": 87553,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": false
+              },
+              {
+                "pid": 87556,
+                "parent": 87554,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl",
+                "owned": false
+              }
+            ],
+            "UTC": "2026-11-12T15:11:00.794621+00:00"
+          }
+        ]
+      },
+      "project_highwater": {
+        "source_sha256": "546487c5a0519e1be1cea79a1ce5add7eb07fa1050cd53b9bf09dd0aa593d45d",
+        "records": [
+          {
+            "time_unix": 1794495959.7312174,
+            "project_threads": 3,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 86213,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T15:05:59.731217+00:00"
+          },
+          {
+            "time_unix": 1794495960.2933605,
+            "project_threads": 4,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 86213,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 86214,
+                "parent": 86213,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T15:06:00.293360+00:00"
+          },
+          {
+            "time_unix": 1794495961.4177482,
+            "project_threads": 5,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 86213,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 86214,
+                "parent": 86213,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 86225,
+                "parent": 86214,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              }
+            ],
+            "UTC": "2026-11-12T15:06:01.417748+00:00"
+          },
+          {
+            "time_unix": 1794495964.7795632,
+            "project_threads": 12,
+            "control_helpers": 2,
+            "processes": [
+              {
+                "pid": 86213,
+                "parent": 86209,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 86214,
+                "parent": 86213,
+                "threads": 1,
+                "name": "python3",
+                "state": "S"
+              },
+              {
+                "pid": 86225,
+                "parent": 86214,
+                "threads": 1,
+                "name": "python3",
+                "state": "R"
+              },
+              {
+                "pid": 86263,
+                "parent": 86225,
+                "threads": 3,
+                "name": "RANSPreservatio",
+                "state": "Sl"
+              },
+              {
+                "pid": 86264,
+                "parent": 86263,
+                "threads": 4,
+                "name": "orted",
+                "state": "Ssl"
+              }
+            ],
+            "UTC": "2026-11-12T15:06:04.779563+00:00"
+          }
+        ]
+      },
+      "suspension_events": {
+        "records": [],
+        "note": "no events recorded"
+      }
+    }
+  },
+  "all_numerical_families_complete": true
+}

@@ -1,5 +1,19 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-5 (2026-11-12): the one selected near-ground radial split
+> resolves A95/6 mm/P4-P2 ground-traction accuracy with unchanged CT4 physics
+> and fits. All three 6 mm P4/P2 transferred recipes pass through T=.02,
+> including complete budgets, domain checks and traction-specific uncertainty.
+> A93 uses one fresh .0005 companion; its original .002/.001 short ambiguity
+> remains archived. The corrected observation audit changes 40 crest distances,
+> adds 36 Fig.7 observations and retains the rough 7 mm limiting traverse.
+> Fresh resource compliance passes. No precursor/hill/native curved production
+> is admitted. Next: conservative curved Accepted manufactured-patch verification,
+> retaining roughness-sublayer and thin-layer qualifications and the unresolved
+> CT4 pressure flag. See [CT-Accepted-5](cao-tamura-accepted-5.md) and its
+> explicit CT4 observation correction notice. Historical CT1–CT4 text below
+> and all sealed results remain unchanged.
+
 > CT-Accepted-4 (2026-11-12) takes priority: use the explicit neutral-equilibrium
 > composite inlet, original Natural A93/A95/E94E95 and Accepted budget AWF.
 > Equal-weight rough mean fits to frozen Fig.3a IDs0–3 reproduce nine separate
