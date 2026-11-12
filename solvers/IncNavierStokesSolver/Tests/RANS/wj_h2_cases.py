@@ -53,7 +53,20 @@ def approximate(fn,knots,degree=12):
     return '('+'+'.join(expressions)+')',maxerr
 
 
-def expressions(c,kind):
+def continuous_outer(c,z):
+    """Physical parallel seed gradient/covariance; spanwise stress retained."""
+    from wj_h2_profiles import constitutive
+    G=np.zeros((3,3));G[0,2]=c.mean(z,1)
+    R,_,_=constitutive(float(c.k(z)),float(c.epsilon(z)),G)
+    return G,R
+
+
+def reduced_normal_offset(K,Rnn):
+    """T_w,nn=-pi_w, T_o,nn=2K/3-pi_o-Rnn for M_w,nn=0."""
+    return float(Rnn-2*K/3)
+
+
+def expressions(c,kind,pressure_seed='SignCorrectedV1',outlet='ZeroTractionV1'):
     H=c.H;r=f'(y-({num(D0)}))';K=c.K;w=c.w
     if kind=='analytic':
         K=QE*US**2;w=wall(K,H,c.h);A=US**3/KAPPA
@@ -84,17 +97,35 @@ def expressions(c,kind):
     # Near-wall measured stresses are extrapolated constant, so modeled ground
     # k flux is initially compatible; no k(0)=0 and no neutral-k substitution.
     ki,ke=approximate(lambda z:float(c.k(D0+z)),cuts)
-    from wj_h2_profiles import constitutive
-    G=np.zeros((3,3));G[0,2]=c.mean(D0+H,1);R,_,_=constitutive(K,float(c.epsilon(D0+H)),G)
-    inner=dict(u=ui,v='0',k=ki,p=num(2*K/3-R[2,2]))
+    _,R=continuous_outer(c,D0+H)
+    C=reduced_normal_offset(K,R[2,2])
+    inner=dict(u=ui,v='0',k=ki,p=num(C))
     outer=dict(u=U,v='0',k=k,epsilon=epsilon,p='0')
-    return inner,outer,dict(u='0',v='0'),dict(u='0',v='0'),None,None,dict(expression_errors=dict(inner_U=ue,inner_k=ke),K=K,wall=w)
+    errors=dict(inner_U=ue,inner_k=ke)
+    if pressure_seed not in ('SignCorrectedV1','VerticalBalanceV1'):raise ValueError('physical pressure seed')
+    if outlet not in ('ZeroTractionV1','FrozenSeedTractionV1'):raise ValueError('physical outlet diagnostic')
+    if outlet=='FrozenSeedTractionV1' and pressure_seed!='VerticalBalanceV1':raise ValueError('frozen traction requires the balanced seed')
+    # All continuous profile breakpoints, independent of the native mesh.
+    cuts=sorted(set([H,12.5-D0,TOP-D0]+[float(v['y_over_H'])-D0 for v in c.rows if D0+H<float(v['y_over_H'])<TOP]))
+    if pressure_seed=='VerticalBalanceV1':
+        outer['p'],errors['outer_pi']=approximate(lambda r:2*c.k(D0+r)/3-continuous_outer(c,D0+r)[1][2,2]+C,cuts,18)
+    oi,oo=dict(u='0',v='0'),dict(u='0',v='0')
+    if outlet=='FrozenSeedTractionV1':
+        oi=dict(u=num(-C),v=num(c.UH/w['J0']))
+        oo['u'],errors['outlet_Txx']=approximate(lambda r:continuous_outer(c,D0+r)[1][2,2]-continuous_outer(c,D0+r)[1][0,0]-C,cuts,18)
+        oo['v'],errors['outlet_Tzx']=approximate(lambda r:-continuous_outer(c,D0+r)[1][2,0],cuts,18)
+    return inner,outer,oi,oo,None,None,dict(expression_errors=errors,K=K,wall=w,
+        seed=dict(version=pressure_seed,offset=C,outlet=outlet,scope='initialization only; no imposed interface pressure row or restoring source'))
 
 
-def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',span=.5,length=.09,restart=None,reject=0):
+def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',span=.5,length=.09,restart=None,reject=0,
+             pressure_seed='SignCorrectedV1',outlet='ZeroTractionV1',xknots=None,tangential_order=8):
     if kind not in ('physical','analytic') or not math.isfinite(dt) or dt<=0 or not 0<=steps<=32:raise ValueError('bounded H2 case')
     c=Completion(span,length);H=c.H
-    inner,outer,oi,oo,top,tf,metadata=expressions(c,kind)
+    xknots=[0.,8.] if xknots is None else list(xknots)
+    if len(xknots)<2 or xknots[0]!=0 or xknots[-1]!=8 or not all(math.isfinite(v) for v in xknots) or any(a>=b for a,b in zip(xknots[:-1],xknots[1:])):raise ValueError('strict physical x knots in [0,8]')
+    if isinstance(tangential_order,bool) or tangential_order not in (8,12,16):raise ValueError('declared H3 tangential orders8/12/16')
+    inner,outer,oi,oo,top,tf,metadata=expressions(c,kind,pressure_seed,outlet)
     w=metadata.pop('wall');K=metadata['K']
     folder=Path(folder);folder.mkdir(parents=True,exist_ok=False)
     root=ET.parse(Path(__file__).with_name('EquilibriumWallFlat.xml')).getroot();co=root.find('CONDITIONS')
@@ -113,7 +144,7 @@ def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',spa
         physical_outer=sorted(set(physical_outer+[(a+b)/2 for a,b in zip(physical_outer[:-1],physical_outer[1:]) if a<6.3]))
     rho=lambda r:H+(r-H)*(TOP-H)/(TOP-D0-H)
     z=inner_knots+[rho(v) for v in physical_outer[1:]]
-    tensor_mesh(root,z,3,2,8.,1.,points=[8,8],xknots=[0.,8.])
+    tensor_mesh(root,z,3,2,8.,1.,points=[8,8],xknots=xknots)
     for node in root.findall('./EXPANSIONS/E'):node.set('FIELDS',node.get('FIELDS').replace('eps_tilde','epsilon'))
     for node in co.findall('./VARIABLES/V'):
         if node.text=='eps_tilde':node.text='epsilon'
@@ -132,7 +163,7 @@ def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',spa
     for key,value in dict(Time=0.,TimeStep=dt,NumSteps=steps,IO_CheckSteps=1,RANSWallDiagnostics=1,Kinvis=NU,RANSWallHeight=H,
         RANSWallRoughness=c.h,RANSWallSampleHeight=H,RANSWallTailStart=H,RANSWallChi=0.,RANSWallFrictionVelocity=US,
         RANSWallMapDisplacement=D0,RANSWallMapTunnelTop=TOP,RANSWallMapAmplitude=0.,RANSWallMapLengthX=2.5,
-        RANSWallEta=0.,RANSWallTangentialOrder=8,RANSWallNormalOrder=16,RANSWallPimpleKBoundMaxSeconds=60.,
+        RANSWallEta=0.,RANSWallTangentialOrder=tangential_order,RANSWallNormalOrder=16,RANSWallPimpleKBoundMaxSeconds=60.,
         RANSWallPimpleKFloorRelative=1e-8,RANSWallPimpleHardAuditRejectStep=reject).items():set_parameter(root,key,value)
     for family in ('InitialConditions','BoundaryValues'):
         for side,values in (('Inner',inner),('Outer',outer)):
@@ -145,7 +176,7 @@ def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',spa
         f=ET.SubElement(co,'FUNCTION',{'NAME':name})
         for variable,value in values.items():ET.SubElement(f,'E',{'VAR':variable,'VALUE':value})
     path=folder/'case.xml';write(root,path)
-    metadata.update(kind=kind,dt=dt,steps=steps,reuse=reuse,refined=refined,chart_z=z,x=[0.,8.],
+    metadata.update(kind=kind,dt=dt,steps=steps,reuse=reuse,refined=refined,chart_z=z,x=xknots,tangential_order=tangential_order,
         physical_outer_r=physical_outer,completion=c.summary(),K=K,
         reference_cutoff=w['rc'],reference_k_min=min(w['kref'](r) for r in np.linspace(0,H,41)))
     (folder/'case-design.json').write_text(json.dumps(metadata,indent=2,allow_nan=False)+'\n')
@@ -154,5 +185,10 @@ def case_xml(folder,kind='physical',steps=4,dt=.02,refined=False,reuse='Off',spa
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--kind',choices=('physical','analytic'),default='physical')
     p.add_argument('--steps',type=int,default=4);p.add_argument('--dt',type=float,default=.02);p.add_argument('--refined',action='store_true')
-    p.add_argument('--reuse',choices=('Off','ExactStepV1'),default='Off');p.add_argument('--restart',type=Path);a=p.parse_args()
-    print(case_xml(a.output,a.kind,a.steps,a.dt,a.refined,a.reuse,restart=a.restart))
+    p.add_argument('--reuse',choices=('Off','ExactStepV1'),default='Off');p.add_argument('--restart',type=Path)
+    p.add_argument('--pressure-seed',choices=('SignCorrectedV1','VerticalBalanceV1'),default='SignCorrectedV1')
+    p.add_argument('--outlet',choices=('ZeroTractionV1','FrozenSeedTractionV1'),default='ZeroTractionV1')
+    p.add_argument('--x-knots',type=lambda s:[float(v) for v in s.split(',')]);p.add_argument('--tangential-order',type=int,default=8)
+    a=p.parse_args()
+    print(case_xml(a.output,a.kind,a.steps,a.dt,a.refined,a.reuse,restart=a.restart,pressure_seed=a.pressure_seed,
+        outlet=a.outlet,xknots=a.x_knots,tangential_order=a.tangential_order))

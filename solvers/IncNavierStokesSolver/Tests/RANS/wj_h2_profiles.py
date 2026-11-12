@@ -102,8 +102,11 @@ class Completion:
         x,U=self.Udata;inside=x-D0<=self.H
         fit=US**2*self.w['J'](x[inside]-D0)
         ref=[self.w['kref'](float(r)) for r in np.linspace(0,self.H,33)]
-        return dict(schema='WJH2FiniteDepthCompletionV1',span_weight=self.span,
-            asymptotic_length_fraction_delta=self.length_fraction,H_w=self.H,h_s=self.h,
+        return dict(schema='WJFiniteDepthCompletionV2',span_weight=self.span,
+            blackadar_parameter_fraction_delta=self.length_fraction,
+            blackadar_parameter_L=self.length_fraction*DELTA,
+            asymptotic_length=self.length_fraction*DELTA+KAPPA*self.H,
+            asymptotic_length_fraction_delta=self.length_fraction+KAPPA*self.H/DELTA,H_w=self.H,h_s=self.h,
             data_sha256=hashlib.sha256(DATA.read_bytes()).hexdigest(),K_H=self.K,
             K_H_over_utau2=self.K/US**2,epsilon_H=float(self.epsilon(D0+self.H)),
             epsilon_H_over_neutral_tail=float(self.epsilon(D0+self.H)/(US**3/KAPPA/self.H)),

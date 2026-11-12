@@ -712,6 +712,9 @@ if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
 endif()
 
 if(Python3_Interpreter_FOUND)
+    add_test(NAME WJH3PressureSeeds COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_SOURCE_DIR}/test_wj_h3_seeds.py)
+    set_tests_properties(WJH3PressureSeeds PROPERTIES PROCESSORS 1 TIMEOUT 120
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1")
     add_test(NAME WJH2MeasuredProfiles
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_wj_h2_profiles.py)
     set_tests_properties(WJH2MeasuredProfiles PROPERTIES PROCESSORS 1 TIMEOUT 120
