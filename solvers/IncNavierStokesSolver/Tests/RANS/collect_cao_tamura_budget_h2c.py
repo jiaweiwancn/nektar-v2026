@@ -32,7 +32,7 @@ def main():
         for k,v in d['results'].items():
             if k.endswith('-hill'):require(v['moving_foot_fixture']['passed'],'moving foot fixture failed')
     save('screens',small(dict(tangential=screens,physical_height=adjusted,cache_bitwise=True)))
-    ana=read('analytical-witnesses-tangential.json');ana2=read('analytical-witnesses-physical-height.json')
+    ana=read('analytical-witnesses-tangential-v2.json');ana2=read('analytical-witnesses-physical-height-v2.json')
     require(ana['status']==ana2['status']=='passed','analytical witness replay failed');save('witnesses',small(dict(tangential=ana,physical_height=ana2)))
     hist=read('historical-h2b-replay-v1/progress.json');old=hist['observations']['composite-hill']
     require(old['state_sha256']=='7adda6c42bd9d6e8fae1c5259055dbd60290888593c0fbc626d027b39b2203e4' and old['audit']['accepted_awf_hard_admissible']==[0],'historical H2b failure changed')

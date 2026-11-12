@@ -26,14 +26,14 @@ def main():
             if d<0:return radial(H,-1)+UH*(r-H)+us/kap*(r*math.log(r/H)-r+H)
             if d==0:return UH+us/kap*math.log(r/H)
             return us/(kap*r) if d==1 else -us/(kap*r*r)
-        def geom(s,r,foot=0):
+        def geom(s,r,foot=0,outer_side=False):
             inside=abs(s)<L or (abs(abs(s)-L)<1e-13 and ((s<0 and foot>0) or (s>0 and foot<0)))
             f=.04*math.cos(math.pi*s/(2*L))**2 if abs(s)<L else 0.
             fp=-.04*math.pi/(2*L)*math.sin(math.pi*s/L) if inside else 0.
             fpp=-.04*math.pi**2/(2*L**2)*math.cos(math.pi*s/L) if inside else 0.
             fppp=.04*math.pi**3/(2*L**3)*math.sin(math.pi*s/L) if inside else 0.
             q=math.hypot(1,fp);k=-fpp/q**3;h=f+H/q;x=s-H*fp/q;hs=fp*(1+H*k);xs=1+H*k
-            if r<=H:
+            if r<H or (r==H and not outer_side):
                 J=1+r*k;pt=np.array([s-r*fp/q,f+r/q]);jac=np.array([[J,-fp/q],[fp*J,1/q]])
             else:
                 eta=(r-H)/(Z-H);pt=np.array([x,h+eta*(Z-h)]);jac=np.array([[xs,0],[hs*(1-eta),(Z-h)/(Z-H)]])
@@ -87,7 +87,7 @@ def main():
             return dict(tensor=stress.tolist(),eigenvalues=eig.tolist(),critical_eigenvector=d.tolist(),critical_terms={k:float(d@x@d) for k,x in parts.items()},production=float(-np.sum(stress*g)))
         output=[]
         for region in ('inner','outer'):
-            w=record['seed_constitutive']['minimum_'+region];s,r=w['coordinate'][0],w['coordinate'][2];bounds=boxes[int(w['geometry'])];foot=-1 if bounds[0][1]<=s+1e-12 else 1
+            w=record['seed_constitutive']['minimum_'+region];s,r=w['coordinate'][0],w['coordinate'][2];bounds=boxes[int(w['geometry'])];foot=(-1 if bounds[0][1]<=s+1e-12 else 1) if abs(abs(s)-L)<1e-12 else 0
             def grad(scale):
                 d=np.zeros((2,2));pt=velocity(s,r,foot)
                 for axis in range(2):
@@ -97,14 +97,14 @@ def main():
                     if c[axis]-step<bounds[axis][0]:d[:,axis]=(-3*pt+4*ev(c[axis]+step)-ev(c[axis]+2*step))/(2*step)
                     elif c[axis]+step>bounds[axis][1]:d[:,axis]=(3*pt-4*ev(c[axis]-step)+ev(c[axis]-2*step))/(2*step)
                     else:d[:,axis]=(ev(c[axis]+step)-ev(c[axis]-step))/(2*step)
-                cart=d@np.linalg.inv(geom(s,r,foot)[-1]);G=np.zeros((3,3));G[np.ix_([0,2],[0,2])]=cart;return G
+                cart=d@np.linalg.inv(geom(s,r,foot,region=='outer')[-1]);G=np.zeros((3,3));G[np.ix_([0,2],[0,2])]=cart;return G
             g=grad(.5);physical=geom(s,r,foot)[-2];actual=np.array(w['velocity_gradient']);nt=slope*(r-v['viscosity_intercept'])
             replay=law(actual,w['k'],w['epsilon'],physical,region=='inner',nt)
             error=np.max(np.abs(np.array(replay['tensor'])-np.array(w['selected']['tensor'])));assert error<1e-11,(name,region,error)
             ak=kref(r) if region=='inner' else K0;ae=A/max(r,w['cutoff']) if region=='inner' else A/r
             exact=law(g,ak,ae,physical,region=='inner',nt)
             one=next((t for t in record['target'] if int(t['geometry'])==int(w['geometry']) and bool(t['inner'])==(region=='inner')),None)
-            output.append(dict(region=region,coordinate=w['coordinate'],physical_coordinate=physical.tolist(),geometry=w['geometry'],radial_side=-1 if region=='inner' else 1,tangential_side=foot,
+            output.append(dict(region=region,coordinate=w['coordinate'],physical_coordinate=physical.tolist(),geometry=w['geometry'],radial_side=(-1 if region=='inner' else 1) if abs(r-H)<1e-12 else 0,tangential_side=foot,
                 native_tensor_replay_error=float(error),native_replay=replay,analytical_radial_target=exact,analytical_gradient=g.tolist(),
                 gradient_step_halving_max=float(np.max(abs(g-grad(1)))),analytical_divergence=float(np.trace(g)),
                 native_1D_target=one,actual_2D=w,analytical_k=ak,analytical_epsilon=ae,
