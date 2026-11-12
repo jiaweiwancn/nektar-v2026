@@ -11,18 +11,21 @@ from rans_request_manifest import RequestManifest,runtime_identity,sha
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','ct2','output'):p.add_argument('--'+k,type=Path,required=True)
+    p.add_argument('--build-directory',type=Path,help='owned mutable CT4 build only; frozen runtimes remain untouched')
     a=p.parse_args();source=a.root/'source';g=['git','-c','index.threads=1','-c','core.preloadIndex=false']
     m=RequestManifest(a.output,dict(schema='CT4NativeBuildV1',source_revision=subprocess.check_output(g+['rev-parse','HEAD'],cwd=source,text=True).strip(),
         source_status=subprocess.check_output(g+['status','--porcelain'],cwd=source,text=True),source_sha256=sha(Path(__file__)),compiler_jobs=2))
     os.environ['CMAKE_BUILD_PARALLEL_LEVEL']='2';result=dict(status='fail',executions=[])
-    cmds=[['cmake','-S',str(Path(__file__).parent),'-B',str(a.output/'build'),'-DCMAKE_BUILD_TYPE=Release','-DRANS_BUILD_SOLVER=ON',
+    build=a.build_directory or a.output/'build'
+    if a.build_directory:require(build.is_relative_to(a.root) and (build/'CMakeCache.txt').exists(),'unowned_incremental_build_directory')
+    cmds=[['cmake','-S',str(Path(__file__).parent),'-B',str(build),'-DCMAKE_BUILD_TYPE=Release','-DRANS_BUILD_SOLVER=ON',
         '-DRANS_PREBUILT_SPATIAL_LIBRARY='+str(a.ct2/'dependency/libSpatialDomains.so.5.9.0'),'-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake'],
-        ['cmake','--build',str(a.output/'build'),'--parallel','2','--target','IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks']]
+        ['cmake','--build',str(build),'--parallel','2','--target','IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks']]
     for i,cmd in enumerate(cmds):
         e=run(cmd,a.output,'build-'+str(i)+'.log');result['executions'].append(e);write_json(a.output/'progress.json',result)
         require(e['exit_code']==0,'CT4_native_build_failure')
     rt=a.output/'runtime';rt.mkdir();shutil.copytree(a.ct2/'runtime/lib',rt/'lib',symlinks=True)
-    for name in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks'):shutil.copy2(a.output/'build'/name,rt/name)
+    for name in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks'):shutil.copy2(build/name,rt/name)
     os.environ['LD_LIBRARY_PATH']=str(rt/'lib')
     result.update(status='pass',runtimes={n:runtime_identity(rt/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe','RANSNativeDiagnosticChecks')},
         libraries={p.name:sha(p) for p in (rt/'lib').iterdir() if p.is_file()},scope='new continuous-reference input provider only; original governing closures, wall kernel, ownership and PIMPLE method unchanged')

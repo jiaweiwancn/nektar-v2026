@@ -153,7 +153,11 @@ def initial(a):
         folder=a.output/str(dt);make(folder,a.runtime,c,dt,0)
         e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'zero.log');row=dict(status='fail',execution=e,directory=str(folder));result['members'][str(dt)]=row
         if not (folder/'case.evolution.json').exists():row['reason']='native_zero_initialization_failed';continue
-        native=json.loads((folder/'case.evolution.json').read_text());row.update(slots=len(native['state']),native_report_sha256=sha(folder/'case.evolution.json'),failure=native['failure'])
+        native=json.loads((folder/'case.evolution.json').read_text())
+        if 'state' not in native:
+            row.update(reason='native_initialization_exception',native_failure=native,native_report_sha256=sha(folder/'case.evolution.json'))
+            write_json(a.output/'progress.json',result);continue
+        row.update(slots=len(native['state']),native_report_sha256=sha(folder/'case.evolution.json'),failure=native['failure'])
         packet,pe=probe(a.runtime,folder,dict(operation='functions',grid=pts,grid_sides=sides,export_basis=True,export_test_basis=True,
             export_constitutive=True,export_neutral_composite_reference=True),'initial');row['probe_execution']=pe
         if e['exit_code'] or pe['exit_code']:row['reason']='native_or_independent_initial_probe_rejection';continue

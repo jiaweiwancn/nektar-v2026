@@ -5,6 +5,8 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <cmath>
 #include <iomanip>
+#include <iostream>
+#include <limits>
 #include <sstream>
 
 namespace Nektar
@@ -60,8 +62,15 @@ public:
     }
     std::array<double,9> At(double z,bool outer) const
     {
-        Require(std::isfinite(z) && z>=0 && (outer?z>=H:z<=H),"neutral reference coordinate/side mismatch");
+        // Native FwdTrans samples GetCoords() at an outer-field endpoint.
+        // It can differ from the declared H vertex by an arithmetic ulp.
+        // Evaluate the analytic outer continuation at the ORIGINAL positive
+        // coordinate, never snap coordinates or relax native element ownership.
+        const bool endpoint=outer && z<H && H-z<=8*std::numeric_limits<double>::epsilon()*H;
+        std::ostringstream where;where<<std::setprecision(17)<<"neutral reference coordinate/side mismatch: z="<<z<<",H="<<H<<",outer="<<outer;
+        Require(std::isfinite(z) && z>=0 && (outer?(z>=H || endpoint):z<=H),where.str());
         const auto key=std::make_pair(z,outer);const auto found=cache.find(key);if(found!=cache.end())return found->second;
+        if(endpoint)std::cerr<<std::setprecision(17)<<"NeutralCompositeV1: outer-field endpoint analytic continuation at original z="<<z<<", H="<<H<<", delta="<<H-z<<"; no coordinate change\n";
         std::array<double,9> v{}; // U,k,epsilon,Pi,U',k',epsilon',Q0,Dk
         const double kap=patch.Parameters().model.Kappa();
         if(outer)v={UH+us/kap*std::log(z/H),K,A/z,PiOuter,us/(kap*z),0,-A/(z*z),0,kap*us*z};
@@ -162,6 +171,8 @@ std::vector<RANSWallEvolutionFunction> RANSAcceptedOpenInitialFunctions(
     {
         const auto ref=std::make_shared<NeutralComposite>(s,patch);
         for(int b=0;b<patch.Gauge();++b)functions.push_back([ref,b](const RANSWallCoordinate &p,double){
+            if(b==1 || b==ref->patch.InnerPressure())return 0.;
+            if(b==ref->patch.OuterPressure())return ref->PiOuter;
             const bool outer=b==ref->patch.Epsilon() || b==ref->patch.OuterPressure() || p[2]>ref->H;
             const auto v=ref->At(p[2],outer);
             return b==0?v[0]:b==1?0.:b==ref->patch.K()?v[1]:b==ref->patch.Epsilon()?v[2]:v[3];});
