@@ -45,11 +45,12 @@ def main():
     files=list(a.root.glob('**/results.json'))
     m=RequestManifest(a.output,dict(schema='CT3AcceptedCostSummaryV1',source_sha256=sha(Path(__file__)),
         receipts={str(f.relative_to(a.root)):sha(f) for f in files if f.name=='results.json'}))
-    result=dict(status='pass',primary_segments=[],detailed_profiles=[],initializations=[])
+    result=dict(status='pass',primary_segments=[],detailed_profiles=[],initializations=[]);reference_executions={}
     for f in files:
         q=json.loads(f.read_text())
         if q.get('schema')=='CT3InitialV1':
             for dt,row in q['members'].items():
+                reference_executions[row['native_report_sha256']]=row['execution']
                 result['initializations'].append(dict(case=q['case'],dt=dt,slots=row['slots'],block_counts=row['block_counts'],
                     native_zero_step=row['executions'][0],observation_export=row['executions'][1],
                     timing=scopes(f.parent/dt/'timing.jsonl'),receipt_sha256=sha(f)))
@@ -64,8 +65,14 @@ def main():
         if q.get('bitwise_accepted_state_history_equivalence'):
             folder=f.parent/'run';row=dict(q,exclusive_grouping=scopes(folder/'timing.jsonl',.008,.02),
                 full_program_grouping=scopes(folder/'timing.jsonl'),receipt_sha256=sha(f))
+            row['reference_native_sha256']=json.loads((f.parent/'request-manifest.json').read_text())['request']['reference_sha256']
             row['whole_program_unattributed_CPU_including_MPI_helpers']=max(0.,q['execution']['process_cpu_seconds']-row['full_program_grouping']['total_instrumented_exclusive_CPU'])
             result['detailed_profiles'].append(row)
+    for row in result['detailed_profiles']:
+        original=reference_executions[row['reference_native_sha256']]
+        row['ordinary_reference_execution']=original
+        row['detailed_telemetry_CPU_overhead_ratio']=row['execution']['process_cpu_seconds']/original['process_cpu_seconds']
+        row['interpretation']='exact exclusive measurements of the instrumented equivalent run; detailed clocks/maps add overhead. Do not interpret fine-grained percentages as ordinary-runtime fractions. Ordinary coarse scopes, costs and physical operation counts are separate.'
     result['profile_scope']='accepted .008-.02 segments where admitted; initialization, full-program output, independent audits and owned-launcher wait costs separate; no startup extrapolation'
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);print('cost summary',len(result['primary_segments']),len(result['detailed_profiles']));return 0
 if __name__=='__main__':raise SystemExit(main())
