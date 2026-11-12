@@ -62,15 +62,20 @@ def profile(a):
     require(e['exit_code']==0 and not native['failure'] and same_history(old,native)
         and [exact_vector_hash(x) for x in old['accepted_states']]==[exact_vector_hash(x) for x in native['accepted_states']],
         'detailed_timing_changed_accepted_states_or_history')
-    phases={};startup={};per_step={}
-    for line in (folder/'timing.jsonl').read_text().splitlines():
-        q=json.loads(line);target=phases if q['step']>0 and q['time']>.008 else startup
+    phases={};startup={};per_step={};linear={}
+    records=[json.loads(line) for line in (folder/'timing.jsonl').read_text().splitlines()]
+    names={q['id']:q['name'] for q in records if 'id' in q}
+    for q in records:
+        target=phases if q['step']>0 and q['time']>.008 else startup
         p=target.setdefault(q['name'],dict(exclusive_process_cpu_seconds=0.,exclusive_wall_seconds=0.,calls=0))
         p['exclusive_process_cpu_seconds']+=q['exclusive_process_cpu_seconds'];p['exclusive_wall_seconds']+=q['exclusive_wall_seconds'];p['calls']+=q.get('calls',1)
         if target is phases:
             d=per_step.setdefault(str(q['step']),dict(time=q['time'],exclusive_cpu=0.));d['exclusive_cpu']+=q['exclusive_process_cpu_seconds']
+            if q['name'] in ('dense.factorization','dense.triangular_solve'):
+                key=q['name']+' in '+names.get(q.get('parent_id'),'unscoped')
+                v=linear.setdefault(key,dict(exclusive_cpu=0.,calls=0));v['exclusive_cpu']+=q['exclusive_process_cpu_seconds'];v['calls']+=1
     result=dict(status='pass',bitwise_accepted_state_history_equivalence=True,execution=e,stored_slots=len(native['state']),accepted_steps_in_segment=round((.02-.008)/dt),
-        start=.008,target=.02,dt=dt,accepted_exclusive_scopes=phases,startup_and_output_scopes=startup,per_step=per_step,
+        start=.008,target=.02,dt=dt,accepted_exclusive_scopes=phases,startup_and_output_scopes=startup,per_step=per_step,dense_linalg_parent_attribution=linear,
         native_report_sha256=sha(folder/'case.evolution.json'),timing_sha256=sha(folder/'timing.jsonl'),
         scope='sum EXCLUSIVE intervals only; nested inclusive totals not added; detailed timing overhead and output remain visible; profile does not change primary runtime attribution')
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return result
