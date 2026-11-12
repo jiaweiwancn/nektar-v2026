@@ -12,22 +12,26 @@ from cls_epawf_m4_cases import tensor_mesh
 from cls_epawf_m3_cases import set_info,set_parameter,write
 
 
-def mesh_knots(c):
+def mesh_knots(c,*,bisect_once=False):
     inner=inner_normal_knots(c.H,c.w,c.h)
     # Data heights only define observation/mesh panels, never an old U/k tail.
     outer=sorted(set([c.H,12.5-c.d0,c.top-c.d0]+[
         r['z_mm']/SCALE_MM-c.d0 for r in measurements(SCALE_MM*c.d0)if r['panel']=='a'and c.d0+c.H<r['z_mm']/SCALE_MM<c.top]))
     rho=lambda r:c.H+(r-c.H)*(c.top-c.H)/(c.top-c.d0-c.H)
     chart=inner+[rho(r)for r in outer[1:]]
+    if not isinstance(bisect_once,bool):raise ValueError('one prescribed normal bisection is boolean')
+    if bisect_once:
+        def bisect(v):return [q for a,b in zip(v[:-1],v[1:])for q in (a,(a+b)/2)]+[v[-1]]
+        inner,outer,chart=bisect(inner),bisect(outer),bisect(chart)
     if any(a>=b for a,b in zip(chart[:-1],chart[1:]))or chart.count(c.H)!=1:
         raise ValueError('invalid low-H interface/mesh ordering')
     return inner,outer,chart
 
 
-def case_xml(folder,c):
+def case_xml(folder,c,*,bisect_once=False):
     if not isinstance(c,NeutralReference):raise TypeError('distinct neutral configuration required; no Completion adapter')
     inner,outer,oi,oo,top,tf,meta=analytic_expressions(c.H,c.h,u_tau=c.u_tau,nu=c.nu,d0=c.d0,top=c.top,z0_e=c.z0_e,expression_degree=16)
-    meta.pop('wall');ik,physical_r,z=mesh_knots(c);folder=Path(folder);folder.mkdir(parents=True,exist_ok=False)
+    meta.pop('wall');ik,physical_r,z=mesh_knots(c,bisect_once=bisect_once);folder=Path(folder);folder.mkdir(parents=True,exist_ok=False)
     root=ET.parse(Path(__file__).with_name('EquilibriumWallFlat.xml')).getroot();co=root.find('CONDITIONS')
     for child in list(co):
         if child.tag!='VARIABLES':co.remove(child)
@@ -65,6 +69,11 @@ def case_xml(folder,c):
     meta.update(reference=c.summary(),inner_knots=ik,physical_outer_r=physical_r,chart_knots=z,
         physical_knots=[c.d0+r for r in ik]+[c.d0+r for r in physical_r[1:]],
         xknots=[0.,8.],normal_cells=len(z)-1,expression_degree=16,steps=0,scope='IDEALIZED EQUILIBRIUM CONTROL; not finite-depth experimental inlet')
+    if bisect_once:
+        ni,no=len(ik)-1,len(physical_r)-1
+        meta.update(mesh_experiment='WJH6AllNormalBisectV1',inner_cells=ni,outer_cells=no,
+            predicted_state_size=38*ni+50*no+20,parent_chart_knots=mesh_knots(c)[2])
+        if (ni,no,meta['predicted_state_size'])!=(16,34,2328):raise ValueError('unexpected prescribed H6 mesh size')
     (folder/'case-design.json').write_text(json.dumps(meta,indent=2,allow_nan=False)+'\n');return path
 
 
