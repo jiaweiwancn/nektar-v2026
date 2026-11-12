@@ -50,12 +50,12 @@ def main():
         q=json.loads(f.read_text())
         if q.get('schema')=='CT3InitialV1':
             for dt,row in q['members'].items():
-                reference_executions[row['native_report_sha256']]=row['execution']
                 result['initializations'].append(dict(case=q['case'],dt=dt,slots=row['slots'],block_counts=row['block_counts'],
                     native_zero_step=row['executions'][0],observation_export=row['executions'][1],
                     timing=scopes(f.parent/dt/'timing.jsonl'),receipt_sha256=sha(f)))
         if q.get('schema')=='CT3SegmentV1':
             for dt,row in q['members'].items():
+                reference_executions[row['native_report_sha256']]=row['execution']
                 folder=Path(row['directory']);timing=scopes(folder/'timing.jsonl',q['start'],row['time'])
                 result['primary_segments'].append(dict(case=q['case'],dt=dt,start=q['start'],target=q['target'],actual_time=row['time'],failure=row['failure'],
                     process=row['execution'],accepted_timing=timing,slots=len(json.loads((folder/'case.evolution.json').read_text())['state']),
