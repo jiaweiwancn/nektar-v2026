@@ -79,7 +79,18 @@ def main():
     m=RequestManifest(a.output,dict(schema='CT3CompactRequiredScopeV1',source_sha256=sha(Path(__file__)),
         comparisons_sha256=sha(a.comparisons/'results.json'),runtime=runtime_identity(runtime/'IncNavierStokesSolver'),
         source_revision=subprocess.check_output(['git','-c','index.threads=1','-c','core.preloadIndex=false','rev-parse','HEAD'],cwd=a.root/'source',text=True).strip()))
-    def save(name,value):write_json(a.output/name,value)
+    function_maps={}
+    def compact(value):
+        if isinstance(value,list):return [compact(v) for v in value]
+        if not isinstance(value,dict):return value
+        result={}
+        for k,v in value.items():
+            if k=='functions' and isinstance(v,dict):
+                digest=hashlib.sha256(canonical(v)).hexdigest();function_maps[digest]=v
+                result['functions_ref_sha256']=digest
+            else:result[k]=compact(v)
+        return result
+    def save(name,value):write_json(a.output/name,compact(value))
     decision=dict(schema='CT-Accepted-3-DecisionV1',diagnostic_execution='pass',cases={},resource_compliance={},
         physical_completion='per_case_only',spatial_uncertainty='unresolved_until_common_contrast',precursor_admission=False,benchmark_admission=False)
     raw={};exports={};requests={}
@@ -133,6 +144,17 @@ def main():
     decision['diagnostic_execution']='pass' if all(r['initialization']=='pass' and '0.008' in r['milestones'] and r['milestones']['0.008']['status'] in ('pass','fail') for r in decision['cases'].values()) else 'incomplete_required_case_diagnostics'
     controls=json.loads((a.root/'controls-v1/results.json').read_text());save('degree-pressure-and-coverage-controls.json',controls)
     decision['boundary_pressure_implementation']=controls['status'];decision['admission_negatives']=controls['coverage']['status']
+    supplements={'complete-budget-negative-controls.json':'gate-tests-v1/results.json','failure-witnesses.json':'failures-v1/results.json',
+        'accepted-costs.json':'costs-v1/results.json','timing-build.json':'profile-build-v1/results.json',
+        'timing-P3.json':'profile-P3-v1/results.json','timing-P4.json':'profile-P4-v1/results.json',
+        'timing-compatibility.json':'profile-compatibility-v1/results.json'}
+    for name,relative in supplements.items():
+        f=a.root/relative
+        require(f.exists(),'missing_required_supplement:'+relative)
+        value=json.loads(f.read_text());save(name,value);exports[name]=dict(source=str(f),sha256=sha(f))
+    decision['timing_runtime_compatibility']=json.loads((a.root/'profile-compatibility-v1/results.json').read_text())['status']
+    decision['timing_bitwise_equivalence']={tag:json.loads((a.root/('profile-'+tag+'-v1')/'results.json').read_text())['bitwise_accepted_state_history_equivalence'] for tag in ('P3','P4')}
+    decision['independent_failure_diagnosis']='pass' if json.loads((a.root/'failures-v1/results.json').read_text())['diagnostic_execution']=='pass' else 'fail'
     for f in a.root.glob('profile*/**/results.json'):
         if f.name=='results.json':
             name='profile-'+hashlib.sha256(str(f).encode()).hexdigest()[:8]+'.json';save(name,json.loads(f.read_text()));exports[name]=dict(source=str(f),sha256=sha(f))
@@ -152,6 +174,7 @@ def main():
         code={str(f.relative_to(source)):sha(f) for f in (source/'solvers/IncNavierStokesSolver/Tests/RANS').glob('ct_accepted3*.py')},
         specifications={str(f.relative_to(source)):sha(f) for f in (source/'docs/literature').glob('*A93*A95*tex')},
         bridge_sha256=sha(a.ct2/'relocation-runtime-bridge.json'),scope='physical runtime reused exactly; separate timing-only runtime explicitly tested; no equations, input functions, ownership or stage order changed'))
+    write_json(a.output/'frozen-functions-by-hash.json',function_maps)
     m.seal(a.output,[f.name for f in a.output.iterdir() if f.is_file() and f.name not in ('request-manifest.json','completed-artifacts.json')])
     save('package-hashes.json',{f.name:sha(f) for f in a.output.iterdir() if f.is_file()})
     print(json.dumps(decision));return 0
