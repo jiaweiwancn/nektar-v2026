@@ -7,7 +7,7 @@ aggregate by accepted step, avoiding per-point output. No new physics cache.
 """
 import argparse, json, os, shutil, subprocess, sys
 from pathlib import Path
-from rans_qualification import THREADS, write_json
+from rans_qualification import THREADS, write_json, exact_vector_hash
 os.environ.update(THREADS)
 import numpy as np
 from rans_request_manifest import RequestManifest, runtime_identity, sha
@@ -59,7 +59,9 @@ def profile(a):
     os.environ.update(LD_LIBRARY_PATH=str(a.runtime/'lib'),NEKTAR_RANS_TIMING_FILE=str(folder/'timing.jsonl'),NEKTAR_RANS_DETAILED_TIMING='1')
     e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');os.environ.pop('NEKTAR_RANS_TIMING_FILE');os.environ.pop('NEKTAR_RANS_DETAILED_TIMING')
     native=json.loads((folder/'case.evolution.json').read_text())
-    require(e['exit_code']==0 and not native['failure'] and same_history(old,native) and old['accepted_states']==native['accepted_states'],'detailed_timing_changed_accepted_states_or_history')
+    require(e['exit_code']==0 and not native['failure'] and same_history(old,native)
+        and [exact_vector_hash(x) for x in old['accepted_states']]==[exact_vector_hash(x) for x in native['accepted_states']],
+        'detailed_timing_changed_accepted_states_or_history')
     phases={};startup={};per_step={}
     for line in (folder/'timing.jsonl').read_text().splitlines():
         q=json.loads(line);target=phases if q['step']>0 and q['time']>.008 else startup
