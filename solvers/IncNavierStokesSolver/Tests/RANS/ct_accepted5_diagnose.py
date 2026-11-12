@@ -15,8 +15,11 @@ from ct_accepted5_traction import profiles,delta
 from ct_accepted_pilot import replay,artifact_hash
 from ct_accepted_open import probe,require,row_value
 from ct_accepted2_storage import artifact
+from ct_accepted3_pressure import pressure_action
 from validate_a93_a95_e94e95 import oracle
 from rans_request_manifest import RequestManifest,sha,runtime_identity
+
+def read_json(path):return json.loads(Path(path).read_text())
 
 def add(a,row,block,off,value):a[np.array(row['ids'],int)+off[block]]+=value
 
@@ -81,6 +84,8 @@ def reconcile(packet,c):
     for q in ordered:q['fraction_of_global_dual_squared']=q['signed_share']/energy
     require(abs(sum(q['signed_share'] for q in ordered)-energy)<2e-10*max(1.,energy),'signed_localization_sum')
     pressure_total=sum(pressure.values(),np.zeros(n));ref_pressure=sum(refp.values(),np.zeros(n));terms={}
+    pa,roughp,owners=pressure_action(o,s,c['roughness_input'],c['pressure_degree'])
+    require(np.max(abs(pa-roughp-pressure_total))<2e-10,'independent_full_pressure_volume_action')
     for name in ('inner_momentum_stress','outer_momentum_stress','conservative_advection','roughness_force'):
         v=np.array(r['terms'][name]);terms[name]=dict(signed_projection=signed(v),native_free_maximum=float(max(np.max(abs(v[np.array(free[b])+off[b]])) for b in (0,1))))
     tops=[]
@@ -92,7 +97,9 @@ def reconcile(packet,c):
                 support_bounds=[dict(geometry=g,lower=catalog[g]['lower'],upper=catalog[g]['upper']) for g in support]))
     return dict(status='pass',physical_reconstruction_maximum=float(np.max(abs(total-native))),term_reconstruction=defects,global_momentum_dual_squared=energy,
         radial_slabs=ordered,elements=element_rows,decisive_free_rows=tops,native_norms=r['norms']['native_stage'],momentum_terms=terms,
-        pressure_volume_projection=signed(pressure_total-ref_pressure),continuous_free_weak_maximum=float(max(np.max(abs(expected[np.array(free[b])+off[b]])) for b in (0,1))),
+        pressure_volume_projection=signed(pressure_total-ref_pressure),rough_pressure_projection=signed(roughp),
+        remaining_roughness_projection=signed(np.array(r['terms']['roughness_force'])-roughp),rough_pressure_trace_geometries=sorted({v['trace_geometry'] for v in owners}),
+        continuous_free_weak_maximum=float(max(np.max(abs(expected[np.array(free[b])+off[b]])) for b in (0,1))),
         prescribed_row_reaction_maximum=float(np.max(abs(native[list(masked)]))),
         shared_interface_rows=[dict(block=b,row=off[b]+j,load=native[off[b]+j]) for b in (0,1) for j in free[b] if any(q['interface'] and j in q['velocity_k']['ids'] for q in o['faces'])],
         owner_mismatch_count=sum(q['velocity_k']['geometry']!=q['pressure']['geometry'] or (q['epsilon'] is not None and q['epsilon']['geometry']!=q['velocity_k']['geometry']) for q in o['volume']),
@@ -101,19 +108,30 @@ def reconcile(packet,c):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('ct4','runtime','output','contract'):p.add_argument('--'+k,type=Path,required=True)
+    p.add_argument('--reuse-packets',type=Path,help='explicit reuse of identical native read-only packets after a reporting-only failure')
     a=p.parse_args();os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');root=a.ct4
     iz=root/'initial-v3/A95-6.0-P4/0.001';run=root/'evolution-v1/A95-6.0-P4/T0.008/0.001'
     prep=json.loads((iz.parent/'results.json').read_text());c=prep['case'];receipt=json.loads((run.parent/'results.json').read_text());native=json.loads((run/'case.evolution.json').read_text());ini=json.loads((iz/'initial.json').read_text())
     require(runtime_identity(a.runtime/'IncNavierStokesSolver')==prep['members']['0.001']['identity']['runtime'],'foreign_governing_runtime')
     require(sha(run/'case.evolution.json')==receipt['members']['0.001']['native_report_sha256'] and artifact_hash(native['checkpoint'])==receipt['members']['0.001']['history_sha256'],'changed_CT4_report_or_history')
-    m=RequestManifest(a.output,dict(schema='CT5NativeDiagnosisV1',contract_sha256=sha(a.contract),baseline_sha256=sha(run.parent/'results.json'),initial_sha256=sha(iz/'initial.json'),
-        runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),source_sha256={f:sha(Path(__file__).with_name(f)) for f in ('ct_accepted5_diagnose.py','ct_accepted5_traction.py')}))
+    request=dict(schema='CT5NativeDiagnosisV1',contract_sha256=sha(a.contract),baseline_sha256=sha(run.parent/'results.json'),initial_sha256=sha(iz/'initial.json'),
+        runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),source_sha256={f:sha(Path(__file__).with_name(f)) for f in ('ct_accepted5_diagnose.py','ct_accepted5_traction.py')})
+    cached=None
+    if a.reuse_packets:
+        old_request=read_json(a.reuse_packets/'request-manifest.json')['request']
+        require(all(old_request[k]==request[k] for k in ('contract_sha256','baseline_sha256','initial_sha256','runtime')),'foreign_cached_native_packet_request')
+        cached=read_json(a.reuse_packets/'progress.json');request['reused_progress_sha256']=sha(a.reuse_packets/'progress.json')
+    m=RequestManifest(a.output,request)
     result=dict(status='fail',accepted={},stages=[],governing_evolution_runs=0,baseline_native_sha256=sha(run/'case.evolution.json'))
     for t in (0.,.001,.002,.004,.008):
         idx=next(i for i,v in enumerate(native['audit_times']) if abs(v-t)<1e-13);state=native['accepted_states'][idx];folder=a.output/str(t);folder.mkdir();shutil.copy2(iz/'case.xml',folder/'case.xml')
-        packet,e=probe(a.runtime,folder,replay(ini,state,t,[],export_basis=True,export_resolution=True),'resolution')
+        if cached:
+            file=a.reuse_packets/str(t)/'resolution.json';require(sha(file)==cached['accepted'][str(t)]['packet_sha256'],'changed_cached_native_packet')
+            packet=read_json(file);e=cached['accepted'][str(t)]['execution']
+        else:
+            packet,e=probe(a.runtime,folder,replay(ini,state,t,[],export_basis=True,export_resolution=True),'resolution');file=folder/'resolution.json'
         require(e['exit_code']==0 and packet['observation']['state']==state,'read_only_replay_changed_input')
-        result['accepted'][str(t)]=dict(state_sha256=exact_vector_hash(state),packet_sha256=sha(folder/'resolution.json'),execution=e,reconciliation=reconcile(packet,c),
+        result['accepted'][str(t)]=dict(state_sha256=exact_vector_hash(state),packet_source=str(file),packet_sha256=sha(file),execution=e,reconciliation=reconcile(packet,c),
             analytical_weak=weak(packet,c),traction=profiles(ini,state,c))
         write_json(a.output/'progress.json',result)
     for attempt in native['pimple_attempts']:
@@ -124,7 +142,7 @@ def main():
         for (left,_),(right,_) in zip(states[:-1],states[1:]):parts[left+'->'+right]=delta(entries[left],entries[right],c)
         parts['input->post_k']=delta(entries['input'],entries['post_k'],c)
         result['stages'].append(dict(time=attempt['time'],incoming_sha256=attempt['incoming_sha256'],history_sha256=attempt['history_sha256'],flow_snapshot_sha256=sha(fpath),k_snapshot_sha256=sha(kpath),
-            traction=entries,decomposition=parts,pressure_action_maximum=float(np.max(abs(f['full_pressure_action']))),predictor_residual_maximum=float(np.max(abs(f['predictor_linear_residual']))),pressure_residual_maximum=float(np.max(abs(f['pressure_linear_residual']))),
+            traction=entries,decomposition=parts,pressure_action_maximum=float(np.max(np.abs(f['full_pressure_action']))),predictor_residual_maximum=float(np.max(np.abs(f['predictor_linear_residual']))),pressure_residual_maximum=float(np.max(np.abs(f['pressure_linear_residual']))),
             scope='no stress-domain rejection added at diagnostic predictor; each actual D uses that stage endpoint state, frozen-input D shown only as counterfactual'))
     require(all(v['reconciliation']['owner_mismatch_count']==0 for v in result['accepted'].values()),'volume_owner_inconsistency')
     require(result['accepted']['0.0']['analytical_weak']['status']=='pass','initial_continuous_weak_identity')
