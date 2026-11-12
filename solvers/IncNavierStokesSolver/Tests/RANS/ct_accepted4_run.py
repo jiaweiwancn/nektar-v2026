@@ -199,7 +199,12 @@ def endpoint(a,initial,native,c,folder):
                 write(root,sub/'case.xml');req=replay(initial,native['state'],native['time'],[],export_physical_scalar_budget=True,
                     previous_state=previous,stage_history=snap['history'],export_frozen_scalar_reconciliation=True,physical_face_order=face)
                 b,e=probe(a.runtime,sub,req,'budget')
-                result['budgets'][label]=dict(budget_classification(b,c),execution=e,packet_sha256=sha(sub/'budget.json')) if e['exit_code']==0 else dict(status='failed_probe',execution=e,raw_packet_sha256=sha(sub/'budget.json'))
+                if e['exit_code']==0:
+                    require(b['observation']['state']==native['state'] and b['observation']['identity']==initial['observation']['identity'],'frozen_budget_state_or_configuration_changed')
+                    require(b['initialization_receipt']['explicit_boundary_sha256']==b['initialization_receipt']['implicit_boundary_sha256']==initial['initialization_receipt']['explicit_boundary_sha256'],'frozen_budget_consumed_boundary_changed')
+                    result['budgets'][label]=dict(budget_classification(b,c),execution=e,packet_sha256=sha(sub/'budget.json'),state_sha256=exact_vector_hash(native['state']),
+                        boundary_sha256=b['initialization_receipt']['explicit_boundary_sha256'])
+                else:result['budgets'][label]=dict(status='failed_probe',execution=e,raw_packet_sha256=sha(sub/'budget.json'))
     result['budget_gate']=physical_budgets(result);result['alpha_zero_native']=packet.get('observation',{}).get('audit_alpha_zero')
     result['stage_diagnostics']=attempt_diagnosis(initial,native,c)
     result['all_accepted_native_audits']=audited_extrema(native)
@@ -221,6 +226,10 @@ def qualify(q):
 def advance(a):
     prep=json.loads((a.initial/'results.json').read_text());a.prep=prep;c=prep['case'];require(prep['status']=='pass','initialization_not_admitted')
     seal=json.loads((a.initial/'completed-artifacts.json').read_text());require(all(sha(a.initial/f)==h for f,h in seal['files'].items()),'initialization_changed')
+    for dt,row in prep['members'].items():
+        zero=a.initial/dt;native=json.loads((zero/'case.evolution.json').read_text())
+        require(row['identity']['runtime']==runtime_identity(a.runtime/'IncNavierStokesSolver'),'initialization_runtime_mismatch')
+        require(sha(zero/'case.evolution.json')==row['native_report_sha256'] and artifact_hash(native['checkpoint'])==row['initial_history_sha256'],'initial_state_or_history_changed')
     start=0.;parent=None
     if a.target==.02:
         require(a.parent is not None,'missing_parent');parent=json.loads((a.parent/'results.json').read_text())
