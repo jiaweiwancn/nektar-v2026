@@ -1,0 +1,1954 @@
+{
+  "CP0-H5.5mm": {
+    "argv": [
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/runtime-v4/IncNavierStokesSolver",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H5.5mm/case.xml"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H5.5mm",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 60,
+    "cp0": true,
+    "generator_fix": null,
+    "inputs": {
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/runtime-v4/IncNavierStokesSolver": {
+        "sha256": "9ae37a1aba62755b10ad99c9484c498cef9d927a75fb950f00344f4ffc5d06fe",
+        "bytes": 7737280
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H5.5mm/case.xml": {
+        "sha256": "9d338a1a6721567c927da5b6cef168f1a28fa94d277d4b73893577dac3b9394f",
+        "bytes": 53933
+      }
+    },
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65802,
+          "parent": 65801,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 65820,
+          "parent": 65802,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'CP0-H5.5mm',['/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/runtime-v4/IncNavierStokesSolver', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H5.5mm/case.xml'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H5.5mm',seconds=60,cp0=True);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "FAIL",
+    "seconds": 6.338364862996968,
+    "exit": 1,
+    "reason": null,
+    "peak_tree_rss_bytes": 316084224,
+    "root_bytes": 653371612,
+    "log_sha256": "de8820ce929a89f0e10daecafbd15b8c7b5d754f2b823d98936a837247be26b5",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/CP0-H5.5mm/receipt.json",
+      "bytes": 2590,
+      "sha256": "fa68d6c5900ea8914769cd425a1c11aa8a07db1adc8720642eb20785ae9a955f"
+    }
+  },
+  "CP0-H5mm": {
+    "argv": [
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/runtime-v4/IncNavierStokesSolver",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H5mm/case.xml"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H5mm",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 60,
+    "cp0": true,
+    "generator_fix": null,
+    "inputs": {
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/runtime-v4/IncNavierStokesSolver": {
+        "sha256": "9ae37a1aba62755b10ad99c9484c498cef9d927a75fb950f00344f4ffc5d06fe",
+        "bytes": 7737280
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H5mm/case.xml": {
+        "sha256": "7da5f0bef7078761edfed0aecc11cd8611c89b6db4134d57765f7d88d4163757",
+        "bytes": 53964
+      }
+    },
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65802,
+          "parent": 65801,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 65804,
+          "parent": 65802,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'CP0-H5mm',['/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/runtime-v4/IncNavierStokesSolver', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H5mm/case.xml'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H5mm',seconds=60,cp0=True);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 6.334576371002186,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 335917056,
+    "root_bytes": 651321679,
+    "log_sha256": "7e0cc0e29d32ee7cc71220a8cbbf768c61b3d9cb5de2c18e20e24ebd6b97c2da",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/CP0-H5mm/receipt.json",
+      "bytes": 2578,
+      "sha256": "637200b0c054076debc6e549b3987844d9421e81f08fa360128c13cee442a95f"
+    }
+  },
+  "CP0-H6mm": {
+    "argv": [
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/runtime-v4/IncNavierStokesSolver",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H6mm/case.xml"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H6mm",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 60,
+    "cp0": true,
+    "generator_fix": null,
+    "inputs": {
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/runtime-v4/IncNavierStokesSolver": {
+        "sha256": "9ae37a1aba62755b10ad99c9484c498cef9d927a75fb950f00344f4ffc5d06fe",
+        "bytes": 7737280
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H6mm/case.xml": {
+        "sha256": "6d27b914c3b06180ce444f3b5ad83cbf4f9d48bf54f48e5e5967dc48a1030000",
+        "bytes": 53977
+      }
+    },
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65802,
+          "parent": 65801,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 65836,
+          "parent": 65802,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'CP0-H6mm',['/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/runtime-v4/IncNavierStokesSolver', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H6mm/case.xml'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/cases/H6mm',seconds=60,cp0=True);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "FAIL",
+    "seconds": 6.34720959400147,
+    "exit": 1,
+    "reason": null,
+    "peak_tree_rss_bytes": 320282624,
+    "root_bytes": 655421073,
+    "log_sha256": "9b98dc8e774bbb4a7ad0afad34a10953659fe68a0345bc4599eb13561944804c",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/CP0-H6mm/receipt.json",
+      "bytes": 2577,
+      "sha256": "532858b74712e9fb549c5ebc6d4d3dd8b101af4187ad137456c1cc1786bafd49"
+    }
+  },
+  "case-generation": {
+    "argv": [
+      "/usr/bin/python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112",
+      "--mode",
+      "generate"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 40,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {
+      "/usr/bin/python3": {
+        "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+        "bytes": 5941864
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py": {
+        "sha256": "fa1e03fcc95735e6db78149f21b4cd60c53683fabbe5960693ea99878b6399eb",
+        "bytes": 15863
+      }
+    },
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65699,
+          "parent": 65698,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 65757,
+          "parent": 65699,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'case-generation',['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py', '--root', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112', '--mode', 'generate'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS',seconds=40);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 2.252123919999576,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 94453760,
+    "root_bytes": 647569760,
+    "log_sha256": "edca192dc414daa024062ca47e43a3cd05f230f65be14abdb8460072ece7500b",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/case-generation/receipt.json",
+      "bytes": 2829,
+      "sha256": "4de66fe9d89ecaefb396beab2a1cafeae69e2b16da3b2cc1ef6e20fdbe14bf6b"
+    }
+  },
+  "configure": {
+    "argv": [
+      "cmake",
+      "-S",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config",
+      "-DRANS_BUILD_SOLVER=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 100,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {},
+    "allocation": {
+      "workers": 17,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 63827,
+          "parent": 63826,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 63828,
+          "parent": 63827,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 --project-limit 16"
+        },
+        {
+          "pid": 63831,
+          "parent": 63827,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 63832,
+          "parent": 63831,
+          "threads": 1,
+          "args": "python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 64017,
+          "parent": 63832,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_jobs.py --phase initial --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime --initial-root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-controller-v2"
+        },
+        {
+          "pid": 64828,
+          "parent": 64825,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 64880,
+          "parent": 64017,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_run.py --mode initial --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime --references /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/reference-v1/results.json --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/docs/plans/cao-tamura-accepted-4-evidence/native-contract.json --model A95 --height 6.5 --degree 3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2/A95-6.5-P3"
+        },
+        {
+          "pid": 64928,
+          "parent": 64880,
+          "threads": 2,
+          "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime/RANSPreservationProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2/A95-6.5-P3/0.002/case.xml /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2/A95-6.5-P3/0.002/initial-request.json /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2/A95-6.5-P3/0.002/initial.json"
+        },
+        {
+          "pid": 64929,
+          "parent": 64928,
+          "threads": 4,
+          "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+        },
+        {
+          "pid": 64935,
+          "parent": 64828,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'configure',['cmake', '-S', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS', '-B', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config', '-DRANS_BUILD_SOLVER=ON', '-DCMAKE_BUILD_TYPE=Release', '-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS',seconds=100);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "FAIL",
+    "seconds": 0.533810186003393,
+    "exit": 1,
+    "reason": null,
+    "peak_tree_rss_bytes": 1273856,
+    "root_bytes": 643885950,
+    "log_sha256": "e7cb8a900d3a2faaa66c1cb12f7be4ada20347e7bb7c4d7b2b8de7b23731a63b",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/configure/receipt.json",
+      "bytes": 9104,
+      "sha256": "6f7d60a4254c0617480fc7ba09553eaa504e011808ebb5a3a03c6ca018565290"
+    }
+  },
+  "configure-final": {
+    "argv": [
+      "cmake",
+      "-S",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-final",
+      "-DRANS_BUILD_SOLVER=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+      "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 100,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {},
+    "allocation": {
+      "workers": 11,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 66182,
+          "parent": 66181,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 66183,
+          "parent": 66182,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 --project-limit 16"
+        },
+        {
+          "pid": 66186,
+          "parent": 66182,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 66187,
+          "parent": 66186,
+          "threads": 1,
+          "args": "python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 67455,
+          "parent": 66187,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_jobs.py --phase initial --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime --initial-root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-controller-v3"
+        },
+        {
+          "pid": 67457,
+          "parent": 67454,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 67470,
+          "parent": 67455,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_run.py --mode initial --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime --references /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/reference-v1/results.json --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/docs/plans/cao-tamura-accepted-4-evidence/projection-contract.json --model A95 --height 6.0 --degree 3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v3/A95-6.0-P3"
+        },
+        {
+          "pid": 67563,
+          "parent": 67457,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'configure-final',['cmake', '-S', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS', '-B', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-final', '-DRANS_BUILD_SOLVER=ON', '-DCMAKE_BUILD_TYPE=Release', '-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math', '-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS',seconds=100);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 1.7498927069973433,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 82100224,
+    "root_bytes": 1125618630,
+    "log_sha256": "0532383b68a263110844e27c3c9b789c70f379473bd44966e219a406ce417b4d",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/configure-final/receipt.json",
+      "bytes": 11497,
+      "sha256": "d0e3c33c0dc502e4d12219606e909e3ad8b6d1bf8ab75115156f8847c0001dac"
+    }
+  },
+  "configure-v2": {
+    "argv": [
+      "cmake",
+      "-S",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-v2",
+      "-DRANS_BUILD_SOLVER=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+      "-DCMAKE_PREFIX_PATH=/home/jay/.local/opt/nektar-v2026-mpi"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 100,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {},
+    "allocation": {
+      "workers": 18,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 63827,
+          "parent": 63826,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 63828,
+          "parent": 63827,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 --project-limit 16"
+        },
+        {
+          "pid": 63831,
+          "parent": 63827,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 63832,
+          "parent": 63831,
+          "threads": 1,
+          "args": "python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 64017,
+          "parent": 63832,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_jobs.py --phase initial --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime --initial-root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-controller-v2"
+        },
+        {
+          "pid": 65054,
+          "parent": 64017,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_run.py --mode initial --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime --references /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/reference-v1/results.json --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/docs/plans/cao-tamura-accepted-4-evidence/native-contract.json --model A93 --height 6.5 --degree 3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2/A93-6.5-P3"
+        },
+        {
+          "pid": 65152,
+          "parent": 65054,
+          "threads": 3,
+          "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime/RANSPreservationProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2/A93-6.5-P3/0.001/case.xml /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2/A93-6.5-P3/0.001/initial-request.json /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2/A93-6.5-P3/0.001/initial.json"
+        },
+        {
+          "pid": 65153,
+          "parent": 65152,
+          "threads": 4,
+          "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+        },
+        {
+          "pid": 65202,
+          "parent": 65200,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 65205,
+          "parent": 65202,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'configure-v2',['cmake', '-S', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS', '-B', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-v2', '-DRANS_BUILD_SOLVER=ON', '-DCMAKE_BUILD_TYPE=Release', '-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math', '-DCMAKE_PREFIX_PATH=/home/jay/.local/opt/nektar-v2026-mpi'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS',seconds=100);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "FAIL",
+    "seconds": 0.5334095189973596,
+    "exit": 1,
+    "reason": null,
+    "peak_tree_rss_bytes": 1236992,
+    "root_bytes": 644021095,
+    "log_sha256": "f2b0708897f76ef1c81a6e44e3cda0f9ac4d7fc800b4e2a22c4c271bda66aa89",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/configure-v2/receipt.json",
+      "bytes": 9240,
+      "sha256": "3d682694f6541e474b57bdfd06eaf9444e2fa03ef961e0dd6e72d9b8f4cd7d66"
+    }
+  },
+  "configure-v3": {
+    "argv": [
+      "cmake",
+      "-S",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-v3",
+      "-DRANS_BUILD_SOLVER=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+      "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 100,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {},
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65699,
+          "parent": 65698,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 65701,
+          "parent": 65699,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'configure-v3',['cmake', '-S', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS', '-B', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-v3', '-DRANS_BUILD_SOLVER=ON', '-DCMAKE_BUILD_TYPE=Release', '-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math', '-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS',seconds=100);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 1.7558707259959192,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 82874368,
+    "root_bytes": 647211524,
+    "log_sha256": "46dd664a22710de4040eeb0e64c8f48fcb3b20f953b128ab15aa781240c0be7c",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/configure-v3/receipt.json",
+      "bytes": 2743,
+      "sha256": "1fd68214c495105a9ece5632cddc272478be0cb2d9656089423dc33b51fd458f"
+    }
+  },
+  "continuum-calibration": {
+    "argv": [
+      "/usr/bin/python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112",
+      "--mode",
+      "reference",
+      "--kernel",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/build-v1/WJKernelProbe"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 120,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {
+      "/usr/bin/python3": {
+        "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+        "bytes": 5941864
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py": {
+        "sha256": "fa1e03fcc95735e6db78149f21b4cd60c53683fabbe5960693ea99878b6399eb",
+        "bytes": 15863
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/build-v1/WJKernelProbe": {
+        "sha256": "3d4edf79a2718a281175be1a575776a33dd5f988c48d5a1b594a9b5f2dd7844c",
+        "bytes": 251368
+      }
+    },
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65699,
+          "parent": 65698,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 65751,
+          "parent": 65699,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'continuum-calibration',['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py', '--root', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112', '--mode', 'reference', '--kernel', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/build-v1/WJKernelProbe'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS',seconds=120);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 1.1810326959966915,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 96911360,
+    "root_bytes": 647358381,
+    "log_sha256": "80ce216e72e4083690c6b5e845946f38bc620bd891f9fd415936324e217543f8",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/continuum-calibration/receipt.json",
+      "bytes": 3261,
+      "sha256": "7ef7913e7c806da59e4b8247d467b4db45b3ea80f331f5028b856a296a35286e"
+    }
+  },
+  "ctest-final": {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-final",
+      "-R",
+      "^WJH5NeutralInlet$",
+      "--output-on-failure",
+      "-j",
+      "1"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 120,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {},
+    "allocation": {
+      "workers": 18,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 66182,
+          "parent": 66181,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 66183,
+          "parent": 66182,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 --project-limit 16"
+        },
+        {
+          "pid": 66186,
+          "parent": 66182,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 66187,
+          "parent": 66186,
+          "threads": 1,
+          "args": "python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 67455,
+          "parent": 66187,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_jobs.py --phase initial --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime --initial-root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-controller-v3"
+        },
+        {
+          "pid": 67457,
+          "parent": 67454,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 67470,
+          "parent": 67455,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_run.py --mode initial --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime --references /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/reference-v1/results.json --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/docs/plans/cao-tamura-accepted-4-evidence/projection-contract.json --model A95 --height 6.0 --degree 3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v3/A95-6.0-P3"
+        },
+        {
+          "pid": 67612,
+          "parent": 67470,
+          "threads": 3,
+          "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver case.xml"
+        },
+        {
+          "pid": 67613,
+          "parent": 67612,
+          "threads": 4,
+          "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+        },
+        {
+          "pid": 67633,
+          "parent": 67457,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'ctest-final',['ctest', '--test-dir', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-final', '-R', '^WJH5NeutralInlet$', '--output-on-failure', '-j', '1'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS',seconds=120);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 2.8221119939989876,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 115986432,
+    "root_bytes": 1125707937,
+    "log_sha256": "650cd5a126f6724e053db574da330a86ff3716c29fc60a91e9127538de61eba5",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/ctest-final/receipt.json",
+      "bytes": 11416,
+      "sha256": "ee6a305bfbdb7b1740accf2d9dddb0b71baaa94441fd8bf65cdb0ec6d5a951fc"
+    }
+  },
+  "ctest-focused": {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-v3",
+      "-R",
+      "^WJH5NeutralInlet$",
+      "--output-on-failure",
+      "-j",
+      "1"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 120,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {},
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65699,
+          "parent": 65698,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 65745,
+          "parent": 65699,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'ctest-focused',['ctest', '--test-dir', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-v3', '-R', '^WJH5NeutralInlet$', '--output-on-failure', '-j', '1'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS',seconds=120);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 2.8285526010004105,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 89174016,
+    "root_bytes": 647263787,
+    "log_sha256": "cee62989a1b1412748671eae7259eb6969370a21825351c0a72072f96f9ef763",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/ctest-focused/receipt.json",
+      "bytes": 2212,
+      "sha256": "f4f936e9f944b74462daacf196b2768d356bb7721d9b318380b2f8497a0829c1"
+    }
+  },
+  "ctest-inventory": {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-v3",
+      "-N",
+      "-R",
+      "^WJH5NeutralInlet$"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 20,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {},
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65699,
+          "parent": 65698,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 65740,
+          "parent": 65699,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'ctest-inventory',['ctest', '--test-dir', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-v3', '-N', '-R', '^WJH5NeutralInlet$'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS',seconds=20);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 0.5543182780020288,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 2023424,
+    "root_bytes": 647223646,
+    "log_sha256": "0c591d9d822d5ee699c56c9721d9b777452d5845f17cccd46fc8fdb95af3c5e2",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/ctest-inventory/receipt.json",
+      "bytes": 2147,
+      "sha256": "a0e9ce28fd2a93167d9ff1fec6ae4504fecc04a72c2b61dfa9887f587e7f4a94"
+    }
+  },
+  "ctest-inventory-final": {
+    "argv": [
+      "ctest",
+      "--test-dir",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-final",
+      "-N",
+      "-R",
+      "^WJH5NeutralInlet$"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 20,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {},
+    "allocation": {
+      "workers": 18,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 66182,
+          "parent": 66181,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 66183,
+          "parent": 66182,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 --project-limit 16"
+        },
+        {
+          "pid": 66186,
+          "parent": 66182,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 66187,
+          "parent": 66186,
+          "threads": 1,
+          "args": "python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 67455,
+          "parent": 66187,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_jobs.py --phase initial --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime --initial-root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-controller-v3"
+        },
+        {
+          "pid": 67457,
+          "parent": 67454,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 67470,
+          "parent": 67455,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_run.py --mode initial --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime --references /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/reference-v1/results.json --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/docs/plans/cao-tamura-accepted-4-evidence/projection-contract.json --model A95 --height 6.0 --degree 3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v3/A95-6.0-P3"
+        },
+        {
+          "pid": 67612,
+          "parent": 67470,
+          "threads": 3,
+          "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver case.xml"
+        },
+        {
+          "pid": 67613,
+          "parent": 67612,
+          "threads": 4,
+          "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+        },
+        {
+          "pid": 67626,
+          "parent": 67457,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'ctest-inventory-final',['ctest', '--test-dir', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/focused-config-final', '-N', '-R', '^WJH5NeutralInlet$'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS',seconds=20);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 0.539919311995618,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 1040384,
+    "root_bytes": 1125648567,
+    "log_sha256": "c0d4d3d54d74b3fa820d70539f8cc29a7fe0d73662e599fc2b0992737d970a38",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/ctest-inventory-final/receipt.json",
+      "bytes": 11357,
+      "sha256": "c4986ea223ced7fb8a6c764365f5da4d06f1064cf1d38f1c71a7bb683df75c4f"
+    }
+  },
+  "equivalence-v1": {
+    "argv": [
+      "/usr/bin/python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112",
+      "--mode",
+      "verify"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 80,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {
+      "/usr/bin/python3": {
+        "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+        "bytes": 5941864
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py": {
+        "sha256": "fa1e03fcc95735e6db78149f21b4cd60c53683fabbe5960693ea99878b6399eb",
+        "bytes": 15863
+      }
+    },
+    "allocation": {
+      "workers": 18,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 63827,
+          "parent": 63826,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 63828,
+          "parent": 63827,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 --project-limit 16"
+        },
+        {
+          "pid": 63831,
+          "parent": 63827,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 63832,
+          "parent": 63831,
+          "threads": 1,
+          "args": "python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 64017,
+          "parent": 63832,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_jobs.py --phase initial --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime --initial-root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-controller-v2"
+        },
+        {
+          "pid": 64828,
+          "parent": 64825,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 64880,
+          "parent": 64017,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_run.py --mode initial --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime --references /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/reference-v1/results.json --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/docs/plans/cao-tamura-accepted-4-evidence/native-contract.json --model A95 --height 6.5 --degree 3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2/A95-6.5-P3"
+        },
+        {
+          "pid": 64899,
+          "parent": 64880,
+          "threads": 3,
+          "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime/IncNavierStokesSolver case.xml"
+        },
+        {
+          "pid": 64900,
+          "parent": 64899,
+          "threads": 4,
+          "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+        },
+        {
+          "pid": 64911,
+          "parent": 64828,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'equivalence-v1',['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py', '--root', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112', '--mode', 'verify'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS',seconds=80);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 1.1753398350047064,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 126124032,
+    "root_bytes": 643646931,
+    "log_sha256": "3e0c29aa44ac058b98826731cc9b16b28d22b5e2060742ebb9e69526f8e10fe9",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/equivalence-v1/receipt.json",
+      "bytes": 9022,
+      "sha256": "6e67a2142b3d2be27b93f9b62c14eb5bbdd59c2402167f392a51238ed64dc9e8"
+    }
+  },
+  "focused-python-v1": {
+    "argv": [
+      "/usr/bin/python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/test_wj_h5_neutral.py",
+      "-v"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 120,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {
+      "/usr/bin/python3": {
+        "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+        "bytes": 5941864
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/test_wj_h5_neutral.py": {
+        "sha256": "932a995fe2dfd595b8dd3f7cadfa5a8b892849328f2236f33506bf423b0088ea",
+        "bytes": 7507
+      }
+    },
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 63781,
+          "parent": 63780,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 63783,
+          "parent": 63781,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;root=Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112');sys.exit(0 if execute(root,'focused-python-v1',[sys.executable,'/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/test_wj_h5_neutral.py','-v'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS',seconds=120) else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "7f8f44e5f06296050394cd796fd2ee79668c543b4844a06f650c5d2e618fc8b7",
+    "status": "FAIL",
+    "seconds": 1.505999689004966,
+    "exit": 1,
+    "reason": null,
+    "peak_tree_rss_bytes": 72777728,
+    "root_bytes": 321802126,
+    "log_sha256": "d96861d4a9d396627f90b27a6e8ed7507c0b02d3e65b36fa269edca0566af028",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/focused-python-v1/receipt.json",
+      "bytes": 2577,
+      "sha256": "259df9a613f467a1843075d1014eda9aea862a9c914a932cb458d9cb31a805e4"
+    }
+  },
+  "focused-python-v2": {
+    "argv": [
+      "/usr/bin/python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/test_wj_h5_neutral.py",
+      "-v"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 120,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {
+      "/usr/bin/python3": {
+        "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+        "bytes": 5941864
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/test_wj_h5_neutral.py": {
+        "sha256": "932a995fe2dfd595b8dd3f7cadfa5a8b892849328f2236f33506bf423b0088ea",
+        "bytes": 7507
+      }
+    },
+    "allocation": {
+      "workers": 18,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 63827,
+          "parent": 63826,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 63828,
+          "parent": 63827,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 --project-limit 16"
+        },
+        {
+          "pid": 63831,
+          "parent": 63827,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-endpoint-v2 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 63832,
+          "parent": 63831,
+          "threads": 1,
+          "args": "python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'endpoint.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v2')],check=True) subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v2/runtime'),'--initial-root',str(r/'initial-v2'),'--output',str(r/'initial-controller-v2')],check=True)"
+        },
+        {
+          "pid": 64017,
+          "parent": 63832,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_jobs.py --phase initial --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime --initial-root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-controller-v2"
+        },
+        {
+          "pid": 64828,
+          "parent": 64825,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 64880,
+          "parent": 64017,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_run.py --mode initial --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime --references /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/reference-v1/results.json --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/docs/plans/cao-tamura-accepted-4-evidence/native-contract.json --model A95 --height 6.5 --degree 3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v2/A95-6.5-P3"
+        },
+        {
+          "pid": 64899,
+          "parent": 64880,
+          "threads": 3,
+          "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v2/runtime/IncNavierStokesSolver case.xml"
+        },
+        {
+          "pid": 64900,
+          "parent": 64899,
+          "threads": 4,
+          "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+        },
+        {
+          "pid": 64919,
+          "parent": 64828,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'focused-python-v2',['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS/test_wj_h5_neutral.py', '-v'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/source-ebc63a6/solvers/IncNavierStokesSolver/Tests/RANS',seconds=120);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 2.7847519089991692,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 72110080,
+    "root_bytes": 643755704,
+    "log_sha256": "eae86541b29fcddcf0b6ff635fc5fe910b71c004e14aaeb4272edd1f32e07d84",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/focused-python-v2/receipt.json",
+      "bytes": 8816,
+      "sha256": "5e3a4780e5b028792f103c5f25e2187e43c008547e1865247a1d23f051d53cf9"
+    }
+  },
+  "observer-focused": {
+    "argv": [
+      "/usr/bin/python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/test_wj_h5_neutral.py",
+      "-v"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 120,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {
+      "/usr/bin/python3": {
+        "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+        "bytes": 5941864
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/test_wj_h5_neutral.py": {
+        "sha256": "932a995fe2dfd595b8dd3f7cadfa5a8b892849328f2236f33506bf423b0088ea",
+        "bytes": 7507
+      }
+    },
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65980,
+          "parent": 65979,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 66012,
+          "parent": 65980,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'observer-focused',['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/test_wj_h5_neutral.py', '-v'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS',seconds=120);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 2.7819611910017557,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 73084928,
+    "root_bytes": 668386379,
+    "log_sha256": "8920d4368b52486f73c060125be3e2353261a428d8a79de2882ae907b9e70b75",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/observer-focused/receipt.json",
+      "bytes": 2629,
+      "sha256": "dd65b2399a808af38f789140888479221328ea438cca91416355db6a960afdab"
+    }
+  },
+  "passive-H5.5mm": {
+    "argv": [
+      "/usr/bin/python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112",
+      "--mode",
+      "assess",
+      "--height-mm",
+      "5.5",
+      "--observer",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/observer-v6/RANSWallResolutionProbe"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 150,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {
+      "/usr/bin/python3": {
+        "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+        "bytes": 5941864
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py": {
+        "sha256": "cb10d7832f0eca85ddaaad36f30fbe18ca554aa767004972dd03e785423ec4c9",
+        "bytes": 20552
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/observer-v6/RANSWallResolutionProbe": {
+        "sha256": "6f35b837f0dd13eb155e0fe34f0dc670c609ee6cbe739609a5de288dd49ed06d",
+        "bytes": 4360816
+      }
+    },
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65980,
+          "parent": 65979,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 66042,
+          "parent": 65980,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'passive-H5.5mm',['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py', '--root', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112', '--mode', 'assess', '--height-mm', '5.5', '--observer', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/observer-v6/RANSWallResolutionProbe'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS',seconds=150);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 2.232878097995126,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 111362048,
+    "root_bytes": 795344215,
+    "log_sha256": "4dd9e5c4b46ba9ad81ceaca418b95ed4bccdc9c2c2c9eb5348034bad314f1a15",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/passive-H5.5mm/receipt.json",
+      "bytes": 3354,
+      "sha256": "7f09b314ac9f341eb7977472695a6fe3d2b410d426d3b3fed8146f71d85d0271"
+    }
+  },
+  "passive-H5mm": {
+    "argv": [
+      "/usr/bin/python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112",
+      "--mode",
+      "assess",
+      "--height-mm",
+      "5",
+      "--observer",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/observer-v6/RANSWallResolutionProbe"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 150,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {
+      "/usr/bin/python3": {
+        "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+        "bytes": 5941864
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py": {
+        "sha256": "cb10d7832f0eca85ddaaad36f30fbe18ca554aa767004972dd03e785423ec4c9",
+        "bytes": 20552
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/observer-v6/RANSWallResolutionProbe": {
+        "sha256": "6f35b837f0dd13eb155e0fe34f0dc670c609ee6cbe739609a5de288dd49ed06d",
+        "bytes": 4360816
+      }
+    },
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65980,
+          "parent": 65979,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 66017,
+          "parent": 65980,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'passive-H5mm',['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py', '--root', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112', '--mode', 'assess', '--height-mm', '5', '--observer', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/observer-v6/RANSWallResolutionProbe'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS',seconds=150);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 23.746433873995556,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 646668288,
+    "root_bytes": 790431267,
+    "log_sha256": "5b2f3d19bb08ec575024896349ac9d495f7957cda96ac0628734c80dfea753a3",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/passive-H5mm/receipt.json",
+      "bytes": 3349,
+      "sha256": "86120455237648a3dc379f55c3d1a914dccac0eb33783e17058e9264b70b92cd"
+    }
+  },
+  "passive-H6mm": {
+    "argv": [
+      "/usr/bin/python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112",
+      "--mode",
+      "assess",
+      "--height-mm",
+      "6",
+      "--observer",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/observer-v6/RANSWallResolutionProbe"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 150,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {
+      "/usr/bin/python3": {
+        "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+        "bytes": 5941864
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py": {
+        "sha256": "cb10d7832f0eca85ddaaad36f30fbe18ca554aa767004972dd03e785423ec4c9",
+        "bytes": 20552
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/observer-v6/RANSWallResolutionProbe": {
+        "sha256": "6f35b837f0dd13eb155e0fe34f0dc670c609ee6cbe739609a5de288dd49ed06d",
+        "bytes": 4360816
+      }
+    },
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65980,
+          "parent": 65979,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 66048,
+          "parent": 65980,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'passive-H6mm',['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py', '--root', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112', '--mode', 'assess', '--height-mm', '6', '--observer', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h2-20261111/observer-v6/RANSWallResolutionProbe'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS',seconds=150);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 2.2621849209972424,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 113266688,
+    "root_bytes": 800261439,
+    "log_sha256": "72133fb1147fe9e984b00df6cf18d3ba989b3fc7f5be88bfa77996544be1f70e",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/passive-H6mm/receipt.json",
+      "bytes": 3349,
+      "sha256": "b159e9335ace56cbd8da69a650cb38e3d30acc6e9a710e3f29a28089e1f7cf1a"
+    }
+  },
+  "plots": {
+    "argv": [
+      "/usr/bin/python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112",
+      "--mode",
+      "plot"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 60,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {
+      "/usr/bin/python3": {
+        "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+        "bytes": 5941864
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py": {
+        "sha256": "cb10d7832f0eca85ddaaad36f30fbe18ca554aa767004972dd03e785423ec4c9",
+        "bytes": 20552
+      }
+    },
+    "allocation": {
+      "workers": 5,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 65980,
+          "parent": 65979,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 66054,
+          "parent": 65980,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'plots',['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py', '--root', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112', '--mode', 'plot'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-5e19336/solvers/IncNavierStokesSolver/Tests/RANS',seconds=60);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 2.837861255997268,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 148156416,
+    "root_bytes": 800661351,
+    "log_sha256": "31f3eea5b1b866e2c636dcb0b2930408451e3322bd0e3072feb15b4ae493786f",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/plots/receipt.json",
+      "bytes": 2822,
+      "sha256": "66b0423092d4985f7980dc3e7c58b60226602103e462113e445fd3e40183b7a3"
+    }
+  },
+  "weak-recheck-v2": {
+    "argv": [
+      "/usr/bin/python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112",
+      "--mode",
+      "weak-recheck"
+    ],
+    "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "reserved_seconds": 120,
+    "cp0": false,
+    "generator_fix": null,
+    "inputs": {
+      "/usr/bin/python3": {
+        "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+        "bytes": 5941864
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py": {
+        "sha256": "a126d26119ab3b577129be19fbfd4a54ada6fd8cdfc4491de45e1682ead6717b",
+        "bytes": 21788
+      }
+    },
+    "allocation": {
+      "workers": 18,
+      "processes": [
+        {
+          "pid": 1956,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2111,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 66182,
+          "parent": 66181,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 66183,
+          "parent": 66182,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 --project-limit 16"
+        },
+        {
+          "pid": 66186,
+          "parent": 66182,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/launch-projection-v3 -- python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 66187,
+          "parent": 66186,
+          "threads": 1,
+          "args": "python3 -c import subprocess,json from pathlib import Path r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112\");g=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1'] assert not subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True).strip() subprocess.run(g+['fetch',str(r/'projection.bundle'),'HEAD'],cwd=r/'source',check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],cwd=r/'source',check=True) s=r/'source/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['python3','-B',str(s/'ct_accepted4_build.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--build-directory',str(r/'build-v1/build'),'--output',str(r/'build-v3')],check=True) a=subprocess.run(['python3','-B',str(s/'ct_accepted4_jobs.py'),'--phase','initial','--root',str(r),'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'initial-controller-v3')]) b=subprocess.run(['python3','-B',str(s/'ct_accepted4_observations.py'),'--data',str(r/'source/docs/plans/cao-tamura-validation-data'),'--references',str(r/'reference-v1/results.json'),'--output',str(r/'observation-checks-v1')]) c=subprocess.run(['python3','-B',str(s/'ct_accepted4_controls.py'),'--root',str(r),'--ct2',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112\",'--runtime',str(r/'build-v3/runtime'),'--initial-root',str(r/'initial-v3'),'--output',str(r/'controls-v1')]) d=subprocess.run(['python3','-B',str(s/'ct_accepted_open_controls.py'),'--runtime',str(r/'build-v3/runtime'),'--old-runtime',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-2-20261112/runtime\",'--output',str(r/'legacy-controls-v1')]) (r/'verification-exits-v3.json').write_text(json.dumps(dict(initial=a.returncode,observations=b.returncode,provider_controls=c.returncode,legacy_controls=d.returncode))) raise SystemExit(a.returncode or b.returncode or c.returncode or d.returncode)"
+        },
+        {
+          "pid": 67455,
+          "parent": 66187,
+          "threads": 1,
+          "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_jobs.py --phase initial --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime --initial-root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-controller-v3"
+        },
+        {
+          "pid": 67457,
+          "parent": 67454,
+          "threads": 1,
+          "args": "python3 -"
+        },
+        {
+          "pid": 67470,
+          "parent": 67455,
+          "threads": 1,
+          "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted4_run.py --mode initial --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime --references /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/reference-v1/results.json --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/source/docs/plans/cao-tamura-accepted-4-evidence/projection-contract.json --model A95 --height 6.0 --degree 3 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/initial-v3/A95-6.0-P3"
+        },
+        {
+          "pid": 67612,
+          "parent": 67470,
+          "threads": 3,
+          "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112/build-v3/runtime/IncNavierStokesSolver case.xml"
+        },
+        {
+          "pid": 67613,
+          "parent": 67612,
+          "threads": 4,
+          "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+        },
+        {
+          "pid": 67644,
+          "parent": 67457,
+          "threads": 1,
+          "args": "/usr/bin/python3 -c from pathlib import Path;from run_wj_h5 import execute;import sys;ok=execute(Path('/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112'),'weak-recheck-v2',['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h5.py', '--root', '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112', '--mode', 'weak-recheck'],cwd='/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/observer-6499527/solvers/IncNavierStokesSolver/Tests/RANS',seconds=120);sys.exit(0 if ok else 1)"
+        }
+      ]
+    },
+    "driver_sha256": "43885d1ca756e63b123dbb2e44192fcbbc48f1caf7774b5f330407d2500af9c8",
+    "status": "PASS",
+    "seconds": 11.736163431000023,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 379564032,
+    "root_bytes": 1125786723,
+    "log_sha256": "2d458b68bb8d54b1ebfab640fa7dcc59880bb335803f6d5dc40f1973d3a3923d",
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h5-equilibrium-inlet-20261112/operations/weak-recheck-v2/receipt.json",
+      "bytes": 12046,
+      "sha256": "ceb39cb42f3f26b0d479fe3d0ceb6f6e1398e3f2633aca9725f5b8857c4bf13b"
+    }
+  }
+}
