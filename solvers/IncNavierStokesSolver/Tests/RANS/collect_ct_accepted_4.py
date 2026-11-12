@@ -67,7 +67,7 @@ def main():
     a=p.parse_args();source=a.root/'source';git=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','pack.threads=1']
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     inputs=[*a.initial_root.glob('*/results.json'),*a.evolution_root.glob('*/*/results.json'),
-        a.root/'controls-v1/results.json',a.root/'legacy-controls-v1/results.json',a.root/'reference-v1/results.json',a.analysis/'results.json']
+        a.root/'controls-v1/results.json',a.root/'legacy-controls-v1/results.json',a.root/'reference-v1/results.json',a.root/'all-reference-weak-v1/results.json',a.analysis/'results.json']
     m=RequestManifest(a.output,dict(schema='CT4RequiredScopeV1',source_sha256=sha(Path(__file__)),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),
         complete_input_receipts={str(f):sha(f) for f in inputs}))
     exports={}
@@ -83,10 +83,11 @@ def main():
         return out
     def save(name,value):write_json(a.output/name,compact(value))
     def export(name,f):save(name,read(f));exports[name]=dict(source=str(f),sha256=sha(f))
-    reference=read(a.root/'reference-v1/results.json');analysis=read(a.analysis/'results.json');controls=read(a.root/'controls-v1/results.json');legacy=read(a.root/'legacy-controls-v1/results.json')
+    reference=read(a.root/'reference-v1/results.json');analysis=read(a.analysis/'results.json');controls=read(a.root/'controls-v1/results.json');legacy=read(a.root/'legacy-controls-v1/results.json');all_weak=read(a.root/'all-reference-weak-v1/results.json')
     decision=dict(schema='CT-Accepted-4-DecisionV1',diagnostic_execution='pass',mean_fit='computed_fixed_membership_not_experimental_validation',
         mathematical_rough='pass' if len(reference['cases'])==9 and all(q['classification']=='admissible_reference' for q in reference['cases'].values()) else 'fail',
-        provider_implementation='pass' if controls['implementation']=='pass' and legacy['status']=='pass' and analysis['analytical_weak_status']=='pass' else 'fail',
+        provider_implementation='pass' if controls['implementation']=='pass' and legacy['status']=='pass' and analysis['analytical_weak_status']==all_weak['status']=='pass' else 'fail',
+        analytical_native_test_space=all_weak['status'],
         spatial_sensitivity=analysis['spatial_sensitivity'],cases={},precursor_admission=False,benchmark_admission=False,
         future_terrain=dict(admission=False,thin_0p1='failed for all5.5/6/6.5mm; historical criterion retained',thin_0p25='separate geometric flag only',physical_roughness_sublayer='unestablished',smooth_preparation='unresolved',native_curved='not_attempted'))
     failures=[];initial_representations={};representations={};costs=[]
@@ -149,6 +150,7 @@ def main():
     export('mathematical-fit-uncertainty.json',a.root/'reference-v1/results.json');export('observation-audit.json',a.root/'observation-checks-v1/results.json')
     export('provider-history-controls.json',a.root/'controls-v1/results.json');export('legacy-compatibility.json',a.root/'legacy-controls-v1/results.json')
     export('native-weak-and-degree-analysis.json',a.analysis/'results.json');export('pre-evolution-weak.json',a.root/'pre-evolution-weak-v1/results.json')
+    export('all-reference-weak.json',a.root/'all-reference-weak-v1/results.json')
     for v in ('build-v1','build-v2','build-v3'):export(v+'.json',a.root/v/'results.json')
     save('prior-preparation-representations.json',initial_representations);save('native-failure-witnesses.json',failures)
     save('represented-gradients-and-traction.json',representations);save('costs.json',costs)
