@@ -107,9 +107,12 @@ def main():
             # solved the failed displaced A95 fit. Physical data are bound in
             # the shared prospective reference definition above.
             parameters=root.find('CONDITIONS/PARAMETERS')
-            unused={'RANSWALLROUGHNESS','RANSWALLFRICTIONVELOCITY','K0','KINVIS','QSTAR','KAPPA','RANSKAPPA'}
-            for node in list(parameters):
-                if node.text.split('=',1)[0].strip().upper() in unused:parameters.remove(node)
+            # Remove the dependent legacy E0/Slope/RoughX/Yap expressions as
+            # well: leaving them after deleting their physical parameters
+            # would feed undefined symbols to the SDK session interpreter.
+            for node in list(parameters):parameters.remove(node)
+            for key,value in dict(NumSteps=0,TimeStep=.0001,Time=0.,RANSWallHeight=H,
+                RANSWallSampleHeight=H,RANSWallTailStart=H,RANSOpenDisplacement=.0875).items():set_parameter(root,key,value)
             for f in list(root.findall('CONDITIONS/FUNCTION')):root.find('CONDITIONS').remove(f)
             write(root,xml);row=dict(xml_sha256=sha(xml),degree=degree,pressure_degree=degree-2,geometry=kind,reference_definition_sha256=sha(a.output/'reference-definition.json'),
                 session_scope='mesh and field layout only; not runnable physical input; missing inadmissible h_s/K inputs are deliberate')

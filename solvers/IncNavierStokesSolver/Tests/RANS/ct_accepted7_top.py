@@ -95,7 +95,7 @@ def classify(packet,c):
     free_top={str(b):sorted(mode_ids[b]-external) for b in mode_ids}
     require(all(free_top[str(b)] for b in (0,2,3)) and not free_top['1'],'top essential/free modes wrong')
     q=weak(packet,c);maximum=max(v['scaled_free_maximum'] for v in q['equations'].values())
-    require(maximum<=2e-10,'continuous RN reference balance on native tests')
+    require(maximum<=2e-10,'continuous RN reference balance on native tests:'+str(q))
     # Deleting either physical datum leaves a resolved load in actual free
     # top modes. All trace modes, including zero integral odd modes, are kept.
     free=sorted(set(range(len(s)))-fixed)
