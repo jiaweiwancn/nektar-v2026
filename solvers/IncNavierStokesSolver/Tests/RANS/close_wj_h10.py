@@ -107,6 +107,20 @@ def finalize(root):
     operations=[]
     for label in book['entries']:
         p=root/'operations'/label;operations.append(dict(label=label,**{k:identity(p/(k+'.json'))for k in ('request','receipt')},log=identity(p/'command.log'),maps=identity(p/'process-maps.json')))
+    observed=[];libraries={}
+    for branch,dt in MATRIX:
+        for label in (branch+'-cp0',branch+'-step',branch+'-cp0-strict',branch+'-run-strict'):
+            p=root/'operations'/label;samples=load(p/'native-exec-samples.json')
+            assert samples and all(v['status']=='PASS'for v in samples)
+            by_path={v['path']:v for v in load(p/'loaded-maps.json')}
+            paths={name for v in samples for name in v['files']if '.so'in Path(name).name or name.endswith('.elf')}
+            for name in paths:
+                assert name in by_path
+                if name not in libraries:libraries[name]=check(by_path[name])
+            observed.append(dict(operation=label,sample_count=len(samples),first=samples[0],last=samples[-1],
+                actual_code_and_libraries=sorted(paths),full_samples=identity(p/'native-exec-samples.json')))
+    save(out/'runtime-observed.json',dict(status='PASS',libraries=list(libraries.values()),actual_exec=observed,
+        scope='per-exec mappings, not a PID union containing pre-exec host libc; new governor/reader identities with the complete original private glibc closure'))
     book.update(closed=True,status='PASS',measured_operation_seconds=actual,charged_seconds=total,build_phase_including_setup=build,science_seconds=science,
         fully_charged_closure_seconds=300,peak_process_tree_RSS=peak,build_source_runtime_bytes=build_bytes,science_bytes=science_bytes,
         closure_scope='full300s includes parent inspections, source/figure QA, verification orchestration, transport and final receipt work; not reclaimed')
