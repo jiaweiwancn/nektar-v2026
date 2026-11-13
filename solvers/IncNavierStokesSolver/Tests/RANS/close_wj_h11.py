@@ -8,14 +8,14 @@ import re
 from run_wj_h11 import H10,load,save,size
 from study_wj_h9 import identity,check
 from study_wj_h11 import parent,audit
-from wj_h11_analysis import MATRIX,VIEWS,selected
+from wj_h11_analysis import MATRIX,VIEWS,selected,callback_relation
 from wj_h9_local import same,phase_bindings
 from wj_h4_points import vector_hash
 from wj3_measure import checkpoint_payload
 
 
 def verify(root):
-    out=root/'closure';out.mkdir();pub=root/'publication-v1';verified=[]
+    out=root/'closure-v2';out.mkdir();pub=root/'publication-v1';verified=[]
     for directory in (pub,root/'local-comparisons-v1'):
         for v in load(directory/'seal.json')['files']:verified.append(check(v))
     for v in load(pub/'manifest.json')['heavy']:check(v)
@@ -35,7 +35,7 @@ def verify(root):
             assert all(v['passed']for v in c['packet']['conditions'].values())and not c['packet']['failure_categories']
             p=load(a['k_snapshot']);assert __import__('run_wj_h11').sha(a['k_snapshot'])==a['k_snapshot_sha256'];states,b=phase_bindings(r,p,step)
             assert b['P_C_bitwise']and b['post_flow_pre_k_bitwise']and b['raw_corrected_bitwise']and b['flow_A_U_pi_bitwise']
-            if step==2:assert same(p['history'],old['state']),'first actual physical callback history differs from imported state'
+            if step==2:b['first_actual_callback_relation']=callback_relation(p['history'],old['state'])
             phases.append(b);count+=1
         index=load(audit(root,branch)['index']['path'])
         for step in VIEWS[branch]:
@@ -61,9 +61,9 @@ def verify(root):
             runtime.append(dict(operation=label,sample_count=len(samples),first=samples[0],last=samples[-1],full_samples=identity(p/'native-exec-samples.json')))
         save(out/(branch+'-phase-bindings.json'),phases)
     assert count==25 and len(bindings)==11
-    for label in ('focused-tests','focused-h11-final'):
+    for label in ('focused-tests','focused-h11-final','focused-h11-callback'):
         text=(root/'operations'/label/'command.log').read_text();assert '\nOK\n'in text;found=re.findall(r'^(test_\w+) \(([^)]+)\)',text,re.M);assert len(found)==int(re.search(r'Ran (\d+) tests',text).group(1));methods.update(found)
-    assert len(methods)==74
+    assert len(methods)==75
     arithmetic=load(root/'science/arithmetic-v1/result.json');assert arithmetic['status']=='PASS'and arithmetic['new_attempt_level_arithmetic_sets']==2
     for b in ('coarse','fine','quarter'):
         packet=load(arithmetic['branches'][b]['packet']['path']);assert packet['time']==.01 and all(v['status']=='PASS'for v in packet['checks'].values())
@@ -76,14 +76,14 @@ def verify(root):
         a=load(root/f'science/arithmetic-v1/{branch}.json');mass_factors+=a['diagnostic_mass_factorizations'];mass_solves+=a['diagnostic_mass_solves']
     save(out/'runtime-observed.json',dict(status='PASS',actual_exec=runtime,libraries=list(libraries.values()),qualified_H10_source=identity(H10/'closure/compiled-inputs.json'),scope='actual native-exec snapshots; pre-exec PID-union host mappings are separate'))
     save(out/'verification.json',dict(status='PASS',scientific_temporal=common['temporal'],original_component_gates=identity(pub/'component-gates.json'),verified_compact=verified,native_bindings=bindings,
-        unique_passing_methods=74,methods=[list(v)for v in sorted(methods)],new_governing_attempts=25,accepted=25,new_CP0=0,new_builds=0,new_strict=11,
+        unique_passing_methods=75,methods=[list(v)for v in sorted(methods)],new_governing_attempts=25,accepted=25,new_CP0=0,new_builds=0,new_strict=11,
         passive=dict(diagnostic_mass_factorizations=mass_factors,diagnostic_mass_solves=mass_solves,kernel_queries=queries,saved_governing_matrix_factorizations=0,saved_governing_matrix_solves=0),
         scope='Linux heavy-byte verification and independent native-header role checks; Mac transport is separately verified',source=identity(__file__)))
-    print('H11 verification PASS; temporal',common['temporal'],'25 attempts/11 views/74 methods',flush=True)
+    print('H11 verification PASS; temporal',common['temporal'],'25 attempts/11 views/75 methods',flush=True)
 
 
 def finalize(root):
-    out=root/'closure';verification=load(out/'verification.json');assert verification['status']=='PASS';book=load(root/'accounting.json');assert not book.get('closed')
+    out=root/'closure-v2';verification=load(out/'verification.json');assert verification['status']=='PASS';book=load(root/'accounting.json');assert not book.get('closed')
     assert all(v['status']!='RESERVED'and 'seconds'in v for v in book['entries'].values())
     actual=sum(v['seconds']for v in book['entries'].values());charge=60+actual+240;peak=max(v['peak_tree_rss_bytes']for v in book['entries'].values())
     copied=sum(size(root/p)for p in ('source','runtime'));science=size(root/'science');assert actual<=1200 and charge<=1500 and peak<=4*1024**3 and copied<=1024**3 and science<=3*1024**3
@@ -97,7 +97,7 @@ def finalize(root):
         local_tables_seal=identity(root/'local-comparisons-v1/seal.json'),original_H10_accounting=check(identity(H10/'closure/accounting-final.json')),input_intent=identity(root/'science/input-intent.json'),
         source_archive=load(root/'source-archive.json'),source_versions=[identity(p)for directory in sorted(root.glob('observer-v*'))for p in sorted(directory.glob('*.py'))],operations=operations,
         limits=dict(total_seconds=1500,operations_seconds=1200,RSS=4*1024**3,science=3*1024**3,source_runtime=1024**3,workers=72),scope='completed fixed H11 matrix; native decisions, finite coverage and UNRESOLVED temporal result remain separate',source=identity(__file__)))
-    save(out/'component-gates-final.json',dict(gates,closure_transport='REMOTE_VERIFIED',resource_accounting='PASS',closure_verification=identity(out/'verification.json'),accounting=identity(out/'accounting-final.json')))
+    save(out/'component-gates-final.json',dict(gates,unique_passing_methods=75,closure_transport='REMOTE_VERIFIED',resource_accounting='PASS',closure_verification=identity(out/'verification.json'),accounting=identity(out/'accounting-final.json')))
     save(out/'seal.json',dict(files=[identity(p)for p in sorted(out.iterdir())if p.is_file()]))
     print(dict(status=gates['status'],resource='PASS',charged_seconds=charge,peak_RSS=peak,science_bytes=science,copied_source_runtime=copied),flush=True)
 

@@ -7,7 +7,7 @@ import tempfile
 import unittest
 import xml.etree.ElementTree as ET
 import numpy as np
-from wj_h11_analysis import MATRIX,VIEWS,admit_xml,selected,checkpoint_match,ratio,native_reserve,common_step
+from wj_h11_analysis import MATRIX,VIEWS,admit_xml,selected,checkpoint_match,ratio,native_reserve,common_step,callback_relation
 from wj_h10_analysis import arithmetic
 from wj_h4_points import vector_hash
 from run_wj_h7 import complete_operation,record_coverage_halt
@@ -84,5 +84,11 @@ class CompatibleContinuation(unittest.TestCase):
         v=ratio(1e-6,1e-12,4e-11);self.assertEqual(v['status'],'INDISTINGUISHABLE');self.assertIsNone(v['rho']);self.assertAlmostEqual(v['rho_upper_bound'],4e-5)
         self.assertEqual(ratio(1e-6,2e-6,4e-11)['status'],'DOES_NOT_CONTRACT');self.assertEqual(ratio(1e-6,.5e-6,4e-11)['status'],'CONTRACTS')
         with self.assertRaises(ValueError):ratio(float('nan'),0,1e-11)
+    def test_callback_arithmetic_is_not_serialized_slot_equality(self):
+        from wj_h9_local import same
+        a=[-0.,1.,0.];b=[0.,1.,-0.];v=callback_relation(b,a)
+        self.assertFalse(v['bitwise_equal']);self.assertTrue(v['numerically_equal']);self.assertEqual(v['signed_zero_only_indices'],[0,2]);self.assertNotEqual(v['history_sha256'],v['predecessor_sha256'])
+        self.assertFalse(same(a,b)) # serialized slot/restart comparisons must still reject these bits
+        with self.assertRaises(AssertionError):callback_relation([0.,1.+1e-14,0.],a)
 
 if __name__=='__main__':unittest.main()

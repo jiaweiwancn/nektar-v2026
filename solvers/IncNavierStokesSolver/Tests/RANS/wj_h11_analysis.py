@@ -58,3 +58,17 @@ def native_reserve(book,key,units):
 
 def common_step(dt,t):
     step=round(t/dt);aligned(step,dt,t);return step
+
+
+def callback_relation(history,predecessor):
+    """A GLM input is derived arithmetic, not the serialized restored slot.
+
+    Preserve both exact hashes. Only opposite signed zeros may differ here;
+    checkpoint/native-slot equality elsewhere remains strictly bitwise.
+    """
+    a=np.asarray(history,dtype='<f8');b=np.asarray(predecessor,dtype='<f8')
+    assert a.shape==b.shape and np.all(np.isfinite(a))and np.all(np.isfinite(b))
+    changed=np.flatnonzero(a.view('<u8')!=b.view('<u8'))
+    assert np.array_equal(a,b)and np.all(a[changed]==0)and np.all(b[changed]==0),'nonzero physical callback history mismatch'
+    return dict(history_sha256=vector_hash(a),predecessor_sha256=vector_hash(b),bitwise_equal=len(changed)==0,
+        signed_zero_only_indices=changed.tolist(),numerically_equal=True,scope='actual derived GLM callback retained verbatim; no assertion of bitwise equality with the predecessor or repair of saved values')

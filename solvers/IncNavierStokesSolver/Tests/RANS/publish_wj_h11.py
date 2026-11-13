@@ -61,9 +61,9 @@ def publish(root):
         imp.append(dict(branch=branch,dt=dt,absolute_step=packet['absolute_step'],time=packet['time'],alpha=packet['alpha'],pressure_L2=packet['pressure_physical']['full']['L2'],j_L2=packet['impulse_physical']['full']['L2'],pressure_mean=packet['pressure_physical']['full']['mean'],j_mean=packet['impulse_physical']['full']['mean'],predictor_L2=packet['predictor_physical_L2'],correction_L2=packet['pressure_correction_physical_L2'],total_du_L2=packet['total_physical_L2']))
     table(out/'common-time-increments.csv',imp)
     tests=set()
-    for label in ('focused-tests','focused-h11-final'):
+    for label in ('focused-tests','focused-h11-final','focused-h11-callback'):
         text=(root/'operations'/label/'command.log').read_text();assert '\nOK\n'in text;found=re.findall(r'^(test_\w+) \(([^)]+)\)',text,re.M);assert len(found)==int(re.search(r'Ran (\d+) tests',text).group(1));tests.update(found)
-    assert len(tests)==74
+    assert len(tests)==75
     native=all(not c['failure']and c['accepted']==c['reserved']and c['qualified']==c['reserved']for c in counts)
     strict=len(views)==12 and all(v['anchor']['status']==v['quadrature']['status']=='PASS'for v in views)
     validation=native and strict and common['status']=='PASS'and common['complete']and ar['status']=='PASS'and len(records)==31 and not book.get('h11_halt')and not book.get('coverage_halt')
@@ -72,7 +72,7 @@ def publish(root):
         new_governing_reserved=book['reserved_attempts'],new_governing_attempted=sum(c['attempted']for c in counts),new_governing_accepted=sum(c['accepted']for c in counts),native_restart_blocks=book['governing_blocks'],new_CP0=0,new_builds=0,new_strict=book['strict_readbacks'],unique_passing_methods=len(tests),closure_transport='PENDING',
         scope='bounded compatible-initialization control toT=.04; no temporal order/global stability/physical inlet claim')
     assert(gates['new_governing_reserved'],gates['new_governing_attempted'],gates['new_governing_accepted'],gates['native_restart_blocks'],gates['new_strict'])==(25,25,25,3,11)
-    save(out/'component-gates.json',gates);save(out/'methods.json',dict(methods=[list(v)for v in sorted(tests)],unique=74,CTest_execution='none; direct Python invocation only'))
+    save(out/'component-gates.json',gates);save(out/'methods.json',dict(methods=[list(v)for v in sorted(tests)],unique=len(tests),CTest_execution='none; direct Python invocation only'))
     save(out/'runtime.json',dict(qualified_H10=load(root/'science/input-intent.json')['runtime'],source_import=identity(root/'science/import-compatibility-v1.json'),original_compiled_inputs=identity(H10/'closure/compiled-inputs.json'),source_capsule=load(root/'source-archive.json')))
     # Figures use scalar results only, without new field evaluation.
     import matplotlib
