@@ -209,8 +209,9 @@ velocity response caps retain their B values.
 
 Selected alpha=0 scaled U/W/k/epsilon residual norms are
 [1.2441133,2.4817564,2.2870106,.08852130]; these are not equilibrium residuals near
-zero. The unchanged interface/source budget passes, with maximum relative
-budget defect 3.17e-16. Full-vector traction RMS is .00296236, normal-traction RMS
+zero. The unchanged counterfactual-production/cutoff budget passes, with maximum
+relative budget defect 3.17e-16. This does not establish balance of actual
+transported production minus E_C. Full-vector traction RMS is .00296236, normal-traction RMS
 7.39249e-5, maximum normal jump .000318415 and k-flux RMS 2.39992e-10.
 
 No new counterfactual law was evaluated on standard fields. The valid H2g
