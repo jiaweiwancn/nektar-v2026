@@ -575,6 +575,24 @@ int main(int argc,char **argv)
             {"resolution",resolution},{"test_basis",testBasis},{"native_constitutive",constitutive},{"physical_scalar_budget",physicalBudget},
             {"tensor_validation",tensorValidation},{"mixed_space",mixedSpace}});
         if(open){output.pop_back();output+=",\"open_boundary\":"+openPacket+",\"open_frozen_systems\":"+openSystems+"}";}
+        if(request.get<bool>("export_manufactured",false))
+        {
+            Require(patch.CurvedManufactured(),"manufactured export requires its verification capability");
+            const RANSWallManufactured mms(patch);std::vector<std::string> samples;
+            for(int i=0;i<grid.size();++i)
+            {
+                const auto &q=grid[i];const bool outer=q[2]==p.geometry.height?sides[i]>0:q[2]>p.geometry.height;const auto v=mms.At(q,time,outer);
+                samples.push_back(J::Object({{"coordinate",J::Numbers(q)},{"outer",J::Boolean(outer)},
+                    {"values",J::Numbers(v.value)},{"gradients",J::Rows(v.gradient)},{"velocity_gradient",J::Rows(v.velocityGradient)},
+                    {"velocity_time",J::Numbers(v.velocityTime)},{"k_time",J::Number(v.kTime)},{"epsilon_time",J::Number(v.epsilonTime)},
+                    {"required_body",J::Numbers(v.body)},{"k_source",J::Number(v.kSource)},{"epsilon_source",J::Number(v.epsilonSource)},
+                    {"R",J::Rows(v.reynolds)},{"Q",J::Rows(v.quadratic)},{"T",J::Rows(v.stress)},
+                    {"k_diffusion",J::Number(v.kDiffusion)},{"epsilon_diffusion",J::Number(v.epsilonDiffusion)},
+                    {"production",J::Number(v.production)},{"epsilon_production",J::Number(v.epsilonProduction)},{"epsilon_destruction",J::Number(v.epsilonDestruction)},
+                    {"K",J::Number(v.K)},{"cutoff",J::Number(v.cutoff)},{"J",J::Number(v.J)},{"a",J::Number(v.a)},{"gamma",J::Number(v.gamma)}}));
+            }
+            output.pop_back();output+=",\"manufactured\":"+J::Object({{"version",J::Quote("CT6ContinuousV1")},{"samples",J::List(samples)}})+"}";
+        }
         if(request.get<bool>("export_neutral_composite_reference",false))
         {
             output.pop_back();output+=",\"neutral_composite_reference\":"+RANSAcceptedCompositeReferencePacket(session,patch,grid,sides)+"}";
