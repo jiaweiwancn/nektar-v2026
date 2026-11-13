@@ -271,8 +271,8 @@ int main(int argc,char **argv)
             if(operation=="h2d_candidate")
             {
                 const auto supplied=Read(packet,"state");Require(supplied.size()==state.size() && RANSWallR3::Hash(state)==packet.get<std::string>("base_sha256"),"candidate base identity mismatch");
-                for(int i=patch.offset[patch.K()];i<state.size();++i)Require(supplied[i]==state[i],"velocity-only candidate changed scalar or pressure");
-                for(auto [row,value]:patch.FixedReferenceBoundary(state))Require(supplied[row]==state[row],"candidate changed essential coefficient");
+                for(int i=patch.offset[patch.K()];i<state.size();++i)Require(std::memcmp(&supplied[i],&state[i],sizeof(double))==0,"velocity-only candidate changed scalar or pressure bits");
+                for(auto [row,value]:patch.FixedReferenceBoundary(state))Require(std::memcmp(&supplied[row],&state[row],sizeof(double))==0,"candidate changed essential coefficient bits");
                 state=supplied;Require(RANSWallR3::Hash(state)==packet.get<std::string>("state_sha256"),"candidate hash mismatch");
             }
             if(operation=="h2d_flat")

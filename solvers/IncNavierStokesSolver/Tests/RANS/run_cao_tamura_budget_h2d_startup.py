@@ -9,6 +9,8 @@ from run_cao_tamura_budget_h2d import case
 from run_cls_epawf_picard import THREADS,load,require,sha,state_hash,set_info,set_parameter,write
 from compare_cls_epawf_pimple import same_history
 
+from cao_tamura_h2d_state import load
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('solver','preflight','h1','certificate','output'):p.add_argument('--'+k,type=Path,required=True)

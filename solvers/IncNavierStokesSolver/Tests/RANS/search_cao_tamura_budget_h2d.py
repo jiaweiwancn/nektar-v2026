@@ -10,6 +10,8 @@ from continue_cls_epawf_pimple import atomic
 from run_cls_epawf_picard import state_hash
 from validate_cls_epawf_m1 import indexed
 
+from cao_tamura_h2d_state import load
+
 def tensors(g,k,e,inner,nt,physical,us,kap):
     """Batch independent dimensional indexed CLS law, physical max branch."""
     S=g+g.transpose(0,2,1);O=g-g.transpose(0,2,1);eye=np.eye(3)
@@ -29,7 +31,7 @@ def tensors(g,k,e,inner,nt,physical,us,kap):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--setup',type=Path,required=True);p.add_argument('--preflight',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(exist_ok=False)
-    doc=json.loads(a.setup.read_text());f=doc['feasibility'];pre=json.loads(a.preflight.read_text());K0=pre['heights'][-1]['K0'];obs=f['observations'];base=np.array(f['base']);Z=np.array(f['basis']);gram=np.array(f['physical_mass_Gram'])
+    doc=load(a.setup);f=doc['feasibility'];pre=json.loads(a.preflight.read_text());K0=pre['heights'][-1]['K0'];obs=f['observations'];base=np.array(f['base']);Z=np.array(f['basis']);gram=np.array(f['physical_mass_Gram'])
     g0=np.array([o['gradient'] for o in obs]);B=np.array([o['gradient_basis'] for o in obs]);V=np.array([o['velocity_basis'] for o in obs]);inner=np.array([o['inner'] for o in obs]);k=np.array([o['k'] for o in obs]);e=np.array([o['epsilon'] for o in obs]);nt=np.array([o['inner_nu_t'] for o in obs]);physical=np.array([o['physical'] for o in obs]);us=pre['u_tau'];kap=pre['kappa_CLS'];N=len(obs)
     # Validate batching against the separately indexed single-state formula.
     batch=tensors(g0,k,e,inner,nt,physical,us,kap);error=0

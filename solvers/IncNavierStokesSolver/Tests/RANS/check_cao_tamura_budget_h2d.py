@@ -11,6 +11,8 @@ from run_cao_tamura_budget_h2d import case
 from diagnose_cls_accepted_covariance import run_probe
 from validate_cao_tamura_budget_h2d import certificate
 
+from cao_tamura_h2d_state import load
+
 def stages(a,b):
     count=0
     for x,y in zip(a['pimple_attempts'],b['pimple_attempts']):

@@ -10,6 +10,8 @@ from diagnose_cls_accepted_covariance import run_probe
 from run_cls_epawf_picard import THREADS,load,sha,write,set_info,set_parameter,require,state_hash
 from compare_cls_epawf_pimple import same_history
 
+from cao_tamura_h2d_state import load
+
 def certificate(d,source):
     require(d['audit']['accepted_awf_hard_admissible']==[1] and d['audit']['admissible']==[1] and d['audit']['accepted_awf_scalar_domain'][8]<=1e-10,'cannot certify failed native inventory')
     require(max(d['audit']['coupled_norms'][4:])<1e-9,'native algebraic/boundary initializer constraints failed')
@@ -38,6 +40,7 @@ def main():
     try:
         xml=case(a.output/'flat-certification',a.h1,pre,flat=True)
         d,receipt=run_probe(probe,xml,dict(operation='h2c_seed',inner_stress_model='Linear',xml_sha256=sha(xml)),a.output/'flat-certification-probe')
+        d=load(Path(receipt['output']))
         cert=a.output/'certificate.json';atomic(cert,certificate(d,Path(receipt['output'])))
         q=native('ordinary-h0');i=native('import-h0',cert=cert)
         require(not q['failure'] and not i['failure'] and same_history(q,i),'exact imported zero seed/history differs')

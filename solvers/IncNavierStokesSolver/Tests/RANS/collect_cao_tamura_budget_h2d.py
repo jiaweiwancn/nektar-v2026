@@ -10,6 +10,8 @@ from validate_cls_epawf_m1 import indexed
 from continue_cls_epawf_pimple import atomic
 from run_cls_epawf_picard import sha,state_hash,load,require
 
+from cao_tamura_h2d_state import load
+
 def small(v):
     if isinstance(v,dict):return {k:small(x) for k,x in v.items() if k not in ('state','base','basis','observations','physical_samples','gradient_basis','velocity_basis')}
     if isinstance(v,list):return [small(x) for x in v]
@@ -28,7 +30,7 @@ def main():
     final=read('final-checks-v3/progress.json');require(final['status']=='passed','final native contract tests incomplete')
     pre=load(r.parent/'cls-cao-tamura-budget-h2c-20261112/preflight-final.json');us=pre['u_tau'];kap=pre['kappa_CLS'];H=.0065;K=pre['heights'][-1]['K0']
     replay={name:result('replay-final-v1',name) for name in ('TangentialNeutralV2','PhysicalHeightInterfaceV2')}
-    best=result('best-final-v1','65-hill');search=read('search-v1/progress.json');candidate=read('search-v1/best-candidate.json')
+    best=result('best-exact-v1','65-hill');search=read('search-v1/progress.json');candidate=read('search-v1/exact-best-candidate.json')
     require(best['state_sha256']==candidate['state_sha256'],'saved optimizer/native candidate differs')
     require(best['audit']['accepted_awf_hard_admissible']==[0] and search['status']=='bounded_search_rejected','unexpected changed hill classification')
     scalar_start=int(best['seed_constitutive']['offsets'][2]);require(state_hash(best['state'][scalar_start:])==state_hash(replay['PhysicalHeightInterfaceV2']['state'][scalar_start:]),'scalar/pressure bits changed during velocity search')
@@ -39,7 +41,14 @@ def main():
         conclusion='bounded frozen-scalar velocity space/response limits did not find covariance feasibility; no global infeasibility or ellipticity inference'))
     save('curvature',dict(replay=small(replay),reference=small(read('independent-replay-v2.json')),old_defect='sorted kappa1 was zero on negative shoulders; signed stream curvature is t_stream^T B t_stream',
         historical_H2c_roots_unchanged=True,initializer_versions=['TangentialNeutralV2','PhysicalHeightInterfaceV2']))
-    save('search',small(search))
+    prefix=(r/'setup-v1/65-hill-probe/result.json').open().read(4*1024*1024)
+    decoder=json.JSONDecoder(parse_int=lambda t:-0.0 if t=='-0' else int(t))
+    def extract(key):return decoder.raw_decode(prefix.split('"'+key+'":',1)[1].lstrip())[0]
+    gram=np.array(extract('physical_mass_Gram'));conditioning=[]
+    for n in (16,32):
+        ev=np.linalg.eigvalsh(gram[:n,:n]);conditioning.append(dict(size=n,minimum_eigenvalue=float(ev[0]),maximum_eigenvalue=float(ev[-1]),condition=float(ev[-1]/ev[0])))
+    save('search',dict(**small(search),basis_mass_Gram_conditioning=conditioning,homogeneous_native_constraint_max=extract('homogeneous_continuity_max'),basis_definition=extract('basis_parameters_cx_height_width_original_massnorm')))
+
     tensor_checks=[];derivatives=[]
     for label,w in [('minimum_inner',best['seed_constitutive']['minimum_inner']),('minimum_outer',best['seed_constitutive']['minimum_outer'])]:
         g=np.array(w['velocity_gradient']);k=w['k'];e=w['epsilon'];z=w['physical_coordinate'][2]
@@ -65,7 +74,8 @@ def main():
             require(errors[-1]<1e-5,'branch-aware directional derivative unresolved')
             levels.append(dict(sign=sign,selected_branch=branch,one_sided_FD_errors=errors))
         derivatives.append(dict(case=label,levels=levels,semantics='one-sided directional q=max branches; no differentiability assertion at equality'))
-    save('verification',dict(final_native=final,initial_import_suite=read('import-validation-v1/progress.json'),tensor_replays=tensor_checks,directional_checks=derivatives,kernel_log=(r/'kernel-checks.log').read_text(),
+    signed=read('signed-contract-v1/progress.json');require(signed['status']=='passed','signed binary64 contract failed')
+    save('verification',dict(final_native=final,signed_zero_contract=signed,signed_reader_regression=read('signed-reader-regression.json'),fixed_signed_zero_rows_restored=candidate['serialized_fixed_signed_zero_rows_restored'],initial_import_suite=read('import-validation-v1/progress.json'),tensor_replays=tensor_checks,directional_checks=derivatives,kernel_log=(r/'kernel-checks.log').read_text(),
         no_accepted_hill_certificate=True,certified_flat_no_Lift=True,ordinary_changed_dt_and_geometry_rejected=True))
     flats={n:result('flat-flux-final-v1',n) for n in ('flat-baseline','flat-radial-h','flat-p4-diagnostic')}
     flats['flat-combined-confirmation']=result('flat-flux-combined-v1','flat-combined-confirmation')
@@ -74,15 +84,15 @@ def main():
     for name,d in flats.items():
         row=dict(case=name,size=d['size'],selected_scaled=d['selected_spatial_norms'][:4],physical_free_mass_dual=[v*s*math.sqrt(V) for v,s,V in zip(d['selected_spatial_norms'],rates,volume)],reference_errors=d['physical_reference']['flat_reference_errors'],radial_sum_error=d['radial_global_free_sum_error'])
         require(row['radial_sum_error']<1e-10,'native panel/global shared-row sum does not close');rows.append(row)
-    save('flat',dict(cases=small(flats),comparison=rows,equilibrium_target=1e-3,all_blocks_pass=False,
+    save('flat',dict(cases=small(flats),comparison=rows,equilibrium_target=1e-3,all_blocks_pass=all(max(x['selected_scaled'])<=1e-3 for x in rows),
         statement='Two tangential panels are a diagnostic reduction. p4 uses supported tensor p4/P2; no isolated radial-p order claim. Only physical representation errors and shared-row residual contractions are compared.',
         analytic_Yap='nonzero exact analytical epsilon_yap contribution retained; its cancellation with other physical terms is part of exact equilibrium, not an error',
-        transfer=dict(original_pilot_slots=2804,full_h_allocation_six_panel_slots=5339,combined_cubic_allocation_six_panel_slots=4399,limit=3000,conclusion='full useful allocation does not fit original pilot limit; no guard increase or evolving new mesh')))
+        transferred_single_knot=small(result('flat-pilot-transfer-v1','flat-pilot-transfer')),transfer=dict(original_pilot_slots=2804,single_added_knot_slots=2982,full_h_allocation_six_panel_slots=5339,combined_cubic_allocation_six_panel_slots=4399,limit=3000,conclusion='full allocation does not fit; the single .1 mm knot transfer fits 2982 slots but worsens gradient and spatial residual errors, so it is not adopted; no evolving new mesh or size-guard increase')))
     save('source-revisions',dict(base='c18e9ab7e6e22a4e268b04d07a0a05ec25083532',revision=a.revision,source_export=str(r/'source'),source_hashes=read('source-final-hashes.json'),
         final_native_runtime=final['runtime'],final_probe_runtime=final['probe'],data_volume_UUID='5AB8A669B8A642FD',run_root=str(r),
         calibration_preflight_sha256=sha(r.parent/'cls-cao-tamura-budget-h2c-20261112/preflight-final.json'),resource_contract='build parallel 4, pilots rank 1/all computational threads 1; independent external build 2 preserved; aggregate below 72'))
     save('cost',dict(search_usage_wall_user_system_RSS_KiB=(r/'search-v1-usage.txt').read_text(),search_tensor_scan_seconds=search['seconds_per_full_tensor_scan'],native_setup_receipt=read('setup-v1/65-hill-probe/receipt.json'),
-        best_audit=read('best-final-v1/progress.json')['results']['65-hill']['receipt'],flat=read('flat-flux-final-v1/progress.json'),final_native=final.get('native'),hill_step_cost='unmeasured: no admissible seed'))
+        best_audit=read('best-exact-v1/progress.json')['results']['65-hill']['receipt'],flat=read('flat-flux-final-v1/progress.json'),final_native=final.get('native'),hill_step_cost='unmeasured: no admissible seed'))
     # Reproducible scientific figures, not an interactive surrogate.
     import matplotlib;matplotlib.use('Agg');import matplotlib.pyplot as plt
     fig,ax=plt.subplots(1,2,figsize=(10,3.4));labels=['U','W','k','epsilon'];xx=np.arange(4)
