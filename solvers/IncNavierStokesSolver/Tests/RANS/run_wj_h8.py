@@ -65,13 +65,17 @@ def execute(root,label,argv,*,cwd=None,seconds=120,cp0=False,governing=False,str
     def limits():
         import resource
         resource.setrlimit(resource.RLIMIT_AS,(8*1024**3,8*1024**3));resource.setrlimit(resource.RLIMIT_FSIZE,(8*1024**3,8*1024**3))
-    start=time.monotonic();peak=0;reason=None;groups=set();last=start;mapped=set()
+    start=time.monotonic();peak=0;reason=None;groups=set();last=start;mapped=set();process_maps={}
     def mappings(pid):
         try:
+            files=set()
             for line in Path(f'/proc/{pid}/maps').read_text().splitlines():
                 fields=line.split(maxsplit=5)
                 if len(fields)==6 and fields[5].startswith('/')and not fields[5].endswith(' (deleted)'):
-                    mapped.add(str(Path(fields[5]).resolve()))
+                    file=str(Path(fields[5]).resolve());mapped.add(file);files.add(file)
+            if files:
+                old=process_maps.setdefault(str(pid),dict(command=Path(f'/proc/{pid}/cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace'),files=[]))
+                old['files']=sorted(set(old['files'])|files)
             for ch in Path(f'/proc/{pid}/task/{pid}/children').read_text().split():mappings(int(ch))
         except (FileNotFoundError,ProcessLookupError):pass
     with(folder/'command.log').open('x')as f:
@@ -96,7 +100,7 @@ def execute(root,label,argv,*,cwd=None,seconds=120,cp0=False,governing=False,str
                 except ProcessLookupError:pass
             code=child.wait()
     loaded=[dict(path=p,bytes=Path(p).stat().st_size,sha256=sha(p))for p in sorted(mapped)if Path(p).is_file()]
-    save(folder/'loaded-maps.json',loaded)
+    save(folder/'loaded-maps.json',loaded);save(folder/'process-maps.json',process_maps)
     entry.update(status='RESOURCE_LIMIT'if reason else 'PASS'if code==0 else 'FAIL',seconds=time.monotonic()-start,exit=code,
         reason=reason,peak_tree_rss_bytes=peak,root_bytes=size(root),log_sha256=sha(folder/'command.log'))
     complete_operation(journal,label,entry);save(folder/'receipt.json',dict(request,**entry));print(label,entry['status'],entry['seconds'],flush=True)
