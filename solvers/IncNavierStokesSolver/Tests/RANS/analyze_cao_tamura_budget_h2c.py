@@ -12,9 +12,11 @@ def main():
     pre=json.loads(a.preflight.read_text());progress=json.loads((a.root/'progress.json').read_text());results={}
     gx,gw=np.polynomial.legendre.leggauss(96)
     for name,record in progress['results'].items():
-        if not name.endswith('-hill'):continue
-        H=next(h['H'] for h in pre['heights'] if round(h['H']*10000)==int(name.split('-')[0]));v=next(h for h in pre['heights'] if h['H']==H)
-        definition=json.loads((a.root/name/'definition.json').read_text());adjusted=definition['initialization'].startswith('PhysicalHeightInterfaceV1')
+        if 'result_file' in record:record=json.loads(Path(record['result_file']).read_text())
+        elif not name.endswith('-hill'):continue
+        definition=json.loads((a.root/name/'definition.json').read_text());H=definition['H_A'];v=next(h for h in pre['heights'] if h['H']==H)
+        adjusted=definition['initialization'].startswith(('PhysicalHeightInterfaceV1','PhysicalHeightInterfaceV2'))
+        if 'seed_target_witnesses' in record:record=dict(record,target=record['seed_target_witnesses'])
         us=pre['u_tau'];kap=pre['kappa_CLS'];K0=v['K0'];nu=pre['nu'];tau=us*us;slope=pre['cMu_wall']*pre['cLength_wall']*math.sqrt(K0);delta=nu/slope-v['viscosity_intercept'];UH=v['U_H'];A=us**3/kap;B=.2;Z=.8;L=.1
         assert v['viscosity_intercept']<0 and delta>0
         def radial(r,d=0):

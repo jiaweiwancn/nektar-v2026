@@ -1,0 +1,29 @@
+{
+  "version": "H2dPredeclaredV1",
+  "case": "H_A=.0065, H2c primary h_s and fit unchanged, AnalyticalNeutralInflowV1",
+  "feasibility": {
+    "basis_sizes": [16, 32],
+    "basis": "physical smooth streamfunctions projected once through the native essential/continuity homogeneous nullspace; consistent physical mass normalization",
+    "maximum_iterations_per_size": 40,
+    "maximum_tensor_trial_batches_per_size": 5000,
+    "maximum_seconds_per_size": 900,
+    "maximum_complete_audits": 6,
+    "stagnation": "8 accepted iterations with normalized worst-eigenvalue improvement below 1e-5",
+    "interior_target_lambda_over_K0": 0.0001,
+    "hard_tolerance_unchanged": "-1e-10 K0 in native production audit",
+    "distance_limit_L2_over_Uhill_sqrt_domain_volume": 0.15,
+    "sampled_velocity_increment_limit_over_Uhill": 0.5,
+    "trust_region_initial_mass_normalized_coefficient_radius": 0.01,
+    "penalty": "phase-I slack + 1e-4 physical mass distance + 1e-4 gamma-weighted strain departure; no covariance guarantee from predictor",
+    "failure_classification": "limited basis / stagnation / budget; never a global infeasibility claim"
+  },
+  "flat": {
+    "configurations": ["two-streamwise-panel comparable cubic baseline", "targeted radial h refinement", "p4 zero-step diagnostic with production positivity guards retained", "at most one combined confirmation if justified"],
+    "physics_and_quadrature": "unchanged; compatible prescribed analytical-reference verification boundaries",
+    "metric": "native physical full free-row mass dual; dimensional representation errors; signed mass-dual projections of global-row panel vectors",
+    "equilibrium_target": 0.001,
+    "comparison_floor": 1e-11,
+    "claim_limit": "not spatial gate closure from a reduced tangential space; no production qualification for p4"
+  },
+  "hill": {"conditional_only": true, "dt": [0.000002,0.000001], "steps": [8,16], "long_continuation": false}
+}

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
@@ -13,6 +14,14 @@ namespace Nektar
 using namespace SolverUtils;
 using namespace RANSWallAlgebra;
 namespace J=RANSWallSolveJson;
+namespace
+{
+double StreamCurvature(const RANSWallNormalMap::Sample &g)
+{
+    double k=0;for(int i=0;i<3;++i)for(int j=0;j<3;++j)k+=g.tangent1[i]*g.B[i][j]*g.tangent1[j];
+    return k;
+}
+}
 
 RANSWallCoordinate RANSWallEvolutionPatch::CompositeChartCoordinate(const RANSWallCoordinate &raw) const
 {
@@ -107,22 +116,22 @@ double RANSWallEvolutionPatch::SeedRadial(int block,double z,int derivative) con
     throw std::runtime_error("seed radial evaluation outside represented panels");
 }
 
-RANSVector RANSWallEvolutionPatch::CompositeSeedVelocity(const RANSWallCoordinate &raw) const
+RANSVector RANSWallEvolutionPatch::CompositeSeedVelocity(const RANSWallCoordinate &raw,int footSide) const
 {
     const auto p=CompositeChartCoordinate(raw);
     if(m_compositeFlatSeed.empty())Require(false,"composite seed target needs its explicit radial setup projection");
     const double H=m_parameters.geometry.height,B=AnalyticalNeutralInflow()?.2:.4,z=Physical(p)[2];
     auto value=[&](double r){return SeedRadial(0,r);};
     auto derivative=[&](double r){return SeedRadial(0,r,1);};
-    const auto g=m_composite->Inner(p[0],std::min(p[2],H));
-    if(m_compositeSeedPolicy=="PhysicalHeightInterfaceV1")
+    const auto g=m_composite->Inner(p[0],std::min(p[2],H),footSide);
+    if(m_compositeSeedPolicy=="PhysicalHeightInterfaceV2")
     {
         // A setup choice, not a wall-law/source change: interface speed may
         // follow the incoming profile at its PHYSICAL height. The complete
         // streamfunction (including its normal velocity) is then projected.
-        const auto gh=m_composite->Inner(p[0],H);
+        const auto gh=m_composite->Inner(p[0],H,footSide);
         const double h=gh.point[2],hs=gh.jacobian[2][0],dx=gh.jacobian[0][0],nz=gh.normal[2],UH=value(H);
-        const double fp=gh.tangent1[2]/gh.tangent1[0],q=gh.baseArea,kappa=gh.kappa1;
+        const double fp=gh.tangent1[2]/gh.tangent1[0],q=gh.baseArea,kappa=StreamCurvature(gh);
         const double fpp=-kappa*q*q*q;
         const double fppp=std::abs(p[0])<m_mapping.lengthX?m_mapping.amplitude*std::pow(std::acos(-1.)/m_mapping.lengthX,3)/2*std::sin(std::acos(-1.)*p[0]/m_mapping.lengthX):0.;
         const double nzs=fp*kappa,nzss=-(fpp*fpp+fp*fppp)/(q*q*q)+3*fp*fp*fpp*fpp/std::pow(q,5);
@@ -153,12 +162,83 @@ RANSVector RANSWallEvolutionPatch::CompositeSeedVelocity(const RANSWallCoordinat
     const double U=value(h),UH=value(H),C=integral(H)-integral(h),D=UH*g.normal[2]-U;
     // n_z'= -slope*slope'/(1+slope^2)^(3/2), with signed curvature
     // kappa=-f''/(1+f'^2)^(3/2). Thus n_z'=slope*kappa.
-    const double slope=g.tangent1[2]/g.tangent1[0],nz_s=slope*g.kappa1;
+    const double slope=g.tangent1[2]/g.tangent1[0],nz_s=slope*StreamCurvature(g);
     const double Cs=-U*hs,Ds=UH*nz_s-derivative(h)*hs,ts=-hs*(1-t)/delta;
     const double h00=1-3*t*t+2*t*t*t,h10=t-2*t*t+t*t*t,d00=-6*t+6*t*t,d10=1-4*t+3*t*t;
     const double u=value(z)+C*d00/delta+D*d10;
     const double psi_s=Cs*h00+C*d00*ts+(-hs*D+delta*Ds)*h10+delta*D*d10*ts;
     return {u,0,-psi_s/dx};
+}
+
+double RANSWallEvolutionPatch::CompositeSeedStreamfunction(const RANSWallCoordinate &p,int footSide) const
+{
+    const double H=m_parameters.geometry.height,B=AnalyticalNeutralInflow()?.2:.4;
+    const auto gh=m_composite->Inner(p[0],H,footSide);const double h=gh.point[2],z=Physical(p)[2],nz=gh.normal[2],UH=SeedRadial(0,H);
+    const bool adjusted=m_compositeSeedPolicy=="PhysicalHeightInterfaceV2";
+    const double a=adjusted?SeedRadial(0,h)/(UH*nz):1.;
+    if(p[2]<=H)return a*SeedRadial(0,p[2],-1);
+    if(z>=B)return SeedRadial(0,z,-1);
+    const double slope=gh.tangent1[2]/gh.tangent1[0],nzs=slope*StreamCurvature(gh);
+    const double as=adjusted?SeedRadial(0,h,1)*gh.jacobian[2][0]/(UH*nz)-SeedRadial(0,h)*nzs/(UH*nz*nz):0.;
+    const double C=a*SeedRadial(0,H,-1)-SeedRadial(0,h,-1);
+    const double D=adjusted?as*SeedRadial(0,H,-1)*gh.inverse[0][2]:UH*nz-SeedRadial(0,h);
+    const double width=B-h,t=(z-h)/width;
+    return SeedRadial(0,z,-1)+C*(1-3*t*t+2*t*t*t)+width*D*(t-2*t*t+t*t*t);
+}
+
+std::string RANSWallEvolutionPatch::CompositeSeedDerivativeChecks() const
+{
+    Require(Composite() && AnalyticalNeutralInflow(),"signed seed checks require analytical composite setup");
+    std::vector<std::string> rows;double maximum=0;
+    const double H=m_parameters.geometry.height,L=m_mapping.lengthX;
+    for(double s:{0.,.059553093889933906,-L,L})for(int side:{-1,1})
+    {
+        if(std::abs(s)!=L && side==-1)continue;
+        const int foot=std::abs(s)==L?side:0;
+        for(double r:{.6*H,H,.08})
+        {
+            const RANSWallCoordinate p{s,0,r};const auto metric=GeometryAt(p,r<=H?-1:1,foot);
+            const auto velocity=CompositeSeedVelocity(p,foot);
+            auto differentiated=[&](double step)
+            {
+                Vector d(3);
+                for(int axis:{0,2})
+                {
+                    const double h=axis==0?step:step*.1;auto a=p,b=p;
+                    int direction=0;if(axis==0 && foot)direction=foot;if(axis==2 && r==H)direction=-1;
+                    if(direction){a[axis]+=direction*h;b[axis]+=direction*2*h;d[axis]=direction*(-3*CompositeSeedStreamfunction(p,foot)+4*CompositeSeedStreamfunction(a)-CompositeSeedStreamfunction(b))/(2*h);}
+                    else{a[axis]+=h;b[axis]-=h;d[axis]=(CompositeSeedStreamfunction(a)-CompositeSeedStreamfunction(b))/(2*h);}
+                }
+                RANSVector v{};for(int j:{0,2}){v[0]+=d[j]*metric.inverse[j][2];v[2]-=d[j]*metric.inverse[j][0];}return v;
+            };
+            const auto first=differentiated(2e-6),second=differentiated(1e-6);double error=0,halving=0;
+            for(int j:{0,2}){error=std::max(error,std::abs(velocity[j]-second[j]));halving=std::max(halving,std::abs(first[j]-second[j]));}
+            auto targetDivergence=[&](double scale)
+            {
+                RANSTensor chart{};const auto v0=CompositeSeedVelocity(p,foot);
+                for(int axis:{0,2})
+                {
+                    const double h=scale*(axis==0?1e-7:1e-8);auto a=p,b=p;int direction=axis==0?foot:(r==H?-1:0);
+                    if(direction){a[axis]+=direction*h;b[axis]+=direction*2*h;const auto va=CompositeSeedVelocity(a),vb=CompositeSeedVelocity(b);for(int i:{0,2})chart[i][axis]=direction*(-3*v0[i]+4*va[i]-vb[i])/(2*h);}
+                    else{a[axis]+=h;b[axis]-=h;const auto va=CompositeSeedVelocity(a),vb=CompositeSeedVelocity(b);for(int i:{0,2})chart[i][axis]=(va[i]-vb[i])/(2*h);}
+                }
+                double div=0;for(int i:{0,2})for(int j:{0,2})div+=chart[i][j]*metric.inverse[j][i];return div;
+            };
+            maximum=std::max(maximum,error);const auto ground=m_composite->Inner(s,0,foot);
+            rows.push_back(J::Object({{"chart",J::Numbers(p)},{"physical",J::Numbers(metric.point)},{"tangential_side",J::Number(foot)},
+                {"signed_stream_curvature",J::Number(StreamCurvature(ground))},{"sorted_principal",J::Numbers(Vector{ground.kappa1,ground.kappa2})},
+                {"velocity",J::Numbers(velocity)},{"streamfunction_FD_velocity",J::Numbers(second)},
+                {"velocity_error",J::Number(error)},{"step_halving",J::Number(halving)},{"target_divergence",J::Number(targetDivergence(.5))},{"divergence_step_halving",J::Number(std::abs(targetDivergence(1)-targetDivergence(.5)))}}));
+        }
+    }
+    // Physical incoming reference differs from zHat at this nonflat point.
+    const RANSWallCoordinate c{.04,0,.1};const auto ref=InflowAt(Physical(c));
+    const double expected=m_robustUstar/(m_parameters.model.Kappa()*Physical(c)[2]);
+    Require(std::abs(ref.dU/expected-1)<1e-14 && std::abs(Physical(c)[2]-c[2])>1e-3,"physical neutral reference diagnostic height");
+    Require(maximum<2e-5,"signed seed velocity disagrees with independently differentiated represented streamfunction");
+    return J::Object({{"passed","true"},{"maximum_velocity_error",J::Number(maximum)},{"samples",J::List(rows)},
+        {"physical_reference_point",J::Numbers(Physical(c))},{"native_zHat",J::Number(c[2])},{"exact_reference_gradient_departure",J::Number(ref.dU/expected-1)},
+        {"exact_reference_epsilon_ratio",J::Number(ref.epsilon/(std::pow(m_robustUstar,3)/(m_parameters.model.Kappa()*Physical(c)[2])))}});
 }
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CompositeSeed() const
@@ -244,10 +324,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CompositeSeed() const
     WallMatrix mass(free.size(),Vector(free.size()));
     for(int i=0;i<free.size();++i)for(int j=0;j<free.size();++j)
         if(free[i]/size[0]==free[j]/size[0])mass[i][j]=m_mass[0][free[i]%size[0]][free[j]%size[0]];
-    const Factor M(mass);WallMatrix inverse,schur(Q.size(),Vector(Q.size()));
+    m_seedM=std::make_shared<Factor>(mass);const auto &M=*m_seedM;WallMatrix inverse,schur(Q.size(),Vector(Q.size()));
     for(const auto &row:Q)inverse.push_back(M.Apply(row));
     for(int i=0;i<Q.size();++i)for(int j=0;j<Q.size();++j)schur[i][j]=std::inner_product(Q[i].begin(),Q[i].end(),inverse[j].begin(),0.);
-    const auto multiplier=RANSWallAlgebra::Solve(schur,beta);Vector delta(free.size());
+    m_seedSchur=std::make_shared<Factor>(schur);
+    m_seedFree=free;m_seedQ=Q;m_seedInverse=inverse;m_seedMass=mass;
+    const auto multiplier=m_seedSchur->Apply(beta);Vector delta(free.size());
     for(int j=0;j<Q.size();++j)for(int i=0;i<free.size();++i)delta[i]+=inverse[j][i]*multiplier[j];
     for(int i=0;i<free.size();++i)s[free[i]]+=delta[i];
     auto remaining=Multiply(D,delta);
@@ -259,6 +341,164 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CompositeSeed() const
         {"setup_continuity_schur_solves","1"},{"independent_continuity_rows",J::Number(Q.size())},
         {"native_weak_continuity_max",J::Number(Maximum(remaining))},{"velocity_projection_mass_norm",J::Number(std::sqrt(std::max(0.,std::inner_product(delta.begin(),delta.end(),Multiply(mass,delta).begin(),0.))))},
         {"governing_solves","0"},{"physical_steps","0"}});return s;
+}
+
+std::string RANSWallEvolutionPatch::CompositeFeasibilityData(const Vector &s,const RANSWallEvolutionData &data) const
+{
+    Require(Composite() && AnalyticalNeutralInflow() && m_seedM && m_seedSchur,"feasibility data needs the corrected native seed projection");
+    const auto started=std::chrono::steady_clock::now();const double Z=upper[2],xmin=lower[0],span=upper[0]-xmin;
+    std::vector<Vector> directions;std::vector<std::string> definitions;double constraintError=0;
+    // 16 and 32 columns are the only declared search spaces. Smooth physical
+    // streamfunctions vanish with their normal derivative at the floor and
+    // inlet; roof psi=0 permits tangential velocity there. No z=.2 restriction.
+    for(double cx:{-.075,-.025,.025,.075,-.13,-.045,.045,.18})for(double height:{.025,.07,.18,.5})
+    {
+        const double width=cx==.18?.2:.065;
+        Vector d(Size());
+        auto target=[&](const RANSWallCoordinate &c,int component)
+        {
+            const auto p=Physical(c);const double x=p[0],z=p[2];
+            const double pi=std::acos(-1.),L=m_mapping.lengthX;
+            const double f=std::abs(x)<L?m_mapping.amplitude*std::pow(std::cos(pi*x/(2*L)),2):0.;
+            const double fp=std::abs(x)<L?-m_mapping.amplitude*pi/(2*L)*std::sin(pi*x/L):0.;
+            const double h=z-f,t=(x-xmin)/span,gauss=std::exp(-std::pow((x-cx)/width,2));
+            const double A=t*t*gauss,Ax=(2*t/span-2*t*t*(x-cx)/(width*width))*gauss;
+            const double E=std::exp(-h/height),B=h*h*(Z-z)*E;
+            const double Bz=(2*h*(Z-z)-h*h-h*h*(Z-z)/height)*E;
+            const double Bx=-fp*(2*h-h*h/height)*(Z-z)*E;
+            return component==0?A*Bz:-(Ax*B+A*Bx);
+        };
+        for(int b=0;b<2;++b){auto v=PhysicalProject(b,[&](const auto &p,double){return target(p,b);},0);std::copy(v.begin(),v.end(),d.begin()+offset[b]);}
+        Vector v(m_seedFree.size());for(int i=0;i<v.size();++i)v[i]=d[m_seedFree[i]];
+        Vector defect(m_seedQ.size());for(int j=0;j<defect.size();++j)defect[j]=std::inner_product(m_seedQ[j].begin(),m_seedQ[j].end(),v.begin(),0.);
+        const auto lambda=m_seedSchur->Apply(defect);
+        for(int j=0;j<lambda.size();++j)for(int i=0;i<v.size();++i)v[i]-=m_seedInverse[j][i]*lambda[j];
+        const auto mv=Multiply(m_seedMass,v);const double norm=std::sqrt(std::inner_product(v.begin(),v.end(),mv.begin(),0.));
+        Require(norm>1e-14,"degenerate projected seed basis");
+        std::fill(d.begin(),d.end(),0.);for(int i=0;i<v.size();++i)d[m_seedFree[i]]=v[i]/norm;
+        for(const auto &q:m_seedQ)constraintError=std::max(constraintError,std::abs(std::inner_product(q.begin(),q.end(),v.begin(),0.))/norm);
+        directions.push_back(d);definitions.push_back(J::Numbers(Vector{cx,height,width,norm}));
+    }
+    Require(constraintError<1e-9,"homogeneous projected basis violates native continuity");
+    const auto domain=ScalarDomain(s,0,data,true);Require(domain.admissible,"feasibility scalar context inadmissible");
+    std::vector<std::string> observations;std::set<std::tuple<int,int,int,bool,RANSWallCoordinate>> seen;
+    auto tensor=[](const RANSTensor &g){std::vector<std::string> v;for(const auto &r:g)v.push_back(J::Numbers(r));return J::List(v);};
+    for(const auto &p:domain.observations)
+    {
+        if(p.block!=K() && !p.dependentTrace)continue;
+        const auto origin=ResolveObservation(p);const auto &row=*origin.velocity;
+        if(!seen.emplace(row.geometry,row.element,origin.radialSide,p.dependentTrace,p.coordinate).second)continue;
+        RANSTensor G{};for(int a=0;a<2;++a)G[PhysicalAxis(a)]=row.Gradient(s,offset[a]);
+        const double k=EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(s,offset[K()]);
+        const double r=Distance(p.coordinate);double e=0,nt=0;
+        if(origin.inner)nt=StateProfile(s,p.coordinate,0,data)->Original().EddyViscosity(r);
+        else e=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(s,offset[Epsilon()]);
+        std::vector<std::string> gradients,velocities;
+        for(const auto &d:directions){RANSTensor g{};for(int a=0;a<2;++a)g[PhysicalAxis(a)]=row.Gradient(d,offset[a]);gradients.push_back(tensor(g));velocities.push_back(J::Numbers(Vector{row.Value(d,offset[0]),row.Value(d,offset[1])}));}
+        observations.push_back(J::Object({{"chart",J::Numbers(p.coordinate)},{"physical",J::Numbers(Physical(p.coordinate))},{"inner",J::Boolean(origin.inner)},
+            {"geometry",J::Number(row.geometry)},{"element",J::Number(row.element)},{"side",J::Number(origin.radialSide)},{"dependent_epsilon",J::Boolean(p.dependentTrace)},
+            {"family",J::Quote(p.inventory)},{"gradient",tensor(G)},{"gradient_basis",J::List(gradients)},{"velocity_basis",J::List(velocities)},{"k",J::Number(k)},{"epsilon",J::Number(e)},{"inner_nu_t",J::Number(nt)}}));
+    }
+    std::vector<std::string> basis,gram;
+    for(const auto &v:directions)basis.push_back(J::Numbers(v));
+    for(const auto &v:directions)
+    {Vector free(m_seedFree.size());for(int i=0;i<free.size();++i)free[i]=v[m_seedFree[i]];const auto mv=Multiply(m_seedMass,free);Vector row;
+     for(const auto &w:directions){double dot=0;for(int i=0;i<free.size();++i)dot+=w[m_seedFree[i]]*mv[i];row.push_back(dot);}gram.push_back(J::Numbers(row));}
+    return J::Object({{"version",J::Quote("VelocityNullspacePhaseIV1")},{"base",J::Numbers(s)},{"basis",J::List(basis)},
+        {"basis_parameters_cx_height_width_original_massnorm",J::List(definitions)},{"mass_normalized",J::Boolean(true)},{"physical_mass_Gram",J::List(gram)},
+        {"homogeneous_continuity_max",J::Number(constraintError)},{"free_velocity_rows",J::Numbers(m_seedFree)},{"velocity_size",J::Number(size[0])},
+        {"observations",J::List(observations)},{"seconds",J::Number(std::chrono::duration<double>(std::chrono::steady_clock::now()-started).count())},
+        {"setup_only","true"},{"governing_solves","0"}});
+}
+
+std::string RANSWallEvolutionPatch::FlatSpatialDiagnostic(const Vector &s,const RANSWallEvolutionData &data) const
+{
+    Require(!Mapped() && AnalyticalNeutralInflow() && !OpenBoundary(),"zero-step spatial comparison requires compatible affine neutral boundaries");
+    const auto resolved=ResidualResolutionComponents(s,s,0,0,data,false,false,false,true);
+    const auto analytical=ResidualResolutionComponents(s,s,0,0,data,false,false,true,true);
+    const double H=m_parameters.geometry.height,K0=InflowAtHeight(H).k;
+    const auto profile=Profile(K0,{lower[0],0,0},1);const auto &total=resolved.terms.at("spatial_sum");
+    WallMatrix duals;std::vector<std::vector<int>> frees;Vector energies;
+    for(int b=0;b<InnerPressure();++b)
+    {
+        std::vector<int> free;for(int i=0;i<size[b];++i)if(!resolved.constraints.count(offset[b]+i))free.push_back(i);
+        WallMatrix M(free.size(),Vector(free.size()));Vector v(free.size());
+        for(int i=0;i<free.size();++i){v[i]=total[offset[b]+free[i]];for(int j=0;j<free.size();++j)M[i][j]=m_mass[b][free[i]][free[j]];}
+        auto d=Factor(M).Apply(v);energies.push_back(std::inner_product(v.begin(),v.end(),d.begin(),0.));duals.push_back(d);frees.push_back(free);
+    }
+    auto norm=[&](Vector v){return Norms(v,resolved.constraints,m_robustUstar);};
+    std::vector<std::pair<std::string,std::string>> terms,analyticTerms,panels;Vector panelSum(Size());
+    for(const auto &[name,v]:resolved.terms)
+    {
+        if(name.rfind("radial:",0)==0)
+        {
+            Vector projection;
+            for(int b=0;b<InnerPressure();++b){double product=0;for(int j=0;j<frees[b].size();++j)product+=v[offset[b]+frees[b][j]]*duals[b][j];projection.push_back(energies[b]>0?product/energies[b]:0.);}
+            panels.push_back({name,J::Object({{"scaled_dual_norm",J::Numbers(norm(v))},{"signed_dual_projection_on_total",J::Numbers(projection)}})});
+            for(int i=0;i<Size();++i)panelSum[i]+=v[i];
+        }
+        else if(std::find(RANSWallResolutionSpatialTerms().begin(),RANSWallResolutionSpatialTerms().end(),name)!=RANSWallResolutionSpatialTerms().end())
+            terms.push_back({name,J::Numbers(norm(v))});
+    }
+    for(const auto &name:RANSWallResolutionSpatialTerms())analyticTerms.push_back({name,J::Numbers(norm(analytical.terms.at(name)))});
+    // Compatible verification boundaries have no open loads; only the gauge
+    // lies outside volume panels. Test differential free rows, with all global
+    // sharing and cross terms retained before contraction.
+    double sumError=0;for(int b=0;b<InnerPressure();++b)for(int id:frees[b])sumError=std::max(sumError,std::abs(panelSum[offset[b]+id]-total[offset[b]+id]));
+    Require(sumError<1e-10,"radial free-load decomposition failed");
+    std::map<std::pair<double,double>,Vector> error;
+    for(const auto &q:Quadrature(0,32))
+    {
+        const auto &el=fields[0]->Elements()[q.element];auto &v=error[{el.lower[2],el.upper[2]}];if(v.empty())v=Vector(8);
+        const double z=q.coordinate[2];const bool inner=z<H;const auto ref=InflowAtHeight(std::max(z,H));
+        const double U=inner?profile->Original().Velocity(z,{InflowAtHeight(H).U,0},{0,0})[0]:ref.U;
+        const double dU=inner?profile->Original().VelocityGradient(z,{InflowAtHeight(H).U,0},{0,0})[0]:ref.dU;
+        RANSTensor g{},gr{};for(int a=0;a<2;++a)g[PhysicalAxis(a)]=q.Gradient(s,offset[a]);gr[0][2]=dU;
+        const double k=q.Value(s,offset[K()]),kr=inner?profile->ReferenceK(z):K0;
+        const double e=inner?profile->Dissipation(z):Point(Epsilon(),q.coordinate).Value(s,offset[Epsilon()]);
+        RANSTensor actualStress{},exactStress{};double actualProduction=0,exactProduction=0;
+        if(inner){const auto a=InnerStress(k,profile->Original().EddyViscosity(z),g),b=InnerStress(kr,profile->Original().EddyViscosity(z),gr);actualStress=a.reynoldsStress;exactStress=b.reynoldsStress;actualProduction=a.production;exactProduction=b.production;}
+        else{const auto a=OuterClosure(k,e,g,q.coordinate),b=OuterClosure(kr,ref.epsilon,gr,q.coordinate);actualStress=a.reynoldsStress;exactStress=b.reynoldsStress;actualProduction=a.production;exactProduction=b.production;}
+        const Vector d{q.Value(s,offset[0])-U,g[0][2]-dU,k-kr,q.Gradient(s,offset[K()])[2]-(inner?profile->ReferenceKGradient(z):0.),inner?0:e-ref.epsilon,
+            actualStress[0][2]-exactStress[0][2]-(inner?m_parameters.geometry.molecularNu*(g[0][2]+g[2][0]-dU):0.),actualStress[2][2]-exactStress[2][2]-(inner?2*m_parameters.geometry.molecularNu*g[2][2]:0.),actualProduction-exactProduction};
+        for(int j=0;j<8;++j)v[j]+=q.weight*d[j]*d[j];
+    }
+    std::vector<std::string> errs,jumps;
+    for(auto [bounds,v]:error){for(auto &x:v)x=std::sqrt(x);errs.push_back(J::Object({{"bounds",J::Numbers(Vector{bounds.first,bounds.second})},{"dimensional_errors",J::Numbers(v)}}));}
+    for(auto [bounds,v]:error)if(bounds.second<upper[2])
+    {
+        const double z=bounds.second;const RANSWallCoordinate c{(lower[0]+upper[0])/2,0,z};
+        std::vector<double> flux;
+        for(int b:{0,K(),Epsilon()})
+        {
+            if(b==Epsilon() && z<=H){flux.push_back(0);continue;}
+            const auto minus=Point(b,c,-1),plus=Point(b,c,1);flux.push_back(plus.Gradient(s,offset[b])[2]-minus.Gradient(s,offset[b])[2]);
+        }
+        std::vector<std::string> sided;
+        for(int side:{-1,1})
+        {
+            const auto row=Point(0,c,side);const bool inner=fields[0]->Elements()[row.element].upper[2]<=H;
+            RANSTensor g{};for(int a=0;a<2;++a)g[PhysicalAxis(a)]=row.Gradient(s,offset[a]);
+            const auto kr=Point(K(),c,side);const double k=kr.Value(s,offset[K()]);const auto dk=kr.Gradient(s,offset[K()]);
+            const double pi=Point(inner?InnerPressure():OuterPressure(),c,side).Value(s,offset[inner?InnerPressure():OuterPressure()]);
+            RANSTensor stress{};double diffusion=0,epsilonFlux=0;
+            if(inner){const double nt=profile->Original().EddyViscosity(z);stress=RANSWallInnerMeanStress(InnerStress(k,nt,g),m_parameters.geometry.molecularNu,pi);diffusion=m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK;}
+            else{const auto er=Point(Epsilon(),c,side);const auto law=OuterClosure(k,er.Value(s,offset[Epsilon()]),g,c);diffusion=law.kDiffusion;
+                epsilonFlux=-law.epsilonDiffusion*er.Gradient(s,offset[Epsilon()])[2];
+                for(int a=0;a<3;++a)for(int b=0;b<3;++b)stress[a][b]=-law.reynoldsStress[a][b]+(a==b?2*k/3-pi:0);}
+            Vector traction;for(int a=0;a<3;++a)traction.push_back(stress[a][2]);
+            sided.push_back(J::Object({{"radial_side",J::Number(side)},{"geometry",J::Number(row.geometry)},{"inner",J::Boolean(inner)},
+                {"selected_mean_traction_on_plus_z",J::Numbers(traction)},{"physical_k_diffusive_flux_plus_z",J::Number(-diffusion*dk[2])},
+                {"physical_epsilon_diffusive_flux_plus_z",inner?"null":J::Number(epsilonFlux)}}));
+        }
+        jumps.push_back(J::Object({{"z",J::Number(z)},{"raw_derivative_jumps_U_k_epsilon",J::Numbers(flux)},{"one_sided_physical_fluxes",J::List(sided)}}));
+    }
+    auto analytic=analytical.terms.at("spatial_sum");
+    return J::Object({{"operation",J::Quote("H2dFlatSpatialV1")},{"physical_steps","0"},{"governing_solves","0"},{"setup_projection_only","true"},
+        {"size",J::Number(Size())},{"state",J::Numbers(s)},{"selected_spatial_norms",J::Numbers(norm(total))},{"analytical_free_load_norms",J::Numbers(norm(analytic))},
+        {"physical_reference",FiniteInflowChecks(s)},{"radial_errors",J::List(errs)},{"error_columns",J::Quote("U,gradU,k,gradk,outer_epsilon,shear_stress,normal_stress,production")},
+        {"radial_components",J::Object(panels)},{"global_components",J::Object(terms)},{"analytical_component_norms",J::Object(analyticTerms)},{"one_sided_derivative_jumps",J::List(jumps)},
+        {"radial_global_free_sum_error",J::Number(sumError)},{"scope",J::Quote("zero-step representation diagnostic; shared global rows combined before full-mass contraction; signed projections retain cancellation; p-enriched diagnostic does not qualify production positivity")}});
 }
 
 std::string RANSWallEvolutionPatch::MovingFootChecks(const Vector &s,const RANSWallEvolutionData &data) const

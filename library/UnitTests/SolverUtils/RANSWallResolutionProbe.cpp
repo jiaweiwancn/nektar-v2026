@@ -55,7 +55,7 @@ std::string MappedSeedWitnesses(const RANSWallEvolutionPatch &patch,const Vector
         const auto metric=patch.GeometryAt(p,inner?-1:1,foot);
         const auto gradient=[&](double scale)
         {
-            RANSTensor native{},physical{};const auto f0=patch.CompositeSeedVelocity(p);
+            RANSTensor native{},physical{};const auto f0=patch.CompositeSeedVelocity(p,foot);
             for(int axis:{0,2})
             {
                 const double h=scale*std::min(axis==0?1e-7:1e-8,(el.upper[axis]-el.lower[axis])*1e-4);
@@ -88,6 +88,27 @@ std::string MappedSeedWitnesses(const RANSWallEvolutionPatch &patch,const Vector
         }
     }
     return J::List(result);
+}
+std::string ExtraSeedAudit(const RANSWallEvolutionPatch &patch,const Vector &s,const RANSWallEvolutionData &data,const Vector *base=nullptr)
+{
+    double minimum=1e300,strong=0,volume=0,energy=0,baseEnergy=0,deltaNorm=0,maximumIncrement=0;std::string witness="null";int count=0;
+    for(const auto &q:patch.Quadrature(0,12))
+    {
+        const bool inner=patch.fields[0]->Elements()[q.element].upper[2]<=patch.Parameters().geometry.height;
+        RANSTensor g{};RANSVector u{};for(int a=0;a<2;++a){g[patch.PhysicalAxis(a)]=q.Gradient(s,patch.offset[a]);u[patch.PhysicalAxis(a)]=q.Value(s,patch.offset[a]);}
+        const double k=patch.GeometryPoint(patch.K(),q.geometry,q.coordinate).Value(s,patch.offset[patch.K()]);
+        const auto profile=patch.StateProfile(s,q.coordinate,0,data);
+        const double e=inner?profile->Dissipation(q.coordinate[2]):patch.GeometryPoint(patch.Epsilon(),q.geometry,q.coordinate).Value(s,patch.offset[patch.Epsilon()]);
+        const auto R=inner?patch.InnerStress(k,profile->Original().EddyViscosity(q.coordinate[2]),g).reynoldsStress:patch.OuterClosure(k,e,g,q.coordinate).reynoldsStress;
+        if(base){double b2=0,d2=0;for(int a=0;a<2;++a){const double b=q.Value(*base,patch.offset[a]),du=u[patch.PhysicalAxis(a)]-b;b2+=b*b;d2+=du*du;maximumIncrement=std::max(maximumIncrement,std::abs(du));}baseEnergy+=q.weight*b2/2;deltaNorm+=q.weight*d2;}
+        const auto ev=J::Eigenvalues(R);double div=g[0][0]+g[2][2];strong+=q.weight*div*div;volume+=q.weight;energy+=q.weight*(u[0]*u[0]+u[2]*u[2])/2;++count;
+        if(ev[0]<minimum){minimum=ev[0];witness=J::Object({{"coordinate",J::Numbers(q.coordinate)},{"physical",J::Numbers(patch.Physical(q.coordinate))},
+            {"geometry",J::Number(q.geometry)},{"element",J::Number(q.element)},{"inner",J::Boolean(inner)},{"k",J::Number(k)},{"epsilon",J::Number(e)},
+            {"gradient",J::Rows(g)},{"tensor",J::Rows(R)},{"eigenvalues",J::Numbers(ev)}});}
+    }
+    return J::Object({{"minimum_covariance",J::Number(minimum)},{"witness",witness},{"count",J::Number(count)},
+        {"strong_divergence_L2",J::Number(std::sqrt(strong))},{"volume",J::Number(volume)},{"kinetic_energy",J::Number(energy)},{"base_kinetic_energy",base?J::Number(baseEnergy):"null"},{"velocity_change_L2",base?J::Number(std::sqrt(deltaNorm)):"null"},{"maximum_sampled_velocity_increment",base?J::Number(maximumIncrement):"null"},
+        {"scope",J::Quote("independent GL12 tensor sampling in each physical native panel; complements complete production inventory; no domain-wide covariance theorem")}});
 }
 std::string Wide(const std::map<std::string,std::vector<long double>> &values)
 {
@@ -237,21 +258,31 @@ int main(int argc,char **argv)
         serial->LoadParameter("RANSWallTangentialOrder",p.tangentialOrder,8);serial->LoadParameter("RANSWallNormalOrder",p.normalOrder,16);
         RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
         const auto operation=packet.get<std::string>("operation","");
-        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.Composite() && (operation=="h2b_operators" || operation=="h2c_seed" || operation=="h2b_checkpoint" || operation=="h2c_checkpoint"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
+        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.Composite() && (operation=="h2b_operators" || operation=="h2d_setup" || operation=="h2d_candidate" || operation=="h2d_flat" || operation=="h2c_seed" || operation=="h2b_checkpoint" || operation=="h2c_checkpoint"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
         Require(patch.InnerStressName()==packet.get<std::string>("inner_stress_model"),"packet law differs from session");
         for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
-        if(operation=="h2b_operators" || operation=="h2c_seed")
+        if(operation=="h2b_operators" || operation=="h2c_seed" || operation=="h2d_setup" || operation=="h2d_candidate" || operation=="h2d_flat")
         {
             Require(patch.PrescribedInflow() && !packet.get_optional<std::string>("native_checkpoint") && RANSWallR3::HashFile(argv[1])==packet.get<std::string>("xml_sha256"),"H2b operator fixture XML/initialization contract differs");
-            const auto state=patch.FiniteInflowSeed();const auto hash=RANSWallR3::Hash(state);data.fixedBoundary=patch.FixedReferenceBoundary(state);
+            auto state=patch.FiniteInflowSeed();const auto baseState=state;
+            if(operation=="h2d_candidate")
+            {
+                const auto supplied=Read(packet,"state");Require(supplied.size()==state.size() && RANSWallR3::Hash(state)==packet.get<std::string>("base_sha256"),"candidate base identity mismatch");
+                for(int i=patch.offset[patch.K()];i<state.size();++i)Require(supplied[i]==state[i],"velocity-only candidate changed scalar or pressure");
+                for(auto [row,value]:patch.FixedReferenceBoundary(state))Require(supplied[row]==state[row],"candidate changed essential coefficient");
+                state=supplied;Require(RANSWallR3::Hash(state)==packet.get<std::string>("state_sha256"),"candidate hash mismatch");
+            }
+            if(operation=="h2d_flat")
+            {data.fixedBoundary=patch.FixedReferenceBoundary(state);patch.SetReference(state,data,0,0);std::ofstream out(argv[3]);out<<patch.FlatSpatialDiagnostic(state,data)<<std::endl;world->Finalise();return 0;}
+            const auto hash=RANSWallR3::Hash(state);data.fixedBoundary=patch.FixedReferenceBoundary(state);
             const auto domain=patch.ScalarDomain(state,0,data,true);
             Require(domain.admissible,"H2b setup scalar/budget gate: "+patch.ScalarDomainJSON(domain,true));
             patch.SetReference(state,data,0,0);
             RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,0);
-            const auto checks=operation=="h2c_seed"?patch.FiniteInflowChecks(state):patch.CompositeChecks(state,0,data);const auto audit=patch.CompleteRestrictedAudit(state,state,0,0,data);
+            const auto checks=operation!="h2b_operators"?patch.FiniteInflowChecks(state):patch.CompositeChecks(state,0,data);const auto audit=patch.CompleteRestrictedAudit(state,state,0,0,data);
             std::string budget;
             try{budget=patch.FiniteTurbulenceBudget(state,state,0,0,data);}
             catch(const std::exception &error)
@@ -264,15 +295,15 @@ int main(int argc,char **argv)
                 catch(const std::exception &error)
                 {footFixture=J::Object({{"passed","false"},{"failure",J::Quote(error.what())},{"native_seed_audit_preserved","true"}});}
             }
-            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"checks",checks},{"audit",Maps(audit)},
-                {"state",J::Numbers(state)},{"state_sha256",J::Quote(hash)},{"seed_setup",patch.CompositeSeedInfo()},
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"checks",checks},{"audit",Maps(audit)},{"feasibility",operation=="h2d_setup"?patch.CompositeFeasibilityData(state,data):"null"},
+                {"state",J::Numbers(state)},{"state_sha256",J::Quote(hash)},{"extra_sampling",operation=="h2d_candidate"?ExtraSeedAudit(patch,state,data,&baseState):"null"},{"seed_setup",patch.CompositeSeedInfo()},{"signed_derivative_checks",patch.Composite() && patch.AnalyticalNeutralInflow() && patch.Mapping().amplitude!=0?patch.CompositeSeedDerivativeChecks():"null"},
                 {"scalar_inventory",patch.ScalarDomainJSON(domain)},
                 {"seed_target_witnesses",patch.Composite() && patch.Mapping().amplitude!=0?MappedSeedWitnesses(patch,state,audit):"[]"},
                 {"moving_foot_fixture",footFixture},
-                {"seed_constitutive",patch.ConstitutiveStateDiagnostic(state,0,data,{})},{"physical_samples",Maps(patch.PhysicalSamples(state,0,data))},
+                {"seed_constitutive",patch.ConstitutiveStateDiagnostic(state,0,data,{{.059553093889933906,0,patch.Parameters().geometry.height},{.1,0,.1}})},{"physical_samples",Maps(patch.PhysicalSamples(state,0,data))},
                 {"native_budget",budget},
                 {"evaluation_reuse",patch.EvaluationReuseJSON()},
-                {"geometry_identity",J::Quote(patch.GeometrySignature())},{"governing_solves","0"},{"physical_commits","0"}})<<'\n';
+                {"patch_signature",J::Quote(patch.Signature())},{"inventory_identity",J::Quote(patch.PimpleKBoundSignature())},{"geometry_identity",J::Quote(patch.GeometrySignature())},{"governing_solves","0"},{"physical_commits","0"}})<<'\n';
             Require(out.good(),"cannot write H2b native operator fixture");world->Finalise();return 0;
         }
         if(operation=="finite_initial_domain")
@@ -666,7 +697,7 @@ int main(int argc,char **argv)
                     {"audit",Maps(audit)},{"native_turbulence_budget",turbulence},{"developing_boundary",boundaryStatus},
                     {"selected_spatial_block_norms",J::Numbers(patch.Norms(native,components.constraints,us))},
                     {"analytical_free_test_loads",analytical},
-                    {"geometry_identity",J::Quote(patch.GeometrySignature())},{"provider",patch.FiniteInflowChecks(state)},
+                    {"patch_signature",J::Quote(patch.Signature())},{"inventory_identity",J::Quote(patch.PimpleKBoundSignature())},{"geometry_identity",J::Quote(patch.GeometrySignature())},{"provider",patch.FiniteInflowChecks(state)},
                     {"governing_solves","0"},{"physical_commits","0"},{"initialization_work",J::Numbers(patch.InitializationWork())},
                     {"native_history_advanced","false"},{"selected_state_unchanged","true"}})<<'\n';world->Finalise();return 0;
             }

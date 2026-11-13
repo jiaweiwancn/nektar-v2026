@@ -86,7 +86,7 @@ const std::vector<std::string> &RANSWallResolutionSpatialTerms()
 
 RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::ResidualResolutionComponents(
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored,
-    bool originalOuterCounterfactual,bool analyticalReference) const
+    bool originalOuterCounterfactual,bool analyticalReference,bool panelDiagnostics) const
 {
     Require(m_comm->GetSize()==1 && m_dimension==2 && (!Mapped() || Composite()) && ((m_transitionEnabled && m_cappedDestruction) || AcceptedAWF()),
         "R3 residual-resolution audit requires serial flat2D Upstream+Capped");
@@ -110,7 +110,12 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     Refresh(s,time,&data);Buckets buckets;
     for(const auto &name:RANSWallResolutionSpatialTerms())Bucket(buckets,name,Size());
     auto load=[&](const std::string &name,int block,const RANSWallGlobalPoint &q,double value,const Flux &flux,double weight)
-        {Add(buckets,name,Size(),offset[block],q,value,flux,weight);};
+        {
+            Add(buckets,name,Size(),offset[block],q,value,flux,weight);
+            if(panelDiagnostics && std::find(RANSWallResolutionSpatialTerms().begin(),RANSWallResolutionSpatialTerms().end(),name)!=RANSWallResolutionSpatialTerms().end())
+            {const auto &el=fields[block]->Elements().at(q.element);const std::string key="radial:"+std::to_string(el.lower[2])+":"+std::to_string(el.upper[2])+":"+name;
+             Add(buckets,key,Size(),offset[block],q,value,flux,weight);}
+        };
     auto evaluate=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile,
         const RANSVector &force,const RANSCappedDestructionValues *normalization)
     {

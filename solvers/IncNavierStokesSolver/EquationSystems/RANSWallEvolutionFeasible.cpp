@@ -2215,8 +2215,12 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         if(m_assertKCoverage)Require(m_coveredKLocations.count(p.coordinate),"unprotected constitutive k evaluation: cached audit");
         if(cov<outerCov){outerCov=cov;outerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,cov};
             outerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};}
-        const double g0=m_robustUstar/(m_parameters.model.Kappa()*r);
-        const double e0=m_robustUstar*m_robustUstar*m_robustUstar/(m_parameters.model.Kappa()*r);
+        // Analytical neutral reference lives at incoming physical height, never
+        // native outer zHat or nearest-floor distance. Legacy finite ranges
+        // retain their explicitly labelled chart-log diagnostic convention.
+        const auto ref=AnalyticalNeutralInflow()?InflowAt(Physical(p.coordinate)):RANSFiniteInflowReference::Value{};
+        const double g0=AnalyticalNeutralInflow()?ref.dU:m_robustUstar/(m_parameters.model.Kappa()*r);
+        const double e0=AnalyticalNeutralInflow()?ref.epsilon:m_robustUstar*m_robustUstar*m_robustUstar/(m_parameters.model.Kappa()*r);
         for(int a=0;a<3;++a)for(int b=0;b<3;++b)
         {
             const double departure=G[a][b]/g0-m_referenceFlow[a]*m_referenceNormal[b];

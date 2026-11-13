@@ -103,8 +103,8 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
             c.cMu,c.cEpsilon1,c.cEpsilon2,c.sigmaK,c.sigmaEpsilon,c.yapCoefficient,c.yapLength});
         if(Composite())
         {
-            session->LoadSolverInfo("RANSWallCompositeSeed",m_compositeSeedPolicy,"TangentialNeutralV1");
-            Require(m_compositeSeedPolicy=="TangentialNeutralV1" || m_compositeSeedPolicy=="PhysicalHeightInterfaceV1","unsupported neutral mapped seed policy");
+            session->LoadSolverInfo("RANSWallCompositeSeed",m_compositeSeedPolicy,"TangentialNeutralV2");
+            Require(m_compositeSeedPolicy=="TangentialNeutralV2" || m_compositeSeedPolicy=="PhysicalHeightInterfaceV2","unsupported neutral mapped seed policy (historical V1 arithmetic requires its frozen runtime)");
             m_finiteInflowIdentity+=":composite-seed="+m_compositeSeedPolicy+":blend-global-z=.2:physical-mass-native-continuity";
         }
     }

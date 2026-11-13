@@ -297,7 +297,37 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
         }
         else
         {
-        m_state=m_patch->PrescribedInflow()?m_patch->FiniteInflowSeed():
+        std::string startupFile,startupHash;
+        m_serialSession->LoadSolverInfo("RANSWallCertifiedStartupFile",startupFile,"");
+        m_serialSession->LoadSolverInfo("RANSWallCertifiedStartupSHA256",startupHash,"");
+        if(!startupFile.empty())
+        {
+            Require(m_diagnosticIVP=="Off" && m_order==1 && m_eta==0 && m_patch->AnalyticalNeutralInflow(),"certified startup is a fresh analytical-neutral IMEX1 experiment, not a changed restart/late IVP");
+            double amplitude=0;m_serialSession->LoadParameter("RANSWallAcceptedKAmplitude",amplitude,0.);
+            Require(amplitude==0,"certified startup forbids post-import perturbation or Lift");
+            for(const std::string f:{"InitialPerturbationInner","InitialPerturbationOuter"})for(const auto &v:m_serialSession->GetVariables())
+                if(m_serialSession->DefinesFunction(f,v))
+                {const auto expression=m_serialSession->GetFunction(f,v)->GetExpression();
+                 Require(expression=="0" || expression=="0." || expression=="0.0" || expression=="-0","certified startup permits only literal zero inherited perturbations; no projection or Lift is applied");}
+            Require(startupHash.size()==64 && RANSWallR3::HashFile(startupFile)==startupHash,"certified startup file identity differs");
+            boost::property_tree::ptree cert;boost::property_tree::read_json(startupFile,cert);
+            Require(cert.get<std::string>("version")=="CertifiedNeutralStartupV1" && cert.get<bool>("complete_native_admissible") &&
+                cert.get<std::string>("patch_signature")==m_patch->Signature() && cert.get<std::string>("geometry_identity")==m_patch->GeometrySignature() &&
+                cert.get<std::string>("inventory_identity")==m_patch->PimpleKBoundSignature() && cert.get<double>("physical_t0")==0.,"certified startup physics/geometry/inventory/gate differs");
+            m_state.clear();for(const auto &v:cert.get_child("state"))m_state.push_back(v.second.get_value<double>());
+            Require(m_state.size()==m_patch->Size() && RANSWallR3::Hash(m_state)==cert.get<std::string>("state_sha256"),"certified coupled state hash differs");
+            m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
+            m_patch->SetReference(m_state,m_data,0,0);
+            const auto check=m_patch->CompleteRestrictedAudit(m_state,m_state,0,0,m_data);
+            Require(check.at("accepted_awf_hard_admissible")==Vector({1.}) && check.at("admissible")==Vector({1.}) && check.at("accepted_awf_scalar_domain").at(8)<=1e-10,"certified startup independent complete native gate failed");
+            const auto &weak=check.at("coupled_norms");for(int b=m_patch->InnerPressure();b<weak.size();++b)
+                Require(weak[b]<1e-9,"certified startup violates native algebraic/boundary constraints");
+            Require(m_patch->InitializationWork()==Vector({0.,0.}),"certified startup performed forbidden Lift");
+            m_ivpIdentity=RANSWallSolveJson::Object({{"mode",RANSWallSolveJson::Quote("CertifiedNeutralStartupV1")},
+                {"certificate_sha256",RANSWallSolveJson::Quote(startupHash)},{"seed_sha256",RANSWallSolveJson::Quote(RANSWallR3::Hash(m_state))},
+                {"fresh_native_histories","true"},{"optimizer_rerun","false"},{"lift_or_projection","false"}});
+        }
+        else m_state=m_patch->PrescribedInflow()?m_patch->FiniteInflowSeed():
             (m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time));
         if(m_neutral || m_patch->PrescribedInflow())m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
         else if(m_patch->Mapped() || m_patch->MatchingEnabled() || m_patch->CappedDestruction())
@@ -337,7 +367,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             }
             // Perturb the state after freezing the neutral reference/defect.
             // This never changes the reference, wall model or boundary data.
-            if(m_serialSession->DefinesFunction("InitialPerturbationInner") || m_serialSession->DefinesFunction("InitialPerturbationOuter"))
+            if(startupFile.empty() && (m_serialSession->DefinesFunction("InitialPerturbationInner") || m_serialSession->DefinesFunction("InitialPerturbationOuter")))
             {
                 const auto perturbation=m_patch->Project(Functions("InitialPerturbation",false),m_time);
                 for(int i=0;i<m_patch->DifferentialSize();++i)m_state[i]+=perturbation[i];
@@ -345,6 +375,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             }
             m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
         }
+        if(!startupFile.empty())Require(m_patch->InitializationWork()==Vector({0.,0.}),"certified startup/restart used forbidden Lift");
         }
         m_historyReady=true;
         RANSWallEvolutionPatch::EvaluationScope evaluation(*m_patch,m_data,m_time);

@@ -92,7 +92,11 @@ public:
     RANSWallGlobalPoint PhysicalPoint(int block,const RANSWallCoordinate&,int radialSide=0,int footSide=0) const;
     double OuterWallDistance(const RANSWallCoordinate&) const;
     Vector CompositeSeed() const;
-    SolverUtils::RANSVector CompositeSeedVelocity(const RANSWallCoordinate&) const;
+    SolverUtils::RANSVector CompositeSeedVelocity(const RANSWallCoordinate&,int footSide=0) const;
+    double CompositeSeedStreamfunction(const RANSWallCoordinate&,int footSide=0) const;
+    std::string CompositeSeedDerivativeChecks() const;
+    std::string CompositeFeasibilityData(const Vector&,const RANSWallEvolutionData&) const;
+    std::string FlatSpatialDiagnostic(const Vector&,const RANSWallEvolutionData&) const;
     const std::string &CompositeSeedInfo() const { return m_compositeSeedInfo; }
     std::string CompositeChecks(const Vector&,double,const RANSWallEvolutionData&) const;
     int Owner(int geometry) const { return (geometry+m_ownershipShift)%m_comm->GetSize(); }
@@ -363,7 +367,7 @@ public:
         double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false) const;
     ResidualResolutionResult ResidualResolutionComponents(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false,
-        bool originalOuterCounterfactual=false,bool analyticalReference=false) const;
+        bool originalOuterCounterfactual=false,bool analyticalReference=false,bool panelDiagnostics=false) const;
     /** Read-only constitutive inventory and one-sided tensor witnesses. No
      * lift, correction, governing solve or change to the selected model. */
     std::string ConstitutiveStateDiagnostic(const Vector &state,double time,
@@ -600,6 +604,9 @@ private:
     mutable std::array<std::vector<std::array<long double,6>>,3> m_seedRadial;
     double SeedRadial(int,double,int derivative=0) const;
     mutable std::string m_compositeSeedInfo="null";
+    mutable std::vector<int> m_seedFree;
+    mutable WallMatrix m_seedQ,m_seedInverse,m_seedMass;
+    mutable std::shared_ptr<Factor> m_seedM,m_seedSchur;
     mutable std::size_t m_chartEndpointSnaps=0;
     mutable double m_chartEndpointOvershoot=0;
     std::shared_ptr<const SolverUtils::RANSTwoRegionHill> m_composite;

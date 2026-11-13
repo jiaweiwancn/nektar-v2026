@@ -146,20 +146,7 @@ def main():
             q=native('hill-h0',.0065,'hill')
             save(status='initialization_rejected' if not q or q['failure'] else 'initialized_zero_steps')
         else:
-            require(a.gate,'screen gate required');g=load(a.gate/'progress.json')
-            require(g['results']['65-hill']['audit']['accepted_awf_hard_admissible']==[1],'hill seed gate failed; no evolving retry')
-            # Implemented only once the native gate has passed. Each dt uses
-            # its own fresh initialization and integrator histories.
-            zero=native('hill-h0',.0065,'hill');finezero=native('hill-half-h0',.0065,'hill',dt=1e-6)
-            require(state_hash(zero['state'])==state_hash(finezero['state']),'dt changed mapped seed')
-            c=native('hill8',.0065,'hill',8,cp=Path(zero['checkpoint']));f=native('hill16',.0065,'hill',16,dt=1e-6,cp=Path(finezero['checkpoint']))
-            require(c and f and not c['failure'] and not f['failure'],'hill leg rejected')
-            from compare_cls_epawf_pimple import same_history
-            first=native('hill4',.0065,'hill',4,cp=Path(zero['checkpoint']));second=native('hill4restart',.0065,'hill',4,cp=Path(first['checkpoint']))
-            require(same_history(c,second),'mapped split restart differs')
-            bad=native('hill-rollback',.0065,'hill',1,cp=Path(zero['checkpoint']),mutate=lambda t:set_parameter(t,'RANSWallPimplePostAssignRejectStep',1))
-            require(same_history(zero,bad),'mapped rollback differs')
-            save(status='completed_hill_pair')
+            raise RuntimeError('Historical regenerated-seed hill runner retired. Use run_cao_tamura_budget_h2d_startup.py with an exact CertifiedNeutralStartupV1 certificate; a gate-file boolean cannot authorize seed regeneration.')
     except Exception as e:save(status='gate_stop',failure=str(e));raise
     finally:lock.stream.close()
 
