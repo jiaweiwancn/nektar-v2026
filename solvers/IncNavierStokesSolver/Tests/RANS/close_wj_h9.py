@@ -11,13 +11,23 @@ from study_wj_h9 import identity,check
 
 
 def verify(root,publication):
-    out=root/'closure';out.mkdir();imports=load(root/'imports.json');verified=[]
+    out=root/'closure';out.mkdir(exist_ok=True);assert not(out/'verification.json').exists();imports=load(root/'imports.json');verified=[]
     for v in load(publication/'seal.json')['files']:verified.append(check(v))
     for item in imports['reports'].values():
         for key in ('report','xml','original_report'):verified.append(check(item[key]))
     for item in imports['attempts']:
         for key in ('packet','matrix','original_packet','original_matrix','checkpoint'):verified.append(check(item[key]))
-    for item in imports['anchors'].values():verified.append(check(item['native']))
+    anchor_bindings=[]
+    for branch,item in imports['anchors'].items():
+        verified.append(check(item['native']));packet=load(item['native']['path']);native=packet['weak_checks'];record=item['independent_weak']
+        assert native['native_terms']==record['native_components']
+        assert [native['native_inner'],native['native_outer']]==record['regional_native']
+        binding=next(v['binding']for v in imports['attempts']if v['branch']==branch and v['step']=={'coarse':1,'fine':2,'quarter':4}[branch])
+        assert packet['state_sha256']==binding['states']['A']and packet['callback_history_sha256']==binding['stage_history_sha256']
+        assert native['alpha_mass']==binding['alpha']and packet['open_boundary']['time']==binding['time']
+        assert packet['report_sha256']==imports['reports'][branch]['report']['sha256']
+        assert packet['checkpoint_sha256']==item['context']['checkpoint']['sha256']
+        anchor_bindings.append(dict(branch=branch,state=binding['states']['A'],history=binding['stage_history_sha256'],alpha=binding['alpha'],time=binding['time'],native=check(item['native']),terms_equal_existing_compact=True));del packet
     for key in ('inventory','records','local','H8_accounting'):verified.append(check(imports[key]))
     for key in ('ELF','wrapper'):verified.append(check(imports['runtime'][key]))
     for v in imports['runtime']['private_libraries']:verified.append(check(v))
@@ -40,7 +50,11 @@ def verify(root,publication):
     logs={};tests=set()
     for name in ('focused-tests-v4','focused-h9-final'):
         log=root/'operations'/name/'command.log';text=log.read_text();assert '\nOK\n'in text
-        tests.update(re.findall(r'^(test_\w+) \(([^)]+)\) \.\.\. ok$',text,re.M))
+        # Individual tests can print to stdout between their name and "ok".
+        # Require the successful suite total and recover all method headings.
+        methods=re.findall(r'^(test_\w+) \(([^)]+)\)',text,re.M)
+        assert len(methods)==int(re.search(r'Ran (\d+) tests',text).group(1))
+        tests.update(methods)
         logs[name]=dict(log=identity(log),request=identity(root/'operations'/name/'request.json'),receipt=identity(root/'operations'/name/'receipt.json'))
     assert len(tests)==51
     matrices=load(publication/'matrix-checks.json');assert len(matrices)==7 and all(v['factorizations']==v['solves']==0 for v in matrices)
@@ -49,13 +63,13 @@ def verify(root,publication):
     for name in book['entries']:
         folder=root/'operations'/name;request=load(folder/'request.json');assert not(forbidden&{Path(x).name for x in request['argv']})
         if book['entries'][name]['status']=='RESERVED':
-            assert name=='closure-verification','only this verifier may be running'
+            assert name=='closure-verification-v2','only this verifier may be running'
             continue
         maps=load(folder/'process-maps.json')
         assert not any(forbidden&{Path(x).name for x in v['command'].split()}for v in maps.values())
         operations.append(dict(label=name,request=identity(folder/'request.json'),receipt=identity(folder/'receipt.json'),log=identity(folder/'command.log'),maps=identity(folder/'process-maps.json')))
     save(out/'verification.json',dict(status='PASS',selected_input_and_publication_hashes=verified,operations=operations,executed_tests=logs,unique_methods=51,methods=[list(v)for v in sorted(tests)],
-        governing_attempts=0,new_CP0=0,new_strict=0,builds=0,attempts_audited=7,full_Q1_tests_per_attempt=[34,70],
+        governing_attempts=0,new_CP0=0,new_strict=0,builds=0,attempts_audited=7,full_Q1_tests_per_attempt=[34,70],native_anchor_bindings=anchor_bindings,
         completed_batch=dict(k_matvecs=21,k_factorizations=0,k_solves=0,diagnostic_mass_factorizations=52,diagnostic_mass_solves=28,kernel_queries=24,weak_evaluations=24),
         failed_prefix=dict(k_matvecs=3,diagnostic_mass_factorizations=52,diagnostic_mass_solves=4,projected_test_fits=134,kernel_queries=0,
             counting_scope='inferred from preserved exception location after coarse matrix/moment evaluation; no completed attempt published'),
@@ -80,8 +94,8 @@ def finalize(root,publication):
     save(root/'accounting.json',book);save(out/'accounting-final.json',book)
     save(out/'bridge.json',dict(publication_seal=identity(publication/'seal.json'),verification=identity(out/'verification.json'),accounting=identity(out/'accounting-final.json'),
         original_H8_accounting=check(load(root/'imports.json')['H8_accounting']),runtime=identity(publication/'runtime.json'),
-        verifier_receipt=identity(root/'operations/closure-verification/receipt.json'),
-        verifier_maps=identity(root/'operations/closure-verification/process-maps.json'),
+        verifier_receipt=identity(root/'operations/closure-verification-v2/receipt.json'),
+        verifier_maps=identity(root/'operations/closure-verification-v2/process-maps.json'),
         source_versions=[identity(p)for directory in [root/'source',*sorted(root.glob('observer-v*'))]for p in sorted(directory.glob('*.py'))],
         superseded=[identity(root/'operations'/name/'receipt.json')for name,v in book['entries'].items()if v['status']!='PASS'],
         scalar_reclassification=dict(original=identity(root/'science-v2/summary.json'),corrected=identity(root/'assessment-v1/summary.json'),reason='physical additive terms distinguished from diagnostic buckets; same load bytes and tolerances'),
