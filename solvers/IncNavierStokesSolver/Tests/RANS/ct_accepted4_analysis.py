@@ -39,6 +39,13 @@ def weak(packet,c,wrong_pressure=False,constant_inner_k=False):
         tr=c['reference_column']['outer_equilibrium']['outlet_traction'];tx=tr[0] if region else 0.
         add(q,0,w*phi*(U*U-tx));add(q,1,-w*phi*tr[1]);add(q,2,w*phi*U*(col.K if constant_inner_k and not region else v[1]))
         if region:add(f['epsilon'],3,w*np.array(f['epsilon']['phi'])*U*v[2])
+    # CT7's opt-in physical top releases these test modes. Legacy packets
+    # have no top_faces and retain their original arithmetic and criteria.
+    for f in packet.get('open_boundary',{}).get('top_faces',[]):
+        w=f['weight']*float(np.linalg.norm(f['area']))
+        add(f['velocity_k_row'],0,-w*np.array(f['velocity_k_row']['phi'])*f['tangential_total_traction'])
+        add(f['velocity_k_row'],2,-w*np.array(f['velocity_k_row']['phi'])*f['k_diffusive_datum'])
+        add(f['epsilon_row'],3,-w*np.array(f['epsilon_row']['phi'])*f['epsilon_diffusive_datum'])
     fixed={int(i) for i,_ in packet['resolution']['constraints']};out={}
     scales=[c['ustar']**2*c['Z']]*2+[c['K0']*c['ustar']*c['Z'],col.A/c['H']*c['ustar']*c['Z'],c['ustar']*c['Z'],c['ustar']*c['Z']]
     for b,name in enumerate(('momentum_x','momentum_z','k_shared_once','outer_epsilon','inner_continuity','outer_continuity')):

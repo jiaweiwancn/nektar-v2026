@@ -75,6 +75,7 @@ RANSWallEvolutionData::RANSWallEvolutionData(int dimension)
     innerKSource=outerKSource=outerEpsilonSource=zero;
     for(int side=0;side<2;++side){outletTraction[side].assign(dimension,zero);outletKDiffusion[side]=zero;}
     outletEpsilonDiffusion=zero;
+    topTraction.assign(dimension,zero);topKDiffusion=zero;topEpsilonDiffusion=zero;
 }
 RANSWallNormalMap LoadRANSWallNormalMap(const LibUtilities::SessionReaderSharedPtr &session,int dimension,double height)
 {
@@ -292,9 +293,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         session->LoadSolverInfo("RANSOpenTop",top,"Missing");
         session->LoadSolverInfo("RANSOpenBackflow",backflow,"Missing");
         session->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
-        Require(top=="DirichletCompatibleV1" && backflow=="RejectV1" && coordinates==(CurvedManufactured()?"Chart":"Physical") &&
+        Require(top==(RichardsNorrisTop()?"RichardsNorris2011V1":"DirichletCompatibleV1") && backflow=="RejectV1" && coordinates==(CurvedManufactured()?"Chart":"Physical") &&
             (m_boundaryPolicy!="AcceptedOpenFlatV1" || !Mapped()),
-            "AcceptedOpenFlatV1 requires declared compatible top, RejectV1 outlet and physical coordinates");
+            "open boundary requires its declared top, RejectV1 outlet and qualified coordinates");
+        Require(!RichardsNorrisTop() || (!Mapped() && RANSUsesNeutralComposite(session)),
+            "RichardsNorris2011V1 requires the immutable flat neutral reference; curved/independent function data are unqualified");
         session->LoadParameter("RANSOpenVelocityScale",m_openVelocityScale,1.);
         Require(std::isfinite(m_openVelocityScale) && m_openVelocityScale>0,"invalid open-boundary velocity scale");
         m_openBoundaryIdentity=RANSAcceptedOpenBoundaryIdentity(session);
@@ -843,7 +846,7 @@ std::map<int,double> RANSWallEvolutionPatch::ExternalConstraints(double time,con
         const auto values=fields[b]->Boundary([&](const RANSWallCoordinate &p){return b<m_dimension && Same(p[2],0)?0.:data.boundary[b](p,time);},
             [&](int axis,int side,const RANSWallGlobalField::Element &e){
                 if(axis!=2)return (!OpenBoundary() || !side) && Same(side?e.upper[axis]:e.lower[axis],side?upper[axis]:lower[axis]);
-                return side?Same(e.upper[2],upper[2]):(b<m_dimension && Same(e.lower[2],0));});
+                return side?((!RichardsNorrisTop() || b==1) && Same(e.upper[2],upper[2])):(b<m_dimension && Same(e.lower[2],0));});
         for(auto [id,value]:values)result[offset[b]+id]=value;
     }
     if(OpenBoundary())result[offset[Gauge()]]=0.; // unused slot, not a pressure test or mean constraint

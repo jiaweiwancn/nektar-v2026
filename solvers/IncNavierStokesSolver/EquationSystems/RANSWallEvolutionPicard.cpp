@@ -281,7 +281,18 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             const int row=system.rows[i];
             system.residual[i]+=outlet.advection[row]+outlet.traction[row]+outlet.diffusion[row];
         }
-        for(const auto &face:Surface(0,0,upper[0],1))
+        std::vector<FacePoint> openFaces;
+        // Keep the established outlet accumulation order. The new top has
+        // essential normal velocity and free transported tangential/scalar
+        // modes; its prescribed tractions/fluxes have no state derivative.
+        const auto outletFaces=Surface(0,0,upper[0],1);
+        openFaces.insert(openFaces.end(),outletFaces.begin(),outletFaces.end());
+        if(RichardsNorrisTop())
+        {
+            const auto topFaces=Surface(0,2,upper[2],1);
+            openFaces.insert(openFaces.end(),topFaces.begin(),topFaces.end());
+        }
+        for(const auto &face:openFaces)
         {
             const auto &v=face.test;const bool outer=fields[0]->Elements()[v.element].lower[2]>=m_parameters.geometry.height;
             if(block==Epsilon() && !outer)continue;

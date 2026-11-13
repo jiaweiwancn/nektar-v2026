@@ -532,6 +532,19 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
             add(side,patch.K(),v,data.outletKDiffusion[side](v.coordinate,time));
             if(side)add(2,patch.Epsilon(),patch.GeometryPoint(patch.Epsilon(),v.geometry,v.coordinate),data.outletEpsilonDiffusion(v.coordinate,time));
         }
+        if(patch.RichardsNorrisTop())for(const auto &face:patch.Surface(0,2,patch.upper[2],1,faceOrder))
+        {
+            const auto &v=face.test;const auto e=patch.GeometryPoint(patch.Epsilon(),v.geometry,v.coordinate);
+            const double un=face.area[0]*v.Value(state,patch.offset[0])+face.area[2]*v.Value(state,patch.offset[1]);
+            const double area=std::hypot(face.area[0],face.area[2]);
+            for(int region:{1,2})
+            {
+                const int block=region==1?patch.K():patch.Epsilon();const auto &q=region==1?v:e;
+                const double datum=region==1?data.topKDiffusion(v.coordinate,time):data.topEpsilonDiffusion(v.coordinate,time);
+                const double load=un*q.Value(state,patch.offset[block])-area*datum;
+                for(int i=0;i<q.ids.size();++i)loads[region][7][q.ids[i]]+=face.weight*q.phi[i]*load;
+            }
+        }
         for(int region=0;region<3;++region)
         {
             const int block=region==2?patch.Epsilon():patch.K();
@@ -680,6 +693,62 @@ int main(int argc,char **argv)
         std::vector<std::string> files{argv[1]};
         auto session=LibUtilities::SessionReader::CreateInstance(1,args,files,LibUtilities::CommSerial::create(1,args));session->InitSession();
         session->SetSolverInfo("GlobalSysSoln","DirectFull");auto graph=SpatialDomains::MeshGraphIO::Read(session);
+        if(request.get<std::string>("operation","functions")=="mapped_mesh_geometry_inventory")
+        {
+            Require(graph->GetMeshDimension()==2,"geometry inventory is serial2D only");
+            const auto full=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"u");
+            double minimum=1e300,maximum=-1e300;int samples=0;
+            for(int e=0;e<full->GetExpSize();++e)
+            {
+                const auto exp=full->GetExp(e);const auto jac=exp->GetGeomFactors()->GetJac(exp->GetPointsKeys());
+                for(int j=0;j<jac.size();++j){minimum=std::min(minimum,jac[j]);maximum=std::max(maximum,jac[j]);++samples;}
+            }
+            Array<OneD,NekDouble> one(full->GetTotPoints(),1.);
+            std::ofstream file(argv[3]);file<<J::Object({{"schema",J::Quote("CT7NativeGeometryInventoryV1")},
+                {"status",J::Quote(minimum>0?"pass":"fail")},{"read_only","true"},
+                {"elements",J::Number(full->GetExpSize())},{"Jacobian_samples",J::Number(samples)},
+                {"minimum_sampled_native_Jacobian",J::Number(minimum)},{"maximum_sampled_native_Jacobian",J::Number(maximum)},
+                {"physical_volume",J::Number(full->Integral(one))},
+                {"scope",J::Quote("actual Nektar interpolated mesh geometry at declared native integration points; separate from analytic map interval/injectivity certificate; no coupled curved operator or evolution qualification")}})<<'\n';
+            return minimum>0?0:1;
+        }
+        if(request.get<std::string>("operation","functions")=="native_layout_inventory")
+        {
+            // Capacity preflight only. Construct the actual native CG maps,
+            // never the patch, a dense mass/matrix, history or evolving state.
+            // This does not bypass the unchanged evolution/count/geometry guards.
+            Require(graph->GetMeshDimension()==2,"native capacity inventory is serial flat2D only");
+            double H;session->LoadParameter("RANSWallHeight",H);
+            const auto full=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"u");
+            const auto pressure=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"p");
+            std::vector<unsigned int> all,inner,outer;
+            for(int e=0;e<full->GetExpSize();++e)
+            {
+                const auto g=full->GetExp(e)->GetGeom();double lo=1e100,hi=-1e100;
+                for(int j=0;j<g->GetNumVerts();++j)
+                {double x,y,z;g->GetVertex(j)->GetCoords(x,y,z);lo=std::min(lo,y);hi=std::max(hi,y);}
+                Require(!(lo<H && hi>H),"capacity element crosses interface");
+                all.push_back(e);if(hi<=H)inner.push_back(e);else outer.push_back(e);
+            }
+            Require(!inner.empty() && !outer.empty(),"capacity inventory missing region");
+            std::vector<double> sizes;std::vector<std::string> basis;
+            for(int b=0;b<6;++b)
+            {
+                const auto f=std::make_shared<RANSWallGlobalField>(session,b<4?full:pressure,
+                    b<3?all:b==3?outer:b==4?inner:outer,2);
+                sizes.push_back(f->Size());const auto exp=f->Field()->GetExp(0);
+                basis.push_back(J::Numbers(Vector{double(exp->GetBasisNumModes(0)),double(exp->GetBasisNumModes(1))}));
+            }
+            double count=1;for(double n:sizes)count+=n;
+            std::ofstream file(argv[3]);file<<J::Object({{"schema",J::Quote("CT7NativeLayoutInventoryV1")},
+                {"status",J::Quote("pass")},{"read_only","true"},{"numerical_evolution_performed","false"},
+                {"native_block_sizes",J::Numbers(sizes)},{"stored_slots",J::Number(count)},
+                {"basis_modes_by_field",J::List(basis)},{"elements",J::Number(all.size())},
+                {"single_dense_double_matrix_bytes",J::Number(8*count*count)},
+                {"within_unchanged_3000_guard",J::Boolean(count<=3000)},
+                {"scope",J::Quote("actual serial affine native CG field maps only; no constitutive/reference admissibility, dense allocation, evolving solve or curved-map qualification")}})<<'\n';
+            return 0;
+        }
         RANSWallPatchParameters p;
         session->LoadParameter("RANSWallChi",p.chi,1.);session->LoadParameter("RANSWallHeight",p.geometry.height,2.);
         session->LoadParameter("RANSWallRoughness",p.geometry.roughness,.1);session->LoadParameter("Kinvis",p.geometry.molecularNu,1.5e-5);
@@ -694,7 +763,7 @@ int main(int argc,char **argv)
             kappa,wall=="EPAWF"?RANSWallFormulation::EPAWF:RANSWallFormulation::AcceptedBudgetAWF,p.geometry.molecularNu);
         Require(p.model.NewModel(),"new-model descriptor required; no CLS-default replay");
         std::string boundaryPolicy;session->LoadSolverInfo("RANSWallBoundaryPolicy",boundaryPolicy,"Closed");
-        const bool open=boundaryPolicy=="AcceptedOpenFlatV1" || boundaryPolicy=="AcceptedManufacturedOpenV1";
+        const bool open=boundaryPolicy=="AcceptedOpenFlatV1" || boundaryPolicy=="AcceptedManufacturedOpenV1" || boundaryPolicy=="AcceptedRichardsNorrisFlatV1";
         for(const auto &name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(open || !session->DefinesFunction(name),"neutral preservation verifier requires unforced source definitions");
         std::string referenceMode;session->LoadSolverInfo("RANSWallReference",referenceMode,"Neutral");

@@ -36,6 +36,8 @@ struct RANSWallEvolutionData
     std::array<std::vector<RANSWallEvolutionFunction>,2> outletTraction;
     std::array<RANSWallEvolutionFunction,2> outletKDiffusion;
     RANSWallEvolutionFunction outletEpsilonDiffusion;
+    std::vector<RANSWallEvolutionFunction> topTraction;
+    RANSWallEvolutionFunction topKDiffusion,topEpsilonDiffusion;
     std::string openBoundaryIdentity;
     // Optional fixed native external traces, e.g. the stored neutral target.
     std::map<int,double> fixedBoundary;
@@ -118,7 +120,8 @@ public:
     bool UniformEPFlat() const { return m_uniformEP; }
     bool AcceptedAWF() const { return m_formulation=="CLSCalibratedBudgetAWF" || m_formulation=="AcceptedBudgetAWF"; }
     bool NewModels() const { return m_parameters.model.NewModel(); }
-    bool OpenBoundary() const { return m_boundaryPolicy=="AcceptedOpenFlatV1" || m_boundaryPolicy=="AcceptedManufacturedOpenV1"; }
+    bool OpenBoundary() const { return m_boundaryPolicy=="AcceptedOpenFlatV1" || m_boundaryPolicy=="AcceptedManufacturedOpenV1" || RichardsNorrisTop(); }
+    bool RichardsNorrisTop() const { return m_boundaryPolicy=="AcceptedRichardsNorrisFlatV1"; }
     bool CurvedVerification() const { return m_curvedCapability!="Off"; }
     bool CurvedManufactured() const { return m_curvedCapability=="CT6ManufacturedV1"; }
     bool StaticTransmissionOnly() const { return m_curvedCapability=="CT6StaticTransmissionV1"; }

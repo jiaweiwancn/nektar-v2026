@@ -189,7 +189,7 @@ def row_value(row,state,offset):
     return phi@state[ids],d@state[ids]
 
 
-def independent_operator(packet,model='A95'):
+def independent_operator(packet,model='A95',column=None):
     """Published tensors and conservative weak form on exported *native* rows.
 
     This fixture has zero roughness so no roughness-volume pressure forcing.
@@ -199,7 +199,7 @@ def independent_operator(packet,model='A95'):
     masses=[np.array(m) for m in packet['open_frozen_systems']['masses']]
     # Pressure is an algebraic test field, with no backward storage term.
     M=block_diag(*masses[:4],np.zeros((n-off[4],n-off[4])));A=M.copy();r=np.zeros(n)
-    params=parameters(model);c=Column(model,1.,2.,0.,1.5e-5)
+    params=parameters(model);c=column if column is not None else Column(model,1.,2.,0.,1.5e-5)
     for point in o['volume']:
         region=int(point['region']);v=point['velocity_k'];pr=point['pressure'];ids=np.array(v['ids'],int)
         phi=np.array(v['phi']);d=np.array(v['derivative'])[[0,2]];w=point['weight']
@@ -215,6 +215,7 @@ def independent_operator(packet,model='A95'):
         else:
             T=(c.nu+nt)*(G+G.T)-np.eye(3)*pi;visc=c.nu+nt
             P=nt*np.sum((G+G.T)*G)
+            if column is not None:P-=2*k*np.trace(G)/3
             rates={2:0.};sources={2:P-c.A/max(point['coordinate'][2],c.cutoff)};diffusion={2:c.nu+nt}
         adv=d.T@u
         for a,axis in enumerate((0,2)):
@@ -240,6 +241,15 @@ def independent_operator(packet,model='A95'):
             boundary['advection'][ids]+=w*ph*un*f;A[np.ix_(ids,ids)]+=w*un*np.outer(ph,ph)
             if b<2:boundary['traction'][ids]-=w*ph*length*face['traction'][b]
             else:boundary['diffusion'][ids]-=w*ph*length*face['k_diffusive_datum' if b==2 else 'epsilon_diffusive_datum']
+    for face in packet['open_boundary'].get('top_faces',[]):
+        v=face['velocity_k_row'];u=np.array([row_value(v,s,off[b])[0] for b in (0,1)])
+        area=np.array(face['area'])[[0,2]];un=u@area;w=face['weight'];length=np.linalg.norm(area)
+        for b in (0,1,2,3):
+            q=face['epsilon_row'] if b==3 else v;ids=np.array(q['ids'],int)+off[b];ph=np.array(q['phi'])
+            f=row_value(q,s,off[b])[0]
+            boundary['advection'][ids]+=w*ph*un*f;A[np.ix_(ids,ids)]+=w*un*np.outer(ph,ph)
+            if b==0:boundary['traction'][ids]-=w*ph*length*face['tangential_total_traction']
+            elif b>1:boundary['diffusion'][ids]-=w*ph*length*face['k_diffusive_datum' if b==2 else 'epsilon_diffusive_datum']
     for x in boundary.values():r+=x
     return r,A,boundary
 
