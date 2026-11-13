@@ -67,17 +67,29 @@ def publish(root,out):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    out.mkdir();timeline=[];error=[];interfaces=[];projection=[];witnesses=[];heavy=[];gates={};localfixed=[];views={};summaries={}
+    out.mkdir();timeline=[];error=[];normhistory=[];interfaces=[];projection=[];witnesses=[];heavy=[];gates={};localfixed=[];views={};summaries={};native_audits=[];report_cache={}
     for h in (5.,5.5,6.):
         binding=root/f'diagnosis-view-H{h:g}.json'
         if not binding.exists():gates[str(h)]={'status':'NOT_RUN'};continue
         v=load(binding);assert sha(v['path'])==v['sha256'];summary=load(v['path']);summaries[h]=summary;records=load(summary['records']['path']);folder=Path(v['path']).parent
         gates[str(h)]=dict(summary['status'],inventory=summary['inventory'],states=len(records),diagnostic_mass_solves=summary['diagnostic_mass_solves'],diagnostic_factorizations=summary['factorizations'])
         for r in records:
+            rp=r['producer']['path']
+            if rp not in report_cache:report_cache[rp]=load(rp)
+            producer=report_cache[rp];first=producer['steps']+1-len(producer['accepted_states'])
+            if r['role']=='accepted':
+                packet=producer['wj_audit_packets'][r['step']-first]
+                native_audits.append(dict(height_mm=h,branch=r['branch'],step=r['step'],native_status='accepted under original native inventory',producer=r['producer'],packet={k:v for k,v in packet.items()if k!='callback_history'}))
             timeline.append(dict(height_mm=h,branch=r['branch'],step=r['step'],time=r['time'],alpha=r['alpha'],role=r['role'],expanded_status=r['status'],min_in_plane=r['min_in_plane'],min_transverse=r['min_transverse'],min_covariance=r['min_covariance'],
                 max_divergence=r['raw_divergence_max'],state_sha256=r['state_sha256'],callback_history_sha256=r['callback_history_sha256'],compiled_minimum=r['compiled_minimum'],inventory_sha256=r['inventory_sha256']))
             witnesses.append(dict(height_mm=h,branch=r['branch'],step=r['step'],time=r['time'],role=r['role'],witness=r['witness'],compiled_minimum=r['compiled_minimum'],producer=r['producer'],checkpoint=r['checkpoint']))
             error.append(dict(height_mm=h,branch=r['branch'],step=r['step'],time=r['time'],role=r['role'],**r['errors']))
+            c=configuration(h)
+            for kind in ('reference_error','initial_drift'):
+                for scope,fields in r[kind].items():
+                    for field,values in fields.items():
+                        scale=1. if field in ('U','G')else c.K if field in ('k','R')else c.A/c.H if field=='epsilon'else c.u_tau**2
+                        normhistory.append(dict(height_mm=h,branch=r['branch'],step=r['step'],time=r['time'],role=r['role'],kind=kind,scope=scope,field=field,fixed_scale=scale,**values))
             for region,p in r['pressure_projection']['regions'].items():
                 projection.append(dict(height_mm=h,branch=r['branch'],step=r['step'],time=r['time'],region=region,**{k:p[k]for k in ('divergence_L2','continuous_Q1_projection_L2','continuous_Q1_complement_L2','broken_Q1_projection_L2','broken_Q1_complement_L2','maximum_pressure_test_moment','integrated_net_flux','identity_roundoff','broken_identity_roundoff','gauge_contribution')}))
             interfaces.append(dict(height_mm=h,branch=r['branch'],step=r['step'],time=r['time'],role=r['role'],**r['interface_budget']))
@@ -100,18 +112,21 @@ def publish(root,out):
         r=load(rp);native=dict(accounting(r),report=identity(rp),time=r['time'],initialization_work=r['initialization_lift_calls_iterations']);heavy.extend([identity(rp),identity(rp.with_name('case.xml'))]);heavy.extend(identity(f)for f in rp.parent.glob('CP*/State.bin'))
     expected_views={'coarse-1','coarse-3','fine-2','fine-6','quarter-4','quarter-12','quarter-16'}
     weak='PASS'if expected_views==set(views)and all(v['status']=='PASS'for v in views.values())else 'UNRESOLVED'if views and any(v['status']!='PASS'for v in views.values())else 'NOT_RUN'
-    book=load(root/'accounting.json');overall='OBSTRUCTED'if book.get('coverage_halt')or native.get('failure')else 'NOT_RUN'if native.get('accepted')!=16 else 'UNRESOLVED'if weak!='PASS'else 'QUALITY_LOST'if any(g.get('quality')!='PASS'for g in gates.values())else 'PASS'
-    save(out/'component-gates.json',dict(status=overall,old_reuse='H7 closed36/36 unchanged',new_native=native,heights=gates,strict_weak=weak,strict_views=sorted(views),required_strict_views=sorted(expected_views),
+    required={(h,b,step)for h in (5.,5.5,6.)for b,n in (('coarse',4),('fine',8))for step in range(n+1)}|{(6.,'quarter',step)for step in range(17)}
+    actual={(r['height_mm'],r['branch'],r['step'])for r in timeline if r['role']=='accepted'}
+    complete=required==actual and len([r for r in timeline if r['role']=='accepted'])==len(required)
+    book=load(root/'accounting.json');overall='OBSTRUCTED'if book.get('coverage_halt')or native.get('failure')else 'NOT_RUN'if native.get('accepted')!=16 or not complete else 'UNRESOLVED'if weak!='PASS'else 'QUALITY_LOST'if any(g.get('quality')!='PASS'for g in gates.values())else 'PASS'
+    save(out/'component-gates.json',dict(status=overall,old_reuse='H7 closed36/36 unchanged',complete_tuple_coverage=complete,required_accepted_records=len(required),actual_accepted_records=len(actual),new_native=native,heights=gates,strict_weak=weak,strict_views=sorted(views),required_strict_views=sorted(expected_views),
         coverage_halt=book.get('coverage_halt'),coverage_earliest=book.get('coverage_earliest'),target=.04,new_cp0=book['cp0_reservations'],strict_view_reservations=book.get('strict_view_reservations',0),
         predictor_pressure_causality='UNRESOLVED:no genuine separated predictor/correction vectors; local action does not take pressure',contraction=comparison_result))
-    csvfile(out/'timeline.csv',timeline);csvfile(out/'reference-errors.csv',error);csvfile(out/'pressure-complement.csv',projection);csvfile(out/'fixed-face-history.csv',localfixed)
-    save(out/'principal-witnesses.json',witnesses);save(out/'interface-budget-history.json',interfaces);save(out/'strict-weak-stage-views.json',views)
+    csvfile(out/'norms-history.csv',normhistory);csvfile(out/'timeline.csv',timeline);csvfile(out/'reference-errors.csv',error);csvfile(out/'pressure-complement.csv',projection);csvfile(out/'fixed-face-history.csv',localfixed)
+    save(out/'native-audit-decisions.json',native_audits);save(out/'principal-witnesses.json',witnesses);save(out/'interface-budget-history.json',interfaces);save(out/'strict-weak-stage-views.json',views)
     for name in ('setup.json','imports-v2.json','runtime-equivalence-v2.json','stage-receipt-v2.json','admission.json','case/intent.json','case/initial-pair.json'):
         if(root/name).exists():save(out/Path(name).name,load(root/name));heavy.append(identity(root/name))
     # All operation receipts, including failed imports, survive. Native maps are
     # compared against the verified private closure rather than host libc.
     commands={};maps={}
-    expected={v['sha256']for v in load(root/'runtime-equivalence-v2.json')['qualified_ELFs']}
+    runtime=load(root/'runtime-equivalence-v2.json');expected={v['sha256']for v in runtime['qualified_ELFs']}|{v['ELF']['sha256']for v in runtime['executables'].values()}
     for f in sorted((root/'operations').glob('*/receipt.json')):
         commands[f.parent.name]=load(f);heavy.extend([identity(f),identity(f.with_name('command.log')),identity(f.with_name('loaded-maps.json'))])
         loaded=load(f.with_name('loaded-maps.json'))
@@ -120,9 +135,13 @@ def publish(root,out):
             for pid,v in process.items():
                 if any(Path(p).name in ('IncNavierStokesSolver.elf','RANSWallResolutionProbe.elf')for p in v['files']):
                     native.extend(bypath[p]for p in v['files']if p in bypath)
-            native=list({v['path']:v for v in native}.values());unexpected=[v for v in native if v['sha256']not in expected]
+            native=list({v['path']:v for v in native}.values())
+            native=[v for v in native if Path(v['path']).open('rb').read(4)==b'\x7fELF'];unexpected=[v for v in native if v['sha256']not in expected]
             maps[f.parent.name]=dict(status='PASS'if native and not unexpected else 'UNRESOLVED',native_loaded=native,unexpected=unexpected,process_maps=identity(f.with_name('process-maps.json')),scope='actual native PID; host time/shell harness excluded')
     save(out/'commands.json',commands);save(out/'actual-native-runtime.json',maps)
+    gate=load(out/'component-gates.json');gate['actual_runtime']='PASS'if len(maps)==9 and all(v['status']=='PASS'for v in maps.values())else 'UNRESOLVED'
+    if overall=='PASS'and gate['actual_runtime']!='PASS':overall='UNRESOLVED';gate['status']=overall
+    save(out/'component-gates.json',gate)
     save(out/'accounting-snapshot.json',book)
     fig,axs=plt.subplots(1,3,figsize=(11,3.4),constrained_layout=True)
     for h,ax in zip((5.,5.5,6.),axs):
@@ -136,6 +155,34 @@ def publish(root,out):
         axs[0].plot([v['time']for v in rr],[v['D1']for v in rr],'o-',label='dt .01/.005');axs[0].plot([v['time']for v in rr],[v['D2']for v in rr],'s-',label='dt .005/.0025');axs[0].set_ylabel('same-owner principal difference');axs[0].legend();axs[1].plot([v['time']for v in rr],[v['rho']for v in rr],'o-');axs[1].axhline(1,color='k',ls='--');axs[1].set_ylabel('D2/D1')
         for ax in axs:ax.set_xlabel('time Hh/Uinf');ax.grid(alpha=.2)
         fig.suptitle('x=8, physical z=10.243007 mm, geometry17 upper trace');fig.savefig(out/'local-timestep.png',dpi=160);plt.close(fig)
+    # Reference error, CP0 movement and timestep differences have distinct plots.
+    fig,axs=plt.subplots(1,3,figsize=(11,3.4),constrained_layout=True)
+    for ax,field in zip(axs,('U','G','epsilon')):
+        for kind,style in (('reference_error','-'),('initial_drift','--')):
+            rr=[v for v in normhistory if v['height_mm']==6. and v['branch']=='quarter'and v['scope']=='outer'and v['field']==field and v['role']=='accepted']
+            rr=[v for v in rr if v['kind']==kind]
+            if rr:ax.plot([v['time']for v in rr],[v['L2']/v['fixed_scale']for v in rr],style,label=kind)
+        ax.set_title(field+' outer physical L2 / fixed scale');ax.set_xlabel('time Hh/Uinf');ax.grid(alpha=.2)
+    axs[0].legend(fontsize=8);fig.savefig(out/'reference-and-drift.png',dpi=160);plt.close(fig)
+    fig,axs=plt.subplots(1,3,figsize=(11,3.4),constrained_layout=True)
+    for branch in ('coarse','fine','quarter'):
+        rr=[v for v in localfixed if v['height_mm']==6. and v['branch']==branch and v['geometry']==17 and v['role']=='accepted']
+        if rr:
+            for ax,key in zip(axs,('Gxz','margin','divergence')):ax.plot([v['time']for v in rr],[v[key]for v in rr],'.-',label=branch);ax.set_title(key);ax.set_xlabel('time Hh/Uinf');ax.grid(alpha=.2)
+    axs[0].legend();fig.suptitle('Fixed geometry17 upper trace, x8, z10.243007mm');fig.savefig(out/'fixed-owner-response.png',dpi=160);plt.close(fig)
+    if 6. in summaries:
+        folder=Path(summaries[6.]['records']['path']).parent;inv=load(folder/'inventory.json');c=configuration(6.);r=load(root/'imports-v2/H6mm/initial.evolution.json');cache=Rows(r,[p['physical']for p in inv['points']],c)
+        rows=load(folder/'records.json');fig,axs=plt.subplots(1,2,figsize=(8,3.7),constrained_layout=True)
+        for branch,step in (('coarse',4),('fine',8),('quarter',16)):
+            rec=next((v for v in rows if v['branch']==branch and v['step']==step and v['role']=='accepted'),None)
+            if rec:
+                with np.load(rec['arrays']['path'])as data:
+                    ii=[i for i,(p,o)in enumerate(cache.rows[:cache.point_count])if p[0]==8 and o['region']=='outer'and p[2]<.6];ii=sorted(ii,key=lambda i:cache.rows[i][0][2]);z=np.array([cache.rows[i][0][2]*40 for i in ii])
+                    axs[0].plot(data['G'][ii,0,2],z,'.-',label=branch);axs[1].plot(data['margin'][ii],z,'.-',label=branch)
+        axs[0].plot(cache.exact['G'][ii,0,2],z,'k--',label='exact');axs[1].axvline(EXACT_MARGIN/2,color='k',ls='--')
+        axs[0].set_xlabel('Gxz');axs[1].set_xlabel('principal / nu_eff')
+        for ax in axs:ax.set_ylabel('physical z (mm)');ax.grid(alpha=.2)
+        axs[0].legend(fontsize=8);fig.suptitle('Outlet one-sided physical profiles, T=.04');fig.savefig(out/'terminal-profiles.png',dpi=160);plt.close(fig)
     # Runtime heavy records are explicitly remote verification, not downloaded fields.
     save(out/'manifest.json',dict(heavy=list({v['path']:v for v in heavy}.values()),scope='hashes verified on Linux; compact transport separately verified on Mac',source=identity(__file__)))
     save(out/'seal.json',dict(files=[identity(p)for p in sorted(out.iterdir())if p.is_file()and p.name!='seal.json'],status=overall))
