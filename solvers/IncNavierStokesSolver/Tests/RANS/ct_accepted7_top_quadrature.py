@@ -16,7 +16,7 @@ def main():
     for k in ('runtime','input','output'):p.add_argument('--'+k,type=Path,required=True)
     p.add_argument('--face-orders',type=int,nargs=2,default=[24,32])
     a=p.parse_args();labels=['A95-p3','A93-p3','E94E95-p3','A95-p4']
-    require(a.face_orders in ([24,32],[64,96]),'outside the bounded CT7 face controls')
+    require(a.face_orders in ([24,32],[64,96],[48,64]),'outside the bounded CT7 face controls')
     m=RequestManifest(a.output,dict(schema='CT7RNFrozenFaceQuadratureV1',runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),
         source=sha(Path(__file__)),packets={n:sha(a.input/n/'native.json') for n in labels},face_orders=a.face_orders,limit=2e-10))
     rows={}

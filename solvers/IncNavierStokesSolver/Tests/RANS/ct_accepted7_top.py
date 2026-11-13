@@ -23,7 +23,7 @@ from rans_request_manifest import RequestManifest,runtime_identity,sha
 from validate_a93_a95_e94e95 import oracle
 
 
-def make(folder,rt,model='A95',degree=3,steps=0,dt=1e-6,restart=None,level=0.,old_top=False,interface_order=96):
+def make(folder,rt,model='A95',degree=3,steps=0,dt=1e-6,restart=None,level=0.,old_top=False,interface_order=64):
     p=parameters(model);us=.4;H=.5;nu=1.5e-5;hr=.4;col=Column(model,p['q']*us*us,H,hr,nu,order=96)
     ref=col.result();G=np.zeros((3,3));G[0,2]=us/(p['kappa']*H);law=oracle(model,col.K,col.A/H,G)
     ref['outer_equilibrium']=dict(outlet_traction=[float(law['Q'][2,2]-law['Q'][0,0]),us*us])
@@ -131,7 +131,7 @@ def classify(packet,c):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','output'):p.add_argument('--'+k,type=Path,required=True)
-    p.add_argument('--interface-order',type=int,choices=(12,24,32,64,96),default=96)
+    p.add_argument('--interface-order',type=int,choices=(12,24,32,48,64),default=64)
     a=p.parse_args();m=RequestManifest(a.output,dict(schema='CT7RichardsNorrisVerificationV1',runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),source=sha(Path(__file__)),interface_order=a.interface_order,controls='all3 P3 and A95 P4; same synthetic d0 compatible reference; absolute traction'))
     result=dict(schema='CT7RichardsNorrisVerificationV1',checks={},execution='incomplete',physical_experimental_admission=False)
     try:
