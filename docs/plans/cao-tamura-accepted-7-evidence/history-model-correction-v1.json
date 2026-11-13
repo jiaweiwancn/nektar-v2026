@@ -1,0 +1,8 @@
+{
+  "schema": "CT7HistoryModelCoverageCorrectionV1",
+  "invalid_coverage_receipts": ["top-history-v7", "compact-v2", "qualified-v1/top-history.json", "qualified-v1/decision.json:scope C history coverage"],
+  "finding": "The helper call evolve(model) supplied a directory label but left its model keyword at default A95. Thus the A93/E94E95 smoke directories actually contain A95 configurations. Their identical state hashff58f73dc55572af563f75849389e86d65c1dbfc2ca03ee091edd19871f146b9 exposed the mismatch during final identity review before publication.",
+  "scope": "The four model-specific native top operator fixtures use explicit model arguments and remain valid. A95 history/pressure/restart/rollback data remain valid in their recorded A95 scope. All-model smoke and budget admission from the listed preliminary receipts is invalid. CT4--CT6 results are unaffected.",
+  "correction": "Pass model=model explicitly; require construction model, native report signature and probe resolved descriptor to agree before collecting. Bind every budget to the actual descriptor/configuration/report/state. Add a foreign-model negative control and rerun fresh short histories; no physical equations or fitted inputs change.",
+  "history": "Original mislabeled artifacts stay sealed. They cannot qualify A93/E94E95. Corrected evidence is exported separately; do not edit or relabel their XML, states or signatures."
+}
