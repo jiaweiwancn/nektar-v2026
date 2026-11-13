@@ -1,0 +1,99 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_wj_h5_neutral",
+    "test_wj_h6_projection",
+    "test_wj_h7_transport",
+    "test_wj_h8_local_timestep",
+    "test_wj_h9_startup_audit"
+  ],
+  "cwd": "/home/jay/build/wj-h9-startup-compatibility-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "reserved_seconds": 90,
+  "units": 0,
+  "kind": "passive",
+  "inputs": {},
+  "allocation": {
+    "workers": 17,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 27506,
+        "parent": 27505,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build8-targeted-evolution-v2 -- python3 -"
+      },
+      {
+        "pid": 27507,
+        "parent": 27506,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build8-targeted-evolution-v2 --project-limit 16"
+      },
+      {
+        "pid": 27510,
+        "parent": 27506,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build8-targeted-evolution-v2 -- python3 -"
+      },
+      {
+        "pid": 27511,
+        "parent": 27510,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 27950,
+        "parent": 27511,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_evolve.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v8/runtime --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/docs/plans/cao-tamura-accepted-6-evidence/contract.json --admission /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/admission-v2.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v2/A95-p4-dt002 --model A95 --degree 4 --dt .002 --target .016"
+      },
+      {
+        "pid": 28974,
+        "parent": 27950,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v8/runtime/IncNavierStokesSolver case.xml"
+      },
+      {
+        "pid": 28976,
+        "parent": 28974,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 9 --singleton-died-pipe 10 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 32718,
+        "parent": 32717,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/source/library -I /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/source/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/RANSWallResolutionProbe.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/source/library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp.d -MF CMakeFiles/RANSWallResolutionProbe.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/source/library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp.o.d -MT CMakeFiles/RANSWallResolutionProbe.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/source/library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D TIXML_USE_STL -D _GLIBCXX_ASSERTIONS -D NDEBUG -D NEKTAR_USE_MPI -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/source/library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp -quiet -dumpdir CMakeFiles/RANSWallResolutionProbe.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/source/library/UnitTests/SolverUtils/ -dumpbase RANSWallResolutionProbe.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror -std=gnu++17 -fno-fast-math -ffp-contract=off -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/cciIBB0m.s"
+      },
+      {
+        "pid": 32992,
+        "parent": 32991,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "driver_sha256": "38a6fda894f42a5cb663ecf1753e46406d0cb9f54f4e44b68b3ae19f3bdac462"
+}

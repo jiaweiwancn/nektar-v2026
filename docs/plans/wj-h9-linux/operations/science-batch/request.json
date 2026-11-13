@@ -1,0 +1,53 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h9-startup-compatibility-20261113/observer-v3/study_wj_h9.py",
+    "--root",
+    "/home/jay/build/wj-h9-startup-compatibility-20261113",
+    "--mode",
+    "science"
+  ],
+  "cwd": "/home/jay/build/wj-h9-startup-compatibility-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "reserved_seconds": 360,
+  "units": 0,
+  "kind": "passive",
+  "inputs": {
+    "/home/jay/build/wj-h9-startup-compatibility-20261113/observer-v3/study_wj_h9.py": {
+      "sha256": "1d7c0fd86c37c8b6b9f8f6ee4100af57070dfd943873b1aaf71c606aa9a99b3f",
+      "bytes": 21816
+    }
+  },
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 33772,
+        "parent": 33771,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "driver_sha256": "38a6fda894f42a5cb663ecf1753e46406d0cb9f54f4e44b68b3ae19f3bdac462"
+}

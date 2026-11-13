@@ -1,0 +1,97 @@
+test_constants_and_physical_viscosity (test_wj_h5_neutral.NeutralInlet) ... ok
+test_data_origins_and_common_fit (test_wj_h5_neutral.NeutralInlet) ... /home/jay/build/wj-h9-startup-compatibility-20261113/source/wj_h2_profiles.py:68: ResourceWarning: unclosed file <_io.TextIOWrapper name='/home/jay/build/wj-h9-startup-compatibility-20261113/source/cao-tamura-fig3/rough-fig3.csv' mode='r' encoding='UTF-8'>
+  rows=list(csv.DictReader(DATA.open()));self.rows=rows
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_explicit_parameters_reach_wall_functions_and_observers (test_wj_h5_neutral.NeutralInlet) ... ok
+test_exterior_weak_load_uses_projected_test_trace (test_wj_h5_neutral.NeutralInlet) ... ok
+test_full_traction_gradients_pressure_and_epsilon_trace (test_wj_h5_neutral.NeutralInlet) ... ok
+test_low_H_generation_has_one_interface_and_no_old_completion (test_wj_h5_neutral.NeutralInlet) ... ok
+test_observation_and_feasibility_conflict (test_wj_h5_neutral.NeutralInlet) ... ok
+test_reject_invalid_or_infeasible_configuration (test_wj_h5_neutral.NeutralInlet) ... ok
+test_three_reference_profiles_and_d_lt_2nu_extension (test_wj_h5_neutral.NeutralInlet) ... ok
+test_endpoint_constrained_trace_and_expression_safety (test_wj_h6_projection.ProjectionChecks) ... ok
+test_executed_unresolved_is_not_not_run (test_wj_h6_projection.ProjectionChecks) ... ok
+test_lifting_and_actual_K_trace_are_separate (test_wj_h6_projection.ProjectionChecks) ... ok
+test_physical_mass_constants_and_representable_polynomial (test_wj_h6_projection.ProjectionChecks) ... ok
+test_prescribed_midpoints_counts_and_functions (test_wj_h6_projection.ProjectionChecks) ... ok
+test_two_distinct_reading_intervals (test_wj_h6_projection.ProjectionChecks) ... ok
+test_batched_full_action_matches_existing (test_wj_h7_transport.TransportTests) ... ok
+test_bound_calls_are_not_activations (test_wj_h7_transport.TransportTests) ... ok
+test_cross_dt_and_state_signature_rejection (test_wj_h7_transport.TransportTests) ... ok
+test_fixed_scale_zero_safe_norms (test_wj_h7_transport.TransportTests) ... ok
+test_genuine_context_and_rejected_binding (test_wj_h7_transport.TransportTests) ... ok
+test_integer_time_and_odd_steps (test_wj_h7_transport.TransportTests) ... ok
+test_matrix_limits_and_clone (test_wj_h7_transport.TransportTests) ... ok
+test_outer_H_reference_uses_owner_despite_subtraction_roundoff (test_wj_h7_transport.TransportTests) ... ok
+test_quality_and_physical_status_are_distinct (test_wj_h7_transport.TransportTests) ... ok
+test_actual_pressure_spaces_polynomial_and_complement_identity (test_wj_h8_local_timestep.LocalTimestepTests) ... ok
+test_checkpoint_names_do_not_define_absolute_steps (test_wj_h8_local_timestep.LocalTimestepTests) ... ok
+test_child_halt_survives_successful_parent_and_refuses_native (test_wj_h8_local_timestep.LocalTimestepTests) ... ERROR
+test_common_integer_times_and_zero_safe_three_level_ratio (test_wj_h8_local_timestep.LocalTimestepTests) ... ok
+test_cross_dt_state_and_reference_are_not_relabelled (test_wj_h8_local_timestep.LocalTimestepTests) ... ok
+test_direction_detail_does_not_change_principal_action (test_wj_h8_local_timestep.LocalTimestepTests) ... ok
+test_early_noncontraction_is_not_hidden_by_terminal_pass (test_wj_h8_local_timestep.LocalTimestepTests) ... ok
+test_first_witness_and_earliest_physical_time_are_distinct (test_wj_h8_local_timestep.LocalTimestepTests) ... ok
+test_fixed_case_cp0_and_sixteen_attempt_design (test_wj_h8_local_timestep.LocalTimestepTests) ... ok
+test_genuine_intermediate_callback_and_rejected_ineligibility (test_wj_h8_local_timestep.LocalTimestepTests) ... ok
+test_mixed_statuses_and_rejected_candidate_are_not_passed (test_wj_h8_local_timestep.LocalTimestepTests) ... ok
+test_reservation_view_cp0_and_attempt_ceilings (test_wj_h8_local_timestep.LocalTimestepTests) ... ok
+test_actual_root_derivative_and_fixed_direction (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_all_Q1_moment_linearity_and_pressure_independence (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_exact_delta_B_has_two_nonzero_terms (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_final_traction_reuse_would_fail_intermediate (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_fixed_seven_attempt_zero_native_scope (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_immutable_history_reference_and_rejected_lineage (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_intermediate_trace_is_not_repaired (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_pressure_roughness_and_reaction_signs (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_projected_polynomial_tests_and_gradients (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_real_phase_masks_and_aliases (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_saved_k_matvec_without_a_solve (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_signed_impulses_and_no_regauging (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+test_telescoping_nonzero_functional_increments (test_wj_h9_startup_audit.StartupAuditTests) ... ok
+
+======================================================================
+ERROR: test_child_halt_survives_successful_parent_and_refuses_native (test_wj_h8_local_timestep.LocalTimestepTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h9-startup-compatibility-20261113/source/test_wj_h8_local_timestep.py", line 33, in test_child_halt_survives_successful_parent_and_refuses_native
+    self.assertTrue(journal.execute(root,'child-halt',[sys.executable,str(script)],seconds=10))
+  File "/home/jay/build/wj-h9-startup-compatibility-20261113/source/run_wj_h7.py", line 113, in execute
+    child=subprocess.Popen(['/usr/bin/time','-v',*map(str,argv)],cwd=cwd or root,env=env,stdout=f,stderr=subprocess.STDOUT,
+  File "/usr/lib/python3.10/subprocess.py", line 971, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.10/subprocess.py", line 1864, in _execute_child
+    raise child_exception_type(err_msg)
+subprocess.SubprocessError: Exception occurred in preexec_fn.
+
+----------------------------------------------------------------------
+Ran 49 tests in 7.022s
+
+FAILED (errors=1)
+EXACT CERTIFICATE: D >= nu_eff/250 on all incompressible rank-one increments.
+Exact positive LDL pivots: ['35607/250', '2902757/300250', '3295566703/12201000', '3188912170563/3295566703000', '2212408252197/24379099000', '609851247/332332000', '3616758816461/553102063049250', '355627/143000']
+Command exited with non-zero status 1
+	Command being timed: "python3 -B -m unittest -v test_wj_h5_neutral test_wj_h6_projection test_wj_h7_transport test_wj_h8_local_timestep test_wj_h9_startup_audit"
+	User time (seconds): 7.45
+	System time (seconds): 0.18
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:07.66
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 103424
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 47003
+	Voluntary context switches: 9
+	Involuntary context switches: 16
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 3168
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

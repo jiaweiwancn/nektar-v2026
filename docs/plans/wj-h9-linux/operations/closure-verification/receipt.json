@@ -1,0 +1,113 @@
+{
+  "argv": [
+    "python3",
+    "/home/jay/build/wj-h9-startup-compatibility-20261113/observer-v8/close_wj_h9.py",
+    "--root",
+    "/home/jay/build/wj-h9-startup-compatibility-20261113",
+    "--publication",
+    "/home/jay/build/wj-h9-startup-compatibility-20261113/publication-v3"
+  ],
+  "cwd": "/home/jay/build/wj-h9-startup-compatibility-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "reserved_seconds": 45,
+  "units": 0,
+  "kind": "passive",
+  "inputs": {
+    "/home/jay/build/wj-h9-startup-compatibility-20261113/observer-v8/close_wj_h9.py": {
+      "sha256": "45ce128d9611581d9e588f68fb0b6e45eb96baf3cc07cf94d638b4f685d30503",
+      "bytes": 8148
+    }
+  },
+  "allocation": {
+    "workers": 18,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 36684,
+        "parent": 36683,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build10-static-primary-audit -- python3 -"
+      },
+      {
+        "pid": 36685,
+        "parent": 36684,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build10-static-primary-audit --project-limit 16"
+      },
+      {
+        "pid": 36724,
+        "parent": 36684,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build10-static-primary-audit -- python3 -"
+      },
+      {
+        "pid": 36734,
+        "parent": 36724,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 37687,
+        "parent": 36734,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_audit.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v10/runtime --member /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v2/A95-p4-dt002 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v1/A95-p4-dt002"
+      },
+      {
+        "pid": 37775,
+        "parent": 37687,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v10/runtime/RANSPreservationProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v1/A95-p4-dt002/native/case.xml /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v1/A95-p4-dt002/native/budget-request.json /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v1/A95-p4-dt002/native/budget.json"
+      },
+      {
+        "pid": 37776,
+        "parent": 37775,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 38438,
+        "parent": 38437,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 38456,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/lib/ubuntu-advantage/apt_news.py"
+      },
+      {
+        "pid": 38460,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/lib/ubuntu-advantage/esm_cache.py"
+      }
+    ]
+  },
+  "driver_sha256": "56b57f70bf25a0f20c8ad84c4a783a30d9cc619e39960f57d724ab0394adb538",
+  "status": "FAIL",
+  "seconds": 1.185247966001043,
+  "exit": 1,
+  "reason": null,
+  "peak_tree_rss_bytes": 92168192,
+  "root_bytes": 85283321,
+  "log_sha256": "5648b4577c011079bd0fdd0f9e960d46990af7ce701733cb7e8b5ea13fa6b4e0"
+}

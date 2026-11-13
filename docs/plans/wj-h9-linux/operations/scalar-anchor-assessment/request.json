@@ -1,0 +1,75 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h9-startup-compatibility-20261113/observer-v5/assess_wj_h9.py",
+    "--root",
+    "/home/jay/build/wj-h9-startup-compatibility-20261113"
+  ],
+  "cwd": "/home/jay/build/wj-h9-startup-compatibility-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "reserved_seconds": 30,
+  "units": 0,
+  "kind": "passive",
+  "inputs": {
+    "/home/jay/build/wj-h9-startup-compatibility-20261113/observer-v5/assess_wj_h9.py": {
+      "sha256": "f0a19c18e8759f9b1f0ba3b45b4ee84ad43f84acb1657a5a9a990cdcef35a549",
+      "bytes": 2529
+    }
+  },
+  "allocation": {
+    "workers": 8,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 34174,
+        "parent": 34173,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build9-replay-primary-audit -- python3 -"
+      },
+      {
+        "pid": 34175,
+        "parent": 34174,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build9-replay-primary-audit --project-limit 16"
+      },
+      {
+        "pid": 34178,
+        "parent": 34174,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build9-replay-primary-audit -- python3 -"
+      },
+      {
+        "pid": 34179,
+        "parent": 34178,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 35982,
+        "parent": 35981,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "driver_sha256": "56b57f70bf25a0f20c8ad84c4a783a30d9cc619e39960f57d724ab0394adb538"
+}

@@ -1,0 +1,72 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h9-startup-compatibility-20261113/observer-v3/study_wj_h9.py",
+    "--root",
+    "/home/jay/build/wj-h9-startup-compatibility-20261113",
+    "--mode",
+    "stage",
+    "--expected",
+    "/home/jay/build/wj-h9-startup-compatibility-20261113/wj-h9-expected.json"
+  ],
+  "cwd": "/home/jay/build/wj-h9-startup-compatibility-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "reserved_seconds": 45,
+  "units": 0,
+  "kind": "passive",
+  "inputs": {
+    "/home/jay/build/wj-h9-startup-compatibility-20261113/observer-v3/study_wj_h9.py": {
+      "sha256": "1d7c0fd86c37c8b6b9f8f6ee4100af57070dfd943873b1aaf71c606aa9a99b3f",
+      "bytes": 21816
+    },
+    "/home/jay/build/wj-h9-startup-compatibility-20261113/wj-h9-expected.json": {
+      "sha256": "57aca521a110cd8fc5c1d23676643fd7c89306ad88bbcd2389c1768a28358fc4",
+      "bytes": 339511
+    }
+  },
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 33415,
+        "parent": 33414,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/search_cao_tamura_budget_h2e.py --context /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/context-v1/context.json --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2c-20261112/preflight-final.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/stage-B --stage B --start /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2e-20261113/stage-A-final/best-candidate.json"
+      },
+      {
+        "pid": 33532,
+        "parent": 33531,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "driver_sha256": "38a6fda894f42a5cb663ecf1753e46406d0cb9f54f4e44b68b3ae19f3bdac462",
+  "status": "PASS",
+  "seconds": 2.2676763919989753,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 137416704,
+  "root_bytes": 45864187,
+  "log_sha256": "1ea512a3305550589da26beedb316d76743cfb8f3267cf7c7893c365230a8076"
+}
