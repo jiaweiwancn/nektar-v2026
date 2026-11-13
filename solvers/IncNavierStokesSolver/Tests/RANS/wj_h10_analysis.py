@@ -47,7 +47,7 @@ def arithmetic(r,snapshot,momentum,pressure,mass,BG,Schur,Au,mom):
     assert np.all(vu<r['offsets'][2])and np.all(pp>=r['offsets'][4])and len(pp)==104
     correction=dpi@BG;du=states['F'][vu]-states['C'][vu];actual_dpi=states['F'][pp]-states['C'][pp]
     checks=dict(velocity_update=residual_check(du,predictor-correction,abs(predictor)+abs(correction)),pressure_update=residual_check(actual_dpi,dpi,abs(dpi)+abs(states['C'][pp])),
-        predictor_system=residual_check(Au@predictor-np.asarray(momentum['rhs']),momentum['linear_residual'],abs(Au)@abs(predictor)+abs(momentum['rhs'])),
+        predictor_system=residual_check(Au@predictor-np.asarray(momentum['rhs']),momentum['linear_residual'],abs(Au)@abs(predictor)+np.abs(momentum['rhs'])),
         pressure_system=residual_check(Schur@dpi-rhs,pressure['linear_residual'],abs(Schur)@abs(dpi)+abs(rhs)))
     def direction(value):
         x=np.zeros(len(states['C']));x[vu]=value;return x

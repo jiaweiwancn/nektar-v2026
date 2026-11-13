@@ -77,8 +77,8 @@ def halt(root,status,reason,**details):
     update_journal(root/'accounting.json',change)
 
 
-def scan(root,branch,phase):
-    folder=root/f'science/cases/{branch}/{phase}';rp=folder/'case.evolution.json';r=load(rp);out=root/f'science/analysis/{branch}-{phase}';out.mkdir(parents=True)
+def scan(root,branch,phase,version="v1"):
+    folder=root/f'science/cases/{branch}/{phase}';rp=folder/'case.evolution.json';r=load(rp);out=root/('science/analysis/'+branch+'-'+phase+(''if version=='v1'else '-'+version));out.mkdir(parents=True)
     before=identity(rp);assert r['initial_velocity_mode']=='FlatInletTraceV1'and len(r['state'])==2328
     if r['failure']:
         save(out/'result.json',dict(status='OBSTRUCTED',failure=r['failure'],producer=before));halt(root,'OBSTRUCTED',r['failure']);return
@@ -134,8 +134,16 @@ def scan(root,branch,phase):
         result['pressure_profiles']=profiles;result['new_vs_H9_first_step']=dict(old=load(root/f'science/imports/{branch}.impulse.json')['physical'],new=result['impulse_physical'],comparison='different first-step times; same pressure level, no regauge')
         save(out/'arithmetic.json',serial(result));state_summary['arithmetic']=identity(out/'arithmetic.json')
     save(out/'result.json',serial(state_summary));assert identity(rp)==before
+    selection=root/'science/analysis-selection.json';index=load(selection)if selection.exists()else {};index[branch+'-'+phase]=identity(out/'result.json');save(selection,index)
     if state_summary['status']!='PASS':halt(root,state_summary['status'],'native state failed expanded/quality/compatibility gate',producer=before,time=r['time'],witness=serial(summary['witness']))
     print(branch,phase,state_summary['status'],'margin',summary['min_in_plane'],'scaled div',summary['divergence_scaled_max'],flush=True)
+
+
+def selected_analysis(root,branch,phase):
+    p=root/'science/analysis-selection.json';index=load(p)if p.exists()else {}
+    v=index.get(branch+'-'+phase)
+    if v:check(v);return load(v['path'])
+    return load(root/f'science/analysis/{branch}-{phase}/result.json')
 
 
 def view_request(root,branch,phase):
@@ -157,7 +165,7 @@ def view_finish(root,branch,phase):
     native_moments={str(b):p['spatial_residual'][r['offsets'][b]:r['offsets'][b+1]]for b in(4,5)}
     assert [len(native_moments[str(b)])for b in(4,5)]==[34,70]
     assert max(abs(x)for v in native_moments.values()for x in v)<=2e-15
-    observed=load(root/f'science/analysis/{branch}-{phase}/result.json')['summary']['moments']
+    observed=selected_analysis(root,branch,phase)['summary']['moments']
     assert max(abs(x-y)for k,v in native_moments.items()for x,y in zip(v,observed[k]['moments']))<=2e-15
     anchor=compare_anchor(values['32'],dict(components=p['weak_checks']['native_terms'],regional=[p['weak_checks']['native_inner'],p['weak_checks']['native_outer']]))
     quadrature=compare(values['24'],values['32']);status='PASS'if anchor['status']==quadrature['status']=='PASS'else 'UNRESOLVED'
@@ -166,7 +174,8 @@ def view_finish(root,branch,phase):
     print(branch,phase,'strict',status,flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('inputs','runtime','fixture','scan','view-request','view-finish'),required=True);p.add_argument('--branch',choices=('coarse','fine','quarter'));p.add_argument('--phase',choices=('cp0','run'));a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('inputs','runtime','fixture','scan','view-request','view-finish'),required=True);p.add_argument('--version',default='v1');p.add_argument('--branch',choices=('coarse','fine','quarter'));p.add_argument('--phase',choices=('cp0','run'));a=p.parse_args()
     if a.mode=='fixture':make_fixture(a.root)
     elif a.mode in ('inputs','runtime'):globals()[a.mode](a.root)
+    elif a.mode=='scan':scan(a.root,a.branch,a.phase,a.version)
     else:globals()[a.mode.replace('-','_')](a.root,a.branch,a.phase)
