@@ -29,14 +29,14 @@ class NeutralComposite
 {
 public:
     const RANSWallEvolutionPatch &patch;
-    double us,H,Hh,K,A,UH,PiOuter,PiInner=0.;
+    double us,H,Hh,K,A,UH,PiOuter,PiInner=0.,displacement=0.;
     std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> profile;
     SolverUtils::RANSTensor Q{};
     mutable std::map<std::pair<double,bool>,std::array<double,9>> cache;
     NeutralComposite(const LibUtilities::SessionReaderSharedPtr &s,const RANSWallEvolutionPatch &p):patch(p)
     {
         const auto &m=p.Parameters().model;const auto &g=p.Parameters().geometry;
-        double displacement;s->LoadParameter("RANSOpenDisplacement",displacement,0.);
+        s->LoadParameter("RANSOpenDisplacement",displacement,0.);
         Require(displacement==0.,
             "original Accepted/NeutralCompositeV1 cannot silently use aerodynamic displacement; a separately qualified displaced wall policy is required");
         s->LoadParameter("RANSOpenPressureLevel",PiInner,0.);
@@ -199,7 +199,9 @@ RANSWallEvolutionData LoadRANSAcceptedOpenData(const LibUtilities::SessionReader
         {
             const double shear=ref->us*ref->us;
             const double sigma=patch.Parameters().model.Parameters().sigmaEpsilon;
-            const double flux=-shear*shear/(sigma*patch.upper[2]);
+            const double zeta=patch.upper[2]-ref->displacement;
+            Require(zeta>0.,"RichardsNorris2011V1 roof must lie above displacement");
+            const double flux=-shear*shear/(sigma*zeta);
             data.topTraction[0]=[shear](const RANSWallCoordinate&,double){return shear;};
             data.topEpsilonDiffusion=[flux](const RANSWallCoordinate&,double){return flux;};
             // Physical flux data: deliberately independent of evolving nu_t.
