@@ -52,7 +52,7 @@ def external_ids(report):
 
 def delta_B(a,b):
     def value(d):
-        G=np.asarray(d['G']);return d['k']/d['epsilon'],G-np.trace(G,axis1=-2,axis2=-1)[...,None,None]*np.eye(3)/3
+        G=np.asarray(d['G']);return np.asarray(d['k'])/np.asarray(d['epsilon']),G-np.trace(G,axis1=-2,axis2=-1)[...,None,None]*np.eye(3)/3
     ta,ga=value(a);tb,gb=value(b)
     gradient=(ta+tb)[...,None,None]/2*(gb-ga);timescale=(tb-ta)[...,None,None]*(ga+gb)/2;total=tb[...,None,None]*gb-ta[...,None,None]*ga
     return dict(gradient_term=gradient,timescale_term=timescale,total=total,residual=total-gradient-timescale)
