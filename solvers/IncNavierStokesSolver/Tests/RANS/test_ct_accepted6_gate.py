@@ -21,6 +21,10 @@ def fixture():
                       stored_slots={3:1273, 4:2283}[p], steps=round(.016/dt),
                       accepted_state_times=[i*dt for i in range(round(.016/dt)+1)])
         members.append(member)
+        member['independent_endpoint_metrics'] = dict(
+            fields={k:dict(scaled_weighted_RMS=5e-5) for k in FIELDS},
+            traction={k:5e-5 for k in ('ground_scaled_RMS', 'full_interface_jump_scaled_RMS',
+                'inner_interface_reference_error_scaled_RMS', 'outer_interface_reference_error_scaled_RMS')})
         binding = dict(model='A95', time=.016, dt=dt, native_report_sha256=report)
         body = dict(budget_binding=binding, mass=dict(outward_net=1e-14, scale=.2),
                     captured_k_matrix=dict(maximum_defect=1e-14, scale=1., captured_rows=576),
@@ -123,6 +127,10 @@ class GateTests(unittest.TestCase):
 
     def test_governing_corrections_forbidden(self):
         q = fixture();q['members'][0]['corrections_and_additional_solves'] = 1
+        self.denied(q)
+
+    def test_independent_traction_cannot_be_replaced_by_field_accuracy(self):
+        q = fixture();q['members'][0]['independent_endpoint_metrics']['traction']['inner_interface_reference_error_scaled_RMS'] = .006
         self.denied(q)
 
     def test_command_exit_matches_primitives(self):

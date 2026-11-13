@@ -51,7 +51,7 @@ def main():
     static=receipt('static-independent-v2/results.json','static-transmission.json')
     receipt('targeted-v4/results.json','static-native-primitives.json')
     zero=receipt('targeted-v3/results.json','zero-and-ground-controls.json')
-    receipt('endpoint-classification-v2/results.json','A95-primary-repaired-endpoint.json')
+    primary_endpoint=receipt('endpoint-classification-v2/results.json','A95-primary-repaired-endpoint.json')
     receipt('first-failure-v1.json','first-flat-guard-failure.json')
     receipt('frozen-boundary-stage-proof-v1.json','wrong-corner-precedence-control.json')
     receipt('frozen-boundary-stage-proof-v2.json','actual-stage-reconstruction-control.json')
@@ -90,6 +90,15 @@ def main():
                 accepted_state_times=n['audit_times'], actual_configuration_sha256=sha(folder/'case.xml'),
                 corrections_and_additional_solves=corrections,all_audited_extrema=audited_extrema(n))
             require(corrections==0,'forbidden governing correction or extra solve')
+            if 'endpoint_metrics' in q:
+                row['independent_endpoint_metrics']=q['endpoint_metrics']
+            elif complete and label=='evolution-v2/A95-p4-dt002' and primary_endpoint:
+                require(primary_endpoint['initialization_receipt']['raw_initial_sha256']==row['actual_state_sha256'] and
+                    abs(primary_endpoint['observation_boundary_time']-n['time'])<1e-13,'foreign repaired endpoint state/time')
+                require(sha(Path(primary_endpoint['packet_path']))==primary_endpoint['packet_sha256'],'changed supplemented endpoint packet')
+                row['independent_endpoint_metrics']=primary_endpoint['physical_metrics']
+                row['diagnostic_supplement']=dict(path=str(r/'endpoint-classification-v2/results.json'),
+                    sha256=sha(r/'endpoint-classification-v2/results.json'),original_failed_receipt_preserved=True)
         members[label]=row;files[str(path)]=sha(path)
         for phase in ('zero','trajectory'):
             timing=path.parent/phase/'timing.jsonl'

@@ -131,6 +131,16 @@ def primary_coverage(members):
         expected_count = {3:1273, 4:2283}.get(row.get('degree'))
         if row.get('stored_slots') != expected_count:
             reasons.append('incorrect_native_count')
+        metrics = row.get('independent_endpoint_metrics', {})
+        for field in FIELDS:
+            v = metrics.get('fields', {}).get(field, {}).get('scaled_weighted_RMS')
+            if not finite(v) or v < 0 or v > (.01 if field == 'Pi' else .005):
+                reasons.append('missing_or_failed_independent_endpoint_field:'+field)
+        for name in ('ground_scaled_RMS', 'full_interface_jump_scaled_RMS',
+                     'inner_interface_reference_error_scaled_RMS', 'outer_interface_reference_error_scaled_RMS'):
+            v = metrics.get('traction', {}).get(name)
+            if not finite(v) or v < 0 or v > .005:
+                reasons.append('missing_or_failed_independent_endpoint_traction:'+name)
     if len(keys) != len(PRIMARY) or set(keys) != PRIMARY:
         reasons.append('missing_duplicate_or_foreign_primary_member')
     for p in (3, 4):
