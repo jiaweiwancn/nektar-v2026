@@ -39,7 +39,8 @@ def main():
         checks[name]=dict(status='pass' if value['status']=='fail' else 'fail',intended_outcome='independent all-row reconstruction must fail',observed=value)
     targeted=json.loads((a.targeted/'results.json').read_text())
     for model in ('A95','A93','E94E95'):
-        row=targeted['checks'][model+'-static']['packet']
+        label=model+'-static-p4' if model+'-static-p4' in targeted['checks'] else model+'-static'
+        row=targeted['checks'][label]['packet']
         for kind,key in [('omit_tilt','omitted_tilt_signal'),('fixed_chart_derivative','fixed_chart_derivative_signal')]:
             v=row[key];checks[model+'-'+kind]=dict(status='pass' if v>1e-8 else 'fail',primitive_signal=v,minimum_discriminating_signal=1e-8)
         K=parameters(model)['q']*.16
