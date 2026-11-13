@@ -143,7 +143,7 @@ def stored_reference(manifest=None):
     w=wall(v['K'],c.H,c.h,nu=c.nu);assert abs(w['rc']-v['rc'])<2e-14
     object.__setattr__(c,'w',w);assert c.K==v['K']and c.A==v['A'];return c
 
-def assessment(root,relative):
+def assessment(root,relative,version='v1'):
     import math
     import numpy as np
     from wj_h4_points import physical
@@ -152,7 +152,7 @@ def assessment(root,relative):
     from study_wj_h9 import serial
     from wj3_measure import checkpoint_payload
     folder=root/'science'/relative;rp=folder/'case.evolution.json';r=load(rp);c=stored_reference()
-    out=folder/'assessment';out.mkdir();before=file_id(rp)
+    out=folder/('assessment'if version=='v1'else'assessment-'+version);out.mkdir();before=file_id(rp)
     if r['failure']:
         save(out/'result.json',dict(status='OBSTRUCTED',native_failure=r['failure'],producer=before));return
     cp=checkpoint_payload(r['checkpoint'],include_reference=True)
@@ -209,7 +209,7 @@ def assessment(root,relative):
                 k_flux_jump=float(d['nu_d'][a]*d['grad_k'][a,2]-d['nu_d'][b]*d['grad_k'][b,2]),reduced_pressure_jump=float(d['pi'][a]-d['pi'][b])))
         s['owner_interfaces']=interfaces
         for b in (4,5):
-            ii,(ids,phi,_,_)=rows.maps[b];rhs=np.zeros(r['fields'][b]['size']);np.add.at(rhs,ids.ravel(),(phi*(rows.weights[ii]*d['divergence'][ii])[:,None]).ravel())
+            ii,(ids,phi,_,_)=rows.maps[b];rhs=np.zeros(r['fields'][b]['size']);np.add.at(rhs,(ids-r['offsets'][b]).ravel(),(phi*(rows.weights[ii]*d['divergence'][ii])[:,None]).ravel())
             moments[str(b)]=dict(moments=rhs.tolist(),maximum=float(np.max(abs(rhs))),signed_integral=float(np.sum(rhs)))
         step=first+j
         if max(v['maximum']for v in moments.values())>2e-15:s['status']='OBSTRUCTED'
@@ -248,7 +248,7 @@ def assessment(root,relative):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('runtime','inputs','small-checks','view','assessment'),required=True)
-    p.add_argument('--case',default='two');p.add_argument('--reuse',action='store_true');a=p.parse_args()
+    p.add_argument('--case',default='two');p.add_argument('--reuse',action='store_true');p.add_argument('--version',default='v1');a=p.parse_args()
     if a.mode=='view':view(a.root,a.case,a.reuse)
-    elif a.mode=='assessment':assessment(a.root,a.case)
+    elif a.mode=='assessment':assessment(a.root,a.case,a.version)
     else:globals()[a.mode.replace('-','_')](a.root)
