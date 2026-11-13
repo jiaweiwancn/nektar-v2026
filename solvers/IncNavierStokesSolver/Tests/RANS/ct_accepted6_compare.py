@@ -67,7 +67,10 @@ def main():
         if not all(pair):continue
         require(pair[0][0]['zero']['state_sha256']==pair[1][0]['zero']['state_sha256'],'same-space actual initial coefficients differ')
         d=norms(pair[0][3]-pair[1][3],pair[0][5],pair[0][6],model)
-        row=dict(difference_002_001=d,initial_coefficients_identical=True)
+        row=dict(difference_002_001=d,initial_coefficients_identical=True,
+            diagnostic_first_order_extrapolated_reference_error=norms(
+                2*pair[1][3]-pair[0][3]-pair[1][4],pair[0][5],pair[0][6],model),
+            extrapolation_scope='read-only first-order assumption, not an evolved state or an admission substitute')
         if (degree,.004) in indexed:
             q=indexed[degree,.004];require(q[0]['zero']['state_sha256']==pair[0][0]['zero']['state_sha256'],'coarse temporal actual initialization differs')
             d0=norms(q[3]-pair[0][3],q[5],q[6],model);orders={}
@@ -77,7 +80,8 @@ def main():
                 order=math.log2(x/y) if resolved else None
                 orders[name]=dict(status=('pass' if .8<=order<=1.2 else 'fail') if resolved else 'unresolved_floor',
                     order=order,D004_002=x,D002_001=y,signal_floor=1e-6)
-            row.update(difference_004_002=d0,orders=orders)
+            row.update(difference_004_002=d0,orders=orders,
+                diagnostic_extrapolation_second_difference=norms(q[3]-3*pair[0][3]+2*pair[1][3],q[5],q[6],model))
         result['temporal'][str(degree)]=row
     if (3,.001) in indexed and (4,.001) in indexed:
         coarse,fine=indexed[3,.001],indexed[4,.001]
@@ -90,6 +94,8 @@ def main():
             result['degree'][name]=dict(status=status,
                 coarse_error=x,fine_error=y,ratio=y/x if x>1e-7 else None,ratio_limit=.85,
                 spatial_difference=delta[name],floor=1e-7,scope='fixed physical partition P3/P1 versus P4/P2, not a measured convergence order')
+            result['degree'][name]['temporal_spreads_scaled_RMS']={
+                str(p):result['temporal'][str(p)]['difference_002_001'][name]['scaled_weighted_RMS'] for p in (3,4)}
     orders=[v for r in result['temporal'].values() for v in r.get('orders',{}).values()]
     result['statuses']['temporal_order']='pass' if any(q['status']=='pass' for q in orders) and all(q['status']!='fail' for q in orders) else 'unresolved' if not any(q['status']=='fail' for q in orders) else 'fail'
     result['statuses']['degree_reduction']='pass' if result['degree'] and all(q['status'] in ('pass','unresolved_floor') for q in result['degree'].values()) and any(q['status']=='pass' for q in result['degree'].values()) else 'fail_or_unresolved'
