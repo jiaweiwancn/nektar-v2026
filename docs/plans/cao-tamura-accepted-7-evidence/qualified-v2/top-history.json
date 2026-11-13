@@ -1,0 +1,241 @@
+{
+  "schema": "CT7RNHistoryBudgetControlsV1",
+  "checks": {
+    "restart": {
+      "status": "pass",
+      "state_sha256": "ff58f73dc55572af563f75849389e86d65c1dbfc2ca03ee091edd19871f146b9",
+      "report_sha256": "35f01db3ce09f9593762623779a441554ab267e1ca8b24fd9a87e32fe3091162"
+    },
+    "rollback": {
+      "status": "pass",
+      "reason": "accepted AWF hard audit exit; candidate/history retained: deliberate_PIMPLE_hard_audit_rejection",
+      "report_sha256": "3e439a924cedbd0b89f4efcf1d4f0a95c9c59eeaa7a1896ee113e5b054e66820"
+    },
+    "old_boundary_history": {
+      "status": "pass",
+      "reason": "Wall IMEX: checkpoint signature mismatch\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\n=======================================================================\n\t      Wall evolution: native IMEX, mapped multiregion CG\n\t  Physical dimension: 2\n\t     Global unknowns: 254\n\t         MPI backend: replicated global coefficients, owned-cell collective assembly\n\t  Correction weights: chi=0.000000, eta=0.000000\n=======================================================================\nEP-AWF evolution state/history: Wall IMEX: checkpoint signature mismatch\n"
+    },
+    "pressure_level_evolution": {
+      "status": "pass",
+      "maximum_defect": 6.125655538369301e-14
+    }
+  },
+  "models": {
+    "A95": {
+      "completion": "pass",
+      "model": "A95",
+      "resolved_descriptor": "A95:OriginalHighRe-v1:A0=6.5:As=3lambdaMax(Sd)/norm(Sd):Q=2sqrt(1-9Cmu^2(s*tau)^2)[O,S]/(1+6sr*tau^2):q=3.8220004260766363:kappa=0.40406099529852102:policy=Natural:sigmaK=1:sigmaE=1.3:Ceps1=1.4399999999999999:Ceps2=1.9199999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=Ceps1*epsilon*P/k:wallSink=P-Ew(K):frozen-prescribed-zero-reaction",
+      "native_signature": "CLS-EPAWF-M4:replicated-CG:2:0.5:1.5e-05:0.40000000000000002:0.5:0.5:0:3.8220004260766363:8:32|70:0:3:0:0.5:0:0:0:0.0625:1:3:0.5:1:0:0:0:0.0625:2:3:0:0.5:0:0:0.0625:0.5:3:3:0.5:1:0:0:0.0625:0.5:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|70:0:3:0:0.5:0:0:0:0.0625:1:3:0.5:1:0:0:0:0.0625:2:3:0:0.5:0:0:0.0625:0.5:3:3:0.5:1:0:0:0.0625:0.5:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|70:0:3:0:0.5:0:0:0:0.0625:1:3:0.5:1:0:0:0:0.0625:2:3:0:0.5:0:0:0.0625:0.5:3:3:0.5:1:0:0:0.0625:0.5:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|28:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|9:0:1:0:0.5:0:0:0:0.0625:1:1:0.5:1:0:0:0:0.0625:2:1:0:0.5:0:0:0.0625:0.5:3:1:0.5:1:0:0:0.0625:0.5:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8|6:4:1:0:0.5:0:0:0.5:1:5:1:0.5:1:0:0:0.5:1:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:boundary=AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=NeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-z-unshifted:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.31678385562910716|K0=0.6115200681722619|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40406099529852102|RANSOPENEQUILIBRIUMQ=3.8220004260766363|RANSOPENMEANINTERCEPT=3.7221290926419526|RANSOPENNATURALKAPPA=0.40406099529852102|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.40000000000000002|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.83971761447516569|ROUGHX=297.9038042055638|SLOPE=0.17946842304608929|YAPSCALE=0.60382768562974365|ZV=-0.024330256663533445:wall_formulation={\"formulation\":\"AcceptedBudgetAWF\",\"resolved_physics\":\"A95:OriginalHighRe-v1:A0=6.5:As=3lambdaMax(Sd)/norm(Sd):Q=2sqrt(1-9Cmu^2(s*tau)^2)[O,S]/(1+6sr*tau^2):q=3.8220004260766363:kappa=0.40406099529852102:policy=Natural:sigmaK=1:sigmaE=1.3:Ceps1=1.4399999999999999:Ceps2=1.9199999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=Ceps1*epsilon*P/k:wallSink=P-Ew(K):frozen-prescribed-zero-reaction\",\"specification_sha256\":\"17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40\",\"c_mu_wall\":0.068457106344852303,\"c_length_wall\":3.0191384281487181,\"source\":\"P_A-Ew(K):frozen-prescribed-zero-local-reaction\",\"scope\":\"serial-flat2D-PimpleSingleSweep\"}:resolved=A95:OriginalHighRe-v1:A0=6.5:As=3lambdaMax(Sd)/norm(Sd):Q=2sqrt(1-9Cmu^2(s*tau)^2)[O,S]/(1+6sr*tau^2):q=3.8220004260766363:kappa=0.40406099529852102:policy=Natural:sigmaK=1:sigmaE=1.3:Ceps1=1.4399999999999999:Ceps2=1.9199999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=Ceps1*epsilon*P/k:wallSink=P-Ew(K):frozen-prescribed-zero-reaction:numerical_operator=GeneratedVolumeOwnerV1:eta=0:neutral=0:us=0.40000000000000002:direction=1,0:chart_functions=0:temporal_coupling=PimpleSingleSweep|E0=0.31678385562910716|K0=0.6115200681722619|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40406099529852102|RANSOPENEQUILIBRIUMQ=3.8220004260766363|RANSOPENMEANINTERCEPT=3.7221290926419526|RANSOPENNATURALKAPPA=0.40406099529852102|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLINTERFACEORDER=64|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMASSORDER=12|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLNORMALORDER=32|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.40000000000000002|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTANGENTIALORDER=8|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|RANSWALLVOLUMEORDER=12|ROUGHM=0.83971761447516569|ROUGHX=297.9038042055638|SLOPE=0.17946842304608929|TIME=0|TIMESTEP=9.9999999999999995e-07|YAPSCALE=0.60382768562974365|ZV=-0.024330256663533445",
+      "configuration_sha256": "18bf6fc434eceb2268ece936b6c6eacfe79ff2f2c57289fa2ea525b49289c240",
+      "time": 2e-06,
+      "state_sha256": "ff58f73dc55572af563f75849389e86d65c1dbfc2ca03ee091edd19871f146b9",
+      "report_sha256": "adff3c2e7cdca27f8481078acae9c70e8eca34c6b8f7fb667cc96d4869c965db",
+      "budget_gate": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 3.9883721325573163e-13,
+          "outer_k": 3.6505867773151124e-13,
+          "outer_epsilon": 2.929816111940653e-12,
+          "whole_k": 4.784432398874383e-13
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      },
+      "mass": {
+        "outward_net": -6.633148891266316e-16,
+        "scale": 0.4,
+        "scaled_defect": 1.658287222816579e-15,
+        "status": "pass"
+      },
+      "captured_k_matrix": {
+        "status": "pass",
+        "maximum_defect": 6.637481363147568e-12,
+        "scale": 1.0,
+        "scaled_defect": 6.637481363147568e-12,
+        "captured_rows": 60,
+        "matrix_sha256": "ede17a1373fc6c2a76b90371931c950d321bd7237119ee6e8a5971168870cfc2",
+        "scope": "actual captured PIMPLE free-row residual plus its frozen matrix times actual raw increment; not a second reassembly using guessed frozen coefficients"
+      },
+      "physical_budget_receipt_sha256": "e76e29f920be6fafdcd9153eaae2cf81306c71cd6117e268264f2b449eb1ce42"
+    },
+    "A93": {
+      "completion": "pass",
+      "model": "A93",
+      "resolved_descriptor": "A93:OriginalHighRe-v1:Cmu=(2/3)/(1.25+eta+.9xi):Q=(3devS2-19devO2+15[O,S])/(1000+eta^3):q=3.4012654173971675:kappa=0.42832362870822022:policy=Natural:sigmaK=1:sigmaE=1.3:Ceps1=1.4399999999999999:Ceps2=1.9199999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=Ceps1*epsilon*P/k:wallSink=P-Ew(K):frozen-prescribed-zero-reaction",
+      "native_signature": "CLS-EPAWF-M4:replicated-CG:2:0.5:1.5e-05:0.40000000000000002:0.5:0.5:0:3.4012654173971675:8:32|70:0:3:0:0.5:0:0:0:0.0625:1:3:0.5:1:0:0:0:0.0625:2:3:0:0.5:0:0:0.0625:0.5:3:3:0.5:1:0:0:0.0625:0.5:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|70:0:3:0:0.5:0:0:0:0.0625:1:3:0.5:1:0:0:0:0.0625:2:3:0:0.5:0:0:0.0625:0.5:3:3:0.5:1:0:0:0.0625:0.5:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|70:0:3:0:0.5:0:0:0:0.0625:1:3:0.5:1:0:0:0:0.0625:2:3:0:0.5:0:0:0.0625:0.5:3:3:0.5:1:0:0:0.0625:0.5:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|28:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|9:0:1:0:0.5:0:0:0:0.0625:1:1:0.5:1:0:0:0:0.0625:2:1:0:0.5:0:0:0.0625:0.5:3:1:0.5:1:0:0:0.0625:0.5:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8|6:4:1:0:0.5:0:0:0.5:1:5:1:0.5:1:0:0:0.5:1:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:boundary=AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=NeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-z-unshifted:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.29883945554447877|K0=0.54420246678354678|KAPPA=0.42832362870822022|KINVIS=1.5e-05|QSTAR=3.4012654173971675|RANSKAPPA=0.42832362870822022|RANSOPENEQUILIBRIUMQ=3.401265417397167|RANSOPENMEANINTERCEPT=3.5168796723426001|RANSOPENNATURALKAPPA=0.42832362870822022|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.40000000000000002|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.8370790902151275|ROUGHX=281.02887527718991|SLOPE=0.16930233304980205|YAPSCALE=0.53735688023134587|ZV=-0.024182610265142856:wall_formulation={\"formulation\":\"AcceptedBudgetAWF\",\"resolved_physics\":\"A93:OriginalHighRe-v1:Cmu=(2/3)/(1.25+eta+.9xi):Q=(3devS2-19devO2+15[O,S])/(1000+eta^3):q=3.4012654173971675:kappa=0.42832362870822022:policy=Natural:sigmaK=1:sigmaE=1.3:Ceps1=1.4399999999999999:Ceps2=1.9199999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=Ceps1*epsilon*P/k:wallSink=P-Ew(K):frozen-prescribed-zero-reaction\",\"specification_sha256\":\"17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40\",\"c_mu_wall\":0.086440834963363009,\"c_length_wall\":2.686784401156729,\"source\":\"P_A-Ew(K):frozen-prescribed-zero-local-reaction\",\"scope\":\"serial-flat2D-PimpleSingleSweep\"}:resolved=A93:OriginalHighRe-v1:Cmu=(2/3)/(1.25+eta+.9xi):Q=(3devS2-19devO2+15[O,S])/(1000+eta^3):q=3.4012654173971675:kappa=0.42832362870822022:policy=Natural:sigmaK=1:sigmaE=1.3:Ceps1=1.4399999999999999:Ceps2=1.9199999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=Ceps1*epsilon*P/k:wallSink=P-Ew(K):frozen-prescribed-zero-reaction:numerical_operator=GeneratedVolumeOwnerV1:eta=0:neutral=0:us=0.40000000000000002:direction=1,0:chart_functions=0:temporal_coupling=PimpleSingleSweep|E0=0.29883945554447877|K0=0.54420246678354678|KAPPA=0.42832362870822022|KINVIS=1.5e-05|QSTAR=3.4012654173971675|RANSKAPPA=0.42832362870822022|RANSOPENEQUILIBRIUMQ=3.401265417397167|RANSOPENMEANINTERCEPT=3.5168796723426001|RANSOPENNATURALKAPPA=0.42832362870822022|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLINTERFACEORDER=64|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMASSORDER=12|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLNORMALORDER=32|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.40000000000000002|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTANGENTIALORDER=8|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|RANSWALLVOLUMEORDER=12|ROUGHM=0.8370790902151275|ROUGHX=281.02887527718991|SLOPE=0.16930233304980205|TIME=0|TIMESTEP=9.9999999999999995e-07|YAPSCALE=0.53735688023134587|ZV=-0.024182610265142856",
+      "configuration_sha256": "2f60e8f870f572e81e56dcdb8e79986dd7423bff38c63487fe1ff18b56ccc7d1",
+      "time": 2e-06,
+      "state_sha256": "c6f1a1503e952da7507cd78902154312f8485fb6ef656b7565187c20f63d9c9a",
+      "report_sha256": "2f17dc62abd4a65c5f070dfd9b2eb2a693337498c24b37945b9aae43157b4824",
+      "budget_gate": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 1.8678409513528393e-12,
+          "outer_k": 4.0329337092082085e-12,
+          "outer_epsilon": 4.242087583983256e-12,
+          "whole_k": 3.039660320322546e-12
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      },
+      "mass": {
+        "outward_net": 9.82287168271867e-17,
+        "scale": 0.4,
+        "scaled_defect": 2.4557179206796675e-16,
+        "status": "pass"
+      },
+      "captured_k_matrix": {
+        "status": "pass",
+        "maximum_defect": 1.8436183569364717e-12,
+        "scale": 1.0,
+        "scaled_defect": 1.8436183569364717e-12,
+        "captured_rows": 60,
+        "matrix_sha256": "144c48110644469de49ff781747b5065e6ec28e5caae82839b92d2dae140261a",
+        "scope": "actual captured PIMPLE free-row residual plus its frozen matrix times actual raw increment; not a second reassembly using guessed frozen coefficients"
+      },
+      "physical_budget_receipt_sha256": "91c9df112427734f110a89703a1a95f88dbbaf728accb6ac52cb3f7058d506d5"
+    },
+    "E94E95": {
+      "completion": "pass",
+      "model": "E94E95",
+      "resolved_descriptor": "E94E95:OriginalHighRe-v1:A0=4:As=3lambdaMax(Sd)/norm(Sd):Q=0:q=3.3245064563141753:kappa=0.41208747162475556:policy=Natural:sigmaK=1:sigmaE=1.2:Ceps1=0.42999999999999999:Ceps2=1.8999999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=C1(eta)*S*epsilon:wallSink=P-Ew(K):frozen-prescribed-zero-reaction",
+      "native_signature": "CLS-EPAWF-M4:replicated-CG:2:0.5:1.5e-05:0.40000000000000002:0.5:0.5:0:3.3245064563141753:8:32|70:0:3:0:0.5:0:0:0:0.0625:1:3:0.5:1:0:0:0:0.0625:2:3:0:0.5:0:0:0.0625:0.5:3:3:0.5:1:0:0:0.0625:0.5:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|70:0:3:0:0.5:0:0:0:0.0625:1:3:0.5:1:0:0:0:0.0625:2:3:0:0.5:0:0:0.0625:0.5:3:3:0.5:1:0:0:0.0625:0.5:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|70:0:3:0:0.5:0:0:0:0.0625:1:3:0.5:1:0:0:0:0.0625:2:3:0:0.5:0:0:0.0625:0.5:3:3:0.5:1:0:0:0.0625:0.5:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|28:4:3:0:0.5:0:0:0.5:1:5:3:0.5:1:0:0:0.5:1:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|9:0:1:0:0.5:0:0:0:0.0625:1:1:0.5:1:0:0:0:0.0625:2:1:0:0.5:0:0:0.0625:0.5:3:1:0.5:1:0:0:0.0625:0.5:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8|6:4:1:0:0.5:0:0:0.5:1:5:1:0.5:1:0:0:0.5:1:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:boundary=AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=NeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-z-unshifted:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.31061366533500462|K0=0.53192103301026816|KAPPA=0.41208747162475556|KINVIS=1.5e-05|QSTAR=3.3245064563141753|RANSKAPPA=0.41208747162475556|RANSOPENEQUILIBRIUMQ=3.3245064563141753|RANSOPENMEANINTERCEPT=3.6564080685323512|RANSOPENNATURALKAPPA=0.41208747162475556|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.40000000000000002|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.83655761365924197|ROUGHX=277.83968245077466|SLOPE=0.16738104369643855|YAPSCALE=0.49958590610661124|ZV=-0.024153898521124598:wall_formulation={\"formulation\":\"AcceptedBudgetAWF\",\"resolved_physics\":\"E94E95:OriginalHighRe-v1:A0=4:As=3lambdaMax(Sd)/norm(Sd):Q=0:q=3.3245064563141753:kappa=0.41208747162475556:policy=Natural:sigmaK=1:sigmaE=1.2:Ceps1=0.42999999999999999:Ceps2=1.8999999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=C1(eta)*S*epsilon:wallSink=P-Ew(K):frozen-prescribed-zero-reaction\",\"specification_sha256\":\"17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40\",\"c_mu_wall\":0.090478551370335225,\"c_length_wall\":2.4979295305330562,\"source\":\"P_A-Ew(K):frozen-prescribed-zero-local-reaction\",\"scope\":\"serial-flat2D-PimpleSingleSweep\"}:resolved=E94E95:OriginalHighRe-v1:A0=4:As=3lambdaMax(Sd)/norm(Sd):Q=0:q=3.3245064563141753:kappa=0.41208747162475556:policy=Natural:sigmaK=1:sigmaE=1.2:Ceps1=0.42999999999999999:Ceps2=1.8999999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=C1(eta)*S*epsilon:wallSink=P-Ew(K):frozen-prescribed-zero-reaction:numerical_operator=GeneratedVolumeOwnerV1:eta=0:neutral=0:us=0.40000000000000002:direction=1,0:chart_functions=0:temporal_coupling=PimpleSingleSweep|E0=0.31061366533500462|K0=0.53192103301026816|KAPPA=0.41208747162475556|KINVIS=1.5e-05|QSTAR=3.3245064563141753|RANSKAPPA=0.41208747162475556|RANSOPENEQUILIBRIUMQ=3.3245064563141753|RANSOPENMEANINTERCEPT=3.6564080685323512|RANSOPENNATURALKAPPA=0.41208747162475556|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLINTERFACEORDER=64|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMASSORDER=12|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLNORMALORDER=32|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.40000000000000002|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTANGENTIALORDER=8|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|RANSWALLVOLUMEORDER=12|ROUGHM=0.83655761365924197|ROUGHX=277.83968245077466|SLOPE=0.16738104369643855|TIME=0|TIMESTEP=9.9999999999999995e-07|YAPSCALE=0.49958590610661124|ZV=-0.024153898521124598",
+      "configuration_sha256": "738dc5558bde0c6b0a7b6d745275b698b2e40dabdabf7b3232827879354fc142",
+      "time": 2e-06,
+      "state_sha256": "981ef882c6097ae391f35f46735c0b2216a15e7981194d5e2d3c15aaeefc5db0",
+      "report_sha256": "b174aab300efbbc0fda873d42877aace8ce2a4d6245027f247626caddded23a7",
+      "budget_gate": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 1.9847283538876326e-12,
+          "outer_k": 3.5706212292430095e-12,
+          "outer_epsilon": 2.126958331682971e-12,
+          "whole_k": 5.555347197885863e-12
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      },
+      "mass": {
+        "outward_net": -1.6757428777935957e-15,
+        "scale": 0.4,
+        "scaled_defect": 4.189357194483989e-15,
+        "status": "pass"
+      },
+      "captured_k_matrix": {
+        "status": "pass",
+        "maximum_defect": 3.707357337789929e-12,
+        "scale": 1.0,
+        "scaled_defect": 3.707357337789929e-12,
+        "captured_rows": 60,
+        "matrix_sha256": "3bcea3e1fa7653c0479f8fb06a0687a1692bd65b7efe89fc016e8998b9384f59",
+        "scope": "actual captured PIMPLE free-row residual plus its frozen matrix times actual raw increment; not a second reassembly using guessed frozen coefficients"
+      },
+      "physical_budget_receipt_sha256": "564a96de15dd74bfa30c352430815ec32fd224404a40a46dcaa5dbff10b39e50"
+    }
+  },
+  "physical_experimental_admission": false,
+  "execution": "complete",
+  "status": "pass"
+}

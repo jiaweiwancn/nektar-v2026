@@ -1,0 +1,229 @@
+{
+  "schema": "CT7RNHistoryBudgetControlsV1",
+  "checks": {
+    "restart": {
+      "status": "pass",
+      "state_sha256": "ff58f73dc55572af563f75849389e86d65c1dbfc2ca03ee091edd19871f146b9",
+      "report_sha256": "18354d2f9380b56e18c476e3e3af315c46d9c2d90204a969558cca5b6939568f"
+    },
+    "rollback": {
+      "status": "pass",
+      "reason": "accepted AWF hard audit exit; candidate/history retained: deliberate_PIMPLE_hard_audit_rejection",
+      "report_sha256": "61719048c737e8b02011f3ce4a0eec3131b22123b5b4f65830feaf876240ac25"
+    },
+    "old_boundary_history": {
+      "status": "pass",
+      "reason": "Wall IMEX: checkpoint signature mismatch\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\n=======================================================================\n\t      Wall evolution: native IMEX, mapped multiregion CG\n\t  Physical dimension: 2\n\t     Global unknowns: 254\n\t         MPI backend: replicated global coefficients, owned-cell collective assembly\n\t  Correction weights: chi=0.000000, eta=0.000000\n=======================================================================\nEP-AWF evolution state/history: Wall IMEX: checkpoint signature mismatch\n"
+    },
+    "pressure_level_evolution": {
+      "status": "pass",
+      "maximum_defect": 6.125655538369301e-14
+    }
+  },
+  "models": {
+    "A95": {
+      "completion": "pass",
+      "time": 2e-06,
+      "state_sha256": "ff58f73dc55572af563f75849389e86d65c1dbfc2ca03ee091edd19871f146b9",
+      "report_sha256": "4f33e198781d4bfc8fbeb5f9a92a9221d361b4a569894c270fb65d3856a20eec",
+      "budget_gate": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 3.9883721325573163e-13,
+          "outer_k": 3.6505867773151124e-13,
+          "outer_epsilon": 2.929816111940653e-12,
+          "whole_k": 4.784432398874383e-13
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      },
+      "mass": {
+        "outward_net": -6.633148891266316e-16,
+        "scale": 0.4,
+        "scaled_defect": 1.658287222816579e-15,
+        "status": "pass"
+      },
+      "captured_k_matrix": {
+        "status": "pass",
+        "maximum_defect": 6.637481363147568e-12,
+        "scale": 1.0,
+        "scaled_defect": 6.637481363147568e-12,
+        "captured_rows": 60,
+        "matrix_sha256": "ede17a1373fc6c2a76b90371931c950d321bd7237119ee6e8a5971168870cfc2",
+        "scope": "actual captured PIMPLE free-row residual plus its frozen matrix times actual raw increment; not a second reassembly using guessed frozen coefficients"
+      },
+      "physical_budget_receipt_sha256": "a3eb32291d5cf420bde3bde644877b25b5d0abd5cd5d8ffc306c9121ee3807bb"
+    },
+    "A93": {
+      "completion": "pass",
+      "time": 2e-06,
+      "state_sha256": "ff58f73dc55572af563f75849389e86d65c1dbfc2ca03ee091edd19871f146b9",
+      "report_sha256": "24c425cc31b48e527a0122cb29e3005f1ab1336d055de583c667a3a940764896",
+      "budget_gate": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 3.9883721325573163e-13,
+          "outer_k": 3.6505867773151124e-13,
+          "outer_epsilon": 2.929816111940653e-12,
+          "whole_k": 4.784432398874383e-13
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      },
+      "mass": {
+        "outward_net": -6.633148891266316e-16,
+        "scale": 0.4,
+        "scaled_defect": 1.658287222816579e-15,
+        "status": "pass"
+      },
+      "captured_k_matrix": {
+        "status": "pass",
+        "maximum_defect": 6.637481363147568e-12,
+        "scale": 1.0,
+        "scaled_defect": 6.637481363147568e-12,
+        "captured_rows": 60,
+        "matrix_sha256": "ede17a1373fc6c2a76b90371931c950d321bd7237119ee6e8a5971168870cfc2",
+        "scope": "actual captured PIMPLE free-row residual plus its frozen matrix times actual raw increment; not a second reassembly using guessed frozen coefficients"
+      },
+      "physical_budget_receipt_sha256": "de32d403020743061977d0bb16a4efd2d008edcda9ad02bdb349a71c94da1bd3"
+    },
+    "E94E95": {
+      "completion": "pass",
+      "time": 2e-06,
+      "state_sha256": "ff58f73dc55572af563f75849389e86d65c1dbfc2ca03ee091edd19871f146b9",
+      "report_sha256": "0a0f76d9a918284263d122245822a24630d2012ce7f9ce97c65bf410e28d00f9",
+      "budget_gate": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 3.9883721325573163e-13,
+          "outer_k": 3.6505867773151124e-13,
+          "outer_epsilon": 2.929816111940653e-12,
+          "whole_k": 4.784432398874383e-13
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      },
+      "mass": {
+        "outward_net": -6.633148891266316e-16,
+        "scale": 0.4,
+        "scaled_defect": 1.658287222816579e-15,
+        "status": "pass"
+      },
+      "captured_k_matrix": {
+        "status": "pass",
+        "maximum_defect": 6.637481363147568e-12,
+        "scale": 1.0,
+        "scaled_defect": 6.637481363147568e-12,
+        "captured_rows": 60,
+        "matrix_sha256": "ede17a1373fc6c2a76b90371931c950d321bd7237119ee6e8a5971168870cfc2",
+        "scope": "actual captured PIMPLE free-row residual plus its frozen matrix times actual raw increment; not a second reassembly using guessed frozen coefficients"
+      },
+      "physical_budget_receipt_sha256": "52404e84252a2581335c1ade7d478580dc664668b96f378e74e37d4a19f83d59"
+    }
+  },
+  "physical_experimental_admission": false,
+  "execution": "complete",
+  "status": "pass"
+}

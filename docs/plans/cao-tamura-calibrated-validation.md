@@ -1,5 +1,23 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-7 (2026-11-14): the separately versioned Richards--Norris flat
+> top passes independent all-row/frozen/rank/flux controls and corrected,
+> native-model-bound A93/A95/E94E95 two-step smokes. A preliminary mislabeled
+> smoke export is explicitly invalidated and retained. Displaced fixed-friction
+> fits reproduce the experimental coordinate convention; the central A95
+> resistance match needs H>7.151mm, so the retained below7mm physical family is
+> blocked. A separately named shifted-sink proposal is read-only, not an enabled
+> wall-law change. The fresh CT6 finer member passes physical budgets and gives
+> pressure order.892, while U/w still fail the unchanged temporal band; no
+> conditional curved transfers are admitted. Matched terrain/flat geometry and
+> measured34,427/63,033-slot layouts pass preflight but exceed the3,000 guard.
+> Full-domain preservation remains unexecuted. Closed fresh resources pass.
+> Next: explicit physical wall-origin/reference admission plus scalable serial
+> assembly and consistent-mass pressure action, then full-domain flat preservation
+> and conservative collar-to-roof coupling before a bounded rough-hill pilot.
+> See [CT-Accepted-7](cao-tamura-accepted-7.md). CT4--CT6 evidence and the earlier
+> unresolved physical/numerical qualifications below are unchanged.
+
 > CT-Accepted-6 (2026-11-13): the named curved Accepted manufactured route
 > passes independent kernel, geometry, native weak-operator and static
 > variable-height transmission checks for the stated Natural models. All five

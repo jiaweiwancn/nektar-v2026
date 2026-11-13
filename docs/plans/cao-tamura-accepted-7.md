@@ -233,6 +233,17 @@ to agree. Only those corrected model-bound smokes qualify all three models.
 The new negative fixture rejects the old pass-labeled coverage. No XML, state or
 history was relabeled to repair it.
 
+The corrected native inventories retain time/location/side witnesses and final
+states separately. Minimum inner-k values are`.540519/.607373/.527942`, and
+minimum outer total-epsilon values`.149420/.158392/.155307` forA93/A95/E94E95.
+Inner covariance minima are`.155316/.211639/.153578`; outer minima are
+`.207281/.176944/.193981`. A95's minimum actual radicand is`.688935` and all
+required cutoff ratios exceed3.06. These are sampled native admissibility
+margins, not global positivity proofs. Weak mass defects are below4.2e-15, while
+final pointwise raw divergence reaches approximately3.5e-4; signed isotropic
+production work remains included. The tiny smokes do not qualify steady
+reference preservation on this coarse synthetic space.
+
 ## CT6 bounded temporal question
 
 One fresh A95P4/P2 history at `dt=.0005` reaches `T=.016` with2,283 slots on
