@@ -8,12 +8,25 @@ import unittest
 from unittest.mock import patch
 import xml.etree.ElementTree as ET
 from cls_epawf_m3_cases import set_info,set_parameter,write
-from wj_h14_execution import protected,validate_pair,clone,target_preflight,QUALIFICATION,file_id,native_command
+from wj_h14_execution import protected,validate_pair,clone,target_preflight,QUALIFICATION,file_id,native_command,OwnerIndex
 
 SOURCE=Path(__file__).resolve().parents[4]
 PARENT=Path(os.environ.get('WJ_H14_PARENT',str(SOURCE/'docs/plans/wj-h13-linux/publication-v1/paired-case')))
 
 class FixedHeightExecution(unittest.TestCase):
+    def test_index_preserves_every_physical_owner_and_roundoff_role(self):
+        from wj_h13_domain import topology
+        from wj_h4_points import owners,physical
+        t=topology(PARENT/'flat/case.xml');r=dict(geometry_signature='Plane:CompositeTunnelV1:0.0875:20',parameters=[6.423173803526447e-5,.15],
+            fields=[dict(mesh=[dict(e,geometry=e['id'])for e in t['elements']])])
+        index=OwnerIndex(r)
+        for x,z in [(-10.,0.),(0.,.15),(1.25,t['chart_normal_knots'][17]),(15.,20.),(0.,t['chart_normal_knots'][18])]:
+            p=physical(r,[x,0,z]);self.assertEqual(index(p),owners(r,p))
+            for a in(0,2):
+                for s in(-1,1):
+                    q=p.copy();q[a]+=s*1e-6
+                    if -10<=q[0]<=15 and .0875<=q[2]<=20:self.assertEqual(index(q),owners(r,q))
+        with self.assertRaises(ValueError):index([-10.001,0,.2])
     def test_native_command_is_bound_to_exact_inputs(self):
         with tempfile.TemporaryDirectory()as d:
             f=Path(d)/'case.xml';f.write_text('immutable execution intent')

@@ -12,7 +12,7 @@ import shutil
 import xml.etree.ElementTree as ET
 
 from run_wj_h4 import load,save,sha
-from wj_h14_execution import clone,file_id,validate_pair
+from wj_h14_execution import clone,file_id,validate_pair,OwnerIndex
 from wj_h7_analysis import context
 from wj_h4_points import vector_hash
 from cls_epawf_m3_cases import set_info,set_parameter,write
@@ -281,7 +281,7 @@ def assessment(root,relative,version='v1'):
             for a in (0,2):
                 for s in (-1,1):q=p.copy();q[a]+=s*1e-6;add(q,'fixed physical inward/witness offset1e-6')
     inventory=dict(rule='unchanged native hard inventory plus every5x5 stored-element Lobatto/all owners, fixed physical observations/native witnesses+1e-6; Gauss8 physical volume support split at settled wall breakpoints',points=list(pts.values()))
-    save(out/'inventory.json',inventory);rows=Rows(r,[v['physical']for v in pts.values()],c)
+    save(out/'inventory.json',inventory);rows=Rows(r,[v['physical']for v in pts.values()],c,owner_lookup=OwnerIndex(r))
     if relative.startswith('target/'):
         assert len(r['state'])==24688 and [f['size']for f in r['fields']]==[6493,6493,6493,4429,255,525]
     initial_report=folder.parent/'cp0/case.evolution.json'

@@ -68,10 +68,10 @@ def wall_batch(K,H,h,nu):
 
 class Rows:
     """Sparse physical observation rows, fixed by mesh/map and explicit owners."""
-    def __init__(self,r,points,c):
+    def __init__(self,r,points,c,*,owner_lookup=None):
         self.report=r;self.config=c;rows=[];weights=[]
         for p in points:
-            for o in owners(r,p):rows.append((list(p),o));weights.append(0.)
+            for o in (owner_lookup(p)if owner_lookup is not None else owners(r,p)):rows.append((list(p),o));weights.append(0.)
         self.point_count=len(rows);g,w=np.polynomial.legendre.leggauss(8)
         for el in r['fields'][0]['mesh']:
             lo,hi=el['lower'],el['upper'];za=physical(r,lo)[2];zb=physical(r,hi)[2]

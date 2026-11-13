@@ -28,6 +28,39 @@ def native_command(admission,phase,argv):
     for v in admission['command_inputs'][phase]:
         if file_id(v['path'])!=v:raise ValueError('changed immutable target command input')
 
+class OwnerIndex:
+    """Candidate index only; the established owner validator defines every row."""
+    def __init__(self,report):
+        import numpy as np
+        self.report=report;self.mesh=report['fields'][0]['mesh']
+        self.axes=[sorted({e[k][a]for e in self.mesh for k in('lower','upper')})for a in(0,2)]
+        for z in self.axes:
+            if min(np.diff(z))<=256*np.finfo(float).eps*max(1.,max(abs(v)for v in z)):
+                raise ValueError('owner index needs separated frozen tensor intervals')
+        ix={v:i for i,v in enumerate(self.axes[0])};iz={v:i for i,v in enumerate(self.axes[1])}
+        self.cells={}
+        for j,e in enumerate(self.mesh):
+            key=(ix[e['lower'][0]],iz[e['lower'][2]])
+            if key in self.cells:raise ValueError('duplicate tensor owner cell')
+            self.cells[key]=(j,e)
+    def __call__(self,p):
+        from bisect import bisect_left
+        from wj_h4_points import chart,owner_point
+        q=chart(self.report,p);indices=[]
+        for z,a in zip(self.axes,(0,2)):
+            j=bisect_left(z,q[a]);indices.append(range(max(0,j-2),min(len(z)-1,j+2)))
+        rows=[]
+        for i in indices[0]:
+            for k in indices[1]:
+                item=self.cells.get((i,k))
+                if item is None:continue
+                order,e=item
+                try:o=owner_point(self.report,e,p)
+                except ValueError:continue
+                rows.append((order,o))
+        if not rows:raise ValueError('physical point has no native owner')
+        return [o for _,o in sorted(rows,key=lambda v:v[0])]
+
 def protected(root):
     r=copy.deepcopy(root)
     for parent,tag in (('./CONDITIONS/SOLVERINFO','I'),('./CONDITIONS/PARAMETERS','P')):

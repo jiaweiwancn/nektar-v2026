@@ -8,6 +8,7 @@ import signal
 import subprocess
 import time
 from run_wj_h4 import load, save, sha, THREADS, input_files, size
+os.environ.update(THREADS)  # before any optional admission module imports NumPy
 from run_wj_h7 import update_journal, complete_operation
 from wj6_resources import scientific_workers, tree_usage
 from wj7_command import owned_groups
