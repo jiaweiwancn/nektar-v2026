@@ -100,7 +100,31 @@ def main():
         files[str(path)]=sha(path)
     resources={}
     for path in sorted(r.glob('launch-*/resource-final.json')):
-        q=read(path);resources[str(path.parent.name)]=q;files[str(path)]=sha(path)
+        q=read(path);row=dict(final=q);files[str(path)]=sha(path)
+        launch=path.parent
+        execution=launch/'execution.json'
+        if execution.exists():
+            e=read(execution);files[str(execution)]=sha(execution)
+            row['execution']=compact(e)
+        for stem in ('worker-guard-highwater','project-highwater','worker-guard-events'):
+            source=launch/(stem+'.jsonl')
+            if source.exists():
+                files[str(source)]=sha(source)
+                row[stem]=[json.loads(line) for line in source.read_text().splitlines()]
+        # Report per-family-root suspension intervals separately from CPU and
+        # elapsed time. Summing every child's stopped duration would count the
+        # same wall interval repeatedly.
+        stopped={};intervals=[]
+        for event in row.get('worker-guard-events',[]):
+            for kind,root,pid in event['events']:
+                if root!=pid:continue
+                if kind=='pause':stopped.setdefault(pid,event['time_unix'])
+                elif kind=='resume' and pid in stopped:
+                    begin=stopped.pop(pid);intervals.append(dict(pid=pid,begin=begin,end=event['time_unix'],seconds=event['time_unix']-begin))
+        row['family_root_suspensions']=dict(closed_intervals=intervals,unclosed_begin_times=stopped,
+            total_closed_seconds=math.fsum(v['seconds'] for v in intervals),
+            scope='root suspension wall intervals; elapsed and process CPU remain separate; no child-duration double counting')
+        resources[str(launch.name)]=row
     decision=dict(schema='CT-Accepted-6-DecisionV1',mathematical_continuum=mathematics['status'] if mathematics else 'missing',
         curved_kernel=kernels['status'] if kernels else 'missing',
         conservative_native_spatial_operator='pass' if operator and all(v['status']=='pass' for v in operator.values()) else 'fail_or_missing',
