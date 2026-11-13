@@ -8,6 +8,13 @@ from wj_h9_local import same,external_ids,phase_bindings,MomentAudit
 MATRIX=(('coarse',.01),('fine',.005),('quarter',.0025))
 QUALITY=.002068763923454
 
+def remaining_matrix(book,resume=False):
+    if not resume:return MATRIX
+    assert not book.get('h10_halt')and not book.get('coverage_halt')
+    assert (book['cp0_reservations'],book['governing_attempts'],book['strict_readbacks'])==(1,1,1)
+    return MATRIX[1:]
+
+
 def preservation(r):
     d=r['initial_velocity_diagnostic'];a=np.asarray(d['pre_state']);b=np.asarray(d['post_state']);off=r['offsets']
     assert r['initial_velocity_mode']=='FlatInletTraceV1'and r['initial_velocity_calls']==1

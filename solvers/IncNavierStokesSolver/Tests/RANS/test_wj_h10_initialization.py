@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 import numpy as np
-from wj_h10_analysis import MATRIX,QUALITY,gates,residual_check
+from wj_h10_analysis import MATRIX,QUALITY,gates,residual_check,arithmetic,remaining_matrix
 from wj_h9_local import same
 from run_wj_h10 import native_intent,runtime_snapshot
 from cls_epawf_m3_cases import set_info,set_parameter,write
@@ -55,6 +55,23 @@ class FlatInletInitialization(unittest.TestCase):
             self.assertEqual(native_intent(r,[str(r/'runtime/IncNavierStokesSolver'),str(p)],'cp0'),'cp0:coarse:cp0')
             set_parameter(x,'TimeStep',.005);write(x,p)
             with self.assertRaises(AssertionError):native_intent(r,[str(r/'runtime/IncNavierStokesSolver'),str(p)],'cp0')
+    def test_zero_relaunch_resume_scope(self):
+        b=dict(cp0_reservations=1,governing_attempts=1,strict_readbacks=1)
+        self.assertEqual(remaining_matrix(b,True),MATRIX[1:])
+        for changed in (dict(b,strict_readbacks=2),dict(b,h10_halt={'status':'UNRESOLVED'}),dict(b,governing_attempts=0)):
+            with self.assertRaises(AssertionError):remaining_matrix(changed,True)
+    def test_actual_arithmetic_accepts_decoded_list_rhs(self):
+        from wj_h4_points import vector_hash
+        c=np.zeros(108);c[2:4]=1;f=c.copy();f[4:6]=[.2,-.4];k=f.copy();k[2]=1.2;a=k.copy();a[3]=1.3
+        h=vector_hash(c);packets=[dict(state_sha256=h,time=0.,alpha_mass=0),dict(state_sha256=vector_hash(a),time=.01,alpha_mass=100.,callback_history=c.tolist(),stage_history_sha256=h)]
+        counters={x:1 for x in ('momentum_predictor_solves','pressure_system_solves','k_transport_solves','epsilon_transport_solves','bound_calls')};counters['bound_activations']=0
+        r=dict(offsets=[0,1,2,3,4,38,108],dt=.01,steps=1,accepted_states=[c.tolist(),a.tolist()],wj_audit_packets=packets,fixed_reference=c.tolist(),initialization_lift_calls_iterations=[0,0],initial_velocity_calls=0,pimple_attempts=[counters])
+        snap=dict(time=.01,alpha=100.,history=c.tolist(),fixed_reference=c.tolist(),committed=c.tolist(),post_flow=f.tolist(),pre_k=f.tolist(),raw=k.tolist(),corrected=k.tolist(),k_bound=dict(activations=0,mass_norm_correction=0))
+        dp=np.zeros(104);dp[:2]=[.2,-.4];BG=np.zeros((104,2));BG[:2]=np.eye(2);S=np.zeros((104,104));S[:2,:2]=np.eye(2)
+        mom=dict(rows=[0,1],solution=[.2,-.4],rhs=[20.,-40.],linear_residual=[0.,0.]);p=dict(rows=list(range(4,108)),solution=dp.tolist(),rhs=dp.tolist(),linear_residual=[0.]*104)
+        class Moments:
+            def moments(self,x,solve=True):return {'4':dict(moments=[float(x[0]),float(x[1])]+[0.]*32),'5':dict(moments=[0.]*70)}
+        result=arithmetic(r,snap,mom,p,np.eye(2),BG,S,100*np.eye(2),Moments());self.assertEqual(result['status'],'PASS');self.assertEqual(result['total_velocity_increment'],[0.,0.])
     def test_native_runtime_snapshot_excludes_preexec_union(self):
         root=Path('/h10');host='/usr/lib/libc.so.6';private='/h10/runtime/glibc/libc.so.6';exe='/h10/runtime/RANSWallResolutionProbe.elf'
         self.assertIsNone(runtime_snapshot(root,[host]))
