@@ -1,0 +1,41 @@
+Get:1 http://mirrors.tuna.tsinghua.edu.cn/ubuntu jammy-updates/main amd64 libc6 amd64 2.35-0ubuntu3.15 [3234 kB]
+Fetched 3234 kB in 3s (991 kB/s)
+PASS exact hashes of all six recovered H6 glibc files
+	Command being timed: "python3 -c from pathlib import Path
+import subprocess,json,hashlib,shlex
+r=Path.cwd();d=r/'private-glibc';d.mkdir();subprocess.run(['apt-get','download','libc6=2.35-0ubuntu3.15'],cwd=d,check=True,timeout=40)
+deb=next(d.glob('*.deb'));subprocess.run(['dpkg-deb','-x',str(deb),str(d/'extract')],check=True,timeout=10)
+changes=json.loads((r/'runtime-differences-v1.json').read_text());overrides={}
+for item in changes:
+ path=d/'extract/lib/x86_64-linux-gnu'/Path(item['path']).name;b=path.read_bytes();h=hashlib.sha256(b).hexdigest();assert h==item['expected_sha256'],str(path)
+ overrides[item['path']]=dict(path=str(path),bytes=len(b),sha256=h)
+loader=overrides['/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2']['path'];lib=str(d/'extract/lib/x86_64-linux-gnu')
+base=r.parent/'wj-h2-20261111';targets={'IncNavierStokesSolver':base/'runtime-v4/IncNavierStokesSolver','RANSWallResolutionProbe':base/'observer-v6/RANSWallResolutionProbe','WJKernelProbe':base/'build-v1/WJKernelProbe'}
+out=r/'runtime';out.mkdir()
+for name,exe in targets.items():
+ p=out/name;p.write_text('#!/bin/sh\nexec '+shlex.quote(loader)+' --library-path '+shlex.quote(lib+':'+str(r.parent/'wj-h1-20261111/build-v1/geometry-lib')+':/home/jay/.local/opt/nektar-v2026-mpi/lib64')+' '+shlex.quote(str(exe))+' "$@"\n');p.chmod(0o755)
+(r/'private-runtime.json').write_text(json.dumps(dict(reason='recover exact H6 library bytes after host upgrade, no installed changes',deb=dict(path=str(deb),sha256=hashlib.sha256(deb.read_bytes()).hexdigest()),overrides=overrides,loader=loader,wrappers={k:str(out/k)for k in targets}),indent=2)+'\n')
+print('PASS exact hashes of all six recovered H6 glibc files')
+"
+	User time (seconds): 0.50
+	System time (seconds): 0.16
+	Percent of CPU this job got: 17%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.90
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 99328
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 15084
+	Voluntary context switches: 1589
+	Involuntary context switches: 6
+	Swaps: 0
+	File system inputs: 272
+	File system outputs: 38512
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

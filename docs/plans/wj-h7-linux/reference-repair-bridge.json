@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "superseded_reference_view": {
+    "path": "/tmp/wj-h7-compact-20261113/publication/seal.json",
+    "bytes": 16103,
+    "sha256": "62c8ec91924b9975f93b071f8bc3d8016ce92d6e147be7210e4fec5fe089d15a"
+  },
+  "corrected_view": {
+    "path": "/tmp/wj-h7-owner-repair/publication-owner-v2/seal.json",
+    "bytes": 16696,
+    "sha256": "056e745eb04d2f1ce88a18a958cebe235c0a0f2c28738a675e040de49579f19c"
+  },
+  "reason": "reference at H selected by explicit owner/region; z-d0 subtraction could round outer trace below H",
+  "immutable_native_data": true,
+  "physical_L2_bitwise_unchanged": true,
+  "principal_drift_dt_and_native_decisions_unchanged": true,
+  "tests": "nine H7 focused methods PASS",
+  "receipts": [
+    {
+      "label": "owner-fixtures",
+      "argv": [
+        "python3",
+        "-B",
+        "/tmp/wj-h7-owner-repair/test_wj_h7_transport.py"
+      ],
+      "exit": 0,
+      "seconds": 1.5067420220002532,
+      "peak_rss": 97247232,
+      "scope": "measurement-only H owner repair within already-charged240s closure; no new allocation/native work"
+    },
+    {
+      "label": "owner-publication-v2",
+      "argv": [
+        "python3",
+        "/tmp/wj-h7-owner-repair/publish_wj_h7.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113",
+        "--output",
+        "/tmp/wj-h7-owner-repair/publication-owner-v2",
+        "--repair-reference"
+      ],
+      "exit": 0,
+      "seconds": 44.61557354599063,
+      "peak_rss": 438030336,
+      "scope": "measurement-only H owner repair within already-charged240s closure; no new allocation/native work"
+    }
+  ],
+  "allocation": "repair/verification/transport within already-charged240s closure reserve; original1800 total and unknown storage charge unchanged",
+  "source": "2785c44"
+}

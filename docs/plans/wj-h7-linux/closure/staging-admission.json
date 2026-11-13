@@ -1,0 +1,39 @@
+{
+  "prior_charged_seconds_including_live_checkout_age": 1187.0203165800049,
+  "checkout_age": 408,
+  "publication_cap": 120,
+  "closure": 240,
+  "ceiling": 1800,
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 1956,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2111,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 131067,
+        "parent": 131066,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/launch-build-v1 -- python3 -"
+      },
+      {
+        "pid": 131238,
+        "parent": 131237,
+        "threads": 1,
+        "args": "python3 -"
+      }
+    ]
+  },
+  "primary_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113",
+  "compact_side_root": "/tmp/wj-h7-compact-20261113",
+  "reason": "primary NTFS metadata blocked in ntfs_look_free_mft; no heavy/native relocation"
+}

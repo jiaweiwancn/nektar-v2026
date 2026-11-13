@@ -70,7 +70,13 @@ def verify_runtime(root):
         value=identity(path);assert value['sha256']==v['sha256'],'changed qualified ELF: '+original
         elf.append(dict(value,original=original))
     assert len(checks)==340 and len(elf)==133
-    save(root/'runtime-equivalence.json',dict(status='PASS',compiled_inputs=checks,qualified_ELFs=elf,
+    base=root.parent/'wj-h2-20261111';executables={}
+    for role,path,expected in (
+        ('governing',base/'runtime-v4/IncNavierStokesSolver','9ae37a1aba62755b10ad99c9484c498cef9d927a75fb950f00344f4ffc5d06fe'),
+        ('observer',base/'observer-v6/RANSWallResolutionProbe','6f35b837f0dd13eb155e0fe34f0dc670c609ee6cbe739609a5de288dd49ed06d'),
+        ('kernel',base/'build-v1/WJKernelProbe','3d4edf79a2718a281175be1a575776a33dd5f988c48d5a1b594a9b5f2dd7844c')):
+        executables[role]=identity(path);assert executables[role]['sha256']==expected,'changed H6 executable '+role
+    save(root/'runtime-equivalence.json',dict(status='PASS',compiled_inputs=checks,qualified_ELFs=elf,executables=executables,
         private_runtime=identity(root/'private-runtime.json'),generating_source=identity(__file__),
         governing_producer='c344dc2209f030e426e2ee5501d5e5b72a6d2c46',observer_producer='e62b5f4d265f068dd5af3f090bfb0e385c3ae53e',
         native_rebuild=False,arithmetic_policy='GNU11.4 C++17 Release -O3 -DNDEBUG -ffp-contract=off -fno-fast-math; RANS_BUILD_SOLVER=ON',

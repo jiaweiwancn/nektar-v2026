@@ -1,0 +1,102 @@
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+CMake Warning at CMakeLists.txt:295 (add_executable):
+  Cannot generate a safe runtime search path for target IncNavierStokesSolver
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/focused-config/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:299 (add_executable):
+  Cannot generate a safe runtime search path for target RANSFieldAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/focused-config/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:301 (add_executable):
+  Cannot generate a safe runtime search path for target RANSWallFieldAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/focused-config/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:304 (add_executable):
+  Cannot generate a safe runtime search path for target RANSObservationAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/focused-config/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:604 (add_executable):
+  Cannot generate a safe runtime search path for target WJTerrainCoupledProbe
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/focused-config/geometry-lib]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+-- Generating done
+-- Build files have been written to: /media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/focused-config
+	Command being timed: "cmake -S /media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/source-73ca56e/solvers/IncNavierStokesSolver/Tests/RANS -B /media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/focused-config -DRANS_BUILD_SOLVER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math -DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+	User time (seconds): 0.89
+	System time (seconds): 0.38
+	Percent of CPU this job got: 98%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.30
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 59392
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 53376
+	Voluntary context switches: 152
+	Involuntary context switches: 7
+	Swaps: 0
+	File system inputs: 312
+	File system outputs: 9352
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

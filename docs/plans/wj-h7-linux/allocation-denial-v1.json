@@ -1,0 +1,28 @@
+{
+  "status": "RESOURCE_LIMIT",
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 1956,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2111,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 129195,
+        "parent": 129194,
+        "threads": 1,
+        "args": "python3 -"
+      }
+    ]
+  },
+  "native_launches": 0,
+  "reason": "workers+10 conservative reserve exceeds72 before prepare"
+}
