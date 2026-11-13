@@ -196,7 +196,7 @@ def arithmetic(report,measurement):
         evaluation_sensitivity=measurement['arithmetic_evaluation_sensitivity'])
 
 
-def checkpoint_payload(directory):
+def checkpoint_payload(directory,*,include_reference=False):
     """Read immutable native binary64 values; the compiled reader independently
     validates schema/checksum/signature and all slots before any measurement.
     This function never creates or modifies a checkpoint.
@@ -215,6 +215,8 @@ def checkpoint_payload(directory):
     order=scalar('Q');steps=scalar('Q');t,dt,eta=[scalar('d') for _ in range(3)]
     primary=vector();history=[vector() for _ in range(scalar('Q'))];times=vector();state=vector();reference=vector();defect=vector()
     require(position==len(data)-8,'checkpoint trailing data or unsupported schema')
-    return dict(signature=signature,order=order,steps=steps,time=t,dt=dt,eta=eta,state=state,
+    payload=dict(signature=signature,order=order,steps=steps,time=t,dt=dt,eta=eta,state=state,
         native_differential_state=primary,native_history=history,native_history_times=times,checkpoint=str(directory),
         reference_sha256=__import__('run_cls_epawf_picard').state_hash(reference))
+    if include_reference:payload.update(fixed_reference=reference,fixed_defect=defect)
+    return payload

@@ -48,8 +48,11 @@ def residual_check(actual,expected,scale):
     return dict(maximum_error=float(np.max(error)),maximum_limit=float(np.max(limit)),status='PASS')
 
 
-def arithmetic(r,snapshot,momentum,pressure,mass,BG,Schur,Au,mom):
-    states,binding=phase_bindings(r,snapshot,1);assert binding['P_C_bitwise']
+def arithmetic(r,snapshot,momentum,pressure,mass,BG,Schur,Au,mom,step=1):
+    # Defaults preserve H10. Restarted producers require an explicit absolute step.
+    first=r['steps']+1-len(r['accepted_states']);local_attempt=step-first-1
+    assert 0<=local_attempt<len(r['pimple_attempts']),'selected step has no completed attempt in this producer'
+    states,binding=phase_bindings(r,snapshot,step);assert binding['P_C_bitwise']
     vu=np.array(momentum['rows'],int);pp=np.array(pressure['rows'],int);predictor=np.asarray(momentum['solution']);dpi=np.asarray(pressure['solution']);rhs=np.asarray(pressure['rhs'])
     assert np.all(vu<r['offsets'][2])and np.all(pp>=r['offsets'][4])and len(pp)==104
     correction=dpi@BG;du=states['F'][vu]-states['C'][vu];actual_dpi=states['F'][pp]-states['C'][pp]
@@ -66,7 +69,7 @@ def arithmetic(r,snapshot,momentum,pressure,mass,BG,Schur,Au,mom):
         full_Schur_action=residual_check(Schur@dpi,dc,abs(Schur)@abs(dpi)+abs(dc)))
     assert max(abs(c))<=2e-15 and max(abs(f))<=2e-15
     assert r['initialization_lift_calls_iterations']==[0,0]and r['initial_velocity_calls']==0
-    a=r['pimple_attempts'][0]
+    a=r['pimple_attempts'][local_attempt]
     for name in ('momentum_predictor_solves','pressure_system_solves','k_transport_solves','epsilon_transport_solves','bound_calls'):assert a[name]==1
     assert a['bound_activations']==0
     return dict(status='PASS',binding=binding,checks=checks,velocity_rows=vu.tolist(),pressure_rows=pp.tolist(),predictor=predictor.tolist(),BGp_delta_pi=correction.tolist(),pressure_correction_velocity=(-correction).tolist(),complete_Gp_delta_pi=((mass@correction)/r['dt']).tolist(),correction_sign='delta_u = predictor + pressure_correction_velocity; BGp_delta_pi is subtracted',total_velocity_increment=du.tolist(),
