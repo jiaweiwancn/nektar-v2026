@@ -1,0 +1,56 @@
+{
+  "schema": "CT-Accepted-7-V1",
+  "starting_revision": "4e253fe03f4c6460040f9359e57f578426f2a7b8",
+  "starting_state": "clean implementation worktree; fetched remote identical; unrelated main checkout preserved",
+  "outcomes": ["CT6 temporal diagnosis", "experimental fit and reference admissibility", "Richards-Norris top verification", "terrain/flat domain geometry and capacity", "conditional full-domain preservation", "remaining terrain admission"],
+  "unchanged": "original Natural A93/A95/E94E95; model equilibrium K; finite inner nu and zero outer molecular diffusion; transported nonconstant inner k, dependent epsilon, full raw-gradient signed production and covariance; one-sweep ordering; no clipping, restoration, trace repair, reference residual cancellation, EP or backend expansion",
+  "sources": {
+    "Richards_Norris": "2011 JWEIA99 pp257-266 DOI10.1016/j.jweia.2010.12.008, p259 Eq23/item4 and pp261-262 empty-domain test",
+    "Cao_Tamura": "2006 section3.1 p6 Fig3e; u_tau/Uinf=.051 and d=.7*5mm determined before z0 fit",
+    "specifications": ["docs/literature/A93_A95_E94_E95_neutral_ABL_EP_AWF_combined.tex", "docs/literature/accepted_awf_appendix_A93_A95_E94_E95.tex"]
+  },
+  "fit": {
+    "primary": "CT7DisplacedFourPointV1",
+    "selection_before_wall_feasibility": "visible f3a_R points in 10--30.5mm physical height, starting above two nominal cube heights and ending near .12 of nominal .25m layer depth; corroborate with f3b_R near-wall shear before evaluating wall roots; not a claim to recover the authors unstated exact interval",
+    "ids": [0,1,2,3],
+    "weights": [1,1,1,1],
+    "control": "same points with d=0 reproduce archived CT4; no change to archived fits",
+    "normalization": "Hh=.04m and original U(40mm) interpolation; nu*=1/10500; no renormalization to fitted U(Hh)",
+    "ustar_Uinf": 0.051,
+    "displacement_m": 0.0035,
+    "uncertainty": "joint coordinate/velocity extraction on IDs0--5,4096 vertices+256 seeded Sobol interiors+central; same realization in fit and40mm normalization, including point3 and changed brackets; fixed membership; not confidence intervals; no invented experimental/probe or displacement uncertainty",
+    "held_out": "all unused f3a_R mean points, Fig3e duplicate and turbulence checks retain source roles; no hill fitting"
+  },
+  "wall": {
+    "heights_mm": [5.5,6.0,6.5,6.99],
+    "upper_height_constraint": "strictly below nominal7mm rough Fig12 stress traverse, also report9.121mm lower flat-stress extraction; do not enlarge heights to obtain a root",
+    "roughness_domain": "0<=h_s<H_A; original resistance and roughness correlation; h_s=H_A is a limiting diagnostic only",
+    "proposed_policy": "SamePhysicalWallDisplacedAcceptedCandidateV1: E=A/(max(r,c)-d), d<c<=H; flat budget P0/A=c/(c-d)+log((H-d)/(c-d)); require P0>=A*H/(H-d); reconstruct k, fluxes, stresses independently; no automatic native or curved admission",
+    "alternatives": "modeled wall at displacement plane changes domain and physical H; original d0 remains archived control, not experimental convention",
+    "native_displaced_admission": "requires a compatible separately versioned wall policy; never silently enable displacement on original Accepted profile"
+  },
+  "top": {
+    "policy": "AcceptedRichardsNorrisFlatV1",
+    "normal_velocity": "essential w=0",
+    "natural_data": "t_x=+u_tau^2,g_k=0,g_epsilon=-u_tau^4/(sigma_epsilon*(Z_T-d)); prescribed physical fluxes, no evolving diffusivity factor",
+    "pressure": "absolute outlet total traction, no mean gauge or separate top normal traction; physical pressure tests remain free",
+    "fixtures": "small serial flat two-column P3/P1 and P4/P2; d0 compatible original Accepted reference is an explicitly nonexperimental control; all top modes and corner precedence checked",
+    "tolerances": {"all_row_and_frozen_operator":2e-10,"geometry":2e-11,"pressure_rank_relative_floor":1e-10,"physical_mass":1e-8,"physical_scalar_budget":0.02},
+    "negative_controls": ["zero epsilon top flux", "reversed driving shear", "evolving-diffusivity substituted for physical epsilon datum", "old boundary history", "unqualified displaced native reference"]
+  },
+  "CT6": {
+    "reuse": "sealed RT12 governing executable and unchanged continuous MMS, Gaussian geometry and physical inventory; all old failures immutable",
+    "fresh": "P4/P2 dt=.0005,T=.016,independent zero-step history; if temporal question resolves, one matched P3/P1 dt=.0005",
+    "comparison": "new .002/.001/.0005 triplet with original .8--1.2 order band and1e-6 signal floor; absolute pressure admission; offset/spatial/interface pressure decomposition diagnostic only; degree threshold.85,uncertainty treatment unchanged",
+    "diagnosis": "stored Pi time; initial weak continuity; actual stage/current-time lift vs frozen coefficients; flow/epsilon/k pressure and traction; refreshed dependent epsilon lag; no governing change without a violated discrete identity",
+    "model_transfer": "only complete A95 admission permits bounded A93/E94E95 curved evolutions; no open-ended timestep/mesh search"
+  },
+  "target_domain": {
+    "candidate": "latest terrain generator audited first; absent superseding case use x=[-25,30]Hh,roof20Hh; flat pair retains extents, partitions, connectivity and reference functions",
+    "geometry": "positive injective normal collar joined to an outer map with fixed horizontal roof; pure normal experimental hill map cannot reach20Hh; new geometry definition is not native coupled-map qualification",
+    "capacity": "measure native count before evolution; retain3000 stored slots and all unsupported-route guards; over-limit domain remains unexecuted with explicit scalable assembly/solver work package",
+    "preservation_if_admitted": "requires complete reference and supported backend; predeclared1 flow-through,stages .01,.1,1 transit,independent dt pair chosen from target mesh scales; field drift1e-3 on u_tau,K,epsilon(H),u_tau^2; w1e-4; ground/interface traction1e-3; timestep spread<=max(1e-7,.1*measured drift),mass1e-8,complete budgets.02; no launch if admission blocked"
+  },
+  "resources": {"project_workers":16,"aggregate_workers":72,"compiler_jobs":2,"numerical_library_threads":1,"numerical_families":1,"root":"/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-7-20261113","guard":"ct_accepted3_command.py owner-aware launcher,including helpers"},
+  "stop": "first genuine domain/accuracy/required gate failure retains candidate and last accepted history; continue independent scopes; do not launch inadmissible physical data or bypass capacity; collector completion is not admission"
+}
