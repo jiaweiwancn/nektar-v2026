@@ -54,9 +54,9 @@ std::string FlatInletChecks(RANSWallEvolutionPatch &patch,
     auto map=patch.Mapping();map.slopeX=.1;expect([&]{patch.ValidateFlatInletTraceMap(map);},"horizontal zero-hill");
     map=patch.Mapping();map.kind=RANSWallNormalMap::Kind::CosineHill;map.amplitude=.1;expect([&]{patch.ValidateFlatInletTraceMap(map);},"horizontal zero-hill");
     map=patch.Mapping();map.heightSlopeX=.01;expect([&]{patch.ValidateFlatInletTraceMap(map);},"horizontal zero-hill");
-    serial->SetParameter("RANSWallAcceptedKAmplitude",.01);
+    double amplitude=.01;serial->SetParameter("RANSWallAcceptedKAmplitude",amplitude);
     expect([&]{RANSWallEvolutionPatch p(serial,graph,comm,patch.Parameters(),patch.Mapping());},"forbids initial perturbations");
-    serial->SetParameter("RANSWallAcceptedKAmplitude",0.);
+    amplitude=0.;serial->SetParameter("RANSWallAcceptedKAmplitude",amplitude);
     const auto active=RANSWallPhysicsSignature(patch,serial,0.,false,.051,{1.,0.},false);
     serial->SetSolverInfo("RANSWallInitialVelocity","Off");
     RANSWallEvolutionPatch off(serial,graph,comm,patch.Parameters(),patch.Mapping());
