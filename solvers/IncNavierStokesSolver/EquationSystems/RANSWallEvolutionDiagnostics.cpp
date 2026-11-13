@@ -461,25 +461,33 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
     Require(m_variantName=="Original" && !m_cappedDestruction && m_innerStress==RANSWallInnerStressModel::Linear,
         "verification requires original outer, linear inner and prescribed uncapped sources");
     EvaluationScope evaluation(*this,data,time);Refresh(state,time,&data);
-    auto row=[&](const RANSWallGlobalPoint &p)
-    {return J::Object({{"ids",J::Numbers(p.ids)},{"phi",J::Numbers(p.phi)},
+    auto row=[&](const RANSWallGlobalPoint &p,int block=-1)
+    {std::vector<std::pair<std::string,std::string>> result{{"ids",J::Numbers(p.ids)},{"phi",J::Numbers(p.phi)},
         {"constant",J::Numbers(p.constant)},
         {"derivative",J::Rows(p.derivative)},{"geometry",J::Number(p.geometry)},
         {"element",J::Number(p.element)},
         {"endpoint_roundoff_axes",J::Number(p.endpointRoundoffAxes)},
-        {"raw_local_coordinate",J::Numbers(p.rawLocalCoordinate)}});};
+        {"raw_local_coordinate",J::Numbers(p.rawLocalCoordinate)}};
+     if(CurvedVerification() && block>=0)
+     {
+         const auto chart=fields[block]->ElementPoint(p.element,p.coordinate);
+         Require(chart.ids==p.ids,"CT6 exported chart/physical row ownership differs");
+         result.push_back({"native_chart_derivative",J::Rows(chart.derivative)});
+         result.push_back({"native_chart_phi",J::Numbers(chart.phi)});
+     }
+     return J::Object(result);};
     std::unique_ptr<RANSWallManufactured> manufactured;
     if(CurvedManufactured())manufactured=std::make_unique<RANSWallManufactured>(*this);
     auto point=[&](const VolumePoint &q,int region)
     {
         std::vector<std::pair<std::string,std::string>> fields{{"coordinate",J::Numbers(q.v.coordinate)},{"weight",J::Number(q.weight)},
-            {"region",J::Number(region)},{"velocity_k",row(q.v)},{"pressure",row(q.p)},
+            {"region",J::Number(region)},{"velocity_k",row(q.v,0)},{"pressure",row(q.p,InnerPressure()+region)},
             {"physical_coordinate",J::Numbers(Physical(q.v.coordinate))},
             {"volume_metric",J::Number(m_mapping.At(q.v.coordinate).determinant)},
             {"normal_J",J::Number(m_mapping.At(q.v.coordinate).J)},
             {"generating_geometry",J::Number(q.generatingGeometry)},
             {"generating_radial_panel",J::Numbers(Vector{q.panelLower,q.panelUpper})},
-            {"epsilon",region==1?row(q.e):"null"}};
+            {"epsilon",region==1?row(q.e,Epsilon()):"null"}};
         if(manufactured)
         {
             const auto &chart=q.v.coordinate;auto H=chart;H[2]=m_parameters.geometry.height;
@@ -495,9 +503,9 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
                 {"body",J::Numbers(body)},{"outer_body_at_H",J::Numbers(outerBody)},
                 {"k_source",J::Number((region?data.outerKSource:data.innerKSource)(chart,time))},
                 {"epsilon_source",region?J::Number(data.outerEpsilonSource(chart,time)):"null"},
-                {"H_velocity_k_row",row(Point(0,H,1))},
-                {"H_pressure_row",row(Point(OuterPressure(),H,1))},
-                {"H_epsilon_row",row(Point(Epsilon(),H,1))},
+                {"H_velocity_k_row",row(Point(0,H,1),0)},
+                {"H_pressure_row",row(Point(OuterPressure(),H,1),OuterPressure())},
+                {"H_epsilon_row",row(Point(Epsilon(),H,1),Epsilon())},
                 {"H_normal",J::Numbers(metric.normal)},{"H_Br",J::Rows(metric.Br)},
                 {"continuous_values",J::Numbers(exact.value)},
                 {"continuous_gradients",J::Rows(exact.gradient)},
@@ -513,7 +521,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         }
         return J::Object(fields);
     };
-    std::vector<std::string> volume,bodyVolume,faces,mass,profiles,values,gradients,regions,observedSides,provenance,tractions,dependentEpsilon;
+    std::vector<std::string> volume,bodyVolume,faces,cellFaces,mass,profiles,values,gradients,regions,observedSides,provenance,tractions,dependentEpsilon;
     std::size_t ni=0,no=m_outer.size();
     for(const auto &ray:m_rays)
     {
@@ -551,8 +559,8 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
                 std::vector<std::pair<std::string,std::string>> record{{"coordinate",J::Numbers(f.test.coordinate)},{"weight",J::Number(f.weight)},
                     {"area",J::Numbers(f.area)},{"region",J::Number(region)},
                     {"interface",J::Boolean(axis==2 && location==H)},
-                    {"velocity_k",row(f.test)},{"pressure",row(pressure)},
-                    {"epsilon",region==1?row(GeometryPoint(Epsilon(),f.test.geometry,f.test.coordinate)):"null"}};
+                    {"velocity_k",row(f.test,0)},{"pressure",row(pressure,InnerPressure()+region)},
+                    {"epsilon",region==1?row(GeometryPoint(Epsilon(),f.test.geometry,f.test.coordinate),Epsilon()):"null"}};
                 if(manufactured)
                 {
                     const auto exact=manufactured->At(f.test.coordinate,time,region==1);
@@ -564,7 +572,19 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
             }
         }
         for(const auto &q:Quadrature(InnerPressure()+region))mass.push_back(J::Object({
-            {"coordinate",J::Numbers(q.coordinate)},{"weight",J::Number(q.weight)},{"region",J::Number(region)},{"pressure",row(q)}}));
+            {"coordinate",J::Numbers(q.coordinate)},{"weight",J::Number(q.weight)},{"region",J::Number(region)},{"pressure",row(q,InnerPressure()+region)}}));
+    }
+    if(basis && CurvedVerification())for(int block:{0,Epsilon(),InnerPressure(),OuterPressure()})
+    {
+        std::array<std::set<double>,3> locations;
+        for(const auto &e:fields[block]->Elements())for(int axis:{0,2})
+        {locations[axis].insert(e.lower[axis]);locations[axis].insert(e.upper[axis]);}
+        for(int axis:{0,2})for(double location:locations[axis])for(int side:{-1,1})
+            for(const auto &f:Surface(block,axis,location,side,m_interfaceOrder?m_interfaceOrder:12))
+                cellFaces.push_back(J::Object({{"block",J::Number(block)},{"axis",J::Number(axis)},
+                    {"side",J::Number(side)},{"coordinate",J::Numbers(f.test.coordinate)},
+                    {"weight",J::Number(f.weight)},{"area",J::Numbers(f.area)},
+                    {"row",row(f.test,block)}}));
     }
     Require(sides.empty() || sides.size()==grid.size(),"sample side count differs");
     for(int index=0;index<grid.size();++index)
@@ -627,6 +647,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
                 "Gauss32 on native radial elements, supplied breakpoints and geometric 1e-4*1.5^j subpanels")},
             {"inner_volume_points",J::Number(ni)},{"outer_volume_points",J::Number(no)}})},
         {"profiles",J::List(profiles)},{"volume",J::List(volume)},{"CT6_body_volume",J::List(bodyVolume)},
+        {"CT6_cell_faces",J::List(cellFaces)},
         {"faces",J::List(faces)},{"pressure_mass",J::List(mass)},
         {"audit_alpha_zero",J::Object(diagnostic)},
         {"grid",J::Rows(grid)},{"grid_regions",J::List(regions)},

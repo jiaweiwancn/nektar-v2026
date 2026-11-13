@@ -14,6 +14,7 @@ import numpy as np
 from ct_accepted_feasibility import Column,parameters,require
 from ct_accepted_open import row_value
 from validate_a93_a95_e94e95 import oracle
+from scipy.integrate import quad
 
 
 def geometry(q,r,amplitude=.005):
@@ -21,6 +22,47 @@ def geometry(q,r,amplitude=.005):
     a=math.sqrt(1+hp*hp);gamma=-hpp/a**3;J=1+r*gamma
     t=np.array([1/a,0,hp/a]);n=np.array([-hp/a,0,1/a])
     return a,J,gamma,t,n
+
+
+def geometry_qualification(packet,amplitude=.005):
+    o=packet['observation'];sizes=o['sizes'];H=.5
+    integrals={};faces={};volumes={};worst=0.;constant=0.;cofactor=0.
+    def check_row(row,coordinate):
+        nonlocal worst,constant
+        a,J,gamma,t,n=geometry(coordinate[0],coordinate[2],amplitude)
+        chart=np.asarray(row['native_chart_derivative']);d=np.asarray(row['derivative'])
+        expected=t[:,None]*chart[0]/(a*J)+n[:,None]*chart[2]
+        worst=max(worst,float(np.max(abs(expected-d)))/max(1.,float(np.max(abs(expected)))),float(np.max(abs(np.asarray(row['native_chart_phi'])-row['phi']))))
+        c=np.asarray(row['constant']);constant=max(constant,abs(float(c@row['phi'])-1),float(np.max(abs(d@c)))/max(1.,float(np.max(abs(d)))))
+    def volume(block,row,coordinate,weight):
+        check_row(row,coordinate);key=(block,row['geometry']);ids=np.asarray(row['ids'],int)
+        if key not in integrals:integrals[key]=np.zeros((sizes[block],3))
+        integrals[key][ids]+=weight*np.asarray(row['derivative']).T
+        volumes[block]=volumes.get(block,0.)+weight
+    for point in o['volume']:
+        volume(0,point['velocity_k'],point['coordinate'],point['weight'])
+        a,J,*_=geometry(point['coordinate'][0],point['coordinate'][2],amplitude)
+        worst=max(worst,abs(a*J-point['volume_metric']),abs(J-point['normal_J']))
+        if point['region']:volume(3,point['epsilon'],point['coordinate'],point['weight'])
+    for point in o['pressure_mass']:volume(4+point['region'],point['pressure'],point['coordinate'],point['weight'])
+    for f in o['CT6_cell_faces']:
+        check_row(f['row'],f['coordinate']);a,J,gamma,t,n=geometry(f['coordinate'][0],f['coordinate'][2],amplitude)
+        expected=f['side']*(t if f['axis']==0 else a*J*n)
+        cofactor=max(cofactor,float(np.max(abs(expected-np.asarray(f['area'])))))
+        block=f['block'];key=(block,f['row']['geometry']);ids=np.asarray(f['row']['ids'],int)
+        if key not in faces:faces[key]=np.zeros((sizes[block],3))
+        faces[key][ids]+=f['weight']*np.asarray(f['row']['phi'])[:,None]*np.asarray(f['area'])
+    require(set(integrals)==set(faces),'missing_native_element_face_inventory')
+    stokes=max(float(np.max(abs(integrals[key]-faces[key])))/max(1.,float(np.max(abs(integrals[key]))),float(np.max(abs(faces[key])))) for key in integrals)
+    bounds={0:(0.,1.),3:(H,1.),4:(0.,H),5:(H,1.)};volume_defects={}
+    for block,(lo,hi) in bounds.items():
+        expected=quad(lambda x:geometry(x,0,amplitude)[0]*((hi-lo)+geometry(x,0,amplitude)[2]*(hi*hi-lo*lo)/2),-1.2,1.2,epsabs=1e-13,epsrel=1e-13)[0]
+        volume_defects[str(block)]=abs(volumes[block]-expected)/expected
+    maximum=max(worst,constant,cofactor,stokes,*volume_defects.values())
+    return dict(schema='CT6NativeMappedGeometryV1',status='pass' if maximum<=2e-11 else 'fail',
+        basis_transform=worst,partition_and_constant_gradient=constant,cofactor=cofactor,
+        all_element_all_mode_Stokes=stokes,physical_volume_defects=volume_defects,
+        tested_element_field_pairs=len(integrals),scope='native chart rows independently transformed to physical Cartesian gradients; all cell faces, oriented cofactors and all-mode element Stokes identities')
 
 
 def reconstruct(packet,model,amplitude=.005):
@@ -171,7 +213,8 @@ def main():
     p.add_argument('--amplitude',type=float,default=.005);a=p.parse_args()
     packet=json.loads(a.packet.read_text());result=reconstruct(packet,a.model,a.amplitude)
     result['continuous_weak']=continuous_weak(packet,a.model)
-    result['status']='pass' if result['status']==result['continuous_weak']['status']=='pass' else 'fail'
+    result['geometry']=geometry_qualification(packet,a.amplitude)
+    result['status']='pass' if result['status']==result['continuous_weak']['status']==result['geometry']['status']=='pass' else 'fail'
     write_json(a.output,result)
     return 0 if result['status']=='pass' else 1
 
