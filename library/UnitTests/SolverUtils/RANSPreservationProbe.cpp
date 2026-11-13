@@ -51,6 +51,7 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
     const auto zeroNormal=patch.fields[patch.K()]->Project([=](const auto &x){return K0*(1+.02*x[0]);});
     RANSWallEvolutionData data(2);std::vector<std::string> rows;
     double maximum=0,tiltedSignal=0,omittedTiltSignal=0,fixedChartSignal=0,minimumCovariance=1e100;
+    double compatibleTraction=0,compatibleFlux=0,compatibleChain=0,compatibleFluxSignal=0;
     const auto dot=[](const RANSVector &a,const RANSVector &b)
     {double x=0;for(int j=0;j<3;++j)x+=a[j]*b[j];return x;};
     for(const auto &face:patch.Surface(0,2,H0,1,12))
@@ -73,6 +74,49 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
         Require(pg.height==g.height && pg.sampleHeight==g.height && pg.tailStart==g.height,
             "Accepted local endpoint metadata mismatch");
         const double sampled=face.test.Value(state,patch.offset[patch.K()]);
+        // A second, constructive static fixture: compatible first jets of
+        // smooth Hermite collars about r=H(q). The common native U/K trace
+        // and its chain derivative are retained; only the inner normal
+        // derivative and pressure jump are solved algebraically from the
+        // transmission laws. These jets are not an evolved FE state.
+        const double normB=std::sqrt(1+qH*qH);
+        RANSVector b{},M{},traceDirection{},U{};
+        for(int j=0;j<3;++j)
+        {b[j]=g.normal[j]-qH*g.tangent1[j];M[j]=(g.tangent1[j]+qH*g.normal[j])/normB;
+         traceDirection[j]=g.baseArea*g.J*g.tangent1[j]+Hp*g.normal[j];}
+        const auto outerRow=patch.Point(0,q,1);RANSTensor Go{},Gi{},To{},Ti{};
+        U[0]=outerRow.Value(state,patch.offset[0]);U[2]=outerRow.Value(state,patch.offset[1]);
+        Go[0]=outerRow.Gradient(state,patch.offset[0]);Go[2]=outerRow.Gradient(state,patch.offset[1]);Gi=Go;
+        const double eo=profile->Dissipation(g.height),pO=patch.Point(patch.OuterPressure(),q,1).Value(state,patch.offset[patch.OuterPressure()]);
+        const auto lawO=patch.OuterClosure(sampled,eo,Go,q);
+        const double ntI=profile->Original().EddyViscosity(g.height),DM=p.geometry.molecularNu+ntI,
+            DI=p.geometry.molecularNu+ntI/p.model.Parameters().sigmaK;
+        for(int i=0;i<3;++i)for(int j=0;j<3;++j)
+        {To[i][j]=-lawO.reynoldsStress[i][j]+(i==j?2*sampled/3-pO:0.);
+         Ti[i][j]=DM*(Gi[i][j]+Gi[j][i])-(i==j?pO:0.);}
+        auto traction=[&](const RANSTensor &T)
+        {RANSVector v{};for(int i=0;i<3;++i)for(int j=0;j<3;++j)v[i]+=T[i][j]*N[j];return v;};
+        const auto to=traction(To),baseInner=traction(Ti);
+        RANSVector delta{};for(int j=0;j<3;++j)delta[j]=to[j]-baseInner[j];
+        const double derivativeChange=dot(M,delta)/(DM*normB);
+        for(int i=0;i<3;++i)for(int j=0;j<3;++j)Gi[i][j]+=derivativeChange*M[i]*b[j];
+        const double pI=pO-dot(N,delta);
+        const auto lawI=patch.InnerStress(sampled,ntI,Gi);Ti=RANSWallInnerMeanStress(lawI,p.geometry.molecularNu,pI);
+        const auto ti=traction(Ti);
+        for(int j=0;j<3;++j)compatibleTraction=std::max(compatibleTraction,std::abs(ti[j]-to[j]));
+        const auto ko=outerRow.Gradient(state,patch.offset[patch.K()]);
+        const double Kq=dot(ko,traceDirection);
+        RANSVector baseK{},ki{};for(int j=0;j<3;++j)baseK[j]=Kq*g.tangent1[j]/(g.baseArea*g.J);
+        const double diK=(lawO.kDiffusion*dot(ko,N)/DI-dot(baseK,N))/normB;
+        for(int j=0;j<3;++j)ki[j]=baseK[j]+diK*b[j];
+        const double fluxO=dot(U,area)*sampled/g.baseArea-lawO.kDiffusion*dot(ko,area)/g.baseArea;
+        const double fluxI=dot(U,area)*sampled/g.baseArea-DI*dot(ki,area)/g.baseArea;
+        compatibleFlux=std::max(compatibleFlux,std::abs(fluxI-fluxO));compatibleFluxSignal=std::max(compatibleFluxSignal,std::abs(fluxO));
+        for(int i=0;i<3;++i)
+        {RANSVector change{};for(int j=0;j<3;++j)change[j]=Gi[i][j]-Go[i][j];compatibleChain=std::max(compatibleChain,std::abs(dot(change,traceDirection)));}
+        compatibleChain=std::max(compatibleChain,std::abs(dot(ki,traceDirection)-Kq));
+        const auto covI=J::Eigenvalues(lawI.reynoldsStress),covO=J::Eigenvalues(lawO.reynoldsStress);
+        Require(J::CovarianceAdmissible(covI[0],K0) && J::CovarianceAdmissible(covO[0],K0),"static compatible collar covariance failure");
         const double dependent=patch.DependentEpsilon(state,q,0.,data);
         const double expected=std::pow(sampled/p.model.Q(),1.5)/(p.model.Kappa()*g.height);
         maximum=std::max(maximum,std::abs(dependent-expected));
@@ -141,7 +185,16 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
             {"normal",J::Numbers(N)},{"cofactor",J::Numbers(area)},{"mH",J::Number(mH)},
             {"mechanical_sampler_defect",J::Number(mechanicalDefect)},
             {"fixed_chart_wrong_sampler_difference",J::Number(wrongChart-expectedMechanical)},
-            {"dependent_epsilon",J::Number(dependent)},{"regions",J::List(regions)}}));
+            {"dependent_epsilon",J::Number(dependent)},
+            {"compatible_collar",J::Object({{"U",J::Numbers(U)},{"K",J::Number(sampled)},
+                {"inner_G",J::Rows(Gi)},{"outer_G",J::Rows(Go)},
+                {"inner_k_gradient",J::Numbers(ki)},{"outer_k_gradient",J::Numbers(ko)},
+                {"inner_Pi",J::Number(pI)},{"outer_Pi",J::Number(pO)},
+                {"outer_epsilon_trace",J::Number(eo)},{"dependent_inner_epsilon_trace",J::Number(dependent)},
+                {"inner_traction",J::Numbers(ti)},{"outer_traction",J::Numbers(to)},
+                {"inner_conservative_k_flux",J::Number(fluxI)},{"outer_conservative_k_flux",J::Number(fluxO)},
+                {"inner_covariance",J::Numbers(covI)},{"outer_covariance",J::Numbers(covO)}})},
+            {"regions",J::List(regions)}}));
     }
     const auto ground=patch.ContinuousGroundDiagnostic(state);
     Tree trace;std::istringstream traceInput(ground);boost::property_tree::read_json(traceInput,trace);
@@ -158,15 +211,20 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
     Tree negativeTrace;std::istringstream negativeInput(negativeGround);boost::property_tree::read_json(negativeInput,negativeTrace);
     maximum=std::max(maximum,std::abs(negativeTrace.get<double>("minimum")+K0*1e-6));
     Require(!negativeTrace.get<bool>("admissible"),"CT6 continuous ground check missed a narrow interior negative interval");
-    Require(maximum<=2e-10 && tiltedSignal>1e-8 && omittedTiltSignal>1e-8 && fixedChartSignal>1e-8,"CT6 static transmission identity or discriminating signal failed");
+    maximum=std::max({maximum,compatibleTraction,compatibleFlux,compatibleChain});
+    Require(maximum<=2e-10 && tiltedSignal>1e-8 && omittedTiltSignal>1e-8 && fixedChartSignal>1e-8 && compatibleFluxSignal>1e-8,"CT6 static transmission identity or discriminating signal failed");
     return J::Object({{"schema",J::Quote("CT6StaticTransmissionV1")},{"status",J::Quote("pass")},
         {"stored_slots",J::Number(patch.Size())},{"maximum_primitive_defect",J::Number(maximum)},
         {"tilted_diffusion_signal",J::Number(tiltedSignal)},{"omitted_tilt_signal",J::Number(omittedTiltSignal)},
         {"fixed_chart_derivative_signal",J::Number(fixedChartSignal)},
         {"minimum_sampled_covariance",J::Number(minimumCovariance)},
+        {"compatible_collar_traction_defect",J::Number(compatibleTraction)},
+        {"compatible_collar_flux_defect",J::Number(compatibleFlux)},
+        {"compatible_collar_chain_defect",J::Number(compatibleChain)},
+        {"compatible_collar_nonzero_flux",J::Number(compatibleFluxSignal)},
         {"continuous_ground_trace",ground},{"independent_ground_minimum",J::Number(exactMinimum)},
         {"negative_ground_control",negativeGround},
-        {"rows",J::List(rows)},{"scope",J::Quote("native geometry/profile/trace identity; full traction and conservative k-flux evaluated on both sides; arbitrary polynomial probe fields are not a transmission solution; no variable-height evolution")}});
+        {"rows",J::List(rows)},{"scope",J::Quote("native geometry/profile/trace identities plus constructive compatible local Hermite collar jets with common U/K, full traction, nonzero conservative k-flux and dependent epsilon; arbitrary polynomial probes separately test geometry; no full variable-height FE evolution")}});
 }
 
 std::string ContinuousCT6Samples(const RANSWallEvolutionPatch &patch,const Tree &request)
