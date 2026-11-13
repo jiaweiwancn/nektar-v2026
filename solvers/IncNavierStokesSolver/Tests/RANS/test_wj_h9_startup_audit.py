@@ -110,6 +110,14 @@ class StartupAuditTests(unittest.TestCase):
         d=dict(K=np.full(2,c.K),U=np.zeros((2,3)),k=np.full(2,c.K),epsilon=np.full(2,c.A/c.H),T=np.zeros((2,3,3)),nu_d=np.ones(2),grad_k=np.zeros((2,3)),pi=np.zeros(2),turbulent_production=np.zeros(2),production=np.zeros(2),reference_production=np.zeros(2),destruction=np.zeros(2))
         p=v.interface_history(d);self.assertIsNone(p['wall_shear_range']);self.assertIn('not_evaluated',p['wall_shear_scope']);self.assertEqual(len(p['rows']),1)
 
+    def test_anchor_categories_keep_physical_and_derived_loads_distinct(self):
+        from wj_h9_weak import compare_anchor
+        value=np.zeros((2,3,6));value[0,0,0]=1.;physical=dict(components={'time_mass':value.sum(axis=0).tolist()},regional=value.tolist())
+        native=dict(components={'time_mass':value.sum(axis=0).tolist(),'total_unmasked':value.sum(axis=0).tolist(),'spatial_sum':np.zeros((3,6)).tolist(),'total_constrained':np.full((3,6),99.).tolist()},regional=value.tolist())
+        result=compare_anchor(physical,native);self.assertEqual(result['status'],'PASS');self.assertIn('total_constrained',result['separate_native_diagnostic_roles'])
+        native['components']['time_mass'][0][0]=2.
+        self.assertEqual(compare_anchor(physical,native)['status'],'UNRESOLVED')
+
     def test_actual_root_derivative_and_fixed_direction(self):
         self.assertLess(abs(np.trace(DIRECTION)),1e-16)
         G=np.array([[[.01,0,.8],[0,0,0],[.001,0,-.002]]]);v=actions(np.array([.009]),np.array([.002]),G)

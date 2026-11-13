@@ -13,7 +13,7 @@ from run_wj_h9 import load,save,sha
 from wj_h4_points import vector_hash,aligned
 from wj_h7_analysis import Rows,context
 from wj_h9_local import MATRIX,DIRECTION,XI,POL,same,phase_bindings,external_ids,delta_B,telescope,safe_ratio,MomentAudit,actions,matrix_check
-from wj_h9_weak import ProjectedTests,WeakAudit,compare
+from wj_h9_weak import ProjectedTests,WeakAudit,compare,compare_anchor
 from study_wj_h6 import configuration
 from validate_wj1 import Probe
 
@@ -171,7 +171,7 @@ def run(root,resume=False):
             if abs(packet['time']-.01)<1e-14:
                 values={phase:{q:weak_value(states[phase],history,alpha,q)for q in (24,32)}for phase in ('C','F','K','A')}
                 if not binding['P_C_bitwise']:values['P']={q:weak_value(states['P'],history,alpha,q)for q in (24,32)}
-                checks={phase:compare(v[24],v[32])for phase,v in values.items()};anchor=compare(values['A'][32],anchors[branch]);weak_results[branch]=dict(checks=checks,anchor=anchor,values=values)
+                checks={phase:compare(v[24],v[32])for phase,v in values.items()};anchor=compare_anchor(values['A'][32],anchors[branch]);weak_results[branch]=dict(checks=checks,anchor=anchor,values=values)
                 # Same history/time/test for every phase: no synthetic BE packet.
                 for q in (24,32):
                     vv=[np.array(values[p][q]['regional'])for p in ('C','F','K','A')];increments,error=telescope(vv);assert np.max(abs(error))<2e-13
@@ -196,9 +196,9 @@ def run(root,resume=False):
             save(out/'progress.json',dict(completed_attempts=number+1,states=len(data_cache),weak_evaluations=weak.evaluations,elapsed=time.monotonic()-start))
             if number==0:
                 pilot=time.monotonic()-timer;remaining=(2*pilot+6*max(1.,pilot*.15)+2*setup_seconds+20)*1.25
-                ledger=load(root/'accounting.json');pre=ledger['setup_seconds']+sum(v.get('seconds',v['reserved_seconds'])for k,v in ledger['entries'].items()if k!='science-batch')
+                ledger=load(root/'accounting.json');pre=ledger['setup_seconds']+sum(v.get('seconds',v['reserved_seconds'])for k,v in ledger['entries'].items()if k!=('science-batch-recovery'if resume else 'science-batch'))
                 projection=dict(pilot_attempt='coarse1 retained',setup_seconds=setup_seconds,pilot_seconds=pilot,remaining_with_25percent_headroom=remaining,
-                    projected_batch_seconds=time.monotonic()-start+remaining,batch_ceiling=360,projected_package_seconds=pre+time.monotonic()-start+remaining+90,package_ceiling=600,closure_reserved=90)
+                    projected_batch_seconds=sum(v.get('seconds',v['reserved_seconds'])for k,v in ledger['entries'].items()if k.startswith('science-batch')and k!=('science-batch-recovery'if resume else 'science-batch'))+time.monotonic()-start+remaining,batch_ceiling=360,projected_package_seconds=pre+time.monotonic()-start+remaining+90,package_ceiling=600,closure_reserved=90)
                 save(out/'admission.json',projection)
                 if projection['projected_batch_seconds']>360 or projection['projected_package_seconds']>600:raise RuntimeError('RESOURCE_LIMIT after retained pilot; remaining batch NOT_RUN')
         same_time=[]

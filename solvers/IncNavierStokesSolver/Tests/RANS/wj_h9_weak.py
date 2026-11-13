@@ -192,3 +192,23 @@ def compare(a,b):
         x=np.array(a['components'].get(k,np.zeros((3,6))));y=np.array(b['components'].get(k,np.zeros((3,6))));err=abs(x-y);conditions[k]=bool(np.all(np.isfinite(err))and np.all(err<=2e-9+2e-8*abs(y)));errors[k]=float(np.max(err))
     x=np.asarray(a['regional']);y=np.asarray(b['regional']);conditions['regional_sum']=bool(np.all(abs(x-y)<=4e-9+2e-8*abs(y)))
     return dict(status='PASS'if all(conditions.values())else 'UNRESOLVED',conditions=conditions,component_max_errors=errors,regional_max_error=float(np.max(abs(x-y))))
+
+# Same additive physical inventory as independent_weak, not the aggregate and
+# alternate-arithmetic diagnostic buckets in ResidualResolutionComponents.
+PHYSICAL_COMPONENTS=('inner_momentum_stress','outer_momentum_stress','conservative_advection','k_diffusion','epsilon_diffusion',
+    'inner_k_production','inner_k_destruction','outer_k_production','outer_k_destruction','epsilon_production','epsilon_destruction',
+    'epsilon_yap','prescribed_scalar_source','roughness_force','prescribed_body','continuity','gauge','time_mass','exterior_boundary')
+
+def compare_anchor(actual,native):
+    physical=dict(components={k:v for k,v in native['components'].items()if k in PHYSICAL_COMPONENTS},regional=native['regional'])
+    result=compare(actual,physical);total=np.asarray(actual['regional']).sum(axis=0);spatial=total-np.asarray(actual['components'].get('time_mass',np.zeros((3,6))))
+    aggregate={}
+    for name,expected in (('total_unmasked',total),('legacy_stage',total),('spatial_sum',spatial),('legacy_spatial',spatial)):
+        if name in native['components']:
+            value=np.asarray(native['components'][name]);error=float(np.max(abs(value-expected)))
+            aggregate[name]=dict(status='PASS'if np.all(abs(value-expected)<=4e-9+2e-8*abs(value))else 'UNRESOLVED',maximum_error=error)
+    result['aggregate_checks']=aggregate
+    result['separate_native_diagnostic_roles']={k:v for k,v in native['components'].items()if k not in PHYSICAL_COMPONENTS and k not in aggregate}
+    result['diagnostic_scope']='constrained totals/replacements and alternate cancelled arithmetic remain native diagnostic roles; never added as independent physical terms'
+    if any(v['status']!='PASS'for v in aggregate.values()):result['status']='UNRESOLVED'
+    return result
