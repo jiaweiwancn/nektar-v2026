@@ -92,8 +92,9 @@ def profiles(c,radii_knots):
             rows.append(row)
     return rows
 
-def assess(root):
-    start=time.monotonic();source=root/'source';out=root/'science';out.mkdir(exist_ok=False)
+def assess(root,version='v1'):
+    if version not in ('v1','v2'):raise ValueError('only the original or concrete passive generator repair output is declared')
+    start=time.monotonic();source=root/'source';out=root/('science'if version=='v1'else'science-v2');out.mkdir(exist_ok=False)
     manifest=prepare(out/'paired-case',source);c,_=primary(source);xml=manifest['flat_session']['path'];t=topology(xml)
     save(out/'parent-input-equivalence.json',selected_parent(source,xml,manifest['normal_chart_knots']))
     ref=reference_checks(c,xml);save(out/'reference-boundary-checks.json',ref)
@@ -124,4 +125,4 @@ def assess(root):
     print('H13 offline assessment PASS; target capacity OBSTRUCTED, all native stages NOT_RUN',json.dumps(result),flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);a=p.parse_args();assess(a.root)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--version',choices=('v1','v2'),default='v1');a=p.parse_args();assess(a.root,a.version)

@@ -120,7 +120,7 @@ def prepare(output,source):
     output=Path(output);output.mkdir(parents=True,exist_ok=False);source=Path(source);c,cal=primary(source)
     flat=case_xml(output/'flat',c,bisect_once=True,xknots=X);tree=ET.parse(flat).getroot()
     set_info(tree,'RANSWallInitialVelocity','FlatInletTraceV1');set_info(tree,'RANSWallDenseEvolutionCapacity','3000')
-    tree.insert(0,ET.Comment('NOT_RUN: 24688-state mapped target. External wj_h13_cases.py --preflight MUST refuse before native allocation; NumSteps=0 is not a capacity guard.'))
+    tree.insert(0,ET.Comment('NOT_RUN: 24688-state mapped target. The external preflight MUST refuse before native allocation; NumSteps=0 is not a capacity guard.'))
     write(tree,flat);t=topology(flat);count=dof_counts(t);inner,outer,z=mesh_knots(c,bisect_once=True)
     if (count['Nx'],count['Ni'],count['No'],count['state'])!=(14,16,34,24688):raise ValueError('wrong frozen target')
     boundaries=boundary(c);policy=source_capacity(source)
