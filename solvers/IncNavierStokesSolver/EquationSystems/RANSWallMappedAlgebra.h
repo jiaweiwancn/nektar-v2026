@@ -76,7 +76,8 @@ public:
         MappedMatrix a(rows.size(),cols.size(),compressed);std::vector<int> index(m,-1);
         for(int j=0;j<cols.size();++j){Require(cols[j]>=0 && cols[j]<m && index[cols[j]]<0,"invalid mapped restriction");index[cols[j]]=j;}
         for(int i=0;i<rows.size();++i){Require(rows[i]>=0 && rows[i]<n,"invalid mapped restriction row");Each(rows[i],[&](int j,double v){if(index[j]>=0)a.Add(i,index[j],v);});}
-        if(massMetric && rows==cols)a.ConsistentMass();return a;
+        if(massMetric && rows==cols)a.ConsistentMass();
+        return a;
     }
     std::uint64_t Nonzeros() const
     {std::uint64_t result=0;for(int i=0;i<n;++i)Each(i,[&](int,double){++result;});return result;}
@@ -95,6 +96,7 @@ private:
 // Reverse Cuthill-McKee uses the union graph, even for nonsymmetric operators.
 inline std::vector<int> BandPermutation(const MappedMatrix &a)
 {
+    RANSWallTiming::Scope timing("mapped.band.permutation");
     const int n=a.size();Require(a.Columns()==n && n>0,"band factor needs a square matrix");
     std::vector<std::vector<int>> graph(n);
     for(int i=0;i<n;++i)a.Each(i,[&](int j,double){if(i!=j){graph[i].push_back(j);graph[j].push_back(i);}});
