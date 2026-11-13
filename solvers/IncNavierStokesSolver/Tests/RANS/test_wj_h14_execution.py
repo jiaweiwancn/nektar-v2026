@@ -14,6 +14,14 @@ SOURCE=Path(__file__).resolve().parents[4]
 PARENT=Path(os.environ.get('WJ_H14_PARENT',str(SOURCE/'docs/plans/wj-h13-linux/publication-v1/paired-case')))
 
 class FixedHeightExecution(unittest.TestCase):
+    def test_scientific_halt_refuses_native_but_keeps_passive_closure_available(self):
+        from run_wj_h14 import halt_admission
+        for key in('coverage_halt','runtime_halt'):
+            b=dict(closed=False,**{key:dict(first_witness='retained')})
+            for phase in('target_cp0','pilot','qualification'):
+                with self.assertRaises(AssertionError):halt_admission(b,phase)
+            for phase in('operation','closure'):halt_admission(b,phase)
+            self.assertEqual(b[key]['first_witness'],'retained')
     def test_immutable_basis_cache_keeps_actual_bits_and_signed_zero_keys(self):
         import numpy as np
         from validate_cls_epawf_m3 import basis

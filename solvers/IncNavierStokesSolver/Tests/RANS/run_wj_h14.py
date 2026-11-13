@@ -17,6 +17,11 @@ from run_wj_h10 import runtime_snapshot
 ROOT='wj-h14-mapped-backend-20261113'
 CAPS={'operation':1200,'build':2400,'qualification':1800,'target_cp0':600,'pilot':600,'closure':300}
 
+def halt_admission(book,phase):
+    assert not book['closed'],'closed H14 allocation'
+    if phase in ('qualification','target_cp0','pilot'):
+        assert not book.get('coverage_halt')and not book.get('runtime_halt'),'monotone H14 native/qualification halt'
+
 def execute(root,label,argv,seconds,phase='operation',workers=1):
     root=Path(root);assert root.name==ROOT and phase in CAPS and 0<seconds<=CAPS[phase]
     assert 1<=workers<=(16 if phase=='build'else 1)
@@ -25,7 +30,7 @@ def execute(root,label,argv,seconds,phase='operation',workers=1):
     request=dict(argv=list(map(str,argv)),phase=phase,reserved_seconds=seconds,workers=workers,allocation=allocation,
         threads=THREADS,inputs=input_files(argv),driver_sha256=sha(__file__))
     def reserve(b):
-        assert not b['closed']and label not in b['entries']and not b.get('coverage_halt')and not b.get('runtime_halt')
+        halt_admission(b,phase);assert label not in b['entries']
         charged=lambda pp:sum(v.get('seconds',v['reserved_seconds'])for v in b['entries'].values()if v['phase']in pp)
         assert 60+charged(set(CAPS)-{'closure'})+(0 if phase=='closure'else seconds)+300<=7200
         if phase!='operation':assert charged({phase})+seconds<=CAPS[phase]
