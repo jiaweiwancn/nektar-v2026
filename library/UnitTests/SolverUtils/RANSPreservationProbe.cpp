@@ -116,6 +116,7 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
         {RANSVector change{};for(int j=0;j<3;++j)change[j]=Gi[i][j]-Go[i][j];compatibleChain=std::max(compatibleChain,std::abs(dot(change,traceDirection)));}
         compatibleChain=std::max(compatibleChain,std::abs(dot(ki,traceDirection)-Kq));
         const auto covI=J::Eigenvalues(lawI.reynoldsStress),covO=J::Eigenvalues(lawO.reynoldsStress);
+        minimumCovariance=std::min({minimumCovariance,covI[0],covO[0]});
         Require(J::CovarianceAdmissible(covI[0],K0) && J::CovarianceAdmissible(covO[0],K0),"static compatible collar covariance failure");
         const double dependent=patch.DependentEpsilon(state,q,0.,data);
         const double expected=std::pow(sampled/p.model.Q(),1.5)/(p.model.Kappa()*g.height);
@@ -190,6 +191,11 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
                 {"inner_G",J::Rows(Gi)},{"outer_G",J::Rows(Go)},
                 {"inner_k_gradient",J::Numbers(ki)},{"outer_k_gradient",J::Numbers(ko)},
                 {"inner_Pi",J::Number(pI)},{"outer_Pi",J::Number(pO)},
+                {"inner_mechanical_pressure",J::Number(pI-2*sampled/3)},
+                {"outer_mechanical_pressure",J::Number(pO-2*sampled/3)},
+                {"inner_R",J::Rows(lawI.reynoldsStress)},{"outer_R",J::Rows(lawO.reynoldsStress)},
+                {"outer_Q",J::Rows(lawO.quadraticStress)},
+                {"inner_signed_production",J::Number(lawI.production)},{"outer_signed_production",J::Number(lawO.production)},
                 {"outer_epsilon_trace",J::Number(eo)},{"dependent_inner_epsilon_trace",J::Number(dependent)},
                 {"inner_traction",J::Numbers(ti)},{"outer_traction",J::Numbers(to)},
                 {"inner_conservative_k_flux",J::Number(fluxI)},{"outer_conservative_k_flux",J::Number(fluxO)},
