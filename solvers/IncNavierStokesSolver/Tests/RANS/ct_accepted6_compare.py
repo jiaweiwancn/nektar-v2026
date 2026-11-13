@@ -75,13 +75,15 @@ def main():
         delta=norms(coarse[3]-fine[3],coarse[5],coarse[6],model)
         ce=result['reference_errors'][str((3,.001))];fe=result['reference_errors'][str((4,.001))]
         for name in NAMES:
-            x,y=ce[name]['scaled_weighted_RMS'],fe[name]['scaled_weighted_RMS'];resolved=x>1e-7 and x-y>2e-8
-            result['degree'][name]=dict(status=('pass' if y<=.85*x else 'fail') if resolved else 'unresolved_floor',
+            x,y=ce[name]['scaled_weighted_RMS'],fe[name]['scaled_weighted_RMS']
+            margin=.85*x-y
+            status='unresolved_floor' if max(x,y)<=1e-7 else ('pass' if margin>2e-8 else 'fail' if margin < -2e-8 else 'unresolved_uncertainty')
+            result['degree'][name]=dict(status=status,
                 coarse_error=x,fine_error=y,ratio=y/x if x>1e-7 else None,ratio_limit=.85,
                 spatial_difference=delta[name],floor=1e-7,scope='fixed physical partition P3/P1 versus P4/P2, not a measured convergence order')
     orders=[v for r in result['temporal'].values() for v in r.get('orders',{}).values()]
     result['statuses']['temporal_order']='pass' if any(q['status']=='pass' for q in orders) and all(q['status']!='fail' for q in orders) else 'unresolved' if not any(q['status']=='fail' for q in orders) else 'fail'
-    result['statuses']['degree_reduction']='pass' if result['degree'] and all(q['status']!='fail' for q in result['degree'].values()) and any(q['status']=='pass' for q in result['degree'].values()) else 'fail_or_unresolved'
+    result['statuses']['degree_reduction']='pass' if result['degree'] and all(q['status'] in ('pass','unresolved_floor') for q in result['degree'].values()) and any(q['status']=='pass' for q in result['degree'].values()) else 'fail_or_unresolved'
     result['statuses']['physical_budgets']='pass' if all(r[1]['status']=='pass' for r in records) else 'fail'
     result['status']='pass' if all(q=='pass' for q in result['statuses'].values()) else 'fail_or_unresolved'
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json'])
