@@ -20,7 +20,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','output'):p.add_argument('--'+k,type=Path,required=True)
     a=p.parse_args();manifest=RequestManifest(a.output,dict(schema='CT7RNHistoryBudgetControlsV1',runtime={n:runtime_identity(a.runtime/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe')},source=sha(Path(__file__)),
-        reference_factory_sha256=sha(Path(__file__).with_name('ct_accepted7_top.py')),native_orders=[32,8,12,12,32],dt=1e-6,steps=2,scope='synthetic d0 implementation control only'))
+        reference_factory_sha256=sha(Path(__file__).with_name('ct_accepted7_top.py')),native_orders=[32,8,12,12,96],dt=1e-6,steps=2,scope='synthetic d0 implementation control only'))
     result=dict(schema='CT7RNHistoryBudgetControlsV1',checks={},models={},physical_experimental_admission=False)
     def evolve(name,model='A95',steps=2,**kwargs):
         folder=a.output/name;c=make(folder,a.runtime,model,steps=steps,**kwargs)
@@ -58,7 +58,7 @@ def main():
             ini,pe=probe(a.runtime,folder,request(construction),'budget-initial');require(pe['exit_code']==0,'budget initial reference rejected')
             attempt=report['pimple_attempts'][-1];path=Path(attempt['k_snapshot']);require(sha(path)==attempt['k_snapshot_sha256'],'changed actual frozen snapshot')
             k=json.loads(path.read_text());body=dict(budget_binding=dict(model=model,time=report['time'],dt=report['dt'],native_report_sha256=sha(folder/'case.evolution.json'),state_sha256=exact_vector_hash(report['state']),configuration_sha256=sha(folder/'case.xml')),budgets={})
-            for label,orders,face in [('native',(32,8,12,12,32),16),('q48f16',(48,12,16,16,16),16),('q64f16',(64,16,20,20,20),16),('q64f32',(64,16,20,20,20),32)]:
+            for label,orders,face in [('native',(32,8,12,12,96),16),('q48f16',(48,12,16,16,16),16),('q64f16',(64,16,20,20,20),16),('q64f32',(64,16,20,20,20),32)]:
                 dest=folder/label;dest.mkdir();root=ET.parse(folder/'case.xml').getroot()
                 for key,value in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),orders,strict=True):set_parameter(root,key,value)
                 write(root,dest/'case.xml');req=replay(ini,report['state'],report['time'],[],export_basis=True,export_physical_scalar_budget=True,

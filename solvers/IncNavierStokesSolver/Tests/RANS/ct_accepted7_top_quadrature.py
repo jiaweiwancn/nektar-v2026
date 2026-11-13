@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-"""Frozen actual RN coefficients: external-face24/32 integration control."""
+"""Frozen actual RN coefficients: explicitly selected external-face control."""
 import argparse,json,os,xml.etree.ElementTree as ET
 from pathlib import Path
 from rans_qualification import THREADS,write_json
@@ -14,13 +14,15 @@ from rans_request_manifest import RequestManifest,runtime_identity,sha
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','input','output'):p.add_argument('--'+k,type=Path,required=True)
+    p.add_argument('--face-orders',type=int,nargs=2,default=[24,32])
     a=p.parse_args();labels=['A95-p3','A93-p3','E94E95-p3','A95-p4']
+    require(a.face_orders in ([24,32],[64,96]),'outside the bounded CT7 face controls')
     m=RequestManifest(a.output,dict(schema='CT7RNFrozenFaceQuadratureV1',runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),
-        source=sha(Path(__file__)),packets={n:sha(a.input/n/'native.json') for n in labels},face_orders=[24,32],limit=2e-10))
+        source=sha(Path(__file__)),packets={n:sha(a.input/n/'native.json') for n in labels},face_orders=a.face_orders,limit=2e-10))
     rows={}
     for name in labels:
         old=a.input/name;ini=json.loads((old/'native.json').read_text());c=json.loads((old/'construction.json').read_text());rows[name]={}
-        for order in (24,32):
+        for order in a.face_orders:
             folder=a.output/(name+'-f'+str(order));folder.mkdir();root=ET.parse(old/'case.xml').getroot();set_parameter(root,'RANSWallInterfaceOrder',order);write(root,folder/'case.xml')
             packet,e=probe(a.runtime,folder,replay(ini,ini['observation']['state'],0.,[],export_basis=True,export_resolution=True),'frozen')
             require(e['exit_code']==0,'frozen face quadrature native rejection')

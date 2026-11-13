@@ -1,0 +1,9 @@
+{
+  "schema": "CT7RNIntegrationControlV2",
+  "prior_controls": "top-frozen-quadrature-v1 retained: A93/E94E95 pass24/32, A95 fails with maxima6.66658e-10/3.78545e-10; no top histories advanced",
+  "final_bounded_control": [64,96],
+  "hypothesis": "External continuous-reference k advection crosses an unaligned dissipation-cutoff break; physical FE advection is polynomial. Increase only external/interface quadrature on the SAME frozen coefficients, basis and physical reference. No physical refit, changed source, threshold or wall law.",
+  "acceptance": "Both64 and96 continuous weak maxima<=2e-10, retaining equation bodies and comparisons; identical actual/reference/consumed essential rows. Complete independent actual/frozen/rank/top controls at96 before any two-step synthetic histories.",
+  "native_orders": [32,8,12,12,96],
+  "stopping_rule": "No face-order search beyond96 in CT7. A failed96 result remains an unresolved integration/reference gate, separate from actual operator reconstruction."
+}
