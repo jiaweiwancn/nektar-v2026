@@ -1,0 +1,213 @@
+{
+  "version": "H2hScalarFeasibilityV1",
+  "coefficient_box": {
+    "method": "independent hard response rows; inverse residual bound",
+    "rank": 16,
+    "condition": 3.105692574676696,
+    "inverse_residual_inf": 8.385686784715345e-16,
+    "selected_rows": [
+      320346,
+      13108,
+      157293,
+      320749,
+      250273,
+      86816,
+      19316,
+      182773,
+      93988,
+      257413,
+      94668,
+      259037,
+      321941,
+      158484,
+      163344,
+      326781
+    ],
+    "bound": 0.740806494509108
+  },
+  "phase": "zero_margin",
+  "rounds": [
+    {
+      "status": 0,
+      "message": "Optimization terminated successfully.",
+      "seconds": 8.063023243004864,
+      "iterations": 284,
+      "rows": 720147,
+      "columns": 17,
+      "certificate": {
+        "verified": true,
+        "primal": 0.16835786057497626,
+        "dual": 0.16835786057497631,
+        "lower_bound": 0.16835786057493957,
+        "gap": 3.6692870963861424e-14,
+        "primal_max_violation": 5.204170427930421e-17,
+        "stationarity_inf": 1.1475195793586579e-15,
+        "stationarity_allowance": 3.3550602496553826e-15,
+        "arithmetic_allowance": 3.337813277253455e-14,
+        "dual_signs_checked": true,
+        "dual_nonzero_rows": 17,
+        "active_dual_rows": [
+          93306,
+          178571,
+          178603,
+          249909,
+          294030,
+          320676,
+          342060,
+          414042,
+          483807,
+          484981,
+          659564,
+          694808,
+          695522,
+          696837,
+          697574,
+          700175,
+          701545
+        ],
+        "active_dual_multipliers": [
+          -0.0012903387052853876,
+          -0.33007200799985276,
+          -0.5118584797241993,
+          -2.85891778275213,
+          -0.03412543862728715,
+          -0.9427549775446771,
+          -0.3178235267410551,
+          -0.8613628472708049,
+          -0.279250144850985,
+          -0.21738394020565294,
+          -1.0103995092415627,
+          -0.7960182576485919,
+          -0.053566828409346456,
+          -0.7058679630612201,
+          -1.4521832623964863,
+          -0.01182399567101508,
+          -0.011499463567104344
+        ],
+        "native_rounding_allowance": 6.116568250956198e-12
+      },
+      "phase": "zero_margin_covariance_only",
+      "covariance_rows": 66319,
+      "hard_rows": 653828
+    }
+  ],
+  "classification": "verified_limited_zero_margin_obstruction",
+  "budget": {
+    "rounds": 1,
+    "complete_scans": 2,
+    "seconds": 9.180055331002222,
+    "limits": {
+      "rounds": 24,
+      "scans": 80,
+      "seconds": 300
+    }
+  },
+  "zero_margin": {
+    "minimum_covariance": -0.01004178648697128,
+    "slack": 0.16835786057497626,
+    "k_ratio": [
+      0.5,
+      2.0
+    ],
+    "epsilon_ratio": [
+      0.5694775239588097,
+      2.0
+    ]
+  },
+  "termination": "positive_verified_phase_I_lower_bound",
+  "certified_lower_bound": 0.168357860568823,
+  "terminal_coefficients": [
+    -0.0043190469416022545,
+    0.006006060520471943,
+    0.006393771217946133,
+    -0.014215169240294746,
+    -0.0040335107514843024,
+    -0.014470714135115817,
+    -0.016326269323453907,
+    0.039962595558840505,
+    -0.03899029970584311,
+    0.08801034147296155,
+    0.03190922593547184,
+    -0.07268697326885673,
+    0.024901941049037264,
+    0.054363091577429794,
+    0.031325857973393816,
+    -0.07908422772378693
+  ],
+  "created_Asia_Shanghai": "2026-11-13T20:35:29.840747+08:00",
+  "context_file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2h-20261113/scalar-context/context.json",
+  "context_sha256": "a6e9dc0ae61841227d08c732526fab4dfb5fc71c34fbf6d8c31c8c77959a921a",
+  "B_sha256": "c83da50b65d2e9980325d365779a9d53394fbf10e6431d1b87f79728366ae13d",
+  "base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "K0": 0.01838575534504143,
+  "setup_seconds": 0.3420900389974122,
+  "rounding_allowance_normalized_zero_margin": 6.116568250956198e-12,
+  "implied_coefficient_box": {
+    "method": "independent hard response rows; inverse residual bound",
+    "rank": 16,
+    "condition": 3.105692574676696,
+    "inverse_residual_inf": 8.385686784715345e-16,
+    "selected_rows": [
+      320346,
+      13108,
+      157293,
+      320749,
+      250273,
+      86816,
+      19316,
+      182773,
+      93988,
+      257413,
+      94668,
+      259037,
+      321941,
+      158484,
+      163344,
+      326781
+    ],
+    "bound": 0.740806494509108
+  },
+  "terminal": {
+    "candidate_file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2h-20261113/scalar-search/candidate.json",
+    "candidate_sha256": "f7ad3a6403f45398ae5da899f812d9a1848d9f9374e0ab211241dc8e3e7b3e25",
+    "minimum_covariance": -0.01004178648697128,
+    "normalized_covariance": -0.5461720934777647,
+    "k_ratio": [
+      0.5,
+      2.0
+    ],
+    "epsilon_ratio": [
+      0.5694775239588097,
+      2.0
+    ],
+    "worst_record": 157028,
+    "physical": [
+      0.07998638643218492,
+      0.0,
+      0.8
+    ],
+    "gradient": [
+      [
+        0.007272178682890995,
+        0.0,
+        0.1974993580641044
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        1.1514443912230554e-14,
+        0.0,
+        0.0035496157151856827
+      ]
+    ],
+    "k": 0.033966763922951726,
+    "epsilon": 0.0006618988751395639,
+    "cold_k": 0.01838575534504143,
+    "cold_epsilon": 0.0011622914817397412,
+    "strain_max_eigenvalue": 0.20835623167620396
+  },
+  "peak_RSS_KiB": 3051892
+}

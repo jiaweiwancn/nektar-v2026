@@ -1,0 +1,766 @@
+{
+  "version": "H2hNativeOutcomeV1",
+  "capture_Asia_Shanghai": "2026-11-13T21:08:08.869552+08:00",
+  "classification": "verified_limited_zero_margin_obstruction",
+  "physical_hill_attempts": 0,
+  "physical_hill_accepted_steps": 0,
+  "governing_solves": 0,
+  "certificate_issued": false,
+  "pilot_reason": "failed complete covariance and fresh GL24 margin/envelope gates",
+  "receipt": {
+    "version": "H2hNativeFreshAuditV1",
+    "passed": false,
+    "gates": {
+      "native_hard": false,
+      "native_positive_margin": false,
+      "optimizer_interior_margin": false,
+      "budget": true,
+      "algebraic": true,
+      "GL20_margin": false,
+      "GL20_scalars": true,
+      "fresh_GL24_margin": false,
+      "fresh_GL24_scalars": false,
+      "strong_divergence": true,
+      "velocity": true,
+      "B_velocity_pressure_exact": true,
+      "profile_invariant": true,
+      "fresh_identity": true
+    },
+    "K0": 0.01838575534504143,
+    "state_sha256": "f7ad3a6403f45398ae5da899f812d9a1848d9f9374e0ab211241dc8e3e7b3e25",
+    "base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+    "B_sha256": "c83da50b65d2e9980325d365779a9d53394fbf10e6431d1b87f79728366ae13d",
+    "probe_output_file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2h-20261113/terminal-audit/native/result.json",
+    "probe_output_sha256": "e18e1a94dbf7928ea4e7e5b90b0051b34513eb3d6fae08aa184c22371a2a7697",
+    "model_specification": {
+      "version": "CanonicalWallModelV1",
+      "name": "StandardKEpsilon",
+      "calibration": "StandardNeutralCalibratedV1",
+      "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+      "coefficients": {
+        "Cmu": 0.09,
+        "Cepsilon1": 1.44,
+        "Cepsilon2": 1.92,
+        "sigmaK": 1,
+        "sigmaEpsilon": 1.3478315512167742,
+        "yapCoefficient": 0,
+        "yapLength": 2.5
+      },
+      "q": 3.3333333333333335,
+      "kappa": 0.4405539051866587,
+      "K0": 0.01838575534504143,
+      "quadratic_active": false,
+      "cubic_active": false,
+      "Yap_active": false,
+      "variant": "Original",
+      "beta": 1,
+      "gamma0": 0,
+      "Gamma": 0,
+      "physical_regularization_active": false
+    },
+    "audit": {
+      "accepted_awf_covariance": [
+        1.838575357258898e-06,
+        -0.01004178648697129
+      ],
+      "accepted_awf_hard_admissible": [
+        0
+      ],
+      "accepted_awf_inner_minimum_physical_point": [
+        0.23549580558569316,
+        0,
+        0.0065
+      ],
+      "accepted_awf_inner_minimum_point": [
+        0.23549580558569316,
+        0,
+        0.0065,
+        0.01838575534504143,
+        0.01838575534504143,
+        0.0002129398143720893,
+        0.017329078322323416,
+        0.01225717023002762,
+        1.838575357258898e-06
+      ],
+      "accepted_awf_outer_minimum_physical_point": [
+        0.07998638643218492,
+        0,
+        0.8
+      ],
+      "accepted_awf_outer_minimum_point": [
+        0.07753315683804873,
+        0,
+        0.8,
+        0.033966763922951726,
+        0.0006618988751395636,
+        -0.01004178648697129
+      ],
+      "accepted_awf_reference_departure": [
+        7.725297070265658,
+        0.4999999999999949,
+        2.000000000000096,
+        0.5694775239588094,
+        7.153846153846153,
+        1,
+        1
+      ],
+      "accepted_awf_scalar_domain": [
+        1,
+        0.4999999999999949,
+        0.018385324422631463,
+        0.009192877672520621,
+        0.0006618988751395636,
+        0.01838575534504143,
+        0.1430512592910451,
+        2.9772430482801835,
+        3.1675203927182606e-16
+      ],
+      "accepted_awf_sources": [
+        0.004536067324001735,
+        0.0023262033179076375,
+        0,
+        0.0010366873464871288,
+        0.002209864006094097
+      ],
+      "admissible": [
+        1
+      ],
+      "constitutive_modification": [
+        0,
+        0,
+        0
+      ],
+      "coupled_norms": [
+        1.24411327736021,
+        2.4817563955179627,
+        2.287010570661097,
+        0.08852129844483281,
+        3.557144159640227e-14,
+        2.8374738464792423e-16,
+        0,
+        0
+      ],
+      "energy": [
+        1.9166994701172353,
+        0,
+        0.007703727311943552,
+        0.0008619731847385973,
+        -8.360299779127787e-05,
+        0,
+        0.008482097498890872,
+        1.9082173726183445,
+        0.5753360211154258,
+        1.9098362712999228,
+        -0.0,
+        0.006863198817312455
+      ],
+      "inner_zero_covariance": [
+        0,
+        0,
+        0
+      ],
+      "interface": [
+        0.8184767094662367,
+        0,
+        7.392488756947711e-05,
+        0.002962358806722617,
+        0.0003184154595374574,
+        2.399917525401389e-10,
+        -4.209683175449892e-05,
+        -6.8789827140695e-06
+      ],
+      "interface_inner": [
+        48,
+        0.01838575534504143,
+        0.1430512592910451,
+        7.311344365243302e-05,
+        0,
+        0
+      ],
+      "interface_outer": [
+        48,
+        0.01838575534504143,
+        0.1430512592910451,
+        -3.13270581135585e-06,
+        0.00021267369553732565,
+        0
+      ],
+      "mass_volume": [
+        19968,
+        0.009192877672520638,
+        0.0006655292516595043,
+        -0.009273635784367898,
+        0.00021359977532970934,
+        0
+      ],
+      "momentum_k_load_and_boundary_reaction": [
+        1.4006673037062396,
+        -0.0021062106587320345,
+        0.01446759030225343,
+        1.3958545295010087,
+        0.012556019962099287,
+        0.01859213529302748
+      ],
+      "native_inner_minimum_geometry_element_side_block": [
+        35,
+        35,
+        -1,
+        2
+      ],
+      "native_outer_minimum_geometry_element_side_block": [
+        76,
+        76,
+        0,
+        2
+      ],
+      "outer_constitutive_range": [
+        6.239702000850238,
+        0.4999999999999949,
+        2.000000000000096,
+        0.5694775239588094,
+        1.9995624863379569,
+        1,
+        1,
+        1.8630394100517598
+      ],
+      "physical_sample_K": [
+        96,
+        0.01838575534504143,
+        0.1430512592910451,
+        1.838575357258898e-06,
+        0,
+        0
+      ],
+      "physical_sample_outer": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "prescribed_source_inner": [
+        27648,
+        0.018385325361941828,
+        0.14316399559055726,
+        3.326734222507989e-06,
+        0,
+        0
+      ],
+      "r4_outer_gradient_witness": [
+        0.009553093889933906,
+        0,
+        0.05611488979112493,
+        2,
+        0,
+        -7.725297070265658,
+        57,
+        0
+      ],
+      "reconstruction_dense": [
+        9486,
+        0.009197817814392868,
+        0.0006638382899952234,
+        -0.00982740601037978,
+        0.00021267369553732565,
+        0
+      ],
+      "reconstruction_native": [
+        19968,
+        0.009192877672520621,
+        0.0006618988751395636,
+        -0.01004178648697129,
+        0.00021267369553732565,
+        0
+      ],
+      "roughness": [
+        1.4195605372006402e-05,
+        0,
+        0.0011551347520206326,
+        8.360299779127787e-05,
+        3.774758283725532e-15
+      ],
+      "source_volume_inner": [
+        23040,
+        0.018385366301405283,
+        0.14337555120236595,
+        6.090912222253726e-06,
+        0,
+        0
+      ],
+      "source_volume_outer": [
+        10752,
+        0.009192877672520638,
+        0.0006655292516595043,
+        -0.009273635784367898,
+        0.00021359977532970934,
+        0
+      ],
+      "strong_continuity": [
+        0.01869790649369188,
+        0.05733630700335526,
+        6.245140460650179e-17,
+        -6.277065703186816e-17,
+        2.713245176849264e-18
+      ]
+    },
+    "extra_sampling": {
+      "minimum_covariance": -0.009523588258795302,
+      "inner_minimum_covariance": 3.890555539397961e-05,
+      "outer_minimum_covariance": -0.009523588258795302,
+      "witness": {
+        "coordinate": [
+          0.07691316302833744,
+          0,
+          0.798625719837019
+        ],
+        "physical": [
+          0.0794138380528358,
+          0,
+          0.7986335717397162
+        ],
+        "geometry": 76,
+        "element": 76,
+        "inner": false,
+        "k": 0.03397386154602172,
+        "epsilon": 0.0006642927117892207,
+        "gradient": [
+          [
+            0.007839782758797188,
+            0,
+            0.19747808028980357
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            -0.00222163612205845,
+            0,
+            0.0025716136012905503
+          ]
+        ],
+        "tensor": [
+          [
+            0.020197317784627734,
+            0,
+            -0.03053361484152129
+          ],
+          [
+            0,
+            0.02264924103068115,
+            0
+          ],
+          [
+            -0.03053361484152129,
+            0,
+            0.021844958646479107
+          ]
+        ],
+        "eigenvalues": [
+          -0.009523588258795302,
+          0.02264924103068115,
+          0.05156586468990215
+        ]
+      },
+      "count": 31200,
+      "quadrature_order": 20,
+      "state_sha256": "f7ad3a6403f45398ae5da899f812d9a1848d9f9374e0ab211241dc8e3e7b3e25",
+      "cold_base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+      "model_specification": {
+        "version": "CanonicalWallModelV1",
+        "name": "StandardKEpsilon",
+        "calibration": "StandardNeutralCalibratedV1",
+        "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+        "coefficients": {
+          "Cmu": 0.09,
+          "Cepsilon1": 1.44,
+          "Cepsilon2": 1.92,
+          "sigmaK": 1,
+          "sigmaEpsilon": 1.3478315512167742,
+          "yapCoefficient": 0,
+          "yapLength": 2.5
+        },
+        "q": 3.3333333333333335,
+        "kappa": 0.4405539051866587,
+        "K0": 0.01838575534504143,
+        "quadratic_active": false,
+        "cubic_active": false,
+        "Yap_active": false,
+        "variant": "Original",
+        "beta": 1,
+        "gamma0": 0,
+        "Gamma": 0,
+        "physical_regularization_active": false
+      },
+      "minimum_k": 0.009192877672520621,
+      "minimum_epsilon": 0.0006642927117892207,
+      "invalid_scalar_count": 0,
+      "scalar_positive_finite": true,
+      "invalid_scalar_witness": null,
+      "outer_k_over_cold": [
+        0.5,
+        1.9997498705045316
+      ],
+      "outer_epsilon_over_cold": [
+        0.5705559255541818,
+        2
+      ],
+      "scalar_envelopes_passed": true,
+      "scalar_envelope_witness": null,
+      "integrals_complete": true,
+      "strong_divergence_RMS": 0.0756217811626416,
+      "maximum_absolute_divergence": 12.567674238743734,
+      "TKE_integral": 0.011586749982927117,
+      "base_TKE_integral": 0.011702006264258385,
+      "outer_TKE_integral": 0.011480270086632043,
+      "base_outer_TKE_integral": 0.011595526367963327,
+      "outer_time_scale": [
+        0.12888838806752848,
+        51.14290875556315
+      ],
+      "outer_length_scale": [
+        0.017476502225903495,
+        9.426660823349561
+      ],
+      "outer_time_scale_ratio": [
+        0.25147902314654075,
+        3.2386589428737325
+      ],
+      "outer_length_scale_ratio": [
+        0.17795038657542048,
+        4.402475356103369
+      ],
+      "strong_divergence_L2": 0.06030807415288491,
+      "volume": 0.6360000000000028,
+      "kinetic_energy": 0.5637492711324963,
+      "base_kinetic_energy": 0.5643662520535043,
+      "velocity_change_L2": 0.050601311547825045,
+      "maximum_sampled_velocity_increment": 0.46536902802819147,
+      "scope": "independent panelwise physical tensor sampling; complements complete inventory; no domain-wide covariance theorem"
+    },
+    "fresh_sampling": {
+      "minimum_covariance": -0.009653473135711152,
+      "inner_minimum_covariance": 9.474957299183268e-07,
+      "outer_minimum_covariance": -0.009653473135711152,
+      "witness": {
+        "coordinate": [
+          0.07660142232156514,
+          0,
+          0.7990374439994044
+        ],
+        "physical": [
+          0.07912547539207372,
+          0,
+          0.7990430901289715
+        ],
+        "geometry": 76,
+        "element": 76,
+        "inner": false,
+        "k": 0.033971319718337334,
+        "epsilon": 0.0006637061979319615,
+        "gradient": [
+          [
+            0.00835775329402352,
+            0,
+            0.19738850763329796
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            -0.0015542211856746718,
+            0,
+            0.002115664091299888
+          ]
+        ],
+        "tensor": [
+          [
+            0.02003170744196737,
+            0,
+            -0.03064645205693029
+          ],
+          [
+            0,
+            0.022647546478891556,
+            0
+          ],
+          [
+            -0.03064645205693029,
+            0,
+            0.02198537848656778
+          ]
+        ],
+        "eigenvalues": [
+          -0.009653473135711152,
+          0.022647546478891556,
+          0.05167055906424631
+        ]
+      },
+      "count": 44928,
+      "quadrature_order": 24,
+      "state_sha256": "f7ad3a6403f45398ae5da899f812d9a1848d9f9374e0ab211241dc8e3e7b3e25",
+      "cold_base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+      "model_specification": {
+        "version": "CanonicalWallModelV1",
+        "name": "StandardKEpsilon",
+        "calibration": "StandardNeutralCalibratedV1",
+        "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+        "coefficients": {
+          "Cmu": 0.09,
+          "Cepsilon1": 1.44,
+          "Cepsilon2": 1.92,
+          "sigmaK": 1,
+          "sigmaEpsilon": 1.3478315512167742,
+          "yapCoefficient": 0,
+          "yapLength": 2.5
+        },
+        "q": 3.3333333333333335,
+        "kappa": 0.4405539051866587,
+        "K0": 0.01838575534504143,
+        "quadratic_active": false,
+        "cubic_active": false,
+        "Yap_active": false,
+        "variant": "Original",
+        "beta": 1,
+        "gamma0": 0,
+        "Gamma": 0,
+        "physical_regularization_active": false
+      },
+      "minimum_k": 0.009184580287889805,
+      "minimum_epsilon": 0.0006637061979319615,
+      "invalid_scalar_count": 0,
+      "scalar_positive_finite": true,
+      "invalid_scalar_witness": null,
+      "outer_k_over_cold": [
+        0.4995487058064718,
+        1.9995738260321103
+      ],
+      "outer_epsilon_over_cold": [
+        0.570345736991251,
+        2.000223756210457
+      ],
+      "scalar_envelopes_passed": false,
+      "scalar_envelope_witness": {
+        "coordinate": [
+          -0.0015431361999316828,
+          0,
+          0.6630085359392327
+        ],
+        "physical": [
+          -0.0017409588451199997,
+          0,
+          0.6699096413130986
+        ],
+        "geometry": 74,
+        "element": 74,
+        "k_over_cold": 0.4999637259949445,
+        "epsilon_over_cold": 1.5718287329767358
+      },
+      "integrals_complete": true,
+      "strong_divergence_RMS": 0.0756217811626415,
+      "maximum_absolute_divergence": 12.624331583334197,
+      "TKE_integral": 0.011586749982927127,
+      "base_TKE_integral": 0.011702006264258364,
+      "outer_TKE_integral": 0.011480270086632055,
+      "base_outer_TKE_integral": 0.011595526367963281,
+      "outer_time_scale": [
+        0.12877967459882425,
+        51.18427374068282
+      ],
+      "outer_length_scale": [
+        0.017461761606536945,
+        9.433932287517202
+      ],
+      "outer_time_scale_ratio": [
+        0.25006188858617,
+        3.23961008390378
+      ],
+      "outer_length_scale_ratio": [
+        0.17674064107566542,
+        4.403603549141816
+      ],
+      "strong_divergence_L2": 0.06030807415288464,
+      "volume": 0.6359999999999986,
+      "kinetic_energy": 0.5637492711324983,
+      "base_kinetic_energy": 0.5643662520535037,
+      "velocity_change_L2": 0.05060131154782526,
+      "maximum_sampled_velocity_increment": 0.46771495783120787,
+      "scope": "independent panelwise physical tensor sampling; complements complete inventory; no domain-wide covariance theorem"
+    },
+    "probe_runtime": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2h-20261113/probe-runtime/RANSWallResolutionProbe",
+      "sha256": "9cfdc803d847ef63185a84310010c36b622a9f96fac8bdca16229c6b27e2dbe0",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffe22fda000)\n\tlibmpi_cxx.so.40 => /lib/x86_64-linux-gnu/libmpi_cxx.so.40 (0x00007a841f9ba000)\n\tlibmpi.so.40 => /lib/x86_64-linux-gnu/libmpi.so.40 (0x00007a841f883000)\n\tlibMultiRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0 (0x00007a841f000000)\n\tlibLocalRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0 (0x00007a841ec00000)\n\tlibSpatialDomains.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0 (0x00007a841e800000)\n\tlibStdRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0 (0x00007a841e400000)\n\tlibLibUtilities.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0 (0x00007a841de00000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x00007a841d600000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007a841d200000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007a841ef19000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007a841f861000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007a841ce00000)\n\tlibopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x00007a841ee66000)\n\tlibopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x00007a841eb43000)\n\tlibhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x00007a841eae7000)\n\tlibCollections.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0 (0x00007a841e28d000)\n\tlibptscotch-6.1.so => /lib/x86_64-linux-gnu/libptscotch-6.1.so (0x00007a841ea14000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x00007a841e79e000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007a841f841000)\n\tlibfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x00007a841ca00000)\n\tlibboost_iostreams.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0 (0x00007a841f829000)\n\tlibboost_program_options.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0 (0x00007a841ee21000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x00007a841a5b0000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007a841a200000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007a841f9f8000)\n\tlibevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x00007a841e769000)\n\tlibevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x00007a841f822000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x00007a841e73f000)\n\tlibMatrixFreeOps.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0 (0x00007a8417400000)\n\tlibptscotcherr-6.1.so => /lib/x86_64-linux-gnu/libptscotcherr-6.1.so (0x00007a841f81b000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x00007a841f808000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007a841e714000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x00007a841dd31000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007a841e6cc000)\n",
+      "libraries": {
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+        "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/usr/lib/x86_64-linux-gnu/libc.so.6": "4ebb1967c395ca547dcfeaeeab7a2819724604a331aede44e8a749a7e1a4628e",
+        "/usr/lib/x86_64-linux-gnu/libevent_core-2.1.so.7.0.1": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/usr/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7.0.1": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/usr/lib/x86_64-linux-gnu/libfftw3.so.3.5.8": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/usr/lib/x86_64-linux-gnu/libhwloc.so.15.5.2": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/usr/lib/x86_64-linux-gnu/libm.so.6": "045fdb0436a8fb0d651f039e3444a9cbffc011d379c82b979cebf43571053eca",
+        "/usr/lib/x86_64-linux-gnu/libmpi.so.40.30.2": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/usr/lib/x86_64-linux-gnu/libmpi_cxx.so.40.30.1": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/usr/lib/x86_64-linux-gnu/libopen-pal.so.40.30.2": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/usr/lib/x86_64-linux-gnu/libopen-rte.so.40.30.2": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/usr/lib/x86_64-linux-gnu/libptscotch-6.1.3.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/usr/lib/x86_64-linux-gnu/libptscotcherr-6.1.3.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.2": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+      }
+    },
+    "solver_runtime": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/IncNavierStokesSolver",
+      "sha256": "844871bb5c70224658c88cca3f8088d7738e6f50a08ae521c74c7d02f4aec0a0",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffc053e5000)\n\tlibSpatialDomains.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0 (0x00007fd193e00000)\n\tlibSolverUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0 (0x00007fd193800000)\n\tlibFieldUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0 (0x00007fd193400000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libmpi_cxx.so.40 (0x00007fd194986000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libmpi.so.40 (0x00007fd1940c9000)\n\tlibGlobalMapping.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0 (0x00007fd1948ef000)\n\tlibMultiRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0 (0x00007fd193000000)\n\tlibLocalRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0 (0x00007fd192c00000)\n\tlibStdRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0 (0x00007fd192800000)\n\tlibLibUtilities.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0 (0x00007fd192200000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/liblapack.so.3 (0x00007fd191a00000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libblas.so.3 (0x00007fd194067000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libstdc++.so.6 (0x00007fd191600000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libm.so.6 (0x00007fd193d19000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libgcc_s.so.1 (0x00007fd194047000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libc.so.6 (0x00007fd191200000)\n\tlibptscotch-6.1.so => /lib/x86_64-linux-gnu/libptscotch-6.1.so (0x00007fd193c46000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007fd194009000)\n\tlibboost_program_options.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0 (0x00007fd1937bb000)\n\tlibopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x00007fd192f4d000)\n\tlibopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x00007fd192e90000)\n\tlibhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x00007fd192e34000)\n\tlibCollections.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0 (0x00007fd19268d000)\n\tlibfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x00007fd190e00000)\n\tlibboost_iostreams.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0 (0x00007fd1933e8000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libopenblas.so.0 (0x00007fd18e9b0000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libgfortran.so.5 (0x00007fd18e600000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fd1949a2000)\n\tlibptscotcherr-6.1.so => /lib/x86_64-linux-gnu/libptscotcherr-6.1.so (0x00007fd1948e2000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x00007fd192e21000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007fd192bd5000)\n\tlibevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x00007fd192ba0000)\n\tlibevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x00007fd1948db000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x00007fd192b76000)\n\tlibMatrixFreeOps.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0 (0x00007fd18b800000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x00007fd192131000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007fd192b2e000)\n",
+      "libraries": {
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2b-20261112/curved-lazy-final/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+        "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/usr/lib/x86_64-linux-gnu/libevent_core-2.1.so.7.0.1": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/usr/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7.0.1": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/usr/lib/x86_64-linux-gnu/libfftw3.so.3.5.8": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/usr/lib/x86_64-linux-gnu/libhwloc.so.15.5.2": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/usr/lib/x86_64-linux-gnu/libopen-pal.so.40.30.2": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/usr/lib/x86_64-linux-gnu/libopen-rte.so.40.30.2": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/usr/lib/x86_64-linux-gnu/libptscotch-6.1.3.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/usr/lib/x86_64-linux-gnu/libptscotcherr-6.1.3.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.2": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667"
+      }
+    },
+    "context_sha256": "a6e9dc0ae61841227d08c732526fab4dfb5fc71c34fbf6d8c31c8c77959a921a",
+    "basis_sha256": "527243bb176685aa769bb624bb73c3ca2b478325df8a2d71fb9439cec229633c",
+    "geometry_identity": "CompositeHillV1:native-outer=[Hw,Z]:eta=(zHat-Hw)/(Z-Hw):CosineNormalVerticalV1:physical-nearest-wall-distance:foot-side-explicit:0.040000000000000001:0.10000000000000001:0.0064999999999999997:0.80000000000000004:-0.20000000000000001:0.59999999999999998",
+    "inventory_identity": ":k_bound=MassProjection:version=MassQR-AcceptedBudgetV2:metric=physical_consistent_Mff:constraints=both_tangential_foot_sides_exact_rows_shared_constitutive_reporting_ground:floor_relative=1e-08:K0=0.01838575534504143:floor=1.8385755345041429e-10:arithmetic_reserve=1.6721747074408476e-14",
+    "seconds": 32.72908584399556,
+    "created_Asia_Shanghai": "2026-11-13T20:37:29.001477+08:00",
+    "governing_solves": 0,
+    "physical_commits": 0
+  },
+  "exact_B_velocity_pressure": {
+    "U": {
+      "B_sha256": "ef02243c06795e4ff2cb8076809f2bcac12d53bd016243c5d771da1cd218d532",
+      "candidate_sha256": "ef02243c06795e4ff2cb8076809f2bcac12d53bd016243c5d771da1cd218d532",
+      "bitwise_equal": true
+    },
+    "W": {
+      "B_sha256": "b8f9af2e5ce0a8400f06f7669a731c75266ffe440e3f247a2a3a3d5e8c0221bd",
+      "candidate_sha256": "b8f9af2e5ce0a8400f06f7669a731c75266ffe440e3f247a2a3a3d5e8c0221bd",
+      "bitwise_equal": true
+    },
+    "all_pressure": {
+      "B_sha256": "1b86835ecd37258d60ca0530f59b19c26d10397671ecc795a36f7e364b0eff64",
+      "candidate_sha256": "1b86835ecd37258d60ca0530f59b19c26d10397671ecc795a36f7e364b0eff64",
+      "bitwise_equal": true
+    }
+  },
+  "complete_fixed_B_contract": {
+    "non_scalar_bits_exact": true,
+    "profile_invariant": true,
+    "profile_sha256": "5009b2e0ec55d25b567713b94cd8f0cf62d4c25716ce8f2a69d55c213eaf6bc7",
+    "B_sha256": "c83da50b65d2e9980325d365779a9d53394fbf10e6431d1b87f79728366ae13d",
+    "cold_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c"
+  },
+  "reference_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "defect_sha256": "e319468000760282822984d0fbdee636d7d5c11abf809a76147469f4ad6368a3",
+  "independent_tensor_checks": [
+    {
+      "set": "extra_sampling",
+      "tensor_error": 3.469446951953614e-18,
+      "eigenvalue": -0.0095235882587953,
+      "eigenvalue_error": 1.734723475976807e-18,
+      "critical_eigenvector": [
+        0.7165790098088521,
+        1.1102230246251565e-16,
+        0.6975059302266647
+      ],
+      "eddy_viscosity": 0.1563769891010092,
+      "production": 0.005747365685026148,
+      "isotropic": 0.022649241030681146,
+      "physical": [
+        0.0794138380528358,
+        0,
+        0.7986335717397162
+      ]
+    },
+    {
+      "set": "fresh_sampling",
+      "tensor_error": 3.469446951953614e-18,
+      "eigenvalue": -0.00965347313571115,
+      "eigenvalue_error": 1.734723475976807e-18,
+      "critical_eigenvector": [
+        0.7182820349642641,
+        -1.1102230246251565e-16,
+        0.6957520522769555
+      ],
+      "eddy_viscosity": 0.15649175950160707,
+      "production": 0.005787692326064554,
+      "isotropic": 0.022647546478891556,
+      "physical": [
+        0.07912547539207372,
+        0,
+        0.7990430901289715
+      ]
+    }
+  ],
+  "normalized_uncancelled_alpha0_coupled_norms": [
+    1.24411327736021,
+    2.4817563955179627,
+    2.287010570661097,
+    0.08852129844483281,
+    3.557144159640227e-14,
+    2.8374738464792423e-16,
+    0,
+    0
+  ],
+  "audit_usage": "34.37 30.45 2.15 1359492",
+  "search_usage": "9.93 7.98 1.64 3051892"
+}

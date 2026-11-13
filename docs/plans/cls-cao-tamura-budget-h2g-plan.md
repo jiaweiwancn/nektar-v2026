@@ -22,3 +22,18 @@ Only an exact independently certified seed may enter the 8/16-step hill pair.
 
 No long continuation, new fit, mesh enrichment, envelope extension, clipping,
 source retuning or full sparse production integration belongs to this package.
+
+## Continuing comparison: H2h registered, 13 November 2026
+
+H2g implementation/calibration and its bounded negative hill result are complete.
+[H2h](cls-cao-tamura-budget-h2h-plan.md) adds fixed-exact-B-velocity scalar
+feasibility and a conditional short standard hill pilot. The two-model comparison
+remains **open**: admissible hill startup, the flat U/k spatial gate, temporal and
+spatial accuracy, developed flow and held-out experimental validation are separate
+remaining stages. Do not repeat H2f/H2g searches as H2h work.
+
+H2h completed its bounded scalar-only test on 13 November 2026. The zero-margin
+LP has a verified limited obstruction, and the exact fixed H-plus B tensor is
+negative with no permitted scalar response. Native and fresh GL24 qualification
+fail; no hill pilot was launched. See [H2h findings](cls-cao-tamura-budget-h2h.md).
+The overall two-model comparison remains open.

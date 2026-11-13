@@ -1,0 +1,254 @@
+{
+  "version": "FixedBScalarContextV1",
+  "state_sha256": "c83da50b65d2e9980325d365779a9d53394fbf10e6431d1b87f79728366ae13d",
+  "base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "basis_sha256": "527243bb176685aa769bb624bb73c3ca2b478325df8a2d71fb9439cec229633c",
+  "model_specification": {
+    "version": "CanonicalWallModelV1",
+    "name": "StandardKEpsilon",
+    "calibration": "StandardNeutralCalibratedV1",
+    "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+    "coefficients": {
+      "Cmu": 0.09,
+      "Cepsilon1": 1.44,
+      "Cepsilon2": 1.92,
+      "sigmaK": 1,
+      "sigmaEpsilon": 1.3478315512167742,
+      "yapCoefficient": 0,
+      "yapLength": 2.5
+    },
+    "q": 3.3333333333333335,
+    "kappa": 0.4405539051866587,
+    "K0": 0.01838575534504143,
+    "quadratic_active": false,
+    "cubic_active": false,
+    "Yap_active": false,
+    "variant": "Original",
+    "beta": 1,
+    "gamma0": 0,
+    "Gamma": 0,
+    "physical_regularization_active": false
+  },
+  "files": {
+    "points": {
+      "file": "points.f64",
+      "shape": [
+        482071,
+        62
+      ],
+      "dtype": "<f8",
+      "sha256": "a3f62a74f718823893768e2fbdac0a5a2fc2e074dff1acdf6b1365603ee40b6f"
+    },
+    "members": {
+      "file": "members.i32",
+      "shape": [
+        482071,
+        10
+      ],
+      "dtype": "<i4",
+      "sha256": "7b0fe0519e8cc8fb9fded98e256eb7cdc289d9741958b2210535b031fb59f274"
+    }
+  },
+  "families": [
+    "mass_volume",
+    "open_boundary_native",
+    "budget_awf_reporting_volume",
+    "prescribed_source_inner",
+    "source_volume_outer",
+    "interface_inner",
+    "interface_outer",
+    "reconstruction_native",
+    "reconstruction_dense",
+    "matching_trace_nodes",
+    "physical_matching_transfer",
+    "physical_sampled_K",
+    "volume_normalization_ray",
+    "constitutive_budget_reporting_source_ray",
+    "trace_budget_awf_ray",
+    "constitutive_matching_K",
+    "constitutive_budget_awf_ray",
+    "constitutive_foot_minus_budget_ray",
+    "constitutive_foot_plus_budget_ray",
+    "actual_lifted_outer_epsilon",
+    "projected_dependent_trace"
+  ],
+  "native_memberships": 450871,
+  "GL20_points": 31200,
+  "profile_sha256": "5009b2e0ec55d25b567713b94cd8f0cf62d4c25716ce8f2a69d55c213eaf6bc7",
+  "verification": {
+    "direct_legal_trials": 3,
+    "relative_affine_error": 1.8981973643569265e-15,
+    "gradient_change": 0,
+    "native_tensor_eigenvalue_error": 1.1275702593849246e-17,
+    "frozen_non_scalar_bits": true,
+    "protected_profile_invariant": true
+  },
+  "seconds": 36.002239388,
+  "governing_solves": 0,
+  "physical_commits": 0,
+  "permitted_row_counts": {
+    "k": 378,
+    "epsilon": 378
+  },
+  "permitted_rows_sha256": "4217722cc59f33c0ac6d07d5a8a548b5e88a4202f645aa684c48a21b4389ed67",
+  "array_directory": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2h-20261113/scalar-context/arrays",
+  "context_sha256": "a6e9dc0ae61841227d08c732526fab4dfb5fc71c34fbf6d8c31c8c77959a921a",
+  "conditioning": {
+    "velocity": {
+      "eigenvalues": [
+        9.237768434478937e-06,
+        6.910033999421996e-05,
+        0.00015676628126202305,
+        0.00021332853923241774,
+        0.0007177053948264748,
+        0.0012347071649288631,
+        0.0035248532803076223,
+        0.003648102383118416,
+        0.012087619838520778,
+        0.01674605504684447,
+        0.028610825498094877,
+        0.045302743103132044,
+        0.08155274384279287,
+        0.08578226537388384,
+        0.10739145351448416,
+        0.11131139244572613,
+        0.14992673638578055,
+        0.2680814193730736,
+        0.40071850298701034,
+        0.4434178535964968,
+        0.6026718735266624,
+        1.0851158202747941,
+        1.1483291431604352,
+        1.2142608987927253,
+        1.274962542874024,
+        1.358454373748241,
+        1.8823567680332156,
+        2.8033703378681376,
+        2.8651014684443923,
+        3.618068003323849,
+        5.385765648997162,
+        7.001039708798421
+      ],
+      "rank": 41,
+      "condition_before": 757871.3147504135,
+      "orthogonality_error": 1.2705614338415216e-11,
+      "relative_rank_threshold": 1e-10,
+      "original_rank": 32,
+      "enriched_orthogonality_error": 1.2705614338415216e-11
+    },
+    "k": {
+      "eigenvalues": [
+        7.578217842851661e-07,
+        2.4046070499699225e-06,
+        7.775020160772526e-06,
+        2.4670534260088033e-05,
+        5.045756130168447e-05,
+        0.0001601044073241369,
+        0.0012754207985088062,
+        0.004046975037363248
+      ],
+      "rank": 8,
+      "condition_before": 5340.272767667475,
+      "orthogonality_error": 3.04867242562068e-13,
+      "relative_rank_threshold": 1e-10
+    },
+    "epsilon": {
+      "eigenvalues": [
+        7.578800827664634e-07,
+        2.404612719486648e-06,
+        7.775618285390773e-06,
+        2.4670592427595542e-05,
+        5.046144295201534e-05,
+        0.00016010478481390738,
+        0.0012755189153706126,
+        0.0040469845792097826
+      ],
+      "rank": 8,
+      "condition_before": 5339.874567540045,
+      "orthogonality_error": 1.545430450278218e-13,
+      "relative_rank_threshold": 1e-10
+    }
+  },
+  "transform_sha256": "ccf4ceb842831aed492786f2785e513bf10ad443f15cd7b785c7e03a1281aed0",
+  "setup_wall_seconds": 43.61530043200037,
+  "observation_blocks": {
+    "chart": {
+      "offset": 0,
+      "width": 3
+    },
+    "physical": {
+      "offset": 3,
+      "width": 3
+    },
+    "gradient": {
+      "offset": 6,
+      "width": 9
+    },
+    "k": {
+      "offset": 15,
+      "width": 1
+    },
+    "epsilon": {
+      "offset": 16,
+      "width": 1
+    },
+    "cold_k": {
+      "offset": 17,
+      "width": 1
+    },
+    "cold_epsilon": {
+      "offset": 18,
+      "width": 1
+    },
+    "inner": {
+      "offset": 19,
+      "width": 1
+    },
+    "covariance": {
+      "offset": 20,
+      "width": 1
+    },
+    "dependent": {
+      "offset": 21,
+      "width": 1
+    },
+    "weight": {
+      "offset": 22,
+      "width": 1
+    },
+    "inner_nu": {
+      "offset": 23,
+      "width": 1
+    },
+    "k_basis": {
+      "offset": 24,
+      "width": 8
+    },
+    "epsilon_basis": {
+      "offset": 32,
+      "width": 8
+    },
+    "k_error": {
+      "offset": 40,
+      "width": 1
+    },
+    "epsilon_error": {
+      "offset": 41,
+      "width": 1
+    },
+    "basis_error": {
+      "offset": 42,
+      "width": 16
+    },
+    "row_norm": {
+      "offset": 58,
+      "width": 2
+    },
+    "row_amplification": {
+      "offset": 60,
+      "width": 2
+    }
+  },
+  "raw_context_bytes": 258390056,
+  "context_usage": "44.30 33.19 3.50 1047676"
+}

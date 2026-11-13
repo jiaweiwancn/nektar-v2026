@@ -355,3 +355,14 @@ B from its completely audited A candidate. No modified CLS checkpoint is used.
 `collect_cao_tamura_budget_h2g.py` verifies Mac/Linux source hashes and builds
 the compact evidence/index. Exact input packets, commands, native histories,
 usage logs, runtime/library hashes and terminal receipts are indexed on Linux.
+
+## H2h follow-up, 13 November 2026
+
+The [executed H2h package](cls-cao-tamura-budget-h2h.md) freezes the exact standard-B
+velocity and pressure and uses the existing sixteen scalar directions. It finds
+a checked sampled zero-margin obstruction and an independently negative H-plus
+tensor whose scalar responses are identically zero. The terminal native/GL24
+audits fail, so no hill certificate or physical step follows. This advances the
+continuing comparison without changing either calibration or repeating H2g's
+searches. Common flat spatial qualification and later developed-flow, accuracy
+and held-out experimental gates remain open.
