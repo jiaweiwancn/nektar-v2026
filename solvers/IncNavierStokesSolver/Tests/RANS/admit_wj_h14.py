@@ -92,7 +92,7 @@ def pilot(root):
         p=r['pimple_attempts'][0];assert all(p[k]==1 for k in('momentum_predictor_solves','pressure_system_solves','k_transport_solves','epsilon_transport_solves','bound_calls'))
         assert p['bound_activations']==p['additional_correction_or_restoration_solves']==0
         snap=load(p['k_snapshot']);assert sha(p['k_snapshot'])==p['k_snapshot_sha256'];_,binding=phase_bindings(r,snap,step);assert binding['P_C_bitwise'];rec['phase_binding']=binding
-        scan=time.monotonic();assessment(root,f'target/pilot{step}');assessment_seconds=time.monotonic()-scan
+        scan=time.monotonic();assessment(root,f'target/pilot{step}',new_only=True);assessment_seconds=time.monotonic()-scan
         result=load(folder/'assessment/result.json');rec.update(status=result['status'],assessment_seconds=assessment_seconds,assessment=file_id(folder/'assessment/result.json'))
         if rec['status']!='PASS':stop=rec['status'];break
         prior=r;estimate=max(native_seconds,estimate*.5);assessment_estimate=max(assessment_seconds,assessment_estimate*.5)
@@ -125,5 +125,26 @@ def rebind(root):
         original_seconds=load(root/'accounting.json')['entries']['target-CP0-owned-assessment-v1']['seconds'],cached_seconds=old['measured_assessment_seconds'],
         target_native_invocations_repeated=0,scientific_inputs_changed=0,resource_allowance_reset=False))
 
+def pilot_bind(root):
+    cp0=root/'science/target/cp0';strict=load(cp0/'view/result.json');assert strict['status']=='PASS'
+    original=root/'target-admission-v2.json';old=load(original)
+    script=Path(__file__).resolve();old['commands']['pilot']=[sys.executable,'-B',str(script),'--root',str(root),'--mode','pilot']
+    old['command_inputs']['pilot']=[file_id(script),file_id(Path(assessment.__code__.co_filename)),file_id(cp0/'case.xml'),file_id(cp0/'view/result.json'),
+        file_id(script.with_name('wj_h7_analysis.py')),file_id(script.with_name('wj_h14_execution.py'))]
+    old['supersedes_only_passive_source']=dict(original=file_id(original),reason='preserve restored alpha0 role; assess each NEW completed state and original-CP0 drift; exact prior startup qualification retained')
+    # The measured CP0 assessment includes one principal evaluation plus three
+    # value-only evaluations. Each continuation view needs one NEW principal
+    # evaluation and one CP0 value-only evaluation on the same fixed support.
+    # Retain the whole CP0 cost, plus3s for witness/producer growth, as the
+    # conservative observation estimate; then apply the declared25% headroom.
+    old['measured_assessment_seconds']+=3.
+    save(root/'target-admission-v3.json',old);shutil.copyfile(root/'target-admission-v3.json',root/'target-admission.json')
+    b=load(root/'accounting.json');charged=60+sum(v.get('seconds',v['reserved_seconds'])for v in b['entries'].values())
+    save(root/'science/remaining-projection-v2.json',dict(status='PASS'if charged+1.25*(600+300+150)+300<=7200 else'RESOURCE_LIMIT',
+        charged_before_pilot=charged,mandatory_remaining=dict(pilot=600,terminal_strict_and_analysis=300,publication_and_verification=150),
+        headroom=1.25,untouched_closure=300,projected_total_seconds=charged+1.25*(600+300+150)+300,
+        predecessor_role='original full CP0 qualified and bitwise-identical cached assessment; restored alpha0 is not a new completed stage',
+        pilot_assessment_estimate_seconds=old['measured_assessment_seconds'],maximum_native_attempts=4,allowance_reset=False))
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('prepare','rebind','pilot'),required=True);a=p.parse_args();globals()[a.mode](a.root)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('prepare','rebind','pilot-bind','pilot'),required=True);a=p.parse_args();globals()[a.mode.replace('-','_')](a.root)

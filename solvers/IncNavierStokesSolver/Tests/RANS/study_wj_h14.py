@@ -244,7 +244,7 @@ def stored_reference(manifest=None):
     w=wall(v['K'],c.H,c.h,nu=c.nu);assert abs(w['rc']-v['rc'])<2e-14
     object.__setattr__(c,'w',w);assert c.K==v['K']and c.A==v['A'];return c
 
-def assessment(root,relative,version='v1'):
+def assessment(root,relative,version='v1',new_only=False):
     import time
     began=time.monotonic();timers={}
     import math
@@ -294,6 +294,11 @@ def assessment(root,relative,version='v1'):
     initial=rows.evaluate(initial_state,principal=False);results=[]
     first=r['steps']+1-len(r['accepted_states'])
     for j,state in enumerate(r['accepted_states']):
+        # A restored alpha=0 audit is not another completed stage. Its genuine
+        # predecessor already has an immutable qualification; retain that role
+        # and recompute CP0 fields for drift, without repeating its principal
+        # scan inside every one-step pilot invocation.
+        if new_only and j==0:continue
         d=rows.evaluate(state);s=rows.summary(d,initial);active=np.flatnonzero(rows.outer);i=active[np.argmin(d['margin'][active])]
         s.update(min_in_plane=float(d['margin'][i]),min_transverse=float(np.min(d['transverse'][active])),
             min_covariance=float(np.min(d['covariance'])),min_scalar=min(float(np.min(d['k'])),float(np.min(d['epsilon'][active]))),
@@ -318,6 +323,8 @@ def assessment(root,relative,version='v1'):
             ii,(ids,phi,_,_)=rows.maps[b];rhs=np.zeros(r['fields'][b]['size']);np.add.at(rhs,(ids-r['offsets'][b]).ravel(),(phi*(rows.weights[ii]*d['divergence'][ii])[:,None]).ravel())
             moments[str(b)]=dict(moments=rhs.tolist(),maximum=float(np.max(abs(rhs))),signed_integral=float(np.sum(rhs)))
         step=first+j
+        ctx=context(r,step);assert vector_hash(state)==ctx['packet']['state_sha256']
+        if new_only:assert step>first and ctx['alpha']==1/r['dt']
         if max(v['maximum']for v in moments.values())>2e-15:s['status']='OBSTRUCTED'
         if step==0 and s['divergence_scaled_max']>1e-12:s['status']='OBSTRUCTED'
         results.append(dict(absolute_step=step,time=r['wj_audit_packets'][j]['time'],state_sha256=vector_hash(state),
