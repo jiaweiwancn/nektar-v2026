@@ -1,0 +1,20 @@
+{
+  "schema": "CT7PrimarySourceReadingV1",
+  "Richards_Norris": {
+    "title": "Appropriate boundary conditions for computational wind engineering models revisited",
+    "DOI": "10.1016/j.jweia.2010.12.008",
+    "source_sha256": "2a8d769dde2d85a6034f2cc64a5da70da31feb9dfdf2c236484cf38520541780",
+    "local_source": "/Users/jay/Documents/nektar-v2026/docs/literature/Appropriate boundary conditions for computational wind engineering models revisited.pdf",
+    "inspected": "Printed p259 Eq23 and item4, pp261--262 empty-domain discussion; p259 also visually rendered. Driving top shear, zero k diffusion and prescribed epsilon physical flux, not a state-dependent derivative condition."
+  },
+  "Cao_Tamura": {
+    "title": "Experimental study on roughness effects on turbulent boundary layer flow over a two-dimensional steep hill",
+    "source_sha256": "adffb5c1d740be791211d82ce35778a37a3315a6dc72c56c80b70cc6642a43df",
+    "local_source": "/Users/jay/Documents/nektar-v2026/docs/literature/Experimental study on roughness effects on turbulent boundary layer flow over a two-dimensional steep hill.pdf",
+    "inspected": "Section3.1 printed p6 and Fig3 on p7 visually rendered. Rough u_tau/Uinf=.051 comes from shear. Displacement3.5mm is the authors assumed .7 times5mm cube height, fixed before roughness fit; it is not a newly measured displacement. Exact author fitting membership is unspecified.",
+    "coordinate_correction": "Fig3a heights are physical y in mm. Fig3e abscissa is logarithmically plotted y-d in mm and ordinate U/u_tau; it is a duplicate crosscheck, not an additional independent fit.",
+    "reported_z0_m": 0.0002
+  },
+  "uncertainty": "Frozen 0.5 PDF-point extraction envelopes on both axes. Keep unknown experimental/probe, displacement, normalization and finite-depth/model uncertainties separate. Deterministic joint evaluations are not confidence intervals or certified interval extrema.",
+  "historical_control": "CT4 unshifted d=0 fit and CT5 corrected observation audit remain sealed under their original identities. CT7 does not describe that fit as the experimental displacement convention."
+}
