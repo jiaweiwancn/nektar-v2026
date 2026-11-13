@@ -8,12 +8,24 @@ import unittest
 from unittest.mock import patch
 import xml.etree.ElementTree as ET
 from cls_epawf_m3_cases import set_info,set_parameter,write
-from wj_h14_execution import protected,validate_pair,clone,target_preflight,QUALIFICATION,file_id,native_command,OwnerIndex
+from wj_h14_execution import protected,validate_pair,clone,target_preflight,QUALIFICATION,file_id,native_command,OwnerIndex,compact_open_packet
 
 SOURCE=Path(__file__).resolve().parents[4]
 PARENT=Path(os.environ.get('WJ_H14_PARENT',str(SOURCE/'docs/plans/wj-h13-linux/publication-v1/paired-case')))
 
 class FixedHeightExecution(unittest.TestCase):
+    def test_compact_native_domain_keeps_summary_roles_and_signed_data(self):
+        with tempfile.TemporaryDirectory()as d:
+            p=Path(d)/'native.json';v=dict(operation='open_checks',state_sha256='report-state',
+                scalar_domain=dict(admissible=True,scope='full',phase='complete',inventory_counts={'outer':3},cutoff_range=[.01,.02],
+                    observations=[{'quoted':'escaped "scalar_domain": stays data','value':1.}]*1000,effective_state=[1.,-0.],trace_target_state=[2.]),
+                assembly_checks=None,signed=[-0.,1.])
+            p.write_text(json.dumps(v,separators=(',',':')));before=p.read_bytes();r=compact_open_packet(p)
+            self.assertEqual(r['scalar_domain']['inventory_counts'],{'outer':3});self.assertNotIn('observations',r['scalar_domain'])
+            self.assertEqual(r['state_sha256'],'report-state');self.assertEqual(p.read_bytes(),before)
+            self.assertEqual(__import__('math').copysign(1,r['signed'][0]),-1.)
+            p.write_text(before.decode().replace('"assembly_checks":null','"other":null'))
+            with self.assertRaises(ValueError):compact_open_packet(p)
     def test_scientific_halt_refuses_native_but_keeps_passive_closure_available(self):
         from run_wj_h14 import halt_admission
         for key in('coverage_halt','runtime_halt'):

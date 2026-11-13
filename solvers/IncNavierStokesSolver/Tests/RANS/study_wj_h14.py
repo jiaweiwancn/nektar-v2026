@@ -12,7 +12,7 @@ import shutil
 import xml.etree.ElementTree as ET
 
 from run_wj_h4 import load,save,sha
-from wj_h14_execution import clone,file_id,validate_pair,OwnerIndex
+from wj_h14_execution import clone,file_id,validate_pair,OwnerIndex,compact_open_packet
 from wj_h7_analysis import context
 from wj_h4_points import vector_hash
 from cls_epawf_m3_cases import set_info,set_parameter,write
@@ -140,7 +140,7 @@ def view(root,case,reuse=False):
         weak=True,weak_compact=True,assembly=False,reuse=reuse))
 
 def view_finish(root,case):
-    folder=root/'science'/(case if '/'in case else'small/'+case);out=folder/'view';request=load(out/'request.json');p=load(out/'native.json');r=load(request['native_report']);cx=context(r)
+    folder=root/'science'/(case if '/'in case else'small/'+case);out=folder/'view';request=load(out/'request.json');p=compact_open_packet(out/'native.json');r=load(request['native_report']);cx=context(r)
     assert sha(request['native_report'])==request['native_report_sha256']and sha(Path(request['native_checkpoint'])/'State.bin')==request['checkpoint_sha256']
     assert p['state_sha256']==vector_hash(cx['state'])and p['callback_history_sha256']==vector_hash(cx['history'])
     assert p['initialization_work']==[0,0]and p['initial_velocity_calls']==0 and p['governing_solves']==0

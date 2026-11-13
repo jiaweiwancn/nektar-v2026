@@ -7,6 +7,7 @@ No calibration, roughness inversion, profile, height-family or mesh generation.
 import copy
 import hashlib
 import json
+import mmap
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -21,6 +22,34 @@ PARAMETERS={'NumSteps','TimeStep','IO_CheckSteps','IO_InfoSteps'}
 
 def file_id(path):
     p=Path(path);return dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+
+def compact_open_packet(path):
+    """Read the sealed native open_checks schema without inflating its rows.
+
+    Reuse the established mmap/unique-key approach. Native ScalarDomainJSON
+    writes summary fields, then observations/effective_state/trace_target_state;
+    the outer writer immediately follows it with assembly_checks. Retain the
+    full native file/hash, but decode only its summary and all other fields.
+    Reject another/ambiguous schema instead of guessing producer roles.
+    """
+    with open(path,'rb')as f,mmap.mmap(f.fileno(),0,access=mmap.ACCESS_READ)as data:
+        def unique(key):
+            at=data.find(key)
+            if at<0 or data.find(key,at+len(key))>=0:raise ValueError('ambiguous/missing native open packet key')
+            return at
+        marker=b'"scalar_domain":';at=unique(marker)+len(marker)
+        end=unique(b',"assembly_checks":')
+        stop=data.find(b',"observations":',at,end)
+        if not at<stop<end:raise ValueError('different native scalar-domain serialization')
+        summary=data[at:stop]+b'}'
+        d=json.loads(summary,parse_int=lambda v:-0.0 if v=='-0'else int(v))
+        if not {'admissible','scope','phase','inventory_counts','cutoff_range'}<=set(d):raise ValueError('incomplete native domain summary')
+        if at+len(data)-end>64*1024**2:raise ValueError('unexpectedly large compact open packet')
+        payload=data[:at]+summary+data[end:]
+    result=json.loads(payload,parse_int=lambda v:-0.0 if v=='-0'else int(v))
+    if result.get('operation')!='open_checks':raise ValueError('wrong native packet role')
+    result['scalar_domain_summary_only']=True
+    return result
 
 def native_command(admission,phase,argv):
     if phase not in ('target_cp0','pilot')or admission.get('status')!='PASS':raise ValueError('closed target command')
