@@ -11,6 +11,7 @@ from run_wj_h4 import load, save, sha, THREADS, input_files, size
 from run_wj_h7 import update_journal, complete_operation
 from wj6_resources import scientific_workers, tree_usage
 from wj7_command import owned_groups
+from run_wj_h10 import runtime_snapshot
 
 ROOT='wj-h14-mapped-backend-20261113'
 CAPS={'operation':1200,'build':2400,'qualification':1800,'target_cp0':600,'pilot':600,'closure':300}
@@ -23,7 +24,7 @@ def execute(root,label,argv,seconds,phase='operation',workers=1):
     request=dict(argv=list(map(str,argv)),phase=phase,reserved_seconds=seconds,workers=workers,allocation=allocation,
         threads=THREADS,inputs=input_files(argv),driver_sha256=sha(__file__))
     def reserve(b):
-        assert not b['closed']and label not in b['entries']and not b.get('coverage_halt')
+        assert not b['closed']and label not in b['entries']and not b.get('coverage_halt')and not b.get('runtime_halt')
         charged=lambda pp:sum(v.get('seconds',v['reserved_seconds'])for v in b['entries'].values()if v['phase']in pp)
         assert 60+charged(set(CAPS)-{'closure'})+(0 if phase=='closure'else seconds)+300<=7200
         if phase!='operation':assert charged({phase})+seconds<=CAPS[phase]
@@ -34,16 +35,29 @@ def execute(root,label,argv,seconds,phase='operation',workers=1):
             assert not any(v['phase']==phase for v in b['entries'].values()),'native reservation cannot be repeated'
         b['entries'][label]=dict(status='RESERVED',phase=phase,reserved_seconds=seconds)
     update_journal(book,reserve);save(folder/'request.json',request)
-    env=dict(os.environ,**THREADS,TMPDIR=str(root/'tmp'),MPLCONFIGDIR=str(root/'tmp/matplotlib'))
+    env=dict(os.environ,**THREADS,TMPDIR=str(root/'tmp'),MPLCONFIGDIR=str(root/'tmp/matplotlib'),
+        NEKTAR_RANS_TIMING_FILE=str(folder/'timing.jsonl'))
     rssLimit=(16 if phase=='build'else 8)*1024**3
     def limits():
         import resource
         resource.setrlimit(resource.RLIMIT_FSIZE,(2*1024**3,2*1024**3))
-    start=time.monotonic();peak=0;reason=None;groups=set()
+    start=time.monotonic();peak=0;reason=None;groups=set();samples=[];seen=set()
+    def mappings(pid):
+        nonlocal reason
+        try:
+            files=sorted({str(Path(s.split(maxsplit=5)[5]).resolve())for s in Path(f'/proc/{pid}/maps').read_text().splitlines()
+                if len(s.split(maxsplit=5))==6 and s.split(maxsplit=5)[5].startswith('/')and not s.endswith(' (deleted)')})
+            snapshot=runtime_snapshot(root,files)
+            if snapshot:
+                key=(pid,tuple(files))
+                if key not in seen:snapshot.update(pid=pid,elapsed=time.monotonic()-start);samples.append(snapshot);seen.add(key)
+                if snapshot['status']!='PASS':reason='RUNTIME_CLOSURE_MISMATCH actual native-exec maps'
+            for child in Path(f'/proc/{pid}/task/{pid}/children').read_text().split():mappings(int(child))
+        except (FileNotFoundError,ProcessLookupError):pass
     with(folder/'command.log').open('x')as log:
         p=subprocess.Popen(['/usr/bin/time','-v',*map(str,argv)],cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True,preexec_fn=limits)
         while p.poll()is None:
-            rss,n=tree_usage(p.pid);peak=max(peak,rss);groups|=owned_groups(p.pid)
+            rss,n=tree_usage(p.pid);peak=max(peak,rss);groups|=owned_groups(p.pid);mappings(p.pid)
             if rss>rssLimit or time.monotonic()-start>seconds:reason='RESOURCE_LIMIT RSS/time'
             if (root/'science').exists()and size(root/'science')>2*1024**3:reason='RESOURCE_LIMIT scientific output'
             if (root/'build').exists()and size(root/'build')>8*1024**3:reason='RESOURCE_LIMIT build footprint'
@@ -60,8 +74,12 @@ def execute(root,label,argv,seconds,phase='operation',workers=1):
                 try:os.killpg(g,signal.SIGKILL)
                 except ProcessLookupError:pass
             code=p.wait()
-    entry=dict(status='RESOURCE_LIMIT'if reason else'PASS'if code==0 else'FAIL',phase=phase,reserved_seconds=seconds,
+    entry=dict(status=('OBSTRUCTED'if reason.startswith('RUNTIME_')else'RESOURCE_LIMIT')if reason else'PASS'if code==0 else'FAIL',phase=phase,reserved_seconds=seconds,
         seconds=time.monotonic()-start,exit=code,reason=reason,peak_tree_rss_bytes=peak,log_sha256=sha(folder/'command.log'))
+    if reason and reason.startswith('RUNTIME_'):
+        def halt(b):b.setdefault('runtime_halt',dict(operation=label,reason=reason))
+        update_journal(book,halt)
+    save(folder/'native-exec-samples.json',samples)
     complete_operation(book,label,entry);save(folder/'receipt.json',dict(request,**entry));print(label,entry['status'],entry['seconds'],flush=True)
     return code==0 and not reason
 
