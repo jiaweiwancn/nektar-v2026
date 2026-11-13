@@ -151,6 +151,14 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
     // Its minimum is the left endpoint regardless of varying curvature/H.
     const double exactMinimum=K0*(1+.02*patch.lower[0]);
     maximum=std::max(maximum,std::abs(trace.get<double>("minimum")-exactMinimum));
+    auto negativeFunctions=functions;
+    negativeFunctions[patch.K()]=[=](const auto &x,double)
+        {return K0*((x[0]+.23)*(x[0]+.23)-1e-6);};
+    const auto negativeState=patch.Project(negativeFunctions,0.);
+    bool negativeAdmissible=true;const auto negativeGround=patch.WallTraceJSON(negativeState,negativeAdmissible);
+    Tree negativeTrace;std::istringstream negativeInput(negativeGround);boost::property_tree::read_json(negativeInput,negativeTrace);
+    maximum=std::max(maximum,std::abs(negativeTrace.get<double>("minimum")+K0*1e-6));
+    Require(!negativeAdmissible,"CT6 continuous ground check missed a narrow interior negative interval");
     Require(maximum<=2e-10 && tiltedSignal>1e-8 && omittedTiltSignal>1e-8 && fixedChartSignal>1e-8,"CT6 static transmission identity or discriminating signal failed");
     return J::Object({{"schema",J::Quote("CT6StaticTransmissionV1")},{"status",J::Quote("pass")},
         {"stored_slots",J::Number(patch.Size())},{"maximum_primitive_defect",J::Number(maximum)},
@@ -158,6 +166,7 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
         {"fixed_chart_derivative_signal",J::Number(fixedChartSignal)},
         {"minimum_sampled_covariance",J::Number(minimumCovariance)},
         {"continuous_ground_trace",ground},{"independent_ground_minimum",J::Number(exactMinimum)},
+        {"negative_ground_control",negativeGround},
         {"rows",J::List(rows)},{"scope",J::Quote("native geometry/profile/trace identity; full traction and conservative k-flux evaluated on both sides; arbitrary polynomial probe fields are not a transmission solution; no variable-height evolution")}});
 }
 
