@@ -28,8 +28,10 @@ def publish(root,out):
         if not selected(r['physical']):continue
         v=dict(branch=r['branch'],step=r['step'],time=r['time'],phase=r['phase'],phase_role='accepted'if r['phase']=='A'else 'preceding accepted'if r['phase']=='P'else 'intermediate diagnostic; not strict-readable',
             x=r['physical'][0],z=r['physical'][2],geometry=r['owner']['geometry'],region=r['owner']['region'],normal_side=r['owner']['normal_side'],state_sha256=r['state_sha256'],
-            k=r['k'],epsilon=r['epsilon'],pi=r['pi'],nu_eff=r['nu_eff'],raw_production=r['raw_production'])
-        for name in ('dimensional_fixed_action','normalized_fixed_action','in_plane','transverse','minimizing_angle','N','F_N','implicit_dN','implicit_derivative_error'):
+            k=r['k'],epsilon=r['epsilon'],pi=r['pi'],mechanical_pressure=r.get('mechanical_pressure'),nu_eff=r['nu_eff'],raw_production=r['raw_production'])
+        for i in range(3):v[f'U{i}']=r['U'][i]
+        for i,value in enumerate(np.linalg.eigvalsh(r['R'])):v[f'covariance_eigenvalue{i}']=float(value)
+        for name in ('dimensional_fixed_action','normalized_fixed_action','in_plane','transverse','minimizing_angle','N','F_N','root_residual','implicit_dN','implicit_derivative_error'):
             v[name]=r.get(name)
         for name in ('G','R','B_t'):
             if name in r:
