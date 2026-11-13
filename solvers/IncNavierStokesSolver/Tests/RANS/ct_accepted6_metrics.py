@@ -40,6 +40,7 @@ def wall_nut(model,K,r):
 
 def metrics(packet,model,initial_state=None):
     o=packet['observation'];s=np.asarray(o['state']);off=o['offsets'];p=parameters(model)
+    if initial_state is not None:initial_state=np.asarray(initial_state,dtype=float)
     K0=p['q']*.16;scales=np.array([.2,.2,K0,.4**3/(p['kappa']*.5),.1])
     squared=np.zeros(5);gradient=np.zeros(5);volumes=np.zeros(5);drift=np.zeros(5)
     for point in o['volume']:
