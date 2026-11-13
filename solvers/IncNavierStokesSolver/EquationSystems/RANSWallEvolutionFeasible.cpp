@@ -947,7 +947,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveFrozenScalars(Vector
 std::vector<RANSWallEvolutionPatch::WallExtremum>
 RANSWallEvolutionPatch::WallTraceR4(const Vector &state) const
 {
-    Require(m_dimension==2 && !Mapped(),"R4 wall trace requires canonical flat 2D");
+    // At r=0 the native scalar is a Modified_A polynomial in the ground
+    // chart coordinate.  Positive ground stretch makes physical arclength
+    // a monotone reparameterization, so its extrema have the same roots.
+    // No physical derivative is taken here; the exact signed CG restriction,
+    // root isolation and arithmetic allowance are unchanged.  This does not
+    // admit ordinary mapped production or variable-height evolution.
+    Require(m_dimension==2 && (!Mapped() || CurvedVerification()),
+            "R4 wall trace requires canonical flat 2D or named CT6 verification");
     const auto &field=*fields[K()];
     const auto native=field.Field();
     const auto map=native->GetLocalToGlobalMap();
@@ -1032,10 +1039,16 @@ std::string RANSWallEvolutionPatch::WallTraceJSON(const Vector &state,bool &admi
     const auto worst=std::min_element(points.begin(),points.end(),[](const auto &a,const auto &b)
         {return a.value-a.error<b.value-b.error;});
     admissible=worst->value>=worst->error;
-    return J::Object({{"admissible",J::Boolean(admissible)},
+    std::vector<std::pair<std::string,std::string>> result{{"admissible",J::Boolean(admissible)},
         {"minimum",J::Number(worst->value)},{"arithmetic_scale",J::Number(worst->error)},
         {"point",J::Numbers(Vector(worst->row.coordinate.begin(),worst->row.coordinate.end()))},
-        {"geometry",J::Number(worst->row.geometry)},{"extrema_checked",J::Number(points.size())}});
+        {"geometry",J::Number(worst->row.geometry)},{"extrema_checked",J::Number(points.size())}};
+    if(CurvedVerification())
+    {
+        result.push_back({"coordinate_kind",J::Quote("ground chart coordinate; monotone physical arclength")});
+        result.push_back({"physical_point",J::Numbers(m_mapping.At(worst->row.coordinate).point)});
+    }
+    return J::Object(result);
 }
 
 bool RANSWallEvolutionPatch::RestrictedInner(const ScalarObservation &p) const

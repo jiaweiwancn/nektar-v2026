@@ -143,12 +143,21 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
             {"fixed_chart_wrong_sampler_difference",J::Number(wrongChart-expectedMechanical)},
             {"dependent_epsilon",J::Number(dependent)},{"regions",J::List(regions)}}));
     }
+    bool groundAdmissible=false;
+    const auto ground=patch.WallTraceJSON(state,groundAdmissible);
+    Require(groundAdmissible,"CT6 ground chart polynomial check rejected the positive static polynomial");
+    Tree trace;std::istringstream traceInput(ground);boost::property_tree::read_json(traceInput,trace);
+    // The independently prescribed ground polynomial is K0*(1+.02*q).
+    // Its minimum is the left endpoint regardless of varying curvature/H.
+    const double exactMinimum=K0*(1+.02*patch.lower[0]);
+    maximum=std::max(maximum,std::abs(trace.get<double>("minimum")-exactMinimum));
     Require(maximum<=2e-10 && tiltedSignal>1e-8 && omittedTiltSignal>1e-8 && fixedChartSignal>1e-8,"CT6 static transmission identity or discriminating signal failed");
     return J::Object({{"schema",J::Quote("CT6StaticTransmissionV1")},{"status",J::Quote("pass")},
         {"stored_slots",J::Number(patch.Size())},{"maximum_primitive_defect",J::Number(maximum)},
         {"tilted_diffusion_signal",J::Number(tiltedSignal)},{"omitted_tilt_signal",J::Number(omittedTiltSignal)},
         {"fixed_chart_derivative_signal",J::Number(fixedChartSignal)},
         {"minimum_sampled_covariance",J::Number(minimumCovariance)},
+        {"continuous_ground_trace",ground},{"independent_ground_minimum",J::Number(exactMinimum)},
         {"rows",J::List(rows)},{"scope",J::Quote("native geometry/profile/trace identity; full traction and conservative k-flux evaluated on both sides; arbitrary polynomial probe fields are not a transmission solution; no variable-height evolution")}});
 }
 
