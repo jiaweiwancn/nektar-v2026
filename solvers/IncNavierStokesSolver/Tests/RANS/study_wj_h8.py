@@ -23,7 +23,7 @@ from wj3_measure import checkpoint_payload
 from wj_h2_weak import independent_weak
 from validate_wj1 import Probe
 
-SOURCE=Path(__file__).resolve().parents[4]
+SOURCE=Path(os.environ.get('WJ_H8_SOURCE',Path(__file__).resolve().parents[4]))
 H7=Path('/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113')
 H6=H7.parent/'wj-h6-neutral-projection-20261112'
 
@@ -31,43 +31,65 @@ def checked(path,v):
     path=Path(path);a=identity(path);assert a['sha256']==v['sha256']and a['bytes']==v['bytes'],str(path);return a
 
 def copy_checked(path,v,dst):
-    checked(path,v);dst=Path(dst);dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,dst);checked(dst,v);return identity(dst)
+    checked(path,v);dst=Path(dst);dst.parent.mkdir(parents=True,exist_ok=True);
+    if dst.exists():checked(dst,v)
+    else:shutil.copyfile(path,dst);checked(dst,v)
+    return identity(dst)
+
+def checkpoint_index(report_path,expected):
+    """Native filenames are output indices; absolute steps come from headers."""
+    result={}
+    for path,v in expected.items():
+        if Path(path).parent.parent==Path(report_path).parent and Path(path).name=='State.bin':
+            checked(path,v);payload=checkpoint_payload(Path(path).parent)
+            result.setdefault(payload['steps'],(Path(path).parent,v))
+    return result
+
 
 def stage(root):
     """Selective imports only. No traversal of any old source/run root."""
     before=time.monotonic();old=load(SOURCE/'docs/plans/wj-h7-linux/runtime-equivalence.json');compiled=[]
     for v in old['compiled_inputs']:assert sha(SOURCE/v['path'])==v['sha256'];compiled.append(v)
     elf=[checked(v['path'],v)for v in old['qualified_ELFs']]
-    runtime=root/'runtime';runtime.mkdir();private=load(SOURCE/'docs/plans/wj-h7-linux/private-runtime.json');glibs=[]
+    runtime=root/'runtime';runtime.mkdir(exist_ok=True);private=load(SOURCE/'docs/plans/wj-h7-linux/private-runtime.json');glibs=[]
     for v in private['overrides'].values():
         dst=runtime/'glibc'/Path(v['path']).name;copy_checked(v['path'],v,dst);dst.chmod(0o755);glibs.append(identity(dst))
     geo=next(v for v in elf if Path(v['path']).name=='libSpatialDomains.so.5.9.0');copy_checked(geo['path'],geo,runtime/'geometry/libSpatialDomains.so.5.9.0')
-    for alias in ('libSpatialDomains.so.5.9','libSpatialDomains.so'):(runtime/'geometry'/alias).symlink_to('libSpatialDomains.so.5.9.0')
+    for alias in ('libSpatialDomains.so.5.9','libSpatialDomains.so'):
+        dst=runtime/'geometry'/alias
+        if not dst.exists():dst.symlink_to('libSpatialDomains.so.5.9.0')
     exes={};targets=load(SOURCE/'docs/plans/wj-h7-linux/closure/executable-map-qualification.json')['records']
     loader=runtime/'glibc/ld-linux-x86-64.so.2';library=f'{runtime}/glibc:{runtime}/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64'
     for v in targets:
-        source=Path(v['path']);assert sha(source)==v['sha256'];dst=runtime/(source.name+'.elf');shutil.copyfile(source,dst);assert sha(dst)==v['sha256'];dst.chmod(0o755)
-        wrapper=runtime/source.name;wrapper.write_text('#!/bin/sh\nexec '+shlex.quote(str(loader))+' --library-path '+shlex.quote(library)+' '+shlex.quote(str(dst))+' "$@"\n');wrapper.chmod(0o755);exes[source.name]=dict(ELF=identity(dst),wrapper=identity(wrapper))
-    save(root/'runtime-equivalence.json',dict(status='PASS',compiled_inputs=compiled,qualified_ELFs=elf,private_libraries=glibs,executables=exes,geometry=identity(runtime/'geometry/libSpatialDomains.so.5.9.0'),
+        source=Path(v['path']);assert sha(source)==v['sha256'];dst=runtime/(source.name+'.elf');
+        if dst.exists():assert sha(dst)==v['sha256']
+        else:shutil.copyfile(source,dst)
+        assert sha(dst)==v['sha256'];dst.chmod(0o755)
+        wrapper=runtime/source.name;text='#!/bin/sh\nexec '+shlex.quote(str(loader))+' --library-path '+shlex.quote(library)+' '+shlex.quote(str(dst))+' "$@"\n'
+        if wrapper.exists():assert wrapper.read_text()==text
+        else:wrapper.write_text(text)
+        wrapper.chmod(0o755);exes[source.name]=dict(ELF=identity(dst),wrapper=identity(wrapper))
+    save(root/'runtime-equivalence-v2.json',dict(status='PASS',compiled_inputs=compiled,qualified_ELFs=elf,private_libraries=glibs,executables=exes,geometry=identity(runtime/'geometry/libSpatialDomains.so.5.9.0'),
         governing_producer='c344dc2209f030e426e2ee5501d5e5b72a6d2c46',observer_producer='e62b5f4d265f068dd5af3f090bfb0e385c3ae53e',native_rebuild=False,
         arithmetic='GNU11.4 C++17 Release -O3 -DNDEBUG -ffp-contract=off -fno-fast-math',source=identity(__file__)))
     gates=load(SOURCE/'docs/plans/wj-h7-linux/component-gates.json')['cases'];manifest=load(SOURCE/'docs/plans/wj-h7-linux/manifest.json');expected={v['path']:v for v in manifest['heavy']};histories=[];initials={}
     for h in (5.,5.5,6.):
-        g=gates[str(h)];inv=g['inventory'];copy_checked(inv['path'],inv,root/f'imports/H{h:g}mm/inventory.json')
-        parent=H6/'cases'/f'H{h:g}mm';rpath=parent/'case.evolution.json';v=next(v for v in load(SOURCE/'docs/plans/wj-h6-linux/manifest.json')['heavy']if v['path']==str(rpath));copy_checked(rpath,v,root/f'imports/H{h:g}mm/initial.evolution.json')
+        g=gates[str(h)];inv=g['inventory'];copy_checked(inv['path'],inv,root/f'imports-v2/H{h:g}mm/inventory.json')
+        parent=H6/'cases'/f'H{h:g}mm';rpath=parent/'case.evolution.json';v=next(v for v in load(SOURCE/'docs/plans/wj-h6-linux/manifest.json')['heavy']if v['path']==str(rpath));copy_checked(rpath,v,root/f'imports-v2/H{h:g}mm/initial.evolution.json')
         r0=load(rpath);initials[str(h)]=dict(report=identity(rpath),state_sha256=vector_hash(r0['state']),reference_sha256=vector_hash(r0['fixed_reference']),dt=r0['dt'])
         for branch in ('coarse','fine'):
-            rp=Path(g['native'][branch]['report']['path']);v=g['native'][branch]['report'];out=root/f'imports/H{h:g}mm'/branch
+            rp=Path(g['native'][branch]['report']['path']);v=g['native'][branch]['report'];out=root/f'imports-v2/H{h:g}mm'/branch
             report=copy_checked(rp,v,out/'case.evolution.json');xml=copy_checked(rp.with_name('case.xml'),expected[str(rp.with_name('case.xml'))],out/'case.xml');r=load(rp)
             assert not r['failure']and len(r['state'])==2328;assert vector_hash(r['fixed_reference'])==vector_hash(r0['fixed_reference'])
             snapshots=[]
             for a in r['pimple_attempts']:
                 p=Path(a['k_snapshot']);assert sha(p)==a['k_snapshot_sha256'];snapshot=load(p);assert vector_hash(snapshot['raw'])==vector_hash(snapshot['corrected']);snapshots.append(dict(packet=identity(p),fields_present=list(snapshot),predictor_pressure_separation='UNRESOLVED:no separate predictor/correction vectors'))
-            checkpoints=[]
+            checkpoints=[];native_cps={}
+            native_cps=checkpoint_index(rp,expected)
             for step in range(r['steps']+1):
                 ctx=context(r,step)
                 if step:
-                    cp=rp.parent/f'CP.{step}';v=expected[str(cp/'State.bin')]
+                    cp,v=native_cps[step]
                 elif branch=='coarse':cp=parent/'CP';v=next(v for v in load(SOURCE/'docs/plans/wj-h6-linux/manifest.json')['heavy']if v['path']==str(cp/'State.bin'))
                 else:
                     original_intent=load(rp.with_name('intent.json'));cp=Path(original_intent['checkpoint']['path']).parent;v=original_intent['checkpoint']
@@ -76,18 +98,18 @@ def stage(root):
                 assert vector_hash(payload['state'])==vector_hash(ctx['state'])and payload['reference_sha256']==vector_hash(r['fixed_reference'])
                 checkpoints.append(dict(step=step,copy=identity(out/f'CP.{step}/State.bin'),original=identity(cp/'State.bin'),state_sha256=vector_hash(ctx['state']),callback_history_sha256=vector_hash(ctx['history']),alpha=ctx['alpha'],time=ctx['time'],native_history_sha256=[vector_hash(v)for v in payload['native_history']],native_history_times=payload['native_history_times']))
             histories.append(dict(height=h,branch=branch,report=report,original_report=identity(rp),xml=xml,checkpoints=checkpoints,snapshot_inventory=snapshots))
-    save(root/'imports.json',dict(histories=histories,initials=initials,original_H7_allocation='closed1800 and107.85679090699705 unknown charge unchanged',seconds=time.monotonic()-before))
+    save(root/'imports-v2.json',dict(histories=histories,initials=initials,original_H7_allocation='closed1800 and107.85679090699705 unknown charge unchanged',seconds=time.monotonic()-before))
     # Frozen old XML bytes, not a regenerated/rounded neutral profile.
-    xml=H6/'cases/H6mm/case.xml';expected_h6=load(SOURCE/'docs/plans/wj-h6-linux/manifest.json')['heavy'];v=next(v for v in expected_h6 if v['path']==str(xml));copy_checked(xml,v,root/'imports/H6mm/reference.xml')
-    save(root/'stage-receipt.json',dict(status='PASS',source=identity(__file__),imports=identity(root/'imports.json'),runtime=identity(root/'runtime-equivalence.json'),seconds=time.monotonic()-before))
+    xml=H6/'cases/H6mm/case.xml';expected_h6=load(SOURCE/'docs/plans/wj-h6-linux/manifest.json')['heavy'];v=next(v for v in expected_h6 if v['path']==str(xml));copy_checked(xml,v,root/'imports-v2/H6mm/reference.xml')
+    save(root/'stage-receipt-v2.json',dict(status='PASS',source=identity(__file__),imports=identity(root/'imports-v2.json'),runtime=identity(root/'runtime-equivalence-v2.json'),seconds=time.monotonic()-before))
     print('PASS selective H6/H7 imports, native histories/checkpoints and exact private runtime',flush=True)
 
 
 def selected(root,h):
-    return [v for v in load(root/'imports.json')['histories']if v['height']==h]
+    return [v for v in load(root/'imports-v2.json')['histories']if v['height']==h]
 
 def inventory(root,h,include_new=False):
-    items=selected(root,h);r=load(items[0]['report']['path']);c=configuration(h);inv=add_local(r,load(root/f'imports/H{h:g}mm/inventory.json'),c)
+    items=selected(root,h);r=load(items[0]['report']['path']);c=configuration(h);inv=add_local(r,load(root/f'imports-v2/H{h:g}mm/inventory.json'),c)
     if include_new:
         rp=root/'case/run/case.evolution.json'
         if rp.exists():inv=extend_witnesses(load(rp),inv,c)
@@ -95,7 +117,7 @@ def inventory(root,h,include_new=False):
 
 
 def diagnose(root,h,version,include_new=False):
-    out=root/'diagnosis'/f'H{h:g}mm'/version;out.mkdir(parents=True);items=selected(root,h);c=configuration(h);r0=load(root/f'imports/H{h:g}mm/initial.evolution.json');inv=inventory(root,h,include_new)
+    out=root/'diagnosis'/f'H{h:g}mm'/version;out.mkdir(parents=True);items=selected(root,h);c=configuration(h);r0=load(root/f'imports-v2/H{h:g}mm/initial.evolution.json');inv=inventory(root,h,include_new)
     save(out/'inventory.json',inv);cache=Rows(r0,[v['physical']for v in inv['points']],c);projection=PressureProjection(cache);initial=cache.evaluate(r0['state']);records=[];local=[];arrays=[]
     keys={tuple(v)for v in inv['local_keys']};local_idx=[i for i,(p,o)in enumerate(cache.rows[:cache.point_count])if tuple(float(v).hex()for v in p)in keys]
     if include_new and(root/'case/run/case.evolution.json').exists():items=items+[dict(height=h,branch='quarter',report=identity(root/'case/run/case.evolution.json'))]
@@ -130,12 +152,12 @@ def diagnose(root,h,version,include_new=False):
 
 
 def prepare(root):
-    folder=root/'case/cp0';folder.mkdir(parents=True);xml=clone(root/'imports/H6mm/reference.xml',folder/'case.xml',.0025,0)
-    save(root/'case/intent.json',dict(xml=identity(xml),physical_parent=identity(root/'imports/H6mm/reference.xml'),dt=.0025,steps=16,H_w_mm=6.,expected_size=2328,NumSteps_CP0=0))
+    folder=root/'case/cp0';folder.mkdir(parents=True);xml=clone(root/'imports-v2/H6mm/reference.xml',folder/'case.xml',.0025,0)
+    save(root/'case/intent.json',dict(xml=identity(xml),physical_parent=identity(root/'imports-v2/H6mm/reference.xml'),dt=.0025,steps=16,H_w_mm=6.,expected_size=2328,NumSteps_CP0=0))
 
 
 def pair_initial(root):
-    r=load(root/'case/cp0/case.evolution.json');base=load(root/'imports/H6mm/initial.evolution.json');compatible(base,r,.0025,same_dt=False);assert not r['failure']
+    r=load(root/'case/cp0/case.evolution.json');base=load(root/'imports-v2/H6mm/initial.evolution.json');compatible(base,r,.0025,same_dt=False);assert not r['failure']
     for a,b in zip(base['native_history'],r['native_history']):assert vector_hash(a)==vector_hash(b)
     assert len(r['native_history'])==len(base['native_history'])
     p=checkpoint_payload(r['checkpoint']);assert p['reference_sha256']==vector_hash(base['fixed_reference'])and vector_hash(p['state'])==vector_hash(r['state'])and p['signature']==r['signature']and p['dt']==.0025

@@ -81,6 +81,13 @@ class LocalTimestepTests(unittest.TestCase):
         for key in ('state','fixed_reference'):
             with self.assertRaisesRegex(ValueError,'state|reference'):compatible(a,dict(a,**{key:[0.,1.]}),.005)
 
+    def test_checkpoint_names_do_not_define_absolute_steps(self):
+        from study_wj_h8 import checkpoint_index
+        expected={'/run/CP.0/State.bin':{'sha256':'first'},'/run/CP.1/State.bin':{'sha256':'second'}}
+        with patch('study_wj_h8.checked'),patch('study_wj_h8.checkpoint_payload',side_effect=lambda p:dict(steps=1 if p.name=='CP.0'else 2)):
+            index=checkpoint_index(Path('/run/case.evolution.json'),expected)
+        self.assertEqual(index[1][0],Path('/run/CP.0'));self.assertEqual(index[2][0],Path('/run/CP.1'))
+
     def test_genuine_intermediate_callback_and_rejected_ineligibility(self):
         s=[[0.],[1.],[2.]];hist=[[0.],[.8],[1.8]];packets=[dict(state_sha256=vector_hash(v),stage_history_sha256=vector_hash(h),callback_history=h,alpha_mass=0 if i==0 else 400,time=i*.0025)for i,(v,h)in enumerate(zip(s,hist))]
         r=dict(dt=.0025,steps=2,accepted_states=s,wj_audit_packets=packets,physical_range_events=[dict(state=[3.],history=[2.8],alpha=400,time=.0075,wj_packet={})])
