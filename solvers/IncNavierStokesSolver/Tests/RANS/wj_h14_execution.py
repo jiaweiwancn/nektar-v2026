@@ -22,6 +22,12 @@ PARAMETERS={'NumSteps','TimeStep','IO_CheckSteps','IO_InfoSteps'}
 def file_id(path):
     p=Path(path);return dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
 
+def native_command(admission,phase,argv):
+    if phase not in ('target_cp0','pilot')or admission.get('status')!='PASS':raise ValueError('closed target command')
+    if list(map(str,argv))!=admission['commands'][phase]:raise ValueError('unbound target command')
+    for v in admission['command_inputs'][phase]:
+        if file_id(v['path'])!=v:raise ValueError('changed immutable target command input')
+
 def protected(root):
     r=copy.deepcopy(root)
     for parent,tag in (('./CONDITIONS/SOLVERINFO','I'),('./CONDITIONS/PARAMETERS','P')):

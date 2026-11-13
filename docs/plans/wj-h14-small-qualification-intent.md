@@ -43,3 +43,28 @@ criteria in the H14 contract remain unchanged. This intent does not authorize
 an extra physical matching height, timestep study, target initialization or pilot.
 Target preflight requires every indispensable implementation/parity/bound/history/
 runtime gate plus a remaining-cost/allocation forecast to pass first.
+
+## Full target pilot rule (frozen before target invocation)
+
+Following small qualification, use the original H13 XML with dt=.0025; only the
+declared execution controls change. The complete local cell/profile advective and
+diffusive indicators are frozen in `target-resource-design-v1.json` before CP0.
+Diffusion is implicit; a cell indicator is not an explicit stability limit, and
+the pilot does not certify temporal preservation. No timestep search is allowed.
+
+After a qualified fresh CP0, use genuine one-step checkpoint continuations, at
+most four, to permit an independent quality/moment assessment before the next
+step. Before each launch require25% cost headroom inside the same600 s pilot
+reservation, using the measured CP0/assessment and then actual pilot costs.
+Unfitting subsequent steps stay unlaunched; there is no restart of the allowance.
+An unknown launch remains charged against the four-attempt maximum. A native or
+expanded failure stops the pilot. This is a bounded capacity/admissibility pilot,
+not H13's duration experiment.
+
+The independent finite inventory is every stored element's5x5 Lobatto points
+with every legitimate owner, physical Gauss8 volume support split at settled wall
+breakpoints, original physical7/10/15 mm and interface/prior-witness heights, and
+native witnesses with deterministic physical1e-6 neighborhoods. Keep the native
+hard inventory unchanged and separate. Use all regional Q1 moment vectors and
+the original CP0 divergence gate. Evolved strong divergence is reported without
+imposing the CP0 construction gate on transported states.

@@ -8,12 +8,23 @@ import unittest
 from unittest.mock import patch
 import xml.etree.ElementTree as ET
 from cls_epawf_m3_cases import set_info,set_parameter,write
-from wj_h14_execution import protected,validate_pair,clone,target_preflight,QUALIFICATION
+from wj_h14_execution import protected,validate_pair,clone,target_preflight,QUALIFICATION,file_id,native_command
 
 SOURCE=Path(__file__).resolve().parents[4]
 PARENT=Path(os.environ.get('WJ_H14_PARENT',str(SOURCE/'docs/plans/wj-h13-linux/publication-v1/paired-case')))
 
 class FixedHeightExecution(unittest.TestCase):
+    def test_native_command_is_bound_to_exact_inputs(self):
+        with tempfile.TemporaryDirectory()as d:
+            f=Path(d)/'case.xml';f.write_text('immutable execution intent')
+            cmd=['governor',str(f)];a=dict(status='PASS',commands={'target_cp0':cmd},command_inputs={'target_cp0':[file_id(f)]})
+            native_command(a,'target_cp0',cmd)
+            with self.assertRaises(ValueError):native_command(a,'target_cp0',['other',str(f)])
+            f.write_text('changed intent')
+            with self.assertRaises(ValueError):native_command(a,'target_cp0',cmd)
+    def test_closed_or_wrong_native_role_is_refused(self):
+        for status,phase in [('NOT_RUN','target_cp0'),('PASS','governing')]:
+            with self.assertRaises(ValueError):native_command(dict(status=status),phase,[])
     def test_stored_reference_never_refits_or_inverts_roughness(self):
         from study_wj_h14 import stored_reference
         with patch('wj_h5_neutral.required_roughness',side_effect=AssertionError('H14 must not calibrate')):

@@ -33,6 +33,10 @@ def execute(root,label,argv,seconds,phase='operation',workers=1):
             admission=load(root/'target-admission.json');assert admission['status']=='PASS'
             assert admission['height_mm']==6 and admission['state_size']==24688
             assert not any(v['phase']==phase for v in b['entries'].values()),'native reservation cannot be repeated'
+            from wj_h14_execution import native_command
+            native_command(admission,phase,argv)
+            if phase=='target_cp0':b['target_CP0_reservations']=b.get('target_CP0_reservations',0)+1
+            else:b['pilot_reserved_maximum_attempts']=4
         b['entries'][label]=dict(status='RESERVED',phase=phase,reserved_seconds=seconds)
     update_journal(book,reserve);save(folder/'request.json',request)
     env=dict(os.environ,**THREADS,TMPDIR=str(root/'tmp'),MPLCONFIGDIR=str(root/'tmp/matplotlib'),
