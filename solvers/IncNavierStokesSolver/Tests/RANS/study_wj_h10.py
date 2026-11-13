@@ -71,9 +71,9 @@ def runtime(root):
     save(root/'science/runtime-build.json',dict(executables=records,kernel=identity(rt/'WJKernelProbe.elf'),private_libraries=load(root/'setup.json')['private_libraries'],geometry=load(root/'setup.json')['geometry'],compiler=load(root/'build/CMakeFiles/3.22.1/CMakeCXXCompiler.cmake')if False else '/usr/bin/c++ GNU11.4.0',compiled_inputs=[dict(path=v['file'],sha256=sha(v['file']),command=v['command'])for v in compile_commands if (Path(v['directory'])/shlex.split(v['command'])[shlex.split(v['command']).index('-o')+1]).exists()],configured_commands=identity(root/'build/compile_commands.json'),scope='new governor/reader ELF identities; complete copied original private glibc closure qualified by actual fixture/maps, no host-library substitution'))
 
 
-def halt(root,status,reason):
+def halt(root,status,reason,**details):
     from run_wj_h7 import update_journal
-    def change(book):book.setdefault('h10_halt',dict(status=status,reason=reason))
+    def change(book):book.setdefault('h10_halt',dict(status=status,reason=reason,**details))
     update_journal(root/'accounting.json',change)
 
 
@@ -134,7 +134,7 @@ def scan(root,branch,phase):
         result['pressure_profiles']=profiles;result['new_vs_H9_first_step']=dict(old=load(root/f'science/imports/{branch}.impulse.json')['physical'],new=result['impulse_physical'],comparison='different first-step times; same pressure level, no regauge')
         save(out/'arithmetic.json',serial(result));state_summary['arithmetic']=identity(out/'arithmetic.json')
     save(out/'result.json',serial(state_summary));assert identity(rp)==before
-    if state_summary['status']!='PASS':halt(root,state_summary['status'],'native state failed expanded/quality/compatibility gate')
+    if state_summary['status']!='PASS':halt(root,state_summary['status'],'native state failed expanded/quality/compatibility gate',producer=before,time=r['time'],witness=serial(summary['witness']))
     print(branch,phase,state_summary['status'],'margin',summary['min_in_plane'],'scaled div',summary['divergence_scaled_max'],flush=True)
 
 

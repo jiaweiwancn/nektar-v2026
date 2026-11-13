@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 from wj_h10_analysis import MATRIX,QUALITY,gates,residual_check
 from wj_h9_local import same
-from run_wj_h10 import native_intent
+from run_wj_h10 import native_intent,runtime_snapshot
 from cls_epawf_m3_cases import set_info,set_parameter,write
 import xml.etree.ElementTree as ET
 
@@ -55,6 +55,11 @@ class FlatInletInitialization(unittest.TestCase):
             self.assertEqual(native_intent(r,[str(r/'runtime/IncNavierStokesSolver'),str(p)],'cp0'),'cp0:coarse:cp0')
             set_parameter(x,'TimeStep',.005);write(x,p)
             with self.assertRaises(AssertionError):native_intent(r,[str(r/'runtime/IncNavierStokesSolver'),str(p)],'cp0')
+    def test_native_runtime_snapshot_excludes_preexec_union(self):
+        root=Path('/h10');host='/usr/lib/libc.so.6';private='/h10/runtime/glibc/libc.so.6';exe='/h10/runtime/RANSWallResolutionProbe.elf'
+        self.assertIsNone(runtime_snapshot(root,[host]))
+        self.assertEqual(runtime_snapshot(root,[exe,private])['status'],'PASS')
+        self.assertEqual(runtime_snapshot(root,[exe,host,private])['status'],'OBSTRUCTED')
     def test_rejected_phase_is_not_a_strict_packet(self):
         with tempfile.TemporaryDirectory()as t:
             r=Path(t);(r/'science').mkdir();(r/'science/input-intent.json').write_text(json.dumps(dict(cases=[])));p=r/'bad.json';p.write_text(json.dumps(dict(operation='candidate')))

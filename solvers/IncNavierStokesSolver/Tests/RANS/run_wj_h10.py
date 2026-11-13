@@ -37,6 +37,14 @@ def native_intent(root,argv,kind):
     if kind=='cp0':assert infos['RANSWallRestart']=='None'
     return kind+':'+case['branch']+':'+phase
 
+def runtime_snapshot(root,files):
+    """Only actual native ELF snapshots, never a PID union across fork/exec."""
+    native=[v for v in files if Path(v).name in ('IncNavierStokesSolver.elf','RANSWallResolutionProbe.elf','WJKernelProbe.elf')]
+    if not native:return None
+    libc=[v for v in files if Path(v).name=='libc.so.6']
+    valid=libc==[str(Path(root)/'runtime/glibc/libc.so.6')]
+    return dict(status='PASS'if valid else 'OBSTRUCTED',native=native,libc=libc,files=files)
+
 def execute(root,label,argv,*,cwd=None,seconds=120,phase="science",kind="passive"):
     root=Path(root);assert root.name=='wj-h10-flat-inlet-20261113'
     assert 0<seconds<=2000 and phase in ('build','science') and kind in ('passive','fixture','cp0','governing','strict')
@@ -44,7 +52,7 @@ def execute(root,label,argv,*,cwd=None,seconds=120,phase="science",kind="passive
     book=load(journal)if journal.exists()else dict(seconds_ceiling=3600,setup_seconds=60.,closure_reserve=300.,
         governing_attempts=0,cp0_reservations=0,strict_readbacks=0,builds=0,entries={})
     assert not book.get('closed'),'closed H10 allocation'
-    assert not book.get('coverage_halt') and not book.get('h10_halt'),'H10 monotone scientific halt'
+    if kind!='passive':assert not book.get('coverage_halt') and not book.get('h10_halt'),'H10 monotone scientific halt'
     assert label not in book['entries'],'write-once command label'
     charged=lambda v:v.get('seconds',v['reserved_seconds'])
     used=sum(charged(v)for v in book['entries'].values()if v['phase']==phase)+(60 if phase=='build'else 0)
@@ -72,14 +80,19 @@ def execute(root,label,argv,*,cwd=None,seconds=120,phase="science",kind="passive
     def limits():
         import resource
         resource.setrlimit(resource.RLIMIT_AS,(4*1024**3,4*1024**3));resource.setrlimit(resource.RLIMIT_FSIZE,(2*1024**3,2*1024**3))
-    start=time.monotonic();peak=0;reason=None;groups=set();last=start;mapped=set();process_maps={}
+    start=time.monotonic();peak=0;reason=None;groups=set();last=start;mapped=set();process_maps={};native_samples=[]
     def mappings(pid):
+        nonlocal reason
         try:
             files=set()
             for line in Path(f'/proc/{pid}/maps').read_text().splitlines():
                 fields=line.split(maxsplit=5)
                 if len(fields)==6 and fields[5].startswith('/')and not fields[5].endswith(' (deleted)'):
                     file=str(Path(fields[5]).resolve());mapped.add(file);files.add(file)
+            snapshot=runtime_snapshot(root,sorted(files))
+            if snapshot:
+                snapshot.update(pid=pid,elapsed=time.monotonic()-start);native_samples.append(snapshot)
+                if snapshot['status']!='PASS':reason='RUNTIME_CLOSURE_MISMATCH actual native libc'
             if files:
                 old=process_maps.setdefault(str(pid),dict(command=Path(f'/proc/{pid}/cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace'),files=[]))
                 old['files']=sorted(set(old['files'])|files)
@@ -108,8 +121,13 @@ def execute(root,label,argv,*,cwd=None,seconds=120,phase="science",kind="passive
                 except ProcessLookupError:pass
             code=child.wait()
     loaded=[dict(path=p,bytes=Path(p).stat().st_size,sha256=sha(p))for p in sorted(mapped)if Path(p).is_file()]
-    save(folder/'loaded-maps.json',loaded);save(folder/'process-maps.json',process_maps)
-    entry.update(status='RESOURCE_LIMIT'if reason else 'PASS'if code==0 else 'FAIL',seconds=time.monotonic()-start,exit=code,
+    save(folder/'loaded-maps.json',loaded);save(folder/'process-maps.json',process_maps);save(folder/'native-exec-samples.json',native_samples)
+    entry.update(status=('OBSTRUCTED'if reason.startswith('RUNTIME_')else 'RESOURCE_LIMIT')if reason else 'PASS'if code==0 else 'FAIL',seconds=time.monotonic()-start,exit=code,
         reason=reason,peak_tree_rss_bytes=peak,root_bytes=size(root),build_source_runtime_bytes=sum(size(root/p)for p in ('source','build','runtime')),science_bytes=size(root/'science'),log_sha256=sha(folder/'command.log'))
-    complete_operation(journal,label,entry);save(folder/'receipt.json',dict(request,**entry));print(label,entry['status'],entry['seconds'],flush=True)
+    complete_operation(journal,label,entry)
+    if kind in ('cp0','governing','strict')and (code!=0 or reason):
+        from run_wj_h7 import update_journal
+        def stop(book):book.setdefault('h10_halt',dict(status=entry['status'],operation=label,exit=code,reason=reason,log_sha256=entry['log_sha256']))
+        update_journal(journal,stop)
+    save(folder/'receipt.json',dict(request,**entry));print(label,entry['status'],entry['seconds'],flush=True)
     return code==0 and reason is None

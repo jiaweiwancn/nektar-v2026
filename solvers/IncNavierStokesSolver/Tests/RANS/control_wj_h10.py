@@ -44,6 +44,8 @@ def projection(root,tag):
 
 def native(root):
     assert load(root/'science/fixture-v2/native.json')['status']=='PASS'
+    assert load(root/'runtime-qualified.json')['status']=='PASS'
+    assert load(root/'operations/focused-h10-runtime/receipt.json')['status']=='PASS'
     assert load(root/'operations/focused-tests-v2/receipt.json')['status']=='PASS'
     for branch,dt in MATRIX:
         if branch!='coarse'and not projection(root,branch+'-cp0'):return False
