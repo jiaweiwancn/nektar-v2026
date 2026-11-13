@@ -47,8 +47,17 @@ def main():
 
     configured = execute('configure-ctest', ['cmake', '-S', test, '-B', a.root/'build']) == 0
     if configured:
-        execute('ctest', ['ctest', '--test-dir', a.root/'build', '-R', '^CT6',
-                          '--parallel', '1', '--output-on-failure'])
+        inventory = execute('ctest-inventory', ['ctest', '--test-dir', a.root/'build',
+            '-R', '^CT6', '--show-only=json-v1'])
+        names = set()
+        if inventory == 0:
+            names = {v['name'] for v in json.loads((a.output/'ctest-inventory.log').read_text())['tests']}
+        expected = {'CT6ManufacturedJetChecks', 'CT6EvolutionAdmissionChecks'}
+        rows['ctest-coverage'] = dict(exit_code=0 if names == expected else 1,
+            required=sorted(expected), actual=sorted(names))
+        if names == expected:
+            execute('ctest', ['ctest', '--test-dir', a.root/'build', '-R', '^CT6',
+                              '--parallel', '1', '--output-on-failure'])
     execute('discriminating', [sys.executable, '-B', test/'ct_accepted6_controls.py',
         '--runtime', a.runtime, '--operator', a.root/'native-operator-v1',
         '--targeted', a.root/'targeted-v4', '--output', a.root/'controls-v1'])
