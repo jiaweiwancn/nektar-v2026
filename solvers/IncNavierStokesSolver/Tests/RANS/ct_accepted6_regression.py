@@ -10,6 +10,7 @@ from ct_accepted_open import run,require
 from ct_accepted_pilot import artifact_hash
 from run_cls_epawf_picard import set_parameter,set_info,write
 from rans_request_manifest import RequestManifest,runtime_identity,sha
+from continue_cls_epawf_pimple import header
 
 
 def main():
@@ -59,10 +60,13 @@ def main():
             if reject:
                 candidate=next(s for tt,s in zip(mms['audit_times'],mms['accepted_states'],strict=True) if abs(tt-.004)<1e-13)
                 retained=r.get('rejected_state')==candidate
-                passed=e['exit_code']!=0 and identical and retained and abs(r.get('time',-1)-.002)<1e-13 and 'deliberate' in r.get('failure','')
+                before=header(first,True)
+                history_identical=r.get('native_history')==before['history'] and r.get('native_history_times')==before['history_times']
+                initial_identical=r.get('initial')==mms['initial']
+                passed=e['exit_code']!=0 and identical and retained and history_identical and initial_identical and abs(r.get('time',-1)-.002)<1e-13 and 'deliberate' in r.get('failure','')
                 row=dict(status='pass' if passed else 'fail',execution=e,last_accepted_state_bitwise_identical=identical,
                     rejected_candidate_equals_uninterrupted_next_state=retained,failure=r.get('failure'),
-                    initial_state_equals_uninterrupted_initial=r.get('initial')==mms['initial'],
+                    initial_state_equals_uninterrupted_initial=initial_identical,native_history_bitwise_rollback=history_identical,
                     time=r.get('time'),native_history_times=r.get('native_history_times'),report_sha256=sha(path))
             else:
                 same_history=bool(r.get('checkpoint')) and sha(Path(r['checkpoint'])/'State.bin')==sha(second/'State.bin')
