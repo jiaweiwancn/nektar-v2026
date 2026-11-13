@@ -62,7 +62,7 @@ def certificate():
         interval_transition_cells=len(leaves),minimum_interval_Jacobian=min(v[0] for v in leaves),minimum_interval_xq=min(v[1] for v in leaves),
         collar_sufficient_Jacobian_bound=1-NC*math.pi**2/(2*L**2),outer_vertical_Jacobian_bound=1-1/Z,
         pure_normal_at_roof_foot_limit=1-Z*math.pi**2/(2*L**2),
-        injectivity='positive oriented one-sided analytic charts, x_q>0 and simple fixed inlet/roof/outlet/ground boundary; matching vertical C1-foot branches; degree-one global inverse on each conforming subdomain',
+        injectivity='positive oriented one-sided analytic charts, x_q>0 and simple fixed inlet/roof/outlet/ground boundary; matching vertical foot edges with one-sided map derivatives (the physical graph is C1, its curvature jumps); degree-one global inverse on conforming subdomains',
         scope='analytic map interval certificate, not a certificate for the native polynomial geometry interpolant or coupled curved evolution')
 
 
