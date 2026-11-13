@@ -78,25 +78,33 @@ def norm_metrics(cache,a):
     return out
 
 
-def run(root):
-    start=time.monotonic();imp=load(root/'imports.json');out=root/'science';out.mkdir();reps={b:load(v['report']['path'])for b,v in imp['reports'].items()};r0=reps['coarse'];c=configuration(6.)
+def run(root,resume=False):
+    start=time.monotonic();imp=load(root/'imports.json');out=root/('science-v2'if resume else 'science');out.mkdir();reps={b:load(v['report']['path'])for b,v in imp['reports'].items()};r0=reps['coarse'];c=configuration(6.)
     inventory=load(imp['inventory']['path']);keys={tuple(v)for v in inventory['local_keys']};points=[v['physical']for v in inventory['points']if tuple(float(x).hex()for x in v['physical'])in keys]
     cache=Rows(r0,points,c);mom=MomentAudit(cache);owned=list(range(cache.point_count));outer_idx=np.flatnonzero(cache.outer[:cache.point_count]);fixed=next(i for i,(p,o)in enumerate(cache.rows[:cache.point_count])if p[0]==8 and abs(p[2]-.25607517888672315)<1e-14 and o['geometry']==17)
     old_records=load(imp['records']['path']);local=[];bindings=[];moments=[];bt=[];tel=[];matrices=[];weak_results={};anchors={};weak_cache={};data_cache={};action_cache={};impulses={};impulse_fields={};phase_ids={};probe_checks=[];compiled_cache={};history_states={};interface_phases=[];flow_increments=[];kernel_calls=0
     save(out/'inventory.json',dict(parent=imp['inventory'],points=points,rows=[dict(physical=p,owner=o)for p,o in cache.rows[:cache.point_count]],rule='H8 local_keys only; all owners; no new point search',fixed_direction=dict(xi=XI.tolist(),a=POL.tolist(),H=DIRECTION.tolist())))
     # Only one full anchor payload is resident at a time; immutable tests are
     # recovered once. No copies of its large scalar rows are published.
-    anchor0=load(imp['anchors']['coarse']['native']['path'])
-    def validate_anchor(branch,p,step):
-        ctx=context(reps[branch],step);assert p['state_sha256']==ctx['packet']['state_sha256']and p['callback_history_sha256']==vector_hash(ctx['history'])
-        assert p['weak_checks']['alpha_mass']==ctx['alpha']and p['open_boundary']['time']==ctx['time']
-        assert p['report_sha256']==imp['reports'][branch]['report']['sha256']and p['checkpoint_sha256']==imp['anchors'][branch]['context']['checkpoint']['sha256']
-    validate_anchor('coarse',anchor0,1);tests=ProjectedTests(r0,anchor0['weak_checks']);weak=WeakAudit(r0,imp['reports']['coarse']['xml']['path'],tests)
-    def compact_anchor(p):return dict(components=p['weak_checks']['native_terms'],regional=[p['weak_checks']['native_inner'],p['weak_checks']['native_outer']])
-    anchors['coarse']=compact_anchor(anchor0);save(out/'projected-tests.json',tests.export());del anchor0;gc.collect()
-    for branch in ('fine','quarter'):
-        p=load(imp['anchors'][branch]['native']['path']);validate_anchor(branch,p,2 if branch=='fine'else 4);anchors[branch]=compact_anchor(p);assert p['state_sha256']==context(reps[branch],2 if branch=='fine'else 4)['packet']['state_sha256']
-        assert tests.validate_boundary(p['weak_checks'])<2e-11;del p;gc.collect()
+    if resume:
+        original=root/'science/projected-tests.json';tests=ProjectedTests.from_export(r0,load(original));weak=WeakAudit(r0,imp['reports']['coarse']['xml']['path'],tests)
+        for branch,v in imp['anchors'].items():
+            native=v['independent_weak'];anchors[branch]=dict(components=native['native_components'],regional=native['regional_native'])
+        save(out/'recovery.json',dict(previous_failed_operation=identity(root/'operations/science-batch/receipt.json'),reused_projected_tests=identity(original),original_checks_preserved=True,
+            native_anchor_source=identity(root/'wj-h9-expected.json'),scope='same seven-attempt logical audit, changed missing-ground handling; no new native work or points'))
+        save(out/'projected-tests.json',tests.export())
+    else:
+        anchor0=load(imp['anchors']['coarse']['native']['path'])
+        def validate_anchor(branch,p,step):
+            ctx=context(reps[branch],step);assert p['state_sha256']==ctx['packet']['state_sha256']and p['callback_history_sha256']==vector_hash(ctx['history'])
+            assert p['weak_checks']['alpha_mass']==ctx['alpha']and p['open_boundary']['time']==ctx['time']
+            assert p['report_sha256']==imp['reports'][branch]['report']['sha256']and p['checkpoint_sha256']==imp['anchors'][branch]['context']['checkpoint']['sha256']
+        validate_anchor('coarse',anchor0,1);tests=ProjectedTests(r0,anchor0['weak_checks']);weak=WeakAudit(r0,imp['reports']['coarse']['xml']['path'],tests)
+        def compact_anchor(p):return dict(components=p['weak_checks']['native_terms'],regional=[p['weak_checks']['native_inner'],p['weak_checks']['native_outer']])
+        anchors['coarse']=compact_anchor(anchor0);save(out/'projected-tests.json',tests.export());del anchor0;gc.collect()
+        for branch in ('fine','quarter'):
+            p=load(imp['anchors'][branch]['native']['path']);validate_anchor(branch,p,2 if branch=='fine'else 4);anchors[branch]=compact_anchor(p);assert p['state_sha256']==context(reps[branch],2 if branch=='fine'else 4)['packet']['state_sha256']
+            assert tests.validate_boundary(p['weak_checks'])<2e-11;del p;gc.collect()
     import ast,xml.etree.ElementTree as ET
     first=[load(v['packet']['path'])for v in imp['attempts']if v['step']==1]
     assert len({vector_hash(v['committed'])for v in first})==1
@@ -213,6 +221,6 @@ def run(root):
     finally:probe.close()
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',required=True,type=Path);p.add_argument('--mode',choices=('stage','science'),required=True);p.add_argument('--expected',type=Path);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--root',required=True,type=Path);p.add_argument('--mode',choices=('stage','science'),required=True);p.add_argument('--expected',type=Path);p.add_argument('--resume',action='store_true');a=p.parse_args()
     if a.mode=='stage':stage(a.root,a.expected)
-    else:run(a.root)
+    else:run(a.root,a.resume)

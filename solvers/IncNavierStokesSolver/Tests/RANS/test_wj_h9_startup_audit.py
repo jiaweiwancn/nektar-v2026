@@ -103,6 +103,13 @@ class StartupAuditTests(unittest.TestCase):
             (M+np.eye(2)).tofile(p)
             with self.assertRaises(AssertionError):matrix_check(packet,p)
 
+    def test_local_only_interface_packet_does_not_invent_wall_samples(self):
+        from types import SimpleNamespace
+        from study_wj_h6 import configuration
+        c=configuration(6.);v=Rows.__new__(Rows);v.config=c;v.rows=[([4,0,c.d0+c.H],dict(chart=[4,0,c.H],interface_role='matching_inner',region='inner')),([4,0,c.d0+c.H],dict(chart=[4,0,c.H],interface_role='matching_outer',region='outer'))];v.point_count=2;v.outer=np.array([False,True]);v.weights=np.zeros(2)
+        d=dict(K=np.full(2,c.K),U=np.zeros((2,3)),k=np.full(2,c.K),epsilon=np.full(2,c.A/c.H),T=np.zeros((2,3,3)),nu_d=np.ones(2),grad_k=np.zeros((2,3)),pi=np.zeros(2),turbulent_production=np.zeros(2),production=np.zeros(2),reference_production=np.zeros(2),destruction=np.zeros(2))
+        p=v.interface_history(d);self.assertIsNone(p['wall_shear_range']);self.assertIn('not_evaluated',p['wall_shear_scope']);self.assertEqual(len(p['rows']),1)
+
     def test_actual_root_derivative_and_fixed_direction(self):
         self.assertLess(abs(np.trace(DIRECTION)),1e-16)
         G=np.array([[[.01,0,.8],[0,0,0],[.001,0,-.002]]]);v=actions(np.array([.009]),np.array([.002]),G)

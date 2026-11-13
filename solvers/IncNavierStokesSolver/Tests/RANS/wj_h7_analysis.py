@@ -164,7 +164,8 @@ class Rows:
                 k_flux_jump=float(data['nu_d'][i]*data['grad_k'][i,2]-data['nu_d'][j]*data['grad_k'][j,2]),
                 pressure_jump=float(data['pi'][i]-data['pi'][j])))
         ii=~self.outer;w=self.weights
-        return dict(rows=rows,wall_shear_range=[float(np.min(data['T'][wall,0,2])),float(np.max(data['T'][wall,0,2]))],
+        return dict(rows=rows,wall_shear_range=[float(np.min(data['T'][wall,0,2])),float(np.max(data['T'][wall,0,2]))]if wall else None,
+            wall_shear_scope='sampled_ground_rows'if wall else 'not_evaluated:no_ground_rows_in_requested_inventory',
             inner_integrals=dict(actual_turbulent_production=float(w[ii]@data['turbulent_production'][ii]),raw_stress_work=float(w[ii]@data['production'][ii]),
                 counterfactual_production=float(w[ii]@data['reference_production'][ii]),cutoff_destruction=float(w[ii]@data['destruction'][ii])),
             note='actual evolving production separate from current-K counterfactual cutoff budget; no stationary restoration')

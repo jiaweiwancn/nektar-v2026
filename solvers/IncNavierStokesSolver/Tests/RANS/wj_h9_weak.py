@@ -53,6 +53,14 @@ class ProjectedTests:
                 self.coeff[(geom,typ)]=(el,co)
         assert self.max_value_error<2e-11 and self.max_gradient_error<2e-10
         self.boundary_error=self.validate_boundary(packet)
+    @classmethod
+    def from_export(cls,report,export):
+        self=cls.__new__(cls);self.report=report;self.H,self.d0,self.top,self.J=mapping(report);self.coeff={};self.fits=0
+        self.max_value_error=export['value_max_error'];self.max_gradient_error=export['gradient_max_error'];self.boundary_error=export['boundary_max_error']
+        for row in export['coefficients']:
+            typ=row['type'];g=row['geometry'];b=0 if typ=='v'else 3 if typ=='e'else 4 if any(e['geometry']==g for e in report['fields'][4]['mesh'])else 5
+            el=next(e for e in report['fields'][b]['mesh']if e['geometry']==g);self.coeff[(g,typ)]=(el,np.asarray(row['coefficients']))
+        return self
     def values(self,geom,typ,x,r):
         el,c=self.coeff[(geom,typ)];J=1 if el['upper'][2]<=self.H else self.J;B,Bx,Bz=shapes(el,x,r,J)
         grad=np.zeros((3,len(x),3));grad[:,:,0]=(Bx@c).T;grad[:,:,2]=(Bz@c).T

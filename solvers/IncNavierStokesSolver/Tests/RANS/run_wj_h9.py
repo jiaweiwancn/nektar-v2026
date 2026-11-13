@@ -26,12 +26,15 @@ def admit_command(argv):
 def execute(root,label,argv,*,cwd=None,seconds=120):
     root=Path(root);assert root.name=='wj-h9-startup-compatibility-20261113'
     admit_command(argv)
-    assert 0<seconds<=(360 if label=='science-batch'else 120)
+    assert 0<seconds<=(360 if label.startswith('science-batch')else 120)
     root.mkdir(exist_ok=True);journal=root/'accounting.json'
     book=load(journal)if journal.exists()else dict(seconds_ceiling=600,setup_seconds=30.,closure_reserve=90.,
         governing_attempts=0,cp0_reservations=0,strict_readbacks=0,builds=0,entries={})
     assert not book.get('closed'),'closed H9 allocation'
     assert label not in book['entries'],'write-once command label'
+    if label.startswith('science-batch'):
+        prior=sum(v.get('seconds',v['reserved_seconds'])for k,v in book['entries'].items()if k.startswith('science-batch'))
+        assert prior+seconds<=360,'RESOURCE_LIMIT shared logical science-batch ceiling; unknown reservations stay charged'
     spent=book['setup_seconds']+sum(v.get('seconds',v['reserved_seconds'])for v in book['entries'].values())
     assert spent+seconds+book['closure_reserve']<=600,'RESOURCE_LIMIT: H9 remaining time'
     units=0
