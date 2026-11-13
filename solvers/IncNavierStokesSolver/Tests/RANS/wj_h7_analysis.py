@@ -27,7 +27,7 @@ def context(r,step=None,rejected=False):
     return dict(state=s,history=h,alpha=a,time=t,step=n,role=role,packet=p)
 
 
-def principal_batch(k,e,G):
+def principal_batch(k,e,G,*,details=False):
     """Same complex implicit-root continuation and planar quartic as H3.
 
     Only independent points are batched; no direction or I4 term is omitted.
@@ -39,7 +39,10 @@ def principal_batch(k,e,G):
     A=np.zeros((3,3));A[2,0]=1;B=np.diag([-1.,0,1]);C=np.zeros((3,3));C[0,2]=-1
     V=np.array([A.ravel(),B.ravel(),C.ravel()]);Q=np.einsum('ai,nij,bj->nab',V,(L+L.transpose(0,2,1))/2,V)
     v=np.zeros((2,9));v[0,3]=1;v[1,5]=1
-    transverse=np.linalg.eigvalsh(np.einsum('ai,nij,bj->nab',v,(L+L.transpose(0,2,1))/2,v))[:,0]
+    transverse_matrix=np.einsum('ai,nij,bj->nab',v,(L+L.transpose(0,2,1))/2,v)
+    if details:
+        et,vt=np.linalg.eigh(transverse_matrix);transverse=et[:,0]
+    else:transverse=np.linalg.eigvalsh(transverse_matrix)[:,0]
     result=np.empty(len(k));angles=np.empty(len(k))
     for i,q in enumerate(Q):
         a,b,c,d,f=q[0,0],2*q[0,1],q[1,1]+2*q[0,2],2*q[1,2],q[2,2]
@@ -47,7 +50,9 @@ def principal_batch(k,e,G):
         ts=np.array([0.,math.pi/2]+[math.atan(float(z.real))%math.pi for z in roots if abs(z.imag)<1e-8])
         x=np.cos(ts);z=np.sin(ts);h=np.array([x*x,x*z,z*z]).T
         forms=np.einsum('ni,ij,nj->n',h,q,h);j=np.argmin(forms);result[i]=forms[j];angles[i]=ts[j]
-    return R,nt,N,result,transverse,angles
+    answer=(R,nt,N,result,transverse,angles)
+    if details:return answer+(dict(transverse_xi=np.stack((vt[:,0,0],np.zeros(len(k)),vt[:,1,0]),axis=1)),)
+    return answer
 
 
 def wall_batch(K,H,h,nu):

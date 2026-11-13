@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Small H7-only bounded admission; six fixed blocks, three fresh CP0s, no retries."""
 import json
+import fcntl
 import os
 from pathlib import Path
 import signal
@@ -11,6 +12,45 @@ import xml.etree.ElementTree as ET
 from run_wj_h4 import load,save,sha,input_files,size,THREADS
 from wj6_resources import scientific_workers,tree_usage
 from wj7_command import owned_groups
+
+
+def update_journal(path,change):
+    """Small shared journal mutation; children and parent use the same lock."""
+    path=Path(path)
+    with Path(str(path)+'.lock').open('a')as lock:
+        fcntl.flock(lock,fcntl.LOCK_EX);latest=load(path);change(latest);save(path,latest)
+    return latest
+
+
+def complete_operation(path,label,entry):
+    # Never publish the pre-spawn book: a scan child may have added a halt,
+    # reservations or charges. Only this operation belongs to the parent.
+    def change(latest):
+        assert label in latest['entries'],'missing original reservation'
+        latest['entries'][label].update(entry)
+    return update_journal(path,change)
+
+
+def record_coverage_halt(path,event):
+    if event['status']not in ('OBSTRUCTED','UNRESOLVED'):raise ValueError('coverage halt requires a physical/sign failure')
+    if event.get('role','accepted')!='accepted':raise ValueError('rejected candidate cannot become an accepted coverage halt')
+    trajectory=event.get('trajectory',str(event.get('height',''))+'/'+str(event.get('branch','')))
+    def change(latest):
+        latest.setdefault('coverage_halt',event) # first DETECTED witness is immutable
+        events=latest.setdefault('coverage_events',[])
+        if event not in events:events.append(event)
+        earliest=latest.setdefault('coverage_earliest',{})
+        if trajectory not in earliest or event['time']<earliest[trajectory]['time']:earliest[trajectory]=event
+    return update_journal(path,change)
+
+
+def coverage_quality(records):
+    accepted=[r['status']for r in records if r.get('role')=='accepted']
+    if not accepted:return dict(coverage='NOT_RUN',quality='NOT_RUN')
+    if any(s not in ('PASS','QUALITY_LOST','OBSTRUCTED','UNRESOLVED')for s in accepted):raise ValueError('unknown scan status')
+    coverage='OBSTRUCTED'if 'OBSTRUCTED'in accepted else 'UNRESOLVED'if 'UNRESOLVED'in accepted else 'PASS'
+    quality=coverage if coverage!='PASS'else 'QUALITY_LOST'if 'QUALITY_LOST'in accepted else 'PASS'
+    return dict(coverage=coverage,quality=quality)
 
 
 MATRIX=[(h,dt,n)for h in (5.5,6.,5.)for dt,n in ((.01,4),(.005,8))]
@@ -94,5 +134,5 @@ def execute(root,label,argv,*,cwd=None,seconds=120,cp0=False,governing=False):
     save(folder/'loaded-maps.json',loaded)
     entry.update(status='RESOURCE_LIMIT'if reason else 'PASS'if code==0 else 'FAIL',seconds=time.monotonic()-start,exit=code,
         reason=reason,peak_tree_rss_bytes=peak,root_bytes=size(root),log_sha256=sha(folder/'command.log'))
-    book['entries'][label]=entry;save(journal,book);save(folder/'receipt.json',dict(request,**entry));print(label,entry['status'],entry['seconds'],flush=True)
+    complete_operation(journal,label,entry);save(folder/'receipt.json',dict(request,**entry));print(label,entry['status'],entry['seconds'],flush=True)
     return code==0 and reason is None

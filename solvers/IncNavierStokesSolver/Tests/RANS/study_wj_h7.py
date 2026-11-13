@@ -10,7 +10,7 @@ import time
 import xml.etree.ElementTree as ET
 import numpy as np
 from numpy.testing import assert_allclose
-from run_wj_h7 import execute,load,save,sha,MATRIX
+from run_wj_h7 import execute,load,save,sha,MATRIX,record_coverage_halt,coverage_quality
 from study_wj_h5 import identity,compare_loads
 from study_wj_h6 import configuration
 from wj_h6_projection import Functions
@@ -190,7 +190,7 @@ def scan(root,h,version):
                     expanded_compiled_replay=float(compiled),inventory_sha256=inv['sha256'],arrays=identity(out/(key+'.npz')),**summary)
                 records.append(record)
                 if name!='H6'and ctx['role']=='accepted'and summary['status']in ('OBSTRUCTED','UNRESOLVED'):
-                    book=load(root/'accounting.json');book['coverage_halt']=dict(height=h,step=ctx['step'],time=ctx['time'],status=summary['status'],witness=wi);save(root/'accounting.json',book)
+                    record_coverage_halt(root/'accounting.json',dict(height=h,branch=name,trajectory=f'{h:g}/{name}',role='accepted',step=ctx['step'],time=ctx['time'],status=summary['status'],witness=wi))
             if name!='H6':save(out/(name+'-accounting.json'),accounting(r))
         pairs=[]
         for step in range(5):
@@ -205,7 +205,7 @@ def scan(root,h,version):
                     position=cache.rows[i],minima=[a['witness'],b['witness']]))
         save(out/'records.json',records);save(out/'pairs.json',pairs)
         save(out/'summary.json',dict(inventory=identity(out/'inventory.json'),records=identity(out/'records.json'),pairs=identity(out/'pairs.json'),
-            peak_quality_status='QUALITY_LOST'if any(v['status']=='QUALITY_LOST'for v in records if v['role']=='accepted')else 'PASS',coverage_halt=load(root/'accounting.json').get('coverage_halt'),
+            peak_quality_status=coverage_quality(records)['quality'],expanded_status=coverage_quality(records)['coverage'],coverage_halt=load(root/'accounting.json').get('coverage_halt'),
             source=identity(__file__),scope='retrospective expanded inventory; native decisions preserved'))
         save(root/f'scan-view-H{h:g}.json',identity(out/'summary.json'));print('PASS completed every-state scan',h,version,[(r['branch'],r['step'],r['role'],r['status'],r['min_in_plane'])for r in records],flush=True)
     finally:kernel.close()
