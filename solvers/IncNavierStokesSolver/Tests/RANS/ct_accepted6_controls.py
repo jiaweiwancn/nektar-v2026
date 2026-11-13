@@ -9,6 +9,7 @@ import numpy as np
 from ct_accepted6_cases import make
 from ct_accepted6_operator import reconstruct,geometry
 from ct_accepted_open import probe,require
+from ct_accepted_feasibility import Column,parameters
 from run_cls_epawf_picard import set_info,set_parameter,write
 from rans_request_manifest import RequestManifest,runtime_identity,sha
 
@@ -41,6 +42,13 @@ def main():
         row=targeted['checks'][model+'-static']['packet']
         for kind,key in [('omit_tilt','omitted_tilt_signal'),('fixed_chart_derivative','fixed_chart_derivative_signal')]:
             v=row[key];checks[model+'-'+kind]=dict(status='pass' if v>1e-8 else 'fail',primitive_signal=v,minimum_discriminating_signal=1e-8)
+        K=parameters(model)['q']*.16
+        flat=Column(model,K,.5,.05,1.5e-5,curvature=0.,order=96)
+        curved=Column(model,K,.5,.05,1.5e-5,curvature=-.25,order=96)
+        defect=(curved.sink_integral(.5,flat.cutoff)-curved.PJ)/curved.A
+        checks[model+'-flat_cutoff_on_curved_ray']=dict(status='pass' if abs(defect)>1e-8 else 'fail',
+            flat_cutoff=flat.cutoff,metric_cutoff=curved.cutoff,scaled_wrong_cutoff_budget_defect=defect,
+            intended_outcome='unchanged curved-ray budget criterion rejects flat-cutoff substitution')
     # Curvature and normal motion contributions in the actual exact Cartesian
     # gradient must be observable, rather than a parallel-shear substitute.
     signal=0.;curvature_signal=0.
