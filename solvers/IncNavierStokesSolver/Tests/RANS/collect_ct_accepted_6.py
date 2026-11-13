@@ -13,6 +13,8 @@ from rans_request_manifest import RequestManifest,sha,canonical
 from ct_accepted_open import require
 from ct_accepted_budget_gate import physical_budgets
 from ct_accepted6_audit import budget,captured_k_matrix
+from ct_accepted6_gate import classify as evolution_gate,PRIMARY
+from ct_accepted6_shared_gates import classify as shared_gates
 
 
 def main():
@@ -45,7 +47,7 @@ def main():
     operator=receipt('native-operator-v1/results.json','native-operator.json')
     frozen=receipt('native-operator-v1/frozen-matrix-classification-v1.json','frozen-matrices.json')
     receipt('primitives-v1/results.json','native-continuous-crosscheck.json')
-    receipt('initial-v1/results.json','initial-representation-v1.json')
+    initial=receipt('initial-v1/results.json','initial-representation-v1.json')
     static=receipt('static-independent-v2/results.json','static-transmission.json')
     receipt('targeted-v4/results.json','static-native-primitives.json')
     zero=receipt('targeted-v3/results.json','zero-and-ground-controls.json')
@@ -68,7 +70,7 @@ def main():
             completed=completed.exists(),body=compact(body),
             source_receipt=str(source),source_receipt_sha256=sha(source) if source.exists() else None)
     write_json(a.output/'build-runtime-identities.json',builds)
-    members={};audits={};costs={}
+    members={};audits={};audit_bodies={};costs={}
     for path in sorted(r.glob('evolution-v*/**/results.json')):
         q=read(path)
         if q.get('schema')!='CT6FreshManufacturedMemberV1':continue
@@ -108,6 +110,7 @@ def main():
             del b
         audits[label]=dict(directory=str(path.parent),body_sha256=sha(path),recomputed_full_budget_gate=gates,
             recorded_status=q['status'],native_diagnostic=q.get('diagnostic_status'),captured_k_matrix=q.get('captured_k_matrix'),mass=q.get('mass'))
+        audit_bodies[label]=q
         write_json(a.output/(label.replace('/','__')+'.json'),dict(path=str(path),sha256=sha(path),body=compact(q),recomputed_gate=gates))
         files[str(path)]=sha(path)
     resources={}
@@ -137,6 +140,35 @@ def main():
             total_closed_seconds=math.fsum(v['seconds'] for v in intervals),
             scope='root suspension wall intervals; elapsed and process CPU remain separate; no child-duration double counting')
         resources[str(launch.name)]=row
+    shared_input=dict(continuous_oracle=mathematics,curved_kernel=kernels,geometry_operator=operator,
+        model_initialization=initial,frozen_pressure_action=frozen,static_transmission=static,
+        zero_curvature=zero,negative_controls=controls,native_restart_rollback=regression,resources=resources)
+    shared=shared_gates(shared_input)
+    selected=[v for v in members.values() if v['model']=='A95' and
+        v['physical_completion']=='pass' and (v['degree'],v['dt']) in PRIMARY]
+    selected_audits={}
+    for label,body in audit_bodies.items():
+        report=body['budget_binding']['native_report_sha256']
+        if report not in {v.get('actual_report_sha256') for v in selected}:continue
+        old=selected_audits.get(report)
+        # Prefer a complete four-control receipt. Never combine controls from
+        # different requests or reinterpret native-only diagnostic completion.
+        if old is None or (set(body['budgets'])=={'native','q48f16','q64f16','q64f32'} and
+                           set(old['budgets'])!={'native','q48f16','q64f16','q64f32'}):
+            selected_audits[report]=body
+    primitive_audits={}
+    for report,body in selected_audits.items():
+        primitive_audits[report]={k:body[k] for k in ('budget_binding','mass','captured_k_matrix')}
+        primitive_audits[report]['budgets']={name:{k:row[k] for k in
+            ('binding','equations','reconstruction','stage_coefficient_validation','packet_sha256','actual_stage_snapshot_sha256')}
+            for name,row in body['budgets'].items()}
+    admission_input=dict(schema='CT6EvolutionAdmissionInputV1',members=selected,
+        comparison=comparison or {},audits=primitive_audits,
+        prerequisites={k:v['status'] for k,v in shared.items()},archive_identities=files)
+    admission=evolution_gate(admission_input)
+    write_json(a.output/'shared-prerequisites.json',shared)
+    write_json(a.output/'evolution-admission-input.json',admission_input)
+    write_json(a.output/'evolution-admission.json',admission)
     decision=dict(schema='CT-Accepted-6-DecisionV1',mathematical_continuum=mathematics['status'] if mathematics else 'missing',
         curved_kernel=kernels['status'] if kernels else 'missing',
         conservative_native_spatial_operator='pass' if operator and all(v['status']=='pass' for v in operator.values()) else 'fail_or_missing',
@@ -148,7 +180,19 @@ def main():
         physical_experimental_applicability='not_assessed_or_admitted',curved_production_admission=False,
         pending_or_missing=missing,historical_scope='CT1--CT5 and eight epsilon-order observations unchanged',
         resource_scope='completed launch receipts only; collector closure exported separately after return',
-        status='pending_required_scope_recomputation')
+        recomputed_shared_prerequisites=shared,recomputed_evolution_admission=admission,
+        required_scopes=dict(curved_Accepted_kernel=shared['curved_kernel'],
+            conservative_spatial_operator=shared['geometry_operator'],
+            full_traction_and_transported_k_transmission=shared['static_transmission'],
+            constant_height_evolution=dict(A95=dict(
+                bounded_completion=admission['primary_coverage']['status'],
+                evolved_consistency=admission['primary_comparison']['status'],
+                full_physical_budgets=admission['complete_bound_audit_coverage']),
+                A93='not_attempted_before_complete_A95_admission',
+                E94E95='not_attempted_before_complete_A95_admission'),
+            static_variable_height=shared['static_transmission'],zero_curvature=shared['zero_curvature'],
+            resources=shared['resources'],physical_experimental_applicability='not_assessed'),
+        status='not_fully_qualified' if admission['status']!='pass' else 'conditional_model_transfers_required')
     write_json(a.output/'decision.json',decision);write_json(a.output/'completed-resources.json',resources)
     write_json(a.output/'native-costs.json',costs)
     write_json(a.output/'actual-loaded-libraries.json',libraries);write_json(a.output/'archive-identities.json',files)
@@ -157,7 +201,7 @@ def main():
         changes=subprocess.check_output(g+['diff','--stat','7d32b43dc9d176628cfef1dbae2aee02a86ce330','HEAD'],cwd=r/'source',text=True),
         guards='named original-Natural Accepted serial2D constant-height Gaussian manufactured evolution only; static variable-height transmission separate; no production/EP/MPI/3D/action support'))
     manifest.seal(a.output,[str(p.relative_to(a.output)) for p in a.output.glob('*.json') if p.name not in ('request-manifest.json','completed-artifacts.json')])
-    print('CT6 compact evidence exported; decision remains separate from execution completion',flush=True)
+    print('CT6 compact evidence exported; primitive admission:',admission['status'],flush=True)
     return 3  # A completed export is not a completed required-scope qualification.
 
 
