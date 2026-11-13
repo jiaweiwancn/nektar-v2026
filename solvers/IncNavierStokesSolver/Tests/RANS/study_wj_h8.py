@@ -124,7 +124,13 @@ def diagnose(root,h,version,include_new=False):
     probe=Probe(str(root/'runtime/WJKernelProbe'))
     try:
         for item in items:
-            r=load(item['report']['path']);branch=item['branch'];ctxs=[context(r,s)for s in range(r['steps']+1-len(r['accepted_states']),r['steps']+1)]
+            r=load(item['report']['path']);branch=item['branch']
+            if branch=='quarter':
+                cp0=load(root/'case/cp0/case.evolution.json')
+                assert r['initialization_lift_calls_iterations']==[0,0],'restart performed Project/Lift'
+                assert vector_hash(r['accepted_states'][0])==vector_hash(cp0['state'])
+                assert vector_hash(r['fixed_reference'])==vector_hash(cp0['fixed_reference'])
+            ctxs=[context(r,s)for s in range(r['steps']+1-len(r['accepted_states']),r['steps']+1)]
             if r.get('physical_range_events'):ctxs.append(context(r,rejected=True))
             for ctx in ctxs:
                 state=ctx['state'];before=vector_hash(state);data=cache.evaluate(state);summary=cache.summary(data,initial);pd=projection.measure(data)
@@ -160,7 +166,10 @@ def pair_initial(root):
     r=load(root/'case/cp0/case.evolution.json');base=load(root/'imports-v2/H6mm/initial.evolution.json');compatible(base,r,.0025,same_dt=False);assert not r['failure']
     for a,b in zip(base['native_history'],r['native_history']):assert vector_hash(a)==vector_hash(b)
     assert len(r['native_history'])==len(base['native_history'])
-    p=checkpoint_payload(r['checkpoint']);assert p['reference_sha256']==vector_hash(base['fixed_reference'])and vector_hash(p['state'])==vector_hash(r['state'])and p['signature']==r['signature']and p['dt']==.0025
+    p=checkpoint_payload(r['checkpoint'])
+    assert len(p['native_history'])==len(r['native_history'])and p['native_history_times']==r['native_history_times']
+    assert all(vector_hash(a)==vector_hash(b)for a,b in zip(p['native_history'],r['native_history']))
+    assert p['reference_sha256']==vector_hash(base['fixed_reference'])and vector_hash(p['state'])==vector_hash(r['state'])and p['signature']==r['signature']and p['dt']==.0025
     folder=root/'case/run';folder.mkdir();xml=clone(root/'case/cp0/case.xml',folder/'case.xml',.0025,16,r['checkpoint'])
     save(root/'case/initial-pair.json',dict(status='PASS',coupled_state_sha256=vector_hash(r['state']),fixed_reference_sha256=vector_hash(r['fixed_reference']),physical_histories_equal=True,source_cp0=identity(root/'case/cp0/case.evolution.json'),checkpoint=identity(Path(r['checkpoint'])/'State.bin'),run_xml=identity(xml),distinct_history_labels=[base['native_history_times'],r['native_history_times']]))
 
