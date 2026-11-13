@@ -7,7 +7,7 @@ from rans_qualification import THREADS,write_json
 os.environ.update(THREADS)
 import numpy as np
 from ct_accepted6_cases import make
-from ct_accepted6_operator import reconstruct
+from ct_accepted6_operator import reconstruct,geometry
 from ct_accepted_open import probe,require
 from run_cls_epawf_picard import set_info,set_parameter,write
 from rans_request_manifest import RequestManifest,runtime_identity,sha
@@ -43,12 +43,20 @@ def main():
             v=row[key];checks[model+'-'+kind]=dict(status='pass' if v>1e-8 else 'fail',primitive_signal=v,minimum_discriminating_signal=1e-8)
     # Curvature and normal motion contributions in the actual exact Cartesian
     # gradient must be observable, rather than a parallel-shear substitute.
-    signal=0.
+    signal=0.;curvature_signal=0.
     for row in original['observation']['faces']:
-        if not row['interface']:continue
-        data=row['CT6_continuous'];T=np.asarray(data['T']);G=np.asarray(data['gradients'])[:2]
-        signal=max(signal,abs(float(T[2,2]+data['values'][4])))
-    checks['omit_normal_motion_traction']=dict(status='pass' if signal>1e-8 else 'fail',normal_viscous_or_nonlinear_stress_signal=signal,minimum_discriminating_signal=1e-8)
+        if not row['interface'] or row['region']:continue
+        data=row['CT6_continuous'];T=np.asarray(data['T']);g=np.asarray(data['gradients']);G=np.zeros((3,3));G[0]=g[0];G[2]=g[1]
+        aa,J,gamma,t,n=geometry(row['coordinate'][0],.5);U=np.array([data['values'][0],0.,data['values'][1]])
+        D=data['Dk'];pi=data['values'][4]
+        parallel=float(t@G@n)*np.outer(t,n)
+        wrong=D*(parallel+parallel.T)-pi*np.eye(3)
+        signal=max(signal,float(np.linalg.norm((T-wrong)@n)))
+        missing=G-gamma*float(U@n)/J*np.outer(t,t)+gamma*float(U@t)/J*np.outer(n,t)
+        wrong=D*(missing+missing.T)-pi*np.eye(3)
+        curvature_signal=max(curvature_signal,float(np.linalg.norm((T-wrong)@n)))
+    checks['omit_normal_motion_traction']=dict(status='pass' if signal>1e-8 else 'fail',full_versus_parallel_traction_signal=signal,minimum_discriminating_signal=1e-8)
+    checks['omit_curvature_connection']=dict(status='pass' if curvature_signal>1e-8 else 'fail',inner_traction_signal=curvature_signal,minimum_discriminating_signal=1e-8)
     variants=[('ordinary_curved_production',{'RANSWallCurvedCapability':'Off','RANSWallManufactured':'Off',
                   'RANSWallBoundaryPolicy':'Closed','RANSWallReference':'Neutral'}, {},'curved'),
               ('curved_EP',{'RANSWallFormulation':'EPAWF'}, {},'Accepted'),
