@@ -1,0 +1,98 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h10-flat-inlet-20261113/runtime/RANSWallResolutionProbe",
+    "/home/jay/build/wj-h10-flat-inlet-20261113/science/fixture-v2/case.xml",
+    "/home/jay/build/wj-h10-flat-inlet-20261113/science/fixture-v2/request.json",
+    "/home/jay/build/wj-h10-flat-inlet-20261113/science/fixture-v2/native.json"
+  ],
+  "cwd": "/home/jay/build/wj-h10-flat-inlet-20261113/science/fixture-v2",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "reserved_seconds": 60,
+  "units": 0,
+  "kind": "fixture",
+  "phase": "build",
+  "inputs": {
+    "/home/jay/build/wj-h10-flat-inlet-20261113/runtime/RANSWallResolutionProbe": {
+      "sha256": "425d5adf20c4d32b26768cc7e8f06eade3c0b1f17e00654ac2c05d7064622276",
+      "bytes": 353
+    },
+    "/home/jay/build/wj-h10-flat-inlet-20261113/science/fixture-v2/case.xml": {
+      "sha256": "08abd8398c2e682e783a1c434c1d96050b0693fb4997981f38f5d418776bf84c",
+      "bytes": 50700
+    },
+    "/home/jay/build/wj-h10-flat-inlet-20261113/science/fixture-v2/request.json": {
+      "sha256": "61001318bbd58031158eb5e6bee5118280435752b4d60ef80128c651b4e3facf",
+      "bytes": 74
+    }
+  },
+  "allocation": {
+    "workers": 9,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 42576,
+        "parent": 42575,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build12-staged-primary-cohort -- python3 -"
+      },
+      {
+        "pid": 42577,
+        "parent": 42576,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build12-staged-primary-cohort --project-limit 16"
+      },
+      {
+        "pid": 42580,
+        "parent": 42576,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-build12-staged-primary-cohort -- python3 -"
+      },
+      {
+        "pid": 42581,
+        "parent": 42580,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 57572,
+        "parent": 42581,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_audit.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime --member /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v3/A95-p4-dt004 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v2/A95-p4-dt004-native --native-only"
+      },
+      {
+        "pid": 57617,
+        "parent": 57616,
+        "threads": 1,
+        "args": "python3 -"
+      }
+    ]
+  },
+  "driver_sha256": "3c771edb2bf437acc4ced05db80ea500044b391e0ec5506ac3e329493b4502e4",
+  "status": "PASS",
+  "seconds": 3.517660571997112,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 111005696,
+  "root_bytes": 609970295,
+  "build_source_runtime_bytes": 434211484,
+  "science_bytes": 24857724,
+  "log_sha256": "53f71fb03ca8a8fb8f967d5800457086a090d1a37a9903da37906e7db0730664"
+}

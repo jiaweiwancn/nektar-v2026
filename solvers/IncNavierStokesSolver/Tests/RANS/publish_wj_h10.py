@@ -46,7 +46,7 @@ def common(root):
 
 
 def publish(root):
-    out=root/'publication-v1';out.mkdir();book=load(root/'accounting.json');common_result=load(root/'science/final-common/result.json');timeline=[];impulses=[];counts=[];moments={};arithmetic_files=[];weak=[];local=[];norms=[];interface=[];records={};runtime=[]
+    out=root/'publication-v1';out.mkdir();book=load(root/'accounting.json');save(out/'accounting-at-publication.json',book);common_result=load(root/'science/final-common/result.json');timeline=[];impulses=[];counts=[];moments={};arithmetic_files=[];weak=[];local=[];norms=[];interface=[];records={};runtime=[]
     for branch,dt in MATRIX:
         for phase in ('cp0','run'):
             v=selected_analysis(root,branch,phase);check(v['producer']);check(v['checkpoint']);r=load(v['producer']['path']);records[branch+'-'+phase]=v
@@ -109,7 +109,7 @@ def publish(root):
     heavy=[]
     for p in sorted((root/'science').rglob('*')):
         if p.is_file():heavy.append(identity(p))
-    save(out/'manifest.json',dict(heavy=heavy,ledger=identity(root/'accounting.json'),source=identity(__file__),scope='full histories, fields, matrices and native view rows stay remote; compact scalars have exact bridges'))
+    save(out/'manifest.json',dict(heavy=heavy,ledger=identity(out/'accounting-at-publication.json'),source=identity(__file__),scope='full histories, fields, matrices and native view rows stay remote; compact scalars have exact bridges'))
     save(out/'seal.json',dict(files=[identity(p)for p in sorted(out.iterdir())if p.is_file()]))
     print('H10 publication',gates,flush=True)
 
