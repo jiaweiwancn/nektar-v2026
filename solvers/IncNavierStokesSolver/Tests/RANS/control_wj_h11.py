@@ -28,6 +28,7 @@ def admission(root,tag):
 def run(root):
     assert load(root/'operations/focused-tests/receipt.json')['status']=='PASS'
     assert load(root/'operations/imports/receipt.json')['status']=='PASS'
+    assert load(root/'science/import-compatibility-v1.json')['status']=='PASS'
     if not admission(root,'initial'):return False
     for branch,dt,n,target in MATRIX:
         if branch!='coarse'and not admission(root,branch):return False

@@ -64,6 +64,21 @@ def parent(root,branch):
     return next(v for v in load(root/'science/input-intent.json')['cases']if v['branch']==branch)
 
 
+def verify_imports(root):
+    """Bind selected tests/XML to the sealed H10 manifest, without new native work."""
+    frozen=root/'source/docs/plans/wj-h10-linux';expected=load(frozen/'publication-v1/inputs.json')
+    manifest=load(frozen/'publication-v1/manifest.json');records=[]
+    for branch,dt,n,target in MATRIX:
+        old=next(v for v in expected['cases']if v['branch']==branch)['run'];check(old)
+        current=parent(root,branch);assert current['original_xml']==old
+        check(current['xml']);admit_xml(current['xml']['path'],branch,old['path']);records.append(old)
+    for name,destination in [('projected-tests.json','projected-tests.json'),('final-common/inventory.json','inventory-parent.json')]:
+        v=next(v for v in manifest['heavy']if v['path']==str(H10/'science'/name));check(v)
+        assert load(v['path'])==load(root/'science'/destination);records.append(v)
+    save(root/'science/import-compatibility-v1.json',dict(status='PASS',selected_manifest=identity(frozen/'publication-v1/manifest.json'),selected=records,
+        intent=identity(root/'science/input-intent.json'),scope='sealed H10 XML/projected-test/inventory identities; unchanged frozen H11 requested intent'))
+
+
 def checkpoints(root,branch,r):
     result=[]
     for directory in sorted((root/'science/cases'/branch).glob('CP*')):
@@ -157,7 +172,8 @@ def view_finish(root,branch,step):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('imports','scan','view-request','view-finish'),required=True);p.add_argument('--branch',choices=('coarse','fine','quarter'));p.add_argument('--step',type=int);p.add_argument('--version',default='v1');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('imports','verify-imports','scan','view-request','view-finish'),required=True);p.add_argument('--branch',choices=('coarse','fine','quarter'));p.add_argument('--step',type=int);p.add_argument('--version',default='v1');a=p.parse_args()
     if a.mode=='imports':imports(a.root)
+    elif a.mode=='verify-imports':verify_imports(a.root)
     elif a.mode=='scan':scan(a.root,a.branch,a.version)
     else:globals()[a.mode.replace('-','_')](a.root,a.branch,a.step)
