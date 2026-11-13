@@ -16,6 +16,11 @@ class FlatInletInitialization(unittest.TestCase):
     def test_three_first_steps_only(self):
         self.assertEqual(MATRIX,(('coarse',.01),('fine',.005),('quarter',.0025)))
         self.assertEqual(len(MATRIX),3)
+        from study_wj_h10 import small_fixture_tree
+        tree=small_fixture_tree(ET.parse(Path(__import__('wj_h5_cases').__file__).with_name('EquilibriumWallFlat.xml')).getroot())
+        variables={v.text for v in tree.findall('./CONDITIONS/VARIABLES/V')}
+        self.assertIn('epsilon',variables)
+        for e in tree.findall('./EXPANSIONS/E'):self.assertTrue(set(e.get('FIELDS').split(','))<=variables)
         self.assertEqual(sum(1 for _ in MATRIX),3)
     def test_quality_and_compatibility_are_separate(self):
         s=dict(status='PASS',min_in_plane=.003,divergence_scaled_max=1e-16,min_covariance=.001,min_transverse=.1)

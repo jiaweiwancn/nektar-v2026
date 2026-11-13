@@ -42,11 +42,22 @@ def inputs(root):
             assert [ET.tostring(f)for f in x.findall('./CONDITIONS/FUNCTION')]==[ET.tostring(f)for f in tree.findall('./CONDITIONS/FUNCTION')]
             assert ET.tostring(x.find('GEOMETRY'))==ET.tostring(tree.find('GEOMETRY'))and ET.tostring(x.find('EXPANSIONS'))==ET.tostring(tree.find('EXPANSIONS'))
             write(x,folder/'case.xml')
-    # Deliberately small 2-column/four-normal-cell native coefficient fixture.
-    x=ET.parse(root/'science/cases/coarse/cp0/case.xml').getroot();tensor_mesh(x,[0.,.075,.15,10.075,20.],3,2,8.,1.,points=[8,8],xknots=[0.,4.,8.])
-    for e in x.findall('./EXPANSIONS/E'):e.set('FIELDS',e.get('FIELDS').replace('eps_tilde','epsilon'))
-    fixture=root/'science/fixture';fixture.mkdir();write(x,fixture/'case.xml');save(fixture/'request.json',dict(operation='initializer_checks',inner_stress_model='Linear'))
+    make_fixture(root,'fixture')
+    fixture=root/'science/fixture'
     save(root/'science/input-intent.json',dict(records=records,cases=[dict(branch=b,dt=dt,cp0=identity(root/f'science/cases/{b}/cp0/case.xml'),run=identity(root/f'science/cases/{b}/run/case.xml'))for b,dt in MATRIX],fixture=identity(fixture/'case.xml'),scope='only added initializer/passive observation/output and authorized dt/step/restart controls; mesh/Functions fixed'))
+
+
+def small_fixture_tree(base):
+    x=ET.fromstring(ET.tostring(base));tensor_mesh(x,[0.,.075,.15,10.075,20.],3,2,8.,1.,points=[8,8],xknots=[0.,4.,8.])
+    for e in x.findall('./EXPANSIONS/E'):e.set('FIELDS',e.get('FIELDS').replace('eps_tilde','epsilon'))
+    for v in x.findall('./CONDITIONS/VARIABLES/V'):
+        if v.text=='eps_tilde':v.text='epsilon'
+    return x
+
+
+def make_fixture(root,name='fixture-v2'):
+    x=small_fixture_tree(ET.parse(root/'science/cases/coarse/cp0/case.xml').getroot())
+    out=root/'science'/name;out.mkdir();write(x,out/'case.xml');save(out/'request.json',dict(operation='initializer_checks',inner_stress_model='Linear'))
 
 
 def runtime(root):
@@ -88,6 +99,13 @@ def scan(root,branch,phase):
     inv=extend_witnesses(r,load(root/'science/imports/inventory.json'),configuration(6.));save(out/'inventory.json',inv)
     cache=Rows(r,[v['physical']for v in inv['points']],configuration(6.));d=cache.evaluate(r['state']);initial=cache.evaluate(r['accepted_states'][0]);summary=cache.summary(d,initial)
     summary['divergence_scaled_max']=float(np.max(abs(d['divergence'])/np.maximum(1.,np.linalg.norm(d['G'],axis=(1,2)))))
+    local_keys={tuple(v)for v in inv['local_keys']};local_idx=[j for j,(p,o)in enumerate(cache.rows[:cache.point_count])if tuple(float(v).hex()for v in p)in local_keys]
+    oo=[j for j in local_idx if cache.outer[j]];ad=actions(d['k'][oo],d['epsilon'][oo],d['G'][oo]);aa={j:n for n,j in enumerate(oo)};local=[]
+    for j in local_idx:
+        v=dict(physical=cache.rows[j][0],owner=cache.rows[j][1],U=d['U'][j],G=d['G'][j],k=d['k'][j],epsilon=d['epsilon'][j]if cache.outer[j]else None,pi=d['pi'][j],mechanical_pressure=d['mechanical_pressure'][j],R=d['R'][j],covariance=d['covariance'][j],K=d['K'][j],rc=d['rc'][j],Lambda=d['Lambda'][j],raw_work=d['production'][j])
+        if j in aa:v.update({k:np.asarray(a[aa[j]])for k,a in ad.items()})
+        local.append(v)
+    save(out/'local.json',serial(local))
     mom=MomentAudit(cache);mm=mom.moments(r['state']);summary['moments']={k:dict(moments=v['moments'].tolist(),projection_L2=v['projection_L2'],signed_integral=v['integral'])for k,v in mm.items()}
     state_summary=dict(status=gates(summary,summary['moments'],startup=phase=='cp0'),producer=before,checkpoint=identity(Path(r['checkpoint'])/'State.bin'),invariants=invariants,summary=serial(summary),diagnostic_mass_factorizations=mom.projection.factorizations,diagnostic_mass_solves=mom.solves)
     if phase=='cp0':
@@ -148,6 +166,7 @@ def view_finish(root,branch,phase):
     print(branch,phase,'strict',status,flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('inputs','runtime','scan','view-request','view-finish'),required=True);p.add_argument('--branch',choices=('coarse','fine','quarter'));p.add_argument('--phase',choices=('cp0','run'));a=p.parse_args()
-    if a.mode in ('inputs','runtime'):globals()[a.mode](a.root)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('inputs','runtime','fixture','scan','view-request','view-finish'),required=True);p.add_argument('--branch',choices=('coarse','fine','quarter'));p.add_argument('--phase',choices=('cp0','run'));a=p.parse_args()
+    if a.mode=='fixture':make_fixture(a.root)
+    elif a.mode in ('inputs','runtime'):globals()[a.mode](a.root)
     else:globals()[a.mode.replace('-','_')](a.root,a.branch,a.phase)
