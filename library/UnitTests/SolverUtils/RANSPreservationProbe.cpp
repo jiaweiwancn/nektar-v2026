@@ -206,7 +206,8 @@ std::string ZeroCurvatureCT6Comparison(RANSWallEvolutionPatch &curved,
     Require(curved.CurvedManufactured() && !curved.Mapped() && curved.Size()<500,
         "zero-curvature comparison requires the small CT6 amplitude-zero fixture");
     char name[]="ct6-flat-comparison";char *args[]{name,nullptr};
-    auto flatSession=LibUtilities::SessionReader::CreateInstance(1,args,files,LibUtilities::CommSerial::create(1,args));
+    auto flatFiles=files;
+    auto flatSession=LibUtilities::SessionReader::CreateInstance(1,args,flatFiles,LibUtilities::CommSerial::create(1,args));
     flatSession->InitSession();flatSession->SetSolverInfo("GlobalSysSoln","DirectFull");
     flatSession->SetSolverInfo("RANSWallCurvedCapability","Off");
     flatSession->SetSolverInfo("RANSWallManufactured","Off");
