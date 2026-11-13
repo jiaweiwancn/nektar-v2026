@@ -73,17 +73,22 @@ std::string RANSWallEvolutionPatch::WJTerrainAssemblyChecks(const Vector &state,
             const auto action=AffinePressureAction(direction,{});
             Vector reduced;for(int row:frozen.rows)reduced.push_back(direction[row]);
             const auto column=RANSWallAlgebra::Multiply(frozen.matrix,reduced);
-            double ce=0,fd=1e300;
-            for(int j=0;j<column.size();++j)ce=std::max(ce,std::abs(column[j]-action[frozen.rows[j]]));
+            double ce=0,fd=1e300;int worstRow=-1;double worstColumn=0,worstAction=0;
+            for(int j=0;j<column.size();++j)if(std::abs(column[j]-action[frozen.rows[j]])>ce)
+            {ce=std::abs(column[j]-action[frozen.rows[j]]);worstRow=frozen.rows[j];worstColumn=column[j];worstAction=action[worstRow];}
             for(double h:{1e-2,1e-3,1e-4})
             {
                 auto plus=state,minus=state;for(int j=0;j<Size();++j)
                 {plus[j]+=h*direction[j];minus[j]-=h*direction[j];}
-                const auto rp=Residual(plus,history,alpha,time,data,false),rm=Residual(minus,history,alpha,time,data,false);
+                const auto rp=Residual(plus,history,alpha,time,data,false,false),rm=Residual(minus,history,alpha,time,data,false,false);
                 double error=0;for(int j=0;j<Size();++j)error=std::max(error,std::abs((rp[j]-rm[j])/(2*h)-action[j]));
                 fd=std::min(fd,error);
             }
             const double scale=std::max(1.,Maximum(action));
+            if(ce/scale>=1e-10 || fd/scale>=1e-8)std::cout<<"EP-AWF pressure comparison witness "<<J::Object({
+                {"mode",J::Number(mode)},{"native_row",J::Number(worstRow)},
+                {"column",J::Number(worstColumn)},{"affine_action",J::Number(worstAction)},
+                {"column_error",J::Number(ce)},{"physical_difference_error",J::Number(fd)}})<<std::endl;
             Require(ce/scale<1e-10 && fd/scale<1e-8,"terrain physical/frozen affine pressure action differs: mode="+
                 std::to_string(mode)+" column="+J::Number(ce)+" finite_difference="+J::Number(fd));
             pressures.push_back(J::Object({{"mode",J::Number(mode)},{"action_max",J::Number(Maximum(action))},
