@@ -15,6 +15,7 @@ from ct_accepted_budget_gate import physical_budgets
 from ct_accepted6_audit import budget,captured_k_matrix
 from ct_accepted6_gate import classify as evolution_gate,PRIMARY
 from ct_accepted6_shared_gates import classify as shared_gates
+from ct_accepted6_quadrature import extract as quadrature_primitives,classify as quadrature_gate
 
 
 def main():
@@ -116,16 +117,19 @@ def main():
         q=read(path);label=str(path.parent.relative_to(r));gates=physical_budgets(q)
         member=next((v for v in members.values() if v.get('actual_report_sha256')==q['budget_binding']['native_report_sha256']),None)
         require(member is not None,'foreign actual-state physical audit')
+        integration={}
         for name,row in q['budgets'].items():
             source=Path(row['execution']['command'][-1]);require(sha(source)==row['packet_sha256'],'changed physical budget packet')
             b=read(source);rebuilt=budget(b,q['budget_binding']['model'])
             for key in ('equations','reconstruction','physical_volume'):require(rebuilt[key]==row[key],'forged or stale budget primitives:'+name+':'+key)
             require(exact_vector_hash(b['observation']['state'])==q['budget_binding']['state_sha256'],'foreign consumed budget state')
+            integration[name]=quadrature_primitives(b,rebuilt)
             del b
+        quad=quadrature_gate(integration,comparison or {},q['budget_binding']['model'])
         audits[label]=dict(directory=str(path.parent),body_sha256=sha(path),recomputed_full_budget_gate=gates,
-            recorded_status=q['status'],native_diagnostic=q.get('diagnostic_status'),captured_k_matrix=q.get('captured_k_matrix'),mass=q.get('mass'))
-        audit_bodies[label]=q
-        write_json(a.output/(label.replace('/','__')+'.json'),dict(path=str(path),sha256=sha(path),body=compact(q),recomputed_gate=gates))
+            recorded_status=q['status'],native_diagnostic=q.get('diagnostic_status'),captured_k_matrix=q.get('captured_k_matrix'),mass=q.get('mass'),quadrature_uncertainty=quad)
+        audit_bodies[label]=dict(q,quadrature_uncertainty=quad)
+        write_json(a.output/(label.replace('/','__')+'.json'),dict(path=str(path),sha256=sha(path),body=compact(q),recomputed_gate=gates,derived_quadrature_uncertainty=quad))
         files[str(path)]=sha(path)
     resources={}
     for path in sorted(r.glob('launch-*/resource-final.json')):
@@ -172,7 +176,7 @@ def main():
             selected_audits[report]=body
     primitive_audits={}
     for report,body in selected_audits.items():
-        primitive_audits[report]={k:body[k] for k in ('budget_binding','mass','captured_k_matrix')}
+        primitive_audits[report]={k:body[k] for k in ('budget_binding','mass','captured_k_matrix','quadrature_uncertainty')}
         primitive_audits[report]['budgets']={name:{k:row[k] for k in
             ('binding','equations','reconstruction','stage_coefficient_validation','packet_sha256','actual_stage_snapshot_sha256')}
             for name,row in body['budgets'].items()}

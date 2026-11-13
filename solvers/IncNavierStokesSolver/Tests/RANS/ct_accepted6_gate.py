@@ -85,7 +85,7 @@ def comparisons(receipt):
                 interpretation='two fixed degrees, not a measured spatial order; below-floor orders stay unresolved')
 
 
-def audit(receipt):
+def audit(receipt, comparison):
     result = physical_budgets(receipt)
     reasons = list(result['reasons'])
     mass = receipt.get('mass', {})
@@ -103,6 +103,26 @@ def audit(receipt):
             value = v.get(key)
             if not finite(value) or value < 0 or value > 2e-13:
                 reasons.append('missing_or_failed_stage_binding:'+label+':'+key)
+    expected={}
+    def limit(field):
+        d=comparison.get('degree',{}).get(field,{}).get('spatial_difference',{}).get('scaled_weighted_RMS')
+        if not finite(d) or d<0:
+            reasons.append('missing_degree_difference_for_quadrature:'+field)
+            return 2e-8
+        return max(2e-8,.1*d)
+    for label in ('q48f16','q64f16','q64f32'):
+        expected[label+':physical_volume']=2e-11
+        for j,name in enumerate(('U','w','k','outer_epsilon','continuity_inner','continuity_outer','unused_gauge','constraints')):
+            expected[label+':alpha_zero_mass_dual_norm:'+name]=limit(name) if j<4 else 2e-8
+        for name in ('k','outer_epsilon'):expected[label+':frozen_all_row_load:'+name]=limit(name)
+        for name in ('inner_k','outer_k','whole_k','outer_epsilon'):
+            expected[label+':physical_budget:'+name]=limit('outer_epsilon' if name=='outer_epsilon' else 'k')
+    observed=receipt.get('quadrature_uncertainty',{}).get('checks',{})
+    if set(observed)!=set(expected):reasons.append('incomplete_frozen_integration_uncertainty')
+    for name,limit_value in expected.items():
+        v=observed.get(name,{}).get('change')
+        if not finite(v) or v<0 or v>limit_value:
+            reasons.append('frozen_integration_uncertainty:'+name)
     return dict(status='pass' if not reasons else 'fail', reasons=reasons,
                 complete_physical_budget=result)
 
@@ -155,7 +175,7 @@ def classify(value):
     comparison = comparisons(value.get('comparison', {}))
     members = value.get('members', [])
     audits = value.get('audits', {})
-    results = {key:audit(v) for key, v in audits.items()}
+    results = {key:audit(v, value.get('comparison',{})) for key, v in audits.items()}
     expected = {v.get('actual_report_sha256') for v in members}
     actual = {v.get('budget_binding', {}).get('native_report_sha256') for v in audits.values()}
     identities = {v.get('actual_report_sha256'):v for v in members}

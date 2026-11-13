@@ -39,11 +39,20 @@ def fixture():
                     scaled_defect=1e-15) for k in ('k', 'outer_epsilon')},
                 stage_coefficient_validation=dict(actual_flow_stage_maximum_difference=0.,
                                                   actual_pre_k_stage_maximum_difference=0.))
+        integration={}
+        for label in ('q48f16','q64f16','q64f32'):
+            integration[label+':physical_volume']=dict(change=0.)
+            for name in ('U','w','k','outer_epsilon','continuity_inner','continuity_outer','unused_gauge','constraints'):
+                integration[label+':alpha_zero_mass_dual_norm:'+name]=dict(change=0.)
+            for name in ('k','outer_epsilon'):integration[label+':frozen_all_row_load:'+name]=dict(change=0.)
+            for name in ('inner_k','outer_k','whole_k','outer_epsilon'):integration[label+':physical_budget:'+name]=dict(change=0.)
+        body['quadrature_uncertainty']=dict(checks=integration)
         audits[report] = body
         error = 1e-4 if p == 3 else 5e-5
         errors[report] = {k:dict(scale=1., weighted_RMS=error, scaled_weighted_RMS=error)
                           for k in FIELDS}
     comparison = dict(model='A95', time=.016, reference_errors=errors,
+                     degree={k:dict(spatial_difference=dict(scaled_weighted_RMS=1e-4)) for k in FIELDS},
                      temporal={'4':dict(orders={k:dict(D004_002=4e-5, D002_001=2e-5)
                                                 for k in FIELDS})})
     return dict(members=members, audits=audits, comparison=comparison,
@@ -131,6 +140,12 @@ class GateTests(unittest.TestCase):
 
     def test_independent_traction_cannot_be_replaced_by_field_accuracy(self):
         q = fixture();q['members'][0]['independent_endpoint_metrics']['traction']['inner_interface_reference_error_scaled_RMS'] = .006
+        self.denied(q)
+
+    def test_quadrature_pass_label_cannot_override_the_declared_limit(self):
+        q = fixture();first=next(iter(q['audits'].values()))
+        first['quadrature_uncertainty'].update(status='pass')
+        first['quadrature_uncertainty']['checks']['q64f32:frozen_all_row_load:k']=dict(change=1e-3,limit=1.)
         self.denied(q)
 
     def test_command_exit_matches_primitives(self):
