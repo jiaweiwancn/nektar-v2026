@@ -37,6 +37,23 @@ std::string FlatInletChecks(RANSWallEvolutionPatch &patch,
         Require(Maximum(load)<2e-15,"initializer synthetic Q1 continuity moments");moments.push_back(J::Numbers(load));
     }
     Require(divergence<1e-12 && dx<1e-12,"initializer physical divergence");
+    double nativeGradientError=0,nativeDivergence=0;
+    for(int e=0;e<patch.fields[0]->Elements().size();++e)
+    {
+        const auto &el=patch.fields[0]->Elements()[e];
+        for(double x:{el.lower[0],(el.lower[0]+el.upper[0])/2,el.upper[0]})
+        for(double r:{el.lower[2],(el.lower[2]+el.upper[2])/2,el.upper[2]})
+        {
+            const RANSWallCoordinate q{x,0,r};
+            const auto nu=patch.fields[0]->NativeEvaluateElement(post,e,q,patch.offset[0]),
+                       nw=patch.fields[1]->NativeEvaluateElement(post,e,q,patch.offset[1]);
+            const auto metric=patch.Mapping().At(q,0,el.lower[2]>=patch.Parameters().geometry.height?1:0);
+            const auto row=patch.fields[0]->ElementPoint(e,q);const auto gu=row.Gradient(post,patch.offset[0]);
+            nativeGradientError=std::max(nativeGradientError,std::max(std::abs(nu[1]-gu[0]),std::abs(nu[3]-gu[2])));
+            nativeDivergence=std::max(nativeDivergence,std::abs(nu[1]+nw[3]*metric.inverse[2][2]));
+        }
+    }
+    Require(nativeGradientError<1e-12 && nativeDivergence<1e-12,"initializer independent native transforms differ");
     auto expect=[&](auto action,const std::string &needle){bool failed=false;try{action();}catch(const std::exception &e){failed=std::string(e.what()).find(needle)!=std::string::npos;}Require(failed,"missing intended rejection: "+needle);};
     auto bad=records;bad.front().element.lower[2]+=.00001;
     expect([&]{RANSWallGlobalField::FlatInletTraceCoefficients(Vector(pre.begin(),pre.begin()+patch.size[0]),bad,patch.lower[0]);},"FlatInletTraceV1");
@@ -76,6 +93,7 @@ std::string FlatInletChecks(RANSWallEvolutionPatch &patch,
     return J::Object({{"status",J::Quote("PASS")},{"scope",J::Quote("small native synthetic coefficient fixture, no CFD CP0/governing solve")},
         {"state_size",J::Number(patch.Size())},{"native_negative_signs",J::Number(negatives)},
         {"physical_divergence_max",J::Number(divergence)},{"all_regional_Q1_moments",J::List(moments)},
+        {"native_chart_gradient_replay_max",J::Number(nativeGradientError)},{"independent_physical_divergence_max",J::Number(nativeDivergence)},
         {"idempotent","true"},{"essential_and_nonvelocity_bits","true"},{"map_partition_ID_normal_perturbation_rejections","true"},
         {"default_off_and_signature_rejection","true"},{"synthetic_checkpoint",J::Quote(path)},
         {"governing_attempts","0"},{"full_size_CP0s","0"},{"new_initialization_solves","0"}});
