@@ -74,6 +74,7 @@ def recover(root,folder):
         map_records=[verified(Path(v['maps']['path']),v['maps'])for v in maps]
         for p,v in parent_before.items():verified(p,v)
         original=folder/'decoded-v1/closure/accounting-final.json';verified(original,load(folder/'decoded-v1/closure/receipt.json')['accounting'])
+        verified(root/'accounting.json',load(original)['primary_accounting_parent'])
         # Current H7 processes, not stale PIDs that may have been reused after reboot.
         live=[]
         for d in Path('/proc').iterdir():
@@ -91,6 +92,10 @@ def recover(root,folder):
             path_aliases={str(Path('/tmp/wj-h7-compact-20261113/publication')):str(folder/'decoded-v1/publication'),'/tmp/wj-h7-compact-20261113/closure':str(folder/'decoded-v1/closure'),
                 '/tmp/wj-h7-owner-repair/publication-owner-v2':str(pub)},native_attempts=0,cp0_initializations=0,
             preserved='old seals, paths, numerical decisions, failed operations and1800s charge unchanged; obsolete partial observer checkout retained read-only')
+        # Flush only this recovery's files, never issue a volume-wide sync.
+        for path in folder.rglob('*'):
+            if path.is_file():
+                with path.open('rb')as f:os.fsync(f.fileno())
         save(folder/'receipt.json',receipt)
         save(folder/'verification-index.json',dict(decoded=decoded,closure_files=[identity(p)for p in sorted((folder/'decoded-v1/closure').rglob('*'))if p.is_file()]))
         print(json.dumps({k:v for k,v in receipt.items()if k not in ('heavy_verified','H6_parent_verified','current_qualified_ELFs_verified','original_native_map_receipts_verified')},indent=2),flush=True)
