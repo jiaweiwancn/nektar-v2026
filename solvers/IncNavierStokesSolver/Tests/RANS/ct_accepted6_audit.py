@@ -148,6 +148,15 @@ def main():
     result['common_observations']=dict(path=str(sub/'endpoint.json'),sha256=sha(sub/'endpoint.json'),execution=e,
         count=n,weights=weights,grid_sha256=hashlib.sha256(canonical([points,sides,weights])).hexdigest(),
         physical_volume=float(w.sum()),divergence_RMS=float(np.sqrt(w@(div*div)/w.sum())),divergence_maximum=float(max(abs(div))))
+    index=int(np.argmax(abs(div)));chart=points[index];_,_,_,_,normal=geometry(chart[0],chart[2])
+    physical=np.array([chart[0],0.,.005*math.exp(-chart[0]*chart[0])])+chart[2]*normal
+    isotropic=-2*np.asarray(o['grid_values'][:n])[:,2]*div/3
+    result['common_observations'].update(raw_divergence_witness=dict(signed_value=float(div[index]),
+        chart_coordinate=chart,physical_coordinate=physical.tolist(),side=sides[index],
+        region=o['grid_regions'][index],native_geometry_by_field=o['grid_geometry_by_field'][index]),
+        isotropic_production_signed_mean=float(w@isotropic/w.sum()),
+        isotropic_production_RMS=float(np.sqrt(w@(isotropic*isotropic)/w.sum())),
+        isotropic_production_definition='-2*k*trace(raw Cartesian velocity gradient)/3; diagnostic only, no projected gradient')
     result['status']='pass' if result['budget_gate']['status']==result['mass']['status']==result['captured_k_matrix']['status']=='pass' else 'fail'
     if a.native_only:
         result['diagnostic_status']='pass' if result['mass']['status']==result['captured_k_matrix']['status']=='pass' and all(
