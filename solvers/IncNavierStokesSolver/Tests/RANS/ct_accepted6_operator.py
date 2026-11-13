@@ -207,6 +207,81 @@ def continuous_weak(packet,model):
         scope='analytical continuous fields and independently differentiated forcing on native test functions; all physical face fluxes included; projected/evolved residual is a separate object')
 
 
+def frozen_systems(packet,model,amplitude=.005):
+    """Original frozen Oseen/reaction matrices and actual free-mass Schur rank."""
+    o=packet['observation'];state=np.asarray(o['state']);off=np.asarray(o['offsets'],int)
+    n=len(state);A=np.zeros((n,n));p=parameters(model);columns={};mass=packet['open_frozen_systems']['masses']
+    for b in range(4):A[off[b]:off[b+1],off[b]:off[b+1]]=np.asarray(mass[b])
+    for point in o['volume']:
+        v=point['velocity_k'];pr=point['pressure'];region=point['region'];weight=point['weight']
+        data=point['CT6_prescribed_data'];ids=np.asarray(v['ids'],int);phi=np.asarray(v['phi']);d=np.asarray(v['derivative'])
+        U=np.zeros(3);G=np.zeros((3,3))
+        for b,axis in enumerate((0,2)):U[axis],G[axis]=row_value(v,state,off[b])
+        k,_=row_value(v,state,off[2]);adv=d.T@U
+        if region:
+            e,_=row_value(point['epsilon'],state,off[3]);law=oracle(model,k,e,G)
+            viscosity=law['nut'];rates={2:(e-min(0.,law['production']))/k,3:(1.9 if model=='E94E95' else 1.92)*e/k}
+            diffusion={2:viscosity,3:viscosity/p['sigma_epsilon']}
+        else:
+            K,_=row_value(data['H_velocity_k_row'],state,off[2]);key=(point['coordinate'][0],K)
+            if key not in columns:
+                *_,gamma,tangent,normal=geometry(point['coordinate'][0],0,amplitude)
+                columns[key]=Column(model,K,.5,.05,1.5e-5,curvature=-gamma,order=96)
+            viscosity=float(columns[key].D(point['coordinate'][2]));rates={2:0.};diffusion={2:viscosity}
+        pp=np.asarray(pr['ids'],int)+off[4+region];pphi=np.asarray(pr['phi'])
+        for b,axis in enumerate((0,2)):
+            ii=ids+off[b]
+            for other,jaxis in enumerate((0,2)):
+                block=viscosity*np.outer(d[jaxis],d[axis])
+                if b==other:block+=viscosity*d.T@d-np.outer(adv,phi)
+                A[np.ix_(ii,ids+off[other])]+=weight*block
+            A[np.ix_(ii,pp)]-=weight*np.outer(d[axis],pphi)
+            A[np.ix_(pp,ii)]+=weight*np.outer(pphi,d[axis])
+            if not region and point['coordinate'][2]<=.05:
+                hp=data['H_pressure_row'];_,_,_,_,normal=geometry(point['coordinate'][0],.5,amplitude)
+                pressure_gradient=np.asarray(hp['derivative']);P=np.eye(3)-np.outer(normal,normal)
+                A[np.ix_(ii,np.asarray(hp['ids'],int)+off[5])]-=weight*np.outer(phi,(P@pressure_gradient)[axis])
+        for b in ((2,3) if region else (2,)):
+            row=point['epsilon'] if b==3 else v;ix=np.asarray(row['ids'],int)+off[b]
+            ph=np.asarray(row['phi']);der=np.asarray(row['derivative'])
+            A[np.ix_(ix,ix)]+=weight*(rates[b]*np.outer(ph,ph)-np.outer(der.T@U,ph)+diffusion[b]*der.T@der)
+    for face in packet['open_boundary']['faces']:
+        U=np.array([face['velocity'][0],0,face['velocity'][1]]);un=float(U@np.asarray(face['area']))
+        for b in ((0,1,2,3) if face['region'] else (0,1,2)):
+            row=face['epsilon_row'] if b==3 else face['velocity_k_row'];ii=np.asarray(row['ids'],int)+off[b];ph=np.asarray(row['phi'])
+            A[np.ix_(ii,ii)]+=face['weight']*un*np.outer(ph,ph)
+    blocks={};flow=None;constraints={int(i):v for i,v in packet['resolution']['constraints']}
+    for block in packet['open_frozen_systems']['blocks']:
+        b=block['block'];ids=np.asarray(block['rows'],int);actual=np.asarray(block['matrix']);expected=A[np.ix_(ids,ids)].copy()
+        if b==3:
+            for j,row in enumerate(ids):
+                if row in constraints:expected[j,:]=0;expected[j,j]=1
+        normal=max(1.,float(np.max(abs(actual))));error=float(np.max(abs(actual-expected)))/normal
+        residual=np.asarray(block['residual']);raw=np.asarray(packet['open_frozen_systems']['raw_residual'])[ids]
+        for j,row in enumerate(ids):
+            if b==3 and row in constraints:raw[j]=state[row]-constraints[row]
+        blocks[str(b)]=dict(matrix_scaled_defect=error,residual_scaled_defect=float(np.max(abs(residual-raw)))/max(1.,float(np.max(abs(raw)))))
+        if b==0:flow=(ids,actual)
+    ids,S=flow;nv=int(packet['mixed_space']['velocity_size']);B=S[:nv,nv:];C=S[nv:,:nv]
+    M=np.zeros((nv,nv))
+    for i,gi in enumerate(ids[:nv]):
+        b=0 if gi<off[1] else 1
+        for j,gj in enumerate(ids[:nv]):
+            if off[b]<=gj<off[b+1]:M[i,j]=mass[b][gi-off[b]][gj-off[b]]
+    schur=C@np.linalg.solve(M,B);row_scale=np.maximum(np.linalg.norm(schur,axis=1),np.finfo(float).tiny)
+    normalized=schur/row_scale[:,None];col_scale=np.maximum(np.linalg.norm(normalized,axis=0),np.finfo(float).tiny);normalized/=col_scale[None,:]
+    singular=np.linalg.svd(normalized,compute_uv=False);relative=float(singular[-1]/singular[0])
+    constant=np.asarray(packet['mixed_space']['pressure_constant_with_zero_gauge'])[nv:]
+    constant_action=float(np.linalg.norm(B@constant)/np.linalg.norm(constant))
+    maximum=max(max(row.values()) for row in blocks.values())
+    return dict(schema='CT6IndependentFrozenSystemsV1',status='pass' if maximum<=2e-10 and relative>1e-11 and constant_action>1e-8 else 'fail',
+        blocks=blocks,pressure_unknowns=len(constant),free_velocity_unknowns=nv,
+        free_mass_symmetry=float(np.max(abs(M-M.T))),minimum_free_mass_eigenvalue=float(np.linalg.eigvalsh(M)[0]),
+        normalized_consistent_mass_pressure_minimum_singular_ratio=relative,
+        constant_pressure_action=constant_action,additional_pressure_null_modes=int(np.sum(singular<=singular[0]*1e-11)),
+        scope='actual constrained matrix, projected roughness-volume pressure columns in both Cartesian components, prescribed outlet advection and frozen scalar reaction; consistent free-mass pressure action, no mean multiplier; finite fixture only')
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--packet',type=Path,required=True)
     p.add_argument('--model',choices=['A93','A95','E94E95'],required=True);p.add_argument('--output',type=Path,required=True)
