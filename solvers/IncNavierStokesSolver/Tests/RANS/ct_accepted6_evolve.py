@@ -37,34 +37,52 @@ def main():
     p.add_argument('--degree',type=int,choices=[3,4],default=4)
     p.add_argument('--dt',type=float,choices=[.004,.002,.001],default=.002)
     p.add_argument('--target',type=float,default=.016)
+    p.add_argument('--prepared',type=Path,help='explicit reuse of a sealed zero-step preparation, never an evolved state')
     a=p.parse_args();require(0<a.target<=.016,'CT6 bounded horizon exceeded')
     admission=json.loads(a.admission.read_text())
     require(admission['status']=='pass','required native operator/geometry/zero-flat admission failed')
     steps=round(a.target/a.dt);require(abs(steps*a.dt-a.target)<1e-14,'nonintegral time horizon')
+    prepared=None
+    if a.prepared:
+        old=json.loads((a.prepared/'results.json').read_text());seal=json.loads((a.prepared/'completed-artifacts.json').read_text())
+        require(all(sha(a.prepared/n)==v for n,v in seal['files'].items()),'changed sealed preparation')
+        require(old['model']==a.model and old['degree']==a.degree and old['dt']==a.dt,'foreign zero-step preparation')
+        require('trajectory' not in old,'preparation already advanced a trajectory')
+        zero=a.prepared/'zero';zr=json.loads((zero/'case.evolution.json').read_text())
+        require(zr['time']==0. and zr['steps']==0 and not zr['failure'],'prepared history is not a successful zero-step state')
+        require(sha(zero/'case.evolution.json')==old['zero']['report_sha256'] and artifact_hash(zr['checkpoint'])==old['zero']['history_sha256'],'changed zero-step state/history')
+        require(old['initial_metrics']['status']=='pass' and sha(zero/'initial.json')==old['initial_packet']['sha256'],'changed initial packet or failed initial accuracy')
+        prior_request=json.loads((a.prepared/'request-manifest.json').read_text())['request']
+        require(prior_request['runtime']['IncNavierStokesSolver']==runtime_identity(a.runtime/'IncNavierStokesSolver'),'foreign prepared runtime')
+        prepared=dict(directory=str(a.prepared),receipt_sha256=sha(a.prepared/'results.json'),state=old['zero']['state_sha256'],history=old['zero']['history_sha256'])
     m=RequestManifest(a.output,dict(schema='CT6FreshManufacturedMemberV1',model=a.model,degree=a.degree,
         dt=a.dt,target=a.target,contract_sha256=sha(a.contract),admission_sha256=sha(a.admission),
         runtime={n:runtime_identity(a.runtime/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},
         scripts={n:sha(Path(__file__).with_name(n)) for n in ('ct_accepted6_evolve.py','ct_accepted6_cases.py','ct_accepted6_metrics.py','ct_accepted6_operator.py')},
         actual_initialization='fresh independently projected at zero, zero-step native history; same-space dt vectors checked separately',
-        pressure='absolute Pi, no fitted gauge',forcing='continuous CT6 MMS only'))
+        pressure='absolute Pi, no fitted gauge',forcing='continuous CT6 MMS only',explicit_preparation_reuse=prepared))
     result=dict(schema='CT6FreshManufacturedMemberV1',model=a.model,degree=a.degree,dt=a.dt,target=a.target,
                 execution_status='incomplete',physical_completion='unattempted',diagnostic_status='unattempted')
     try:
-        zero=a.output/'zero';make(zero,a.runtime,model=a.model,degree=a.degree,dt=a.dt)
-        os.environ['NEKTAR_RANS_TIMING_FILE']=str(zero/'timing.jsonl')
-        e=run([a.runtime/'IncNavierStokesSolver','case.xml'],zero,'solver.log')
-        r,z=report_summary(zero/'case.evolution.json',e);result['zero']=z
-        write_json(a.output/'progress.json',result)
-        require(e['exit_code']==0 and not r['failure'] and r['time']==0.,'fresh zero-step initialization rejected')
-        require(len(r['state'])==(1273 if a.degree==3 else 2283),'actual native slots differ')
-        req=request();req.update(export_tensor_validation=False,export_constitutive=False,export_resolution=False)
-        initial,pe=probe(a.runtime,zero,req,'initial')
-        result['initial_probe_execution']=pe
-        require(pe['exit_code']==0 and initial['observation']['state']==r['state'],'initial effective driver/probe mismatch')
+        if a.prepared:
+            r=zr;result['zero']=old['zero'];initial=json.loads((zero/'initial.json').read_text())
+        else:
+            zero=a.output/'zero';make(zero,a.runtime,model=a.model,degree=a.degree,dt=a.dt)
+            os.environ['NEKTAR_RANS_TIMING_FILE']=str(zero/'timing.jsonl')
+            e=run([a.runtime/'IncNavierStokesSolver','case.xml'],zero,'solver.log')
+            r,z=report_summary(zero/'case.evolution.json',e);result['zero']=z
+            write_json(a.output/'progress.json',result)
+            require(e['exit_code']==0 and not r['failure'] and r['time']==0.,'fresh zero-step initialization rejected')
+            require(len(r['state'])==(1273 if a.degree==3 else 2283),'actual native slots differ')
+            req=request();req.update(export_tensor_validation=False,export_constitutive=False,export_resolution=False)
+            initial,pe=probe(a.runtime,zero,req,'initial')
+            result['initial_probe_execution']=pe
+            require(pe['exit_code']==0 and initial['observation']['state']==r['state'],'initial effective driver/probe mismatch')
         result['initial_packet']=dict(path=str(zero/'initial.json'),sha256=sha(zero/'initial.json'))
         result['initial_metrics']=metrics(initial,a.model)
         require(result['initial_metrics']['status']=='pass','initial physical accuracy gate failed')
-        folder=a.output/'trajectory';make(folder,a.runtime,model=a.model,degree=a.degree,dt=a.dt,steps=steps,restart=r['checkpoint'])
+        result['zero_directory']=str(zero)
+        folder=a.output/'trajectory';make(folder,a.runtime,model=a.model,degree=a.degree,dt=a.dt,steps=steps,restart=Path(r['checkpoint']))
         os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'timing.jsonl')
         print(a.model,a.degree,a.dt,'starting fresh trajectory',flush=True)
         e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log')
