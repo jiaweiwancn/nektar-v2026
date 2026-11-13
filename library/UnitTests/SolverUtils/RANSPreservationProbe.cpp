@@ -866,6 +866,12 @@ int main(int argc,char **argv)
             {"resolution",resolution},{"test_basis",testBasis},{"native_constitutive",constitutive},{"physical_scalar_budget",physicalBudget},
             {"tensor_validation",tensorValidation},{"mixed_space",mixedSpace}});
         if(open){output.pop_back();output+=",\"open_boundary\":"+openPacket+",\"open_frozen_systems\":"+openSystems+"}";}
+        if(patch.CurvedManufactured())
+        {
+            output.pop_back();output+=",\"fixed_reference_time\":"+J::Number(referenceTime)+
+                ",\"observation_boundary_time\":"+J::Number(time)+
+                ",\"replay_receipt_scope\":"+J::Quote("consumed observed coefficients and live functions at observation time; immutable initial reference at time zero; no refreshed epsilon-trace repair")+"}";
+        }
         if(request.get<bool>("export_manufactured",false))
         {
             Require(patch.CurvedManufactured(),"manufactured export requires its verification capability");
