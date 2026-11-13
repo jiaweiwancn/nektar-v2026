@@ -99,7 +99,12 @@ def execute(root,label,argv,*,cwd=None,seconds=120,cp0=False,governing=False):
     env=dict(os.environ,**THREADS,TMPDIR=str(root/'tmp'),NEKTAR_RANS_TIMING_FILE=str(folder/'timing.jsonl'));(root/'tmp').mkdir(exist_ok=True)
     def limits():
         import resource
-        resource.setrlimit(resource.RLIMIT_AS,(8*1024**3,8*1024**3));resource.setrlimit(resource.RLIMIT_FSIZE,(8*1024**3,8*1024**3))
+        # A bounded caller may have imposed a smaller hard limit. Respect it;
+        # a child must never try to raise the enclosing allocation's ceiling.
+        for kind in (resource.RLIMIT_AS,resource.RLIMIT_FSIZE):
+            hard=resource.getrlimit(kind)[1]
+            limit=8*1024**3 if hard==resource.RLIM_INFINITY else min(8*1024**3,hard)
+            resource.setrlimit(kind,(limit,limit))
     start=time.monotonic();peak=0;reason=None;groups=set();last=start;mapped=set()
     def mappings(pid):
         try:

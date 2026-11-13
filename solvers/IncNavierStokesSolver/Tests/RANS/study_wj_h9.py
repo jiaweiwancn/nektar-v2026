@@ -82,16 +82,34 @@ def run(root):
     start=time.monotonic();imp=load(root/'imports.json');out=root/'science';out.mkdir();reps={b:load(v['report']['path'])for b,v in imp['reports'].items()};r0=reps['coarse'];c=configuration(6.)
     inventory=load(imp['inventory']['path']);keys={tuple(v)for v in inventory['local_keys']};points=[v['physical']for v in inventory['points']if tuple(float(x).hex()for x in v['physical'])in keys]
     cache=Rows(r0,points,c);mom=MomentAudit(cache);owned=list(range(cache.point_count));outer_idx=np.flatnonzero(cache.outer[:cache.point_count]);fixed=next(i for i,(p,o)in enumerate(cache.rows[:cache.point_count])if p[0]==8 and abs(p[2]-.25607517888672315)<1e-14 and o['geometry']==17)
-    old_records=load(imp['records']['path']);local=[];bindings=[];moments=[];bt=[];tel=[];matrices=[];weak_results={};anchors={};weak_cache={};data_cache={};action_cache={};impulses={};impulse_fields={};phase_ids={};probe_checks=[];history_states={};kernel_calls=0
+    old_records=load(imp['records']['path']);local=[];bindings=[];moments=[];bt=[];tel=[];matrices=[];weak_results={};anchors={};weak_cache={};data_cache={};action_cache={};impulses={};impulse_fields={};phase_ids={};probe_checks=[];compiled_cache={};history_states={};interface_phases=[];flow_increments=[];kernel_calls=0
     save(out/'inventory.json',dict(parent=imp['inventory'],points=points,rows=[dict(physical=p,owner=o)for p,o in cache.rows[:cache.point_count]],rule='H8 local_keys only; all owners; no new point search',fixed_direction=dict(xi=XI.tolist(),a=POL.tolist(),H=DIRECTION.tolist())))
     # Only one full anchor payload is resident at a time; immutable tests are
     # recovered once. No copies of its large scalar rows are published.
-    anchor0=load(imp['anchors']['coarse']['native']['path']);tests=ProjectedTests(r0,anchor0['weak_checks']);weak=WeakAudit(r0,imp['reports']['coarse']['xml']['path'],tests)
+    anchor0=load(imp['anchors']['coarse']['native']['path'])
+    def validate_anchor(branch,p,step):
+        ctx=context(reps[branch],step);assert p['state_sha256']==ctx['packet']['state_sha256']and p['callback_history_sha256']==vector_hash(ctx['history'])
+        assert p['weak_checks']['alpha_mass']==ctx['alpha']and p['open_boundary']['time']==ctx['time']
+        assert p['report_sha256']==imp['reports'][branch]['report']['sha256']and p['checkpoint_sha256']==imp['anchors'][branch]['context']['checkpoint']['sha256']
+    validate_anchor('coarse',anchor0,1);tests=ProjectedTests(r0,anchor0['weak_checks']);weak=WeakAudit(r0,imp['reports']['coarse']['xml']['path'],tests)
     def compact_anchor(p):return dict(components=p['weak_checks']['native_terms'],regional=[p['weak_checks']['native_inner'],p['weak_checks']['native_outer']])
     anchors['coarse']=compact_anchor(anchor0);save(out/'projected-tests.json',tests.export());del anchor0;gc.collect()
     for branch in ('fine','quarter'):
-        p=load(imp['anchors'][branch]['native']['path']);anchors[branch]=compact_anchor(p);assert p['state_sha256']==context(reps[branch],2 if branch=='fine'else 4)['packet']['state_sha256']
+        p=load(imp['anchors'][branch]['native']['path']);validate_anchor(branch,p,2 if branch=='fine'else 4);anchors[branch]=compact_anchor(p);assert p['state_sha256']==context(reps[branch],2 if branch=='fine'else 4)['packet']['state_sha256']
         assert tests.validate_boundary(p['weak_checks'])<2e-11;del p;gc.collect()
+    import ast,xml.etree.ElementTree as ET
+    first=[load(v['packet']['path'])for v in imp['attempts']if v['step']==1]
+    assert len({vector_hash(v['committed'])for v in first})==1
+    static=[]
+    for branch,item in imp['reports'].items():
+        for f in ET.parse(item['xml']['path']).findall('./CONDITIONS/FUNCTION'):
+            if f.get('NAME').startswith(('Boundary','Outlet','Top')):
+                for equation in f.findall('E'):
+                    tree=ast.parse(equation.get('VALUE').replace('^','**'),mode='eval');assert not any(isinstance(n,ast.Name)and n.id=='t'for n in ast.walk(tree))
+        static.append(branch)
+    save(out/'first-step-premises.json',dict(common_committed_state_sha256=vector_hash(first[0]['committed']),static_boundary_branches=static,
+        incoming_differential_storage_max=[float(max(abs(np.array(v['committed'])[:r0['offsets'][4]]-np.array(v['history'])[:r0['offsets'][4]])))for v in first],
+        pressure_seed_scope='pressure is not stored in the differential mass term; no governing Schur/predictor assembled',S0_limit='conditional source asymptotics, not computed predictor/correction vectors'))
     setup_seconds=time.monotonic()-start;probe=Probe(imp['runtime']['wrapper']['path'])
     def data(state):
         key=vector_hash(state)
@@ -107,7 +125,7 @@ def run(root):
             timer=time.monotonic();branch,step,dt=item['branch'],item['step'],item['dt'];r=reps[branch];packet=load(item['packet']['path']);states,binding=phase_bindings(r,packet,step);binding['external_lift_coefficients']=item['binding']['external_lift_coefficients'];bindings.append(dict(branch=branch,**binding));history=np.array(packet['history']);alpha=packet['alpha']
             ids={key:vector_hash(value)for key,value in states.items()};phase_ids[(branch,step)]=ids;ds={key:data(value)for key,value in states.items()}
             matrices.append(dict(branch=branch,step=step,matrix=item['matrix'],**matrix_check(packet,item['matrix']['path'])))
-            mm=mom.identity(states['C'],states['F']);old=next(v for v in old_records if v['branch']==branch and v['step']==step and v['role']=='accepted');assert old['state_sha256']==ids['A']
+            mm=mom.identity(states['C'],states['F']);old=next(v for v in old_records if v['branch']==branch and v['step']==step and v['role']=='accepted');assert old['state_sha256']==ids['A']and old['callback_history_sha256']==binding['stage_history_sha256']and old['alpha']==alpha
             for region in mm:
                 assert mm[region]['linear_identity_max']<2e-15 and mm[region]['post_flow_max']<2e-15 and mm[region]['repair_max']<2e-15
                 prior=old['pressure_projection']['regions'][region]['pressure_test_moments'];assert max(abs(np.array(prior)-mm[region]['F']))<2e-15
@@ -120,7 +138,12 @@ def run(root):
                 for j,i in enumerate(outer_idx):
                     p,o=cache.rows[i];v={k:np.asarray(x[j]).tolist()for k,x in ad.items()};local.append(dict(branch=branch,step=step,time=packet['time'],phase=phase,state_sha256=ids[phase],physical=p,owner=o,
                         U=d['U'][i].tolist(),G=d['G'][i].tolist(),k=float(d['k'][i]),epsilon=float(d['epsilon'][i]),pi=float(d['pi'][i]),mechanical_pressure=float(d['mechanical_pressure'][i]),**v))
-                trace=cache.interface_history(d);history_states[(branch,step,phase)]=dict(state=states[phase],data=d,action=ad,interface=trace)
+                
+                for i in owned:
+                    if not cache.outer[i]:
+                        local.append(dict(branch=branch,step=step,time=packet['time'],phase=phase,state_sha256=ids[phase],physical=cache.rows[i][0],owner=cache.rows[i][1],
+                            U=d['U'][i].tolist(),G=d['G'][i].tolist(),k=float(d['k'][i]),epsilon=None,epsilon_role='no inner PDE',pi=float(d['pi'][i]),R=d['R'][i].tolist(),covariance=np.linalg.eigvalsh(d['R'][i]).tolist(),raw_production=float(d['production'][i]),nu_eff=float(d['nu_eff'][i])))
+                trace=cache.interface_history(d);interface_phases.append(dict(branch=branch,step=step,time=packet['time'],phase=phase,state_sha256=ids[phase],**trace));history_states[(branch,step,phase)]=dict(state=states[phase],data=d,action=ad,interface=trace)
             for a,b in (('P','C'),('C','F'),('F','K'),('K','A')):
                 diff=delta_B(own_fields(ds[a]),own_fields(ds[b]));assert np.max(abs(diff['residual']))<2e-13
                 for j,i in enumerate(outer_idx):
@@ -129,6 +152,8 @@ def run(root):
             for field in ('dimensional_fixed_action','normalized_fixed_action','in_plane','transverse','N','nu_eff'):
                 vv=np.array([actual[p][field]for p in ('C','F','K','A')]);pieces,error=telescope(vv);assert np.max(abs(error))<2e-13
                 tel.append(dict(kind='local',branch=branch,step=step,functional=field,maximum_identity_defect=float(np.max(abs(error))),phases=vv.tolist(),increments=pieces.tolist(),lift=(actual['C'][field]-actual['P'][field]).tolist()))
+            delta_pressure=states['F']-states['C'];dpi=cache.field(delta_pressure,4)[0]+cache.field(delta_pressure,5)[0]
+            flow_increments.append(dict(branch=branch,step=step,time=packet['time'],dt=dt,pressure=norm_metrics(cache,dpi),impulse=norm_metrics(cache,dt*dpi),velocity_increment_L2=float(np.sqrt(cache.weights@np.sum((ds['F']['U']-ds['C']['U'])**2,axis=1)))))
             if step==1:
                 pressure=(states['F']-states['C'])*dt;pi=cache.field(pressure,4)[0]+cache.field(pressure,5)[0];impulse_fields[branch]=pi;impulses[branch]=dict(dt=dt,time=packet['time'],coefficient_sha256=vector_hash(pressure[r['offsets'][4]:]),coefficients=pressure[r['offsets'][4]:].tolist(),physical=norm_metrics(cache,pi),
                     pressure_increment=norm_metrics(cache,pi/dt),velocity_increment_L2=float(np.sqrt(cache.weights@np.sum((ds['F']['U']-ds['C']['U'])**2,axis=1))),
@@ -151,7 +176,9 @@ def run(root):
                 # four roles. Equal states remain aliases, not new solutions.
                 j=list(outer_idx).index(fixed)
                 for phase in ('C','F','K','A'):
-                    d=ds[phase];k,e,G=d['k'][fixed],d['epsilon'][fixed],d['G'][fixed];v=probe.closure(k,e,G);dv=probe.closure(k,e,G,(0,0,DIRECTION));kernel_calls+=2
+                    d=ds[phase];k,e,G=d['k'][fixed],d['epsilon'][fixed],d['G'][fixed];key=np.r_[k,e,G.ravel()].astype('<f8').tobytes()
+                    if key not in compiled_cache:compiled_cache[key]=(probe.closure(k,e,G),probe.closure(k,e,G,(0,0,DIRECTION)));kernel_calls+=2
+                    v,dv=compiled_cache[key]
                     numerical=-float(np.sum(DIRECTION*dv['R']));err=abs(numerical-actual[phase]['dimensional_fixed_action'][j]);assert err<2e-13
                     assert abs(dv['scalar'][12]-actual[phase]['implicit_dN'][j])<2e-11
                     probe_checks.append(dict(branch=branch,step=step,phase=phase,dimensional_action=numerical,independent=actual[phase]['dimensional_fixed_action'][j],error=err,
@@ -177,7 +204,7 @@ def run(root):
         for a,b in [('coarse','fine'),('fine','quarter')]:
             diff=impulse_fields[b]-impulse_fields[a];metric=norm_metrics(cache,diff);impulse_comparisons.append(dict(pair=a+'-'+b,physical_difference=metric,relative_full_L2=safe_ratio(metric['full']['L2'],impulses[a]['physical']['full']['L2']),
                 coefficient_difference=(np.array(impulses[b]['coefficients'])-impulses[a]['coefficients']).tolist()))
-        save(out/'phase-bindings.json',serial(bindings));save(out/'continuity.json',serial(moments));save(out/'local-phases.json',serial(local));save(out/'delta-B-stage.json',serial(bt));save(out/'delta-B-common-time.json',serial(same_time));save(out/'telescopes.json',serial(tel));save(out/'matrix-checks.json',serial(matrices));save(out/'compiled-checks.json',serial(probe_checks));save(out/'weak-budgets.json',serial(weak_results));save(out/'impulse-comparisons.json',serial(impulse_comparisons))
+        save(out/'interface-phases.json',serial(interface_phases));save(out/'flow-increments.json',serial(flow_increments));save(out/'phase-bindings.json',serial(bindings));save(out/'continuity.json',serial(moments));save(out/'local-phases.json',serial(local));save(out/'delta-B-stage.json',serial(bt));save(out/'delta-B-common-time.json',serial(same_time));save(out/'telescopes.json',serial(tel));save(out/'matrix-checks.json',serial(matrices));save(out/'compiled-checks.json',serial(probe_checks));save(out/'weak-budgets.json',serial(weak_results));save(out/'impulse-comparisons.json',serial(impulse_comparisons))
         native_ok=all(v['anchor']['status']=='PASS'and all(x['status']=='PASS'for x in v['checks'].values())for v in weak_results.values())
         save(out/'summary.json',dict(status='PASS'if native_ok else 'UNRESOLVED',attempts_audited=len(bindings),new_governing=0,new_CP0=0,new_strict=0,new_builds=0,k_matvecs=sum(v['matvecs']for v in matrices),k_factorizations=0,k_solves=0,
             diagnostic_pressure_mass_factorizations=mom.projection.factorizations,diagnostic_pressure_mass_solves=mom.solves,projected_test_fits=tests.fits,kernel_calls=kernel_calls,weak_evaluations=weak.evaluations,unique_actual_states=len(data_cache),
