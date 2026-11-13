@@ -55,16 +55,20 @@ def publish(root):
             moments[branch+'-'+phase]=dict(native=view['native_Q1_moments'],independent=v['summary']['moments'],final_common=s['moments'])
             norms.append(dict(branch=branch,phase=phase,native_mass_dual=view['norms'],reference_error=v.get('reference_error',v['summary']['reference_error']),initial_drift=v['summary']['initial_drift'],velocity_initialization_change=v.get('velocity_change'),errors=v['summary']['errors']))
             interface.append(dict(branch=branch,phase=phase,**v['summary']['interface_budget']))
-            for z in load(Path(v['producer']['path']).parents[3]/'missing.json')if False else load(Path(v['arithmetic']['path']).parent/'local.json')if phase=='run'else load(root/f'science/analysis/{branch}-cp0/local.json'):
-                pt=z['physical'];o=z['owner']
+            local_path=(Path(v['arithmetic']['path']).parent/'local.json'
+                        if phase=='run' else root/f'science/analysis/{branch}-cp0/local.json')
+            for z in load(local_path):
+                pt=z['physical']
                 if pt[0]==8. and(abs(pt[2]-FACE)<=1.01e-6 or abs(pt[2]-.2375)<=1.01e-6):local.append(dict(branch=branch,phase=phase,time=r['time'],**z))
             weak.append(dict(branch=branch,phase=phase,result=identity(strict),signed_weak=view['signed_weak'],anchor=view['anchor'],quadrature=view['quadrature'],weak_evaluations=view['weak_evaluations']))
             if phase=='run':
-                ar=load(v['arithmetic']['path']);arithmetic_files.append(v['arithmetic']);old=load(root/f'science/imports/{branch}.impulse.json')
+                ar=load(v['arithmetic']['path']);assert ar['status']=='PASS'and all(z['status']=='PASS'for z in ar['checks'].values())
+                arithmetic_files.append(v['arithmetic']);old=load(root/f'science/imports/{branch}.impulse.json')
                 impulses.append(dict(branch=branch,dt=dt,time=r['time'],new_pressure_L2=ar['pressure_physical']['full']['L2'],new_j_L2=ar['impulse_physical']['full']['L2'],old_pressure_L2=old['pressure_increment']['full']['L2'],old_j_L2=old['physical']['full']['L2'],new_pressure_mean=ar['pressure_physical']['full']['mean'],new_j_mean=ar['impulse_physical']['full']['mean'],predictor_L2=ar['predictor_physical_L2'],pressure_correction_L2=ar['pressure_correction_physical_L2'],total_du_L2=ar['total_physical_L2'],predictor_per_dt_L2=ar['predictor_per_dt_physical_L2']))
                 save(out/(branch+'-arithmetic.json'),ar)
                 a=r['pimple_attempts'][0];counts.append(dict(branch=branch,**{k:a[k]for k in ('momentum_predictor_solves','pressure_system_solves','k_transport_solves','epsilon_transport_solves','bound_calls','bound_activations')}))
-                for phase_name,vec in [('C',load(a['k_snapshot'])['committed']),('F',load(a['k_snapshot'])['post_flow']),('K',load(a['k_snapshot'])['raw']),('A',r['state'])]:
+                snapshot=load(a['k_snapshot'])
+                for phase_name,vec in [('C',snapshot['committed']),('F',snapshot['post_flow']),('K',snapshot['raw']),('A',r['state'])]:
                     assert len(vec)==2328  # retain aliases/trace roles, never lift here
             label=branch+'-'+('step'if phase=='run'else 'cp0');samples=load(root/'operations'/label/'native-exec-samples.json');assert samples and all(x['status']=='PASS'for x in samples);runtime.append(dict(branch=branch,phase=phase,actual_exec_samples=identity(root/'operations'/label/'native-exec-samples.json')))
     table(out/'timeline.csv',timeline);table(out/'pressure-impulses.csv',impulses);table(out/'solve-counts.csv',counts);save(out/'all-Q1-moments.json',moments);save(out/'norms-errors.json',norms);save(out/'interface-budgets.json',interface);save(out/'local-owned-states.json',serial(local));save(out/'weak-checks.json',weak);save(out/'common-inventory-result.json',common_result)
@@ -77,7 +81,9 @@ def publish(root):
                     for mode in range(3):loads.append(dict(branch=v['branch'],phase=v['phase'],kind=kind,term=name,region=region,mode=mode,**dict(zip(('u','v','k','outer_epsilon','p_inner','p_outer'),rows[region][mode]))))
     table(out/'signed-weak-components.csv',loads)
     gates=dict(implementation_build='PASS',native_fixture='PASS',startup_compatibility='PASS'if all(v['expanded']=='PASS'for v in timeline if v['phase']=='cp0')else 'OBSTRUCTED',native_hard_admission='PASS'if all(v['native']=='PASS'for v in timeline)else 'OBSTRUCTED',principal_quality=common_result['status'],restart_history='PASS',strict_weak='PASS'if all(v['anchor']['status']==v['quadrature']['status']=='PASS'for v in weak)else 'UNRESOLVED',actual_predictor_correction='PASS',coverage='finite inventory only',H8_common_time_contraction='UNRESOLVED unchanged',new_CP0=book['cp0_reservations'],new_governing=book['governing_attempts'],new_strict=book['strict_readbacks'],closure_transport='PENDING')
-    assert(gates['new_CP0'],gates['new_governing'],gates['new_strict'])==(3,3,6)and len(timeline)==6
+    assert(gates['new_CP0'],gates['new_governing'],gates['new_strict'])==(3,3,6)and len(timeline)==6 and len(arithmetic_files)==3
+    assert all(row[k]==1 for row in counts for k in ('momentum_predictor_solves','pressure_system_solves','k_transport_solves','epsilon_transport_solves','bound_calls'))
+    assert all(row['bound_activations']==0 for row in counts)
     gates['status']='PASS'if not book.get('h10_halt')and all(gates[k]=='PASS'for k in ('implementation_build','startup_compatibility','native_hard_admission','principal_quality','strict_weak','actual_predictor_correction'))else 'OBSTRUCTED';save(out/'component-gates.json',gates)
     save(out/'state-bindings.json',{k:dict(producer=v['producer'],checkpoint=v['checkpoint'],invariants=v['invariants'],arithmetic=v.get('arithmetic'))for k,v in records.items()})
     save(out/'runtime.json',dict(build=load(root/'science/runtime-build.json'),qualification=identity(root/'runtime-qualified.json'),actual_cases=runtime))
