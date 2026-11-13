@@ -19,11 +19,11 @@ def write_csv(p,rows):
     with p.open('w',newline='')as f:
         w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
 
-def publish(root):
+def publish(root,output=None):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    out=root/'publication';out.mkdir();gates={};timeline=[];errors=[];pairs=[];interfaces=[];witnesses=[];norms={};heavy=[];details={};steps=attempts=0
+    out=Path(output)if output else root/'publication';out.mkdir();profiles={};gates={};timeline=[];errors=[];pairs=[];interfaces=[];witnesses=[];norms={};heavy=[];details={};steps=attempts=0
     for h in (5.5,6.,5.):
         view=root/f'scan-view-H{h:g}.json'
         if not view.exists():gates[str(h)]=dict(status='NOT_RUN');continue
@@ -69,6 +69,9 @@ def publish(root):
                 # The original v1 array lacks only the newly published inner
                 # turbulent-production contraction; derive it without a solve.
                 d=dict(data);d['turbulent_production']=d['nu_eff']*np.sum((d['G']+d['G'].transpose(0,2,1))*d['G'],axis=(1,2))
+                if r['role']=='accepted'and r['branch']in ('coarse','fine')and r['step']==max(x['step']for x in rec if x['branch']==r['branch']and x['role']=='accepted'):
+                    ii=[i for i,(p,o)in enumerate(cache.rows[:cache.point_count])if p[0]==8 and o['region']=='outer'and p[2]<1];ii=sorted(ii,key=lambda i:cache.rows[i][0][2])
+                    profiles[(h,r['branch'])]=dict(z=[cache.rows[i][0][2]*40 for i in ii],Gxz=d['G'][ii,0,2].copy(),exact=cache.exact['G'][ii,0,2].copy())
                 inter=cache.interface_history(d);interfaces.append(dict(height_mm=h,branch=r['branch'],role=r['role'],step=r['step'],time=r['time'],**inter))
             heavy.append(r['arrays'])
         for p in pair:
@@ -112,14 +115,8 @@ def publish(root):
     for a,h in zip(ax,(5.,5.5,6.)):
         if h not in details:continue
         for branch in ('coarse','fine'):
-            rr=[r for r in details[h]if r['branch']==branch and r['role']=='accepted'];r=rr[-1]
-            view=load(root/f'scan-view-H{h:g}.json');summary=load(view['path']);inv=load(summary['inventory']['path']);base=reports(root,h)[0][1];c=configuration(h);cache=Rows(base,[p['physical']for p in inv['points']],c)
-            with np.load(r['arrays']['path'])as d:
-                ii=[i for i,(p,o)in enumerate(cache.rows[:cache.point_count])if p[0]==8 and o['region']=='outer'and p[2]<1]
-                ii=sorted(ii,key=lambda i:cache.rows[i][0][2]);z=[cache.rows[i][0][2]*40 for i in ii]
-                a.plot(z,d['G'][ii,0,2],'.-',ms=2,label=branch)
-                if branch=='fine':a.plot(z,cache.exact['G'][ii,0,2],'k:',label='exact')
-            del cache;gc.collect()
+            pp=profiles[(h,branch)];a.plot(pp['z'],pp['Gxz'],'.-',ms=2,label=branch)
+            if branch=='fine':a.plot(pp['z'],pp['exact'],'k:',label='exact')
         a.set(title=f'Hw={h:g}mm, x=8, terminal',xlabel='physical z [mm]',ylabel='Gxz [Uinf/Hh]');a.grid(alpha=.2)
     ax[0].legend();fig.savefig(out/'terminal-gradients.png',dpi=160);plt.close(fig)
     save(out/'manifest.json',dict(root=str(root),publisher=identity(__file__),heavy=heavy,producer_scope='governing source unchanged c344dc2; native observer e62b5f4; Python versions in receipts',
@@ -128,4 +125,4 @@ def publish(root):
     print('H7 compact publication',overall,'attempts',attempts,'accepted',steps,flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);publish(p.parse_args().root)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path);a=p.parse_args();publish(a.root,a.output)
