@@ -53,9 +53,13 @@ def publish(root):
             quality='PASS'if quality else 'QUALITY_LOST',endpoint_weak=endpoints,inventory=summary['inventory'],source_view=v)
         for r in rec:
             timeline.append(dict(height_mm=h,branch=r['branch'],role=r['role'],step=r['step'],time=r['time'],alpha=r['alpha'],status=r['status'],min_in_plane=r['min_in_plane'],min_transverse=r['min_transverse'],min_covariance=r['min_covariance'],
-                max_divergence=r['raw_divergence_max'],state_sha256=r['state_sha256'],history_sha256=r['history_sha256'],inventory_sha256=r['inventory_sha256']))
+                native_min_in_plane=r['native_witness_replays']['in_plane']['native']['minimum_over_nu_eff'],native_status=r['role'],max_divergence=r['raw_divergence_max'],state_sha256=r['state_sha256'],history_sha256=r['history_sha256'],inventory_sha256=r['inventory_sha256']))
             errors.append(dict(height_mm=h,branch=r['branch'],role=r['role'],step=r['step'],time=r['time'],**r['errors']))
-            witnesses.append(dict(height_mm=h,branch=r['branch'],role=r['role'],step=r['step'],time=r['time'],witness=r['witness'],independent_compiled_replay=r['expanded_compiled_replay'],native_replays=r['native_witness_replays']))
+            wi=dict(r['witness']);theta=wi['angle'];wi['xi']=[float(np.cos(theta)),0.,float(np.sin(theta))];wi['polarization']=[-float(np.sin(theta)),0.,float(np.cos(theta))];wi['a_dot_xi']=0.;wi['normalization']='unit xi and transverse unit polarization; principal divided by nu_eff'
+            G=np.array(wi['G']);B=wi['k']/wi['epsilon']*(G-np.trace(G)*np.eye(3)/3);S=(B+B.T)/2;O=(B-B.T)/2;ss=float(np.trace(S@S));ww=float(np.trace(O@O));N=wi['root']
+            wi['F_N']=1.8*(N*N-2*ww)/N+2*N*(N-1.8);wi['scaled_root_residual']=((N-1.8)*(N*N-2*ww)-2.7*ss*N)/(1+N**3+abs(2.7*ss*N)+abs(ww*N))
+            wi['Pdev']=wi['production']+2*wi['k']*wi['divergence']/3
+            witnesses.append(dict(height_mm=h,branch=r['branch'],role=r['role'],step=r['step'],time=r['time'],witness=wi,independent_compiled_replay=r['expanded_compiled_replay'],native_replays=r['native_witness_replays']))
             for kind in ('reference_error','initial_drift'):
                 for scope,fields in r[kind].items():
                     for field,m in fields.items():
