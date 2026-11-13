@@ -179,7 +179,9 @@ def qualification(root):
     # The early H10 fixture qualifier is a subset. The sealed closure also
     # covers governor-only FieldUtils/filters and actual production MPI loads.
     prior=load(H10/'runtime-qualified.json')['loaded']
-    observed=load(H10/'closure/runtime-observed.json');assert observed['status']=='PASS'
+    observed_path=verify(dict(path=str(H10/'closure/runtime-observed.json'),bytes=307438,
+        sha256='f8698dbe2108eb1f597696805b342f051c1ddac5cd2006fd655e5a682b43a502'))
+    observed=load(observed_path);assert observed['status']=='PASS'
     for v in observed['libraries']:
         if v['path']in prior:assert prior[v['path']]['sha256']==v['sha256']
         prior[v['path']]=v
@@ -208,6 +210,25 @@ def qualification(root):
         small_governing_verification_attempts=7,complete_small_solves_each=7,small_CP0s=1,deliberate_rejections=1,
         physical_native_integrated_accepted_steps=4,verification_sweeps=2,
         note='initial failed parity observers reached no sweep; retained failures and superseded sources remain charged'))
+
+def unsupported(root):
+    import subprocess
+    folder=root/'science/small/unsupported';folder.mkdir();records=[]
+    base=root/'science/small/initializer/case.xml'
+    for name,operation,change,needle in (
+        ('legacy-observer','k_bound',None,'does not support legacy dense matrix observers'),
+        ('dense-arithmetic','initializer_checks',('RANSWallPimpleArithmetic','On'),'dense arithmetic'),
+        ('dense-4331','initializer_checks',('RANSWallDenseEvolutionCapacity','4331'),'dense_capacity_route')):
+        x=ET.parse(base).getroot()
+        if name=='dense-4331':set_info(x,'RANSWallLinearBackend','Dense')
+        if change:set_info(x,*change)
+        xml=folder/(name+'.xml');write(x,xml);request=folder/(name+'-request.json');save(request,dict(operation=operation,inner_stress_model='Linear'))
+        p=subprocess.run([str(root/'runtime-v4/RANSWallResolutionProbe'),str(xml),str(request),str(folder/(name+'-unexpected.json'))],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+        (folder/(name+'.log')).write_text(p.stdout)
+        assert p.returncode!=0 and needle in p.stdout,(name,p.returncode,p.stdout[:2000])
+        records.append(dict(case=name,status='PASS',actual_native_exit=p.returncode,expected_diagnostic=needle,
+            xml=file_id(xml),request=file_id(request),log=file_id(folder/(name+'.log')),governing_attempts=0))
+    save(folder/'result.json',dict(status='PASS',records=records,scope='unsupported options refused before patch mass allocation; no target constructor or governing attempt'))
 
 def stored_reference(manifest=None):
     """Restore ONLY the settled H13 six-mm reference; never run an inverse/fit."""
@@ -327,7 +348,7 @@ def assessment(root,relative,version='v1'):
     assert file_id(rp)==before;print(relative,status,'minima',[v['summary']['min_in_plane']for v in results],flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('runtime','inputs','small-checks','view','view-finish','rejection','qualification','assessment'),required=True)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('runtime','inputs','small-checks','view','view-finish','rejection','qualification','unsupported','assessment'),required=True)
     p.add_argument('--case',default='two');p.add_argument('--reuse',action='store_true');p.add_argument('--version',default='v1');a=p.parse_args()
     if a.mode=='view':view(a.root,a.case,a.reuse)
     elif a.mode=='view-finish':view_finish(a.root,a.case)
