@@ -11,6 +11,7 @@ from study_wj_h5 import identity
 from study_wj_h6 import configuration
 from study_wj_h7 import reports,accounting,paths
 from wj_h7_analysis import Rows
+from wj_h4_points import aligned
 
 
 def write_csv(p,rows):
@@ -43,7 +44,7 @@ def publish(root):
                 save(out/f'endpoint-H{h:g}-{branch}.json',{k:v for k,v in e.items()if k not in ('scalar_domain',)})
         accepted=[r for r in rec if r['role']=='accepted'and r['branch']!='H6'];expanded=all(r['status']in ('PASS','QUALITY_LOST')for r in accepted)
         quality=all(r['status']=='PASS'for r in accepted)
-        reached=all(b in native and native[b]['time']==.04 and native[b]['accepted']==n and not native[b]['failure']for b,n in (('coarse',4),('fine',8)))
+        reached=all(b in native and aligned(n,.01 if b=='coarse'else .005,native[b]['time'])==aligned(4,.01,.04) and native[b]['accepted']==n and not native[b]['failure']for b,n in (('coarse',4),('fine',8)))
         expected={(b,s)for b,n in (('coarse',4),('fine',8))for s in range(n+1)};actual={(r['branch'],r['step'])for r in accepted}
         complete=expected==actual and len([r for r in pair if r['status']=='PASS'])==5
         weak=all(endpoints.get(b)=='PASS'for b in ('coarse','fine'))
