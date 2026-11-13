@@ -1,0 +1,687 @@
+{
+  "schema": "WJH14Fixed6mmResourceDesignV1",
+  "height_mm": 6,
+  "target_state": 24688,
+  "selected_H13": [
+    {
+      "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/publication-v1/paired-case/flat/case.xml",
+      "bytes": 155724,
+      "sha256": "137566f8704fed63d881dfbb5b804a02776a09c2081b9f29c42cadd91e794511"
+    },
+    {
+      "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/publication-v1/paired-case/paired-domain.json",
+      "bytes": 707505,
+      "sha256": "cba5d1bae5aa98c4b563fadaa01bcb06e0276c1b837990ef9b8594b812cf83d4"
+    },
+    {
+      "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/publication-v1/paired-case/preservation-protocol.json",
+      "bytes": 11004,
+      "sha256": "2b2c51827ac6e5a71560842c7681bad40f9e471205c144e34e360d1e4888b117"
+    },
+    {
+      "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/publication-v1/paired-case/mapped-backend-prerequisite.json",
+      "bytes": 10570,
+      "sha256": "be56f3e016ee12e49ab3c2353b9acbfae16668193a646cbaa9f88b92a256f364"
+    }
+  ],
+  "source_allocation": {
+    "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target-source-allocation-v1.json",
+    "bytes": 1921,
+    "sha256": "3b06dc0942f6fc42c9e2f3e5464bc4e90437d504e182a65eb30dad4d7e798d6a"
+  },
+  "qualified_gates": {
+    "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/qualification-gates.json",
+    "bytes": 625,
+    "sha256": "9ebac7d569c202181e05e4c16da77cab0201dcafc1930e3862a290fef605a1c8"
+  },
+  "unsupported": {
+    "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/unsupported/result.json",
+    "bytes": 2942,
+    "sha256": "4f9a52a6aa62c923352ec030a712faa89fd2203d0a71c35437f869e692457524"
+  },
+  "runtime": {
+    "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/runtime-qualified-v4.json",
+    "bytes": 64885,
+    "sha256": "b27799d6d1310363e9946bdd2a7662e59b8974d8652abc9157ea0da24c094aaf"
+  },
+  "limits": {
+    "state": 24688,
+    "pressure": 1024,
+    "factor_payload_bytes": 536870912,
+    "native_RSS_bytes": 8589934592,
+    "science_bytes": 2147483648,
+    "pilot_seconds": 600
+  },
+  "forecast": {
+    "status": "PASS",
+    "charged_before_admission": 656.3338198060301,
+    "headroom": 1.25,
+    "untouched_closure": 300,
+    "remaining_nominal_seconds": {
+      "target_cp0": 600,
+      "target_pilot": 600,
+      "passive_strict_and_final_analysis": 700,
+      "transport_and_verification": 150
+    },
+    "projected_total_seconds": 3518.83381980603,
+    "measured_small_cp0_seconds": 9.4630373139953,
+    "measured_small_two_step_seconds": 17.765550046999124,
+    "target_rate": "unknown until actual CP0/pilot; finite phase ceilings retained, no small-to-target cost claim"
+  },
+  "pilot_rule": "one-step genuine checkpoint continuations, at most4, after each independent hard/quality/moment assessment; before each next step require25% cost headroom within the same600s reservation; no retry",
+  "timestep": {
+    "dt": 0.0025,
+    "maximum_steps": 4,
+    "dt_source": "existing qualified6mm small timestep; selected for a capacity/admissibility pilot only",
+    "minimum_horizontal_cell": 1.0,
+    "max_reference_U": 1.0900334256227213,
+    "cell_advective_CFL": 0.0027250835640568035,
+    "Q3_degree_squared_advective_indicator": 0.02452575207651123,
+    "max_cell_diffusion_indicator": 1.2951806957315903,
+    "max_profile_diffusion_indicator": 0.007918429009434886,
+    "normal_intervals": [
+      {
+        "chart_interval": [
+          0.0,
+          0.0005
+        ],
+        "physical_normal_width": 0.0005,
+        "region": "inner",
+        "diffusivity": 0.0001197791640527173,
+        "dt_D_over_cell_width_squared": 1.197791640527173,
+        "profile_diffusion_time": 0.3157191908926916,
+        "dt_over_profile_diffusion_time": 0.007918429009434886
+      },
+      {
+        "chart_interval": [
+          0.0005,
+          0.001
+        ],
+        "physical_normal_width": 0.0005,
+        "region": "inner",
+        "diffusivity": 0.00012951806957315902,
+        "dt_D_over_cell_width_squared": 1.2951806957315903,
+        "profile_diffusion_time": 0.3413894265752596,
+        "dt_over_profile_diffusion_time": 0.007323015317373553
+      },
+      {
+        "chart_interval": [
+          0.001,
+          0.003
+        ],
+        "physical_normal_width": 0.002,
+        "region": "inner",
+        "diffusivity": 0.00015386533337426324,
+        "dt_D_over_cell_width_squared": 0.09616583335891454,
+        "profile_diffusion_time": 0.4055650157816794,
+        "dt_over_profile_diffusion_time": 0.006164239770981086
+      },
+      {
+        "chart_interval": [
+          0.003,
+          0.005
+        ],
+        "physical_normal_width": 0.002,
+        "region": "inner",
+        "diffusivity": 0.00019282095545603,
+        "dt_D_over_cell_width_squared": 0.12051309716001876,
+        "profile_diffusion_time": 0.5082459585119509,
+        "dt_over_profile_diffusion_time": 0.0049188782677574705
+      },
+      {
+        "chart_interval": [
+          0.005,
+          0.0125
+        ],
+        "physical_normal_width": 0.007500000000000001,
+        "region": "inner",
+        "diffusivity": 0.00028534055790022615,
+        "dt_D_over_cell_width_squared": 0.012681802573343382,
+        "profile_diffusion_time": 0.7521131974963462,
+        "dt_over_profile_diffusion_time": 0.0033239677329450733
+      },
+      {
+        "chart_interval": [
+          0.0125,
+          0.02
+        ],
+        "physical_normal_width": 0.0075,
+        "region": "inner",
+        "diffusivity": 0.0004314241407068515,
+        "dt_D_over_cell_width_squared": 0.019174406253637845,
+        "profile_diffusion_time": 1.137166732734865,
+        "dt_over_profile_diffusion_time": 0.0021984463034611878
+      },
+      {
+        "chart_interval": [
+          0.02,
+          0.023209949154884668
+        ],
+        "physical_normal_width": 0.0032099491548846677,
+        "region": "inner",
+        "diffusivity": 0.0005357273236550077,
+        "dt_D_over_cell_width_squared": 0.12998328225440733,
+        "profile_diffusion_time": 1.4120936516890734,
+        "dt_over_profile_diffusion_time": 0.0017704208194758396
+      },
+      {
+        "chart_interval": [
+          0.023209949154884668,
+          0.026419898309769336
+        ],
+        "physical_normal_width": 0.0032099491548846677,
+        "region": "inner",
+        "diffusivity": 0.0005982501067446945,
+        "dt_D_over_cell_width_squared": 0.14515315730620018,
+        "profile_diffusion_time": 1.5768939543589713,
+        "dt_over_profile_diffusion_time": 0.0015853951326842924
+      },
+      {
+        "chart_interval": [
+          0.026419898309769336,
+          0.03820994915488467
+        ],
+        "physical_normal_width": 0.011790050845115332,
+        "region": "inner",
+        "diffusivity": 0.00074433368955132,
+        "dt_D_over_cell_width_squared": 0.013386786246256388,
+        "profile_diffusion_time": 1.9619474895974902,
+        "dt_over_profile_diffusion_time": 0.001274244093307969
+      },
+      {
+        "chart_interval": [
+          0.03820994915488467,
+          0.05
+        ],
+        "physical_normal_width": 0.011790050845115335,
+        "region": "inner",
+        "diffusivity": 0.0009739780720748841,
+        "dt_D_over_cell_width_squared": 0.017516923447690316,
+        "profile_diffusion_time": 2.5672542574046298,
+        "dt_over_profile_diffusion_time": 0.0009738030398778574
+      },
+      {
+        "chart_interval": [
+          0.05,
+          0.07500000000000001
+        ],
+        "physical_normal_width": 0.02500000000000001,
+        "region": "inner",
+        "diffusivity": 0.001332272901347708,
+        "dt_D_over_cell_width_squared": 0.005329091605390829,
+        "profile_diffusion_time": 3.511663533372396,
+        "dt_over_profile_diffusion_time": 0.0007119133072521748
+      },
+      {
+        "chart_interval": [
+          0.07500000000000001,
+          0.1
+        ],
+        "physical_normal_width": 0.024999999999999994,
+        "region": "inner",
+        "diffusivity": 0.001819218177369793,
+        "dt_D_over_cell_width_squared": 0.007276872709479175,
+        "profile_diffusion_time": 4.795175317500792,
+        "dt_over_profile_diffusion_time": 0.0005213573716222289
+      },
+      {
+        "chart_interval": [
+          0.1,
+          0.10427251771267732
+        ],
+        "physical_normal_width": 0.0042725177126773095,
+        "region": "inner",
+        "diffusivity": 0.002104300461719013,
+        "dt_D_over_cell_width_squared": 0.28819073552492847,
+        "profile_diffusion_time": 5.5466077462073615,
+        "dt_over_profile_diffusion_time": 0.0004507259417631327
+      },
+      {
+        "chart_interval": [
+          0.10427251771267732,
+          0.10854503542535461
+        ],
+        "physical_normal_width": 0.004272517712677296,
+        "region": "inner",
+        "diffusivity": 0.002187519754395369,
+        "dt_D_over_cell_width_squared": 0.29958788607569886,
+        "profile_diffusion_time": 5.765960819492107,
+        "dt_over_profile_diffusion_time": 0.00043357908217978697
+      },
+      {
+        "chart_interval": [
+          0.10854503542535461,
+          0.1292725177126773
+        ],
+        "physical_normal_width": 0.0207274822873227,
+        "region": "inner",
+        "diffusivity": 0.0024309923924064115,
+        "dt_D_over_cell_width_squared": 0.014145897374621587,
+        "profile_diffusion_time": 6.407716711556305,
+        "dt_over_profile_diffusion_time": 0.0003901545765110456
+      },
+      {
+        "chart_interval": [
+          0.1292725177126773,
+          0.15
+        ],
+        "physical_normal_width": 0.020727482287322685,
+        "region": "inner",
+        "diffusivity": 0.0028347183757521403,
+        "dt_D_over_cell_width_squared": 0.01649517100695229,
+        "profile_diffusion_time": 7.471875422399956,
+        "dt_over_profile_diffusion_time": 0.00033458801956269817
+      },
+      {
+        "chart_interval": [
+          0.15,
+          0.1593287109652487
+        ],
+        "physical_normal_width": 0.009287589443361588,
+        "region": "outer",
+        "diffusivity": 0.0030121226122340585,
+        "dt_D_over_cell_width_squared": 0.08729847086815233,
+        "profile_diffusion_time": 7.939485314704396,
+        "dt_over_profile_diffusion_time": 0.0003148818721749951
+      },
+      {
+        "chart_interval": [
+          0.1593287109652487,
+          0.16865742193049738
+        ],
+        "physical_normal_width": 0.00928758944336156,
+        "region": "outer",
+        "diffusivity": 0.0031930245244371582,
+        "dt_D_over_cell_width_squared": 0.09254143815252325,
+        "profile_diffusion_time": 8.416314534572438,
+        "dt_over_profile_diffusion_time": 0.0002970421304634623
+      },
+      {
+        "chart_interval": [
+          0.16865742193049738,
+          0.23233253930006453
+        ],
+        "physical_normal_width": 0.06339443360282473,
+        "region": "outer",
+        "diffusivity": 0.0039008678799185327,
+        "dt_D_over_cell_width_squared": 0.0024266044961538287,
+        "profile_diffusion_time": 10.282079196053873,
+        "dt_over_profile_diffusion_time": 0.00024314148455104948
+      },
+      {
+        "chart_interval": [
+          0.23233253930006453,
+          0.2960076566696317
+        ],
+        "physical_normal_width": 0.06339443360282473,
+        "region": "outer",
+        "diffusivity": 0.005135652678678182,
+        "dt_D_over_cell_width_squared": 0.003194724421434442,
+        "profile_diffusion_time": 13.536779299148701,
+        "dt_over_profile_diffusion_time": 0.00018468203881828962
+      },
+      {
+        "chart_interval": [
+          0.2960076566696317,
+          0.35780139746094064
+        ],
+        "physical_normal_width": 0.0615213502462591,
+        "region": "outer",
+        "diffusivity": 0.006352195695596325,
+        "dt_D_over_cell_width_squared": 0.0041957747068966,
+        "profile_diffusion_time": 16.743396911027393,
+        "dt_over_profile_diffusion_time": 0.000149312592497492
+      },
+      {
+        "chart_interval": [
+          0.35780139746094064,
+          0.4195951382522496
+        ],
+        "physical_normal_width": 0.0615213502462591,
+        "region": "outer",
+        "diffusivity": 0.007550496930672964,
+        "dt_D_over_cell_width_squared": 0.004987280865446321,
+        "profile_diffusion_time": 19.90193203168995,
+        "dt_over_profile_diffusion_time": 0.00012561594502580138
+      },
+      {
+        "chart_interval": [
+          0.4195951382522496,
+          0.5454577729062501
+        ],
+        "physical_normal_width": 0.1253078245516214,
+        "region": "outer",
+        "diffusivity": 0.00937000861249161,
+        "dt_D_over_cell_width_squared": 0.0014918447080304051,
+        "profile_diffusion_time": 24.697880981131224,
+        "dt_over_profile_diffusion_time": 0.00010122325886621442
+      },
+      {
+        "chart_interval": [
+          0.5454577729062501,
+          0.6713204075602506
+        ],
+        "physical_normal_width": 0.1253078245516214,
+        "region": "outer",
+        "diffusivity": 0.011810730741052258,
+        "dt_D_over_cell_width_squared": 0.0018804439657100274,
+        "profile_diffusion_time": 31.1312437593512,
+        "dt_over_profile_diffusion_time": 8.030517570468254e-05
+      },
+      {
+        "chart_interval": [
+          0.6713204075602506,
+          0.7971684578996913
+        ],
+        "physical_normal_width": 0.12529330452560183,
+        "region": "outer",
+        "diffusivity": 0.014251311460451348,
+        "dt_D_over_cell_width_squared": 0.002269546645252707,
+        "profile_diffusion_time": 37.56423380508114,
+        "dt_over_profile_diffusion_time": 6.655266850303324e-05
+      },
+      {
+        "chart_interval": [
+          0.7971684578996913,
+          0.923016508239132
+        ],
+        "physical_normal_width": 0.12529330452560183,
+        "region": "outer",
+        "diffusivity": 0.016691750770688882,
+        "dt_D_over_cell_width_squared": 0.0026581909370333463,
+        "profile_diffusion_time": 43.996851118321054,
+        "dt_over_profile_diffusion_time": 5.6822248330380096e-05
+      },
+      {
+        "chart_interval": [
+          0.923016508239132,
+          0.9859624098806912
+        ],
+        "physical_normal_width": 0.06266843230182943,
+        "region": "outer",
+        "diffusivity": 0.018522292367109363,
+        "dt_D_over_cell_width_squared": 0.011790631939696934,
+        "profile_diffusion_time": 48.821873201986016,
+        "dt_over_profile_diffusion_time": 5.120655632480531e-05
+      },
+      {
+        "chart_interval": [
+          0.9859624098806912,
+          1.0489083115222504
+        ],
+        "physical_normal_width": 0.06266843230182943,
+        "region": "outer",
+        "diffusivity": 0.019742936249712784,
+        "dt_D_over_cell_width_squared": 0.012567650381257452,
+        "profile_diffusion_time": 52.03930005607604,
+        "dt_over_profile_diffusion_time": 4.804061540616559e-05
+      },
+      {
+        "chart_interval": [
+          1.0489083115222504,
+          1.1114458523561273
+        ],
+        "physical_normal_width": 0.062261871573274126,
+        "region": "outer",
+        "diffusivity": 0.020959620675792486,
+        "dt_D_over_cell_width_squared": 0.013516961743986273,
+        "profile_diffusion_time": 55.24629040044477,
+        "dt_over_profile_diffusion_time": 4.5251907085147444e-05
+      },
+      {
+        "chart_interval": [
+          1.1114458523561273,
+          1.173983393190004
+        ],
+        "physical_normal_width": 0.062261871573274126,
+        "region": "outer",
+        "diffusivity": 0.022172345645348476,
+        "dt_D_over_cell_width_squared": 0.014299053999997268,
+        "profile_diffusion_time": 58.44284423509222,
+        "dt_over_profile_diffusion_time": 4.277683662936559e-05
+      },
+      {
+        "chart_interval": [
+          1.173983393190004,
+          1.2990584748577576
+        ],
+        "physical_normal_width": 0.12452374314654804,
+        "region": "outer",
+        "diffusivity": 0.02399143309968245,
+        "dt_D_over_cell_width_squared": 0.003868048096003451,
+        "profile_diffusion_time": 63.23767498706339,
+        "dt_over_profile_diffusion_time": 3.9533395250717676e-05
+      },
+      {
+        "chart_interval": [
+          1.2990584748577576,
+          1.4241335565255109
+        ],
+        "physical_normal_width": 0.12452374314654782,
+        "region": "outer",
+        "diffusivity": 0.026416883038794404,
+        "dt_D_over_cell_width_squared": 0.00425909422400896,
+        "profile_diffusion_time": 69.63078265635826,
+        "dt_over_profile_diffusion_time": 3.5903660775120064e-05
+      },
+      {
+        "chart_interval": [
+          1.4241335565255109,
+          1.676267186641196
+        ],
+        "physical_normal_width": 0.25102220983179985,
+        "region": "outer",
+        "diffusivity": 0.03007428959343477,
+        "dt_D_over_cell_width_squared": 0.0011931940774567102,
+        "profile_diffusion_time": 79.27113577894701,
+        "dt_over_profile_diffusion_time": 3.153733039692305e-05
+      },
+      {
+        "chart_interval": [
+          1.676267186641196,
+          1.9284008167568811
+        ],
+        "physical_normal_width": 0.25102220983179985,
+        "region": "outer",
+        "diffusivity": 0.034963652763603546,
+        "dt_D_over_cell_width_squared": 0.0013871790146255637,
+        "profile_diffusion_time": 92.15873435482965,
+        "dt_over_profile_diffusion_time": 2.7127108651194117e-05
+      },
+      {
+        "chart_interval": [
+          1.9284008167568811,
+          2.178973925214632
+        ],
+        "physical_normal_width": 0.2494685670476727,
+        "region": "outer",
+        "diffusivity": 0.03983788515348521,
+        "dt_D_over_cell_width_squared": 0.0016003118423292219,
+        "profile_diffusion_time": 105.00645055427724,
+        "dt_over_profile_diffusion_time": 2.3808061188657778e-05
+      },
+      {
+        "chart_interval": [
+          2.178973925214632,
+          2.4295470336723826
+        ],
+        "physical_normal_width": 0.24946856704767226,
+        "region": "outer",
+        "diffusivity": 0.04469698676307971,
+        "dt_D_over_cell_width_squared": 0.0017955048807888712,
+        "profile_diffusion_time": 117.81428437728972,
+        "dt_over_profile_diffusion_time": 2.1219837757482558e-05
+      },
+      {
+        "chart_interval": [
+          2.4295470336723826,
+          2.680893110801819
+        ],
+        "physical_normal_width": 0.2502381284267248,
+        "region": "outer",
+        "diffusivity": 0.04956358305823699,
+        "dt_D_over_cell_width_squared": 0.001978771912286066,
+        "profile_diffusion_time": 130.6418730222747,
+        "dt_over_profile_diffusion_time": 1.9136284119056875e-05
+      },
+      {
+        "chart_interval": [
+          2.680893110801819,
+          2.9322391879312555
+        ],
+        "physical_normal_width": 0.2502381284267248,
+        "region": "outer",
+        "diffusivity": 0.054437674038957044,
+        "dt_D_over_cell_width_squared": 0.002173364670425508,
+        "profile_diffusion_time": 143.4892164892321,
+        "dt_over_profile_diffusion_time": 1.7422912056862533e-05
+      },
+      {
+        "chart_interval": [
+          2.9322391879312555,
+          3.434129204889323
+        ],
+        "physical_normal_width": 0.499677655422358,
+        "region": "outer",
+        "diffusivity": 0.06174103300615125,
+        "dt_D_over_cell_width_squared": 0.0006182071760439357,
+        "profile_diffusion_time": 162.73973140271573,
+        "dt_over_profile_diffusion_time": 1.5361952354545188e-05
+      },
+      {
+        "chart_interval": [
+          3.434129204889323,
+          3.93601922184739
+        ],
+        "physical_normal_width": 0.499677655422358,
+        "region": "outer",
+        "diffusivity": 0.07147365995981957,
+        "dt_D_over_cell_width_squared": 0.0007156590574194373,
+        "profile_diffusion_time": 188.39341776272553,
+        "dt_over_profile_diffusion_time": 1.3270102690894735e-05
+      },
+      {
+        "chart_interval": [
+          3.93601922184739,
+          4.438711376106266
+        ],
+        "physical_normal_width": 0.5004762568534523,
+        "region": "outer",
+        "diffusivity": 0.08121406441737382,
+        "dt_D_over_cell_width_squared": 0.0008105957017012984,
+        "profile_diffusion_time": 214.06760440968793,
+        "dt_over_profile_diffusion_time": 1.1678553636800818e-05
+      },
+      {
+        "chart_interval": [
+          4.438711376106266,
+          4.941403530365142
+        ],
+        "physical_normal_width": 0.5004762568534532,
+        "region": "outer",
+        "diffusivity": 0.090962246378814,
+        "dt_D_over_cell_width_squared": 0.0009078920807710163,
+        "profile_diffusion_time": 239.762291343603,
+        "dt_over_profile_diffusion_time": 1.0426994111502103e-05
+      },
+      {
+        "chart_interval": [
+          4.941403530365142,
+          5.569549958470333
+        ],
+        "physical_normal_width": 0.6253775206765152,
+        "region": "outer",
+        "diffusivity": 0.10192682994801075,
+        "dt_D_over_cell_width_squared": 0.0006515443652448708,
+        "profile_diffusion_time": 268.66322315690667,
+        "dt_over_profile_diffusion_time": 9.305330184846073e-06
+      },
+      {
+        "chart_interval": [
+          5.569549958470333,
+          6.197696386575524
+        ],
+        "physical_normal_width": 0.6253775206765161,
+        "region": "outer",
+        "diffusivity": 0.11410781512496405,
+        "dt_D_over_cell_width_squared": 0.0007294085768486568,
+        "profile_diffusion_time": 300.770399849599,
+        "dt_over_profile_diffusion_time": 8.311988151926292e-06
+      },
+      {
+        "chart_interval": [
+          6.197696386575524,
+          6.825099014638149
+        ],
+        "physical_normal_width": 0.6246369993495027,
+        "region": "outer",
+        "diffusivity": 0.12628158843467774,
+        "dt_D_over_cell_width_squared": 0.0008091417938262697,
+        "profile_diffusion_time": 332.85856718529885,
+        "dt_over_profile_diffusion_time": 7.510697474727386e-06
+      },
+      {
+        "chart_interval": [
+          6.825099014638149,
+          7.452501642700774
+        ],
+        "physical_normal_width": 0.6246369993495027,
+        "region": "outer",
+        "diffusivity": 0.13844814987715173,
+        "dt_D_over_cell_width_squared": 0.0008870983152185645,
+        "profile_diffusion_time": 364.9277251640063,
+        "dt_over_profile_diffusion_time": 6.850671592235001e-06
+      },
+      {
+        "chart_interval": [
+          7.452501642700774,
+          9.959647405790614
+        ],
+        "physical_normal_width": 2.4960941130006526,
+        "region": "outer",
+        "diffusivity": 0.16884065533503279,
+        "dt_D_over_cell_width_squared": 6.774778893129399e-05,
+        "profile_diffusion_time": 445.0376283199571,
+        "dt_over_profile_diffusion_time": 5.617502523185838e-06
+      },
+      {
+        "chart_interval": [
+          9.959647405790614,
+          12.466793168880454
+        ],
+        "physical_normal_width": 2.4960941130006526,
+        "region": "outer",
+        "diffusivity": 0.21745910480832098,
+        "dt_D_over_cell_width_squared": 8.725607884255495e-05,
+        "profile_diffusion_time": 573.1882766531514,
+        "dt_over_profile_diffusion_time": 4.361568618600348e-06
+      },
+      {
+        "chart_interval": [
+          12.466793168880454,
+          16.23339658444023
+        ],
+        "physical_normal_width": 3.7500000000000027,
+        "region": "outer",
+        "diffusivity": 0.2782892252466214,
+        "dt_D_over_cell_width_squared": 4.9473640043843736e-05,
+        "profile_diffusion_time": 733.526984629378,
+        "dt_over_profile_diffusion_time": 3.4081909082910565e-06
+      },
+      {
+        "chart_interval": [
+          16.23339658444023,
+          20.0
+        ],
+        "physical_normal_width": 3.749999999999999,
+        "region": "outer",
+        "diffusivity": 0.35133101664993416,
+        "dt_D_over_cell_width_squared": 6.245884740443277e-05,
+        "profile_diffusion_time": 926.0537522486374,
+        "dt_over_profile_diffusion_time": 2.6996273098937475e-06
+      }
+    ],
+    "limitation": "implicit diffusion has no asserted explicit stability bound; high-frequency cell response and temporal preservation remain unqualified; no timestep search"
+  },
+  "scientific_data_unchanged": true
+}

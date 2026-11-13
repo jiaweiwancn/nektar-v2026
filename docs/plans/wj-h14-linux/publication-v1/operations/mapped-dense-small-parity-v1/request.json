@@ -1,0 +1,105 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h14-mapped-backend-20261113/runtime/RANSWallResolutionProbe",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/operator/case.xml",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/operator/request.json",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/operator/native.json"
+  ],
+  "phase": "qualification",
+  "reserved_seconds": 180.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 17,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 127464,
+        "parent": 127463,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-native-v2 -- python3 -"
+      },
+      {
+        "pid": 127465,
+        "parent": 127464,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-native-v2 --project-limit 16"
+      },
+      {
+        "pid": 127468,
+        "parent": 127464,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-native-v2 -- python3 -"
+      },
+      {
+        "pid": 127469,
+        "parent": 127468,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 127487,
+        "parent": 127469,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted7_native_campaign.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113 --old /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1 --ct4 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --ct5 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/native-verification-v2 --build-output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/build-v2 --suffix v2"
+      },
+      {
+        "pid": 128470,
+        "parent": 127487,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_regression.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/build-v2/runtime --ct5 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112 --member /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v2/A95-p4-dt002 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/regression-v2"
+      },
+      {
+        "pid": 128621,
+        "parent": 128470,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/build-v2/runtime/IncNavierStokesSolver case.xml"
+      },
+      {
+        "pid": 128622,
+        "parent": 128621,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 9 --singleton-died-pipe 10 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 129028,
+        "parent": 129027,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label mapped-dense-small-parity-v1 --phase qualification --seconds 180 -- /home/jay/build/wj-h14-mapped-backend-20261113/runtime/RANSWallResolutionProbe /home/jay/build/wj-h14-mapped-backend-20261113/science/small/operator/case.xml /home/jay/build/wj-h14-mapped-backend-20261113/science/small/operator/request.json /home/jay/build/wj-h14-mapped-backend-20261113/science/small/operator/native.json"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/runtime/RANSWallResolutionProbe": {
+      "sha256": "acadb95bbf410f4018d2924885a0fb7bda014d235650e541fdb7c1d61d59d46c",
+      "bytes": 369
+    },
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/operator/case.xml": {
+      "sha256": "8db2e4cf8a34466e4bfb4e716c0c67ad48c842f1a2b009752aae7dc1c5a5464f",
+      "bytes": 59894
+    },
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/operator/request.json": {
+      "sha256": "02449b0dc9d34357471d92bf9406fb2a9c12f8abe1d376109a998c461dccd32b",
+      "bytes": 185272
+    }
+  },
+  "driver_sha256": "baf1474647560c038fdfa044225bbe6308f66b3a47179870a74fc7d31958ffc8"
+}

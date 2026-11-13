@@ -1,0 +1,52 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v22/admit_wj_h14.py",
+    "--root",
+    "/home/jay/build/wj-h14-mapped-backend-20261113",
+    "--mode",
+    "finish-bind"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 90.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 145175,
+        "parent": 145174,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label bounded-target-strict-finish-and-pilot-bind-v5 --phase operation --seconds 90 -- python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/observer-v22/admit_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --mode finish-bind"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v22/admit_wj_h14.py": {
+      "sha256": "a990dbfbae520f3a49ef413fae8ce57ad9ae5a39d85a47f3c90d3a190f3c491f",
+      "bytes": 14436
+    }
+  },
+  "driver_sha256": "f488d5ce5612af039202f3479146885e018a2d0b3e11a4a7b624156a14c1d880"
+}

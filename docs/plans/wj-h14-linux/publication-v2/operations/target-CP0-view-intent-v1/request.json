@@ -1,0 +1,54 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v19/study_wj_h14.py",
+    "--root",
+    "/home/jay/build/wj-h14-mapped-backend-20261113",
+    "--mode",
+    "view",
+    "--case",
+    "target/cp0"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 30.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 142344,
+        "parent": 142343,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label target-CP0-view-intent-v1 --phase operation --seconds 30 -- python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/observer-v19/study_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --mode view --case target/cp0"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v19/study_wj_h14.py": {
+      "sha256": "1d3ac769fa53e625e202ca757dcd1e09eabffaf6e9093d2368b8acec4bee6191",
+      "bytes": 27358
+    }
+  },
+  "driver_sha256": "a79cf62c2df3d4ecc9c82429941ae3e1fcde0cf80b449fe7db2ea74e13dbbd80"
+}

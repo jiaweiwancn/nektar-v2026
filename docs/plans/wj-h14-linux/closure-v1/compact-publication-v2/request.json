@@ -1,0 +1,54 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/publication-tools-v24/publish_wj_h14.py",
+    "--root",
+    "/home/jay/build/wj-h14-mapped-backend-20261113",
+    "--source-commit",
+    "bd4bf4e6",
+    "--version",
+    "v2"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 120.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 148928,
+        "parent": 148927,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label compact-publication-v2 --phase operation --seconds 120 -- python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/publication-tools-v24/publish_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --source-commit bd4bf4e6 --version v2"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/publication-tools-v24/publish_wj_h14.py": {
+      "sha256": "e25aa967984e3389c2a75294ce34de151da38f584da25b4a475f493e785837f7",
+      "bytes": 22447
+    }
+  },
+  "driver_sha256": "f488d5ce5612af039202f3479146885e018a2d0b3e11a4a7b624156a14c1d880"
+}

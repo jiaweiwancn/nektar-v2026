@@ -1,0 +1,57 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/IncNavierStokesSolver",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/restart/case.xml"
+  ],
+  "phase": "qualification",
+  "reserved_seconds": 120.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 133918,
+        "parent": 133917,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label small-restarted-second-step-v1 --phase qualification --seconds 120 -- /home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/IncNavierStokesSolver /home/jay/build/wj-h14-mapped-backend-20261113/science/small/restart/case.xml"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/IncNavierStokesSolver": {
+      "sha256": "b995b4e458f0184062e98a098f21782021c8d8d83e51b7a3919c1639008c7ed5",
+      "bytes": 370
+    },
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/restart/case.xml": {
+      "sha256": "6f683075e5e5e426bb7de506ea3fabd78968c3f6edb10cfbe6a7b46d5e07f7b3",
+      "bytes": 59956
+    }
+  },
+  "driver_sha256": "baf1474647560c038fdfa044225bbe6308f66b3a47179870a74fc7d31958ffc8",
+  "status": "PASS",
+  "seconds": 13.341638111000066,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 645578752,
+  "log_sha256": "2ae2c0cfd8f4546ce3b675ce67ff1df23fe6efc479554b3c849445d6f37a61da"
+}

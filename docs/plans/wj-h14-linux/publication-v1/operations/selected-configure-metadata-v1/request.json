@@ -1,0 +1,80 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json\nr=Path('/home/jay/build/wj-h10-flat-inlet-20261113')\nprint('CACHE',chr(10).join(s for s in (r/'build/CMakeCache.txt').read_text().splitlines()if s.startswith(('CMAKE_CXX_FLAGS:','CMAKE_CXX_FLAGS_RELEASE:','CMAKE_EXE_LINKER_FLAGS:','CMAKE_PREFIX_PATH:','Nektar++_DIR:','CMAKE_CXX_COMPILER:'))))\nprint('WRAPPER',(r/'runtime/IncNavierStokesSolver').read_text())\nprint('SOURCE_CPP_ROOT',(r/'source/solvers/IncNavierStokesSolver/Tests/RANS').exists())\nprint('BUILD_OPERATIONS',[p.name for p in (r/'operations').iterdir()if any(k in p.name for k in ('configure','build'))])\n"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 20,
+  "workers": 1,
+  "allocation": {
+    "workers": 10,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 118527,
+        "parent": 118526,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-verification-v1 -- python3 -"
+      },
+      {
+        "pid": 118528,
+        "parent": 118527,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-verification-v1 --project-limit 16"
+      },
+      {
+        "pid": 118531,
+        "parent": 118527,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-verification-v1 -- python3 -"
+      },
+      {
+        "pid": 118532,
+        "parent": 118531,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 118551,
+        "parent": 118532,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted7_campaign.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113 --old /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1 --ct4 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --ct5 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/verification-v1"
+      },
+      {
+        "pid": 119584,
+        "parent": 118551,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_audit.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime --member /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4-audit"
+      },
+      {
+        "pid": 119645,
+        "parent": 119644,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {},
+  "driver_sha256": "4bdd5f3d7effa6653f4be53c8cb3fe83c39aca54ba738f90433d92f4e12151f3"
+}

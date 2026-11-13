@@ -1,0 +1,44 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json\nr=Path('/home/jay/build/wj-h10-flat-inlet-20261113')\nfor name in ('setup.json','runtime-qualified.json','native-source-repair.json','build-admission-v2.json'):\n p=r/name;print('SELECTED',name,p.read_text()[:14000])\nfor p in sorted((r/'runtime').iterdir()):print('RUNTIME',p.name,p.resolve())\nfor p in sorted((r/'build').glob('*')):print('BUILD',p.name)\n"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 30,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 118392,
+        "parent": 118391,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {},
+  "driver_sha256": "4bdd5f3d7effa6653f4be53c8cb3fe83c39aca54ba738f90433d92f4e12151f3"
+}

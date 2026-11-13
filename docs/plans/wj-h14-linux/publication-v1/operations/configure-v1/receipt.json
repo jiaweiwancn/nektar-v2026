@@ -1,0 +1,104 @@
+{
+  "argv": [
+    "cmake",
+    "-S",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS",
+    "-B",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/build",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DRANS_BUILD_SOLVER=ON",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DRANS_PREBUILT_SPATIAL_LIBRARY=/home/jay/build/wj-h10-flat-inlet-20261113/runtime/geometry/libSpatialDomains.so.5.9.0"
+  ],
+  "phase": "build",
+  "reserved_seconds": 120,
+  "workers": 1,
+  "allocation": {
+    "workers": 17,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 118527,
+        "parent": 118526,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-verification-v1 -- python3 -"
+      },
+      {
+        "pid": 118528,
+        "parent": 118527,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-verification-v1 --project-limit 16"
+      },
+      {
+        "pid": 118531,
+        "parent": 118527,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-verification-v1 -- python3 -"
+      },
+      {
+        "pid": 118532,
+        "parent": 118531,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 118551,
+        "parent": 118532,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted7_campaign.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113 --old /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1 --ct4 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --ct5 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/verification-v1"
+      },
+      {
+        "pid": 119584,
+        "parent": 118551,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_audit.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime --member /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4-audit"
+      },
+      {
+        "pid": 120217,
+        "parent": 119584,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4-audit/q48f16/case.xml /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4-audit/q48f16/budget-request.json /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4-audit/q48f16/budget.json"
+      },
+      {
+        "pid": 120218,
+        "parent": 120217,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 120430,
+        "parent": 120429,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {},
+  "driver_sha256": "4bdd5f3d7effa6653f4be53c8cb3fe83c39aca54ba738f90433d92f4e12151f3",
+  "status": "PASS",
+  "seconds": 1.7015483299983316,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 59088896,
+  "log_sha256": "35607200b802a7906db8a3ac204b64803be597293a4e60eee3926cff63ecc786"
+}

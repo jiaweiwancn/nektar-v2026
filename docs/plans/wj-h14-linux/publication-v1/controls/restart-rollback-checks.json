@@ -1,0 +1,299 @@
+{
+  "status": "PASS",
+  "state_max_error": 0.0,
+  "state_bitwise": true,
+  "native_history_bitwise": true,
+  "reference_defect_bitwise": true,
+  "rejected_attempt_rollback": true,
+  "counts": {
+    "cp0": {
+      "steps": 0,
+      "time": 0,
+      "failure": "",
+      "attempts": 0,
+      "initialization": [
+        1,
+        1
+      ],
+      "initializer_calls": 1,
+      "producer": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/cp0/case.evolution.json",
+        "bytes": 5337255,
+        "sha256": "19cdd807a72e852e4dafd8c8a1c904848864550fded013440a39106b7c62513a"
+      },
+      "checkpoint": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/cp0/CP"
+    },
+    "two": {
+      "steps": 2,
+      "time": 0.02,
+      "failure": "",
+      "attempts": 2,
+      "initialization": [
+        0,
+        0
+      ],
+      "initializer_calls": 0,
+      "producer": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/two/case.evolution.json",
+        "bytes": 6351841,
+        "sha256": "5290cefad79013902cfaaa99a5ba8a23ce4815f7fafb971f165d78165784f512"
+      },
+      "checkpoint": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/two/CP.2"
+    },
+    "one": {
+      "steps": 1,
+      "time": 0.01,
+      "failure": "",
+      "attempts": 1,
+      "initialization": [
+        0,
+        0
+      ],
+      "initializer_calls": 0,
+      "producer": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/one/case.evolution.json",
+        "bytes": 6185520,
+        "sha256": "2b76d82732983a9c3a2ec5ec90b8cd52d105ca026fff08b4e725a8fa693eea9f"
+      },
+      "checkpoint": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/one/CP.1"
+    },
+    "restart": {
+      "steps": 2,
+      "time": 0.02,
+      "failure": "",
+      "attempts": 1,
+      "initialization": [
+        0,
+        0
+      ],
+      "initializer_calls": 0,
+      "producer": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/restart/case.evolution.json",
+        "bytes": 6243648,
+        "sha256": "de3dd19b2defd1a1883a4c82bac41b3a351123aab42f8c0c3c59a8d1aefdb7eb"
+      },
+      "checkpoint": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/restart/CP.1"
+    },
+    "reject": {
+      "steps": 1,
+      "time": 0.01,
+      "failure": "WJ hard audit exit; candidate/history retained: deliberate_PIMPLE_WJ_hard_audit_rejection",
+      "attempts": 1,
+      "initialization": [
+        0,
+        0
+      ],
+      "initializer_calls": 0,
+      "producer": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/reject/case.evolution.json",
+        "bytes": 6127210,
+        "sha256": "d6670d59d0a4670167f6f6ec89fc278d4c985516338166256557c25f774c82ae"
+      },
+      "checkpoint": ""
+    }
+  },
+  "phase_bindings": [
+    {
+      "case": "two",
+      "step": 1,
+      "time": 0.01,
+      "alpha": 100,
+      "stage_history_sha256": "a9b15f84a8b5fcfe7a8e16b2d4daf60268246d612fb6f01cf13e9aa32f547877",
+      "states": {
+        "P": "cb6d81f3413c30ba0567824541b35c4a10a6dd0f6bcbaebcbfddbe865df4f429",
+        "C": "cb6d81f3413c30ba0567824541b35c4a10a6dd0f6bcbaebcbfddbe865df4f429",
+        "F": "251176c7fa418b351f7cd959e6af385c696fa28d0f4a43f1d8ef688165332b92",
+        "K": "69f90bb157b54375ea5ae4ada6ec8955bea5206991d034eadf2c13d43ecfb751",
+        "A": "07fe422011afcbcb4523f131bca8d98f9b04c6b234dee74e353be4719c1ca2ff"
+      },
+      "P_C_bitwise": true,
+      "lift_max": 0.0,
+      "field_masks": {
+        "C->F": [
+          0,
+          1,
+          4,
+          5
+        ],
+        "F->K": [
+          2
+        ],
+        "K->A": [
+          3
+        ]
+      },
+      "post_flow_pre_k_bitwise": true,
+      "raw_corrected_bitwise": true,
+      "flow_A_U_pi_bitwise": true,
+      "accepted_role": "A only; P is predecessor; C/F/K diagnostic aliases",
+      "initial_differential_storage_max": 0.0
+    },
+    {
+      "case": "two",
+      "step": 2,
+      "time": 0.02,
+      "alpha": 100,
+      "stage_history_sha256": "4b24f6b281d8163cc69e6e68cdd0f51ecd81bab31f28339f26768ebcb660ec80",
+      "states": {
+        "P": "07fe422011afcbcb4523f131bca8d98f9b04c6b234dee74e353be4719c1ca2ff",
+        "C": "07fe422011afcbcb4523f131bca8d98f9b04c6b234dee74e353be4719c1ca2ff",
+        "F": "f6984ace0853f824fed61b1c278d6bfe764e08309d1f5b1bf1d20e95edc2f430",
+        "K": "7f72294985b37cd3a0aae65a04b66c6b86a03916ee5591985a9d89afe2006aa9",
+        "A": "7313ae09ae287f3e33d57b0eba7709f3ef1f7c74260702c02cd9ec8b05474bfa"
+      },
+      "P_C_bitwise": true,
+      "lift_max": 0.0,
+      "field_masks": {
+        "C->F": [
+          0,
+          1,
+          4,
+          5
+        ],
+        "F->K": [
+          2
+        ],
+        "K->A": [
+          3
+        ]
+      },
+      "post_flow_pre_k_bitwise": true,
+      "raw_corrected_bitwise": true,
+      "flow_A_U_pi_bitwise": true,
+      "accepted_role": "A only; P is predecessor; C/F/K diagnostic aliases",
+      "initial_differential_storage_max": 0.0
+    },
+    {
+      "case": "one",
+      "step": 1,
+      "time": 0.01,
+      "alpha": 100,
+      "stage_history_sha256": "a9b15f84a8b5fcfe7a8e16b2d4daf60268246d612fb6f01cf13e9aa32f547877",
+      "states": {
+        "P": "cb6d81f3413c30ba0567824541b35c4a10a6dd0f6bcbaebcbfddbe865df4f429",
+        "C": "cb6d81f3413c30ba0567824541b35c4a10a6dd0f6bcbaebcbfddbe865df4f429",
+        "F": "251176c7fa418b351f7cd959e6af385c696fa28d0f4a43f1d8ef688165332b92",
+        "K": "69f90bb157b54375ea5ae4ada6ec8955bea5206991d034eadf2c13d43ecfb751",
+        "A": "07fe422011afcbcb4523f131bca8d98f9b04c6b234dee74e353be4719c1ca2ff"
+      },
+      "P_C_bitwise": true,
+      "lift_max": 0.0,
+      "field_masks": {
+        "C->F": [
+          0,
+          1,
+          4,
+          5
+        ],
+        "F->K": [
+          2
+        ],
+        "K->A": [
+          3
+        ]
+      },
+      "post_flow_pre_k_bitwise": true,
+      "raw_corrected_bitwise": true,
+      "flow_A_U_pi_bitwise": true,
+      "accepted_role": "A only; P is predecessor; C/F/K diagnostic aliases",
+      "initial_differential_storage_max": 0.0
+    },
+    {
+      "case": "restart",
+      "step": 2,
+      "time": 0.02,
+      "alpha": 100,
+      "stage_history_sha256": "4b24f6b281d8163cc69e6e68cdd0f51ecd81bab31f28339f26768ebcb660ec80",
+      "states": {
+        "P": "07fe422011afcbcb4523f131bca8d98f9b04c6b234dee74e353be4719c1ca2ff",
+        "C": "07fe422011afcbcb4523f131bca8d98f9b04c6b234dee74e353be4719c1ca2ff",
+        "F": "f6984ace0853f824fed61b1c278d6bfe764e08309d1f5b1bf1d20e95edc2f430",
+        "K": "7f72294985b37cd3a0aae65a04b66c6b86a03916ee5591985a9d89afe2006aa9",
+        "A": "7313ae09ae287f3e33d57b0eba7709f3ef1f7c74260702c02cd9ec8b05474bfa"
+      },
+      "P_C_bitwise": true,
+      "lift_max": 0.0,
+      "field_masks": {
+        "C->F": [
+          0,
+          1,
+          4,
+          5
+        ],
+        "F->K": [
+          2
+        ],
+        "K->A": [
+          3
+        ]
+      },
+      "post_flow_pre_k_bitwise": true,
+      "raw_corrected_bitwise": true,
+      "flow_A_U_pi_bitwise": true,
+      "accepted_role": "A only; P is predecessor; C/F/K diagnostic aliases",
+      "initial_differential_storage_max": 0.0
+    }
+  ],
+  "matrix_checks": [
+    {
+      "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/two/snapshots/k-t0.01-a9b15f84a8b5.matrix.coo.bin",
+      "sha256": "7e5ed901649d2f6b770e28b26f542d4a449ab745b25b91dfbf02ef4063a11dde",
+      "bytes": 108144,
+      "encoding": "COO native-endian int32 row,int32 column,IEEE754 binary64 value; shape=len(transport_rows)^2; zero entries omitted",
+      "n": 453,
+      "nonzeros": 6759,
+      "matvec_error": 4.235164736271502e-22,
+      "matvecs": 1,
+      "factorizations": 0,
+      "solves": 0
+    },
+    {
+      "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/two/snapshots/k-t0.02-4b24f6b281d8.matrix.coo.bin",
+      "sha256": "b4217f1147b4959380614b928a7565d42c1feda027e426bb48c45cc517785ec9",
+      "bytes": 108144,
+      "encoding": "COO native-endian int32 row,int32 column,IEEE754 binary64 value; shape=len(transport_rows)^2; zero entries omitted",
+      "n": 453,
+      "nonzeros": 6759,
+      "matvec_error": 5.583469134732937e-23,
+      "matvecs": 1,
+      "factorizations": 0,
+      "solves": 0
+    },
+    {
+      "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/one/snapshots/k-t0.01-a9b15f84a8b5.matrix.coo.bin",
+      "sha256": "7e5ed901649d2f6b770e28b26f542d4a449ab745b25b91dfbf02ef4063a11dde",
+      "bytes": 108144,
+      "encoding": "COO native-endian int32 row,int32 column,IEEE754 binary64 value; shape=len(transport_rows)^2; zero entries omitted",
+      "n": 453,
+      "nonzeros": 6759,
+      "matvec_error": 4.235164736271502e-22,
+      "matvecs": 1,
+      "factorizations": 0,
+      "solves": 0
+    },
+    {
+      "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/restart/snapshots/k-t0.02-4b24f6b281d8.matrix.coo.bin",
+      "sha256": "b4217f1147b4959380614b928a7565d42c1feda027e426bb48c45cc517785ec9",
+      "bytes": 108144,
+      "encoding": "COO native-endian int32 row,int32 column,IEEE754 binary64 value; shape=len(transport_rows)^2; zero entries omitted",
+      "n": 453,
+      "nonzeros": 6759,
+      "matvec_error": 5.583469134732937e-23,
+      "matvecs": 1,
+      "factorizations": 0,
+      "solves": 0
+    },
+    {
+      "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/reject/snapshots/k-t0.02-4b24f6b281d8.matrix.coo.bin",
+      "sha256": "b4217f1147b4959380614b928a7565d42c1feda027e426bb48c45cc517785ec9",
+      "bytes": 108144,
+      "encoding": "COO native-endian int32 row,int32 column,IEEE754 binary64 value; shape=len(transport_rows)^2; zero entries omitted",
+      "n": 453,
+      "nonzeros": 6759,
+      "matvec_error": 5.583469134732937e-23,
+      "matvecs": 1,
+      "factorizations": 0,
+      "solves": 0
+    }
+  ]
+}

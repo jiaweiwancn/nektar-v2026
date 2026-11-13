@@ -1,0 +1,100 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/study_wj_h14.v14.py",
+    "--root",
+    "/home/jay/build/wj-h14-mapped-backend-20261113",
+    "--mode",
+    "qualification"
+  ],
+  "phase": "qualification",
+  "reserved_seconds": 90.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 16,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 135266,
+        "parent": 135265,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-top-v6 -- python3 -"
+      },
+      {
+        "pid": 135267,
+        "parent": 135266,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-top-v6 --project-limit 16"
+      },
+      {
+        "pid": 135270,
+        "parent": 135266,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-top-v6 -- python3 -"
+      },
+      {
+        "pid": 135271,
+        "parent": 135270,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 135672,
+        "parent": 135271,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted7_top.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/build-v2/runtime --interface-order 64 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/top-v6"
+      },
+      {
+        "pid": 135857,
+        "parent": 135672,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/build-v2/runtime/RANSPreservationProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/top-v6/A95-p4/case.xml /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/top-v6/A95-p4/native-request.json /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/top-v6/A95-p4/native.json"
+      },
+      {
+        "pid": 135858,
+        "parent": 135857,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 135993,
+        "parent": 135992,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label complete-small-qualification-v2 --phase qualification --seconds 90 -- python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/study_wj_h14.v14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --mode qualification"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/study_wj_h14.v14.py": {
+      "sha256": "e674d568186a4f6f1d528549667cd2f7eedac4f4953162c7e862d5b75b2f107f",
+      "bytes": 24954
+    }
+  },
+  "driver_sha256": "baf1474647560c038fdfa044225bbe6308f66b3a47179870a74fc7d31958ffc8",
+  "status": "PASS",
+  "seconds": 6.135637466002663,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 715472896,
+  "log_sha256": "357d1e15122db46a69ce589a79ede4d80fbd1f9bc1b0d447373c4303b0f41529"
+}

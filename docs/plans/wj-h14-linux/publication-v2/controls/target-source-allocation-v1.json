@@ -1,0 +1,66 @@
+{
+  "status": "PREPARED_NOT_ADMITTED",
+  "topology_sha256": "7bbb644e4e11309bfd5bc65d445c0da5e09db598e6affbe614f100c3063ac97c",
+  "state": 24688,
+  "counts": {
+    "Nx": 14,
+    "Ni": 16,
+    "No": 34,
+    "fields": {
+      "U": 6493,
+      "W": 6493,
+      "k": 6493,
+      "epsilon": 4429,
+      "pi_inner": 255,
+      "pi_outer": 525,
+      "gauge": 0
+    },
+    "state": 24688,
+    "state_formula": 24688,
+    "shared_U_k_interface_DOFs": 43,
+    "regional_velocity": {
+      "inner": 2107,
+      "outer": 4429
+    },
+    "regional_pressure_interface_vertices_each": 15,
+    "essential": {
+      "U": 193,
+      "W": 235,
+      "k": 151,
+      "epsilon_excluding_dependent_corner": 102
+    },
+    "dependent_epsilon_DOFs": 43,
+    "independent": {
+      "U": 6300,
+      "W": 6258,
+      "k": 6342,
+      "epsilon": 4284,
+      "pi_inner": 255,
+      "pi_outer": 525
+    },
+    "free_solve_blocks": {
+      "momentum_predictor": 12558,
+      "pressure": 780,
+      "assembled_flow": 13338,
+      "k": 6342,
+      "epsilon": 4327,
+      "epsilon_independent_transport": 4284,
+      "epsilon_identity_trace_rows": 43
+    },
+    "independent_state": 23964,
+    "count_kind": "source-aware canonical topology; native numbering/sign verification deferred to fresh target CP0"
+  },
+  "pressure_dense_payload_bytes": 4867200,
+  "pressure_dense_factors": 2,
+  "native_factor_payload_per_factor_limit_bytes": 536870912,
+  "process_tree_limit_bytes": 8589934592,
+  "actual_permutation_required": true,
+  "bandwidth_assumed_from_native_order": false,
+  "worst_simultaneous_factor_reservation_bytes": 2147483648,
+  "science_output_limit_bytes": 2147483648,
+  "build_and_source_limit_bytes": 8589934592,
+  "remaining_small_qualification": "all indispensable gates must pass before this becomes admission",
+  "target_historical_dense_preflight": "OBSTRUCTED remains immutable",
+  "H_w_mm": 6,
+  "physical_flat_interface_mm": 9.5
+}

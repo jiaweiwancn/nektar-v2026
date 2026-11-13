@@ -1,0 +1,48 @@
+{
+  "argv": [
+    "cmake",
+    "--build",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/build",
+    "--target",
+    "IncNavierStokesSolver",
+    "RANSWallResolutionProbe",
+    "--parallel",
+    "8"
+  ],
+  "phase": "build",
+  "reserved_seconds": 180.0,
+  "workers": 8,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 131675,
+        "parent": 131674,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label exact-owner-build-v5 --phase build --seconds 180 --workers 8 -- cmake --build /home/jay/build/wj-h14-mapped-backend-20261113/build --target IncNavierStokesSolver RANSWallResolutionProbe --parallel 8"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {},
+  "driver_sha256": "baf1474647560c038fdfa044225bbe6308f66b3a47179870a74fc7d31958ffc8"
+}

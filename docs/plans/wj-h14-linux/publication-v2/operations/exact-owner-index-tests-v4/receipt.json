@@ -1,0 +1,55 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v17/test_wj_h14_execution.py",
+    "-v"
+  ],
+  "phase": "qualification",
+  "reserved_seconds": 60.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 138655,
+        "parent": 138654,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label exact-owner-index-tests-v4 --phase qualification --seconds 60 -- python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/observer-v17/test_wj_h14_execution.py -v"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v17/test_wj_h14_execution.py": {
+      "sha256": "06b22fd935feab1255b78429df037b386190ae9891c0cbf354053eb4a0fb01a7",
+      "bytes": 5453
+    }
+  },
+  "driver_sha256": "a79cf62c2df3d4ecc9c82429941ae3e1fcde0cf80b449fe7db2ea74e13dbbd80",
+  "status": "PASS",
+  "seconds": 1.7655370840002433,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 62685184,
+  "log_sha256": "33e505aa84cddd427db4bc180d5a080bab0943fe9be15435a194fe7874e38142"
+}

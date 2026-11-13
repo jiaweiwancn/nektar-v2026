@@ -1,0 +1,58 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/publication-tools-v23/publish_wj_h14.py",
+    "--root",
+    "/home/jay/build/wj-h14-mapped-backend-20261113",
+    "--source-commit",
+    "0889c51e"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 120.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 148638,
+        "parent": 148637,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label compact-publication-v1 --phase operation --seconds 120 -- python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/publication-tools-v23/publish_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --source-commit 0889c51e"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/publication-tools-v23/publish_wj_h14.py": {
+      "sha256": "962068ca80dc29f14c50dc3924e807c466953aa69b2f464cb01d480f61775d8c",
+      "bytes": 22218
+    }
+  },
+  "driver_sha256": "f488d5ce5612af039202f3479146885e018a2d0b3e11a4a7b624156a14c1d880",
+  "status": "PASS",
+  "seconds": 17.32134377300099,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 372486144,
+  "log_sha256": "145c05db87cd94787e71d3d7fa09de9af2f7d5690c37a792f1c250ef2eb7a1fa"
+}

@@ -1,0 +1,54 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v17/study_wj_h14.py",
+    "--root",
+    "/home/jay/build/wj-h14-mapped-backend-20261113",
+    "--mode",
+    "assessment",
+    "--case",
+    "target/cp0"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 300.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 138707,
+        "parent": 138706,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label target-CP0-owned-assessment-v1 --phase operation --seconds 300 -- python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/observer-v17/study_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --mode assessment --case target/cp0"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v17/study_wj_h14.py": {
+      "sha256": "2e7eded1b0e239e32d1803ed96d38125197d3bfe8adc404ffbd75689ed1e37b7",
+      "bytes": 26708
+    }
+  },
+  "driver_sha256": "a79cf62c2df3d4ecc9c82429941ae3e1fcde0cf80b449fe7db2ea74e13dbbd80"
+}

@@ -1,0 +1,98 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport hashlib,json,tarfile,shutil\nr=Path('/home/jay/build/wj-h14-mapped-backend-20261113');m=json.loads((r/'wj-h14-source-overlay-v3.json').read_text())\nassert hashlib.sha256((r/'wj-h14-source-overlay-v3.tar.gz').read_bytes()).hexdigest()==m['archive_sha256']\noriginal=r/'pre-integration-v3';original.mkdir(exist_ok=False)\nwith tarfile.open(r/'wj-h14-source-overlay-v3.tar.gz')as t:\n assert set(t.getnames())=={v['path']for v in m['files']}\n for v in m['files']:\n  p=Path(v['path']);assert not p.is_absolute()and '..'not in p.parts\n  b=t.extractfile(str(p)).read();assert len(b)==v['bytes']and hashlib.sha256(b).hexdigest()==v['sha256']\n  dest=r/'source'/p\n  if dest.exists():\n   old=original/p;old.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(dest,old)\n  dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(b)\n# Selectively verify the source-built geometry and private loader closure.\nh=Path('/home/jay/build/wj-h10-flat-inlet-20261113')\nmeta=json.loads((h/'setup.json').read_text())\nfor v in [meta['geometry'],*meta['private_libraries']]:\n p=Path(v['path']);assert p.stat().st_size==v['bytes']and hashlib.sha256(p.read_bytes()).hexdigest()==v['sha256']\n(r/'source-binding-v3.json').write_text(json.dumps(dict(commit=m['commit'],base=m['base'],overlay=m['archive_sha256'],geometry_and_private_loader_hashes='PASS',new_matching_height=False),indent=2))\nprint('source integration and selected source-built/private closure bytes verified',m['commit'])\n"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 30,
+  "workers": 1,
+  "allocation": {
+    "workers": 17,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 118527,
+        "parent": 118526,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-verification-v1 -- python3 -"
+      },
+      {
+        "pid": 118528,
+        "parent": 118527,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-verification-v1 --project-limit 16"
+      },
+      {
+        "pid": 118531,
+        "parent": 118527,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-verification-v1 -- python3 -"
+      },
+      {
+        "pid": 118532,
+        "parent": 118531,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 118551,
+        "parent": 118532,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted7_campaign.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113 --old /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1 --ct4 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --ct5 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/verification-v1"
+      },
+      {
+        "pid": 119584,
+        "parent": 118551,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_audit.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime --member /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4-audit"
+      },
+      {
+        "pid": 123432,
+        "parent": 119584,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4-audit/q64f32/case.xml /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4-audit/q64f32/budget-request.json /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4-audit/q64f32/budget.json"
+      },
+      {
+        "pid": 123433,
+        "parent": 123432,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 124270,
+        "parent": 124269,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {},
+  "driver_sha256": "4bdd5f3d7effa6653f4be53c8cb3fe83c39aca54ba738f90433d92f4e12151f3",
+  "status": "PASS",
+  "seconds": 0.5702848129949416,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 1421312,
+  "log_sha256": "8bb8ff0415d6438d44d2a1477b6ed8dbf57f2c70091d31fd7a38e02bc7ca709d"
+}

@@ -1,0 +1,157 @@
+{
+  "status": "PASS",
+  "verified": [
+    {
+      "publication": "v1",
+      "manifest": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/publication-v1/manifest.json",
+        "bytes": 73063,
+        "sha256": "8808320ced4c7f7023ee7130dd3b7339d7fdd62561a50d315ce471d6bbaee72d"
+      },
+      "seal": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/publication-v1/seal.json",
+        "bytes": 805,
+        "sha256": "bdb822672044dd9ba7077886feee0e20102e9d0bdb6d8f8007485f19358557b0"
+      },
+      "artifacts": 296,
+      "decoded_logs": 84
+    },
+    {
+      "publication": "v2",
+      "manifest": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/publication-v2/manifest.json",
+        "bytes": 73793,
+        "sha256": "995740b01557b4b298ccbbac4d8f9fb1c07380aa2596b6e4fe4e489939ef4b47"
+      },
+      "seal": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/publication-v2/seal.json",
+        "bytes": 805,
+        "sha256": "04b020cbcdadad92c83d1dac72be25d3cd3ea81267349f2766c49e06decc1952"
+      },
+      "artifacts": 299,
+      "decoded_logs": 85
+    }
+  ],
+  "unchanged_target_bindings": [
+    {
+      "case": "cp0",
+      "producer": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/case.evolution.json",
+        "bytes": 39980105,
+        "sha256": "3ee5b987d40d6b58ef04ec12b02efa4a7a59e0f32ede93b4c330ff89e5b27566"
+      },
+      "xml": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/case.xml",
+        "bytes": 156197,
+        "sha256": "515caab634d2d4391bb77d3a18be4e4ee375449e11ff2aea62d94275c393e51d"
+      },
+      "checkpoint": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/CP/State.bin",
+        "bytes": 1447065,
+        "sha256": "d27ee0e2f9b9bf8639d47449c5e8e338212363417faca7bf014d1008f44f69a3"
+      },
+      "checkpoint_absolute_step": 0,
+      "checkpoint_time": 0.0,
+      "dt": 0.0025,
+      "coupled_state_sha256": "631caa32a59ff43253f1fcac4effd955eb68b8529d9c28f29e615cf14ca0f077",
+      "fixed_reference_sha256": "9e2af3379f05a2ffbadc2cee491aefcab33900674c8b7ca6af380c922399d849",
+      "fixed_defect_sha256": "cf3dba7cf72ffc915d727bae7aad2b12c60eff2f1bb077159e9ee95a71268cbd",
+      "physical_signature_sha256": "21ba0fa5200173541f02c1fa0772049796b10f98e971bc3128a9814dad19c50a",
+      "native_history_sha256": [
+        "e81ee8d9843c260510db3eb6afd914d64529491eafc9a8050dd54a9387217ebf",
+        "dab65c1e55e3e6ee1652a7f00506175865ab3df20024bcea7335a3cda8764634"
+      ],
+      "native_history_times": [
+        0.0,
+        0.0025
+      ],
+      "native_initialization_work": [
+        1,
+        1
+      ],
+      "initializer_calls": 1,
+      "role": "fresh startup"
+    },
+    {
+      "case": "pilot1",
+      "producer": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/pilot1/case.evolution.json",
+        "bytes": 48917004,
+        "sha256": "135e4767f63867ad45862e9d2d9a49df89efa85854504a25fbc33c9183cd559e"
+      },
+      "xml": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/pilot1/case.xml",
+        "bytes": 156270,
+        "sha256": "1a5770ca53fa41c760759c4b90330f645f90bb5204b20b95610363961daa9024"
+      },
+      "checkpoint": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/pilot1/CP.1/State.bin",
+        "bytes": 1447065,
+        "sha256": "b6d553883babeed03b6024438f233c4207c09308e9300512272e047851df4501"
+      },
+      "checkpoint_absolute_step": 1,
+      "checkpoint_time": 0.0025,
+      "dt": 0.0025,
+      "coupled_state_sha256": "b9c1c19b6c44513d1778143b695e9720d0463d0a9786a91ec6ae97cc6c469819",
+      "fixed_reference_sha256": "9e2af3379f05a2ffbadc2cee491aefcab33900674c8b7ca6af380c922399d849",
+      "fixed_defect_sha256": "cf3dba7cf72ffc915d727bae7aad2b12c60eff2f1bb077159e9ee95a71268cbd",
+      "physical_signature_sha256": "21ba0fa5200173541f02c1fa0772049796b10f98e971bc3128a9814dad19c50a",
+      "native_history_sha256": [
+        "8b78108227afd64fc48759b4e048d8cb07807a18548052ca80c1e709a712564b",
+        "dab65c1e55e3e6ee1652a7f00506175865ab3df20024bcea7335a3cda8764634"
+      ],
+      "native_history_times": [
+        0.0025,
+        0.0025
+      ],
+      "native_initialization_work": [
+        0,
+        0
+      ],
+      "initializer_calls": 0,
+      "role": "new completed state; restored entry remains alpha0"
+    }
+  ],
+  "scientific_output_bytes": 1760592797,
+  "build_footprint_bytes": 95091501,
+  "source_footprint_bytes": 44742055,
+  "current_allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 149171,
+        "parent": 149170,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label closure-verification-v1 --phase closure --seconds 300 -- python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/publication-tools-v24/close_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --mode verify"
+      },
+      {
+        "pid": 149174,
+        "parent": 149173,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/publication-tools-v24/close_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --mode verify"
+      }
+    ]
+  },
+  "governing_target_attempts": 1,
+  "accepted_target_steps": 1,
+  "qualified_target_steps": 1,
+  "unlaunched_target_steps": 3,
+  "unlaunched_status": "RESOURCE_LIMIT",
+  "small_verification_attempts": 7,
+  "target_CP0s": 1,
+  "small_CP0s": 1,
+  "accepted_checkpoint_native_views": 3,
+  "scope": "remote-heavy bytes rehashed in place; compact transport independently verified separately on Mac; no new native/scientific evaluation"
+}

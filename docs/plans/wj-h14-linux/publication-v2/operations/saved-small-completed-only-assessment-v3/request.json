@@ -1,0 +1,57 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v21/study_wj_h14.py",
+    "--root",
+    "/home/jay/build/wj-h14-mapped-backend-20261113",
+    "--mode",
+    "assessment",
+    "--case",
+    "small/one",
+    "--version",
+    "completed-only-v3",
+    "--new-only"
+  ],
+  "phase": "qualification",
+  "reserved_seconds": 60.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 144374,
+        "parent": 144373,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label saved-small-completed-only-assessment-v3 --phase qualification --seconds 60 -- python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/observer-v21/study_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --mode assessment --case small/one --version completed-only-v3 --new-only"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v21/study_wj_h14.py": {
+      "sha256": "d8777f71cbdd50615cb37740426e7b3c233cf2b288da5601ac6d94b42a82daa0",
+      "bytes": 27913
+    }
+  },
+  "driver_sha256": "f488d5ce5612af039202f3479146885e018a2d0b3e11a4a7b624156a14c1d880"
+}

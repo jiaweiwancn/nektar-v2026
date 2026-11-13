@@ -1,0 +1,93 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/IncNavierStokesSolver",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/one/case.xml"
+  ],
+  "phase": "qualification",
+  "reserved_seconds": 120.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 16,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 133293,
+        "parent": 133292,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-top-v4 -- python3 -"
+      },
+      {
+        "pid": 133296,
+        "parent": 133293,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-top-v4 --project-limit 16"
+      },
+      {
+        "pid": 133299,
+        "parent": 133293,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-top-v4 -- python3 -"
+      },
+      {
+        "pid": 133300,
+        "parent": 133299,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 133392,
+        "parent": 133300,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted7_top_quadrature.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/build-v2/runtime --input /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/top-v2 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/top-frozen-quadrature-v1"
+      },
+      {
+        "pid": 133667,
+        "parent": 133392,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/build-v2/runtime/RANSPreservationProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/top-frozen-quadrature-v1/A95-p4-f32/case.xml /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/top-frozen-quadrature-v1/A95-p4-f32/frozen-request.json /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/top-frozen-quadrature-v1/A95-p4-f32/frozen.json"
+      },
+      {
+        "pid": 133668,
+        "parent": 133667,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 133717,
+        "parent": 133715,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label small-one-step-v1 --phase qualification --seconds 120 -- /home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/IncNavierStokesSolver /home/jay/build/wj-h14-mapped-backend-20261113/science/small/one/case.xml"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/IncNavierStokesSolver": {
+      "sha256": "b995b4e458f0184062e98a098f21782021c8d8d83e51b7a3919c1639008c7ed5",
+      "bytes": 370
+    },
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/small/one/case.xml": {
+      "sha256": "2660c1b71017a4df71c1708250ab7f9e64343704b2744fc688ad3d16b4d243ea",
+      "bytes": 59942
+    }
+  },
+  "driver_sha256": "baf1474647560c038fdfa044225bbe6308f66b3a47179870a74fc7d31958ffc8"
+}

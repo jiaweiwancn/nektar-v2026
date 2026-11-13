@@ -1,0 +1,162 @@
+{
+  "status": "PASS",
+  "native_launch_allowed": true,
+  "height_mm": 6,
+  "state_size": 24688,
+  "missing_gates": [],
+  "execution_diff": {
+    "status": "PASS",
+    "protected_sha256": "8cb898c26c24ec6ff925c99f073354f24394727cce756c52889a6a595210bfdb",
+    "original": {
+      "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/publication-v1/paired-case/flat/case.xml",
+      "bytes": 155724,
+      "sha256": "137566f8704fed63d881dfbb5b804a02776a09c2081b9f29c42cadd91e794511"
+    },
+    "execution": {
+      "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/case.xml",
+      "bytes": 156197,
+      "sha256": "515caab634d2d4391bb77d3a18be4e4ee375449e11ff2aea62d94275c393e51d"
+    },
+    "changed_execution_parameters": {
+      "NumSteps": "0",
+      "TimeStep": "0.0025",
+      "IO_CheckSteps": "1"
+    },
+    "no_height_or_profile_generation": true
+  },
+  "parent_H13_capacity_status": "OBSTRUCTED; immutable historical dense-route result",
+  "backend": "MappedBlockV1",
+  "fresh_state_required": true,
+  "old_strip_checkpoint_substitution": false,
+  "scientific_reference": "unchanged H13 full-height neutral; physical interface9.5mm",
+  "field_spaces": {
+    "Nx": 14,
+    "Ni": 16,
+    "No": 34,
+    "fields": {
+      "U": 6493,
+      "W": 6493,
+      "k": 6493,
+      "epsilon": 4429,
+      "pi_inner": 255,
+      "pi_outer": 525,
+      "gauge": 0
+    },
+    "state": 24688,
+    "state_formula": 24688,
+    "shared_U_k_interface_DOFs": 43,
+    "regional_velocity": {
+      "inner": 2107,
+      "outer": 4429
+    },
+    "regional_pressure_interface_vertices_each": 15,
+    "essential": {
+      "U": 193,
+      "W": 235,
+      "k": 151,
+      "epsilon_excluding_dependent_corner": 102
+    },
+    "dependent_epsilon_DOFs": 43,
+    "independent": {
+      "U": 6300,
+      "W": 6258,
+      "k": 6342,
+      "epsilon": 4284,
+      "pi_inner": 255,
+      "pi_outer": 525
+    },
+    "free_solve_blocks": {
+      "momentum_predictor": 12558,
+      "pressure": 780,
+      "assembled_flow": 13338,
+      "k": 6342,
+      "epsilon": 4327,
+      "epsilon_independent_transport": 4284,
+      "epsilon_identity_trace_rows": 43
+    },
+    "independent_state": 23964,
+    "count_kind": "source-aware canonical topology; native numbering/sign verification deferred to fresh target CP0"
+  },
+  "actual_bandwidths": "native permutation/factor audits must remain within predeclared allocation",
+  "commands": {
+    "target_cp0": [
+      "/home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/IncNavierStokesSolver",
+      "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/case.xml"
+    ],
+    "pilot": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v19/admit_wj_h14.py",
+      "--root",
+      "/home/jay/build/wj-h14-mapped-backend-20261113",
+      "--mode",
+      "pilot"
+    ]
+  },
+  "command_inputs": {
+    "target_cp0": [
+      {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/case.xml",
+        "bytes": 156197,
+        "sha256": "515caab634d2d4391bb77d3a18be4e4ee375449e11ff2aea62d94275c393e51d"
+      },
+      {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/IncNavierStokesSolver",
+        "bytes": 370,
+        "sha256": "b995b4e458f0184062e98a098f21782021c8d8d83e51b7a3919c1639008c7ed5"
+      },
+      {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/IncNavierStokesSolver.elf",
+        "bytes": 7919248,
+        "sha256": "aebfb5980e4a75e2bdf864e2616d0bff6d614431ab2173c104d23384102de9ef"
+      }
+    ],
+    "pilot": [
+      {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v19/admit_wj_h14.py",
+        "bytes": 12099,
+        "sha256": "d3293edaaa8c75fdfaac734544eaee0e9d132b2ad930ce34e5c3d4f1c1be9f81"
+      },
+      {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v19/study_wj_h14.py",
+        "bytes": 27358,
+        "sha256": "1d3ac769fa53e625e202ca757dcd1e09eabffaf6e9093d2368b8acec4bee6191"
+      },
+      {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/case.xml",
+        "bytes": 156197,
+        "sha256": "515caab634d2d4391bb77d3a18be4e4ee375449e11ff2aea62d94275c393e51d"
+      },
+      {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v19/wj_h7_analysis.py",
+        "bytes": 13362,
+        "sha256": "fb2eba775d5b74a1e886a758bda64f210495000eedf1bf2c147d56048ea04cf8"
+      },
+      {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v19/wj_h14_execution.py",
+        "bytes": 7839,
+        "sha256": "cd63effae9a73fe0646b8328d8d5b736b64c345570a68a2ef9d9ee407bf51217"
+      }
+    ]
+  },
+  "resource_design": {
+    "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target-resource-design-v1.json",
+    "bytes": 24397,
+    "sha256": "d07338a01ef7d5f46015dca57b7e49934f3e7637dda2235079ebbda2d8b215f9"
+  },
+  "maximum_pilot_attempts": 4,
+  "supersedes_only_passive_source": {
+    "original": {
+      "path": "/home/jay/build/wj-h14-mapped-backend-20261113/target-admission-v1.json",
+      "bytes": 4559,
+      "sha256": "55c150d543df7607d16b259f465e78863aca2a3ca6d69b9540e0a1f60d8508b1"
+    },
+    "reason": "exact immutable basis/matching cache; same full physical point/owner support and bitwise-identical measured scalar/tensor/quality results"
+  },
+  "qualified_cp0_assessment": {
+    "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/assessment-v2/result.json",
+    "bytes": 271046,
+    "sha256": "f99c9e1e58a884e28cf67a03d4141842a2e9f1ba0b456fd6964f6cceda48075b"
+  },
+  "measured_assessment_seconds": 274.4385734940006
+}

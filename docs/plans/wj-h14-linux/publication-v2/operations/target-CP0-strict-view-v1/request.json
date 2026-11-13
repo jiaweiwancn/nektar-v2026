@@ -1,0 +1,57 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/RANSWallResolutionProbe",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/case.xml",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/view/request.json",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/view/native.json"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 300.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 142392,
+        "parent": 142391,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label target-CP0-strict-view-v1 --phase operation --seconds 300 -- /home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/RANSWallResolutionProbe /home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/case.xml /home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/view/request.json /home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/view/native.json"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/runtime-v4/RANSWallResolutionProbe": {
+      "sha256": "d2ce6253875fb942259e1da186de96239f9d18f5dcf7eaef64e3879d63b2d66f",
+      "bytes": 372
+    },
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/case.xml": {
+      "sha256": "515caab634d2d4391bb77d3a18be4e4ee375449e11ff2aea62d94275c393e51d",
+      "bytes": 156197
+    },
+    "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/view/request.json": {
+      "sha256": "f92f12a2a75a959dc1f5907ad90090d00921a0e82f968a8b98eebddb6942cb59",
+      "bytes": 1351
+    }
+  },
+  "driver_sha256": "a79cf62c2df3d4ecc9c82429941ae3e1fcde0cf80b449fe7db2ea74e13dbbd80"
+}

@@ -1,0 +1,49 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 30.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 140352,
+        "parent": 140351,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label immutable-basis-source-v18 --phase operation --seconds 30 -- python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {},
+  "driver_sha256": "a79cf62c2df3d4ecc9c82429941ae3e1fcde0cf80b449fe7db2ea74e13dbbd80",
+  "status": "PASS",
+  "seconds": 0.5850425169992377,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 2027520,
+  "log_sha256": "e8d1a2f17eb2c76fb3d82f3bc8f8f6c712f7d985568cad774fd7b1ea3812d513"
+}

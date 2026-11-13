@@ -1,0 +1,58 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v19/admit_wj_h14.py",
+    "--root",
+    "/home/jay/build/wj-h14-mapped-backend-20261113",
+    "--mode",
+    "rebind"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 60.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 142297,
+        "parent": 142296,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label target-passive-equivalence-and-rebind-v2 --phase operation --seconds 60 -- python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/observer-v19/admit_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --mode rebind"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h14-mapped-backend-20261113/observer-v19/admit_wj_h14.py": {
+      "sha256": "d3293edaaa8c75fdfaac734544eaee0e9d132b2ad930ce34e5c3d4f1c1be9f81",
+      "bytes": 12099
+    }
+  },
+  "driver_sha256": "a79cf62c2df3d4ecc9c82429941ae3e1fcde0cf80b449fe7db2ea74e13dbbd80",
+  "status": "PASS",
+  "seconds": 0.5840004639976542,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 2023424,
+  "log_sha256": "239483e74feec6fa9a41b69273e517dcf9406a1cd4ab19e43efa23c7b187508d"
+}

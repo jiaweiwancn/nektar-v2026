@@ -1,0 +1,61 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-"
+  ],
+  "phase": "operation",
+  "reserved_seconds": 30.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 6,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 144434,
+        "parent": 144433,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label target-strict-gate-and-pilot-projection-v4 --phase operation --seconds 60 -- python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/observer-v21/admit_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --mode finish-bind"
+      },
+      {
+        "pid": 144437,
+        "parent": 144436,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/observer-v21/admit_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --mode finish-bind"
+      },
+      {
+        "pid": 144684,
+        "parent": 144682,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h14-mapped-backend-20261113/run_wj_h14.py --root /home/jay/build/wj-h14-mapped-backend-20261113 --label saved-assessor-identity-and-final-pilot-preflight-v1 --phase operation --seconds 30 -- python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {},
+  "driver_sha256": "f488d5ce5612af039202f3479146885e018a2d0b3e11a4a7b624156a14c1d880",
+  "status": "FAIL",
+  "seconds": 0.589274411999213,
+  "exit": 1,
+  "reason": null,
+  "peak_tree_rss_bytes": 1675264,
+  "log_sha256": "b90aad73ff8986e3850348c063519e4486b551e94c7fa14bacb426ac53d2c15b"
+}

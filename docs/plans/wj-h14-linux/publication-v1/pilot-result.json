@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "completed_steps": 1,
+  "actual_attempts": 1,
+  "reserved_maximum_attempts": 4,
+  "records": [
+    {
+      "step": 1,
+      "native_exit": 0,
+      "native_seconds": 164.85119465399475,
+      "report": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/pilot1/case.evolution.json",
+        "bytes": 48917004,
+        "sha256": "135e4767f63867ad45862e9d2d9a49df89efa85854504a25fbc33c9183cd559e"
+      },
+      "native_failure": "",
+      "attempts": 1,
+      "phase_binding": {
+        "step": 1,
+        "time": 0.0025,
+        "alpha": 400,
+        "stage_history_sha256": "40d7d7178d0ec1cada609e6267ce46b582ba869daf4725e5ed501759e87bed1a",
+        "states": {
+          "P": "631caa32a59ff43253f1fcac4effd955eb68b8529d9c28f29e615cf14ca0f077",
+          "C": "631caa32a59ff43253f1fcac4effd955eb68b8529d9c28f29e615cf14ca0f077",
+          "F": "38357f931da9fecc5906d6e06bcb6eb02c6201112dfa08b162dada7704d70612",
+          "K": "2772b3b87a2b4e1a1cee1eba8693a4ce011e5ac6a142b69dce155fe230ba5e47",
+          "A": "b9c1c19b6c44513d1778143b695e9720d0463d0a9786a91ec6ae97cc6c469819"
+        },
+        "P_C_bitwise": true,
+        "lift_max": 0.0,
+        "field_masks": {
+          "C->F": [
+            0,
+            1,
+            4,
+            5
+          ],
+          "F->K": [
+            2
+          ],
+          "K->A": [
+            3
+          ]
+        },
+        "post_flow_pre_k_bitwise": true,
+        "raw_corrected_bitwise": true,
+        "flow_A_U_pi_bitwise": true,
+        "accepted_role": "A only; P is predecessor; C/F/K diagnostic aliases",
+        "initial_differential_storage_max": 0.0
+      },
+      "status": "PASS",
+      "assessment_seconds": 269.23885344599694,
+      "assessment": {
+        "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/pilot1/assessment/result.json",
+        "bytes": 284449,
+        "sha256": "07f6ff2c59bfa5c4b5f8f2787fedca278c9a96fd117de1ec78de95f90a8877be"
+      }
+    }
+  ],
+  "remaining_steps_status": "RESOURCE_LIMIT",
+  "stop_reason": "RESOURCE_LIMIT",
+  "elapsed_seconds": 435.7597611290039,
+  "scope": "capacity/admissibility pilot only; no duration preservation or physical experimental qualification"
+}
