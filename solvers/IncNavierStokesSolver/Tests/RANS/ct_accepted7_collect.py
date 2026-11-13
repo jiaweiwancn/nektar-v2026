@@ -11,7 +11,7 @@ from pathlib import Path
 from rans_qualification import THREADS,write_json
 os.environ.update(THREADS)
 from ct_accepted_open import require
-from ct_accepted7_gate import top,history,resources,temporal
+from ct_accepted7_gate import top,history,resources,temporal,finite
 from rans_request_manifest import RequestManifest,sha
 
 
@@ -34,12 +34,14 @@ def main():
     domain_errors=[]
     if set(dom.get('cases',{}))!={'flat-p3','flat-p4','terrain-p3','terrain-p4'}:domain_errors.append('domain_pair_coverage')
     for label,row in dom.get('cases',{}).items():
-        if label.startswith('flat') and row.get('native_count',{}).get('stored_slots',0)<=3000:domain_errors.append('missing_or_unexpected_capacity:'+label)
+        count=row.get('native_count',{}).get('stored_slots')
+        if label.startswith('flat') and (not finite(count) or count<=3000):domain_errors.append('missing_or_unexpected_capacity:'+label)
         if set(row.get('native_geometry',{}))!={'16','32'}:domain_errors.append('missing_geometry_orders:'+label)
         for q,g in row.get('native_geometry',{}).items():
-            if g.get('minimum_sampled_native_Jacobian',0)<=0 or g.get('volume_defect',1e300)>2e-11*g.get('expected_physical_volume',0):domain_errors.append('native_geometry:'+label+':'+q)
+            keys=('minimum_sampled_native_Jacobian','volume_defect','expected_physical_volume')
+            if any(not finite(g.get(k)) for k in keys) or g['minimum_sampled_native_Jacobian']<=0 or g['expected_physical_volume']<=0 or g['volume_defect']>2e-11*g['expected_physical_volume']:domain_errors.append('native_geometry:'+label+':'+q)
     cert=dom.get('analytic_geometry_certificate',{})
-    if min(cert.get(k,0) for k in ('minimum_interval_Jacobian','minimum_interval_xq','collar_sufficient_Jacobian_bound','outer_vertical_Jacobian_bound'))<=0:domain_errors.append('analytic_geometry_certificate')
+    if any(not finite(cert.get(k)) or cert[k]<=0 for k in ('minimum_interval_Jacobian','minimum_interval_xq','collar_sufficient_Jacobian_bound','outer_vertical_Jacobian_bound')):domain_errors.append('analytic_geometry_certificate')
     required_reg={'fresh_CT5_A95_two_steps','unchanged_restart','deliberate_rejection_rollback','incompatible_geometry_history'}
     regression=bool(set(reg.get('checks',{}))==required_reg and all(v['status']=='pass' for v in reg['checks'].values()))
     failed_roots={model:[h for h in (5.5,6.,6.5,6.99) if refs['cases'][model+'-'+str(h)]['roughness_match']['status']!='root'] for model in ('A93','A95','E94E95')}
