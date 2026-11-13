@@ -86,8 +86,8 @@ reasons are durable.
 
 | Quantity | Corrected base | A: velocity only | B: velocity + outer k/epsilon |
 |---|---:|---:|---:|
-| Native inner covariance minimum | historical H2d base | +.000792568 | −.001006332 |
-| Native outer covariance minimum | approximately −.0534449 | −.038148745 | −.029992657 |
+| Native inner covariance minimum | +.001602362 | +.000792568 | −.001006332 |
+| Native outer covariance minimum | −.052890553 | −.038148745 | −.029992657 |
 | Independent GL20 minimum | — | −.038162358 | −.030095454 |
 | Physical divergence L2 | .0603080381 | .0601611911 | .0603080602 |
 | Velocity increment L2 | 0 | .03251855 | .05350842 |
@@ -278,3 +278,8 @@ Native tensor discrepancies are around 7e-18, whereas the B negative eigenvalue
 is about −.03 (hard covariance tolerance about −1.8e-12). The rejection is far
 larger than replay roundoff. Signed cancellation in local stress contributions
 is preserved throughout.
+
+H2f documentation correction (13 November 2026): the base column above now uses
+the exact retained `replay-final-v1/PhysicalHeightInterfaceV2-probe/result.json`
+receipt for hash 83b1a4fd…, rather than the pre-repair outer value. No H2e run
+was repeated to make this correction.

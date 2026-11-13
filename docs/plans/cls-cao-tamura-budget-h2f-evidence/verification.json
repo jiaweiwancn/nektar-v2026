@@ -1,0 +1,124 @@
+{
+  "focused": {
+    "passed": true,
+    "affine_cut_error": 3.615533665575379e-18,
+    "repeated_eigenspace_separation": true,
+    "outer_patch_inner_gradient_max": 0.0,
+    "conditioning": {
+      "velocity": {
+        "eigenvalues": [
+          9.237768434478937e-06,
+          6.910033999421996e-05,
+          0.00015676628126202305,
+          0.00021332853923241774,
+          0.0007177053948264748,
+          0.0012347071649288631,
+          0.0035248532803076223,
+          0.003648102383118416,
+          0.012087619838520778,
+          0.01674605504684447,
+          0.028610825498094877,
+          0.045302743103132044,
+          0.08155274384279287,
+          0.08578226537388384,
+          0.10739145351448416,
+          0.11131139244572613,
+          0.14992673638578055,
+          0.2680814193730736,
+          0.40071850298701034,
+          0.4434178535964968,
+          0.6026718735266624,
+          1.0851158202747941,
+          1.1483291431604352,
+          1.2142608987927253,
+          1.274962542874024,
+          1.358454373748241,
+          1.8823567680332156,
+          2.8033703378681376,
+          2.8651014684443923,
+          3.618068003323849,
+          5.385765648997162,
+          7.001039708798421
+        ],
+        "rank": 41,
+        "condition_before": 757871.3147504135,
+        "orthogonality_error": 1.2705614338415216e-11,
+        "relative_rank_threshold": 1e-10,
+        "original_rank": 32,
+        "enriched_orthogonality_error": 1.2705614338415216e-11
+      },
+      "k": {
+        "eigenvalues": [
+          7.578217842847311e-07,
+          2.4046070499700372e-06,
+          7.77502016077236e-06,
+          2.4670534260087955e-05,
+          5.045756130168425e-05,
+          0.0001601044073241365,
+          0.0012754207985088057,
+          0.004046975037363249
+        ],
+        "rank": 8,
+        "condition_before": 5340.272767670542,
+        "orthogonality_error": 8.746336987996983e-13,
+        "relative_rank_threshold": 1e-10
+      },
+      "epsilon": {
+        "eigenvalues": [
+          7.578800827664634e-07,
+          2.404612719486648e-06,
+          7.775618285390773e-06,
+          2.4670592427595542e-05,
+          5.046144295201534e-05,
+          0.00016010478481390738,
+          0.0012755189153706126,
+          0.0040469845792097826
+        ],
+        "rank": 8,
+        "condition_before": 5339.874567540045,
+        "orthogonality_error": 1.545430450278218e-13,
+        "relative_rank_threshold": 1e-10
+      }
+    },
+    "corrupt_schema_and_geometry_rejected": true,
+    "accepted_states": {
+      "stage-A-final": {
+        "accepted_minimum": 9.99999233130891e-05,
+        "inner_cuts_max": 51,
+        "terminal_rechecked": true
+      },
+      "stage-B": {
+        "accepted_minimum": 9.999991244475622e-05,
+        "inner_cuts_max": 30,
+        "terminal_rechecked": true
+      }
+    },
+    "context_sha256": "506ff9bd84c990869252cc70b37f4e8b1f404ceb3988188afb5953ee9a13e4a6"
+  },
+  "startup": {
+    "passed": true,
+    "ordinary_changed_dt_rejected": true,
+    "changed_state_old_receipt_rejected": true,
+    "V1_native_h0_history_bitwise": true,
+    "parent_bytes_preserved": true,
+    "reports": {
+      "ordinary-changed-dt": {
+        "code": 1,
+        "failure": "Wall IMEX: checkpoint signature mismatch",
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2f-20261113/startup-followup/ordinary-changed-dt/case.evolution.json",
+        "report_sha256": "78b994b2f4d553a986a96ab08b1e947503d490a0911534f592b9b4bd84eb588a",
+        "seconds": 12.44814323400351,
+        "usage": "Command exited with non-zero status 1\n12.39 10.98 0.93 982924\n",
+        "accepted_steps": null
+      }
+    },
+    "V1_report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2f-20261113/startup-followup/V1-regression/case.evolution.json"
+  },
+  "helper_replay": {
+    "passed": true,
+    "extra_witness_selection_bitwise": true,
+    "combined_binary_arrays_and_witnesses_bitwise": true
+  },
+  "mass_metric_QP_passed": true,
+  "branch_tests_passed": true
+}

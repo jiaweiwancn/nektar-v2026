@@ -1,0 +1,53 @@
+{
+  "version": "H2fSymbolicMassGraphV1",
+  "production_guard": 3000,
+  "physical_target_factorizations": 0,
+  "cases": [
+    {
+      "label": "current",
+      "radial_panels": 13,
+      "outer_panels": 7,
+      "estimated_coupled_slots": 2804,
+      "velocity_field_size": 760,
+      "free_velocity_size": 1386,
+      "support_graph_nnz": 31164,
+      "CSR_upper_bytes": 379516,
+      "graph_seconds": 0.006834572999650845,
+      "fill_only_surrogate_L_U_nnz": 66762,
+      "fill_only_surrogate_seconds": 0.00245552299747942,
+      "dense_free_mass_bytes": 15367968,
+      "dense_coupled_array_bytes": 62899328
+    },
+    {
+      "label": "retained-localized",
+      "radial_panels": 21,
+      "outer_panels": 10,
+      "estimated_coupled_slots": 4399,
+      "velocity_field_size": 1216,
+      "free_velocity_size": 2250,
+      "support_graph_nnz": 51324,
+      "CSR_upper_bytes": 624892,
+      "graph_seconds": 0.010106243997142883,
+      "fill_only_surrogate_L_U_nnz": 110826,
+      "fill_only_surrogate_seconds": 0.003980069999670377,
+      "dense_free_mass_bytes": 40500000,
+      "dense_coupled_array_bytes": 154809608
+    },
+    {
+      "label": "retained-full-h",
+      "radial_panels": 25,
+      "outer_panels": 14,
+      "estimated_coupled_slots": 5339,
+      "velocity_field_size": 1444,
+      "free_velocity_size": 2682,
+      "support_graph_nnz": 61404,
+      "CSR_upper_bytes": 747580,
+      "graph_seconds": 0.01127280600121594,
+      "fill_only_surrogate_L_U_nnz": 132858,
+      "fill_only_surrogate_seconds": 0.004185116002190625,
+      "dense_free_mass_bytes": 57544992,
+      "dense_coupled_array_bytes": 228039368
+    }
+  ],
+  "scope": "support graphs of retained tensor Q3/P1 allocations; modified-basis signs do not change adjacency; curved/affine numerical zeros can reduce actual nnz; surrogate fill is an estimate, not physical target factor timing"
+}
