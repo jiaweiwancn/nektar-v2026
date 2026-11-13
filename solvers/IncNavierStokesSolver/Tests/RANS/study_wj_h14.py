@@ -93,7 +93,7 @@ def small_checks(root):
     assert cp0['steps']==0 and two['steps']==restart['steps']==2 and one['steps']==1
     err=float(np.max(abs(np.array(two['state'])-restart['state'])))
     assert err<=1e-9*max(1.,max(abs(x)for x in two['state']))
-    counts={};phase=[]
+    counts={};phase=[];matrices=[]
     for name,r in reports.items():
         assert r['initial_velocity_mode']=='FlatInletTraceV1'
         for key in ('fixed_reference','fixed_defect'):assert same(r[key],cp0[key])
@@ -104,6 +104,15 @@ def small_checks(root):
             p=load(attempt['k_snapshot']);assert sha(attempt['k_snapshot'])==attempt['k_snapshot_sha256']
             assert same(p['raw'],p['corrected'])and p['k_bound']['activations']==0 and p['k_bound']['mass_norm_correction']==0
             assert p['matrix_encoding'].startswith('COO native-endian int32 row,int32 column') and p['schema']==2
+            assert sha(p['matrix_file'])==p['matrix_sha256']
+            coo=np.fromfile(p['matrix_file'],dtype=np.dtype([('i','<i4'),('j','<i4'),('a','<f8')]))
+            n=len(p['transport_rows']);assert np.all(coo['i']<n)and np.all(coo['j']<n)and np.all(coo['i']>=0)and np.all(coo['j']>=0)
+            dx=np.asarray(p['raw_increment']);rhs=np.asarray(p['transport_residual']);saved=np.asarray(p['raw_linear_residual'])
+            action=np.bincount(coo['i'],weights=coo['a']*dx[coo['j']],minlength=n)
+            scale=np.bincount(coo['i'],weights=abs(coo['a']*dx[coo['j']]),minlength=n)+abs(rhs)
+            error=abs(action+rhs-saved);assert np.all(error<=128*np.finfo(float).eps*scale+2e-20)
+            matrices.append(dict(path=p['matrix_file'],sha256=p['matrix_sha256'],bytes=Path(p['matrix_file']).stat().st_size,
+                encoding=p['matrix_encoding'],n=n,nonzeros=len(coo),matvec_error=float(np.max(error)),matvecs=1,factorizations=0,solves=0))
         counts[name]=dict(steps=r['steps'],time=r['time'],failure=r['failure'],attempts=len(r['pimple_attempts']),
             initialization=r['initialization_lift_calls_iterations'],initializer_calls=r['initial_velocity_calls'],
             producer=file_id(out/name/'case.evolution.json'),checkpoint=r['checkpoint'])
@@ -120,7 +129,7 @@ def small_checks(root):
         for step in range(first+1,r['steps']+1):
             a=r['pimple_attempts'][step-first-1];p=load(a['k_snapshot']);_,v=phase_bindings(r,p,step);assert v['P_C_bitwise'];phase.append(dict(case=name,**v))
     save(out/'restart-rollback-checks.json',dict(status='PASS',state_max_error=err,state_bitwise=same(two['state'],restart['state']),
-        native_history_bitwise=True,reference_defect_bitwise=True,rejected_attempt_rollback=True,counts=counts,phase_bindings=phase))
+        native_history_bitwise=True,reference_defect_bitwise=True,rejected_attempt_rollback=True,counts=counts,phase_bindings=phase,matrix_checks=matrices))
 
 def view(root,case,reuse=False):
     folder=root/'science'/(case if '/'in case else'small/'+case);rp=folder/'case.evolution.json';r=load(rp);out=folder/'view';out.mkdir()
@@ -155,6 +164,43 @@ def rejection(root):
     save(folder/'expected-rejection.json',dict(status='PASS',native_exit=code,native_failure=r['failure'],
         accepted_step=r['steps'],attempted_step=2,attempted_time=.02,producer=file_id(folder/'case.evolution.json'),
         scope='deliberate native hard-audit rejection; failing candidate is never accepted or eligible as a checkpoint'))
+
+def qualification(root):
+    from wj_h14_execution import QUALIFICATION
+    small_checks(root);view_finish(root,'two')
+    q=load(root/'science/small/operator/native-v4.json');assert q['status']=='PASS'
+    assert q['sweep_coefficient_error']<=1e-9
+    for v in q['independent_pressure_checks']['pressure_modes']:
+        assert v['frozen_column_defect']<=1e-11*max(1.,v['action_max'])
+    for name in ('mapped-v2','dense-default'):assert load(root/f'science/small/initializer/{name}.json')['status']=='PASS'
+    for name,version in (('cp0','assessment-v2'),('two','assessment'),('one','assessment'),('restart','assessment')):
+        assert load(root/f'science/small/{name}/{version}/result.json')['status']=='PASS'
+    # Verify the ACTUAL native-exec closure, not the parent/PID-union mappings.
+    prior=load(H10/'runtime-qualified.json')['loaded'];files=set();samples=[]
+    for p in sorted((root/'operations').glob('*/native-exec-samples.json')):
+        for v in load(p):
+            if not any('/runtime-v4/'in x for x in v['native']):continue
+            assert v['status']=='PASS';samples.append(dict(operation=p.parent.name,pid=v['pid'],native=v['native'],libc=v['libc']))
+            files.update(x for x in v['files']if '.so'in Path(x).name or Path(x).name.startswith('ld-linux'))
+    assert samples and any(any('IncNavierStokesSolver.elf'in x for x in v['native'])for v in samples)
+    libraries=[]
+    for f in sorted(files):
+        p=Path(f)
+        if not p.is_file():continue
+        key=f
+        if '/runtime/glibc/'in f:key=str(H10/'runtime/glibc'/p.name)
+        elif '/runtime/geometry/'in f:key=str(H10/'runtime/geometry'/p.name)
+        assert key in prior,'unqualified actual loaded library: '+f
+        old=prior[key];assert sha(p)==old['sha256']and p.stat().st_size==old['bytes']
+        libraries.append(dict(actual=file_id(p),qualified_H10=old))
+    save(root/'science/runtime-qualified-v4.json',dict(status='PASS',native_exec_samples=samples,libraries=libraries,
+        compiled_build=file_id(root/'science/runtime-build-v4.json'),historical_runtime=file_id(H10/'runtime-qualified.json'),
+        scope='actual per-process native-exec maps; new ELFs, exact original private loader/libc/geometry and selected loaded dependency hashes'))
+    gates={k:'PASS'for k in QUALIFICATION}
+    save(root/'science/qualification-gates.json',dict(status='PASS',gates=gates,
+        small_governing_verification_attempts=7,complete_small_solves_each=7,small_CP0s=1,deliberate_rejections=1,
+        physical_native_integrated_accepted_steps=4,verification_sweeps=2,
+        note='initial failed parity observers reached no sweep; retained failures and superseded sources remain charged'))
 
 def stored_reference(manifest=None):
     """Restore ONLY the settled H13 six-mm reference; never run an inverse/fit."""
@@ -274,7 +320,7 @@ def assessment(root,relative,version='v1'):
     assert file_id(rp)==before;print(relative,status,'minima',[v['summary']['min_in_plane']for v in results],flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('runtime','inputs','small-checks','view','view-finish','rejection','assessment'),required=True)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('runtime','inputs','small-checks','view','view-finish','rejection','qualification','assessment'),required=True)
     p.add_argument('--case',default='two');p.add_argument('--reuse',action='store_true');p.add_argument('--version',default='v1');a=p.parse_args()
     if a.mode=='view':view(a.root,a.case,a.reuse)
     elif a.mode=='view-finish':view_finish(a.root,a.case)
