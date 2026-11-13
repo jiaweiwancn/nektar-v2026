@@ -78,7 +78,8 @@ def scan(root,branch,phase):
             baseline=load(root/'science/cases/coarse/cp0/case.evolution.json')
             from wj_h9_local import same
             for key in ('state','fixed_reference','fixed_defect'):assert same(r[key],baseline[key])
-            assert all(np.array_equal(a,b)for a,b in zip(cp['native_history'],checkpoint_payload(baseline['checkpoint'])['native_history']))
+            other=checkpoint_payload(baseline['checkpoint'])
+            assert len(cp['native_history'])==len(other['native_history'])and all(same(a,b)for a,b in zip(cp['native_history'],other['native_history']))
     else:
         invariants=dict(status='PASS',initializer_calls=r['initial_velocity_calls']);assert r['initial_velocity_calls']==0 and r['initialization_lift_calls_iterations']==[0,0]
         cp0=load(root/f'science/cases/{branch}/cp0/case.evolution.json');assert vector_hash(r['accepted_states'][0])==vector_hash(cp0['state'])
