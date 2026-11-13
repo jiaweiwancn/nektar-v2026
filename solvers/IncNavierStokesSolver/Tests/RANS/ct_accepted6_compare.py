@@ -19,12 +19,20 @@ def observations(member,audit):
     require(r['physical_completion']=='pass','incomplete or physically rejected required member')
     p=Path(a['common_observations']['path']);require(sha(p)==a['common_observations']['sha256'],'changed common physical packet')
     packet=json.loads(p.read_text());o=packet['observation']
+    construction=json.loads((member/'trajectory/construction.json').read_text())
+    require(sha(member/'trajectory/case.xml')==construction['configuration_sha256'],'changed consumed configuration')
+    require(construction['model']==r['model'] and construction['policy']=='Natural' and
+            construction['wall']=='AcceptedBudgetAWF' and construction['provider']=='CT6ContinuousV1' and
+            construction['H']==.5 and construction['nu']==1.5e-5 and construction['roughness']==.05 and
+            construction['map_amplitude']==.005 and construction['map_length']==1.,'foreign continuous physical inputs')
+    require(packet['manufactured']['version']=='CT6ContinuousV1' and ':curved=' in o['identity'],'wrong manufactured or map identity')
+    physical_context=o['identity'].split('|',1)[0]+':curved='+o['identity'].split(':curved=',1)[1]
     require(abs(o['time']-r['target'])<1e-13 and abs(a['time']-r['target'])<1e-13,'required endpoint not reached')
     points,sides,weights,n=common_grid()
     require(o['grid']==points and o['grid_sides']==sides and a['common_observations']['weights']==weights,'common observation identities differ')
     v=np.asarray(o['grid_values'][:n]);truth=np.asarray([q['values'] for q in packet['manufactured']['samples'][:n]])
     require(v.shape==truth.shape==(n,5) and np.all(np.isfinite(v)) and np.all(np.isfinite(truth)),'invalid physical field arrays')
-    return r,a,o,v,truth,np.asarray(weights),np.asarray(o['grid_regions'][:n])
+    return r,a,o,v,truth,np.asarray(weights),np.asarray(o['grid_regions'][:n]),physical_context
 
 
 def norms(delta,weights,regions,model):
@@ -43,11 +51,12 @@ def main():
     records=[observations(x,y) for x,y in zip(a.member,a.audit,strict=True)]
     model=records[0][0]['model'];target=records[0][0]['target']
     require(all(r[0]['model']==model and r[0]['target']==target for r in records),'foreign model or horizon')
+    require(all(r[7]==records[0][7] for r in records),'physical mapping, resolved model or boundary functions differ')
     indexed={(r[0]['degree'],r[0]['dt']):r for r in records};require(len(indexed)==len(records),'duplicate member')
     m=RequestManifest(a.output,dict(schema='CT6MMSComparisonsV1',model=model,target=target,
         members=[dict(receipt_sha256=sha(x/'results.json'),audit_sha256=sha(y/'results.json')) for x,y in zip(a.member,a.audit,strict=True)],
         source_sha256=sha(Path(__file__)),pressure='absolute, no mean subtraction',floor=1e-7,
-        degree_ratio=.85,first_order_band=[.8,1.2]))
+        degree_ratio=.85,first_order_band=[.8,1.2],common_physical_context=records[0][7]))
     result=dict(schema='CT6MMSComparisonsV1',model=model,time=target,reference_errors={},temporal={},degree={},statuses={})
     for key,r in indexed.items():
         result['reference_errors'][str(key)]=norms(r[3]-r[4],r[5],r[6],model)
