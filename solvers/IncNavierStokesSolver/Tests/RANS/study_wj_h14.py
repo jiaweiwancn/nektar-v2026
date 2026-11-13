@@ -365,8 +365,8 @@ def assessment(root,relative,version='v1',new_only=False):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('runtime','inputs','small-checks','view','view-finish','rejection','qualification','unsupported','assessment'),required=True)
-    p.add_argument('--case',default='two');p.add_argument('--reuse',action='store_true');p.add_argument('--version',default='v1');a=p.parse_args()
+    p.add_argument('--case',default='two');p.add_argument('--reuse',action='store_true');p.add_argument('--version',default='v1');p.add_argument('--new-only',action='store_true');a=p.parse_args()
     if a.mode=='view':view(a.root,a.case,a.reuse)
     elif a.mode=='view-finish':view_finish(a.root,a.case)
-    elif a.mode=='assessment':assessment(a.root,a.case,a.version)
+    elif a.mode=='assessment':assessment(a.root,a.case,a.version,a.new_only)
     else:globals()[a.mode.replace('-','_')](a.root)

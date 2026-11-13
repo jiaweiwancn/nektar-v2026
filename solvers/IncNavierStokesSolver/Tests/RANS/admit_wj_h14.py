@@ -12,7 +12,7 @@ import time
 import numpy as np
 from run_wj_h4 import load,save,sha
 from wj_h14_execution import clone,file_id,target_preflight,validate_pair
-from study_wj_h14 import H13,verify,stored_reference,assessment
+from study_wj_h14 import H13,verify,stored_reference,assessment,view_finish
 
 def prepare(root):
     gate=load(root/'science/qualification-gates.json');assert gate['status']=='PASS'
@@ -146,5 +146,9 @@ def pilot_bind(root):
         predecessor_role='original full CP0 qualified and bitwise-identical cached assessment; restored alpha0 is not a new completed stage',
         pilot_assessment_estimate_seconds=old['measured_assessment_seconds'],maximum_native_attempts=4,allowance_reset=False))
 
+def finish_bind(root):
+    view_finish(root,'target/cp0');pilot_bind(root)
+    assert load(root/'science/remaining-projection-v2.json')['status']=='PASS'
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('prepare','rebind','pilot-bind','pilot'),required=True);a=p.parse_args();globals()[a.mode.replace('-','_')](a.root)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('prepare','rebind','pilot-bind','finish-bind','pilot'),required=True);a=p.parse_args();globals()[a.mode.replace('-','_')](a.root)
