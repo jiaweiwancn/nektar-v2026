@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 import xml.etree.ElementTree as ET
 from cls_epawf_m3_cases import set_info,set_parameter,write
 from wj_h14_execution import protected,validate_pair,clone,target_preflight,QUALIFICATION
@@ -13,6 +14,13 @@ SOURCE=Path(__file__).resolve().parents[4]
 PARENT=Path(os.environ.get('WJ_H14_PARENT',str(SOURCE/'docs/plans/wj-h13-linux/publication-v1/paired-case')))
 
 class FixedHeightExecution(unittest.TestCase):
+    def test_stored_reference_never_refits_or_inverts_roughness(self):
+        from study_wj_h14 import stored_reference
+        with patch('wj_h5_neutral.required_roughness',side_effect=AssertionError('H14 must not calibrate')):
+            c=stored_reference(PARENT/'paired-domain.json')
+        self.assertEqual(c.H,.15);self.assertEqual(c.h,.10854503542535461)
+        self.assertEqual(c.K,.008809015145515192)
+        self.assertAlmostEqual(c.w['rc'],.026419898309769336,places=14)
     def test_execution_only_diff_and_exact_physical_functions(self):
         with tempfile.TemporaryDirectory()as d:
             a=PARENT/'flat/case.xml';b=clone(a,Path(d)/'case',dt=.0025)

@@ -129,8 +129,126 @@ def view(root,case,reuse=False):
         physical_observations=[[0.,0.,.2375],[4.,0.,.2375],[8.,0.,.2375],[8.,0.,.25607517888672315]],
         weak=False,assembly=False,reuse=reuse))
 
+def stored_reference(manifest=None):
+    """Restore ONLY the settled H13 six-mm reference; never run an inverse/fit."""
+    from wj_h5_neutral import NeutralReference
+    from wj_h2_profiles import wall
+    v=load(manifest or H13/'publication-v1/paired-case/paired-domain.json')['primary_reference']
+    assert v['H_w']==.15 and v['h_s_mm']==4.341801417014184 and v['physical_z_H_mm']==9.5
+    # Deserialization of already validated immutable data, not construction of
+    # another candidate through NeutralReference.__post_init__/roughness inverse.
+    c=object.__new__(NeutralReference)
+    for k,value in dict(H=v['H_w'],h=v['h_s'],z0_e=v['z0_e'],u_tau=v['u_tau'],nu=v['nu'],d0=v['d0'],top=v['top'],
+                        d_nu=v['d_nu'],fit_identity=v['fit_identity']).items():object.__setattr__(c,k,value)
+    w=wall(v['K'],c.H,c.h,nu=c.nu);assert abs(w['rc']-v['rc'])<2e-14
+    object.__setattr__(c,'w',w);assert c.K==v['K']and c.A==v['A'];return c
+
+def assessment(root,relative):
+    import math
+    import numpy as np
+    from wj_h4_points import physical
+    from wj_h7_analysis import Rows,classify
+    from wj_h9_local import same
+    from study_wj_h9 import serial
+    from wj3_measure import checkpoint_payload
+    folder=root/'science'/relative;rp=folder/'case.evolution.json';r=load(rp);c=stored_reference()
+    out=folder/'assessment';out.mkdir();before=file_id(rp)
+    if r['failure']:
+        save(out/'result.json',dict(status='OBSTRUCTED',native_failure=r['failure'],producer=before));return
+    cp=checkpoint_payload(r['checkpoint'],include_reference=True)
+    for key in ('state','fixed_reference','fixed_defect'):assert same(cp[key],r[key])
+    assert cp['signature']==r['signature']and cp['steps']==r['steps']and cp['time']==r['time']and cp['dt']==r['dt']
+    pts={};xmin=min(e['lower'][0]for e in r['fields'][0]['mesh']);xmax=max(e['upper'][0]for e in r['fields'][0]['mesh'])
+    def add(p,tag):
+        p=list(map(float,p))
+        if not xmin<=p[0]<=xmax or not c.d0<=p[2]<=c.top:return
+        key=tuple(x.hex()for x in p);v=pts.setdefault(key,dict(physical=p,tags=[]))
+        if tag not in v['tags']:v['tags'].append(tag)
+    g=(-1.,-math.sqrt(3/7),0.,math.sqrt(3/7),1.)
+    for e in r['fields'][0]['mesh']:
+        lo,hi=e['lower'],e['upper']
+        for u in g:
+            for v in g:
+                x=lo[0]if u==-1 else hi[0]if u==1 else (lo[0]+hi[0])/2+(hi[0]-lo[0])*u/2
+                z=lo[2]if v==-1 else hi[2]if v==1 else (lo[2]+hi[2])/2+(hi[2]-lo[2])*v/2
+                add(physical(r,[x,0.,z]),'every stored element5x5 Lobatto; all legitimate owners')
+    for x in sorted(set([xmin,xmax,(xmin+xmax)/2]+[x for x in (0.,4.,8.,10.,-2.5,2.5,6.5,7.5)if xmin<=x<=xmax])):
+        for z in (c.d0,c.d0+c.H,.175,.25,.25607517888672315,.31946961248954786,.375,c.top):add([x,0.,z],'fixed interface/measurement/prior-witness physical heights')
+    for packet in r['wj_audit_packets']:
+        for w in packet['principal_witnesses'].values():
+            p=w['position'];add(p,'genuine native witness')
+            for a in (0,2):
+                for s in (-1,1):q=p.copy();q[a]+=s*1e-6;add(q,'fixed physical inward/witness offset1e-6')
+    inventory=dict(rule='unchanged native hard inventory plus every5x5 stored-element Lobatto/all owners, fixed physical observations/native witnesses+1e-6; Gauss8 physical volume support split at settled wall breakpoints',points=list(pts.values()))
+    save(out/'inventory.json',inventory);rows=Rows(r,[v['physical']for v in pts.values()],c)
+    if relative.startswith('target/'):
+        assert len(r['state'])==24688 and [f['size']for f in r['fields']]==[6493,6493,6493,4429,255,525]
+    initial_report=folder.parent/'cp0/case.evolution.json'
+    initial_state=load(initial_report)['state']if initial_report.exists()else r['accepted_states'][0]
+    initial=rows.evaluate(initial_state,principal=False);results=[]
+    first=r['steps']+1-len(r['accepted_states'])
+    for j,state in enumerate(r['accepted_states']):
+        d=rows.evaluate(state);s=rows.summary(d,initial);active=np.flatnonzero(rows.outer);i=active[np.argmin(d['margin'][active])]
+        s.update(min_in_plane=float(d['margin'][i]),min_transverse=float(np.min(d['transverse'][active])),
+            min_covariance=float(np.min(d['covariance'])),min_scalar=min(float(np.min(d['k'])),float(np.min(d['epsilon'][active]))),
+            witness=rows.witness(d,i),quality_scope='all explicit owners AND physical Gauss8 support',
+            divergence_scaled_max=float(np.max(abs(d['divergence'])/np.maximum(1.,np.linalg.norm(d['G'],axis=(1,2))))))
+        s['status']=classify(s['min_in_plane'],s['min_transverse'],s['min_covariance'],s['min_scalar']);moments={}
+        groups={}
+        for n,(p,o)in enumerate(rows.rows[:rows.point_count]):
+            if not o['interface_role'].startswith('matching_'):continue
+            key=(float(p[0]).hex(),float(o['lower'][0]).hex(),float(o['upper'][0]).hex())
+            groups.setdefault(key,{})[o['region']]=n
+        interfaces=[]
+        for pair in groups.values():
+            if set(pair)!={'inner','outer'}:continue
+            a,b=pair['inner'],pair['outer'];K=float(d['K'][b]);target=(K/(81/(2*math.sqrt(143))))**1.5/(c.H*.3819178635467331)
+            interfaces.append(dict(physical=rows.rows[b][0],inner_owner=rows.rows[a][1],outer_owner=rows.rows[b][1],K=K,rc=float(d['rc'][b]),Lambda=float(d['Lambda'][b]),
+                shared_U=(d['U'][a]-d['U'][b]).tolist(),shared_k=float(d['k'][a]-d['k'][b]),epsilon=float(d['epsilon'][b]),epsilon_target=target,
+                epsilon_trace_defect=float(d['epsilon'][b]-target),total_traction_jump=(d['T'][a,:,2]-d['T'][b,:,2]).tolist(),
+                k_flux_jump=float(d['nu_d'][a]*d['grad_k'][a,2]-d['nu_d'][b]*d['grad_k'][b,2]),reduced_pressure_jump=float(d['pi'][a]-d['pi'][b])))
+        s['owner_interfaces']=interfaces
+        for b in (4,5):
+            ii,(ids,phi,_,_)=rows.maps[b];rhs=np.zeros(r['fields'][b]['size']);np.add.at(rhs,ids.ravel(),(phi*(rows.weights[ii]*d['divergence'][ii])[:,None]).ravel())
+            moments[str(b)]=dict(moments=rhs.tolist(),maximum=float(np.max(abs(rhs))),signed_integral=float(np.sum(rhs)))
+        step=first+j
+        if max(v['maximum']for v in moments.values())>2e-15:s['status']='OBSTRUCTED'
+        if step==0 and s['divergence_scaled_max']>1e-12:s['status']='OBSTRUCTED'
+        results.append(dict(absolute_step=step,time=r['wj_audit_packets'][j]['time'],state_sha256=vector_hash(state),
+            summary=s,all_regional_Q1_moments=moments,native_audit_state_sha256=r['wj_audit_packets'][j]['state_sha256']))
+    invariants={}
+    if r['initial_velocity_calls']:
+        diag=r['initial_velocity_diagnostic'];a=diag['pre_state'];b=diag['post_state'];off=r['offsets']
+        assert same(a[off[2]:],b[off[2]:])and same(a,r['fixed_reference'])and vector_hash(b)==vector_hash(r['accepted_states'][0])
+        essential=set()
+        for block in (0,1):
+            for e in r['fields'][block]['mesh']:
+                ids=np.array(e['ids']).reshape(4,4)+off[block]
+                if e['lower'][0]==xmin:essential.update(ids[:,0])
+                if e['lower'][2]==0:essential.update(ids[0,:])
+                if block==1 and e['upper'][2]==c.top:essential.update(ids[1,:])
+        essential=sorted(essential);assert same(np.array(a)[essential],np.array(b)[essential])
+        pre=rows.evaluate(a,principal=False);post=rows.evaluate(b,principal=False)
+        for k in ('K','rc','Lambda'):assert same(pre[k],post[k])
+        invariants=dict(essential_velocity_bits=True,essential_count=len(essential),nonvelocity_bits=True,fixed_reference_defect_bits=True,
+            K_cutoff_trace_inputs_unchanged=True,initializer_calls=r['initial_velocity_calls'],velocity_change=rows.norms(post,pre))
+    else:
+        assert r['initial_velocity_calls']==0 and r['initialization_lift_calls_iterations']==[0,0]
+        invariants=dict(initializer_calls=0,project_lift_calls=[0,0])
+    status='PASS'if all(v['summary']['status']=='PASS'for v in results)else next(v['summary']['status']for v in results if v['summary']['status']!='PASS')
+    save(out/'result.json',serial(dict(status=status,producer=before,checkpoint=file_id(Path(r['checkpoint'])/'State.bin'),
+        inventory=file_id(out/'inventory.json'),physical_row_count=len(rows.rows),owner_row_count=rows.point_count,
+        states=results,invariants=invariants,diagnostic_mass_solves=0,raw_corrected_k_scope='actual native snapshots/counters verified separately')))
+    if status!='PASS':
+        from run_wj_h7 import update_journal
+        failed=next(v for v in results if v['summary']['status']!='PASS')
+        def halt(b):b.setdefault('coverage_halt',dict(status=status,producer=before,absolute_step=failed['absolute_step'],time=failed['time'],witness=serial(failed['summary']['witness'])))
+        update_journal(root/'accounting.json',halt)
+    assert file_id(rp)==before;print(relative,status,'minima',[v['summary']['min_in_plane']for v in results],flush=True)
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('runtime','inputs','small-checks','view'),required=True)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('runtime','inputs','small-checks','view','assessment'),required=True)
     p.add_argument('--case',default='two');p.add_argument('--reuse',action='store_true');a=p.parse_args()
     if a.mode=='view':view(a.root,a.case,a.reuse)
+    elif a.mode=='assessment':assessment(a.root,a.case)
     else:globals()[a.mode.replace('-','_')](a.root)
