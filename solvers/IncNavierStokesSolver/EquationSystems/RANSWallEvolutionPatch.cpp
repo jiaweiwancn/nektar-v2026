@@ -207,6 +207,28 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     session->LoadSolverInfo("RANSWallNativeGeometry",m_nativeGeometry,"FlatV1");
     session->LoadSolverInfo("RANSWallBoundaryMode",m_boundaryMode,"PrescribedV1");
     session->LoadSolverInfo("RANSWallOpenTop",m_openTop,"SlipV1");
+    session->LoadSolverInfo("RANSWallInitialVelocity",m_initialVelocityMode,"Off");
+    Require(m_initialVelocityMode=="Off" || m_initialVelocityMode=="FlatInletTraceV1","unknown RANSWallInitialVelocity");
+    if(m_initialVelocityMode!="Off")
+    {
+        Require(WJTerrain() && BudgetAWF() && OpenBoundary() && m_dimension==2 && m_comm->GetSize()==1,
+            "FlatInletTraceV1 requires serial2D composite open WJ Budget");
+        ValidateFlatInletTraceMap(m_mapping);
+        std::string reference,coordinates;session->LoadSolverInfo("RANSWallReference",reference,"Neutral");
+        session->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
+        Require(reference=="Functions" && coordinates=="Physical","FlatInletTraceV1 requires physical Functions");
+        Require(!session->DefinesFunction("InitialPerturbationInner") && !session->DefinesFunction("InitialPerturbationOuter") &&
+            (!session->DefinesParameter("RANSWallAcceptedKAmplitude") || session->GetParameter("RANSWallAcceptedKAmplitude")==0),
+            "FlatInletTraceV1 forbids initial perturbations");
+        for(const std::string family:{"InitialConditionsInner","InitialConditionsOuter","BoundaryValuesInner","BoundaryValuesOuter"})
+        {
+            Require(session->DefinesFunction(family,"v"),"FlatInletTraceV1 needs explicit zero normal velocity");
+            const auto expression=session->GetFunction(family,"v")->GetExpression();std::size_t used=0;double value=1.;
+            try{value=std::stod(expression,&used);}catch(const std::exception &){used=0;}
+            Require(used>0 && expression.find_first_not_of(" \t\r\n",used)==std::string::npos && value==0.,
+                "FlatInletTraceV1 requires literal-zero prescribed/initial normal velocity");
+        }
+    }
     Require(m_boundaryMode=="PrescribedV1" || m_boundaryMode=="OpenTunnelV1","unknown wall boundary mode");
     Require(!OpenBoundary() || (WJTerrain() && BudgetAWF() && m_dimension==2 && m_comm->GetSize()==1 &&
         m_mapping.compositeTunnel && m_mapping.amplitude==0 && m_mapping.slopeX==0),
@@ -1736,6 +1758,7 @@ std::string RANSWallEvolutionPatch::Signature() const
         <<":c1="<<m_parameters.wj.c1<<":c2="<<m_parameters.wj.c2<<":ce1="<<Epsilon1()<<":ce2="<<Epsilon2()<<":sigmaK="<<SigmaK()<<":sigmaE="<<m_parameters.wj.sigmaEpsilon;
     if(Mapped())text<<':'<<m_mapping.Signature();
     if(OpenBoundary())text<<":boundary=OpenTunnelV1:top="<<m_openTop<<":outlet=full_mean_traction:scalar=zero_diffusive:backflow=stop:gauge=absent";
+    if(m_initialVelocityMode!="Off")text<<":initial_velocity=FlatInletTraceV1:lifted_native_inlet_coefficients";
     if(m_innerStress==RANSWallInnerStressModel::SaturatedR2)
         text<<":M8-R2:InnerStress:SaturatedR2:v1:rho=0.8";
     if(m_variantName!="Original" || m_cappedDestruction)
@@ -1756,4 +1779,41 @@ std::string RANSWallEvolutionPatch::Signature() const
     }
     return text.str();
 }
+void RANSWallEvolutionPatch::ValidateFlatInletTraceMap(const RANSWallNormalMap &map)
+{
+    Require(map.dimension==2 && map.compositeTunnel && map.kind==RANSWallNormalMap::Kind::Plane &&
+        map.amplitude==0 && map.slopeX==0 && map.slopeY==0 && map.heightSlopeX==0 && map.heightSlopeY==0 && map.heightAmplitude==0,
+        "FlatInletTraceV1 requires a horizontal zero-hill constant-H composite Plane");
+}
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ApplyInitialVelocity(const Vector &state)
+{
+    Require(m_initialVelocityMode=="FlatInletTraceV1" && state.size()==std::size_t(Size()),"FlatInletTraceV1 mode/state differs");
+    ValidateFlatInletTraceMap(m_mapping);
+    Vector result=state;
+    const Vector inlet(state.begin()+offset[0],state.begin()+offset[1]);
+    const auto extended=fields[0]->FlatInletTrace(inlet,lower[0]);
+    std::copy(extended.begin(),extended.end(),result.begin()+offset[0]);
+    std::fill(result.begin()+offset[1],result.begin()+offset[2],0.);
+    // Identify existing essential coefficients from topology only. In
+    // particular this does NOT reevaluate/project the analytic inlet.
+    for(int b=0;b<2;++b)
+    {
+        const auto field=fields[b];const auto map=field->Field()->GetLocalToGlobalMap();
+        for(int e=0;e<field->Elements().size();++e)
+        {
+            const auto &el=field->Elements()[e];const int m=el.degree+1,start=field->Field()->GetCoeff_Offset(e);
+            for(int j=0;j<m;++j)for(int i=0;i<m;++i)
+            {
+                const bool essential=(el.lower[0]==lower[0] && i==0) || (el.lower[2]==0 && j==0) || (b==1 && el.upper[2]==upper[2] && j==1);
+                if(!essential)continue;
+                const int id=offset[b]+map->GetLocalToGlobalMap(start+i+m*j);
+                Require(b==0 || state[id]==0,"FlatInletTraceV1 nonzero prescribed normal coefficient");
+                Require(result[id]==state[id],"FlatInletTraceV1 conflicts with an essential velocity coefficient");
+                result[id]=state[id]; // preserve signed binary64 zeros too
+            }
+        }
+    }
+    ++m_initialVelocityCalls;return result;
+}
+
 }

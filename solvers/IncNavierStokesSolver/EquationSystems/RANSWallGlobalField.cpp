@@ -684,4 +684,79 @@ RANSWallGlobalField::Vector RANSWallGlobalField::RadialProject(
     for(int j=0;j<Size();++j)if(injection[j]>=0)result[j]=sign[j]*coefficients[injection[j]];
     return result;
 }
+std::vector<RANSWallGlobalField::InletTraceElement>
+RANSWallGlobalField::InletTraceElements() const
+{
+    Require(m_dimension==2,"FlatInletTraceV1 requires 2D Modified_A tensor fields");
+    std::vector<InletTraceElement> result;const auto map=m_field->GetLocalToGlobalMap();
+    for(int e=0;e<m_elements.size();++e)
+    {
+        InletTraceElement item;item.element=m_elements[e];
+        const int start=m_field->GetCoeff_Offset(e),n=m_field->GetExp(e)->GetNcoeffs();
+        for(int j=0;j<n;++j){item.ids.push_back(map->GetLocalToGlobalMap(start+j));item.signs.push_back(map->GetLocalToGlobalSign(start+j));}
+        result.push_back(std::move(item));
+    }
+    return result;
+}
+RANSWallGlobalField::Vector RANSWallGlobalField::FlatInletTraceCoefficients(
+    const Vector &values,const std::vector<InletTraceElement> &elements,double inlet)
+{
+    Require(!values.empty() && !elements.empty() && std::isfinite(inlet),"empty FlatInletTraceV1 data");
+    using Interval=std::pair<double,double>;
+    using Role=std::tuple<double,double,int,double,double,int>;
+    struct Radial {int degree=-1;Vector trace;std::vector<Interval> columns;};
+    std::map<Interval,Radial> radial;
+    std::map<Role,std::pair<int,double>> roles;std::map<int,Role> ids;
+    for(const auto &item:elements)
+    {
+        const auto &el=item.element;const int m=el.degree+1;
+        Require(m>=2 && el.lower[0]>=inlet && el.upper[0]>el.lower[0] && el.upper[2]>el.lower[2] &&
+            el.lower[1]==0 && el.upper[1]==0 && item.ids.size()==std::size_t(m*m) && item.signs.size()==item.ids.size(),
+            "inconsistent FlatInletTraceV1 interval/degree/shape");
+        auto &r=radial[{el.lower[2],el.upper[2]}];
+        Require(r.degree<0 || r.degree==el.degree,"inconsistent FlatInletTraceV1 horizontal degrees");r.degree=el.degree;
+        r.columns.emplace_back(el.lower[0],el.upper[0]);
+        for(int j=0;j<m;++j)for(int i=0;i<m;++i)
+        {
+            const int n=i+m*j,id=item.ids[n];const double sign=item.signs[n];
+            Require(id>=0 && id<values.size() && std::isfinite(values[id]) && (sign==1 || sign==-1),"invalid FlatInletTraceV1 native ID/sign");
+            const double x=i<2?(i?el.upper[0]:el.lower[0]):el.lower[0],
+                         z=j<2?(j?el.upper[2]:el.lower[2]):el.lower[2];
+            const Role role{x,i<2?x:el.upper[0],i<2?0:i,z,j<2?z:el.upper[2],j<2?0:j};
+            const auto old=roles.find(role);Require(old==roles.end() || old->second==std::make_pair(id,sign),"inconsistent FlatInletTraceV1 shared native trace ID/sign");roles[role]={id,sign};
+            const auto alias=ids.find(id);Require(alias==ids.end() || alias->second==role,"aliased FlatInletTraceV1 native ID");ids[id]=role;
+        }
+        if(el.lower[0]==inlet)
+        {
+            Require(r.trace.empty(),"duplicate FlatInletTraceV1 inlet interval");
+            for(int j=0;j<m;++j)r.trace.push_back(item.signs[m*j]*values[item.ids[m*j]]);
+        }
+    }
+    bool first=true;double previous=0;std::vector<Interval> columns;
+    for(auto &[interval,r]:radial)
+    {
+        Require((first || previous==interval.first) && !r.trace.empty(),"nonconforming FlatInletTraceV1 normal partition/inlet");previous=interval.second;
+        std::sort(r.columns.begin(),r.columns.end());double end=inlet;
+        for(const auto &c:r.columns){Require(c.first==end,"nonconforming FlatInletTraceV1 horizontal partition");end=c.second;}
+        Require(first || columns==r.columns,"inconsistent FlatInletTraceV1 columns across normal intervals");columns=r.columns;first=false;
+    }
+    Vector result(values.size(),std::numeric_limits<double>::quiet_NaN());
+    for(const auto &item:elements)
+    {
+        const auto &el=item.element;const int m=el.degree+1;const auto &trace=radial.at({el.lower[2],el.upper[2]}).trace;
+        for(int j=0;j<m;++j)for(int i=0;i<m;++i)
+        {
+            const int n=i+m*j,id=item.ids[n];const double v=item.signs[n]*(i<2?trace[j]:0.);
+            Require(!std::isfinite(result[id]) || result[id]==v,"inconsistent FlatInletTraceV1 injected shared coefficient");result[id]=v;
+        }
+    }
+    for(double v:result)Require(std::isfinite(v),"unassigned FlatInletTraceV1 coefficient");
+    return result;
+}
+RANSWallGlobalField::Vector RANSWallGlobalField::FlatInletTrace(const Vector &values,double inlet) const
+{
+    Require(values.size()==std::size_t(Size()),"FlatInletTraceV1 coefficient shape differs");
+    return FlatInletTraceCoefficients(values,InletTraceElements(),inlet);
+}
+
 }

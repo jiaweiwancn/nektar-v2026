@@ -135,6 +135,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         Require(mode=="Neutral" || mode=="Functions","RANSWallReference must be Neutral or Functions");m_neutral=mode=="Neutral";
         m_session->LoadSolverInfo("RANSWallCondense",condensation,"False");Require(condensation=="True" || condensation=="False","invalid condensation selector");m_condensed=condensation=="True";
         m_session->LoadParameter("RANSWallEta",m_eta,0.);m_session->LoadParameter("RANSWallFrictionVelocity",m_ustar,.4);
+        Require(m_patch->InitialVelocityMode()=="Off" || (!m_neutral && !m_chartFunctions && m_patch->PimpleSingleSweep() && m_eta==0),
+            "FlatInletTraceV1 requires physical Functions and unanchored single sweep");
         m_session->LoadParameter("RANSWallDirectionX",m_direction[0],1.);m_session->LoadParameter("RANSWallDirectionY",m_direction[1],0.);
         m_session->LoadParameter("RANSWallNonlinearTolerance",m_tolerance,2e-12);m_session->LoadParameter("RANSWallMaxIterations",m_maximumIterations,20);
         int diagnostics=0;m_session->LoadParameter("RANSWallDiagnostics",diagnostics,0);
@@ -252,7 +254,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             if(m_neutral)m_data.fixedBoundary=m_patch->FixedReferenceBoundary(savedWJ->fixedReference);
             m_patch->RestoreReference(savedWJ->fixedReference,savedWJ->fixedDefect,savedWJ->eta,m_data,m_time);
             m_state=savedWJ->coupledState;m_initial=savedWJ->fixedReference;
-            Require(m_patch->InitializationWork()==Vector({0.,0.}),"WJ restart constructed or lifted a new reference");
+            Require(m_patch->InitializationWork()==Vector({0.,0.}) && m_patch->InitialVelocityCalls()==0,"WJ restart constructed, lifted or transformed a new reference");
         }
         else
         {
@@ -295,6 +297,20 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
                 const auto perturbation=m_patch->Project(Functions("InitialPerturbation",false),m_time);
                 for(int i=0;i<m_patch->DifferentialSize();++i)m_state[i]+=perturbation[i];
                 m_state=m_patch->Lift(m_state,m_time,m_data);
+            }
+            if(m_patch->InitialVelocityMode()!="Off")
+            {
+                const auto before=m_state;const auto referenceHash=RANSWallR3::Hash(m_initial),defectHash=RANSWallR3::Hash(m_patch->Defect());
+                m_state=m_patch->ApplyInitialVelocity(m_state);
+                Require(m_patch->InitialVelocityCalls()==1 && referenceHash==RANSWallR3::Hash(m_initial) && defectHash==RANSWallR3::Hash(m_patch->Defect()),
+                    "FlatInletTraceV1 changed frozen reference/defect or ran twice");
+                const auto norms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data,false),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
+                m_initialVelocityDiagnostic=RANSWallSolveJson::Object({
+                    {"pre_state",RANSWallSolveJson::Numbers(before)},{"post_state",RANSWallSolveJson::Numbers(m_state)},
+                    {"pre_sha256",Quoted(RANSWallR3::Hash(before))},{"post_sha256",Quoted(RANSWallR3::Hash(m_state))},
+                    {"fixed_reference_sha256",Quoted(referenceHash)},{"fixed_defect_sha256",Quoted(defectHash)},
+                    {"pre_spatial_norms",RANSWallSolveJson::Numbers(m_rawNorms)},{"post_spatial_norms",RANSWallSolveJson::Numbers(norms)},
+                    {"scope",Quoted("actual coefficient-only startup; original raw/reference diagnostics remain attached to m_initial; no governing solve")}});
             }
             m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
         }
@@ -984,6 +1000,9 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"k_bound_work_controls\":"<<m_patch->PimpleKBoundControls()
        <<",\"implicit_callback_count\":"<<m_implicitCallbacks
        <<",\"initialization_lift_calls_iterations\":"<<RANSWallSolveJson::Numbers(m_patch->InitializationWork())
+       <<",\"initial_velocity_mode\":"<<Quoted(m_patch->InitialVelocityMode())
+       <<",\"initial_velocity_calls\":"<<m_patch->InitialVelocityCalls()
+       <<",\"initial_velocity_diagnostic\":"<<m_initialVelocityDiagnostic
        <<",\"pimple_attempts\":"<<RANSWallSolveJson::List(m_patch->PimpleRecords());
     out<<",\"physical_samples\":{";int sampleCount=0;
     for(const auto &[name,values]:m_physicalSamples){if(sampleCount++)out<<',';out<<Quoted(name)<<':';Write(out,values);}out<<'}';

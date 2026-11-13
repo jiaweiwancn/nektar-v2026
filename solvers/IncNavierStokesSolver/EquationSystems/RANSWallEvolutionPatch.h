@@ -82,6 +82,10 @@ public:
     bool HasGauge() const { return size[Gauge()]!=0; }
     double GaugeValue(const Vector &s) const { return HasGauge()?s[offset[Gauge()]]:0.; }
     bool OpenBoundary() const { return m_boundaryMode=="OpenTunnelV1"; }
+    const std::string &InitialVelocityMode() const { return m_initialVelocityMode; }
+    int InitialVelocityCalls() const { return m_initialVelocityCalls; }
+    static void ValidateFlatInletTraceMap(const SolverUtils::RANSWallNormalMap &);
+    Vector ApplyInitialVelocity(const Vector &state);
     void LoadOpenBoundaryData(const LibUtilities::SessionReaderSharedPtr &,RANSWallEvolutionData &) const;
     int PhysicalAxis(int a) const { return m_dimension==2 && a==1?2:a; }
     const RANSWallPatchParameters &Parameters() const { return m_parameters; }
@@ -398,6 +402,8 @@ public:
     const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
     std::string m_boundaryMode="PrescribedV1",m_openTop="SlipV1";
+    std::string m_initialVelocityMode="Off";
+    int m_initialVelocityCalls=0;
     class Factor
     {
     public:

@@ -89,6 +89,19 @@ public:
         const std::vector<std::array<double,3>> &constraints,
         const std::vector<double> &physicalBreakpoints={}) const;
 
+    // Coefficient-only horizontal extension of an ALREADY LIFTED inlet trace.
+    // No function evaluation, quadrature, projection or linear solve occurs.
+    struct InletTraceElement
+    {
+        Element element;
+        std::vector<int> ids;
+        Vector signs;
+    };
+    std::vector<InletTraceElement> InletTraceElements() const;
+    static Vector FlatInletTraceCoefficients(const Vector &values,
+        const std::vector<InletTraceElement> &elements,double inlet);
+    Vector FlatInletTrace(const Vector &values,double inlet) const;
+
     /** Independent diagnostic through full native BwdTrans/PhysDeriv and
      * standard physical interpolation, not the fast tensor evaluation rows.
      * Returns value, dx,dy,dz in physical Cartesian axes.

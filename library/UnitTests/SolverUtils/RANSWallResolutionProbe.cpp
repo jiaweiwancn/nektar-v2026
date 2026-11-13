@@ -62,6 +62,7 @@ Vector MapParameters(const RANSWallNormalMap &map)
     map.heightWaveX,map.heightWaveY,map.slopeX,map.slopeY,map.radius,map.amplitude,map.lengthX,map.lengthY};}
 
 #include "RANSWallOpenWeakChecks.h"
+#include "RANSWallFlatInletChecks.h"
 
 Vector ConstructContact(const RANSWallEvolutionPatch &patch,const Vector &history)
 {
@@ -185,12 +186,17 @@ int main(int argc,char **argv)
         if(model=="WJHighRe")LoadWJNativeConfiguration(serial,p);
         RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
         const auto operation=packet.get<std::string>("operation","");
-        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.OpenBoundary() && operation=="open_checks")) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
+        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.OpenBoundary() && (operation=="open_checks" || operation=="initializer_checks"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
         Require(patch.InnerStressName()==packet.get<std::string>("inner_stress_model"),"packet law differs from session");
         for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
+        if(operation=="initializer_checks")
+        {
+            std::ofstream out(argv[3]);out<<FlatInletChecks(patch,serial,graph,world->GetComm(),argv[3])<<'\n';
+            Require(out.good(),"initializer fixture write failed");world->Finalise();return 0;
+        }
         if(operation=="open_checks")
         {
             Require(patch.OpenBoundary(),"open checks require OpenTunnelV1");
@@ -268,7 +274,7 @@ int main(int argc,char **argv)
                 assembly=packet.get<bool>("assembly",true)?patch.WJTerrainAssemblyChecks(state,history,alpha>0?alpha:1/dt,time,data):"null";
             }
             if(packet.get<bool>("reuse",false))reuse=patch.EvaluationReuseChecks(state,history,time,data);
-            Require(patch.InitializationWork()==Vector({0.,0.}) && reportHash==RANSWallR3::HashFile(reportPath) &&
+            Require(patch.InitializationWork()==Vector({0.,0.}) && patch.InitialVelocityCalls()==0 && reportHash==RANSWallR3::HashFile(reportPath) &&
                 checkpointHash==RANSWallR3::HashFile(cpPath+"/State.bin"),"open passive reader changed saved bytes or lifted state");
             std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},
                 {"report_sha256",J::Quote(reportHash)},{"checkpoint_sha256",J::Quote(checkpointHash)},
@@ -283,7 +289,8 @@ int main(int argc,char **argv)
                     {"completed_stage",J::Numbers(stageNorms)},{"fixed_amplitudes_U_k_epsilon",J::Numbers(Vector{1.,amplitudeK,amplitudeEpsilon})},
                     {"time_scale_H_h_over_U_infinity","1"},{"order",J::Quote("u,v,k,entire_outer_epsilon,inner_continuity,outer_continuity,absent_gauge,constraints")},
                     {"scope",J::Quote("consistent-mass dual passive algebra; no governing solve, synthetic callback or state projection")}})},
-                {"initialization_work",J::Numbers(patch.InitializationWork())},{"governing_solves","0"}})<<'\n';
+                {"initialization_work",J::Numbers(patch.InitializationWork())},
+                {"initial_velocity_mode",J::Quote(patch.InitialVelocityMode())},{"initial_velocity_calls",J::Number(patch.InitialVelocityCalls())},{"governing_solves","0"}})<<'\n';
             Require(out.good(),"open immutable checks write failed");world->Finalise();return 0;
         }
         if(operation=="archived_report_stages")
