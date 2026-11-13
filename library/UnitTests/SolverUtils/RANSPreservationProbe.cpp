@@ -659,7 +659,14 @@ int main(int argc,char **argv)
             {auto q=item.second.begin();const int row=q->second.get_value<int>();++q;const double value=q->second.get_value<double>();Require(row>=0 && row<patch.Size(),"invalid fixed boundary row");Require(data.fixedBoundary.emplace(row,value).second,"duplicate fixed boundary row");}
             Require(patch.CurvedManufactured()?data.fixedBoundary.empty():data.fixedBoundary==patch.FixedReferenceBoundary(reference),"verification external boundary identity mismatch");
         }
-        patch.SetReference(reference,data,time,0.);
+        // CT6 has time-dependent live boundary functions and a fixed initial
+        // reference. Validate/store that reference at its actual time zero,
+        // just as native restart does before restoring the evolved time.
+        // Current-state rows, boundary functions and residuals below still
+        // use the requested observation time. This is diagnostic-only; no
+        // field or history is reset and no residual enters evolution.
+        const double referenceTime=patch.CurvedManufactured()?0.:time;
+        patch.SetReference(reference,data,referenceTime,0.);
         std::vector<RANSWallCoordinate> grid;
         if(auto points=request.get_child_optional("grid"))for(const auto &item:*points)
         {RANSWallCoordinate q{};int i=0;for(const auto &v:item.second){Require(i<3,"invalid verification coordinate");q[i++]=v.second.get_value<double>();}Require(i==3,"invalid verification coordinate");grid.push_back(q);}
