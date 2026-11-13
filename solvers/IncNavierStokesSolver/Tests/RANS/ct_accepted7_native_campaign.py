@@ -31,7 +31,7 @@ def main():
     rt=a.build_output/'runtime'
     if built:
         os.environ['LD_LIBRARY_PATH']=str(rt/'lib')
-        if 'ctest' in a.checks:execute('ctest',['ctest','--test-dir',a.root/'build','-R','^CT6','--parallel','1','--output-on-failure'])
+        if 'ctest' in a.checks:execute('ctest',['ctest','--test-dir',a.root/'build','-R','^CT[67]','--parallel','1','--output-on-failure'])
         top=True
         if 'top' in a.checks:top=execute('top',[sys.executable,'-B',t/'ct_accepted7_top.py','--runtime',rt,'--output',a.root/('top-'+a.suffix)])
         if 'history' in a.checks and top:execute('history',[sys.executable,'-B',t/'ct_accepted7_history.py','--runtime',rt,'--output',a.root/('top-history-'+a.suffix)])

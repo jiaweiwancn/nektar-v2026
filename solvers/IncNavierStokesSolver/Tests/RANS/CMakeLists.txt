@@ -680,6 +680,10 @@ add_test(NAME CT6ManufacturedJetChecks COMMAND CT6ManufacturedJetChecks)
 if(Python3_Interpreter_FOUND)
     add_test(NAME CT6EvolutionAdmissionChecks COMMAND ${Python3_EXECUTABLE} -B
         ${CMAKE_CURRENT_LIST_DIR}/test_ct_accepted6_gate.py)
+    add_test(NAME CT7ScopeAdmissionChecks COMMAND ${Python3_EXECUTABLE} -B
+        ${CMAKE_CURRENT_LIST_DIR}/test_ct_accepted7_gate.py)
+    set_tests_properties(CT7ScopeAdmissionChecks PROPERTIES PROCESSORS 1 TIMEOUT 60
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;BLIS_NUM_THREADS=1;PYTHONDONTWRITEBYTECODE=1")
     set_tests_properties(CT6EvolutionAdmissionChecks PROPERTIES PROCESSORS 1 TIMEOUT 60
         ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;PYTHONDONTWRITEBYTECODE=1")
 endif()
