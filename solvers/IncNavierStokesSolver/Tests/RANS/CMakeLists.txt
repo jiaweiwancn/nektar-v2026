@@ -667,7 +667,7 @@ if(Python3_Interpreter_FOUND)
         ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
 endif()
 
-foreach(ct6_native_target RANSEquilibriumEvolutionProbe RANSCurvedWallProbe RANSPressureActionProbe RANSNonpressureActionProbe RANSWallResolutionProbe RANSPreservationProbe RANSNativeDiagnosticChecks)
+foreach(ct6_native_target RANSEquilibriumEvolutionProbe RANSCurvedWallProbe RANSPressureActionProbe RANSNonpressureActionProbe RANSWallResolutionProbe RANSPreservationProbe)
     if(TARGET ${ct6_native_target})
         target_sources(${ct6_native_target} PRIVATE ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallManufactured.cpp)
     endif()

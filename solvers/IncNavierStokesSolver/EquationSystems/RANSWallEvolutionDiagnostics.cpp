@@ -548,11 +548,19 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
                     if((e.lower[2]>=H?1:0)!=region)continue;
                 }
                 const auto pressure=GeometryPoint(InnerPressure()+region,f.test.geometry,f.test.coordinate);
-                faces.push_back(J::Object({{"coordinate",J::Numbers(f.test.coordinate)},{"weight",J::Number(f.weight)},
+                std::vector<std::pair<std::string,std::string>> record{{"coordinate",J::Numbers(f.test.coordinate)},{"weight",J::Number(f.weight)},
                     {"area",J::Numbers(f.area)},{"region",J::Number(region)},
                     {"interface",J::Boolean(axis==2 && location==H)},
                     {"velocity_k",row(f.test)},{"pressure",row(pressure)},
-                    {"epsilon",region==1?row(GeometryPoint(Epsilon(),f.test.geometry,f.test.coordinate)):"null"}}));
+                    {"epsilon",region==1?row(GeometryPoint(Epsilon(),f.test.geometry,f.test.coordinate)):"null"}};
+                if(manufactured)
+                {
+                    const auto exact=manufactured->At(f.test.coordinate,time,region==1);
+                    record.push_back({"CT6_continuous",J::Object({{"values",J::Numbers(exact.value)},
+                        {"gradients",J::Rows(exact.gradient)},{"T",J::Rows(exact.stress)},
+                        {"Dk",J::Number(exact.kDiffusion)},{"Depsilon",J::Number(exact.epsilonDiffusion)}})});
+                }
+                faces.push_back(J::Object(record));
             }
         }
         for(const auto &q:Quadrature(InnerPressure()+region))mass.push_back(J::Object({
