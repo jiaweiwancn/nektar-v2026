@@ -29,6 +29,11 @@ class CompatibleContinuation(unittest.TestCase):
         self.assertEqual([n for b,dt,n,target in MATRIX],[3,7,15]);self.assertEqual(sum(n for b,dt,n,target in MATRIX),25)
         self.assertEqual(sum(len(v)for v in VIEWS.values()),11)
         self.assertTrue(all(abs(target*dt-.04)<1e-15 for b,dt,n,target in MATRIX))
+    def test_passive_cannot_bypass_native_or_build_admission(self):
+        from run_wj_h11 import intent
+        for name in ('IncNavierStokesSolver','RANSWallResolutionProbe','cmake'):
+            with self.assertRaises(AssertionError):intent(Path('/unused'),[name],'passive')
+        self.assertEqual(intent(Path('/unused'),['python3','-B'],'passive'),(None,0))
     def test_restart_absolute_index_not_local_one(self):
         r,s=report();c,a,i=selected(r,4);self.assertEqual(i,2);self.assertEqual(c['step'],4)
         with self.assertRaises(ValueError):selected(r,1)

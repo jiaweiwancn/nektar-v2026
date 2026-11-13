@@ -17,7 +17,9 @@ H10=Path('/home/jay/build/wj-h10-flat-inlet-20261113')
 ROOT='wj-h11-compatible-common-time-20261113'
 
 def intent(root,argv,kind):
-    if kind=='passive':return None,0
+    if kind=='passive':
+        assert Path(argv[0]).name not in ('IncNavierStokesSolver','RANSWallResolutionProbe','cmake','make','ninja'),'unscoped native/build invocation'
+        return None,0
     assert Path(argv[0])==H10/'runtime'/('IncNavierStokesSolver'if kind=='governing'else 'RANSWallResolutionProbe')
     assert sha(root/'science/input-intent.json')==load(root/'accounting.json')['intent_sha256'],'frozen requested intent changed'
     plan=load(root/'science/input-intent.json');case=next(v for v in plan['cases']if v['xml']['path']==str(argv[1]))

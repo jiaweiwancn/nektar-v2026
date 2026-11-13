@@ -33,8 +33,10 @@ def run(root):
     for branch,dt,n,target in MATRIX:
         if branch!='coarse'and not admission(root,branch):return False
         case=study.parent(root,branch);folder=root/'science/cases'/branch
-        if not command(root,branch+'-block',[str(H10/'runtime/IncNavierStokesSolver'),case['xml']['path']],120,kind='governing',cwd=folder):return False
+        native_ok=command(root,branch+'-block',[str(H10/'runtime/IncNavierStokesSolver'),case['xml']['path']],120,kind='governing',cwd=folder)
+        if not Path(case['report']).is_file():return False # unknown/aborted reservation remains charged
         if not passive(root,branch+'-scan','scan',branch=branch,seconds=120):return False
+        if not native_ok:return False # diagnostic accepted prefix/candidate never becomes success
         if study.audit(root,branch)['status']!='PASS':return False
         for step in VIEWS[branch]:
             if not passive(root,f'{branch}-{step}-request','view-request',branch=branch,step=step,seconds=10):return False

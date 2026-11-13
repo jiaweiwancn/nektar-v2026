@@ -129,12 +129,19 @@ def scan(root,branch,version='v1'):
     successful=not r['failure']and r['steps']==rec['target']and all(v['status']=='PASS'for v in records)
     save(out/'states.json',serial(records));save(out/'phases.json',serial(bindings));save(out/'pressure-projections.json',serial(projections))
     arithmetic_steps=[first+i+1 for i,a in enumerate(r['pimple_attempts'])if 'momentum_arithmetic'in a]
-    assert arithmetic_steps==([]if branch=='coarse'else [2]if branch=='fine'else [4])
+    allowed=[]if branch=='coarse'else [2]if branch=='fine'else [4]
+    assert all(step in allowed for step in arithmetic_steps)
+    if allowed and allowed[0]<=r['steps']:assert arithmetic_steps==allowed
     save(out/'result.json',dict(status='PASS'if successful else 'OBSTRUCTED',native=native_status,producer=identity(Path(rec['report'])),
         reserved=rec['additional'],attempted=len(r['pimple_attempts']),accepted=len(records),qualified=sum(v['status']=='PASS'for v in records),
         native_failure=r['failure'],index=identity(out/'checkpoints.json'),states=identity(out/'states.json'),phases=identity(out/'phases.json'),inventory=identity(out/'inventory.json'),
         arithmetic_steps=arithmetic_steps,diagnostic_mass_factorizations=mom.projection.factorizations,diagnostic_mass_solves=sum(v['mass_solves']for v in projections),kernel_queries=queries))
-    if r.get('rejected_state'):save(out/'rejected-candidate.json',dict(producer=identity(Path(rec['report'])),role='rejected; no checkpoint/strict eligibility',state_sha256=vector_hash(r['rejected_state']),original_failure=r['failure']))
+    if r.get('rejected_state'):
+        candidate=dict(producer=identity(Path(rec['report'])),role='rejected; no checkpoint/strict eligibility',state_sha256=vector_hash(r['rejected_state']),original_failure=r['failure'])
+        try:
+            data=rows.evaluate(r['rejected_state']);candidate['passive_summary']=serial(rows.summary(data,initial))
+        except (ValueError,ArithmeticError)as error:candidate['passive_obstruction']=str(error)
+        save(out/'rejected-candidate.json',candidate)
     selection=root/'science/audit-selection.json';v=load(selection)if selection.exists()else{};v[branch]=identity(out/'result.json');save(selection,v)
     def reconcile(b):b.setdefault('actual',{})[branch]=dict(attempted=len(r['pimple_attempts']),accepted=len(records),qualified=sum(v['status']=='PASS'for v in records))
     update_journal(root/'accounting.json',reconcile);print(branch,'every-step',successful,'accepted',len(records),flush=True)
