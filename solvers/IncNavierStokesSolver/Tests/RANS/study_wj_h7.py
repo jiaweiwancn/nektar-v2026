@@ -225,7 +225,8 @@ def observe(root,h,branch):
         state_sha256=p['state_sha256'],callback_history_sha256=p['callback_history_sha256'],time=ctx['time'],alpha=ctx['alpha'],strict_seconds=time.monotonic()-start,
         spatial_and_completed_norms=p['physical_mass_dual_norms'],independent_weak=weak,quadrature=quad,open_boundary=p['open_boundary'],
         scalar_condition=p['scalar_domain']['admissible']if 'admissible'in p['scalar_domain']else None))
-    print('PASS strict endpoint/predecessor lineage, weak and fixed quadrature',h,branch,flush=True)
+    status=load(out/'result.json')['status']
+    print(status+' strict endpoint/predecessor lineage, weak and fixed quadrature',h,branch,flush=True)
 
 
 def main():

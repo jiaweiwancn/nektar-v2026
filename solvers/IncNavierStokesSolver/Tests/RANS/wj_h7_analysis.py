@@ -113,7 +113,7 @@ class Rows:
         T[outer]=-ro+(2*k[outer]/3-pi[outer])[:,None,None]*np.eye(3)
         return dict(U=U,G=G,k=k,epsilon=eps,pi=pi,mechanical_pressure=pi-2*k/3,R=R,T=T,K=K,rc=rc,Lambda=lam,nu_eff=nu_eff,nu_d=nu_d,
             root=root,margin=m,transverse=trans,angle=angles,covariance=np.linalg.eigvalsh(R),divergence=np.trace(G,axis1=1,axis2=2),
-            production=-np.sum(R*G,axis=(1,2)),reference_production=(K/QE)**2*nt/(c.nu+nt)**2,destruction=A/np.maximum(self.rphys,rc),
+            production=-np.sum(R*G,axis=(1,2)),turbulent_production=nt*np.sum((G+G.transpose(0,2,1))*G,axis=(1,2)),reference_production=(K/QE)**2*nt/(c.nu+nt)**2,destruction=A/np.maximum(self.rphys,rc),
             grad_k=gk,grad_epsilon=ge)
 
     def reference(self):
@@ -141,6 +141,27 @@ class Rows:
     def witness(self,data,i):
         p,o=self.rows[i];return dict(physical=p,owner=o,**{k:np.asarray(v[i]).tolist()for k,v in data.items()})
 
+    def interface_history(self,data):
+        c=self.config;groups={};wall=[]
+        for i,(p,o)in enumerate(self.rows[:self.point_count]):
+            if o['chart'][2]==0:wall.append(i)
+            if o['interface_role'].startswith('matching_'):groups.setdefault(float(p[0]).hex(),{})[o['region']]=i
+        rows=[]
+        for group in groups.values():
+            if set(group)!=set(('inner','outer')):continue
+            i,j=group['inner'],group['outer'];K=data['K'][j];a,A,zv,lam,rc=wall_batch(np.array([K]),c.H,c.h,c.nu)
+            rows.append(dict(x=self.rows[j][0][0],K=float(K),rc=float(rc[0]),Lambda=float(lam[0]),
+                shared_U=float(np.max(abs(data['U'][i]-data['U'][j]))),shared_k=float(data['k'][i]-data['k'][j]),
+                epsilon=float(data['epsilon'][j]),epsilon_target=float(A[0]/c.H),
+                traction_jump=(data['T'][i,:,2]-data['T'][j,:,2]).tolist(),
+                k_flux_jump=float(data['nu_d'][i]*data['grad_k'][i,2]-data['nu_d'][j]*data['grad_k'][j,2]),
+                pressure_jump=float(data['pi'][i]-data['pi'][j])))
+        ii=~self.outer;w=self.weights
+        return dict(rows=rows,wall_shear_range=[float(np.min(data['T'][wall,0,2])),float(np.max(data['T'][wall,0,2]))],
+            inner_integrals=dict(actual_turbulent_production=float(w[ii]@data['turbulent_production'][ii]),raw_stress_work=float(w[ii]@data['production'][ii]),
+                counterfactual_production=float(w[ii]@data['reference_production'][ii]),cutoff_destruction=float(w[ii]@data['destruction'][ii])),
+            note='actual evolving production separate from current-K counterfactual cutoff budget; no stationary restoration')
+
     def summary(self,data,initial):
         c=self.config;outer=self.outer;point=np.arange(len(self.rows))<self.point_count;active=np.flatnonzero(outer & point);i=active[np.argmin(data['margin'][active])]
         minm=float(data['margin'][i]);mint=float(np.min(data['transverse'][active]));cov=float(np.min(data['covariance']));minscalar=min(float(np.min(data['k'])),float(np.min(data['epsilon'][outer])))
@@ -148,7 +169,7 @@ class Rows:
         errors=dict(E_G=float(np.max(abs(data['G'][active,0,2]/self.exact['G'][active,0,2]-1))),E_epsilon=float(np.max(abs(data['epsilon'][active]/self.exact['epsilon'][active]-1))),
             E_U=float(np.max(abs(data['U'][active]-self.exact['U'][active]))),E_k=float(np.max(abs(data['k'][active]/c.K-1))))
         return dict(status=status,min_in_plane=minm,min_transverse=mint,min_covariance=cov,min_scalar=minscalar,
-            witness=self.witness(data,i),errors=errors,reference_error=self.norms(data,self.exact),initial_drift=self.norms(data,initial),
+            witness=self.witness(data,i),errors=errors,interface_budget=self.interface_history(data),reference_error=self.norms(data,self.exact),initial_drift=self.norms(data,initial),
             raw_divergence_max=float(np.max(abs(data['divergence']))),row_count=self.point_count,quadrature_rows=len(self.rows)-self.point_count)
 
 
