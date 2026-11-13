@@ -57,7 +57,11 @@ def main():
     receipt('frozen-boundary-stage-proof-v2.json','actual-stage-reconstruction-control.json')
     controls=receipt('controls-v1/results.json','discriminating-controls.json')
     regression=receipt('regression-v1/results.json','regression.json')
-    comparison=receipt('primary-comparisons-v1/results.json','A95-complete-comparisons.json')
+    receipt('primary-comparisons-v1/results.json','A95-staged-comparisons.json')
+    comparison=receipt('primary-comparisons-v2/results.json','A95-complete-comparisons.json')
+    if comparison is None:
+        path=r/'primary-comparisons-v1/results.json'
+        if path.exists():comparison=read(path)
     builds={}
     for folder in sorted(r.glob('build-v*')):
         request=folder/'request-manifest.json';completed=folder/'results.json';progress=folder/'progress.json'
