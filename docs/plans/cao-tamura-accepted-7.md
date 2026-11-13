@@ -215,6 +215,24 @@ top-checker attempt used a shadowed Python variable; the repair changes no
 governing C++ or raw state. Unchanged constitutive/wall/manufactured evidence is
 reused only where its source hashes remain unchanged.
 
+The P3/P1 fixtures have254 native stored slots and the A95P4/P2 fixture437.
+Worst actual all-row disagreement is3.84e-16; worst frozen-entry discrepancy
+is1.28e-15. The minimum normalized consistent-mass pressure singular ratio is
+.00261728, with no extra null mode. Pressure-offset coefficient/free-action
+defects are2.78e-17/3.97e-15, and evolved pressure-offset invariance is6.13e-14.
+
+**Coverage correction:** the preliminary `top-history-v7` controller used the
+directory label as its first argument while leaving the helper model atA95.
+Its labeled A93/E94E95 smokes and preliminary all-model export are invalid.
+The [correction notice](cao-tamura-accepted-7-evidence/history-model-correction-v1.json)
+and byte-preserved `invalid-history-export-v1` retain that evidence. The four
+native operator fixtures had explicit correct models and are unaffected.
+Fresh `top-history-v8` histories use the proper model keyword and require the
+native configuration, report signature, probe descriptor and budget/state binding
+to agree. Only those corrected model-bound smokes qualify all three models.
+The new negative fixture rejects the old pass-labeled coverage. No XML, state or
+history was relabeled to repair it.
+
 ## CT6 bounded temporal question
 
 One fresh A95P4/P2 history at `dt=.0005` reaches `T=.016` with2,283 slots on

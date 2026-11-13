@@ -65,7 +65,7 @@ def main():
     regression=bool(set(reg.get('checks',{}))==required_reg and all(v['status']=='pass' for v in reg['checks'].values()))
     failed_roots={model:[h for h in (5.5,6.,6.5,6.99) if refs['cases'][model+'-'+str(h)]['roughness_match']['status']!='root'] for model in ('A93','A95','E94E95')}
     require(failed_roots['A95']==[5.5,6.,6.5,6.99],'unexpected central fit result: a new physical admission contract is required')
-    decision=dict(schema='CT-Accepted-7-DecisionV1',scopes=dict(
+    decision=dict(schema='CT-Accepted-7-DecisionV2',verification_policy='NativeModelBoundV2; preliminary foreign-model smoke coverage is invalid',scopes=dict(
         A_CT6_temporal=times,
         B_experimental_reference=dict(status='blocked',reason='central displaced A95 resistance has no original-interval root below nominal7mm; original Accepted epsilon trace also lacks displacement',failed_roots_mm=failed_roots,
             proposed_shifted_sink='independent candidate study only; not an enabled native policy',physical_evolution_admitted=False),
@@ -100,9 +100,21 @@ def main():
     provenance['host_kernel']=subprocess.check_output(['uname','-a'],text=True).strip()
     failures={}
     for name in ('build-v1/build-1.log','domain-v2/flat-p3/count.log','top-v2/results.json','top-frozen-quadrature-v1/results.json',
-        'top-frozen-quadrature-v2/A95-p3-f96/frozen.json','top-v6/results.json'):
-        path=a.root/name;failures[name]=dict(path=str(path),sha256=sha(path),tail=path.read_text()[-3000:],historical_status='retained_failed_preparation; no physical trajectory was admitted')
+        'top-frozen-quadrature-v2/A95-p3-f96/frozen.json','top-v6/results.json','top-history-v7/results.json','model-coverage-negative-v1.json'):
+        path=a.root/name;failures[name]=dict(path=str(path),sha256=sha(path),tail=path.read_text()[-3000:],historical_status=(
+            'expected foreign-model rejection; negative control passes for the intended reason' if name=='model-coverage-negative-v1.json' else
+            'retained invalid model coverage; actual A95 states valid only in their A95 scope' if name=='top-history-v7/results.json' else
+            'retained failed preparation; no physical trajectory was admitted'))
     write_json(a.output/'failed-preparations.json',failures)
+    costs={}
+    for folder in a.resource:
+        execution=json.loads((folder/'execution.json').read_text());events=folder/'worker-guard-events.jsonl'
+        costs[folder.name]={k:execution[k] for k in ('command','exit_code','wall_seconds','allocation_wait_seconds','process_cpu_seconds','process_cpu_scope')}
+        costs[folder.name].update(closed_resource=closed[str(folder)],execution_sha256=sha(folder/'execution.json'),
+            events=[json.loads(v) for v in events.read_text().splitlines()] if events.exists() else [],
+            project_highwater=[json.loads(v) for v in (folder/'project-highwater.jsonl').read_text().splitlines()],
+            aggregate_highwater=[json.loads(v) for v in (folder/'worker-guard-highwater.jsonl').read_text().splitlines()])
+    write_json(a.output/'resource-costs.json',costs)
     write_json(a.output/'provenance.json',provenance)
     m.seal(a.output,[str(f.relative_to(a.output)) for f in a.output.glob('*.json') if f.name not in ('request-manifest.json','completed-artifacts.json')])
     print('CT7 implemented checks',decision['required_implemented_checks'],'CT6 temporal',times['status'],'physical/full-domain admission blocked',flush=True)
