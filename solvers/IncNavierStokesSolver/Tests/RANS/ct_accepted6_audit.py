@@ -86,6 +86,7 @@ def main():
         write(root,sub/'case.xml')
         req=replay(initial,report['state'],report['time'],[],export_basis=True,
                    export_physical_scalar_budget=True,previous_state=previous,stage_history=snapshot['history'],
+                   actual_flow_stage=snapshot['post_flow'],actual_pre_k_stage=snapshot['pre_k'],
                    export_frozen_scalar_reconciliation=True,physical_face_order=face)
         packet,e=probe(a.runtime,sub,req,'budget')
         require(e['exit_code']==0,'physical budget probe rejected '+label+':'+str(packet.get('failure')))
@@ -97,7 +98,10 @@ def main():
         if frozen_boundary_identity is None:frozen_boundary_identity=boundary_identity
         require(boundary_identity==frozen_boundary_identity,'quadrature control changed consumed effective coefficients or essential boundary rows')
         result['budgets'][label]=dict(budget(packet,model),binding=binding,execution=e,packet_sha256=sha(sub/'budget.json'),
-            initialization_receipt=receipt,frozen_boundary_identity=boundary_identity)
+            initialization_receipt=receipt,frozen_boundary_identity=boundary_identity,
+            actual_stage_snapshot_sha256=attempt['k_snapshot_sha256'],
+            stage_coefficient_validation={k:packet['physical_scalar_budget']['reconciliation'][k] for k in
+                ('current_time_essential_lift_difference','actual_flow_stage_maximum_difference','actual_pre_k_stage_maximum_difference')})
         write_json(a.output/'progress.json',result);print('CT6 physical budget',model,label,result['budgets'][label]['accuracy_status'],flush=True)
     result['budget_gate']=physical_budgets(result)
     sub=a.output/'common';sub.mkdir();write(ET.parse(folder/'case.xml').getroot(),sub/'case.xml')

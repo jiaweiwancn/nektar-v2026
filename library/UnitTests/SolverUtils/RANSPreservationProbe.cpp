@@ -363,16 +363,33 @@ std::string ZeroCurvatureCT6Comparison(RANSWallEvolutionPatch &curved,
 std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     const RANSWallPatchParameters &parameters,const Vector &state,const Vector &previous,
     double dt,double time,const RANSWallEvolutionData &data,int faceOrder,
-    bool reconcile=false,const Vector &stageHistory={},double diffusionIBPFraction=0.)
+    bool reconcile=false,const Vector &stageHistory={},double diffusionIBPFraction=0.,
+    const Vector &actualFlowStage={},const Vector &actualPreKStage={})
 {
     Require(dt>0 && previous.size()==state.size(),"invalid physical budget history");
     Require(!patch.Mapped() || diffusionIBPFraction==0,"Cartesian finite-difference IBP diagnostic is not a mapped derivative");
     Require(faceOrder==16 || faceOrder==24 || faceOrder==32,"unsupported physical budget face order");
-    auto flow=previous;
+    // PIMPLE first installs essential data at the current stage time. Old
+    // scalar coefficients therefore include that lift, while physical
+    // backward storage still uses the actual previous accepted field.
+    // They coincide for the historical time-independent CT1--CT5 inputs.
+    const auto coefficientOld=patch.ExternalLift(previous,time,data);
+    auto flow=coefficientOld;
     for(int b:{0,1,patch.InnerPressure(),patch.OuterPressure()})
         std::copy_n(state.begin()+patch.offset[b],patch.size[b],flow.begin()+patch.offset[b]);
     flow.back()=state.back();auto preK=flow;
     std::copy_n(state.begin()+patch.offset[patch.Epsilon()],patch.size[patch.Epsilon()],preK.begin()+patch.offset[patch.Epsilon()]);
+    double stageFlowDefect=0,stagePreKDefect=0,oldLiftDifference=0;
+    for(int j=0;j<state.size();++j)oldLiftDifference=std::max(oldLiftDifference,std::abs(coefficientOld[j]-previous[j]));
+    auto stageDifference=[&](const Vector &actual,const Vector &derived)
+    {
+        if(actual.empty())return 0.;
+        Require(actual.size()==derived.size(),"actual frozen-stage shape mismatch");double d=0;
+        for(int j=0;j<actual.size();++j)d=std::max(d,std::abs(actual[j]-derived[j]));
+        return d;
+    };
+    stageFlowDefect=stageDifference(actualFlowStage,flow);stagePreKDefect=stageDifference(actualPreKStage,preK);
+    Require(std::max(stageFlowDefect,stagePreKDefect)<=2e-13,"physical budget coefficient states differ from actual PIMPLE snapshots");
     Tree packet;std::istringstream input(patch.PreservationPacket(preK,time,data,true,{},{}));
     boost::property_tree::read_json(input,packet);
     std::array<Vector,3> sum{Vector(7),Vector(7),Vector(7)};
@@ -390,7 +407,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     {RANSTensor g{};g[0]=v.Gradient(state,patch.offset[0]);g[2]=v.Gradient(state,patch.offset[1]);return g;};
     auto coefficients=[&](const RANSWallGlobalPoint &v,bool outer)
     {
-        const auto g=gradient(v);const double oldK=v.Value(previous,patch.offset[patch.K()]),newK=v.Value(state,patch.offset[patch.K()]);
+        const auto g=gradient(v);const double oldK=v.Value(coefficientOld,patch.offset[patch.K()]),newK=v.Value(state,patch.offset[patch.K()]);
         Vector c(12); // original eight totals, then independent frozen RHS/rates
         if(!outer)
         {
@@ -406,7 +423,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
         else
         {
             const auto e=patch.GeometryPoint(patch.Epsilon(),v.geometry,v.coordinate);
-            const double oldE=e.Value(previous,patch.offset[patch.Epsilon()]),newE=e.Value(state,patch.offset[patch.Epsilon()]);
+            const double oldE=e.Value(coefficientOld,patch.offset[patch.Epsilon()]),newE=e.Value(state,patch.offset[patch.Epsilon()]);
             const auto kLaw=patch.OuterClosure(oldK,newE,g,v.coordinate),eLaw=patch.OuterClosure(oldK,oldE,g,v.coordinate),current=patch.OuterClosure(newK,newE,g,v.coordinate);
             c[0]=kLaw.kDiffusion;c[1]=current.kDiffusion;c[2]=eLaw.epsilonDiffusion;c[3]=current.epsilonDiffusion;
             c[4]=std::max(0.,kLaw.production)-(newE-std::min(0.,kLaw.production))*newK/oldK;
@@ -574,8 +591,11 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
         reconciliation=J::Object({{"schema",J::Quote("ConservativeFrozenScalarReconciliationV1")},
             {"regions",J::Object(regional)},{"assembled",J::Object(assembled)},
             {"transport_velocity",J::Quote("actual corrected flow, unchanged by subsequent scalar solves")},
-            {"epsilon_coefficients",J::Quote("old k and old epsilon; transported epsilon is newly solved, including dependent trace storage")},
+            {"epsilon_coefficients",J::Quote("old k and old epsilon after current-time essential boundary lift; transported epsilon is newly solved, including dependent trace storage")},
             {"k_coefficients",J::Quote("old k and newly solved epsilon; transported k is newly solved")},
+            {"current_time_essential_lift_difference",J::Number(oldLiftDifference)},
+            {"actual_flow_stage_maximum_difference",J::Number(stageFlowDefect)},
+            {"actual_pre_k_stage_maximum_difference",J::Number(stagePreKDefect)},
             {"diffusion_IBP_element_step_fraction",J::Number(diffusionIBPFraction)},
             {"diffusion_IBP_method",J::Quote("optional fourth-order physical flux differences within each known generating owner, central or declared one-sided near its endpoint; h/h2 control; forward constitutive values only, no tangent or ellipticity claim")},
             {"scope",J::Quote("read-only actual unmasked frozen scalar matrix and independently rebuilt weak terms; prescribed reactions are algebraic diagnostics, not physical flux substitutes; no scalar*div(U) correction")}});
@@ -880,8 +900,12 @@ int main(int argc,char **argv)
             Require(scheme.method=="IMEX" && scheme.variant.empty() && scheme.order==1,"physical stage budget requires IMEX1");
             double dt;session->LoadParameter("TimeStep",dt);Require(time>0,"physical stage budget needs an advanced state");
             const bool reconciliation=request.get<bool>("export_frozen_scalar_reconciliation",false);
+            const bool actualStages=bool(request.get_child_optional("actual_flow_stage")) && bool(request.get_child_optional("actual_pre_k_stage"));
+            Require(!patch.CurvedManufactured() || !reconciliation || actualStages,
+                "CT6 frozen scalar budget requires actual flow/pre-k snapshot coefficients");
             physicalBudget=PhysicalScalarBudget(patch,p,state,Values(request,"previous_state"),dt,time,data,request.get<int>("physical_face_order",16),
-                reconciliation,reconciliation?Values(request,"stage_history"):Vector{},request.get<double>("diffusion_IBP_element_step_fraction",0.));
+                reconciliation,reconciliation?Values(request,"stage_history"):Vector{},request.get<double>("diffusion_IBP_element_step_fraction",0.),
+                actualStages?Values(request,"actual_flow_stage"):Vector{},actualStages?Values(request,"actual_pre_k_stage"):Vector{});
         }
         Require(state==stateCopy,"read-only verification modified coefficients");
         const auto elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
