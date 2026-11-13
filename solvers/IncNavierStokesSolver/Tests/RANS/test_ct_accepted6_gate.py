@@ -136,6 +136,14 @@ class GateTests(unittest.TestCase):
                                       '--output', str(p/'result.json')], check=False)
                 self.assertEqual(run.returncode, 0 if passed else 1)
                 self.assertTrue((p/'result.json').is_file())
+            value = fixture()
+            next(iter(value['audits'].values()))['budgets']['native']['equations']['outer_epsilon']['storage_backward_difference'] = float('nan')
+            (p/'input.json').write_text(json.dumps(value))
+            run = subprocess.run([sys.executable, '-B', str(script), '--input', str(p/'input.json'),
+                                  '--output', str(p/'nonfinite.json')], check=False)
+            self.assertEqual(run.returncode, 1)
+            result = json.loads((p/'nonfinite.json').read_text())
+            self.assertEqual(result['status'], 'not_admitted')
 
 
 if __name__ == '__main__':

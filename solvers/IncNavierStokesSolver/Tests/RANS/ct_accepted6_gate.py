@@ -183,7 +183,15 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     a = p.parse_args()
     result = classify(json.loads(a.input.read_text()))
-    a.output.write_text(json.dumps(result, indent=2, allow_nan=False)+'\n')
+    def serializable(value):
+        # Reject before serialization. Keep the failed report writable even
+        # when a deliberately invalid input contains NaN/Inf; the original
+        # primitive file remains unchanged at --input.
+        if isinstance(value, float) and not math.isfinite(value):return None
+        if isinstance(value, dict):return {k:serializable(v) for k,v in value.items()}
+        if isinstance(value, list):return [serializable(v) for v in value]
+        return value
+    a.output.write_text(json.dumps(serializable(result), indent=2, allow_nan=False)+'\n')
     return 0 if result['status'] == 'pass' else 1
 
 
