@@ -54,6 +54,16 @@ std::string FlatInletChecks(RANSWallEvolutionPatch &patch,
         }
     }
     Require(nativeGradientError<1e-12 && nativeDivergence<1e-12,"initializer independent native transforms differ");
+    int nearFaceOwnerChecks=0;
+    if(patch.MappedBlock())for(const auto &el:patch.fields[0]->Elements())
+        for(int axis:{0,2})if(el.upper[axis]<patch.upper[axis])
+        {
+            auto q=el.lower;for(int a:{0,2})q[a]=(el.lower[a]+el.upper[a])/2;
+            q[axis]=std::nextafter(el.upper[axis],std::numeric_limits<double>::infinity());
+            const auto row=patch.fields[0]->Point(q);const auto &owner=patch.fields[0]->Elements()[row.element];
+            Require(q[axis]>=owner.lower[axis] && q[axis]<=owner.upper[axis] && owner.geometry!=el.geometry,
+                "mapped near-face quadrature selected a tolerance-only neighbour");++nearFaceOwnerChecks;
+        }
     auto expect=[&](auto action,const std::string &needle){bool failed=false;try{action();}catch(const std::exception &e){failed=std::string(e.what()).find(needle)!=std::string::npos;}Require(failed,"missing intended rejection: "+needle);};
     auto bad=records;bad.front().element.lower[2]+=.00001;
     expect([&]{RANSWallGlobalField::FlatInletTraceCoefficients(Vector(pre.begin(),pre.begin()+patch.size[0]),bad,patch.lower[0]);},"FlatInletTraceV1");
@@ -94,6 +104,7 @@ std::string FlatInletChecks(RANSWallEvolutionPatch &patch,
         {"state_size",J::Number(patch.Size())},{"native_negative_signs",J::Number(negatives)},
         {"physical_divergence_max",J::Number(divergence)},{"all_regional_Q1_moments",J::List(moments)},
         {"native_chart_gradient_replay_max",J::Number(nativeGradientError)},{"independent_physical_divergence_max",J::Number(nativeDivergence)},
+        {"exact_near_face_owner_checks",J::Number(nearFaceOwnerChecks)},
         {"idempotent","true"},{"essential_and_nonvelocity_bits","true"},{"map_partition_ID_normal_perturbation_rejections","true"},
         {"default_off_and_signature_rejection","true"},{"synthetic_checkpoint",J::Quote(path)},
         {"governing_attempts","0"},{"full_size_CP0s","0"},{"new_initialization_solves","0"}});

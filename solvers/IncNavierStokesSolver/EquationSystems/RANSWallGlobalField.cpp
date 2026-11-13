@@ -272,6 +272,26 @@ int RANSWallGlobalField::LocateElement(const Coordinate &coordinate,int side) co
 {
     Require(side>=-1 && side<=1,"unknown radial sampling side");
     int selected=-1;
+    // A moving cutoff can create a valid quadrature interval arbitrarily
+    // close to a stored face. On the new route, an exactly containing owner
+    // takes priority over a neighbour admitted only by the legacy 1e-11
+    // tolerance. Otherwise the latter can clamp an interior point and use
+    // the wrong one-sided basis gradient. Exact-face geometry-ID tie breaks
+    // and the roundoff fallback for physical inverse/trace queries remain.
+    // Keep the historical default route's lookup byte-for-byte unchanged.
+    if(m_mappedBlock)
+    {
+        for(int e=0;e<m_elements.size();++e)
+        {
+            const auto &element=m_elements[e];bool contains=true;
+            for(int d=0;d<m_dimension;++d)
+            {const int a=m_axes[d];contains=contains && coordinate[a]>=element.lower[a] && coordinate[a]<=element.upper[a];}
+            if(!contains || (side>0 && coordinate[2]>=element.upper[2]) ||
+                            (side<0 && coordinate[2]<=element.lower[2]))continue;
+            if(selected<0 || element.geometry<m_elements[selected].geometry)selected=e;
+        }
+        if(selected>=0)return selected;
+    }
     for(std::size_t e=0;e<m_elements.size();++e)
     {
         const auto &element=m_elements[e];bool contains=true;
