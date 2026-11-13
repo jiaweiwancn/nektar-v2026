@@ -26,7 +26,7 @@ def fit(model,z,v,normal,d=.0035):
     C=float(np.mean(v[:4]/normal-us/p['kappa']*np.log((z[:4]-d)/.04)))
     z0=.04*math.exp(-C*p['kappa']/us)
     predicted=us/p['kappa']*np.log((z-d)/z0)
-    return dict(C=C,z0_m=z0,ustar=us,K=p['q']*us*us,
+    return dict(C=C,z0_m=z0,ustar=us,K=p['q']*us*us,model_parameters=p,
         predicted_U_Hh=us/p['kappa']*math.log((.04-d)/z0),
         predicted=predicted.tolist(),residuals=(predicted-v/normal).tolist())
 
@@ -66,8 +66,9 @@ class DisplacedColumn(Column):
                                   np.nextafter(disp,H),H,xtol=2e-14*H)
     def sink_integral(self,r,c=None):
         c=self.cutoff if c is None else c;d=self.disp;r=np.asarray(r);g=-self.curvature
-        plateau=(r+g*r*r/2)/(c-d)
-        tail=(c+g*c*c/2)/(c-d)+(1+g*d)*np.log((np.maximum(r,c)-d)/(c-d))+g*(np.maximum(r,c)-c)
+        inside=np.minimum(r,c)
+        plateau=(inside+g*inside*inside/2)/(c-d)
+        tail=(c+g*c*c/2)/(c-d)+(1+g*d)*(np.log(np.maximum(r,c)-d)-math.log(c-d))+g*(np.maximum(r,c)-c)
         return self.A*np.where(r<=c,plateau,tail)
     def k_extrema(self):
         c=self.cutoff;points=set(self.breaks());ac=self.a*(c-self.disp);disc=ac*ac-4*ac*self.nu
@@ -109,7 +110,7 @@ class DisplacedColumn(Column):
             G=np.zeros((3,3));G[0,2]=self.um/(self.p['kappa']*(self.H-self.disp))
             law=oracle(self.model,self.K,self.A/(self.H-self.disp),G)
             r.update(outer_covariance_minimum=float(np.linalg.eigvalsh(law['R'])[0]),Q=law['Q'].tolist(),Pi_outer=-float(law['Q'][2,2]),
-                outer_shear=-float(law['R'][0,2]),outer_normal_traction=-float(law['Q'][2,2])-(-float(law['Q'][2,2])))
+                outer_shear=-float(law['R'][0,2]),outer_normal_traction=-float(law['R'][2,2])+2*self.K/3+float(law['Q'][2,2]))
         else:r['curved_covariance']='undefined without a declared actual curved velocity/strain field'
         r['status']='negative_reference_k' if ex['minimum_over_K']<=0 else 'covariance_failure' if cov and min(cov)[0]<0 else 'admissible_frozen_column'
         return r
@@ -139,6 +140,16 @@ def main():
         f['duplicate_mean_checks']=[dict(series=r['series_id'],point_id=r['point_id'],physical_height_m=.0035+float(r['axis_x'])/1000,
             observed_U_over_utau=float(r['value']),predicted_U_over_utau=math.log((float(r['axis_x'])/1000)/f['z0_m'])/parameters(model)['kappa'],
             role=r['role'],coordinate='Fig3e x axis is physical y-d in mm; y axis U/u_tau, not y/z0') for r in raw if r['series_id']=='f3e_R' and r['quality']=='visible']
+        f['full_height_outer_reference']=[]
+        for z_m in (.007,.04,.25,.8):
+            zeta=(z_m-.0035)/.04;p=parameters(model);A=f['ustar']**3/p['kappa'];G=np.zeros((3,3));G[0,2]=f['ustar']/(p['kappa']*zeta)
+            law=oracle(model,f['K'],A/zeta,G)
+            f['full_height_outer_reference'].append(dict(physical_z_m=z_m,zeta_over_Hh=zeta,
+                U=f['ustar']/p['kappa']*math.log((z_m-.0035)/f['z0_m']),K=f['K'],epsilon=A/zeta,
+                nut=law['nut'],Pi=-float(law['Q'][2,2]),R=law['R'].tolist(),
+                k_source=law['production']-A/zeta,epsilon_balance=law['eps_source']+f['ustar']**4/(p['sigma_epsilon']*zeta**2),
+                prescribed_top_diffusive_epsilon=-f['ustar']**4/(p['sigma_epsilon']*zeta),
+                no_cap=True,scope='outer idealization only; complete inner compatibility is a separate gate'))
         for mm in HEIGHTS:
             H=mm/40;p=parameters(model)
             root=wall_root(model,H,f,nu,disp);row=dict(model=model,H_mm=mm,roughness_match=root,
@@ -151,6 +162,7 @@ def main():
                 coarse=DisplacedColumn(model,f['K'],mm/40,root['h_s'],nu,disp).result()
                 fine=DisplacedColumn(model,f['K'],mm/40,root['h_s'],nu,disp,96).result()
                 row.update(candidate=fine,quadrature_uncertainty={k:abs(fine[k]-coarse[k]) for k in ('J0','P0')})
+                row['velocity_match_defect']=fine['matching_velocity']-root['target']
             result['cases'][model+'-'+str(mm)]=row
         vals=[];brackets=set();u40=[];z0=[];failed={mm:0 for mm in HEIGHTS}
         for s in scenarios:

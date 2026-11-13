@@ -125,9 +125,12 @@ def main():
     try:
         for model,degree in [('A95',3),('A93',3),('E94E95',3),('A95',4)]:
             label=model+'-p'+str(degree);folder=a.output/label;c=make(folder,a.runtime,model,degree)
-            packet,e=probe(a.runtime,folder,request(c),'native');require(e['exit_code']==0,'RN native construction:'+str(packet.get('failure')))
-            result['checks'][label]=dict(classify(packet,c),execution=e,packet_sha256=sha(folder/'native.json'),construction_sha256=sha(folder/'construction.json'))
-            write_json(a.output/'progress.json',result);print('CT7 RN top',label,'pass',flush=True)
+            try:
+                packet,e=probe(a.runtime,folder,request(c),'native');require(e['exit_code']==0,'RN native construction:'+str(packet.get('failure')))
+                result['checks'][label]=dict(classify(packet,c),execution=e,packet_sha256=sha(folder/'native.json'),construction_sha256=sha(folder/'construction.json'))
+            except Exception as error:result['checks'][label]=dict(status='fail',failure=repr(error),directory=str(folder))
+            write_json(a.output/'progress.json',result);print('CT7 RN top',label,result['checks'][label]['status'],flush=True)
+        require(result['checks']['A95-p3']['status']=='pass','base A95 operator unavailable for dependent offset/history controls')
         base=a.output/'A95-p3';initial=json.loads((base/'native.json').read_text());off=initial['observation']['offsets']
         folder=a.output/'pressure-level';c=make(folder,a.runtime,level=.125)
         shifted,e=probe(a.runtime,folder,request(c),'native');require(e['exit_code']==0,'shifted pressure-level native rejection')
@@ -146,13 +149,22 @@ def main():
         changed,e=probe(a.runtime,base,req,'changed-top-k');require(e['exit_code']==0,'admissible top coefficient control rejected')
         old=[f['epsilon_diffusive_datum'] for f in initial['open_boundary']['top_faces']];new=[f['epsilon_diffusive_datum'] for f in changed['open_boundary']['top_faces']]
         require(old==new,'prescribed epsilon flux changed with evolving state')
-        result['checks']['state_independent_epsilon_flux']=dict(status='pass',changed_global_K_row=ids[-1],actual_state_sha256=exact_vector_hash(changed['observation']['state']),datum=old[0],execution=e)
+        wrong=[]
+        for face in changed['open_boundary']['top_faces']:
+            v=face['velocity_k_row'];er=face['epsilon_row'];G=np.zeros((3,3));s=np.asarray(changed['observation']['state'])
+            for b,axis in enumerate((0,2)):G[axis]=row_value(v,s,off[b])[1]
+            k=row_value(v,s,off[2])[0];eps=row_value(er,s,off[3])[0];law=oracle('A95',k,eps,G)
+            A=c['ustar']**3/parameters('A95')['kappa']
+            wrong.append(-A/c['Z']**2*law['nut']/parameters('A95')['sigma_epsilon'])
+        signal=max(abs(x-y) for x,y in zip(wrong,new,strict=True))
+        require(signal>1e-8,'evolving-diffusivity negative control is not discriminating')
+        result['checks']['state_independent_epsilon_flux']=dict(status='pass',changed_global_K_row=ids[-1],actual_state_sha256=exact_vector_hash(changed['observation']['state']),datum=old[0],wrong_evolving_diffusivity_signal=signal,execution=e)
         for name,modify,word in [('displaced_original_wall',lambda root:set_parameter(root,'RANSOpenDisplacement',.0875),'displacement'),
              ('unsupported_cache',lambda root:set_info(root,'RANSWallEvaluationReuse','ExactStepV1'),'caching')]:
             folder=a.output/name;c=make(folder,a.runtime);root=ET.parse(folder/'case.xml').getroot();modify(root);write(root,folder/'case.xml')
             packet,e=probe(a.runtime,folder,dict(operation='functions'),'negative');require(e['exit_code']!=0 and word in packet.get('failure','').lower(),'wrong expected rejection:'+name)
             result['checks'][name]=dict(status='pass',reason=packet['failure'],execution=e)
-        result['execution']='pass';result['status']='pass'
+        result['execution']='complete';result['status']='pass' if all(r['status']=='pass' for r in result['checks'].values()) else 'fail'
     except Exception as error:result['failure']=repr(error);result['status']='fail'
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json'])
     return 0 if result['status']=='pass' else 1

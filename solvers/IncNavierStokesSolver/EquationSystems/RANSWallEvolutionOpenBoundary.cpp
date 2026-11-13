@@ -42,6 +42,8 @@ public:
         s->LoadParameter("RANSOpenPressureLevel",PiInner,0.);
         Require(std::isfinite(PiInner) && (p.RichardsNorrisTop() || PiInner==0.),
             "a changed absolute pressure/traction level is qualified only for RichardsNorris2011V1");
+        if(p.RichardsNorrisTop())for(const std::string name:{"TopTotalTraction","TopDiffusiveFlux"})
+            Require(!s->DefinesFunction(name),"RichardsNorris2011V1 forbids competing top functions "+name);
         Require(p.OpenBoundary() && p.NewModels() && p.AcceptedAWF() && !p.Mapped() && p.Dimension()==2 &&
             m.KappaPolicy()==SolverUtils::RANSKappaPolicy::Natural,
             "NeutralCompositeV1 requires original Natural Accepted serial flat2D open route");
@@ -142,7 +144,13 @@ std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSh
     {
         std::string projection;s->LoadSolverInfo("RANSOpenReferenceProjection",projection,"FunctionsL2V1");
         Require(projection=="FunctionsL2V1" || projection=="ConstrainedRadialV1","unknown neutral reference projection");
-        out<<":reference=NeutralCompositeV1:projection="<<projection<<":coordinate=physical-z-unshifted:Pi_inner=0:Pi_outer=-Qzz:no-finite-depth-cap";
+        out<<":reference=NeutralCompositeV1:projection="<<projection<<":coordinate=physical-z-unshifted";
+        if(driven)
+        {
+            double level;s->LoadParameter("RANSOpenPressureLevel",level,0.);
+            out<<":Pi_inner="<<level<<":Pi_outer=level-Qzz:no-finite-depth-cap";
+        }
+        else out<<":Pi_inner=0:Pi_outer=-Qzz:no-finite-depth-cap";
     }
     const std::set<std::string> work{"NUMSTEPS","TIMESTEP","TIME","IO_CHECKSTEPS","IO_INFOSTEPS","IO_TIMER_LEVEL",
         "RANSWALLNORMALORDER","RANSWALLTANGENTIALORDER","RANSWALLMASSORDER","RANSWALLVOLUMEORDER","RANSWALLINTERFACEORDER",
