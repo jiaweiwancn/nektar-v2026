@@ -73,6 +73,7 @@ def captured_k_matrix(packet,snapshot):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for key in ('runtime','member','output'):p.add_argument('--'+key,type=Path,required=True)
+    p.add_argument('--native-only',action='store_true',help='staged diagnostic only; never supplies full quadrature qualification')
     a=p.parse_args();receipt=json.loads((a.member/'results.json').read_text())
     model=receipt['model'];initial_path=Path(receipt['initial_packet']['path'])
     require(sha(initial_path)==receipt['initial_packet']['sha256'],'changed bound zero-step packet')
@@ -80,9 +81,10 @@ def main():
     folder=a.member/'trajectory';report=json.loads((folder/'case.evolution.json').read_text())
     require(report['steps']>0,'no accepted step available for physical storage audit')
     points,sides,weights,n=common_grid()
+    controls=CONTROLS[:1] if a.native_only else CONTROLS
     m=RequestManifest(a.output,dict(schema='CT6ActualStatePhysicalAuditV1',member_sha256=sha(a.member/'results.json'),
         native_report_sha256=sha(folder/'case.evolution.json'),runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),
-        state_sha256=exact_vector_hash(report['state']),source_sha256=sha(Path(__file__)),controls=CONTROLS,
+        state_sha256=exact_vector_hash(report['state']),source_sha256=sha(Path(__file__)),controls=controls,
         physical_grid_sha256=hashlib.sha256(canonical([points,sides,weights])).hexdigest(),pressure='absolute Pi'))
     binding=dict(model=model,time=report['time'],dt=report['dt'],state_sha256=exact_vector_hash(report['state']),
                  native_report_sha256=sha(folder/'case.evolution.json'),configuration_sha256=sha(folder/'case.xml'))
@@ -95,7 +97,7 @@ def main():
     attempt=next(q for q in reversed(report['pimple_attempts']) if q['scheduled_complete'])
     require(sha(attempt['k_snapshot'])==attempt['k_snapshot_sha256'],'changed actual pre-k frozen stage snapshot')
     snapshot=json.loads(Path(attempt['k_snapshot']).read_text())
-    for label,orders,face in CONTROLS:
+    for label,orders,face in controls:
         sub=a.output/label;sub.mkdir();root=ET.parse(folder/'case.xml').getroot()
         for key,value in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),orders,strict=True):set_parameter(root,key,value)
         write(root,sub/'case.xml')
@@ -140,8 +142,13 @@ def main():
         count=n,weights=weights,grid_sha256=hashlib.sha256(canonical([points,sides,weights])).hexdigest(),
         physical_volume=float(w.sum()),divergence_RMS=float(np.sqrt(w@(div*div)/w.sum())),divergence_maximum=float(max(abs(div))))
     result['status']='pass' if result['budget_gate']['status']==result['mass']['status']==result['captured_k_matrix']['status']=='pass' else 'fail'
+    if a.native_only:
+        result['diagnostic_status']='pass' if result['mass']['status']==result['captured_k_matrix']['status']=='pass' and all(
+            q['accuracy_status']==q['reconstruction_status']=='pass' for q in result['budgets'].values()) else 'fail'
+        result['status']='incomplete_required_quadrature'
+        result['qualification']='not_admitted_by_native_only_diagnostic'
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json'])
-    return 0 if result['status']=='pass' else 1
+    return 3 if a.native_only and result['diagnostic_status']=='pass' else 0 if result['status']=='pass' else 1
 
 
 if __name__=='__main__':raise SystemExit(main())
