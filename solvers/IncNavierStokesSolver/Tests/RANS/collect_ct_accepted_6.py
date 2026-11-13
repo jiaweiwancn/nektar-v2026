@@ -69,6 +69,7 @@ def main():
             row.update(physical_completion='pass' if complete else 'fail',time=n['time'],failure=n['failure'],steps=n['steps'],stored_slots=len(n['state']),
                 actual_report_sha256=sha(report_path),actual_state_sha256=exact_vector_hash(n['state']),actual_initial_sha256=exact_vector_hash(n['initial']),
                 actual_history_sha256=sha(Path(n['checkpoint'])/'State.bin') if n['checkpoint'] else None,
+                accepted_state_times=n['audit_times'], actual_configuration_sha256=sha(folder/'case.xml'),
                 corrections_and_additional_solves=corrections,all_audited_extrema=audited_extrema(n))
             require(corrections==0,'forbidden governing correction or extra solve')
         members[label]=row;files[str(path)]=sha(path)
