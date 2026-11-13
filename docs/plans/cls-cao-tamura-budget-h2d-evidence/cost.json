@@ -1,0 +1,175 @@
+{
+  "search_usage_wall_user_system_RSS_KiB": "238.91 169.40 58.61 5088836\n",
+  "search_tensor_scan_seconds": 0.4249834686667479,
+  "native_setup_receipt": {
+    "command": [
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/setup-v1/runtime/RANSWallResolutionProbe",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/setup-v1/65-hill/case.xml",
+      "input.json",
+      "result.json"
+    ],
+    "exit_code": 0,
+    "seconds": 99.96711702399989,
+    "input_sha256": "b807e9ac367466bac3e95ce215790e5f2310449f80a4eda089b74bee4c64b0b4",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/setup-v1/65-hill-probe/result.json",
+    "output_sha256": "daebd6b5d692dd03826ece1cccd5195f1043c1e87267985636df36bbc6a4956e"
+  },
+  "best_audit": {
+    "command": [
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/best-exact-v1/runtime/RANSWallResolutionProbe",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/best-exact-v1/65-hill/case.xml",
+      "input.json",
+      "result.json"
+    ],
+    "exit_code": 0,
+    "seconds": 25.125466489000246,
+    "input_sha256": "09dcb3a3bb76badf3141c08fca6b7c6c9ab784443e686b6b47d44ada93459c76",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/best-exact-v1/65-hill-probe/result.json",
+    "output_sha256": "692b0200fe0a81ce877f8cd6af8b6f51cbb47d115c3a7eebee09d250c54612f6",
+    "child_peak_RSS_KiB_cumulative_max": 1314908
+  },
+  "flat": {
+    "status": "completed",
+    "phase": "flat",
+    "runtime": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/RANSWallResolutionProbe",
+      "sha256": "8eb433f56dbcecf4572ed445ea2dc751a1396a7d82cb8ed29afa111e5a98e352",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffcbabe2000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libmpi_cxx.so.40 (0x00007c0dc1233000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libmpi.so.40 (0x00007c0dc0cc9000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libMultiRegions.so.5.9.0 (0x00007c0dc0800000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libLocalRegions.so.5.9.0 (0x00007c0dc0400000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libSpatialDomains.so.5.9.0 (0x00007c0dc0000000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libStdRegions.so.5.9.0 (0x00007c0dbfc00000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libLibUtilities.so.5.9.0 (0x00007c0dbf600000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/liblapack.so.3 (0x00007c0dbee00000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libstdc++.so.6 (0x00007c0dbea00000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libm.so.6 (0x00007c0dc0be2000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libgcc_s.so.1 (0x00007c0dc120f000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libc.so.6 (0x00007c0dbe600000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libopen-pal.so.40 (0x00007c0dc074d000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libopen-rte.so.40 (0x00007c0dc0690000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libhwloc.so.15 (0x00007c0dc0634000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libCollections.so.5.9.0 (0x00007c0dc028d000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libptscotch-6.1.so (0x00007c0dbff2d000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libblas.so.3 (0x00007c0dc022b000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libz.so.1 (0x00007c0dc11f1000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libfftw3.so.3 (0x00007c0dbe200000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libboost_iostreams.so.1.74.0 (0x00007c0dc11d7000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libboost_program_options.so.1.74.0 (0x00007c0dbfee8000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libopenblas.so.0 (0x00007c0dbbdb0000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libgfortran.so.5 (0x00007c0dbba00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007c0dc124f000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libevent_core-2.1.so.7 (0x00007c0dbfbcb000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libevent_pthreads-2.1.so.7 (0x00007c0dc0bdd000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libudev.so.1 (0x00007c0dbfebe000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libMatrixFreeOps.so.5.9.0 (0x00007c0db8c00000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libptscotcherr-6.1.so (0x00007c0dc0bd8000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libbz2.so.1.0 (0x00007c0dc0621000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/liblzma.so.5 (0x00007c0dbfba0000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libzstd.so.1 (0x00007c0dbfad1000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libquadmath.so.0 (0x00007c0dbfa89000)\n",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libc.so.6": "4ebb1967c395ca547dcfeaeeab7a2819724604a331aede44e8a749a7e1a4628e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libm.so.6": "045fdb0436a8fb0d651f039e3444a9cbffc011d379c82b979cebf43571053eca",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a"
+      }
+    },
+    "preflight_sha256": "2fdd94085d70b40be89be1800de46b4e79c15112a5291310028b803f0c0d5f4c",
+    "results": {
+      "flat-baseline": {
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/flat-baseline/case.xml",
+            "input.json",
+            "result.json"
+          ],
+          "exit_code": 0,
+          "seconds": 7.935657227000775,
+          "input_sha256": "db746a36d53d90d6389393f97acce4cd61c7e3ba396511ec7da3c48b2933a62b",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/flat-baseline-probe/result.json",
+          "output_sha256": "2efbc4e9ec05bca32b3ffad9154e8aacb8b152f33378fcb954cca17cea6d29b4",
+          "child_peak_RSS_KiB_cumulative_max": 136908
+        },
+        "result_file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/flat-baseline-probe/result.json"
+      },
+      "flat-radial-h": {
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/flat-radial-h/case.xml",
+            "input.json",
+            "result.json"
+          ],
+          "exit_code": 0,
+          "seconds": 13.450574202999633,
+          "input_sha256": "556ed22ca30b4074ff5a6fc970f75a9d3e93c073ec4e2cf7a0da763d3c8b548e",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/flat-radial-h-probe/result.json",
+          "output_sha256": "a8a04fba0991cba9f6db969d8900989e7f837213573a87f83c930025b5ee5c5c",
+          "child_peak_RSS_KiB_cumulative_max": 226172
+        },
+        "result_file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/flat-radial-h-probe/result.json"
+      },
+      "flat-p4-diagnostic": {
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/runtime/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/flat-p4-diagnostic/case.xml",
+            "input.json",
+            "result.json"
+          ],
+          "exit_code": 0,
+          "seconds": 9.623008180000397,
+          "input_sha256": "45ab072aec0aceb5260fcac07f664ebd4024107838999894fb2a49fe6aef2132",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/flat-p4-diagnostic-probe/result.json",
+          "output_sha256": "fcdfb9c74764066617a955751acde609474eab4233f8fa63d0bbea3510597cc1",
+          "child_peak_RSS_KiB_cumulative_max": 226172
+        },
+        "result_file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/flat-flux-final-v1/flat-p4-diagnostic-probe/result.json"
+      }
+    },
+    "physical_steps": 0
+  },
+  "final_native": {
+    "final-fresh-h0": {
+      "code": 0,
+      "failure": "",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/final-checks-v3/final-fresh-h0/case.evolution.json",
+      "usage": "17.55 16.16 0.85 1048548\n"
+    },
+    "final4": {
+      "code": 0,
+      "failure": "",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/final-checks-v3/final4/case.evolution.json",
+      "usage": "45.36 42.98 1.68 1592912\n"
+    },
+    "final-post-assignment-reject": {
+      "code": 1,
+      "failure": "deliberate post-assignment explicit rejection",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/final-checks-v3/final-post-assignment-reject/case.evolution.json",
+      "usage": "Command exited with non-zero status 1\n24.09 22.35 1.15 1500788\n"
+    },
+    "final-changed-dt": {
+      "code": 1,
+      "failure": "Wall IMEX: checkpoint signature mismatch",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/final-checks-v3/final-changed-dt/case.evolution.json",
+      "usage": "Command exited with non-zero status 1\n10.16 8.97 0.71 977940\n"
+    },
+    "reject-post-import-perturbation": {
+      "code": 1,
+      "failure": "EP-AWF patch: certified startup permits only literal zero inherited perturbations; no projection or Lift is applied",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/final-checks-v3/reject-post-import-perturbation/case.evolution.json",
+      "usage": "Command exited with non-zero status 1\n5.12 4.44 0.22 193028\n"
+    },
+    "reject-actual-geometry": {
+      "code": 1,
+      "failure": "EP-AWF patch: certified startup physics/geometry/inventory/gate differs",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2d-20261113/final-checks-v3/reject-actual-geometry/case.evolution.json",
+      "usage": "Command exited with non-zero status 1\n5.27 4.56 0.23 193008\n"
+    }
+  },
+  "hill_step_cost": "unmeasured: no admissible seed"
+}
