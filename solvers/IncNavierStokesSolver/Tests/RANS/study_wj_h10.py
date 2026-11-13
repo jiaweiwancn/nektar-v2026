@@ -135,9 +135,14 @@ def view_finish(root,branch,phase):
     if path.exists():values=load(path);evaluations=0
     else:
         values={str(q):wk.evaluate(cx['state'],cx['history'],cx['alpha'],q)for q in(24,32)};save(path,serial(values));evaluations=2
+    native_moments={str(b):p['spatial_residual'][r['offsets'][b]:r['offsets'][b+1]]for b in(4,5)}
+    assert [len(native_moments[str(b)])for b in(4,5)]==[34,70]
+    assert max(abs(x)for v in native_moments.values()for x in v)<=2e-15
+    observed=load(root/f'science/analysis/{branch}-{phase}/result.json')['summary']['moments']
+    assert max(abs(x-y)for k,v in native_moments.items()for x,y in zip(v,observed[k]['moments']))<=2e-15
     anchor=compare_anchor(values['32'],dict(components=p['weak_checks']['native_terms'],regional=[p['weak_checks']['native_inner'],p['weak_checks']['native_outer']]))
     quadrature=compare(values['24'],values['32']);status='PASS'if anchor['status']==quadrature['status']=='PASS'else 'UNRESOLVED'
-    save(out/'result.json',dict(status=status,context=ctx,native=identity(out/'native.json'),anchor=anchor,quadrature=quadrature,signed_weak=identity(path),weak_evaluations=evaluations,norms=p['physical_mass_dual_norms'],open_boundary={k:v for k,v in p['open_boundary'].items()if k not in ('boundary_rows','stations')}))
+    save(out/'result.json',dict(status=status,context=ctx,native=identity(out/'native.json'),anchor=anchor,quadrature=quadrature,signed_weak=identity(path),native_Q1_moments=native_moments,weak_evaluations=evaluations,norms=p['physical_mass_dual_norms'],open_boundary={k:v for k,v in p['open_boundary'].items()if k not in ('boundary_rows','stations')}))
     if status!='PASS':halt(root,status,'strict/native-independent weak anchor or q24/32 failed')
     print(branch,phase,'strict',status,flush=True)
 

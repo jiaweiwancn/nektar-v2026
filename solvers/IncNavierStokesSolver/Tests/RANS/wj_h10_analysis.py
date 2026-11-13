@@ -64,5 +64,5 @@ def arithmetic(r,snapshot,momentum,pressure,mass,BG,Schur,Au,mom):
     assert a['bound_activations']==0
     return dict(status='PASS',binding=binding,checks=checks,velocity_rows=vu.tolist(),pressure_rows=pp.tolist(),predictor=predictor.tolist(),pressure_correction_velocity=correction.tolist(),total_velocity_increment=du.tolist(),
         pressure_increment=dpi.tolist(),pressure_rhs=rhs.tolist(),D_predictor=dp.tolist(),r_p_C=c.tolist(),r_p_F=f.tolist(),D_delta_u=dd.tolist(),
-        predictor_per_dt=(predictor/r['dt']).tolist(),consistent_mass_residual_bound=float(np.max(abs(mass@correction))),
+        predictor_per_dt=(predictor/r['dt']).tolist(),consistent_mass_correction_action_max=float(np.max(abs(mass@correction))),consistent_mass_norms={name:float(np.sqrt(max(0.,v@(mass@v))))for name,v in [('predictor',predictor),('pressure_correction',correction),('total',du),('predictor_per_dt',predictor/r['dt'])]},
         scope='native saved vectors/maps and matvecs, complete BGp; Cpp=0 from source; no new governing factorization/solve')
