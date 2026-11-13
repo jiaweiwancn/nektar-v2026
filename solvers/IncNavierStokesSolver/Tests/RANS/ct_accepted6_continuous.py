@@ -88,15 +88,30 @@ class Continuous:
         w=-self.b(t)*mp.mpf('.02')*r*r/(2*g['a']*g['J'])
         return [ut*g['t'][j]+w*g['n'][j] for j in range(3)]
 
+    def base_gradient(self,q,r,t):
+        # A second algebraic route avoids nested numerical differentiation of
+        # the explicit base streamfunction inside every interface derivative.
+        # General mapped differentiation remains the independent cross-check.
+        g=self.geometry(q,r);h=self.amplitude*mp.exp(-q*q)
+        hp=-2*q*h;hpp=(4*q*q-2)*h;hppp=(12*q-8*q**3)*h
+        ap=hp*hpp/g['a'];gp=-hppp/g['a']**3+3*hpp*ap/g['a']**4
+        ut=self.b(t)*(1+mp.mpf('.02')*q)*r
+        w=-self.b(t)*mp.mpf('.02')*r*r/(2*g['a']*g['J'])
+        utr=self.b(t)*(1+mp.mpf('.02')*q);utq=self.b(t)*mp.mpf('.02')*r
+        wr=-self.b(t)*mp.mpf('.02')*r*(2+r*g['gamma'])/(2*g['a']*g['J']**2)
+        wq=-w*(ap/g['a']+r*gp/g['J'])
+        dq=[g['t'][i]*(utq+g['a']*g['gamma']*w)+g['n'][i]*(wq-g['a']*g['gamma']*ut) for i in range(3)]
+        dr=[g['t'][i]*utr+g['n'][i]*wr for i in range(3)]
+        return matrix(lambda i,j:dq[i]*g['t'][j]/(g['a']*g['J'])+dr[i]*g['n'][j])
+
     def ray(self,q,t):
         H=self.H;g=self.geometry(q,H);k=self.K(q,t);D=self.D(q,H,t)
-        G=self.gradient(self.base,q,H,t);law=self.outer(k,self.A(k)/H,G)
+        G=self.base_gradient(q,H,t);law=self.outer(k,self.A(k)/H,G)
         F=matrix(lambda i,j:-law['R'][i][j]+(2*k/3 if i==j else 0))
         traction=lambda left,right:sum(left[i]*F[i][j]*right[j] for i in range(3) for j in range(3))
-        w=lambda s,r,t:-self.b(t)*mp.mpf('.02')*r*r/(2*self.geometry(s,r)['a']*self.geometry(s,r)['J'])
-        ut=self.b(t)*(1+mp.mpf('.02')*q)*H
-        c=traction(g['t'],g['n'])/D-(self.b(t)*(1+mp.mpf('.02')*q)+mp.diff(lambda s:w(s,H,t),q)/(g['a']*g['J'])-g['gamma']*ut/g['J'])
-        jump=traction(g['n'],g['n'])-2*D*mp.diff(lambda r:w(q,r,t),H)
+        contract=lambda left,right:sum(left[i]*G[i][j]*right[j] for i in range(3) for j in range(3))
+        c=traction(g['t'],g['n'])/D-(contract(g['t'],g['n'])+contract(g['n'],g['t']))
+        jump=traction(g['n'],g['n'])-2*D*contract(g['n'],g['n'])
         l=law['nt']/D*(mp.mpf('.03')*self.K0/H)
         a=self.kappa*mp.sqrt(k/self.qm);d=self.D(q,0,t);V=d+a*H;lg=mp.log(V/d);t0=k/self.qm
         p0=t0*t0/a*(lg+self.nu/V-self.nu/d)
@@ -116,11 +131,11 @@ class Continuous:
         pi=mp.mpf('.03')*(q+mp.mpf('.2')*r)+mp.mpf('.02')*t+mp.mpf('.01')*t*t+(ray['jump'] if outer else 0)
         return dict(u=u,k=k,epsilon=eps,Pi=pi,ray=ray)
 
-    def sample(self,q,r,t,outer,sources=False):
-        q,r,t=map(mp.mpf,(str(q),str(r),str(t)))
-        fields=self.fields(q,r,t,outer);u=lambda a,b,c:self.fields(a,b,c,outer)['u']
-        G=self.gradient(u,q,r,t);k=fields['k'];e=fields['epsilon'];pi=fields['Pi']
-        g=self.geometry(q,r)
+    def stress(self,q,r,t,outer):
+        f=self.fields(q,r,t,outer)
+        if outer:G=self.base_gradient(q,r,t)
+        else:G=self.gradient(lambda a,b,c:self.fields(a,b,c,outer)['u'],q,r,t)
+        k,e,pi=f['k'],f['epsilon'],f['Pi']
         if outer:
             law=self.outer(k,e,G);D=law['nt'];de=D/self.sigma
             T=matrix(lambda i,j:-law['R'][i][j]+(2*k/3-pi if i==j else 0))
@@ -129,6 +144,13 @@ class Continuous:
             R=matrix(lambda i,j:(2*k/3 if i==j else 0)-nt*(G[i][j]+G[j][i]))
             law=dict(R=R,Q=matrix(lambda i,j:0),P=-sum(R[i][j]*G[i][j] for i in range(3) for j in range(3)),ep=0,ed=0,radicand=None)
             T=matrix(lambda i,j:D*(G[i][j]+G[j][i])-(pi if i==j else 0))
+        return f,G,law,D,de,T
+
+    def sample(self,q,r,t,outer,sources=False):
+        q,r,t=map(mp.mpf,(str(q),str(r),str(t)))
+        fields,G,law,D,de,T=self.stress(q,r,t,outer);u=lambda a,b,c:self.fields(a,b,c,outer)['u']
+        k=fields['k'];e=fields['epsilon'];pi=fields['Pi']
+        g=self.geometry(q,r)
         gradients=[self.grad(lambda a,b,c:self.fields(a,b,c,outer)[key],q,r,t) for key in ('k','epsilon','Pi')]
         dtU=[mp.diff(lambda tt:u(q,r,tt)[j],t) for j in range(3)]
         dt=[mp.diff(lambda tt:self.fields(q,r,tt,outer)[key],t) for key in ('k','epsilon')]
@@ -140,14 +162,17 @@ class Continuous:
             K=self.K(q,t),cutoff=fields['ray']['cutoff'],velocity_time=dtU,k_time=dt[0],epsilon_time=dt[1])
         if sources:
             # These are continuous physical divergences, not FE residuals.
-            def stress(a,b,c):return self.sample(a,b,c,outer,False)['T']
+            def stress(a,b,c):return self.stress(a,b,c,outer)[-1]
             body=[]
             for i in range(3):
                 flux=lambda a,b,c:[u(a,b,c)[i]*u(a,b,c)[j]-stress(a,b,c)[i][j] for j in range(3)]
                 body.append(dtU[i]+self.divergence(flux,q,r,t))
             def sf(a,b,c,key):
                 v=self.fields(a,b,c,outer);grad=self.grad(lambda aa,bb,cc:self.fields(aa,bb,cc,outer)[key],a,b,c)
-                sample=self.sample(a,b,c,outer,False);diff=sample['Dk' if key=='k' else 'Depsilon']
+                if outer:
+                    G=self.base_gradient(a,b,c);diff=self.outer(v['k'],v['epsilon'],G)['nt']
+                    if key=='epsilon':diff/=self.sigma
+                else:diff=self.D(a,b,c)
                 return [v['u'][j]*v[key]-diff*grad[j] for j in range(3)]
             result.update(required_body=body,k_source=dt[0]+self.divergence(lambda a,b,c:sf(a,b,c,'k'),q,r,t)-law['P']+e,
                           epsilon_source=dt[1]+self.divergence(lambda a,b,c:sf(a,b,c,'epsilon'),q,r,t)-law['ep']+law['ed'] if outer else 0)
@@ -157,10 +182,13 @@ class Continuous:
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--sources',action='store_true');a=p.parse_args();mp.mp.dps=35
-    a.output.mkdir(parents=True,exist_ok=False);rows=[];interfaces=[]
+    a.output.mkdir(parents=True,exist_ok=False);rows=[];interfaces=[];base_defect=0
     for model in ('A95','A93','E94E95'):
         c=Continuous(model)
         for q in ('-.9','0','.9'):
+            qv=mp.mpf(q);tv=mp.mpf('.0032');rv=mp.mpf('.72')
+            direct=c.base_gradient(qv,rv,tv);differentiated=c.gradient(c.base,qv,rv,tv)
+            base_defect=max(base_defect,max(abs(direct[i][j]-differentiated[i][j]) for i in range(3) for j in range(3)))
             for outer,r in ((False,'.23'),(True,'.72')):
                 row=c.sample(q,r,'.0032',outer,a.sources)
                 eigenvalues=mp.eigsy(mp.matrix(row['R']),eigvals_only=True)
@@ -175,14 +203,14 @@ def main():
                 epsilon_trace=abs(inner['values'][3]-outer['values'][3]))
             interfaces.append(dict(model=model,q=float(q),defects=plain(defects)))
             (a.output/'progress.json').write_text(json.dumps(dict(samples=rows,interfaces=interfaces),allow_nan=False,indent=2)+'\n')
-    maximum=max([abs(row['divergence']) for row in rows]+[v for row in interfaces for v in row['defects'].values()])
+    maximum=max([float(base_defect)]+[abs(row['divergence']) for row in rows]+[v for row in interfaces for v in row['defects'].values()])
     domain=dict(minimum_k=min(row['values'][2] for row in rows),
         minimum_epsilon=min(row['values'][3] for row in rows),
         minimum_covariance=min(min(row['covariance_eigenvalues']) for row in rows),
         minimum_A95_radicand=min(row['A95_radicand'] for row in rows if row['A95_radicand'] is not None))
     result=dict(schema='CT6IndependentContinuousOracleV1',status='pass' if maximum<=2e-10 and min(domain.values())>0 else 'fail',
                 precision_digits=mp.mp.dps,maximum_primitive_defect=maximum,samples=rows,interfaces=interfaces,
-                sampled_domain=domain,source_evaluation=a.sources,scope='independent physical derivatives; no native operator or evolution qualification')
+                independent_base_gradient_defect=float(base_defect),sampled_domain=domain,source_evaluation=a.sources,scope='independent physical derivatives; no native operator or evolution qualification')
     (a.output/'results.json').write_text(json.dumps(result,allow_nan=False,indent=2)+'\n')
     return 0 if result['status']=='pass' else 1
 
