@@ -30,13 +30,20 @@ def main():
     base=reconstruct(original,'A95');require(base['status']=='pass','unmutated native all-row control failed')
     for name in ('omit_metric','wrong_outlet_orientation'):
         packet=copy.deepcopy(original)
+        consumed=0
         if name=='omit_metric':
-            for row in packet['observation']['volume']:row['weight']/=row['volume_metric']
+            for row in packet['observation']['volume']:
+                row['weight']/=row['volume_metric'];consumed+=1
         else:
-            for row in packet['observation']['faces']:
-                if row['coordinate'][0]==1.2:row['area']=[-x for x in row['area']]
+            # reconstruct() consumes these declared natural-boundary rows.
+            # observation.faces is a different inventory for the continuous
+            # weak oracle and would make this mutation an ineffective test.
+            for row in packet['open_boundary']['faces']:
+                row['area']=[-x for x in row['area']];consumed+=1
+        require(consumed>0,'negative control changed no consumed quadrature rows')
         value=reconstruct(packet,'A95')
-        checks[name]=dict(status='pass' if value['status']=='fail' else 'fail',intended_outcome='independent all-row reconstruction must fail',observed=value)
+        checks[name]=dict(status='pass' if value['status']=='fail' else 'fail',
+            changed_consumed_rows=consumed,intended_outcome='independent all-row reconstruction must fail',observed=value)
     targeted=json.loads((a.targeted/'results.json').read_text())
     for model in ('A95','A93','E94E95'):
         label=model+'-static-p4' if model+'-static-p4' in targeted['checks'] else model+'-static'
@@ -82,7 +89,7 @@ def main():
         checks[name]=dict(status='pass' if e['exit_code']!=0 and word.lower() in reason.lower() else 'fail',
             intended_reason=word,observed_reason=reason,execution=e,packet_sha256=sha(folder/'negative.json'))
         write_json(a.output/'progress.json',checks)
-    result=dict(schema='CT6DiscriminatingControlsV1',status='pass' if all(x['status']=='pass' for x in checks.values()) else 'fail',
+    result=dict(schema='CT6DiscriminatingControlsV2',status='pass' if all(x['status']=='pass' for x in checks.values()) else 'fail',
                 checks=checks,scope='mutations affect diagnostic copies only; no modified load is passed to governing evolution')
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json'])
     return 0 if result['status']=='pass' else 1
