@@ -1,0 +1,22 @@
+{
+  "schema": "CT6ExecutionAndAuditNotesV2",
+  "base_contract": "CT-Accepted-6-V1",
+  "unchanged": "Geometry, continuous manufactured fields/forcing, physical models, coefficients, quadrature policy, timestep/horizon matrix, all numerical tolerances and one-sweep stage ordering remain as declared.",
+  "ground_trace": "The first attempted evolving step stopped before any governing solve on an inherited flat-only continuous ground-k diagnostic guard. On a positive-stretch chart, monotone physical arclength has the same polynomial stationary roots. The named CT6 route now retains the exact signed polynomial check, including a narrow negative-interval control. No scalar floor was changed.",
+  "evolved_replay": "The immutable initial reference belongs to time zero; live manufactured boundary functions belong to the observation time. Read-only replay now validates those at their respective times. Sealed trajectory coefficients/history are unchanged. The generic solver ExactSolution L2 output is not the manufactured error.",
+  "actual_frozen_stages": {
+    "issue": "Reconstruction against a second assembly using guessed frozen coefficients is insufficient to identify the actually consumed PIMPLE system.",
+    "witness": "The old self-reconstruction passed at roundoff but differed from the captured governing free-k matrix/increment/residual by 3.306903700930181e-6.",
+    "correction": "Old scalar coefficients include the actual current-time essential boundary lift. Dependent epsilon trace rows, including inlet/interface corners, retain their existing precedence; they are not refreshed before flow. Physical backward storage continues to use the actual previous accepted state.",
+    "qualification": "Bind original post-flow and pre-k snapshot hashes and coefficients; require agreement with the derived stage inputs and the actual captured governing k matrix. The corrected primary comparison is 9.41521166586412e-16. This modifies diagnostics only, not epsilon transport or governing evolution.",
+    "history": "CT1--CT5 time-independent physical inputs and historical receipts are not reclassified. Their old coefficients already coincide with their essential lift."
+  },
+  "staged_execution": {
+    "native_only": "A native-only budget audit may be used to diagnose the predeclared A95 matrix before spending on all frozen quadrature controls. It exits 3 after diagnostic success, records incomplete_required_quadrature, and cannot admit a full qualification or A93/E94E95 evolution.",
+    "full_gate": "The original complete quadrature and convergence requirements remain. All four controls and four physical equations plus both reconstruction records are required for a full budget qualification. Missing coverage cannot supply pass.",
+    "transfer": "A93/E94E95 manufactured evolution remains conditional on the complete A95 qualification. Independent kernel, geometry and static transmission checks continue regardless."
+  },
+  "static_height": "Separate arbitrary polynomial geometry probes and constructive compatible local Hermite collar jets exercise native common U/K traces, full traction, nonzero conservative k flux, chain rules, mechanical-pressure sampling and dependent epsilon. These are static transmission tests, not full variable-height FE evolution.",
+  "runtime": "After the continuous-ground guard correction, later changes are in the preservation probe/reporting code. Every reused governing trajectory is bound to its original executable and history. Rebuilt solver executables must be byte-identical before any such reuse; diagnostic executable identities are recorded separately.",
+  "historical_scope": "CT1--CT5 evidence, A93's narrow CT5 traction margin, CT4 pressure interpretation, roughness-sublayer/interface adequacy, thin-layer criterion, smooth preparation and approach-layer fidelity remain unchanged and open where previously recorded."
+}
