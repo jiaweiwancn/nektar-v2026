@@ -23,3 +23,13 @@ charges exactly. No original budget is reopened or reclaimed. Check current
 allocation and remain below72 total workers. Stop on mismatched bytes rather
 than regenerating scientific data. A new receipt will supersede only the active
 storage-obstruction status; historical obstruction/seal/receipts remain intact.
+
+The first resumed verification matched both decoded publications and all retained
+scientific/runtime/ledger bytes, then failed its final10s whole-root du check:
+Input/output error in the obsolete observer-10a4078/solvers/IncNavierStokesSolver
+directory. Preserve storage-recovery-v1 and that failure. A fixed v2 completion
+re-verifies the same already-decoded bytes without re-extraction or another du
+attempt, records the prior sealed footprint bound plus actual recovery output,
+and leaves the unused checkout's EIO explicitly UNRESOLVED. This is archival
+recovery, not a clean-health certificate for every old source directory. Both
+attempts share the180s administrative limit; no study ledger is reopened.
