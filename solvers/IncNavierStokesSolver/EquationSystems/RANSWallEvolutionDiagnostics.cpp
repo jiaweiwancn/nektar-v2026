@@ -916,7 +916,7 @@ std::string RANSWallEvolutionPatch::WJPassiveDiagnostics(const Vector &state,con
         const int b=InnerPressure()+region;Vector gauge,actual;
         for(int i=0;i<size[b];++i){gauge.push_back(GaugeValue(state)*m_pressureMean[region][i]);actual.push_back(residual[offset[b]+i]);}
         regions.push_back(J::Object({{"region",J::Number(region)},{"offset",J::Number(offset[b])},
-            {"pressure_mass",J::Rows(m_mass[b])},{"constant_coefficients",J::Numbers(m_constants[b])},
+            {"pressure_mass",J::Rows(MappedBlock()?m_mass[b].PressureDense():static_cast<const WallMatrix&>(m_mass[b]))},{"constant_coefficients",J::Numbers(m_constants[b])},
             {"gauge_mean_row",J::Numbers(m_pressureMean[region])},{"B_U",J::Numbers(moments[region])},
             {"lambda_m_p",J::Numbers(gauge)},{"actual_continuity_rows",J::Numbers(actual)}}));
         for(int axis:{0,2})for(int side:{-1,1})

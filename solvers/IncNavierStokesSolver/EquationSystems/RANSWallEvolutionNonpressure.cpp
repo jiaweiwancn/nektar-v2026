@@ -827,7 +827,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PicardKJacobian(
     auto result=AssembleNonpressureR3(state,time,data,false,-1,nullptr,&rows);
     const int start=offset[K()];
     for(int i=0;i<rows.size();++i)for(int j=0;j<rows.size();++j)
-        result[i][j]+=alpha*m_mass[K()][rows[i]-start][rows[j]-start];
+        result[i][j]+=alpha*m_mass[K()].Get(rows[i]-start,rows[j]-start);
     return result;
 }
 

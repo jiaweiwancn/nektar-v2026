@@ -209,9 +209,11 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
         for(int i=0;i<size[block];++i)
         {
             long double wide=0,wideDelta=0;
-            for(int j=0;j<size[block];++j)
-            {wide+=(long double)m_mass[block][i][j]*delta[j];
-             wideDelta+=(long double)m_mass[block][i][j]*((long double)s[offset[block]+j]-history[offset[block]+j]);}
+            if(MappedBlock())m_mass[block].Each(i,[&](int j,double value){
+                wide+=(long double)value*delta[j];wideDelta+=(long double)value*((long double)s[offset[block]+j]-history[offset[block]+j]);});
+            else for(int j=0;j<size[block];++j)
+            {wide+=(long double)m_mass[block].Get(i,j)*delta[j];
+             wideDelta+=(long double)m_mass[block].Get(i,j)*((long double)s[offset[block]+j]-history[offset[block]+j]);}
             mass.Add(offset[block]+i,alpha*baseline[i],(long double)alpha*wide);
             massWideDelta.Add(offset[block]+i,alpha*baseline[i],(long double)alpha*wideDelta);
         }

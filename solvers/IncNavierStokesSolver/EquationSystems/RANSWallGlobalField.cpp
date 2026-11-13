@@ -120,6 +120,9 @@ RANSWallGlobalField::RANSWallGlobalField(
     :m_dimension(dimension),m_axes(dimension==2?std::array<int,3>{0,2,-1}:
                                                  std::array<int,3>{0,1,2})
 {
+    std::string backend;session->LoadSolverInfo("RANSWallLinearBackend",backend,"Dense");
+    Require(backend=="Dense" || backend=="MappedBlockV1","unknown wall linear backend");
+    m_mappedBlock=backend=="MappedBlockV1";
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");
     auto subset=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(*full,elements,true);
@@ -307,8 +310,23 @@ std::vector<RANSWallGlobalPoint> RANSWallGlobalField::Quadrature(int order) cons
     }
     return result;
 }
+RANSWallAlgebra::MappedMatrix RANSWallGlobalField::ExecutionMass() const
+{
+    if(!m_mappedBlock)return Mass();
+    {
+        // Same native quadrature, contribution order and long-double sums;
+        // only the assembly sink changes. No native square is allocated.
+        std::vector<std::map<int,long double>> sums(Size());
+        for(const auto &q:Quadrature())for(int i=0;i<q.ids.size();++i)for(int j=0;j<q.ids.size();++j)
+            sums[q.ids[i]][q.ids[j]]+=(long double)q.weight*q.phi[i]*q.phi[j];
+        RANSWallAlgebra::MappedMatrix mass(Size(),Size(),true);
+        for(int i=0;i<Size();++i)for(auto [j,value]:sums[i])mass.Set(i,j,double(value));
+        return mass.ConsistentMass();
+    }
+}
 RANSWallGlobalField::WallMatrix RANSWallGlobalField::Mass() const
 {
+    Require(!m_mappedBlock,"legacy dense canonical mass is unsupported on MappedBlockV1; use ExecutionMass");
     std::vector<std::vector<long double>> mass(Size(),std::vector<long double>(Size()));
     for(const auto &q:Quadrature())
         for(std::size_t i=0;i<q.ids.size();++i)for(std::size_t j=0;j<q.ids.size();++j)
@@ -371,7 +389,7 @@ RANSWallGlobalField::Vector RANSWallGlobalField::Project(const RANSWallFunction 
         }
     }
     for(int j=0;j<Size();++j){Require(count[j]>0,"unmapped projection coefficient");result[j]/=count[j];}
-    const auto mass=Mass();
+    const auto mass=ExecutionMass();
     for(int iteration=0;iteration<3;++iteration)
     {
         std::vector<long double> load(Size());

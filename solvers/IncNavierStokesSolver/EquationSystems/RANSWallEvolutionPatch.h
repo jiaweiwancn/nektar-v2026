@@ -54,6 +54,7 @@ class RANSWallEvolutionPatch
 public:
     using Vector=RANSWallAlgebra::Vector;
     using WallMatrix=RANSWallAlgebra::DenseMatrix;
+    using BlockMatrix=RANSWallAlgebra::MappedMatrix;
     using Diagnostic=std::map<std::string,Vector>;
     class EvaluationScope
     {
@@ -92,6 +93,7 @@ public:
     const LibUtilities::CommSharedPtr &Comm() const { return m_comm; }
     const SolverUtils::RANSWallNormalMap &Mapping() const { return m_mapping; }
     bool Mapped() const { return !m_mapping.Identity(); }
+    bool MappedBlock() const { return m_linearBackend=="MappedBlockV1"; }
     int Owner(int geometry) const { return (geometry+m_ownershipShift)%m_comm->GetSize(); }
     RANSWallCoordinate Physical(const RANSWallCoordinate &chart) const;
     RANSWallGlobalPoint Point(int block,const RANSWallCoordinate &chart,int side=0) const;
@@ -324,7 +326,7 @@ public:
     RANSWallGlobalPoint SampleKRow(const RANSWallCoordinate &anchor) const;
     // Exact physical mass restricted to the supplied global free-k rows.
     // Read-only access also supports native functional/projection verification.
-    WallMatrix PicardKMass(const std::vector<int> &rows) const;
+    BlockMatrix PicardKMass(const std::vector<int> &rows) const;
     std::string HeightComparison(const Vector &state,const Vector &history,double time,
         const RANSWallEvolutionData &data,const Vector &reportingBreakpoints={}) const;
     std::string PhysicalKBands(const Vector &state,double time,const RANSWallEvolutionData &data,
@@ -398,26 +400,31 @@ public:
     // this operation performs no governing solve or initialization Lift.
     std::string WJTerrainAssemblyChecks(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data) const;
+    std::string WJMappedBackendChecks(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &) const;
     std::string WJWeakLoads(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &) const;
     const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
-    std::string m_boundaryMode="PrescribedV1",m_openTop="SlipV1";
+    std::string m_boundaryMode="PrescribedV1",m_openTop="SlipV1",m_linearBackend="Dense";
+    std::string m_mappedResourceDesign="None";
     std::string m_initialVelocityMode="Off";
     int m_initialVelocityCalls=0;
     class Factor
     {
     public:
         explicit Factor(const WallMatrix &matrix);
+        explicit Factor(const BlockMatrix &matrix);
         Vector Apply(Vector rhs,bool transpose=false) const;
+        std::string AllocationJSON() const;
     private:
         int n;
         Vector lu;
         std::vector<int> pivots;
+        std::shared_ptr<RANSWallAlgebra::MappedBandFactor> band;
     };
     struct PicardBlock
     {
         std::vector<int> rows;
-        WallMatrix matrix;
+        BlockMatrix matrix;
         Vector residual;
     };
     void ExteriorPicard(int,const Vector &,double,const RANSWallEvolutionData &,
@@ -433,7 +440,7 @@ private:
         double alpha,double time,const RANSWallEvolutionData &data,
         const std::map<int,double> &external) const;
     Vector SolvePimpleSingleSweep(Vector state,const Vector &history,double alpha,double time,
-        const RANSWallEvolutionData &data,int &iterations) const;
+        const RANSWallEvolutionData &data,int &iterations,bool denseReference=false) const;
     struct NonKResponse
     {
         bool converged=false;
@@ -450,7 +457,7 @@ private:
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
     PicardBlock AssemblePicardBlock(int block,const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,
-        const std::map<int,double> &external) const;
+        const std::map<int,double> &external,bool denseReference=false) const;
     Vector ProjectPicardGround(const Vector &state,const PicardBlock &block,
         const Factor &factor,const Vector &step,double relaxation,int &cuts,
         std::string *diagnostic=nullptr) const;
@@ -580,7 +587,7 @@ private:
     Vector OwnedBodyLoad(double time,const RANSWallEvolutionData &data,int region=-1) const;
     std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> Profile(double k,const RANSWallCoordinate &chart={},double weight=-1) const;
     RANSWallGlobalPoint Transform(RANSWallGlobalPoint point) const;
-    WallMatrix PhysicalMass(int block,int region=-1) const;
+    BlockMatrix PhysicalMass(int block,int region=-1) const;
     Vector PhysicalProject(int block,const RANSWallEvolutionFunction &function,double time) const;
     void Refresh(const Vector &state,double time=0,const RANSWallEvolutionData *data=nullptr) const;
     Vector ExternalLift(const Vector &state,double time,const RANSWallEvolutionData &data) const;
@@ -613,8 +620,8 @@ private:
     using ProfilePair=std::array<std::shared_ptr<SolverUtils::EquilibriumAWFProfiles>,2>;
     mutable std::map<std::array<double,3>,ProfilePair> m_profileCache;
     mutable std::map<std::array<double,3>,std::shared_ptr<SolverUtils::EquilibriumAWFProfiles>> m_prospectiveProfileCache;
-    std::vector<WallMatrix> m_mass;
-    mutable std::array<WallMatrix,2> m_regionalMass;
+    std::vector<BlockMatrix> m_mass;
+    mutable std::array<BlockMatrix,2> m_regionalMass;
     mutable Vector m_boundaryFlux,m_boundaryDirection;
     mutable double m_boundaryCost=0;
     mutable double m_boundaryCorrection=0;

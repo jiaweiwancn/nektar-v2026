@@ -6,6 +6,7 @@
 #define NEKTAR_RANS_WALL_GLOBAL_FIELD_H
 
 #include <IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallMappedAlgebra.h>
 #include <array>
 #include <functional>
 #include <map>
@@ -73,6 +74,7 @@ public:
     std::array<Vector,3> RadialGradientDerivative(const RANSWallGlobalPoint &point) const;
     std::vector<RANSWallGlobalPoint> Quadrature(int order=0) const;
     WallMatrix Mass() const;
+    RANSWallAlgebra::MappedMatrix ExecutionMass() const;
     Vector Project(const RANSWallFunction &function) const;
     std::map<int,double> Boundary(const RANSWallFunction &function,
                                   const BoundaryPredicate &predicate) const;
@@ -118,6 +120,7 @@ public:
 private:
     struct BasisData;
     MultiRegions::ContFieldSharedPtr m_field;
+    bool m_mappedBlock=false;
     int m_dimension;
     std::array<int,3> m_axes{};
     std::vector<Element> m_elements;

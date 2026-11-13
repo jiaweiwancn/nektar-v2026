@@ -184,14 +184,29 @@ int main(int argc,char **argv)
         serial->LoadParameter("RANSWallTangentialOrder",p.tangentialOrder,8);serial->LoadParameter("RANSWallNormalOrder",p.normalOrder,16);
         std::string model;serial->LoadSolverInfo("TurbulenceModel",model,"CLSHighRe");
         if(model=="WJHighRe")LoadWJNativeConfiguration(serial,p);
-        RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
         const auto operation=packet.get<std::string>("operation","");
-        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.OpenBoundary() && (operation=="open_checks" || operation=="initializer_checks"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
+        std::string backend;serial->LoadSolverInfo("RANSWallLinearBackend",backend,"Dense");
+        if(backend=="MappedBlockV1")Require(operation=="open_checks" || operation=="initializer_checks" || operation=="mapped_backend_checks",
+            "MappedBlockV1 does not support legacy dense matrix observers");
+        RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
+        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.OpenBoundary() && (operation=="open_checks" || operation=="initializer_checks" || operation=="mapped_backend_checks"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
         Require(patch.InnerStressName()==packet.get<std::string>("inner_stress_model"),"packet law differs from session");
         for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
+        if(operation=="mapped_backend_checks")
+        {
+            Require(patch.MappedBlock() && patch.Size()<=3000,"mapped parity accepts only small admitted fixtures");
+            patch.LoadOpenBoundaryData(serial,data);
+            const auto state=Read(packet,"state"),history=Read(packet,"history"),ref=Read(packet,"fixed_reference"),defect=Read(packet,"fixed_defect");
+            Require(RANSWallR3::Hash(state)==packet.get<std::string>("state_sha256") &&
+                RANSWallR3::Hash(history)==packet.get<std::string>("history_sha256"),"mapped test vector identity differs");
+            patch.RestoreReference(ref,defect,0.,data,0.);
+            const auto result=patch.WJMappedBackendChecks(state,history,packet.get<double>("alpha"),packet.get<double>("time"),data);
+            std::ofstream out(argv[3]);out<<result<<'\n';Require(out.good(),"mapped qualification write failed");
+            world->Finalise();return 0;
+        }
         if(operation=="initializer_checks")
         {
             std::ofstream out(argv[3]);out<<FlatInletChecks(patch,serial,graph,world->GetComm(),argv[3])<<'\n';

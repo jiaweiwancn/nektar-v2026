@@ -561,7 +561,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::ScalarFeasibleJacobia
                 !(block==Epsilon() && m_transitionEnabled && m_traceIds.count(local));
             if(external)continue;
             for(int row=0;row<size[block];++row)if(!constraints.count(offset[block]+row))
-                jac[offset[block]+row][column]+=alpha*m_mass[block][row][local];
+                jac[offset[block]+row][column]+=alpha*m_mass[block].Get(row,local);
         }
         if(metadata)metadata->push_back(J::Object({{"component",J::Quote("complete_verified_R3_action")},
             {"pressure_and_gauge_columns",J::Number(Size()-offset[InnerPressure()])},
@@ -635,7 +635,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::ScalarFeasibleJacobia
         // exactly instead of subtracting large, unchanged time loads.
         const int local=column-offset[block];
         for(int i=0;i<size[block];++i)if(!constraints.count(offset[block]+i))
-            jac[offset[block]+i][column]+=alpha*m_mass[block][i][local];
+            jac[offset[block]+i][column]+=alpha*m_mass[block].Get(i,local);
         if(metadata)metadata->push_back(J::Object({{"column",J::Number(column)},
             {"stencil",J::Quote(stencil)},{"step",J::Number(selected)},
             {"side",J::Number(central?0:side)},{"probes",J::List(probes)}}));
@@ -1104,7 +1104,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         block.lower.assign(n,Vector(n));
         for(int i=0;i<n;++i)for(int j=0;j<=i;++j)
         {
-            long double value=m_mass[b][block.free[i]-offset[b]][block.free[j]-offset[b]];
+            long double value=m_mass[b].Get(block.free[i]-offset[b],block.free[j]-offset[b]);
             for(int k=0;k<j;++k)value-=block.lower[i][k]*block.lower[j][k];
             Require(i!=j || value>0,"R4 free consistent mass is not SPD");
             block.lower[i][j]=i==j?std::sqrt(value):value/block.lower[j][j];

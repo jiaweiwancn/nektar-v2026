@@ -94,15 +94,75 @@ std::string RANSWallEvolutionPatch::WJTerrainAssemblyChecks(const Vector &state,
         {"governing_solves","0"},{"scope",J::Quote("same-state frozen blocks and affine pressure action; not the nonlinear Jacobian")}});
 }
 
-RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PicardKMass(
+RANSWallEvolutionPatch::BlockMatrix RANSWallEvolutionPatch::PicardKMass(
     const std::vector<int> &rows) const
 {
     const int first = offset[K()];
+    if(MappedBlock())
+    {std::vector<int> local;for(int row:rows)local.push_back(row-first);return m_mass[K()].Restrict(local,local);}
     WallMatrix mass(rows.size(), Vector(rows.size()));
     for (int i = 0; i < rows.size(); ++i)
         for (int j = 0; j < rows.size(); ++j)
-            mass[i][j] = m_mass[K()][rows[i] - first][rows[j] - first];
+            mass[i][j] = m_mass[K()].Get(rows[i] - first,rows[j] - first);
     return mass;
+}
+
+std::string RANSWallEvolutionPatch::WJMappedBackendChecks(const Vector &state,const Vector &history,
+    double alpha,double time,const RANSWallEvolutionData &data) const
+{
+    Require(MappedBlock() && Size()<=3000,"mapped dense-reference qualification is limited to admitted small cases");
+    const auto stateHash=RANSWallR3::Hash(state),historyHash=RANSWallR3::Hash(history);
+    const auto referenceHash=RANSWallR3::Hash(m_reference),defectHash=RANSWallR3::Hash(m_defect);
+    const auto constraints=Constraints(state,time,data);auto external=ExternalConstraints(time,data);
+    for(int id:m_traceIds)external.erase(offset[Epsilon()]+id);
+    std::vector<std::string> masses,blocks;
+    for(int b=0;b<Gauge();++b)
+    {
+        WallMatrix reference(size[b],Vector(size[b]));
+        for(const auto &q:Quadrature(b))for(int i=0;i<q.ids.size();++i)for(int j=0;j<q.ids.size();++j)
+            reference[q.ids[i]][q.ids[j]]+=q.weight*q.phi[i]*q.phi[j];
+        Vector direction(size[b]);for(int i=0;i<direction.size();++i)direction[i]=std::sin(.17*i)+.2;
+        auto expected=Multiply(reference,direction),actual=Multiply(m_mass[b],direction),difference=actual;
+        for(int i=0;i<difference.size();++i)difference[i]-=expected[i];
+        Require(Maximum(difference)<=1e-11*std::max(1.,Maximum(expected)),"mapped physical mass action parity");
+        std::vector<int> free;for(int i=0;i<size[b];++i)if(!constraints.count(offset[b]+i))free.push_back(i);
+        if(free.empty())continue;
+        auto restricted=m_mass[b].Restrict(free,free);Vector x(free.size());for(int i=0;i<x.size();++i)x[i]=direction[free[i]];
+        auto rhs=restricted.Apply(x);WallMatrix dense(free.size(),Vector(free.size()));
+        for(int i=0;i<free.size();++i)for(int j=0;j<free.size();++j)dense[i][j]=reference[free[i]][free[j]];
+        const auto newSolve=Factor(restricted).Apply(rhs),oldSolve=Factor(dense).Apply(rhs);auto error=newSolve;
+        for(int i=0;i<error.size();++i)error[i]-=oldSolve[i];
+        Require(Maximum(error)<=1e-9*std::max(1.,Maximum(oldSolve)),"mapped constrained mass solve parity");
+        masses.push_back(J::Object({{"block",J::Number(b)},{"action_error",J::Number(Maximum(difference))},
+            {"solve_error",J::Number(Maximum(error))},{"nonzeros",J::Number(m_mass[b].Nonzeros())}}));
+    }
+    for(int b:{0,K(),Epsilon()})
+    {
+        const auto mapped=AssemblePicardBlock(b,state,history,alpha,time,data,external),
+            dense=AssemblePicardBlock(b,state,history,alpha,time,data,external,true);
+        Require(mapped.rows==dense.rows,"mapped native row IDs/order changed");Vector v(mapped.rows.size());
+        for(int i=0;i<v.size();++i)v[i]=std::cos(.23*i)-.1;
+        const auto ref=Multiply(dense.matrix,v);auto error=Multiply(mapped.matrix,v);
+        for(int i=0;i<error.size();++i)error[i]-=ref[i];
+        Require(Maximum(error)<=1e-11*std::max(1.,Maximum(ref)),"mapped frozen operator action parity");
+        blocks.push_back(J::Object({{"block",J::Number(b)},{"rows",J::Numbers(mapped.rows)},
+            {"action_error",J::Number(Maximum(error))},{"reference_scale",J::Number(std::max(1.,Maximum(ref)))},
+            {"nonzeros",J::Number(mapped.matrix.Nonzeros())}}));
+    }
+    const auto pressure=WJTerrainAssemblyChecks(state,history,alpha,time,data);
+    const auto before=m_pimpleRecords.size();int mappedIterations=0,denseIterations=0;
+    const auto mapped=SolvePimpleSingleSweep(state,history,alpha,time,data,mappedIterations),
+        dense=SolvePimpleSingleSweep(state,history,alpha,time,data,denseIterations,true);
+    auto error=mapped;for(int i=0;i<error.size();++i)error[i]-=dense[i];
+    Require(Maximum(error)<=1e-9*std::max(1.,Maximum(dense)),"mapped/dense complete one-sweep parity");
+    Require(stateHash==RANSWallR3::Hash(state) && historyHash==RANSWallR3::Hash(history) &&
+        referenceHash==RANSWallR3::Hash(m_reference) && defectHash==RANSWallR3::Hash(m_defect),"qualification modified immutable input/reference");
+    std::vector<std::string> attempts(m_pimpleRecords.begin()+before,m_pimpleRecords.end());
+    return J::Object({{"status",J::Quote("PASS")},{"mass_checks",J::List(masses)},{"block_checks",J::List(blocks)},
+        {"independent_pressure_checks",pressure},{"sweep_coefficient_error",J::Number(Maximum(error))},
+        {"mapped_result",J::Numbers(mapped)},{"dense_result",J::Numbers(dense)},{"attempts",J::List(attempts)},
+        {"state_sha256",J::Quote(stateHash)},{"history_sha256",J::Quote(historyHash)},
+        {"scope",J::Quote("two small verification sweeps from identical state/history; no physical trajectory or target admission")}});
 }
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PicardKResidual(
@@ -120,7 +180,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PicardKResidual(
 RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     int block, const Vector &s, const Vector &history, double alpha,
     double time, const RANSWallEvolutionData &data,
-    const std::map<int, double> &external) const
+    const std::map<int, double> &external,bool denseReference) const
 {
     RANSWallTiming::Scope timing(block==0?"flow.assembly":block==Epsilon()?"epsilon.assembly":"k.assembly");
     const bool flow = block == 0;
@@ -138,7 +198,8 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
         }
     }
     const auto n = system.rows.size();
-    system.matrix.assign(n, Vector(n));
+    Require(!denseReference || Size()<=3000,"dense reference sink is limited to admitted small fixtures");
+    system.matrix=BlockMatrix(n,n,MappedBlock() && !denseReference);
     system.residual.assign(n, 0.);
 
     const double nu   = m_parameters.geometry.molecularNu;
@@ -166,10 +227,10 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             {
                 const int col = index[offset[block] + point.ids[j]];
                 if (col >= 0)
-                    system.matrix[row][col] +=
+                    system.matrix.Add(row,col,
                         weight * ((test * rate - adv) * point.phi[j] +
                                   diffusion * (dx * point.derivative[0][j] +
-                                               dz * point.derivative[2][j]));
+                                               dz * point.derivative[2][j])));
             }
         }
     };
@@ -280,7 +341,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                                     viscosity * (dx * q.v.derivative[0][j] +
                                                  dz * q.v.derivative[2][j]) -
                                     (dx * u[0] + dz * u[2]) * q.v.phi[j];
-                            system.matrix[row][col] += q.weight * value;
+                            system.matrix.Add(row,col,q.weight * value);
                         }
                     }
                     if (forcingPressure)
@@ -295,9 +356,8 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                         {
                             double normalDerivative=0;
                             for(int d=0;d<3;++d)normalDerivative+=normal[d]*fp.derivative[d][p];
-                            system.matrix[row][index[offset[OuterPressure()] +
-                                                     fp.ids[p]]] -=
-                                q.weight * q.v.phi[i] * (fp.derivative[aa][p]-normal[aa]*normalDerivative);
+                            system.matrix.Add(row,index[offset[OuterPressure()]+fp.ids[p]],
+                                -q.weight*q.v.phi[i]*(fp.derivative[aa][p]-normal[aa]*normalDerivative));
                         }
                     }
                 }
@@ -307,8 +367,8 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 {
                     const int pressure = index[offset[pBlock] + q.p.ids[p]];
                     const double entry = q.weight * q.p.phi[p] * testDerivative;
-                    system.matrix[row][pressure] -= entry;
-                    system.matrix[pressure][row] += entry;
+                    system.matrix.Add(row,pressure,-entry);
+                    system.matrix.Add(pressure,row,entry);
                 }
             }
         }
@@ -349,12 +409,14 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 system.residual[row] -= body[offset[b] + i];
             if (m_eta)
                 system.residual[row] -= m_eta * m_defect[offset[b] + i];
-            for (int j = 0; j < size[b]; ++j)
+            if(MappedBlock())m_mass[b].Each(i,[&](int j,double value){
+                const int col=index[offset[b]+j];if(col>=0)system.matrix.Add(row,col,(alpha+m_picardPseudoAlpha)*value);});
+            else for (int j = 0; j < size[b]; ++j)
             {
                 const int col = index[offset[b] + j];
                 if (col >= 0)
-                    system.matrix[row][col] +=
-                        (alpha + m_picardPseudoAlpha) * m_mass[b][i][j];
+                    system.matrix.Add(row,col,
+                        (alpha + m_picardPseudoAlpha) * m_mass[b].Get(i,j));
             }
         }
     }
@@ -367,7 +429,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 const int id              = offset[InnerPressure() + side] + i,
                           row             = index[id];
                 const double w            = m_pressureMean[side][i];
-                system.matrix[row][gauge] = system.matrix[gauge][row] = w;
+                system.matrix.Set(row,gauge,w);system.matrix.Set(gauge,row,w);
                 system.residual[row] += s[offset[Gauge()]] * w;
                 system.residual[gauge] += s[id] * w;
             }
@@ -382,8 +444,8 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             const int row = index[offset[block] + id];
             Require(row >= 0,
                     "Picard matching trace overlaps external lifting");
-            std::fill(system.matrix[row].begin(), system.matrix[row].end(), 0.);
-            system.matrix[row][row] = 1.;
+            system.matrix.ClearRow(row);
+            system.matrix.Set(row,row,1.);
             system.residual[row] =
                 s[offset[block] + id] - (value + trace[1].at(id));
         }

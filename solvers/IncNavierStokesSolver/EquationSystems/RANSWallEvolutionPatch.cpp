@@ -49,6 +49,7 @@ RANSWallEvolutionPatch::Factor::Factor(const WallMatrix &a):n(a.size()),lu(n*n),
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Factor::Apply(Vector rhs,bool transpose) const
 {
+    if(band)return band->Apply(rhs,transpose);
     RANSWallTiming::Scope timing("dense.triangular_solve");
     if(rhs.size()!=static_cast<std::size_t>(n))
         throw std::logic_error("evolution factor right-hand side shape mismatch");
@@ -56,6 +57,19 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Factor::Apply(Vector rhs,
     int info;Lapack::Dgetrs(transpose?'T':'N',n,1,lu.data(),n,pivot.data(),rhs.data(),n,info);
     if(info<0)throw std::logic_error("invalid evolution factor solve argument");
     Require(info==0,"failed evolution factor solve");Maximum(rhs);return rhs;
+}
+RANSWallEvolutionPatch::Factor::Factor(const BlockMatrix &a):n(a.size())
+{
+    if(a.Sparse())band=std::make_shared<MappedBandFactor>(a,a.MassMetric());
+    else *this=Factor(static_cast<const WallMatrix&>(a));
+}
+std::string RANSWallEvolutionPatch::Factor::AllocationJSON() const
+{
+    namespace J=RANSWallSolveJson;
+    return band?J::Object({{"factor",J::Quote("permuted-band")},{"n",J::Number(n)},
+        {"lower_bandwidth",J::Number(band->LowerBandwidth())},{"upper_bandwidth",J::Number(band->UpperBandwidth())},
+        {"storage_bytes",J::Number(band->StorageBytes())},{"band_to_native",J::Numbers(band->Permutation())}}):
+        J::Object({{"factor",J::Quote("legacy-dense-LU")},{"n",J::Number(n)},{"storage_bytes",J::Number(lu.size()*sizeof(double))}});
 }
 struct RANSWallEvolutionPatch::SolverCache
 {
@@ -161,18 +175,18 @@ double RANSWallEvolutionPatch::DependentEpsilon(const Vector &s,const RANSWallCo
     Require(!m_transitionEnabled,"transition dissipation evaluation requires its current time and forcing data");
     return WallDissipation(s,p,*Profile(SampleK(s,p),p));
 }
-RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PhysicalMass(int block,int region) const
+RANSWallEvolutionPatch::BlockMatrix RANSWallEvolutionPatch::PhysicalMass(int block,int region) const
 {
-    if(!Mapped() && region<0)return fields[block]->Mass();
+    if(!Mapped() && region<0)return fields[block]->ExecutionMass();
     const bool regional=region>=0 && (block<m_dimension || block==K());
     if(regional && !m_regionalMass[region].empty())return m_regionalMass[region];
-    const int n=fields[block]->Size();WallMatrix mass(n,Vector(n));
+    const int n=fields[block]->Size();BlockMatrix mass(n,n,MappedBlock());mass.ConsistentMass();
     for(const auto &q:Quadrature(block))
     {
         if(region==0 && q.coordinate[2]>m_parameters.geometry.height)continue;
         if(region==1 && q.coordinate[2]<m_parameters.geometry.height)continue;
         for(int i=0;i<q.ids.size();++i)for(int j=0;j<q.ids.size();++j)
-            mass[q.ids[i]][q.ids[j]]+=q.weight*q.phi[i]*q.phi[j];
+            mass.Add(q.ids[i],q.ids[j],q.weight*q.phi[i]*q.phi[j]);
     }
     if(regional)m_regionalMass[region]=mass;
     return mass;
@@ -208,6 +222,24 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     session->LoadSolverInfo("RANSWallBoundaryMode",m_boundaryMode,"PrescribedV1");
     session->LoadSolverInfo("RANSWallOpenTop",m_openTop,"SlipV1");
     session->LoadSolverInfo("RANSWallInitialVelocity",m_initialVelocityMode,"Off");
+    session->LoadSolverInfo("RANSWallLinearBackend",m_linearBackend,"Dense");
+    Require(m_linearBackend=="Dense" || MappedBlock(),"unknown RANSWallLinearBackend");
+    if(MappedBlock())
+    {
+        Require(WJTerrain() && BudgetAWF() && OpenBoundary() && m_dimension==2 && m_comm->GetSize()==1,
+            "MappedBlockV1 requires serial2D composite open WJ Budget");
+        ValidateFlatInletTraceMap(m_mapping);
+        Require(parameters.geometry.height==.15,"H14 mapped route retains the existing six-millimetre reference");
+        for(const std::string key:{"RANSWallPimpleArithmetic","RANSWallPimpleVerify"})
+        {std::string value;session->LoadSolverInfo(key,value,"Off");Require(value=="Off","MappedBlockV1 rejects legacy dense arithmetic/verification before allocation");}
+        std::string dump;session->LoadSolverInfo("RANSWallPimpleKBoundDumpFile",dump,"None");
+        Require(dump=="None","MappedBlockV1 rejects legacy dense bound-mass dumps before allocation");
+        std::string stage,condensed;double eta=0.;
+        session->LoadSolverInfo("RANSWallStageTest",stage,"Off");session->LoadSolverInfo("RANSWallCondense",condensed,"False");
+        session->LoadParameter("RANSWallEta",eta,0.);
+        Require(stage=="Off" && condensed=="False" && eta==0.,"MappedBlockV1 rejects legacy stage experiments, condensation and anchoring before allocation");
+        session->LoadSolverInfo("RANSWallMappedResourceDesign",m_mappedResourceDesign,"None");
+    }
     Require(m_initialVelocityMode=="Off" || m_initialVelocityMode=="FlatInletTraceV1","unknown RANSWallInitialVelocity");
     if(m_initialVelocityMode!="Off")
     {
@@ -291,6 +323,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(!m_solveDiagnostics || m_comm->GetSize()==1,"detailed first-failure diagnostics currently require one MPI rank");
     session->LoadSolverInfo("RANSWallNonlinearPolicy",m_nonlinearPolicy,"Legacy");
     session->LoadSolverInfo("RANSWallTemporalCoupling",m_temporalCoupling,"ConvergedStage");
+    if(MappedBlock())Require(PimpleSingleSweep() && m_comm->GetSize()==1,"MappedBlockV1 requires one serial PIMPLE sweep");
     Require(m_temporalCoupling=="ConvergedStage" || PimpleSingleSweep(),"unknown temporal coupling mode");
     Require(!(AcceptedAWF() || WJ()) || PimpleSingleSweep(),"accepted wall formulation currently supports only the one-sweep temporal path");
     Require(!session->DefinesParameter("RANSWallDenseEvolutionCapacity") &&
@@ -551,6 +584,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     offset.resize(Gauge()+1);size.resize(Gauge()+1);
     for(int b=0;b<Gauge();++b){size[b]=fields[b]->Size();offset[b+1]=offset[b]+size[b];}
     size[Gauge()]=OpenBoundary()?0:1;
+    if(MappedBlock())Require(Size()<=24688 && size[InnerPressure()]+size[OuterPressure()]<=1024,
+        "MappedBlockV1 exceeds the finite H14 state/pressure allocation; no mass has been allocated");
+    if(MappedBlock() && Size()>3000)Require(m_mappedResourceDesign.size()==64 &&
+        std::all_of(m_mappedResourceDesign.begin(),m_mappedResourceDesign.end(),[](char c){return(c>='0' && c<='9')||(c>='a' && c<='f');}),
+        "MappedBlockV1 target requires its qualified allocation-manifest SHA256 before mass allocation");
     Require(fields[K()]->Size()==velocity->Size(),"different velocity/k polynomial spaces are not supported");
     for(int b=0;b<Gauge();++b)
     {
@@ -1004,8 +1042,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
         if(region<0)load=Multiply(m_mass[b],delta);
         else
         {
-            const auto mass=b==Epsilon()?(region==1?m_mass[b]:WallMatrix(size[b],Vector(size[b]))):PhysicalMass(b,region);
-            load=Multiply(mass,delta);
+            if(b==Epsilon() && region==0)load=Vector(size[b]);
+            else load=Multiply(b==Epsilon()?m_mass[b]:PhysicalMass(b,region),delta);
         }for(int i=0;i<size[b];++i)r[offset[b]+i]+=alpha*load[i];
     }
     for(int side=0;HasGauge() && side<2;++side)if(region<0 || side==region)for(int i=0;i<m_pressureMean[side].size();++i)
@@ -1028,8 +1066,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Norms(const Vector &r,con
         if(free.empty()){norms.push_back(0);continue;}
         if(free!=m_solver->free[b] || !m_solver->massFactors[b])
         {
-            WallMatrix mass(free.size(),Vector(free.size()));
-            for(int i=0;i<free.size();++i)for(int j=0;j<free.size();++j)mass[i][j]=m_mass[b][free[i]][free[j]];
+            const auto mass=m_mass[b].Restrict(free,free);
             m_solver->free[b]=free;m_solver->massFactors[b]=std::make_shared<Factor>(mass);
         }
         const auto inverse=m_solver->massFactors[b]->Apply(load);long double square=0;
@@ -1084,6 +1121,15 @@ void RANSWallEvolutionPatch::CheckDenseEvolutionCapacity(bool condensed) const
 std::string RANSWallEvolutionPatch::DenseEvolutionCapacityJSON() const
 {
     namespace J=RANSWallSolveJson;
+    if(MappedBlock())
+    {
+        std::vector<std::string> matrices;
+        for(int b=0;b<m_mass.size();++b)matrices.push_back(J::Object({{"block",J::Number(b)},{"n",J::Number(size[b])},
+            {"nonzeros",J::Number(m_mass[b].Nonzeros())},{"storage",J::Quote("sparse native rows")}}));
+        return J::Object({{"backend",J::Quote("MappedBlockV1")},{"state_limit","24688"},{"pressure_limit","1024"},
+            {"factor_payload_limit_bytes","536870912"},{"resource_design_sha256",J::Quote(m_mappedResourceDesign)},
+            {"legacy_dense_capacity","3000"},{"legacy_4331_route_unchanged","true"},{"mass_matrices",J::List(matrices)}});
+    }
     return J::Object({{"setting",J::Quote("RANSWallDenseEvolutionCapacity")},
         {"requested",J::Quote(m_denseCapacityRequest)},{"effective",J::Number(m_denseCapacity)},
         {"legacy_default","3000"},{"hard_maximum","4331"},
@@ -1094,7 +1140,9 @@ std::string RANSWallEvolutionPatch::DenseEvolutionCapacityJSON() const
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vector &history,double alpha,double time,
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
-    CheckDenseEvolutionCapacity(condensed);
+    if(MappedBlock())Require(!condensed && m_eta==0. && PimpleSingleSweep() && Size()<=24688,
+        "mapped block evolution capability mismatch");
+    else CheckDenseEvolutionCapacity(condensed);
     if(PimpleSingleSweep())
     {
         Require(!condensed && m_eta==0.,"PimpleSingleSweep requires uncondensed eta-zero physical equations");
@@ -1759,6 +1807,7 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(Mapped())text<<':'<<m_mapping.Signature();
     if(OpenBoundary())text<<":boundary=OpenTunnelV1:top="<<m_openTop<<":outlet=full_mean_traction:scalar=zero_diffusive:backflow=stop:gauge=absent";
     if(m_initialVelocityMode!="Off")text<<":initial_velocity=FlatInletTraceV1:lifted_native_inlet_coefficients";
+    if(MappedBlock())text<<":linear_backend=MappedBlockV1:consistent_band_mass_streamed_schur_v1";
     if(m_innerStress==RANSWallInnerStressModel::SaturatedR2)
         text<<":M8-R2:InnerStress:SaturatedR2:v1:rho=0.8";
     if(m_variantName!="Original" || m_cappedDestruction)

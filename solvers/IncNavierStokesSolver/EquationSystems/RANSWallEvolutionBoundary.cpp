@@ -219,14 +219,14 @@ void RANSWallEvolutionPatch::ExteriorPicard(int block,const Vector &s,double tim
                     double value=v.un*q.phi[j];
                     if(block!=0 && f.role=="inlet")
                         for(int d=0;d<3;++d)value-=(block==K()?v.dk:v.de)*v.normal[d]*q.derivative[d][j];
-                    system.matrix[row][col]+=v.weight*q.phi[i]*value;
+                    system.matrix.Add(row,col,v.weight*q.phi[i]*value);
                 }
                 if(block==0 && f.role!="outlet")
                 {
                     const int pb=f.inner?InnerPressure():OuterPressure();
                     for(int j=0;j<v.pressure.ids.size();++j)
-                        system.matrix[row][index[offset[pb]+v.pressure.ids[j]]]+=
-                            v.weight*q.phi[i]*v.normal[PhysicalAxis(b)]*v.pressure.phi[j];
+                        system.matrix.Add(row,index[offset[pb]+v.pressure.ids[j]],
+                            v.weight*q.phi[i]*v.normal[PhysicalAxis(b)]*v.pressure.phi[j]);
                 }
             }
     }

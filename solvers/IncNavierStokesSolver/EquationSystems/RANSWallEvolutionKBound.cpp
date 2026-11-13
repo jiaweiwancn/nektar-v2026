@@ -65,7 +65,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     std::vector<Location> points,witnesses;
     std::vector<RANSWallCoordinate> retainedAnchors;
     std::vector<int> rows,index(size[K()],-1);
-    std::unique_ptr<RANSWallKBound::Projection> projection;WallMatrix projectionMass;
+    std::unique_ptr<RANSWallKBound::Projection> projection;BlockMatrix projectionMass;
     std::ofstream traceStream;if(m_kBoundTraceFile!="None")
     {traceStream.open(m_kBoundTraceFile,std::ios::app);Require(traceStream.good(),"cannot open k-bound progress trace");}
     std::vector<std::string> traceRecords;int traceSequence=0;
@@ -182,7 +182,16 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
                         {"last_completed_primal_objective",J::Number(e.objective)},
                         {"working_dual_violation",J::Number(e.dualViolation)},{"seconds",J::Number(seconds())}}));
                 };
-                projection=std::make_unique<RANSWallKBound::Projection>(projectionMass,controls,event);
+                if(MappedBlock())
+                {
+                    const auto factorStart=Clock::now();
+                    const auto factor=std::make_shared<MappedBandFactor>(projectionMass,true);
+                    RANSWallKBound::Projection::Metric metric{int(rows.size()),
+                        [factor](const Vector &row){return factor->Whiten(row);},
+                        [factor](const Vector &y){return factor->Recover(y);},factorStart};
+                    projection=std::make_unique<RANSWallKBound::Projection>(metric,controls,event);
+                }
+                else projection=std::make_unique<RANSWallKBound::Projection>(static_cast<const WallMatrix&>(projectionMass),controls,event);
             }
             witnesses.push_back(cut);retainedAnchors.push_back(cut.row.coordinate);
             record(J::Object({{"kind",J::Quote("separation")},{"sequence",J::Number(traceSequence+1)},
