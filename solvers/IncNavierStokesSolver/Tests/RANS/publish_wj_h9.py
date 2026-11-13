@@ -39,11 +39,11 @@ def publish(root,out):
     csvout(out/'local-phases.csv',fixed)
     bt=[]
     for r in load(science/'delta-B-stage.json'):
-        if selected(r['physical']):bt.append(dict(kind=r['kind'],branch=r['branch'],step=r['step'],transition=r['transition'],x=r['physical'][0],z=r['physical'][2],geometry=r['owner']['geometry'],gradient_norm=r['gradient_norm'],timescale_norm=r['timescale_norm'],gradient_term=r['gradient_term'],timescale_term=r['timescale_term'],total=r['total'],identity_max=float(np.max(abs(r['residual'])))))
+            if selected(r['physical']):bt.append(dict(kind=r['kind'],branch=r['branch'],step=r['step'],transition=r['transition'],x=r['physical'][0],z=r['physical'][2],geometry=r['owner']['geometry'],gradient_norm=r['gradient_norm'],timescale_norm=r['timescale_norm'],gradient_term=r['gradient_term'],timescale_term=r['timescale_term'],total=r['total'],identity_max=float(np.max(np.abs(r['residual'])))))
     common=load(science/'delta-B-common-time.json');common_fixed=[]
     for v in common:
         for r in v['records']:
-            if selected(r['physical']):common_fixed.append(dict(pair=v['pair'],x=r['physical'][0],z=r['physical'][2],geometry=r['owner']['geometry'],normal_side=r['owner']['normal_side'],gradient_norm=r['gradient_norm'],timescale_norm=r['timescale_norm'],ratio=r['ratio'],gradient_term=r['gradient_term'],timescale_term=r['timescale_term'],total=r['total'],identity_max=float(np.max(abs(r['residual'])))))
+            if selected(r['physical']):common_fixed.append(dict(pair=v['pair'],x=r['physical'][0],z=r['physical'][2],geometry=r['owner']['geometry'],normal_side=r['owner']['normal_side'],gradient_norm=r['gradient_norm'],timescale_norm=r['timescale_norm'],ratio=r['ratio'],gradient_term=r['gradient_term'],timescale_term=r['timescale_term'],total=r['total'],identity_max=float(np.max(np.abs(r['residual'])))))
     save(out/'delta-B-selected.json',dict(stages=bt,common_time=common_fixed,interpretation='nonorthogonal exact tensor terms; norm ratio is NOT nonlinear-action percentage attribution'))
     tel=[]
     for t in load(science/'telescopes.json'):
