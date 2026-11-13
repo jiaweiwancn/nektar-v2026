@@ -55,6 +55,21 @@ def budget(packet,model):
     return result
 
 
+def captured_k_matrix(packet,snapshot):
+    path=Path(snapshot['matrix_file']);require(sha(path)==snapshot['matrix_sha256'],'changed captured governing k matrix')
+    rows=np.asarray(snapshot['transport_rows'],int);n=len(rows)
+    A=np.fromfile(path,dtype=np.float64);require(A.size==n*n,'captured governing k matrix shape mismatch')
+    A=A.reshape(n,n);delta=np.asarray(snapshot['raw_increment']);r=np.asarray(snapshot['transport_residual'])
+    require(delta.shape==r.shape==(n,),'captured governing k vector shape mismatch')
+    expected=r+A@delta
+    raw=np.asarray(packet['physical_scalar_budget']['reconciliation']['assembled']['k']['native_raw_frozen_load'])
+    ids=rows-packet['observation']['offsets'][2]
+    difference=float(max(abs(raw[ids]-expected),default=0.));scale=max(1.,float(max(abs(r),default=0.)))
+    return dict(status='pass' if difference/scale<=2e-10 else 'fail',maximum_defect=difference,scale=scale,
+        scaled_defect=difference/scale,captured_rows=n,matrix_sha256=snapshot['matrix_sha256'],
+        scope='actual captured PIMPLE free-row residual plus its frozen matrix times actual raw increment; not a second reassembly using guessed frozen coefficients')
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for key in ('runtime','member','output'):p.add_argument('--'+key,type=Path,required=True)
@@ -102,6 +117,7 @@ def main():
             actual_stage_snapshot_sha256=attempt['k_snapshot_sha256'],
             stage_coefficient_validation={k:packet['physical_scalar_budget']['reconciliation'][k] for k in
                 ('current_time_essential_lift_difference','actual_flow_stage_maximum_difference','actual_pre_k_stage_maximum_difference')})
+        if label=='native':result['captured_k_matrix']=captured_k_matrix(packet,snapshot)
         write_json(a.output/'progress.json',result);print('CT6 physical budget',model,label,result['budgets'][label]['accuracy_status'],flush=True)
     result['budget_gate']=physical_budgets(result)
     sub=a.output/'common';sub.mkdir();write(ET.parse(folder/'case.xml').getroot(),sub/'case.xml')
@@ -123,7 +139,7 @@ def main():
     result['common_observations']=dict(path=str(sub/'endpoint.json'),sha256=sha(sub/'endpoint.json'),execution=e,
         count=n,weights=weights,grid_sha256=hashlib.sha256(canonical([points,sides,weights])).hexdigest(),
         physical_volume=float(w.sum()),divergence_RMS=float(np.sqrt(w@(div*div)/w.sum())),divergence_maximum=float(max(abs(div))))
-    result['status']='pass' if result['budget_gate']['status']==result['mass']['status']=='pass' else 'fail'
+    result['status']='pass' if result['budget_gate']['status']==result['mass']['status']==result['captured_k_matrix']['status']=='pass' else 'fail'
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json'])
     return 0 if result['status']=='pass' else 1
 
