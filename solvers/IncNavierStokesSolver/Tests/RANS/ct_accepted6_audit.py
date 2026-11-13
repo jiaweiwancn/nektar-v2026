@@ -76,6 +76,7 @@ def main():
     i=next(i for i,t in enumerate(report['audit_times']) if abs(t-report['time'])<1e-13)
     require(i>0,'missing consecutive actual accepted states')
     previous=report['accepted_states'][i-1]
+    frozen_boundary_identity=None
     attempt=next(q for q in reversed(report['pimple_attempts']) if q['scheduled_complete'])
     require(sha(attempt['k_snapshot'])==attempt['k_snapshot_sha256'],'changed actual pre-k frozen stage snapshot')
     snapshot=json.loads(Path(attempt['k_snapshot']).read_text())
@@ -89,8 +90,14 @@ def main():
         packet,e=probe(a.runtime,sub,req,'budget')
         require(e['exit_code']==0,'physical budget probe rejected '+label+':'+str(packet.get('failure')))
         o=packet['observation'];require(o['state']==report['state'] and o['identity']==initial['observation']['identity'],'frozen control changed effective state or verification identity')
+        receipt=packet['initialization_receipt']
+        boundary_identity={k:receipt[k] for k in ('raw_initial_sha256','effective_initial_sha256','fixed_reference_sha256','explicit_boundary_sha256','implicit_boundary_sha256')}
+        require(receipt['open_explicit_implicit_agreement'] and receipt['explicit_boundary_sha256']==receipt['implicit_boundary_sha256'],'explicit/implicit live boundary mismatch')
+        require(receipt['fixed_reference_sha256']==initial['initialization_receipt']['fixed_reference_sha256'],'frozen control changed immutable reference')
+        if frozen_boundary_identity is None:frozen_boundary_identity=boundary_identity
+        require(boundary_identity==frozen_boundary_identity,'quadrature control changed consumed effective coefficients or essential boundary rows')
         result['budgets'][label]=dict(budget(packet,model),binding=binding,execution=e,packet_sha256=sha(sub/'budget.json'),
-            initialization_receipt=packet['initialization_receipt'] if 'initialization_receipt' in packet else None)
+            initialization_receipt=receipt,frozen_boundary_identity=boundary_identity)
         write_json(a.output/'progress.json',result);print('CT6 physical budget',model,label,result['budgets'][label]['accuracy_status'],flush=True)
     result['budget_gate']=physical_budgets(result)
     sub=a.output/'common';sub.mkdir();write(ET.parse(folder/'case.xml').getroot(),sub/'case.xml')
