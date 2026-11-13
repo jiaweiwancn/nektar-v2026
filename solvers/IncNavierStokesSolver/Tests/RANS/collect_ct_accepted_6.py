@@ -56,7 +56,7 @@ def main():
     controls=receipt('controls-v1/results.json','discriminating-controls.json')
     regression=receipt('regression-v1/results.json','regression.json')
     comparison=receipt('primary-comparisons-v1/results.json','A95-complete-comparisons.json')
-    members={};audits={}
+    members={};audits={};costs={}
     for path in sorted(r.glob('evolution-v*/**/results.json')):
         q=read(path)
         if q.get('schema')!='CT6FreshManufacturedMemberV1':continue
@@ -72,6 +72,16 @@ def main():
                 corrections_and_additional_solves=corrections,all_audited_extrema=audited_extrema(n))
             require(corrections==0,'forbidden governing correction or extra solve')
         members[label]=row;files[str(path)]=sha(path)
+        for phase in ('zero','trajectory'):
+            timing=path.parent/phase/'timing.jsonl'
+            if not timing.exists():continue
+            exclusive={};roots=[]
+            for line in timing.read_text().splitlines():
+                t=json.loads(line);name=t['name'];v=exclusive.setdefault(name,dict(process_cpu_seconds=0.,wall_seconds=0.,calls=0))
+                v['process_cpu_seconds']+=t['exclusive_process_cpu_seconds'];v['wall_seconds']+=t['exclusive_wall_seconds'];v['calls']+=1
+                if t['parent_id']==0:roots.append(t)
+            costs[label+'/'+phase]=dict(path=str(timing),sha256=sha(timing),exclusive=exclusive,root_scopes=roots,
+                scope='exclusive instrumentation only; nested inclusive totals are not added; child process CPU/wall/RSS remain in execution receipts')
         write_json(a.output/(label.replace('/','__')+'.json'),dict(path=str(path),sha256=sha(path),body=compact(q),actual=row))
     for path in sorted(r.glob('physical-audits-v*/**/results.json')):
         q=read(path);label=str(path.parent.relative_to(r));gates=physical_budgets(q)
@@ -103,6 +113,7 @@ def main():
         resource_scope='completed launch receipts only; collector closure exported separately after return',
         status='pending_required_scope_recomputation')
     write_json(a.output/'decision.json',decision);write_json(a.output/'completed-resources.json',resources)
+    write_json(a.output/'native-costs.json',costs)
     write_json(a.output/'actual-loaded-libraries.json',libraries);write_json(a.output/'archive-identities.json',files)
     write_json(a.output/'source-scope.json',dict(source_revision=revision,starting_revision='7d32b43dc9d176628cfef1dbae2aee02a86ce330',
         source_status=subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True),
@@ -110,7 +121,7 @@ def main():
         guards='named original-Natural Accepted serial2D constant-height Gaussian manufactured evolution only; static variable-height transmission separate; no production/EP/MPI/3D/action support'))
     manifest.seal(a.output,[str(p.relative_to(a.output)) for p in a.output.glob('*.json') if p.name not in ('request-manifest.json','completed-artifacts.json')])
     print('CT6 compact evidence exported; decision remains separate from execution completion',flush=True)
-    return 0
+    return 3  # A completed export is not a completed required-scope qualification.
 
 
 if __name__=='__main__':raise SystemExit(main())
