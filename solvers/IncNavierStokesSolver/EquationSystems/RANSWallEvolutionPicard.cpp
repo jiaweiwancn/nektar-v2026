@@ -64,7 +64,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     RANSWallTiming::Scope timing(block==0?"flow.assembly":block==Epsilon()?"epsilon.assembly":"k.assembly");
     const bool flow = block == 0;
     Require(!diagnosticRawScalar || (NewModels() && PimpleSingleSweep() &&
-        !Mapped() && m_dimension==2 && external.empty() && (block==K() || block==Epsilon())),
+        (!Mapped() || CurvedManufactured()) && m_dimension==2 && external.empty() && (block==K() || block==Epsilon())),
         "raw frozen scalar matrix is a read-only flat2D one-sweep diagnostic");
     PicardBlock system;
     std::vector<int> index(Size(), -1);
@@ -225,16 +225,22 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                             system.matrix[row][col] += q.weight * value;
                         }
                     }
-                    if (forcingPressure && aa == 0)
+                    if (forcingPressure && (aa == 0 || CurvedVerification()))
                     {
                         // Flat tangential pressure gradient in the roughness
                         // load. The mechanical -2 grad(k)/3 and convection
                         // parts of CartesianForcing stay frozen in this solve.
                         const auto &fp = *forcingPressure;
                         for (int p = 0; p < fp.ids.size(); ++p)
-                            system.matrix[row][index[offset[OuterPressure()] +
-                                                     fp.ids[p]]] -=
-                                q.weight * q.v.phi[i] * fp.derivative[0][p];
+                            {
+                                double derivative=fp.derivative[0][p];
+                                if(CurvedVerification())
+                                {
+                                    auto H=q.v.coordinate;H[2]=m_parameters.geometry.height;const auto normal=m_mapping.At(H).normal;
+                                    derivative=fp.derivative[aa][p];for(int axis=0;axis<3;++axis)derivative-=normal[aa]*normal[axis]*fp.derivative[axis][p];
+                                }
+                                system.matrix[row][index[offset[OuterPressure()]+fp.ids[p]]]-=q.weight*q.v.phi[i]*derivative;
+                            }
                     }
                 }
                 if (row < 0)
@@ -373,7 +379,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FrozenScalarWeakLoad(
 std::string RANSWallEvolutionPatch::MixedSpaceRankPacket(const Vector &state,double time,
     const RANSWallEvolutionData &data) const
 {
-    Require(NewModels() && PimpleSingleSweep() && !Mapped() && m_dimension==2 && Size()<500,
+    Require(NewModels() && PimpleSingleSweep() && (!Mapped() || CurvedManufactured()) && m_dimension==2 && Size()<500,
             "mixed rank packet is restricted to a small canonical new-model one-sweep fixture");
     const auto external=ExternalConstraints(time,data);
     const auto block=AssemblePicardBlock(0,state,state,1.,time,data,external);

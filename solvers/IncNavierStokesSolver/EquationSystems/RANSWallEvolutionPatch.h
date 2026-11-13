@@ -117,7 +117,11 @@ public:
     bool UniformEPFlat() const { return m_uniformEP; }
     bool AcceptedAWF() const { return m_formulation=="CLSCalibratedBudgetAWF" || m_formulation=="AcceptedBudgetAWF"; }
     bool NewModels() const { return m_parameters.model.NewModel(); }
-    bool OpenBoundary() const { return m_boundaryPolicy=="AcceptedOpenFlatV1"; }
+    bool OpenBoundary() const { return m_boundaryPolicy=="AcceptedOpenFlatV1" || m_boundaryPolicy=="AcceptedManufacturedOpenV1"; }
+    bool CurvedVerification() const { return m_curvedCapability!="Off"; }
+    bool CurvedManufactured() const { return m_curvedCapability=="CT6ManufacturedV1"; }
+    bool StaticTransmissionOnly() const { return m_curvedCapability=="CT6StaticTransmissionV1"; }
+    const std::string &CurvedCapabilityName() const { return m_curvedCapability; }
     const std::string &BoundaryPolicyName() const { return m_boundaryPolicy; }
     const std::string &OpenBoundaryIdentity() const { return m_openBoundaryIdentity; }
     struct OpenBoundaryTerms { Vector advection,traction,diffusion; };
@@ -598,6 +602,7 @@ private:
     int m_ownershipShift=0;
     SolverUtils::AWFProfileOptions m_options;
     std::string m_formulation="EPAWF";
+    std::string m_curvedCapability="Off";
     std::string m_boundaryPolicy="Closed",m_openBoundaryIdentity;
     double m_openVelocityScale=1.;
     SolverUtils::AWFParameters m_wallParameters;

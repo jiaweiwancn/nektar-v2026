@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallManufactured.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
@@ -119,6 +120,7 @@ RANSWallEvolutionFunction Load(const LibUtilities::SessionReaderSharedPtr &s,
 
 std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSharedPtr &s)
 {
+    if(RANSUsesAcceptedManufactured(s))return RANSAcceptedManufacturedIdentity(s);
     std::ostringstream out;out<<std::setprecision(17)<<"AcceptedOpenFlatV1:top=DirichletCompatibleV1:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero";
     if(RANSUsesNeutralComposite(s))
     {
@@ -141,7 +143,8 @@ std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSh
 RANSWallEvolutionData LoadRANSAcceptedOpenData(const LibUtilities::SessionReaderSharedPtr &s,
     const RANSWallEvolutionPatch &patch)
 {
-    Require(patch.OpenBoundary() && patch.Dimension()==2 && !patch.Mapped(),"open data loader requires AcceptedOpenFlatV1");
+    Require(patch.OpenBoundary() && patch.Dimension()==2 && (!patch.Mapped() || patch.CurvedManufactured()),"open data loader requires qualified Accepted policy");
+    if(patch.CurvedManufactured())return RANSWallManufactured(patch).Data();
     RANSWallEvolutionData data(2);data.openBoundaryIdentity=RANSAcceptedOpenBoundaryIdentity(s);
     if(RANSUsesNeutralComposite(s))
     {
@@ -204,6 +207,7 @@ std::vector<RANSWallEvolutionFunction> RANSAcceptedOpenInitialFunctions(
     const LibUtilities::SessionReaderSharedPtr &s,const RANSWallEvolutionPatch &patch)
 {
     Require(patch.OpenBoundary(),"open initial-function loader requires its policy");
+    if(patch.CurvedManufactured())return RANSWallManufactured(patch).InitialFunctions();
     std::vector<RANSWallEvolutionFunction> functions;
     if(RANSUsesNeutralComposite(s))
     {

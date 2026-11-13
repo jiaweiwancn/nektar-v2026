@@ -28,6 +28,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSWallGlobalField.cpp
         ./EquationSystems/RANSWallEvolutionPatch.cpp
         ./EquationSystems/RANSWallEvolutionOpenBoundary.cpp
+    ./EquationSystems/RANSWallManufactured.cpp
         ./EquationSystems/RANSWallEvolutionEvaluation.cpp
         ./EquationSystems/RANSWallEvolutionDiagnostics.cpp
         ./EquationSystems/RANSWallEvolutionTransition.cpp

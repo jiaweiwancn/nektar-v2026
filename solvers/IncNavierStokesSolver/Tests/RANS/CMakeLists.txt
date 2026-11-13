@@ -666,3 +666,11 @@ if(Python3_Interpreter_FOUND)
     set_tests_properties(RANSNewModelsIndependentOracle PROPERTIES PROCESSORS 1 TIMEOUT 600
         ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
 endif()
+
+foreach(ct6_native_target RANSEquilibriumEvolutionProbe RANSCurvedWallProbe RANSPressureActionProbe RANSNonpressureActionProbe RANSWallResolutionProbe RANSPreservationProbe RANSNativeDiagnosticChecks)
+    if(TARGET ${ct6_native_target})
+        target_sources(${ct6_native_target} PRIVATE ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallManufactured.cpp)
+    endif()
+endforeach()
+add_executable(RANSCurvedAcceptedKernelProbe ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSCurvedAcceptedKernelProbe.cpp)
+target_link_libraries(RANSCurvedAcceptedKernelProbe RANSKernels)

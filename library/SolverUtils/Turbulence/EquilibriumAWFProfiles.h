@@ -53,8 +53,11 @@ enum class AWFProfileFormulation { LegacyEPAWF, CLSCalibratedBudgetAWF, Accepted
  * 0.09/2.55 wall coefficients for the calibrated formulation. */
 SOLVER_UTILS_EXPORT AWFParameters CalibratedAWFParameters(const RANSNeutralReference &model);
 
+enum class AWFCurvedCapability { FlatQualifiedV1, AcceptedVerificationV1 };
+
 struct AWFProfileOptions
 {
+    AWFCurvedCapability curvedCapability = AWFCurvedCapability::FlatQualifiedV1;
     double requestedWeight = 1, minimumReynolds = 100;
     int quadratureOrder = 16;
     AWFFailurePolicy failurePolicy = AWFFailurePolicy::RequirePreservation;

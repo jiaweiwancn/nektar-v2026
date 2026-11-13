@@ -3,6 +3,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallPhysicsSignature.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallManufactured.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <cstring>
 #include <algorithm>
@@ -41,6 +42,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     bool reconcile=false,const Vector &stageHistory={},double diffusionIBPFraction=0.)
 {
     Require(dt>0 && previous.size()==state.size(),"invalid physical budget history");
+    Require(!patch.Mapped() || diffusionIBPFraction==0,"Cartesian finite-difference IBP diagnostic is not a mapped derivative");
     Require(faceOrder==16 || faceOrder==24 || faceOrder==32,"unsupported physical budget face order");
     auto flow=previous;
     for(int b:{0,1,patch.InnerPressure(),patch.OuterPressure()})
@@ -69,7 +71,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
         if(!outer)
         {
             const auto frozen=patch.StateProfile(preK,v.coordinate,time,data),current=patch.StateProfile(state,v.coordinate,time,data);
-            const double nt=frozen->Original().EddyViscosity(v.coordinate[2]),now=current->Original().EddyViscosity(v.coordinate[2]);
+            const double nt=frozen->Original().EddyViscosity(patch.Distance(v.coordinate)),now=current->Original().EddyViscosity(patch.Distance(v.coordinate));
             const auto law=patch.InnerStress(oldK,nt,g),actual=patch.InnerStress(newK,now,g);
             double rate=0;const auto source=patch.WallSource(preK,v.coordinate,law.production,*frozen,nullptr,&rate);
             Require(rate==0,"prescribed wall sink unexpectedly has local reaction");
@@ -339,14 +341,14 @@ int main(int argc,char **argv)
             kappa,wall=="EPAWF"?RANSWallFormulation::EPAWF:RANSWallFormulation::AcceptedBudgetAWF,p.geometry.molecularNu);
         Require(p.model.NewModel(),"new-model descriptor required; no CLS-default replay");
         std::string boundaryPolicy;session->LoadSolverInfo("RANSWallBoundaryPolicy",boundaryPolicy,"Closed");
-        const bool open=boundaryPolicy=="AcceptedOpenFlatV1";
+        const bool open=boundaryPolicy=="AcceptedOpenFlatV1" || boundaryPolicy=="AcceptedManufacturedOpenV1";
         for(const auto &name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(open || !session->DefinesFunction(name),"neutral preservation verifier requires unforced source definitions");
         std::string referenceMode;session->LoadSolverInfo("RANSWallReference",referenceMode,"Neutral");
         Require(referenceMode=="Neutral" || (open && referenceMode=="Functions"),"neutral verification requires the Neutral reference/boundary contract");
         double eta;session->LoadParameter("RANSWallEta",eta,0.);Require(eta==0,"unanchored verification requires eta zero");
         RANSWallEvolutionPatch patch(session,graph,world->GetComm(),p,LoadRANSWallNormalMap(session,2,p.geometry.height));
-        Require(patch.Dimension()==2 && !patch.Mapped() && (patch.AcceptedAWF() || patch.UniformEPFlat()),
+        Require(patch.Dimension()==2 && (!patch.Mapped() || patch.CurvedVerification()) && (patch.AcceptedAWF() || patch.UniformEPFlat()),
             "neutral preservation probe supports accepted or EP plateau references, serial flat2D only");
         RANSWallEvolutionData data(2);Vector state,reference;double time=request.get<double>("time",0.);
         if(open)data=LoadRANSAcceptedOpenData(session,patch);
@@ -365,7 +367,7 @@ int main(int argc,char **argv)
         {
             Require(open && referenceMode=="Functions" && time==0.,"Functions verification is a fresh open-policy initialization only");
             state=patch.Lift(data.projectedReference.empty()?patch.Project(RANSAcceptedOpenInitialFunctions(session,patch),time):data.projectedReference,time,data);reference=state;
-            data.fixedBoundary=patch.FixedReferenceBoundary(state);
+            if(!patch.CurvedManufactured())data.fixedBoundary=patch.FixedReferenceBoundary(state);
         }
         else
         {
@@ -384,7 +386,7 @@ int main(int argc,char **argv)
             Require(state.size()==std::size_t(patch.Size()) && reference.size()==state.size(),"verification coefficient size mismatch");
             for(const auto &item:request.get_child("fixed_boundary"))
             {auto q=item.second.begin();const int row=q->second.get_value<int>();++q;const double value=q->second.get_value<double>();Require(row>=0 && row<patch.Size(),"invalid fixed boundary row");Require(data.fixedBoundary.emplace(row,value).second,"duplicate fixed boundary row");}
-            Require(data.fixedBoundary==patch.FixedReferenceBoundary(reference),"verification external boundary identity mismatch");
+            Require(patch.CurvedManufactured()?data.fixedBoundary.empty():data.fixedBoundary==patch.FixedReferenceBoundary(reference),"verification external boundary identity mismatch");
         }
         patch.SetReference(reference,data,time,0.);
         std::vector<RANSWallCoordinate> grid;

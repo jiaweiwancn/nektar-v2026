@@ -4,6 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallManufactured.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
@@ -197,18 +198,34 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     session->LoadSolverInfo("RANSWallFormulation",m_formulation,"EPAWF");
     session->LoadSolverInfo("RANSWallBoundaryPolicy",m_boundaryPolicy,"Closed");
     Require(m_boundaryPolicy=="Closed" || OpenBoundary(),"unknown native wall-evolution boundary policy");
+    session->LoadSolverInfo("RANSWallCurvedCapability",m_curvedCapability,"Off");
+    Require(m_curvedCapability=="Off" || CurvedManufactured() || StaticTransmissionOnly(),"unknown curved verification capability");
+    if(CurvedVerification())
+    {
+        Require(NewModels() && AcceptedAWF() && m_dimension==2 && m_comm->GetSize()==1 &&
+            m_parameters.model.KappaPolicy()==RANSKappaPolicy::Natural &&
+            (m_mapping.kind==RANSWallNormalMap::Kind::Gaussian || m_mapping.kind==RANSWallNormalMap::Kind::Flat),
+            "CT6 verification requires original Natural Accepted serial2D Gaussian/zero map");
+        Require(StaticTransmissionOnly()?m_boundaryPolicy=="Closed":
+            (m_boundaryPolicy=="AcceptedManufacturedOpenV1" && RANSUsesAcceptedManufactured(session)),
+            "curved production unsupported: CT6 requires manufactured provider or static transmission");
+        Require(!CurvedManufactured() || (m_mapping.heightSlopeX==0 && m_mapping.heightSlopeY==0 && m_mapping.heightAmplitude==0),
+            "full variable-height evolution remains unsupported");
+        m_options.curvedCapability=AWFCurvedCapability::AcceptedVerificationV1;
+    }
+    Require(m_boundaryPolicy!="AcceptedManufacturedOpenV1" || CurvedManufactured(),"manufactured open boundary requires CT6ManufacturedV1");
     Require(m_formulation=="EPAWF" || AcceptedAWF(),"unknown wall formulation");
     Require(NewModels() || m_formulation!="AcceptedBudgetAWF","AcceptedBudgetAWF requires a new-model resolved descriptor");
     if(NewModels())
     {
-        Require(m_dimension==2 && !Mapped() && m_comm->GetSize()==1,
+        Require(m_dimension==2 && (!Mapped() || CurvedVerification()) && m_comm->GetSize()==1,
             "A93/A95/E94E95 native evolution supports serial flat 2D only; curved/3D/MPI unsupported");
         Require(m_formulation==(m_parameters.model.WallFormulation()==RANSWallFormulation::AcceptedBudgetAWF?"AcceptedBudgetAWF":"EPAWF"),
             "wall selection differs from resolved descriptor");
     }
     if(AcceptedAWF())
     {
-        Require(m_dimension==2 && !Mapped() && m_comm->GetSize()==1 && (parameters.model.Model()==RANSModel::CLSHighRe || NewModels()),
+        Require(m_dimension==2 && (!Mapped() || CurvedVerification()) && m_comm->GetSize()==1 && (parameters.model.Model()==RANSModel::CLSHighRe || NewModels()),
             "CLSCalibratedBudgetAWF evolution currently supports serial flat 2D CLS only");
         Require(parameters.geometry.sampleHeight==parameters.geometry.height && parameters.geometry.tailStart==parameters.geometry.height && parameters.chi==0,
             "CLSCalibratedBudgetAWF requires endpoint zK=zm=H and no chi policy");
@@ -247,7 +264,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(!ColumnAverageK() || PimpleSingleSweep(),"ColumnAverage K is supported only by the PIMPLE pilot");
     if(PimpleSingleSweep())
     {
-        Require(m_nonlinearPolicy=="Legacy" && m_comm->GetSize()==1 && m_dimension==2 && !Mapped(),
+        Require(m_nonlinearPolicy=="Legacy" && m_comm->GetSize()==1 && m_dimension==2 && (!Mapped() || CurvedVerification()),
             "PimpleSingleSweep pilot requires Legacy policy, serial flat 2D and the inherited transition implementation");
         std::string verify;session->LoadSolverInfo("RANSWallPimpleVerify",verify,"Off");
         Require(verify=="Off" || verify=="On","invalid PIMPLE verification selector");m_pimpleVerify=verify=="On";
@@ -268,14 +285,15 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     m_evaluationReuse=reuse=="ExactStepV1";
     if(OpenBoundary())
     {
-        Require(NewModels() && AcceptedAWF() && PimpleSingleSweep() && m_dimension==2 && !Mapped() && m_comm->GetSize()==1,
+        Require(NewModels() && AcceptedAWF() && PimpleSingleSweep() && m_dimension==2 && (!Mapped() || CurvedManufactured()) && m_comm->GetSize()==1,
             "AcceptedOpenFlatV1 supports only serial flat2D original new-model Accepted one-sweep evolution");
         Require(!m_evaluationReuse,"AcceptedOpenFlatV1 evaluation caching is not qualified; select Off");
         std::string top,backflow,coordinates;
         session->LoadSolverInfo("RANSOpenTop",top,"Missing");
         session->LoadSolverInfo("RANSOpenBackflow",backflow,"Missing");
         session->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
-        Require(top=="DirichletCompatibleV1" && backflow=="RejectV1" && coordinates=="Physical",
+        Require(top=="DirichletCompatibleV1" && backflow=="RejectV1" && coordinates==(CurvedManufactured()?"Chart":"Physical") &&
+            (m_boundaryPolicy!="AcceptedOpenFlatV1" || !Mapped()),
             "AcceptedOpenFlatV1 requires declared compatible top, RejectV1 outlet and physical coordinates");
         session->LoadParameter("RANSOpenVelocityScale",m_openVelocityScale,1.);
         Require(std::isfinite(m_openVelocityScale) && m_openVelocityScale>0,"invalid open-boundary velocity scale");
@@ -460,7 +478,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     for(const auto &point:std::vector<RANSWallCoordinate>{lower,upper,{lower[0],upper[1],0},{upper[0],lower[1],0}})
     {
         const double minH=m_mapping.At(point).height-std::abs(m_mapping.heightAmplitude)*2;
-        Require(parameters.geometry.roughness<minH && parameters.geometry.sampleHeight<=minH && parameters.geometry.tailStart<=minH,
+        Require(parameters.geometry.roughness<minH && (AcceptedAWF() || (parameters.geometry.sampleHeight<=minH && parameters.geometry.tailStart<=minH)),
             "physical h/rK/rm do not fit every mapped ray");
     }
     if(m_mapping.kind==RANSWallNormalMap::Kind::CosineHill)
@@ -541,7 +559,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             m_dimension==3?column[2]+(z[j]+1)*(column[3]-column[2])/2:0.,parameters.geometry.sampleHeight};
         ray.weight=w[i]*(column[1]-column[0])/2;
         if(m_dimension==3)ray.weight*=w[j]*(column[3]-column[2])/2;
-        ray.coordinate[2]=(ColumnAverageK()?m_parameters.geometry.sampleHeight:parameters.geometry.sampleHeight)/m_mapping.At(ray.coordinate).scale;
+        ray.coordinate[2]=AcceptedAWF()?parameters.geometry.height:(ColumnAverageK()?m_parameters.geometry.sampleHeight:parameters.geometry.sampleHeight)/m_mapping.At(ray.coordinate).scale;
         ray.weight*=m_mapping.At(ray.coordinate).baseArea;
         const double scale=m_mapping.At(ray.coordinate).scale;
         for(const auto &element:innerVelocity->Elements())
@@ -576,7 +594,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             "CLS-specific action/budget/comparison routes unsupported for the new closures; use model-aware native audits");
     }
     if(SegregatedPicard() || PimpleSingleSweep())
-        Require(m_dimension==2 && !Mapped() && (NewModels() || (((m_transitionEnabled && m_cappedDestruction) || (AcceptedAWF() && !m_cappedDestruction)) &&
+        Require(m_dimension==2 && (!Mapped() || CurvedVerification()) && (NewModels() || (((m_transitionEnabled && m_cappedDestruction) || (AcceptedAWF() && !m_cappedDestruction)) &&
             m_parameters.model.Model()==RANSModel::CLSHighRe)) && !m_solveDiagnosticReplay,
             "SegregatedPicard requires flat 2D upstream CLS with capped destruction and no legacy replay");
     Vector seed(Size());for(int i=0;i<size[K()];++i)seed[offset[K()]+i]=parameters.model.Q()*.16*m_constants[K()][i];
@@ -599,6 +617,7 @@ std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::Profile(double k
     else if(weight<0)weight=m_transitionEnabled?0:m_parameters.chi;
     Require(k>0 && std::isfinite(k),"invalid physical sampled K");
     const auto metric=m_mapping.At(chart);auto geometry=m_parameters.geometry;geometry.height=metric.height;
+    if(AcceptedAWF())geometry.sampleHeight=geometry.tailStart=geometry.height;
     auto options=m_options;options.requestedWeight=weight;for(double &r:options.physicalBreakpoints)r*=metric.scale;
     const AWFNormalMetric normal{metric.kappa1,metric.kappa2};
     const auto construct=[&]()
@@ -827,7 +846,7 @@ std::map<int,double> RANSWallEvolutionPatch::ExternalConstraints(double time,con
         for(auto [id,value]:values)result[offset[b]+id]=value;
     }
     if(OpenBoundary())result[offset[Gauge()]]=0.; // unused slot, not a pressure test or mean constraint
-    if(Mapped())
+    if(Mapped() && !OpenBoundary())
     {
         if(m_boundaryFlux.empty())
         {
@@ -1073,6 +1092,7 @@ std::vector<int> RANSWallEvolutionPatch::CondensableVelocity(const std::map<int,
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vector &history,double alpha,double time,
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
+    Require(!StaticTransmissionOnly(),"CT6 static transmission does not enable variable-height evolution");
     Require(Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
     if(PimpleSingleSweep())
     {
@@ -1735,6 +1755,7 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();
     if(NewModels())text<<":resolved="<<m_parameters.model.Signature();
     if(Mapped())text<<':'<<m_mapping.Signature();
+    if(CurvedVerification())text<<":curved-capability="<<m_curvedCapability<<":CT6-conservative-v1";
     if(m_innerStress==RANSWallInnerStressModel::SaturatedR2)
         text<<":M8-R2:InnerStress:SaturatedR2:v1:rho=0.8";
     if(m_variantName!="Original" || m_cappedDestruction)

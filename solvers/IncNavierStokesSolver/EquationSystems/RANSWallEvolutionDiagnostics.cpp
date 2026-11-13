@@ -4,6 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallManufactured.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallForwardDiagnostics.h>
@@ -443,6 +444,7 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
         }
     }
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
+    if(CurvedVerification())out<<":curved="<<CurvedCapabilityName()<<":"<<m_mapping.Signature()<<":CT6-conservative-v1";
     if(OpenBoundary())
     {
         Require(!legacyOperator,"open boundary has no legacy replay identity");
@@ -454,7 +456,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
     const RANSWallEvolutionData &data,bool basis,const std::vector<RANSWallCoordinate> &grid,const std::vector<int> &sides) const
 {
     namespace J=RANSWallSolveJson;
-    Require(NewModels() && Dimension()==2 && !Mapped() && m_comm->GetSize()==1,
+    Require(NewModels() && Dimension()==2 && (!Mapped() || CurvedVerification()) && m_comm->GetSize()==1,
         "verification is model-aware serial flat2D only");
     Require(m_variantName=="Original" && !m_cappedDestruction && m_innerStress==RANSWallInnerStressModel::Linear,
         "verification requires original outer, linear inner and prescribed uncapped sources");
@@ -470,6 +472,9 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
     {
         return J::Object({{"coordinate",J::Numbers(q.v.coordinate)},{"weight",J::Number(q.weight)},
             {"region",J::Number(region)},{"velocity_k",row(q.v)},{"pressure",row(q.p)},
+            {"physical_coordinate",J::Numbers(Physical(q.v.coordinate))},
+            {"volume_metric",J::Number(m_mapping.At(q.v.coordinate).determinant)},
+            {"normal_J",J::Number(m_mapping.At(q.v.coordinate).J)},
             {"generating_geometry",J::Number(q.generatingGeometry)},
             {"generating_radial_panel",J::Numbers(Vector{q.panelLower,q.panelUpper})},
             {"epsilon",region==1?row(q.e):"null"}});
@@ -528,7 +533,9 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         RANSTensor G{},stress{};for(int a=0;a<2;++a)for(int j=0;j<3;++j)G[PhysicalAxis(a)][j]=g[a][j];
         if(region==0){const auto profile=StateProfile(state,p,time,data);stress=RANSWallInnerMeanStress(InnerStress(v[2],profile->Original().EddyViscosity(Distance(p)),G),m_parameters.geometry.molecularNu,v[4]);}
         else{const auto law=OuterClosure(v[2],v[3],G,p);for(int a=0;a<3;++a)for(int j=0;j<3;++j)stress[a][j]=-law.reynoldsStress[a][j]+(a==j?2*v[2]/3-v[4]:0.);}
-        Vector traction;for(int a=0;a<3;++a)traction.push_back(stress[a][2]);tractions.push_back(J::Numbers(traction));
+        Vector traction;auto normal=m_mapping.At(p).normal;
+        if(CurvedVerification() && interface){normal=m_mapping.MatchingArea(p);const double norm=std::hypot(normal[0],normal[1],normal[2]);for(double &v:normal)v/=norm;}
+        for(int a=0;a<3;++a){double v=stress[a][2];if(CurvedVerification()){v=0;for(int b=0;b<3;++b)v+=stress[a][b]*normal[b];}traction.push_back(v);}tractions.push_back(J::Numbers(traction));
         dependentEpsilon.push_back(region==0?J::Number(DependentEpsilon(state,p,time,data)):"null");
         values.push_back(J::Numbers(v));gradients.push_back(J::Rows(g));regions.push_back(J::Number(region));
         observedSides.push_back(J::Number(side));provenance.push_back(J::Numbers(geometry));

@@ -88,7 +88,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored,
     bool originalOuterCounterfactual,bool localize) const
 {
-    Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || ModelAwareAudit()),
+    Require(m_comm->GetSize()==1 && m_dimension==2 && (!Mapped() || CurvedVerification()) && ((m_transitionEnabled && m_cappedDestruction) || ModelAwareAudit()),
         "R3 residual-resolution audit requires serial flat2D Upstream+Capped");
     Require(state.size()==Size() && history.size()==Size() && alpha>=0 && m_eta==0,
         "R3 residual-resolution audit requires frozen unanchored valid state/history");

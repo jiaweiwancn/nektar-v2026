@@ -123,8 +123,14 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
     metric.Validate(geometry.height);
     if(model.NewModel())
     {
-        if(metric.kappa1!=0 || metric.kappa2!=0)
-            throw std::invalid_argument("New-model curved AWF kernel unsupported in first qualification");
+        if((metric.kappa1!=0 || metric.kappa2!=0) &&
+           !(model.WallFormulation()==RANSWallFormulation::AcceptedBudgetAWF &&
+             options.curvedCapability==AWFCurvedCapability::AcceptedVerificationV1))
+            throw std::invalid_argument("New-model curved AWF requires explicit AcceptedVerificationV1 kernel capability");
+        if(options.curvedCapability!=AWFCurvedCapability::FlatQualifiedV1 &&
+           !(options.curvedCapability==AWFCurvedCapability::AcceptedVerificationV1 &&
+             model.WallFormulation()==RANSWallFormulation::AcceptedBudgetAWF))
+            throw std::invalid_argument("Curved verification capability requires the Accepted formulation");
         const bool accepted=model.WallFormulation()==RANSWallFormulation::AcceptedBudgetAWF;
         if(options.formulation!=(accepted?AWFProfileFormulation::AcceptedBudgetAWF:AWFProfileFormulation::LegacyEPAWF) ||
            geometry.molecularNu!=model.MolecularNu())

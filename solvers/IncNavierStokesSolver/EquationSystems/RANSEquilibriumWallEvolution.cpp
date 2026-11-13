@@ -8,6 +8,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallPhysicsSignature.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallManufactured.h>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <LibUtilities/BasicUtils/FieldIO.h>
 #include <SpatialDomains/MeshGraphIO.h>
@@ -59,7 +60,7 @@ RANSWallEvolutionFunction RANSEquilibriumWallEvolution::Function(const std::stri
 }
 std::vector<RANSWallEvolutionFunction> RANSEquilibriumWallEvolution::Functions(const std::string &name,bool required) const
 {
-    if(m_patch->OpenBoundary() && RANSUsesNeutralComposite(m_serialSession) && name=="InitialConditions")
+    if(m_patch->OpenBoundary() && (RANSUsesNeutralComposite(m_serialSession) || RANSUsesAcceptedManufactured(m_serialSession)) && name=="InitialConditions")
         return RANSAcceptedOpenInitialFunctions(m_serialSession,*m_patch);
     std::vector<RANSWallEvolutionFunction> result;const int dim=m_patch->Dimension();
     for(int b=0;b<m_patch->Gauge();++b)
@@ -225,7 +226,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         for(int a=0;a<dim;++a)
         {m_data.innerBody[a]=Function("BodyForceInner",expected[a]);m_data.outerBody[a]=Function("BodyForceOuter",expected[a]);}
         m_data.innerKSource=Function("ScalarSourceInner","k");m_data.outerKSource=Function("ScalarSourceOuter","k");m_data.outerEpsilonSource=Function("ScalarSourceOuter","eps_tilde");
-        if(!m_neutral && !(m_patch->OpenBoundary() && RANSUsesNeutralComposite(m_serialSession)))
+        if(!m_neutral && !(m_patch->OpenBoundary() && (RANSUsesNeutralComposite(m_serialSession) || RANSUsesAcceptedManufactured(m_serialSession))))
         {
             for(int b=0;b<dim;++b)
             {
