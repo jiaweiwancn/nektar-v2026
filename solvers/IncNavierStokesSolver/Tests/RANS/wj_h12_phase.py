@@ -52,6 +52,12 @@ def role_context(binding,phase):
         state_absolute_step=binding['predecessor_step']if phase=='P'else binding['step']if phase=='A'else None,
         accepted_role=phase in ('P','A'),callback_history_sha256=binding['stage_history_sha256'],alpha=binding['alpha'])
 
+def endpoint_margin(record):
+    """H11 fixed-owner records export margin, not H4 scan's principal dict."""
+    value=float(record['margin'])
+    if not math.isfinite(value):raise ValueError('nonfinite published margin')
+    return value
+
 def bind(r,packet,step,producer,expected_producer):
     if producer!=expected_producer:raise ValueError('wrong original attempt producer')
     c,attempt,local=selected(r,step);p=checked_context(r,step-1)

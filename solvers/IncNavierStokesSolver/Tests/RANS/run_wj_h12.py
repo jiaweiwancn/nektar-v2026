@@ -31,7 +31,16 @@ def execute(root,label,argv,seconds=60,phase='operation'):
         assert not b.get('closed')and label not in b['entries']
         spent=lambda phases:sum(v.get('seconds',v['reserved_seconds'])for v in b['entries'].values()if v['phase']in phases)
         if phase!='closure':
-            assert not b.get('h12_halt'),'monotone H12 halt'
+            if b.get('h12_halt'):
+                # H12 permits a charged purely passive correction, never a
+                # native relaunch or erasure of the original stop receipt.
+                assert b['h12_halt']['reason']=="KeyError('principal')",'unresolved scientific/provenance halt'
+                if '--resume-from'in argv:
+                    admission=b['passive_repair_admission'];assert not admission['used']
+                    record=admission['receipt'];assert sha(record['path'])==record['sha256']
+                    assert load(record['path'])['status']=='PASS'
+                    admission['used']=True
+                else:assert '--mode'in argv and argv[argv.index('--mode')+1]=='repair','monotone H12 halt'
             assert spent(('operation','science'))+seconds<=480
             if phase=='science':assert spent(('science',))+seconds<=360
         else:assert spent(('closure',))+seconds<=90

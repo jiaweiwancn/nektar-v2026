@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 from wj_h12_phase import (ATTEMPTS,WINDOWS,BRANCHES,OWNER_KEYS,PHASES,SparseRows,checked_context,bind,
                          local,decompositions,window,paired_window,cancellation,identity,kernel_input,
-                         predictor_eligible,scatter,validate_owner,DIRECTION,role_context)
+                         predictor_eligible,scatter,validate_owner,DIRECTION,role_context,endpoint_margin)
 from wj_h4_points import chart,owner_point,vector_hash
 from wj_h9_local import same
 from test_wj_h11_continuation import report
@@ -72,6 +72,10 @@ class SavedPhaseDiagnosis(unittest.TestCase):
         self.assertEqual((a['time'],a['state_absolute_step']),(.04,4))
         self.assertFalse(c['accepted_role']);self.assertIsNone(c['state_absolute_step'])
         self.assertEqual(p['attempt_time'],a['attempt_time'])
+    def test_published_endpoint_schema_is_not_a_scan_packet(self):
+        self.assertEqual(endpoint_margin(dict(margin=.0035)),.0035)
+        with self.assertRaises(KeyError):endpoint_margin(dict(principal=dict(in_plane=.0035)))
+        with self.assertRaises(ValueError):endpoint_margin(dict(margin=float('nan')))
     def test_fixed_action_normalization_gap_and_B_identities(self):
         G=np.array([[.003,0,.8],[0,0,0],[.002,0,-.001]])
         a=local(dict(G=G,k=.009,epsilon=.002));b=local(dict(G=G*1.002,k=.0091,epsilon=.00203))

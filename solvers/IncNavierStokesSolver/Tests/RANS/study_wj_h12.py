@@ -12,7 +12,7 @@ from run_wj_h4 import load,save,sha
 from run_wj_h7 import update_journal
 from run_wj_h10 import runtime_snapshot
 from wj_h12_phase import (ATTEMPTS,BRANCHES,WINDOWS,OWNER_KEYS,OBSERVABLES,PHASES,SparseRows,checked_context,
-    bind,local,decompositions,window,paired_window,identity,scale,comparison_scale,kernel_input,sparse_flow,predictor_eligible,DIRECTION,role_context)
+    bind,local,decompositions,window,paired_window,identity,scale,comparison_scale,kernel_input,sparse_flow,predictor_eligible,DIRECTION,role_context,endpoint_margin)
 from wj_h4_points import vector_hash
 from wj_h9_local import same
 from wj_h3_analysis import principal
@@ -42,6 +42,25 @@ def manifest_item(m,p):
     rows=[v for v in m['heavy']if v['path']==str(p)]
     if len(rows)!=1:raise ValueError('required input absent/duplicated in sealed manifest: '+str(p))
     return check(rows[0])
+
+def repair(root):
+    """Qualify the one passive endpoint-schema repair; preserve the old halt."""
+    book=load(root/'accounting.json');old=root/'science/results-v1'
+    assert book['h12_halt']['reason']=="KeyError('principal')"
+    assert load(root/'operations/sparse-science-v2/receipt.json')['status']=='FAIL'
+    assert not(old/'kernel-native-exec.json').exists()and not(old/'compiled-checks.json').exists()
+    roles=load(old/'local-phase-roles.json');bindings=load(old/'phase-bindings.json')
+    assert len(roles)==280 and len(bindings)==14
+    assert all(v['value']['constitutive_status']=='DEFINED'for v in roles)
+    assert all(v['P_C_bitwise']and v['raw_corrected_bitwise']for v in bindings)
+    receipt=dict(status='PASS',classification='passive endpoint schema KeyError, before kernel creation; no native/physical halt',
+        original_halt=book['h12_halt'],failed_operation=file_id(root/'operations/sparse-science-v2/receipt.json'),
+        input_intent=file_id(root/'science/input-intent.json'),retained_roles=file_id(old/'local-phase-roles.json'),
+        retained_bindings=file_id(old/'phase-bindings.json'),retained_pilot=file_id(old/'retained-pilot.json'),
+        source=file_id(__file__),scope='resume aggregation/compiled checks; do not repeat the retained pilot or phase constitutive evaluations')
+    save(root/'science/passive-repair-v3.json',receipt)
+    update_journal(root/'accounting.json',lambda b:b.setdefault('passive_repair_admission',dict(receipt=file_id(root/'science/passive-repair-v3.json'),used=False)))
+    print('PASS passive schema repair admission; original halt and all charges preserved',flush=True)
 
 def stage(root):
     out=root/'science';out.mkdir(exist_ok=False);verified=[];manifests={}
@@ -147,9 +166,17 @@ def maps_for_kernel(probe,runtime):
         time.sleep(.01)
     raise ValueError('no qualified native-exec snapshot')
 
-def science(root):
+def science(root,resume_from=None):
     start=time.monotonic();intent=root/'science/input-intent.json';assert sha(intent)==load(root/'accounting.json')['intent_sha256']
-    imp=load(intent);out=root/'science/results-v1';out.mkdir(exist_ok=False)
+    imp=load(intent);out=root/('science/results-v2'if resume_from else 'science/results-v1');out.mkdir(exist_ok=False)
+    previous_roles={}
+    if resume_from:
+        receipt=load(root/'science/passive-repair-v3.json')
+        for k in ('retained_roles','retained_bindings','retained_pilot','input_intent'):check(receipt[k])
+        assert Path(resume_from)==root/'science/results-v1'
+        previous_roles={(v['branch'],v['step'],v['phase'],v['owner_index']):v for v in load(receipt['retained_roles']['path'])}
+        save(out/'passive-resume.json',dict(admission=file_id(root/'science/passive-repair-v3.json'),
+            retained_phase_evaluations=224,retained_predecessors=56,additional_constitutive_phase_evaluations=0))
     reports={b:{label:load(check(v)['path'])for label,v in rr.items()}for b,rr in imp['reports'].items()}
     caches={b:SparseRows(reports[b]['H10'],imp['owners'])for b,dt in BRANCHES}
     # Native mesh/maps must match before sharing immutable basis data.
@@ -170,7 +197,15 @@ def science(root):
         bindings.append(binding);key=(rec['branch'],rec['step']);source_by_attempt[key]=rec;state_arrays[key]=states
         phase_values[key]={}
         for phase in PHASES:
-            h,values=evaluate_state(states[phase]);phase_values[key][phase]=values
+            if resume_from:
+                h=vector_hash(states[phase]);values=[]
+                for i in range(4):
+                    prev=previous_roles[rec['branch'],rec['step'],phase,i]
+                    assert prev['state_sha256']==h and prev['owner']==imp['owners'][i]['owner']
+                    values.append({k:np.asarray(v)if isinstance(v,list)else v for k,v in prev['value'].items()})
+                local_cache[h]=values
+            else:h,values=evaluate_state(states[phase])
+            phase_values[key][phase]=values
             for i,v in enumerate(values):
                 role_records.append(dict(branch=rec['branch'],step=rec['step'],window=rec['window'],phase=phase,owner_index=i,
                     **role_context(binding,phase),state_sha256=h,alias_key=h+':'+str(i),physical=imp['owners'][i]['physical'],owner=imp['owners'][i]['owner'],value=v))
@@ -178,7 +213,7 @@ def science(root):
             for pa,pb in zip(PHASES[:-1],PHASES[1:]):
                 transition.append(dict(branch=rec['branch'],step=rec['step'],owner_index=i,before=pa,after=pb,
                                        decomposition=decompositions(phase_values[key][pa][i],phase_values[key][pb][i])))
-        if number==0:
+        if number==0 and not resume_from:
             error=caches['coarse'].reference_check(states['A']);assert error<2e-11
             elapsed=time.monotonic()-start;cost=time.monotonic()-t0
             remaining=1.25*(13*cost+25.) # 25 s for bounded kernel/aggregation/publication preparation.
@@ -201,7 +236,7 @@ def science(root):
             replay.append(dict(branch=b,step=s,time=old['time'],owner_index=i,status='NOT_EVALUABLE',reason=new['reason']));continue
         errors={name:float(np.max(abs(np.asarray(new[newkey])-np.asarray(rec[oldkey]))))for name,newkey,oldkey in
                 (('U','U','U'),('G','G','G'),('k','k','k'),('epsilon','epsilon','epsilon'),('R','R','R'),('pi','pi','pi'))}
-        errors['mhat']=abs(new['mhat']-rec['principal']['in_plane'])
+        errors['mhat']=abs(new['mhat']-endpoint_margin(rec))
         independent=principal(new['k'],new['epsilon'],new['G']);errors['independent_mhat']=abs(independent['in_plane']-new['mhat'])
         floors={name:(2e-11 if name in ('mhat','independent_mhat')else 4e-11*comparison_scale(name))for name in errors}
         assert all(v<floors[name]for name,v in errors.items()),'H11 endpoint replay differs'
@@ -270,8 +305,11 @@ def science(root):
     save(out/'result.json',serial(result));print('H12 science',status,result,flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('stage','science'),required=True);a=p.parse_args()
-    try:globals()[a.mode](a.root)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('stage','science','repair'),required=True)
+    p.add_argument('--resume-from',type=Path);a=p.parse_args()
+    try:
+        if a.mode=='science':science(a.root,a.resume_from)
+        else:globals()[a.mode](a.root)
     except Exception as err:
         update_journal(a.root/'accounting.json',lambda b:b.setdefault('h12_halt',dict(status='UNRESOLVED',operation=a.mode,reason=repr(err))))
         raise
