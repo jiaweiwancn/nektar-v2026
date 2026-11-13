@@ -1,0 +1,114 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_wj_h12_saved_phase",
+    "test_wj_h9_startup_audit.StartupAuditTests.test_real_phase_masks_and_aliases",
+    "test_wj_h9_startup_audit.StartupAuditTests.test_immutable_history_reference_and_rejected_lineage",
+    "test_wj_h9_startup_audit.StartupAuditTests.test_intermediate_trace_is_not_repaired",
+    "test_wj_h9_startup_audit.StartupAuditTests.test_exact_delta_B_has_two_nonzero_terms",
+    "test_wj_h9_startup_audit.StartupAuditTests.test_telescoping_nonzero_functional_increments",
+    "test_wj_h9_startup_audit.StartupAuditTests.test_actual_root_derivative_and_fixed_direction",
+    "test_wj_h10_initialization.FlatInletInitialization.test_saved_predictor_correction_nonzero",
+    "test_wj_h10_initialization.FlatInletInitialization.test_actual_arithmetic_accepts_decoded_list_rhs",
+    "test_wj_h11_continuation.CompatibleContinuation.test_restart_absolute_index_not_local_one",
+    "test_wj_h11_continuation.CompatibleContinuation.test_selected_native_arithmetic_later_attempt",
+    "test_wj_h11_continuation.CompatibleContinuation.test_wrong_producer_alpha_and_history_reject",
+    "test_wj_h11_continuation.CompatibleContinuation.test_common_integer_times_and_fine_off_common",
+    "test_wj_h11_continuation.CompatibleContinuation.test_floor_has_no_precise_zero_or_rate",
+    "test_wj_h11_continuation.CompatibleContinuation.test_callback_arithmetic_is_not_serialized_slot_equality"
+  ],
+  "cwd": "/home/jay/build/wj-h12-saved-phase-diagnosis-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "phase": "operation",
+  "reserved_seconds": 60.0,
+  "allocation": {
+    "workers": 18,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 71564,
+        "parent": 71563,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-finishing-v1 -- python3 -"
+      },
+      {
+        "pid": 71565,
+        "parent": 71564,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-finishing-v1 --project-limit 16"
+      },
+      {
+        "pid": 71568,
+        "parent": 71564,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-finishing-v1 -- python3 -"
+      },
+      {
+        "pid": 71569,
+        "parent": 71568,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 71591,
+        "parent": 71569,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_finish.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime --ct5 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/finishing-v1"
+      },
+      {
+        "pid": 84897,
+        "parent": 71591,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_audit.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime --member /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v3/A95-p4-dt004 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004"
+      },
+      {
+        "pid": 86845,
+        "parent": 84897,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q64f16/case.xml /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q64f16/budget-request.json /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q64f16/budget.json"
+      },
+      {
+        "pid": 86846,
+        "parent": 86845,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 88713,
+        "parent": 88712,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/source/library -I /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/source/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/RANSWallResolutionProbe.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/source/library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp.d -MF CMakeFiles/RANSWallResolutionProbe.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/source/library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp.o.d -MT CMakeFiles/RANSWallResolutionProbe.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/source/library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D TIXML_USE_STL -D _GLIBCXX_ASSERTIONS -D NDEBUG -D NEKTAR_USE_MPI -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/source/library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp -quiet -dumpdir CMakeFiles/RANSWallResolutionProbe.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/source/library/UnitTests/SolverUtils/ -dumpbase RANSWallResolutionProbe.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror -std=gnu++17 -fno-fast-math -ffp-contract=off -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/cc02OG8d.s"
+      },
+      {
+        "pid": 88845,
+        "parent": 88844,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h12-saved-phase-diagnosis-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h12.py --root /home/jay/build/wj-h12-saved-phase-diagnosis-20261113 --label focused-tests-v1 --seconds 60 -- python3 -B -m unittest -v test_wj_h12_saved_phase test_wj_h9_startup_audit.StartupAuditTests.test_real_phase_masks_and_aliases test_wj_h9_startup_audit.StartupAuditTests.test_immutable_history_reference_and_rejected_lineage test_wj_h9_startup_audit.StartupAuditTests.test_intermediate_trace_is_not_repaired test_wj_h9_startup_audit.StartupAuditTests.test_exact_delta_B_has_two_nonzero_terms test_wj_h9_startup_audit.StartupAuditTests.test_telescoping_nonzero_functional_increments test_wj_h9_startup_audit.StartupAuditTests.test_actual_root_derivative_and_fixed_direction test_wj_h10_initialization.FlatInletInitialization.test_saved_predictor_correction_nonzero test_wj_h10_initialization.FlatInletInitialization.test_actual_arithmetic_accepts_decoded_list_rhs test_wj_h11_continuation.CompatibleContinuation.test_restart_absolute_index_not_local_one test_wj_h11_continuation.CompatibleContinuation.test_selected_native_arithmetic_later_attempt test_wj_h11_continuation.CompatibleContinuation.test_wrong_producer_alpha_and_history_reject test_wj_h11_continuation.CompatibleContinuation.test_common_integer_times_and_fine_off_common test_wj_h11_continuation.CompatibleContinuation.test_floor_has_no_precise_zero_or_rate test_wj_h11_continuation.CompatibleContinuation.test_callback_arithmetic_is_not_serialized_slot_equality"
+      }
+    ]
+  },
+  "inputs": {},
+  "driver_sha256": "4e7629e262eca6fcc6ad94c9c0af3df5b8da24f98058fa4cfd66be09ea7afd22"
+}
