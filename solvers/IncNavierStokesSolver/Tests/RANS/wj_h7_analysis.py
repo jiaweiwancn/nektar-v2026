@@ -119,12 +119,14 @@ class Rows:
     def reference(self):
         c=self.config;n=len(self.rows);rr=self.rphys;outer=self.outer;U=np.zeros((n,3));G=np.zeros((n,3,3));k=np.full(n,c.K);eps=np.zeros(n);R=np.tile(c.Rc,(n,1,1));pi=np.where(outer,0.,-c.K/NE)
         for z in np.unique(rr):
-            ii=rr==z
-            if z<c.H:
+            # Owner/region selects a one-sided reference at H. Subtracting d0
+            # can round an outer H coordinate just below H; that must never
+            # substitute the finite-nu inner derivative or covariance.
+            ii=(rr==z)&~outer
+            if np.any(ii):
                 U[ii,0]=c.U_inner(z);G[ii,0,2]=c.u_tau**2/c.D(z);k[ii]=c.k_inner(z);R[ii]=c.covariance_inner(z)
-            else:U[ii,0]=c.U_outer(z);G[ii,0,2]=c.u_tau/(KAPPA*z)
-        # At H use the distinct inner derivative/stress on its legitimate owner.
-        ii=~outer;G[ii,0,2]=c.u_tau**2/np.array([c.D(z)for z in rr[ii]]);R[ii]=np.array([c.covariance_inner(z)for z in rr[ii]])
+            ii=(rr==z)&outer
+            if np.any(ii):U[ii,0]=c.U_outer(z);G[ii,0,2]=c.u_tau/(KAPPA*z)
         eps[outer]=c.A/rr[outer]
         return dict(U=U,G=G,k=k,epsilon=eps,pi=pi,mechanical_pressure=pi-2*k/3,R=R)
 

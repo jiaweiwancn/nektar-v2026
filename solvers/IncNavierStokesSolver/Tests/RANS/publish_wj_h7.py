@@ -19,7 +19,7 @@ def write_csv(p,rows):
     with p.open('w',newline='')as f:
         w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
 
-def publish(root,output=None):
+def publish(root,output=None,repair_reference=False):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -30,6 +30,18 @@ def publish(root,output=None):
         v=load(view);assert sha(v['path'])==v['sha256'];summary=load(v['path']);folder=Path(v['path']).parent
         inv=load(summary['inventory']['path']);rs=reports(root,h);r0=rs[0][1];c=configuration(h);cache=Rows(r0,[p['physical']for p in inv['points']],c)
         rec=load(summary['records']['path']);pair=load(summary['pairs']['path']);details[h]=rec
+        if repair_reference:
+            for entry in rec:
+                with np.load(entry['arrays']['path'])as data:
+                    old=entry['reference_error'];new=cache.norms(data,cache.exact)
+                    for scope,fields in old.items():
+                        for field,value in fields.items():assert value['L2']==new[scope][field]['L2'],'reference repair must affect zero-weight H traces only'
+                    active=np.flatnonzero(cache.outer & (np.arange(len(cache.rows))<cache.point_count))
+                    corrected=dict(E_G=float(np.max(abs(data['G'][active,0,2]/cache.exact['G'][active,0,2]-1))),
+                        E_epsilon=float(np.max(abs(data['epsilon'][active]/cache.exact['epsilon'][active]-1))),
+                        E_U=float(np.max(abs(data['U'][active]-cache.exact['U'][active]))),E_k=float(np.max(abs(data['k'][active]/c.K-1))))
+                    entry['reference_owner_repair']=dict(original_errors=entry['errors'],corrected_errors=corrected,reason='H reference selected by explicit owner, not rounded z-d0; state/action/quality/drift/dt differences unchanged')
+                    entry['errors']=corrected;entry['reference_error']=new
         native={};endpoints={}
         for branch in ('coarse','fine'):
             rp=root/'cases'/f'H{h:g}mm'/branch/'case.evolution.json';ep=root/'observations'/f'H{h:g}mm'/branch/'result.json'
@@ -85,7 +97,7 @@ def publish(root,output=None):
     save(out/'component-gates.json',dict(status=overall,cases=gates,accepted_steps=steps,attempts=attempts,fresh_cp0=load(root/'accounting.json')['cp0_reservations'],
         scope='finite inventory/T=.04 idealized neutral transport; no order, long-time, developed-flow or experimental claim'))
     write_csv(out/'timeline.csv',timeline);write_csv(out/'reference-max-errors.csv',errors);write_csv(out/'norms-and-differences.csv',pairs)
-    save(out/'principal-witnesses.json',witnesses);save(out/'interface-budget-history.json',interfaces);save(out/'residual-weak-checks.json',norms)
+    save(out/'reference-owner-repair.json',dict(enabled=repair_reference,source=identity(__file__),original_record_views={str(h):load(root/f'scan-view-H{h:g}.json')for h in details},repairs=[dict(height=h,branch=e['branch'],step=e['step'],**e['reference_owner_repair'])for h,rr in details.items()for e in rr if 'reference_owner_repair'in e]));save(out/'principal-witnesses.json',witnesses);save(out/'interface-budget-history.json',interfaces);save(out/'residual-weak-checks.json',norms)
     for name in ('imports.json','runtime-equivalence.json','private-runtime.json','runtime-differences-v1.json','setup.json','allocation-denial-v1.json','parent-thread-fix.json'):
         if (root/name).exists():save(out/name,load(root/name))
     save(out/'accounting-snapshot.json',load(root/'accounting.json'))
@@ -125,4 +137,4 @@ def publish(root,output=None):
     print('H7 compact publication',overall,'attempts',attempts,'accepted',steps,flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path);a=p.parse_args();publish(a.root,a.output)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path);p.add_argument('--repair-reference',action='store_true');a=p.parse_args();publish(a.root,a.output,a.repair_reference)

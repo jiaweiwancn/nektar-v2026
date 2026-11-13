@@ -59,6 +59,14 @@ class TransportTests(unittest.TestCase):
         with self.assertRaises(AssertionError):accounting(dict(r,pimple_attempts=[dict(a,bound_activations=1)]))
         partial=dict(a,scheduled_complete=False,k_transport_solves=0,bound_calls=0)
         self.assertEqual(accounting(dict(r,pimple_attempts=[partial],steps=0,failure='original'))['failure'],'original')
+    def test_outer_H_reference_uses_owner_despite_subtraction_roundoff(self):
+        from wj_h7_analysis import Rows
+        from wj_h5_neutral import KAPPA
+        c=configuration(5.);r=Rows.__new__(Rows);r.config=c;r.rows=[0,1]
+        r.rphys=np.array([np.nextafter(c.H,0.),np.nextafter(c.H,0.)]);r.outer=np.array([False,True]);v=r.reference()
+        assert_allclose(v['G'][1,0,2],c.u_tau/KAPPA/r.rphys[1],atol=1e-15,rtol=0)
+        assert_allclose(v['R'][1],c.Rc,atol=0,rtol=0)
+        self.assertGreater(abs(v['G'][0,0,2]-v['G'][1,0,2]),.01)
     def test_quality_and_physical_status_are_distinct(self):
         self.assertEqual(classify(.003,1,.001,.001),'PASS');self.assertEqual(classify(.001,1,.001,.001),'QUALITY_LOST')
         self.assertEqual(classify(-1e-3,1,.001,.001),'OBSTRUCTED');self.assertEqual(classify(-1e-12,1,.001,.001),'UNRESOLVED')
