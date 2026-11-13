@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 import numpy as np
 from numpy.testing import assert_allclose
 from run_wj_h7 import execute,load,save,sha,MATRIX
-from study_wj_h5 import verify,identity,compare_loads
+from study_wj_h5 import identity,compare_loads
 from study_wj_h6 import configuration
 from wj_h6_projection import Functions
 from wj_h4_points import owners,evaluate,vector_hash,aligned
@@ -26,8 +26,9 @@ from validate_wj1 import Probe
 PARENT='wj-h6-neutral-projection-20261112'
 
 def paths(root):
-    base=root.parent/'wj-h2-20261111'
-    return base/'runtime-v4/IncNavierStokesSolver',base/'observer-v6/RANSWallResolutionProbe',base/'build-v1/WJKernelProbe'
+    base=root/'runtime'
+    if not (root/'runtime-equivalence.json').exists():raise ValueError('verify exact H6 private runtime closure first')
+    return tuple(base/n for n in ('IncNavierStokesSolver','RANSWallResolutionProbe','WJKernelProbe'))
 
 def case(root,h,branch):return root/'cases'/f'H{h:g}mm'/branch
 
@@ -55,8 +56,29 @@ def compatible(a,b,dt,*,same_dt=True):
     if b['steps']!=0 or b['time']!=0:raise ValueError('CP0 required')
 
 
+def verify_runtime(root):
+    source=Path(__file__).resolve().parents[4];sealed=source/'docs/plans/wj-h2-linux'
+    checks=[]
+    for v in load(sealed/'native-source-inputs.json'):
+        assert sha(source/v['path'])==v['sha256'],'changed native source input'
+        checks.append(v)
+    private=load(root/'private-runtime.json');overrides=private['overrides'];elf=[]
+    for v in load(sealed/'loaded-runtime.json')['loaded_files']:
+        original=v['path'].replace('/media/jay/新加卷/','/media/jay/新加卷1/',1)
+        path=Path(overrides.get(original,{}).get('path',original))
+        if not path.is_file()or path.open('rb').read(4)!=b'\x7fELF':continue
+        value=identity(path);assert value['sha256']==v['sha256'],'changed qualified ELF: '+original
+        elf.append(dict(value,original=original))
+    assert len(checks)==340 and len(elf)==133
+    save(root/'runtime-equivalence.json',dict(status='PASS',compiled_inputs=checks,qualified_ELFs=elf,
+        private_runtime=identity(root/'private-runtime.json'),generating_source=identity(__file__),
+        governing_producer='c344dc2209f030e426e2ee5501d5e5b72a6d2c46',observer_producer='e62b5f4d265f068dd5af3f090bfb0e385c3ae53e',
+        native_rebuild=False,arithmetic_policy='GNU11.4 C++17 Release -O3 -DNDEBUG -ffp-contract=off -fno-fast-math; RANS_BUILD_SOLVER=ON',
+        reason='six host glibc files upgraded; private original-version files exactly match every H6 hash'))
+
+
 def imports(root):
-    verify(root);parent=root.parent/PARENT;manifest=load(Path(__file__).resolve().parents[4]/'docs/plans/wj-h6-linux/manifest.json')
+    verify_runtime(root);parent=root.parent/PARENT;manifest=load(Path(__file__).resolve().parents[4]/'docs/plans/wj-h6-linux/manifest.json')
     expected={v['path']:v for v in manifest['heavy']};records=[]
     for h in (5.5,6.,5.):
         folder=parent/'cases'/f'H{h:g}mm';rp=folder/'case.evolution.json';r=load(rp);cp=Path(r['checkpoint']);payload=checkpoint_payload(cp)
