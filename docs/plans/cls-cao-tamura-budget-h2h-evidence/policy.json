@@ -1,0 +1,79 @@
+{
+  "version": "H2hPredeclaredV1",
+  "parent": "f30c309d6944dc7a117f14d6d7e2b929bbcf0d54",
+  "B_sha256": "c83da50b65d2e9980325d365779a9d53394fbf10e6431d1b87f79728366ae13d",
+  "cold_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "physics": "exact H2g standard/CLS manifests; no recalibration; current 2804-slot hill mesh",
+  "candidate": "exact B copy; add signed increments on permitted outer k/epsilon rows only; no velocity reconstruction",
+  "basis": "archived eight k/eight epsilon and existing cold conditioning transforms; no regeneration",
+  "envelope_reference": "immutable standard cold, not B",
+  "envelopes": [
+    0.5,
+    2.0
+  ],
+  "fixed": "all velocity and pressure, inner k, endpoint K, inlet/interface scalars, dependent epsilon, fixed reference/defect and boundary data",
+  "sets": {
+    "optimization": [
+      "complete native scalar/covariance inventory",
+      "GL20 physical volume"
+    ],
+    "withheld": "one terminal GL24 audit; not exported/used during search"
+  },
+  "mathematics": {
+    "zero": "(2/3)*epsilon-Cmu*lambda_max(G+G^T)*k >= 0",
+    "positive": "Cmu*s*k^2/epsilon-(2/3)*k+delta <= 0",
+    "target_delta_over_K0": 0.0001,
+    "positive_optimizer_buffer_over_K0": 1e-08,
+    "positive_scalar_bound_interior_buffer": 0,
+    "certificate_scope": "fixed B gradient, sixteen signed scalar increments, declared finite samples and original [.5,2] bounds only",
+    "scalar_bound_policy": "Original hard [.5,2] envelopes in every LP; no tightened-envelope infeasibility claim"
+  },
+  "LP": {
+    "method": "highs-ds",
+    "threads": 1,
+    "primal_dual_tolerance": 1e-10,
+    "variables": "signed; finite redundant bounds may be derived from independent hard scalar rows, never default nonnegative",
+    "row_scaling": "normalize physical scalar rows by cold value, zero covariance by cold epsilon, positive covariance by K0, then by max(1,||row||inf,|rhs|)",
+    "phase_I": "covariance slack alone; all non-covariance bounds hard; no mixed distance objective",
+    "obstruction": "requires checked primal/dual/lower bound/gap and rounding allowance; infeasible status alone is inconclusive",
+    "secondary": "only after positive feasibility; weighted conditioned L1 departure from exact B, maximum four remaining rounds"
+  },
+  "budget": {
+    "total_LP_rounds": 24,
+    "complete_separation_scans": 80,
+    "optimizer_seconds": 300,
+    "native_candidate_checks": 3
+  },
+  "tolerances": {
+    "native_gates": "unchanged",
+    "affine_reconstruction_relative": 1e-10,
+    "dual_stationarity": 1e-08,
+    "primal_gap": 1e-07,
+    "certified_obstruction_lower_bound": 1e-08,
+    "roundoff": "export native constant-centred evaluator bounds; verify direct legal increments; include residual times implied coefficient bounds in the dual lower bound"
+  },
+  "pilot": {
+    "conditional_on_all_native_GL20_GL24_identity_gates": true,
+    "dt": [
+      2e-06,
+      1e-06
+    ],
+    "steps": [
+      8,
+      16
+    ],
+    "split": [
+      4,
+      4
+    ],
+    "rollback": true,
+    "no_Lift_projection": true,
+    "long_continuation": false
+  },
+  "resources": {
+    "build_workers": 4,
+    "native_ranks": 1,
+    "library_threads": 1,
+    "aggregate_limit": 72
+  }
+}

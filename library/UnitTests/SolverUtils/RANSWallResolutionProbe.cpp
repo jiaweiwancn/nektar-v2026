@@ -9,6 +9,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallModelSpec.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallKBoundProjection.h>
+#include "RANSWallScalarFeasibilityContext.h"
 #include <LibUtilities/Communication/CommSerial.h>
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <SpatialDomains/MeshGraphIO.h>
@@ -93,6 +94,7 @@ std::string MappedSeedWitnesses(const RANSWallEvolutionPatch &patch,const Vector
 std::string ExtraSeedAudit(const RANSWallEvolutionPatch &patch,const Vector &s,const RANSWallEvolutionData &data,const Vector *base=nullptr,int order=12)
 {
     double minimum=1e300,innerMinimum=1e300,outerMinimum=1e300,strong=0,volume=0,energy=0,baseEnergy=0,deltaNorm=0,maximumIncrement=0;double tke=0,baseTke=0,outerTke=0,baseOuterTke=0,tmin=1e300,tmax=0,lmin=1e300,lmax=0,trmin=1e300,trmax=0,lrmin=1e300,lrmax=0,maxDivergence=0;std::string witness="null";int count=0;
+    double krmin=1e300,krmax=-1e300,ermin=1e300,ermax=-1e300,minK=1e300,minE=1e300;int invalidScalars=0;std::string scalarWitness="null",envelopeWitness="null";
     for(const auto &q:patch.Quadrature(0,order))
     {
         const bool inner=patch.fields[0]->Elements()[q.element].upper[2]<=patch.Parameters().geometry.height;
@@ -100,6 +102,16 @@ std::string ExtraSeedAudit(const RANSWallEvolutionPatch &patch,const Vector &s,c
         const double k=patch.GeometryPoint(patch.K(),q.geometry,q.coordinate).Value(s,patch.offset[patch.K()]);
         const auto profile=patch.StateProfile(s,q.coordinate,0,data);
         const double e=inner?profile->Dissipation(q.coordinate[2]):patch.GeometryPoint(patch.Epsilon(),q.geometry,q.coordinate).Value(s,patch.offset[patch.Epsilon()]);
+        minK=std::min(minK,k);minE=std::min(minE,e);
+        if(!(std::isfinite(k) && std::isfinite(e) && k>0 && e>0))
+        {++invalidScalars;scalarWitness=J::Object({{"coordinate",J::Numbers(q.coordinate)},{"physical",J::Numbers(patch.Physical(q.coordinate))},{"geometry",J::Number(q.geometry)},{"element",J::Number(q.element)},{"inner",J::Boolean(inner)},{"k",J::Number(k)},{"epsilon",J::Number(e)}});continue;}
+        if(!inner && base)
+        {
+            const double kb=patch.GeometryPoint(patch.K(),q.geometry,q.coordinate).Value(*base,patch.offset[patch.K()]);
+            const double eb=patch.GeometryPoint(patch.Epsilon(),q.geometry,q.coordinate).Value(*base,patch.offset[patch.Epsilon()]);
+            const double rk=k/kb,re=e/eb;krmin=std::min(krmin,rk);krmax=std::max(krmax,rk);ermin=std::min(ermin,re);ermax=std::max(ermax,re);
+            if(std::min(rk,re)<.5-1e-12 || std::max(rk,re)>2+1e-12)envelopeWitness=J::Object({{"coordinate",J::Numbers(q.coordinate)},{"physical",J::Numbers(patch.Physical(q.coordinate))},{"geometry",J::Number(q.geometry)},{"element",J::Number(q.element)},{"k_over_cold",J::Number(rk)},{"epsilon_over_cold",J::Number(re)}});
+        }
         const auto R=inner?patch.InnerStress(k,profile->Original().EddyViscosity(q.coordinate[2]),g).reynoldsStress:patch.OuterClosure(k,e,g,q.coordinate).reynoldsStress;
         tke+=q.weight*k;const double bk=base?patch.GeometryPoint(patch.K(),q.geometry,q.coordinate).Value(*base,patch.offset[patch.K()]):k;baseTke+=q.weight*bk;
         if(!inner){outerTke+=q.weight*k;baseOuterTke+=q.weight*bk;const double ts=k/e,ls=std::pow(k,1.5)/e;tmin=std::min(tmin,ts);tmax=std::max(tmax,ts);lmin=std::min(lmin,ls);lmax=std::max(lmax,ls);
@@ -112,7 +124,8 @@ std::string ExtraSeedAudit(const RANSWallEvolutionPatch &patch,const Vector &s,c
             {"gradient",J::Rows(g)},{"tensor",J::Rows(R)},{"eigenvalues",J::Numbers(ev)}});}
     }
     return J::Object({{"minimum_covariance",J::Number(minimum)},{"inner_minimum_covariance",J::Number(innerMinimum)},{"outer_minimum_covariance",J::Number(outerMinimum)},{"witness",witness},{"count",J::Number(count)},
-        {"quadrature_order",J::Number(order)},{"strong_divergence_RMS",J::Number(std::sqrt(strong/volume))},{"maximum_absolute_divergence",J::Number(maxDivergence)},{"TKE_integral",J::Number(tke)},{"base_TKE_integral",J::Number(baseTke)},{"outer_TKE_integral",J::Number(outerTke)},{"base_outer_TKE_integral",J::Number(baseOuterTke)},{"outer_time_scale",J::Numbers(Vector{tmin,tmax})},{"outer_length_scale",J::Numbers(Vector{lmin,lmax})},{"outer_time_scale_ratio",J::Numbers(Vector{trmin,trmax})},{"outer_length_scale_ratio",J::Numbers(Vector{lrmin,lrmax})},{"strong_divergence_L2",J::Number(std::sqrt(strong))},{"volume",J::Number(volume)},{"kinetic_energy",J::Number(energy)},{"base_kinetic_energy",base?J::Number(baseEnergy):"null"},{"velocity_change_L2",base?J::Number(std::sqrt(deltaNorm)):"null"},{"maximum_sampled_velocity_increment",base?J::Number(maximumIncrement):"null"},
+        {"quadrature_order",J::Number(order)},{"state_sha256",J::Quote(RANSWallR3::Hash(s))},{"cold_base_sha256",base?J::Quote(RANSWallR3::Hash(*base)):"null"},{"model_specification",patch.ModelMetadata()},
+        {"minimum_k",J::Number(minK)},{"minimum_epsilon",J::Number(minE)},{"invalid_scalar_count",J::Number(invalidScalars)},{"scalar_positive_finite",J::Boolean(invalidScalars==0)},{"invalid_scalar_witness",scalarWitness},{"outer_k_over_cold",J::Numbers(Vector{krmin,krmax})},{"outer_epsilon_over_cold",J::Numbers(Vector{ermin,ermax})},{"scalar_envelopes_passed",J::Boolean(base && invalidScalars==0 && krmin>=.5-1e-12 && krmax<=2+1e-12 && ermin>=.5-1e-12 && ermax<=2+1e-12)},{"scalar_envelope_witness",envelopeWitness},{"integrals_complete",J::Boolean(invalidScalars==0)},{"strong_divergence_RMS",J::Number(std::sqrt(strong/volume))},{"maximum_absolute_divergence",J::Number(maxDivergence)},{"TKE_integral",J::Number(tke)},{"base_TKE_integral",J::Number(baseTke)},{"outer_TKE_integral",J::Number(outerTke)},{"base_outer_TKE_integral",J::Number(baseOuterTke)},{"outer_time_scale",J::Numbers(Vector{tmin,tmax})},{"outer_length_scale",J::Numbers(Vector{lmin,lmax})},{"outer_time_scale_ratio",J::Numbers(Vector{trmin,trmax})},{"outer_length_scale_ratio",J::Numbers(Vector{lrmin,lrmax})},{"strong_divergence_L2",J::Number(std::sqrt(strong))},{"volume",J::Number(volume)},{"kinetic_energy",J::Number(energy)},{"base_kinetic_energy",base?J::Number(baseEnergy):"null"},{"velocity_change_L2",base?J::Number(std::sqrt(deltaNorm)):"null"},{"maximum_sampled_velocity_increment",base?J::Number(maximumIncrement):"null"},
         {"scope",J::Quote("independent panelwise physical tensor sampling; complements complete inventory; no domain-wide covariance theorem")}});
 }
 std::string Wide(const std::map<std::string,std::vector<long double>> &values)
@@ -266,13 +279,13 @@ int main(int argc,char **argv)
         {std::ofstream readback(std::string(argv[3])+".model.json");readback<<patch.ModelMetadata()<<std::endl;Require(readback.good(),"native model readback output");}
         const auto operation=packet.get<std::string>("operation","");
         if(auto expected=packet.get_optional<std::string>("expected_model"))Require(*expected==(p.model.Model()==SolverUtils::RANSModel::CLSHighRe?"CLSHighRe":"StandardKEpsilon"),"probe/model-manifest mismatch");
-        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.Composite() && (operation=="h2b_operators" || operation=="h2e_contract_checks" || operation=="h2g_frozen" || operation=="h2f_context" || operation=="h2f_native" || operation=="h2e_context" || operation=="h2e_candidate" || operation=="h2d_setup" || operation=="h2d_candidate" || operation=="h2d_flat" || operation=="h2c_seed" || operation=="h2b_checkpoint" || operation=="h2c_checkpoint"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
+        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.Composite() && (operation=="h2b_operators" || operation=="h2e_contract_checks" || operation=="h2h_scalar_context" || operation=="h2h_candidate" || operation=="h2g_frozen" || operation=="h2f_context" || operation=="h2f_native" || operation=="h2e_context" || operation=="h2e_candidate" || operation=="h2d_setup" || operation=="h2d_candidate" || operation=="h2d_flat" || operation=="h2c_seed" || operation=="h2b_checkpoint" || operation=="h2c_checkpoint"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
         Require(patch.InnerStressName()==packet.get<std::string>("inner_stress_model"),"packet law differs from session");
         for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
-        if(operation=="h2b_operators" || operation=="h2c_seed" || operation=="h2e_contract_checks" || operation=="h2g_frozen" || operation=="h2f_context" || operation=="h2f_native" || operation=="h2e_context" || operation=="h2e_candidate" || operation=="h2d_setup" || operation=="h2d_candidate" || operation=="h2d_flat")
+        if(operation=="h2b_operators" || operation=="h2c_seed" || operation=="h2e_contract_checks" || operation=="h2h_scalar_context" || operation=="h2h_candidate" || operation=="h2g_frozen" || operation=="h2f_context" || operation=="h2f_native" || operation=="h2e_context" || operation=="h2e_candidate" || operation=="h2d_setup" || operation=="h2d_candidate" || operation=="h2d_flat")
         {
             Require(patch.PrescribedInflow() && !packet.get_optional<std::string>("native_checkpoint") && RANSWallR3::HashFile(argv[1])==packet.get<std::string>("xml_sha256"),"H2b operator fixture XML/initialization contract differs");
             auto state=patch.FiniteInflowSeed();const auto baseState=state;
@@ -320,12 +333,27 @@ int main(int argc,char **argv)
                 data.fixedBoundary=patch.FixedReferenceBoundary(baseState);patch.SetReference(baseState,data,0,0);
                 std::ofstream out(argv[3]);out<<patch.FrozenConstitutiveData(state,data,packet.get<std::string>("context_directory"))<<std::endl;Require(out.good(),"frozen output");world->Finalise();return 0;
             }
+            if(operation=="h2h_scalar_context")
+            {
+                Require(RANSWallR3::Hash(baseState)==packet.get<std::string>("base_sha256"),"H2h cold base differs");
+                const auto b=Read(packet,"state");Require(RANSWallR3::Hash(b)==packet.get<std::string>("state_sha256"),"H2h archived B differs");
+                data.fixedBoundary=patch.FixedReferenceBoundary(baseState);patch.SetReference(baseState,data,0,0);
+                const auto context=RANSH2h::Export(patch,b,baseState,data,packet);
+                std::ofstream out(argv[3]);out<<J::Object({{"context",context},{"patch_signature",J::Quote(patch.Signature())},{"geometry_identity",J::Quote(patch.GeometrySignature())},{"inventory_identity",J::Quote(patch.PimpleKBoundSignature())},{"reference_sha256",J::Quote(RANSWallR3::Hash(patch.Reference()))},{"defect_sha256",J::Quote(RANSWallR3::Hash(patch.Defect()))}})<<std::endl;
+                Require(out.good(),"H2h scalar context manifest write");world->Finalise();return 0;
+            }
+            const bool scalarCandidate=operation=="h2e_candidate" || operation=="h2h_candidate";
             std::string outerContract="null";
-            if(operation=="h2e_candidate")
+            if(scalarCandidate)
             {
                 Require(RANSWallR3::Hash(baseState)==packet.get<std::string>("base_sha256"),"H2e candidate base mismatch");state=Read(packet,"state");
                 Require(RANSWallR3::Hash(state)==packet.get<std::string>("state_sha256"),"H2e candidate checksum");
                 data.fixedBoundary=patch.FixedReferenceBoundary(baseState);patch.SetReference(baseState,data,0,0);
+                if(operation=="h2h_candidate")
+                {
+                    const auto b=Read(packet,"B_state");Require(RANSWallR3::Hash(b)==packet.get<std::string>("B_sha256"),"H2h exact B checksum");
+                    RANSH2h::FixedB(patch,state,b,baseState);
+                }
                 outerContract=patch.ValidateOuterInitializer(state,baseState,data,packet.get<bool>("coupled",false));
             }
             if(operation=="h2d_candidate")
@@ -337,10 +365,18 @@ int main(int argc,char **argv)
             }
             if(operation=="h2d_flat")
             {data.fixedBoundary=patch.FixedReferenceBoundary(state);patch.SetReference(state,data,0,0);std::ofstream out(argv[3]);out<<patch.FlatSpatialDiagnostic(state,data)<<std::endl;world->Finalise();return 0;}
-            const auto hash=RANSWallR3::Hash(state);data.fixedBoundary=patch.FixedReferenceBoundary(operation=="h2e_candidate"?baseState:state);
+            const auto hash=RANSWallR3::Hash(state);data.fixedBoundary=patch.FixedReferenceBoundary(scalarCandidate?baseState:state);
             const auto domain=patch.ScalarDomain(state,0,data,true);
             Require(domain.admissible,"H2b setup scalar/budget gate: "+patch.ScalarDomainJSON(domain,true));
-            patch.SetReference(operation=="h2e_candidate"?baseState:state,data,0,0);
+            std::string h2hContract="null";
+            if(operation=="h2h_candidate")
+            {
+                const auto b=Read(packet,"B_state");RANSH2h::FixedB(patch,state,b,baseState);
+                const auto coldDomain=patch.ScalarDomain(baseState,0,data,true);
+                const auto ph=RANSH2h::ProfileHash(domain);Require(ph==RANSH2h::ProfileHash(coldDomain),"H2h candidate changed fixed AWF profile");
+                h2hContract=J::Object({{"non_scalar_bits_exact","true"},{"profile_invariant","true"},{"profile_sha256",J::Quote(ph)},{"B_sha256",J::Quote(RANSWallR3::Hash(b))},{"cold_sha256",J::Quote(RANSWallR3::Hash(baseState))}});
+            }
+            patch.SetReference(scalarCandidate?baseState:state,data,0,0);
             RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,0);
             const auto checks=operation!="h2b_operators"?patch.FiniteInflowChecks(state):patch.CompositeChecks(state,0,data);const auto audit=patch.CompleteRestrictedAudit(state,state,0,0,data);
             std::string budget;
@@ -356,7 +392,7 @@ int main(int argc,char **argv)
                 {footFixture=J::Object({{"passed","false"},{"failure",J::Quote(error.what())},{"native_seed_audit_preserved","true"}});}
             }
             std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"checks",checks},{"audit",Maps(audit)},{"feasibility",operation=="h2d_setup"?patch.CompositeFeasibilityData(state,data):"null"},
-                {"state",J::Numbers(state)},{"state_sha256",J::Quote(hash)},{"outer_initializer_contract",outerContract},{"fixed_reference",operation=="h2e_candidate"?J::Numbers(patch.Reference()):"null"},{"fixed_defect",operation=="h2e_candidate"?J::Numbers(patch.Defect()):"null"},{"reference_sha256",J::Quote(RANSWallR3::Hash(patch.Reference()))},{"defect_sha256",J::Quote(RANSWallR3::Hash(patch.Defect()))},{"extra_sampling",(operation=="h2d_candidate" || operation=="h2e_candidate")?ExtraSeedAudit(patch,state,data,&baseState,operation=="h2e_candidate"?20:12):"null"},{"seed_setup",patch.CompositeSeedInfo()},{"signed_derivative_checks",patch.Composite() && patch.AnalyticalNeutralInflow() && patch.Mapping().amplitude!=0?patch.CompositeSeedDerivativeChecks():"null"},
+                {"state",J::Numbers(state)},{"state_sha256",J::Quote(hash)},{"outer_initializer_contract",outerContract},{"H2h_fixed_B_contract",h2hContract},{"fixed_reference",scalarCandidate?J::Numbers(patch.Reference()):"null"},{"fixed_defect",scalarCandidate?J::Numbers(patch.Defect()):"null"},{"reference_sha256",J::Quote(RANSWallR3::Hash(patch.Reference()))},{"defect_sha256",J::Quote(RANSWallR3::Hash(patch.Defect()))},{"extra_sampling",(operation=="h2d_candidate" || scalarCandidate)?ExtraSeedAudit(patch,state,data,&baseState,scalarCandidate?20:12):"null"},{"fresh_sampling",operation=="h2h_candidate"?ExtraSeedAudit(patch,state,data,&baseState,24):"null"},{"seed_setup",patch.CompositeSeedInfo()},{"signed_derivative_checks",patch.Composite() && patch.AnalyticalNeutralInflow() && patch.Mapping().amplitude!=0?patch.CompositeSeedDerivativeChecks():"null"},
                 {"scalar_inventory",patch.ScalarDomainJSON(domain)},
                 {"seed_target_witnesses",patch.Composite() && patch.Mapping().amplitude!=0?MappedSeedWitnesses(patch,state,audit):"[]"},
                 {"moving_foot_fixture",footFixture},
