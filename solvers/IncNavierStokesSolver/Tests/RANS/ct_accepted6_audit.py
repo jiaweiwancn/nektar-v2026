@@ -94,6 +94,7 @@ def main():
     require(i>0,'missing consecutive actual accepted states')
     previous=report['accepted_states'][i-1]
     frozen_boundary_identity=None
+    mass_faces=None;mass_state=None;mass_offsets=None
     attempt=next(q for q in reversed(report['pimple_attempts']) if q['scheduled_complete'])
     require(sha(attempt['k_snapshot'])==attempt['k_snapshot_sha256'],'changed actual pre-k frozen stage snapshot')
     snapshot=json.loads(Path(attempt['k_snapshot']).read_text())
@@ -119,7 +120,10 @@ def main():
             actual_stage_snapshot_sha256=attempt['k_snapshot_sha256'],
             stage_coefficient_validation={k:packet['physical_scalar_budget']['reconciliation'][k] for k in
                 ('current_time_essential_lift_difference','actual_flow_stage_maximum_difference','actual_pre_k_stage_maximum_difference')})
-        if label=='native':result['captured_k_matrix']=captured_k_matrix(packet,snapshot)
+        if label=='native':
+            result['captured_k_matrix']=captured_k_matrix(packet,snapshot)
+            mass_faces=o['faces'];mass_state=o['state'];mass_offsets=o['offsets']
+            require(bool(mass_faces),'missing actual physical face inventory for continuity audit')
         write_json(a.output/'progress.json',result);print('CT6 physical budget',model,label,result['budgets'][label]['accuracy_status'],flush=True)
     result['budget_gate']=physical_budgets(result)
     sub=a.output/'common';sub.mkdir();write(ET.parse(folder/'case.xml').getroot(),sub/'case.xml')
@@ -129,9 +133,9 @@ def main():
     o=packet['observation'];g=np.asarray(o['grid_gradients'][:n]);w=np.asarray(weights)
     div=g[:,0,0]+g[:,1,2];mass=0.;by_face={}
     from ct_accepted_open import row_value
-    for f in o['faces']:
+    for f in mass_faces:
         if f['interface']:continue
-        U=np.array([row_value(f['velocity_k'],o['state'],o['offsets'][0])[0],0.,row_value(f['velocity_k'],o['state'],o['offsets'][1])[0]])
+        U=np.array([row_value(f['velocity_k'],np.asarray(mass_state),mass_offsets[0])[0],0.,row_value(f['velocity_k'],np.asarray(mass_state),mass_offsets[1])[0]])
         load=f['weight']*float(U@f['area']);mass+=load
         key=str((f['axis'],f['side'])) if 'axis' in f else str(f['coordinate'])
         by_face[key]=by_face.get(key,0.)+load
