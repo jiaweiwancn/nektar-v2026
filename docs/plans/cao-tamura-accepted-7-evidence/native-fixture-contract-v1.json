@@ -1,0 +1,20 @@
+{
+  "schema": "CT7RNSyntheticFixtureV1",
+  "declared_before_first_native_top_execution": true,
+  "scope": "Nonexperimental d=0 boundary-equation verification only. No CT4/CT5 fitted physical input, equilibrium coefficient or governing law is changed.",
+  "models": ["A95", "A93", "E94E95"],
+  "policy": "Natural / original Accepted / NeutralCompositeV1 / AcceptedRichardsNorrisFlatV1",
+  "u_tau": 0.4,
+  "nu": 0.000015,
+  "H": 0.5,
+  "roughness_input": 0.4,
+  "x": [0, 0.5, 1],
+  "radial": [0, 0.0625, 0.5, 1],
+  "spaces": ["P3/P1 all three models", "P4/P2 A95"],
+  "B": "determined once from this compatible finite-nu resistance, not from experimental observations",
+  "selection": "Resolve a smoother synthetic resistance layer on a small <500-slot all-matrix-export fixture. The earlier unexecuted .05 roughness / .25 first-cell preparation has a very sharp ground slope; it is not a CT4 physical case and carries no numerical evidence. Its code history is preserved. This single declared verification geometry is not a search for a passing physical inlet.",
+  "short_history": {"dt": 0.000001, "steps": 2},
+  "pressure_level_control": 0.125,
+  "limits": {"independent_operator": 2e-10, "continuous_weak": 2e-10, "mass": 1e-8, "physical_scalar_budget": 0.02},
+  "physical_admission": false
+}

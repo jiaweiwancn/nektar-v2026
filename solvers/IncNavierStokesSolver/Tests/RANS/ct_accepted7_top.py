@@ -24,12 +24,12 @@ from validate_a93_a95_e94e95 import oracle
 
 
 def make(folder,rt,model='A95',degree=3,steps=0,dt=1e-6,restart=None,level=0.,old_top=False):
-    p=parameters(model);us=.4;H=.5;nu=1.5e-5;hr=.05;col=Column(model,p['q']*us*us,H,hr,nu,order=96)
+    p=parameters(model);us=.4;H=.5;nu=1.5e-5;hr=.4;col=Column(model,p['q']*us*us,H,hr,nu,order=96)
     ref=col.result();G=np.zeros((3,3));G[0,2]=us/(p['kappa']*H);law=oracle(model,col.K,col.A/H,G)
     ref['outer_equilibrium']=dict(outlet_traction=[float(law['Q'][2,2]-law['Q'][0,0]),us*us])
     c=dict(model=model,H=H,H_mm=20.,Z=1.,nu=nu,ustar=us,B=col.t0*col.J0-us/p['kappa']*math.log(H),K0=col.K,
-        roughness_input=hr,reference_column=ref,x=[0.,.5,1.],knots=[0.,.25,.5,1.],degree=degree,pressure_degree=degree-2,
-        provider='NeutralCompositeV1',scope='synthetic d0 RN boundary verification, not experimental inlet admission')
+        roughness_input=hr,reference_column=ref,x=[0.,.5,1.],knots=[0.,.0625,.5,1.],degree=degree,pressure_degree=degree-2,
+        provider='NeutralCompositeV1',fixture='CT7RNSyntheticFixtureV1',scope='synthetic d0 RN boundary verification, not experimental inlet admission')
     xml=legacy_make(folder,rt,c,dt,steps,parent=restart);root=ET.parse(xml).getroot()
     if not old_top:
         set_info(root,'RANSWallBoundaryPolicy','AcceptedRichardsNorrisFlatV1')
