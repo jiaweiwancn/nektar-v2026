@@ -7,12 +7,15 @@ resumes a failed trajectory or admits the conditional A93/E94E95 evolutions.
 """
 import argparse
 import json
+import importlib.metadata
 import os
+import platform
 import subprocess
 import sys
 from pathlib import Path
-from rans_qualification import THREADS, write_json
+from rans_qualification import THREADS, write_json, dependencies
 os.environ.update(THREADS)
+dependencies('numpy', 'scipy', 'mpmath')
 from ct_accepted_open import require, run
 from rans_request_manifest import RequestManifest, runtime_identity, sha
 
@@ -28,7 +31,11 @@ def main():
     for folder in members:
         q = json.loads((folder/'results.json').read_text())
         require(q['physical_completion'] == 'pass', 'required A95 member did not complete: '+str(folder))
-    manifest = RequestManifest(a.output, dict(schema='CT6CompleteVerificationDriverV1',
+    environment = dict(python=sys.version, executable=sys.executable, platform=platform.platform(),
+        packages={n:importlib.metadata.version(n) for n in ('numpy', 'scipy', 'mpmath')},
+        numerical_threads={n:os.environ[n] for n in THREADS},
+        MPI='MPI-enabled build, native serial rank one; no MPI numerical qualification')
+    manifest = RequestManifest(a.output, dict(schema='CT6CompleteVerificationDriverV1',environment=environment,
         runtime={n:runtime_identity(a.runtime/n) for n in ('IncNavierStokesSolver', 'RANSPreservationProbe')},
         members={str(f):sha(f/'results.json') for f in members},
         scripts={n:sha(test/n) for n in ('ct_accepted6_finish.py', 'ct_accepted6_audit.py',
@@ -37,6 +44,7 @@ def main():
         source_revision=subprocess.check_output(['git', '-c', 'core.preloadIndex=false',
             '-c', 'index.threads=1', 'rev-parse', 'HEAD'], cwd=test, text=True).strip(),
         scope='diagnostic/restart/rollback/flat-regression only; no new duration or conditional model transfers'))
+    write_json(a.output/'environment.json', environment)
     rows = {}
 
     def execute(label, command):
@@ -79,7 +87,7 @@ def main():
                   status='pass' if all(q['exit_code'] == 0 for q in rows.values()) else 'failed_or_unresolved_required_check',
                   model_transfers='not_admitted_by_process_completion')
     write_json(a.output/'results.json', result)
-    manifest.seal(a.output, ['results.json'])
+    manifest.seal(a.output, ['results.json', 'environment.json'])
     return 0 if result['status'] == 'pass' else 1
 
 
