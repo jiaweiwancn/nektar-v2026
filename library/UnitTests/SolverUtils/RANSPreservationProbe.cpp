@@ -126,6 +126,54 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
         {"rows",J::List(rows)},{"scope",J::Quote("native geometry/profile/trace identity; full traction and conservative k-flux evaluated on both sides; arbitrary polynomial probe fields are not a transmission solution; no variable-height evolution")}});
 }
 
+std::string ContinuousCT6Samples(const RANSWallEvolutionPatch &patch,const Tree &request)
+{
+    Require(patch.CurvedManufactured(),"continuous CT6 samples require the manufactured verification capability");
+    const double time=request.get<double>("time",0.);
+    Require(time>=0 && time<=.016,"CT6 continuous data check exceeds the contracted horizon");
+    const RANSWallManufactured mms(patch);const auto &p=patch.Parameters();
+    std::vector<int> sides;for(const auto &s:request.get_child("grid_sides"))sides.push_back(s.second.get_value<int>());
+    Require(sides.size()==request.get_child("grid").size(),"continuous sample side count differs");
+    std::vector<std::string> rows;int index=0;
+    for(const auto &entry:request.get_child("grid"))
+    {
+        Vector values;for(const auto &x:entry.second)values.push_back(x.second.get_value<double>());
+        Require(values.size()==3,"continuous sample coordinate size differs");
+        const RANSWallCoordinate q{values[0],values[1],values[2]};const int side=sides[index++];
+        Require(q[2]==p.geometry.height?(side==-1 || side==1):side==0,"ambiguous continuous interface sample");
+        const bool outer=q[2]>p.geometry.height || (q[2]==p.geometry.height && side>0);
+        const auto v=mms.At(q,time,outer);RANSTensor nativeR{},nativeQ{};double nativeP=0,nativeD=0,ep=0,ed=0;
+        double nativeCutoff=0;
+        if(outer)
+        {
+            const auto law=EvaluateRANSClosure(p.model.Model(),v.value[2],v.value[3],v.velocityGradient,q[2],p.model.Parameters(),0);
+            nativeR=law.reynoldsStress;nativeQ=law.quadraticStress;nativeP=law.production;nativeD=law.kDiffusion;
+            ep=law.epsilonProduction;ed=law.epsilonDestruction;
+        }
+        else
+        {
+            auto options=AWFProfileOptions{};options.formulation=AWFProfileFormulation::AcceptedBudgetAWF;
+            options.curvedCapability=AWFCurvedCapability::AcceptedVerificationV1;options.quadratureOrder=96;
+            const auto metric=patch.Mapping().At(q);EquilibriumAWFProfiles f(p.geometry,v.K,p.model,{metric.kappa1,metric.kappa2},options,CalibratedAWFParameters(p.model));
+            const double nt=f.Original().EddyViscosity(q[2]);const auto law=EvaluateRANSWallInnerStress(v.value[2],nt,v.velocityGradient,RANSWallInnerStressModel::Linear);
+            for(int i=0;i<3;++i)for(int j=0;j<3;++j)nativeR[i][j]=(i==j?2*v.value[2]/3:0)-law.turbulentStress[i][j];
+            nativeP=law.production;nativeD=p.geometry.molecularNu+nt/p.model.Parameters().sigmaK;nativeCutoff=f.Reference().cutoff;
+        }
+        rows.push_back(J::Object({{"coordinate",J::Numbers(q)},{"outer",J::Boolean(outer)},
+            {"values",J::Numbers(v.value)},{"gradients",J::Rows(v.gradient)},{"velocity_gradient",J::Rows(v.velocityGradient)},
+            {"required_body",J::Numbers(v.body)},{"k_source",J::Number(v.kSource)},{"epsilon_source",J::Number(v.epsilonSource)},
+            {"R",J::Rows(v.reynolds)},{"Q",J::Rows(v.quadratic)},{"T",J::Rows(v.stress)},
+            {"production",J::Number(v.production)},{"cutoff",J::Number(v.cutoff)},
+            {"native_R",J::Rows(nativeR)},{"native_Q",J::Rows(nativeQ)},
+            {"native_P",J::Number(nativeP)},{"native_Dk",J::Number(nativeD)},
+            {"native_epsilon_production",J::Number(ep)},{"native_epsilon_destruction",J::Number(ed)},
+            {"native_cutoff",outer?"null":J::Number(nativeCutoff)}}));
+    }
+    return J::Object({{"schema",J::Quote("CT6ContinuousNativeCrossCheckV1")},{"status",J::Quote("execution_completed")},
+        {"time",J::Number(time)},{"stored_slots",J::Number(patch.Size())},{"samples",J::List(rows)},
+        {"scope",J::Quote("independent continuous-data provider and production constitutive/profile evaluations; zero governing solves; primitive agreement classified by external oracle")}});
+}
+
 // Physical volume/face integration, deliberately independent of assembled
 // constant-test loads and prescribed-row reactions. IMEX1, unforced one sweep.
 std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
@@ -447,6 +495,8 @@ int main(int argc,char **argv)
             Require(request.get<std::string>("operation")=="ct6_static_transmission","static CT6 route cannot replay or evolve a history");
             std::ofstream out(argv[3]);out<<StaticCT6Transmission(patch)<<'\n';return 0;
         }
+        if(request.get<std::string>("operation","")=="ct6_continuous_samples")
+        {std::ofstream out(argv[3]);out<<ContinuousCT6Samples(patch,request)<<'\n';return 0;}
         Require(patch.Dimension()==2 && (!patch.Mapped() || patch.CurvedVerification()) && (patch.AcceptedAWF() || patch.UniformEPFlat()),
             "neutral preservation probe supports accepted or EP plateau references, serial flat2D only");
         RANSWallEvolutionData data(2);Vector state,reference;double time=request.get<double>("time",0.);

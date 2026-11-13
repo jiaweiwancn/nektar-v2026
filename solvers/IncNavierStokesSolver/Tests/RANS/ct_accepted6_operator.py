@@ -88,7 +88,9 @@ def reconstruct(packet,model,amplitude=.005):
     equation_scales=np.empty(len(total));scales=[.2,.2,p['q']*.16,.4**3/(p['kappa']*.5),.2,.2,1.]
     for b in range(len(off)-1):equation_scales[off[b]:off[b+1]]=scales[b]
     equation_scales[-1]=1.
-    denominator=np.maximum(equation_scales*2.4,absolute)
+    physical_volume=math.fsum(point['weight'] for point in o['volume'])
+    require(math.isfinite(physical_volume) and physical_volume>0,'invalid_physical_volume')
+    denominator=np.maximum(equation_scales*physical_volume,absolute)
     scaled=abs(native-total)/denominator
     constrained=total.copy()
     for row,value in packet['resolution']['constraints']:constrained[int(row)]=state[int(row)]-value
@@ -101,8 +103,8 @@ def reconstruct(packet,model,amplitude=.005):
         maximum_scaled_defect=maximum,constrained_scaled_defect=constrained_defect,
         native_term_sum_scaled_defect=reconstruction,geometry_primitive_defect=geom_error,
         witness=dict(row=int(np.argmax(scaled)),native=float(native[np.argmax(scaled)]),independent=float(total[np.argmax(scaled)]),scale=float(denominator[np.argmax(scaled)])),
-        actual_stored_slots=len(state),consumed_volume_points=ownership,independent_rays=len(columns),
-        norm='all-row maximum absolute difference / max(physical equation scale*2.4, sum absolute primitive increments)',
+        actual_stored_slots=len(state),physical_volume=physical_volume,consumed_volume_points=ownership,independent_rays=len(columns),
+        norm='all-row maximum absolute difference / max(physical equation scale*actual integrated physical volume, sum absolute primitive increments)',
         scope='current represented state, conservative unmasked operator; prescribed-row replacement separately checked; not analytical equilibrium cancellation or spatial/temporal convergence')
 
 
@@ -150,8 +152,9 @@ def continuous_weak(packet,model):
             ids=np.asarray(face['velocity_k']['ids'],int)+off[2]
             interface_k[ids]+=w*np.asarray(face['velocity_k']['phi'])*kflux
         if face['region']:add(3,face['epsilon'],un*value[3]-d['Depsilon']*float(g[3]@area),[0,0,0],w)
-    scale=np.empty(size)
-    for b,s in enumerate([.2,.2,p['q']*.16,.4**3/(p['kappa']*.5),.2,.2]):scale[off[b]:off[b+1]]=s*2.4
+    scale=np.empty(size);physical_volume=math.fsum(point['weight'] for point in o['volume'])
+    require(math.isfinite(physical_volume) and physical_volume>0,'invalid_physical_volume')
+    for b,s in enumerate([.2,.2,p['q']*.16,.4**3/(p['kappa']*.5),.2,.2]):scale[off[b]:off[b+1]]=s*physical_volume
     scale[-1]=1.;denominator=np.maximum(scale,absolute)
     defects=abs(r)/denominator
     maximum=float(np.max(defects));interface=max(float(np.max(abs(interface_k)/scale)),float(np.max(abs(interface_momentum)/scale)))
