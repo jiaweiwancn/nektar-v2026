@@ -1,0 +1,437 @@
+{
+  "status": "PASS",
+  "terminals": [
+    {
+      "height_mm": 5.0,
+      "branch": "coarse",
+      "status": "PASS",
+      "source": {
+        "repository_path": "docs/plans/wj-h7-linux/endpoint-H5-coarse.json",
+        "bytes": 86499,
+        "sha256": "e7b1fba60eec9ba5001cbb237d5593e2d0f87cf863eab7b7ad881f568e54b4ed"
+      },
+      "producer": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H5mm/coarse/case.evolution.json",
+        "bytes": 6519381,
+        "sha256": "f2237475f45eb07669e18b989a6aef69dc2da3185543cdafea570431b437c8c8"
+      },
+      "original_checkpoint": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H5mm/coarse/CP.4/State.bin",
+        "bytes": 170946,
+        "sha256": "9c180c8d530b52348d9adca5428f17e9ae9ca2158a5025ffb557a852f5b340a3"
+      },
+      "H8_import_terminal": {
+        "path": "/home/jay/build/wj-h8-local-timestep-20261113/imports-v2/H5mm/coarse/CP.4/State.bin",
+        "bytes": 170946,
+        "sha256": "9c180c8d530b52348d9adca5428f17e9ae9ca2158a5025ffb557a852f5b340a3"
+      },
+      "selected_checkpoint_bytes_equal": true,
+      "state_sha256": "10d91c9583353013e6ed649dfda70fe7a30551bc1cd46c284ef9d9dbb578242c",
+      "callback_history_sha256": "9b8f44a1a0cda7470e69824b7024cd0450046055a1d5d4cff1571b29d4084387",
+      "alpha": 100,
+      "time": 0.04,
+      "native": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/observations/H5mm/coarse/native.json",
+        "bytes": 125539889,
+        "sha256": "641c62e7b801463a164c16fed9a1374ea36aa145aafa7a4e69ee86ff6c1cc69d"
+      },
+      "norms": {
+        "uncancelled_spatial": [
+          2.7472931701869266e-06,
+          1.354069136546216e-06,
+          7.994789500611319e-06,
+          1.2102107557664417e-05,
+          6.208117412434234e-17,
+          4.196101381090595e-18,
+          0,
+          0
+        ],
+        "completed_stage": [
+          1.6893380052674398e-06,
+          1.1914409571724385e-06,
+          4.253170817770621e-08,
+          1.8102962355836423e-07,
+          6.208117412434234e-17,
+          4.196101381090595e-18,
+          0,
+          0
+        ],
+        "fixed_amplitudes_U_k_epsilon": [
+          1,
+          0.008809015145515192,
+          0.002778628865759104
+        ],
+        "time_scale_H_h_over_U_infinity": 1,
+        "order": "u,v,k,entire_outer_epsilon,inner_continuity,outer_continuity,absent_gauge,constraints",
+        "scope": "consistent-mass dual passive algebra; no governing solve, synthetic callback or state projection"
+      },
+      "scope": "sealed H7 terminal strict evidence reused; zero H8 native readbacks"
+    },
+    {
+      "height_mm": 5.0,
+      "branch": "fine",
+      "status": "PASS",
+      "source": {
+        "repository_path": "docs/plans/wj-h7-linux/endpoint-H5-fine.json",
+        "bytes": 86461,
+        "sha256": "5cc0f8972e2f89a80cbaa7f8571449a3cab010beb066693f2eabed2e3b0dce49"
+      },
+      "producer": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H5mm/fine/case.evolution.json",
+        "bytes": 7015657,
+        "sha256": "7617b32217926e3e44120889d18a467483d319a0f457f6d52f3b65b87a6b24fd"
+      },
+      "original_checkpoint": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H5mm/fine/CP.8/State.bin",
+        "bytes": 170963,
+        "sha256": "c0075ca5dc55ea1669c61081c984617c468f9ba569eb89e3e9ea26b1c4e76771"
+      },
+      "H8_import_terminal": {
+        "path": "/home/jay/build/wj-h8-local-timestep-20261113/imports-v2/H5mm/fine/CP.8/State.bin",
+        "bytes": 170963,
+        "sha256": "c0075ca5dc55ea1669c61081c984617c468f9ba569eb89e3e9ea26b1c4e76771"
+      },
+      "selected_checkpoint_bytes_equal": true,
+      "state_sha256": "75898821af4647f79d721216cf4be1ea262c6357abbe8fccb02c7ee1b6f308e7",
+      "callback_history_sha256": "32a269443742768ead9327c65f8a875fd404aded29a8cff54db5d5ceae5124bf",
+      "alpha": 200,
+      "time": 0.04,
+      "native": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/observations/H5mm/fine/native.json",
+        "bytes": 125558948,
+        "sha256": "999db80696f65828674671e4e8c6da6903fc04b1ec4d7da2b80ec685d48f64a1"
+      },
+      "norms": {
+        "uncancelled_spatial": [
+          1.8658867080885133e-06,
+          7.732507140732706e-07,
+          6.921135804079025e-06,
+          1.0258559067404642e-05,
+          1.3672828793693281e-17,
+          2.6811069552759065e-18,
+          0,
+          0
+        ],
+        "completed_stage": [
+          5.803679701649954e-07,
+          4.6799652307251957e-07,
+          1.855667641240074e-08,
+          7.284077109679321e-08,
+          1.3672828793693281e-17,
+          2.6811069552759065e-18,
+          0,
+          0
+        ],
+        "fixed_amplitudes_U_k_epsilon": [
+          1,
+          0.008809015145515192,
+          0.002778628865759104
+        ],
+        "time_scale_H_h_over_U_infinity": 1,
+        "order": "u,v,k,entire_outer_epsilon,inner_continuity,outer_continuity,absent_gauge,constraints",
+        "scope": "consistent-mass dual passive algebra; no governing solve, synthetic callback or state projection"
+      },
+      "scope": "sealed H7 terminal strict evidence reused; zero H8 native readbacks"
+    },
+    {
+      "height_mm": 5.5,
+      "branch": "coarse",
+      "status": "PASS",
+      "source": {
+        "repository_path": "docs/plans/wj-h7-linux/endpoint-H5.5-coarse.json",
+        "bytes": 85890,
+        "sha256": "20881d6c886a296fc283a15b8d0b4a6adf49f2d310200524a358829c66bf6cc1"
+      },
+      "producer": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H5.5mm/coarse/case.evolution.json",
+        "bytes": 6511659,
+        "sha256": "2c3e2cb409f2bc47610adaab7e21def55cfef8fca9465b3c95cc9d5a6e9a2bad"
+      },
+      "original_checkpoint": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H5.5mm/coarse/CP.4/State.bin",
+        "bytes": 171116,
+        "sha256": "748382d6ed055fb782d6721afbef4b532df9b479d70a60e110a8b3736384f82d"
+      },
+      "H8_import_terminal": {
+        "path": "/home/jay/build/wj-h8-local-timestep-20261113/imports-v2/H5.5mm/coarse/CP.4/State.bin",
+        "bytes": 171116,
+        "sha256": "748382d6ed055fb782d6721afbef4b532df9b479d70a60e110a8b3736384f82d"
+      },
+      "selected_checkpoint_bytes_equal": true,
+      "state_sha256": "cba220610c44c3260ecb172a3fda9251ce2814ddd5020fe236cee6a814192777",
+      "callback_history_sha256": "0c331fe3118706393c002288f4725ece7d5f4230091ac67a9a92d2793763d7c9",
+      "alpha": 100,
+      "time": 0.04,
+      "native": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/observations/H5.5mm/coarse/native.json",
+        "bytes": 125622541,
+        "sha256": "d04899f79fddcd41bf32276fc815465b10b75e1ac99065a7d59742d4255a4eef"
+      },
+      "norms": {
+        "uncancelled_spatial": [
+          3.712263286195417e-06,
+          2.412333039661178e-06,
+          8.040265301740911e-06,
+          1.3179177959122985e-05,
+          3.5943656959706307e-16,
+          6.414701843970557e-18,
+          0,
+          0
+        ],
+        "completed_stage": [
+          2.7979869151743213e-06,
+          2.271868155786025e-06,
+          4.2134645051251756e-08,
+          2.0273158530629119e-07,
+          3.5943656959706307e-16,
+          6.414701843970557e-18,
+          0,
+          0
+        ],
+        "fixed_amplitudes_U_k_epsilon": [
+          1,
+          0.008809015145515192,
+          0.0025260262415991858
+        ],
+        "time_scale_H_h_over_U_infinity": 1,
+        "order": "u,v,k,entire_outer_epsilon,inner_continuity,outer_continuity,absent_gauge,constraints",
+        "scope": "consistent-mass dual passive algebra; no governing solve, synthetic callback or state projection"
+      },
+      "scope": "sealed H7 terminal strict evidence reused; zero H8 native readbacks"
+    },
+    {
+      "height_mm": 5.5,
+      "branch": "fine",
+      "status": "PASS",
+      "source": {
+        "repository_path": "docs/plans/wj-h7-linux/endpoint-H5.5-fine.json",
+        "bytes": 85919,
+        "sha256": "d1b1a4975c6b2b966870a93fb538c14d8a9260f14fe8eb14a06f458735645e78"
+      },
+      "producer": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H5.5mm/fine/case.evolution.json",
+        "bytes": 7008622,
+        "sha256": "aaeff5baadd98c6b7d5552164bb929077028fdae4b75a6e679ec57dd0378981a"
+      },
+      "original_checkpoint": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H5.5mm/fine/CP.8/State.bin",
+        "bytes": 171133,
+        "sha256": "eb9bb87df70f4524dcec388b0939f3f669f025330faa3a090b6cb98dbeb2c695"
+      },
+      "H8_import_terminal": {
+        "path": "/home/jay/build/wj-h8-local-timestep-20261113/imports-v2/H5.5mm/fine/CP.8/State.bin",
+        "bytes": 171133,
+        "sha256": "eb9bb87df70f4524dcec388b0939f3f669f025330faa3a090b6cb98dbeb2c695"
+      },
+      "selected_checkpoint_bytes_equal": true,
+      "state_sha256": "65ccc94a70c13048e104dc7f8ba79f752c64140cfab5cc01435d59526448c89f",
+      "callback_history_sha256": "13eb1438325d8d4efea3bd7c717aa369e35722c5b1340b63aac2f5caf6c73834",
+      "alpha": 200,
+      "time": 0.04,
+      "native": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/observations/H5.5mm/fine/native.json",
+        "bytes": 125638172,
+        "sha256": "e3b2c1efd825097b9a90d10831a9f8632da38e924b4444b9dd8783bc3e91a4ee"
+      },
+      "norms": {
+        "uncancelled_spatial": [
+          1.9217274759900295e-06,
+          9.75428880053925e-07,
+          6.961643956307304e-06,
+          1.1044618148387337e-05,
+          4.5415182436799735e-17,
+          5.010485982576642e-18,
+          0,
+          0
+        ],
+        "completed_stage": [
+          6.875842724081433e-07,
+          7.093548901257404e-07,
+          1.8277542297005925e-08,
+          8.053728778689337e-08,
+          4.5415182436799735e-17,
+          5.010485982576642e-18,
+          0,
+          0
+        ],
+        "fixed_amplitudes_U_k_epsilon": [
+          1,
+          0.008809015145515192,
+          0.0025260262415991858
+        ],
+        "time_scale_H_h_over_U_infinity": 1,
+        "order": "u,v,k,entire_outer_epsilon,inner_continuity,outer_continuity,absent_gauge,constraints",
+        "scope": "consistent-mass dual passive algebra; no governing solve, synthetic callback or state projection"
+      },
+      "scope": "sealed H7 terminal strict evidence reused; zero H8 native readbacks"
+    },
+    {
+      "height_mm": 6.0,
+      "branch": "coarse",
+      "status": "PASS",
+      "source": {
+        "repository_path": "docs/plans/wj-h7-linux/endpoint-H6-coarse.json",
+        "bytes": 85872,
+        "sha256": "10fc20576fca172de7157bc9b2d45f59f44558a5b77193dbf51dd0b8c4b2f5e0"
+      },
+      "producer": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H6mm/coarse/case.evolution.json",
+        "bytes": 6510348,
+        "sha256": "30541bb3fe94842c12001ce525ac73094d29e05b9d3c7840105cc0e9ec6f3e37"
+      },
+      "original_checkpoint": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H6mm/coarse/CP.4/State.bin",
+        "bytes": 171162,
+        "sha256": "acfb81d56192ff7b04fec473c1f3596a6d0a78c758b8808219ec18313570a518"
+      },
+      "H8_import_terminal": {
+        "path": "/home/jay/build/wj-h8-local-timestep-20261113/imports-v2/H6mm/coarse/CP.4/State.bin",
+        "bytes": 171162,
+        "sha256": "acfb81d56192ff7b04fec473c1f3596a6d0a78c758b8808219ec18313570a518"
+      },
+      "selected_checkpoint_bytes_equal": true,
+      "state_sha256": "073bc78a69e104fe9a918f555a717957df76b320549f3478544cf9e4932c84ac",
+      "callback_history_sha256": "d4b8d0900843dff182add7f0ddfe690c92a3b72f6e4502a6e8b8c8b7cd054b25",
+      "alpha": 100,
+      "time": 0.04,
+      "native": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/observations/H6mm/coarse/native.json",
+        "bytes": 125638464,
+        "sha256": "6afd22ecc894acdfda689b983bf043d81782b66309c4ad08f1c54ae7cc4360dd"
+      },
+      "norms": {
+        "uncancelled_spatial": [
+          7.060609412728502e-06,
+          6.200245589195007e-06,
+          8.079506649910705e-06,
+          1.4496110025836937e-05,
+          7.329218967141684e-18,
+          4.165540031813727e-18,
+          0,
+          0
+        ],
+        "completed_stage": [
+          6.35819251008843e-06,
+          6.091940492299725e-06,
+          4.258457627011327e-08,
+          2.1929216175069465e-07,
+          7.329218967141684e-18,
+          4.165540031813727e-18,
+          0,
+          0
+        ],
+        "fixed_amplitudes_U_k_epsilon": [
+          1,
+          0.008809015145515192,
+          0.002315524054799254
+        ],
+        "time_scale_H_h_over_U_infinity": 1,
+        "order": "u,v,k,entire_outer_epsilon,inner_continuity,outer_continuity,absent_gauge,constraints",
+        "scope": "consistent-mass dual passive algebra; no governing solve, synthetic callback or state projection"
+      },
+      "scope": "sealed H7 terminal strict evidence reused; zero H8 native readbacks"
+    },
+    {
+      "height_mm": 6.0,
+      "branch": "fine",
+      "status": "PASS",
+      "source": {
+        "repository_path": "docs/plans/wj-h7-linux/endpoint-H6-fine.json",
+        "bytes": 85898,
+        "sha256": "14a89883aada027ee4cd94b89c0464fb8a455d5b05e251975c28f6d05839fd77"
+      },
+      "producer": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H6mm/fine/case.evolution.json",
+        "bytes": 7007018,
+        "sha256": "d36f308e6e492f959465228610b43953753543661a21987f3ceae742e0ae2b8a"
+      },
+      "original_checkpoint": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/cases/H6mm/fine/CP.8/State.bin",
+        "bytes": 171179,
+        "sha256": "ec45548a6941ff4447b8e0efad23ab5a6585c2e209cd70f1a01c78a62e5da732"
+      },
+      "H8_import_terminal": {
+        "path": "/home/jay/build/wj-h8-local-timestep-20261113/imports-v2/H6mm/fine/CP.8/State.bin",
+        "bytes": 171179,
+        "sha256": "ec45548a6941ff4447b8e0efad23ab5a6585c2e209cd70f1a01c78a62e5da732"
+      },
+      "selected_checkpoint_bytes_equal": true,
+      "state_sha256": "5fce6f73ed11ae74653a9556772b0d0b57171dccff39326cfd1463d41aa6d879",
+      "callback_history_sha256": "b6fe1c36f9df4f8571b97f08807eb8f3e3720d72c9e2b6e77d2c8498cff10a82",
+      "alpha": 200,
+      "time": 0.04,
+      "native": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/observations/H6mm/fine/native.json",
+        "bytes": 125669915,
+        "sha256": "49059fc20ae374507d2af8c48315ad32ca6c25d6ffed2e2cc803fe03d3192d54"
+      },
+      "norms": {
+        "uncancelled_spatial": [
+          2.0257061659788475e-06,
+          1.7231118233496201e-06,
+          7.013841232275526e-06,
+          1.2175591554341854e-05,
+          1.9855319084512703e-17,
+          5.031560177787944e-18,
+          0,
+          0
+        ],
+        "completed_stage": [
+          9.269991110810032e-07,
+          1.4868019526789913e-06,
+          1.8774062693398674e-08,
+          8.514302024455049e-08,
+          1.9855319084512703e-17,
+          5.031560177787944e-18,
+          0,
+          0
+        ],
+        "fixed_amplitudes_U_k_epsilon": [
+          1,
+          0.008809015145515192,
+          0.002315524054799254
+        ],
+        "time_scale_H_h_over_U_infinity": 1,
+        "order": "u,v,k,entire_outer_epsilon,inner_continuity,outer_continuity,absent_gauge,constraints",
+        "scope": "consistent-mass dual passive algebra; no governing solve, synthetic callback or state projection"
+      },
+      "scope": "sealed H7 terminal strict evidence reused; zero H8 native readbacks"
+    }
+  ],
+  "CP0": {
+    "manifest": {
+      "repository_path": "docs/plans/wj-h6-linux/manifest.json",
+      "bytes": 11768,
+      "sha256": "79407355dba34f763a8441632125f7fc4018ee5419bb67084d266aa8ad78ea67"
+    },
+    "spatial": {
+      "repository_path": "docs/plans/wj-h6-linux/spatial-residuals.json",
+      "bytes": 3038,
+      "sha256": "e8eea6fca90e2051339311159dce1daa4eb4659b40b46e59725b20d2b32a358a"
+    },
+    "weak": {
+      "repository_path": "docs/plans/wj-h6-linux/weak-quadrature.json",
+      "bytes": 114542,
+      "sha256": "ed02130947ec774e631df0c00449f449d5144a1599b37a8092fba59ed55bcc71"
+    },
+    "native": [
+      {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h6-neutral-projection-20261112/observations/H5mm/native.json",
+        "bytes": 116832649,
+        "sha256": "20a5ca7f89e8f4e8ec1718fd15ad0edc737ecf202ef7727853f9887de1d7ec8f"
+      },
+      {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h6-neutral-projection-20261112/observations/H5.5mm/native.json",
+        "bytes": 116904321,
+        "sha256": "6186071c8c051a173874e5572db59a5a818bfb799fc31d4c7595cd13d7dbfc9a"
+      },
+      {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h6-neutral-projection-20261112/observations/H6mm/native.json",
+        "bytes": 116925709,
+        "sha256": "979d4ab72b5c6038c903e9c85dff569e6bc4c27f207ac1ebe769311df73df6f6"
+      }
+    ],
+    "scope": "qualified accepted H6 CP0 views reused; completed-stage data inapplicable; no new readback"
+  },
+  "verification": "Mac independently checked reviewed Git and compact-seal bytes and state/callback/producer bindings against Linux-verified H8 imports; heavy H7 packets were not downloaded or reread."
+}
