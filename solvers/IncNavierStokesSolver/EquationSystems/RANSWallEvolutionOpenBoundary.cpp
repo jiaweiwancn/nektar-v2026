@@ -67,7 +67,7 @@ public:
         SolverUtils::RANSTensor G{};G[0][2]=us/(m.Kappa()*H);
         const auto law=SolverUtils::EvaluateRANSClosure(m.Model(),K,A/H,G,H,m.Parameters(),0);
         Q=law.quadraticStress;
-        PiOuter=PiInner-Q[2][2];
+        PiOuter=PiInner==0.?-Q[2][2]:PiInner-Q[2][2];
     }
     std::array<double,9> At(double z,bool outer) const
     {
