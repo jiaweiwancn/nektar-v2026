@@ -181,7 +181,9 @@ def storage(count):
     add('GlobalField_Mass_long_double_temporary',f['U'],width=16,scope='current x86 long-double accumulation, plus double result; report actual ABI')
     add('Picard_flow',b['assembled_flow']);add('Pimple_A',b['momentum_predictor']);add('Pimple_M',b['momentum_predictor'])
     add('Pimple_A_LU',b['momentum_predictor']);add('Pimple_M_LU',b['momentum_predictor'])
-    for name in ('G','D','BGp'):add(name,b['momentum_predictor'],b['pressure'])
+    add('G',b['momentum_predictor'],b['pressure'])
+    add('D',b['pressure'],b['momentum_predictor'])
+    add('BGp',b['pressure'],b['momentum_predictor'],scope='native transposed pressure-column storage; mathematical BGp is velocity x pressure')
     add('Schur',b['pressure']);add('scalar_k',b['k']);add('scalar_epsilon_with_trace',b['epsilon'])
     add('legacy_full_state_square_if_requested',count['state'],scope='sizing only, not asserted to be the selected PIMPLE allocation')
     return dict(entries=rows,stored_field_mass_payload_bytes=sum(v['bytes']for v in rows if v['name'].startswith('stored_mass_')),

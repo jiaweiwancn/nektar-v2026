@@ -65,6 +65,9 @@ class FullHeightPairedDomain(unittest.TestCase):
             if nx==1:self.assertEqual((n['free_solve_blocks']['momentum_predictor'],n['free_solve_blocks']['pressure']),(897,104))
         self.assertEqual(n['free_solve_blocks']['epsilon'],4327)
         self.assertGreater(storage(n)['simultaneous_Pimple_payload_lower_bound'],4*1024**3)
+        blocks={v['name']:v for v in storage(n)['entries']}
+        self.assertEqual((blocks['D']['rows'],blocks['D']['columns']),(780,12558))
+        self.assertEqual((blocks['G']['rows'],blocks['G']['columns']),(12558,780))
     def test_multi_column_trace_identity_without_projection(self):
         # Pure coefficient injection on three columns, orientation signs
         # explicit; no reference reevaluation or radial/mass projection.
