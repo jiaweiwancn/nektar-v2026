@@ -45,6 +45,9 @@ def manifest_item(m,p):
 
 def repair(root):
     """Qualify the one passive endpoint-schema repair; preserve the old halt."""
+    import unittest
+    suite=unittest.defaultTestLoader.loadTestsFromName('test_wj_h12_saved_phase.SavedPhaseDiagnosis.test_published_endpoint_schema_is_not_a_scan_packet')
+    assert unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()
     book=load(root/'accounting.json');old=root/'science/results-v1'
     assert book['h12_halt']['reason']=="KeyError('principal')"
     assert load(root/'operations/sparse-science-v2/receipt.json')['status']=='FAIL'
