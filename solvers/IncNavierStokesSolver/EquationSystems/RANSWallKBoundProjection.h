@@ -52,6 +52,12 @@ class Projection
 {
 public:
     using Clock=std::chrono::steady_clock;
+    struct Metric
+    {
+        int dimension;
+        std::function<Vector(const Vector&)> whiten,recover;
+        Clock::time_point factorStarted;
+    };
     struct Cut {Vector row;double rhs;int witness;std::string rowIdentity,constraintIdentity;Vector physicalRow;double physicalRhs=0.;};
     explicit Projection(const Matrix &mass):Projection(mass,Controls{}){}
     Projection(const Matrix &mass,const Controls &limits,std::function<void(const Event&)> sink={}):
@@ -67,6 +73,16 @@ public:
             if(i==j){if(!(s>0))throw std::runtime_error("k-bound mass is not positive definite");lower[i][j]=std::sqrt(s);}
             else lower[i][j]=s/lower[j][j];
         }
+        factorizationSeconds=Seconds();
+    }
+    // Exact consistent-mass metric, e.g. a permuted band Cholesky. These are
+    // triangular actions, not an approximate inverse or a preconditioner.
+    Projection(const Metric &metric,const Controls &limits,std::function<void(const Event&)> sink={}):
+        n(metric.dimension),y(n),delta(n),controls(limits),trace(std::move(sink)),started(metric.factorStarted),
+        metricWhiten(metric.whiten),metricRecover(metric.recover)
+    {
+        if(n<=0 || !metricWhiten || !metricRecover || controls.maximumPerAdd<=0 || controls.maximumTotal<=0 ||
+            !(controls.maximumSeconds>0) || !std::isfinite(controls.maximumSeconds))throw std::logic_error("invalid exact k-bound metric");
         factorizationSeconds=Seconds();
     }
     double Seconds() const {return std::chrono::duration<double>(Clock::now()-started).count();}
@@ -100,7 +116,9 @@ public:
         Vector a;
         if(reuse<0)
         {
-        a=row;for(int i=0;i<n;++i){for(int j=0;j<i;++j)a[i]-=lower[i][j]*a[j];a[i]/=lower[i][i];}
+        if(metricWhiten)a=metricWhiten(row);
+        else {a=row;for(int i=0;i<n;++i){for(int j=0;j<i;++j)a[i]-=lower[i][j]*a[j];a[i]/=lower[i][i];}}
+        if(a.size()!=std::size_t(n))throw std::logic_error("k-bound whitening changed dimension");
         ++massFactorApplications;
         const double scale=Norm(a);
         if(!(scale>0)){failure="incompatible_prescribed_k_floor";Emit("invalid_row");return false;}
@@ -192,8 +210,9 @@ public:
             }
             lambda=std::move(candidate);std::fill(y.begin(),y.end(),0.);
             for(int i=0;i<m;++i)for(int j=0;j<n;++j)y[j]+=q[i][j]*t[i];
-            delta=y;
-            for(int i=n-1;i>=0;--i){for(int j=i+1;j<n;++j)delta[i]-=lower[j][i]*delta[j];delta[i]/=lower[i][i];}
+            if(metricRecover)delta=metricRecover(y);
+            else {delta=y;for(int i=n-1;i>=0;--i){for(int j=i+1;j<n;++j)delta[i]-=lower[j][i]*delta[j];delta[i]/=lower[i][i];}}
+            if(delta.size()!=std::size_t(n))throw std::logic_error("k-bound recovery changed dimension");
             ++massFactorApplications;
             solvedActive=active;solvedLambda=lambda;solvedAdd=adds;workComplete=true;
             lastQRMin=qrMin;lastQRMax=qrMax;Emit("solved",-1,1.,qrMin,qrMax);return true;
@@ -224,6 +243,7 @@ public:
     std::map<std::string,int> rowVisits,constraintVisits,workingSetVisits;
 private:
     std::function<void(const Event&)> trace;Clock::time_point started;
+    std::function<Vector(const Vector&)> metricWhiten,metricRecover;
 };
 }
 #endif

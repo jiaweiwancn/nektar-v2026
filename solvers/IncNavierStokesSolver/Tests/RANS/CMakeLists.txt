@@ -18,6 +18,13 @@ target_include_directories(RANSWallTimingChecks PRIVATE ${RANS_SOURCE_ROOT}/solv
 enable_testing()
 add_test(NAME RANSKBoundQPChecks COMMAND RANSKBoundQPChecks)
 add_test(NAME RANSReducedModelChecks COMMAND RANSReducedModelChecks)
+add_executable(WJMappedAlgebraChecks test_wj_mapped_algebra.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp)
+target_include_directories(WJMappedAlgebraChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_link_libraries(WJMappedAlgebraChecks ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+add_test(NAME WJMappedAlgebraChecks COMMAND WJMappedAlgebraChecks)
+set_tests_properties(WJMappedAlgebraChecks PROPERTIES PROCESSORS 1 TIMEOUT 120
+    ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1")
 add_definitions(${NEKTAR++_DEFINITIONS} -DENABLE_NEKTAR_EXCEPTIONS)
 include_directories(${RANS_SOURCE_ROOT}/library)
 include_directories(SYSTEM ${NEKTAR++_INCLUDE_DIRS} ${NEKTAR++_TP_INCLUDE_DIRS})
