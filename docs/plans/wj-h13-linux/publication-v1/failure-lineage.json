@@ -1,0 +1,42 @@
+{
+  "failed_operations": [
+    {
+      "label": "focused-tests-v1",
+      "receipt": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/operations/focused-tests-v1/receipt.json",
+        "bytes": 1576,
+        "sha256": "cd7ca4b342e7e59fcc92abf406f8a9bf864676f4dce0e35b62b1d88a0ca82e48"
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/operations/focused-tests-v1/command.log",
+        "bytes": 6360,
+        "sha256": "0331901f10717e91650f54159f34b5ac2ad6d18d32da176fc8d50780b84a7713"
+      }
+    },
+    {
+      "label": "paired-offline-science-v1",
+      "receipt": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/operations/paired-offline-science-v1/receipt.json",
+        "bytes": 2141,
+        "sha256": "ab3f26c5883ecb728e882707ccfa617b6a85936b8905347898f9a4da93fbed68"
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/operations/paired-offline-science-v1/command.log",
+        "bytes": 2311,
+        "sha256": "bd0c9d4d2ef608dc81766a99cbd64034f1e2fe4019c8f8570b8d5f501345a689"
+      }
+    }
+  ],
+  "causes": {
+    "focused-tests-v1": "three synthetic fixtures lacked CONDITIONS; external-preflight fixture also found an invalid double-hyphen XML comment",
+    "paired-offline-science-v1": "same invalid double-hyphen comment; retained malformed XML, no native launch"
+  },
+  "original_failed_case": {
+    "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/science/paired-case/flat/case.xml",
+    "bytes": 155735,
+    "sha256": "b8a552c6e301d58411ea17b3a38aebe5a6e0be7abaf59d04d9ab1db52978b4a2"
+  },
+  "repair": "fixture nodes and well-formed comment; separate observer versions, receipts and science-v2 output",
+  "abandoned_observer_v3": "transported only, not executed",
+  "native_invocations": 0
+}

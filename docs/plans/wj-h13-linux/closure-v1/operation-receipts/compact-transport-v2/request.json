@@ -1,0 +1,86 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport hashlib,json,tarfile\nr=Path('/home/jay/build/wj-h13-fullheight-paired-domain-20261113')\nfiles=[p for p in sorted((r/'publication-v1').rglob('*'))if p.is_file()]\nfiles += [r/'closure-v1/verification.json',r/'remaining-projection-v1.json']\nfiles += sorted(r.glob('wj-h13-*.json'))\ndef rec(p):\n    b=p.read_bytes();return dict(path=str(p),relative_path=str(p.relative_to(r)),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\nwith tarfile.open(r/'compact-publication-v2.tar.gz','x:gz')as t:\n    for p in files:t.add(p,arcname=str(p.relative_to(r)),recursive=False)\nmeta=dict(archive=rec(r/'compact-publication-v2.tar.gz'),decoded_members=[rec(p)for p in files])\n(r/'transport-publication-v2.json').write_text(json.dumps(meta,indent=2)+chr(10))\nprint(json.dumps(meta['archive']))\n"
+  ],
+  "cwd": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "phase": "closure",
+  "reserved_seconds": 20,
+  "inputs": {},
+  "allocation": {
+    "workers": 16,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 109869,
+        "parent": 109865,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-temporal-v1 -- python3 -"
+      },
+      {
+        "pid": 109870,
+        "parent": 109869,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-temporal-v1 --project-limit 16"
+      },
+      {
+        "pid": 109873,
+        "parent": 109869,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/launch-temporal-v1 -- python3 -"
+      },
+      {
+        "pid": 109874,
+        "parent": 109873,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 109969,
+        "parent": 109874,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_evolve.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/source/docs/plans/cao-tamura-accepted-7-evidence/contract.json --admission /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/admission-v5.json --model A95 --degree 4 --dt .0005 --target .016 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113/ct6-finer-p4"
+      },
+      {
+        "pid": 110003,
+        "parent": 109969,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/IncNavierStokesSolver case.xml"
+      },
+      {
+        "pid": 110004,
+        "parent": 110003,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 9 --singleton-died-pipe 10 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 110118,
+        "parent": 110117,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "driver_sha256": "466264728f215fbde121d20d671af312c9e362e3c39ec8ec565a9ab650fe6e41"
+}

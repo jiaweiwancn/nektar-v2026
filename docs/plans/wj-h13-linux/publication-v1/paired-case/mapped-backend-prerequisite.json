@@ -1,0 +1,239 @@
+{
+  "schema": "WJH13MappedBackendPrerequisiteV1",
+  "status": "IMPLEMENTATION_REQUIRED",
+  "target": {
+    "Nx": 14,
+    "Ni": 16,
+    "No": 34,
+    "fields": {
+      "U": 6493,
+      "W": 6493,
+      "k": 6493,
+      "epsilon": 4429,
+      "pi_inner": 255,
+      "pi_outer": 525,
+      "gauge": 0
+    },
+    "state": 24688,
+    "state_formula": 24688,
+    "shared_U_k_interface_DOFs": 43,
+    "regional_velocity": {
+      "inner": 2107,
+      "outer": 4429
+    },
+    "regional_pressure_interface_vertices_each": 15,
+    "essential": {
+      "U": 193,
+      "W": 235,
+      "k": 151,
+      "epsilon_excluding_dependent_corner": 102
+    },
+    "dependent_epsilon_DOFs": 43,
+    "independent": {
+      "U": 6300,
+      "W": 6258,
+      "k": 6342,
+      "epsilon": 4284,
+      "pi_inner": 255,
+      "pi_outer": 525
+    },
+    "free_solve_blocks": {
+      "momentum_predictor": 12558,
+      "pressure": 780,
+      "assembled_flow": 13338,
+      "k": 6342,
+      "epsilon": 4327,
+      "epsilon_independent_transport": 4284,
+      "epsilon_identity_trace_rows": 43
+    },
+    "independent_state": 23964,
+    "count_kind": "source-aware canonical topology; native numbering/sign verification deferred to fresh target CP0"
+  },
+  "proposed_opt_in": "MappedBlockV1 (proposal only; keep legacy dense default and guards)",
+  "source_call_graph": [
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp",
+      "lines": [
+        310
+      ],
+      "needle": "RANSWallGlobalField::WallMatrix RANSWallGlobalField::Mass()",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp",
+        "bytes": 38430,
+        "sha256": "b64acabca45fea3b8d9f32ad1b2eb16146623d4e64a412333f361d6780b194b3"
+      }
+    },
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp",
+      "lines": [
+        320
+      ],
+      "needle": "RANSWallGlobalField::Vector RANSWallGlobalField::Project(",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp",
+        "bytes": 38430,
+        "sha256": "b64acabca45fea3b8d9f32ad1b2eb16146623d4e64a412333f361d6780b194b3"
+      }
+    },
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp",
+      "lines": [
+        164
+      ],
+      "needle": "RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PhysicalMass(",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp",
+        "bytes": 120665,
+        "sha256": "10d719cda0e4d209ea67a50f6b5f1042a5ee626685c317411d6f92a6d92aab87"
+      }
+    },
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp",
+      "lines": [
+        180
+      ],
+      "needle": "RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PhysicalProject(",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp",
+        "bytes": 120665,
+        "sha256": "10d719cda0e4d209ea67a50f6b5f1042a5ee626685c317411d6f92a6d92aab87"
+      }
+    },
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp",
+      "lines": [
+        1020
+      ],
+      "needle": "RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Norms(",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp",
+        "bytes": 120665,
+        "sha256": "10d719cda0e4d209ea67a50f6b5f1042a5ee626685c317411d6f92a6d92aab87"
+      }
+    },
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp",
+      "lines": [
+        141
+      ],
+      "needle": "system.matrix.assign(n, Vector(n))",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp",
+        "bytes": 78964,
+        "sha256": "ab6cb2d7ed66241a14384ffd7dc13f74cc8015416372841b210f1d9f3718a477"
+      }
+    },
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp",
+      "lines": [
+        118
+      ],
+      "needle": "WallMatrix a(nv,Vector(nv))",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp",
+        "bytes": 25880,
+        "sha256": "8e75288abcf8c4342e93c82c5c95537ec19753d310dbda45fb0901435c4caf92"
+      }
+    },
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp",
+      "lines": [
+        133
+      ],
+      "needle": "const Factor momentumFactor(a)",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp",
+        "bytes": 25880,
+        "sha256": "8e75288abcf8c4342e93c82c5c95537ec19753d310dbda45fb0901435c4caf92"
+      }
+    },
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp",
+      "lines": [
+        144
+      ],
+      "needle": "WallMatrix bg(np,Vector(nv)),schur(np,Vector(np))",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp",
+        "bytes": 25880,
+        "sha256": "8e75288abcf8c4342e93c82c5c95537ec19753d310dbda45fb0901435c4caf92"
+      }
+    },
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp",
+      "lines": [
+        250
+      ],
+      "needle": "const auto delta=Factor(block.matrix).Apply(rhs)",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp",
+        "bytes": 25880,
+        "sha256": "8e75288abcf8c4342e93c82c5c95537ec19753d310dbda45fb0901435c4caf92"
+      }
+    },
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionKBound.cpp",
+      "lines": [
+        68
+      ],
+      "needle": "std::unique_ptr<RANSWallKBound::Projection>",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionKBound.cpp",
+        "bytes": 29598,
+        "sha256": "ae2a648db21bf0d46ee06552d4aafee7d8efa69f36e1f4a7cd40e23944bf5c9e"
+      }
+    },
+    {
+      "relative_path": "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp",
+      "lines": [
+        919
+      ],
+      "needle": "{\"pressure_mass\",J::Rows(m_mass[b])}",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp",
+        "bytes": 87301,
+        "sha256": "e3460ad3ae6c83da2ca38355b453dd72b38a40154384cbc15ba60007ddd4e8df"
+      }
+    },
+    {
+      "relative_path": "library/LibUtilities/LinearAlgebra/NekLinSysIterGMRES.h",
+      "lines": [
+        45,
+        47
+      ],
+      "needle": "class NekLinSysIterGMRES",
+      "identity": {
+        "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/library/LibUtilities/LinearAlgebra/NekLinSysIterGMRES.h",
+        "bytes": 6202,
+        "sha256": "208ccb073ad18d7b81ffc21d6a9d69e37bd29ff944deb43ef03653e7053a22e1"
+      }
+    }
+  ],
+  "smallest_complete_extension": [
+    "element/face/ray-local sparse or matrix-free mass and frozen Picard actions using existing native IDs/signs and full mapped rows; consistent mass in startup projection as well as governing steps",
+    "replace global dense PhysicalMass/Project and residual mass-dual factors with qualified consistent-mass applications/solves; preserve physical quadrature, constraints and reference freeze order",
+    "predictor solve with alpha*M+L; nonsymmetric Schur action D*(alpha*M_free)^-1*G-C via actual complete pressure action and free-row restrictions; no dense BG column corpus",
+    "k then epsilon transport, retaining dependent epsilon identity rows AND their transport/mass columns, current-K profiles/cutoff and refreshed boundary reactions",
+    "operator-backed bound mass inverse/retained constraint pool, diagnostics/strict reader and streamed sparse rows; do not leave dense startup/observation hidden behind a new governing backend selector"
+  ],
+  "existing_infrastructure": "LibUtilities NekLinSysIterGMRES/NekSysOperators and native AssemblyMapCG; requires a custom mapped-row adapter, not only a session GlobalSysSoln change",
+  "forbidden_shortcuts": [
+    "mass lumping",
+    "full momentum inverse in place of mass",
+    "Gp=-D^T",
+    "omitted roughness/exterior/interface pressure terms",
+    "assumed SPD Schur",
+    "physics/space/source changes",
+    "normal coarsening or guard-only increase"
+  ],
+  "qualification_sequence": [
+    "small existing dense-qualified mapped cases, including H10 two-column synthetic/native fixture: mass/flow/pressure/scalar actions and solves versus dense with identical constraints",
+    "preserve linear residual tolerances, native hard/quality checks, current-K trace, bound adverse witnesses and one-sweep counters; freeze scaled comparison tolerances before tests",
+    "restart/history/initializer invocation and rollback equivalence; pressure level and signed exterior/interface identities; input/generation cache invalidation",
+    "only then actual 24688-state target fresh CP0 with finite memory/output/worker budget and all source-aware dimensions/native row maps verified",
+    "retained short target pilot measures startup, operator, solve, predicate and observation cost; admit full-duration preservation only from those measurements"
+  ],
+  "measured_target_cost": null,
+  "historical_timing": "H2 small-case four sweeps Off10.2503s/ExactStep3.55065s, domain.compute11.1269s/2.14574s, dense factorization .01698/.01680s; timers overlap; not target performance",
+  "implementation_in_H13": false
+}

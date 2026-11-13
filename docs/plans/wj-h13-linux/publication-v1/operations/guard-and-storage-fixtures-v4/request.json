@@ -1,0 +1,44 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "import unittest;from pathlib import Path;import test_wj_h13_domain as m;m.SOURCE=Path(\"/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source\");names=[\"test_external_preflight_refuses_before_any_native_allocation\",\"test_target_count_entities_and_epsilon_identity_rows\"];s=unittest.TestSuite(m.FullHeightPairedDomain(n)for n in names);r=unittest.TextTestRunner(verbosity=2).run(s);raise SystemExit(not r.wasSuccessful())"
+  ],
+  "cwd": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "phase": "operation",
+  "reserved_seconds": 45.0,
+  "inputs": {},
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 109368,
+        "parent": 109366,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h13.py --root /home/jay/build/wj-h13-fullheight-paired-domain-20261113 --label guard-and-storage-fixtures-v4 --seconds 45 -- python3 -B -c import unittest;from pathlib import Path;import test_wj_h13_domain as m;m.SOURCE=Path(\"/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source\");names=[\"test_external_preflight_refuses_before_any_native_allocation\",\"test_target_count_entities_and_epsilon_identity_rows\"];s=unittest.TestSuite(m.FullHeightPairedDomain(n)for n in names);r=unittest.TextTestRunner(verbosity=2).run(s);raise SystemExit(not r.wasSuccessful())"
+      }
+    ]
+  },
+  "driver_sha256": "466264728f215fbde121d20d671af312c9e362e3c39ec8ec565a9ab650fe6e41"
+}

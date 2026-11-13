@@ -1,0 +1,348 @@
+{
+  "status": {
+    "paired_domain_construction": "PASS",
+    "continuum_boundary_compatibility": "PASS",
+    "geometry_certificate": "PASS",
+    "target_capacity": "OBSTRUCTED",
+    "fresh_native_initialization": "NOT_RUN",
+    "target_domain_evolution": "NOT_RUN",
+    "duration_preservation": "NOT_RUN",
+    "experimental_comparison": "NOT_RUN",
+    "all_native_invocations": 0,
+    "native_builds": 0,
+    "global_dense_matrix_allocations": 0,
+    "target_count": 24688,
+    "shared_topology_sha256": "7bbb644e4e11309bfd5bc65d445c0da5e09db598e6affbe614f100c3063ac97c",
+    "source": {
+      "path": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/observer-v4/study_wj_h13.py",
+      "bytes": 10267,
+      "sha256": "c286a122d3e3f6bd21745822f5f6580c1aa906680436ba48a34a5e7f834f2110"
+    },
+    "elapsed_science_seconds": 1.080005916999653
+  },
+  "counts": {
+    "Nx": 14,
+    "Ni": 16,
+    "No": 34,
+    "fields": {
+      "U": 6493,
+      "W": 6493,
+      "k": 6493,
+      "epsilon": 4429,
+      "pi_inner": 255,
+      "pi_outer": 525,
+      "gauge": 0
+    },
+    "state": 24688,
+    "state_formula": 24688,
+    "shared_U_k_interface_DOFs": 43,
+    "regional_velocity": {
+      "inner": 2107,
+      "outer": 4429
+    },
+    "regional_pressure_interface_vertices_each": 15,
+    "essential": {
+      "U": 193,
+      "W": 235,
+      "k": 151,
+      "epsilon_excluding_dependent_corner": 102
+    },
+    "dependent_epsilon_DOFs": 43,
+    "independent": {
+      "U": 6300,
+      "W": 6258,
+      "k": 6342,
+      "epsilon": 4284,
+      "pi_inner": 255,
+      "pi_outer": 525
+    },
+    "free_solve_blocks": {
+      "momentum_predictor": 12558,
+      "pressure": 780,
+      "assembled_flow": 13338,
+      "k": 6342,
+      "epsilon": 4327,
+      "epsilon_independent_transport": 4284,
+      "epsilon_identity_trace_rows": 43
+    },
+    "independent_state": 23964,
+    "count_kind": "source-aware canonical topology; native numbering/sign verification deferred to fresh target CP0"
+  },
+  "storage": {
+    "entries": [
+      {
+        "name": "stored_mass_U",
+        "rows": 6493,
+        "columns": 6493,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 337272392,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "stored_mass_W",
+        "rows": 6493,
+        "columns": 6493,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 337272392,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "stored_mass_k",
+        "rows": 6493,
+        "columns": 6493,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 337272392,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "stored_mass_epsilon",
+        "rows": 4429,
+        "columns": 4429,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 156928328,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "stored_mass_pi_inner",
+        "rows": 255,
+        "columns": 255,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 520200,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "stored_mass_pi_outer",
+        "rows": 525,
+        "columns": 525,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 2205000,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "GlobalField_Mass_long_double_temporary",
+        "rows": 6493,
+        "columns": 6493,
+        "bytes_per_entry": 16,
+        "copies": 1,
+        "bytes": 674544784,
+        "scope": "current x86 long-double accumulation, plus double result; report actual ABI"
+      },
+      {
+        "name": "Picard_flow",
+        "rows": 13338,
+        "columns": 13338,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 1423217952,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "Pimple_A",
+        "rows": 12558,
+        "columns": 12558,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 1261626912,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "Pimple_M",
+        "rows": 12558,
+        "columns": 12558,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 1261626912,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "Pimple_A_LU",
+        "rows": 12558,
+        "columns": 12558,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 1261626912,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "Pimple_M_LU",
+        "rows": 12558,
+        "columns": 12558,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 1261626912,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "G",
+        "rows": 12558,
+        "columns": 780,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 78361920,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "D",
+        "rows": 780,
+        "columns": 12558,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 78361920,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "BGp",
+        "rows": 780,
+        "columns": 12558,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 78361920,
+        "scope": "native transposed pressure-column storage; mathematical BGp is velocity x pressure"
+      },
+      {
+        "name": "Schur",
+        "rows": 780,
+        "columns": 780,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 4867200,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "scalar_k",
+        "rows": 6342,
+        "columns": 6342,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 321767712,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "scalar_epsilon_with_trace",
+        "rows": 4327,
+        "columns": 4327,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 149783432,
+        "scope": "double payload lower bound only"
+      },
+      {
+        "name": "legacy_full_state_square_if_requested",
+        "rows": 24688,
+        "columns": 24688,
+        "bytes_per_entry": 8,
+        "copies": 1,
+        "bytes": 4875978752,
+        "scope": "sizing only, not asserted to be the selected PIMPLE allocation"
+      }
+    ],
+    "stored_field_mass_payload_bytes": 1171470704,
+    "simultaneous_Pimple_payload_lower_bound": 6709678560,
+    "measured_target_performance": null,
+    "note": "integer sizing only; no global matrix allocated; excludes row containers, factor workspaces, diagnostics, copies and bound inventories"
+  },
+  "clocks": {
+    "Lx": 25.0,
+    "cross_section_physical_height": 19.9125,
+    "volume_per_unit_span": 497.81250000000006,
+    "reference_flow_rate_per_unit_span": 19.048823247420685,
+    "U_bulk": 0.9566264028836502,
+    "T_bulk": 26.13350407707765,
+    "T_slowest_outer_transit": 57.17628191545675,
+    "T_top_transit": 22.935076496133906,
+    "T_inner_diffusion_conservative": 195.80590488759879,
+    "T_interface_k_over_epsilon": 3.8043289281565653,
+    "T_top_k_over_epsilon": 505.02466521278404,
+    "proposed_preservation_horizon": 505.02466521278404,
+    "horizon_rule": "max(3*T_bulk,2*T_slowest_outer,T_inner_diffusion,T_top_k/epsilon)",
+    "terminal_window": [
+      447.8483832973273,
+      505.02466521278404
+    ],
+    "horizon_native_admission": "NOT_RUN; future measured cost and frozen application budgets required",
+    "temporal_steps_at_metadata_dt_0p01": 50503,
+    "runtime_estimate": null,
+    "note": "slowest OUTER transit excludes no-slip infinite advection time; clocks and finite monitoring do not prove stationarity"
+  },
+  "geometry": {
+    "flat": {
+      "owned_sample_count": 17500,
+      "minimum_sampled_determinant": 0.9955919395465994,
+      "physical_shared_face_error": 0.0,
+      "opposite_cofactor_error": 0.0,
+      "top_lateral_coordinate_error": 1.7763568394002505e-15,
+      "certificate": {
+        "status": "PASS",
+        "physical_curvature_bound": 0.0,
+        "normal_reach": 0.2375,
+        "reach_times_curvature": 0.0,
+        "minimum_normal_stretch_lower_bound": 1.0,
+        "minimum_required_stretch": 0.1,
+        "outer_ceiling_bracket_lower_bound": 19.7625,
+        "outer_determinant_lower_bound": 0.9955919395465994,
+        "global_injectivity": "x_s>0; det>0 gives z increasing at fixed physical x; straight flat lateral boundaries give connected eta intervals",
+        "region_nonoverlap": "outer segments stay above the offset-interface graph by eta*(top-f-reach*sqrt(1+M^2))>0; normal tube stays below",
+        "whole_height": true,
+        "normal_ray_scope": "only d0+H; outer eta is an independent continuation"
+      }
+    },
+    "terrain": {
+      "owned_sample_count": 17500,
+      "minimum_sampled_determinant": 0.8088960663700735,
+      "physical_shared_face_error": 0.0,
+      "opposite_cofactor_error": 0.0,
+      "top_lateral_coordinate_error": 1.7763568394002505e-15,
+      "certificate": {
+        "status": "PASS",
+        "physical_curvature_bound": 0.7895683520871486,
+        "normal_reach": 0.2375,
+        "reach_times_curvature": 0.1875224836206978,
+        "minimum_normal_stretch_lower_bound": 0.8124775163793022,
+        "minimum_required_stretch": 0.1,
+        "outer_ceiling_bracket_lower_bound": 18.71951016964967,
+        "outer_determinant_lower_bound": 0.7662055985125468,
+        "global_injectivity": "x_s>0; det>0 gives z increasing at fixed physical x; straight flat lateral boundaries give connected eta intervals",
+        "region_nonoverlap": "outer segments stay above the offset-interface graph by eta*(top-f-reach*sqrt(1+M^2))>0; normal tube stays below",
+        "whole_height": true,
+        "normal_ray_scope": "only d0+H; outer eta is an independent continuation"
+      }
+    }
+  },
+  "reference": {
+    "expression_U_max_abs": 7.162326287613041e-14,
+    "expression_k_max_abs": 6.768891003261501e-15,
+    "budget_production_integral": 0.0009504709341241106,
+    "budget_destruction_integral": 0.0009504709341241107,
+    "budget_integral_defect": 1.0842021724855044e-19,
+    "Q_endpoints": [
+      0.0,
+      0.0
+    ],
+    "epsilon_B": 5.204000769230766e-06,
+    "epsilon_reaction_coefficient": 5.204000769230768e-06,
+    "epsilon_coefficient_defect": -2.541098841762901e-21,
+    "epsilon_gradient_flux_integral": 3.443199504563231e-05,
+    "epsilon_boundary_difference": 3.443199504563231e-05,
+    "epsilon_integral_defect": 0.0,
+    "top_outward_epsilon_flux": 2.6134341590612756e-07,
+    "interface_U_difference": 1.1102230246251565e-16,
+    "interface_K_difference": 0.0,
+    "total_inner_traction": 0.0026009999999999996,
+    "outer_shear": 0.0026009999999999996,
+    "finite_nu_gradient_ratio": 0.9621581978585547,
+    "dependent_epsilon": 0.0023155240547992548,
+    "wall_E_H": 0.0023155240547992548,
+    "pi_jump": -0.0021750654680284427,
+    "full_height_top_U_over_Uinf": 1.0900334256227213,
+    "molecular_ratio_at_H": 0.021984584715549343,
+    "no_native_projection_or_discrete_spatial_residual_evaluated": true,
+    "status": "PASS",
+    "qualification": "continuum/reference expression checks only; no native equilibrium preservation result"
+  }
+}

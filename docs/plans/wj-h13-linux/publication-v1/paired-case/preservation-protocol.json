@@ -1,0 +1,310 @@
+{
+  "schema": "WJH13TargetPreservationProtocolV1",
+  "status": "PREPARED_NOT_ADMITTED",
+  "fresh_mesh_signature_required": true,
+  "old_checkpoint_conversion": false,
+  "initial_states": {
+    "q0": "analytical coupled neutral reference",
+    "qh0": "actual accepted state after projection, external/dependent lifting and FlatInletTraceV1",
+    "internal_reference": "separate native pre-initializer frozen reference/defect; not assumed equal to qh0",
+    "qh0_identity": null
+  },
+  "stages": {
+    "A": {
+      "kind": "future fresh target CP0 plus short admission pilot",
+      "maximum_pilot_steps": 4,
+      "metadata_dt": 0.01,
+      "admission": "independent future contract, capacity/runtime and measured cost first",
+      "CP0_checks": [
+        "native IDs/signs and trace compatibility",
+        "all regional Q1 continuity moments <=2e-15",
+        "physical div <=1e-12*max(1,||G||)",
+        "unchanged scalars/root/covariance/principal/cutoff/outlet/ground predicates",
+        "half-neutral quality m/nu_eff>=.002068763923454, distinct from hard physical sign",
+        "actual K, cutoff and epsilon_H=A(K)/H",
+        "fixed reference/defect and actual qh0 distinct"
+      ]
+    },
+    "B": {
+      "kind": "target-domain duration preservation",
+      "clocks": {
+        "Lx": 25.0,
+        "cross_section_physical_height": 19.9125,
+        "volume_per_unit_span": 497.81250000000006,
+        "reference_flow_rate_per_unit_span": 19.048823247420685,
+        "U_bulk": 0.9566264028836502,
+        "T_bulk": 26.13350407707765,
+        "T_slowest_outer_transit": 57.17628191545675,
+        "T_top_transit": 22.935076496133906,
+        "T_inner_diffusion_conservative": 195.80590488759879,
+        "T_interface_k_over_epsilon": 3.8043289281565653,
+        "T_top_k_over_epsilon": 505.02466521278404,
+        "proposed_preservation_horizon": 505.02466521278404,
+        "horizon_rule": "max(3*T_bulk,2*T_slowest_outer,T_inner_diffusion,T_top_k/epsilon)",
+        "terminal_window": [
+          447.8483832973273,
+          505.02466521278404
+        ],
+        "horizon_native_admission": "NOT_RUN; future measured cost and frozen application budgets required",
+        "temporal_steps_at_metadata_dt_0p01": 50503,
+        "runtime_estimate": null,
+        "note": "slowest OUTER transit excludes no-slip infinite advection time; clocks and finite monitoring do not prove stationarity"
+      },
+      "application_error_budgets": null,
+      "comparison_floors": null,
+      "before_native_launch": "freeze budgets/floors/horizon/monitor cadence and finite resources; no result-dependent tuning",
+      "terminal_monitoring": "sample station and inventory drift over the complete declared terminal window; report trend, not a stationarity proof",
+      "insufficient_duration": "PARTIAL_DURATION/UNRESOLVED"
+    },
+    "C": {
+      "kind": "separately authorized targeted temporal/spatial sensitivity",
+      "automatic": false
+    }
+  },
+  "errors": {
+    "E_repr": "||qh0-q0||/S",
+    "E_drift": "||qh(t)-qh0||/S",
+    "E_ref": "||qh(t)-q0||/S",
+    "E_fetch": "||qh(x,t)-qh(x_in,t)||/S",
+    "station_to_analytical": "also compare every station with q0",
+    "temporal_difference": "separate diagnostic, not preservation or continuum error"
+  },
+  "norms": {
+    "volume": "physical regional Gauss8 L2, faces and wall/cutoff/roughness breakpoints split; Jacobian once",
+    "finite_maximum": "all normal faces with both owners, native points and deterministic inward offsets; freeze exact inventory before native run",
+    "scales": {
+      "U": 1.0,
+      "alternative_velocity": 0.051,
+      "k": 0.008809015145515192,
+      "R": 0.0026009999999999996,
+      "pressure": 0.0026009999999999996,
+      "epsilon_fixed": 0.0023155240547992548
+    },
+    "epsilon_additional": "outer-only height-resolved relative error; do not hide top errors with A/H scale",
+    "zero_components": "absolute fixed scales, no division by no-slip U=0",
+    "pressure": "traction-fixed convention; no independent regauge"
+  },
+  "stations": [
+    {
+      "x_code": -10.0,
+      "x_mm": -400.0,
+      "role": "inlet",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": -7.5,
+      "x_mm": -300.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": -5.0,
+      "x_mm": -200.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": -2.5,
+      "x_mm": -100.0,
+      "role": "upstream_foot",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": -1.25,
+      "x_mm": -50.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 0.0,
+      "x_mm": 0.0,
+      "role": "virtual_crest",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 1.25,
+      "x_mm": 50.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 2.5,
+      "x_mm": 100.0,
+      "role": "downstream_foot",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 3.75,
+      "x_mm": 150.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 4.0,
+      "x_mm": 160.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 4.25,
+      "x_mm": 170.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 4.5,
+      "x_mm": 180.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 4.75,
+      "x_mm": 190.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 5.0,
+      "x_mm": 200.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 5.25,
+      "x_mm": 210.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 5.5,
+      "x_mm": 220.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 5.75,
+      "x_mm": 230.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 6.0,
+      "x_mm": 240.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 6.25,
+      "x_mm": 250.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 6.5,
+      "x_mm": 260.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 6.75,
+      "x_mm": 270.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 7.0,
+      "x_mm": 280.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 7.25,
+      "x_mm": 290.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 7.5,
+      "x_mm": 300.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 7.75,
+      "x_mm": 310.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 8.0,
+      "x_mm": 320.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": false,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 10.0,
+      "x_mm": 400.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 12.5,
+      "x_mm": 500.0,
+      "role": "profile/wake diagnostic",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    },
+    {
+      "x_code": 15.0,
+      "x_mm": 600.0,
+      "role": "outlet",
+      "mesh_vertex": true,
+      "physical_height": "original floor z; flat r=z-d0; retain both face/H owners"
+    }
+  ],
+  "required_diagnostics": [
+    "U,W,k,outer epsilon,pi,all Rij",
+    "outer -Rxz/u_tau^2, inner total molecular+turbulent shear, wall traction",
+    "P/epsilon where meaningful, actual versus counterfactual production/destruction",
+    "current K/cutoff/dependent trace",
+    "signed storage/advection/stress/roughness/diffusion/source/exterior/interface budgets",
+    "local test moments, regional inventories, weak continuity and strong divergence separately",
+    "limiter/bound/fallback and raw/corrected differences",
+    "continuum, expression, projection, quadrature, assembled spatial residual and genuine completed-stage defects separately"
+  ],
+  "no_equilibrium_repairs": [
+    "no eta anchor",
+    "no EP redistribution",
+    "no reference reset",
+    "no extra forcing",
+    "no retuning"
+  ],
+  "experimental_roles": "Fig3 at flat virtual crest x=0, not moved to inlet=-10; selected neutral inlet is an explicit model choice, not measured finite-depth reconstruction"
+}

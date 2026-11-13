@@ -1,0 +1,57 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h13.py",
+    "--root",
+    "/home/jay/build/wj-h13-fullheight-paired-domain-20261113"
+  ],
+  "cwd": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "phase": "science",
+  "reserved_seconds": 180.0,
+  "inputs": {
+    "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h13.py": {
+      "sha256": "bc99219588789a107009ae10067e12e43fedc483f2c6ce67e45f06a004aefc1b",
+      "bytes": 10021
+    }
+  },
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 109143,
+        "parent": 109142,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h13.py --root /home/jay/build/wj-h13-fullheight-paired-domain-20261113 --label paired-offline-science-v1 --seconds 180 --phase science -- python3 -B /home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h13.py --root /home/jay/build/wj-h13-fullheight-paired-domain-20261113"
+      }
+    ]
+  },
+  "driver_sha256": "466264728f215fbde121d20d671af312c9e362e3c39ec8ec565a9ab650fe6e41",
+  "status": "FAIL",
+  "seconds": 0.7691184039940708,
+  "exit": 1,
+  "reason": null,
+  "peak_tree_rss_bytes": 87089152,
+  "output_bytes": 10998443,
+  "log_sha256": "bd0c9d4d2ef608dc81766a99cbd64034f1e2fe4019c8f8570b8d5f501345a689"
+}

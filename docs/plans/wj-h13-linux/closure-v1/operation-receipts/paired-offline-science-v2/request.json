@@ -1,0 +1,52 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/observer-v4/study_wj_h13.py",
+    "--root",
+    "/home/jay/build/wj-h13-fullheight-paired-domain-20261113",
+    "--version",
+    "v2"
+  ],
+  "cwd": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "phase": "science",
+  "reserved_seconds": 180.0,
+  "inputs": {
+    "/home/jay/build/wj-h13-fullheight-paired-domain-20261113/observer-v4/study_wj_h13.py": {
+      "sha256": "c286a122d3e3f6bd21745822f5f6580c1aa906680436ba48a34a5e7f834f2110",
+      "bytes": 10267
+    }
+  },
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 109366,
+        "parent": 109365,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h13-fullheight-paired-domain-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h13.py --root /home/jay/build/wj-h13-fullheight-paired-domain-20261113 --label paired-offline-science-v2 --seconds 180 --phase science -- python3 -B /home/jay/build/wj-h13-fullheight-paired-domain-20261113/observer-v4/study_wj_h13.py --root /home/jay/build/wj-h13-fullheight-paired-domain-20261113 --version v2"
+      }
+    ]
+  },
+  "driver_sha256": "466264728f215fbde121d20d671af312c9e362e3c39ec8ec565a9ab650fe6e41"
+}

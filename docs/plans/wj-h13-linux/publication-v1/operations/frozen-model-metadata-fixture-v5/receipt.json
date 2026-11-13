@@ -1,0 +1,51 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport unittest,test_wj_h13_domain as t\nt.SOURCE=Path('/home/jay/build/wj-h13-fullheight-paired-domain-20261113/source')\nsuite=unittest.TestSuite([t.FullHeightPairedDomain('test_frozen_reference_full_height_and_molecular_anchor')])\nraise SystemExit(not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful())\n"
+  ],
+  "cwd": "/home/jay/build/wj-h13-fullheight-paired-domain-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "phase": "operation",
+  "reserved_seconds": 20,
+  "inputs": {},
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 109591,
+        "parent": 109590,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "driver_sha256": "466264728f215fbde121d20d671af312c9e362e3c39ec8ec565a9ab650fe6e41",
+  "status": "PASS",
+  "seconds": 0.260125615997822,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 19673088,
+  "output_bytes": 13272865,
+  "log_sha256": "a8af04d447fb9a033523175002b3ab2c4936c08029fe50c5a207a7271742ce2b"
+}
