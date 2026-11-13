@@ -29,7 +29,7 @@ class LocalTimestepTests(unittest.TestCase):
             script=Path(d)/'child.py'
             script.write_text('from pathlib import Path\nfrom run_wj_h7 import record_coverage_halt,update_journal\np=Path('+repr(str(root/'accounting.json'))+')\nrecord_coverage_halt(p,dict(status="OBSTRUCTED",role="accepted",trajectory="6/fine",time=.03,step=6,witness={"marker":"first"}))\nupdate_journal(p,lambda b:b["entries"].update(child_reserved=dict(status="RESERVED",reserved_seconds=7)))\n')
             import os
-            with patch.dict(os.environ,PYTHONPATH=str(Path(__file__).parent)),patch.object(journal,'scientific_workers',return_value=dict(workers=0)):
+            with patch.dict(os.environ,PYTHONPATH=str(Path(journal.__file__).parent)+os.pathsep+os.environ.get('PYTHONPATH','')),patch.object(journal,'scientific_workers',return_value=dict(workers=0)):
                 self.assertTrue(journal.execute(root,'child-halt',[sys.executable,str(script)],seconds=10))
             b=journal.load(root/'accounting.json');self.assertEqual(b['coverage_halt']['witness']['marker'],'first');self.assertEqual(b['entries']['child_reserved']['reserved_seconds'],7)
             self.assertEqual(b['entries']['child-halt']['status'],'PASS')
