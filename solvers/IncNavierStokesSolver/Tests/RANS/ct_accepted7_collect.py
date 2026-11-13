@@ -12,6 +12,7 @@ from rans_qualification import THREADS,write_json
 os.environ.update(THREADS)
 from ct_accepted_open import require
 from ct_accepted7_gate import top,history,resources,temporal,finite
+from ct_accepted_budget_gate import physical_budgets
 from rans_request_manifest import RequestManifest,sha
 
 
