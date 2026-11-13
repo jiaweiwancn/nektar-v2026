@@ -8,7 +8,7 @@ Vec Velocity(const RANSWallEvolutionPatch &p,const Vector &s,const RANSWallGloba
 double Volume(const RANSWallEvolutionPatch &p)
 {double result=0;for(const auto &q:p.Quadrature(0,16))result+=q.weight;return result;}
 std::string Weak(const RANSWallEvolutionPatch &p,const Vector &s,const Vector &h,double alpha,double time,
-    const RANSWallEvolutionData &data,int outerOrder=24)
+    const RANSWallEvolutionData &data,int outerOrder=24,bool compact=false)
 {
     Require(outerOrder>=8 && outerOrder<=32,"unsupported passive outer weak quadrature order");
     const auto hash=RANSWallR3::Hash(s);const auto work=p.InitializationWork();
@@ -33,6 +33,19 @@ std::string Weak(const RANSWallEvolutionPatch &p,const Vector &s,const Vector &h
     std::vector<std::pair<std::string,std::string>> terms;
     for(const auto &[name,values]:components.terms)terms.push_back({name,contract(values)});
     const auto inner=p.Residual(s,h,alpha,time,data,false,false,0),outer=p.Residual(s,h,alpha,time,data,false,false,1);
+    if(compact)
+    {
+        std::vector<std::string> identities;
+        for(const auto &mode:tests){std::vector<std::string> fields;
+            for(const auto &v:mode)fields.push_back(J::Quote(RANSWallR3::Hash(v)));
+            identities.push_back(J::List(fields));}
+        Require(hash==RANSWallR3::Hash(s) && work==p.InitializationWork(),"compact weak observation mutated state/Lift");
+        return J::Object({{"schema",J::Quote("WJProjectedWeakCompactV1")},{"state_sha256",J::Quote(hash)},
+            {"alpha_mass",J::Number(alpha)},{"native_inner",contract(inner)},{"native_outer",contract(outer)},
+            {"native_terms",J::Object(terms)},{"projected_test_hashes",J::List(identities)},
+            {"scope",J::Quote("same actual projected 1,x/5,interface_hat physical weak components and reactions; compact native contractions only, no independent quadrature rows or quadrature claim")},
+            {"governing_solves","0"}});
+    }
     std::vector<std::string> rows;
     auto append=[&](const RANSWallGlobalPoint &v,const RANSWallGlobalPoint &pressure,const RANSWallGlobalPoint &ep,
         double weight,double canonicalWeight,bool in,const EquilibriumAWFProfiles *profile)

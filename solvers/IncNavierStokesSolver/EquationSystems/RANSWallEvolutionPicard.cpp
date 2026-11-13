@@ -68,7 +68,10 @@ std::string RANSWallEvolutionPatch::WJTerrainAssemblyChecks(const Vector &state,
             else for(int side=0;side<2;++side)for(int j=0;j<size[InnerPressure()+side];++j)
                 if(mode==side || mode==3)direction[offset[InnerPressure()+side]+j]=
                     (mode==3 && side==1?-1:1)*m_constants[InnerPressure()+side][j];
-            const auto action=AffinePressureAction(direction,constraints);
+            // Residual(...,false) below retains physical exterior reactions on
+            // essential rows. Compare that SAME unconstrained functional. The
+            // frozen system comparison selects only its native free rows.
+            const auto action=AffinePressureAction(direction,{});
             Vector reduced;for(int row:frozen.rows)reduced.push_back(direction[row]);
             const auto column=RANSWallAlgebra::Multiply(frozen.matrix,reduced);
             double ce=0,fd=1e300;
