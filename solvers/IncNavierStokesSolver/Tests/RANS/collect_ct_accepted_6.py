@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+"""Compact CT6 receipts; preserve incomplete/failed scopes and raw identities.
+
+Use the owned Linux launcher after numerical families have closed. Large
+matrices, coefficient arrays and packets stay at their original archive paths.
+"""
+import argparse,hashlib,json,math,os,subprocess
+from pathlib import Path
+from rans_qualification import THREADS,write_json,exact_vector_hash,audited_extrema
+os.environ.update(THREADS)
+from rans_request_manifest import RequestManifest,sha,canonical
+from ct_accepted_open import require
+from ct_accepted_budget_gate import physical_budgets
+from ct_accepted6_audit import budget,captured_k_matrix
+
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+    a=p.parse_args();r=a.root;files={};libraries={};missing=[]
+    def read(path):return json.loads(Path(path).read_text())
+    def compact(x):
+        if isinstance(x,list):return [compact(v) for v in x]
+        if not isinstance(x,dict):return x
+        out={}
+        for key,value in x.items():
+            if key=='actual_mapped_files':
+                h=hashlib.sha256(canonical(value)).hexdigest();libraries[h]=value;out['actual_mapped_files_sha256']=h
+            elif key in ('state','initial','accepted_states','rejected_state','history','native_history','reference','fixed_defect','fixed_reference','effective_initial','live_fixed_boundary','matrix','mass','weights','mixed_space'):
+                out[key+'_archive_identity']=dict(sha256=hashlib.sha256(canonical(value)).hexdigest(),entries=len(value) if isinstance(value,(list,dict)) else None,location='original sealed Linux receipt/packet')
+            else:out[key]=compact(value)
+        return out
+    def receipt(relative,name=None):
+        path=r/relative
+        if not path.exists():missing.append(str(path));return None
+        payload=read(path);files[str(path)]=sha(path)
+        write_json(a.output/(name or relative.replace('/','__')),dict(path=str(path),sha256=sha(path),body=compact(payload)))
+        return payload
+    g=['git','-c','core.filemode=false','-c','index.threads=1','-c','core.preloadIndex=false']
+    revision=subprocess.check_output(g+['rev-parse','HEAD'],cwd=r/'source',text=True).strip()
+    manifest=RequestManifest(a.output,dict(schema='CT6CompactRequiredScopeV1',root=str(r),source_revision=revision,collector_sha256=sha(Path(__file__))))
+    mathematics=receipt('mathematics-v2/continuous/results.json','continuous-oracle.json')
+    kernels=receipt('mathematics-v2/kernels/results.json','curved-kernels.json')
+    operator=receipt('native-operator-v1/results.json','native-operator.json')
+    frozen=receipt('native-operator-v1/frozen-matrix-classification-v1.json','frozen-matrices.json')
+    receipt('primitives-v1/results.json','native-continuous-crosscheck.json')
+    receipt('initial-v1/results.json','initial-representation-v1.json')
+    static=receipt('static-independent-v2/results.json','static-transmission.json')
+    receipt('targeted-v4/results.json','static-native-primitives.json')
+    zero=receipt('targeted-v3/results.json','zero-and-ground-controls.json')
+    receipt('endpoint-classification-v2/results.json','A95-primary-repaired-endpoint.json')
+    receipt('first-failure-v1.json','first-flat-guard-failure.json')
+    receipt('frozen-boundary-stage-proof-v1.json','wrong-corner-precedence-control.json')
+    receipt('frozen-boundary-stage-proof-v2.json','actual-stage-reconstruction-control.json')
+    controls=receipt('controls-v1/results.json','discriminating-controls.json')
+    regression=receipt('regression-v1/results.json','regression.json')
+    comparison=receipt('primary-comparisons-v1/results.json','A95-complete-comparisons.json')
+    members={};audits={}
+    for path in sorted(r.glob('evolution-v*/**/results.json')):
+        q=read(path)
+        if q.get('schema')!='CT6FreshManufacturedMemberV1':continue
+        label=str(path.parent.relative_to(r));folder=path.parent/'trajectory';report_path=folder/'case.evolution.json'
+        row=dict(receipt_sha256=sha(path),directory=str(path.parent),model=q['model'],degree=q['degree'],dt=q['dt'],target=q['target'],
+                 recorded_status=q['status'],physical_completion=q['physical_completion'],diagnostic_status=q['diagnostic_status'])
+        if report_path.exists():
+            n=read(report_path);complete=not n['failure'] and math.isfinite(n['time']) and abs(n['time']-q['target'])<1e-13
+            corrections=sum(x.get('bound_calls',0)+x.get('additional_governing_equation_solves',0)+x.get('additional_correction_or_restoration_solves',0) for x in n['pimple_attempts'])
+            row.update(physical_completion='pass' if complete else 'fail',time=n['time'],failure=n['failure'],steps=n['steps'],stored_slots=len(n['state']),
+                actual_report_sha256=sha(report_path),actual_state_sha256=exact_vector_hash(n['state']),actual_initial_sha256=exact_vector_hash(n['initial']),
+                actual_history_sha256=sha(Path(n['checkpoint'])/'State.bin') if n['checkpoint'] else None,
+                corrections_and_additional_solves=corrections,all_audited_extrema=audited_extrema(n))
+            require(corrections==0,'forbidden governing correction or extra solve')
+        members[label]=row;files[str(path)]=sha(path)
+        write_json(a.output/(label.replace('/','__')+'.json'),dict(path=str(path),sha256=sha(path),body=compact(q),actual=row))
+    for path in sorted(r.glob('physical-audits-v*/**/results.json')):
+        q=read(path);label=str(path.parent.relative_to(r));gates=physical_budgets(q)
+        member=next((v for v in members.values() if v.get('actual_report_sha256')==q['budget_binding']['native_report_sha256']),None)
+        require(member is not None,'foreign actual-state physical audit')
+        for name,row in q['budgets'].items():
+            source=Path(row['execution']['command'][-1]);require(sha(source)==row['packet_sha256'],'changed physical budget packet')
+            b=read(source);rebuilt=budget(b,q['budget_binding']['model'])
+            for key in ('equations','reconstruction','physical_volume'):require(rebuilt[key]==row[key],'forged or stale budget primitives:'+name+':'+key)
+            require(exact_vector_hash(b['observation']['state'])==q['budget_binding']['state_sha256'],'foreign consumed budget state')
+            del b
+        audits[label]=dict(directory=str(path.parent),body_sha256=sha(path),recomputed_full_budget_gate=gates,
+            recorded_status=q['status'],native_diagnostic=q.get('diagnostic_status'),captured_k_matrix=q.get('captured_k_matrix'),mass=q.get('mass'))
+        write_json(a.output/(label.replace('/','__')+'.json'),dict(path=str(path),sha256=sha(path),body=compact(q),recomputed_gate=gates))
+        files[str(path)]=sha(path)
+    resources={}
+    for path in sorted(r.glob('launch-*/resource-final.json')):
+        q=read(path);resources[str(path.parent.name)]=q;files[str(path)]=sha(path)
+    decision=dict(schema='CT-Accepted-6-DecisionV1',mathematical_continuum=mathematics['status'] if mathematics else 'missing',
+        curved_kernel=kernels['status'] if kernels else 'missing',
+        conservative_native_spatial_operator='pass' if operator and all(v['status']=='pass' for v in operator.values()) else 'fail_or_missing',
+        static_variable_height_transmission=static['status'] if static else 'missing',
+        zero_curvature='pass' if zero and all(v['packet']['status']=='pass' for k,v in zero['checks'].items() if '-zero-' in k) else 'fail_or_missing',
+        primary_MMS_consistency=comparison['status'] if comparison else 'not_completed',
+        discriminating_controls=controls['status'] if controls else 'not_completed',regression=regression['status'] if regression else 'not_completed',
+        native_members=members,actual_physical_audits=audits,
+        physical_experimental_applicability='not_assessed_or_admitted',curved_production_admission=False,
+        pending_or_missing=missing,historical_scope='CT1--CT5 and eight epsilon-order observations unchanged',
+        resource_scope='completed launch receipts only; collector closure exported separately after return',
+        status='pending_required_scope_recomputation')
+    write_json(a.output/'decision.json',decision);write_json(a.output/'completed-resources.json',resources)
+    write_json(a.output/'actual-loaded-libraries.json',libraries);write_json(a.output/'archive-identities.json',files)
+    write_json(a.output/'source-scope.json',dict(source_revision=revision,starting_revision='7d32b43dc9d176628cfef1dbae2aee02a86ce330',
+        source_status=subprocess.check_output(g+['status','--porcelain'],cwd=r/'source',text=True),
+        changes=subprocess.check_output(g+['diff','--stat','7d32b43dc9d176628cfef1dbae2aee02a86ce330','HEAD'],cwd=r/'source',text=True),
+        guards='named original-Natural Accepted serial2D constant-height Gaussian manufactured evolution only; static variable-height transmission separate; no production/EP/MPI/3D/action support'))
+    manifest.seal(a.output,[str(p.relative_to(a.output)) for p in a.output.glob('*.json') if p.name not in ('request-manifest.json','completed-artifacts.json')])
+    print('CT6 compact evidence exported; decision remains separate from execution completion',flush=True)
+    return 0
+
+
+if __name__=='__main__':raise SystemExit(main())
