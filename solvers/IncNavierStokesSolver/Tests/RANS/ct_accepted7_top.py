@@ -23,7 +23,7 @@ from rans_request_manifest import RequestManifest,runtime_identity,sha
 from validate_a93_a95_e94e95 import oracle
 
 
-def make(folder,rt,model='A95',degree=3,steps=0,dt=1e-6,restart=None,level=0.,old_top=False):
+def make(folder,rt,model='A95',degree=3,steps=0,dt=1e-6,restart=None,level=0.,old_top=False,interface_order=32):
     p=parameters(model);us=.4;H=.5;nu=1.5e-5;hr=.4;col=Column(model,p['q']*us*us,H,hr,nu,order=96)
     ref=col.result();G=np.zeros((3,3));G[0,2]=us/(p['kappa']*H);law=oracle(model,col.K,col.A/H,G)
     ref['outer_equilibrium']=dict(outlet_traction=[float(law['Q'][2,2]-law['Q'][0,0]),us*us])
@@ -35,7 +35,8 @@ def make(folder,rt,model='A95',degree=3,steps=0,dt=1e-6,restart=None,level=0.,ol
         set_info(root,'RANSWallBoundaryPolicy','AcceptedRichardsNorrisFlatV1')
         set_info(root,'RANSOpenTop','RichardsNorris2011V1')
     if level:set_parameter(root,'RANSOpenPressureLevel',level)
-    set_parameter(root,'RANSWallMassOrder',12);set_parameter(root,'RANSWallVolumeOrder',12);set_parameter(root,'RANSWallInterfaceOrder',12)
+    set_parameter(root,'RANSWallMassOrder',12);set_parameter(root,'RANSWallVolumeOrder',12);set_parameter(root,'RANSWallInterfaceOrder',interface_order)
+    c['integration']=dict(normal=32,tangential=8,mass=12,volume=12,interface=interface_order)
     write(root,xml);write_json(folder/'construction.json',dict(c,configuration_sha256=sha(xml),dt=dt,steps=steps))
     return c
 
@@ -130,11 +131,12 @@ def classify(packet,c):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','output'):p.add_argument('--'+k,type=Path,required=True)
-    a=p.parse_args();m=RequestManifest(a.output,dict(schema='CT7RichardsNorrisVerificationV1',runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),source=sha(Path(__file__)),controls='all3 P3 and A95 P4; same synthetic d0 compatible reference; absolute traction'))
+    p.add_argument('--interface-order',type=int,choices=(12,24,32),default=32)
+    a=p.parse_args();m=RequestManifest(a.output,dict(schema='CT7RichardsNorrisVerificationV1',runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),source=sha(Path(__file__)),interface_order=a.interface_order,controls='all3 P3 and A95 P4; same synthetic d0 compatible reference; absolute traction'))
     result=dict(schema='CT7RichardsNorrisVerificationV1',checks={},execution='incomplete',physical_experimental_admission=False)
     try:
         for model,degree in [('A95',3),('A93',3),('E94E95',3),('A95',4)]:
-            label=model+'-p'+str(degree);folder=a.output/label;c=make(folder,a.runtime,model,degree)
+            label=model+'-p'+str(degree);folder=a.output/label;c=make(folder,a.runtime,model,degree,interface_order=a.interface_order)
             try:
                 packet,e=probe(a.runtime,folder,request(c),'native');require(e['exit_code']==0,'RN native construction:'+str(packet.get('failure')))
                 result['checks'][label]=dict(classify(packet,c),execution=e,packet_sha256=sha(folder/'native.json'),construction_sha256=sha(folder/'construction.json'))
@@ -142,7 +144,7 @@ def main():
             write_json(a.output/'progress.json',result);print('CT7 RN top',label,result['checks'][label]['status'],flush=True)
         require(result['checks']['A95-p3']['status']=='pass','base A95 operator unavailable for dependent offset/history controls')
         base=a.output/'A95-p3';initial=json.loads((base/'native.json').read_text());off=initial['observation']['offsets']
-        folder=a.output/'pressure-level';c=make(folder,a.runtime,level=.125)
+        folder=a.output/'pressure-level';c=make(folder,a.runtime,level=.125,interface_order=a.interface_order)
         shifted,e=probe(a.runtime,folder,request(c),'native');require(e['exit_code']==0,'shifted pressure-level native rejection')
         delta=np.asarray(shifted['observation']['state'])-initial['observation']['state'];expected=np.zeros(len(delta))
         for q in initial['observation']['pressure_mass']:
@@ -171,7 +173,7 @@ def main():
         result['checks']['state_independent_epsilon_flux']=dict(status='pass',changed_global_K_row=ids[-1],actual_state_sha256=exact_vector_hash(changed['observation']['state']),datum=old[0],wrong_evolving_diffusivity_signal=signal,execution=e)
         for name,modify,word in [('displaced_original_wall',lambda root:set_parameter(root,'RANSOpenDisplacement',.0875),'displacement'),
              ('unsupported_cache',lambda root:set_info(root,'RANSWallEvaluationReuse','ExactStepV1'),'caching')]:
-            folder=a.output/name;c=make(folder,a.runtime);root=ET.parse(folder/'case.xml').getroot();modify(root);write(root,folder/'case.xml')
+            folder=a.output/name;c=make(folder,a.runtime,interface_order=a.interface_order);root=ET.parse(folder/'case.xml').getroot();modify(root);write(root,folder/'case.xml')
             packet,e=probe(a.runtime,folder,dict(operation='functions'),'negative');require(e['exit_code']!=0 and word in packet.get('failure','').lower(),'wrong expected rejection:'+name)
             result['checks'][name]=dict(status='pass',reason=packet['failure'],execution=e)
         result['execution']='complete';result['status']='pass' if all(r['status']=='pass' for r in result['checks'].values()) else 'fail'

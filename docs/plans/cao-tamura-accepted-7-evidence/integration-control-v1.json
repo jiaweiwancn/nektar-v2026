@@ -1,0 +1,9 @@
+{
+  "schema": "CT7RNIntegrationControlV1",
+  "retained_preparation": "top-v2: original12-point external-face rule; independent actual residual/frozen matrices pass but analytical weak momentum/k maxima reach1.284e-9 against the declared2e-10 CT7 limit",
+  "hypothesis_before_control": "The continuous U and nonconstant inner k are nonpolynomial; wall-volume panels are split at physical breaks while external-face12-point integration only splits at native cells. Resolve this integration uncertainty without changing coefficients, fields or tests.",
+  "control": "Freeze the exact top-v2 actual initial coefficients/reference/essential rows and physical functions; change only RANSWallInterfaceOrder to24 and32 on all four model/degree fixtures. Require identical effective/reference/boundary identities and analytical weak balance<=2e-10. Retain both results.",
+  "new_top_and_history_integration": {"wall_normal":32,"tangential":8,"mass":12,"outer_volume":12,"interface_and_external_faces":32},
+  "unchanged": "Same synthetic fixture, spaces, physical parameters, timestep, original laws and all tolerances. No change to CT4/5 physical input or old histories.",
+  "stop": "Do not admit top-history controls if frozen-state integration does not resolve the reference defect. Preserve failure; no tolerance increase or source cancellation."
+}
