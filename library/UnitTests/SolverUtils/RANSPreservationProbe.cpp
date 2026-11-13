@@ -143,10 +143,9 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
             {"fixed_chart_wrong_sampler_difference",J::Number(wrongChart-expectedMechanical)},
             {"dependent_epsilon",J::Number(dependent)},{"regions",J::List(regions)}}));
     }
-    bool groundAdmissible=false;
-    const auto ground=patch.WallTraceJSON(state,groundAdmissible);
-    Require(groundAdmissible,"CT6 ground chart polynomial check rejected the positive static polynomial");
+    const auto ground=patch.ContinuousGroundDiagnostic(state);
     Tree trace;std::istringstream traceInput(ground);boost::property_tree::read_json(traceInput,trace);
+    Require(trace.get<bool>("admissible"),"CT6 ground chart polynomial check rejected the positive static polynomial");
     // The independently prescribed ground polynomial is K0*(1+.02*q).
     // Its minimum is the left endpoint regardless of varying curvature/H.
     const double exactMinimum=K0*(1+.02*patch.lower[0]);
@@ -155,10 +154,10 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
     negativeFunctions[patch.K()]=[=](const auto &x,double)
         {return K0*((x[0]+.23)*(x[0]+.23)-1e-6);};
     const auto negativeState=patch.Project(negativeFunctions,0.);
-    bool negativeAdmissible=true;const auto negativeGround=patch.WallTraceJSON(negativeState,negativeAdmissible);
+    const auto negativeGround=patch.ContinuousGroundDiagnostic(negativeState);
     Tree negativeTrace;std::istringstream negativeInput(negativeGround);boost::property_tree::read_json(negativeInput,negativeTrace);
     maximum=std::max(maximum,std::abs(negativeTrace.get<double>("minimum")+K0*1e-6));
-    Require(!negativeAdmissible,"CT6 continuous ground check missed a narrow interior negative interval");
+    Require(!negativeTrace.get<bool>("admissible"),"CT6 continuous ground check missed a narrow interior negative interval");
     Require(maximum<=2e-10 && tiltedSignal>1e-8 && omittedTiltSignal>1e-8 && fixedChartSignal>1e-8,"CT6 static transmission identity or discriminating signal failed");
     return J::Object({{"schema",J::Quote("CT6StaticTransmissionV1")},{"status",J::Quote("pass")},
         {"stored_slots",J::Number(patch.Size())},{"maximum_primitive_defect",J::Number(maximum)},
