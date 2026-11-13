@@ -373,7 +373,12 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     // scalar coefficients therefore include that lift, while physical
     // backward storage still uses the actual previous accepted field.
     // They coincide for the historical time-independent CT1--CT5 inputs.
-    const auto coefficientOld=patch.ExternalLift(previous,time,data);
+    // Use the existing public, read-only effective-input receipt. It invokes
+    // the very same ExternalLift, including matching-trace corner precedence;
+    // it performs no projection or governing solve.
+    Tree lifted;std::istringstream liftInput(patch.InitializationReceipt(previous,previous,time,data,data,{}));
+    boost::property_tree::read_json(liftInput,lifted);
+    const auto coefficientOld=Values(lifted,"effective_initial");
     auto flow=coefficientOld;
     for(int b:{0,1,patch.InnerPressure(),patch.OuterPressure()})
         std::copy_n(state.begin()+patch.offset[b],patch.size[b],flow.begin()+patch.offset[b]);
@@ -597,6 +602,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
             {"k_coefficients",J::Quote("old k and newly solved epsilon; transported k is newly solved")},
             {"current_time_essential_lift_difference",J::Number(oldLiftDifference)},
             {"current_time_essential_lift_difference_by_block",J::Numbers(liftByBlock)},
+            {"coefficient_policy",J::Quote("ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots")},
             {"actual_flow_stage_maximum_difference",J::Number(stageFlowDefect)},
             {"actual_pre_k_stage_maximum_difference",J::Number(stagePreKDefect)},
             {"diffusion_IBP_element_step_fraction",J::Number(diffusionIBPFraction)},
