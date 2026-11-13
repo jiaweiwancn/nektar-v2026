@@ -42,7 +42,6 @@ std::string RANSWallEvolutionPatch::WJTerrainAssemblyChecks(const Vector &state,
     auto external=ExternalConstraints(time,data);
     for(int id:m_traceIds)external.erase(offset[Epsilon()]+id);
     const auto physical=Residual(state,history,alpha,time,data,false);
-    const auto constraints=Constraints(state,time,data);
     std::vector<std::string> blocks,pressures;
     for(int block:{0,K(),Epsilon()})
     {
@@ -85,7 +84,8 @@ std::string RANSWallEvolutionPatch::WJTerrainAssemblyChecks(const Vector &state,
                 fd=std::min(fd,error);
             }
             const double scale=std::max(1.,Maximum(action));
-            Require(ce/scale<1e-10 && fd/scale<1e-8,"terrain physical/frozen affine pressure action differs");
+            Require(ce/scale<1e-10 && fd/scale<1e-8,"terrain physical/frozen affine pressure action differs: mode="+
+                std::to_string(mode)+" column="+J::Number(ce)+" finite_difference="+J::Number(fd));
             pressures.push_back(J::Object({{"mode",J::Number(mode)},{"action_max",J::Number(Maximum(action))},
                 {"frozen_column_defect",J::Number(ce)},{"centered_difference_defect",J::Number(fd)}}));
         }
