@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 import numpy as np
 from numpy.testing import assert_allclose
 from wj_h13_domain import X,H,D0,TOP,topology,cg_keys,dof_counts,storage,mapped,certificate,geometry_checks,source_capacity,preflight
-from wj_h13_cases import primary,boundary,protocol,prepare
+from wj_h13_cases import primary,boundary,protocol,prepare,model_metadata
 from wj_h5_cases import case_xml,mesh_knots
 from cls_epawf_m4_cases import tensor_mesh
 from cls_epawf_m3_cases import set_parameter,write
@@ -28,6 +28,8 @@ class FullHeightPairedDomain(unittest.TestCase):
         self.assertEqual(c.h,v['frozen_primary']['h_s']);self.assertGreater(c.U_outer(TOP-D0),1.)
         self.assertEqual(len(v['historical_heights']),3);self.assertTrue(v['no_new_fit'])
         self.assertNotEqual(c.z0_e,.2/40)
+        self.assertEqual(model_metadata()['Ce2'],1.82);self.assertEqual(model_metadata()['outer_molecular_viscosity'],0.)
+        self.assertGreater(model_metadata()['wall_molecular_viscosity'],0.)
     def test_complete_traction_pressure_and_unspecialized_epsilon_budget(self):
         c,_=primary(SOURCE);v=boundary(c);B=v['top']['B'];rT=TOP-D0
         self.assertAlmostEqual(B,v['top']['epsilon_equation_coefficient'],places=20)

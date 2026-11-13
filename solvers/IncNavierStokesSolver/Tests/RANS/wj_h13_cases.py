@@ -16,6 +16,13 @@ from wj_h13_domain import X,H,D0,TOP,L,identity,digest,topology,mapped,dof_count
 
 def save(p,v):Path(p).write_text(json.dumps(v,indent=2,allow_nan=False)+'\n')
 
+def model_metadata():
+    return dict(outer='WJHighRe',tensor='full3D Original',gradient_policy='DevStrainRawWorkV1',production='-R:Graw',
+        inner='WJCalibratedBudgetAWF:Linear',c1=1.8,c2=5/9,Ce1=1.44,Ce2=1.82,sigma_k=1.,sigma_epsilon=1.30,
+        Ne=NE,qe=QE,Cstar=CD,Cd=CD,kappa=KAPPA,outer_molecular_viscosity=0.,wall_molecular_viscosity=.051*.005/3.97,
+        cutoff='metric counterfactual production at current represented K; actual P_A-E_c drives transported k_w',
+        dependent_epsilon='A(K_current)/H, outer only',chi='no physical chi',source_caps=False)
+
 def primary(source):
     record=Path(source)/'docs/plans/wj-h5-linux/calibration.json';data=json.loads(record.read_text())
     v=next(v for v in data['candidates']if v['H_w_mm']==6.)
@@ -137,7 +144,8 @@ def prepare(output,source):
     # Geometry-only terrain XML contains no CONDITIONS/solver or runnable route.
     terrain=ET.Element('NEKTAR');terrain.append(ET.fromstring(ET.tostring(tree.find('GEOMETRY'))));write(terrain,output/'terrain-chart-topology.xml')
     manifest=dict(schema='WJH13FullHeightPairedDomainV1',objective='user-selected full-height neutral inlet; supersedes finite-depth/ambient designs',
-        primary_reference=c.summary(),calibration_lineage=cal,shared_topology=t,inner_normal_knots=inner,outer_physical_flat_r=outer,
+        primary_reference=c.summary(),model=model_metadata(),reference_scope='flat analytical reference/calibration; terrain artifact is geometry only and has no initialized field or imported flat cutoff',
+        calibration_lineage=cal,shared_topology=t,inner_normal_knots=inner,outer_physical_flat_r=outer,
         normal_chart_knots=z,physical_flat_knots=[c.d0+r for r in inner]+[c.d0+r for r in outer[1:]],
         geometry_partners=partners,boundary_data=boundaries,counts=count,storage=storage(count),capacity_policy=policy,flat_session=identity(flat),
         quadrature=dict(native_representation_GLL=[8,8],canonical_mass_projection_Gauss=8,external_lift_GLL=8,physical_mass_projection_Gauss=16,operator_tangential=12,operator_normal=16,expression_degree=16),
