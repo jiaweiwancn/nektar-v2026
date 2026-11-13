@@ -46,6 +46,12 @@ def checked_context(r,step):
     aligned(step,r['dt'],c['time'])
     return c
 
+def role_context(binding,phase):
+    if phase not in PHASES:raise ValueError('unknown saved phase')
+    return dict(attempt_time=binding['time'],time=binding['predecessor_time']if phase=='P'else binding['time'],
+        state_absolute_step=binding['predecessor_step']if phase=='P'else binding['step']if phase=='A'else None,
+        accepted_role=phase in ('P','A'),callback_history_sha256=binding['stage_history_sha256'],alpha=binding['alpha'])
+
 def bind(r,packet,step,producer,expected_producer):
     if producer!=expected_producer:raise ValueError('wrong original attempt producer')
     c,attempt,local=selected(r,step);p=checked_context(r,step-1)

@@ -12,7 +12,7 @@ from run_wj_h4 import load,save,sha
 from run_wj_h7 import update_journal
 from run_wj_h10 import runtime_snapshot
 from wj_h12_phase import (ATTEMPTS,BRANCHES,WINDOWS,OWNER_KEYS,OBSERVABLES,PHASES,SparseRows,checked_context,
-    bind,local,decompositions,window,paired_window,identity,scale,comparison_scale,kernel_input,sparse_flow,predictor_eligible,DIRECTION)
+    bind,local,decompositions,window,paired_window,identity,scale,comparison_scale,kernel_input,sparse_flow,predictor_eligible,DIRECTION,role_context)
 from wj_h4_points import vector_hash
 from wj_h9_local import same
 from wj_h3_analysis import principal
@@ -172,8 +172,8 @@ def science(root):
         for phase in PHASES:
             h,values=evaluate_state(states[phase]);phase_values[key][phase]=values
             for i,v in enumerate(values):
-                role_records.append(dict(branch=rec['branch'],step=rec['step'],window=rec['window'],time=binding['time'],phase=phase,owner_index=i,
-                    accepted_role=phase in ('P','A'),state_sha256=h,alias_key=h+':'+str(i),physical=imp['owners'][i]['physical'],owner=imp['owners'][i]['owner'],value=v))
+                role_records.append(dict(branch=rec['branch'],step=rec['step'],window=rec['window'],phase=phase,owner_index=i,
+                    **role_context(binding,phase),state_sha256=h,alias_key=h+':'+str(i),physical=imp['owners'][i]['physical'],owner=imp['owners'][i]['owner'],value=v))
         for i in range(4):
             for pa,pb in zip(PHASES[:-1],PHASES[1:]):
                 transition.append(dict(branch=rec['branch'],step=rec['step'],owner_index=i,before=pa,after=pb,

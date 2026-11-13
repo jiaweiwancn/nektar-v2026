@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 from wj_h12_phase import (ATTEMPTS,WINDOWS,BRANCHES,OWNER_KEYS,PHASES,SparseRows,checked_context,bind,
                          local,decompositions,window,paired_window,cancellation,identity,kernel_input,
-                         predictor_eligible,scatter,validate_owner,DIRECTION)
+                         predictor_eligible,scatter,validate_owner,DIRECTION,role_context)
 from wj_h4_points import chart,owner_point,vector_hash
 from wj_h9_local import same
 from test_wj_h11_continuation import report
@@ -65,6 +65,13 @@ class SavedPhaseDiagnosis(unittest.TestCase):
         self.assertFalse(same(states['K'][3:4],states['A'][3:4]))
         bad=copy.deepcopy(s);bad['raw'][0]=1;bad['corrected'][0]=1
         with self.assertRaises(AssertionError):bind(r,bad,4,{}, {})
+    def test_predecessor_role_keeps_its_own_time_and_step(self):
+        b=dict(time=.04,step=4,predecessor_time=.03,predecessor_step=3,stage_history_sha256='saved',alpha=100.)
+        p=role_context(b,'P');a=role_context(b,'A');c=role_context(b,'C')
+        self.assertEqual((p['time'],p['state_absolute_step']),(.03,3))
+        self.assertEqual((a['time'],a['state_absolute_step']),(.04,4))
+        self.assertFalse(c['accepted_role']);self.assertIsNone(c['state_absolute_step'])
+        self.assertEqual(p['attempt_time'],a['attempt_time'])
     def test_fixed_action_normalization_gap_and_B_identities(self):
         G=np.array([[.003,0,.8],[0,0,0],[.002,0,-.001]])
         a=local(dict(G=G,k=.009,epsilon=.002));b=local(dict(G=G*1.002,k=.0091,epsilon=.00203))
