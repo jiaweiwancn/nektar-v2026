@@ -1,0 +1,61 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h11-compatible-common-time-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h11.py",
+    "--root",
+    "/home/jay/build/wj-h11-compatible-common-time-20261113",
+    "--mode",
+    "imports"
+  ],
+  "cwd": "/home/jay/build/wj-h11-compatible-common-time-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "reserved_seconds": 60,
+  "units": 0,
+  "kind": "passive",
+  "inputs": {
+    "/home/jay/build/wj-h11-compatible-common-time-20261113/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h11.py": {
+      "sha256": "f5b2ab5009e1f3691f85a3af028156171e7634db3d8dc6693624c2d124560ae1",
+      "bytes": 15775
+    }
+  },
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 71510,
+        "parent": 71509,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "driver_sha256": "d2e178adb8a8cf427499ed68d8f1f94cea2b9de47a6a69340c1b5cb77c39d9a9",
+  "status": "PASS",
+  "seconds": 1.7249088280004798,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 209674240,
+  "source_runtime_bytes": 9750961,
+  "science_bytes": 1638132,
+  "log_sha256": "7179a471d6391c7c579ca361d401c3e57b85e8fdf43798665f17cd1bf8edc7ff"
+}

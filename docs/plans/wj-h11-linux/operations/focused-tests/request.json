@@ -1,0 +1,53 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_wj_h5_neutral",
+    "test_wj_h6_projection",
+    "test_wj_h7_transport",
+    "test_wj_h8_local_timestep",
+    "test_wj_h9_startup_audit",
+    "test_wj_h10_initialization",
+    "test_wj_h11_continuation"
+  ],
+  "cwd": "/home/jay/build/wj-h11-compatible-common-time-20261113",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "reserved_seconds": 60,
+  "units": 0,
+  "kind": "passive",
+  "inputs": {},
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 71510,
+        "parent": 71509,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "driver_sha256": "d2e178adb8a8cf427499ed68d8f1f94cea2b9de47a6a69340c1b5cb77c39d9a9"
+}
