@@ -52,7 +52,7 @@ def classify(packet,c):
     receipt=packet['initialization_receipt']
     require(receipt['open_explicit_implicit_agreement'] and receipt['explicit_boundary_sha256']==receipt['implicit_boundary_sha256'],
         'RN explicit/implicit live essential boundary mismatch')
-    o=packet['observation'];s=np.asarray(o['state']);off=o['offsets'];f=packet['open_frozen_systems'];top=packet['open_boundary']['top_faces']
+    o=packet['observation'];s=np.asarray(o['state']);off=o['offsets'];frozen=packet['open_frozen_systems'];top=packet['open_boundary']['top_faces']
     require(bool(top),'no consumed RN top rows')
     col=Column(c['model'],c['K0'],c['H'],c['roughness_input'],c['nu'],order=96)
     r,A,loads=independent_operator(packet,c['model'],column=col)
@@ -70,20 +70,20 @@ def classify(packet,c):
         action,rough,_=pressure_action(o,direction,c['roughness_input'],c['pressure_degree'])
         A[:off[2],j]=action[:off[2]]
         r+=s[j]*rough
-    native=np.asarray(f['raw_residual']);defects=dict(all_row=float(np.max(abs(r-native)))/max(1.,float(np.max(abs(native)))))
+    native=np.asarray(frozen['raw_residual']);defects=dict(all_row=float(np.max(abs(r-native)))/max(1.,float(np.max(abs(native)))))
     for name,load in loads.items():
         key='diffusive_load' if name=='diffusion' else name+'_load'
         defects['boundary_'+name]=float(np.max(abs(load-np.asarray(packet['open_boundary'][key]))))
     fixed={int(i) for i,_ in packet['resolution']['constraints']}
-    for b in f['blocks']:
+    for b in frozen['blocks']:
         ids=np.array(b['rows'],int);expected=A[np.ix_(ids,ids)].copy()
         if b['block']==3:
             for j,row in enumerate(ids):
                 if row in fixed:expected[j]=0.;expected[j,j]=1.
         defects['frozen_'+str(b['block'])]=float(np.max(abs(expected-np.asarray(b['matrix']))))
-        defects['residual_'+str(b['block'])]=float(np.max(abs(np.asarray(b['residual'])-np.asarray(f['constrained_residual'])[ids])))
+        defects['residual_'+str(b['block'])]=float(np.max(abs(np.asarray(b['residual'])-np.asarray(frozen['constrained_residual'])[ids])))
     require(max(defects.values())<=2e-10,'RN independent all-row/frozen operator mismatch:'+str(defects))
-    external={int(i) for i,_ in f['external_constraints']};mode_ids={b:set() for b in (0,1,2,3)};e_load=np.zeros(len(s));tx_load=np.zeros(len(s));length=0.
+    external={int(i) for i,_ in frozen['external_constraints']};mode_ids={b:set() for b in (0,1,2,3)};e_load=np.zeros(len(s));tx_load=np.zeros(len(s));length=0.
     for face in top:
         w=face['weight']*float(np.linalg.norm(face['area']));length+=w
         for b in (0,1,2,3):
@@ -103,12 +103,12 @@ def classify(packet,c):
     eps_signal=float(np.max(abs(e_load[free])));shear_signal=float(np.max(abs(2*tx_load[free])))
     require(eps_signal>1e-8 and shear_signal>1e-8,'nondiscriminating top negative controls')
     omitted=copy.deepcopy(packet)
-    for f in omitted['open_boundary']['top_faces']:f['epsilon_diffusive_datum']=0.
+    for omitted_face in omitted['open_boundary']['top_faces']:omitted_face['epsilon_diffusive_datum']=0.
     zero_flux_balance=weak(omitted,c)
     require(zero_flux_balance['equations']['outer_epsilon']['status']=='fail',
         'zero epsilon top flux did not break the continuous reference identity')
     mixed=packet['mixed_space'];rows=np.asarray(mixed['rows'],int);nv=int(mixed['velocity_size']);mat=np.asarray(mixed['matrix'])
-    mass=block_diag(*[np.asarray(m) for m in f['masses']],np.ones((1,1)))[np.ix_(rows,rows)]
+    mass=block_diag(*[np.asarray(m) for m in frozen['masses']],np.ones((1,1)))[np.ix_(rows,rows)]
     schur=mat[nv:,:nv]@np.linalg.solve(mass[:nv,:nv],mat[:nv,nv:])
     row_scale=np.maximum(np.linalg.norm(schur,axis=1),np.finfo(float).tiny);normalized=schur/row_scale[:,None]
     normalized/=np.maximum(np.linalg.norm(normalized,axis=0),np.finfo(float).tiny)[None,:]
