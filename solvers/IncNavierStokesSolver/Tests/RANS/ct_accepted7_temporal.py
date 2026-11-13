@@ -6,6 +6,7 @@ Absolute pressure remains the admission observable. Decompositions and
 first-order extrapolation are read-only and never replace the failed CT6 gate.
 """
 import argparse,json,math,os
+from functools import lru_cache
 from pathlib import Path
 from rans_qualification import THREADS,write_json,exact_vector_hash
 os.environ.update(THREADS)
@@ -17,6 +18,8 @@ from ct_accepted6_metrics import wall_nut
 from ct_accepted2_audit import values
 from ct_accepted_feasibility import parameters
 from ct_accepted_open import require
+from ct_accepted_open import row_value
+from ct_accepted6_continuous import Continuous
 from validate_a93_a95_e94e95 import oracle
 from rans_request_manifest import RequestManifest,sha
 
@@ -59,7 +62,30 @@ def diagnose(member,audit):
     require(sha(path)==a['common_observations']['sha256'],'changed stage diagnostic basis packet')
     packet=json.loads(path.read_text());_,_,_,n=common_grid();off=packet['observation']['offsets'];w=np.asarray(common_grid()[2])
     initial=values(packet,report['initial'],n)['observation'];g=np.asarray(initial['grid_gradients']);div=g[:,0,0]+g[:,1,2]
-    result=dict(initial_divergence_RMS=float(np.sqrt(w@(div*div)/w.sum())),initial_pressure_error=receipt['initial_metrics']['fields']['Pi'],stages=[])
+    initial_path=Path(receipt['initial_packet']['path'])
+    require(sha(initial_path)==receipt['initial_packet']['sha256'],'changed initial native rows')
+    native=json.loads(initial_path.read_text())['observation'];initial_load=np.zeros(off[6]-off[4])
+    for point in native['volume']:
+        velocity=point['velocity_k'];state=np.asarray(report['initial']);gradient=np.zeros((3,3))
+        gradient[0]=row_value(velocity,state,off[0])[1];gradient[2]=row_value(velocity,state,off[1])[1]
+        pressure=point['pressure'];block=4+point['region']
+        initial_load[np.asarray(pressure['ids'],int)+off[block]-off[4]]+=point['weight']*np.asarray(pressure['phi'])*np.trace(gradient)
+    continuum=Continuous('A95')
+    @lru_cache(None)
+    def jump(q,time):return float(continuum.ray(q,time)['jump'])
+    def time_errors(state,time,dt):
+        represented=np.asarray(values(packet,state,n)['observation']['grid_values'])[:,4];out={}
+        for label,t in [('target',time),('previous',time-dt),('midpoint',time-dt/2)]:
+            truth=np.array([.03*(point[0]+.2*point[2])+.02*t+.01*t*t+(jump(point[0],t) if region else 0.)
+                for point,region in zip(packet['observation']['grid'][:n],packet['observation']['grid_regions'][:n],strict=True)])
+            error=represented-truth;mean=float(w@error/w.sum())
+            out[label]=dict(physical_time=t,absolute_scaled_RMS=float(np.sqrt(w@(error*error)/w.sum())/.1),
+                common_offset=mean,spatial_variation_RMS=float(np.sqrt(w@((error-mean)**2)/w.sum())))
+        return out
+    result=dict(initial_divergence_RMS=float(np.sqrt(w@(div*div)/w.sum())),initial_pressure_error=receipt['initial_metrics']['fields']['Pi'],
+        initial_native_weak_continuity=dict(maximum_absolute_load=float(max(abs(initial_load))),
+            inner_maximum=float(max(abs(initial_load[:off[5]-off[4]]))),outer_maximum=float(max(abs(initial_load[off[5]-off[4]:]))),
+            rows=len(initial_load),scope='all actual free pressure tests, physical gradients and native volume quadrature; distinct from pointwise divergence'),stages=[])
     attempts=report['pimple_attempts']
     for index in sorted(set([0,len(attempts)-1])):
         attempt=attempts[index];fp=Path(attempt['flow_snapshot']);kp=Path(attempt['k_snapshot'])
@@ -74,6 +100,8 @@ def diagnose(member,audit):
             predictor_linear_residual=attempt['predictor_linear_residual'],pressure_linear_residual=attempt['pressure_linear_residual'],
             momentum_splitting_identity_defect=attempt['momentum_splitting_identity_defect'],native_full_pressure_action_defect=attempt['native_full_G_action_defect'],
             frozen_momentum_defect=attempt['frozen_momentum_defect'],refreshed_trace_defect=attempt['refreshed_trace_defect'])
+        row['pressure_time_comparisons']={name:time_errors(phases[name],f['time'],1/f['alpha'])
+            for name in ('previous_accepted','current_time_lifted_input','pressure_corrected_flow','post_epsilon','post_k')}
         result['stages'].append(row)
     result['time_semantics']='stored Pi is updated by dz in the flow solve at declared target time with target-time forcing/essential lift; epsilon and k then change constitutive normal stress without updating Pi. This is frozen-stage splitting, not permission to relabel pressure time or repair it.'
     return result
