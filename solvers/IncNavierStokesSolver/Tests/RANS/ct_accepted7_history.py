@@ -52,12 +52,16 @@ def main():
         for model in ('A95','A93','E94E95'):
             if model=='A95':folder,construction,report=full,c,r
             else:
-                folder,construction,report,e=evolve(model)
+                folder,construction,report,e=evolve(model,model=model)
                 if e['exit_code']!=0 or report['failure']:
                     result['models'][model]=dict(completion='fail',failure=report['failure'],report_sha256=sha(folder/'case.evolution.json'));continue
+            require(construction['model']==model and ':resolved='+model+':OriginalHighRe-v1' in report['signature'],
+                'foreign native model/configuration in labeled smoke:'+model)
             ini,pe=probe(a.runtime,folder,request(construction),'budget-initial');require(pe['exit_code']==0,'budget initial reference rejected')
+            descriptor=ini['observation']['resolved_descriptor']
+            require(descriptor.startswith(model+':OriginalHighRe-v1'),'foreign native probe descriptor in smoke:'+model)
             attempt=report['pimple_attempts'][-1];path=Path(attempt['k_snapshot']);require(sha(path)==attempt['k_snapshot_sha256'],'changed actual frozen snapshot')
-            k=json.loads(path.read_text());body=dict(budget_binding=dict(model=model,time=report['time'],dt=report['dt'],native_report_sha256=sha(folder/'case.evolution.json'),state_sha256=exact_vector_hash(report['state']),configuration_sha256=sha(folder/'case.xml')),budgets={})
+            k=json.loads(path.read_text());body=dict(budget_binding=dict(model=construction['model'],resolved_descriptor=descriptor,time=report['time'],dt=report['dt'],native_report_sha256=sha(folder/'case.evolution.json'),state_sha256=exact_vector_hash(report['state']),configuration_sha256=sha(folder/'case.xml')),budgets={})
             for label,orders,face in [('native',(32,8,12,12,64),16),('q48f16',(48,12,16,16,16),16),('q64f16',(64,16,20,20,20),16),('q64f32',(64,16,20,20,20),32)]:
                 dest=folder/label;dest.mkdir();root=ET.parse(folder/'case.xml').getroot()
                 for key,value in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),orders,strict=True):set_parameter(root,key,value)
@@ -78,7 +82,8 @@ def main():
                 net+=face['weight']*float(u@np.asarray(face['area'])[[0,2]])
             scale=construction['ustar']*construction['Z'];body['mass']=dict(outward_net=net,scale=scale,scaled_defect=abs(net)/scale,status='pass' if abs(net)/scale<=1e-8 else 'fail')
             body['budget_gate']=physical_budgets(body);write_json(folder/'physical-budgets.json',body)
-            result['models'][model]=dict(completion='pass',time=report['time'],state_sha256=exact_vector_hash(report['state']),report_sha256=sha(folder/'case.evolution.json'),
+            result['models'][model]=dict(completion='pass',model=construction['model'],resolved_descriptor=descriptor,native_signature=report['signature'],configuration_sha256=sha(folder/'case.xml'),
+                time=report['time'],state_sha256=exact_vector_hash(report['state']),report_sha256=sha(folder/'case.evolution.json'),
                 budget_gate=body['budget_gate'],mass=body['mass'],captured_k_matrix=body['captured_k_matrix'],physical_budget_receipt_sha256=sha(folder/'physical-budgets.json'))
             write_json(a.output/'progress.json',result)
         result['execution']='complete';result['status']='pass' if all(v['completion']=='pass' and v['budget_gate']['status']=='pass' and v['captured_k_matrix']['status']=='pass' and v['mass']['status']=='pass' for v in result['models'].values()) and len(result['models'])==3 else 'failed_or_incomplete_budget_accuracy'

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 import copy,unittest
-from ct_accepted7_gate import top,temporal,resources,TOP_CASES,TOP_EXTRA
+from ct_accepted7_gate import top,temporal,resources,history,TOP_CASES,TOP_EXTRA
 
 class CT7Gates(unittest.TestCase):
     def setUp(self):
@@ -37,5 +37,20 @@ class CT7Gates(unittest.TestCase):
         self.assertEqual(resources({})['status'],'fail')
         r=dict(maximum_project=16,maximum_aggregate=72,project_status='pass',aggregate_status='pass',control_helpers_counted=2)
         self.assertEqual(resources({'closed':r})['status'],'pass');r['maximum_project']=17;self.assertEqual(resources({'closed':r})['status'],'fail')
+    def test_foreign_native_smoke_model(self):
+        receipt=dict(checks={k:dict(status='pass') for k in ('restart','rollback','old_boundary_history','pressure_level_evolution')},models={});primitives={}
+        for model in ('A93','A95','E94E95'):
+            desc=model+':OriginalHighRe-v1';binding=dict(model=model,resolved_descriptor=desc,native_report_sha256=model+'-report',state_sha256=model+'-state',configuration_sha256=model+'-xml')
+            receipt['models'][model]=dict(completion='pass',time=2e-6,model=model,resolved_descriptor=desc,native_signature='patch:resolved='+desc,
+                report_sha256=binding['native_report_sha256'],state_sha256=binding['state_sha256'],configuration_sha256=binding['configuration_sha256'],
+                mass=dict(outward_net=0.,scale=1.),captured_k_matrix=dict(maximum_defect=0.,scale=1.))
+            eq={k:dict(physical_scale=1.,storage_backward_difference=0.,stage_source=0.,stage_physical_boundary_flux=0.,frozen_stage_physical_defect=0.) for k in ('inner_k','outer_k','outer_epsilon','whole_k')}
+            rec={k:dict(scaled_defect=0.,normalization=1.,maximum_defect=0.) for k in ('k','outer_epsilon')}
+            primitives[model]=dict(budget_binding=binding,budgets={k:dict(binding=binding,equations=eq,reconstruction=rec) for k in ('native','q48f16','q64f16','q64f32')})
+        self.assertEqual(history(receipt,primitives)['status'],'pass')
+        receipt['models']['A93']['model']='A95'
+        self.assertIn('A93:foreign_native_model_configuration',history(receipt,primitives)['reasons'])
+        receipt['models']['A93']['model']='A93';primitives['E94E95']['budget_binding']['model']='A95'
+        self.assertIn('E94E95:budget_native_identity_mismatch',history(receipt,primitives)['reasons'])
 
 if __name__=='__main__':unittest.main()

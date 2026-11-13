@@ -49,6 +49,12 @@ def history(receipt,primitives):
     budgets={}
     for model in ('A93','A95','E94E95'):
         row=receipt.get('models',{}).get(model,{})
+        binding=primitives.get(model,{}).get('budget_binding',{})
+        if row.get('model')!=model or not row.get('resolved_descriptor','').startswith(model+':OriginalHighRe-v1') or ':resolved='+model+':OriginalHighRe-v1' not in row.get('native_signature',''):
+            reasons.append(model+':foreign_native_model_configuration')
+        if binding.get('model')!=model or binding.get('resolved_descriptor')!=row.get('resolved_descriptor') or any(binding.get(k)!=row.get(v) or not binding.get(k)
+            for k,v in [('native_report_sha256','report_sha256'),('state_sha256','state_sha256'),('configuration_sha256','configuration_sha256')]):
+            reasons.append(model+':budget_native_identity_mismatch')
         if row.get('completion')!='pass' or not finite(row.get('time')) or abs(row['time']-2e-6)>1e-15:reasons.append(model+':incomplete_history')
         budgets[model]=physical_budgets(primitives.get(model,{}))
         if budgets[model]['status']!='pass':reasons.append(model+':physical_budget_primitives')
