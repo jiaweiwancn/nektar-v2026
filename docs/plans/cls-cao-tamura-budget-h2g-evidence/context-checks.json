@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "model_specification": {
+    "version": "CanonicalWallModelV1",
+    "name": "StandardKEpsilon",
+    "calibration": "StandardNeutralCalibratedV1",
+    "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+    "coefficients": {
+      "Cmu": 0.09,
+      "Cepsilon1": 1.44,
+      "Cepsilon2": 1.92,
+      "sigmaK": 1,
+      "sigmaEpsilon": 1.3478315512167742,
+      "yapCoefficient": 0,
+      "yapLength": 2.5
+    },
+    "q": 3.3333333333333335,
+    "kappa": 0.4405539051866587,
+    "K0": 0.01838575534504143,
+    "quadratic_active": false,
+    "cubic_active": false,
+    "Yap_active": false,
+    "variant": "Original",
+    "beta": 1,
+    "gamma0": 0,
+    "Gamma": 0,
+    "physical_regularization_active": false
+  },
+  "base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "retained_CLS_base_sha256": "83b1a4fd9a4fcda694f6e6f10bfb789700d1fc6fc83443b91f67bfcb045e79b5",
+  "cold_velocity_max_difference": 3.4757960398756893e-13,
+  "velocity_pool_bitwise": true,
+  "velocity_directions": 41,
+  "scalar_directions": [
+    8,
+    8
+  ],
+  "mass_Gram_max_difference": 0.0,
+  "divergence_form_max_difference": 2.788221042937522e-13,
+  "initializer_strain_max_difference": 2.2737367544323206e-13,
+  "common_divergence_limit": 0.06030809942199109,
+  "standard_native_limit": 0.06030809942198281,
+  "scalar_inner_and_dependent_traces_exact": true,
+  "analytic_standard_Rayleigh_errors": [
+    2.5602697045767897e-13,
+    1.6051439691300295e-13,
+    1.4126200209574336e-13,
+    1.3882645033547192e-13
+  ],
+  "classification": "common discretization and initializer controls; not matched optimization histories"
+}

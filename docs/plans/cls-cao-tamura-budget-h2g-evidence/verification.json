@@ -1,0 +1,70 @@
+{
+  "version": "H2gFocusedVerificationV1",
+  "tests": {
+    "CLS_context_as_standard_rejected": true,
+    "CLS_evaluator_as_standard_rejected": true,
+    "CLS_h0_two_steps_histories_bitwise": true,
+    "native_solver_probe_manifests_and_expression_rejections": true,
+    "cross_model_and_dt_restarts_rejected": true,
+    "CLS_cold_base_bitwise": true,
+    "cold_velocity_max_difference": 3.4757960398756893e-13
+  },
+  "native": {
+    "reject-sigma": {
+      "code": 1,
+      "report": null,
+      "failure": "\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\nEP-AWF evolution initialisation: EP-AWF patch: inconsistent effective calibrated coefficient: RANSSigmaEpsilon\n",
+      "expected": "inconsistent effective calibrated coefficient"
+    },
+    "reject-Qstar": {
+      "code": 1,
+      "report": null,
+      "failure": "\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\nEP-AWF evolution initialisation: EP-AWF patch: native coefficient/reference expression mismatch: Qstar\n",
+      "expected": "native coefficient/reference expression mismatch"
+    },
+    "reject-probe-model": {
+      "code": 1,
+      "report": null,
+      "failure": "EP-AWF patch: probe/model-manifest mismatch\n",
+      "expected": "probe/model-manifest mismatch"
+    },
+    "reject-manifest": {
+      "code": 1,
+      "report": null,
+      "failure": "\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\nEP-AWF evolution initialisation: EP-AWF patch: native/model manifest coefficient mismatch: coefficients.Cmu\n",
+      "expected": "native/model manifest coefficient mismatch"
+    },
+    "CLS-h0": {
+      "code": 0,
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/verification/CLS-h0/case.evolution.json",
+      "failure": "",
+      "expected": null
+    },
+    "CLS-two": {
+      "code": 0,
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/verification/CLS-two/case.evolution.json",
+      "failure": "",
+      "expected": null
+    },
+    "cross-model-restart": {
+      "code": 1,
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/verification/cross-model-restart/case.evolution.json",
+      "failure": "Wall IMEX: checkpoint signature mismatch",
+      "expected": "checkpoint"
+    },
+    "cross-model-certificate": {
+      "code": 1,
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/verification/cross-model-certificate/case.evolution.json",
+      "failure": "EP-AWF patch: certified startup physics/geometry/inventory/gate differs",
+      "expected": "certified startup physics/geometry/inventory/gate differs"
+    },
+    "ordinary-changed-dt": {
+      "code": 1,
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/verification/ordinary-changed-dt/case.evolution.json",
+      "failure": "Wall IMEX: checkpoint signature mismatch",
+      "expected": "checkpoint"
+    }
+  },
+  "status": "passed",
+  "seconds": 81.73111255600088
+}
