@@ -18,7 +18,7 @@ from cls_epawf_m3_cases import set_parameter,write
 SOURCE=Path(__file__).resolve().parents[4]
 
 def tiny(nx=2):
-    r=ET.fromstring('<NEKTAR><GEOMETRY/><EXPANSIONS/></NEKTAR>')
+    r=ET.fromstring('<NEKTAR><GEOMETRY/><EXPANSIONS/><CONDITIONS/></NEKTAR>')
     xs=np.linspace(-10,15,nx+1).tolist();tensor_mesh(r,[0.,.05,H,1.,TOP],3,2,25.,1.,points=[8,8],xknots=xs)
     return r,topology(r)
 
@@ -48,7 +48,7 @@ class FullHeightPairedDomain(unittest.TestCase):
     def test_paired_composite_foot_reach_and_interface(self):
         _,t=tiny();self.assertEqual(geometry_checks(t,False)['status'],'PASS')
         # Small geometry fixture includes explicit feet, separate from target.
-        r=ET.fromstring('<NEKTAR><GEOMETRY/><EXPANSIONS/></NEKTAR>');tensor_mesh(r,[0.,H,1.,TOP],3,2,25.,1.,xknots=[-10,-2.5,0,2.5,15]);t=topology(r)
+        r=ET.fromstring('<NEKTAR><GEOMETRY/><EXPANSIONS/><CONDITIONS/></NEKTAR>');tensor_mesh(r,[0.,H,1.,TOP],3,2,25.,1.,xknots=[-10,-2.5,0,2.5,15]);t=topology(r)
         check=geometry_checks(t,True);self.assertLess(check['opposite_cofactor_error'],1e-12)
         a=mapped(1.,0.,True);self.assertGreater(abs(a['physical'][2]-(math.cos(math.pi/5)**2+D0)),1e-3)
         for foot in check['foot_limits']:
@@ -58,7 +58,7 @@ class FullHeightPairedDomain(unittest.TestCase):
         with self.assertRaises(ValueError):mapped(0.,2.,True,region='inner')
     def test_target_count_entities_and_epsilon_identity_rows(self):
         for nx,expected in ((1,2328),(2,4048),(14,24688)):
-            c,_=primary(SOURCE);_,_,z=mesh_knots(c,bisect_once=True);r=ET.fromstring('<NEKTAR><GEOMETRY/><EXPANSIONS/></NEKTAR>')
+            c,_=primary(SOURCE);_,_,z=mesh_knots(c,bisect_once=True);r=ET.fromstring('<NEKTAR><GEOMETRY/><EXPANSIONS/><CONDITIONS/></NEKTAR>')
             tensor_mesh(r,z,3,2,25.,1.,xknots=np.linspace(-10,15,nx+1));n=dof_counts(topology(r));self.assertEqual(n['state'],expected)
             self.assertEqual(n['free_solve_blocks']['epsilon']-n['independent']['epsilon'],3*nx+1)
             self.assertEqual(n['fields']['pi_inner'],(nx+1)*17);self.assertEqual(n['fields']['pi_outer'],(nx+1)*35)
