@@ -136,9 +136,9 @@ def publish(root):
             values=[v['incoming'],*[v['contributions'][k]for k in ('lift','flow','k','epsilon')],v['endpoint']]
             ax=axes[w,j];ax.bar(range(6),np.array(values)*1e6,color=colors);ax.axhline(0,color='.4',lw=.6)
             ax.set_xticks(range(6),['incoming','lift','flow','k','epsilon','end'],rotation=25);ax.set_title(pair+'; '+('[0,.01]'if w==0 else '[.03,.04]'))
-            ax.set_ylabel('signed normalized principal difference × 10⁶')
+    fig.supylabel('signed normalized principal difference × 10⁶')
     fig.suptitle('Geometry 17 upper, x=8, physical z=10.243007 mm\ncoarser minus finer; incoming history stays separate')
-    fig.tight_layout();fig.savefig(out/'signed-window-contributions.png',dpi=170);plt.close(fig)
+    fig.tight_layout(rect=(.03,0,1,.95));fig.savefig(out/'signed-window-contributions.png',dpi=170);plt.close(fig)
     fig,axes=plt.subplots(1,2,figsize=(9,3.8),sharey=True)
     for w,ax in enumerate(axes):
         packet=load(r/'endpoint-decompositions.json');items=[next(v['decomposition']for v in packet if v['window']==w and v['owner_index']==0 and v['pair']==pair)for pair in ('coarse-fine','fine-quarter')]
