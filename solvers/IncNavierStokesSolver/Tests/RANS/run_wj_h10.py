@@ -18,6 +18,25 @@ from run_wj_h7 import complete_operation,record_coverage_halt,coverage_quality
 
 def size(p):return _size(p)if Path(p).exists()else 0
 
+def native_intent(root,argv,kind):
+    if kind not in ('cp0','governing','strict'):return None
+    root=Path(root);expected=root/'runtime'/('RANSWallResolutionProbe'if kind=='strict'else 'IncNavierStokesSolver')
+    assert Path(argv[0])==expected,'H10 native executable identity'
+    intent=load(root/'science/input-intent.json');phase='cp0'if kind=='cp0'else 'run'
+    if kind=='strict':
+        request=load(argv[2]);assert request['operation']=='open_checks'
+        xml=Path(argv[1]);phase=xml.parent.name
+        assert phase in ('cp0','run')and Path(request['native_report'])==xml.with_suffix('.evolution.json')
+    matches=[v for v in intent['cases']if v[phase]['path']==str(argv[1])]
+    assert len(matches)==1 and sha(argv[1])==matches[0][phase]['sha256'],'H10 immutable XML intent mismatch'
+    case=matches[0];xml=ET.parse(argv[1]);params={v.text.split('=')[0].strip():v.text.split('=')[1].strip()for v in xml.findall('./CONDITIONS/PARAMETERS/P')}
+    infos={v.get('PROPERTY'):v.get('VALUE')for v in xml.findall('./CONDITIONS/SOLVERINFO/I')}
+    assert float(params['TimeStep'])==case['dt']and float(params['NumSteps'])==(0 if phase=='cp0'else 1)
+    assert infos['RANSWallInitialVelocity']=='FlatInletTraceV1'
+    if kind=='governing':assert infos['RANSWallRestart']==str(root/'science/cases'/case['branch']/'cp0/CP')
+    if kind=='cp0':assert infos['RANSWallRestart']=='None'
+    return kind+':'+case['branch']+':'+phase
+
 def execute(root,label,argv,*,cwd=None,seconds=120,phase="science",kind="passive"):
     root=Path(root);assert root.name=='wj-h10-flat-inlet-20261113'
     assert 0<seconds<=2000 and phase in ('build','science') and kind in ('passive','fixture','cp0','governing','strict')
@@ -30,6 +49,11 @@ def execute(root,label,argv,*,cwd=None,seconds=120,phase="science",kind="passive
     charged=lambda v:v.get('seconds',v['reserved_seconds'])
     used=sum(charged(v)for v in book['entries'].values()if v['phase']==phase)+(60 if phase=='build'else 0)
     assert used+seconds<=(2400 if phase=='build'else 900),'RESOURCE_LIMIT phase allowance'
+    reservation=native_intent(root,argv,kind)
+    if reservation:
+        used_cases=book.setdefault('native_case_reservations',[])
+        assert reservation not in used_cases,'H10 failed/unknown/native case cannot be retried'
+        used_cases.append(reservation)
     key={'cp0':'cp0_reservations','governing':'governing_attempts','strict':'strict_readbacks'}.get(kind)
     if key:
         assert book[key]<{'cp0':3,'governing':3,'strict':6}[kind],'H10 invocation ceiling'
