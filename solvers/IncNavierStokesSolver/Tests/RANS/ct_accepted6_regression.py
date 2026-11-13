@@ -39,7 +39,11 @@ def main():
     write_json(a.output/'progress.json',checks)
     first=folder/'checkpoint';second=folder/'checkpoint.1'
     for name,reject,amplitude in (('unchanged_restart',0,.005),('deliberate_rejection_rollback',2,.005),('incompatible_geometry_history',0,0.)):
-        sub=a.output/name;make(sub,a.runtime,model='A95',degree=4,dt=.002,steps=1,restart=first,amplitude=amplitude)
+        # The manufactured boundary identity deliberately binds all non-work
+        # parameters, including the deliberate rejection fixture. Give that
+        # fixture its own fresh history; never edit or relabel a signature.
+        sub=a.output/name;make(sub,a.runtime,model='A95',degree=4,dt=.002,
+            steps=2 if reject else 1,restart=None if reject else first,amplitude=amplitude)
         if reject:
             root=ET.parse(sub/'case.xml').getroot();set_parameter(root,'RANSWallPimpleHardAuditRejectStep',reject);write(root,sub/'case.xml')
         os.environ['NEKTAR_RANS_TIMING_FILE']=str(sub/'timing.jsonl')
@@ -58,6 +62,7 @@ def main():
                 passed=e['exit_code']!=0 and identical and retained and abs(r.get('time',-1)-.002)<1e-13 and 'deliberate' in r.get('failure','')
                 row=dict(status='pass' if passed else 'fail',execution=e,last_accepted_state_bitwise_identical=identical,
                     rejected_candidate_equals_uninterrupted_next_state=retained,failure=r.get('failure'),
+                    initial_state_equals_uninterrupted_initial=r.get('initial')==mms['initial'],
                     time=r.get('time'),native_history_times=r.get('native_history_times'),report_sha256=sha(path))
             else:
                 same_history=bool(r.get('checkpoint')) and sha(Path(r['checkpoint'])/'State.bin')==sha(second/'State.bin')
