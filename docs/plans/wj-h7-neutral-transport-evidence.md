@@ -321,3 +321,12 @@ H4 backend/capacity, EP, physical hill and longer continuation work remain pause
 T=.04 is only .005 strip flow-throughs and about 1.05–1.26% of K/epsilon_H.
 The full-height logarithm is still an idealized control, not a developed tunnel
 inlet or a physical hill result.
+
+Post-repair archival follow-up: the user requested resumption, and the sealed
+original/corrected temporary publications have now been restored to persistent
+H7 recovery paths and reverified. See [the recovery report](wj-h7-storage-recovery.md)
+and `wj-h7-linux/storage-recovery/summary.json`. This supersedes the pending
+archival status only. The historical storage obstruction/charges remain intact,
+and an I/O error in the obsolete observer checkout remains explicitly unresolved.
+The36/36 numerical result and all source/state/history/test decisions are unchanged;
+there were zero additional native attempts, CP0s or numerical reprocessing.

@@ -1,0 +1,41 @@
+du: cannot access '/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/observer-10a4078/solvers/IncNavierStokesSolver': Input/output error
+Traceback (most recent call last):
+  File "/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/storage-recovery-v1/recover_wj_h7_storage.py", line 106, in <module>
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--folder',type=Path,required=True);a=p.parse_args();recover(a.root,a.folder)
+  File "/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/storage-recovery-v1/recover_wj_h7_storage.py", line 86, in recover
+    size=sum(p.stat().st_size for p in folder.rglob('*')if p.is_file());total=int(subprocess.check_output(['du','-sb',str(root)],text=True,timeout=10).split()[0])
+  File "/usr/lib/python3.10/subprocess.py", line 421, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+  File "/usr/lib/python3.10/subprocess.py", line 505, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+  File "/usr/lib/python3.10/subprocess.py", line 1154, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+  File "/usr/lib/python3.10/subprocess.py", line 2022, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+  File "/usr/lib/python3.10/subprocess.py", line 1198, in _check_timeout
+    raise TimeoutExpired(
+subprocess.TimeoutExpired: Command '['du', '-sb', '/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113']' timed out after 10 seconds
+Command exited with non-zero status 1
+	Command being timed: "python3 -B /media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/storage-recovery-v1/recover_wj_h7_storage.py --root /media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113 --folder /media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/storage-recovery-v1"
+	User time (seconds): 1.97
+	System time (seconds): 2.75
+	Percent of CPU this job got: 22%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:21.35
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 25932
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 69115
+	Voluntary context switches: 114270
+	Involuntary context switches: 9
+	Swaps: 0
+	File system inputs: 353168
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

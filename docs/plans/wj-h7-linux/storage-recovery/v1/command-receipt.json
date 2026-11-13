@@ -1,0 +1,72 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/storage-recovery-v1/recover_wj_h7_storage.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113",
+    "--folder",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/storage-recovery-v1"
+  ],
+  "scope": "user-requested administrative storage recovery only, not study-ledger resumption",
+  "seconds_limit": 180,
+  "allocation": {
+    "workers": 9,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 8019,
+        "parent": 8018,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/launch-build-v2 -- python3 -"
+      },
+      {
+        "pid": 8020,
+        "parent": 8019,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/launch-build-v2 --project-limit 16"
+      },
+      {
+        "pid": 8023,
+        "parent": 8019,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/launch-build-v2 -- python3 -"
+      },
+      {
+        "pid": 8024,
+        "parent": 8023,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 8038,
+        "parent": 8024,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_build.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1 --previous /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v2"
+      },
+      {
+        "pid": 8114,
+        "parent": 8113,
+        "threads": 1,
+        "args": "python3 -"
+      }
+    ]
+  },
+  "native_attempts": 0,
+  "exit": 1,
+  "seconds": 21.575870425000176,
+  "peak_rss_bytes": 27324416,
+  "reason": null,
+  "status": "UNRESOLVED"
+}

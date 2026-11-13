@@ -1,0 +1,77 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/storage-recovery-v2/recover_wj_h7_storage.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113",
+    "--folder",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/storage-recovery-v2",
+    "--reuse-decoded",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/wj-h7-neutral-transport-20261113/storage-recovery-v1"
+  ],
+  "seconds_limit": 120,
+  "aggregate_limit_seconds": 180,
+  "prior_attempt_seconds": 21.575870425000176,
+  "administrative_setup_closure_allowance": 30,
+  "allocation": {
+    "workers": 9,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 8582,
+        "parent": 8581,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-mathematics-v1 -- python3 -"
+      },
+      {
+        "pid": 8583,
+        "parent": 8582,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-mathematics-v1 --project-limit 16"
+      },
+      {
+        "pid": 8586,
+        "parent": 8582,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/launch-mathematics-v1 -- python3 -"
+      },
+      {
+        "pid": 8587,
+        "parent": 8586,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 8589,
+        "parent": 8587,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_continuous.py --sources --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/mathematics-v1/continuous"
+      },
+      {
+        "pid": 9120,
+        "parent": 9119,
+        "threads": 1,
+        "args": "python3 -"
+      }
+    ]
+  },
+  "native_attempts": 0,
+  "exit": 0,
+  "seconds": 2.0084697719998985,
+  "peak_rss_bytes": 27418624,
+  "reason": null,
+  "status": "PASS",
+  "conservative_total_seconds": 53.584340197000074
+}

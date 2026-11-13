@@ -96,6 +96,7 @@ def recover(root,folder,reuse_decoded=None):
             # obsolete, unused checkout. Preserve that error; do not repeat the
             # failing traversal or claim it is a fresh whole-root measurement.
             problem=load(inputs/'failure.json')
+            if "['du', '-sb'"not in problem['reason']:raise ValueError('v2 completion requires the recorded whole-root traversal failure')
             prior=load(inputs/'decoded-v1/closure/receipt.json')['conservative_primary_plus_side_output_bound_bytes']
             total=prior+size;size_scope='sealed pre-repair bound plus measured recovery files; obsolete checkout EIO remains unmeasured';storage_status='ARCHIVAL_RECOVERED_AUXILIARY_EIO_UNRESOLVED'
         if size>128*1024**2 or total>8*1024**3:raise ValueError('output ceiling exceeded')
@@ -107,9 +108,10 @@ def recover(root,folder,reuse_decoded=None):
                 '/tmp/wj-h7-owner-repair/publication-owner-v2':str(pub)},native_attempts=0,cp0_initializations=0,
             preserved='old seals, paths, numerical decisions, failed operations and1800s charge unchanged; obsolete partial observer checkout retained read-only')
         # Flush only this recovery's files, never issue a volume-wide sync.
-        for path in folder.rglob('*'):
-            if path.is_file():
-                with path.open('rb')as f:os.fsync(f.fileno())
+        for directory in {folder,inputs}:
+            for path in directory.rglob('*'):
+                if path.is_file():
+                    with path.open('rb')as f:os.fsync(f.fileno())
         save(folder/'receipt.json',receipt)
         save(folder/'verification-index.json',dict(decoded=decoded,closure_files=[identity(p)for p in sorted((inputs/'decoded-v1/closure').rglob('*'))if p.is_file()]))
         print(json.dumps({k:v for k,v in receipt.items()if k not in ('heavy_verified','H6_parent_verified','current_qualified_ELFs_verified','original_native_map_receipts_verified')},indent=2),flush=True)

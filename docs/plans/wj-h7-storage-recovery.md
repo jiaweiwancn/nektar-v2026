@@ -33,3 +33,51 @@ attempt, records the prior sealed footprint bound plus actual recovery output,
 and leaves the unused checkout's EIO explicitly UNRESOLVED. This is archival
 recovery, not a clean-health certificate for every old source directory. Both
 attempts share the180s administrative limit; no study ledger is reopened.
+
+Recovery result (2026-11-13): archival PASS. The new persistent copies are:
+
+- `/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/storage-recovery-v1/decoded-v1/publication`
+- `/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113/storage-recovery-v1/decoded-v2/publication`
+
+Both original transport SHA-256 values and all68/69 decoded seal entries match.
+Reverification also matched105 heavy artifacts,9 H6 report/XML/checkpoint files,
+133 qualified ELF files and9 original native-map receipt files. The live parent
+accounting/imports bytes and archived final accounting are unchanged. No original
+signature/path/receipt was rewritten; v2/receipt.json supplies explicit path
+aliases for the former temporary publications. All original numerical decisions,
+including the corrected H owner view, remain unchanged.
+
+The first metadata attempt cost21.5759s and retained its whole-root du timeout
+and Input/output error. The fixed completion cost2.0085s; with the30s setup/
+closure allowance, this user-requested administrative recovery charges53.5843s
+against its180s bound. Peak process-tree RSS was27418624bytes; measured added
+recovery files were88613438bytes (plus the small final receipts), below128MiB.
+Current allocation was9 tracked workers before launch, with4 reserved; no other
+campaign/process/install was altered. One serial metadata worker, all six
+numerical-library thread controls1; zero native attempts/CP0s, builds or numerical
+tests. Existing H7 scientific and test evidence is reused by exact-byte identity.
+The original1800s study ledger, including its unknown storage charge, is preserved.
+
+Storage is not certified wholly clean: the obsolete, superseded
+`observer-10a4078/solvers/IncNavierStokesSolver` subtree still returned an I/O
+error during the first resumed traversal. Its files were not deleted, restored
+or hidden. Whole-root size remains a previously sealed conservative bound plus
+measured recovery output, not a fresh successful traversal. New publication
+writes/flushes/readbacks and all selected scientific-file reads passed. The
+remaining auxiliary-directory EIO is UNRESOLVED; it does not change the completed
+36/36 scientific result or prevent access to the recovered publication.
+
+Small receipts, source identity, the failed attempt/log and the read-only
+verification index are in `docs/plans/wj-h7-linux/storage-recovery/`. Both versions
+remain on Linux; only the compact receipt set is committed. Reproduce the
+completion (into an unused destination only) with the fixed utility and the
+exact sealed archives; its v2 invocation is:
+
+```bash
+R=/media/jay/新加卷1/nektar-v2026-runs/wj-h7-neutral-transport-20261113
+python3 -B recover_wj_h7_storage.py --root "$R" \
+  --folder "$R/storage-recovery-v2" --reuse-decoded "$R/storage-recovery-v1"
+```
+
+The receipt guards intentionally reject re-execution into completed destinations.
+No simulation or longer horizon follows from this archival recovery.
