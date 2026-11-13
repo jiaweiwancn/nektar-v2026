@@ -5,6 +5,8 @@ import argparse
 import math
 from pathlib import Path
 import subprocess
+import shutil
+import json
 import sys
 import time
 import numpy as np
@@ -62,11 +64,11 @@ def prepare(root):
 
 def pilot(root):
     start=time.monotonic();admission=load(root/'target-admission.json');assert admission['status']=='PASS'
-    cp0=root/'science/target/cp0';a=load(cp0/'assessment/result.json');assert a['status']=='PASS'
+    cp0=root/'science/target/cp0';a=load(admission.get('qualified_cp0_assessment',dict(path=str(cp0/'assessment/result.json')))['path']);assert a['status']=='PASS'
     original=H13/'publication-v1/paired-case/flat/case.xml';design=admission['resource_design']['sha256'];dt=.0025
     prior=load(cp0/'case.evolution.json');assert prior['steps']==0 and prior['dt']==dt
     records=[];stop=None;cp0cost=load(root/'accounting.json')['entries']['target-full-domain-CP0-v1']['seconds']
-    estimate=max(30.,2*cp0cost);assessment_estimate=load(root/'accounting.json')['entries']['target-CP0-owned-assessment-v1']['seconds']
+    estimate=max(30.,2*cp0cost);assessment_estimate=admission.get('measured_assessment_seconds',load(root/'accounting.json')['entries']['target-CP0-owned-assessment-v1']['seconds'])
     for step in range(1,5):
         elapsed=time.monotonic()-start;required=1.25*(estimate+assessment_estimate)
         projection=dict(next_absolute_step=step,elapsed=elapsed,remaining=600-elapsed,required_with25percent_headroom=required,
@@ -101,5 +103,27 @@ def pilot(root):
         elapsed_seconds=time.monotonic()-start,scope='capacity/admissibility pilot only; no duration preservation or physical experimental qualification'))
     print('full-domain pilot',complete,'completed steps; stop',stop,flush=True)
 
+def rebind(root):
+    """A new passive-source receipt; the actual native CP0 is never repeated."""
+    cp0=root/'science/target/cp0';a=load(cp0/'assessment/result.json');b=load(cp0/'assessment-v2/result.json')
+    assert a['status']==b['status']=='PASS'and a['producer']==b['producer']and a['checkpoint']==b['checkpoint']
+    for key in('states','invariants','physical_row_count','owner_row_count'):
+        assert json.dumps(a[key],sort_keys=True)==json.dumps(b[key],sort_keys=True),'cached/uncached assessment differs: '+key
+    assert a['inventory']['sha256']==b['inventory']['sha256']
+    original=root/'target-admission-v1.json';shutil.copyfile(root/'target-admission.json',original)
+    old=load(original);original_command=old['commands']['target_cp0'];original_inputs=old['command_inputs']['target_cp0']
+    old['supersedes_only_passive_source']=dict(original=file_id(original),reason='exact immutable basis/matching cache; same full physical point/owner support and bitwise-identical measured scalar/tensor/quality results')
+    old['qualified_cp0_assessment']=file_id(cp0/'assessment-v2/result.json')
+    old['measured_assessment_seconds']=load(root/'accounting.json')['entries']['target-CP0-owned-assessment-v2']['seconds']
+    script=Path(__file__).resolve();old['commands']['pilot']=[sys.executable,'-B',str(script),'--root',str(root),'--mode','pilot']
+    old['command_inputs']['pilot']=[file_id(script),file_id(Path(assessment.__code__.co_filename)),file_id(cp0/'case.xml'),
+        file_id(script.with_name('wj_h7_analysis.py')),file_id(script.with_name('wj_h14_execution.py'))]
+    assert old['commands']['target_cp0']==original_command and old['command_inputs']['target_cp0']==original_inputs
+    save(root/'target-admission-v2.json',old);shutil.copyfile(root/'target-admission-v2.json',root/'target-admission.json')
+    save(root/'science/immutable-cache-equivalence.json',dict(status='PASS',original=a['producer'],original_assessment=file_id(cp0/'assessment/result.json'),
+        cached_assessment=file_id(cp0/'assessment-v2/result.json'),all_state_and_invariant_numeric_bits_equal=True,inventory_bytes_equal=True,
+        original_seconds=load(root/'accounting.json')['entries']['target-CP0-owned-assessment-v1']['seconds'],cached_seconds=old['measured_assessment_seconds'],
+        target_native_invocations_repeated=0,scientific_inputs_changed=0,resource_allowance_reset=False))
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('prepare','pilot'),required=True);a=p.parse_args();globals()[a.mode](a.root)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('prepare','rebind','pilot'),required=True);a=p.parse_args();globals()[a.mode](a.root)
