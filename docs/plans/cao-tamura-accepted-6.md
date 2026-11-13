@@ -3,9 +3,10 @@
 Starting source: `7d32b43dc9d176628cfef1dbae2aee02a86ce330`, clean and equal to fetched remote.
 The [versioned contract](cao-tamura-accepted-6-evidence/contract.json) precedes native execution.
 
-This package implements a guarded manufactured curved route. Qualification of
-the complete evolving formulation is pending the declared degree, timestep and
-physical-budget gates. CT4/CT5 physical fits, observations, sealed artifacts and
+This package implements a guarded manufactured curved route. The complete
+evolving formulation is **not qualified**: the declared degree and timestep
+gates fail in the A95 primary experiment. Independent quadrature receipts are
+being completed separately. CT4/CT5 physical fits, observations, sealed artifacts and
 historical decisions remain unchanged. No ordinary curved production or
 experimental admission is implied by a manufactured test.
 
@@ -90,22 +91,91 @@ P4/P2 fixtures have 1,273/2,283 slots. Native counts are measured, not predictio
 Native chart-basis checks are distinguished from independent mapped physical
 gradient and Stokes checks.
 
-## Evolving qualification in progress
+## Bounded A95 evolution and failed consistency gates
 
-Fresh histories use the prescribed degree/timestep matrix through `T=.016`.
-A95 P4/P2 at `.002` has completed all eight accepted steps. Its independent
-endpoint scaled RMS errors are approximately `1.22e-5` (U), `1.10e-5` (w),
-`1.09e-5` (k), `3.00e-5` (outer epsilon) and `.001598` (absolute Pi).
-Ground traction error is `.000742`; the two interface-side reference errors
-are `.000910/.000906`, and their full jump is `.000310`. All pass the CT6
-limits. These are bounded endpoint accuracy results, not a convergence claim.
+All five fresh A95 histories reach `T=.016`, passing the accepted-state domain
+and manufactured field/traction limits. Same-space timestep members have
+identical actual initial coefficient vectors. Each has complete native
+physical-budget equations and actual captured-stage reconciliation. Full
+four-control quadrature qualification is a separate receipt and is not supplied
+by native-only completion.
 
-The companion histories, degree comparison and full frozen-quadrature coverage
-are still required. A native-only physical-budget diagnostic explicitly exits
-3 and cannot supply full qualification or admit the A93/E94E95 transfers.
-Time-discrete stage residuals, unchanged alpha-zero spatial loads and the
-read-only consistency load `r_spatial + load(analytical time derivative)` are
-reported separately. The last expression never enters evolution.
+The following are scaled weighted physical RMS errors against the continuous
+time-dependent solution, on one common physical inventory. Pi is absolute;
+there is no pressure mean subtraction. Scales are `.2` for U and w,
+`K0=.6115200681722618` for k, `.3167838556291072` for outer epsilon and `.1`
+for Pi. The limits are `.005` for the four transported fields and `.01` for Pi.
+
+| Space | Stored slots | dt | Accepted steps | U | w | k | Outer epsilon | Pi |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| P3/P1 | 1273 | .002 | 8 | 1.52414e-5 | 1.40619e-5 | 1.09086e-5 | 1.20792e-4 | .00158203 |
+| P3/P1 | 1273 | .001 | 16 | 8.97399e-6 | 6.91036e-6 | 5.49718e-6 | 1.29468e-4 | .000775087 |
+| P4/P2 | 2283 | .004 | 4 | 2.56345e-5 | 2.04337e-5 | 2.17874e-5 | 6.09391e-5 | .00263361 |
+| P4/P2 | 2283 | .002 | 8 | 1.22157e-5 | 1.10066e-5 | 1.09031e-5 | 2.99731e-5 | .00159824 |
+| P4/P2 | 2283 | .001 | 16 | 5.25802e-6 | 4.98739e-6 | 5.45498e-6 | 1.67812e-5 | .000775897 |
+
+The original gates are retained. They apply to resolved differences rather than
+successful process exits or finite values.
+
+| Observable | P4/P3 error ratio at dt=.001 | Required <=.85 | P4 triplet order | Required .8--1.2 |
+|---|---:|---|---:|---|
+| U | .585918 | pass | 1.208038 | **fail** |
+| w | .721726 | pass | 1.234440 | **fail** |
+| k | .992324 | **fail** | .998575 | pass |
+| Outer epsilon | .129616 | pass | .997092 | pass |
+| Absolute Pi | 1.001045 | **fail** | .357693 | **fail** |
+
+Every temporal difference is above the declared `1e-6` signal floor. Neither
+the small U/w band misses nor the pressure failure is rounded into a pass.
+The k and Pi errors exceed the spatial floor `1e-7`; they are not relabelled as
+unresolved-floor observations.
+
+For k, the timestep spread is about `5.45e-6` on either space, while the
+P3/P4 difference is `6.55e-7`. For Pi, these quantities are about `.00082`
+and `.000125`. Thus the raw degree contrast is substantially contaminated by
+time/splitting error. Read-only first-order extrapolation and second differences
+are exported as diagnostics; they do not replace the failed gates or alter any
+state. Two degrees do not establish a spatial order.
+
+P4/P2 initial projection errors are `2.11e-9`, `3.00e-8`, `2.43e-12`,
+`1.89e-5` and `1.17e-7` on these same field scales. Initial projection,
+subsequent numerical drift and time-dependent reference change are reported
+separately. Initial pressure value error alone is much smaller than the evolved
+pressure error; this does not exclude an initial weak-continuity or splitting
+effect. No violated governing discrete identity has been established from the
+temporal failure.
+
+At P4/P2 dt=.002, ground-traction reference error is `.000742`;
+the interface inner/outer reference errors are `.000910/.000906` and the full
+jump is `.000310`, all below `.005`. These are reconstructed physical
+tractions using current FE gradients and endpoint K, not prescribed loads or
+row reactions.
+
+The last time-discrete scaled stage residuals at dt=.002/.001 are about
+`.0130/.00389`. They are not steady-state residuals. Unmodified alpha-zero
+spatial loads and the separate read-only consistency load
+`r_spatial + load(analytical time derivative)` remain visible; the latter never
+enters the governing equations.
+
+Because the A95 consistency contract fails, A93 and E94E95 manufactured
+**evolutions are not admitted**. Their successful kernel, continuous-source,
+initialized native weak-balance and static-transmission results retain their
+own scope. No additional timestep, mesh or manufactured input has been used to
+search for a passing result.
+
+## Compatibility and rejection controls
+
+The rebuilt runtime reproduces fresh CT5 A95 physical states at `.002/.004`
+and its native history payload bit for bit. The current curved same-method
+restart is also bitwise identical. Deliberate rejection at step two retains the
+last accepted state and every native history slot; its rejected candidate equals
+the corresponding uninterrupted next state. Changed geometry is rejected by
+the checkpoint signature. These tests do not extend a CT5 trajectory.
+
+Both registered CT6 CTests pass, including the admission suite's process-level
+negative checks. Missing members/equations/controls, invalid primitives,
+incorrect actual-stage binding, failed independent traction and failed shared
+prerequisites cannot admit a model transfer merely through enclosing pass labels.
 
 ## Retained failures and diagnostic corrections
 

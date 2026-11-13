@@ -17,7 +17,7 @@ from rans_request_manifest import RequestManifest,runtime_identity,sha
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','operator','targeted','output'):p.add_argument('--'+k,type=Path,required=True)
-    a=p.parse_args();m=RequestManifest(a.output,dict(schema='CT6DiscriminatingControlsV1',
+    a=p.parse_args();m=RequestManifest(a.output,dict(schema='CT6DiscriminatingControlsV2',
         runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),operator_sha256=sha(a.operator/'results.json'),
         targeted_sha256=sha(a.targeted/'results.json'),source_sha256=sha(Path(__file__))))
     summary=json.loads((a.operator/'results.json').read_text());checks={}

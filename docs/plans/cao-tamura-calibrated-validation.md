@@ -1,5 +1,19 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-6 (2026-11-13): the named curved Accepted manufactured route
+> passes independent kernel, geometry, native weak-operator and static
+> variable-height transmission checks for the stated Natural models. All five
+> A95 primary histories reach T=.016 with admissible fields and passing
+> endpoint accuracy, but the fixed degree-reduction and timestep-order gates
+> fail. A93/E94E95 evolving transfers are therefore not admitted. Complete
+> quadrature receipts and resource closure are being exported separately;
+> successful collection is not admission. Fresh CT5 A95 states/history and
+> curved restart/rollback controls are bitwise compatible. See
+> [CT-Accepted-6](cao-tamura-accepted-6.md). The CT5 A93 narrow traction margin,
+> CT4 pressure interpretation, physical interface/thin-layer questions and
+> smooth preparation remain open. No physical curved production, precursor or
+> hill prediction is admitted. Historical CT1–CT5 decisions below are unchanged.
+
 > CT-Accepted-5 (2026-11-12): the one selected near-ground radial split
 > resolves A95/6 mm/P4-P2 ground-traction accuracy with unchanged CT4 physics
 > and fits. All three 6 mm P4/P2 transferred recipes pass through T=.02,
