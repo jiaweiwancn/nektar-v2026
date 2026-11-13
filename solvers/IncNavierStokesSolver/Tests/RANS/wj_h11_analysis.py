@@ -34,6 +34,8 @@ def selected(r,step):
     first=r['steps']+1-len(r['accepted_states']);local=step-first-1
     if not 0<=local<len(r['pimple_attempts']):raise ValueError('restored/rejected/nonproduced step is not a completed attempt')
     c=context(r,step)
+    if c['step']!=step:raise ValueError('requested absolute step differs from recorded callback time')
+    aligned(step,r['dt'],c['time'])
     if c['alpha']!=1/r['dt']:raise ValueError('wrong completed callback alpha')
     a=r['pimple_attempts'][local]
     return c,a,local

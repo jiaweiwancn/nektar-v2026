@@ -91,7 +91,10 @@ Cross-level endpoint differences equal the nonzero incoming difference at
 .03 plus differences of cumulative flow/k/epsilon/lift terms. Publish signed
 components before norms for G,B,d,nu_eff,a,g,mhat and supporting fields.
 Cancellation=1-|E_end|/S, S=|E_start|+sum(abs(phase differences)), componentwise;
-if S<=4e-11*fixed_scale the ratio is UNRESOLVED. This describes cancellation,
+if S<=4e-11*physical_scale the ratio is UNRESOLVED. Physical scales retain
+H11's 1 for U/G/normalized actions, K for k/R, A/H for epsilon and u_tau^2
+for pressure; other diagnostic quantities use the fixed scales above.
+This describes cancellation,
 not unique causality or a physical gate. Two windows do not establish order.
 
 Replay the 24 accepted endpoint/owner records against H11. Preserve both
