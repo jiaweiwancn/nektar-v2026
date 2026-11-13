@@ -18,7 +18,7 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
     namespace J=RANSWallSolveJson;
     using Vector=RANSWallAlgebra::Vector;
     using Matrix=RANSWallAlgebra::DenseMatrix;
-    RANSWallAlgebra::Require(patch.Dimension()==2 && !patch.Mapped() && patch.Size()<500,
+    RANSWallAlgebra::Require(patch.Dimension()==2 && (!patch.Mapped() || patch.CurvedManufactured()) && patch.Size()<500,
         "tensor validation requires a small serial affine 2D fixture");
     std::vector<std::string> fields;
     for(int b=0;b<patch.Gauge();++b)
@@ -186,7 +186,9 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
     }
     return J::Object({{"schema",J::Quote("NativeDirectionalTensorChecksV2")},{"fields",J::List(fields)},
         {"continuous_ground_fixtures",J::List(ground)},
-        {"scope",J::Quote("independent Nektar BwdTrans/PhysDeriv/Integral, signed CG packing, native faces and restriction; all individual modes; constants, affine and mixed polynomials")}});
+        {"scope",J::Quote(patch.CurvedManufactured()?
+            "CT6 canonical native CHART rows only: independent Nektar BwdTrans/PhysDeriv/Integral, signed CG packing, faces and restriction; physical transforms require the separate mapped metric/operator checks":
+            "independent Nektar BwdTrans/PhysDeriv/Integral, signed CG packing, native faces and restriction; all individual modes; constants, affine and mixed polynomials")}});
 }
 }
 #endif
