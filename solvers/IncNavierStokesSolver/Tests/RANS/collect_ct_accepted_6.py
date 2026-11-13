@@ -56,6 +56,18 @@ def main():
     controls=receipt('controls-v1/results.json','discriminating-controls.json')
     regression=receipt('regression-v1/results.json','regression.json')
     comparison=receipt('primary-comparisons-v1/results.json','A95-complete-comparisons.json')
+    builds={}
+    for folder in sorted(r.glob('build-v*')):
+        request=folder/'request-manifest.json';completed=folder/'results.json';progress=folder/'progress.json'
+        if not request.exists():continue
+        identity=read(request);files[str(request)]=sha(request)
+        source=completed if completed.exists() else progress
+        body=read(source) if source.exists() else dict(status='no_completed_build_receipt')
+        if source.exists():files[str(source)]=sha(source)
+        builds[folder.name]=dict(request=compact(identity),request_sha256=sha(request),
+            completed=completed.exists(),body=compact(body),
+            source_receipt=str(source),source_receipt_sha256=sha(source) if source.exists() else None)
+    write_json(a.output/'build-runtime-identities.json',builds)
     members={};audits={};costs={}
     for path in sorted(r.glob('evolution-v*/**/results.json')):
         q=read(path)
