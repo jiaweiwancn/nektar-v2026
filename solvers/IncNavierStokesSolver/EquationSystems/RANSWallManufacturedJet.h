@@ -51,7 +51,16 @@ inline Jet Pow(const Jet &a,double p)
     Jet d=a-a.Value(),v(1),r;double b=std::pow(a.Value(),p);
     for(int k=0;k<=4;++k){r=r+v*b;v=v*d;b*=((p-k)/(k+1))/a.Value();}return r;
 }
-inline Jet operator/(const Jet &a,const Jet &b){return a*Pow(b,-1);}
+inline Jet Inverse(const Jet &a)
+{
+    // A reciprocal is defined on either sign branch. Fractional powers and
+    // logarithms have the separate positive-base domain used above/below.
+    if(a.Value()==0 || !std::isfinite(a.Value()))
+        throw std::domain_error("CT6 Taylor reciprocal requires finite nonzero base");
+    const Jet d=(a-a.Value())*(-1/a.Value());Jet v(1),r;
+    for(int k=0;k<=4;++k){r=r+v*(1/a.Value());v=v*d;}return r;
+}
+inline Jet operator/(const Jet &a,const Jet &b){return a*Inverse(b);}
 inline Jet operator/(const Jet &a,double b){return a*(1/b);}
 inline Jet Sqrt(const Jet &a){return Pow(a,.5);}
 inline Jet Exp(const Jet &a)

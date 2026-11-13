@@ -468,18 +468,52 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         {"element",J::Number(p.element)},
         {"endpoint_roundoff_axes",J::Number(p.endpointRoundoffAxes)},
         {"raw_local_coordinate",J::Numbers(p.rawLocalCoordinate)}});};
+    std::unique_ptr<RANSWallManufactured> manufactured;
+    if(CurvedManufactured())manufactured=std::make_unique<RANSWallManufactured>(*this);
     auto point=[&](const VolumePoint &q,int region)
     {
-        return J::Object({{"coordinate",J::Numbers(q.v.coordinate)},{"weight",J::Number(q.weight)},
+        std::vector<std::pair<std::string,std::string>> fields{{"coordinate",J::Numbers(q.v.coordinate)},{"weight",J::Number(q.weight)},
             {"region",J::Number(region)},{"velocity_k",row(q.v)},{"pressure",row(q.p)},
             {"physical_coordinate",J::Numbers(Physical(q.v.coordinate))},
             {"volume_metric",J::Number(m_mapping.At(q.v.coordinate).determinant)},
             {"normal_J",J::Number(m_mapping.At(q.v.coordinate).J)},
             {"generating_geometry",J::Number(q.generatingGeometry)},
             {"generating_radial_panel",J::Numbers(Vector{q.panelLower,q.panelUpper})},
-            {"epsilon",region==1?row(q.e):"null"}});
+            {"epsilon",region==1?row(q.e):"null"}};
+        if(manufactured)
+        {
+            const auto &chart=q.v.coordinate;auto H=chart;H[2]=m_parameters.geometry.height;
+            const auto metric=m_mapping.At(H);
+            const auto exact=manufactured->At(chart,time,region==1);
+            Vector body,outerBody;
+            for(int a=0;a<m_dimension;++a)
+            {
+                body.push_back((region?data.outerBody:data.innerBody)[a](chart,time));
+                outerBody.push_back(data.outerBody[a](H,time));
+            }
+            fields.push_back({"CT6_prescribed_data",J::Object({
+                {"body",J::Numbers(body)},{"outer_body_at_H",J::Numbers(outerBody)},
+                {"k_source",J::Number((region?data.outerKSource:data.innerKSource)(chart,time))},
+                {"epsilon_source",region?J::Number(data.outerEpsilonSource(chart,time)):"null"},
+                {"H_velocity_k_row",row(Point(0,H,1))},
+                {"H_pressure_row",row(Point(OuterPressure(),H,1))},
+                {"H_epsilon_row",row(Point(Epsilon(),H,1))},
+                {"H_normal",J::Numbers(metric.normal)},{"H_Br",J::Rows(metric.Br)},
+                {"continuous_values",J::Numbers(exact.value)},
+                {"continuous_gradients",J::Rows(exact.gradient)},
+                {"continuous_R",J::Rows(exact.reynolds)},{"continuous_Q",J::Rows(exact.quadratic)},
+                {"continuous_T",J::Rows(exact.stress)},
+                {"continuous_dtU",J::Numbers(exact.velocityTime)},
+                {"continuous_dtk",J::Number(exact.kTime)},
+                {"continuous_dtepsilon",J::Number(exact.epsilonTime)},
+                {"continuous_required_body",J::Numbers(exact.body)},
+                {"continuous_Dk",J::Number(exact.kDiffusion)},
+                {"continuous_Depsilon",J::Number(exact.epsilonDiffusion)},
+                {"continuous_production",J::Number(exact.production)}})});
+        }
+        return J::Object(fields);
     };
-    std::vector<std::string> volume,faces,mass,profiles,values,gradients,regions,observedSides,provenance,tractions,dependentEpsilon;
+    std::vector<std::string> volume,bodyVolume,faces,mass,profiles,values,gradients,regions,observedSides,provenance,tractions,dependentEpsilon;
     std::size_t ni=0,no=m_outer.size();
     for(const auto &ray:m_rays)
     {
@@ -491,6 +525,13 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         if(basis)for(const auto &q:ray.points)volume.push_back(point(q,0));
     }
     if(basis)for(const auto &q:m_outer)volume.push_back(point(q,1));
+    if(basis && manufactured)
+    {
+        // Prescribed IMEX body loads retain their own fixed generating panels;
+        // do not substitute the current-K wall-source quadrature for them.
+        for(const auto &q:m_bodyInner)bodyVolume.push_back(point(q,0));
+        for(const auto &q:m_outer)bodyVolume.push_back(point(q,1));
+    }
     const double H=m_parameters.geometry.height;
     if(basis)for(int region=0;region<2;++region)
     {
@@ -577,7 +618,8 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
                 "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data":
                 "Gauss32 on native radial elements, supplied breakpoints and geometric 1e-4*1.5^j subpanels")},
             {"inner_volume_points",J::Number(ni)},{"outer_volume_points",J::Number(no)}})},
-        {"profiles",J::List(profiles)},{"volume",J::List(volume)},{"faces",J::List(faces)},{"pressure_mass",J::List(mass)},
+        {"profiles",J::List(profiles)},{"volume",J::List(volume)},{"CT6_body_volume",J::List(bodyVolume)},
+        {"faces",J::List(faces)},{"pressure_mass",J::List(mass)},
         {"audit_alpha_zero",J::Object(diagnostic)},
         {"grid",J::Rows(grid)},{"grid_regions",J::List(regions)},
         {"grid_inner_prescribed_epsilon",J::List(dependentEpsilon)},{"grid_sides",J::List(observedSides)},{"grid_geometry_by_field",J::List(provenance)},{"grid_traction",J::List(tractions)},{"grid_values",J::List(values)},{"grid_gradients",J::List(gradients)}});

@@ -674,3 +674,6 @@ foreach(ct6_native_target RANSEquilibriumEvolutionProbe RANSCurvedWallProbe RANS
 endforeach()
 add_executable(RANSCurvedAcceptedKernelProbe ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSCurvedAcceptedKernelProbe.cpp)
 target_link_libraries(RANSCurvedAcceptedKernelProbe RANSKernels)
+add_executable(CT6ManufacturedJetChecks test_ct_accepted6_jet.cpp)
+target_include_directories(CT6ManufacturedJetChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+add_test(NAME CT6ManufacturedJetChecks COMMAND CT6ManufacturedJetChecks)

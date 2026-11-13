@@ -1,0 +1,44 @@
+{
+  "schema": "CT6StorageInterruptionV1",
+  "classification": "infrastructure_interruption_before_native_build",
+  "device": "/dev/sda2",
+  "uuid": "5AB8A669B8A642FD",
+  "mount": "/media/jay/\u65b0\u52a0\u53771",
+  "driver": "ntfs3",
+  "observed_kernel_waits": [
+    "ntfs_look_free_mft",
+    "ntfs_extend_mft",
+    "walk_component",
+    "ntfs_get_ea"
+  ],
+  "kernel_report_dates": "Nov 13 09:17:50 through 09:21:56, server journal local time",
+  "native_build_started": false,
+  "native_evolution_started": false,
+  "blocked_owned_build_launcher_pid": 131067,
+  "action": "SIGTERM requested for owned launcher and diagnostic readers; no forced unmount, repair or unrelated process termination",
+  "ordinary_unmount_result": "udisksctl DeviceBusy",
+  "sudo_result": "noninteractive sudo requires password",
+  "server_reboot_observed": "Nov 13 09:47 server uptime approximately one minute",
+  "post_reboot_mount_service_result": "ntfs-3g installed; udisksctl OptionNotPermitted for explicit driver name; user given ordinary sudo ntfs-3g mount command",
+  "independent_lightweight_checks": {
+    "location": "/tmp/nektar-ct6-lightweight-source-20261113 before reboot; temporary files removed by reboot",
+    "jet": {
+      "scaled_error": 1.11022e-16,
+      "expected_rejections": 3,
+      "exit_code": 0,
+      "process_cpu_seconds": 0.8737429999999999,
+      "wall_seconds": 1.1811699520039838,
+      "maximum_project_workers": 5,
+      "maximum_aggregate_workers": 6
+    },
+    "continuous": {
+      "maximum_interface_and_divergence_defect": 1.88079096131566e-37,
+      "precision_digits": 35,
+      "maximum_project_workers": 4,
+      "maximum_aggregate_workers": 5,
+      "source_evaluation": false
+    },
+    "qualification_scope": "algebra and independent continuum identities only; neither a native operator test nor native evolution evidence"
+  },
+  "historical_evidence": "CT1-CT5 unchanged; no attempted replacement or relabelling"
+}

@@ -34,6 +34,98 @@ std::string Row(const RANSWallGlobalPoint &p)
     {"geometry",J::Number(p.geometry)},{"endpoint_roundoff_axes",J::Number(p.endpointRoundoffAxes)},
     {"raw_local_coordinate",J::Numbers(p.rawLocalCoordinate)}});}
 
+// Static variable-height geometry/trace qualification. These polynomial
+// fields are probes, not a claimed equilibrium or an evolving solution.
+std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
+{
+    Require(patch.StaticTransmissionOnly(),"static transmission requires CT6StaticTransmissionV1");
+    const auto &p=patch.Parameters();const double H0=p.geometry.height,K0=p.model.Q()*.16;
+    std::vector<RANSWallEvolutionFunction> functions{
+        [](const auto &x,double){return .15*x[2]+.01*x[0];},
+        [](const auto &x,double){return .002*x[0]*x[0];},
+        [=](const auto &x,double){return K0*(1+.02*x[0]+.03*x[2]/H0);},
+        [=](const auto &,double){return std::pow(K0/p.model.Q(),1.5)/(p.model.Kappa()*H0);},
+        [](const auto &x,double){return .02*x[0]+.01*x[2];},
+        [](const auto &x,double){return .03*x[0]-.01*x[2];}};
+    const auto state=patch.Project(functions,0.);
+    const auto zeroNormal=patch.fields[patch.K()]->Project([=](const auto &x){return K0*(1+.02*x[0]);});
+    RANSWallEvolutionData data(2);std::vector<std::string> rows;
+    double maximum=0,tiltedSignal=0,omittedTiltSignal=0;
+    const auto dot=[](const RANSVector &a,const RANSVector &b)
+    {double x=0;for(int j=0;j<3;++j)x+=a[j]*b[j];return x;};
+    for(const auto &face:patch.Surface(0,2,H0,1,12))
+    {
+        const auto q=face.test.coordinate;const auto g=patch.Mapping().At(q);
+        const auto &m=patch.Mapping();
+        const double Hp=m.heightSlopeX+m.heightAmplitude*m.heightWaveX*std::cos(m.heightWaveX*q[0]);
+        const double qH=Hp/(g.baseArea*g.J);
+        RANSVector N{},area=patch.Mapping().MatchingArea(q);
+        for(int j=0;j<3;++j)N[j]=(g.normal[j]-qH*g.tangent1[j])/std::sqrt(1+qH*qH);
+        const double areaNorm=std::hypot(area[0],area[1],area[2]);
+        for(int j=0;j<3;++j)maximum=std::max(maximum,std::abs(N[j]-area[j]/areaNorm));
+        const auto profile=patch.StateProfile(state,q,0.,data);const auto &pg=profile->Geometry();
+        Require(pg.height==g.height && pg.sampleHeight==g.height && pg.tailStart==g.height,
+            "Accepted local endpoint metadata mismatch");
+        const double sampled=face.test.Value(state,patch.offset[patch.K()]);
+        const double dependent=patch.DependentEpsilon(state,q,0.,data);
+        const double expected=std::pow(sampled/p.model.Q(),1.5)/(p.model.Kappa()*g.height);
+        maximum=std::max(maximum,std::abs(dependent-expected));
+        RANSVector u{face.test.Value(state,patch.offset[0]),0,face.test.Value(state,patch.offset[1])};
+        const double mH=g.J*(dot(u,g.normal)-dot(u,g.tangent1)*qH);
+        maximum=std::max(maximum,std::abs(mH-dot(u,area)/g.baseArea));
+        std::vector<std::string> regions;
+        for(int side:{-1,1})
+        {
+            const bool outer=side>0;const auto v=patch.Point(0,q,side);
+            const auto kg=patch.Point(patch.K(),q,side).Gradient(state,patch.offset[patch.K()]);
+            const double k=v.Value(state,patch.offset[patch.K()]);
+            RANSTensor G{},T{};G[0]=v.Gradient(state,patch.offset[0]);G[2]=v.Gradient(state,patch.offset[1]);
+            const double pi=patch.Point(patch.InnerPressure()+outer,q,side).Value(state,patch.offset[patch.InnerPressure()+outer]);
+            double D=0;
+            if(outer)
+            {
+                const double eps=patch.Point(patch.Epsilon(),q,side).Value(state,patch.offset[patch.Epsilon()]);
+                const auto law=patch.OuterClosure(k,eps,G,q);D=law.kDiffusion;
+                for(int i=0;i<3;++i)for(int j=0;j<3;++j)T[i][j]=-law.reynoldsStress[i][j]+(i==j?2*k/3-pi:0);
+            }
+            else
+            {
+                const double nt=profile->Original().EddyViscosity(g.height);D=p.geometry.molecularNu+nt/p.model.Parameters().sigmaK;
+                T=RANSWallInnerMeanStress(patch.InnerStress(k,nt,G),p.geometry.molecularNu,pi);
+            }
+            const double dr=dot(kg,g.normal),dt=dot(kg,g.tangent1);
+            const double normalFlux=mH*k-g.J*D*(dr-qH*dt);
+            const double physicalFlux=dot(u,area)*k/g.baseArea-D*dot(kg,area)/g.baseArea;
+            maximum=std::max(maximum,std::abs(normalFlux-physicalFlux));
+            const double chain=g.baseArea*g.J*dt+Hp*dr;
+            maximum=std::max(maximum,std::abs(chain-.02*K0));
+            RANSVector a{},b{};
+            for(int i=0;i<3;++i)for(int j=0;j<3;++j)
+            {a[i]+=T[i][j]*area[j]/g.baseArea;b[i]+=g.J*T[i][j]*(g.normal[j]-qH*g.tangent1[j]);}
+            for(int i=0;i<3;++i)maximum=std::max(maximum,std::abs(a[i]-b[i]));
+            const auto zn=patch.Point(patch.K(),q,side).Gradient(zeroNormal,0);
+            const double tilt=-D*dot(zn,area)/g.baseArea;
+            // A zero base-normal derivative does not annul tilted diffusion.
+            maximum=std::max(maximum,std::abs(dot(zn,g.normal)));
+            tiltedSignal=std::max(tiltedSignal,std::abs(tilt));
+            omittedTiltSignal=std::max(omittedTiltSignal,std::abs(g.J*D*qH*dt));
+            regions.push_back(J::Object({{"side",J::Number(side)},{"geometry",J::Number(v.geometry)},
+                {"k_gradient",J::Numbers(kg)},{"normal_flux",J::Number(normalFlux)},
+                {"Cartesian_flux",J::Number(physicalFlux)},{"traction_per_ground_area",J::Numbers(a)},
+                {"zero_base_normal_gradient_tilted_diffusion",J::Number(tilt)}}));
+        }
+        rows.push_back(J::Object({{"chart",J::Numbers(q)},{"physical",J::Numbers(g.point)},
+            {"H",J::Number(g.height)},{"qH",J::Number(qH)},{"J",J::Number(g.J)},
+            {"normal",J::Numbers(N)},{"cofactor",J::Numbers(area)},{"mH",J::Number(mH)},
+            {"dependent_epsilon",J::Number(dependent)},{"regions",J::List(regions)}}));
+    }
+    Require(maximum<=2e-10 && tiltedSignal>1e-8 && omittedTiltSignal>1e-8,"CT6 static transmission identity or discriminating signal failed");
+    return J::Object({{"schema",J::Quote("CT6StaticTransmissionV1")},{"status",J::Quote("pass")},
+        {"stored_slots",J::Number(patch.Size())},{"maximum_primitive_defect",J::Number(maximum)},
+        {"tilted_diffusion_signal",J::Number(tiltedSignal)},{"omitted_tilt_signal",J::Number(omittedTiltSignal)},
+        {"rows",J::List(rows)},{"scope",J::Quote("native geometry/profile/trace identity; full traction and conservative k-flux evaluated on both sides; arbitrary polynomial probe fields are not a transmission solution; no variable-height evolution")}});
+}
+
 // Physical volume/face integration, deliberately independent of assembled
 // constant-test loads and prescribed-row reactions. IMEX1, unforced one sweep.
 std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
@@ -345,9 +437,16 @@ int main(int argc,char **argv)
         for(const auto &name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(open || !session->DefinesFunction(name),"neutral preservation verifier requires unforced source definitions");
         std::string referenceMode;session->LoadSolverInfo("RANSWallReference",referenceMode,"Neutral");
-        Require(referenceMode=="Neutral" || (open && referenceMode=="Functions"),"neutral verification requires the Neutral reference/boundary contract");
+        std::string curved;session->LoadSolverInfo("RANSWallCurvedCapability",curved,"Off");
+        const bool staticCT6=curved=="CT6StaticTransmissionV1";
+        Require(referenceMode=="Neutral" || ((open || staticCT6) && referenceMode=="Functions"),"neutral verification requires the Neutral reference/boundary contract");
         double eta;session->LoadParameter("RANSWallEta",eta,0.);Require(eta==0,"unanchored verification requires eta zero");
         RANSWallEvolutionPatch patch(session,graph,world->GetComm(),p,LoadRANSWallNormalMap(session,2,p.geometry.height));
+        if(staticCT6)
+        {
+            Require(request.get<std::string>("operation")=="ct6_static_transmission","static CT6 route cannot replay or evolve a history");
+            std::ofstream out(argv[3]);out<<StaticCT6Transmission(patch)<<'\n';return 0;
+        }
         Require(patch.Dimension()==2 && (!patch.Mapped() || patch.CurvedVerification()) && (patch.AcceptedAWF() || patch.UniformEPFlat()),
             "neutral preservation probe supports accepted or EP plateau references, serial flat2D only");
         RANSWallEvolutionData data(2);Vector state,reference;double time=request.get<double>("time",0.);
@@ -445,26 +544,38 @@ int main(int argc,char **argv)
                 const double k=q.Value(state,patch.offset[patch.K()]);
                 const double pi=patch.GeometryPoint(patch.InnerPressure()+outer,q.geometry,q.coordinate).Value(state,patch.offset[patch.InnerPressure()+outer]);
                 RANSTensor g{},stress{};for(int a=0;a<2;++a)g[a==0?0:2]=q.Gradient(state,patch.offset[a]);
+                RANSVector normal{0,0,1};double measure=1;
+                if(patch.CurvedVerification())
+                {
+                    measure=std::hypot(f.area[0],f.area[1],f.area[2]);
+                    for(int a=0;a<3;++a)normal[a]=side*f.area[a]/measure;
+                }
+                const auto normalDerivative=[&](const auto &gradient)
+                {double v=0;for(int a=0;a<3;++a)v+=gradient[a]*normal[a];return v;};
                 double dk=0,de=0,epsilon=0,epsilonFlux=0;
                 if(outer)
                 {
                     const auto erow=patch.GeometryPoint(patch.Epsilon(),q.geometry,q.coordinate);
                     epsilon=erow.Value(state,patch.offset[patch.Epsilon()]);
                     const auto c=patch.OuterClosure(k,epsilon,g,q.coordinate);dk=c.kDiffusion;de=c.epsilonDiffusion;
-                    epsilonFlux=de*erow.Gradient(state,patch.offset[patch.Epsilon()])[2];
+                    epsilonFlux=de*normalDerivative(erow.Gradient(state,patch.offset[patch.Epsilon()]));
                     for(int a=0;a<3;++a)for(int b=0;b<3;++b)stress[a][b]=-c.reynoldsStress[a][b]+(a==b?2*k/3-pi:0.);
                 }
                 else
                 {
                     const auto profile=patch.StateProfile(state,q.coordinate,time,data);
-                    const double nt=profile->Original().EddyViscosity(z);
+                    const double nt=profile->Original().EddyViscosity(patch.Distance(q.coordinate));
                     dk=p.geometry.molecularNu+nt/p.model.Parameters().sigmaK;
                     stress=RANSWallInnerMeanStress(patch.InnerStress(k,nt,g),p.geometry.molecularNu,pi);
                 }
-                const Vector traction{stress[0][2],stress[1][2],stress[2][2]};
+                Vector traction(3);for(int a=0;a<3;++a)for(int b=0;b<3;++b)traction[a]+=stress[a][b]*normal[b];
                 const double vertical=q.Value(state,patch.offset[1]);
+                const double un=q.Value(state,patch.offset[0])*normal[0]+vertical*normal[2];
+                const double kFlux=dk*normalDerivative(q.Gradient(state,patch.offset[patch.K()]));
                 fluxes.push_back(J::Object({{"coordinate",J::Numbers(q.coordinate)},
-                    {"weight",J::Number(f.weight)},{"geometry",J::Number(q.geometry)},
+                    {"weight",J::Number(f.weight*measure)},{"chart_weight",J::Number(f.weight)},
+                    {"positive_chart_normal",J::Numbers(normal)},{"area",J::Numbers(f.area)},
+                    {"geometry",J::Number(q.geometry)},
                     {"region",outer?"1":"0"},{"side",J::Number(-side)},
                     {"outward_normal_z",J::Number(side)},
                     {"velocity",J::Numbers(Vector{q.Value(state,patch.offset[0]),vertical})},
@@ -472,10 +583,10 @@ int main(int argc,char **argv)
                     {"Pi",J::Number(pi)},{"velocity_gradient",J::Rows(g)},
                     {"k_gradient",J::Numbers(q.Gradient(state,patch.offset[patch.K()]))},
                     {"full_traction",J::Numbers(traction)},
-                    {"k_diffusive_flux",J::Number(dk*q.Gradient(state,patch.offset[patch.K()])[2])},
-                    {"k_conservative_flux",J::Number(dk*q.Gradient(state,patch.offset[patch.K()])[2]-vertical*k)},
+                    {"k_diffusive_flux",J::Number(kFlux)},
+                    {"k_conservative_flux",J::Number(kFlux-un*k)},
                     {"epsilon_diffusive_flux",outer?J::Number(epsilonFlux):"null"},
-                    {"epsilon_conservative_flux",outer?J::Number(epsilonFlux-vertical*epsilon):"null"},
+                    {"epsilon_conservative_flux",outer?J::Number(epsilonFlux-un*epsilon):"null"},
                     {"test",Row(q)}}));
             }
             resolution=J::Object({{"schema",J::Quote("ModelAwareSpatialResolutionV1")},

@@ -515,6 +515,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     offset.resize(Gauge()+1);size.resize(Gauge()+1);
     for(int b=0;b<Gauge();++b){size[b]=fields[b]->Size();offset[b+1]=offset[b]+size[b];}
     size[Gauge()]=1;
+    if(CurvedVerification())Require(Size()<=3000,"CT6 verification exceeds the unchanged 3000 stored-slot limit");
     if(OpenBoundary())
     {
         const int degree=fields[0]->Elements().front().degree;
