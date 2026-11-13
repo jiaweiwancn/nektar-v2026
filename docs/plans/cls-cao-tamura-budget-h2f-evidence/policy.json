@@ -1,0 +1,136 @@
+{
+  "version": "H2fPredeclaredV1",
+  "parent": "e93c0fe8f52fee76d23d1ee23c30e6359d47f7e7",
+  "immutable_base_sha256": "83b1a4fd9a4fcda694f6e6f10bfb789700d1fc6fc83443b91f67bfcb045e79b5",
+  "physical_case": "unchanged H2e primary calibrated H_A=z_m=z_K=.0065, h_s=.0022472751006336437, fit/us/nu, AnalyticalNeutralInflowV1, Regularized beta=.4 Gamma=1 gamma0=0, Linear inner stress, accepted budget cutoff, open boundaries, one-sweep IMEX1, 3000 slots",
+  "start": "exact H2e Stage A; immutable-base total-departure coordinates; no new increment allowance",
+  "context": "NativeOuterScalarContextV2; explicit counts, typed named blocks, membership and native row identities; zero-enrichment V1 replay required",
+  "witness_selection": {
+    "outer_clusters": 8,
+    "selection": "worst Stage-A outer tensors, greedy physical separation .025 m; include slope/transition, matching, roof where present",
+    "inner": "downstream matching-plane H2e witness and worst Stage-A inner tensor",
+    "near_repeated_eigenvalues": "retain all eigendirections with gap <=1e-7 K0, at most 16 response RHS in total"
+  },
+  "accessibility": {
+    "metric": "physical consistent velocity mass; constrained Riesz action using native M and all independent Q rows",
+    "negligible_response_relative": 1e-12,
+    "finite_gradient_step": 2e-06,
+    "report": "eta squared in old mass-conditioned span, response norm, constraints, local cap/divergence/inner predicted and true trial effects"
+  },
+  "enrichment": {
+    "old_span": 32,
+    "maximum_new_rank": 16,
+    "primary_patch_chart": [
+      [
+        -0.1,
+        0.1
+      ],
+      [
+        0.0065,
+        0.4
+      ]
+    ],
+    "one_permitted_enlargement_chart": [
+      [
+        -0.2,
+        0.6
+      ],
+      [
+        0.0065,
+        0.8
+      ]
+    ],
+    "enlargement_rule": "primary patch captures <5 percent global constrained response for at least half outer witnesses or no checked positive useful step; no optimization trial needed to select patch",
+    "support": "native coefficients whose entire element support lies in patch; zero artificial patch-boundary trace; physical essential rows excluded",
+    "continuity": "restrict every native independent global Q row, rank-reveal once and verify against every original row",
+    "rank_relative": 1e-10,
+    "overlap": "remove old-span physical-mass overlap with factored Gram, twice reorthogonalize; preserve old 32 physical directions",
+    "alternative": "bounded global constrained residual responses only if patch responses lack useful independent freedom; actual support/roof/inner effects must be reported; no quota filling"
+  },
+  "inner_protection": {
+    "target_lambda_over_K0": 0.0001,
+    "hard_acceptance_unchanged": true,
+    "cuts": "exact affine fixed-eigenvector Rayleigh cuts without outer slack; include all nearly repeated critical eigendirections",
+    "full_check": "predictor, line search, every save and terminal state; full finite inventory and final native/GL20 checks"
+  },
+  "bounds": {
+    "velocity_L2": 0.12,
+    "component_increment_m_per_s": 0.5,
+    "strong_divergence": "base GL16 L2*(1+1e-6)+1e-9; independent GL20 difference allowance 1e-8",
+    "outer_k_ratio": [
+      0.5,
+      2
+    ],
+    "outer_epsilon_ratio": [
+      0.5,
+      2
+    ],
+    "frozen": "inner k, endpoint K, inlet/interface/dependent epsilon, prescribed and pressure rows; exact bits"
+  },
+  "objective": {
+    "outer_target_lambda_over_K0": 0.0001,
+    "velocity_distance": 0.001,
+    "gamma_strain": 0.001,
+    "roof_gradient": 0.01,
+    "scalar_relative_L2": 0.01,
+    "scalar_relative_gradient": 0.01,
+    "scalar_length_m": 0.02
+  },
+  "stage_A": {
+    "major_iterations": 20,
+    "seconds": 300,
+    "full_scans": 180,
+    "active_derivative_batches": 3000
+  },
+  "stage_B": {
+    "conditional_on_A_failure": true,
+    "major_iterations": 40,
+    "seconds": 900,
+    "full_scans": 320,
+    "active_derivative_batches": 6000
+  },
+  "termination": "budget, complete interior target, six major iterations without >=1e-5 outer normalized deficit improvement, or trust radius <1e-6; no automatic extension; all optimizer diagnostic attempts count",
+  "hybrid": {
+    "maximum_combinations": 1,
+    "definition": "Stage A velocity plus Stage B on permitted outer scalar rows only, from immutable base",
+    "selection": "may start B only if native/GL20 inner >=target, all bounds pass and actual outer minimum improves over A start; otherwise use best hard-inner-feasible A"
+  },
+  "certifications": {
+    "maximum_complete_native_hill_candidates": 6,
+    "extra_order": 20,
+    "require_positive_startup_margin": true,
+    "runtime": "freeze solver/closure before issuance; exact V2 receipt and state binding"
+  },
+  "V2_fixture": "fresh positive affine nonzero permitted outer-k and epsilon perturbation; exact base/reference distinction, direct/split, solved epsilon, no Lift/projection, postassignment rollback and parent bytes",
+  "pilot": {
+    "conditional_on_all_gates": true,
+    "dt": [
+      2e-06,
+      1e-06
+    ],
+    "steps": [
+      8,
+      16
+    ],
+    "coarse_split": [
+      4,
+      4
+    ],
+    "long_run": false
+  },
+  "sparse_prototype": {
+    "production_default_unchanged": true,
+    "input": "direct native element consistent-mass contributions including signed CG sharing and physical weights; never dense-to-sparse conversion",
+    "factor": "SciPy SuperLU sparse direct diagnostic; pressure Schur remains dense; B=(alpha M_free)^-1 unchanged",
+    "relative_matrix_action_tolerance": 1e-11,
+    "relative_inverse_and_dual_tolerance": 1e-09,
+    "constraint_response_tolerance": 1e-09,
+    "scale_targets": "4399/5339-slot symbolic graphs only; production guard unchanged"
+  },
+  "resources": {
+    "build_workers": 4,
+    "native_ranks": 1,
+    "library_threads": 1,
+    "aggregate_limit": 72
+  }
+}

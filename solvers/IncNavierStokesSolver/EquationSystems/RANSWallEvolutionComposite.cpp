@@ -740,10 +740,10 @@ std::string RANSWallEvolutionPatch::ValidateOuterInitializer(const Vector &s,con
         {"K_envelope",J::Numbers(Vector{lowK,highK})},{"epsilon_envelope",J::Numbers(Vector{lowE,highE})},{"fixed_inventory_locations",J::Number(locations)},{"moving_inventory_unchanged","true"}});
 }
 
-std::string RANSWallEvolutionPatch::CoupledInitializerContext(const Vector &s,const RANSWallEvolutionData &data,const WallMatrix &directions,const std::string &path) const
+std::string RANSWallEvolutionPatch::CoupledInitializerContext(const Vector &s,const RANSWallEvolutionData &data,const WallMatrix &directions,const std::string &path,bool versionTwo) const
 {
-    Require(Composite() && AnalyticalNeutralInflow() && m_seedM && directions.size()==32,"H2e needs corrected seed and 32 saved native directions");
-    const auto started=std::chrono::steady_clock::now();const auto allowed=InitializerRows(s);WallMatrix all=directions;double continuity=0,frozen=0;const int nv=32;
+    Require(Composite() && AnalyticalNeutralInflow() && m_seedM && !directions.empty() && directions.size()<=48,"initializer context needs corrected seed and 1..48 native directions");
+    const auto started=std::chrono::steady_clock::now();const auto allowed=InitializerRows(s);WallMatrix all=directions;double continuity=0,frozen=0;const int nv=directions.size();
     for(const auto &d:directions)
     {
         Require(d.size()==Size(),"saved direction dimension");Vector f(m_seedFree.size());for(int i=0;i<f.size();++i)f[i]=d[m_seedFree[i]];
@@ -811,10 +811,83 @@ std::string RANSWallEvolutionPatch::CoupledInitializerContext(const Vector &s,co
     points.close();membership.close();Require(points.good() && membership.good(),"H2e observation output failed");
     files.push_back({"observations",J::Object({{"file",J::Quote("observations.f64")},{"shape",J::Numbers(std::vector<int>{n,width})},{"dtype",J::Quote("<f8")},{"sha256",J::Quote(RANSWallR3::HashFile(path+"/observations.f64"))}})});
     files.push_back({"membership",J::Object({{"file",J::Quote("membership.i32")},{"shape",J::Numbers(std::vector<int>{total,9})},{"dtype",J::Quote("<i4")},{"sha256",J::Quote(RANSWallR3::HashFile(path+"/membership.i32"))}})});
-    return J::Object({{"version",J::Quote("NativeOuterScalarContextV1")},{"base_sha256",J::Quote(RANSWallR3::Hash(s))},{"files",J::Object(files)},{"families",J::List(familyNames)},
+    std::vector<std::pair<std::string,std::string>> blocks;
+    auto block=[&](const std::string &name,int offset,int count,const std::vector<int> &shape){blocks.push_back({name,J::Object({{"offset",J::Number(offset)},{"width",J::Number(count)},{"shape",J::Numbers(shape)}})});};
+    block("chart",0,3,{3});block("physical",3,3,{3});block("gradient",6,4,{2,2});block("velocity",10,2,{2});
+    for(const auto &v:std::vector<std::pair<std::string,int>>{{"k",12},{"epsilon",13},{"inner_nu_t",14},{"inner",15},{"covariance",16},{"dependent_epsilon",17}})block(v.first,v.second,1,{1});
+    block("velocity_basis",18,nv*6,{nv,6});block("k_basis",18+nv*6,8,{8});block("epsilon_basis",18+nv*6+8,8,{8});
+    return J::Object({{"version",J::Quote(versionTwo?"NativeOuterScalarContextV2":"NativeOuterScalarContextV1")},{"direction_counts",J::Object({{"velocity",J::Number(nv)},{"k","8"},{"epsilon","8"}})},{"observation_blocks",J::Object(blocks)},{"native_coefficient_offsets",J::Numbers(offset)},{"native_coefficient_sizes",J::Numbers(size)},
+        {"geometry_identity",J::Quote(GeometrySignature())},{"inventory_identity",J::Quote(PimpleKBoundSignature())},{"reference_sha256",J::Quote(RANSWallR3::Hash(Reference()))},{"physical_mass_conditioning",J::Object({{"gram",J::Quote("mass_gram")},{"relative_rank_threshold","1e-10"},{"native_continuity_rank",J::Number(m_seedQ.size())}})},{"base_sha256",J::Quote(RANSWallR3::Hash(s))},{"files",J::Object(files)},{"families",J::List(familyNames)},
         {"rows",J::Object({{"velocity",J::Numbers(allowed.velocity)},{"k",J::Numbers(allowed.k)},{"epsilon",J::Numbers(allowed.epsilon)}})},{"homogeneous_continuity_max",J::Number(continuity)},{"frozen_direction_max",J::Number(frozen)},
         {"volume",J::Number(volume)},{"outer_volume",J::Number(outerVolume)},{"base_divergence_L2",J::Number(std::sqrt(div[0][0]))},{"base_maximum_quadrature_divergence",J::Number(maxDiv)},
         {"seconds",J::Number(std::chrono::duration<double>(std::chrono::steady_clock::now()-started).count())},{"governing_solves","0"},{"physical_commits","0"}});
+}
+
+std::string RANSWallEvolutionPatch::InitializerNativeData(const Vector &base,const Vector &start,const WallMatrix &basis,const std::vector<InitializerWitness> &witnesses,const RANSWallEvolutionData &data,const std::string &path) const
+{
+    Require(m_seedM && m_seedSchur && basis.size()==32 && witnesses.size()<=16,"bounded native initializer response context");
+    ValidateOuterInitializer(start,base,data,false);
+    const auto begun=std::chrono::steady_clock::now();const int n=m_seedFree.size();
+    auto binary=[&](const std::string &name,const WallMatrix &a)
+    {std::ofstream out(path+"/"+name+".f64",std::ios::binary);for(const auto &r:a)out.write(reinterpret_cast<const char*>(r.data()),r.size()*sizeof(double));out.close();Require(out.good(),"native response write failed");return J::Object({{"file",J::Quote(name+".f64")},{"shape",J::Numbers(std::vector<int>{int(a.size()),int(a.empty()?0:a[0].size())})},{"sha256",J::Quote(RANSWallR3::HashFile(path+"/"+name+".f64"))},{"dtype",J::Quote("<f8")}});};
+    auto freeVector=[&](const Vector &v){Vector f(n);for(int i=0;i<n;++i)f[i]=v[m_seedFree[i]];return f;};
+    WallMatrix gram(32,Vector(32)),old;for(const auto &v:basis)old.push_back(freeVector(v));
+    for(int i=0;i<32;++i){const auto m=Multiply(m_seedMass,old[i]);for(int j=0;j<32;++j)gram[i][j]=std::inner_product(old[j].begin(),old[j].end(),m.begin(),0.);}
+    const Factor oldFactor(gram);WallMatrix gradients,responses;std::vector<std::string> results;double derivativeError=0;
+    for(const auto &w:witnesses)
+    {
+        const auto row=GeometryPoint(0,w.geometry,w.chart);const bool inner=fields[0]->Elements().at(row.element).upper[2]<=m_parameters.geometry.height;
+        RANSTensor g{};for(int a=0;a<2;++a)g[PhysicalAxis(a)]=row.Gradient(start,offset[a]);
+        const double k=GeometryPoint(K(),w.geometry,w.chart).Value(start,offset[K()]);
+        const auto profile=StateProfile(base,w.chart,0,data);const double nt=inner?profile->Original().EddyViscosity(Distance(w.chart)):0;
+        const double e=inner?profile->Dissipation(Distance(w.chart)):GeometryPoint(Epsilon(),w.geometry,w.chart).Value(start,offset[Epsilon()]);
+        Require(k>0 && e>0,"native response inadmissible scalar input");
+        auto tensor=[&](const RANSTensor &G){return inner?InnerStress(k,nt,G).reynoldsStress:OuterClosure(k,e,G,w.chart).reynoldsStress;};
+        auto rayleigh=[&](const RANSTensor &G){const auto R=tensor(G);double v=0;for(int i=0;i<3;++i)for(int j=0;j<3;++j)v+=w.eigenvector[i]*R[i][j]*w.eigenvector[j];return v;};
+        Vector grad(n);const double K0=InflowAtHeight(m_parameters.geometry.height).k;
+        for(int a=0;a<2;++a)for(int d:{0,2})
+        {
+            const double h=2e-6*std::max(1.,std::abs(g[PhysicalAxis(a)][d]));auto p=g,m=g,pp=g,mm=g;
+            p[PhysicalAxis(a)][d]+=h;m[PhysicalAxis(a)][d]-=h;pp[PhysicalAxis(a)][d]+=h/2;mm[PhysicalAxis(a)][d]-=h/2;
+            const double deriv=(rayleigh(p)-rayleigh(m))/(2*h),half=(rayleigh(pp)-rayleigh(mm))/h;derivativeError=std::max(derivativeError,std::abs(deriv-half));
+            for(int j=0;j<row.ids.size();++j)
+            {
+                const int global=offset[a]+row.ids[j];const auto it=std::lower_bound(m_seedFree.begin(),m_seedFree.end(),global);if(it==m_seedFree.end() || *it!=global)continue;
+                Vector unit(Size());unit[global]=1.;grad[it-m_seedFree.begin()]+=deriv*row.Gradient(unit,offset[a])[d]/K0;
+            }
+        }
+        auto response=m_seedM->Apply(grad);const auto q=Multiply(m_seedQ,response),mu=m_seedSchur->Apply(q);
+        for(int j=0;j<mu.size();++j)for(int i=0;i<n;++i)response[i]-=m_seedInverse[j][i]*mu[j];
+        const auto mr=Multiply(m_seedMass,response);const double norm2=std::inner_product(response.begin(),response.end(),mr.begin(),0.);
+        Vector overlap(32);for(int j=0;j<32;++j)overlap[j]=std::inner_product(old[j].begin(),old[j].end(),mr.begin(),0.);
+        const auto coeff=oldFactor.Apply(overlap);const double captured=std::inner_product(coeff.begin(),coeff.end(),overlap.begin(),0.);
+        double constraint=0;for(double v:Multiply(m_seedQ,response))constraint=std::max(constraint,std::abs(v));
+        gradients.push_back(grad);responses.push_back(response);
+        results.push_back(J::Object({{"coordinate",J::Numbers(w.chart)},{"physical",J::Numbers(Physical(w.chart))},{"geometry",J::Number(w.geometry)},{"element",J::Number(row.element)},{"inner",J::Boolean(inner)},{"eigenvector",J::Numbers(w.eigenvector)},
+            {"gradient",J::Rows(g)},{"tensor",J::Rows(tensor(g))},{"k",J::Number(k)},{"epsilon",J::Number(e)},{"critical_Rayleigh",J::Number(rayleigh(g))},{"response_mass_squared",J::Number(norm2)},{"eta_squared",norm2>1e-24?J::Number(captured/norm2):"null"},{"Q_response_max",J::Number(constraint)}}));
+    }
+    // Direct physical element masses; no dense-to-sparse conversion. Phi already
+    // carries signed global sharing. Independent dense arrays are reference data.
+    std::map<int,WallMatrix> local;std::map<int,std::vector<int>> ids;
+    for(const auto &q:Quadrature(0))
+    {
+        if(!local.count(q.geometry)){local[q.geometry]=WallMatrix(q.ids.size(),Vector(q.ids.size()));ids[q.geometry]=q.ids;}
+        Require(ids[q.geometry]==q.ids,"native element coefficient order changed within quadrature");auto &m=local[q.geometry];
+        for(int i=0;i<q.ids.size();++i)for(int j=0;j<q.ids.size();++j)m[i][j]+=q.weight*q.phi[i]*q.phi[j];
+    }
+    WallMatrix localRows;std::vector<std::string> elements;WallMatrix support(size[0],Vector{1e300,-1e300,1e300,-1e300});
+    for(const auto &[geometry,m]:local)
+    {
+        const auto el=GeometryElement(0,geometry);const auto &e=fields[0]->Elements()[el];Vector record;
+        for(int i:ids[geometry]){record.push_back(i);auto &b=support[i];b[0]=std::min(b[0],e.lower[0]);b[1]=std::max(b[1],e.upper[0]);b[2]=std::min(b[2],e.lower[2]);b[3]=std::max(b[3],e.upper[2]);}
+        for(const auto &v:m){record.insert(record.end(),v.begin(),v.end());}
+        localRows.push_back(record);
+        elements.push_back(J::Object({{"geometry",J::Number(geometry)},{"element",J::Number(el)},{"count",J::Number(m.size())},{"lower",J::Numbers(e.lower)},{"upper",J::Numbers(e.upper)}}));
+    }
+    std::vector<std::pair<std::string,std::string>> files{{"mass_free",binary("mass_free",m_seedMass)},{"mass_field",binary("mass_field",m_mass[0])},{"continuity_Q",binary("continuity_Q",m_seedQ)},{"gradients",binary("gradients",gradients)},{"global_responses",binary("global_responses",responses)},{"element_mass",binary("element_mass",localRows)},{"support_bounds",binary("support_bounds",support)}};
+    return J::Object({{"version",J::Quote("NativeInitializerRieszV1")},{"files",J::Object(files)},{"free_rows",J::Numbers(m_seedFree)},{"velocity_field_size",J::Number(size[0])},{"elements",J::List(elements)},{"witnesses",J::List(results)},
+        {"base_sha256",J::Quote(RANSWallR3::Hash(base))},{"start_sha256",J::Quote(RANSWallR3::Hash(start))},{"geometry_identity",J::Quote(GeometrySignature())},{"inventory_identity",J::Quote(PimpleKBoundSignature())},
+        {"reference_sha256",J::Quote(RANSWallR3::Hash(Reference()))},{"derivative_step_halving_max",J::Number(derivativeError)},{"seconds",J::Number(std::chrono::duration<double>(std::chrono::steady_clock::now()-begun).count())},{"governing_solves","0"},{"physical_commits","0"}});
 }
 
 }

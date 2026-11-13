@@ -98,7 +98,9 @@ public:
     std::string CompositeFeasibilityData(const Vector&,const RANSWallEvolutionData&) const;
     struct OuterInitializerRows { std::vector<int> velocity,k,epsilon; };
     OuterInitializerRows InitializerRows(const Vector&) const;
-    std::string CoupledInitializerContext(const Vector&,const RANSWallEvolutionData&,const WallMatrix&,const std::string&) const;
+    std::string CoupledInitializerContext(const Vector&,const RANSWallEvolutionData&,const WallMatrix&,const std::string&,bool versionTwo=false) const;
+    struct InitializerWitness { RANSWallCoordinate chart;int geometry;SolverUtils::RANSVector eigenvector; };
+    std::string InitializerNativeData(const Vector&,const Vector&,const WallMatrix&,const std::vector<InitializerWitness>&,const RANSWallEvolutionData&,const std::string&) const;
     std::string ValidateOuterInitializer(const Vector&,const Vector&,const RANSWallEvolutionData&,bool) const;
     std::string FlatSpatialDiagnostic(const Vector&,const RANSWallEvolutionData&) const;
     const std::string &CompositeSeedInfo() const { return m_compositeSeedInfo; }
