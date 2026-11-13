@@ -379,8 +379,10 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
         std::copy_n(state.begin()+patch.offset[b],patch.size[b],flow.begin()+patch.offset[b]);
     flow.back()=state.back();auto preK=flow;
     std::copy_n(state.begin()+patch.offset[patch.Epsilon()],patch.size[patch.Epsilon()],preK.begin()+patch.offset[patch.Epsilon()]);
-    double stageFlowDefect=0,stagePreKDefect=0,oldLiftDifference=0;
+    double stageFlowDefect=0,stagePreKDefect=0,oldLiftDifference=0;Vector liftByBlock(patch.Gauge()+1);
     for(int j=0;j<state.size();++j)oldLiftDifference=std::max(oldLiftDifference,std::abs(coefficientOld[j]-previous[j]));
+    for(int b=0;b<=patch.Gauge();++b)for(int j=0;j<patch.size[b];++j)
+        liftByBlock[b]=std::max(liftByBlock[b],std::abs(coefficientOld[patch.offset[b]+j]-previous[patch.offset[b]+j]));
     auto stageDifference=[&](const Vector &actual,const Vector &derived)
     {
         if(actual.empty())return 0.;
@@ -594,6 +596,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
             {"epsilon_coefficients",J::Quote("old k and old epsilon after current-time essential boundary lift; transported epsilon is newly solved, including dependent trace storage")},
             {"k_coefficients",J::Quote("old k and newly solved epsilon; transported k is newly solved")},
             {"current_time_essential_lift_difference",J::Number(oldLiftDifference)},
+            {"current_time_essential_lift_difference_by_block",J::Numbers(liftByBlock)},
             {"actual_flow_stage_maximum_difference",J::Number(stageFlowDefect)},
             {"actual_pre_k_stage_maximum_difference",J::Number(stagePreKDefect)},
             {"diffusion_IBP_element_step_fraction",J::Number(diffusionIBPFraction)},
