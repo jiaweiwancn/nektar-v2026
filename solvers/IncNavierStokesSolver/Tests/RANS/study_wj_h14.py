@@ -176,7 +176,14 @@ def qualification(root):
     for name,version in (('cp0','assessment-v2'),('two','assessment'),('one','assessment'),('restart','assessment')):
         assert load(root/f'science/small/{name}/{version}/result.json')['status']=='PASS'
     # Verify the ACTUAL native-exec closure, not the parent/PID-union mappings.
-    prior=load(H10/'runtime-qualified.json')['loaded'];files=set();samples=[]
+    # The early H10 fixture qualifier is a subset. The sealed closure also
+    # covers governor-only FieldUtils/filters and actual production MPI loads.
+    prior=load(H10/'runtime-qualified.json')['loaded']
+    observed=load(H10/'closure/runtime-observed.json');assert observed['status']=='PASS'
+    for v in observed['libraries']:
+        if v['path']in prior:assert prior[v['path']]['sha256']==v['sha256']
+        prior[v['path']]=v
+    files=set();samples=[]
     for p in sorted((root/'operations').glob('*/native-exec-samples.json')):
         for v in load(p):
             if not any('/runtime-v4/'in x for x in v['native']):continue
@@ -194,7 +201,7 @@ def qualification(root):
         old=prior[key];assert sha(p)==old['sha256']and p.stat().st_size==old['bytes']
         libraries.append(dict(actual=file_id(p),qualified_H10=old))
     save(root/'science/runtime-qualified-v4.json',dict(status='PASS',native_exec_samples=samples,libraries=libraries,
-        compiled_build=file_id(root/'science/runtime-build-v4.json'),historical_runtime=file_id(H10/'runtime-qualified.json'),
+        compiled_build=file_id(root/'science/runtime-build-v4.json'),historical_runtime=file_id(H10/'closure/runtime-observed.json'),
         scope='actual per-process native-exec maps; new ELFs, exact original private loader/libc/geometry and selected loaded dependency hashes'))
     gates={k:'PASS'for k in QUALIFICATION}
     save(root/'science/qualification-gates.json',dict(status='PASS',gates=gates,
