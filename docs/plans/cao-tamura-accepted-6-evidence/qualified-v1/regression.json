@@ -1,0 +1,92 @@
+{
+  "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/regression-v1/results.json",
+  "sha256": "51e118637a8ba5fe71af5af8e5bda2299141e84b6914fbb933cf8ae4381b029b",
+  "body": {
+    "schema": "CT6FlatAndNativeHistoryControlsV1",
+    "status": "pass",
+    "checks": {
+      "fresh_CT5_A95_two_steps": {
+        "status": "pass",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 18.090130109998427,
+          "process_cpu_seconds": 16.447958999999997,
+          "peak_RSS_KiB": 352880,
+          "actual_mapped_files_sha256": "3eb479eccecd12a483b59e5a8b4627e9828bd5329a9078fe3c556c4aa060148b"
+        },
+        "accepted_states_bitwise_identical": true,
+        "history_payload_bitwise_identical": true,
+        "final_time": 0.004,
+        "current_report_sha256": "e201d18c40c46f52817b3275bf6193767ec231711cbf21a841f33fd3c39293e5",
+        "historical_report_sha256": "a2e501a9ca22ce0d4b198a13259c6ece0e16fabe156a33a19ca213218d7581fb",
+        "historical_history_sha256": "e65649426bbe00d8aed92a90217cb72ea0c365f1600a1606faa458bd55ae1308",
+        "fresh_history_sha256": "e65649426bbe00d8aed92a90217cb72ea0c365f1600a1606faa458bd55ae1308"
+      },
+      "unchanged_restart": {
+        "status": "pass",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 312.25592592799876,
+          "process_cpu_seconds": 311.091144,
+          "peak_RSS_KiB": 497928,
+          "actual_mapped_files_sha256": "c50e50f0a3db4b16ca61a8f50c0eb51ac17582748b77957f39071d9043667782"
+        },
+        "accepted_state_bitwise_identical": true,
+        "history_payload_bitwise_identical": true,
+        "time": 0.004,
+        "report_sha256": "6a3b09a0c42b39dbb1bcb29f78d8c8dbf75dc9fac4e1f0027c6acf4d420aab48",
+        "history_sha256": "6724173e9807c0d669b22582cea326f908ba0390236fb88134284fbaa4fd24e9"
+      },
+      "deliberate_rejection_rollback": {
+        "status": "pass",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 349.1282193650004,
+          "process_cpu_seconds": 347.77965300000005,
+          "peak_RSS_KiB": 506960,
+          "actual_mapped_files_sha256": "2dbd0f37f69f8e662ccafeacb0ac57191314936803ef6f8c93b255f58e851b41"
+        },
+        "last_accepted_state_bitwise_identical": true,
+        "rejected_candidate_equals_uninterrupted_next_state": true,
+        "failure": "accepted AWF hard audit exit; candidate/history retained: deliberate_PIMPLE_hard_audit_rejection",
+        "initial_state_equals_uninterrupted_initial": true,
+        "native_history_bitwise_rollback": true,
+        "time": 0.002,
+        "native_history_times": [
+          0.002,
+          0.002
+        ],
+        "report_sha256": "e1d867c97e2a106217829be2b367983d24ea14a348be5b0d5b4a391a29ef72d0"
+      },
+      "incompatible_geometry_history": {
+        "status": "pass",
+        "intended_rejection": "checkpoint physics/signature mismatch",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 33.69210567000118,
+          "process_cpu_seconds": 33.112091000000035,
+          "peak_RSS_KiB": 269772,
+          "actual_mapped_files_sha256": "40573bff715fbbcc0f9f94814baf5c0c1c444479c9eff17d5725d5907a2956a6"
+        },
+        "log_sha256": "f77ff2ba97653f3b4551b3766c92f9522d8e3c6a19c89c04d57d1e73ac1cc0db",
+        "log_tail": "\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\n=======================================================================\n\t      Wall evolution: native IMEX, mapped multiregion CG\n\t  Physical dimension: 2\n\t     Global unknowns: 2283\n\t         MPI backend: replicated global coefficients, owned-cell collective assembly\n\t  Correction weights: chi=0.000000, eta=0.000000\n=======================================================================\nEP-AWF evolution state/history: Wall IMEX: checkpoint signature mismatch\n"
+      }
+    }
+  }
+}

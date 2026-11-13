@@ -1,0 +1,4704 @@
+{
+  "evolution-v2/A95-p4-dt002/zero": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v2/A95-p4-dt002/zero/timing.jsonl",
+    "sha256": "82197e82676b437a92e8348c6e32377a3f2dd4031e5b7495aa46e93379801fb3",
+    "exclusive": {
+      "constitutive.refresh": {
+        "process_cpu_seconds": 0.8535330000000001,
+        "wall_seconds": 0.856504076,
+        "calls": 23
+      },
+      "startup.object": {
+        "process_cpu_seconds": 3.328214,
+        "wall_seconds": 3.332070061,
+        "calls": 1
+      },
+      "matching.constraints": {
+        "process_cpu_seconds": 0.33692099999999997,
+        "wall_seconds": 0.337097505,
+        "calls": 30
+      },
+      "residual": {
+        "process_cpu_seconds": 202.08091499999995,
+        "wall_seconds": 202.127623204,
+        "calls": 15
+      },
+      "dense.factorization": {
+        "process_cpu_seconds": 0.027093999999999997,
+        "wall_seconds": 0.027092579000000006,
+        "calls": 18
+      },
+      "dense.triangular_solve": {
+        "process_cpu_seconds": 0.012212000000000004,
+        "wall_seconds": 0.012205705000000004,
+        "calls": 50
+      },
+      "residual.mass_dual_norms": {
+        "process_cpu_seconds": 0.030214999999999995,
+        "wall_seconds": 0.030510211000000006,
+        "calls": 7
+      },
+      "native.explicit": {
+        "process_cpu_seconds": 6.948211000000001,
+        "wall_seconds": 6.949655559999999,
+        "calls": 1
+      },
+      "domain.compute": {
+        "process_cpu_seconds": 4.786733,
+        "wall_seconds": 4.7915489,
+        "calls": 2
+      },
+      "domain.scalar": {
+        "process_cpu_seconds": 0.00013800000000019352,
+        "wall_seconds": 0.0001486219999997651,
+        "calls": 2
+      },
+      "audit.physical": {
+        "process_cpu_seconds": 28.91213900000001,
+        "wall_seconds": 28.918334531,
+        "calls": 2
+      },
+      "audit.complete": {
+        "process_cpu_seconds": 3.3878759999999914,
+        "wall_seconds": 3.3892233750000003,
+        "calls": 2
+      },
+      "audit.manufactured_accuracy": {
+        "process_cpu_seconds": 0.38693,
+        "wall_seconds": 0.38693227,
+        "calls": 1
+      },
+      "native.acceptance_audit": {
+        "process_cpu_seconds": 0.0001779999999911297,
+        "wall_seconds": 0.00018744300000150815,
+        "calls": 1
+      },
+      "output.project_fields": {
+        "process_cpu_seconds": 0.00073,
+        "wall_seconds": 0.000736233,
+        "calls": 2
+      },
+      "startup.initialize": {
+        "process_cpu_seconds": 2.572579999999988,
+        "wall_seconds": 2.5738652299999956,
+        "calls": 1
+      },
+      "io.checkpoint": {
+        "process_cpu_seconds": 0.001436,
+        "wall_seconds": 0.004348873,
+        "calls": 1
+      },
+      "native.solve_block": {
+        "process_cpu_seconds": 7.0023930000000005,
+        "wall_seconds": 7.003931121,
+        "calls": 1
+      },
+      "output.report": {
+        "process_cpu_seconds": 0.01198,
+        "wall_seconds": 0.022503587,
+        "calls": 1
+      },
+      "output.fields_and_report": {
+        "process_cpu_seconds": 0.029226000000000002,
+        "wall_seconds": 0.055824130000000007,
+        "calls": 1
+      },
+      "process": {
+        "process_cpu_seconds": 0.2753210000000479,
+        "wall_seconds": 0.8264984539999887,
+        "calls": 1
+      }
+    },
+    "root_scopes": [
+      {
+        "schema": 1,
+        "pid": 27983,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "process",
+        "wall_seconds": 159.536539871,
+        "process_cpu_seconds": 158.902262,
+        "exclusive_wall_seconds": 0.8264984539999887,
+        "exclusive_process_cpu_seconds": 0.2753210000000479
+      },
+      {
+        "schema": 1,
+        "pid": 28323,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.182315162,
+        "process_cpu_seconds": 0.180106,
+        "exclusive_wall_seconds": 0.182315162,
+        "exclusive_process_cpu_seconds": 0.180106
+      },
+      {
+        "schema": 1,
+        "pid": 28323,
+        "id": 2,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.036205971,
+        "process_cpu_seconds": 0.036197,
+        "exclusive_wall_seconds": 0.036205971,
+        "exclusive_process_cpu_seconds": 0.036197
+      },
+      {
+        "schema": 1,
+        "pid": 28323,
+        "id": 3,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.150816086,
+        "process_cpu_seconds": 14.146527,
+        "exclusive_wall_seconds": 13.901647844000001,
+        "exclusive_process_cpu_seconds": 13.897427
+      },
+      {
+        "schema": 1,
+        "pid": 28323,
+        "id": 6,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.025120168,
+        "process_cpu_seconds": 0.02512,
+        "exclusive_wall_seconds": 0.025120168,
+        "exclusive_process_cpu_seconds": 0.02512
+      },
+      {
+        "schema": 1,
+        "pid": 28323,
+        "id": 7,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.026001805,
+        "process_cpu_seconds": 0.026001,
+        "exclusive_wall_seconds": 0.014542629000000001,
+        "exclusive_process_cpu_seconds": 0.014541
+      },
+      {
+        "schema": 1,
+        "pid": 28323,
+        "id": 20,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 13.820612654,
+        "process_cpu_seconds": 13.817158,
+        "exclusive_wall_seconds": 13.819039187,
+        "exclusive_process_cpu_seconds": 13.815584
+      },
+      {
+        "schema": 1,
+        "pid": 28323,
+        "id": 23,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024196232,
+        "process_cpu_seconds": 0.024121,
+        "exclusive_wall_seconds": 0.024196232,
+        "exclusive_process_cpu_seconds": 0.024121
+      },
+      {
+        "schema": 1,
+        "pid": 28323,
+        "id": 24,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.000894486,
+        "process_cpu_seconds": 0.000895,
+        "exclusive_wall_seconds": 0.000894486,
+        "exclusive_process_cpu_seconds": 0.000895
+      },
+      {
+        "schema": 1,
+        "pid": 28323,
+        "id": 25,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 5.8281e-05,
+        "process_cpu_seconds": 5.8e-05,
+        "exclusive_wall_seconds": 5.8281e-05,
+        "exclusive_process_cpu_seconds": 5.8e-05
+      },
+      {
+        "schema": 1,
+        "pid": 28323,
+        "id": 26,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "audit.complete",
+        "wall_seconds": 73.844080954,
+        "process_cpu_seconds": 73.82653,
+        "exclusive_wall_seconds": 1.7180153879999978,
+        "exclusive_process_cpu_seconds": 1.7171570000000003
+      }
+    ],
+    "scope": "exclusive instrumentation only; nested inclusive totals are not added; child process CPU/wall/RSS remain in execution receipts"
+  },
+  "evolution-v2/A95-p4-dt002/trajectory": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v2/A95-p4-dt002/trajectory/timing.jsonl",
+    "sha256": "70321b42aabd5183c2611afcc49957202907e11cb030e96673db3c5247120c4c",
+    "exclusive": {
+      "constitutive.refresh": {
+        "process_cpu_seconds": 3.8201170000000015,
+        "wall_seconds": 3.822755229000001,
+        "calls": 140
+      },
+      "startup.object": {
+        "process_cpu_seconds": 3.112413,
+        "wall_seconds": 3.116640593,
+        "calls": 1
+      },
+      "matching.constraints": {
+        "process_cpu_seconds": 1.672101,
+        "wall_seconds": 1.6724768489999997,
+        "calls": 173
+      },
+      "residual": {
+        "process_cpu_seconds": 699.6624549999999,
+        "wall_seconds": 699.8046288989999,
+        "calls": 87
+      },
+      "dense.factorization": {
+        "process_cpu_seconds": 0.44043100000000024,
+        "wall_seconds": 0.440518161,
+        "calls": 79
+      },
+      "dense.triangular_solve": {
+        "process_cpu_seconds": 0.37942900000000074,
+        "wall_seconds": 0.3793895509999996,
+        "calls": 1767
+      },
+      "residual.mass_dual_norms": {
+        "process_cpu_seconds": 0.027617000000000003,
+        "wall_seconds": 0.029762027999999992,
+        "calls": 39
+      },
+      "native.explicit": {
+        "process_cpu_seconds": 62.929574,
+        "wall_seconds": 62.94246181,
+        "calls": 9
+      },
+      "domain.compute": {
+        "process_cpu_seconds": 94.542495,
+        "wall_seconds": 94.56178312700003,
+        "calls": 41
+      },
+      "domain.scalar": {
+        "process_cpu_seconds": 0.8049329999999997,
+        "wall_seconds": 0.806151574999999,
+        "calls": 41
+      },
+      "audit.physical": {
+        "process_cpu_seconds": 76.017019,
+        "wall_seconds": 76.036236099,
+        "calls": 9
+      },
+      "audit.complete": {
+        "process_cpu_seconds": 15.158747000000012,
+        "wall_seconds": 15.161375267000004,
+        "calls": 9
+      },
+      "audit.manufactured_accuracy": {
+        "process_cpu_seconds": 3.479736,
+        "wall_seconds": 3.4801297079999998,
+        "calls": 9
+      },
+      "native.acceptance_audit": {
+        "process_cpu_seconds": 0.0014690000000143755,
+        "wall_seconds": 0.0015445369999866898,
+        "calls": 9
+      },
+      "output.project_fields": {
+        "process_cpu_seconds": 0.000548,
+        "wall_seconds": 0.000548716,
+        "calls": 2
+      },
+      "startup.initialize": {
+        "process_cpu_seconds": 2.5817130000000077,
+        "wall_seconds": 2.5836107709999965,
+        "calls": 1
+      },
+      "pimple.check.input": {
+        "process_cpu_seconds": 0.04630900000000038,
+        "wall_seconds": 0.04640863400000006,
+        "calls": 8
+      },
+      "flow.assembly": {
+        "process_cpu_seconds": 16.575257,
+        "wall_seconds": 16.577671819,
+        "calls": 8
+      },
+      "momentum.factorize": {
+        "process_cpu_seconds": 0.010775000000000003,
+        "wall_seconds": 0.010808864000000001,
+        "calls": 8
+      },
+      "pressure.mass_factorize": {
+        "process_cpu_seconds": 0.014931,
+        "wall_seconds": 0.014934817999999996,
+        "calls": 8
+      },
+      "momentum.solve_validate": {
+        "process_cpu_seconds": 0.020915,
+        "wall_seconds": 0.021486731999999998,
+        "calls": 8
+      },
+      "pressure.build": {
+        "process_cpu_seconds": 0.6147020000000001,
+        "wall_seconds": 0.6245603780000001,
+        "calls": 8
+      },
+      "pressure.solve_validate": {
+        "process_cpu_seconds": 0.00112,
+        "wall_seconds": 0.001116644,
+        "calls": 8
+      },
+      "io.flow_attempt_snapshot": {
+        "process_cpu_seconds": 2.146847,
+        "wall_seconds": 4.8050229490000005,
+        "calls": 8
+      },
+      "pimple.check.flow": {
+        "process_cpu_seconds": 0.036034999999999595,
+        "wall_seconds": 0.03605470900000096,
+        "calls": 8
+      },
+      "flow.correction_validate": {
+        "process_cpu_seconds": 0.18205000000000382,
+        "wall_seconds": 0.4031002449999992,
+        "calls": 8
+      },
+      "flow.total": {
+        "process_cpu_seconds": 0.05888699999999858,
+        "wall_seconds": 0.0594402340000002,
+        "calls": 8
+      },
+      "epsilon.assembly": {
+        "process_cpu_seconds": 0.07291,
+        "wall_seconds": 0.072906097,
+        "calls": 8
+      },
+      "epsilon.solve_validate": {
+        "process_cpu_seconds": 0.001006,
+        "wall_seconds": 0.0010094820000000001,
+        "calls": 8
+      },
+      "pimple.check.epsilon": {
+        "process_cpu_seconds": 0.0416420000000004,
+        "wall_seconds": 0.04192859100000046,
+        "calls": 8
+      },
+      "epsilon.total": {
+        "process_cpu_seconds": 0.0024870000000021264,
+        "wall_seconds": 0.0025540460000055276,
+        "calls": 8
+      },
+      "k.assembly": {
+        "process_cpu_seconds": 57.19459199999999,
+        "wall_seconds": 57.20790861200001,
+        "calls": 8
+      },
+      "k.solve_validate": {
+        "process_cpu_seconds": 0.007913,
+        "wall_seconds": 0.007913882,
+        "calls": 8
+      },
+      "io.attempt_snapshot": {
+        "process_cpu_seconds": 0.40295900000000007,
+        "wall_seconds": 1.002470499,
+        "calls": 8
+      },
+      "pimple.check.k": {
+        "process_cpu_seconds": 0.04089200000000082,
+        "wall_seconds": 0.041058233999999416,
+        "calls": 8
+      },
+      "k.total": {
+        "process_cpu_seconds": 0.0023459999999921877,
+        "wall_seconds": 0.0028895280000007517,
+        "calls": 8
+      },
+      "pimple.final_refresh_diagnostics": {
+        "process_cpu_seconds": 0.001422000000003365,
+        "wall_seconds": 0.001968066999998186,
+        "calls": 8
+      },
+      "pimple.sweep": {
+        "process_cpu_seconds": 0.28986400000000145,
+        "wall_seconds": 0.2950733789999873,
+        "calls": 8
+      },
+      "native.physical_samples": {
+        "process_cpu_seconds": 0.31806999999999996,
+        "wall_seconds": 0.318069488,
+        "calls": 8
+      },
+      "native.implicit": {
+        "process_cpu_seconds": 0.0015860000000458285,
+        "wall_seconds": 0.0023293000000279562,
+        "calls": 8
+      },
+      "native.advance": {
+        "process_cpu_seconds": 0.001183999999980756,
+        "wall_seconds": 0.0014964639999988094,
+        "calls": 8
+      },
+      "io.checkpoint": {
+        "process_cpu_seconds": 0.01803,
+        "wall_seconds": 0.063387591,
+        "calls": 9
+      },
+      "native.step": {
+        "process_cpu_seconds": 0.02521200000001045,
+        "wall_seconds": 0.026427610000027357,
+        "calls": 8
+      },
+      "native.solve_block": {
+        "process_cpu_seconds": 7.069159000000013,
+        "wall_seconds": 7.070944772999951,
+        "calls": 1
+      },
+      "output.report": {
+        "process_cpu_seconds": 0.085326,
+        "wall_seconds": 0.128037105,
+        "calls": 1
+      },
+      "output.fields_and_report": {
+        "process_cpu_seconds": 0.027958999999999998,
+        "wall_seconds": 0.04391063099999998,
+        "calls": 1
+      },
+      "process": {
+        "process_cpu_seconds": 0.3074619999999868,
+        "wall_seconds": 0.8863133840000046,
+        "calls": 1
+      }
+    },
+    "root_scopes": [
+      {
+        "schema": 1,
+        "pid": 28974,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "process",
+        "wall_seconds": 1040.269927031,
+        "process_cpu_seconds": 1035.864463,
+        "exclusive_wall_seconds": 0.8863133840000046,
+        "exclusive_process_cpu_seconds": 0.3074619999999868
+      },
+      {
+        "schema": 1,
+        "pid": 33098,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.173761397,
+        "process_cpu_seconds": 0.173175,
+        "exclusive_wall_seconds": 0.173761397,
+        "exclusive_process_cpu_seconds": 0.173175
+      },
+      {
+        "schema": 1,
+        "pid": 33098,
+        "id": 2,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.170657987,
+        "process_cpu_seconds": 14.16814,
+        "exclusive_wall_seconds": 13.88267914,
+        "exclusive_process_cpu_seconds": 13.880586
+      },
+      {
+        "schema": 1,
+        "pid": 33098,
+        "id": 5,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024276047,
+        "process_cpu_seconds": 0.024276,
+        "exclusive_wall_seconds": 0.024276047,
+        "exclusive_process_cpu_seconds": 0.024276
+      },
+      {
+        "schema": 1,
+        "pid": 33098,
+        "id": 6,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.020593247,
+        "process_cpu_seconds": 0.020592,
+        "exclusive_wall_seconds": 0.008175044999999999,
+        "exclusive_process_cpu_seconds": 0.008173999999999997
+      }
+    ],
+    "scope": "exclusive instrumentation only; nested inclusive totals are not added; child process CPU/wall/RSS remain in execution receipts"
+  },
+  "evolution-v3/A95-p3-dt001/zero": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v3/A95-p3-dt001/zero/timing.jsonl",
+    "sha256": "5197666e1849e8f579cd22feaf80522251abdf072e8fb7551d76ef224eb9c6d2",
+    "exclusive": {
+      "constitutive.refresh": {
+        "process_cpu_seconds": 0.7682810000000001,
+        "wall_seconds": 0.769591288,
+        "calls": 23
+      },
+      "startup.object": {
+        "process_cpu_seconds": 1.4403860000000002,
+        "wall_seconds": 1.446512775,
+        "calls": 1
+      },
+      "matching.constraints": {
+        "process_cpu_seconds": 0.33336800000000005,
+        "wall_seconds": 0.333478121,
+        "calls": 30
+      },
+      "residual": {
+        "process_cpu_seconds": 206.04473099999998,
+        "wall_seconds": 206.09143607200002,
+        "calls": 15
+      },
+      "dense.factorization": {
+        "process_cpu_seconds": 0.0054849999999999986,
+        "wall_seconds": 0.005482294999999999,
+        "calls": 18
+      },
+      "dense.triangular_solve": {
+        "process_cpu_seconds": 0.0038610000000000003,
+        "wall_seconds": 0.0038622049999999996,
+        "calls": 50
+      },
+      "residual.mass_dual_norms": {
+        "process_cpu_seconds": 0.0064470000000000005,
+        "wall_seconds": 0.006687883,
+        "calls": 7
+      },
+      "native.explicit": {
+        "process_cpu_seconds": 7.214719,
+        "wall_seconds": 7.216028665,
+        "calls": 1
+      },
+      "domain.compute": {
+        "process_cpu_seconds": 4.1569329999999995,
+        "wall_seconds": 4.160039969,
+        "calls": 2
+      },
+      "domain.scalar": {
+        "process_cpu_seconds": 5.599999999983396e-05,
+        "wall_seconds": 7.140400000027469e-05,
+        "calls": 2
+      },
+      "audit.physical": {
+        "process_cpu_seconds": 29.16107799999999,
+        "wall_seconds": 29.166413765,
+        "calls": 2
+      },
+      "audit.complete": {
+        "process_cpu_seconds": 2.91838700000001,
+        "wall_seconds": 2.9193162759999893,
+        "calls": 2
+      },
+      "audit.manufactured_accuracy": {
+        "process_cpu_seconds": 0.39453,
+        "wall_seconds": 0.394548429,
+        "calls": 1
+      },
+      "native.acceptance_audit": {
+        "process_cpu_seconds": 0.00020299999998485418,
+        "wall_seconds": 0.0004404029999989234,
+        "calls": 1
+      },
+      "output.project_fields": {
+        "process_cpu_seconds": 0.000353,
+        "wall_seconds": 0.00035944899999999997,
+        "calls": 2
+      },
+      "startup.initialize": {
+        "process_cpu_seconds": 2.492186000000032,
+        "wall_seconds": 2.493181233999991,
+        "calls": 1
+      },
+      "io.checkpoint": {
+        "process_cpu_seconds": 0.00065,
+        "wall_seconds": 0.001646504,
+        "calls": 1
+      },
+      "native.solve_block": {
+        "process_cpu_seconds": 7.017719000000001,
+        "wall_seconds": 7.01919124,
+        "calls": 1
+      },
+      "output.report": {
+        "process_cpu_seconds": 0.006969,
+        "wall_seconds": 0.012562497,
+        "calls": 1
+      },
+      "output.fields_and_report": {
+        "process_cpu_seconds": 0.026418,
+        "wall_seconds": 0.050853877,
+        "calls": 1
+      },
+      "process": {
+        "process_cpu_seconds": 0.2883209999999963,
+        "wall_seconds": 0.8397520110000016,
+        "calls": 1
+      }
+    },
+    "root_scopes": [
+      {
+        "schema": 1,
+        "pid": 65014,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "process",
+        "wall_seconds": 160.554591419,
+        "process_cpu_seconds": 159.929049,
+        "exclusive_wall_seconds": 0.8397520110000016,
+        "exclusive_process_cpu_seconds": 0.2883209999999963
+      },
+      {
+        "schema": 1,
+        "pid": 65312,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.151387443,
+        "process_cpu_seconds": 0.151305,
+        "exclusive_wall_seconds": 0.151387443,
+        "exclusive_process_cpu_seconds": 0.151305
+      },
+      {
+        "schema": 1,
+        "pid": 65312,
+        "id": 2,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.036175302,
+        "process_cpu_seconds": 0.03617,
+        "exclusive_wall_seconds": 0.036175302,
+        "exclusive_process_cpu_seconds": 0.03617
+      },
+      {
+        "schema": 1,
+        "pid": 65312,
+        "id": 3,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.25891769,
+        "process_cpu_seconds": 14.254379,
+        "exclusive_wall_seconds": 14.041410403,
+        "exclusive_process_cpu_seconds": 14.037002
+      },
+      {
+        "schema": 1,
+        "pid": 65312,
+        "id": 6,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024491041,
+        "process_cpu_seconds": 0.02449,
+        "exclusive_wall_seconds": 0.024491041,
+        "exclusive_process_cpu_seconds": 0.02449
+      },
+      {
+        "schema": 1,
+        "pid": 65312,
+        "id": 7,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.005182667,
+        "process_cpu_seconds": 0.005183,
+        "exclusive_wall_seconds": 0.0027178290000000006,
+        "exclusive_process_cpu_seconds": 0.002719000000000001
+      },
+      {
+        "schema": 1,
+        "pid": 65312,
+        "id": 20,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 13.952300523,
+        "process_cpu_seconds": 13.948436,
+        "exclusive_wall_seconds": 13.951337164,
+        "exclusive_process_cpu_seconds": 13.947472999999999
+      },
+      {
+        "schema": 1,
+        "pid": 65312,
+        "id": 23,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024222448,
+        "process_cpu_seconds": 0.024165,
+        "exclusive_wall_seconds": 0.024222448,
+        "exclusive_process_cpu_seconds": 0.024165
+      },
+      {
+        "schema": 1,
+        "pid": 65312,
+        "id": 24,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.00076467,
+        "process_cpu_seconds": 0.000764,
+        "exclusive_wall_seconds": 0.00076467,
+        "exclusive_process_cpu_seconds": 0.000764
+      },
+      {
+        "schema": 1,
+        "pid": 65312,
+        "id": 25,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 5.2563e-05,
+        "process_cpu_seconds": 5.2e-05,
+        "exclusive_wall_seconds": 5.2563e-05,
+        "exclusive_process_cpu_seconds": 5.2e-05
+      },
+      {
+        "schema": 1,
+        "pid": 65312,
+        "id": 26,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "audit.complete",
+        "wall_seconds": 73.923370596,
+        "process_cpu_seconds": 73.907088,
+        "exclusive_wall_seconds": 1.4588912499999935,
+        "exclusive_process_cpu_seconds": 1.4584270000000004
+      }
+    ],
+    "scope": "exclusive instrumentation only; nested inclusive totals are not added; child process CPU/wall/RSS remain in execution receipts"
+  },
+  "evolution-v3/A95-p3-dt001/trajectory": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v3/A95-p3-dt001/trajectory/timing.jsonl",
+    "sha256": "42824f3a2582abf36434039970caad3ee8bc50e20d652ec8148c013fdeb85616",
+    "exclusive": {
+      "constitutive.refresh": {
+        "process_cpu_seconds": 6.240443000000003,
+        "wall_seconds": 6.244876001000002,
+        "calls": 272
+      },
+      "startup.object": {
+        "process_cpu_seconds": 3.02793,
+        "wall_seconds": 3.032712519,
+        "calls": 1
+      },
+      "matching.constraints": {
+        "process_cpu_seconds": 3.053388999999998,
+        "wall_seconds": 3.054843872000001,
+        "calls": 330
+      },
+      "residual": {
+        "process_cpu_seconds": 1297.0413620000002,
+        "wall_seconds": 1297.4724857269996,
+        "calls": 167
+      },
+      "dense.factorization": {
+        "process_cpu_seconds": 0.17288099999999995,
+        "wall_seconds": 0.17304623100000013,
+        "calls": 146
+      },
+      "dense.triangular_solve": {
+        "process_cpu_seconds": 0.12388800000000137,
+        "wall_seconds": 0.12391705400000011,
+        "calls": 1636
+      },
+      "residual.mass_dual_norms": {
+        "process_cpu_seconds": 0.016167999999999995,
+        "wall_seconds": 0.021721602999999996,
+        "calls": 98
+      },
+      "native.explicit": {
+        "process_cpu_seconds": 118.21506199999999,
+        "wall_seconds": 118.254824169,
+        "calls": 17
+      },
+      "domain.compute": {
+        "process_cpu_seconds": 166.825694,
+        "wall_seconds": 166.88114811599996,
+        "calls": 82
+      },
+      "domain.scalar": {
+        "process_cpu_seconds": 1.438918,
+        "wall_seconds": 1.4406985589999994,
+        "calls": 82
+      },
+      "audit.physical": {
+        "process_cpu_seconds": 148.249208,
+        "wall_seconds": 148.30015290100002,
+        "calls": 18
+      },
+      "audit.complete": {
+        "process_cpu_seconds": 27.288450999999974,
+        "wall_seconds": 27.297612142999995,
+        "calls": 18
+      },
+      "audit.manufactured_accuracy": {
+        "process_cpu_seconds": 6.486134000000001,
+        "wall_seconds": 6.488700135999999,
+        "calls": 17
+      },
+      "native.acceptance_audit": {
+        "process_cpu_seconds": 0.001936000000036131,
+        "wall_seconds": 0.0023981779999928676,
+        "calls": 17
+      },
+      "output.project_fields": {
+        "process_cpu_seconds": 0.000329,
+        "wall_seconds": 0.00032898499999999995,
+        "calls": 2
+      },
+      "startup.initialize": {
+        "process_cpu_seconds": 2.4804809999999975,
+        "wall_seconds": 2.482074778999987,
+        "calls": 1
+      },
+      "pimple.check.input": {
+        "process_cpu_seconds": 0.06501999999999963,
+        "wall_seconds": 0.06506504200000007,
+        "calls": 16
+      },
+      "flow.assembly": {
+        "process_cpu_seconds": 10.139906999999997,
+        "wall_seconds": 10.144002390999999,
+        "calls": 16
+      },
+      "momentum.factorize": {
+        "process_cpu_seconds": 0.006856999999999999,
+        "wall_seconds": 0.006864491999999999,
+        "calls": 16
+      },
+      "pressure.mass_factorize": {
+        "process_cpu_seconds": 0.0066939999999999986,
+        "wall_seconds": 0.007238947,
+        "calls": 16
+      },
+      "momentum.solve_validate": {
+        "process_cpu_seconds": 0.012684,
+        "wall_seconds": 0.012685122000000002,
+        "calls": 16
+      },
+      "pressure.build": {
+        "process_cpu_seconds": 0.07309800000000001,
+        "wall_seconds": 0.080263582,
+        "calls": 16
+      },
+      "pressure.solve_validate": {
+        "process_cpu_seconds": 0.000432,
+        "wall_seconds": 0.00043101199999999993,
+        "calls": 16
+      },
+      "io.flow_attempt_snapshot": {
+        "process_cpu_seconds": 1.414949,
+        "wall_seconds": 3.495204128,
+        "calls": 16
+      },
+      "pimple.check.flow": {
+        "process_cpu_seconds": 0.05109099999999889,
+        "wall_seconds": 0.05113562300000174,
+        "calls": 16
+      },
+      "flow.correction_validate": {
+        "process_cpu_seconds": 0.17974900000000282,
+        "wall_seconds": 0.18067676600000304,
+        "calls": 16
+      },
+      "flow.total": {
+        "process_cpu_seconds": 0.03582599999999836,
+        "wall_seconds": 0.037052695999998164,
+        "calls": 16
+      },
+      "epsilon.assembly": {
+        "process_cpu_seconds": 0.106873,
+        "wall_seconds": 0.106866544,
+        "calls": 16
+      },
+      "epsilon.solve_validate": {
+        "process_cpu_seconds": 0.001145,
+        "wall_seconds": 0.0011481800000000002,
+        "calls": 16
+      },
+      "pimple.check.epsilon": {
+        "process_cpu_seconds": 0.06701100000000126,
+        "wall_seconds": 0.0670530140000003,
+        "calls": 16
+      },
+      "epsilon.total": {
+        "process_cpu_seconds": 0.0023709999999983467,
+        "wall_seconds": 0.0027671059999931913,
+        "calls": 16
+      },
+      "k.assembly": {
+        "process_cpu_seconds": 112.387688,
+        "wall_seconds": 112.426054687,
+        "calls": 16
+      },
+      "k.solve_validate": {
+        "process_cpu_seconds": 0.0069,
+        "wall_seconds": 0.006902318,
+        "calls": 16
+      },
+      "io.attempt_snapshot": {
+        "process_cpu_seconds": 0.36362700000000003,
+        "wall_seconds": 0.90629535,
+        "calls": 16
+      },
+      "pimple.check.k": {
+        "process_cpu_seconds": 0.06669499999999973,
+        "wall_seconds": 0.06674024900000042,
+        "calls": 16
+      },
+      "k.total": {
+        "process_cpu_seconds": 0.003117000000003145,
+        "wall_seconds": 0.004649975999996059,
+        "calls": 16
+      },
+      "pimple.final_refresh_diagnostics": {
+        "process_cpu_seconds": 0.001665999999998391,
+        "wall_seconds": 0.002938191999998452,
+        "calls": 16
+      },
+      "pimple.sweep": {
+        "process_cpu_seconds": 0.5446320000000213,
+        "wall_seconds": 0.5541996360000354,
+        "calls": 16
+      },
+      "native.physical_samples": {
+        "process_cpu_seconds": 0.616472,
+        "wall_seconds": 0.616467507,
+        "calls": 16
+      },
+      "native.implicit": {
+        "process_cpu_seconds": 0.0021529999999501115,
+        "wall_seconds": 0.0027888880000261906,
+        "calls": 16
+      },
+      "native.advance": {
+        "process_cpu_seconds": 0.0015989999999987958,
+        "wall_seconds": 0.002241068000046198,
+        "calls": 16
+      },
+      "io.checkpoint": {
+        "process_cpu_seconds": 0.0346,
+        "wall_seconds": 0.109585017,
+        "calls": 17
+      },
+      "native.step": {
+        "process_cpu_seconds": 0.024577000000050475,
+        "wall_seconds": 0.02665340499997626,
+        "calls": 16
+      },
+      "native.solve_block": {
+        "process_cpu_seconds": 6.980253999999832,
+        "wall_seconds": 6.983239822000314,
+        "calls": 1
+      },
+      "output.report": {
+        "process_cpu_seconds": 0.078933,
+        "wall_seconds": 0.135888461,
+        "calls": 1
+      },
+      "output.fields_and_report": {
+        "process_cpu_seconds": 0.02711899999999999,
+        "wall_seconds": 0.051806611,
+        "calls": 1
+      },
+      "process": {
+        "process_cpu_seconds": 0.269649999999956,
+        "wall_seconds": 0.8173297619998721,
+        "calls": 1
+      }
+    },
+    "root_scopes": [
+      {
+        "schema": 1,
+        "pid": 66035,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "process",
+        "wall_seconds": 1773.671940884,
+        "process_cpu_seconds": 1769.716623,
+        "exclusive_wall_seconds": 0.8173297619998721,
+        "exclusive_process_cpu_seconds": 0.269649999999956
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.153458296,
+        "process_cpu_seconds": 0.15188,
+        "exclusive_wall_seconds": 0.153458296,
+        "exclusive_process_cpu_seconds": 0.15188
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 2,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.253110708,
+        "process_cpu_seconds": 14.248628,
+        "exclusive_wall_seconds": 13.998081230999999,
+        "exclusive_process_cpu_seconds": 13.993602
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 5,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024654485,
+        "process_cpu_seconds": 0.024654,
+        "exclusive_wall_seconds": 0.024654485,
+        "exclusive_process_cpu_seconds": 0.024654
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 6,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.005622136,
+        "process_cpu_seconds": 0.005622,
+        "exclusive_wall_seconds": 0.002648998,
+        "exclusive_process_cpu_seconds": 0.0026490000000000007
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 19,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 13.95797917,
+        "process_cpu_seconds": 13.953062,
+        "exclusive_wall_seconds": 13.957007647,
+        "exclusive_process_cpu_seconds": 13.952089999999998
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 22,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024280007,
+        "process_cpu_seconds": 0.024279,
+        "exclusive_wall_seconds": 0.024280007,
+        "exclusive_process_cpu_seconds": 0.024279
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 23,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.000767725,
+        "process_cpu_seconds": 0.000767,
+        "exclusive_wall_seconds": 0.000767725,
+        "exclusive_process_cpu_seconds": 0.000767
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 24,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.241684703,
+        "process_cpu_seconds": 0.241624,
+        "exclusive_wall_seconds": 0.241684703,
+        "exclusive_process_cpu_seconds": 0.241624
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 25,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "audit.complete",
+        "wall_seconds": 73.92398213,
+        "process_cpu_seconds": 73.898215,
+        "exclusive_wall_seconds": 1.4462918400000007,
+        "exclusive_process_cpu_seconds": 1.4457239999999842
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 58,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.001016505,
+        "process_cpu_seconds": 0.001012,
+        "exclusive_wall_seconds": 0.001016505,
+        "exclusive_process_cpu_seconds": 0.001012
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 59,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 4.9312e-05,
+        "process_cpu_seconds": 4.9e-05,
+        "exclusive_wall_seconds": 4.9312e-05,
+        "exclusive_process_cpu_seconds": 4.9e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 60,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.00696626,
+        "process_cpu_seconds": 14.001423,
+        "exclusive_wall_seconds": 13.982079043,
+        "exclusive_process_cpu_seconds": 13.976537
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 63,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 13.982573694,
+        "process_cpu_seconds": 13.977847,
+        "exclusive_wall_seconds": 13.957808097,
+        "exclusive_process_cpu_seconds": 13.953082
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 66,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 13.988891693,
+        "process_cpu_seconds": 13.98434,
+        "exclusive_wall_seconds": 13.964394112999999,
+        "exclusive_process_cpu_seconds": 13.959844
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 69,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.0011303,
+        "process_cpu_seconds": 0.00113,
+        "exclusive_wall_seconds": 0.00016727600000000017,
+        "exclusive_process_cpu_seconds": 0.00016599999999999991
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 76,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.00027133,
+        "process_cpu_seconds": 0.000271,
+        "exclusive_wall_seconds": 6.937200000000003e-05,
+        "exclusive_process_cpu_seconds": 6.999999999999997e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 83,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000238898,
+        "process_cpu_seconds": 0.000239,
+        "exclusive_wall_seconds": 6.408200000000003e-05,
+        "exclusive_process_cpu_seconds": 6.400000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 90,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000702215,
+        "process_cpu_seconds": 0.000344,
+        "exclusive_wall_seconds": 0.0005358899999999999,
+        "exclusive_process_cpu_seconds": 0.00017900000000000004
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 97,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000200277,
+        "process_cpu_seconds": 0.0002,
+        "exclusive_wall_seconds": 5.570099999999996e-05,
+        "exclusive_process_cpu_seconds": 5.500000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 104,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000203537,
+        "process_cpu_seconds": 0.000204,
+        "exclusive_wall_seconds": 6.204000000000002e-05,
+        "exclusive_process_cpu_seconds": 6.199999999999999e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 111,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000156055,
+        "process_cpu_seconds": 0.000156,
+        "exclusive_wall_seconds": 5.481199999999999e-05,
+        "exclusive_process_cpu_seconds": 5.500000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 118,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000416864,
+        "process_cpu_seconds": 0.000211,
+        "exclusive_wall_seconds": 0.00031347000000000005,
+        "exclusive_process_cpu_seconds": 0.000108
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 125,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000144925,
+        "process_cpu_seconds": 0.000145,
+        "exclusive_wall_seconds": 5.3341e-05,
+        "exclusive_process_cpu_seconds": 5.400000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 132,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000149375,
+        "process_cpu_seconds": 0.000149,
+        "exclusive_wall_seconds": 5.7881000000000024e-05,
+        "exclusive_process_cpu_seconds": 5.6000000000000006e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 139,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000150086,
+        "process_cpu_seconds": 0.00015,
+        "exclusive_wall_seconds": 5.849100000000002e-05,
+        "exclusive_process_cpu_seconds": 5.7e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 146,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000375213,
+        "process_cpu_seconds": 0.000197,
+        "exclusive_wall_seconds": 0.000282939,
+        "exclusive_process_cpu_seconds": 0.000105
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 153,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000150585,
+        "process_cpu_seconds": 0.00015,
+        "exclusive_wall_seconds": 5.8941000000000004e-05,
+        "exclusive_process_cpu_seconds": 5.7e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 160,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000160616,
+        "process_cpu_seconds": 0.00016,
+        "exclusive_wall_seconds": 6.9053e-05,
+        "exclusive_process_cpu_seconds": 6.800000000000003e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 167,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000156815,
+        "process_cpu_seconds": 0.000157,
+        "exclusive_wall_seconds": 6.0182000000000014e-05,
+        "exclusive_process_cpu_seconds": 5.900000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 174,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000148155,
+        "process_cpu_seconds": 0.000148,
+        "exclusive_wall_seconds": 5.650199999999998e-05,
+        "exclusive_process_cpu_seconds": 5.8e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 181,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000158785,
+        "process_cpu_seconds": 0.000159,
+        "exclusive_wall_seconds": 6.716199999999999e-05,
+        "exclusive_process_cpu_seconds": 6.6e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 188,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000162906,
+        "process_cpu_seconds": 0.000163,
+        "exclusive_wall_seconds": 7.103299999999998e-05,
+        "exclusive_process_cpu_seconds": 7.200000000000002e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 195,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000149596,
+        "process_cpu_seconds": 0.000149,
+        "exclusive_wall_seconds": 5.8083000000000006e-05,
+        "exclusive_process_cpu_seconds": 5.8e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 202,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000149995,
+        "process_cpu_seconds": 0.00015,
+        "exclusive_wall_seconds": 5.889299999999999e-05,
+        "exclusive_process_cpu_seconds": 5.9e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 209,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000425585,
+        "process_cpu_seconds": 0.000187,
+        "exclusive_wall_seconds": 0.000333592,
+        "exclusive_process_cpu_seconds": 9.2e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 216,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000175207,
+        "process_cpu_seconds": 0.000176,
+        "exclusive_wall_seconds": 6.728400000000002e-05,
+        "exclusive_process_cpu_seconds": 6.7e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 223,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000150305,
+        "process_cpu_seconds": 0.000151,
+        "exclusive_wall_seconds": 5.8110999999999986e-05,
+        "exclusive_process_cpu_seconds": 5.8000000000000014e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 230,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000155706,
+        "process_cpu_seconds": 0.000156,
+        "exclusive_wall_seconds": 6.3863e-05,
+        "exclusive_process_cpu_seconds": 6.500000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 237,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000366723,
+        "process_cpu_seconds": 0.000187,
+        "exclusive_wall_seconds": 0.00027416,
+        "exclusive_process_cpu_seconds": 9.2e-05
+      },
+      {
+        "schema": 1,
+        "pid": 69968,
+        "id": 244,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000148805,
+        "process_cpu_seconds": 0.000149,
+        "exclusive_wall_seconds": 5.7442000000000024e-05,
+        "exclusive_process_cpu_seconds": 5.8e-05
+      }
+    ],
+    "scope": "exclusive instrumentation only; nested inclusive totals are not added; child process CPU/wall/RSS remain in execution receipts"
+  },
+  "evolution-v3/A95-p3-dt002/zero": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v3/A95-p3-dt002/zero/timing.jsonl",
+    "sha256": "16df3bec45218161f4f18d1e2929e93f4662b2ee3c9c6657f040ce690bd65005",
+    "exclusive": {
+      "constitutive.refresh": {
+        "process_cpu_seconds": 0.7342119999999998,
+        "wall_seconds": 0.736252449,
+        "calls": 23
+      },
+      "startup.object": {
+        "process_cpu_seconds": 3.1443369999999997,
+        "wall_seconds": 3.149766086,
+        "calls": 1
+      },
+      "matching.constraints": {
+        "process_cpu_seconds": 0.335307,
+        "wall_seconds": 0.3353381519999999,
+        "calls": 30
+      },
+      "residual": {
+        "process_cpu_seconds": 202.46087999999997,
+        "wall_seconds": 202.50548035300005,
+        "calls": 15
+      },
+      "dense.factorization": {
+        "process_cpu_seconds": 0.005604999999999999,
+        "wall_seconds": 0.005601124,
+        "calls": 18
+      },
+      "dense.triangular_solve": {
+        "process_cpu_seconds": 0.003829,
+        "wall_seconds": 0.003825809,
+        "calls": 50
+      },
+      "residual.mass_dual_norms": {
+        "process_cpu_seconds": 0.006831000000000001,
+        "wall_seconds": 0.007321179999999999,
+        "calls": 7
+      },
+      "native.explicit": {
+        "process_cpu_seconds": 6.992088000000001,
+        "wall_seconds": 6.993523891,
+        "calls": 1
+      },
+      "domain.compute": {
+        "process_cpu_seconds": 4.14838,
+        "wall_seconds": 4.150612637,
+        "calls": 2
+      },
+      "domain.scalar": {
+        "process_cpu_seconds": 6.199999999978445e-05,
+        "wall_seconds": 7.64440000002864e-05,
+        "calls": 2
+      },
+      "audit.physical": {
+        "process_cpu_seconds": 28.764084000000018,
+        "wall_seconds": 28.77036466900004,
+        "calls": 2
+      },
+      "audit.complete": {
+        "process_cpu_seconds": 2.9000360000000143,
+        "wall_seconds": 2.9006263249999904,
+        "calls": 2
+      },
+      "audit.manufactured_accuracy": {
+        "process_cpu_seconds": 0.3863,
+        "wall_seconds": 0.386481323,
+        "calls": 1
+      },
+      "native.acceptance_audit": {
+        "process_cpu_seconds": 9.299999999257125e-05,
+        "wall_seconds": 0.00010164399999723628,
+        "calls": 1
+      },
+      "output.project_fields": {
+        "process_cpu_seconds": 0.00030000000000000003,
+        "wall_seconds": 0.000308553,
+        "calls": 2
+      },
+      "startup.initialize": {
+        "process_cpu_seconds": 2.4799429999999916,
+        "wall_seconds": 2.481959211000003,
+        "calls": 1
+      },
+      "io.checkpoint": {
+        "process_cpu_seconds": 0.000882,
+        "wall_seconds": 0.002856531,
+        "calls": 1
+      },
+      "native.solve_block": {
+        "process_cpu_seconds": 6.9650549999999996,
+        "wall_seconds": 6.967047791,
+        "calls": 1
+      },
+      "output.report": {
+        "process_cpu_seconds": 0.007098,
+        "wall_seconds": 0.016278264,
+        "calls": 1
+      },
+      "output.fields_and_report": {
+        "process_cpu_seconds": 0.026263,
+        "wall_seconds": 0.049183498000000006,
+        "calls": 1
+      },
+      "process": {
+        "process_cpu_seconds": 0.2631279999999947,
+        "wall_seconds": 0.8227962689999799,
+        "calls": 1
+      }
+    },
+    "root_scopes": [
+      {
+        "schema": 1,
+        "pid": 58674,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "process",
+        "wall_seconds": 158.042755237,
+        "process_cpu_seconds": 157.403551,
+        "exclusive_wall_seconds": 0.8227962689999799,
+        "exclusive_process_cpu_seconds": 0.2631279999999947
+      },
+      {
+        "schema": 1,
+        "pid": 59251,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.152623131,
+        "process_cpu_seconds": 0.151991,
+        "exclusive_wall_seconds": 0.152623131,
+        "exclusive_process_cpu_seconds": 0.151991
+      },
+      {
+        "schema": 1,
+        "pid": 59251,
+        "id": 2,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.037419031,
+        "process_cpu_seconds": 0.037413,
+        "exclusive_wall_seconds": 0.037419031,
+        "exclusive_process_cpu_seconds": 0.037413
+      },
+      {
+        "schema": 1,
+        "pid": 59251,
+        "id": 3,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.291395742,
+        "process_cpu_seconds": 14.287576,
+        "exclusive_wall_seconds": 14.074171438,
+        "exclusive_process_cpu_seconds": 14.070357
+      },
+      {
+        "schema": 1,
+        "pid": 59251,
+        "id": 6,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.025641085,
+        "process_cpu_seconds": 0.025642,
+        "exclusive_wall_seconds": 0.025641085,
+        "exclusive_process_cpu_seconds": 0.025642
+      },
+      {
+        "schema": 1,
+        "pid": 59251,
+        "id": 7,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.005707436,
+        "process_cpu_seconds": 0.005707,
+        "exclusive_wall_seconds": 0.0031216939999999986,
+        "exclusive_process_cpu_seconds": 0.0031230000000000003
+      },
+      {
+        "schema": 1,
+        "pid": 59251,
+        "id": 20,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.001594541,
+        "process_cpu_seconds": 13.998603,
+        "exclusive_wall_seconds": 14.000616727999999,
+        "exclusive_process_cpu_seconds": 13.997625
+      },
+      {
+        "schema": 1,
+        "pid": 59251,
+        "id": 23,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.025261675,
+        "process_cpu_seconds": 0.025262,
+        "exclusive_wall_seconds": 0.025261675,
+        "exclusive_process_cpu_seconds": 0.025262
+      },
+      {
+        "schema": 1,
+        "pid": 59251,
+        "id": 24,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.000766393,
+        "process_cpu_seconds": 0.000767,
+        "exclusive_wall_seconds": 0.000766393,
+        "exclusive_process_cpu_seconds": 0.000767
+      },
+      {
+        "schema": 1,
+        "pid": 59251,
+        "id": 25,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 5.6382e-05,
+        "process_cpu_seconds": 5.6e-05,
+        "exclusive_wall_seconds": 5.6382e-05,
+        "exclusive_process_cpu_seconds": 5.6e-05
+      },
+      {
+        "schema": 1,
+        "pid": 59251,
+        "id": 26,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "audit.complete",
+        "wall_seconds": 73.70258155,
+        "process_cpu_seconds": 73.688145,
+        "exclusive_wall_seconds": 1.4469976019999962,
+        "exclusive_process_cpu_seconds": 1.446784000000008
+      }
+    ],
+    "scope": "exclusive instrumentation only; nested inclusive totals are not added; child process CPU/wall/RSS remain in execution receipts"
+  },
+  "evolution-v3/A95-p3-dt002/trajectory": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v3/A95-p3-dt002/trajectory/timing.jsonl",
+    "sha256": "6c8634d163279e1022a342b2cf8e15456a21c7727fb728edef24535de2bc6e6e",
+    "exclusive": {
+      "constitutive.refresh": {
+        "process_cpu_seconds": 3.5954980000000023,
+        "wall_seconds": 3.5994380250000004,
+        "calls": 152
+      },
+      "startup.object": {
+        "process_cpu_seconds": 3.017981,
+        "wall_seconds": 3.023502714,
+        "calls": 1
+      },
+      "matching.constraints": {
+        "process_cpu_seconds": 1.8472669999999989,
+        "wall_seconds": 1.8479673690000005,
+        "calls": 186
+      },
+      "residual": {
+        "process_cpu_seconds": 816.0976279999998,
+        "wall_seconds": 816.3363168190003,
+        "calls": 95
+      },
+      "dense.factorization": {
+        "process_cpu_seconds": 0.090024,
+        "wall_seconds": 0.09002196900000001,
+        "calls": 82
+      },
+      "dense.triangular_solve": {
+        "process_cpu_seconds": 0.06529500000000021,
+        "wall_seconds": 0.0652425689999999,
+        "calls": 924
+      },
+      "residual.mass_dual_norms": {
+        "process_cpu_seconds": 0.012058999999999995,
+        "wall_seconds": 0.015488299,
+        "calls": 66
+      },
+      "native.explicit": {
+        "process_cpu_seconds": 65.605106,
+        "wall_seconds": 65.62412794699999,
+        "calls": 9
+      },
+      "domain.compute": {
+        "process_cpu_seconds": 85.33652500000001,
+        "wall_seconds": 85.36346621700001,
+        "calls": 42
+      },
+      "domain.scalar": {
+        "process_cpu_seconds": 0.7437800000000003,
+        "wall_seconds": 0.744216095999999,
+        "calls": 42
+      },
+      "audit.physical": {
+        "process_cpu_seconds": 90.29384800000003,
+        "wall_seconds": 90.32024943599998,
+        "calls": 10
+      },
+      "audit.complete": {
+        "process_cpu_seconds": 14.801623999999997,
+        "wall_seconds": 14.806688701999995,
+        "calls": 10
+      },
+      "audit.manufactured_accuracy": {
+        "process_cpu_seconds": 3.6834919999999998,
+        "wall_seconds": 3.6848468060000004,
+        "calls": 9
+      },
+      "native.acceptance_audit": {
+        "process_cpu_seconds": 0.0009619999999941342,
+        "wall_seconds": 0.0010420199999927604,
+        "calls": 9
+      },
+      "output.project_fields": {
+        "process_cpu_seconds": 0.000343,
+        "wall_seconds": 0.00034312700000000004,
+        "calls": 2
+      },
+      "startup.initialize": {
+        "process_cpu_seconds": 2.499239000000017,
+        "wall_seconds": 2.5010864140000137,
+        "calls": 1
+      },
+      "pimple.check.input": {
+        "process_cpu_seconds": 0.03051199999999943,
+        "wall_seconds": 0.030534041000000123,
+        "calls": 8
+      },
+      "flow.assembly": {
+        "process_cpu_seconds": 5.068533,
+        "wall_seconds": 5.0705031389999995,
+        "calls": 8
+      },
+      "momentum.factorize": {
+        "process_cpu_seconds": 0.0035679999999999983,
+        "wall_seconds": 0.003574148,
+        "calls": 8
+      },
+      "pressure.mass_factorize": {
+        "process_cpu_seconds": 0.0020959999999999998,
+        "wall_seconds": 0.002096413,
+        "calls": 8
+      },
+      "momentum.solve_validate": {
+        "process_cpu_seconds": 0.006536999999999999,
+        "wall_seconds": 0.006809393,
+        "calls": 8
+      },
+      "pressure.build": {
+        "process_cpu_seconds": 0.03611700000000001,
+        "wall_seconds": 0.03918568900000001,
+        "calls": 8
+      },
+      "pressure.solve_validate": {
+        "process_cpu_seconds": 0.000196,
+        "wall_seconds": 0.000196722,
+        "calls": 8
+      },
+      "io.flow_attempt_snapshot": {
+        "process_cpu_seconds": 0.6650139999999999,
+        "wall_seconds": 1.596752872,
+        "calls": 8
+      },
+      "pimple.check.flow": {
+        "process_cpu_seconds": 0.024575999999999265,
+        "wall_seconds": 0.024601060000000174,
+        "calls": 8
+      },
+      "flow.correction_validate": {
+        "process_cpu_seconds": 0.09135200000000232,
+        "wall_seconds": 0.09144484400000152,
+        "calls": 8
+      },
+      "flow.total": {
+        "process_cpu_seconds": 0.016351999999999478,
+        "wall_seconds": 0.017145219999997963,
+        "calls": 8
+      },
+      "epsilon.assembly": {
+        "process_cpu_seconds": 0.052531,
+        "wall_seconds": 0.05252760399999999,
+        "calls": 8
+      },
+      "epsilon.solve_validate": {
+        "process_cpu_seconds": 0.00046300000000000003,
+        "wall_seconds": 0.0004705849999999999,
+        "calls": 8
+      },
+      "pimple.check.epsilon": {
+        "process_cpu_seconds": 0.031735999999999986,
+        "wall_seconds": 0.03175211299999958,
+        "calls": 8
+      },
+      "epsilon.total": {
+        "process_cpu_seconds": 0.0012899999999991252,
+        "wall_seconds": 0.0016594309999984347,
+        "calls": 8
+      },
+      "k.assembly": {
+        "process_cpu_seconds": 56.226361,
+        "wall_seconds": 56.242886234,
+        "calls": 8
+      },
+      "k.solve_validate": {
+        "process_cpu_seconds": 0.0032979999999999997,
+        "wall_seconds": 0.0033013,
+        "calls": 8
+      },
+      "io.attempt_snapshot": {
+        "process_cpu_seconds": 0.176806,
+        "wall_seconds": 0.427767444,
+        "calls": 8
+      },
+      "pimple.check.k": {
+        "process_cpu_seconds": 0.033561999999999426,
+        "wall_seconds": 0.03388260400000087,
+        "calls": 8
+      },
+      "k.total": {
+        "process_cpu_seconds": 0.0014190000000056102,
+        "wall_seconds": 0.0018155879999959268,
+        "calls": 8
+      },
+      "pimple.final_refresh_diagnostics": {
+        "process_cpu_seconds": 0.0008960000000000079,
+        "wall_seconds": 0.0015589470000021421,
+        "calls": 8
+      },
+      "pimple.sweep": {
+        "process_cpu_seconds": 0.27244599999998087,
+        "wall_seconds": 0.2766854859999981,
+        "calls": 8
+      },
+      "native.physical_samples": {
+        "process_cpu_seconds": 0.302248,
+        "wall_seconds": 0.30225001,
+        "calls": 8
+      },
+      "native.implicit": {
+        "process_cpu_seconds": 0.0010960000000039827,
+        "wall_seconds": 0.0015101359999789565,
+        "calls": 8
+      },
+      "native.advance": {
+        "process_cpu_seconds": 0.0009720000000186246,
+        "wall_seconds": 0.0015607780000124194,
+        "calls": 8
+      },
+      "io.checkpoint": {
+        "process_cpu_seconds": 0.012932,
+        "wall_seconds": 0.050147231,
+        "calls": 9
+      },
+      "native.step": {
+        "process_cpu_seconds": 0.012884999999997149,
+        "wall_seconds": 0.013881083000015337,
+        "calls": 8
+      },
+      "native.solve_block": {
+        "process_cpu_seconds": 7.223825000000147,
+        "wall_seconds": 7.226775882000084,
+        "calls": 1
+      },
+      "output.report": {
+        "process_cpu_seconds": 0.07282,
+        "wall_seconds": 0.124605246,
+        "calls": 1
+      },
+      "output.fields_and_report": {
+        "process_cpu_seconds": 0.02756,
+        "wall_seconds": 0.051643893999999996,
+        "calls": 1
+      },
+      "process": {
+        "process_cpu_seconds": 0.2924360000000661,
+        "wall_seconds": 0.8473916099999315,
+        "calls": 1
+      }
+    },
+    "root_scopes": [
+      {
+        "schema": 1,
+        "pid": 60060,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "process",
+        "wall_seconds": 1015.558690721,
+        "process_cpu_seconds": 1013.398902,
+        "exclusive_wall_seconds": 0.8473916099999315,
+        "exclusive_process_cpu_seconds": 0.2924360000000661
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.154019207,
+        "process_cpu_seconds": 0.152299,
+        "exclusive_wall_seconds": 0.154019207,
+        "exclusive_process_cpu_seconds": 0.152299
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 2,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.367068602,
+        "process_cpu_seconds": 14.356812,
+        "exclusive_wall_seconds": 14.111841317,
+        "exclusive_process_cpu_seconds": 14.102592999999999
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 5,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024467578,
+        "process_cpu_seconds": 0.024467,
+        "exclusive_wall_seconds": 0.024467578,
+        "exclusive_process_cpu_seconds": 0.024467
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 6,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.005947841,
+        "process_cpu_seconds": 0.005947,
+        "exclusive_wall_seconds": 0.0027908379999999995,
+        "exclusive_process_cpu_seconds": 0.002788000000000001
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 19,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.06968773,
+        "process_cpu_seconds": 14.064614,
+        "exclusive_wall_seconds": 14.068727762,
+        "exclusive_process_cpu_seconds": 14.063654000000001
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 22,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024138554,
+        "process_cpu_seconds": 0.024137,
+        "exclusive_wall_seconds": 0.024138554,
+        "exclusive_process_cpu_seconds": 0.024137
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 23,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.000754117,
+        "process_cpu_seconds": 0.000754,
+        "exclusive_wall_seconds": 0.000754117,
+        "exclusive_process_cpu_seconds": 0.000754
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 24,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.241198552,
+        "process_cpu_seconds": 0.241194,
+        "exclusive_wall_seconds": 0.241198552,
+        "exclusive_process_cpu_seconds": 0.241194
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 25,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "audit.complete",
+        "wall_seconds": 74.167596072,
+        "process_cpu_seconds": 74.139626,
+        "exclusive_wall_seconds": 1.486184167999994,
+        "exclusive_process_cpu_seconds": 1.4854320000000172
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 58,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.001022001,
+        "process_cpu_seconds": 0.001016,
+        "exclusive_wall_seconds": 0.001022001,
+        "exclusive_process_cpu_seconds": 0.001016
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 59,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 4.8092e-05,
+        "process_cpu_seconds": 4.8e-05,
+        "exclusive_wall_seconds": 4.8092e-05,
+        "exclusive_process_cpu_seconds": 4.8e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 60,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.005970199,
+        "process_cpu_seconds": 14.000135,
+        "exclusive_wall_seconds": 13.980952803,
+        "exclusive_process_cpu_seconds": 13.975118
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 63,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 13.984898468,
+        "process_cpu_seconds": 13.981645,
+        "exclusive_wall_seconds": 13.960099342000001,
+        "exclusive_process_cpu_seconds": 13.956929
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 66,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 13.988933286,
+        "process_cpu_seconds": 13.986293,
+        "exclusive_wall_seconds": 13.964477543,
+        "exclusive_process_cpu_seconds": 13.961838
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 69,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.001109295,
+        "process_cpu_seconds": 0.001109,
+        "exclusive_wall_seconds": 0.00015458599999999996,
+        "exclusive_process_cpu_seconds": 0.00015299999999999992
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 76,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000168169,
+        "process_cpu_seconds": 0.000168,
+        "exclusive_wall_seconds": 7.565399999999999e-05,
+        "exclusive_process_cpu_seconds": 7.400000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 83,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000160158,
+        "process_cpu_seconds": 0.00016,
+        "exclusive_wall_seconds": 6.8734e-05,
+        "exclusive_process_cpu_seconds": 6.900000000000002e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 90,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000594349,
+        "process_cpu_seconds": 0.000279,
+        "exclusive_wall_seconds": 0.0005014539999999999,
+        "exclusive_process_cpu_seconds": 0.000183
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 97,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000147197,
+        "process_cpu_seconds": 0.000147,
+        "exclusive_wall_seconds": 5.495200000000001e-05,
+        "exclusive_process_cpu_seconds": 5.500000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 104,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000148367,
+        "process_cpu_seconds": 0.000148,
+        "exclusive_wall_seconds": 5.7363e-05,
+        "exclusive_process_cpu_seconds": 5.4999999999999995e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 111,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000144387,
+        "process_cpu_seconds": 0.000144,
+        "exclusive_wall_seconds": 5.3463e-05,
+        "exclusive_process_cpu_seconds": 5.3000000000000014e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 118,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.00040003,
+        "process_cpu_seconds": 0.000204,
+        "exclusive_wall_seconds": 0.000297513,
+        "exclusive_process_cpu_seconds": 0.00010300000000000001
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 125,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000143197,
+        "process_cpu_seconds": 0.000143,
+        "exclusive_wall_seconds": 5.2520999999999994e-05,
+        "exclusive_process_cpu_seconds": 5.3000000000000014e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 132,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000146897,
+        "process_cpu_seconds": 0.000147,
+        "exclusive_wall_seconds": 5.584999999999999e-05,
+        "exclusive_process_cpu_seconds": 5.7e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 139,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000143007,
+        "process_cpu_seconds": 0.000143,
+        "exclusive_wall_seconds": 5.2432e-05,
+        "exclusive_process_cpu_seconds": 5.3000000000000014e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 146,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000357098,
+        "process_cpu_seconds": 0.00019,
+        "exclusive_wall_seconds": 0.00026553099999999995,
+        "exclusive_process_cpu_seconds": 9.900000000000002e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 153,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000171569,
+        "process_cpu_seconds": 0.000171,
+        "exclusive_wall_seconds": 8.0214e-05,
+        "exclusive_process_cpu_seconds": 7.900000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 160,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000157688,
+        "process_cpu_seconds": 0.000158,
+        "exclusive_wall_seconds": 6.668300000000001e-05,
+        "exclusive_process_cpu_seconds": 6.7e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 167,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000148948,
+        "process_cpu_seconds": 0.000149,
+        "exclusive_wall_seconds": 5.2473000000000024e-05,
+        "exclusive_process_cpu_seconds": 5.199999999999999e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 174,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000144218,
+        "process_cpu_seconds": 0.000144,
+        "exclusive_wall_seconds": 5.2383e-05,
+        "exclusive_process_cpu_seconds": 5.1000000000000006e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 181,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000352167,
+        "process_cpu_seconds": 0.000181,
+        "exclusive_wall_seconds": 0.00026060300000000004,
+        "exclusive_process_cpu_seconds": 8.900000000000002e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 188,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000163149,
+        "process_cpu_seconds": 0.000163,
+        "exclusive_wall_seconds": 7.257499999999998e-05,
+        "exclusive_process_cpu_seconds": 7.200000000000002e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 195,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000142707,
+        "process_cpu_seconds": 0.000143,
+        "exclusive_wall_seconds": 5.229200000000001e-05,
+        "exclusive_process_cpu_seconds": 5.3000000000000014e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 202,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000148138,
+        "process_cpu_seconds": 0.000148,
+        "exclusive_wall_seconds": 5.677199999999998e-05,
+        "exclusive_process_cpu_seconds": 5.6000000000000006e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 209,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000350748,
+        "process_cpu_seconds": 0.000181,
+        "exclusive_wall_seconds": 0.000259123,
+        "exclusive_process_cpu_seconds": 9.100000000000002e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 216,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000160078,
+        "process_cpu_seconds": 0.00016,
+        "exclusive_wall_seconds": 6.1703e-05,
+        "exclusive_process_cpu_seconds": 6.200000000000002e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 223,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000233412,
+        "process_cpu_seconds": 0.000157,
+        "exclusive_wall_seconds": 0.00014240500000000002,
+        "exclusive_process_cpu_seconds": 6.7e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 230,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000149247,
+        "process_cpu_seconds": 0.000149,
+        "exclusive_wall_seconds": 5.788200000000001e-05,
+        "exclusive_process_cpu_seconds": 5.8e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 237,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000392839,
+        "process_cpu_seconds": 0.000188,
+        "exclusive_wall_seconds": 0.000301404,
+        "exclusive_process_cpu_seconds": 9.8e-05
+      },
+      {
+        "schema": 1,
+        "pid": 63129,
+        "id": 244,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000143197,
+        "process_cpu_seconds": 0.000143,
+        "exclusive_wall_seconds": 5.2462999999999975e-05,
+        "exclusive_process_cpu_seconds": 5.3000000000000014e-05
+      }
+    ],
+    "scope": "exclusive instrumentation only; nested inclusive totals are not added; child process CPU/wall/RSS remain in execution receipts"
+  },
+  "evolution-v3/A95-p4-dt001/zero": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v3/A95-p4-dt001/zero/timing.jsonl",
+    "sha256": "981c4e9c0caefda5ebc624d138fa98e773f6da0ddda4fdfa14c42a48439e6320",
+    "exclusive": {
+      "constitutive.refresh": {
+        "process_cpu_seconds": 0.8406939999999999,
+        "wall_seconds": 0.8418781420000002,
+        "calls": 23
+      },
+      "startup.object": {
+        "process_cpu_seconds": 3.246141,
+        "wall_seconds": 3.247724092,
+        "calls": 1
+      },
+      "matching.constraints": {
+        "process_cpu_seconds": 0.340346,
+        "wall_seconds": 0.3404174860000001,
+        "calls": 30
+      },
+      "residual": {
+        "process_cpu_seconds": 202.574658,
+        "wall_seconds": 202.60440059099997,
+        "calls": 15
+      },
+      "dense.factorization": {
+        "process_cpu_seconds": 0.025911000000000003,
+        "wall_seconds": 0.025911829000000004,
+        "calls": 18
+      },
+      "dense.triangular_solve": {
+        "process_cpu_seconds": 0.010086999999999999,
+        "wall_seconds": 0.010083649999999998,
+        "calls": 50
+      },
+      "residual.mass_dual_norms": {
+        "process_cpu_seconds": 0.016438,
+        "wall_seconds": 0.016732314,
+        "calls": 7
+      },
+      "native.explicit": {
+        "process_cpu_seconds": 6.944499,
+        "wall_seconds": 6.944891264,
+        "calls": 1
+      },
+      "domain.compute": {
+        "process_cpu_seconds": 4.721679999999999,
+        "wall_seconds": 4.72485363,
+        "calls": 2
+      },
+      "domain.scalar": {
+        "process_cpu_seconds": 6.599999999989947e-05,
+        "wall_seconds": 7.885600000001602e-05,
+        "calls": 2
+      },
+      "audit.physical": {
+        "process_cpu_seconds": 29.111459999999994,
+        "wall_seconds": 29.116802566999993,
+        "calls": 2
+      },
+      "audit.complete": {
+        "process_cpu_seconds": 3.346907000000016,
+        "wall_seconds": 3.3476673699999964,
+        "calls": 2
+      },
+      "audit.manufactured_accuracy": {
+        "process_cpu_seconds": 0.386028,
+        "wall_seconds": 0.386101115,
+        "calls": 1
+      },
+      "native.acceptance_audit": {
+        "process_cpu_seconds": 9.500000000173259e-05,
+        "wall_seconds": 0.00010646399999814093,
+        "calls": 1
+      },
+      "output.project_fields": {
+        "process_cpu_seconds": 0.000334,
+        "wall_seconds": 0.000339221,
+        "calls": 2
+      },
+      "startup.initialize": {
+        "process_cpu_seconds": 2.570769999999982,
+        "wall_seconds": 2.5712232120000067,
+        "calls": 1
+      },
+      "io.checkpoint": {
+        "process_cpu_seconds": 0.001307,
+        "wall_seconds": 0.004005255,
+        "calls": 1
+      },
+      "native.solve_block": {
+        "process_cpu_seconds": 6.9749479999999995,
+        "wall_seconds": 6.975492322,
+        "calls": 1
+      },
+      "output.report": {
+        "process_cpu_seconds": 0.012176,
+        "wall_seconds": 0.022683367,
+        "calls": 1
+      },
+      "output.fields_and_report": {
+        "process_cpu_seconds": 0.028911,
+        "wall_seconds": 0.054582002000000004,
+        "calls": 1
+      },
+      "process": {
+        "process_cpu_seconds": 0.2835019999999986,
+        "wall_seconds": 0.8378100600000096,
+        "calls": 1
+      }
+    },
+    "root_scopes": [
+      {
+        "schema": 1,
+        "pid": 43561,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "process",
+        "wall_seconds": 158.893705737,
+        "process_cpu_seconds": 158.281533,
+        "exclusive_wall_seconds": 0.8378100600000096,
+        "exclusive_process_cpu_seconds": 0.2835019999999986
+      },
+      {
+        "schema": 1,
+        "pid": 43853,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.174176638,
+        "process_cpu_seconds": 0.173524,
+        "exclusive_wall_seconds": 0.174176638,
+        "exclusive_process_cpu_seconds": 0.173524
+      },
+      {
+        "schema": 1,
+        "pid": 43853,
+        "id": 2,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.036295181,
+        "process_cpu_seconds": 0.036292,
+        "exclusive_wall_seconds": 0.036295181,
+        "exclusive_process_cpu_seconds": 0.036292
+      },
+      {
+        "schema": 1,
+        "pid": 43853,
+        "id": 3,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.266091637,
+        "process_cpu_seconds": 14.262787,
+        "exclusive_wall_seconds": 14.019346067,
+        "exclusive_process_cpu_seconds": 14.016237
+      },
+      {
+        "schema": 1,
+        "pid": 43853,
+        "id": 6,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024728961,
+        "process_cpu_seconds": 0.02473,
+        "exclusive_wall_seconds": 0.024728961,
+        "exclusive_process_cpu_seconds": 0.02473
+      },
+      {
+        "schema": 1,
+        "pid": 43853,
+        "id": 7,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.019259441,
+        "process_cpu_seconds": 0.01926,
+        "exclusive_wall_seconds": 0.008032538,
+        "exclusive_process_cpu_seconds": 0.008033
+      },
+      {
+        "schema": 1,
+        "pid": 43853,
+        "id": 20,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 13.977882337,
+        "process_cpu_seconds": 13.975082,
+        "exclusive_wall_seconds": 13.976622922,
+        "exclusive_process_cpu_seconds": 13.973822
+      },
+      {
+        "schema": 1,
+        "pid": 43853,
+        "id": 23,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024327666,
+        "process_cpu_seconds": 0.02433,
+        "exclusive_wall_seconds": 0.024327666,
+        "exclusive_process_cpu_seconds": 0.02433
+      },
+      {
+        "schema": 1,
+        "pid": 43853,
+        "id": 24,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.000876637,
+        "process_cpu_seconds": 0.000876,
+        "exclusive_wall_seconds": 0.000876637,
+        "exclusive_process_cpu_seconds": 0.000876
+      },
+      {
+        "schema": 1,
+        "pid": 43853,
+        "id": 25,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 5.4867e-05,
+        "process_cpu_seconds": 5.4e-05,
+        "exclusive_wall_seconds": 5.4867e-05,
+        "exclusive_process_cpu_seconds": 5.4e-05
+      },
+      {
+        "schema": 1,
+        "pid": 43853,
+        "id": 26,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "audit.complete",
+        "wall_seconds": 74.656385707,
+        "process_cpu_seconds": 74.63849,
+        "exclusive_wall_seconds": 1.7047892479999973,
+        "exclusive_process_cpu_seconds": 1.7043150000000082
+      }
+    ],
+    "scope": "exclusive instrumentation only; nested inclusive totals are not added; child process CPU/wall/RSS remain in execution receipts"
+  },
+  "evolution-v3/A95-p4-dt001/trajectory": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v3/A95-p4-dt001/trajectory/timing.jsonl",
+    "sha256": "0273e5ea925fc89ecd0eea782bf63c2bcf7fa6242e68809ab4e3efacd1a94c39",
+    "exclusive": {
+      "constitutive.refresh": {
+        "process_cpu_seconds": 7.103532999999999,
+        "wall_seconds": 7.108825825000001,
+        "calls": 272
+      },
+      "startup.object": {
+        "process_cpu_seconds": 3.080756,
+        "wall_seconds": 3.084516604,
+        "calls": 1
+      },
+      "matching.constraints": {
+        "process_cpu_seconds": 3.0877879999999975,
+        "wall_seconds": 3.089284874000002,
+        "calls": 330
+      },
+      "residual": {
+        "process_cpu_seconds": 1307.676975,
+        "wall_seconds": 1307.9715278650003,
+        "calls": 167
+      },
+      "dense.factorization": {
+        "process_cpu_seconds": 0.8461329999999997,
+        "wall_seconds": 0.8463897849999998,
+        "calls": 146
+      },
+      "dense.triangular_solve": {
+        "process_cpu_seconds": 0.7388639999999977,
+        "wall_seconds": 0.7391171340000001,
+        "calls": 3652
+      },
+      "residual.mass_dual_norms": {
+        "process_cpu_seconds": 0.031285999999999994,
+        "wall_seconds": 0.037198126,
+        "calls": 98
+      },
+      "native.explicit": {
+        "process_cpu_seconds": 118.54337800000002,
+        "wall_seconds": 118.571798242,
+        "calls": 17
+      },
+      "domain.compute": {
+        "process_cpu_seconds": 190.827655,
+        "wall_seconds": 190.87677231999993,
+        "calls": 82
+      },
+      "domain.scalar": {
+        "process_cpu_seconds": 1.5864349999999972,
+        "wall_seconds": 1.5872405760000006,
+        "calls": 82
+      },
+      "audit.physical": {
+        "process_cpu_seconds": 150.78144200000003,
+        "wall_seconds": 150.815760848,
+        "calls": 18
+      },
+      "audit.complete": {
+        "process_cpu_seconds": 30.22551200000001,
+        "wall_seconds": 30.232493854000005,
+        "calls": 18
+      },
+      "audit.manufactured_accuracy": {
+        "process_cpu_seconds": 6.533549000000001,
+        "wall_seconds": 6.5351827600000005,
+        "calls": 17
+      },
+      "native.acceptance_audit": {
+        "process_cpu_seconds": 0.0019400000000118212,
+        "wall_seconds": 0.002085065000002828,
+        "calls": 17
+      },
+      "output.project_fields": {
+        "process_cpu_seconds": 0.000331,
+        "wall_seconds": 0.000330454,
+        "calls": 2
+      },
+      "startup.initialize": {
+        "process_cpu_seconds": 2.5683480000000145,
+        "wall_seconds": 2.569450381999985,
+        "calls": 1
+      },
+      "pimple.check.input": {
+        "process_cpu_seconds": 0.09713799999999928,
+        "wall_seconds": 0.09717241200000126,
+        "calls": 16
+      },
+      "flow.assembly": {
+        "process_cpu_seconds": 32.976166,
+        "wall_seconds": 32.984012825,
+        "calls": 16
+      },
+      "momentum.factorize": {
+        "process_cpu_seconds": 0.023543,
+        "wall_seconds": 0.02359033399999999,
+        "calls": 16
+      },
+      "pressure.mass_factorize": {
+        "process_cpu_seconds": 0.032556,
+        "wall_seconds": 0.032556493000000006,
+        "calls": 16
+      },
+      "momentum.solve_validate": {
+        "process_cpu_seconds": 0.040561,
+        "wall_seconds": 0.04056875099999999,
+        "calls": 16
+      },
+      "pressure.build": {
+        "process_cpu_seconds": 1.2307560000000004,
+        "wall_seconds": 1.251238019,
+        "calls": 16
+      },
+      "pressure.solve_validate": {
+        "process_cpu_seconds": 0.002429,
+        "wall_seconds": 0.0029788139999999998,
+        "calls": 16
+      },
+      "io.flow_attempt_snapshot": {
+        "process_cpu_seconds": 3.924633,
+        "wall_seconds": 8.49734855,
+        "calls": 16
+      },
+      "pimple.check.flow": {
+        "process_cpu_seconds": 0.07081800000000094,
+        "wall_seconds": 0.07085880799999966,
+        "calls": 16
+      },
+      "flow.correction_validate": {
+        "process_cpu_seconds": 0.39721699999999593,
+        "wall_seconds": 0.3973641780000019,
+        "calls": 16
+      },
+      "flow.total": {
+        "process_cpu_seconds": 0.1199410000000043,
+        "wall_seconds": 0.12040399999999707,
+        "calls": 16
+      },
+      "epsilon.assembly": {
+        "process_cpu_seconds": 0.14403799999999997,
+        "wall_seconds": 0.144129472,
+        "calls": 16
+      },
+      "epsilon.solve_validate": {
+        "process_cpu_seconds": 0.0021030000000000003,
+        "wall_seconds": 0.0023845050000000003,
+        "calls": 16
+      },
+      "pimple.check.epsilon": {
+        "process_cpu_seconds": 0.0798890000000001,
+        "wall_seconds": 0.07993429400000096,
+        "calls": 16
+      },
+      "epsilon.total": {
+        "process_cpu_seconds": 0.004993999999999943,
+        "wall_seconds": 0.005587161999997647,
+        "calls": 16
+      },
+      "k.assembly": {
+        "process_cpu_seconds": 113.21620200000002,
+        "wall_seconds": 113.243316059,
+        "calls": 16
+      },
+      "k.solve_validate": {
+        "process_cpu_seconds": 0.017631,
+        "wall_seconds": 0.017638369000000004,
+        "calls": 16
+      },
+      "io.attempt_snapshot": {
+        "process_cpu_seconds": 0.7412350000000001,
+        "wall_seconds": 1.8380293740000002,
+        "calls": 16
+      },
+      "pimple.check.k": {
+        "process_cpu_seconds": 0.08726399999999979,
+        "wall_seconds": 0.08738708899999992,
+        "calls": 16
+      },
+      "k.total": {
+        "process_cpu_seconds": 0.003431000000006179,
+        "wall_seconds": 0.003680097999993137,
+        "calls": 16
+      },
+      "pimple.final_refresh_diagnostics": {
+        "process_cpu_seconds": 0.0013200000000068712,
+        "wall_seconds": 0.0015237600000030938,
+        "calls": 16
+      },
+      "pimple.sweep": {
+        "process_cpu_seconds": 0.5844119999999648,
+        "wall_seconds": 1.47859701900002,
+        "calls": 16
+      },
+      "native.physical_samples": {
+        "process_cpu_seconds": 0.6521700000000001,
+        "wall_seconds": 0.6522548760000002,
+        "calls": 16
+      },
+      "native.implicit": {
+        "process_cpu_seconds": 0.0029770000000439722,
+        "wall_seconds": 0.004049178999892433,
+        "calls": 16
+      },
+      "native.advance": {
+        "process_cpu_seconds": 0.002020000000001687,
+        "wall_seconds": 0.0020237070000348467,
+        "calls": 16
+      },
+      "io.checkpoint": {
+        "process_cpu_seconds": 0.034068,
+        "wall_seconds": 0.11588113300000001,
+        "calls": 17
+      },
+      "native.step": {
+        "process_cpu_seconds": 0.05510999999998489,
+        "wall_seconds": 0.057752844000006576,
+        "calls": 16
+      },
+      "native.solve_block": {
+        "process_cpu_seconds": 7.022769000000153,
+        "wall_seconds": 7.024488078999866,
+        "calls": 1
+      },
+      "output.report": {
+        "process_cpu_seconds": 0.091254,
+        "wall_seconds": 0.163337415,
+        "calls": 1
+      },
+      "output.fields_and_report": {
+        "process_cpu_seconds": 0.026432999999999998,
+        "wall_seconds": 0.051311370999999995,
+        "calls": 1
+      },
+      "process": {
+        "process_cpu_seconds": 0.29087200000003577,
+        "wall_seconds": 0.8451791379998213,
+        "calls": 1
+      }
+    },
+    "root_scopes": [
+      {
+        "schema": 1,
+        "pid": 44384,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "process",
+        "wall_seconds": 1846.089899442,
+        "process_cpu_seconds": 1838.329746,
+        "exclusive_wall_seconds": 0.8451791379998213,
+        "exclusive_process_cpu_seconds": 0.29087200000003577
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.17511962,
+        "process_cpu_seconds": 0.172126,
+        "exclusive_wall_seconds": 0.17511962,
+        "exclusive_process_cpu_seconds": 0.172126
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 2,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.399051963,
+        "process_cpu_seconds": 14.39347,
+        "exclusive_wall_seconds": 14.113878986,
+        "exclusive_process_cpu_seconds": 14.108318
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 5,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024944529,
+        "process_cpu_seconds": 0.024942,
+        "exclusive_wall_seconds": 0.024944529,
+        "exclusive_process_cpu_seconds": 0.024942
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 6,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.020302266,
+        "process_cpu_seconds": 0.0203,
+        "exclusive_wall_seconds": 0.008273446,
+        "exclusive_process_cpu_seconds": 0.008273999999999998
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 19,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.01889806,
+        "process_cpu_seconds": 14.014482,
+        "exclusive_wall_seconds": 14.017522082,
+        "exclusive_process_cpu_seconds": 14.013105999999999
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 22,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024478591,
+        "process_cpu_seconds": 0.024477,
+        "exclusive_wall_seconds": 0.024478591,
+        "exclusive_process_cpu_seconds": 0.024477
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 23,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.000902009,
+        "process_cpu_seconds": 0.000902,
+        "exclusive_wall_seconds": 0.000902009,
+        "exclusive_process_cpu_seconds": 0.000902
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 24,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.274293248,
+        "process_cpu_seconds": 0.274271,
+        "exclusive_wall_seconds": 0.274293248,
+        "exclusive_process_cpu_seconds": 0.274271
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 25,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "audit.complete",
+        "wall_seconds": 76.161199986,
+        "process_cpu_seconds": 76.149812,
+        "exclusive_wall_seconds": 1.6858069130000075,
+        "exclusive_process_cpu_seconds": 1.6855869999999982
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 58,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.00109836,
+        "process_cpu_seconds": 0.001091,
+        "exclusive_wall_seconds": 0.00109836,
+        "exclusive_process_cpu_seconds": 0.001091
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 59,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 5.2035e-05,
+        "process_cpu_seconds": 5.2e-05,
+        "exclusive_wall_seconds": 5.2035e-05,
+        "exclusive_process_cpu_seconds": 5.2e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 60,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.063455524,
+        "process_cpu_seconds": 14.060656,
+        "exclusive_wall_seconds": 14.038068729,
+        "exclusive_process_cpu_seconds": 14.035271
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 63,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.046425022,
+        "process_cpu_seconds": 14.042922,
+        "exclusive_wall_seconds": 14.021770038,
+        "exclusive_process_cpu_seconds": 14.018268
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 66,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.0932831,
+        "process_cpu_seconds": 14.090307,
+        "exclusive_wall_seconds": 14.068579997,
+        "exclusive_process_cpu_seconds": 14.065605999999999
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 69,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.001297265,
+        "process_cpu_seconds": 0.001297,
+        "exclusive_wall_seconds": 0.00018989699999999985,
+        "exclusive_process_cpu_seconds": 0.00019000000000000006
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 76,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000362692,
+        "process_cpu_seconds": 0.000362,
+        "exclusive_wall_seconds": 0.00010251900000000003,
+        "exclusive_process_cpu_seconds": 0.00010199999999999999
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 83,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000559389,
+        "process_cpu_seconds": 0.000559,
+        "exclusive_wall_seconds": 0.000306146,
+        "exclusive_process_cpu_seconds": 0.000304
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 90,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.00067081,
+        "process_cpu_seconds": 0.000447,
+        "exclusive_wall_seconds": 0.000415046,
+        "exclusive_process_cpu_seconds": 0.00019200000000000006
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 97,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000357362,
+        "process_cpu_seconds": 0.000358,
+        "exclusive_wall_seconds": 9.231700000000002e-05,
+        "exclusive_process_cpu_seconds": 9.400000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 104,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000349381,
+        "process_cpu_seconds": 0.000349,
+        "exclusive_wall_seconds": 9.5239e-05,
+        "exclusive_process_cpu_seconds": 9.500000000000003e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 111,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000351711,
+        "process_cpu_seconds": 0.000352,
+        "exclusive_wall_seconds": 9.868000000000002e-05,
+        "exclusive_process_cpu_seconds": 9.899999999999997e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 118,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000529657,
+        "process_cpu_seconds": 0.000382,
+        "exclusive_wall_seconds": 0.00027486400000000004,
+        "exclusive_process_cpu_seconds": 0.00012500000000000006
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 125,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000349121,
+        "process_cpu_seconds": 0.000349,
+        "exclusive_wall_seconds": 9.125799999999999e-05,
+        "exclusive_process_cpu_seconds": 9.200000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 132,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.00034624,
+        "process_cpu_seconds": 0.000346,
+        "exclusive_wall_seconds": 9.697999999999998e-05,
+        "exclusive_process_cpu_seconds": 9.699999999999997e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 139,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000347241,
+        "process_cpu_seconds": 0.000347,
+        "exclusive_wall_seconds": 9.799800000000002e-05,
+        "exclusive_process_cpu_seconds": 9.8e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 146,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000532617,
+        "process_cpu_seconds": 0.000387,
+        "exclusive_wall_seconds": 0.00027021300000000005,
+        "exclusive_process_cpu_seconds": 0.00012399999999999998
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 153,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000350681,
+        "process_cpu_seconds": 0.000351,
+        "exclusive_wall_seconds": 9.627700000000003e-05,
+        "exclusive_process_cpu_seconds": 9.500000000000009e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 160,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000346551,
+        "process_cpu_seconds": 0.000346,
+        "exclusive_wall_seconds": 9.537e-05,
+        "exclusive_process_cpu_seconds": 9.300000000000004e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 167,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000351361,
+        "process_cpu_seconds": 0.000351,
+        "exclusive_wall_seconds": 9.456699999999999e-05,
+        "exclusive_process_cpu_seconds": 9.400000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 174,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.00034116,
+        "process_cpu_seconds": 0.000341,
+        "exclusive_wall_seconds": 9.243000000000006e-05,
+        "exclusive_process_cpu_seconds": 9.099999999999999e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 181,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.00033885,
+        "process_cpu_seconds": 0.000338,
+        "exclusive_wall_seconds": 9.446699999999999e-05,
+        "exclusive_process_cpu_seconds": 9.199999999999996e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 188,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000329659,
+        "process_cpu_seconds": 0.000329,
+        "exclusive_wall_seconds": 9.288900000000002e-05,
+        "exclusive_process_cpu_seconds": 9.200000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 195,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000332709,
+        "process_cpu_seconds": 0.000332,
+        "exclusive_wall_seconds": 9.046799999999999e-05,
+        "exclusive_process_cpu_seconds": 8.799999999999997e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 202,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.00034539,
+        "process_cpu_seconds": 0.000345,
+        "exclusive_wall_seconds": 9.1328e-05,
+        "exclusive_process_cpu_seconds": 9.000000000000002e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 209,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000508745,
+        "process_cpu_seconds": 0.000369,
+        "exclusive_wall_seconds": 0.000259254,
+        "exclusive_process_cpu_seconds": 0.00012000000000000004
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 216,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000340201,
+        "process_cpu_seconds": 0.00034,
+        "exclusive_wall_seconds": 9.890700000000002e-05,
+        "exclusive_process_cpu_seconds": 9.800000000000002e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 223,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000327649,
+        "process_cpu_seconds": 0.000328,
+        "exclusive_wall_seconds": 9.071900000000004e-05,
+        "exclusive_process_cpu_seconds": 9.100000000000002e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 230,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000328298,
+        "process_cpu_seconds": 0.000329,
+        "exclusive_wall_seconds": 9.1646e-05,
+        "exclusive_process_cpu_seconds": 9.299999999999998e-05
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 237,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000538558,
+        "process_cpu_seconds": 0.000369,
+        "exclusive_wall_seconds": 0.000310488,
+        "exclusive_process_cpu_seconds": 0.00014000000000000004
+      },
+      {
+        "schema": 1,
+        "pid": 49273,
+        "id": 244,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000315788,
+        "process_cpu_seconds": 0.000316,
+        "exclusive_wall_seconds": 9.102e-05,
+        "exclusive_process_cpu_seconds": 9.199999999999999e-05
+      }
+    ],
+    "scope": "exclusive instrumentation only; nested inclusive totals are not added; child process CPU/wall/RSS remain in execution receipts"
+  },
+  "evolution-v3/A95-p4-dt004/zero": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v3/A95-p4-dt004/zero/timing.jsonl",
+    "sha256": "0668ce2d838c1156ea4f48f05417c78830fc0ac0f1b426600dab0244351ff2d8",
+    "exclusive": {
+      "constitutive.refresh": {
+        "process_cpu_seconds": 0.884321,
+        "wall_seconds": 0.8860612170000002,
+        "calls": 23
+      },
+      "startup.object": {
+        "process_cpu_seconds": 2.487497,
+        "wall_seconds": 2.492428844,
+        "calls": 1
+      },
+      "matching.constraints": {
+        "process_cpu_seconds": 0.339519,
+        "wall_seconds": 0.33968025799999996,
+        "calls": 30
+      },
+      "residual": {
+        "process_cpu_seconds": 203.64695299999997,
+        "wall_seconds": 203.694394386,
+        "calls": 15
+      },
+      "dense.factorization": {
+        "process_cpu_seconds": 0.026234000000000004,
+        "wall_seconds": 0.026236709000000004,
+        "calls": 18
+      },
+      "dense.triangular_solve": {
+        "process_cpu_seconds": 0.012202,
+        "wall_seconds": 0.012204894999999997,
+        "calls": 50
+      },
+      "residual.mass_dual_norms": {
+        "process_cpu_seconds": 0.016846000000000003,
+        "wall_seconds": 0.017363747000000006,
+        "calls": 7
+      },
+      "native.explicit": {
+        "process_cpu_seconds": 6.948115,
+        "wall_seconds": 6.949543618,
+        "calls": 1
+      },
+      "domain.compute": {
+        "process_cpu_seconds": 4.723375,
+        "wall_seconds": 4.7253764899999995,
+        "calls": 2
+      },
+      "domain.scalar": {
+        "process_cpu_seconds": 0.0001229999999998732,
+        "wall_seconds": 0.00013317100000032056,
+        "calls": 2
+      },
+      "audit.physical": {
+        "process_cpu_seconds": 29.167973000000003,
+        "wall_seconds": 29.174475627000007,
+        "calls": 2
+      },
+      "audit.complete": {
+        "process_cpu_seconds": 3.2823369999999983,
+        "wall_seconds": 3.283517248999999,
+        "calls": 2
+      },
+      "audit.manufactured_accuracy": {
+        "process_cpu_seconds": 0.386193,
+        "wall_seconds": 0.386344236,
+        "calls": 1
+      },
+      "native.acceptance_audit": {
+        "process_cpu_seconds": 0.00021499999999718966,
+        "wall_seconds": 0.0005242480000049454,
+        "calls": 1
+      },
+      "output.project_fields": {
+        "process_cpu_seconds": 0.000335,
+        "wall_seconds": 0.000338675,
+        "calls": 2
+      },
+      "startup.initialize": {
+        "process_cpu_seconds": 2.587178000000023,
+        "wall_seconds": 2.5877586729999678,
+        "calls": 1
+      },
+      "io.checkpoint": {
+        "process_cpu_seconds": 0.001178,
+        "wall_seconds": 0.003949573,
+        "calls": 1
+      },
+      "native.solve_block": {
+        "process_cpu_seconds": 6.967217000000001,
+        "wall_seconds": 6.969410036999999,
+        "calls": 1
+      },
+      "output.report": {
+        "process_cpu_seconds": 0.011312,
+        "wall_seconds": 0.021130986,
+        "calls": 1
+      },
+      "output.fields_and_report": {
+        "process_cpu_seconds": 0.027002,
+        "wall_seconds": 0.05198758199999999,
+        "calls": 1
+      },
+      "process": {
+        "process_cpu_seconds": 0.25437699999997676,
+        "wall_seconds": 0.7529208199999857,
+        "calls": 1
+      }
+    },
+    "root_scopes": [
+      {
+        "schema": 1,
+        "pid": 52457,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "process",
+        "wall_seconds": 158.861857994,
+        "process_cpu_seconds": 158.273245,
+        "exclusive_wall_seconds": 0.7529208199999857,
+        "exclusive_process_cpu_seconds": 0.25437699999997676
+      },
+      {
+        "schema": 1,
+        "pid": 52907,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.172378671,
+        "process_cpu_seconds": 0.171903,
+        "exclusive_wall_seconds": 0.172378671,
+        "exclusive_process_cpu_seconds": 0.171903
+      },
+      {
+        "schema": 1,
+        "pid": 52907,
+        "id": 2,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.036284295,
+        "process_cpu_seconds": 0.036278,
+        "exclusive_wall_seconds": 0.036284295,
+        "exclusive_process_cpu_seconds": 0.036278
+      },
+      {
+        "schema": 1,
+        "pid": 52907,
+        "id": 3,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.313616229,
+        "process_cpu_seconds": 14.310743,
+        "exclusive_wall_seconds": 14.06430529,
+        "exclusive_process_cpu_seconds": 14.061585000000001
+      },
+      {
+        "schema": 1,
+        "pid": 52907,
+        "id": 6,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.02478614,
+        "process_cpu_seconds": 0.024784,
+        "exclusive_wall_seconds": 0.02478614,
+        "exclusive_process_cpu_seconds": 0.024784
+      },
+      {
+        "schema": 1,
+        "pid": 52907,
+        "id": 7,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.01895818,
+        "process_cpu_seconds": 0.018957,
+        "exclusive_wall_seconds": 0.007673165000000004,
+        "exclusive_process_cpu_seconds": 0.007672999999999999
+      },
+      {
+        "schema": 1,
+        "pid": 52907,
+        "id": 20,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.065842247,
+        "process_cpu_seconds": 14.063399,
+        "exclusive_wall_seconds": 14.064476366000001,
+        "exclusive_process_cpu_seconds": 14.062033
+      },
+      {
+        "schema": 1,
+        "pid": 52907,
+        "id": 23,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.02429243,
+        "process_cpu_seconds": 0.024291,
+        "exclusive_wall_seconds": 0.02429243,
+        "exclusive_process_cpu_seconds": 0.024291
+      },
+      {
+        "schema": 1,
+        "pid": 52907,
+        "id": 24,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.000873095,
+        "process_cpu_seconds": 0.000873,
+        "exclusive_wall_seconds": 0.000873095,
+        "exclusive_process_cpu_seconds": 0.000873
+      },
+      {
+        "schema": 1,
+        "pid": 52907,
+        "id": 25,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 5.7904e-05,
+        "process_cpu_seconds": 5.7e-05,
+        "exclusive_wall_seconds": 5.7904e-05,
+        "exclusive_process_cpu_seconds": 5.7e-05
+      },
+      {
+        "schema": 1,
+        "pid": 52907,
+        "id": 26,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "audit.complete",
+        "wall_seconds": 74.856833856,
+        "process_cpu_seconds": 74.845972,
+        "exclusive_wall_seconds": 1.64577641999999,
+        "exclusive_process_cpu_seconds": 1.6455880000000036
+      }
+    ],
+    "scope": "exclusive instrumentation only; nested inclusive totals are not added; child process CPU/wall/RSS remain in execution receipts"
+  },
+  "evolution-v3/A95-p4-dt004/trajectory": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v3/A95-p4-dt004/trajectory/timing.jsonl",
+    "sha256": "c577abf5ea3eccb4f84ddfe061ef9a9c274c5b790114c30ccfb163e47f0d6040",
+    "exclusive": {
+      "constitutive.refresh": {
+        "process_cpu_seconds": 2.5296630000000007,
+        "wall_seconds": 2.531991195,
+        "calls": 92
+      },
+      "startup.object": {
+        "process_cpu_seconds": 3.0958300000000003,
+        "wall_seconds": 3.101662308,
+        "calls": 1
+      },
+      "matching.constraints": {
+        "process_cpu_seconds": 1.1806880000000002,
+        "wall_seconds": 1.180940392,
+        "calls": 114
+      },
+      "residual": {
+        "process_cpu_seconds": 546.011167,
+        "wall_seconds": 546.133892427,
+        "calls": 59
+      },
+      "dense.factorization": {
+        "process_cpu_seconds": 0.23324999999999999,
+        "wall_seconds": 0.23332120799999995,
+        "calls": 50
+      },
+      "dense.triangular_solve": {
+        "process_cpu_seconds": 0.20410200000000064,
+        "wall_seconds": 0.20406165199999973,
+        "calls": 1072
+      },
+      "residual.mass_dual_norms": {
+        "process_cpu_seconds": 0.023232000000000003,
+        "wall_seconds": 0.025822766000000004,
+        "calls": 50
+      },
+      "native.explicit": {
+        "process_cpu_seconds": 35.624977,
+        "wall_seconds": 35.631176153,
+        "calls": 5
+      },
+      "domain.compute": {
+        "process_cpu_seconds": 50.847419,
+        "wall_seconds": 50.85992082200001,
+        "calls": 22
+      },
+      "domain.scalar": {
+        "process_cpu_seconds": 0.36048299999999944,
+        "wall_seconds": 0.36060194099999965,
+        "calls": 22
+      },
+      "audit.physical": {
+        "process_cpu_seconds": 59.387906999999984,
+        "wall_seconds": 59.40132682800002,
+        "calls": 6
+      },
+      "audit.complete": {
+        "process_cpu_seconds": 9.91702,
+        "wall_seconds": 9.920076435999995,
+        "calls": 6
+      },
+      "audit.manufactured_accuracy": {
+        "process_cpu_seconds": 1.922729,
+        "wall_seconds": 1.9233946540000002,
+        "calls": 5
+      },
+      "native.acceptance_audit": {
+        "process_cpu_seconds": 0.0008169999999978472,
+        "wall_seconds": 0.0008399969999928203,
+        "calls": 5
+      },
+      "output.project_fields": {
+        "process_cpu_seconds": 0.00043599999999999997,
+        "wall_seconds": 0.000436639,
+        "calls": 2
+      },
+      "startup.initialize": {
+        "process_cpu_seconds": 2.7232799999999884,
+        "wall_seconds": 2.72537740300001,
+        "calls": 1
+      },
+      "pimple.check.input": {
+        "process_cpu_seconds": 0.01576299999999975,
+        "wall_seconds": 0.01577004099999968,
+        "calls": 4
+      },
+      "flow.assembly": {
+        "process_cpu_seconds": 8.198585,
+        "wall_seconds": 8.201005343,
+        "calls": 4
+      },
+      "momentum.factorize": {
+        "process_cpu_seconds": 0.0038449999999999977,
+        "wall_seconds": 0.0038560769999999994,
+        "calls": 4
+      },
+      "pressure.mass_factorize": {
+        "process_cpu_seconds": 0.008268999999999999,
+        "wall_seconds": 0.008574369999999998,
+        "calls": 4
+      },
+      "momentum.solve_validate": {
+        "process_cpu_seconds": 0.010186,
+        "wall_seconds": 0.010885246999999997,
+        "calls": 4
+      },
+      "pressure.build": {
+        "process_cpu_seconds": 0.30696300000000004,
+        "wall_seconds": 0.311888257,
+        "calls": 4
+      },
+      "pressure.solve_validate": {
+        "process_cpu_seconds": 0.0005690000000000001,
+        "wall_seconds": 0.000567907,
+        "calls": 4
+      },
+      "io.flow_attempt_snapshot": {
+        "process_cpu_seconds": 1.181105,
+        "wall_seconds": 2.540166242,
+        "calls": 4
+      },
+      "pimple.check.flow": {
+        "process_cpu_seconds": 0.01322900000000038,
+        "wall_seconds": 0.013235618999999588,
+        "calls": 4
+      },
+      "flow.correction_validate": {
+        "process_cpu_seconds": 0.09124100000000013,
+        "wall_seconds": 0.09126489100000157,
+        "calls": 4
+      },
+      "flow.total": {
+        "process_cpu_seconds": 0.02450000000000152,
+        "wall_seconds": 0.025101181000001915,
+        "calls": 4
+      },
+      "epsilon.assembly": {
+        "process_cpu_seconds": 0.036123999999999996,
+        "wall_seconds": 0.036391297,
+        "calls": 4
+      },
+      "epsilon.solve_validate": {
+        "process_cpu_seconds": 0.0005060000000000002,
+        "wall_seconds": 0.0005046249999999999,
+        "calls": 4
+      },
+      "pimple.check.epsilon": {
+        "process_cpu_seconds": 0.013939000000000146,
+        "wall_seconds": 0.013944551000000693,
+        "calls": 4
+      },
+      "epsilon.total": {
+        "process_cpu_seconds": 0.0014269999999978467,
+        "wall_seconds": 0.0014463029999998156,
+        "calls": 4
+      },
+      "k.assembly": {
+        "process_cpu_seconds": 28.312802,
+        "wall_seconds": 28.319386190000003,
+        "calls": 4
+      },
+      "k.solve_validate": {
+        "process_cpu_seconds": 0.004369,
+        "wall_seconds": 0.004367662,
+        "calls": 4
+      },
+      "io.attempt_snapshot": {
+        "process_cpu_seconds": 0.21304800000000002,
+        "wall_seconds": 0.537348704,
+        "calls": 4
+      },
+      "pimple.check.k": {
+        "process_cpu_seconds": 0.01542400000000077,
+        "wall_seconds": 0.015430516999999533,
+        "calls": 4
+      },
+      "k.total": {
+        "process_cpu_seconds": 0.001159000000004795,
+        "wall_seconds": 0.0011952050000019199,
+        "calls": 4
+      },
+      "pimple.final_refresh_diagnostics": {
+        "process_cpu_seconds": 0.0007139999999994373,
+        "wall_seconds": 0.0010489009999989918,
+        "calls": 4
+      },
+      "pimple.sweep": {
+        "process_cpu_seconds": 0.14643099999999976,
+        "wall_seconds": 0.14942518200000166,
+        "calls": 4
+      },
+      "native.physical_samples": {
+        "process_cpu_seconds": 0.157035,
+        "wall_seconds": 0.157031223,
+        "calls": 4
+      },
+      "native.implicit": {
+        "process_cpu_seconds": 0.0008430000000032578,
+        "wall_seconds": 0.0008663169999891807,
+        "calls": 4
+      },
+      "native.advance": {
+        "process_cpu_seconds": 0.0005699999999961847,
+        "wall_seconds": 0.0005663439999921138,
+        "calls": 4
+      },
+      "io.checkpoint": {
+        "process_cpu_seconds": 0.007556,
+        "wall_seconds": 0.027559135,
+        "calls": 5
+      },
+      "native.step": {
+        "process_cpu_seconds": 0.0146259999999927,
+        "wall_seconds": 0.015228345000011245,
+        "calls": 4
+      },
+      "native.solve_block": {
+        "process_cpu_seconds": 7.654897000000062,
+        "wall_seconds": 7.655386108999949,
+        "calls": 1
+      },
+      "output.report": {
+        "process_cpu_seconds": 0.073343,
+        "wall_seconds": 0.103867043,
+        "calls": 1
+      },
+      "output.fields_and_report": {
+        "process_cpu_seconds": 0.028510999999999995,
+        "wall_seconds": 0.057013738999999994,
+        "calls": 1
+      },
+      "process": {
+        "process_cpu_seconds": 0.4309569999999212,
+        "wall_seconds": 0.9690270859999828,
+        "calls": 1
+      }
+    },
+    "root_scopes": [
+      {
+        "schema": 1,
+        "pid": 54452,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "process",
+        "wall_seconds": 617.883716821,
+        "process_cpu_seconds": 615.426339,
+        "exclusive_wall_seconds": 0.9690270859999828,
+        "exclusive_process_cpu_seconds": 0.4309569999999212
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 1,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.173159185,
+        "process_cpu_seconds": 0.172818,
+        "exclusive_wall_seconds": 0.173159185,
+        "exclusive_process_cpu_seconds": 0.172818
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 2,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.378665796,
+        "process_cpu_seconds": 14.376605,
+        "exclusive_wall_seconds": 14.098184276,
+        "exclusive_process_cpu_seconds": 14.096167
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 5,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024956094,
+        "process_cpu_seconds": 0.024901,
+        "exclusive_wall_seconds": 0.024956094,
+        "exclusive_process_cpu_seconds": 0.024901
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 6,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.021874316,
+        "process_cpu_seconds": 0.021874,
+        "exclusive_wall_seconds": 0.009445518,
+        "exclusive_process_cpu_seconds": 0.009446000000000001
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 19,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.003066654,
+        "process_cpu_seconds": 14.001903,
+        "exclusive_wall_seconds": 14.001104962,
+        "exclusive_process_cpu_seconds": 13.999941
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 22,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.024295935,
+        "process_cpu_seconds": 0.024297,
+        "exclusive_wall_seconds": 0.024295935,
+        "exclusive_process_cpu_seconds": 0.024297
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 23,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.000873808,
+        "process_cpu_seconds": 0.000874,
+        "exclusive_wall_seconds": 0.000873808,
+        "exclusive_process_cpu_seconds": 0.000874
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 24,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 0.267944107,
+        "process_cpu_seconds": 0.267948,
+        "exclusive_wall_seconds": 0.267944107,
+        "exclusive_process_cpu_seconds": 0.267948
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 25,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "audit.complete",
+        "wall_seconds": 74.599706005,
+        "process_cpu_seconds": 74.579707,
+        "exclusive_wall_seconds": 1.684499002999999,
+        "exclusive_process_cpu_seconds": 1.6839499999999958
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 58,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "matching.constraints",
+        "wall_seconds": 0.001172544,
+        "process_cpu_seconds": 0.00117,
+        "exclusive_wall_seconds": 0.001172544,
+        "exclusive_process_cpu_seconds": 0.00117
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 59,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "constitutive.refresh",
+        "wall_seconds": 5.3421e-05,
+        "process_cpu_seconds": 5.3e-05,
+        "exclusive_wall_seconds": 5.3421e-05,
+        "exclusive_process_cpu_seconds": 5.3e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 60,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.067359394,
+        "process_cpu_seconds": 14.063549,
+        "exclusive_wall_seconds": 14.042166923,
+        "exclusive_process_cpu_seconds": 14.038357
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 63,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.024109285,
+        "process_cpu_seconds": 14.020868,
+        "exclusive_wall_seconds": 13.999546435,
+        "exclusive_process_cpu_seconds": 13.996305
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 66,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual",
+        "wall_seconds": 14.03960156,
+        "process_cpu_seconds": 14.036502,
+        "exclusive_wall_seconds": 14.014460926,
+        "exclusive_process_cpu_seconds": 14.011361
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 69,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.003076419,
+        "process_cpu_seconds": 0.003076,
+        "exclusive_wall_seconds": 0.00020938299999999962,
+        "exclusive_process_cpu_seconds": 0.00020800000000000072
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 76,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000365436,
+        "process_cpu_seconds": 0.000365,
+        "exclusive_wall_seconds": 0.00010118200000000006,
+        "exclusive_process_cpu_seconds": 9.999999999999999e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 83,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000361386,
+        "process_cpu_seconds": 0.000361,
+        "exclusive_wall_seconds": 0.00010010100000000001,
+        "exclusive_process_cpu_seconds": 9.999999999999999e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 90,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000960806,
+        "process_cpu_seconds": 0.000431,
+        "exclusive_wall_seconds": 0.000700371,
+        "exclusive_process_cpu_seconds": 0.00016900000000000004
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 97,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000352976,
+        "process_cpu_seconds": 0.000353,
+        "exclusive_wall_seconds": 9.288100000000006e-05,
+        "exclusive_process_cpu_seconds": 9.300000000000004e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 104,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000359276,
+        "process_cpu_seconds": 0.000359,
+        "exclusive_wall_seconds": 0.00010463200000000001,
+        "exclusive_process_cpu_seconds": 0.000105
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 111,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000352386,
+        "process_cpu_seconds": 0.000353,
+        "exclusive_wall_seconds": 9.814100000000005e-05,
+        "exclusive_process_cpu_seconds": 9.8e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 118,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.0005905,
+        "process_cpu_seconds": 0.000408,
+        "exclusive_wall_seconds": 0.000336165,
+        "exclusive_process_cpu_seconds": 0.00015399999999999995
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 125,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000348275,
+        "process_cpu_seconds": 0.000349,
+        "exclusive_wall_seconds": 9.3631e-05,
+        "exclusive_process_cpu_seconds": 9.500000000000003e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 132,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000355855,
+        "process_cpu_seconds": 0.000356,
+        "exclusive_wall_seconds": 0.00010348099999999994,
+        "exclusive_process_cpu_seconds": 0.00010200000000000004
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 139,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000358866,
+        "process_cpu_seconds": 0.000359,
+        "exclusive_wall_seconds": 0.00010001099999999995,
+        "exclusive_process_cpu_seconds": 0.00010099999999999996
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 146,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.00059923,
+        "process_cpu_seconds": 0.000408,
+        "exclusive_wall_seconds": 0.00034102799999999995,
+        "exclusive_process_cpu_seconds": 0.00014800000000000002
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 153,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000350316,
+        "process_cpu_seconds": 0.00035,
+        "exclusive_wall_seconds": 9.774200000000005e-05,
+        "exclusive_process_cpu_seconds": 9.700000000000003e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 160,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000345425,
+        "process_cpu_seconds": 0.000346,
+        "exclusive_wall_seconds": 9.874199999999997e-05,
+        "exclusive_process_cpu_seconds": 9.900000000000002e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 167,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000347566,
+        "process_cpu_seconds": 0.000347,
+        "exclusive_wall_seconds": 9.613300000000004e-05,
+        "exclusive_process_cpu_seconds": 9.399999999999995e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 174,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000355046,
+        "process_cpu_seconds": 0.000355,
+        "exclusive_wall_seconds": 9.598199999999994e-05,
+        "exclusive_process_cpu_seconds": 9.6e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 181,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000595309,
+        "process_cpu_seconds": 0.000396,
+        "exclusive_wall_seconds": 0.00034922500000000005,
+        "exclusive_process_cpu_seconds": 0.000149
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 188,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000341325,
+        "process_cpu_seconds": 0.000341,
+        "exclusive_wall_seconds": 0.00010621100000000002,
+        "exclusive_process_cpu_seconds": 0.000105
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 195,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000331735,
+        "process_cpu_seconds": 0.000332,
+        "exclusive_wall_seconds": 9.680100000000001e-05,
+        "exclusive_process_cpu_seconds": 9.6e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 202,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000336395,
+        "process_cpu_seconds": 0.000336,
+        "exclusive_wall_seconds": 8.939199999999999e-05,
+        "exclusive_process_cpu_seconds": 8.799999999999997e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 209,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000610839,
+        "process_cpu_seconds": 0.000407,
+        "exclusive_wall_seconds": 0.0003561749999999999,
+        "exclusive_process_cpu_seconds": 0.00015300000000000003
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 216,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000342936,
+        "process_cpu_seconds": 0.000343,
+        "exclusive_wall_seconds": 9.835200000000001e-05,
+        "exclusive_process_cpu_seconds": 9.8e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 223,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000340485,
+        "process_cpu_seconds": 0.000341,
+        "exclusive_wall_seconds": 9.605100000000005e-05,
+        "exclusive_process_cpu_seconds": 9.400000000000001e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 230,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000335706,
+        "process_cpu_seconds": 0.000336,
+        "exclusive_wall_seconds": 9.876000000000001e-05,
+        "exclusive_process_cpu_seconds": 9.9e-05
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 237,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000589349,
+        "process_cpu_seconds": 0.000386,
+        "exclusive_wall_seconds": 0.00035115499999999997,
+        "exclusive_process_cpu_seconds": 0.00014900000000000004
+      },
+      {
+        "schema": 1,
+        "pid": 56615,
+        "id": 244,
+        "parent_id": 0,
+        "step": -1,
+        "time": -1,
+        "name": "residual.mass_dual_norms",
+        "wall_seconds": 0.000333706,
+        "process_cpu_seconds": 0.000334,
+        "exclusive_wall_seconds": 9.630400000000005e-05,
+        "exclusive_process_cpu_seconds": 9.7e-05
+      }
+    ],
+    "scope": "exclusive instrumentation only; nested inclusive totals are not added; child process CPU/wall/RSS remain in execution receipts"
+  }
+}

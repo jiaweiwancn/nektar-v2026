@@ -1,0 +1,2342 @@
+{
+  "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/results.json",
+  "sha256": "c691ab0c2d6501e3852ad1cbacdac38bbcee62685115da17efed77d67cc7effe",
+  "body": {
+    "schema": "CT6NativeInitializationV1",
+    "cases": {
+      "A95-p3": {
+        "status": "pass",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v4/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 157.10541601099976,
+          "process_cpu_seconds": 156.014709,
+          "peak_RSS_KiB": 328612,
+          "actual_mapped_files_sha256": "5b0ec014e884498902c050b553d747cd869c8c2b20659a679d9733a784c0cb33"
+        },
+        "native_report_sha256": "4f754f12c8b3e1b045503f6f5f62f3153a0d6f0c8043239dc1753bed84df3b91",
+        "stored_slots": 1273,
+        "state_sha256": "322c7f75e9ccc583eb1562d4dadcb89846f471135515d49e324fffb34f53e013",
+        "checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A95-p3/checkpoint",
+        "history_sha256": "6463abbb8928382e139111df46684cf53aab8e014c49c252f115cf4088b66091",
+        "raw_native_alpha_zero": [
+          0.06970824461941767,
+          0.0009206416370998129,
+          0.06218333472295592,
+          0.06395929680710337,
+          1.8585371271570553e-06,
+          1.3506509835911737e-06,
+          0,
+          0
+        ],
+        "initialization_receipt": {
+          "raw_initial_sha256": "322c7f75e9ccc583eb1562d4dadcb89846f471135515d49e324fffb34f53e013",
+          "effective_initial_sha256": "322c7f75e9ccc583eb1562d4dadcb89846f471135515d49e324fffb34f53e013",
+          "fixed_reference_sha256": "322c7f75e9ccc583eb1562d4dadcb89846f471135515d49e324fffb34f53e013",
+          "explicit_boundary_sha256": "06a126dd43fc56886be051e4adcbf35a9ce0151ce9c9a3d79299ff81b4582dfd",
+          "implicit_boundary_sha256": "06a126dd43fc56886be051e4adcbf35a9ce0151ce9c9a3d79299ff81b4582dfd",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0,
+          "live_fixed_boundary_archive_identity": {
+            "sha256": "d30d402d743ee074dee40bb74fe481207c76416c3d9c7a8668618442f8e23947",
+            "entries": 173,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "effective_initial_archive_identity": {
+            "sha256": "940bcb3f56b82ea058b4a52e9e14cb656fe96de767ac6077c4150b591ec28e6b",
+            "entries": 1273,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "open_boundary_definition": "AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration|E0=0.3167838556291071|K0=0.61152006817226179|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40999999999999998|RANSOPENVELOCITYSCALE=0.20000000000000001|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.0050000000000000001|RANSWALLMAPHEIGHTAMPLITUDE=0|RANSWALLMAPHEIGHTWAVEX=1.5707963267948966|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPIMPLEHARDAUDITREJECTSTEP=0|RANSWALLPIMPLEREJECTSTEP=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.050000000000000003|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.71308649305426108|ROUGHX=37.237975525695468|SLOPE=0.17946842304608926|YAPSCALE=0.60382768562974354|ZV=-0.0025019456529227911",
+          "open_traction_load_sha256": "e9cac28022ebf08392720d45063bdc63ffae9010c0fcafe523bdbe4206526902",
+          "open_diffusive_load_sha256": "587d25d2bd21521189dc557c4bd83abf2e0bc80c1697bc6e2ae5b6f9a5342f31",
+          "open_advective_load_sha256": "f9d4f897ac7a395fb1cb1920fd52c585c2a29aff88115a00cf856dfa6f8423f9",
+          "open_explicit_implicit_agreement": true
+        },
+        "probe_execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v4/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A95-p3/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A95-p3/initial-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A95-p3/initial.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 276.2122350080008,
+          "process_cpu_seconds": 268.458747,
+          "peak_RSS_KiB": 19579580,
+          "actual_mapped_files_sha256": "11eab870e203d68d0518414671be84c669808c8b7ae21e932479edbcd57e28ed"
+        },
+        "packet_sha256": "62d2908d1dce19a41a0aae9756bcda2d73b108b1ac1d0d8127370448685d3049",
+        "packet_path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A95-p3/initial.json",
+        "physical_metrics": {
+          "schema": "CT6ManufacturedPhysicalMetricsV1",
+          "status": "pass",
+          "fields": {
+            "U": {
+              "scaled_weighted_RMS": 2.9503709439397114e-08,
+              "true_L2": 9.146829154283426e-09,
+              "scaled_gradient_RMS": 1.14099780058756e-06,
+              "volume": 2.402856850925395,
+              "scale": 0.2,
+              "scaled_drift_from_actual_initial": null
+            },
+            "w": {
+              "scaled_weighted_RMS": 5.937701526755798e-07,
+              "true_L2": 1.84082416978524e-07,
+              "scaled_gradient_RMS": 3.131005787429386e-05,
+              "volume": 2.402856850925395,
+              "scale": 0.2,
+              "scaled_drift_from_actual_initial": null
+            },
+            "k": {
+              "scaled_weighted_RMS": 2.8647596078024985e-11,
+              "true_L2": 2.7155815400182976e-11,
+              "scaled_gradient_RMS": 8.271962405863762e-10,
+              "volume": 2.402856850925395,
+              "scale": 0.6115200681722618,
+              "scaled_drift_from_actual_initial": null
+            },
+            "outer_epsilon": {
+              "scaled_weighted_RMS": 0.00016875806625433484,
+              "true_L2": 5.861448606835126e-05,
+              "scaled_gradient_RMS": 0.005727166947619612,
+              "volume": 1.2021392068235675,
+              "scale": 0.31678385562910716,
+              "scaled_drift_from_actual_initial": null
+            },
+            "Pi": {
+              "scaled_weighted_RMS": 1.7146434025336594e-05,
+              "true_L2": 2.657894644690327e-06,
+              "scaled_gradient_RMS": 0.00033140044693666767,
+              "volume": 2.402856850925395,
+              "scale": 0.1,
+              "scaled_drift_from_actual_initial": null
+            }
+          },
+          "traction": {
+            "ground_scaled_RMS": 1.8683273276887033e-09,
+            "ground_signed_mean": [
+              -0.00010807678195582018,
+              0.0,
+              1.0722349950903635e-08
+            ],
+            "ground_reference_mean": [
+              -0.00010807676487354532,
+              0.0,
+              1.0853492466979634e-08
+            ],
+            "full_interface_jump_scaled_RMS": 4.411562123314181e-05,
+            "conservative_k_interface_jump_scaled_RMS": 5.75068461624627e-08,
+            "outlet_reconstruction_scaled_RMS": 0.00010915547131834767,
+            "current_endpoint_trace_restriction_defect": 6.661338147750939e-16
+          },
+          "pressure": "absolute augmented Pi, no fitted gauge subtraction",
+          "field_limits": {
+            "U": 0.005,
+            "w": 0.005,
+            "k": 0.005,
+            "outer_epsilon": 0.005,
+            "Pi": 0.01
+          },
+          "traction_limit": 0.005,
+          "scope": "current FE coefficients and actual endpoint K; projection/error, drift and reconstructed physical traction remain separate"
+        },
+        "all_row": {
+          "schema": "CT6IndependentAllRowOperatorV1",
+          "status": "pass",
+          "model": "A95",
+          "maximum_scaled_defect": 2.165826243842284e-16,
+          "constrained_scaled_defect": 1.11901022598518e-16,
+          "native_term_sum_scaled_defect": 5.705472144385693e-16,
+          "geometry_primitive_defect": 2.220446049250313e-16,
+          "witness": {
+            "row": 36,
+            "native": 0.03582587792609139,
+            "independent": 0.035825877926091286,
+            "scale": 0.4805713701850766
+          },
+          "actual_stored_slots": 1273,
+          "physical_volume": 2.402856850925383,
+          "consumed_volume_points": 30912,
+          "independent_rays": 48,
+          "norm": "all-row maximum absolute difference / max(physical equation scale*actual integrated physical volume, sum absolute primitive increments)",
+          "scope": "current represented state, conservative unmasked operator; prescribed-row replacement separately checked; not analytical equilibrium cancellation or spatial/temporal convergence"
+        },
+        "continuous_weak": {
+          "schema": "CT6ContinuousNativeWeakV1",
+          "model": "A95",
+          "status": "pass",
+          "maximum_scaled_all_row_defect": 7.382280794034035e-17,
+          "shared_interface_cancellation": 1.1341153129885397e-17,
+          "witness": {
+            "row": 41,
+            "signed_load": 3.5477127962799115e-17,
+            "scale": 0.4805713701850766
+          },
+          "block_maximum": [
+            7.382280794034035e-17,
+            6.019278233730715e-17,
+            1.4196812153646425e-17,
+            3.362520771903801e-17,
+            1.5219997340976e-21,
+            1.2786338687894588e-20
+          ],
+          "scope": "analytical continuous fields and independently differentiated forcing on native test functions; all physical face fluxes included; projected/evolved residual is a separate object"
+        },
+        "geometry": {
+          "schema": "CT6NativeMappedGeometryV1",
+          "status": "pass",
+          "basis_transform": 4.805841015600703e-16,
+          "partition_and_constant_gradient": 1.977284730570495e-14,
+          "cofactor": 4.440892098500626e-16,
+          "all_element_all_mode_Stokes": 9.159339953157541e-16,
+          "physical_volume_defects": {
+            "0": 4.805246493004747e-15,
+            "3": 3.1400342508582273e-15,
+            "4": 1.4794126230476363e-15,
+            "5": 3.1400342508582273e-15
+          },
+          "tested_element_field_pairs": 84,
+          "scope": "native chart rows independently transformed to physical Cartesian gradients; all cell faces, oriented cofactors and all-mode element Stokes identities"
+        },
+        "raw_native_audit": {
+          "accepted_awf_covariance": [
+            0.37078875133090433,
+            0.27057080459458294
+          ],
+          "accepted_awf_hard_admissible": [
+            1
+          ],
+          "accepted_awf_inner_minimum_point": [
+            -0.95,
+            0,
+            0.5,
+            0.6054201554922435,
+            0.6054201554922435,
+            0.08081031817272327,
+            0.046419224875704435,
+            0.403613436994829,
+            0.37078875133090433
+          ],
+          "accepted_awf_outer_minimum_point": [
+            -0.7183400362866285,
+            0,
+            1,
+            0.6242356026857541,
+            0.15620957661271503,
+            0.27057080459458294
+          ],
+          "accepted_awf_reference_departure": [
+            0.9013960693054004,
+            0.9899999999999998,
+            1.0684,
+            0.9849124164189119,
+            1.0586652043501428,
+            0.9899999999999998,
+            1.0383999999999998
+          ],
+          "accepted_awf_scalar_domain": [
+            1,
+            0.9601667136496788,
+            0.5871612141877882,
+            0.6054048674905391,
+            0.15602199716707144,
+            0.6054048674905391,
+            0.3120439943341428,
+            5.222512985393207,
+            2.721685032007704e-16
+          ],
+          "accepted_awf_sources": [
+            0.002406396828303056,
+            2.0033316825900984,
+            0,
+            8.822699802409129e-07,
+            -2.000925285761795
+          ],
+          "admissible": [
+            1
+          ],
+          "common_velocity_k_dependent_epsilon_trace_defects": [
+            1.3877787807814457e-17,
+            1.1102230246251565e-16,
+            0
+          ],
+          "constitutive_modification": [
+            0,
+            0,
+            0
+          ],
+          "coupled_norms": [
+            0.06970824461941767,
+            0.0009206416370998129,
+            0.06218333472295592,
+            0.06395929680710337,
+            1.8585371271570553e-06,
+            1.3506509835911737e-06,
+            0,
+            0
+          ],
+          "energy": [
+            0.052157734850701146,
+            0,
+            -0.03207254227562566,
+            -4.644818263548872e-05,
+            0.002895123590829202,
+            0,
+            -0.029223866867431943,
+            0.08138160171813309,
+            1.4887335379499849,
+            0.11549340669693244,
+            -0.0,
+            -0.06333567184623129
+          ],
+          "inner_zero_covariance": [
+            0,
+            0,
+            0
+          ],
+          "interface": [
+            2.4028568509253825,
+            -0.14985651907505004,
+            6.731020528005009e-06,
+            7.0584993963944905e-06,
+            1.2133527423668483e-05,
+            7.03332271180465e-09,
+            -0.0011995373027445895,
+            1.3632029294675156e-05
+          ],
+          "interface_inner": [
+            72,
+            0.6054087037776902,
+            0.31204696307537505,
+            0.3707900442806033,
+            0,
+            0
+          ],
+          "interface_outer": [
+            72,
+            0.6054087037776902,
+            0.3120469606843243,
+            0.33500201715078015,
+            0,
+            0
+          ],
+          "mass_volume": [
+            5184,
+            0.5871640305421341,
+            0.15638571225856593,
+            0.270779702146213,
+            0,
+            0
+          ],
+          "momentum_k_load_and_boundary_reaction": [
+            0.17116360260344154,
+            0.12599174781009517,
+            0.01599639051898353,
+            0.20513429794777915,
+            0.1257761610748982,
+            0.07551987714459647
+          ],
+          "native_A95_minimum_radicand_geometry_element_side_block": [
+            35,
+            35,
+            0,
+            2
+          ],
+          "native_A95_minimum_radicand_point": [
+            1.15,
+            0,
+            1,
+            0.6520179846869699,
+            0.16707603018666414,
+            0.9568342711132566
+          ],
+          "native_A95_radicand_range": [
+            0.9568342711132566,
+            0.9878457579672112
+          ],
+          "native_inner_covariance_tensor_row_major": [
+            0.40354231973705257,
+            0,
+            -0.03282327448563334,
+            0,
+            0.403613436994829,
+            0,
+            -0.03282327448563334,
+            0,
+            0.40368188024436324
+          ],
+          "native_inner_covariance_witness_gradient_row_major": [
+            0.00044002584932533747,
+            0,
+            0.40584411856021,
+            0,
+            0,
+            0,
+            0.0003326572257379485,
+            0,
+            -0.0004234808814141341
+          ],
+          "native_inner_minimum_geometry_element_side_block": [
+            18,
+            18,
+            -1,
+            2
+          ],
+          "native_k_inner_outer_shared_interface_constant_test": [
+            -0.0256274291772087,
+            -0.01694787707514878,
+            -0.016948180373255482
+          ],
+          "native_k_inner_outer_shared_interface_dual": [
+            0.04380176451563892,
+            0.04275475825326694,
+            0.0382695769695992
+          ],
+          "native_k_inner_outer_shared_interface_max_row": [
+            0.0023615386624719873,
+            0.0031226418369136024,
+            0.003125645266036177
+          ],
+          "native_k_inner_outer_shared_interface_row_counts": [
+            216,
+            90,
+            18
+          ],
+          "native_outer_covariance_tensor_row_major": [
+            0.5466990338523828,
+            0,
+            -0.06445247520282617,
+            0,
+            0.4161571913582241,
+            0,
+            -0.06445247520282617,
+            0,
+            0.2856149801609012
+          ],
+          "native_outer_covariance_witness_gradient_row_major": [
+            0.0031554537277712893,
+            0,
+            0.1971573269178854,
+            0,
+            0,
+            0,
+            9.791977478780218e-05,
+            0,
+            -0.0031548498172273656
+          ],
+          "native_outer_isotropic_production_work_maximum": [
+            4.156010993780431e-06
+          ],
+          "native_outer_isotropic_production_work_witness": [
+            0.48165996371337155,
+            0,
+            0.5,
+            4.156010993780431e-06,
+            28,
+            1
+          ],
+          "native_outer_minimum_geometry_element_side_block": [
+            31,
+            31,
+            0,
+            2
+          ],
+          "native_raw_divergence_maximum_witness": [
+            0.5581401564195043,
+            0,
+            0.25,
+            -4.9622117369529494e-05,
+            22,
+            0,
+            0
+          ],
+          "native_raw_divergence_range": [
+            -4.9622117369529494e-05,
+            4.4449065496115266e-05
+          ],
+          "outer_constitutive_range": [
+            0.9013960693054004,
+            0.9899999999999998,
+            1.0684,
+            0.9849124164189119,
+            1.0586652043501428,
+            0.9899999999999998,
+            1.0383999999999998,
+            5.088078033888405e-06
+          ],
+          "outer_tangent_diagnostic_available": [
+            0
+          ],
+          "physical_sample_K": [
+            48,
+            0.605413098127012,
+            0.3120503605633208,
+            0.3707900806316485,
+            0,
+            0
+          ],
+          "physical_sample_outer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "prescribed_source_inner": [
+            29184,
+            0.5871679237895362,
+            0.3121527316147253,
+            0.3708261495703227,
+            0,
+            0
+          ],
+          "r4_outer_gradient_witness": [
+            -1.2,
+            0,
+            0.5,
+            0,
+            2,
+            -0.9013960693054004,
+            24,
+            1
+          ],
+          "reconstruction_dense": [
+            5028,
+            0.5871612141877882,
+            0.15602199716707144,
+            0.2705708240107392,
+            0,
+            0
+          ],
+          "reconstruction_native": [
+            2304,
+            0.587170191803004,
+            0.15602613990282005,
+            0.27057080459458294,
+            0,
+            0
+          ],
+          "roughness": [
+            0.004474824876243927,
+            0,
+            1.8994069916214001e-06,
+            4.1546472277115566e-05,
+            4.6566483308252415e-17
+          ],
+          "scalar_minimum_point_0": [
+            -1,
+            0,
+            0
+          ],
+          "scalar_minimum_point_1": [
+            -1,
+            0,
+            0.5
+          ],
+          "scalar_minimum_point_2": [
+            -1,
+            0,
+            1
+          ],
+          "source_volume_inner": [
+            29184,
+            0.5871679237895363,
+            0.31215109765060994,
+            0.3708255743751359,
+            0,
+            0
+          ],
+          "source_volume_outer": [
+            1728,
+            0.6054932740942089,
+            0.15638571225856593,
+            0.270779702146213,
+            0,
+            0
+          ],
+          "strong_continuity": [
+            8.632638375166833e-06,
+            1.7676959756213903e-06,
+            4.62354411076333e-07,
+            -4.647303132897316e-07,
+            -2.3759021979128574e-09
+          ],
+          "wall_cutoff_activity": [
+            91,
+            91,
+            0,
+            0
+          ],
+          "wall_cutoff_limiting_point": [
+            0,
+            0,
+            0.5
+          ],
+          "wall_cutoff_required_budget": [
+            1,
+            5.222512985393207,
+            2.721685032007704e-16
+          ]
+        },
+        "actual_quadrature": {
+          "wall_normal": 32,
+          "wall_tangential": 8,
+          "outer_volume": 12,
+          "mass_override": 12,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 12,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 29184,
+          "outer_volume_points": 1728
+        }
+      },
+      "A95-p4": {
+        "status": "pass",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v4/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 158.24305856699993,
+          "process_cpu_seconds": 157.22614599999997,
+          "peak_RSS_KiB": 404764,
+          "actual_mapped_files_sha256": "d9ae49b3312c7ef1a494528c548ed546d98b65e7c0372d34fd296303a24652da"
+        },
+        "native_report_sha256": "246842b922ee90098495c85f70f005841aa44245324acd05d9fefee7e8f6b319",
+        "stored_slots": 2283,
+        "state_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+        "checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A95-p4/checkpoint",
+        "history_sha256": "f198af876246e02e4577b86cb81ab46518e93ca4a7f1caa24b995120acbf05a9",
+        "raw_native_alpha_zero": [
+          0.07050191728859304,
+          0.0005935639093129676,
+          0.06251920498312229,
+          0.06449979948447762,
+          9.973044003155534e-09,
+          1.678853190567358e-08,
+          0,
+          0
+        ],
+        "initialization_receipt": {
+          "raw_initial_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "effective_initial_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "explicit_boundary_sha256": "5f5d08419c39622269b4aca21f37d430ac197af5c76309d41bddf71b69782314",
+          "implicit_boundary_sha256": "5f5d08419c39622269b4aca21f37d430ac197af5c76309d41bddf71b69782314",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0,
+          "live_fixed_boundary_archive_identity": {
+            "sha256": "aae83f2f74d9b8d486cf19df54dc4be86010c531a5620e6f45297bb05412e4bb",
+            "entries": 229,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "effective_initial_archive_identity": {
+            "sha256": "31026003883ce14c96abd73d54afb47c327e5085678bd437b796e016ade3119e",
+            "entries": 2283,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "open_boundary_definition": "AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration|E0=0.3167838556291071|K0=0.61152006817226179|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40999999999999998|RANSOPENVELOCITYSCALE=0.20000000000000001|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.0050000000000000001|RANSWALLMAPHEIGHTAMPLITUDE=0|RANSWALLMAPHEIGHTWAVEX=1.5707963267948966|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPIMPLEHARDAUDITREJECTSTEP=0|RANSWALLPIMPLEREJECTSTEP=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.050000000000000003|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.71308649305426108|ROUGHX=37.237975525695468|SLOPE=0.17946842304608926|YAPSCALE=0.60382768562974354|ZV=-0.0025019456529227911",
+          "open_traction_load_sha256": "f77234a0c24f57a611ae2eb6b1049ab3f4bdccc14328ab37415d8d4c735bcfd9",
+          "open_diffusive_load_sha256": "5e3d4b4a2f8562131a6b6b60d69e1040434e273f600635eb5d38cff55cb69c6f",
+          "open_advective_load_sha256": "3f06a1e00ae0e80218dfa82e3dc01b14d8d01d5826fb26ea120d3314e579a075",
+          "open_explicit_implicit_agreement": true
+        },
+        "probe_execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v4/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A95-p4/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A95-p4/initial-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A95-p4/initial.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 314.19623541000055,
+          "process_cpu_seconds": 306.9021589999999,
+          "peak_RSS_KiB": 28703760,
+          "actual_mapped_files_sha256": "e9ad099dff5535bf537454a6933a4fd9c4dbd797100981baab409342605d1f6c"
+        },
+        "packet_sha256": "07edf9f05a286e5c0448d44431d600ce944a95366da8781a7ef6ec0ae26bc68d",
+        "packet_path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A95-p4/initial.json",
+        "physical_metrics": {
+          "schema": "CT6ManufacturedPhysicalMetricsV1",
+          "status": "pass",
+          "fields": {
+            "U": {
+              "scaled_weighted_RMS": 2.1149874959308843e-09,
+              "true_L2": 6.556948145270515e-10,
+              "scaled_gradient_RMS": 1.0026484606970862e-07,
+              "volume": 2.402856850925395,
+              "scale": 0.2,
+              "scaled_drift_from_actual_initial": null
+            },
+            "w": {
+              "scaled_weighted_RMS": 2.995420625814632e-08,
+              "true_L2": 9.28649353933681e-09,
+              "scaled_gradient_RMS": 1.18343297558859e-06,
+              "volume": 2.402856850925395,
+              "scale": 0.2,
+              "scaled_drift_from_actual_initial": null
+            },
+            "k": {
+              "scaled_weighted_RMS": 2.426950853435165e-12,
+              "true_L2": 2.3005710210971926e-12,
+              "scaled_gradient_RMS": 1.4219422358577334e-10,
+              "volume": 2.402856850925395,
+              "scale": 0.6115200681722618,
+              "scaled_drift_from_actual_initial": null
+            },
+            "outer_epsilon": {
+              "scaled_weighted_RMS": 1.8946806141824787e-05,
+              "true_L2": 6.580765763018539e-06,
+              "scaled_gradient_RMS": 0.0007517314291101239,
+              "volume": 1.2021392068235675,
+              "scale": 0.31678385562910716,
+              "scaled_drift_from_actual_initial": null
+            },
+            "Pi": {
+              "scaled_weighted_RMS": 1.16566896747082e-07,
+              "true_L2": 1.8069210784844664e-08,
+              "scaled_gradient_RMS": 2.5278809702469556e-06,
+              "volume": 2.402856850925395,
+              "scale": 0.1,
+              "scaled_drift_from_actual_initial": null
+            }
+          },
+          "traction": {
+            "ground_scaled_RMS": 1.2273245987015697e-10,
+            "ground_signed_mean": [
+              -0.00010807676391545359,
+              0.0,
+              1.0857263078039105e-08
+            ],
+            "ground_reference_mean": [
+              -0.00010807676487354532,
+              0.0,
+              1.0853492466979634e-08
+            ],
+            "full_interface_jump_scaled_RMS": 1.4627845978342872e-07,
+            "conservative_k_interface_jump_scaled_RMS": 1.1813572909660593e-10,
+            "outlet_reconstruction_scaled_RMS": 1.0710611095179402e-05,
+            "current_endpoint_trace_restriction_defect": 1.3322676295501878e-15
+          },
+          "pressure": "absolute augmented Pi, no fitted gauge subtraction",
+          "field_limits": {
+            "U": 0.005,
+            "w": 0.005,
+            "k": 0.005,
+            "outer_epsilon": 0.005,
+            "Pi": 0.01
+          },
+          "traction_limit": 0.005,
+          "scope": "current FE coefficients and actual endpoint K; projection/error, drift and reconstructed physical traction remain separate"
+        },
+        "all_row": {
+          "schema": "CT6IndependentAllRowOperatorV1",
+          "status": "pass",
+          "model": "A95",
+          "maximum_scaled_defect": 1.4438841625615226e-16,
+          "constrained_scaled_defect": 9.204761536329707e-17,
+          "native_term_sum_scaled_defect": 5.584094819102608e-16,
+          "geometry_primitive_defect": 2.220446049250313e-16,
+          "witness": {
+            "row": 626,
+            "native": -0.009600318457347606,
+            "independent": -0.009600318457347675,
+            "scale": 0.4805713701850766
+          },
+          "actual_stored_slots": 2283,
+          "physical_volume": 2.402856850925383,
+          "consumed_volume_points": 30912,
+          "independent_rays": 48,
+          "norm": "all-row maximum absolute difference / max(physical equation scale*actual integrated physical volume, sum absolute primitive increments)",
+          "scope": "current represented state, conservative unmasked operator; prescribed-row replacement separately checked; not analytical equilibrium cancellation or spatial/temporal convergence"
+        },
+        "continuous_weak": {
+          "schema": "CT6ContinuousNativeWeakV1",
+          "model": "A95",
+          "status": "pass",
+          "maximum_scaled_all_row_defect": 7.382280794034035e-17,
+          "shared_interface_cancellation": 1.1341153129885397e-17,
+          "witness": {
+            "row": 41,
+            "signed_load": 3.5477127962799115e-17,
+            "scale": 0.4805713701850766
+          },
+          "block_maximum": [
+            7.382280794034035e-17,
+            6.019278233730715e-17,
+            1.4196812153646425e-17,
+            3.362520771903801e-17,
+            1.5653233731565339e-21,
+            1.2786338687894588e-20
+          ],
+          "scope": "analytical continuous fields and independently differentiated forcing on native test functions; all physical face fluxes included; projected/evolved residual is a separate object"
+        },
+        "geometry": {
+          "schema": "CT6NativeMappedGeometryV1",
+          "status": "pass",
+          "basis_transform": 4.86445010056735e-16,
+          "partition_and_constant_gradient": 1.9772847305704943e-14,
+          "cofactor": 4.440892098500626e-16,
+          "all_element_all_mode_Stokes": 9.159339953157541e-16,
+          "physical_volume_defects": {
+            "0": 4.805246493004747e-15,
+            "3": 3.1400342508582273e-15,
+            "4": 1.4794126230476363e-15,
+            "5": 3.1400342508582273e-15
+          },
+          "tested_element_field_pairs": 84,
+          "scope": "native chart rows independently transformed to physical Cartesian gradients; all cell faces, oriented cofactors and all-mode element Stokes identities"
+        },
+        "raw_native_audit": {
+          "accepted_awf_covariance": [
+            0.3707899898204935,
+            0.2705702512374919
+          ],
+          "accepted_awf_hard_admissible": [
+            1
+          ],
+          "accepted_awf_inner_minimum_point": [
+            -0.9428571428571428,
+            0,
+            0.5,
+            0.6054248354927652,
+            0.6054248354927652,
+            0.08081063064460384,
+            0.04642378024450319,
+            0.4036165569951768,
+            0.3707899898204935
+          ],
+          "accepted_awf_outer_minimum_point": [
+            -0.72,
+            0,
+            1,
+            0.6242299012691541,
+            0.1562073704418133,
+            0.2705702512374919
+          ],
+          "accepted_awf_reference_departure": [
+            0.9013960693527743,
+            0.9899999999999998,
+            1.0684,
+            0.985013438675033,
+            1.0582106677134433,
+            0.9899999999999998,
+            1.0383999999999998
+          ],
+          "accepted_awf_scalar_domain": [
+            1,
+            0.9601667136323869,
+            0.5871612141772139,
+            0.6054048674905391,
+            0.1560219985314141,
+            0.6054048674905391,
+            0.31204399706282815,
+            5.222512985393207,
+            2.721685032007704e-16
+          ],
+          "accepted_awf_sources": [
+            0.0024065893797631886,
+            2.003331682590098,
+            0,
+            8.822699884693884e-07,
+            -2.0009250932103346
+          ],
+          "admissible": [
+            1
+          ],
+          "common_velocity_k_dependent_epsilon_trace_defects": [
+            1.3877787807814457e-17,
+            1.1102230246251565e-16,
+            0
+          ],
+          "constitutive_modification": [
+            0,
+            0,
+            0
+          ],
+          "coupled_norms": [
+            0.07050191728859304,
+            0.0005935639093129676,
+            0.06251920498312229,
+            0.06449979948447762,
+            9.973044003155534e-09,
+            1.678853190567358e-08,
+            0,
+            0
+          ],
+          "energy": [
+            0.05212457799793445,
+            0,
+            -0.03210569718943679,
+            -4.6448649753278816e-05,
+            0.002895122631633273,
+            0,
+            -0.02925702320755679,
+            0.08138160120549123,
+            1.4887335379482383,
+            0.11549103841366365,
+            -0.0,
+            -0.0633664604157292
+          ],
+          "inner_zero_covariance": [
+            0,
+            0,
+            0
+          ],
+          "interface": [
+            2.4028568509253825,
+            -0.14985651907497782,
+            1.6982189108058607e-08,
+            2.3404553653457943e-08,
+            4.465713516924833e-08,
+            1.4448622852031434e-11,
+            -0.0012000025967431145,
+            -4.213041471922212e-09
+          ],
+          "interface_inner": [
+            72,
+            0.6054087037776902,
+            0.31204696307537505,
+            0.3707913492557418,
+            0,
+            0
+          ],
+          "interface_outer": [
+            72,
+            0.6054087037776902,
+            0.31204696307534724,
+            0.33500218227328227,
+            0,
+            0
+          ],
+          "mass_volume": [
+            5184,
+            0.5871640305181117,
+            0.15638353089092627,
+            0.2707779541140377,
+            0,
+            0
+          ],
+          "momentum_k_load_and_boundary_reaction": [
+            0.171163556283998,
+            0.1259917531661803,
+            0.015962384016956023,
+            0.20513989419618883,
+            0.12577841031461268,
+            0.07551662654983783
+          ],
+          "native_A95_minimum_radicand_geometry_element_side_block": [
+            35,
+            35,
+            0,
+            2
+          ],
+          "native_A95_minimum_radicand_point": [
+            1.16,
+            0,
+            1,
+            0.6522815498363521,
+            0.16718027804527794,
+            0.9568339776188491
+          ],
+          "native_A95_radicand_range": [
+            0.9568339776188491,
+            0.9878455480587319
+          ],
+          "native_inner_covariance_tensor_row_major": [
+            0.40354699519549186,
+            0,
+            -0.03282649611035358,
+            0,
+            0.4036165569951768,
+            0,
+            -0.03282649611035358,
+            0,
+            0.4036861240838995
+          ],
+          "native_inner_covariance_witness_gradient_row_major": [
+            0.00043040005460933734,
+            0,
+            0.40588898739366674,
+            0,
+            0,
+            0,
+            0.0003260841693910173,
+            0,
+            -0.000430432779498051
+          ],
+          "native_inner_minimum_geometry_element_side_block": [
+            18,
+            18,
+            -1,
+            2
+          ],
+          "native_k_inner_outer_shared_interface_constant_test": [
+            -0.02562736808869818,
+            -0.016956380203885863,
+            -0.01697049424029777
+          ],
+          "native_k_inner_outer_shared_interface_dual": [
+            0.04414537988201619,
+            0.04338016934884549,
+            0.038392418934435145
+          ],
+          "native_k_inner_outer_shared_interface_max_row": [
+            0.0023615131766317092,
+            0.0031242560575103916,
+            0.0031299105811408334
+          ],
+          "native_k_inner_outer_shared_interface_row_counts": [
+            384,
+            168,
+            24
+          ],
+          "native_outer_covariance_tensor_row_major": [
+            0.5466909184742882,
+            0,
+            -0.06445414288357026,
+            0,
+            0.41615326669573793,
+            0,
+            -0.06445414288357026,
+            0,
+            0.2856156173682821
+          ],
+          "native_outer_covariance_witness_gradient_row_major": [
+            0.003155684439643165,
+            0,
+            0.19715068481535017,
+            0,
+            0,
+            0,
+            0.00010795871140337983,
+            0,
+            -0.003155688454360351
+          ],
+          "native_outer_isotropic_production_work_maximum": [
+            4.000655319842003e-08
+          ],
+          "native_outer_isotropic_production_work_witness": [
+            0.4,
+            0,
+            0.75,
+            4.000655319842003e-08,
+            34,
+            0
+          ],
+          "native_outer_minimum_geometry_element_side_block": [
+            31,
+            31,
+            0,
+            2
+          ],
+          "native_raw_divergence_maximum_witness": [
+            0,
+            0,
+            0.39245714845842283,
+            -2.0823510311148048e-07,
+            20,
+            0,
+            0
+          ],
+          "native_raw_divergence_range": [
+            -2.0823510311148048e-07,
+            1.9713770652951372e-07
+          ],
+          "outer_constitutive_range": [
+            0.9013960693527743,
+            0.9899999999999998,
+            1.0684,
+            0.985013438675033,
+            1.0582106677134433,
+            0.9899999999999998,
+            1.0383999999999998,
+            8.870599012864176e-08
+          ],
+          "outer_tangent_diagnostic_available": [
+            0
+          ],
+          "physical_sample_K": [
+            48,
+            0.605413098127012,
+            0.3120503605633208,
+            0.3707914613431212,
+            0,
+            0
+          ],
+          "physical_sample_outer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "prescribed_source_inner": [
+            29184,
+            0.5871679237566757,
+            0.3121527316147253,
+            0.37082752064814406,
+            0,
+            0
+          ],
+          "r4_outer_gradient_witness": [
+            -1.2,
+            0,
+            0.5,
+            0,
+            2,
+            -0.9013960693527743,
+            24,
+            1
+          ],
+          "reconstruction_dense": [
+            6852,
+            0.5871612141772139,
+            0.1560219985314141,
+            0.2705702512374919,
+            0,
+            0
+          ],
+          "reconstruction_native": [
+            2304,
+            0.5871701917657918,
+            0.1560261408073568,
+            0.27057040071414823,
+            0,
+            0
+          ],
+          "roughness": [
+            0.004474871093538649,
+            0,
+            1.89779838518126e-06,
+            4.1547015313092313e-05,
+            4.653937825394028e-17
+          ],
+          "scalar_minimum_point_0": [
+            -1,
+            0,
+            0
+          ],
+          "scalar_minimum_point_1": [
+            -1,
+            0,
+            0.5
+          ],
+          "scalar_minimum_point_2": [
+            -1,
+            0,
+            1
+          ],
+          "source_volume_inner": [
+            29184,
+            0.5871679237566758,
+            0.31215109765060994,
+            0.3708269456064052,
+            0,
+            0
+          ],
+          "source_volume_outer": [
+            1728,
+            0.6054932740942089,
+            0.15638353089092627,
+            0.2707779541140377,
+            0,
+            0
+          ],
+          "strong_continuity": [
+            3.135648773868943e-08,
+            2.367786334352299e-08,
+            -2.6329211171088644e-09,
+            2.5098172792534478e-09,
+            -1.231038561561905e-10
+          ],
+          "wall_cutoff_activity": [
+            91,
+            91,
+            0,
+            0
+          ],
+          "wall_cutoff_limiting_point": [
+            0,
+            0,
+            0.5
+          ],
+          "wall_cutoff_required_budget": [
+            1,
+            5.222512985393207,
+            2.721685032007704e-16
+          ]
+        },
+        "actual_quadrature": {
+          "wall_normal": 32,
+          "wall_tangential": 8,
+          "outer_volume": 12,
+          "mass_override": 12,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 12,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 29184,
+          "outer_volume_points": 1728
+        }
+      },
+      "A93-p4": {
+        "status": "pass",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v4/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 158.05624731100033,
+          "process_cpu_seconds": 157.02519300000014,
+          "peak_RSS_KiB": 405460,
+          "actual_mapped_files_sha256": "bbbd64df029a38bdaeafda68c6e5d78f91d7c6fa56854ced13d21d7c9e77aecc"
+        },
+        "native_report_sha256": "31c5df672d461a3a671cb1570110096da42bcb25bedda81801adc3f3ebc2a8d9",
+        "stored_slots": 2283,
+        "state_sha256": "a255021afe7809771fab7f2717d9fe67ae22e2be7bff530050ac506b64fe1538",
+        "checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A93-p4/checkpoint",
+        "history_sha256": "d49c3f41a42aab1e330f731b14c38ad6f3e170782db684161fc4bf7bf2ae9dc5",
+        "raw_native_alpha_zero": [
+          0.0702635406337204,
+          0.0005971422987959744,
+          0.06384152335041048,
+          0.06410594783934997,
+          2.0034968281350907e-08,
+          1.6880202140917114e-08,
+          0,
+          0
+        ],
+        "initialization_receipt": {
+          "raw_initial_sha256": "a255021afe7809771fab7f2717d9fe67ae22e2be7bff530050ac506b64fe1538",
+          "effective_initial_sha256": "a255021afe7809771fab7f2717d9fe67ae22e2be7bff530050ac506b64fe1538",
+          "fixed_reference_sha256": "a255021afe7809771fab7f2717d9fe67ae22e2be7bff530050ac506b64fe1538",
+          "explicit_boundary_sha256": "6e1be83d16fc8fcf4888926cf7166466b50a9739af16ad76a1c2c1bfb07f7590",
+          "implicit_boundary_sha256": "6e1be83d16fc8fcf4888926cf7166466b50a9739af16ad76a1c2c1bfb07f7590",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0,
+          "live_fixed_boundary_archive_identity": {
+            "sha256": "f4481ae2a848e6b7aa355df652bab3909b28d83ce80711011c8f43d45fdc6bbd",
+            "entries": 229,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "effective_initial_archive_identity": {
+            "sha256": "9d83412ec6184eee91706db2b6cffd5b3f5a73ee8f58ea8bb85ca53358740990",
+            "entries": 2283,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "open_boundary_definition": "AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration|E0=0.29883945554447877|K0=0.54420246678354678|KAPPA=0.42832362870822022|KINVIS=1.5e-05|QSTAR=3.401265417397167|RANSKAPPA=0.40999999999999998|RANSOPENVELOCITYSCALE=0.20000000000000001|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.0050000000000000001|RANSWALLMAPHEIGHTAMPLITUDE=0|RANSWALLMAPHEIGHTWAVEX=1.5707963267948966|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPIMPLEHARDAUDITREJECTSTEP=0|RANSWALLPIMPLEREJECTSTEP=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.050000000000000003|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.70836340232828932|ROUGHX=35.128609409648739|SLOPE=0.16930233304980205|YAPSCALE=0.53735688023134587|ZV=-0.0024894083277834378",
+          "open_traction_load_sha256": "6765c7c1af51771e51b5362d9a0db9db1d614f82b5c3da9f2a26e412116d3a3c",
+          "open_diffusive_load_sha256": "5ce76c0316980fc44e79383fd62d699f1e2c05e3c25ddd7b94bc8c1ad1727b7e",
+          "open_advective_load_sha256": "3b5baf16082945a9782466fe4eaa9f0293e3393852782e296d77c4e316a607b1",
+          "open_explicit_implicit_agreement": true
+        },
+        "probe_execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v4/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A93-p4/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A93-p4/initial-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A93-p4/initial.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 313.81538568699943,
+          "process_cpu_seconds": 306.83079899999996,
+          "peak_RSS_KiB": 28707680,
+          "actual_mapped_files_sha256": "49e668d396805bdfc69d6ab5c2e30371ed69dc52a3a94009d9017c2dd3b9b696"
+        },
+        "packet_sha256": "006ae581c772a431b8fda3b505bd4a9cb4d3e615676432fa6cd3ee5bd7bf1de5",
+        "packet_path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/A93-p4/initial.json",
+        "physical_metrics": {
+          "schema": "CT6ManufacturedPhysicalMetricsV1",
+          "status": "pass",
+          "fields": {
+            "U": {
+              "scaled_weighted_RMS": 5.69550143408261e-09,
+              "true_L2": 1.7657365651779675e-09,
+              "scaled_gradient_RMS": 2.698851151021481e-07,
+              "volume": 2.4028568509253914,
+              "scale": 0.2,
+              "scaled_drift_from_actual_initial": null
+            },
+            "w": {
+              "scaled_weighted_RMS": 3.048263449175287e-08,
+              "true_L2": 9.450318457116286e-09,
+              "scaled_gradient_RMS": 1.2095266415621707e-06,
+              "volume": 2.4028568509253914,
+              "scale": 0.2,
+              "scaled_drift_from_actual_initial": null
+            },
+            "k": {
+              "scaled_weighted_RMS": 4.670762300823627e-11,
+              "true_L2": 3.9401451556135626e-11,
+              "scaled_gradient_RMS": 2.139385552712018e-09,
+              "volume": 2.4028568509253914,
+              "scale": 0.5442024667835468,
+              "scaled_drift_from_actual_initial": null
+            },
+            "outer_epsilon": {
+              "scaled_weighted_RMS": 1.8946806141851347e-05,
+              "true_L2": 6.207994576565368e-06,
+              "scaled_gradient_RMS": 0.0007517314291099356,
+              "volume": 1.2021392068235675,
+              "scale": 0.2988394555444788,
+              "scaled_drift_from_actual_initial": null
+            },
+            "Pi": {
+              "scaled_weighted_RMS": 1.3825109425497082e-07,
+              "true_L2": 2.1430511003039357e-08,
+              "scaled_gradient_RMS": 2.9376805639828464e-06,
+              "volume": 2.4028568509253914,
+              "scale": 0.1,
+              "scaled_drift_from_actual_initial": null
+            }
+          },
+          "traction": {
+            "ground_scaled_RMS": 2.639902974696393e-10,
+            "ground_signed_mean": [
+              -0.0002845088275072665,
+              0.0,
+              2.0486087046362507e-08
+            ],
+            "ground_reference_mean": [
+              -0.0002845088303468358,
+              0.0,
+              2.047837224932474e-08
+            ],
+            "full_interface_jump_scaled_RMS": 3.560463406594674e-07,
+            "conservative_k_interface_jump_scaled_RMS": 1.9957921421617164e-09,
+            "outlet_reconstruction_scaled_RMS": 5.951758302538876e-06,
+            "current_endpoint_trace_restriction_defect": 7.771561172376096e-16
+          },
+          "pressure": "absolute augmented Pi, no fitted gauge subtraction",
+          "field_limits": {
+            "U": 0.005,
+            "w": 0.005,
+            "k": 0.005,
+            "outer_epsilon": 0.005,
+            "Pi": 0.01
+          },
+          "traction_limit": 0.005,
+          "scope": "current FE coefficients and actual endpoint K; projection/error, drift and reconstructed physical traction remain separate"
+        },
+        "all_row": {
+          "schema": "CT6IndependentAllRowOperatorV1",
+          "status": "pass",
+          "model": "A93",
+          "maximum_scaled_defect": 1.0478615589263198e-16,
+          "constrained_scaled_defect": 1.0478615589263198e-16,
+          "native_term_sum_scaled_defect": 5.722645234468534e-16,
+          "geometry_primitive_defect": 2.220446049250313e-16,
+          "witness": {
+            "row": 1884,
+            "native": -0.001547429808685533,
+            "independent": -0.0015474298086854577,
+            "scale": 0.7180684330818624
+          },
+          "actual_stored_slots": 2283,
+          "physical_volume": 2.402856850925383,
+          "consumed_volume_points": 30912,
+          "independent_rays": 48,
+          "norm": "all-row maximum absolute difference / max(physical equation scale*actual integrated physical volume, sum absolute primitive increments)",
+          "scope": "current represented state, conservative unmasked operator; prescribed-row replacement separately checked; not analytical equilibrium cancellation or spatial/temporal convergence"
+        },
+        "continuous_weak": {
+          "schema": "CT6ContinuousNativeWeakV1",
+          "model": "A93",
+          "status": "pass",
+          "maximum_scaled_all_row_defect": 1.0625379987287455e-16,
+          "shared_interface_cancellation": 1.6289523230460927e-17,
+          "witness": {
+            "row": 44,
+            "signed_load": 5.106253419227824e-17,
+            "scale": 0.4805713701850766
+          },
+          "block_maximum": [
+            1.0625379987287455e-16,
+            9.462358790185135e-17,
+            1.3455849465690974e-17,
+            4.3012905129558407e-17,
+            2.016709536244094e-21,
+            1.2786338687894588e-20
+          ],
+          "scope": "analytical continuous fields and independently differentiated forcing on native test functions; all physical face fluxes included; projected/evolved residual is a separate object"
+        },
+        "geometry": {
+          "schema": "CT6NativeMappedGeometryV1",
+          "status": "pass",
+          "basis_transform": 4.936201694317912e-16,
+          "partition_and_constant_gradient": 1.9772847305704943e-14,
+          "cofactor": 4.440892098500626e-16,
+          "all_element_all_mode_Stokes": 7.216449660063518e-16,
+          "physical_volume_defects": {
+            "0": 3.3267091105417476e-15,
+            "3": 3.1400342508582273e-15,
+            "4": 1.4794126230476363e-15,
+            "5": 3.1400342508582273e-15
+          },
+          "tested_element_field_pairs": 84,
+          "scope": "native chart rows independently transformed to physical Cartesian gradients; all cell faces, oriented cofactors and all-mode element Stokes identities"
+        },
+        "raw_native_audit": {
+          "accepted_awf_covariance": [
+            0.29232352982116533,
+            0.2670928798588203
+          ],
+          "accepted_awf_hard_admissible": [
+            1
+          ],
+          "accepted_awf_inner_minimum_point": [
+            -0.9142857142857144,
+            0,
+            0.5,
+            0.5388004243377607,
+            0.5388004243377607,
+            0.08566269271790382,
+            0.09457801786422207,
+            0.3592002828918404,
+            0.29232352982116533
+          ],
+          "accepted_awf_outer_minimum_point": [
+            -0.96,
+            0,
+            1,
+            0.5550952233586862,
+            0.14718761258183502,
+            0.2670928798588203
+          ],
+          "accepted_awf_reference_departure": [
+            0.8954756887004572,
+            0.9899999999999998,
+            1.0683999999999996,
+            0.9850134386750329,
+            1.058210667713443,
+            0.9899999999999998,
+            1.0384
+          ],
+          "accepted_awf_scalar_domain": [
+            1,
+            0.9304149451956522,
+            0.5063341083077525,
+            0.5387604421157113,
+            0.14718404446935826,
+            0.5387604421157113,
+            0.29436808893871647,
+            5.231121151434867,
+            2.8803498819010593e-16
+          ],
+          "accepted_awf_sources": [
+            0.005711739176744072,
+            1.8929652534070802,
+            0,
+            1.975020172137986e-06,
+            -1.8872535142303362
+          ],
+          "admissible": [
+            1
+          ],
+          "common_velocity_k_dependent_epsilon_trace_defects": [
+            1.3877787807814457e-17,
+            1.1102230246251565e-16,
+            0
+          ],
+          "constitutive_modification": [
+            0,
+            0,
+            0
+          ],
+          "coupled_norms": [
+            0.0702635406337204,
+            0.0005971422987959744,
+            0.06384152335041048,
+            0.06410594783934997,
+            2.0034968281350907e-08,
+            1.6880202140917114e-08,
+            0,
+            0
+          ],
+          "energy": [
+            0.07309005211844741,
+            0,
+            0.004704378430615565,
+            -4.499048915745281e-05,
+            0.010134565992337597,
+            0,
+            0.01479395393379571,
+            0.0582960981846517,
+            1.3135740048097562,
+            0.1310863681261228,
+            -0.0,
+            -0.05799631600767538
+          ],
+          "inner_zero_covariance": [
+            0,
+            0,
+            0
+          ],
+          "interface": [
+            2.4028568509253825,
+            0.0014639573746959155,
+            2.3231540235577877e-08,
+            5.696741448972378e-08,
+            5.306771398023161e-08,
+            2.1722315470416115e-10,
+            -0.001200002730643099,
+            -1.2906535631559912e-08
+          ],
+          "interface_inner": [
+            72,
+            0.5387638560951366,
+            0.29437088693981056,
+            0.2923240304854971,
+            0,
+            0
+          ],
+          "interface_outer": [
+            72,
+            0.5387638560951366,
+            0.29437088693978436,
+            0.29243508377288246,
+            0,
+            0
+          ],
+          "mass_volume": [
+            5184,
+            0.5063341083077525,
+            0.14752509762455698,
+            0.26717350670466783,
+            0,
+            0
+          ],
+          "momentum_k_load_and_boundary_reaction": [
+            0.18322761168588764,
+            -0.06606402138684403,
+            0.030013289947369896,
+            0.21717771197714308,
+            -0.0662796288331229,
+            0.08425402614398148
+          ],
+          "native_inner_covariance_tensor_row_major": [
+            0.3593869738703735,
+            0,
+            -0.06687649721539347,
+            0,
+            0.3592002828918404,
+            0,
+            -0.06687649721539347,
+            0,
+            0.3590136013379045
+          ],
+          "native_inner_covariance_witness_gradient_row_major": [
+            -0.001089686610411957,
+            0,
+            0.7804030295420797,
+            0,
+            0,
+            0,
+            0.0002926863353648107,
+            0,
+            0.0010896316004837616
+          ],
+          "native_inner_minimum_geometry_element_side_block": [
+            18,
+            18,
+            -1,
+            2
+          ],
+          "native_k_inner_outer_shared_interface_constant_test": [
+            -0.0239128501083678,
+            -0.015089830449469101,
+            -0.015238055638774683
+          ],
+          "native_k_inner_outer_shared_interface_dual": [
+            0.04599919120902178,
+            0.043380299935742946,
+            0.038737753011253456
+          ],
+          "native_k_inner_outer_shared_interface_max_row": [
+            0.002182330073988395,
+            0.002780338582057205,
+            0.0028100261066450884
+          ],
+          "native_k_inner_outer_shared_interface_row_counts": [
+            384,
+            168,
+            24
+          ],
+          "native_outer_covariance_tensor_row_major": [
+            0.3694616224038343,
+            0,
+            -0.10351821122207606,
+            0,
+            0.3689553575079137,
+            0,
+            -0.10351821122207606,
+            0,
+            0.3717734668056245
+          ],
+          "native_outer_covariance_witness_gradient_row_major": [
+            0.0032682279973718824,
+            0,
+            0.19618783915071195,
+            0,
+            0,
+            0,
+            0.0007058555108824757,
+            0,
+            -0.003268214741808901
+          ],
+          "native_outer_isotropic_production_work_maximum": [
+            3.5247381464110306e-08
+          ],
+          "native_outer_isotropic_production_work_witness": [
+            0.4,
+            0,
+            0.775,
+            3.5247381464110306e-08,
+            34,
+            0
+          ],
+          "native_outer_minimum_geometry_element_side_block": [
+            30,
+            30,
+            0,
+            2
+          ],
+          "native_raw_divergence_maximum_witness": [
+            0,
+            0,
+            0.39285714285714285,
+            -5.429844829763376e-07,
+            20,
+            0,
+            0
+          ],
+          "native_raw_divergence_range": [
+            -5.429844829763376e-07,
+            5.111933281515789e-07
+          ],
+          "outer_constitutive_range": [
+            0.8954756887004572,
+            0.9899999999999998,
+            1.0683999999999996,
+            0.9850134386750329,
+            1.058210667713443,
+            0.9899999999999998,
+            1.0384,
+            9.449697929930021e-08
+          ],
+          "outer_tangent_diagnostic_available": [
+            0
+          ],
+          "physical_sample_K": [
+            48,
+            0.5387677667039054,
+            0.2943740919751363,
+            0.29232504355776384,
+            0,
+            0
+          ],
+          "physical_sample_outer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "prescribed_source_inner": [
+            29184,
+            0.5063352526672483,
+            0.29448802050645745,
+            0.292450178700399,
+            0,
+            0
+          ],
+          "r4_outer_gradient_witness": [
+            -1.2,
+            0,
+            0.5,
+            0,
+            2,
+            -0.8954756887004572,
+            24,
+            1
+          ],
+          "reconstruction_dense": [
+            6852,
+            0.5063342817954639,
+            0.14718404446935826,
+            0.2670928798588203,
+            0,
+            0
+          ],
+          "reconstruction_native": [
+            2304,
+            0.506336241137402,
+            0.14718795210374502,
+            0.26709311620198456,
+            0,
+            0
+          ],
+          "roughness": [
+            0.008135588688062778,
+            0,
+            1.4586560814535139e-06,
+            0.00013783683084301395,
+            6.993104012531504e-18
+          ],
+          "scalar_minimum_point_0": [
+            -1.0250466817022938,
+            0,
+            0.00046098414383201894
+          ],
+          "scalar_minimum_point_1": [
+            -1,
+            0,
+            0.5
+          ],
+          "scalar_minimum_point_2": [
+            -1,
+            0,
+            1
+          ],
+          "source_volume_inner": [
+            29184,
+            0.5063352526672483,
+            0.294486566241199,
+            0.2924485987016614,
+            0,
+            0
+          ],
+          "source_volume_outer": [
+            1728,
+            0.5388391167076031,
+            0.14752509762455698,
+            0.26717350670466783,
+            0,
+            0
+          ],
+          "strong_continuity": [
+            8.021237708157402e-08,
+            2.375596764262091e-08,
+            -2.770478645803114e-09,
+            2.643717262707163e-09,
+            -1.2676147723720069e-10
+          ],
+          "wall_cutoff_activity": [
+            91,
+            91,
+            0,
+            0
+          ],
+          "wall_cutoff_limiting_point": [
+            0,
+            0,
+            0.5
+          ],
+          "wall_cutoff_required_budget": [
+            1,
+            5.231121151434867,
+            2.8803498819010593e-16
+          ]
+        },
+        "actual_quadrature": {
+          "wall_normal": 32,
+          "wall_tangential": 8,
+          "outer_volume": 12,
+          "mass_override": 12,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 12,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 29184,
+          "outer_volume_points": 1728
+        }
+      },
+      "E94E95-p4": {
+        "status": "pass",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v4/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 158.12880191400018,
+          "process_cpu_seconds": 156.98503099999996,
+          "peak_RSS_KiB": 402004,
+          "actual_mapped_files_sha256": "f6838acd9258bf6f5f50c039338276846e9343ed973093bfb24501e6af9c2d14"
+        },
+        "native_report_sha256": "b79469fca1dc685f74ffe194bd91db3e4748088653cce6fb60005f2c0fcf0a9b",
+        "stored_slots": 2283,
+        "state_sha256": "33dc2f21f690fe38215479b407d22522e9f5f46ff779dcd298a4bc184c614ac0",
+        "checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/E94E95-p4/checkpoint",
+        "history_sha256": "70630556334f61d65f6932e7de31e65af7232b1145059ac58347e7c4328a2b90",
+        "raw_native_alpha_zero": [
+          0.07046169170906517,
+          0.0005971409709254962,
+          0.06266798389140764,
+          0.06440243591103215,
+          1.1322650725069648e-08,
+          1.6799074160973924e-08,
+          0,
+          0
+        ],
+        "initialization_receipt": {
+          "raw_initial_sha256": "33dc2f21f690fe38215479b407d22522e9f5f46ff779dcd298a4bc184c614ac0",
+          "effective_initial_sha256": "33dc2f21f690fe38215479b407d22522e9f5f46ff779dcd298a4bc184c614ac0",
+          "fixed_reference_sha256": "33dc2f21f690fe38215479b407d22522e9f5f46ff779dcd298a4bc184c614ac0",
+          "explicit_boundary_sha256": "2ae316614adb5067a872e898e42b0d15053c632e796111c6f48df2b89b55ba85",
+          "implicit_boundary_sha256": "2ae316614adb5067a872e898e42b0d15053c632e796111c6f48df2b89b55ba85",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0,
+          "live_fixed_boundary_archive_identity": {
+            "sha256": "dcaf1c8252c669b20524cb7e0a382bbb77be530b99a6109cb94b094cac85ebb4",
+            "entries": 229,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "effective_initial_archive_identity": {
+            "sha256": "10df0396ca77eec80a6313b7171ebfddc9a165024cdd4b0cd0c922087e8fcb52",
+            "entries": 2283,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "open_boundary_definition": "AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration|E0=0.31061366533500456|K0=0.53192103301026805|KAPPA=0.41208747162475556|KINVIS=1.5e-05|QSTAR=3.3245064563141753|RANSKAPPA=0.40999999999999998|RANSOPENVELOCITYSCALE=0.20000000000000001|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.0050000000000000001|RANSWALLMAPHEIGHTAMPLITUDE=0|RANSWALLMAPHEIGHTWAVEX=1.5707963267948966|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPIMPLEHARDAUDITREJECTSTEP=0|RANSWALLPIMPLEREJECTSTEP=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.050000000000000003|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.70742993314545188|ROUGHX=34.729960306346825|SLOPE=0.16738104369643853|YAPSCALE=0.49958590610661119|ZV=-0.0024869567602610033",
+          "open_traction_load_sha256": "99c1c61ff1c75e355e093cf5d8e588264403e292846784c16fb9a4e87f4a8437",
+          "open_diffusive_load_sha256": "0eef0d6a88c1430f79cfa3edd52ff42888ecf96922325c94739556a8c3cf66a8",
+          "open_advective_load_sha256": "c6ce4d7eecc67f39b031847d9a027a4d6149b7ac45a99ab7164bce3e208a5087",
+          "open_explicit_implicit_agreement": true
+        },
+        "probe_execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v4/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/E94E95-p4/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/E94E95-p4/initial-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/E94E95-p4/initial.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 311.0491464830002,
+          "process_cpu_seconds": 304.14563200000003,
+          "peak_RSS_KiB": 28702360,
+          "actual_mapped_files_sha256": "0cb22ac3f9c526c2f4958406b16ea85ed78a92e49799cabe1b277c372240c4dc"
+        },
+        "packet_sha256": "0d548f0feee83fd269c2214586127c00b10095198ad2b23fa6956bdcf89df7c5",
+        "packet_path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/initial-v1/E94E95-p4/initial.json",
+        "physical_metrics": {
+          "schema": "CT6ManufacturedPhysicalMetricsV1",
+          "status": "pass",
+          "fields": {
+            "U": {
+              "scaled_weighted_RMS": 2.6975388800775463e-09,
+              "true_L2": 8.362991549855254e-10,
+              "scaled_gradient_RMS": 1.278460062582896e-07,
+              "volume": 2.402856850925378,
+              "scale": 0.2,
+              "scaled_drift_from_actual_initial": null
+            },
+            "w": {
+              "scaled_weighted_RMS": 3.002306377999422e-08,
+              "true_L2": 9.307840956332727e-09,
+              "scaled_gradient_RMS": 1.1868631946351897e-06,
+              "volume": 2.402856850925378,
+              "scale": 0.2,
+              "scaled_drift_from_actual_initial": null
+            },
+            "k": {
+              "scaled_weighted_RMS": 3.905596829327487e-12,
+              "true_L2": 3.2203162402051868e-12,
+              "scaled_gradient_RMS": 2.2879267689677425e-10,
+              "volume": 2.402856850925378,
+              "scale": 0.531921033010268,
+              "scaled_drift_from_actual_initial": null
+            },
+            "outer_epsilon": {
+              "scaled_weighted_RMS": 1.894680614184161e-05,
+              "true_L2": 6.45258821761842e-06,
+              "scaled_gradient_RMS": 0.0007517314291101702,
+              "volume": 1.2021392068235675,
+              "scale": 0.3106136653350046,
+              "scaled_drift_from_actual_initial": null
+            },
+            "Pi": {
+              "scaled_weighted_RMS": 7.00843452038365e-08,
+              "true_L2": 1.0863880239975896e-08,
+              "scaled_gradient_RMS": 1.4913399701589446e-06,
+              "volume": 2.402856850925378,
+              "scale": 0.1,
+              "scaled_drift_from_actual_initial": null
+            }
+          },
+          "traction": {
+            "ground_scaled_RMS": 1.429263072067021e-10,
+            "ground_signed_mean": [
+              -0.00013285228725984052,
+              0.0,
+              1.2475300577369587e-08
+            ],
+            "ground_reference_mean": [
+              -0.00013285228852355008,
+              0.0,
+              1.2470969045801123e-08
+            ],
+            "full_interface_jump_scaled_RMS": 1.6006453386732253e-07,
+            "conservative_k_interface_jump_scaled_RMS": 2.0012526997907391e-10,
+            "outlet_reconstruction_scaled_RMS": 4.534856241683435e-06,
+            "current_endpoint_trace_restriction_defect": 8.881784197001252e-16
+          },
+          "pressure": "absolute augmented Pi, no fitted gauge subtraction",
+          "field_limits": {
+            "U": 0.005,
+            "w": 0.005,
+            "k": 0.005,
+            "outer_epsilon": 0.005,
+            "Pi": 0.01
+          },
+          "traction_limit": 0.005,
+          "scope": "current FE coefficients and actual endpoint K; projection/error, drift and reconstructed physical traction remain separate"
+        },
+        "all_row": {
+          "schema": "CT6IndependentAllRowOperatorV1",
+          "status": "pass",
+          "model": "E94E95",
+          "maximum_scaled_defect": 1.2273015381772942e-16,
+          "constrained_scaled_defect": 7.445027713207851e-17,
+          "native_term_sum_scaled_defect": 3.019424734645321e-16,
+          "geometry_primitive_defect": 2.220446049250313e-16,
+          "witness": {
+            "row": 626,
+            "native": -0.009600360294561829,
+            "independent": -0.009600360294561888,
+            "scale": 0.4805713701850766
+          },
+          "actual_stored_slots": 2283,
+          "physical_volume": 2.402856850925383,
+          "consumed_volume_points": 30912,
+          "independent_rays": 48,
+          "norm": "all-row maximum absolute difference / max(physical equation scale*actual integrated physical volume, sum absolute primitive increments)",
+          "scope": "current represented state, conservative unmasked operator; prescribed-row replacement separately checked; not analytical equilibrium cancellation or spatial/temporal convergence"
+        },
+        "continuous_weak": {
+          "schema": "CT6ContinuousNativeWeakV1",
+          "model": "E94E95",
+          "status": "pass",
+          "maximum_scaled_all_row_defect": 6.190882478990748e-17,
+          "shared_interface_cancellation": 1.499757121488769e-17,
+          "witness": {
+            "row": 626,
+            "signed_load": 2.975160875583367e-17,
+            "scale": 0.4805713701850766
+          },
+          "block_maximum": [
+            5.876602593005953e-17,
+            6.190882478990748e-17,
+            1.835713959774797e-17,
+            3.552956019682595e-17,
+            2.3017468798461135e-21,
+            1.2786338687894588e-20
+          ],
+          "scope": "analytical continuous fields and independently differentiated forcing on native test functions; all physical face fluxes included; projected/evolved residual is a separate object"
+        },
+        "geometry": {
+          "schema": "CT6NativeMappedGeometryV1",
+          "status": "pass",
+          "basis_transform": 4.805247179196562e-16,
+          "partition_and_constant_gradient": 1.9772847305704943e-14,
+          "cofactor": 4.440892098500626e-16,
+          "all_element_all_mode_Stokes": 6.106226635438361e-16,
+          "physical_volume_defects": {
+            "0": 2.2178060736944987e-15,
+            "3": 3.1400342508582273e-15,
+            "4": 1.4794126230476363e-15,
+            "5": 3.1400342508582273e-15
+          },
+          "tested_element_field_pairs": 84,
+          "scope": "native chart rows independently transformed to physical Cartesian gradients; all cell faces, oriented cofactors and all-mode element Stokes identities"
+        },
+        "raw_native_audit": {
+          "accepted_awf_covariance": [
+            0.31331482100437846,
+            0.2924914702458975
+          ],
+          "accepted_awf_hard_admissible": [
+            1
+          ],
+          "accepted_awf_inner_minimum_point": [
+            -0.926433700200364,
+            0,
+            0.5,
+            0.5266306102489517,
+            0.5266306102489517,
+            0.08241433062134004,
+            0.053418035866796595,
+            0.3510870734993012,
+            0.31331482100437846
+          ],
+          "accepted_awf_outer_minimum_point": [
+            -0.92,
+            0,
+            1,
+            0.5425934966165861,
+            0.15299789888809248,
+            0.2924914702458975
+          ],
+          "accepted_awf_reference_departure": [
+            0.899437510512697,
+            0.9899999999999997,
+            1.0683999999999998,
+            0.9850134386750329,
+            1.0582106677134437,
+            0.9899999999999997,
+            1.0384
+          ],
+          "accepted_awf_scalar_domain": [
+            1,
+            0.9550241239921939,
+            0.5079974185836542,
+            0.5266018226801653,
+            0.15298306392695576,
+            0.5266018226801653,
+            0.3059661278539115,
+            5.229421976302668,
+            2.7717618946834157e-16
+          ],
+          "accepted_awf_sources": [
+            0.0027067964235470954,
+            1.9669106794529025,
+            0,
+            9.730148421159955e-07,
+            -1.9642038830293556
+          ],
+          "admissible": [
+            1
+          ],
+          "common_velocity_k_dependent_epsilon_trace_defects": [
+            1.3877787807814457e-17,
+            1.1102230246251565e-16,
+            0
+          ],
+          "constitutive_modification": [
+            0,
+            0,
+            0
+          ],
+          "coupled_norms": [
+            0.07046169170906517,
+            0.0005971409709254962,
+            0.06266798389140764,
+            0.06440243591103215,
+            1.1322650725069648e-08,
+            1.6799074160973924e-08,
+            0,
+            0
+          ],
+          "energy": [
+            0.04358531189528125,
+            0,
+            -0.020036857798273494,
+            -4.6128723787709105e-05,
+            0.00439237804034332,
+            0,
+            -0.015690608481717883,
+            0.05927592037699913,
+            1.2948014780484793,
+            0.09932814896429992,
+            -0.0,
+            -0.055742837069018676
+          ],
+          "inner_zero_covariance": [
+            0,
+            0,
+            0
+          ],
+          "interface": [
+            2.4028568509253825,
+            0.0010573670851515872,
+            1.1149655727186361e-08,
+            2.5610325408599218e-08,
+            2.4993376413726955e-08,
+            2.1290124255355378e-11,
+            -0.0012000026228093004,
+            -5.513486394678696e-09
+          ],
+          "interface_inner": [
+            72,
+            0.5266051596137028,
+            0.30596903609564247,
+            0.31331482100437846,
+            0,
+            0
+          ],
+          "interface_outer": [
+            72,
+            0.5266051596137028,
+            0.30596903609561515,
+            0.3133015275834366,
+            0,
+            0
+          ],
+          "mass_volume": [
+            5184,
+            0.5079993198733478,
+            0.15333755450256378,
+            0.29257502304816346,
+            0,
+            0
+          ],
+          "momentum_k_load_and_boundary_reaction": [
+            0.10013963317152183,
+            -0.05091589363326236,
+            0.017257595688727596,
+            0.13411236853977374,
+            -0.05113094220995111,
+            0.0691981825949284
+          ],
+          "native_inner_covariance_tensor_row_major": [
+            0.35105332887857177,
+            0,
+            -0.03777224032325511,
+            0,
+            0.3510870734993012,
+            0,
+            -0.03777224032325511,
+            0,
+            0.35112082392834104
+          ],
+          "native_inner_covariance_witness_gradient_row_major": [
+            0.00020472544322710682,
+            0,
+            0.45801143592825383,
+            0,
+            0,
+            0,
+            0.0003098297846599004,
+            0,
+            -0.00020476068170076443
+          ],
+          "native_inner_minimum_geometry_element_side_block": [
+            18,
+            18,
+            -1,
+            2
+          ],
+          "native_k_inner_outer_shared_interface_constant_test": [
+            -0.0224150510229155,
+            -0.014749161527942025,
+            -0.014776374355343276
+          ],
+          "native_k_inner_outer_shared_interface_dual": [
+            0.04435630444209936,
+            0.043379837588472095,
+            0.03843111747191037
+          ],
+          "native_k_inner_outer_shared_interface_max_row": [
+            0.002063157661986685,
+            0.0027175693753163244,
+            0.0027252063320070017
+          ],
+          "native_k_inner_outer_shared_interface_row_counts": [
+            384,
+            168,
+            24
+          ],
+          "native_outer_covariance_tensor_row_major": [
+            0.3594521546970206,
+            0,
+            -0.06920007989169567,
+            0,
+            0.3617289998773615,
+            0,
+            -0.06920007989169567,
+            0,
+            0.36400583865879005
+          ],
+          "native_outer_covariance_witness_gradient_row_major": [
+            0.0032406087165271864,
+            0,
+            0.19634864470564584,
+            0,
+            0,
+            0,
+            0.0006347813240744492,
+            0,
+            -0.0032405996090255
+          ],
+          "native_outer_isotropic_production_work_maximum": [
+            3.4725526386144504e-08
+          ],
+          "native_outer_isotropic_production_work_witness": [
+            0.4,
+            0,
+            0.75,
+            3.4725526386144504e-08,
+            34,
+            0
+          ],
+          "native_outer_minimum_geometry_element_side_block": [
+            30,
+            30,
+            0,
+            2
+          ],
+          "native_raw_divergence_maximum_witness": [
+            0,
+            0,
+            0.3897781324727328,
+            -2.640901074942026e-07,
+            20,
+            0,
+            0
+          ],
+          "native_raw_divergence_range": [
+            -2.640901074942026e-07,
+            2.48800300518999e-07
+          ],
+          "outer_constitutive_range": [
+            0.899437510512697,
+            0.9899999999999997,
+            1.0683999999999998,
+            0.9850134386750329,
+            1.0582106677134437,
+            0.9899999999999997,
+            1.0384,
+            9.054669503405026e-08
+          ],
+          "outer_tangent_diagnostic_available": [
+            0
+          ],
+          "physical_sample_K": [
+            48,
+            0.5266089819687692,
+            0.30597236740866557,
+            0.31331889420650155,
+            0,
+            0
+          ],
+          "physical_sample_outer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "prescribed_source_inner": [
+            29184,
+            0.508002445690158,
+            0.3060789474024278,
+            0.31336837545624313,
+            0,
+            0
+          ],
+          "r4_outer_gradient_witness": [
+            -1.2,
+            0,
+            0.5,
+            0,
+            2,
+            -0.899437510512697,
+            24,
+            1
+          ],
+          "reconstruction_dense": [
+            6852,
+            0.5079974185836542,
+            0.15298306392695576,
+            0.2924914702458975,
+            0,
+            0
+          ],
+          "reconstruction_native": [
+            2304,
+            0.5080043032008735,
+            0.15298712552129062,
+            0.29249175596514104,
+            0,
+            0
+          ],
+          "roughness": [
+            0.005152312614031079,
+            0,
+            1.4846720073793439e-06,
+            5.336084755084591e-05,
+            6.911788849595091e-18
+          ],
+          "scalar_minimum_point_0": [
+            -1,
+            0,
+            0
+          ],
+          "scalar_minimum_point_1": [
+            -1,
+            0,
+            0.5
+          ],
+          "scalar_minimum_point_2": [
+            -1,
+            0,
+            1
+          ],
+          "source_volume_inner": [
+            29184,
+            0.508002445690158,
+            0.3060773764060001,
+            0.31336764678215273,
+            0,
+            0
+          ],
+          "source_volume_outer": [
+            1728,
+            0.5266787217622994,
+            0.15333755450256378,
+            0.29257502304816346,
+            0,
+            0
+          ],
+          "strong_continuity": [
+            3.9085029813969593e-08,
+            2.3686890384986007e-08,
+            -2.6596120099073472e-09,
+            2.535883465958226e-09,
+            -1.237285530649758e-10
+          ],
+          "wall_cutoff_activity": [
+            91,
+            91,
+            0,
+            0
+          ],
+          "wall_cutoff_limiting_point": [
+            0,
+            0,
+            0.5
+          ],
+          "wall_cutoff_required_budget": [
+            1,
+            5.229421976302668,
+            2.7717618946834157e-16
+          ]
+        },
+        "actual_quadrature": {
+          "wall_normal": 32,
+          "wall_tangential": 8,
+          "outer_volume": 12,
+          "mass_override": 12,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 12,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 29184,
+          "outer_volume_points": 1728
+        }
+      }
+    },
+    "status": "pass"
+  }
+}

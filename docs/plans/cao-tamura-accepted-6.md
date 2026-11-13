@@ -5,8 +5,9 @@ The [versioned contract](cao-tamura-accepted-6-evidence/contract.json) precedes 
 
 This package implements a guarded manufactured curved route. The complete
 evolving formulation is **not qualified**: the declared degree and timestep
-gates fail in the A95 primary experiment. Independent quadrature receipts are
-being completed separately. CT4/CT5 physical fits, observations, sealed artifacts and
+gates fail in the A95 primary experiment. All five endpoint physical-budget
+audits completed with four integration controls; their accuracy and integration
+uncertainty remain distinct from reconstruction. CT4/CT5 physical fits, observations, sealed artifacts and
 historical decisions remain unchanged. No ordinary curved production or
 experimental admission is implied by a manufactured test.
 
@@ -46,8 +47,8 @@ transported inner k is nonconstant and differs from the frozen reference column.
 Manufactured sources come from continuous Cartesian derivatives, using
 multivariate Taylor arithmetic independently checked by arbitrary-precision
 differentiation and a Lambert-W cutoff. They never use the native discrete
-residual. Inner body forcing explicitly removes the counterfactual roughness
-completion so that adding the actual native completion recovers the intended
+residual. Inner body forcing explicitly removes the analytically evaluated
+manufactured roughness completion so that adding the actual native completion recovers the intended
 continuous equation. All corresponding work is retained. This forcing is
 available only through the named manufactured capability.
 
@@ -98,7 +99,13 @@ and manufactured field/traction limits. Same-space timestep members have
 identical actual initial coefficient vectors. Each has complete native
 physical-budget equations and actual captured-stage reconciliation. Full
 four-control quadrature qualification is a separate receipt and is not supplied
-by native-only completion.
+by native-only completion. Each completed audit contains `native`, `q48f16`,
+`q64f16` and `q64f32`, each with inner k, outer k, outer epsilon and whole k,
+plus both k and outer-epsilon reconstruction records. Whole-patch k excludes
+the internal-interface flux from the external total. Physical fluxes use actual
+one-sided FE gradients, including the ground; prescribed-row reactions never
+replace them. Dependent-epsilon boundary storage and current-versus-frozen
+coefficient splitting remain explicit.
 
 The following are scaled weighted physical RMS errors against the continuous
 time-dependent solution, on one common physical inventory. Pi is absolute;
@@ -156,6 +163,36 @@ The last time-discrete scaled stage residuals at dt=.002/.001 are about
 spatial loads and the separate read-only consistency load
 `r_spatial + load(analytical time derivative)` remain visible; the latter never
 enters the governing equations.
+The primary `.002` endpoint's refreshed dependent-epsilon trace lag is
+`5.35e-5` absolute (about `1.69e-4` on its epsilon scale). The relevant frozen
+stage constraints and this refreshed lag are distinct; there is no post-k
+trace repair.
+
+All five four-control endpoint audits pass the physical budget limit `.02`.
+The largest scaled defect is outer epsilon: `.00350792` for P3/P1 and
+`.000404766` for P4/P2. Actual captured-stage matrix reconstruction is at most
+`2.95e-15`, against `2e-10`. Independently integrated net mass defects are at
+most `2.02e-16` on the declared `.2 * physical outlet length` scale.
+Each member also passes all 45 frozen integration-uncertainty comparisons.
+These compare current unanchored mass-dual residual norms, complete frozen
+scalar load vectors and physical budget defects, without changing effective
+coefficients, immutable reference or live essential boundaries. Momentum norm
+agreement alone is not presented as a direction-sensitive load comparison;
+the separate all-row operator check supplies that reconstruction test.
+
+Weak mass conservation does not imply pointwise incompressibility. At the
+P4/P2 `.001` endpoint the independent physical grid gives raw-divergence RMS
+`1.78117e-5`, maximum `1.09094e-4`, and isotropic production-work RMS
+`7.43328e-6`. The signed `-2 k div(U)/3` term is retained. Its coordinate,
+region, native field owners and side are exported; no trace removal is applied
+to production.
+
+For the primary P4/P2 `.002` member, aggregation over every recorded accepted
+state and audited stage gives inner/outer k minima `.587161/.605405`, outer
+epsilon `.156022`, inner/outer covariance minima `.370790/.270410`, and A95
+radicand `.956606`. Final-state extrema are retained separately. These are
+finite native inventories with witnesses, not a global positivity or
+realizability theorem.
 
 Because the A95 consistency contract fails, A93 and E94E95 manufactured
 **evolutions are not admitted**. Their successful kernel, continuous-source,
@@ -176,6 +213,9 @@ Both registered CT6 CTests pass, including the admission suite's process-level
 negative checks. Missing members/equations/controls, invalid primitives,
 incorrect actual-stage binding, failed independent traction and failed shared
 prerequisites cannot admit a model transfer merely through enclosing pass labels.
+The derived integration gate recomputes the original uncertainty bound from
+the measured degree difference; a forged large limit or a passing enclosing
+label cannot override it.
 
 ## Retained failures and diagnostic corrections
 
@@ -201,6 +241,13 @@ to `9.42e-16`. This changes diagnostics only. Solver executables after this
 correction are byte-identical to the sealed governing runtime. CT1–CT5 used
 time-independent inputs and their historical budget decisions are not relabelled.
 
+The first outlet-orientation negative control changed an observation inventory
+that the all-row reconstruction did not consume. That ineffective test is
+retained as a failed harness attempt. The corrected control reverses the actual
+natural-boundary cofactor rows, verifies that rows were changed, and observes
+the intended reconstruction failure. Its new receipt does not overwrite the
+original attempt. All 17 corrected discriminating controls pass.
+
 ## Provenance and remaining scope
 
 Linux is authoritative. All heavy data are isolated under
@@ -213,8 +260,87 @@ runtimes, shared installations and unrelated campaigns remain untouched.
 Builds use two jobs; numerical libraries use one thread. Every numerical family
 uses the owned 16-worker project guard under the 72-worker aggregate limit.
 Final resource closure, source/runtime/library hashes, commands, accepted-run
-costs, failure witnesses and the complete qualification decision will accompany
-the completed numerical campaign.
+costs and failure witnesses are in the
+[sealed compact export](cao-tamura-accepted-6-evidence/qualified-v1/decision.json)
+and [final primitive verification](cao-tamura-accepted-6-evidence/final-audit-v2/results.json).
+The admission CLI exits **1** for the actual failed convergence primitives;
+the completed collector exits **3**, by design, rather than implying admission.
+The final verification reproduces the classification exactly and validates
+all sealed compact hashes. There are no missing required compact receipts.
+
+The compiled diagnostic source is
+`0cce5b53716db58e39ee9ee0eb5c14f29f62e668`. The governing executable is
+byte-identical to the ground-guard-corrected runtime built at
+`99aac0832ad009715f386040985267e99042444c`. Complete endpoint audits and the
+comparison use analysis source `764180e0c4d6d8e67a5fdce9bab6fa874d3a5904`;
+the corrected negative controls, 18 admission tests and final primitive export
+use `e8e49ae527ca73870fd65c16f04e0917dfa91ed6`. Later report/evidence commits
+do not change tested C++ sources. Runtime SHA256 values are:
+
+| Frozen runtime file | SHA256 |
+|---|---|
+| `IncNavierStokesSolver` | `c4ad1b18f4a57e880700bfb585cdb12a4f2ca4fb12401eb988153c7ca6e31601` |
+| `RANSPreservationProbe` | `c4ee55a14a8ee254a97f7ce69364c01ac150cb3a2260cd428017780c9b03fb60` |
+| `RANSCurvedAcceptedKernelProbe` | `720b862961479adc5e24327742b981fcbed37e42ba227ccca463132f4eb4fd80` |
+
+Build requests retain compiler settings (GCC 11.4.0, Release `-O3 -DNDEBUG`,
+GNU C++17 and the existing warning/error policy); each command binds consumed XML,
+provider/boundary functions, state and native history. Actual mapped-library
+paths and hashes are in the compact library registry. MPI is enabled in the
+build, but every numerical test is serial rank one; this is no MPI qualification.
+`RANSModels.{cpp,h}`, the two specifications, CT5 evidence and frozen observation
+data have no changes from the reviewed start.
+
+The recovered campaign's closed monitors record a maximum of **14 project**
+and **30 aggregate** workers, including control helpers, below 16/72. The final
+verification family closes at 3/3; its own completed receipt accompanies the
+otherwise closed 25-family inventory. CPU time, elapsed time and suspension
+intervals are recorded separately, with PID/thread high-water witnesses.
+Historical resource failures are unchanged.
+
+The following are actual solver-process costs for initialization plus accepted
+evolution, with ordinary checks enabled. Separate read-only endpoint probes
+are excluded from these rows; the full exclusive instrumentation and analysis
+costs remain in the archive. Nested inclusive timers are not added.
+
+| Space | dt | Steps | Process CPU seconds | Elapsed seconds |
+|---|---:|---:|---:|---:|
+| P3/P1 | .002 | 8 | 1013.40 | 1015.56 |
+| P3/P1 | .001 | 16 | 1769.72 | 1773.67 |
+| P4/P2 | .004 | 4 | 615.43 | 617.88 |
+| P4/P2 | .002 | 8 | 1035.86 | 1040.27 |
+| P4/P2 | .001 | 16 | 1838.33 | 1846.09 |
+
+These synthetic-source costs are not an experimental hill cost prediction.
+For example, the P4/P2 `.002` solver execution peaks at 598,504 KiB RSS.
+Per-execution RSS, initialization/projection and exclusive timer categories are
+retained with the native member receipts. No backend or performance
+optimization was introduced.
+
+## Required-scope decision and next gate
+
+| Scope | Decision |
+|---|---|
+| Curved Accepted kernel, all three models | **Pass**, signed curvature and intended rejection controls |
+| Conservative spatial operator | **Pass** in the stated small P3/P1 and P4/P2 native fixtures |
+| Full traction and transported-k transmission | **Pass** for the constructed continuous/native/static tests |
+| Constant-height evolving MMS, A95 | Bounded completion and physical checks pass; **degree/time consistency fails** |
+| Constant-height evolving MMS, A93/E94E95 | **Not attempted** because complete A95 admission fails |
+| Static variable-height transmission | **Pass**; evolving variable height remains rejected |
+| Zero-curvature/flat regression | **Pass**, including bitwise fresh CT5 A95 state/history compatibility |
+| Resources | **Pass** for the recovered isolated campaign |
+| Experimental applicability / ordinary curved production | **Not admitted** |
+
+The smallest next package is a bounded diagnosis of absolute-pressure time
+level, initial weak continuity and frozen-boundary splitting on this same MMS,
+followed by an independently initialized finer timestep contrast that separates
+time error from the degree comparison. Existing state/row/matrix packets are
+the first diagnostic inputs. A governing change needs a demonstrated discrete
+identity defect; no such defect is inferred merely from a failed error ratio.
+Only after the evolving consistency gate passes should the remaining model
+transfers precede physical approach-flow/interface admission and a first bounded
+rough-hill pilot. That later pilot also needs a reach-safe outer geometry, rather
+than extrapolating this shallow Gaussian normal map to the experimental hill.
 
 Ordinary curved production, experimental predictions and developed precursors
 remain unadmitted. A93's narrow CT5 value `.000992850582/.001`, general spatial
@@ -222,3 +348,6 @@ convergence/long-time preservation, the historical CT4 pressure interpretation,
 roughness-sublayer/interface adequacy, the `.1` thin-layer criterion, smooth
 preparation and approach-layer fidelity remain open. EP, optimization, full
 variable-height evolution and backend expansion remain outside CT6.
+The original CT5 A93 coarse-pair ambiguity and all eight historical unresolved
+epsilon-order observations are unchanged. CT6's time-dependent manufactured
+orders use their own declared horizon and signal floor.

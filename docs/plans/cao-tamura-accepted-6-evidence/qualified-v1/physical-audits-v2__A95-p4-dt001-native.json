@@ -1,0 +1,302 @@
+{
+  "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v2/A95-p4-dt001-native/results.json",
+  "sha256": "3d8e7c98f5b585c3fd466fc5f5e267b6ebbc3773b88e59effdb8523f5e4c7ec0",
+  "body": {
+    "schema": "CT6ActualStatePhysicalAuditV1",
+    "budget_binding": {
+      "model": "A95",
+      "time": 0.016000000000000007,
+      "dt": 0.001,
+      "state_sha256": "f1f812b2332997cfa434d0e0fa0265b118b557646063241f712ca4adfb2d2301",
+      "native_report_sha256": "3f2af6d103c9706ce84f266578f1b85ac016f1829a4c09f2d960543ee4439066",
+      "configuration_sha256": "4b286bfbfefafc0f5e31176d664ce208b746cb9f3dd1bb4e7e1b7a1293d66284"
+    },
+    "budgets": {
+      "native": {
+        "reconstruction_status": "pass",
+        "accuracy_status": "pass",
+        "equations": {
+          "inner_k": {
+            "storage_backward_difference": 0.03969670025613335,
+            "stage_source": 0.025564264725137977,
+            "instantaneous_source": 0.025417467963715898,
+            "stage_physical_boundary_flux": 0.01413415735765122,
+            "instantaneous_physical_boundary_flux": 0.01413452011929901,
+            "volume": 1.2007176441018257,
+            "frozen_stage_physical_defect": -1.7218266558458734e-06,
+            "instantaneous_physical_defect": 0.0001447121731184449,
+            "frozen_operator_splitting": 0.00014643399977428903,
+            "physical_scale": 1.4693951852860765,
+            "scaled_frozen_defect": 1.1717927709900934e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_k": {
+            "storage_backward_difference": 0.0392738236253091,
+            "stage_source": 0.025142684456668028,
+            "instantaneous_source": 0.025153717960278772,
+            "stage_physical_boundary_flux": 0.01412941354457928,
+            "instantaneous_physical_boundary_flux": 0.014128319145111238,
+            "volume": 1.2021392068235675,
+            "frozen_stage_physical_defect": 1.7256240617945923e-06,
+            "instantaneous_physical_defect": -8.21348008090729e-06,
+            "frozen_operator_splitting": -9.939104142703617e-06,
+            "physical_scale": 1.4693951852860765,
+            "scaled_frozen_defect": 1.1743771036371204e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "storage_backward_difference": 0.021095444983884798,
+            "stage_source": -0.07902791847189322,
+            "instantaneous_source": -0.07903231159116707,
+            "stage_physical_boundary_flux": 0.09986281857008429,
+            "instantaneous_physical_boundary_flux": 0.09986697383801348,
+            "volume": 1.2021392068235675,
+            "frozen_stage_physical_defect": 0.00026054488569372813,
+            "instantaneous_physical_defect": 0.0002607827370383897,
+            "frozen_operator_splitting": 2.378513446615882e-07,
+            "physical_scale": 0.7611862577609576,
+            "scaled_frozen_defect": 0.0003422879525704068,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "whole_k": {
+            "storage_backward_difference": 0.07897052388144246,
+            "stage_source": 0.050706949181806,
+            "instantaneous_source": 0.05057118592399467,
+            "stage_physical_boundary_flux": 0.028263085327595906,
+            "instantaneous_physical_boundary_flux": 0.02826331886207432,
+            "volume": 2.402856850925393,
+            "frozen_stage_physical_defect": 4.893720405539648e-07,
+            "instantaneous_physical_defect": 0.00013601909537347065,
+            "frozen_operator_splitting": 0.00013552972333291322,
+            "physical_scale": 1.4693951852860765,
+            "scaled_frozen_defect": 3.330431768487719e-07,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          }
+        },
+        "reconstruction": {
+          "k": {
+            "maximum_defect": 5.854691731421724e-16,
+            "normalization": 1.0,
+            "scaled_defect": 5.854691731421724e-16,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "maximum_defect": 1.3183898417423734e-16,
+            "normalization": 1.0,
+            "scaled_defect": 1.3183898417423734e-16,
+            "status": "pass"
+          }
+        },
+        "interface_frozen_k_fluxes": {
+          "0": 0.014996847884691364,
+          "1": -0.01499636231005677
+        },
+        "interface_current_k_fluxes": {
+          "0": 0.014997195706888235,
+          "1": -0.014997675304552307
+        },
+        "face_order": 16,
+        "actual_quadrature": {
+          "wall_normal": 32,
+          "wall_tangential": 8,
+          "outer_volume": 12,
+          "mass_override": 12,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 12,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 29184,
+          "outer_volume_points": 1728
+        },
+        "physical_volume": 2.402856850925383,
+        "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching; curved physical volume is independently integrated a*J, not chart area",
+        "binding": {
+          "model": "A95",
+          "time": 0.016000000000000007,
+          "dt": 0.001,
+          "state_sha256": "f1f812b2332997cfa434d0e0fa0265b118b557646063241f712ca4adfb2d2301",
+          "native_report_sha256": "3f2af6d103c9706ce84f266578f1b85ac016f1829a4c09f2d960543ee4439066",
+          "configuration_sha256": "4b286bfbfefafc0f5e31176d664ce208b746cb9f3dd1bb4e7e1b7a1293d66284"
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v2/A95-p4-dt001-native/native/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v2/A95-p4-dt001-native/native/budget-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v2/A95-p4-dt001-native/native/budget.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 222.5837573179997,
+          "process_cpu_seconds": 221.204039,
+          "peak_RSS_KiB": 3755236,
+          "actual_mapped_files_sha256": "9950ef2616f48e5853db274a4a95953107c8bc030899c768388b089fde9d7b0e"
+        },
+        "packet_sha256": "0b37f8681f4d5ef8cc2121a2397ab512b93176c193c18c3ee332073162c86112",
+        "initialization_receipt": {
+          "raw_initial_sha256": "f1f812b2332997cfa434d0e0fa0265b118b557646063241f712ca4adfb2d2301",
+          "effective_initial_sha256": "f1f812b2332997cfa434d0e0fa0265b118b557646063241f712ca4adfb2d2301",
+          "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "explicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "implicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0.0006815526368874336,
+          "live_fixed_boundary_archive_identity": {
+            "sha256": "48584c8285d47e8a9d32520bcca603f22124f35bc13c3a4eb5b01bcc3aa75f1f",
+            "entries": 229,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "effective_initial_archive_identity": {
+            "sha256": "b4e37bf01772161329799dbc21f51ca5c1cc8d921a07ddacc79a27f322f2e9c3",
+            "entries": 2283,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "open_boundary_definition": "AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration|E0=0.3167838556291071|K0=0.61152006817226179|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40999999999999998|RANSOPENVELOCITYSCALE=0.20000000000000001|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.0050000000000000001|RANSWALLMAPHEIGHTAMPLITUDE=0|RANSWALLMAPHEIGHTWAVEX=1.5707963267948966|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPIMPLEHARDAUDITREJECTSTEP=0|RANSWALLPIMPLEREJECTSTEP=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.050000000000000003|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.71308649305426108|ROUGHX=37.237975525695468|SLOPE=0.17946842304608926|YAPSCALE=0.60382768562974354|ZV=-0.0025019456529227911",
+          "open_traction_load_sha256": "6707872bd36e7c211b20599fcd954069ce69e4e9b94b592dbfffea8ae5fb1d97",
+          "open_diffusive_load_sha256": "9cf10bb1dceb0ca77181b0316402018d473e1fe68a3a4ef6a24b28aa44768b6c",
+          "open_advective_load_sha256": "40fc4e14e733112d0cce2dcf552bf0e31c7a80b22bdc98c98e69612cab700404",
+          "open_explicit_implicit_agreement": true
+        },
+        "frozen_boundary_identity": {
+          "raw_initial_sha256": "f1f812b2332997cfa434d0e0fa0265b118b557646063241f712ca4adfb2d2301",
+          "effective_initial_sha256": "f1f812b2332997cfa434d0e0fa0265b118b557646063241f712ca4adfb2d2301",
+          "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "explicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "implicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345"
+        },
+        "actual_stage_snapshot_sha256": "8eaf81ae96b47060b0b992385c3ecbdc3316b42d6abdb9bd3e376f2db830d790",
+        "stage_coefficient_validation": {
+          "current_time_essential_lift_difference": 4.41329907600041e-05,
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        }
+      }
+    },
+    "physical_completion": "pass",
+    "time": 0.016000000000000007,
+    "captured_k_matrix": {
+      "status": "pass",
+      "maximum_defect": 2.6558616417204917e-15,
+      "scale": 1.0,
+      "scaled_defect": 2.6558616417204917e-15,
+      "captured_rows": 576,
+      "matrix_sha256": "84951d7ef6bb2f631f8c9dac8fff153a34b219e6fe0f2f19057b86f84a0dddae",
+      "scope": "actual captured PIMPLE free-row residual plus its frozen matrix times actual raw increment; not a second reassembly using guessed frozen coefficients"
+    },
+    "budget_gate": {
+      "status": "fail",
+      "reasons": [
+        "missing_or_foreign_budget_control"
+      ],
+      "controls": {
+        "native": {
+          "status": "pass",
+          "reasons": []
+        }
+      },
+      "scaled_signed_defect_spreads": {
+        "inner_k": 0.0,
+        "outer_k": 0.0,
+        "outer_epsilon": 0.0,
+        "whole_k": 0.0
+      },
+      "uncertainty_limit": 0.02,
+      "required_controls": [
+        "native",
+        "q48f16",
+        "q64f16",
+        "q64f32"
+      ],
+      "required_equations": [
+        "inner_k",
+        "outer_epsilon",
+        "outer_k",
+        "whole_k"
+      ],
+      "required_reconstruction": [
+        "k",
+        "outer_epsilon"
+      ]
+    },
+    "mass_archive_identity": {
+      "sha256": "6fb8813a782696ed963aa9bf38ea7584772cd6e7b9961318c5d527f3652ab8b6",
+      "entries": 7,
+      "location": "original sealed Linux receipt/packet"
+    },
+    "common_observations": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v2/A95-p4-dt001-native/common/endpoint.json",
+      "sha256": "77f23729328e6c76c2045610d4fba3aed947e1073422ee4029cba1093a026ec6",
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v2/A95-p4-dt001-native/common/case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v2/A95-p4-dt001-native/common/endpoint-request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v2/A95-p4-dt001-native/common/endpoint.json"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 108.73105042300085,
+        "process_cpu_seconds": 108.04614099999999,
+        "peak_RSS_KiB": 401324,
+        "actual_mapped_files_sha256": "6056307e66ea32ec8b45e91dd1c953b0f750d8ad85b50713c6cfd3b8eca5bc96"
+      },
+      "count": 1296,
+      "weights_archive_identity": {
+        "sha256": "b2b0fe95930d22772891bbf94b93e58d6017a1721f778a997f57c911a2c96339",
+        "entries": 1296,
+        "location": "original sealed Linux receipt/packet"
+      },
+      "grid_sha256": "f3f10646dd13648bb7da1b2cd94e3b96483fc96b9034d9b41b0238447fe00de0",
+      "physical_volume": 2.402856850925383,
+      "divergence_RMS": 1.7811697423123948e-05,
+      "divergence_maximum": 0.00010909413566784903
+    },
+    "status": "incomplete_required_quadrature",
+    "diagnostic_status": "pass",
+    "qualification": "not_admitted_by_native_only_diagnostic"
+  },
+  "recomputed_gate": {
+    "status": "fail",
+    "reasons": [
+      "missing_or_foreign_budget_control"
+    ],
+    "controls": {
+      "native": {
+        "status": "pass",
+        "reasons": []
+      }
+    },
+    "scaled_signed_defect_spreads": {
+      "inner_k": 0.0,
+      "outer_k": 0.0,
+      "outer_epsilon": 0.0,
+      "whole_k": 0.0
+    },
+    "uncertainty_limit": 0.02,
+    "required_controls": [
+      "native",
+      "q48f16",
+      "q64f16",
+      "q64f32"
+    ],
+    "required_equations": [
+      "inner_k",
+      "outer_epsilon",
+      "outer_k",
+      "whole_k"
+    ],
+    "required_reconstruction": [
+      "k",
+      "outer_epsilon"
+    ]
+  },
+  "derived_quadrature_uncertainty": {
+    "status": "incomplete",
+    "reasons": [
+      "missing_or_foreign_frozen_quadrature_control"
+    ],
+    "checks": {}
+  }
+}

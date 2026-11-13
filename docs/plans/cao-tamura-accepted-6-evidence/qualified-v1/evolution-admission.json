@@ -1,0 +1,500 @@
+{
+  "schema": "CT6EvolutionAdmissionV1",
+  "status": "not_admitted",
+  "primary_coverage": {
+    "status": "pass",
+    "reasons": []
+  },
+  "primary_comparison": {
+    "status": "fail_or_unresolved",
+    "reasons": [
+      "required_degree_reduction",
+      "required_temporal_order_or_unresolved_signal"
+    ],
+    "field_accuracy": {
+      "(4, 0.002):U": {
+        "status": "pass",
+        "scaled_RMS": 1.2215698740860866e-05,
+        "limit": 0.005
+      },
+      "(4, 0.002):w": {
+        "status": "pass",
+        "scaled_RMS": 1.1006635504957902e-05,
+        "limit": 0.005
+      },
+      "(4, 0.002):k": {
+        "status": "pass",
+        "scaled_RMS": 1.0903095443675858e-05,
+        "limit": 0.005
+      },
+      "(4, 0.002):outer_epsilon": {
+        "status": "pass",
+        "scaled_RMS": 2.997310854503573e-05,
+        "limit": 0.005
+      },
+      "(4, 0.002):Pi": {
+        "status": "pass",
+        "scaled_RMS": 0.0015982386015201252,
+        "limit": 0.01
+      },
+      "(4, 0.001):U": {
+        "status": "pass",
+        "scaled_RMS": 5.2580230883603865e-06,
+        "limit": 0.005
+      },
+      "(4, 0.001):w": {
+        "status": "pass",
+        "scaled_RMS": 4.987388712697777e-06,
+        "limit": 0.005
+      },
+      "(4, 0.001):k": {
+        "status": "pass",
+        "scaled_RMS": 5.4549817434831e-06,
+        "limit": 0.005
+      },
+      "(4, 0.001):outer_epsilon": {
+        "status": "pass",
+        "scaled_RMS": 1.6781168727708397e-05,
+        "limit": 0.005
+      },
+      "(4, 0.001):Pi": {
+        "status": "pass",
+        "scaled_RMS": 0.0007758968751631188,
+        "limit": 0.01
+      },
+      "(4, 0.004):U": {
+        "status": "pass",
+        "scaled_RMS": 2.5634454053000916e-05,
+        "limit": 0.005
+      },
+      "(4, 0.004):w": {
+        "status": "pass",
+        "scaled_RMS": 2.0433666939197746e-05,
+        "limit": 0.005
+      },
+      "(4, 0.004):k": {
+        "status": "pass",
+        "scaled_RMS": 2.178739806882323e-05,
+        "limit": 0.005
+      },
+      "(4, 0.004):outer_epsilon": {
+        "status": "pass",
+        "scaled_RMS": 6.093907850638227e-05,
+        "limit": 0.005
+      },
+      "(4, 0.004):Pi": {
+        "status": "pass",
+        "scaled_RMS": 0.0026336065720217123,
+        "limit": 0.01
+      },
+      "(3, 0.002):U": {
+        "status": "pass",
+        "scaled_RMS": 1.524140774136542e-05,
+        "limit": 0.005
+      },
+      "(3, 0.002):w": {
+        "status": "pass",
+        "scaled_RMS": 1.4061883040630351e-05,
+        "limit": 0.005
+      },
+      "(3, 0.002):k": {
+        "status": "pass",
+        "scaled_RMS": 1.0908629272801752e-05,
+        "limit": 0.005
+      },
+      "(3, 0.002):outer_epsilon": {
+        "status": "pass",
+        "scaled_RMS": 0.00012079177863110048,
+        "limit": 0.005
+      },
+      "(3, 0.002):Pi": {
+        "status": "pass",
+        "scaled_RMS": 0.0015820267444465563,
+        "limit": 0.01
+      },
+      "(3, 0.001):U": {
+        "status": "pass",
+        "scaled_RMS": 8.973986170696447e-06,
+        "limit": 0.005
+      },
+      "(3, 0.001):w": {
+        "status": "pass",
+        "scaled_RMS": 6.910359060581622e-06,
+        "limit": 0.005
+      },
+      "(3, 0.001):k": {
+        "status": "pass",
+        "scaled_RMS": 5.49717843515682e-06,
+        "limit": 0.005
+      },
+      "(3, 0.001):outer_epsilon": {
+        "status": "pass",
+        "scaled_RMS": 0.00012946841209556667,
+        "limit": 0.005
+      },
+      "(3, 0.001):Pi": {
+        "status": "pass",
+        "scaled_RMS": 0.0007750870813470092,
+        "limit": 0.01
+      }
+    },
+    "degree": {
+      "U": {
+        "status": "pass",
+        "coarse_error": 8.973986170696447e-06,
+        "fine_error": 5.2580230883603865e-06,
+        "reduction_margin": 2.3698651567315936e-06,
+        "ratio_limit": 0.85,
+        "floor": 1e-07,
+        "absolute_margin": 2e-08
+      },
+      "w": {
+        "status": "pass",
+        "coarse_error": 6.910359060581622e-06,
+        "fine_error": 4.987388712697777e-06,
+        "reduction_margin": 8.864164887966016e-07,
+        "ratio_limit": 0.85,
+        "floor": 1e-07,
+        "absolute_margin": 2e-08
+      },
+      "k": {
+        "status": "fail",
+        "coarse_error": 5.49717843515682e-06,
+        "fine_error": 5.4549817434831e-06,
+        "reduction_margin": -7.82380073599803e-07,
+        "ratio_limit": 0.85,
+        "floor": 1e-07,
+        "absolute_margin": 2e-08
+      },
+      "outer_epsilon": {
+        "status": "pass",
+        "coarse_error": 0.00012946841209556667,
+        "fine_error": 1.6781168727708397e-05,
+        "reduction_margin": 9.326698155352326e-05,
+        "ratio_limit": 0.85,
+        "floor": 1e-07,
+        "absolute_margin": 2e-08
+      },
+      "Pi": {
+        "status": "fail",
+        "coarse_error": 0.0007750870813470092,
+        "fine_error": 0.0007758968751631188,
+        "reduction_margin": -0.00011707285601816094,
+        "ratio_limit": 0.85,
+        "floor": 1e-07,
+        "absolute_margin": 2e-08
+      }
+    },
+    "temporal_order": {
+      "U": {
+        "status": "fail",
+        "order": 1.2080384554507795,
+        "D004_002": 1.6605782249852182e-05,
+        "D002_001": 7.1879248476218216e-06,
+        "signal_floor": 1e-06,
+        "band": [
+          0.8,
+          1.2
+        ]
+      },
+      "w": {
+        "status": "fail",
+        "order": 1.2344396036622252,
+        "D004_002": 1.4960446549840263e-05,
+        "D002_001": 6.35830282826387e-06,
+        "signal_floor": 1e-06,
+        "band": [
+          0.8,
+          1.2
+        ]
+      },
+      "k": {
+        "status": "pass",
+        "order": 0.998575376575431,
+        "D004_002": 1.0886474259364404e-05,
+        "D002_001": 5.448614837981399e-06,
+        "signal_floor": 1e-06,
+        "band": [
+          0.8,
+          1.2
+        ]
+      },
+      "outer_epsilon": {
+        "status": "pass",
+        "order": 0.997092211317702,
+        "D004_002": 3.2681379933724456e-05,
+        "D002_001": 1.637365825767109e-05,
+        "signal_floor": 1e-06,
+        "band": [
+          0.8,
+          1.2
+        ]
+      },
+      "Pi": {
+        "status": "fail",
+        "order": 0.357692697424665,
+        "D004_002": 0.0010553213388463448,
+        "D002_001": 0.0008235851145832132,
+        "signal_floor": 1e-06,
+        "band": [
+          0.8,
+          1.2
+        ]
+      }
+    },
+    "interpretation": "two fixed degrees, not a measured spatial order; below-floor orders stay unresolved"
+  },
+  "physical_audits": {
+    "eba3feacd585013c06b66f044921cf8be7ec33e02c27c9e1cc7cc1480490e903": {
+      "status": "pass",
+      "reasons": [],
+      "complete_physical_budget": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 1.4225867527159139e-15,
+          "outer_k": 1.3057106055549238e-15,
+          "outer_epsilon": 1.2750217548429532e-16,
+          "whole_k": 1.3222438416523805e-16
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      }
+    },
+    "cd069992d663dbadf9203013c8618eb4a9f723fb0ac339feed5674e7f1c421bc": {
+      "status": "pass",
+      "reasons": [],
+      "complete_physical_budget": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 2.5382358704011815e-16,
+          "outer_k": 1.0908462989237672e-15,
+          "outer_epsilon": 4.380176776841438e-16,
+          "whole_k": 1.116819717218373e-15
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      }
+    },
+    "3f2af6d103c9706ce84f266578f1b85ac016f1829a4c09f2d960543ee4439066": {
+      "status": "pass",
+      "reasons": [],
+      "complete_physical_budget": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 3.588931537075674e-16,
+          "outer_k": 9.692475195653607e-16,
+          "outer_epsilon": 8.022011874220247e-16,
+          "whole_k": 6.209796530272696e-16
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      }
+    },
+    "c2287be8fd729dde1d13626e767c8cb6d13c9b12dd32c197180312f50369d58a": {
+      "status": "pass",
+      "reasons": [],
+      "complete_physical_budget": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 1.0152896894792627e-15,
+          "outer_k": 8.476491637234278e-16,
+          "outer_epsilon": 7.474489777115068e-16,
+          "whole_k": 1.4922403895510031e-15
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      }
+    },
+    "d6f1719592f5815807205169533b38e056f4ba857fb901787c994a9ae9460959": {
+      "status": "pass",
+      "reasons": [],
+      "complete_physical_budget": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 2.892405756636622e-16,
+          "outer_k": 2.0187844451680093e-16,
+          "outer_epsilon": 4.3747557659790104e-16,
+          "whole_k": 8.972365900380627e-17
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      }
+    }
+  },
+  "complete_bound_audit_coverage": "pass",
+  "shared_prerequisites": "pass",
+  "A93_E94E95_transfer_eligible": false,
+  "curved_production_eligible": false,
+  "physical_experimental_applicability": "not_assessed",
+  "scope": "A95 admission only; all-model evolving qualification additionally requires the admitted transfers"
+}

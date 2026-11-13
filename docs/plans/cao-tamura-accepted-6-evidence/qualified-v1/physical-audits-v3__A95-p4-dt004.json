@@ -1,0 +1,1106 @@
+{
+  "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/results.json",
+  "sha256": "8004ca2f39f097db45c05e531cf73fa9167331296c8d3572b1c0ccc6ebe2c32a",
+  "body": {
+    "schema": "CT6ActualStatePhysicalAuditV1",
+    "budget_binding": {
+      "model": "A95",
+      "time": 0.016,
+      "dt": 0.004,
+      "state_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+      "native_report_sha256": "d6f1719592f5815807205169533b38e056f4ba857fb901787c994a9ae9460959",
+      "configuration_sha256": "2afaa3b144f11b3a1ccea02b1fce48f7af967f5611eeef8172b7a8cfa6a7b85c"
+    },
+    "budgets": {
+      "native": {
+        "reconstruction_status": "pass",
+        "accuracy_status": "pass",
+        "equations": {
+          "inner_k": {
+            "storage_backward_difference": 0.040110203160810175,
+            "stage_source": 0.025990714823392408,
+            "instantaneous_source": 0.02540297735809666,
+            "stage_physical_boundary_flux": 0.01412894098656465,
+            "instantaneous_physical_boundary_flux": 0.014130393080098199,
+            "volume": 1.2007176441018166,
+            "frozen_stage_physical_defect": -9.452649146883887e-06,
+            "instantaneous_physical_defect": 0.0005768327226153159,
+            "frozen_operator_splitting": 0.000586285371762198,
+            "physical_scale": 1.4693951852860765,
+            "scaled_frozen_defect": 6.433020362077443e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_k": {
+            "storage_backward_difference": 0.039221810149358,
+            "stage_source": 0.025116821084527532,
+            "instantaneous_source": 0.02516098197848726,
+            "stage_physical_boundary_flux": 0.014094566699291022,
+            "instantaneous_physical_boundary_flux": 0.01409017984603962,
+            "volume": 1.2021392068235675,
+            "frozen_stage_physical_defect": 1.0422365539447184e-05,
+            "instantaneous_physical_defect": -2.935167516887778e-05,
+            "frozen_operator_splitting": -3.97740407083267e-05,
+            "physical_scale": 1.4693951852860765,
+            "scaled_frozen_defect": 7.09296290324924e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "storage_backward_difference": 0.02075006349992201,
+            "stage_source": -0.07900245137623496,
+            "instantaneous_source": -0.07901888187223335,
+            "stage_physical_boundary_flux": 0.09944441253830988,
+            "instantaneous_physical_boundary_flux": 0.09946167350609592,
+            "volume": 1.2021392068235675,
+            "frozen_stage_physical_defect": 0.0003081023378470882,
+            "instantaneous_physical_defect": 0.00030727186605944423,
+            "frozen_operator_splitting": -8.304717876439494e-07,
+            "physical_scale": 0.7611862577609576,
+            "scaled_frozen_defect": 0.0004047660276387234,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "whole_k": {
+            "storage_backward_difference": 0.07933201331016818,
+            "stage_source": 0.05110753590791994,
+            "instantaneous_source": 0.05056395933658392,
+            "stage_physical_boundary_flux": 0.028231452706463836,
+            "instantaneous_physical_boundary_flux": 0.028232384355511734,
+            "volume": 2.4028568509253843,
+            "frozen_stage_physical_defect": -6.9753042156034395e-06,
+            "instantaneous_physical_defect": 0.0005356696180725228,
+            "frozen_operator_splitting": 0.0005426449222881262,
+            "physical_scale": 1.4693951852860765,
+            "scaled_frozen_defect": 4.747058031393657e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          }
+        },
+        "reconstruction": {
+          "k": {
+            "maximum_defect": 1.2923689896027213e-16,
+            "normalization": 1.0,
+            "scaled_defect": 1.2923689896027213e-16,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "maximum_defect": 6.245004513516506e-17,
+            "normalization": 1.0,
+            "scaled_defect": 6.245004513516506e-17,
+            "status": "pass"
+          }
+        },
+        "interface_frozen_k_fluxes": {
+          "0": 0.014991351406564025,
+          "1": -0.01499929642717219
+        },
+        "interface_current_k_fluxes": {
+          "0": 0.014992743656994998,
+          "1": -0.015004555086368913
+        },
+        "face_order": 16,
+        "actual_quadrature": {
+          "wall_normal": 32,
+          "wall_tangential": 8,
+          "outer_volume": 12,
+          "mass_override": 12,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 12,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 29184,
+          "outer_volume_points": 1728
+        },
+        "physical_volume": 2.402856850925383,
+        "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching; curved physical volume is independently integrated a*J, not chart area",
+        "binding": {
+          "model": "A95",
+          "time": 0.016,
+          "dt": 0.004,
+          "state_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "native_report_sha256": "d6f1719592f5815807205169533b38e056f4ba857fb901787c994a9ae9460959",
+          "configuration_sha256": "2afaa3b144f11b3a1ccea02b1fce48f7af967f5611eeef8172b7a8cfa6a7b85c"
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/native/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/native/budget-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/native/budget.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 222.3549682740013,
+          "process_cpu_seconds": 220.990272,
+          "peak_RSS_KiB": 3755640,
+          "actual_mapped_files_sha256": "9cc0ac0a2b5ac30c55b17e901ef1c895c405b16e4bcceab9712fecd5d603bd76"
+        },
+        "packet_sha256": "2d58eeb50408edebaf36dfb0339ad54c9233239584ce42374c580690d99089ec",
+        "initialization_receipt": {
+          "raw_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "effective_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "explicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "implicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0.0006815526368874336,
+          "live_fixed_boundary_archive_identity": {
+            "sha256": "48584c8285d47e8a9d32520bcca603f22124f35bc13c3a4eb5b01bcc3aa75f1f",
+            "entries": 229,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "effective_initial_archive_identity": {
+            "sha256": "f4ef7da7bed649767aaf2a50b510d2e7eaf1db2382d3d37c0493a4e7e0989912",
+            "entries": 2283,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "open_boundary_definition": "AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration|E0=0.3167838556291071|K0=0.61152006817226179|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40999999999999998|RANSOPENVELOCITYSCALE=0.20000000000000001|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.0050000000000000001|RANSWALLMAPHEIGHTAMPLITUDE=0|RANSWALLMAPHEIGHTWAVEX=1.5707963267948966|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPIMPLEHARDAUDITREJECTSTEP=0|RANSWALLPIMPLEREJECTSTEP=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.050000000000000003|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.71308649305426108|ROUGHX=37.237975525695468|SLOPE=0.17946842304608926|YAPSCALE=0.60382768562974354|ZV=-0.0025019456529227911",
+          "open_traction_load_sha256": "6707872bd36e7c211b20599fcd954069ce69e4e9b94b592dbfffea8ae5fb1d97",
+          "open_diffusive_load_sha256": "9cf10bb1dceb0ca77181b0316402018d473e1fe68a3a4ef6a24b28aa44768b6c",
+          "open_advective_load_sha256": "7a9daa160826e3a37273ebe07c5383c0f91134bc55c957f6d7db548914b0d46b",
+          "open_explicit_implicit_agreement": true
+        },
+        "frozen_boundary_identity": {
+          "raw_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "effective_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "explicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "implicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345"
+        },
+        "actual_stage_snapshot_sha256": "7d2fe915e4b97e897e8a6536b00619aa619d5084e82e35938c5b7667d68c9eca",
+        "stage_coefficient_validation": {
+          "current_time_essential_lift_difference": 0.0001753032022763501,
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        }
+      },
+      "q48f16": {
+        "reconstruction_status": "pass",
+        "accuracy_status": "pass",
+        "equations": {
+          "inner_k": {
+            "storage_backward_difference": 0.04011020316081037,
+            "stage_source": 0.02599071482339246,
+            "instantaneous_source": 0.025402977358096587,
+            "stage_physical_boundary_flux": 0.01412894098656465,
+            "instantaneous_physical_boundary_flux": 0.014130393080098199,
+            "volume": 1.2007176441018224,
+            "frozen_stage_physical_defect": -9.45264914674164e-06,
+            "instantaneous_physical_defect": 0.000576832722615583,
+            "frozen_operator_splitting": 0.0005862853717623264,
+            "physical_scale": 1.4693951852860765,
+            "scaled_frozen_defect": 6.433020361980637e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_k": {
+            "storage_backward_difference": 0.039221810149357876,
+            "stage_source": 0.025116821084527556,
+            "instantaneous_source": 0.02516098197848726,
+            "stage_physical_boundary_flux": 0.014094566699291022,
+            "instantaneous_physical_boundary_flux": 0.01409017984603962,
+            "volume": 1.202139206823566,
+            "frozen_stage_physical_defect": 1.0422365539297998e-05,
+            "instantaneous_physical_defect": -2.935167516900268e-05,
+            "frozen_operator_splitting": -3.9774040708298944e-05,
+            "physical_scale": 1.4693951852860765,
+            "scaled_frozen_defect": 7.092962903147711e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "storage_backward_difference": 0.020750063499922457,
+            "stage_source": -0.07900245137623474,
+            "instantaneous_source": -0.07901888187223358,
+            "stage_physical_boundary_flux": 0.09944441253830988,
+            "instantaneous_physical_boundary_flux": 0.09946167350609592,
+            "volume": 1.202139206823566,
+            "frozen_stage_physical_defect": 0.0003081023378473102,
+            "instantaneous_physical_defect": 0.00030727186606011037,
+            "frozen_operator_splitting": -8.304717871998601e-07,
+            "physical_scale": 0.7611862577609576,
+            "scaled_frozen_defect": 0.0004047660276390151,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "whole_k": {
+            "storage_backward_difference": 0.07933201331016825,
+            "stage_source": 0.05110753590792001,
+            "instantaneous_source": 0.05056395933658385,
+            "stage_physical_boundary_flux": 0.028231452706463836,
+            "instantaneous_physical_boundary_flux": 0.028232384355511734,
+            "volume": 2.4028568509253883,
+            "frozen_stage_physical_defect": -6.9753042156034395e-06,
+            "instantaneous_physical_defect": 0.0005356696180726615,
+            "frozen_operator_splitting": 0.000542644922288265,
+            "physical_scale": 1.4693951852860765,
+            "scaled_frozen_defect": 4.747058031393657e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          }
+        },
+        "reconstruction": {
+          "k": {
+            "maximum_defect": 7.719519468096792e-17,
+            "normalization": 1.0,
+            "scaled_defect": 7.719519468096792e-17,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "maximum_defect": 5.551115123125783e-17,
+            "normalization": 1.0,
+            "scaled_defect": 5.551115123125783e-17,
+            "status": "pass"
+          }
+        },
+        "interface_frozen_k_fluxes": {
+          "0": 0.014991351406564025,
+          "1": -0.01499929642717219
+        },
+        "interface_current_k_fluxes": {
+          "0": 0.014992743656994998,
+          "1": -0.015004555086368913
+        },
+        "face_order": 16,
+        "actual_quadrature": {
+          "wall_normal": 48,
+          "wall_tangential": 12,
+          "outer_volume": 16,
+          "mass_override": 16,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 16,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 65664,
+          "outer_volume_points": 3072
+        },
+        "physical_volume": 2.402856850925383,
+        "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching; curved physical volume is independently integrated a*J, not chart area",
+        "binding": {
+          "model": "A95",
+          "time": 0.016,
+          "dt": 0.004,
+          "state_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "native_report_sha256": "d6f1719592f5815807205169533b38e056f4ba857fb901787c994a9ae9460959",
+          "configuration_sha256": "2afaa3b144f11b3a1ccea02b1fce48f7af967f5611eeef8172b7a8cfa6a7b85c"
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q48f16/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q48f16/budget-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q48f16/budget.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 485.44003557799806,
+          "process_cpu_seconds": 483.22192800000005,
+          "peak_RSS_KiB": 7927800,
+          "actual_mapped_files_sha256": "8d8e574d509817681f69a4ad1a677126c89661bc8afe2794e3de72b3c7329346"
+        },
+        "packet_sha256": "28e55085df99a83a8cadfa0e55217eac4e297d7742635690bc20a084b2f7c154",
+        "initialization_receipt": {
+          "raw_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "effective_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "explicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "implicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0.0006815526368874336,
+          "live_fixed_boundary_archive_identity": {
+            "sha256": "48584c8285d47e8a9d32520bcca603f22124f35bc13c3a4eb5b01bcc3aa75f1f",
+            "entries": 229,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "effective_initial_archive_identity": {
+            "sha256": "f4ef7da7bed649767aaf2a50b510d2e7eaf1db2382d3d37c0493a4e7e0989912",
+            "entries": 2283,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "open_boundary_definition": "AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration|E0=0.3167838556291071|K0=0.61152006817226179|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40999999999999998|RANSOPENVELOCITYSCALE=0.20000000000000001|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.0050000000000000001|RANSWALLMAPHEIGHTAMPLITUDE=0|RANSWALLMAPHEIGHTWAVEX=1.5707963267948966|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPIMPLEHARDAUDITREJECTSTEP=0|RANSWALLPIMPLEREJECTSTEP=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.050000000000000003|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.71308649305426108|ROUGHX=37.237975525695468|SLOPE=0.17946842304608926|YAPSCALE=0.60382768562974354|ZV=-0.0025019456529227911",
+          "open_traction_load_sha256": "ddf010b534d3b273f8822663f3b6b62c032c116be7d3bed2a030ccc02ea65e34",
+          "open_diffusive_load_sha256": "2256f62f16dc8d553e5dbb38101d5385ade918237f095f5365865d69009867a9",
+          "open_advective_load_sha256": "64363847947620ce13349f68cdaf6a149582fcb2cc3bbf87b5a162c97f105429",
+          "open_explicit_implicit_agreement": true
+        },
+        "frozen_boundary_identity": {
+          "raw_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "effective_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "explicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "implicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345"
+        },
+        "actual_stage_snapshot_sha256": "7d2fe915e4b97e897e8a6536b00619aa619d5084e82e35938c5b7667d68c9eca",
+        "stage_coefficient_validation": {
+          "current_time_essential_lift_difference": 0.0001753032022763501,
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        }
+      },
+      "q64f16": {
+        "reconstruction_status": "pass",
+        "accuracy_status": "pass",
+        "equations": {
+          "inner_k": {
+            "storage_backward_difference": 0.04011020316081049,
+            "stage_source": 0.02599071482339231,
+            "instantaneous_source": 0.025402977358096955,
+            "stage_physical_boundary_flux": 0.01412894098656465,
+            "instantaneous_physical_boundary_flux": 0.014130393080098199,
+            "volume": 1.2007176441018028,
+            "frozen_stage_physical_defect": -9.452649146474493e-06,
+            "instantaneous_physical_defect": 0.0005768327226153332,
+            "frozen_operator_splitting": 0.000586285371761806,
+            "physical_scale": 1.4693951852860767,
+            "scaled_frozen_defect": 6.433020361798828e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_k": {
+            "storage_backward_difference": 0.03922181014935777,
+            "stage_source": 0.025116821084527584,
+            "instantaneous_source": 0.02516098197848721,
+            "stage_physical_boundary_flux": 0.014094566699291022,
+            "instantaneous_physical_boundary_flux": 0.01409017984603962,
+            "volume": 1.2021392068235652,
+            "frozen_stage_physical_defect": 1.0422365539166159e-05,
+            "instantaneous_physical_defect": -2.9351675169058192e-05,
+            "frozen_operator_splitting": -3.9774040708222616e-05,
+            "physical_scale": 1.4693951852860767,
+            "scaled_frozen_defect": 7.0929629030579865e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "storage_backward_difference": 0.020750063499922318,
+            "stage_source": -0.07900245137623499,
+            "instantaneous_source": -0.07901888187223381,
+            "stage_physical_boundary_flux": 0.09944441253830988,
+            "instantaneous_physical_boundary_flux": 0.09946167350609592,
+            "volume": 1.2021392068235652,
+            "frozen_stage_physical_defect": 0.00030810233784742125,
+            "instantaneous_physical_defect": 0.0003072718660602214,
+            "frozen_operator_splitting": -8.304717872137379e-07,
+            "physical_scale": 0.7611862577609577,
+            "scaled_frozen_defect": 0.00040476602763916085,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "whole_k": {
+            "storage_backward_difference": 0.07933201331016826,
+            "stage_source": 0.051107535907919895,
+            "instantaneous_source": 0.05056395933658417,
+            "stage_physical_boundary_flux": 0.028231452706463836,
+            "instantaneous_physical_boundary_flux": 0.028232384355511734,
+            "volume": 2.4028568509253683,
+            "frozen_stage_physical_defect": -6.9753042154716005e-06,
+            "instantaneous_physical_defect": 0.0005356696180723562,
+            "frozen_operator_splitting": 0.0005426449222878348,
+            "physical_scale": 1.4693951852860767,
+            "scaled_frozen_defect": 4.747058031303933e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          }
+        },
+        "reconstruction": {
+          "k": {
+            "maximum_defect": 9.215718466126788e-17,
+            "normalization": 1.0,
+            "scaled_defect": 9.215718466126788e-17,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "maximum_defect": 4.163336342344337e-17,
+            "normalization": 1.0,
+            "scaled_defect": 4.163336342344337e-17,
+            "status": "pass"
+          }
+        },
+        "interface_frozen_k_fluxes": {
+          "0": 0.014991351406564025,
+          "1": -0.01499929642717219
+        },
+        "interface_current_k_fluxes": {
+          "0": 0.014992743656994998,
+          "1": -0.015004555086368913
+        },
+        "face_order": 16,
+        "actual_quadrature": {
+          "wall_normal": 64,
+          "wall_tangential": 16,
+          "outer_volume": 20,
+          "mass_override": 20,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 20,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 116736,
+          "outer_volume_points": 4800
+        },
+        "physical_volume": 2.4028568509253834,
+        "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching; curved physical volume is independently integrated a*J, not chart area",
+        "binding": {
+          "model": "A95",
+          "time": 0.016,
+          "dt": 0.004,
+          "state_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "native_report_sha256": "d6f1719592f5815807205169533b38e056f4ba857fb901787c994a9ae9460959",
+          "configuration_sha256": "2afaa3b144f11b3a1ccea02b1fce48f7af967f5611eeef8172b7a8cfa6a7b85c"
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q64f16/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q64f16/budget-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q64f16/budget.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 901.7298636010019,
+          "process_cpu_seconds": 898.0385049999998,
+          "peak_RSS_KiB": 13800164,
+          "actual_mapped_files_sha256": "b507a42bf74710895c497f192a061a929e66c9d52bf055e51a555c114e9d4e9f"
+        },
+        "packet_sha256": "3986f786cfe8b3de4cafa76b92643636d36abde6ad07f6848f628537e0c6fc32",
+        "initialization_receipt": {
+          "raw_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "effective_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "explicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "implicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0.0006815526368874336,
+          "live_fixed_boundary_archive_identity": {
+            "sha256": "48584c8285d47e8a9d32520bcca603f22124f35bc13c3a4eb5b01bcc3aa75f1f",
+            "entries": 229,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "effective_initial_archive_identity": {
+            "sha256": "f4ef7da7bed649767aaf2a50b510d2e7eaf1db2382d3d37c0493a4e7e0989912",
+            "entries": 2283,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "open_boundary_definition": "AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration|E0=0.3167838556291071|K0=0.61152006817226179|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40999999999999998|RANSOPENVELOCITYSCALE=0.20000000000000001|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.0050000000000000001|RANSWALLMAPHEIGHTAMPLITUDE=0|RANSWALLMAPHEIGHTWAVEX=1.5707963267948966|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPIMPLEHARDAUDITREJECTSTEP=0|RANSWALLPIMPLEREJECTSTEP=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.050000000000000003|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.71308649305426108|ROUGHX=37.237975525695468|SLOPE=0.17946842304608926|YAPSCALE=0.60382768562974354|ZV=-0.0025019456529227911",
+          "open_traction_load_sha256": "f52f44cf9168867d663596dbeb0c17f9b6ecb12469b02828a8ee0009e70f89b9",
+          "open_diffusive_load_sha256": "fc50d0802f7af71fac7f0eded067c528dcdbdf42b9aedf2d5eea7d262d933a4b",
+          "open_advective_load_sha256": "028bb26ffb4bf11350695524c96cb9b26c97e60342f584215441c4b329b1ec43",
+          "open_explicit_implicit_agreement": true
+        },
+        "frozen_boundary_identity": {
+          "raw_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "effective_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "explicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "implicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345"
+        },
+        "actual_stage_snapshot_sha256": "7d2fe915e4b97e897e8a6536b00619aa619d5084e82e35938c5b7667d68c9eca",
+        "stage_coefficient_validation": {
+          "current_time_essential_lift_difference": 0.0001753032022763501,
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        }
+      },
+      "q64f32": {
+        "reconstruction_status": "pass",
+        "accuracy_status": "pass",
+        "equations": {
+          "inner_k": {
+            "storage_backward_difference": 0.04011020316081049,
+            "stage_source": 0.02599071482339231,
+            "instantaneous_source": 0.025402977358096955,
+            "stage_physical_boundary_flux": 0.014128940986564635,
+            "instantaneous_physical_boundary_flux": 0.014130393080098188,
+            "volume": 1.2007176441018028,
+            "frozen_stage_physical_defect": -9.45264914645888e-06,
+            "instantaneous_physical_defect": 0.0005768327226153436,
+            "frozen_operator_splitting": 0.0005862853717618025,
+            "physical_scale": 1.4693951852860767,
+            "scaled_frozen_defect": 6.433020361788203e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_k": {
+            "storage_backward_difference": 0.03922181014935777,
+            "stage_source": 0.025116821084527584,
+            "instantaneous_source": 0.02516098197848721,
+            "stage_physical_boundary_flux": 0.014094566699291038,
+            "instantaneous_physical_boundary_flux": 0.014090179846039632,
+            "volume": 1.2021392068235652,
+            "frozen_stage_physical_defect": 1.0422365539150547e-05,
+            "instantaneous_physical_defect": -2.9351675169070335e-05,
+            "frozen_operator_splitting": -3.977404070822088e-05,
+            "physical_scale": 1.4693951852860767,
+            "scaled_frozen_defect": 7.092962903047361e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "storage_backward_difference": 0.020750063499922318,
+            "stage_source": -0.07900245137623499,
+            "instantaneous_source": -0.07901888187223381,
+            "stage_physical_boundary_flux": 0.09944441253831,
+            "instantaneous_physical_boundary_flux": 0.09946167350609604,
+            "volume": 1.2021392068235652,
+            "frozen_stage_physical_defect": 0.00030810233784729635,
+            "instantaneous_physical_defect": 0.0003072718660600965,
+            "frozen_operator_splitting": -8.304717872137379e-07,
+            "physical_scale": 0.7611862577609577,
+            "scaled_frozen_defect": 0.0004047660276389968,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "whole_k": {
+            "storage_backward_difference": 0.07933201331016826,
+            "stage_source": 0.051107535907919895,
+            "instantaneous_source": 0.05056395933658417,
+            "stage_physical_boundary_flux": 0.028231452706463843,
+            "instantaneous_physical_boundary_flux": 0.028232384355511737,
+            "volume": 2.4028568509253683,
+            "frozen_stage_physical_defect": -6.975304215478539e-06,
+            "instantaneous_physical_defect": 0.0005356696180723527,
+            "frozen_operator_splitting": 0.0005426449222878313,
+            "physical_scale": 1.4693951852860767,
+            "scaled_frozen_defect": 4.747058031308655e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          }
+        },
+        "reconstruction": {
+          "k": {
+            "maximum_defect": 9.215718466126788e-17,
+            "normalization": 1.0,
+            "scaled_defect": 9.215718466126788e-17,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "maximum_defect": 4.163336342344337e-17,
+            "normalization": 1.0,
+            "scaled_defect": 4.163336342344337e-17,
+            "status": "pass"
+          }
+        },
+        "interface_frozen_k_fluxes": {
+          "0": 0.014991351406564017,
+          "1": -0.014999296427172185
+        },
+        "interface_current_k_fluxes": {
+          "0": 0.014992743656995,
+          "1": -0.015004555086368917
+        },
+        "face_order": 32,
+        "actual_quadrature": {
+          "wall_normal": 64,
+          "wall_tangential": 16,
+          "outer_volume": 20,
+          "mass_override": 20,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 20,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 116736,
+          "outer_volume_points": 4800
+        },
+        "physical_volume": 2.4028568509253834,
+        "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching; curved physical volume is independently integrated a*J, not chart area",
+        "binding": {
+          "model": "A95",
+          "time": 0.016,
+          "dt": 0.004,
+          "state_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "native_report_sha256": "d6f1719592f5815807205169533b38e056f4ba857fb901787c994a9ae9460959",
+          "configuration_sha256": "2afaa3b144f11b3a1ccea02b1fce48f7af967f5611eeef8172b7a8cfa6a7b85c"
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q64f32/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q64f32/budget-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/q64f32/budget.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 862.0786413109963,
+          "process_cpu_seconds": 858.803178,
+          "peak_RSS_KiB": 13825532,
+          "actual_mapped_files_sha256": "b99b16b39430151ed25aa24a9193d37ef342f694280be5192baa68592059cd1f"
+        },
+        "packet_sha256": "3f40b7041f0279b07193723acc684c77c117254a94ab23a56964ea9eb11507ad",
+        "initialization_receipt": {
+          "raw_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "effective_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "explicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "implicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0.0006815526368874336,
+          "live_fixed_boundary_archive_identity": {
+            "sha256": "48584c8285d47e8a9d32520bcca603f22124f35bc13c3a4eb5b01bcc3aa75f1f",
+            "entries": 229,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "effective_initial_archive_identity": {
+            "sha256": "f4ef7da7bed649767aaf2a50b510d2e7eaf1db2382d3d37c0493a4e7e0989912",
+            "entries": 2283,
+            "location": "original sealed Linux receipt/packet"
+          },
+          "open_boundary_definition": "AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration|E0=0.3167838556291071|K0=0.61152006817226179|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40999999999999998|RANSOPENVELOCITYSCALE=0.20000000000000001|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.0050000000000000001|RANSWALLMAPHEIGHTAMPLITUDE=0|RANSWALLMAPHEIGHTWAVEX=1.5707963267948966|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPIMPLEHARDAUDITREJECTSTEP=0|RANSWALLPIMPLEREJECTSTEP=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.050000000000000003|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.71308649305426108|ROUGHX=37.237975525695468|SLOPE=0.17946842304608926|YAPSCALE=0.60382768562974354|ZV=-0.0025019456529227911",
+          "open_traction_load_sha256": "f52f44cf9168867d663596dbeb0c17f9b6ecb12469b02828a8ee0009e70f89b9",
+          "open_diffusive_load_sha256": "fc50d0802f7af71fac7f0eded067c528dcdbdf42b9aedf2d5eea7d262d933a4b",
+          "open_advective_load_sha256": "028bb26ffb4bf11350695524c96cb9b26c97e60342f584215441c4b329b1ec43",
+          "open_explicit_implicit_agreement": true
+        },
+        "frozen_boundary_identity": {
+          "raw_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "effective_initial_sha256": "fc14d0b6e54c64a1f94406c28b7eecc28ee0aae1aa47c15a99d2e1700507329f",
+          "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+          "explicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+          "implicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345"
+        },
+        "actual_stage_snapshot_sha256": "7d2fe915e4b97e897e8a6536b00619aa619d5084e82e35938c5b7667d68c9eca",
+        "stage_coefficient_validation": {
+          "current_time_essential_lift_difference": 0.0001753032022763501,
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        }
+      }
+    },
+    "physical_completion": "pass",
+    "time": 0.016,
+    "captured_k_matrix": {
+      "status": "pass",
+      "maximum_defect": 6.132247487578013e-16,
+      "scale": 1.0,
+      "scaled_defect": 6.132247487578013e-16,
+      "captured_rows": 576,
+      "matrix_sha256": "2ac4a403c4fc1fa529851502dff88c4d0f37a1545c9e375176fb56c267dfb619",
+      "scope": "actual captured PIMPLE free-row residual plus its frozen matrix times actual raw increment; not a second reassembly using guessed frozen coefficients"
+    },
+    "budget_gate": {
+      "status": "pass",
+      "reasons": [],
+      "controls": {
+        "native": {
+          "status": "pass",
+          "reasons": []
+        },
+        "q48f16": {
+          "status": "pass",
+          "reasons": []
+        },
+        "q64f16": {
+          "status": "pass",
+          "reasons": []
+        },
+        "q64f32": {
+          "status": "pass",
+          "reasons": []
+        }
+      },
+      "scaled_signed_defect_spreads": {
+        "inner_k": 2.892405756636622e-16,
+        "outer_k": 2.0187844451680093e-16,
+        "outer_epsilon": 4.3747557659790104e-16,
+        "whole_k": 8.972365900380627e-17
+      },
+      "uncertainty_limit": 0.02,
+      "required_controls": [
+        "native",
+        "q48f16",
+        "q64f16",
+        "q64f32"
+      ],
+      "required_equations": [
+        "inner_k",
+        "outer_epsilon",
+        "outer_k",
+        "whole_k"
+      ],
+      "required_reconstruction": [
+        "k",
+        "outer_epsilon"
+      ]
+    },
+    "mass_archive_identity": {
+      "sha256": "8377a5f291c28d7c4dc6b2517d362aa37c4d404cacc59104ad8a73049c51fe08",
+      "entries": 7,
+      "location": "original sealed Linux receipt/packet"
+    },
+    "common_observations": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/common/endpoint.json",
+      "sha256": "55e15c25a8b0bac7027eebdd9d69948d97ff8ae93f41402328f41b04a31368b1",
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/common/case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/common/endpoint-request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/physical-audits-v3/A95-p4-dt004/common/endpoint.json"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 108.74569856599555,
+        "process_cpu_seconds": 108.11652799999993,
+        "peak_RSS_KiB": 401408,
+        "actual_mapped_files_sha256": "b65c596fefe775b6f35175009e8a17bbd7919ab7faae498ff25cfeab53ca4aa1"
+      },
+      "count": 1296,
+      "weights_archive_identity": {
+        "sha256": "b2b0fe95930d22772891bbf94b93e58d6017a1721f778a997f57c911a2c96339",
+        "entries": 1296,
+        "location": "original sealed Linux receipt/packet"
+      },
+      "grid_sha256": "f3f10646dd13648bb7da1b2cd94e3b96483fc96b9034d9b41b0238447fe00de0",
+      "physical_volume": 2.402856850925383,
+      "divergence_RMS": 0.00010001347472460038,
+      "divergence_maximum": 0.000591573267196457,
+      "raw_divergence_witness": {
+        "signed_value": -0.000591573267196457,
+        "chart_coordinate": [
+          0.8135060971593696,
+          0.0,
+          0.741558689275394
+        ],
+        "physical_coordinate": [
+          0.8166184571774169,
+          0.0,
+          0.7441317872715253
+        ],
+        "side": 0,
+        "region": 1,
+        "native_geometry_by_field": [
+          29,
+          29,
+          29,
+          29,
+          29
+        ]
+      },
+      "isotropic_production_signed_mean": 6.114992934177307e-12,
+      "isotropic_production_RMS": 4.15927309555101e-05,
+      "isotropic_production_definition": "-2*k*trace(raw Cartesian velocity gradient)/3; diagnostic only, no projected gradient"
+    },
+    "status": "pass"
+  },
+  "recomputed_gate": {
+    "status": "pass",
+    "reasons": [],
+    "controls": {
+      "native": {
+        "status": "pass",
+        "reasons": []
+      },
+      "q48f16": {
+        "status": "pass",
+        "reasons": []
+      },
+      "q64f16": {
+        "status": "pass",
+        "reasons": []
+      },
+      "q64f32": {
+        "status": "pass",
+        "reasons": []
+      }
+    },
+    "scaled_signed_defect_spreads": {
+      "inner_k": 2.892405756636622e-16,
+      "outer_k": 2.0187844451680093e-16,
+      "outer_epsilon": 4.3747557659790104e-16,
+      "whole_k": 8.972365900380627e-17
+    },
+    "uncertainty_limit": 0.02,
+    "required_controls": [
+      "native",
+      "q48f16",
+      "q64f16",
+      "q64f32"
+    ],
+    "required_equations": [
+      "inner_k",
+      "outer_epsilon",
+      "outer_k",
+      "whole_k"
+    ],
+    "required_reconstruction": [
+      "k",
+      "outer_epsilon"
+    ]
+  },
+  "derived_quadrature_uncertainty": {
+    "schema": "CT6FrozenIntegrationUncertaintyV1",
+    "status": "pass",
+    "reasons": [],
+    "checks": {
+      "q48f16:physical_volume": {
+        "change": 0.0,
+        "limit": 2e-11,
+        "status": "pass"
+      },
+      "q48f16:alpha_zero_mass_dual_norm:U": {
+        "change": 4.496403249731884e-15,
+        "limit": 7.351060744044856e-07,
+        "status": "pass"
+      },
+      "q48f16:alpha_zero_mass_dual_norm:w": {
+        "change": 5.80785419757035e-15,
+        "limit": 4.806049764024479e-07,
+        "status": "pass"
+      },
+      "q48f16:alpha_zero_mass_dual_norm:k": {
+        "change": 1.942890293094024e-16,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q48f16:alpha_zero_mass_dual_norm:outer_epsilon": {
+        "change": 8.049116928532385e-16,
+        "limit": 1.3509091292550941e-05,
+        "status": "pass"
+      },
+      "q48f16:alpha_zero_mass_dual_norm:continuity_inner": {
+        "change": 1.3828359709563993e-17,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q48f16:alpha_zero_mass_dual_norm:continuity_outer": {
+        "change": 8.294193319772566e-18,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q48f16:alpha_zero_mass_dual_norm:unused_gauge": {
+        "change": 0.0,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q48f16:alpha_zero_mass_dual_norm:constraints": {
+        "change": 0.0,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q48f16:frozen_all_row_load:k": {
+        "change": 8.466898526585945e-17,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q48f16:frozen_all_row_load:outer_epsilon": {
+        "change": 2.036832760505722e-16,
+        "limit": 1.3509091292550941e-05,
+        "status": "pass"
+      },
+      "q48f16:physical_budget:inner_k": {
+        "change": 2.4201637127186683e-16,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q48f16:physical_budget:outer_k": {
+        "change": 2.5382189297422364e-16,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q48f16:physical_budget:outer_epsilon": {
+        "change": 7.292614862680624e-16,
+        "limit": 1.3509091292550941e-05,
+        "status": "pass"
+      },
+      "q48f16:physical_budget:whole_k": {
+        "change": 0.0,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q64f16:physical_volume": {
+        "change": 1.8481717280787491e-16,
+        "limit": 2e-11,
+        "status": "pass"
+      },
+      "q64f16:alpha_zero_mass_dual_norm:U": {
+        "change": 3.608224830031759e-15,
+        "limit": 7.351060744044856e-07,
+        "status": "pass"
+      },
+      "q64f16:alpha_zero_mass_dual_norm:w": {
+        "change": 1.1046719095020308e-14,
+        "limit": 4.806049764024479e-07,
+        "status": "pass"
+      },
+      "q64f16:alpha_zero_mass_dual_norm:k": {
+        "change": 4.440892098500626e-16,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q64f16:alpha_zero_mass_dual_norm:outer_epsilon": {
+        "change": 2.3592239273284576e-15,
+        "limit": 1.3509091292550941e-05,
+        "status": "pass"
+      },
+      "q64f16:alpha_zero_mass_dual_norm:continuity_inner": {
+        "change": 1.4130194382630085e-17,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q64f16:alpha_zero_mass_dual_norm:continuity_outer": {
+        "change": 1.0279834260960988e-17,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q64f16:alpha_zero_mass_dual_norm:unused_gauge": {
+        "change": 0.0,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q64f16:alpha_zero_mass_dual_norm:constraints": {
+        "change": 0.0,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q64f16:frozen_all_row_load:k": {
+        "change": 7.083418375183013e-17,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q64f16:frozen_all_row_load:outer_epsilon": {
+        "change": 1.7092302885362703e-16,
+        "limit": 1.3509091292550941e-05,
+        "status": "pass"
+      },
+      "q64f16:physical_budget:inner_k": {
+        "change": 6.965384859332607e-16,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q64f16:physical_budget:outer_k": {
+        "change": 4.781331580661075e-16,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q64f16:physical_budget:outer_epsilon": {
+        "change": 1.0936889414947526e-15,
+        "limit": 1.3509091292550941e-05,
+        "status": "pass"
+      },
+      "q64f16:physical_budget:whole_k": {
+        "change": 2.243091475095157e-16,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q64f32:physical_volume": {
+        "change": 1.8481717280787491e-16,
+        "limit": 2e-11,
+        "status": "pass"
+      },
+      "q64f32:alpha_zero_mass_dual_norm:U": {
+        "change": 3.608224830031759e-15,
+        "limit": 7.351060744044856e-07,
+        "status": "pass"
+      },
+      "q64f32:alpha_zero_mass_dual_norm:w": {
+        "change": 1.1046719095020308e-14,
+        "limit": 4.806049764024479e-07,
+        "status": "pass"
+      },
+      "q64f32:alpha_zero_mass_dual_norm:k": {
+        "change": 4.440892098500626e-16,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q64f32:alpha_zero_mass_dual_norm:outer_epsilon": {
+        "change": 2.3592239273284576e-15,
+        "limit": 1.3509091292550941e-05,
+        "status": "pass"
+      },
+      "q64f32:alpha_zero_mass_dual_norm:continuity_inner": {
+        "change": 1.4130194382630085e-17,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q64f32:alpha_zero_mass_dual_norm:continuity_outer": {
+        "change": 1.0279834260960988e-17,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q64f32:alpha_zero_mass_dual_norm:unused_gauge": {
+        "change": 0.0,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q64f32:alpha_zero_mass_dual_norm:constraints": {
+        "change": 0.0,
+        "limit": 2e-08,
+        "status": "pass"
+      },
+      "q64f32:frozen_all_row_load:k": {
+        "change": 7.083418375183013e-17,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q64f32:frozen_all_row_load:outer_epsilon": {
+        "change": 1.7092302885362703e-16,
+        "limit": 1.3509091292550941e-05,
+        "status": "pass"
+      },
+      "q64f32:physical_budget:inner_k": {
+        "change": 7.231014391591555e-16,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q64f32:physical_budget:outer_k": {
+        "change": 5.046961112920023e-16,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      },
+      "q64f32:physical_budget:outer_epsilon": {
+        "change": 6.835894697521105e-16,
+        "limit": 1.3509091292550941e-05,
+        "status": "pass"
+      },
+      "q64f32:physical_budget:whole_k": {
+        "change": 2.1250362580715887e-16,
+        "limit": 6.545229482229388e-08,
+        "status": "pass"
+      }
+    },
+    "actual_orders": {
+      "native": {
+        "wall_normal": 32,
+        "wall_tangential": 8,
+        "outer_volume": 12,
+        "mass_override": 12,
+        "mass_default": "max(8,p+3) per native field",
+        "interface": 12,
+        "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+        "inner_volume_points": 29184,
+        "outer_volume_points": 1728
+      },
+      "q48f16": {
+        "wall_normal": 48,
+        "wall_tangential": 12,
+        "outer_volume": 16,
+        "mass_override": 16,
+        "mass_default": "max(8,p+3) per native field",
+        "interface": 16,
+        "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+        "inner_volume_points": 65664,
+        "outer_volume_points": 3072
+      },
+      "q64f16": {
+        "wall_normal": 64,
+        "wall_tangential": 16,
+        "outer_volume": 20,
+        "mass_override": 20,
+        "mass_default": "max(8,p+3) per native field",
+        "interface": 20,
+        "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+        "inner_volume_points": 116736,
+        "outer_volume_points": 4800
+      },
+      "q64f32": {
+        "wall_normal": 64,
+        "wall_tangential": 16,
+        "outer_volume": 20,
+        "mass_override": 20,
+        "mass_default": "max(8,p+3) per native field",
+        "interface": 20,
+        "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+        "inner_volume_points": 116736,
+        "outer_volume_points": 4800
+      }
+    },
+    "reference_time": 2.5,
+    "floor": 2e-08,
+    "fraction_of_measured_degree_difference": 0.1,
+    "scope": "same actual coefficients/reference/live essential boundaries; current unanchored native mass-dual norm changes, complete frozen scalar row-load changes and physical source/storage/face-budget changes; not temporal or spatial convergence"
+  }
+}

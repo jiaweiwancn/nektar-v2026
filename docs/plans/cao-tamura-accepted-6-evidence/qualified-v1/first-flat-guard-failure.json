@@ -1,0 +1,66 @@
+{
+  "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/first-failure-v1.json",
+  "sha256": "62350443ba105a5ff6be01be96c7fa68029987d196033d78bd8b27a05109d963",
+  "body": {
+    "schema": "CT6InitialTraceGuardFailureV1",
+    "failure": "EP-AWF patch: R4 wall trace requires canonical flat 2D",
+    "time": 0,
+    "attempts": [
+      {
+        "history_sha256": "e5ab41454cfe34e71493bf4c8d55a8b22db8e35a61fced1426182acbcdbccb6e",
+        "incoming_sha256": "c21a54f1dcd882e9aa2db271be6b2ec6900b744ccc2943d8b09a0f68e7e8e0de",
+        "input_outlet": {
+          "policy": "AcceptedManufacturedOpenV1",
+          "admissible": true,
+          "minimum_outward_velocity": 0.0001944040393317969,
+          "roundoff_tolerance": 2e-13,
+          "point": [
+            1.2,
+            0,
+            0.00046098414383201894
+          ],
+          "geometry": 5,
+          "side": 1,
+          "time": 0.002,
+          "samples": 72,
+          "reason": "outflow",
+          "scope": "declared Gaussian outlet face inventory; signed flux retained; no rejection of internal reversed flow or negative wall shear"
+        },
+        "time": 0.002,
+        "alpha": 500,
+        "governing_solves_complete": false,
+        "momentum_predictor_solve_attempts": 0,
+        "pressure_system_solve_attempts": 0,
+        "epsilon_transport_solve_attempts": 0,
+        "k_transport_solve_attempts": 0,
+        "momentum_predictor_solve_completed": false,
+        "pressure_system_solve_completed": false,
+        "epsilon_transport_solve_completed": false,
+        "k_transport_solve_completed": false,
+        "scheduled_complete": false,
+        "failure": "EP-AWF patch: R4 wall trace requires canonical flat 2D",
+        "outer_sweeps": 0,
+        "momentum_predictor_solves": 0,
+        "pressure_system_solves": 0,
+        "epsilon_transport_solves": 0,
+        "k_transport_solves": 0,
+        "mass_inverse_applications": 0,
+        "additional_governing_equation_solves": 0,
+        "additional_correction_or_restoration_solves": 0,
+        "bound_calls": 0,
+        "bound_activations": 0,
+        "bound_active_set_iterations": 0,
+        "bound_mass_factor_applications": 0,
+        "bound_kkt_solves": 0,
+        "seconds": 2.334171958
+      }
+    ],
+    "accepted_state_equals_fresh_zero": true,
+    "native_history_equals_zero": true,
+    "zero_state_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+    "failed_report_sha256": "29b6d4b323f381e1d16c1f03c93ae4d529716b14de46da2caedad08d7895dbc2",
+    "last_accepted_checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v1/A95-p4-dt002/zero/checkpoint",
+    "postcollector": "stopped owned collector after empty checkpoint string selected cwd; no native evolution or external process interrupted; fixed collector never hashes empty history paths",
+    "scope": "flat-only continuous ground trace guard; no governing solve attempted"
+  }
+}

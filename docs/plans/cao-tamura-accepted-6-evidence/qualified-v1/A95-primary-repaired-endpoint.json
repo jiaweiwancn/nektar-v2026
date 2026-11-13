@@ -1,0 +1,219 @@
+{
+  "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/endpoint-classification-v2/results.json",
+  "sha256": "fcc71ef909ede0c104c0eb958621270dd0aded72519504b35d938b803e302163",
+  "body": {
+    "schema": "CT6EvolvedReplayClassificationV2",
+    "packet_sha256": "f8a05a6f54c8d6a0b1106b5f705e2c841f6b0fcd09c2d6ce7b83b4d9a703f5a8",
+    "packet_path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/endpoint-supplement-v1/endpoint.json",
+    "physical_metrics": {
+      "schema": "CT6ManufacturedPhysicalMetricsV1",
+      "status": "pass",
+      "fields": {
+        "U": {
+          "scaled_weighted_RMS": 1.2215698582316298e-05,
+          "true_L2": 3.787147787710606e-06,
+          "scaled_gradient_RMS": 0.0005035155614040198,
+          "volume": 2.4028568509253896,
+          "scale": 0.2,
+          "scaled_drift_from_actual_initial": 0.0019118987386483569
+        },
+        "w": {
+          "scaled_weighted_RMS": 1.1006635160897276e-05,
+          "true_L2": 3.4123102922719594e-06,
+          "scaled_gradient_RMS": 0.00036583025252471136,
+          "volume": 2.4028568509253896,
+          "scale": 0.2,
+          "scaled_drift_from_actual_initial": 1.7294459181667737e-05
+        },
+        "k": {
+          "scaled_weighted_RMS": 1.0903095443541258e-05,
+          "true_L2": 1.0335333071192709e-05,
+          "scaled_gradient_RMS": 0.00039228070041888127,
+          "volume": 2.4028568509253896,
+          "scale": 0.6115200681722618,
+          "scaled_drift_from_actual_initial": 0.0008387962774821562
+        },
+        "outer_epsilon": {
+          "scaled_weighted_RMS": 3.0002052851354923e-05,
+          "true_L2": 1.042056802326336e-05,
+          "scaled_gradient_RMS": 0.000996156076162434,
+          "volume": 1.2021392068235675,
+          "scale": 0.31678385562910716,
+          "scaled_drift_from_actual_initial": 0.000863854260618865
+        },
+        "Pi": {
+          "scaled_weighted_RMS": 0.0015982386015201307,
+          "true_L2": 0.0002477453803887551,
+          "scaled_gradient_RMS": 0.005687099307397902,
+          "volume": 2.4028568509253896,
+          "scale": 0.1,
+          "scaled_drift_from_actual_initial": 0.006269945748385117
+        }
+      },
+      "traction": {
+        "ground_scaled_RMS": 0.0007416357625356858,
+        "ground_signed_mean": [
+          -0.00010885677553238094,
+          0.0,
+          0.0004247185982889792
+        ],
+        "ground_reference_mean": [
+          -0.00010868149238222582,
+          0.0,
+          0.00032256904500152847
+        ],
+        "full_interface_jump_scaled_RMS": 0.00031010456998398174,
+        "inner_interface_reference_error_scaled_RMS": 0.0009100426318886134,
+        "outer_interface_reference_error_scaled_RMS": 0.0009057889111350205,
+        "conservative_k_interface_jump_scaled_RMS": 1.3350673514310816e-05,
+        "outlet_reconstruction_scaled_RMS": 0.0013367227033702896,
+        "current_endpoint_trace_restriction_defect": 8.881784197001252e-16
+      },
+      "pressure": "absolute augmented Pi, no fitted gauge subtraction",
+      "field_limits": {
+        "U": 0.005,
+        "w": 0.005,
+        "k": 0.005,
+        "outer_epsilon": 0.005,
+        "Pi": 0.01
+      },
+      "traction_limit": 0.005,
+      "scope": "current FE coefficients and actual endpoint K; projection/error, drift and reconstructed physical traction remain separate"
+    },
+    "all_row": {
+      "schema": "CT6IndependentAllRowOperatorV1",
+      "status": "pass",
+      "model": "A95",
+      "maximum_scaled_defect": 1.732660995073827e-16,
+      "constrained_scaled_defect": 9.701096717210231e-17,
+      "native_term_sum_scaled_defect": 4.493543531756724e-16,
+      "geometry_primitive_defect": 2.220446049250313e-16,
+      "mechanical_weak_work": {
+        "stress": 0.013795450382021894,
+        "conservative_advection": -4.698191896399838e-05,
+        "roughness_sampler": -2.698909480103952e-05,
+        "prescribed_body_completion": 0.002470073612596049,
+        "outlet": 0.019774885252778956,
+        "signed_turbulent_production": 0.013794562392177134,
+        "molecular_loss": 8.879934048323529e-07,
+        "mechanical_pressure_work": -3.560083407832213e-12,
+        "native_unmasked_velocity_test": 0.035966438233631846,
+        "independent_weak_work": 0.03596643823363186,
+        "reconstruction_defect": -1.3877787807814457e-17,
+        "stress_split_defect": 1.0794983272141604e-17,
+        "scale": 1.0,
+        "maximum_scaled_defect": 1.3877787807814457e-17,
+        "scope": "actual FE velocity as native weak test, all prescribed rows retained; full signed production, finite inner molecular loss, Pi-2k/3 mechanical work, roughness and body completion separately retained; algebraic work identity is not an independent physical conservation theorem"
+      },
+      "witness": {
+        "row": 36,
+        "native": 0.036064005340696564,
+        "independent": 0.03606400534069648,
+        "scale": 0.4805713701850766
+      },
+      "actual_stored_slots": 2283,
+      "physical_volume": 2.402856850925383,
+      "consumed_volume_points": 30912,
+      "independent_rays": 48,
+      "norm": "all-row maximum absolute difference / max(physical equation scale*actual integrated physical volume, sum absolute primitive increments)",
+      "scope": "current represented state, conservative unmasked operator; prescribed-row replacement separately checked; not analytical equilibrium cancellation or spatial/temporal convergence"
+    },
+    "continuous_weak": {
+      "schema": "CT6ContinuousNativeWeakV1",
+      "model": "A95",
+      "status": "pass",
+      "maximum_scaled_all_row_defect": 6.185660913034219e-17,
+      "shared_interface_cancellation": 1.7435183271555887e-17,
+      "witness": {
+        "row": 261,
+        "signed_load": -2.9726515404771264e-17,
+        "scale": 0.4805713701850766
+      },
+      "block_maximum": [
+        6.185660913034219e-17,
+        5.151945077108558e-17,
+        2.4631134745539956e-17,
+        2.790292712994821e-17,
+        2.0892644895730338e-21,
+        8.602780138958102e-21
+      ],
+      "scope": "analytical continuous fields and independently differentiated forcing on native test functions; all physical face fluxes included; projected/evolved residual is a separate object"
+    },
+    "represented_consistency": {
+      "schema": "CT6RepresentedMMSConsistencyV1",
+      "blocks": {
+        "momentum_x": {
+          "free_rows": 552,
+          "scaled_mass_dual": 0.006080205085521408,
+          "scaled_maximum": 5.4998805096258904e-05,
+          "native_alpha_zero_load_maximum": 0.0033154429228659187,
+          "analytical_storage_load_maximum": 0.0032890120717422675
+        },
+        "momentum_z": {
+          "free_rows": 552,
+          "scaled_mass_dual": 0.021254619655227402,
+          "scaled_maximum": 0.00017515558467534186,
+          "native_alpha_zero_load_maximum": 0.00011708766571994975,
+          "analytical_storage_load_maximum": 3.8001916364890135e-05
+        },
+        "k": {
+          "free_rows": 576,
+          "scaled_mass_dual": 0.00010575266546645771,
+          "scaled_maximum": 1.2448132096212255e-06,
+          "native_alpha_zero_load_maximum": 0.003331257919305426,
+          "analytical_storage_load_maximum": 0.0033308825343979346
+        },
+        "outer_epsilon": {
+          "free_rows": 168,
+          "scaled_mass_dual": 0.0013384091196746968,
+          "scaled_maximum": 3.0972634519266123e-05,
+          "native_alpha_zero_load_maximum": 0.0017642562926365795,
+          "analytical_storage_load_maximum": 0.001776051238442076
+        },
+        "continuity_inner": {
+          "free_rows": 117,
+          "scaled_mass_dual": 3.754203961327878e-17,
+          "scaled_maximum": 1.2585923636231444e-18,
+          "native_alpha_zero_load_maximum": 3.0224281154682474e-19,
+          "analytical_storage_load_maximum": 0.0
+        },
+        "continuity_outer": {
+          "free_rows": 65,
+          "scaled_mass_dual": 8.125085115023108e-17,
+          "scaled_maximum": 5.166060556414114e-18,
+          "native_alpha_zero_load_maximum": 1.2420647879380362e-18,
+          "analytical_storage_load_maximum": 0.0
+        }
+      },
+      "scope": "unmodified native alpha-zero load plus independently differentiated analytical storage on free native test rows; time-discrete stage residual and analytical weak oracle remain separate; no governing cancellation"
+    },
+    "initialization_receipt": {
+      "raw_initial_sha256": "0f9fe535939a92c8b30d5f958074f7f65f5777093558355998484d38e08a912a",
+      "effective_initial_sha256": "0f9fe535939a92c8b30d5f958074f7f65f5777093558355998484d38e08a912a",
+      "fixed_reference_sha256": "18f8a9bea3688779579b8c0a6bc1995e6470a0c1681881f3cece25fa44e2aa56",
+      "explicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+      "implicit_boundary_sha256": "bc812b2d8cf3968d22f99b25953e2a91a769f84b283701a4ff0365eeddd03345",
+      "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+      "raw_effective_max_difference": 0,
+      "source_target_boundary_max_difference": 0.0006815526368874336,
+      "live_fixed_boundary_archive_identity": {
+        "sha256": "48584c8285d47e8a9d32520bcca603f22124f35bc13c3a4eb5b01bcc3aa75f1f",
+        "entries": 229,
+        "location": "original sealed Linux receipt/packet"
+      },
+      "effective_initial_archive_identity": {
+        "sha256": "7fd784a37840cede952d0f2864c9b0fab51f9dfd51d44e21218eea0f0c29c69e",
+        "entries": 2283,
+        "location": "original sealed Linux receipt/packet"
+      },
+      "open_boundary_definition": "AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration|E0=0.3167838556291071|K0=0.61152006817226179|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40999999999999998|RANSOPENVELOCITYSCALE=0.20000000000000001|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.0050000000000000001|RANSWALLMAPHEIGHTAMPLITUDE=0|RANSWALLMAPHEIGHTWAVEX=1.5707963267948966|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPIMPLEHARDAUDITREJECTSTEP=0|RANSWALLPIMPLEREJECTSTEP=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.050000000000000003|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.71308649305426108|ROUGHX=37.237975525695468|SLOPE=0.17946842304608926|YAPSCALE=0.60382768562974354|ZV=-0.0025019456529227911",
+      "open_traction_load_sha256": "6707872bd36e7c211b20599fcd954069ce69e4e9b94b592dbfffea8ae5fb1d97",
+      "open_diffusive_load_sha256": "9cf10bb1dceb0ca77181b0316402018d473e1fe68a3a4ef6a24b28aa44768b6c",
+      "open_advective_load_sha256": "28956e05dcc58a661ca99da3abffd32d3a9e1a0ee36610c5f7796486fb229475",
+      "open_explicit_implicit_agreement": true
+    },
+    "fixed_reference_time": 0,
+    "observation_boundary_time": 0.016,
+    "status": "pass"
+  }
+}

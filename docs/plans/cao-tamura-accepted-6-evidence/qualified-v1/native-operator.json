@@ -1,0 +1,1725 @@
+{
+  "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/native-operator-v1/results.json",
+  "sha256": "d8935b7a1c2efed976e863e1034412498197fd779179bc5e2cb4026cc69008cd",
+  "body": {
+    "3": {
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v4/runtime/RANSPreservationProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/native-operator-v1/A95-p3/case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/native-operator-v1/A95-p3/native-request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/native-operator-v1/A95-p3/native.json"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 36.30136978099972,
+        "process_cpu_seconds": 33.328289,
+        "peak_RSS_KiB": 5640768,
+        "actual_mapped_files_sha256": "77a1144fe66083c7500029b6c6c6f1578edbc45f7a624b88fdaea1c21d07e940"
+      },
+      "packet_sha256": "540b6fe1970b71b075585c48af5d7ae7c28b185a6dfd19555ddd7999f8dec906",
+      "all_row": {
+        "schema": "CT6IndependentAllRowOperatorV1",
+        "status": "pass",
+        "model": "A95",
+        "maximum_scaled_defect": 1.0883276875307454e-15,
+        "constrained_scaled_defect": 1.0883276875307454e-15,
+        "native_term_sum_scaled_defect": 3.757753448034581e-15,
+        "geometry_primitive_defect": 2.220446049250313e-16,
+        "witness": {
+          "row": 5,
+          "native": -0.005844395832171537,
+          "independent": -0.005844395832171014,
+          "scale": 0.4805713701850777
+        },
+        "actual_stored_slots": 188,
+        "physical_volume": 2.4028568509253883,
+        "consumed_volume_points": 8992,
+        "independent_rays": 16,
+        "norm": "all-row maximum absolute difference / max(physical equation scale*actual integrated physical volume, sum absolute primitive increments)",
+        "scope": "current represented state, conservative unmasked operator; prescribed-row replacement separately checked; not analytical equilibrium cancellation or spatial/temporal convergence"
+      },
+      "continuous_weak": {
+        "schema": "CT6ContinuousNativeWeakV1",
+        "model": "A95",
+        "status": "pass",
+        "maximum_scaled_all_row_defect": 4.981697879937145e-14,
+        "shared_interface_cancellation": 1.8288259363694245e-17,
+        "witness": {
+          "row": 67,
+          "signed_load": -2.3940613760094903e-14,
+          "scale": 0.4805713701850777
+        },
+        "block_maximum": [
+          2.5712649209247616e-14,
+          4.981697879937145e-14,
+          1.8092144632437113e-15,
+          5.982306009876932e-17,
+          4.640814008995773e-21,
+          6.020793146760364e-20
+        ],
+        "scope": "analytical continuous fields and independently differentiated forcing on native test functions; all physical face fluxes included; projected/evolved residual is a separate object"
+      },
+      "geometry": {
+        "schema": "CT6NativeMappedGeometryV1",
+        "status": "pass",
+        "basis_transform": 4.817704208104522e-16,
+        "partition_and_constant_gradient": 1.963471789344244e-14,
+        "cofactor": 4.440892098500626e-16,
+        "all_element_all_mode_Stokes": 1.733060445369486e-13,
+        "physical_volume_defects": {
+          "0": 3.1418919377338727e-15,
+          "3": 3.6941579421861495e-16,
+          "4": 3.698531557619091e-16,
+          "5": 3.6941579421861495e-16
+        },
+        "tested_element_field_pairs": 10,
+        "scope": "native chart rows independently transformed to physical Cartesian gradients; all cell faces, oriented cofactors and all-mode element Stokes identities"
+      },
+      "tensor": {
+        "schema": "NativeDirectionalTensorChecksV2",
+        "fields": [
+          {
+            "block": 0,
+            "size": 49,
+            "axis_degrees": [
+              3,
+              3,
+              0
+            ],
+            "mode_checks": 1600,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              2.220446049250313e-16,
+              1.687538997430238e-14,
+              6.661338147750939e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "539cd8d3e6ad77cd812db4db0adebc808375c4a36fe613c2f90318f6609ae5ef",
+              "entries": 49,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.065,
+                0.9870841560681793
+              ],
+              [
+                0.205,
+                0.9598291152409532
+              ],
+              [
+                0.415,
+                0.9203511716615043
+              ],
+              [
+                0.065,
+                0.9870841560681793
+              ],
+              [
+                0.205,
+                0.9598291152409532
+              ],
+              [
+                0.415,
+                0.9203511716615043
+              ],
+              [
+                0.565,
+                0.8931506783956971
+              ],
+              [
+                0.7050000000000001,
+                0.868489298766522
+              ],
+              [
+                0.915,
+                0.8327681773499315
+              ],
+              [
+                0.565,
+                0.8931506783956971
+              ],
+              [
+                0.7050000000000001,
+                0.868489298766522
+              ],
+              [
+                0.915,
+                0.8327681773499315
+              ]
+            ],
+            "integrated_volume": 2.400000000000001,
+            "outer_native_restriction_maximum_defect": 5.906386491005833e-14,
+            "outer_native_restriction_exports": [
+              {
+                "polynomial": 0,
+                "coefficients": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "polynomial": 1,
+                "coefficients": [
+                  0.5499999999999999,
+                  0.85,
+                  0.7000000000000001,
+                  0.3999999999999999,
+                  1.15,
+                  1,
+                  5.233223352938851e-17,
+                  2.02525549960245e-16,
+                  2.315541077676131e-16,
+                  -1.9281862695606455e-16,
+                  -5.608637283139532e-17,
+                  3.3872878164372063e-16,
+                  5.0277260937723144e-17,
+                  -2.8858729985609374e-17,
+                  2.0692087159867816e-16,
+                  1.8633313760083986e-16,
+                  3.549788069628975e-16,
+                  -4.674265265135227e-16,
+                  -1.0124959412796664e-17,
+                  -2.0321486083802751e-16,
+                  -2.801610556631854e-16,
+                  -2.404641612561111e-16,
+                  2.3710878991561746e-16,
+                  -3.8974726691973696e-16,
+                  -8.114202774094792e-16,
+                  -1.4609493175462503e-16,
+                  1.0529143839048713e-15,
+                  -1.177257091883864e-15
+                ]
+              },
+              {
+                "polynomial": 2,
+                "coefficients": [
+                  0.4450000000000002,
+                  0.9999999999999999,
+                  0.9999999999999999,
+                  -0.019999999999999858,
+                  1.645,
+                  2.3800000000000003,
+                  -0.04500000000000005,
+                  -2.373605588355935e-16,
+                  6.151242848714055e-16,
+                  -4.662246203819901e-17,
+                  -0.18000000000000002,
+                  -4.589921185449265e-16,
+                  -0.04500000000000032,
+                  -3.703133704021691e-16,
+                  -0.04500000000000049,
+                  1.098471119574612e-15,
+                  -0.04500000000000113,
+                  -4.648071803764305e-16,
+                  -0.18000000000000038,
+                  8.189554830653033e-16,
+                  0.04499999999999908,
+                  -1.7737818067133004e-15,
+                  -4.1561622111023133e-16,
+                  1.313451229005705e-16,
+                  0.0450000000000015,
+                  3.1060992118741243e-15,
+                  -2.4200985881554885e-15,
+                  -3.0708806713231175e-15
+                ]
+              }
+            ]
+          },
+          {
+            "block": 1,
+            "size": 49,
+            "axis_degrees": [
+              3,
+              3,
+              0
+            ],
+            "mode_checks": 1600,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              2.220446049250313e-16,
+              1.687538997430238e-14,
+              6.661338147750939e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "539cd8d3e6ad77cd812db4db0adebc808375c4a36fe613c2f90318f6609ae5ef",
+              "entries": 49,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.065,
+                0.9870841560681793
+              ],
+              [
+                0.205,
+                0.9598291152409532
+              ],
+              [
+                0.415,
+                0.9203511716615043
+              ],
+              [
+                0.065,
+                0.9870841560681793
+              ],
+              [
+                0.205,
+                0.9598291152409532
+              ],
+              [
+                0.415,
+                0.9203511716615043
+              ],
+              [
+                0.565,
+                0.8931506783956971
+              ],
+              [
+                0.7050000000000001,
+                0.868489298766522
+              ],
+              [
+                0.915,
+                0.8327681773499315
+              ],
+              [
+                0.565,
+                0.8931506783956971
+              ],
+              [
+                0.7050000000000001,
+                0.868489298766522
+              ],
+              [
+                0.915,
+                0.8327681773499315
+              ]
+            ],
+            "integrated_volume": 2.400000000000001,
+            "outer_native_restriction_maximum_defect": 5.906386491005833e-14,
+            "outer_native_restriction_exports": [
+              {
+                "polynomial": 0,
+                "coefficients": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "polynomial": 1,
+                "coefficients": [
+                  0.5499999999999999,
+                  0.85,
+                  0.7000000000000001,
+                  0.3999999999999999,
+                  1.15,
+                  1,
+                  5.233223352938851e-17,
+                  2.02525549960245e-16,
+                  2.315541077676131e-16,
+                  -1.9281862695606455e-16,
+                  -5.608637283139532e-17,
+                  3.3872878164372063e-16,
+                  5.0277260937723144e-17,
+                  -2.8858729985609374e-17,
+                  2.0692087159867816e-16,
+                  1.8633313760083986e-16,
+                  3.549788069628975e-16,
+                  -4.674265265135227e-16,
+                  -1.0124959412796664e-17,
+                  -2.0321486083802751e-16,
+                  -2.801610556631854e-16,
+                  -2.404641612561111e-16,
+                  2.3710878991561746e-16,
+                  -3.8974726691973696e-16,
+                  -8.114202774094792e-16,
+                  -1.4609493175462503e-16,
+                  1.0529143839048713e-15,
+                  -1.177257091883864e-15
+                ]
+              },
+              {
+                "polynomial": 2,
+                "coefficients": [
+                  0.4450000000000002,
+                  0.9999999999999999,
+                  0.9999999999999999,
+                  -0.019999999999999858,
+                  1.645,
+                  2.3800000000000003,
+                  -0.04500000000000005,
+                  -2.373605588355935e-16,
+                  6.151242848714055e-16,
+                  -4.662246203819901e-17,
+                  -0.18000000000000002,
+                  -4.589921185449265e-16,
+                  -0.04500000000000032,
+                  -3.703133704021691e-16,
+                  -0.04500000000000049,
+                  1.098471119574612e-15,
+                  -0.04500000000000113,
+                  -4.648071803764305e-16,
+                  -0.18000000000000038,
+                  8.189554830653033e-16,
+                  0.04499999999999908,
+                  -1.7737818067133004e-15,
+                  -4.1561622111023133e-16,
+                  1.313451229005705e-16,
+                  0.0450000000000015,
+                  3.1060992118741243e-15,
+                  -2.4200985881554885e-15,
+                  -3.0708806713231175e-15
+                ]
+              }
+            ]
+          },
+          {
+            "block": 2,
+            "size": 49,
+            "axis_degrees": [
+              3,
+              3,
+              0
+            ],
+            "mode_checks": 1600,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              2.220446049250313e-16,
+              1.687538997430238e-14,
+              6.661338147750939e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "539cd8d3e6ad77cd812db4db0adebc808375c4a36fe613c2f90318f6609ae5ef",
+              "entries": 49,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.065,
+                0.9870841560681793
+              ],
+              [
+                0.205,
+                0.9598291152409532
+              ],
+              [
+                0.415,
+                0.9203511716615043
+              ],
+              [
+                0.065,
+                0.9870841560681793
+              ],
+              [
+                0.205,
+                0.9598291152409532
+              ],
+              [
+                0.415,
+                0.9203511716615043
+              ],
+              [
+                0.565,
+                0.8931506783956971
+              ],
+              [
+                0.7050000000000001,
+                0.868489298766522
+              ],
+              [
+                0.915,
+                0.8327681773499315
+              ],
+              [
+                0.565,
+                0.8931506783956971
+              ],
+              [
+                0.7050000000000001,
+                0.868489298766522
+              ],
+              [
+                0.915,
+                0.8327681773499315
+              ]
+            ],
+            "integrated_volume": 2.400000000000001,
+            "outer_native_restriction_maximum_defect": 5.906386491005833e-14,
+            "outer_native_restriction_exports": [
+              {
+                "polynomial": 0,
+                "coefficients": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "polynomial": 1,
+                "coefficients": [
+                  0.5499999999999999,
+                  0.85,
+                  0.7000000000000001,
+                  0.3999999999999999,
+                  1.15,
+                  1,
+                  5.233223352938851e-17,
+                  2.02525549960245e-16,
+                  2.315541077676131e-16,
+                  -1.9281862695606455e-16,
+                  -5.608637283139532e-17,
+                  3.3872878164372063e-16,
+                  5.0277260937723144e-17,
+                  -2.8858729985609374e-17,
+                  2.0692087159867816e-16,
+                  1.8633313760083986e-16,
+                  3.549788069628975e-16,
+                  -4.674265265135227e-16,
+                  -1.0124959412796664e-17,
+                  -2.0321486083802751e-16,
+                  -2.801610556631854e-16,
+                  -2.404641612561111e-16,
+                  2.3710878991561746e-16,
+                  -3.8974726691973696e-16,
+                  -8.114202774094792e-16,
+                  -1.4609493175462503e-16,
+                  1.0529143839048713e-15,
+                  -1.177257091883864e-15
+                ]
+              },
+              {
+                "polynomial": 2,
+                "coefficients": [
+                  0.4450000000000002,
+                  0.9999999999999999,
+                  0.9999999999999999,
+                  -0.019999999999999858,
+                  1.645,
+                  2.3800000000000003,
+                  -0.04500000000000005,
+                  -2.373605588355935e-16,
+                  6.151242848714055e-16,
+                  -4.662246203819901e-17,
+                  -0.18000000000000002,
+                  -4.589921185449265e-16,
+                  -0.04500000000000032,
+                  -3.703133704021691e-16,
+                  -0.04500000000000049,
+                  1.098471119574612e-15,
+                  -0.04500000000000113,
+                  -4.648071803764305e-16,
+                  -0.18000000000000038,
+                  8.189554830653033e-16,
+                  0.04499999999999908,
+                  -1.7737818067133004e-15,
+                  -4.1561622111023133e-16,
+                  1.313451229005705e-16,
+                  0.0450000000000015,
+                  3.1060992118741243e-15,
+                  -2.4200985881554885e-15,
+                  -3.0708806713231175e-15
+                ]
+              }
+            ]
+          },
+          {
+            "block": 3,
+            "size": 28,
+            "axis_degrees": [
+              3,
+              3,
+              0
+            ],
+            "mode_checks": 800,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              1.1102230246251565e-16,
+              8.770761894538737e-15,
+              6.661338147750939e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "b6092e5b916b772bdf96943381ffbc58a73388d373dd3c062a86bdc04737f081",
+              "entries": 28,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.565,
+                0.8931506790166218
+              ],
+              [
+                0.7050000000000001,
+                0.8684892983915891
+              ],
+              [
+                0.915,
+                0.8327681776022607
+              ],
+              [
+                0.565,
+                0.8931506790166218
+              ],
+              [
+                0.7050000000000001,
+                0.8684892983915891
+              ],
+              [
+                0.915,
+                0.8327681776022607
+              ]
+            ],
+            "integrated_volume": 1.2000000000000006,
+            "outer_native_restriction_maximum_defect": 0,
+            "outer_native_restriction_exports": []
+          },
+          {
+            "block": 4,
+            "size": 6,
+            "axis_degrees": [
+              1,
+              1,
+              0
+            ],
+            "mode_checks": 200,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              1.3877787807814457e-16,
+              1.0436096431476471e-14,
+              4.440892098500626e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "91780cd9ad33be5f2bb45b186dbd146ed01f7603c0af25535d63ec58cfef01b9",
+              "entries": 6,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.065,
+                0.9868301080047565
+              ],
+              [
+                0.205,
+                0.9601890249182194
+              ],
+              [
+                0.415,
+                0.920227400288414
+              ],
+              [
+                0.065,
+                0.9868301080047565
+              ],
+              [
+                0.205,
+                0.9601890249182194
+              ],
+              [
+                0.415,
+                0.920227400288414
+              ]
+            ],
+            "integrated_volume": 1.2000000000000006,
+            "outer_native_restriction_maximum_defect": 0,
+            "outer_native_restriction_exports": []
+          },
+          {
+            "block": 5,
+            "size": 6,
+            "axis_degrees": [
+              1,
+              1,
+              0
+            ],
+            "mode_checks": 200,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              1.1102230246251565e-16,
+              1.6209256159527285e-14,
+              4.440892098500626e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "86d4df8657a085fec7dc2e61f2cce1be83ec1cb693fdbfc1aa733484c3c67097",
+              "entries": 6,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.565,
+                0.8929208069671719
+              ],
+              [
+                0.7050000000000001,
+                0.8688149581334678
+              ],
+              [
+                0.915,
+                0.8326561848829116
+              ],
+              [
+                0.565,
+                0.8929208069671719
+              ],
+              [
+                0.7050000000000001,
+                0.8688149581334678
+              ],
+              [
+                0.915,
+                0.8326561848829116
+              ]
+            ],
+            "integrated_volume": 1.2000000000000006,
+            "outer_native_restriction_maximum_defect": 0,
+            "outer_native_restriction_exports": []
+          }
+        ],
+        "continuous_ground_fixtures": [],
+        "scope": "CT6 canonical native CHART rows only: independent Nektar BwdTrans/PhysDeriv/Integral, signed CG packing, faces and restriction; physical transforms require the separate mapped metric/operator checks"
+      },
+      "mixed_space_archive_identity": {
+        "sha256": "93e8220c3228f3e50c2bb9a7d12f49b1fd236495694945129c39fdb2c690b4df",
+        "entries": 6,
+        "location": "original sealed Linux receipt/packet"
+      },
+      "status": "pass"
+    },
+    "4": {
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v4/runtime/RANSPreservationProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/native-operator-v1/A95-p4/case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/native-operator-v1/A95-p4/native-request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/native-operator-v1/A95-p4/native.json"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 48.39324096600012,
+        "process_cpu_seconds": 45.284525,
+        "peak_RSS_KiB": 8268852,
+        "actual_mapped_files_sha256": "93a3522a5f58b74e98185c1c123e3bd8eba95d77952943776be7966ebdb32364"
+      },
+      "packet_sha256": "42732be3c4f473fc9fb1a9a74285e9e696cf875d7f686332a9d357532d2724a6",
+      "all_row": {
+        "schema": "CT6IndependentAllRowOperatorV1",
+        "status": "pass",
+        "model": "A95",
+        "maximum_scaled_defect": 1.075693701108332e-15,
+        "constrained_scaled_defect": 1.075693701108332e-15,
+        "native_term_sum_scaled_defect": 3.960811441456493e-15,
+        "geometry_primitive_defect": 2.220446049250313e-16,
+        "witness": {
+          "row": 5,
+          "native": -0.005996982622852804,
+          "independent": -0.005996982622852287,
+          "scale": 0.4805713701850777
+        },
+        "actual_stored_slots": 319,
+        "physical_volume": 2.4028568509253883,
+        "consumed_volume_points": 8992,
+        "independent_rays": 16,
+        "norm": "all-row maximum absolute difference / max(physical equation scale*actual integrated physical volume, sum absolute primitive increments)",
+        "scope": "current represented state, conservative unmasked operator; prescribed-row replacement separately checked; not analytical equilibrium cancellation or spatial/temporal convergence"
+      },
+      "continuous_weak": {
+        "schema": "CT6ContinuousNativeWeakV1",
+        "model": "A95",
+        "status": "pass",
+        "maximum_scaled_all_row_defect": 2.0839540637042841e-13,
+        "shared_interface_cancellation": 1.8288259363694245e-17,
+        "witness": {
+          "row": 29,
+          "signed_load": -1.0014886597971284e-13,
+          "scale": 0.4805713701850777
+        },
+        "block_maximum": [
+          2.0839540637042841e-13,
+          1.5306376211855297e-13,
+          1.5027235161974802e-14,
+          7.301242575545042e-17,
+          4.637393711168681e-21,
+          6.020793146760364e-20
+        ],
+        "scope": "analytical continuous fields and independently differentiated forcing on native test functions; all physical face fluxes included; projected/evolved residual is a separate object"
+      },
+      "geometry": {
+        "schema": "CT6NativeMappedGeometryV1",
+        "status": "pass",
+        "basis_transform": 4.769883869008923e-16,
+        "partition_and_constant_gradient": 1.9634717893442436e-14,
+        "cofactor": 4.440892098500626e-16,
+        "all_element_all_mode_Stokes": 2.287361208661655e-12,
+        "physical_volume_defects": {
+          "0": 3.1418919377338727e-15,
+          "3": 3.6941579421861495e-16,
+          "4": 3.698531557619091e-16,
+          "5": 3.6941579421861495e-16
+        },
+        "tested_element_field_pairs": 10,
+        "scope": "native chart rows independently transformed to physical Cartesian gradients; all cell faces, oriented cofactors and all-mode element Stokes identities"
+      },
+      "tensor": {
+        "schema": "NativeDirectionalTensorChecksV2",
+        "fields": [
+          {
+            "block": 0,
+            "size": 81,
+            "axis_degrees": [
+              4,
+              4,
+              0
+            ],
+            "mode_checks": 2500,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              2.220446049250313e-16,
+              1.554312234475219e-14,
+              8.881784197001252e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "6f8b9dad8dae5b302579e04cd4a2cdd0dddc6c94944971683b7e75ef85e09e73",
+              "entries": 81,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.065,
+                0.9870841351766291
+              ],
+              [
+                0.205,
+                0.9598291298296591
+              ],
+              [
+                0.415,
+                0.9203511471523496
+              ],
+              [
+                0.065,
+                0.9870841351766291
+              ],
+              [
+                0.205,
+                0.9598291298296591
+              ],
+              [
+                0.415,
+                0.9203511471523496
+              ],
+              [
+                0.565,
+                0.8931506602434344
+              ],
+              [
+                0.7050000000000001,
+                0.8684893116136742
+              ],
+              [
+                0.915,
+                0.8327681556280093
+              ],
+              [
+                0.565,
+                0.8931506602434344
+              ],
+              [
+                0.7050000000000001,
+                0.8684893116136742
+              ],
+              [
+                0.915,
+                0.8327681556280093
+              ]
+            ],
+            "integrated_volume": 2.400000000000001,
+            "outer_native_restriction_maximum_defect": 5.906386491005833e-14,
+            "outer_native_restriction_exports": [
+              {
+                "polynomial": 0,
+                "coefficients": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "polynomial": 1,
+                "coefficients": [
+                  0.55,
+                  0.8500000000000001,
+                  0.7000000000000001,
+                  0.40000000000000013,
+                  1.1500000000000001,
+                  1,
+                  -4.4331019123502157e-16,
+                  1.4304339876317465e-16,
+                  -3.990633278885767e-16,
+                  2.5020725192089242e-17,
+                  1.557648150058241e-16,
+                  -2.4841457503517528e-17,
+                  -4.704041195481738e-16,
+                  -6.504307231938103e-17,
+                  -4.786983064723892e-16,
+                  -6.031558905186257e-17,
+                  1.2529390864668441e-16,
+                  -2.557240397813537e-17,
+                  -6.607100147059827e-16,
+                  3.073881354761939e-16,
+                  -1.2618300630263276e-16,
+                  -6.228283575158675e-16,
+                  -3.33068111824649e-16,
+                  -6.075190073956318e-16,
+                  6.114239615922248e-17,
+                  8.51348561443913e-17,
+                  -3.7242149138520156e-17,
+                  5.315615496220378e-16,
+                  -1.1322449561735536e-15,
+                  6.362309867432119e-16,
+                  -1.1225154050118832e-16,
+                  -4.619746488962355e-16,
+                  -4.840477275482091e-16,
+                  -3.963722479886644e-16,
+                  -9.752447317665755e-16,
+                  -2.789555575015671e-16,
+                  2.2703180295196095e-15,
+                  2.181487285443499e-15,
+                  6.615752114326096e-16,
+                  -1.6538438857537788e-15,
+                  -4.722654723193664e-16,
+                  -6.023322562975685e-16,
+                  1.1290569895286793e-15,
+                  1.5504075757315592e-15,
+                  7.356669947456463e-16
+                ]
+              },
+              {
+                "polynomial": 2,
+                "coefficients": [
+                  0.44499999999999995,
+                  0.9999999999999999,
+                  0.9999999999999999,
+                  -0.01999999999999988,
+                  1.6449999999999998,
+                  2.3800000000000003,
+                  -0.04499999999999955,
+                  2.1142650449496622e-16,
+                  2.83941400065399e-16,
+                  1.0527180294172833e-15,
+                  -6.619420982847393e-17,
+                  -1.7104683691351243e-16,
+                  -0.18000000000000022,
+                  -5.223736699438652e-16,
+                  1.6158535007637675e-16,
+                  -0.044999999999999235,
+                  -2.793072842736868e-16,
+                  3.003874806256543e-16,
+                  -0.04499999999999967,
+                  9.00356558422737e-16,
+                  3.209565630796255e-16,
+                  -0.0449999999999992,
+                  -5.07508080003858e-16,
+                  8.68102077441944e-16,
+                  -0.17999999999999997,
+                  5.167164314822448e-16,
+                  3.127754145535011e-16,
+                  0.04499999999999554,
+                  -1.3043426929222643e-15,
+                  -3.3402015985868526e-15,
+                  -8.80773535874843e-16,
+                  -9.486340838789098e-16,
+                  -1.2195747558514753e-15,
+                  -4.3200199464399295e-19,
+                  -3.4763972548020085e-16,
+                  -1.451573366358225e-15,
+                  0.04499999999999371,
+                  2.970311068423249e-16,
+                  -6.529482045617916e-15,
+                  -2.2717521789771743e-15,
+                  -3.4643254492134343e-15,
+                  -1.2327644077433896e-15,
+                  -3.721690214355376e-15,
+                  -2.617887657546866e-15,
+                  -3.3717587323555375e-15
+                ]
+              }
+            ]
+          },
+          {
+            "block": 1,
+            "size": 81,
+            "axis_degrees": [
+              4,
+              4,
+              0
+            ],
+            "mode_checks": 2500,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              2.220446049250313e-16,
+              1.554312234475219e-14,
+              8.881784197001252e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "6f8b9dad8dae5b302579e04cd4a2cdd0dddc6c94944971683b7e75ef85e09e73",
+              "entries": 81,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.065,
+                0.9870841351766291
+              ],
+              [
+                0.205,
+                0.9598291298296591
+              ],
+              [
+                0.415,
+                0.9203511471523496
+              ],
+              [
+                0.065,
+                0.9870841351766291
+              ],
+              [
+                0.205,
+                0.9598291298296591
+              ],
+              [
+                0.415,
+                0.9203511471523496
+              ],
+              [
+                0.565,
+                0.8931506602434344
+              ],
+              [
+                0.7050000000000001,
+                0.8684893116136742
+              ],
+              [
+                0.915,
+                0.8327681556280093
+              ],
+              [
+                0.565,
+                0.8931506602434344
+              ],
+              [
+                0.7050000000000001,
+                0.8684893116136742
+              ],
+              [
+                0.915,
+                0.8327681556280093
+              ]
+            ],
+            "integrated_volume": 2.400000000000001,
+            "outer_native_restriction_maximum_defect": 5.906386491005833e-14,
+            "outer_native_restriction_exports": [
+              {
+                "polynomial": 0,
+                "coefficients": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "polynomial": 1,
+                "coefficients": [
+                  0.55,
+                  0.8500000000000001,
+                  0.7000000000000001,
+                  0.40000000000000013,
+                  1.1500000000000001,
+                  1,
+                  -4.4331019123502157e-16,
+                  1.4304339876317465e-16,
+                  -3.990633278885767e-16,
+                  2.5020725192089242e-17,
+                  1.557648150058241e-16,
+                  -2.4841457503517528e-17,
+                  -4.704041195481738e-16,
+                  -6.504307231938103e-17,
+                  -4.786983064723892e-16,
+                  -6.031558905186257e-17,
+                  1.2529390864668441e-16,
+                  -2.557240397813537e-17,
+                  -6.607100147059827e-16,
+                  3.073881354761939e-16,
+                  -1.2618300630263276e-16,
+                  -6.228283575158675e-16,
+                  -3.33068111824649e-16,
+                  -6.075190073956318e-16,
+                  6.114239615922248e-17,
+                  8.51348561443913e-17,
+                  -3.7242149138520156e-17,
+                  5.315615496220378e-16,
+                  -1.1322449561735536e-15,
+                  6.362309867432119e-16,
+                  -1.1225154050118832e-16,
+                  -4.619746488962355e-16,
+                  -4.840477275482091e-16,
+                  -3.963722479886644e-16,
+                  -9.752447317665755e-16,
+                  -2.789555575015671e-16,
+                  2.2703180295196095e-15,
+                  2.181487285443499e-15,
+                  6.615752114326096e-16,
+                  -1.6538438857537788e-15,
+                  -4.722654723193664e-16,
+                  -6.023322562975685e-16,
+                  1.1290569895286793e-15,
+                  1.5504075757315592e-15,
+                  7.356669947456463e-16
+                ]
+              },
+              {
+                "polynomial": 2,
+                "coefficients": [
+                  0.44499999999999995,
+                  0.9999999999999999,
+                  0.9999999999999999,
+                  -0.01999999999999988,
+                  1.6449999999999998,
+                  2.3800000000000003,
+                  -0.04499999999999955,
+                  2.1142650449496622e-16,
+                  2.83941400065399e-16,
+                  1.0527180294172833e-15,
+                  -6.619420982847393e-17,
+                  -1.7104683691351243e-16,
+                  -0.18000000000000022,
+                  -5.223736699438652e-16,
+                  1.6158535007637675e-16,
+                  -0.044999999999999235,
+                  -2.793072842736868e-16,
+                  3.003874806256543e-16,
+                  -0.04499999999999967,
+                  9.00356558422737e-16,
+                  3.209565630796255e-16,
+                  -0.0449999999999992,
+                  -5.07508080003858e-16,
+                  8.68102077441944e-16,
+                  -0.17999999999999997,
+                  5.167164314822448e-16,
+                  3.127754145535011e-16,
+                  0.04499999999999554,
+                  -1.3043426929222643e-15,
+                  -3.3402015985868526e-15,
+                  -8.80773535874843e-16,
+                  -9.486340838789098e-16,
+                  -1.2195747558514753e-15,
+                  -4.3200199464399295e-19,
+                  -3.4763972548020085e-16,
+                  -1.451573366358225e-15,
+                  0.04499999999999371,
+                  2.970311068423249e-16,
+                  -6.529482045617916e-15,
+                  -2.2717521789771743e-15,
+                  -3.4643254492134343e-15,
+                  -1.2327644077433896e-15,
+                  -3.721690214355376e-15,
+                  -2.617887657546866e-15,
+                  -3.3717587323555375e-15
+                ]
+              }
+            ]
+          },
+          {
+            "block": 2,
+            "size": 81,
+            "axis_degrees": [
+              4,
+              4,
+              0
+            ],
+            "mode_checks": 2500,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              2.220446049250313e-16,
+              1.554312234475219e-14,
+              8.881784197001252e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "6f8b9dad8dae5b302579e04cd4a2cdd0dddc6c94944971683b7e75ef85e09e73",
+              "entries": 81,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.065,
+                0.9870841351766291
+              ],
+              [
+                0.205,
+                0.9598291298296591
+              ],
+              [
+                0.415,
+                0.9203511471523496
+              ],
+              [
+                0.065,
+                0.9870841351766291
+              ],
+              [
+                0.205,
+                0.9598291298296591
+              ],
+              [
+                0.415,
+                0.9203511471523496
+              ],
+              [
+                0.565,
+                0.8931506602434344
+              ],
+              [
+                0.7050000000000001,
+                0.8684893116136742
+              ],
+              [
+                0.915,
+                0.8327681556280093
+              ],
+              [
+                0.565,
+                0.8931506602434344
+              ],
+              [
+                0.7050000000000001,
+                0.8684893116136742
+              ],
+              [
+                0.915,
+                0.8327681556280093
+              ]
+            ],
+            "integrated_volume": 2.400000000000001,
+            "outer_native_restriction_maximum_defect": 5.906386491005833e-14,
+            "outer_native_restriction_exports": [
+              {
+                "polynomial": 0,
+                "coefficients": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "polynomial": 1,
+                "coefficients": [
+                  0.55,
+                  0.8500000000000001,
+                  0.7000000000000001,
+                  0.40000000000000013,
+                  1.1500000000000001,
+                  1,
+                  -4.4331019123502157e-16,
+                  1.4304339876317465e-16,
+                  -3.990633278885767e-16,
+                  2.5020725192089242e-17,
+                  1.557648150058241e-16,
+                  -2.4841457503517528e-17,
+                  -4.704041195481738e-16,
+                  -6.504307231938103e-17,
+                  -4.786983064723892e-16,
+                  -6.031558905186257e-17,
+                  1.2529390864668441e-16,
+                  -2.557240397813537e-17,
+                  -6.607100147059827e-16,
+                  3.073881354761939e-16,
+                  -1.2618300630263276e-16,
+                  -6.228283575158675e-16,
+                  -3.33068111824649e-16,
+                  -6.075190073956318e-16,
+                  6.114239615922248e-17,
+                  8.51348561443913e-17,
+                  -3.7242149138520156e-17,
+                  5.315615496220378e-16,
+                  -1.1322449561735536e-15,
+                  6.362309867432119e-16,
+                  -1.1225154050118832e-16,
+                  -4.619746488962355e-16,
+                  -4.840477275482091e-16,
+                  -3.963722479886644e-16,
+                  -9.752447317665755e-16,
+                  -2.789555575015671e-16,
+                  2.2703180295196095e-15,
+                  2.181487285443499e-15,
+                  6.615752114326096e-16,
+                  -1.6538438857537788e-15,
+                  -4.722654723193664e-16,
+                  -6.023322562975685e-16,
+                  1.1290569895286793e-15,
+                  1.5504075757315592e-15,
+                  7.356669947456463e-16
+                ]
+              },
+              {
+                "polynomial": 2,
+                "coefficients": [
+                  0.44499999999999995,
+                  0.9999999999999999,
+                  0.9999999999999999,
+                  -0.01999999999999988,
+                  1.6449999999999998,
+                  2.3800000000000003,
+                  -0.04499999999999955,
+                  2.1142650449496622e-16,
+                  2.83941400065399e-16,
+                  1.0527180294172833e-15,
+                  -6.619420982847393e-17,
+                  -1.7104683691351243e-16,
+                  -0.18000000000000022,
+                  -5.223736699438652e-16,
+                  1.6158535007637675e-16,
+                  -0.044999999999999235,
+                  -2.793072842736868e-16,
+                  3.003874806256543e-16,
+                  -0.04499999999999967,
+                  9.00356558422737e-16,
+                  3.209565630796255e-16,
+                  -0.0449999999999992,
+                  -5.07508080003858e-16,
+                  8.68102077441944e-16,
+                  -0.17999999999999997,
+                  5.167164314822448e-16,
+                  3.127754145535011e-16,
+                  0.04499999999999554,
+                  -1.3043426929222643e-15,
+                  -3.3402015985868526e-15,
+                  -8.80773535874843e-16,
+                  -9.486340838789098e-16,
+                  -1.2195747558514753e-15,
+                  -4.3200199464399295e-19,
+                  -3.4763972548020085e-16,
+                  -1.451573366358225e-15,
+                  0.04499999999999371,
+                  2.970311068423249e-16,
+                  -6.529482045617916e-15,
+                  -2.2717521789771743e-15,
+                  -3.4643254492134343e-15,
+                  -1.2327644077433896e-15,
+                  -3.721690214355376e-15,
+                  -2.617887657546866e-15,
+                  -3.3717587323555375e-15
+                ]
+              }
+            ]
+          },
+          {
+            "block": 3,
+            "size": 45,
+            "axis_degrees": [
+              4,
+              4,
+              0
+            ],
+            "mode_checks": 1250,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              1.1102230246251565e-16,
+              1.2712053631958042e-14,
+              8.881784197001252e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "f73781b5df6ada29864f419c7058a1d7545f63b2620e80648a17bdb481692437",
+              "entries": 45,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.565,
+                0.8931506602332605
+              ],
+              [
+                0.7050000000000001,
+                0.8684893116158564
+              ],
+              [
+                0.915,
+                0.8327681556540034
+              ],
+              [
+                0.565,
+                0.8931506602332605
+              ],
+              [
+                0.7050000000000001,
+                0.8684893116158564
+              ],
+              [
+                0.915,
+                0.8327681556540034
+              ]
+            ],
+            "integrated_volume": 1.2000000000000006,
+            "outer_native_restriction_maximum_defect": 0,
+            "outer_native_restriction_exports": []
+          },
+          {
+            "block": 4,
+            "size": 15,
+            "axis_degrees": [
+              2,
+              2,
+              0
+            ],
+            "mode_checks": 450,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              1.3877787807814457e-16,
+              1.454392162258955e-14,
+              4.440892098500626e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "555e98b23386e6cfecc9ce753ba71d61be85f5931bccc1adc445c45a63bad30b",
+              "entries": 15,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.065,
+                0.9870849244502555
+              ],
+              [
+                0.205,
+                0.9598311402153623
+              ],
+              [
+                0.415,
+                0.9203490208320966
+              ],
+              [
+                0.065,
+                0.9870849244502555
+              ],
+              [
+                0.205,
+                0.9598311402153623
+              ],
+              [
+                0.415,
+                0.9203490208320966
+              ]
+            ],
+            "integrated_volume": 1.2000000000000006,
+            "outer_native_restriction_maximum_defect": 0,
+            "outer_native_restriction_exports": []
+          },
+          {
+            "block": 5,
+            "size": 15,
+            "axis_degrees": [
+              2,
+              2,
+              0
+            ],
+            "mode_checks": 450,
+            "defects_value_dx_dz_dxz_dzz_mass_polynomial_faces": [
+              3.3306690738754696e-16,
+              1.1723955140041652e-14,
+              1.1546319456101628e-14,
+              2.871036741680655e-13,
+              1.4584629800159133e-13,
+              1.1102230246251565e-16,
+              9.992007221626409e-15,
+              6.661338147750939e-16
+            ],
+            "mass_archive_identity": {
+              "sha256": "932700207a8a563ab3d4b5ade7af398453ccfe7e187cd5027f005ff90a4165a3",
+              "entries": 15,
+              "location": "original sealed Linux receipt/packet"
+            },
+            "radial_projection_samples": [
+              [
+                0.565,
+                0.8931513744217917
+              ],
+              [
+                0.7050000000000001,
+                0.8684911306629784
+              ],
+              [
+                0.915,
+                0.832766231701638
+              ],
+              [
+                0.565,
+                0.8931513744217917
+              ],
+              [
+                0.7050000000000001,
+                0.8684911306629784
+              ],
+              [
+                0.915,
+                0.832766231701638
+              ]
+            ],
+            "integrated_volume": 1.2000000000000006,
+            "outer_native_restriction_maximum_defect": 0,
+            "outer_native_restriction_exports": []
+          }
+        ],
+        "continuous_ground_fixtures": [],
+        "scope": "CT6 canonical native CHART rows only: independent Nektar BwdTrans/PhysDeriv/Integral, signed CG packing, faces and restriction; physical transforms require the separate mapped metric/operator checks"
+      },
+      "mixed_space_archive_identity": {
+        "sha256": "36c05bb381dd828d0af25d8b1ba64f9a0c34724c0000ab142e28c4ed69aefa99",
+        "entries": 6,
+        "location": "original sealed Linux receipt/packet"
+      },
+      "status": "pass"
+    }
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/results.json",
+  "sha256": "08c521a95a3122686a733fccea98ec70d64d2d63f8c02c92aba2b4fec408d40c",
+  "body": {
+    "schema": "CT6DiscriminatingControlsV2",
+    "status": "pass",
+    "checks": {
+      "omit_metric": {
+        "status": "pass",
+        "changed_consumed_rows": 8992,
+        "intended_outcome": "independent all-row reconstruction must fail",
+        "observed": {
+          "schema": "CT6IndependentAllRowOperatorV1",
+          "status": "fail",
+          "model": "A95",
+          "maximum_scaled_defect": 0.0005046662918022719,
+          "constrained_scaled_defect": 0.0004877987112195288,
+          "native_term_sum_scaled_defect": 3.9655262113864154e-15,
+          "geometry_primitive_defect": 2.220446049250313e-16,
+          "mechanical_weak_work": {
+            "stress": 0.013681707139812996,
+            "conservative_advection": -4.634617384497807e-05,
+            "roughness_sampler": -2.7078903914981386e-05,
+            "prescribed_body_completion": 0.0029221505388154767,
+            "outlet": 0.019609239053102762,
+            "signed_turbulent_production": 0.013680911519554277,
+            "molecular_loss": 8.817464790631918e-07,
+            "mechanical_pressure_work": -8.612622037708001e-08,
+            "native_unmasked_velocity_test": 0.03616214100556479,
+            "independent_weak_work": 0.03613967165397128,
+            "reconstruction_defect": 2.2469351593508435e-05,
+            "stress_split_defect": 3.288961436250464e-17,
+            "scale": 1.0,
+            "maximum_scaled_defect": 2.2469351593508435e-05,
+            "scope": "actual FE velocity as native weak test, all prescribed rows retained; full signed production, finite inner molecular loss, Pi-2k/3 mechanical work, roughness and body completion separately retained; algebraic work identity is not an independent physical conservation theorem"
+          },
+          "witness": {
+            "row": 6,
+            "native": 0.07038618563912133,
+            "independent": 0.07014394581905624,
+            "scale": 0.48
+          },
+          "actual_stored_slots": 319,
+          "physical_volume": 2.4,
+          "consumed_volume_points": 8992,
+          "independent_rays": 16,
+          "norm": "all-row maximum absolute difference / max(physical equation scale*actual integrated physical volume, sum absolute primitive increments)",
+          "scope": "current represented state, conservative unmasked operator; prescribed-row replacement separately checked; not analytical equilibrium cancellation or spatial/temporal convergence"
+        }
+      },
+      "wrong_outlet_orientation": {
+        "status": "pass",
+        "changed_consumed_rows": 24,
+        "intended_outcome": "independent all-row reconstruction must fail",
+        "observed": {
+          "schema": "CT6IndependentAllRowOperatorV1",
+          "status": "fail",
+          "model": "A95",
+          "maximum_scaled_defect": 0.04362276929672618,
+          "constrained_scaled_defect": 0.04362276929672618,
+          "native_term_sum_scaled_defect": 3.960811441456493e-15,
+          "geometry_primitive_defect": 2.220446049250313e-16,
+          "mechanical_weak_work": {
+            "stress": 0.013704267201937787,
+            "conservative_advection": -4.643462653857579e-05,
+            "roughness_sampler": -2.708116175265028e-05,
+            "prescribed_body_completion": 0.0029221505388154767,
+            "outlet": 0.015362364367538305,
+            "signed_turbulent_production": 0.013703471017039545,
+            "molecular_loss": 8.822689254828934e-07,
+            "mechanical_pressure_work": -8.608402724913581e-08,
+            "native_unmasked_velocity_test": 0.03616214100556479,
+            "independent_weak_work": 0.03191526632000034,
+            "reconstruction_defect": 0.004246874685564443,
+            "stress_split_defect": 7.88157539975226e-18,
+            "scale": 1.0,
+            "maximum_scaled_defect": 0.004246874685564443,
+            "scope": "actual FE velocity as native weak test, all prescribed rows retained; full signed production, finite inner molecular loss, Pi-2k/3 mechanical work, roughness and body completion separately retained; algebraic work identity is not an independent physical conservation theorem"
+          },
+          "witness": {
+            "row": 167,
+            "native": -0.009398339014557278,
+            "independent": -0.07349742618801214,
+            "scale": 1.4693951852860796
+          },
+          "actual_stored_slots": 319,
+          "physical_volume": 2.4028568509253883,
+          "consumed_volume_points": 8992,
+          "independent_rays": 16,
+          "norm": "all-row maximum absolute difference / max(physical equation scale*actual integrated physical volume, sum absolute primitive increments)",
+          "scope": "current represented state, conservative unmasked operator; prescribed-row replacement separately checked; not analytical equilibrium cancellation or spatial/temporal convergence"
+        }
+      },
+      "A95-omit_tilt": {
+        "status": "pass",
+        "primitive_signal": 8.645373591027787e-05,
+        "minimum_discriminating_signal": 1e-08
+      },
+      "A95-fixed_chart_derivative": {
+        "status": "pass",
+        "primitive_signal": 0.0016181382251210137,
+        "minimum_discriminating_signal": 1e-08
+      },
+      "A95-flat_cutoff_on_curved_ray": {
+        "status": "pass",
+        "flat_cutoff": 0.007271031885914226,
+        "metric_cutoff": 0.007289990617608755,
+        "scaled_wrong_cutoff_budget_defect": 0.0026064098260501446,
+        "intended_outcome": "unchanged curved-ray budget criterion rejects flat-cutoff substitution"
+      },
+      "A93-omit_tilt": {
+        "status": "pass",
+        "primitive_signal": 0.0001722702017131984,
+        "minimum_discriminating_signal": 1e-08
+      },
+      "A93-fixed_chart_derivative": {
+        "status": "pass",
+        "primitive_signal": 0.0014916998656970305,
+        "minimum_discriminating_signal": 1e-08
+      },
+      "A93-flat_cutoff_on_curved_ray": {
+        "status": "pass",
+        "flat_cutoff": 0.007208562184887464,
+        "metric_cutoff": 0.0072272377835889716,
+        "scaled_wrong_cutoff_budget_defect": 0.0025897364866039265,
+        "intended_outcome": "unchanged curved-ray budget criterion rejects flat-cutoff substitution"
+      },
+      "E94E95-omit_tilt": {
+        "status": "pass",
+        "primitive_signal": 9.072305403593556e-05,
+        "minimum_discriminating_signal": 1e-08
+      },
+      "E94E95-fixed_chart_derivative": {
+        "status": "pass",
+        "primitive_signal": 0.0014686324315396383,
+        "minimum_discriminating_signal": 1e-08
+      },
+      "E94E95-flat_cutoff_on_curved_ray": {
+        "status": "pass",
+        "flat_cutoff": 0.007220850508932522,
+        "metric_cutoff": 0.007239581147084076,
+        "scaled_wrong_cutoff_budget_defect": 0.0025929484530708706,
+        "intended_outcome": "unchanged curved-ray budget criterion rejects flat-cutoff substitution"
+      },
+      "omit_normal_motion_traction": {
+        "status": "pass",
+        "full_versus_parallel_traction_signal": 0.0003342708946418841,
+        "minimum_discriminating_signal": 1e-08
+      },
+      "omit_curvature_connection": {
+        "status": "pass",
+        "inner_traction_signal": 8.082477640213536e-05,
+        "minimum_discriminating_signal": 1e-08
+      },
+      "ordinary_curved_production": {
+        "status": "pass",
+        "intended_reason": "curved",
+        "observed_reason": "EP-AWF patch: A93/A95/E94E95 native evolution supports serial flat 2D only; curved/3D/MPI unsupported",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/ordinary_curved_production/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/ordinary_curved_production/negative-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/ordinary_curved_production/negative.json"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 0.8281417140024132,
+          "process_cpu_seconds": 0.20416199999999998,
+          "peak_RSS_KiB": 48016,
+          "actual_mapped_files_sha256": "fb3d1ac20af1878fe743e8ab9b6ff5b59efd97cfd7a27ee544ea074466a5d5d3"
+        },
+        "packet_sha256": "da985f32cc0a49512fde42041a28d4e40faa4e5eb15ac5124c47cb0cf4b04bfe"
+      },
+      "curved_EP": {
+        "status": "pass",
+        "intended_reason": "Accepted",
+        "observed_reason": "EP-AWF patch: CT6 verification requires original Natural Accepted serial2D Gaussian/zero map",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/curved_EP/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/curved_EP/negative-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/curved_EP/negative.json"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 0.7711398989995359,
+          "process_cpu_seconds": 0.204476,
+          "peak_RSS_KiB": 51876,
+          "actual_mapped_files_sha256": "5b832a783403792b1e41006b4efdac39cd5ddefe36bd03cd4b294a94cd64a1f0"
+        },
+        "packet_sha256": "229cb989c15dbd59dd316f64401f4f0c97dbe5a35b9fe99dad10b73dda1c561f"
+      },
+      "variable_height_evolution": {
+        "status": "pass",
+        "intended_reason": "height",
+        "observed_reason": "EP-AWF patch: full variable-height evolution remains unsupported",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/variable_height_evolution/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/variable_height_evolution/negative-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/variable_height_evolution/negative.json"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 0.7763243970039184,
+          "process_cpu_seconds": 0.207345,
+          "peak_RSS_KiB": 48184,
+          "actual_mapped_files_sha256": "6c00c5ec9e53ff2e7c84aa52f6512e608a274b0d887cefbd4e341fd88f5a4aee"
+        },
+        "packet_sha256": "c15e646f03f7fb8f0b44de851597068c8f1e0eb73c90c04405b74124f3dcd0a6"
+      },
+      "unqualified_cache": {
+        "status": "pass",
+        "intended_reason": "caching",
+        "observed_reason": "EP-AWF patch: AcceptedOpenFlatV1 evaluation caching is not qualified; select Off",
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/build-v12/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/unqualified_cache/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/unqualified_cache/negative-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/controls-v2/unqualified_cache/negative.json"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 0.7602310370057239,
+          "process_cpu_seconds": 0.19087099999999996,
+          "peak_RSS_KiB": 48236,
+          "actual_mapped_files_sha256": "9601656b9d0ca21c5975bb23af4ece9f76034c5c66fedc4c5a11e21176bd78c1"
+        },
+        "packet_sha256": "30bd3285b35e524a2c75f69ad1d485f846a82d0048c84f35e087d6076b682d33"
+      }
+    },
+    "scope": "mutations affect diagnostic copies only; no modified load is passed to governing evolution"
+  }
+}

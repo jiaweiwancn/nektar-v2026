@@ -1,0 +1,55 @@
+{
+  "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/frozen-boundary-stage-proof-v2.json",
+  "sha256": "f8cb699c47c1922e1c732ae99aac36701b2c07cb3c2a1c96b135675a199c6878",
+  "body": {
+    "schema": "CT6ActualFrozenBoundaryStageProofV2",
+    "old_against_actual_captured_matrix": {
+      "status": "fail",
+      "maximum_defect": 3.306903700930181e-06,
+      "scale": 1.0,
+      "scaled_defect": 3.306903700930181e-06,
+      "captured_rows": 576,
+      "matrix_sha256": "5d700502f2bc96819eb219752794162ec1d89f11fce8e99dcd814470b27aef55",
+      "scope": "actual captured PIMPLE free-row residual plus its frozen matrix times actual raw increment; not a second reassembly using guessed frozen coefficients"
+    },
+    "old_scalar_coefficient_differences": {
+      "2": 6.731025851192118e-05,
+      "3": 3.3109494963823316e-05
+    },
+    "current_time_lift_reconstruction_flow_defect": 0,
+    "current_time_lift_reconstruction_pre_k_defect": 0,
+    "matching_epsilon_trace_rows": [
+      0,
+      1,
+      4,
+      6,
+      8,
+      10,
+      12,
+      21,
+      22,
+      23,
+      33,
+      34,
+      35,
+      42,
+      43,
+      44,
+      51,
+      52,
+      53,
+      60,
+      61,
+      62,
+      69,
+      70,
+      71
+    ],
+    "corner_policy": "ExternalLift skips dependent epsilon trace rows, including inlet/interface corner; no pre-flow trace repair",
+    "wrong_all_boundary_rows_control_sha256": "f435d5d7dcaf31d649bae7d9f3a9594cd84f27d4066c517e6ed0a197aadc34c2",
+    "packet_sha256": "c026e4f8e7bd202f31a624dd2ed9057b1421e1624c0ae7346564bc6b82e30b71",
+    "actual_snapshot_sha256": "9379dcfb60d918dda162a2179870f4ead3be5cbb9e1f555b17da3b499d7eeb5d",
+    "native_governing_trajectory_unchanged": true,
+    "status": "pass"
+  }
+}
