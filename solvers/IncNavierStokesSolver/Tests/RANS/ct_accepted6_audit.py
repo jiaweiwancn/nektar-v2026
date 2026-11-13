@@ -131,17 +131,20 @@ def main():
                export_test_basis=True,export_constitutive=True,export_manufactured=True)
     packet,e=probe(a.runtime,sub,req,'endpoint');require(e['exit_code']==0,'common physical observation probe failed')
     o=packet['observation'];g=np.asarray(o['grid_gradients'][:n]);w=np.asarray(weights)
-    div=g[:,0,0]+g[:,1,2];mass=0.;by_face={}
+    div=g[:,0,0]+g[:,1,2];mass=0.;outlet_length=0.;by_face={};mass_state=np.asarray(mass_state)
     from ct_accepted_open import row_value
     for f in mass_faces:
         if f['interface']:continue
-        U=np.array([row_value(f['velocity_k'],np.asarray(mass_state),mass_offsets[0])[0],0.,row_value(f['velocity_k'],np.asarray(mass_state),mass_offsets[1])[0]])
+        U=np.array([row_value(f['velocity_k'],mass_state,mass_offsets[0])[0],0.,row_value(f['velocity_k'],mass_state,mass_offsets[1])[0]])
         load=f['weight']*float(U@f['area']);mass+=load
+        if f['coordinate'][0]==X[-1]:outlet_length+=f['weight']*float(np.linalg.norm(f['area']))
         key=str((f['axis'],f['side'])) if 'axis' in f else str(f['coordinate'])
         by_face[key]=by_face.get(key,0.)+load
     # Independently compare the scalar storage/source/face budget and continuity.
-    mass_scale=.2*2.4;result['mass']=dict(outward_net=mass,scale=mass_scale,scaled_defect=abs(mass)/mass_scale,
-        status='pass' if abs(mass)/mass_scale<=1e-8 else 'fail',by_face=by_face)
+    require(outlet_length>0.,'nonpositive physical outlet length')
+    mass_scale=.2*outlet_length;result['mass']=dict(outward_net=mass,scale=mass_scale,scaled_defect=abs(mass)/mass_scale,
+        status='pass' if abs(mass)/mass_scale<=1e-8 else 'fail',by_face=by_face,
+        actual_outlet_length=outlet_length,scale_definition='declared velocity scale .2 times actual physical outlet length')
     result['common_observations']=dict(path=str(sub/'endpoint.json'),sha256=sha(sub/'endpoint.json'),execution=e,
         count=n,weights=weights,grid_sha256=hashlib.sha256(canonical([points,sides,weights])).hexdigest(),
         physical_volume=float(w.sum()),divergence_RMS=float(np.sqrt(w@(div*div)/w.sum())),divergence_maximum=float(max(abs(div))))
