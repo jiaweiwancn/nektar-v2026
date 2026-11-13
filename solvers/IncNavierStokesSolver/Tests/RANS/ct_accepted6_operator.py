@@ -69,6 +69,8 @@ def reconstruct(packet,model,amplitude=.005):
     o=packet['observation'];require('CT6' in o['identity'],'foreign_CT6_packet')
     state=np.asarray(o['state'],float);off=np.asarray(o['offsets'],int)
     total=np.zeros(len(state));absolute=np.zeros(len(state));columns={};ownership=0;geom_error=0.
+    work=dict(stress=0.,conservative_advection=0.,roughness_sampler=0.,prescribed_body_completion=0.,
+              outlet=0.,signed_turbulent_production=0.,molecular_loss=0.,mechanical_pressure_work=0.)
     p=parameters(model);nu=1.5e-5;H=.5;hr=.05
     def add(block,row,scalar,flux,weight):
         ids=np.asarray(row['ids'],int)+off[block]
@@ -104,6 +106,13 @@ def reconstruct(packet,model,amplitude=.005):
                 _,gp=row_value(hpressure,state,off[5]);_,gkh=row_value(hrow,state,off[2])
                 w=float(Uh@n);ut=P@Uh;gradient=P@Gh-np.outer(n,Br.T@Uh)-w*Br
                 rough=P@(gp-2*gkh/3+ut*np.trace(gradient)+gradient@ut)
+        production=law['production'] if region else production
+        work['stress']+=weight*float(np.sum(T*G))
+        work['conservative_advection']-=weight*float(np.sum(G*np.outer(U,U)))
+        work['roughness_sampler']-=weight*float(U@rough)
+        work['signed_turbulent_production']+=weight*production
+        work['molecular_loss']+=0. if region else weight*nu*float(np.sum((G+G.T)*G))
+        work['mechanical_pressure_work']-=weight*(pi-2*k/3)*float(np.trace(G))
         for b,axis in enumerate((0,2)):add(b,v,-rough[axis],T[axis]-U[axis]*U,weight)
         add(4+region,pr,np.trace(G),[0,0,0],weight)
         add(2,v,-sk,Dk*gk-U*k,weight)
@@ -115,12 +124,15 @@ def reconstruct(packet,model,amplitude=.005):
             _,_,_,_,n=geometry(point['coordinate'][0],H,amplitude)
             out=np.array([data['outer_body_at_H'][0],0,data['outer_body_at_H'][1]])
             body-=out-n*float(out@n)
+        u=np.array([row_value(point['velocity_k'],state,off[0])[0],0.,row_value(point['velocity_k'],state,off[1])[0]])
+        work['prescribed_body_completion']-=point['weight']*float(u@body)
         for b,axis in enumerate((0,2)):add(b,point['velocity_k'],-body[axis],[0,0,0],point['weight'])
     # The physical outlet has both advective and natural flux contributions.
     for face in packet['open_boundary']['faces']:
         area=np.asarray(face['area']);norm=np.linalg.norm(area);weight=face['weight']
         U=np.array([face['velocity'][0],0,face['velocity'][1]]);un=float(U@area)
         for b in (0,1):add(b,face['velocity_k_row'],un*face['velocity'][b]-norm*face['traction'][b],[0,0,0],weight)
+        work['outlet']+=weight*(un*float(U@U)-norm*float(U@np.array([face['traction'][0],0.,face['traction'][1]])))
         add(2,face['velocity_k_row'],un*face['k']-norm*face['k_diffusive_datum'],[0,0,0],weight)
         if face['region']:add(3,face['epsilon_row'],un*face['epsilon']-norm*face['epsilon_diffusive_datum'],[0,0,0],weight)
     native=np.asarray(packet['resolution']['native']['spatial_unmasked'])
@@ -141,9 +153,18 @@ def reconstruct(packet,model,amplitude=.005):
     primitive_sum=np.asarray(packet['resolution']['terms']['spatial_sum'])
     reconstruction=float(np.max(abs(native-primitive_sum)/denominator))
     maximum=float(np.max(scaled));status='pass' if max(maximum,constrained_defect,reconstruction,geom_error)<=2e-10 else 'fail'
+    native_work=math.fsum(float(state[off[b]+j]*native[off[b]+j]) for b in (0,1) for j in range(o['sizes'][b]))
+    sum_work=sum(work[k] for k in ('stress','conservative_advection','roughness_sampler','prescribed_body_completion','outlet'))
+    work['native_unmasked_velocity_test']=native_work;work['independent_weak_work']=sum_work
+    work['reconstruction_defect']=native_work-sum_work
+    work['stress_split_defect']=work['stress']-work['signed_turbulent_production']-work['molecular_loss']-work['mechanical_pressure_work']
+    work['scale']=max(1.,sum(abs(work[k]) for k in ('stress','conservative_advection','roughness_sampler','prescribed_body_completion','outlet')))
+    work['maximum_scaled_defect']=max(abs(work['reconstruction_defect']),abs(work['stress_split_defect']))/work['scale']
+    if work['maximum_scaled_defect']>2e-10:status='fail'
+    work['scope']='actual FE velocity as native weak test, all prescribed rows retained; full signed production, finite inner molecular loss, Pi-2k/3 mechanical work, roughness and body completion separately retained; algebraic work identity is not an independent physical conservation theorem'
     return dict(schema='CT6IndependentAllRowOperatorV1',status=status,model=model,
         maximum_scaled_defect=maximum,constrained_scaled_defect=constrained_defect,
-        native_term_sum_scaled_defect=reconstruction,geometry_primitive_defect=geom_error,
+        native_term_sum_scaled_defect=reconstruction,geometry_primitive_defect=geom_error,mechanical_weak_work=work,
         witness=dict(row=int(np.argmax(scaled)),native=float(native[np.argmax(scaled)]),independent=float(total[np.argmax(scaled)]),scale=float(denominator[np.argmax(scaled)])),
         actual_stored_slots=len(state),physical_volume=physical_volume,consumed_volume_points=ownership,independent_rays=len(columns),
         norm='all-row maximum absolute difference / max(physical equation scale*actual integrated physical volume, sum absolute primitive increments)',
