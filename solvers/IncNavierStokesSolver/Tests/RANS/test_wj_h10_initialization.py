@@ -58,6 +58,7 @@ class FlatInletInitialization(unittest.TestCase):
     def test_native_runtime_snapshot_excludes_preexec_union(self):
         root=Path('/h10');host='/usr/lib/libc.so.6';private='/h10/runtime/glibc/libc.so.6';exe='/h10/runtime/RANSWallResolutionProbe.elf'
         self.assertIsNone(runtime_snapshot(root,[host]))
+        self.assertIsNone(runtime_snapshot(root,[exe]))
         self.assertEqual(runtime_snapshot(root,[exe,private])['status'],'PASS')
         self.assertEqual(runtime_snapshot(root,[exe,host,private])['status'],'OBSTRUCTED')
     def test_rejected_phase_is_not_a_strict_packet(self):

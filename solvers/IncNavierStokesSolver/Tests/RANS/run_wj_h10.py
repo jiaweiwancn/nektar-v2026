@@ -42,6 +42,7 @@ def runtime_snapshot(root,files):
     native=[v for v in files if Path(v).name in ('IncNavierStokesSolver.elf','RANSWallResolutionProbe.elf','WJKernelProbe.elf')]
     if not native:return None
     libc=[v for v in files if Path(v).name=='libc.so.6']
+    if not libc:return None  # loader is still mapping dependencies
     valid=libc==[str(Path(root)/'runtime/glibc/libc.so.6')]
     return dict(status='PASS'if valid else 'OBSTRUCTED',native=native,libc=libc,files=files)
 
@@ -102,7 +103,7 @@ def execute(root,label,argv,*,cwd=None,seconds=120,phase="science",kind="passive
         child=subprocess.Popen(['/usr/bin/time','-v',*map(str,argv)],cwd=cwd or root,env=env,stdout=f,stderr=subprocess.STDOUT,
             start_new_session=True,preexec_fn=limits)
         while child.poll()is None:
-            rss,n=tree_usage(child.pid);peak=max(peak,rss);groups|=owned_groups(child.pid);mappings(child.pid)
+            rss,n=tree_usage(os.getpid());peak=max(peak,rss);groups|=owned_groups(child.pid);mappings(child.pid)
             if rss>4*1024**3 or time.monotonic()-start>seconds:reason='RESOURCE_LIMIT process memory/time'
             if time.monotonic()-last>=5:
                 last=time.monotonic()
