@@ -8,30 +8,82 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import shlex
 import tarfile
+import xml.etree.ElementTree as ET
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from run_wj_h4 import load,save,sha
-from wj_h14_execution import file_id,validate_pair,OwnerIndex,compact_open_packet
-from study_wj_h14 import H13,stored_reference
+from wj_h14_execution import OwnerIndex
+from study_wj_h14 import H10,H13,stored_reference
 from wj_h4_points import evaluate,vector_hash
 from wj3_measure import checkpoint_payload
 from wj_h7_analysis import context
+
+def file_id(path):
+    p=Path(path);h=hashlib.sha256()
+    with p.open('rb')as f:
+        for block in iter(lambda:f.read(1024**2),b''):h.update(block)
+    return dict(path=str(p),bytes=p.stat().st_size,sha256=h.hexdigest())
 
 def table(path,rows):
     if not rows:return
     with path.open('w',newline='')as f:
         w=csv.DictWriter(f,list(rows[0]));w.writeheader();w.writerows(rows)
 
+def native_closure(root,out):
+    """Reverify the saved per-native-exec maps, without another invocation."""
+    old=load(H10/'closure/runtime-observed.json')
+    assert old['status']=='PASS'
+    prior={v['path']:v for v in old['libraries']}
+    prior.update(load(H10/'runtime-qualified.json')['loaded'])
+    records=[];files=set()
+    for label in ('target-full-domain-CP0-v1','target-cost-gated-pilot-v1',
+                  'target-CP0-strict-view-v1','target-terminal-strict-view-v1'):
+        samples=load(root/'operations'/label/'native-exec-samples.json')
+        assert samples,'missing actual native maps: '+label
+        for v in samples:
+            assert v['status']=='PASS'and v['libc']==[str(root/'runtime/glibc/libc.so.6')]
+            assert all(str(root/'runtime-v4/')in p for p in v['native'])
+            files.update(p for p in v['files']if '.so'in Path(p).name or Path(p).name.startswith('ld-linux'))
+        records.append(dict(operation=label,saved_maps=file_id(root/'operations'/label/'native-exec-samples.json'),samples=samples))
+    libs=[]
+    for f in sorted(files):
+        p=Path(f);key=str(H10/'runtime/glibc'/p.name)if '/runtime/glibc/'in f else f
+        assert key in prior,'unqualified loaded library: '+f
+        v=file_id(p);assert v['sha256']==prior[key]['sha256']and v['bytes']==prior[key]['bytes']
+        libs.append(dict(actual=v,qualified_H10=prior[key]))
+    build=load(root/'science/runtime-build-v4.json')
+    for e in build['executables']:
+        for v in e.values():assert file_id(v['path'])==v
+    save(out/'target-runtime-verification.json',dict(status='PASS',executables=build['executables'],libraries=libs,native_exec_maps=records,
+        scope='saved actual native-exec mappings and rehashed selected bytes; no new native invocation'))
+    inputs=[];dependencies={}
+    for v in build['compiled_inputs']:
+        assert sha(v['path'])==v['sha256']
+        args=shlex.split(v['command']);obj=root/'build'/args[args.index('-o')+1]
+        if not obj.exists():continue  # configured test source is not an executed build
+        dep=Path(str(obj)+'.d')
+        inputs.append(dict(source=v,object=file_id(obj),dependency_file=file_id(dep)if dep.exists()else None))
+        if dep.exists():
+            for p in dep.read_text().replace('\\\n',' ').split()[1:]:
+                if p.startswith(str(root/'source/') )and Path(p).is_file():dependencies[p]=file_id(p)
+    assert inputs and dependencies
+    save(out/'compiled-source-and-objects.json',dict(inputs=inputs,local_compiled_dependencies=list(dependencies.values()),
+        effective_native_source_commit='ec5fb45d',compiler='GNU11.4.0',cmake_cache=file_id(root/'build/CMakeCache.txt'),
+        scope='actual existing objects plus source/header dependency bytes; unbuilt configured test objects excluded; final Python publication revision is distinct'))
+
 def main(root,source):
     out=root/'publication-v1';out.mkdir();(out/'controls').mkdir();(out/'operations').mkdir()
     def copy(p,name=None):
         p=Path(p);dest=out/(name or p.name);shutil.copyfile(p,dest);assert sha(dest)==sha(p);return file_id(dest)
     book=load(root/'accounting.json');copy(root/'accounting.json','accounting-at-publication.json')
+    native_closure(root,out)
     for p in(root/'target-admission-v1.json',root/'target-admission-v2.json',root/'target-admission-v3.json',
         root/'science/target-resource-design-v1.json',root/'science/remaining-projection-v2.json',
+        root/'science/remaining-projection-v3.json',
         root/'science/target-source-allocation-v1.json',root/'science/qualification-gates.json',
         root/'science/runtime-build-v4.json',root/'science/runtime-qualified-v4.json',
         root/'science/immutable-cache-equivalence.json',root/'science/completed-assessor-equivalence.json',
@@ -61,6 +113,16 @@ def main(root,source):
             native_history_times=cp['native_history_times'],native_initialization_work=r['initialization_lift_calls_iterations'],initializer_calls=r['initial_velocity_calls'],
             role='fresh startup'if r['steps']==0 else'new completed state; restored entry remains alpha0'))
         copy(case/'execution-diff.json','controls/'+case.name+'-execution-diff.json')
+        # Add the complete as-run solver-info changes to the original adapter's
+        # protected physical-data/parameter comparison, without rewriting it.
+        original=ET.parse(H13/'publication-v1/paired-case/flat/case.xml')
+        current=ET.parse(case/'case.xml')
+        info=lambda t:{v.get('PROPERTY'):v.get('VALUE')for v in t.findall('./CONDITIONS/SOLVERINFO/I')}
+        left,right=info(original),info(current)
+        save(out/'controls'/(case.name+'-solverinfo-diff.json'),dict(
+            original=file_id(H13/'publication-v1/paired-case/flat/case.xml'),as_run=file_id(case/'case.xml'),
+            changes={k:dict(old=left.get(k),new=right.get(k))for k in sorted(set(left)|set(right))if left.get(k)!=right.get(k)},
+            scope='execution-only changes; original protected physical Functions, mesh and parameters verified separately'))
         assessment=case/('assessment-v2'if case.name=='cp0'else'assessment')/'result.json'
         if assessment.exists():
             a=load(assessment);copy(assessment,case.name+'-assessment.json')
@@ -94,7 +156,9 @@ def main(root,source):
         for allocation in r['dense_evolution_capacity'].get('band_factor_allocations',[]):
             factors.append(dict(case=case.name,time=r['time'],factor='native constructor/projection/norm factor',allocation=allocation))
         vp=case/'view/result.json'
-        if vp.exists():copy(vp,case.name+'-strict.json');views.append(file_id(vp));heavy.append(file_id(case/'view/native.json'))
+        if vp.exists():
+            result=load(vp);assert result['status']=='PASS'and result['scalar_domain']['admissible']
+            copy(vp,case.name+'-strict.json');views.append(file_id(vp));heavy.append(file_id(case/'view/native.json'))
         if not r['failure']:final=(case,r)
     if not final:raise ValueError('no retained target state')
     save(out/'state-bindings.json',dict(parent_H13=parents,states=bindings,source_python_commit=source,native_compiled_source='ec5fb45d (effective H14 C++ tree; exact compiled file identities in runtime-build-v4)',
@@ -105,6 +169,7 @@ def main(root,source):
     for p in sorted((root/'science/target').glob('pilot-projection-*.json')):copy(p)
     statuses=dict(implementation_build='PASS',small_dense_and_bound_qualification='PASS',fresh_target_CP0='PASS',target_startup_quality='PASS',
         target_strict_CP0='PASS',pilot=pilot['status'],pilot_completed_steps=pilot['completed_steps'],pilot_actual_attempts=pilot['actual_attempts'],
+        target_strict_terminal='PASS'if(root/'science/target/pilot1/view/result.json').exists()else'NOT_RUN',
         further_pilot_steps=pilot.get('remaining_steps_status','NOT_RUN'),duration_preservation='NOT_RUN',hill_evolution='NOT_RUN',experimental_validation='NOT_RUN',raised_height_cases='EXCLUDED_NOT_PREPARED',
         temporal_order='NOT_ESTABLISHED',scalable_production_capacity='NOT_QUALIFIED')
     save(out/'component-gates.json',statuses)
@@ -167,7 +232,7 @@ def main(root,source):
         source_python_commit=source,build_flags='-ffp-contract=off -fno-fast-math; RANS_BUILD_SOLVER=ON; Release GNU11.4.0',
         rank=1,numerical_threads=1,compile_parallel=8,hard_server_worker_limit=72)
     save(out/'resources-at-publication.json',totals)
-    duration=505.02466521278404;dt=final[1]['dt'];steps=math.ceil(duration/dt)if False else int(np.ceil(duration/dt))
+    duration=505.02466521278404;dt=final[1]['dt'];steps=int(np.ceil(duration/dt))
     measured=[v for v in timing.values()if v['operation']=='target-cost-gated-pilot-v1'and v['scope']=='native.step']
     warm=sum(v['wall_inclusive']for v in measured)/sum(v['calls']for v in measured)if measured else None
     save(out/'preservation-forecast.json',dict(reference_clocks=dict(bulk=26.13350407707765,slowest_outer=57.17628191545675,
