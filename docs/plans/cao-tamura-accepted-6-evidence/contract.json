@@ -1,0 +1,174 @@
+{
+  "schema": "CT-Accepted-6-V1",
+  "starting_revision": "7d32b43dc9d176628cfef1dbae2aee02a86ce330",
+  "starting_state": "clean existing implementation worktree; fetched remote identical; no intervening commits",
+  "purpose": "curved Accepted verification only, separate from experimental applicability",
+  "capability": {
+    "evolution": "CT6ManufacturedV1",
+    "static": "CT6StaticTransmissionV1",
+    "boundary": "AcceptedManufacturedOpenV1",
+    "provider": "CT6ContinuousV1",
+    "unsupported": [
+      "curved new-model EP",
+      "ordinary curved production",
+      "MPI",
+      "3D",
+      "nonlinear/action routes",
+      "variable-height evolution",
+      "ExactStepV1 caching"
+    ]
+  },
+  "physics": "original A93/A95/E94E95 Natural descriptors; compatible model-specific wall constants; finite inner nu; zero outer molecular diffusion; current endpoint K; transported local inner k; dependent total epsilon; raw full signed production and full3D covariance; original one-sweep stage order; eta0; no corrections/restoration/clipping/regularization",
+  "geometry": {
+    "kind": "Gaussian",
+    "graph": "h(q)=.005*exp(-q^2)",
+    "amplitude": 0.005,
+    "length": 1.0,
+    "q": [
+      -1.2,
+      -0.8,
+      -0.4,
+      0.0,
+      0.4,
+      0.8,
+      1.2
+    ],
+    "H": 0.5,
+    "top": 1.0,
+    "inner_knots": [
+      0.0,
+      0.05,
+      0.125,
+      0.25,
+      0.5
+    ],
+    "outer_knots": [
+      0.5,
+      0.75,
+      1.0
+    ],
+    "curvature": "B=grad_Gamma n; gamma=-hqq/(1+hq^2)^1.5; J=1+r*gamma; old1-kappa*r uses kappa=-gamma",
+    "whole_tube_bound": ".01*rmax=.01<.8; conservative minimum stretch>=.99 over mapped outer region; native global certificate required",
+    "kernel_signed_curvatures": [
+      -0.25,
+      0.0,
+      0.25
+    ],
+    "zero_curvature_amplitude": 0.0,
+    "static_height": "H(q)=.5+.03*sin(pi*q/2), rho_H=.5; no evolution"
+  },
+  "manufactured": {
+    "nu": 1.5e-05,
+    "roughness": 0.05,
+    "ustar_scale": 0.4,
+    "K0": "q_m*.4^2",
+    "K": "K0*(1+.02*q+.01*q^2)*(1+.05*t+.1*t^2)",
+    "b": ".2*(1+.2*t+.5*t^2)",
+    "f": "1+.02*q",
+    "psi_outer": "b*f*r^2/2",
+    "psi_inner": "psi_outer+c(q,t)*r^2*(r-H)^2/(2H^2)",
+    "velocity": "u_t=psi_r; w=-psi_q/(a*J), U=u_t*tangent+w*n",
+    "c": "solve tangential full traction exactly: t.To.n/DH minus base inner shear (psi_rr + grad_r(w).t - gamma*u_t/J)",
+    "k_outer": "K+.03*K0*(r-H)/H",
+    "k_inner": "K+l*(r^2-H^2)/(2H), l=(nut_outer_H/DH)*(.03*K0/H)",
+    "epsilon_outer": "A_epsilon(K)/r",
+    "pressure_inner": ".03*(q+.2*r)+.02*t+.01*t^2",
+    "pressure_outer": "same base plus Fnn_outer_H-Fnn_inner_H",
+    "interface": "common psi/psi_r, Cartesian U and k; full total traction; common nonzero k flux; epsilon=A(K)/H; no epsilon flux condition",
+    "sources": "continuous storage+Cartesian conservative flux divergence minus actual independent model sources; independent planar invariant closure and multivariate Taylor derivatives; never native residual cancellation",
+    "roughness_completion": "outer body=f_required_outer; inner body=f_required_inner-1_(r<=hr)*FA_exact, native completion then recovers required inner acceleration; retain all work",
+    "initialization": "ordinary native physical projection and existing trace lifting; raw/effective coefficients and projection error retained; no later resetting"
+  },
+  "numerical": {
+    "spaces": [
+      "P3/P1",
+      "P4/P2"
+    ],
+    "predicted_slots": [
+      1273,
+      2283
+    ],
+    "limit": 3000,
+    "quadrature": [
+      [
+        32,
+        8,
+        12,
+        12,
+        12
+      ],
+      [
+        48,
+        12,
+        16,
+        16,
+        16
+      ],
+      [
+        64,
+        16,
+        20,
+        20,
+        20
+      ]
+    ],
+    "physical_face_orders": [
+      16,
+      32
+    ],
+    "timesteps": [
+      0.004,
+      0.002,
+      0.001
+    ],
+    "horizon": 0.016,
+    "sequence": "independent mathematics/kernel/operator/zero-curvature first; A95 p3 .002/.001 and p4 .004/.002/.001; then A93/E94E95 p4 .002/.001 after A95 gates",
+    "spatial": "one fixed-mesh degree contrast, no mesh search; require15percent error reduction for resolved fields on fixed physical samples; full native loads remain visible",
+    "temporal": "expected first order; A95 p4 triplet, p=log2(D004_002/D002_001) in[.8,1.2] for differences above10*uncertainty floor; near-floor observables unresolved, never assign unstable order; other models paired uncertainty",
+    "uncertainty_floor": 1e-07,
+    "quadrature_uncertainty": "changes<=max(2e-8 scaled, .1*resolved degree differences); frozen coefficients and live boundary identities bound"
+  },
+  "tolerances": {
+    "operator_scaled_all_rows": 2e-10,
+    "geometry": 2e-11,
+    "continuous_divergence": 2e-11,
+    "continuous_transmission": 2e-10,
+    "kernel_relative": 2e-10,
+    "manufactured_field_scaled_RMS": 0.005,
+    "manufactured_pressure_scaled_RMS": 0.01,
+    "manufactured_traction_scaled_RMS": 0.005,
+    "mass_scaled": 1e-08,
+    "physical_scalar_budget_scaled": 0.02,
+    "scalar_reconstruction": 2e-10
+  },
+  "scales": {
+    "velocity": 0.2,
+    "k": "K0",
+    "epsilon": "A(K0)/H",
+    "pressure": 0.1,
+    "traction": ".4^2",
+    "load": "max(physical equation scale*domain measure, sum of absolute primitive loads); conditioning/roundoff exposed, no physical .001 operator tolerance"
+  },
+  "admissibility": "finite everywhere consumed; k>0/inner allowed nonnegative; epsilon>0; cutoff applicable; actual A95 radicand>=0; full covariance check; expected pre-run radicand>.1 clearance is fixture design, no modification of actual rejection rule; diagnostic predictor undefined does not add rejection",
+  "regressions": "zero-curvature same states/data raw loads and frozen systems; fresh A95 CT5/6mm/P4 two steps dt.002 against sealed states at.002/.004; A93/E94E95 read-only targeted kernel/operator checks",
+  "negative_controls": [
+    "omitted J/cofactor",
+    "wrong face orientation",
+    "omitted curvature or normal-motion traction",
+    "fixed-chart vs fixed-physical-r derivative",
+    "flat curved-ray cutoff",
+    "inconsistent local endpoint metadata",
+    "unsupported production capability"
+  ],
+  "stop": "first actual domain/finite/accuracy failure, retain candidate and last accepted history; continue independent static/kernel checks; no added knots/tuned coefficients/loosened tolerance; no claim of complete CT6 if a required gate remains failed or unresolved",
+  "resources": {
+    "root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113",
+    "project": 16,
+    "aggregate": 72,
+    "compiler_jobs": 2,
+    "libraries_threads": 1,
+    "numerical_families": 1,
+    "cache": "Off"
+  },
+  "historical": "CT1-CT5 immutable; A93 CT5 upper.000992850582 narrow pass, original ambiguity retained; pressure interpretation/general spatial convergence/long-time/roughness-sublayer/thin.1/smooth/fidelity remain open"
+}
