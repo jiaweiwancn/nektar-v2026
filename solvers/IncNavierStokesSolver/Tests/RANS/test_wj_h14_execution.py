@@ -14,6 +14,16 @@ SOURCE=Path(__file__).resolve().parents[4]
 PARENT=Path(os.environ.get('WJ_H14_PARENT',str(SOURCE/'docs/plans/wj-h13-linux/publication-v1/paired-case')))
 
 class FixedHeightExecution(unittest.TestCase):
+    def test_immutable_basis_cache_keeps_actual_bits_and_signed_zero_keys(self):
+        import numpy as np
+        from validate_cls_epawf_m3 import basis
+        r=dict(fields=[dict(mesh=[dict(geometry=0,lower=[0,0,0],upper=[1,0,1])])]);cache=OwnerIndex(r)
+        for p in(1,3):
+            for x in(-1.,-.375,-0.,0.,.375,1.):
+                expected=basis(p,[x]);a=cache.basis(p,[x]);b=cache.basis(p,[x])
+                self.assertIs(a,b)
+                for old,new in zip(expected,a):self.assertEqual(old.tobytes(),new.tobytes());self.assertFalse(new.flags.writeable)
+        self.assertEqual(len(cache.basis_values),12)
     def test_index_preserves_every_physical_owner_and_roundoff_role(self):
         from wj_h13_domain import topology
         from wj_h4_points import owners,physical

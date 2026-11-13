@@ -39,6 +39,7 @@ class OwnerIndex:
                 raise ValueError('owner index needs separated frozen tensor intervals')
         ix={v:i for i,v in enumerate(self.axes[0])};iz={v:i for i,v in enumerate(self.axes[1])}
         self.cells={}
+        self.basis_values={};self.matching_rows={};self.hits={'basis':0,'matching':0}
         for j,e in enumerate(self.mesh):
             key=(ix[e['lower'][0]],iz[e['lower'][2]])
             if key in self.cells:raise ValueError('duplicate tensor owner cell')
@@ -60,6 +61,18 @@ class OwnerIndex:
                 rows.append((order,o))
         if not rows:raise ValueError('physical point has no native owner')
         return [o for _,o in sorted(rows,key=lambda v:v[0])]
+    def basis(self,degree,x):
+        from validate_cls_epawf_m3 import basis
+        key=(degree,tuple(float(v).hex()for v in x))
+        if key in self.basis_values:self.hits['basis']+=1;return self.basis_values[key]
+        result=basis(degree,x)
+        for v in result:v.setflags(write=False)
+        self.basis_values[key]=result;return result
+    def matching(self,owner):
+        from wj_h4_points import matching
+        key=tuple(float(v).hex()for v in(owner['chart'][0],owner['lower'][0],owner['upper'][0]))
+        if key in self.matching_rows:self.hits['matching']+=1;return self.matching_rows[key]
+        result=matching(self.report,owner);self.matching_rows[key]=result;return result
 
 def protected(root):
     r=copy.deepcopy(root)

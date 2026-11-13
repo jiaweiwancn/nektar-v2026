@@ -281,7 +281,8 @@ def assessment(root,relative,version='v1'):
             for a in (0,2):
                 for s in (-1,1):q=p.copy();q[a]+=s*1e-6;add(q,'fixed physical inward/witness offset1e-6')
     inventory=dict(rule='unchanged native hard inventory plus every5x5 stored-element Lobatto/all owners, fixed physical observations/native witnesses+1e-6; Gauss8 physical volume support split at settled wall breakpoints',points=list(pts.values()))
-    save(out/'inventory.json',inventory);rows=Rows(r,[v['physical']for v in pts.values()],c,owner_lookup=OwnerIndex(r))
+    save(out/'inventory.json',inventory);geometry=OwnerIndex(r)
+    rows=Rows(r,[v['physical']for v in pts.values()],c,owner_lookup=geometry,geometry_cache=geometry)
     if relative.startswith('target/'):
         assert len(r['state'])==24688 and [f['size']for f in r['fields']]==[6493,6493,6493,4429,255,525]
     initial_report=folder.parent/'cp0/case.evolution.json'
@@ -339,6 +340,8 @@ def assessment(root,relative,version='v1'):
     status='PASS'if all(v['summary']['status']=='PASS'for v in results)else next(v['summary']['status']for v in results if v['summary']['status']!='PASS')
     save(out/'result.json',serial(dict(status=status,producer=before,checkpoint=file_id(Path(r['checkpoint'])/'State.bin'),
         inventory=file_id(out/'inventory.json'),physical_row_count=len(rows.rows),owner_row_count=rows.point_count,
+        immutable_geometry_cache=dict(hits=geometry.hits,basis_keys=len(geometry.basis_values),matching_rows=len(geometry.matching_rows),
+            scope='actual coordinate bits/degrees/column owners only; no state, stress, K, cutoff, source or admission result cached'),
         states=results,invariants=invariants,diagnostic_mass_solves=0,raw_corrected_k_scope='actual native snapshots/counters verified separately')))
     if status!='PASS':
         from run_wj_h7 import update_journal

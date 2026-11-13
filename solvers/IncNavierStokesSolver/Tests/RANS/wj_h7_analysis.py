@@ -68,7 +68,7 @@ def wall_batch(K,H,h,nu):
 
 class Rows:
     """Sparse physical observation rows, fixed by mesh/map and explicit owners."""
-    def __init__(self,r,points,c,*,owner_lookup=None):
+    def __init__(self,r,points,c,*,owner_lookup=None,geometry_cache=None):
         self.report=r;self.config=c;rows=[];weights=[]
         for p in points:
             for o in (owner_lookup(p)if owner_lookup is not None else owners(r,p)):rows.append((list(p),o));weights.append(0.)
@@ -81,21 +81,23 @@ class Rows:
                     for j,z in enumerate((a+b)/2+(b-a)/2*g):
                         p=[float(x),0,float(z)];o=next(o for o in owners(r,p)if o['geometry']==el['geometry'])
                         rows.append((p,o));weights.append(float(w[i]*w[j]*(hi[0]-lo[0])*(b-a)/4))
+        point_basis=basis if geometry_cache is None else geometry_cache.basis
+        point_matching=(lambda o:matching(r,o))if geometry_cache is None else geometry_cache.matching
         self.rows=rows;self.weights=np.array(weights);self.outer=np.array([o['region']=='outer'for p,o in rows]);self.rphys=np.array([p[2]-c.d0 for p,o in rows]);self.maps={}
         for block in range(6):
             active=np.flatnonzero(self.outer if block in (3,5)else ~self.outer if block==4 else np.ones(len(rows),bool));compiled=[]
             elements={e['geometry']:e for e in r['fields'][block]['mesh']}
             for i in active:
                 p,o=rows[i];el=elements[o['geometry']];lo,hi=el['lower'],el['upper'];x,_,rho=o['chart']
-                px,dx=basis(el['degree'],[2*(x-lo[0])/(hi[0]-lo[0])-1]);pr,dr=basis(el['degree'],[2*(rho-lo[2])/(hi[2]-lo[2])-1]);J=1 if not self.outer[i]else mapping(r)[3]
+                px,dx=point_basis(el['degree'],[2*(x-lo[0])/(hi[0]-lo[0])-1]);pr,dr=point_basis(el['degree'],[2*(rho-lo[2])/(hi[2]-lo[2])-1]);J=1 if not self.outer[i]else mapping(r)[3]
                 compiled.append((np.asarray(el['ids'])+r['offsets'][block],np.outer(pr[0],px[0]).ravel()*el['sign'],
                     np.outer(pr[0],dx[0]).ravel()*el['sign']*2/(hi[0]-lo[0]),np.outer(dr[0],px[0]).ravel()*el['sign']*2/(hi[2]-lo[2])/J))
             self.maps[block]=(active,tuple(np.array(v)for v in zip(*compiled)))
         # Endpoint K uses its own outer interface value, never local k.
         self.kmap=[]
         for p,o in rows:
-            m=matching(r,o);el=next(e for e in r['fields'][2]['mesh']if e['geometry']==m['geometry']);lo,hi=el['lower'],el['upper']
-            px=basis(3,[2*(m['chart'][0]-lo[0])/(hi[0]-lo[0])-1])[0][0];pr=basis(3,[-1])[0][0]
+            m=point_matching(o);el=next(e for e in r['fields'][2]['mesh']if e['geometry']==m['geometry']);lo,hi=el['lower'],el['upper']
+            px=point_basis(3,[2*(m['chart'][0]-lo[0])/(hi[0]-lo[0])-1])[0][0];pr=point_basis(3,[-1])[0][0]
             self.kmap.append((np.asarray(el['ids'])+r['offsets'][2],np.outer(pr,px).ravel()*el['sign']))
         self.kids=np.array([v[0]for v in self.kmap]);self.kphi=np.array([v[1]for v in self.kmap]);self.exact=self.reference()
 
