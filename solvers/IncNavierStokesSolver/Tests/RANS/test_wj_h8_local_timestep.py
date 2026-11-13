@@ -114,6 +114,15 @@ class LocalTimestepTests(unittest.TestCase):
             self.assertLess(v['identity_roundoff'],2e-11);self.assertLess(v['broken_identity_roundoff'],2e-11)
         self.assertEqual(data['governing_solves'],0);self.assertEqual(data['mass_solves'],5)
 
+    def test_early_noncontraction_is_not_hidden_by_terminal_pass(self):
+        from publish_wj_h8 import contraction_status
+        primary=[dict(time=t,geometry=17,rho=r)for t,r in zip((.01,.02,.03,.04),(1.86,.82,.31,.05))]
+        envelope=[dict(time=v['time'],rho=v['rho'])for v in primary]
+        self.assertEqual(contraction_status(primary,envelope)['status'],'UNRESOLVED')
+        self.assertEqual(contraction_status(primary[1:],envelope)['status'],'NOT_RUN')
+        primary[0]['rho']=.4;envelope[0]['rho']=.4
+        self.assertEqual(contraction_status(primary,envelope)['status'],'PASS')
+
     def test_direction_detail_does_not_change_principal_action(self):
         G=np.array([[[.02,0,.7],[0,.01,0],[.01,0,-.04]]]);k=np.array([.009]);e=np.array([.002])
         a=principal_batch(k,e,G);b=principal_batch(k,e,G,details=True)

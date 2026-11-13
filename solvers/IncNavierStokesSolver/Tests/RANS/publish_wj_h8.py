@@ -22,6 +22,17 @@ def csvfile(path,rows):
         writer=csv.DictWriter(f,fieldnames=keys);writer.writeheader();writer.writerows(rows)
 
 
+def contraction_status(primary,envelopes):
+    times={.01,.02,.03,.04}
+    face={v['time']:v for v in primary if v['geometry']==17 and v['time']>0}
+    envelope={v['time']:v for v in envelopes if v['time']>0}
+    if set(face)!=times or set(envelope)!=times:return dict(status='NOT_RUN',reason='missing fixed-face/common-support comparison time')
+    adverse=[dict(time=t,fixed_face_rho=face[t]['rho'],outer_envelope_rho=envelope[t]['rho'])for t in sorted(times)
+        if any(v['rho']is None or not math.isfinite(v['rho'])or v['rho']>=1 for v in (face[t],envelope[t]))]
+    return dict(status='UNRESOLVED'if adverse else 'PASS',noncontracting_or_unresolved_times=adverse,
+        scope='same-owner decisive upper face and common-support outer principal envelope; excludes identical CP0; no convergence-order claim')
+
+
 def comparison(root,out,folder):
     summary=load(folder/'summary.json');records=load(summary['records']['path']);inv=load(summary['inventory']['path']);c=configuration(6.)
     r=load(root/'imports-v2/H6mm/initial.evolution.json');cache=Rows(r,[p['physical']for p in inv['points']],c)
@@ -131,16 +142,19 @@ def publish(root,out):
         commands[f.parent.name]=load(f);heavy.extend([identity(f),identity(f.with_name('command.log')),identity(f.with_name('loaded-maps.json'))])
         loaded=load(f.with_name('loaded-maps.json'))
         if commands[f.parent.name].get('cp0')or commands[f.parent.name].get('units')or commands[f.parent.name].get('strict_view'):
-            bypath={v['path']:v for v in loaded};process=load(f.with_name('process-maps.json'));native=[]
+            bypath={v['path']:v for v in loaded};process=load(f.with_name('process-maps.json'));native_loaded=[]
             for pid,v in process.items():
                 if any(Path(p).name in ('IncNavierStokesSolver.elf','RANSWallResolutionProbe.elf')for p in v['files']):
-                    native.extend(bypath[p]for p in v['files']if p in bypath)
-            native=list({v['path']:v for v in native}.values())
-            native=[v for v in native if Path(v['path']).open('rb').read(4)==b'\x7fELF'];unexpected=[v for v in native if v['sha256']not in expected]
-            maps[f.parent.name]=dict(status='PASS'if native and not unexpected else 'UNRESOLVED',native_loaded=native,unexpected=unexpected,process_maps=identity(f.with_name('process-maps.json')),scope='actual native PID; host time/shell harness excluded')
+                    native_loaded.extend(bypath[p]for p in v['files']if p in bypath)
+            native_loaded=list({v['path']:v for v in native_loaded}.values())
+            native_loaded=[v for v in native_loaded if Path(v['path']).open('rb').read(4)==b'\x7fELF'];unexpected=[v for v in native_loaded if v['sha256']not in expected]
+            maps[f.parent.name]=dict(status='PASS'if native_loaded and not unexpected else 'UNRESOLVED',native_loaded=native_loaded,unexpected=unexpected,process_maps=identity(f.with_name('process-maps.json')),scope='actual native PID; host time/shell harness excluded')
     save(out/'commands.json',commands);save(out/'actual-native-runtime.json',maps)
     gate=load(out/'component-gates.json');gate['actual_runtime']='PASS'if len(maps)==9 and all(v['status']=='PASS'for v in maps.values())else 'UNRESOLVED'
     if overall=='PASS'and gate['actual_runtime']!='PASS':overall='UNRESOLVED';gate['status']=overall
+    gate['verification_status']=overall
+    gate['local_timestep_contraction']=contraction_status(comparison_result['primary_face'],comparison_result['margin_envelopes'])if comparison_result else dict(status='NOT_RUN')
+    if overall=='PASS'and gate['local_timestep_contraction']['status']!='PASS':overall='UNRESOLVED';gate['status']=overall
     save(out/'component-gates.json',gate)
     save(out/'accounting-snapshot.json',book)
     fig,axs=plt.subplots(1,3,figsize=(11,3.4),constrained_layout=True)
