@@ -111,7 +111,8 @@ struct RANSWallManufactured::Impl
         Jet logc(std::log(Cutoff(k.Value(),g.gamma.Value())));
         for(int i=0;i<5;++i){const Jet cut=Exp(logc);logc=logc-(Ae*(1+std::log(H)-logc+g.gamma*(H-cut/2))-production)/(-Ae*(1+g.gamma*cut/2));}
         v.cutoff=freeze(Exp(logc));
-        if(rays.size()>4096)rays.clear();rays.emplace(key,v);return v;
+        if(rays.size()>4096)rays.clear();
+        rays.emplace(key,v);return v;
     }
     double Cutoff(double k,double gamma) const
     {
@@ -162,7 +163,8 @@ struct RANSWallManufactured::Impl
             for(int j=0;j<3;++j){v.velocityGradient[i][j]=G[i][j].Value();v.reynolds[i][j]=law.R[i][j].Value();v.quadratic[i][j]=law.Q[i][j].Value();v.stress[i][j]=T[i][j].Value();}
         }
         v.kDiffusion=D.Value();v.epsilonDiffusion=de.Value();v.production=law.P.Value();v.epsilonProduction=law.ep.Value();v.epsilonDestruction=law.ed.Value();v.radicand=law.rad.Value();v.J=g.J.Value();v.a=g.a.Value();v.gamma=g.gamma.Value();
-        if(cache.size()>30000)cache.clear();cache.emplace(key,v);return v;
+        if(cache.size()>30000)cache.clear();
+        cache.emplace(key,v);return v;
     }
     RANSVector Rough(double q,double time) const
     {
@@ -213,6 +215,7 @@ std::string RANSAcceptedManufacturedIdentity(const LibUtilities::SessionReaderSh
     for(const std::string f:{"InitialConditionsInner","InitialConditionsOuter","BoundaryValuesInner","BoundaryValuesOuter","BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","OutletTotalTractionInner","OutletTotalTractionOuter","OutletDiffusiveFluxInner","OutletDiffusiveFluxOuter"})Require(!s->DefinesFunction(f),"CT6 provider forbids competing physical production functions");
     std::ostringstream o;o<<std::setprecision(17)<<"AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration";
     const std::set<std::string> work{"NUMSTEPS","TIMESTEP","TIME","IO_CHECKSTEPS","IO_INFOSTEPS","IO_TIMER_LEVEL","RANSWALLNORMALORDER","RANSWALLTANGENTIALORDER","RANSWALLMASSORDER","RANSWALLVOLUMEORDER","RANSWALLINTERFACEORDER"};
-    for(const auto &[k,v]:s->GetParameters())if(!work.count(k))o<<'|'<<k<<'='<<v;return o.str();
+    for(const auto &[k,v]:s->GetParameters())if(!work.count(k))o<<'|'<<k<<'='<<v;
+    return o.str();
 }
 } // namespace Nektar
