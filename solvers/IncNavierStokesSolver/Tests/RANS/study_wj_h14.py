@@ -123,11 +123,38 @@ def small_checks(root):
         native_history_bitwise=True,reference_defect_bitwise=True,rejected_attempt_rollback=True,counts=counts,phase_bindings=phase))
 
 def view(root,case,reuse=False):
-    folder=root/'science/small'/case;rp=folder/'case.evolution.json';r=load(rp);out=folder/'view';out.mkdir()
+    folder=root/'science'/(case if '/'in case else'small/'+case);rp=folder/'case.evolution.json';r=load(rp);out=folder/'view';out.mkdir()
+    xmin=min(e['lower'][0]for e in r['fields'][0]['mesh']);xmax=max(e['upper'][0]for e in r['fields'][0]['mesh'])
     save(out/'request.json',dict(operation='open_checks',inner_stress_model='Linear',native_report=str(rp),native_report_sha256=sha(rp),
         native_checkpoint=r['checkpoint'],checkpoint_sha256=sha(Path(r['checkpoint'])/'State.bin'),
-        physical_observations=[[0.,0.,.2375],[4.,0.,.2375],[8.,0.,.2375],[8.,0.,.25607517888672315]],
-        weak=False,assembly=False,reuse=reuse))
+        physical_observations=[[x,0.,z]for x in(xmin,(xmin+xmax)/2,xmax)for z in(.175,.2375,.25607517888672315,.31946961248954786,20.)],
+        weak=True,weak_compact=True,assembly=False,reuse=reuse))
+
+def view_finish(root,case):
+    folder=root/'science'/(case if '/'in case else'small/'+case);out=folder/'view';request=load(out/'request.json');p=load(out/'native.json');r=load(request['native_report']);cx=context(r)
+    assert sha(request['native_report'])==request['native_report_sha256']and sha(Path(request['native_checkpoint'])/'State.bin')==request['checkpoint_sha256']
+    assert p['state_sha256']==vector_hash(cx['state'])and p['callback_history_sha256']==vector_hash(cx['history'])
+    assert p['initialization_work']==[0,0]and p['initial_velocity_calls']==0 and p['governing_solves']==0
+    if request['reuse']:assert p['reuse_checks']['passed']
+    weak=p['weak_checks'];assert weak['schema']=='WJProjectedWeakCompactV1'and weak['state_sha256']==p['state_sha256']
+    moments={str(b):p['spatial_residual'][r['offsets'][b]:r['offsets'][b+1]]for b in(4,5)}
+    assert max(abs(x)for v in moments.values()for x in v)<=2e-15
+    save(out/'result.json',dict(status='PASS',native=file_id(out/'native.json'),request=file_id(out/'request.json'),
+        report=request['native_report_sha256'],checkpoint=request['checkpoint_sha256'],absolute_step=p['selected_absolute_step'],
+        genuine_callback_history_sha256=p['callback_history_sha256'],initialization_work=p['initialization_work'],initializer_calls=0,governing_solves=0,
+        physical_mass_dual_norms=p['physical_mass_dual_norms'],native_signed_Q1=moments,weak_components=weak,
+        cache_checks=p['reuse_checks'],interface=p['open_boundary'].get('interface',p['open_boundary'].get('interfaces')),
+        scalar_domain=p['scalar_domain']))
+
+def rejection(root):
+    import subprocess
+    folder=root/'science/small/reject'
+    code=subprocess.run([str(root/'runtime-v4/IncNavierStokesSolver'),str(folder/'case.xml')]).returncode
+    r=load(folder/'case.evolution.json');assert code!=0 and 'deliberate_PIMPLE_WJ_hard_audit_rejection'in r['failure']
+    assert r['steps']==1 and r['time']==.01 and len(r['pimple_attempts'])==1
+    save(folder/'expected-rejection.json',dict(status='PASS',native_exit=code,native_failure=r['failure'],
+        accepted_step=r['steps'],attempted_step=2,attempted_time=.02,producer=file_id(folder/'case.evolution.json'),
+        scope='deliberate native hard-audit rejection; failing candidate is never accepted or eligible as a checkpoint'))
 
 def stored_reference(manifest=None):
     """Restore ONLY the settled H13 six-mm reference; never run an inverse/fit."""
@@ -247,8 +274,9 @@ def assessment(root,relative,version='v1'):
     assert file_id(rp)==before;print(relative,status,'minima',[v['summary']['min_in_plane']for v in results],flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('runtime','inputs','small-checks','view','assessment'),required=True)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('runtime','inputs','small-checks','view','view-finish','rejection','assessment'),required=True)
     p.add_argument('--case',default='two');p.add_argument('--reuse',action='store_true');p.add_argument('--version',default='v1');a=p.parse_args()
     if a.mode=='view':view(a.root,a.case,a.reuse)
+    elif a.mode=='view-finish':view_finish(a.root,a.case)
     elif a.mode=='assessment':assessment(a.root,a.case,a.version)
     else:globals()[a.mode.replace('-','_')](a.root)
