@@ -23,7 +23,8 @@ inline std::string RANSWallPhysicsSignature(const RANSWallEvolutionPatch &patch,
         s<<":capped_initial_trace=1";
     if(patch.PimpleSingleSweep())s<<":temporal_coupling=PimpleSingleSweep"<<patch.PimpleKBoundSignature();
     std::string startupHash;session->LoadSolverInfo("RANSWallCertifiedStartupSHA256",startupHash,"");
-    if(!startupHash.empty())s<<":startup=CertifiedNeutralStartupV1:certificate_sha256="<<startupHash;
+    if(!startupHash.empty())
+    {std::string version;session->LoadSolverInfo("RANSWallCertifiedStartupVersion",version,"CertifiedNeutralStartupV1");s<<":startup="<<version<<":certificate_sha256="<<startupHash;}
     for(const auto &[name,value]:session->GetParameters())
         if(!(patch.ColumnAverageK() && name=="RANSWALLSAMPLEHEIGHT") && !RANSWallEvolutionPatch::PimpleKBoundWorkParameter(name) && name!="RANSWALLPACKETINTERVAL" && name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT" && name!="RANSWALLPIMPLEPOSTASSIGNREJECTSTEP" && name!="RANSWALLPIMPLEREJECTSTEP" && name!="RANSWALLPIMPLEHARDAUDITREJECTSTEP" && name!="RANSWALLPIMPLEKFLOORRELATIVE" && name!="RANSWALLPIMPLEBUDGETTIME")s<<'|'<<name<<'='<<value;
     const std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","InitialPerturbationInner","InitialPerturbationOuter","BoundaryValuesInner","BoundaryValuesOuter",

@@ -297,7 +297,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
         }
         else
         {
-        std::string startupFile,startupHash;
+        std::string startupFile,startupHash;bool coupledStartup=false;
         m_serialSession->LoadSolverInfo("RANSWallCertifiedStartupFile",startupFile,"");
         m_serialSession->LoadSolverInfo("RANSWallCertifiedStartupSHA256",startupHash,"");
         if(!startupFile.empty())
@@ -311,34 +311,66 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
                  Require(expression=="0" || expression=="0." || expression=="0.0" || expression=="-0","certified startup permits only literal zero inherited perturbations; no projection or Lift is applied");}
             Require(startupHash.size()==64 && RANSWallR3::HashFile(startupFile)==startupHash,"certified startup file identity differs");
             boost::property_tree::ptree cert;boost::property_tree::read_json(startupFile,cert);
-            Require(cert.get<std::string>("version")=="CertifiedNeutralStartupV1" && cert.get<bool>("complete_native_admissible") &&
+            const auto startupVersion=cert.get<std::string>("version");coupledStartup=startupVersion=="CertifiedNeutralStartupV2";
+            std::string declaredVersion;m_serialSession->LoadSolverInfo("RANSWallCertifiedStartupVersion",declaredVersion,"CertifiedNeutralStartupV1");
+            Require(declaredVersion==startupVersion,"certified startup interpretation version differs");
+            Require((startupVersion=="CertifiedNeutralStartupV1" || coupledStartup) && cert.get<bool>("complete_native_admissible") &&
                 cert.get<std::string>("patch_signature")==m_patch->Signature() && cert.get<std::string>("geometry_identity")==m_patch->GeometrySignature() &&
                 cert.get<std::string>("inventory_identity")==m_patch->PimpleKBoundSignature() && cert.get<double>("physical_t0")==0.,"certified startup physics/geometry/inventory/gate differs");
             m_state.clear();for(const auto &v:cert.get_child("state"))m_state.push_back(v.second.get_value<double>());
             Require(m_state.size()==m_patch->Size() && RANSWallR3::Hash(m_state)==cert.get<std::string>("state_sha256"),"certified coupled state hash differs");
-            m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
-            m_patch->SetReference(m_state,m_data,0,0);
+            if(coupledStartup)
+            {
+                auto read=[&](const std::string &name){Vector v;for(const auto &x:cert.get_child(name))v.push_back(x.second.get_value<double>());Require(v.size()==m_patch->Size() && RANSWallR3::Hash(v)==cert.get<std::string>(name+"_sha256"),"V2 startup vector identity: "+name);return v;};
+                const auto base=read("immutable_base"),reference=read("fixed_reference"),defect=read("fixed_defect");
+                Require(RANSWallR3::Hash(reference)==RANSWallR3::Hash(base),"V2 reference must retain immutable base");
+                Require(cert.get<std::string>("allowed_update_contract")=="OuterScalarInitializerV1" && cert.get<std::string>("prescribed_boundary_sha256")==RANSWallR3::Hash(base),"V2 startup boundary/update contract differs");
+                Require(RANSWallR3::HashFile("/proc/self/exe")==cert.get<std::string>("runtime.sha256"),"V2 startup solver executable differs; revalidate exact state under selected runtime");
+                const char *lib=std::getenv("LD_LIBRARY_PATH");Require(lib && std::string(lib)==cert.get<std::string>("runtime.library_path"),"V2 startup library search closure differs");
+                for(const auto &v:cert.get_child("runtime.libraries"))Require(RANSWallR3::HashFile(v.first)==v.second.get_value<std::string>(),"V2 linked-library content differs");
+                const auto receiptFile=cert.get<std::string>("native_receipt_file");Require(RANSWallR3::HashFile(receiptFile)==cert.get<std::string>("native_receipt_sha256"),"V2 validation receipt changed");
+                boost::property_tree::ptree receipt;boost::property_tree::read_json(receiptFile,receipt);
+                Require(receipt.get<bool>("passed") && receipt.get<std::string>("state_sha256")==RANSWallR3::Hash(m_state) && receipt.get<bool>("gates.extra_covariance") && receipt.get<bool>("gates.strong_divergence"),"V2 independent native/extra-point certificate rejected");
+                Require(receipt.get<std::string>("base_sha256")==RANSWallR3::Hash(base),"V2 native receipt immutable base differs");
+                const auto reportFile=receipt.get<std::string>("probe_output_file");Require(RANSWallR3::HashFile(reportFile)==receipt.get<std::string>("probe_output_sha256"),"V2 native report content changed");
+                boost::property_tree::ptree native;boost::property_tree::read_json(reportFile,native);
+                Require(native.get<std::string>("state_sha256")==RANSWallR3::Hash(m_state) && native.get<std::string>("outer_initializer_contract.base_sha256")==RANSWallR3::Hash(base),"V2 native report state/base differs");
+
+                Require(RANSWallR3::HashFile(cert.get<std::string>("validation_probe.path"))==cert.get<std::string>("validation_probe.sha256"),"V2 validation probe identity differs");
+                Require(!cert.get<std::string>("source_revision").empty() && !cert.get_child("source_hashes").empty(),"V2 startup missing source provenance");
+                m_data.fixedBoundary=m_patch->FixedReferenceBoundary(base);m_patch->RestoreReference(reference,defect,0,m_data,0);
+                m_patch->ValidateOuterInitializer(m_state,base,m_data,true);
+                Require(cert.get<std::string>("scalar_envelope_version")=="OuterRatioV1:0.5:2:zero-inlet-interface" && cert.get<std::string>("basis_sha256").size()==64 && cert.get<std::string>("context_sha256").size()==64,"V2 startup basis/envelope provenance missing or incompatible");
+                const auto allowed=m_patch->InitializerRows(base);std::set<int> rows;
+                auto checkRows=[&](const std::string &name,const std::vector<int> &actual){std::vector<int> declared;for(const auto &x:cert.get_child("allowed_rows."+name))declared.push_back(x.second.get_value<int>());Require(declared==actual,"V2 native permitted rows differ");rows.insert(actual.begin(),actual.end());};
+                checkRows("velocity_rows",allowed.velocity);checkRows("outer_k_rows",allowed.k);checkRows("outer_epsilon_rows",allowed.epsilon);
+                Vector frozen;for(int i=0;i<base.size();++i)if(!rows.count(i))frozen.push_back(base[i]);Require(RANSWallR3::Hash(frozen)==cert.get<std::string>("frozen_base_rows_sha256"),"V2 immutable frozen-row identity differs");
+
+            }
+            else
+            {m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);m_patch->SetReference(m_state,m_data,0,0);}
             const auto check=m_patch->CompleteRestrictedAudit(m_state,m_state,0,0,m_data);
             Require(check.at("accepted_awf_hard_admissible")==Vector({1.}) && check.at("admissible")==Vector({1.}) && check.at("accepted_awf_scalar_domain").at(8)<=1e-10,"certified startup independent complete native gate failed");
             const auto &weak=check.at("coupled_norms");for(int b=m_patch->InnerPressure();b<weak.size();++b)
                 Require(weak[b]<1e-9,"certified startup violates native algebraic/boundary constraints");
             Require(m_patch->InitializationWork()==Vector({0.,0.}),"certified startup performed forbidden Lift");
-            m_ivpIdentity=RANSWallSolveJson::Object({{"mode",RANSWallSolveJson::Quote("CertifiedNeutralStartupV1")},
+            m_ivpIdentity=RANSWallSolveJson::Object({{"mode",RANSWallSolveJson::Quote(startupVersion)},
                 {"certificate_sha256",RANSWallSolveJson::Quote(startupHash)},{"seed_sha256",RANSWallSolveJson::Quote(RANSWallR3::Hash(m_state))},
                 {"fresh_native_histories","true"},{"optimizer_rerun","false"},{"lift_or_projection","false"}});
         }
         else m_state=m_patch->PrescribedInflow()?m_patch->FiniteInflowSeed():
             (m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time));
-        if(m_neutral || m_patch->PrescribedInflow())m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
-        else if(m_patch->Mapped() || m_patch->MatchingEnabled() || m_patch->CappedDestruction())
+        if((m_neutral || m_patch->PrescribedInflow()) && !coupledStartup)m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
+        else if(!coupledStartup && (m_patch->Mapped() || m_patch->MatchingEnabled() || m_patch->CappedDestruction()))
             m_state=m_patch->Lift(m_state,m_time,m_data);
-        if(m_neutral && m_patch->MatchingEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
+        if(!coupledStartup && m_neutral && m_patch->MatchingEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
         if(m_patch->PrescribedInflow())
         {
             const auto domain=m_patch->ScalarDomain(m_state,m_time,m_data);
             Require(domain.admissible,"finite-profile native initialization: "+m_patch->ScalarDomainJSON(domain));
         }
-        m_patch->SetReference(m_state,m_data,m_time,m_eta);m_initial=m_state;
+        if(!coupledStartup)m_patch->SetReference(m_state,m_data,m_time,m_eta);
+        m_initial=m_state;
         const auto residualStart=std::chrono::steady_clock::now();
         m_rawNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data,false),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
         rawResidualSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-residualStart).count();

@@ -692,4 +692,129 @@ std::string RANSWallEvolutionPatch::CompositeChecks(const Vector &s,double time,
         {"epsilon_free_rows",J::Numbers(Vector(epsilon.rows.begin(),epsilon.rows.end()))},{"governing_solves","0"},{"physical_commits","0"},
         {"diagnostic_block_assemblies","3"},{"projection_fixture_calls","1"},{"selected_state_sha256",J::Quote(before)}});
 }
+RANSWallEvolutionPatch::OuterInitializerRows RANSWallEvolutionPatch::InitializerRows(const Vector &base) const
+{
+    Require(base.size()==Size(),"initializer base size");OuterInitializerRows out;
+    const auto essential=FixedReferenceBoundary(base);std::set<int> fixedK,fixedE;
+    const auto map=fields[K()]->Field()->GetLocalToGlobalMap();
+    for(int e=0;e<fields[K()]->Elements().size();++e)if(fields[K()]->Elements()[e].upper[2]<=m_parameters.geometry.height+1e-13)
+    {const int start=fields[K()]->Field()->GetCoeff_Offset(e),n=fields[K()]->Field()->GetExp(e)->GetNcoeffs();for(int j=0;j<n;++j)fixedK.insert(map->GetLocalToGlobalMap(start+j));}
+    for(int id:m_traceIds)fixedE.insert(id);
+    for(int b=0;b<InnerPressure();++b)for(int i=0;i<size[b];++i)
+    {
+        const int row=offset[b]+i;if(essential.count(row))continue;
+        if(b<K())out.velocity.push_back(row);
+        else if(b==K() && !fixedK.count(i))out.k.push_back(row);
+        else if(b==Epsilon() && !fixedE.count(i))out.epsilon.push_back(row);
+    }
+    return out;
+}
+
+std::string RANSWallEvolutionPatch::ValidateOuterInitializer(const Vector &s,const Vector &base,const RANSWallEvolutionData &data,bool coupled) const
+{
+    Require(s.size()==Size() && base.size()==Size(),"coupled initializer size mismatch");
+    const auto rows=InitializerRows(base);std::set<int> permitted(rows.velocity.begin(),rows.velocity.end());
+    if(coupled){permitted.insert(rows.k.begin(),rows.k.end());permitted.insert(rows.epsilon.begin(),rows.epsilon.end());}
+    int changed=0;for(int i=0;i<Size();++i)
+    {Require(std::isfinite(s[i]),"nonfinite initializer coefficient");if(!permitted.count(i))Require(std::memcmp(&s[i],&base[i],sizeof(double))==0,"coupled initializer changed frozen coefficient bits at "+std::to_string(i));else if(std::memcmp(&s[i],&base[i],sizeof(double)))++changed;}
+    double boundary=0,endpoint=0,trace=0;
+    for(int b=0;b<InnerPressure();++b)for(const auto &q:SurfaceView(b,0,lower[0],-1,12))boundary=std::max(boundary,std::abs(q.test.Value(s,offset[b])-q.test.Value(base,offset[b])));
+    for(const auto &q:SurfaceView(K(),2,m_parameters.geometry.height,-1,12))endpoint=std::max(endpoint,std::abs(q.test.Value(s,offset[K()])-q.test.Value(base,offset[K()])));
+    for(const auto &q:SurfaceView(Epsilon(),2,m_parameters.geometry.height,-1,12))trace=std::max(trace,std::abs(q.test.Value(s,offset[Epsilon()])-q.test.Value(base,offset[Epsilon()])));
+    Require(boundary==0 && endpoint==0 && trace==0,"coupled initializer changed inlet, endpoint or transported trace functional");
+    const auto d0=ScalarDomain(base,0,data,true),d1=ScalarDomain(s,0,data,true);
+    Require(d0.admissible && d1.admissible,"coupled initializer scalar domain rejected");
+    Require(d0.observations.size()==d1.observations.size(),"fixed K initializer changed inventory cardinality");
+    double lowK=1e300,highK=0,lowE=1e300,highE=0;int locations=0;
+    for(int i=0;i<d0.observations.size();++i)
+    {
+        const auto &a=d0.observations[i],&b=d1.observations[i];
+        Require(a.coordinate==b.coordinate && a.geometry==b.geometry && a.side==b.side && a.tangentialSide==b.tangentialSide && a.inventory==b.inventory && a.dependentTrace==b.dependentTrace,"fixed K initializer moved inventory/profile geometry");
+        if(a.dependentTrace)Require(std::memcmp(&a.value,&b.value,sizeof(double))==0,"coupled initializer changed dependent epsilon trace");
+        if(!a.dependentTrace && a.coordinate[2]>m_parameters.geometry.height && (a.block==K() || a.block==Epsilon()))
+        {const double ratio=b.value/a.value;if(a.block==K()){lowK=std::min(lowK,ratio);highK=std::max(highK,ratio);}else{lowE=std::min(lowE,ratio);highE=std::max(highE,ratio);}++locations;}
+    }
+    Require(lowK>=.5-1e-12 && highK<=2+1e-12 && lowE>=.5-1e-12 && highE<=2+1e-12,"coupled initializer scalar envelope rejected");
+    return J::Object({{"version",J::Quote("OuterScalarInitializerV1")},{"base_sha256",J::Quote(RANSWallR3::Hash(base))},{"state_sha256",J::Quote(RANSWallR3::Hash(s))},{"velocity_rows",J::Numbers(rows.velocity)},{"outer_k_rows",J::Numbers(rows.k)},{"outer_epsilon_rows",J::Numbers(rows.epsilon)},
+        {"changed_permitted_rows",J::Number(changed)},{"frozen_bits_preserved","true"},{"boundary_from_immutable_base","true"},{"inlet_functional_difference",J::Number(boundary)},{"endpoint_difference",J::Number(endpoint)},{"trace_difference",J::Number(trace)},
+        {"K_envelope",J::Numbers(Vector{lowK,highK})},{"epsilon_envelope",J::Numbers(Vector{lowE,highE})},{"fixed_inventory_locations",J::Number(locations)},{"moving_inventory_unchanged","true"}});
+}
+
+std::string RANSWallEvolutionPatch::CoupledInitializerContext(const Vector &s,const RANSWallEvolutionData &data,const WallMatrix &directions,const std::string &path) const
+{
+    Require(Composite() && AnalyticalNeutralInflow() && m_seedM && directions.size()==32,"H2e needs corrected seed and 32 saved native directions");
+    const auto started=std::chrono::steady_clock::now();const auto allowed=InitializerRows(s);WallMatrix all=directions;double continuity=0,frozen=0;const int nv=32;
+    for(const auto &d:directions)
+    {
+        Require(d.size()==Size(),"saved direction dimension");Vector f(m_seedFree.size());for(int i=0;i<f.size();++i)f[i]=d[m_seedFree[i]];
+        for(const auto &q:m_seedQ)continuity=std::max(continuity,std::abs(std::inner_product(q.begin(),q.end(),f.begin(),0.)));
+        const std::set<int> free(m_seedFree.begin(),m_seedFree.end());for(int i=0;i<Size();++i)if(!free.count(i))frozen=std::max(frozen,std::abs(d[i]));
+    }
+    Require(continuity<1e-9 && frozen==0,"saved direction violates frozen rows or continuity");
+    const double H=m_parameters.geometry.height,span=upper[0]-lower[0];
+    for(int b:{K(),Epsilon()})for(double cx:{-.075,-.025,.025,.18})for(double height:{.08,.35})
+    {
+        const double width=cx==.18?.2:.065;Vector d(Size());
+        auto projected=PhysicalProject(b,[&](const RANSWallCoordinate &p,double)
+        {if(p[2]<=H)return 0.;const double t=(p[0]-lower[0])/span,r=(p[2]-H)/height;return Point(b,p).Value(s,offset[b])*t*t*std::exp(-std::pow((p[0]-cx)/width,2))*r*r*std::exp(-r);},0.);
+        const auto &rows=b==K()?allowed.k:allowed.epsilon;for(int i:rows)d[i]=projected[i-offset[b]];all.push_back(std::move(d));
+    }
+    auto binary=[&](const std::string &name,const WallMatrix &a)
+    {std::ofstream out(path+"/"+name+".f64",std::ios::binary);Require(out.good(),"cannot create H2e binary context");for(const auto &r:a)out.write(reinterpret_cast<const char*>(r.data()),r.size()*sizeof(double));out.close();Require(out.good(),"H2e binary write failed");return J::Object({{"file",J::Quote(name+".f64")},{"shape",J::Numbers(std::vector<int>{int(a.size()),int(a.empty()?0:a[0].size())})},{"sha256",J::Quote(RANSWallR3::HashFile(path+"/"+name+".f64"))},{"dtype",J::Quote("<f8")}});};
+    WallMatrix gram(nv,Vector(nv));for(int i=0;i<nv;++i){Vector f(m_seedFree.size());for(int j=0;j<f.size();++j)f[j]=all[i][m_seedFree[j]];auto mf=Multiply(m_seedMass,f);for(int k=0;k<nv;++k)for(int j=0;j<f.size();++j)gram[i][k]+=all[k][m_seedFree[j]]*mf[j];}
+    WallMatrix div(nv+1,Vector(nv+1)),strain=div,roof=div,sg(16,Vector(16)),smooth=sg;double volume=0,outerVolume=0,maxDiv=0;
+    for(const auto &q:Quadrature(0,16))
+    {
+        const bool inner=fields[0]->Elements()[q.element].upper[2]<=H;Vector d(nv+1);std::vector<RANSTensor> S(nv+1);
+        for(int j=0;j<=nv;++j){const auto &v=j?all[j-1]:s;RANSTensor g{};for(int a=0;a<2;++a)g[PhysicalAxis(a)]=q.Gradient(v,offset[a]);d[j]=g[0][0]+g[2][2];for(int a=0;a<3;++a)for(int b=0;b<3;++b)S[j][a][b]=g[a][b]+g[b][a];}
+        volume+=q.weight;maxDiv=std::max(maxDiv,std::abs(d[0]));
+        for(int i=0;i<=nv;++i)for(int j=0;j<=nv;++j)div[i][j]+=q.weight*d[i]*d[j];
+        if(!inner)
+        {
+            outerVolume+=q.weight;const auto ref=RegularizedReferenceAt(q.coordinate);for(int a=0;a<3;++a)for(int b=0;b<3;++b)S[0][a][b]-=ref.referenceStrain[a][b];
+            for(int i=0;i<=nv;++i)for(int j=0;j<=nv;++j)for(int a=0;a<3;++a)for(int b=0;b<3;++b)strain[i][j]+=q.weight*ref.gamma*S[i][a][b]*S[j][a][b];
+            for(int block:{K(),Epsilon()})
+            {const auto row=GeometryPoint(block,q.geometry,q.coordinate);const double base=row.Value(s,offset[block]);const auto bg=row.Gradient(s,offset[block]);Vector v(8);std::vector<RANSVector> g(8);const int off=block==K()?0:8;
+             for(int i=0;i<8;++i){v[i]=row.Value(all[nv+off+i],offset[block])/base;g[i]=row.Gradient(all[nv+off+i],offset[block]);for(int a=0;a<3;++a)g[i][a]=g[i][a]/base-v[i]*bg[a]/base;}
+             for(int i=0;i<8;++i)for(int j=0;j<8;++j){sg[off+i][off+j]+=q.weight*v[i]*v[j];for(int a=0;a<3;++a)smooth[off+i][off+j]+=q.weight*.02*.02*g[i][a]*g[j][a];}}
+        }
+    }
+    for(auto &r:sg)for(auto &v:r){v/=outerVolume;}
+    for(auto &r:smooth)for(auto &v:r){v/=outerVolume;}
+    for(const auto &f:SurfaceView(0,2,upper[2],1,16)){Vector d(nv+1);for(int j=0;j<=nv;++j)d[j]=f.test.Gradient(j?all[j-1]:s,offset[0])[0];double area=0;for(double v:f.area)area+=v*v;for(int i=0;i<=nv;++i)for(int j=0;j<=nv;++j)roof[i][j]+=f.weight*std::sqrt(area)*d[i]*d[j];}
+    std::vector<std::pair<std::string,std::string>> files{{"base",binary("base",WallMatrix{s})},{"basis",binary("basis",all)},{"mass_gram",binary("mass_gram",gram)},{"divergence",binary("divergence",div)},{"strain",binary("strain",strain)},{"roof",binary("roof",roof)},{"scalar_gram",binary("scalar_gram",sg)},{"scalar_smoothness",binary("scalar_smoothness",smooth)}};
+    // Every original membership is retained; only identical native evaluations
+    // share numerical storage. The key retains both sided identities and the
+    // actual/dependent epsilon context, including signed binary64 coordinates.
+    const auto domain=ScalarDomain(s,0,data,true);Require(domain.admissible,"H2e base scalar gate");
+    std::map<std::string,int> seen,families;std::vector<std::string> familyNames;std::ofstream points(path+"/observations.f64",std::ios::binary),membership(path+"/membership.i32",std::ios::binary);int n=0,total=0;const int width=18+nv*6+16;
+    for(const auto &p:domain.observations)
+    {
+        if(p.block!=K() && p.block!=Epsilon() && !p.dependentTrace)continue;
+        const auto origin=ResolveObservation(p);const auto &row=*origin.velocity;
+        std::ostringstream key;key<<row.geometry<<':'<<row.element<<':'<<origin.radialSide<<':'<<origin.tangentialSide<<':'<<p.dependentTrace<<':'<<p.block<<':'<<RANSWallR3::Hash(p.coordinate.data(),3*sizeof(double))<<':'<<RANSWallR3::Hash(&p.value,p.dependentTrace?sizeof(double):0);
+        auto it=seen.find(key.str());int id;
+        if(it!=seen.end())id=it->second;
+        else
+        {
+            id=n++;seen.emplace(key.str(),id);Vector r;for(double v:p.coordinate)r.push_back(v);for(double v:Physical(p.coordinate))r.push_back(v);
+            RANSTensor g{};for(int a=0;a<2;++a)g[PhysicalAxis(a)]=row.Gradient(s,offset[a]);for(int a:{0,2})for(int b:{0,2})r.push_back(g[a][b]);for(int a=0;a<2;++a)r.push_back(row.Value(s,offset[a]));
+            const auto kr=GeometryPoint(K(),row.geometry,p.coordinate);double e=0,nt=0;if(origin.inner)nt=StateProfile(s,p.coordinate,0,data)->Original().EddyViscosity(Distance(p.coordinate));else e=p.dependentTrace?p.value:GeometryPoint(Epsilon(),row.geometry,p.coordinate).Value(s,offset[Epsilon()]);
+            r.insert(r.end(),{kr.Value(s,offset[K()]),e,nt,double(origin.inner),double(p.block==K() || p.dependentTrace),double(p.dependentTrace)});
+            for(int j=0;j<nv;++j){for(int a=0;a<2;++a){const auto grad=row.Gradient(all[j],offset[a]);r.push_back(grad[0]);r.push_back(grad[2]);}for(int a=0;a<2;++a)r.push_back(row.Value(all[j],offset[a]));}
+            for(int b:{K(),Epsilon()})for(int j=0;j<8;++j)r.push_back(origin.inner || (b==Epsilon() && p.dependentTrace)?0.:GeometryPoint(b,row.geometry,p.coordinate).Value(all[nv+(b==K()?0:8)+j],offset[b]));
+            Require(r.size()==width,"H2e record width");points.write(reinterpret_cast<const char*>(r.data()),r.size()*sizeof(double));
+        }
+        int family;if(families.count(p.inventory))family=families[p.inventory];else{family=familyNames.size();families[p.inventory]=family;familyNames.push_back(J::Quote(p.inventory));}
+        const std::int32_t m[]{total++,id,family,row.geometry,row.element,origin.radialSide,origin.tangentialSide,p.block,p.dependentTrace};membership.write(reinterpret_cast<const char*>(m),sizeof(m));
+    }
+    points.close();membership.close();Require(points.good() && membership.good(),"H2e observation output failed");
+    files.push_back({"observations",J::Object({{"file",J::Quote("observations.f64")},{"shape",J::Numbers(std::vector<int>{n,width})},{"dtype",J::Quote("<f8")},{"sha256",J::Quote(RANSWallR3::HashFile(path+"/observations.f64"))}})});
+    files.push_back({"membership",J::Object({{"file",J::Quote("membership.i32")},{"shape",J::Numbers(std::vector<int>{total,9})},{"dtype",J::Quote("<i4")},{"sha256",J::Quote(RANSWallR3::HashFile(path+"/membership.i32"))}})});
+    return J::Object({{"version",J::Quote("NativeOuterScalarContextV1")},{"base_sha256",J::Quote(RANSWallR3::Hash(s))},{"files",J::Object(files)},{"families",J::List(familyNames)},
+        {"rows",J::Object({{"velocity",J::Numbers(allowed.velocity)},{"k",J::Numbers(allowed.k)},{"epsilon",J::Numbers(allowed.epsilon)}})},{"homogeneous_continuity_max",J::Number(continuity)},{"frozen_direction_max",J::Number(frozen)},
+        {"volume",J::Number(volume)},{"outer_volume",J::Number(outerVolume)},{"base_divergence_L2",J::Number(std::sqrt(div[0][0]))},{"base_maximum_quadrature_divergence",J::Number(maxDiv)},
+        {"seconds",J::Number(std::chrono::duration<double>(std::chrono::steady_clock::now()-started).count())},{"governing_solves","0"},{"physical_commits","0"}});
+}
+
 }

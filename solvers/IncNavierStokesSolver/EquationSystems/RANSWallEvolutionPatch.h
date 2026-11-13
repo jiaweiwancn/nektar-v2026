@@ -96,6 +96,10 @@ public:
     double CompositeSeedStreamfunction(const RANSWallCoordinate&,int footSide=0) const;
     std::string CompositeSeedDerivativeChecks() const;
     std::string CompositeFeasibilityData(const Vector&,const RANSWallEvolutionData&) const;
+    struct OuterInitializerRows { std::vector<int> velocity,k,epsilon; };
+    OuterInitializerRows InitializerRows(const Vector&) const;
+    std::string CoupledInitializerContext(const Vector&,const RANSWallEvolutionData&,const WallMatrix&,const std::string&) const;
+    std::string ValidateOuterInitializer(const Vector&,const Vector&,const RANSWallEvolutionData&,bool) const;
     std::string FlatSpatialDiagnostic(const Vector&,const RANSWallEvolutionData&) const;
     const std::string &CompositeSeedInfo() const { return m_compositeSeedInfo; }
     std::string CompositeChecks(const Vector&,double,const RANSWallEvolutionData&) const;
