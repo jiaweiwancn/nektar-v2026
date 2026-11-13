@@ -700,7 +700,9 @@ int main(int argc,char **argv)
             double minimum=1e300,maximum=-1e300;int samples=0;
             for(int e=0;e<full->GetExpSize();++e)
             {
-                const auto exp=full->GetExp(e);const auto jac=exp->GetGeomFactors()->GetJac(exp->GetPointsKeys());
+                // Expansion geometric factors are already evaluated on its
+                // native integration grid (regular elements have one value).
+                const auto exp=full->GetExp(e);const auto jac=exp->GetGeomFactors()->GetJac();
                 for(int j=0;j<jac.size();++j){minimum=std::min(minimum,jac[j]);maximum=std::max(maximum,jac[j]);++samples;}
             }
             Array<OneD,NekDouble> one(full->GetTotPoints(),1.);

@@ -101,8 +101,18 @@ def main():
             root=ET.parse(xml).getroot();curved_geometry(root,radial,amp)
             set_parameter(root,'RANSWallHeight',H);set_parameter(root,'RANSWallSampleHeight',H);set_parameter(root,'RANSWallTailStart',H)
             set_parameter(root,'RANSOpenDisplacement',.0875);set_info(root,'RANSWallBoundaryPolicy','AcceptedRichardsNorrisFlatV1');set_info(root,'RANSOpenTop','RichardsNorris2011V1')
+            set_info(root,'RANSOpenReference','NeutralCompositeV1');set_info(root,'RANSWallReference','Functions');set_info(root,'RANSOpenBackflow','RejectV1')
+            # A geometric session, not an executable physical candidate. In
+            # particular, never retain an unrelated default h_s or K as if it
+            # solved the failed displaced A95 fit. Physical data are bound in
+            # the shared prospective reference definition above.
+            parameters=root.find('CONDITIONS/PARAMETERS')
+            unused={'RANSWALLROUGHNESS','RANSWALLFRICTIONVELOCITY','K0','KINVIS','QSTAR','KAPPA','RANSKAPPA'}
+            for node in list(parameters):
+                if node.text.split('=',1)[0].strip().upper() in unused:parameters.remove(node)
             for f in list(root.findall('CONDITIONS/FUNCTION')):root.find('CONDITIONS').remove(f)
-            write(root,xml);row=dict(xml_sha256=sha(xml),degree=degree,pressure_degree=degree-2,geometry=kind,reference_definition_sha256=sha(a.output/'reference-definition.json'))
+            write(root,xml);row=dict(xml_sha256=sha(xml),degree=degree,pressure_degree=degree-2,geometry=kind,reference_definition_sha256=sha(a.output/'reference-definition.json'),
+                session_scope='mesh and field layout only; not runnable physical input; missing inadmissible h_s/K inputs are deliberate')
             if kind=='flat':
                 packet,e=probe(a.runtime,folder,dict(operation='native_layout_inventory'),'count')
                 require(e['exit_code']==0,'actual native flat count failed');row.update(native_count=packet,execution=e,count_packet_sha256=sha(folder/'count.json'))
