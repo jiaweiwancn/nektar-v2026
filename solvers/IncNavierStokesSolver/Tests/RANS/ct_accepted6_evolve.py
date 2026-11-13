@@ -35,7 +35,9 @@ def main():
     for key in ('runtime','contract','admission','output'):p.add_argument('--'+key,type=Path,required=True)
     p.add_argument('--model',choices=['A95','A93','E94E95'],default='A95')
     p.add_argument('--degree',type=int,choices=[3,4],default=4)
-    p.add_argument('--dt',type=float,choices=[.004,.002,.001],default=.002)
+    # CT7 authorizes one separately contracted finer member. Old CT6
+    # requests, histories and failed consistency receipts remain immutable.
+    p.add_argument('--dt',type=float,choices=[.004,.002,.001,.0005],default=.002)
     p.add_argument('--target',type=float,default=.016)
     p.add_argument('--prepared',type=Path,help='explicit reuse of a sealed zero-step preparation, never an evolved state')
     a=p.parse_args();require(0<a.target<=.016,'CT6 bounded horizon exceeded')
