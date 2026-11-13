@@ -117,7 +117,7 @@ public:
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart,double time,
         const RANSWallEvolutionData &data) const;
     bool UniformEPFlat() const { return m_uniformEP; }
-    bool AcceptedAWF() const { return m_formulation=="CLSCalibratedBudgetAWF"; }
+    bool AcceptedAWF() const { return m_formulation=="CLSCalibratedBudgetAWF" || m_formulation=="StandardCalibratedBudgetAWF"; }
     const std::string &FormulationName() const { return m_formulation; }
     bool MatchingEnabled() const { return m_transitionEnabled || AcceptedAWF(); }
     std::string WallPolicyName() const { return AcceptedAWF()?m_formulation:(m_uniformEP?"UniformEPFlat-v1":(m_transitionEnabled?"Upstream":"Fixed")); }
@@ -347,6 +347,9 @@ public:
     Vector LateInnerKPerturbation(const Vector &state,double amplitude,double time,
         const RANSWallEvolutionData &data,std::string &report) const;
     std::string FormulationMetadata() const;
+    std::string ModelMetadata() const;
+    std::string FrozenConstitutiveData(const Vector&,const RANSWallEvolutionData&,const std::string&) const;
+    bool CalibratedStandard() const { return m_parameters.model.Model()==SolverUtils::RANSModel::StandardKEpsilon && m_parameters.modelCalibration=="StandardNeutralCalibratedV1"; }
     RANSWallGlobalPoint SampleKRow(const RANSWallCoordinate &anchor) const;
     // Exact physical mass restricted to the supplied global free-k rows.
     // Read-only access also supports native functional/projection verification.

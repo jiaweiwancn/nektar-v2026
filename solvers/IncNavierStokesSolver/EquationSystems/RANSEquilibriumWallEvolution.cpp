@@ -8,6 +8,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallPhysicsSignature.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallModelSpec.h>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <LibUtilities/BasicUtils/FieldIO.h>
 #include <SpatialDomains/MeshGraphIO.h>
@@ -121,9 +122,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         m_session->LoadParameter("RANSWallChi",parameters.chi,1.);
         m_session->LoadParameter("RANSWallTangentialOrder",parameters.tangentialOrder,8);
         m_session->LoadParameter("RANSWallNormalOrder",parameters.normalOrder,16);
-        std::string model;m_session->LoadSolverInfo("TurbulenceModel",model,"CLSHighRe");
-        Require(model=="CLSHighRe" || model=="StandardKEpsilon","invalid evolution turbulence model");
-        if(model=="StandardKEpsilon")parameters.model=SolverUtils::RANSNeutralReference::Standard();
+        LoadRANSWallModel(m_serialSession,parameters);
         m_patch=std::make_shared<RANSWallEvolutionPatch>(m_serialSession,graph,m_session->GetComm(),parameters,
             LoadRANSWallNormalMap(m_session,dim,parameters.geometry.height));
         std::string coordinates;m_session->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
@@ -1063,6 +1062,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     if(m_patch->PrescribedInflow())out<<",\"finite_inflow_reference\":"<<m_patch->FiniteInflowChecks(m_state);
     if(m_patch->OpenBoundary())out<<",\"developing_boundary\":"<<m_patch->DevelopingChecks(m_state,m_time,m_data);
     out<<",\"attempt_packet_status\":"<<m_patch->AttemptPacketStatus()<<",\"rollback_receipt\":"<<m_rollbackReceipt;
+    out<<",\"model_specification\":"<<m_patch->ModelMetadata();
     out<<",\"wall_formulation\":"<<m_patch->FormulationMetadata()<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())
        <<",\"audit_revision\":"<<Quoted(m_patch->AuditRevision())
        <<",\"evaluation_reuse\":"<<m_patch->EvaluationReuseJSON()

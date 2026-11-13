@@ -200,12 +200,13 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(m_formulation=="EPAWF" || AcceptedAWF(),"unknown wall formulation");
     if(AcceptedAWF())
     {
-        Require(m_dimension==2 && (!Mapped() || Composite()) && m_comm->GetSize()==1 && parameters.model.Model()==RANSModel::CLSHighRe,
+        Require(m_dimension==2 && (!Mapped() || Composite()) && m_comm->GetSize()==1 && (parameters.model.Model()==RANSModel::CLSHighRe || CalibratedStandard()),
             "CLSCalibratedBudgetAWF evolution currently supports serial flat 2D CLS only");
         Require(parameters.geometry.sampleHeight==parameters.geometry.height && parameters.geometry.tailStart==parameters.geometry.height && parameters.chi==0,
             "CLSCalibratedBudgetAWF requires endpoint zK=zm=H and no chi policy");
+        Require((m_formulation=="StandardCalibratedBudgetAWF")==CalibratedStandard(),"wall formulation/model calibration mismatch");
         m_wallParameters=CalibratedAWFParameters(parameters.model);
-        m_options.formulation=AWFProfileFormulation::CLSCalibratedBudgetAWF;
+        m_options.formulation=CalibratedStandard()?AWFProfileFormulation::StandardCalibratedBudgetAWF:AWFProfileFormulation::CLSCalibratedBudgetAWF;
     }
     session->LoadSolverInfo("RANSWallBoundaryPolicy",m_boundaryPolicy,"CompatibilityV1");
     Require(m_boundaryPolicy=="CompatibilityV1" || OpenBoundary(),"unknown wall boundary policy");
@@ -520,12 +521,13 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     m_solver=std::make_shared<SolverCache>();m_solver->free.resize(Gauge());m_solver->massFactors.resize(Gauge());
     InitialiseRobust(session);
     Require(!Composite() || (AcceptedAWF() && PrescribedInflow() && OpenBoundary() &&
-        PimpleSingleSweep() && VariantName()=="Regularized" && InnerStressName()=="Linear" &&
-        m_robust.beta==.4 && m_regularizationScale==1. && m_regularizationGamma==0.),
+        PimpleSingleSweep() && InnerStressName()=="Linear" &&
+        ((VariantName()=="Regularized" && m_robust.beta==.4 && m_regularizationScale==1. && m_regularizationGamma==0.) ||
+         (CalibratedStandard() && VariantName()=="Original" && m_robust.beta==1. && m_regularizationScale==0. && m_regularizationGamma==0.))),
         "CompositeHillV1 is restricted to the finite/open Regularized(beta=.4,Gamma=1,gamma0=0)/Linear budget-AWF one-sweep pilot");
     if(SegregatedPicard() || PimpleSingleSweep())
         Require(m_dimension==2 && (!Mapped() || Composite()) && ((m_transitionEnabled && m_cappedDestruction) || (AcceptedAWF() && !m_cappedDestruction)) &&
-            m_parameters.model.Model()==RANSModel::CLSHighRe && !m_solveDiagnosticReplay,
+            (m_parameters.model.Model()==RANSModel::CLSHighRe || (AcceptedAWF() && CalibratedStandard())) && !m_solveDiagnosticReplay,
             "SegregatedPicard requires flat 2D upstream CLS with capped destruction and no legacy replay");
     Vector seed(Size());for(int i=0;i<size[K()];++i)seed[offset[K()]+i]=parameters.model.Q()*.16*m_constants[K()][i];
     Refresh(seed);for(const auto &ray:m_rays)for(const auto &q:ray.points)m_bodyInner.push_back(q);
@@ -1647,6 +1649,7 @@ std::string RANSWallEvolutionPatch::Signature() const
     }
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();
+    if(CalibratedStandard())text<<":model="<<ModelMetadata();
     if(Mapped())text<<':'<<GeometrySignature();
     if(m_innerStress==RANSWallInnerStressModel::SaturatedR2)
         text<<":M8-R2:InnerStress:SaturatedR2:v1:rho=0.8";

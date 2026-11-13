@@ -772,7 +772,7 @@ std::string RANSWallEvolutionPatch::CoupledInitializerContext(const Vector &s,co
         if(!inner)
         {
             outerVolume+=q.weight;const auto ref=RegularizedReferenceAt(q.coordinate);for(int a=0;a<3;++a)for(int b=0;b<3;++b)S[0][a][b]-=ref.referenceStrain[a][b];
-            for(int i=0;i<=nv;++i)for(int j=0;j<=nv;++j)for(int a=0;a<3;++a)for(int b=0;b<3;++b)strain[i][j]+=q.weight*ref.gamma*S[i][a][b]*S[j][a][b];
+            for(int i=0;i<=nv;++i)for(int j=0;j<=nv;++j)for(int a=0;a<3;++a)for(int b=0;b<3;++b)strain[i][j]+=q.weight*(CalibratedStandard()?m_parameters.model.Kappa()*m_robustUstar*InflowHeight(Physical(q.coordinate)):ref.gamma)*S[i][a][b]*S[j][a][b];
             for(int block:{K(),Epsilon()})
             {const auto row=GeometryPoint(block,q.geometry,q.coordinate);const double base=row.Value(s,offset[block]);const auto bg=row.Gradient(s,offset[block]);Vector v(8);std::vector<RANSVector> g(8);const int off=block==K()?0:8;
              for(int i=0;i<8;++i){v[i]=row.Value(all[nv+off+i],offset[block])/base;g[i]=row.Gradient(all[nv+off+i],offset[block]);for(int a=0;a<3;++a)g[i][a]=g[i][a]/base-v[i]*bg[a]/base;}
@@ -816,7 +816,7 @@ std::string RANSWallEvolutionPatch::CoupledInitializerContext(const Vector &s,co
     block("chart",0,3,{3});block("physical",3,3,{3});block("gradient",6,4,{2,2});block("velocity",10,2,{2});
     for(const auto &v:std::vector<std::pair<std::string,int>>{{"k",12},{"epsilon",13},{"inner_nu_t",14},{"inner",15},{"covariance",16},{"dependent_epsilon",17}})block(v.first,v.second,1,{1});
     block("velocity_basis",18,nv*6,{nv,6});block("k_basis",18+nv*6,8,{8});block("epsilon_basis",18+nv*6+8,8,{8});
-    return J::Object({{"version",J::Quote(versionTwo?"NativeOuterScalarContextV2":"NativeOuterScalarContextV1")},{"direction_counts",J::Object({{"velocity",J::Number(nv)},{"k","8"},{"epsilon","8"}})},{"observation_blocks",J::Object(blocks)},{"native_coefficient_offsets",J::Numbers(offset)},{"native_coefficient_sizes",J::Numbers(size)},
+    return J::Object({{"model_specification",ModelMetadata()},{"initializer_strain_weight",J::Quote("kappa*u_tau*physical-incoming-height")},{"version",J::Quote(versionTwo?"NativeOuterScalarContextV2":"NativeOuterScalarContextV1")},{"direction_counts",J::Object({{"velocity",J::Number(nv)},{"k","8"},{"epsilon","8"}})},{"observation_blocks",J::Object(blocks)},{"native_coefficient_offsets",J::Numbers(offset)},{"native_coefficient_sizes",J::Numbers(size)},
         {"geometry_identity",J::Quote(GeometrySignature())},{"inventory_identity",J::Quote(PimpleKBoundSignature())},{"reference_sha256",J::Quote(RANSWallR3::Hash(Reference()))},{"physical_mass_conditioning",J::Object({{"gram",J::Quote("mass_gram")},{"relative_rank_threshold","1e-10"},{"native_continuity_rank",J::Number(m_seedQ.size())}})},{"base_sha256",J::Quote(RANSWallR3::Hash(s))},{"files",J::Object(files)},{"families",J::List(familyNames)},
         {"rows",J::Object({{"velocity",J::Numbers(allowed.velocity)},{"k",J::Numbers(allowed.k)},{"epsilon",J::Numbers(allowed.epsilon)}})},{"homogeneous_continuity_max",J::Number(continuity)},{"frozen_direction_max",J::Number(frozen)},
         {"volume",J::Number(volume)},{"outer_volume",J::Number(outerVolume)},{"base_divergence_L2",J::Number(std::sqrt(div[0][0]))},{"base_maximum_quadrature_divergence",J::Number(maxDiv)},
@@ -888,6 +888,69 @@ std::string RANSWallEvolutionPatch::InitializerNativeData(const Vector &base,con
     return J::Object({{"version",J::Quote("NativeInitializerRieszV1")},{"files",J::Object(files)},{"free_rows",J::Numbers(m_seedFree)},{"velocity_field_size",J::Number(size[0])},{"elements",J::List(elements)},{"witnesses",J::List(results)},
         {"base_sha256",J::Quote(RANSWallR3::Hash(base))},{"start_sha256",J::Quote(RANSWallR3::Hash(start))},{"geometry_identity",J::Quote(GeometrySignature())},{"inventory_identity",J::Quote(PimpleKBoundSignature())},
         {"reference_sha256",J::Quote(RANSWallR3::Hash(Reference()))},{"derivative_step_halving_max",J::Number(derivativeError)},{"seconds",J::Number(std::chrono::duration<double>(std::chrono::steady_clock::now()-begun).count())},{"governing_solves","0"},{"physical_commits","0"}});
+}
+
+std::string RANSWallEvolutionPatch::FrozenConstitutiveData(const Vector &s,const RANSWallEvolutionData &data,const std::string &path) const
+{
+    const auto domain=ScalarDomain(s,0,data,true);Require(domain.admissible,"frozen diagnostic scalar domain");
+    RANSParameters standard;standard.sigmaEpsilon=std::pow(RANSNeutralReference::CLS().Kappa(),2)/((standard.cEpsilon2-standard.cEpsilon1)*std::sqrt(standard.cMu));standard.yapCoefficient=0;
+    const std::vector<std::string> laws{"regularized_CLS","CLS_beta04_no_regularization","Original_CLS","local_CLS_Cmu_linear","local_CLS_Cmu_linear_regularized","calibrated_standard"};
+    auto tensor=[&](int law,double k,double e,const RANSTensor &g,double distance,const RANSWallCoordinate &p,bool inner,double nt)
+    {
+        if(inner)return InnerStress(k,nt,g).reynoldsStress;
+        const auto model=law==5?RANSModel::StandardKEpsilon:RANSModel::CLSHighRe;
+        auto c=EvaluateRANSClosure(model,k,e,g,distance,law==5?standard:m_parameters.model.Parameters(),0);
+        const auto ref=RegularizedReferenceAt(p);auto R=c.reynoldsStress;
+        for(int a=0;a<3;++a)for(int b=0;b<3;++b)
+        {
+            if(law==0 || law==1)R[a][b]-=.6*c.cubicStress[a][b];
+            if(law==3 || law==4)R[a][b]-=c.quadraticStress[a][b]+c.cubicStress[a][b];
+            if(law==0 || law==4)R[a][b]-=ref.gamma*(g[a][b]+g[b][a]-ref.referenceStrain[a][b]);
+        }
+        return R;
+    };
+    auto dataset=[&](const std::string &name,bool volume)
+    {
+        std::ofstream binary(path+"/"+name+".f64",std::ios::binary),members(path+"/"+name+"-membership.i32",std::ios::binary);
+        Vector minima(6,1e300),negativeVolume(6),negativeInner(6),negativeOuter(6);std::vector<int> negativeUnique(6),negativeMembers(6);std::vector<std::string> worst(6,"null");
+        std::map<std::string,int> seen;std::vector<std::array<double,6>> saved;int count=0,total=0;
+        auto evaluate=[&](const RANSWallGlobalPoint &row,bool inner,double e,bool dependent,int radial,int tangential,double weight,const std::string &family)
+        {
+            RANSTensor g{};for(int a=0;a<2;++a)g[PhysicalAxis(a)]=row.Gradient(s,offset[a]);
+            const double k=GeometryPoint(K(),row.geometry,row.coordinate).Value(s,offset[K()]);const double nt=inner?StateProfile(s,row.coordinate,0,data)->Original().EddyViscosity(Distance(row.coordinate)):0;
+            std::ostringstream key;key<<row.geometry<<':'<<row.element<<':'<<radial<<':'<<tangential<<':'<<dependent<<':'<<RANSWallR3::Hash(row.coordinate.data(),3*sizeof(double))<<':'<<RANSWallR3::Hash(&e,sizeof(double));
+            int id;auto old=seen.find(key.str());
+            if(old==seen.end())
+            {
+                id=count++;seen.emplace(key.str(),id);Vector record;for(double x:row.coordinate)record.push_back(x);for(double x:Physical(row.coordinate))record.push_back(x);for(auto &r:g)for(double x:r)record.push_back(x);record.insert(record.end(),{k,e,nt,double(inner),weight});binary.write(reinterpret_cast<const char*>(record.data()),20*sizeof(double));
+                std::array<double,6> ev{};
+                for(int j=0;j<6;++j)
+                {
+                    const auto R=tensor(j,k,e,g,inner?1.:OuterWallDistance(row.coordinate),row.coordinate,inner,nt);ev[j]=J::Eigenvalues(R)[0];
+                    if(ev[j]<0){++negativeUnique[j];negativeVolume[j]+=weight;if(inner)negativeInner[j]+=weight;else negativeOuter[j]+=weight;}
+                    if(ev[j]<minima[j]){minima[j]=ev[j];worst[j]=J::Object({{"index",J::Number(id)},{"chart",J::Numbers(row.coordinate)},{"physical",J::Numbers(Physical(row.coordinate))},{"geometry",J::Number(row.geometry)},{"element",J::Number(row.element)},{"radial_side",J::Number(radial)},{"tangential_side",J::Number(tangential)},{"dependent_epsilon",J::Boolean(dependent)},{"inner",J::Boolean(inner)},{"gradient",J::Rows(g)},{"k",J::Number(k)},{"epsilon",J::Number(e)},{"tensor",J::Rows(R)},{"eigenvalues",J::Numbers(J::Eigenvalues(R))},{"family",J::Quote(family)}});}
+                }
+                saved.push_back(ev);
+            }else id=old->second;
+            for(int j=0;j<6;++j)if(saved[id][j]<0)++negativeMembers[j];
+            const std::int32_t m[]{total++,id,row.geometry,row.element,radial,tangential,dependent};members.write(reinterpret_cast<const char*>(m),sizeof(m));
+        };
+        if(volume)for(const auto &q:Quadrature(0,20))
+        {
+            const bool inner=fields[0]->Elements()[q.element].upper[2]<=m_parameters.geometry.height;
+            const double e=inner?StateProfile(s,q.coordinate,0,data)->Dissipation(Distance(q.coordinate)):GeometryPoint(Epsilon(),q.geometry,q.coordinate).Value(s,offset[Epsilon()]);
+            evaluate(q,inner,e,false,0,0,q.weight,"GL20_physical_volume");
+        }
+        else for(const auto &p:domain.observations)if(p.block==K() || p.dependentTrace)
+        {
+            const auto origin=ResolveObservation(p);const auto &row=*origin.velocity;const double e=origin.inner?StateProfile(s,p.coordinate,0,data)->Dissipation(Distance(p.coordinate)):(p.dependentTrace?p.value:GeometryPoint(Epsilon(),row.geometry,p.coordinate).Value(s,offset[Epsilon()]));
+            evaluate(row,origin.inner,e,p.dependentTrace,origin.radialSide,origin.tangentialSide,0.,p.inventory);
+        }
+        binary.close();members.close();Require(binary.good()&&members.good(),"frozen-field array output failed");
+        return J::Object({{"file",J::Quote(name+".f64")},{"sha256",J::Quote(RANSWallR3::HashFile(path+"/"+name+".f64"))},{"shape",J::Numbers(std::vector<int>{count,20})},{"membership_file",J::Quote(name+"-membership.i32")},{"membership_sha256",J::Quote(RANSWallR3::HashFile(path+"/"+name+"-membership.i32"))},{"membership_shape",J::Numbers(std::vector<int>{total,7})},{"native_minima",J::Numbers(minima)},{"negative_unique",J::Numbers(negativeUnique)},{"negative_memberships",J::Numbers(negativeMembers)},{"negative_volume",J::Numbers(negativeVolume)},{"negative_inner_volume",J::Numbers(negativeInner)},{"negative_outer_volume",J::Numbers(negativeOuter)},{"witnesses",J::List(worst)}});
+    };
+    const auto inventory=dataset("inventory",false),volume=dataset("GL20",true);std::vector<std::string> names;for(auto &n:laws)names.push_back(J::Quote(n));
+    return J::Object({{"version",J::Quote("H2gFrozenFieldsV1")},{"laws",J::List(names)},{"inventory",inventory},{"GL20",volume},{"model_specification",ModelMetadata()},{"state_sha256",J::Quote(RANSWallR3::Hash(s))},{"governing_solves","0"},{"physical_commits","0"},{"certificate_issued","false"}});
 }
 
 }

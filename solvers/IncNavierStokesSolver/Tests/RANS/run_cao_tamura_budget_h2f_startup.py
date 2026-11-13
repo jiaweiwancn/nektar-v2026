@@ -11,8 +11,8 @@ from run_cls_epawf_picard import THREADS,sha,state_hash,require,set_info,set_par
 from compare_cls_epawf_pimple import same_history
 
 class StartupRun:
-    def __init__(self,solver,certificate,preflight,h1,output,flat=False):
-        self.solver=solver.resolve();self.certpath=certificate.resolve();self.cert=load(certificate);self.pre=load(preflight);self.h1=h1;self.root=output;self.flat=flat
+    def __init__(self,solver,certificate,preflight,h1,output,flat=False,builder=None):
+        self.solver=solver.resolve();self.certpath=certificate.resolve();self.cert=load(certificate);self.pre=load(preflight);self.h1=h1;self.root=output;self.flat=flat;self.builder=builder or case
         c=self.cert;require(c['version']=='CertifiedNeutralStartupV2' and c['complete_native_admissible'],'genuine V2 certificate required')
         require(state_hash(c['state'])==c['state_sha256'],'certificate state checksum')
         require(sha(self.solver)==c['runtime']['sha256'] and str(self.solver.parent/'lib')==c['runtime']['library_path'],'select certified runtime; do not refreeze it after issuance')
@@ -23,7 +23,7 @@ class StartupRun:
         output.mkdir(exist_ok=False);self.out=dict(version='H2fV2StartupV1',status='running',certificate_sha256=sha(certificate),seed_sha256=c['state_sha256'],base_sha256=c['immutable_base_sha256'],runtime=c['runtime'],results={},flat_fixture=flat);self.save()
     def save(self):atomic(self.root/'progress.json',self.out)
     def native(self,name,dt,steps=0,checkpoint=None,reject=False):
-        xml=case(self.root/name,self.h1,self.pre,flat=self.flat);tree=ET.parse(xml).getroot();set_parameter(tree,'TimeStep',dt);set_parameter(tree,'NumSteps',steps);set_info(tree,'RANSWallCertifiedStartupFile',str(self.certpath));set_info(tree,'RANSWallCertifiedStartupSHA256',sha(self.certpath));set_info(tree,'RANSWallCertifiedStartupVersion','CertifiedNeutralStartupV2')
+        xml=self.builder(self.root/name,self.h1,self.pre,flat=self.flat);tree=ET.parse(xml).getroot();set_parameter(tree,'TimeStep',dt);set_parameter(tree,'NumSteps',steps);set_info(tree,'RANSWallCertifiedStartupFile',str(self.certpath));set_info(tree,'RANSWallCertifiedStartupSHA256',sha(self.certpath));set_info(tree,'RANSWallCertifiedStartupVersion','CertifiedNeutralStartupV2')
         if checkpoint:set_info(tree,'RANSWallRestart',str(checkpoint))
         if reject:set_parameter(tree,'RANSWallPimplePostAssignRejectStep',1)
         write(tree,xml);env=dict(os.environ,**THREADS);env['LD_LIBRARY_PATH']=self.cert['runtime']['library_path'];env['NEKTAR_RANS_TIMING_FILE']=str(xml.parent/'timing.jsonl');started=time.monotonic()

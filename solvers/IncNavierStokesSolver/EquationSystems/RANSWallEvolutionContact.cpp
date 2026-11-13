@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallModelSpec.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallKBoundProjection.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
@@ -15,6 +16,9 @@ using namespace RANSWallAlgebra;
 using namespace SolverUtils;
 namespace J=RANSWallSolveJson;
 namespace { bool Same(double a,double b){return std::abs(a-b)<1e-11;} }
+
+std::string RANSWallEvolutionPatch::ModelMetadata() const
+{return RANSWallModelJSON(m_parameters,m_robustUstar,m_variantName,m_robust.beta,m_regularizationGamma,m_regularizationScale);}
 
 std::string RANSWallEvolutionPatch::FormulationMetadata() const
 {

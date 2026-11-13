@@ -24,6 +24,7 @@ struct RANSWallPatchData
 struct RANSWallPatchParameters
 {
     SolverUtils::AWFProfileGeometry geometry{1.5e-5,2,.1,1,1};
+    std::string modelCalibration,modelManifest; // empty preserves historical CLS identity
     double chi = 1;
     int tangentialOrder = 8, normalOrder = 16;
     SolverUtils::RANSNeutralReference model = SolverUtils::RANSNeutralReference::CLS();

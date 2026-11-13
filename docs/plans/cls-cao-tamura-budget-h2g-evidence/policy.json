@@ -1,0 +1,90 @@
+{
+  "version": "H2gPredeclaredV1",
+  "parent": "f13c9240a1f21d3c9550509c2ca317ef05c543be",
+  "common": {
+    "H": 0.0065,
+    "u_tau": 0.07426793792419734,
+    "nu": 3.8095238095238094e-06,
+    "kappa": 0.4405539051866587,
+    "z0_eff": 0.00012222264395414748,
+    "fit": "retained seven-point mean fit; no refit",
+    "mesh": "exact frozen H2f six-by-thirteen Q3/P1 2804-slot mesh"
+  },
+  "standard": {
+    "version": "StandardNeutralCalibratedV1",
+    "Cmu": 0.09,
+    "Cepsilon1": 1.44,
+    "Cepsilon2": 1.92,
+    "sigmaK": 1,
+    "sigmaEpsilon": "kappa^2/((Cepsilon2-Cepsilon1)*sqrt(Cmu))",
+    "Yap": 0,
+    "regularization": 0,
+    "nonlinear_stress": 0,
+    "roughness": "native bracketed root; common U(H), model K0",
+    "cutoff": "each profile solves its own accepted physical budget"
+  },
+  "CLS": "deployed unchanged beta=.4 Gamma=1 gamma0=0; retain h_s=.0022472751006336437",
+  "frozen_laws": [
+    "regularized_CLS",
+    "CLS_beta04_no_regularization",
+    "Original_CLS",
+    "local_CLS_Cmu_linear",
+    "local_CLS_Cmu_linear_regularized",
+    "calibrated_standard"
+  ],
+  "initializer": {
+    "strain_weight": "common kappa*u_tau*physical_z, independent of physical Gamma",
+    "velocity_L2": 0.12,
+    "component_increment": 0.5,
+    "divergence": "common cold bound if verified equal, otherwise stop and diagnose",
+    "scalar_ratio": [
+      0.5,
+      2
+    ],
+    "inner_margin": 0.0001,
+    "outer_target": 0.0001,
+    "basis": "retained qualified 41 velocity plus original 8 k/8 epsilon; no enrichment",
+    "frozen": "all inner k, endpoint K, inlet/interface scalars, dependent trace, pressure and prescribed rows",
+    "A": {
+      "majors": 20,
+      "seconds": 300,
+      "full_scan_work": 180,
+      "active_batches": 3000
+    },
+    "B": {
+      "majors": 40,
+      "seconds": 900,
+      "full_scan_work": 320,
+      "active_batches": 6000
+    }
+  },
+  "verification": {
+    "calibration_relative": 1e-10,
+    "tensor_relative": 2e-11,
+    "directional_relative": 2e-05,
+    "unchanged_CLS": "bitwise state/reference/history where arithmetic is unchanged",
+    "sparse_production": false
+  },
+  "pilot": {
+    "conditional_on_complete_native_and_GL20_and_V2": true,
+    "dt": [
+      2e-06,
+      1e-06
+    ],
+    "steps": [
+      8,
+      16
+    ],
+    "split": [
+      4,
+      4
+    ],
+    "first_rejection_terminal": true
+  },
+  "resources": {
+    "build_workers": 4,
+    "native_ranks": 1,
+    "library_threads": 1,
+    "aggregate_limit": 72
+  }
+}

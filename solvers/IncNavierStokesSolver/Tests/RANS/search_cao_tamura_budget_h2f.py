@@ -17,7 +17,9 @@ class WorkLimit(Exception):pass
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for n in ('context','preflight','start','output'):p.add_argument('--'+n,type=Path,required=True)
-    p.add_argument('--stage',choices=['A','B'],required=True);p.add_argument('--prior-full-scans',type=int,default=0);a=p.parse_args();a.output.mkdir(exist_ok=False);setup=time.monotonic();c=NativeContext(a.context);pre=load(a.preflight);K0=pre['heights'][-1]['K0'];target=1e-4;tol=1e-10
+    p.add_argument('--divergence-limit',type=float);p.add_argument('--stage',choices=['A','B'],required=True);p.add_argument('--prior-full-scans',type=int,default=0);a=p.parse_args();a.output.mkdir(exist_ok=False);setup=time.monotonic();c=NativeContext(a.context);pre=load(a.preflight);K0=pre['heights'][-1]['K0'];target=1e-4;tol=1e-10
+    from cao_tamura_h2g_constitutive import tensors_for_spec
+    def tensors(g,k,e,inner,nt,physical,us,kap):return tensors_for_spec(g,k,e,inner,nt,physical,us,kap,c.model)
     T,Ts,conditioning=c.transforms();nv=T.shape[1];nk=c.counts['k'];ne=c.counts['epsilon'];ns=Ts.shape[1];dim=nv+(ns if a.stage=='B' else 0);G=T.T@c.array('mass_gram')@T
     transform=np.zeros((len(T)+1,nv+1));transform[0,0]=1;transform[1:,1:]=T;D=transform.T@c.array('divergence')@transform;strain=transform.T@c.array('strain')@transform;roof=transform.T@c.array('roof')@transform;Spen=Ts.T@(c.array('scalar_gram')+c.array('scalar_smoothness'))@Ts
     basis=np.array(c.array('basis'));Z=np.vstack([T.T@basis[:len(T)],Ts.T@basis[len(T):]]);base=np.array(c.array('base')[0]);raw=c.block('velocity_basis');B=np.einsum('nbc,bj->ncj',raw[:,:,:4],T);V=np.einsum('nbc,bj->ncj',raw[:,:,4:],T);g0=c.gradient();k0=c.block('k');e0=c.block('epsilon');nt=c.block('inner_nu_t');physical=c.block('physical');inner=c.block('inner').astype(bool);cov=c.block('covariance').astype(bool);dep=c.block('dependent_epsilon').astype(bool);innerids=np.flatnonzero(inner&cov);outerids=np.flatnonzero(~inner&cov)
@@ -25,6 +27,8 @@ def main():
     start=load(a.start);x=np.zeros(dim);oldx=start['conditioned_velocity_coefficients'];x[:len(oldx)]=oldx
     if a.stage=='B' and start.get('conditioned_scalar_coefficients'):x[nv:]=start['conditioned_scalar_coefficients']
     free=np.array(c.meta['rows']['velocity']+(c.meta['rows']['k']+c.meta['rows']['epsilon'] if a.stage=='B' else []),int);Dmax=np.sqrt(D[0,0])*(1+1e-6)+1e-9
+    if a.divergence_limit is not None:
+        require(abs(a.divergence_limit-Dmax)<1e-10,'shared divergence limit disagrees with native base');Dmax=a.divergence_limit
     full=a.prior_full_scans;inner_scans=active=0;history=[];cuts=[];cutkeys=set();responsecaps=set();scalarcaps=set();maximum_cuts=2000;maxiter=20 if a.stage=='A' else 40;seconds=300 if a.stage=='A' else 900;fullcap=180 if a.stage=='A' else 320;activecap=3000 if a.stage=='A' else 6000;began=None;deadline=None
     def check_work():
         if began is not None and (time.monotonic()>deadline or full+inner_scans>=fullcap-2 or active>=activecap):raise WorkLimit()
@@ -69,13 +73,13 @@ def main():
     def save(v,s,label):
         require(float(s['inner_values'][:,0].min())>=target-tol,'attempt to save inner-infeasible state');require(within_bounds(v),'attempt to save physical bound violation')
         state=base.copy();state[free]+=(v@Z[:dim])[free];fixed=np.ones(len(state),bool);fixed[free]=False;require(state[fixed].tobytes()==base[fixed].tobytes(),'fixed coefficient bits changed')
-        response,kr,er=bounds(v);j=int(np.argmin(s['outer_values'][:,0]));q=int(outerids[j]);g,k,e=values(v,[q]);out=dict(version='H2fHardInnerCandidateV1',stage=a.stage,state=state.tolist(),state_sha256=state_hash(state),base_sha256=state_hash(base),conditioned_velocity_coefficients=v[:nv].tolist(),conditioned_scalar_coefficients=v[nv:].tolist(),min_lambda_over_K0=minimum(s),inner_min_lambda_over_K0=float(s['inner_values'][:,0].min()),divergence_limit=Dmax,strong_divergence_L2=float(np.sqrt(max(0,quad(D,v)))),velocity_mass_distance=float(np.sqrt(max(0,distance(v)))),maximum_sampled_component_increment=float(np.max(abs(response))),K_envelope=[float(kr.min()),float(kr.max())],epsilon_envelope=[float(er.min()),float(er.max())],context_sha256=sha(a.context),selection=label,witness=dict(index=q,chart=c.block('chart')[q].tolist(),physical=physical[q].tolist(),gradient=g[0].tolist(),k=float(k[0]),epsilon=float(e[0]),inner=False))
+        response,kr,er=bounds(v);j=int(np.argmin(s['outer_values'][:,0]));q=int(outerids[j]);g,k,e=values(v,[q]);out=dict(model_specification=c.model,version='H2fHardInnerCandidateV1',stage=a.stage,state=state.tolist(),state_sha256=state_hash(state),base_sha256=state_hash(base),conditioned_velocity_coefficients=v[:nv].tolist(),conditioned_scalar_coefficients=v[nv:].tolist(),min_lambda_over_K0=minimum(s),inner_min_lambda_over_K0=float(s['inner_values'][:,0].min()),divergence_limit=Dmax,strong_divergence_L2=float(np.sqrt(max(0,quad(D,v)))),velocity_mass_distance=float(np.sqrt(max(0,distance(v)))),maximum_sampled_component_increment=float(np.max(abs(response))),K_envelope=[float(kr.min()),float(kr.max())],epsilon_envelope=[float(er.min()),float(er.max())],context_sha256=sha(a.context),selection=label,witness=dict(index=q,chart=c.block('chart')[q].tolist(),physical=physical[q].tolist(),gradient=g[0].tolist(),k=float(k[0]),epsilon=float(e[0]),inner=False))
         atomic(a.output/'best-candidate.json',out)
     # Setup and verification are separate from the bounded optimizer clock.
     s=scan(x);require(within_bounds(x) and s['inner_values'][:,0].min()>=target-tol,'starting state not hard-inner-feasible')
     reconstructed=base.copy();reconstructed[free]+=(x@Z[:dim])[free];initial_reconstruction=float(np.max(abs(reconstructed-np.array(start['state']))));require(initial_reconstruction<1e-10,'starting physical field changed beyond coordinate roundoff')
     t=time.monotonic();scan(x);scan_cost=time.monotonic()-t;add_inner(s['inner_values'],s['inner_vectors']);best=x.copy();bs=s;save(best,bs,'initial');began=time.monotonic();deadline=began+seconds;radius=.01;stagnant=0;reason='iteration_budget';accepted_margins=[float(s['inner_values'][:,0].min())];subproblems=0;retained=set()
-    report=dict(version='H2fHardInnerPhaseIV1',stage=a.stage,conditioning=conditioning,initial_coefficient_reconstruction_max=initial_reconstruction,context_setup_seconds=began-setup,seconds_per_full_scan=scan_cost,inner_target=target,hard_tolerance_unchanged=True,prior_full_scan_attempts=a.prior_full_scans,history=history,status='running',K0=K0)
+    report=dict(model_specification=c.model,version='H2fHardInnerPhaseIV1',stage=a.stage,conditioning=conditioning,initial_coefficient_reconstruction_max=initial_reconstruction,context_setup_seconds=began-setup,seconds_per_full_scan=scan_cost,inner_target=target,hard_tolerance_unchanged=True,prior_full_scan_attempts=a.prior_full_scans,history=history,status='running',K0=K0)
     try:
         for iteration in range(maxiter):
             check_work();predictor=iteration==0;s=scan(x);before=merit(x,s);before_outer=minimum(s);before_inner=float(s['inner_values'][:,0].min());candidates=np.argsort(s['outer_values'][:,0])[:64];retained.update(map(int,candidates));local=np.array(sorted(retained),int)
@@ -84,8 +88,12 @@ def main():
             # Fixed-eigenvector Rayleigh derivatives respect the actual max
             # invariant branch at each perturbed constitutive evaluation.
             for col,(i,j) in enumerate(((0,0),(0,2),(2,0),(2,2))):
-                h=2e-6*np.maximum(1,abs(g[:,i,j]));gp=g.copy();gm=g.copy();gp[:,i,j]+=h;gm[:,i,j]-=h
-                Rp=tensors(gp,k,e,inner[ids],nt[ids],physical[ids],pre['u_tau'],pre['kappa_CLS']);Rm=tensors(gm,k,e,inner[ids],nt[ids],physical[ids],pre['u_tau'],pre['kappa_CLS']);deriv=np.einsum('ni,nij,nj->n',vcrit,Rp-Rm,vcrit)/(2*h*K0);J[:,:nv]+=deriv[:,None]*B[ids,col];active+=2
+                if c.model['name']=='StandardKEpsilon':
+                    deriv=-2*.09*k*k/e*vcrit[:,i]*vcrit[:,j]/K0;active+=1
+                else:
+                    h=2e-6*np.maximum(1,abs(g[:,i,j]));gp=g.copy();gm=g.copy();gp[:,i,j]+=h;gm[:,i,j]-=h
+                    Rp=tensors(gp,k,e,inner[ids],nt[ids],physical[ids],pre['u_tau'],pre['kappa_CLS']);Rm=tensors(gm,k,e,inner[ids],nt[ids],physical[ids],pre['u_tau'],pre['kappa_CLS']);deriv=np.einsum('ni,nij,nj->n',vcrit,Rp-Rm,vcrit)/(2*h*K0);active+=2
+                J[:,:nv]+=deriv[:,None]*B[ids,col]
             if a.stage=='B':
                 for scalar,fieldsB in [('k',BK),('epsilon',BE)]:
                     h=2e-6*(k if scalar=='k' else e);kp=k.copy();km=k.copy();ep=e.copy();em=e.copy()
@@ -143,5 +151,5 @@ def main():
     # Reserved full scans retain the last actual accepted state before exit.
     terminal=scan(x);require(terminal['inner_values'][:,0].min()>=target-tol,'terminal inner protection failed')
     if minimum(terminal)>minimum(bs):best=x.copy();bs=terminal
-    bs=scan(best);save(best,bs,'terminal_best');report.update(status='sampled_candidate' if minimum(bs)>=target else 'bounded_search_rejected',termination=reason,best_outer_minimum=minimum(bs),best_inner_minimum=float(bs['inner_values'][:,0].min()),minimum_accepted_inner_margin=min(accepted_margins),accepted_states=len(accepted_margins),full_tensor_scans=full,complete_inner_scans=inner_scans,conservative_full_scan_work=full+inner_scans,active_derivative_batches=active,subproblems=subproblems,search_seconds=time.monotonic()-began,peak_RSS_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,classification='bounded local nonconvex search; finite inventory; no global infeasibility certificate');atomic(a.output/'progress.json',report)
+    bs=scan(best);save(best,bs,'terminal_best');report.update(status='sampled_candidate' if minimum(bs)>=target else 'bounded_search_rejected',termination=reason,best_outer_minimum=minimum(bs),best_inner_minimum=float(bs['inner_values'][:,0].min()),minimum_accepted_inner_margin=min(accepted_margins),accepted_states=len(accepted_margins),full_tensor_scans=full,complete_inner_scans=inner_scans,conservative_full_scan_work=full+inner_scans,active_derivative_batches=active,subproblems=subproblems,search_seconds=time.monotonic()-began,peak_RSS_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,classification=('standard fixed-scalar affine-tensor convex finite-inventory constraints; bounded solver stop is not an infeasibility certificate' if c.model['name']=='StandardKEpsilon' and a.stage=='A' else 'bounded local nonconvex search; finite inventory; no global infeasibility certificate'));atomic(a.output/'progress.json',report)
 if __name__=='__main__':main()

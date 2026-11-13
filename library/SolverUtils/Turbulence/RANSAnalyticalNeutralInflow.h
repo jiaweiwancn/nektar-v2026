@@ -16,7 +16,7 @@ public:
         : m_model(model),m_us(us),m_H(H),m_z0(z0),m_Gamma(Gamma),
           m_origin(origin),m_flow(flow),m_normal(normal)
     {
-        if(!std::isfinite(us+H+z0+Gamma) || model.Model()!=RANSModel::CLSHighRe || !(us>0 && H>z0 && z0>0 && Gamma>=0))
+        if(!std::isfinite(us+H+z0+Gamma) || (model.Model()!=RANSModel::CLSHighRe && model.Model()!=RANSModel::StandardKEpsilon) || !(us>0 && H>z0 && z0>0 && Gamma>=0))
             throw std::invalid_argument("AnalyticalNeutralInflowV1 invalid CLS reference");
         double ff=0,nn=0,fn=0;
         for(int i=0;i<3;++i)

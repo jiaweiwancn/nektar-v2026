@@ -81,8 +81,9 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
 
     if(mode=="AnalyticalNeutralInflowV1")
     {
-        Require(AcceptedAWF() && m_variantName=="Regularized" && m_regularizationGamma==0,
-            "analytical neutral inlet requires Regularized accepted AWF and gamma0=0");
+        Require(AcceptedAWF() && m_regularizationGamma==0 &&
+            ((m_variantName=="Regularized" && !CalibratedStandard()) || (CalibratedStandard() && m_variantName=="Original" && m_regularizationScale==0)),
+            "analytical neutral inlet requires selected CLS or calibrated standard accepted AWF");
         RANSVector origin{},flow{1,0,0},normal{0,0,1};
         for(int a=0;a<3;++a)
         {const std::string axis=a==0?"X":a==1?"Y":"Z";

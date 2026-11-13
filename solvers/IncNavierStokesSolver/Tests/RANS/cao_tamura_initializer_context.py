@@ -21,6 +21,14 @@ class NativeContext:
         require(self.meta['files']['basis']['shape'][0]==nv+nk+ne and self.meta['files']['mass_gram']['shape']==[nv,nv] and self.meta['files']['scalar_gram']['shape']==[nk+ne,nk+ne],'schema matrix/direction dimensions disagree')
         if self.meta['version']=='NativeOuterScalarContextV2':
             for key in ('geometry_identity','inventory_identity','reference_sha256'):require(self.meta[key]==self.doc[key],'context identity mismatch '+key)
+        self.model=self.meta.get('model_specification',dict(name='CLSHighRe',calibration='DeployedCLSV1',physical_regularization_active=True))
+        if self.doc.get('expected_model'):require(self.model['name']==self.doc['expected_model'],'context/model-manifest mismatch')
+        if self.model['name']=='StandardKEpsilon':
+            require(self.model['calibration']=='StandardNeutralCalibratedV1' and not self.model['physical_regularization_active'],'invalid standard context terms')
+            receipt=self.doc.get('receipt',{});native_file=Path(receipt.get('output',''))
+            require(native_file.is_file() and sha(native_file)==receipt.get('output_sha256'),'standard context needs its exact native export receipt')
+            native=load(native_file)['context']
+            require(native.get('model_specification')==self.model and native['files']==self.meta['files'] and native['base_sha256']==self.meta['base_sha256'],'context model/arrays differ from native export')
         self.verify=verify;self.observations=self.array('observations');self.N=len(self.observations)
         intervals=[]
         for b in self.blocks.values():intervals.extend(range(b['offset'],b['offset']+b['width']))

@@ -103,8 +103,8 @@ double EquilibriumAWFProfileWeight(double spatial, const std::array<double, 7> &
 
 AWFParameters CalibratedAWFParameters(const RANSNeutralReference &model)
 {
-    if (model.Model() != RANSModel::CLSHighRe)
-        throw std::invalid_argument("CLS-calibrated AWF requires a CLS reference");
+    if (model.Model() != RANSModel::CLSHighRe && model.Model() != RANSModel::StandardKEpsilon)
+        throw std::invalid_argument("Unknown calibrated AWF model");
     AWFParameters wall;
     const long double q = model.Q();
     wall.cMu = Cast(1/(q*q));
@@ -132,6 +132,9 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
         throw std::invalid_argument("Unknown AWF profile formulation");
     if (AcceptedAWF())
     {
+        if ((options.formulation == AWFProfileFormulation::StandardCalibratedBudgetAWF) !=
+            (model.Model() == RANSModel::StandardKEpsilon))
+            throw std::invalid_argument("Budget AWF formulation/model mismatch");
         const auto calibrated = CalibratedAWFParameters(model);
         const auto same = [](double a, double b) {
             return std::abs(a-b) <= 64*std::numeric_limits<double>::epsilon()*

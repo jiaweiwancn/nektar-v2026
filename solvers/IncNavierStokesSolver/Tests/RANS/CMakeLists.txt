@@ -597,3 +597,10 @@ if(RANS_BUILD_SOLVER)
     set_property(TEST ${rans_all_tests} APPEND PROPERTY ENVIRONMENT
         "LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
 endif()
+
+add_executable(RANSCaoTamuraBudgetH2gChecks test_cao_tamura_budget_h2g.cpp)
+target_include_directories(RANSCaoTamuraBudgetH2gChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_link_libraries(RANSCaoTamuraBudgetH2gChecks RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+add_executable(RANSH2gConstitutiveProbe h2g_constitutive_probe.cpp)
+target_include_directories(RANSH2gConstitutiveProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_link_libraries(RANSH2gConstitutiveProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})

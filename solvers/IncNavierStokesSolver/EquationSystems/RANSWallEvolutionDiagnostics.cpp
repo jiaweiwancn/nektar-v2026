@@ -383,7 +383,7 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
                 for(int a=0;a<3;++a)for(int b=0;b<3;++b)variant.referenceStrain[a][b]=shear*(m_referenceFlow[a]*m_referenceNormal[b]+m_referenceNormal[a]*m_referenceFlow[b]);
             }
             variant.beta=.4;
-            regularized=EvaluateRANSRobustClosure(m_parameters.model.Model(),k,epsilon,g,OuterWallDistance(v.coordinate),m_parameters.model.Parameters(),0,variant);
+            regularized=CalibratedStandard()?original:EvaluateRANSRobustClosure(m_parameters.model.Model(),k,epsilon,g,OuterWallDistance(v.coordinate),m_parameters.model.Parameters(),0,variant);
         }
         const double eigen=CovarianceSpectrum(c.reynoldsStress).eigenvalues[0];const int region=inner?0:1;++counts[family];
         const double originalEigen=inner?1e300:CovarianceSpectrum(original.reynoldsStress).eigenvalues[0];
@@ -405,7 +405,7 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
             {"epsilon_H_refreshed_projected",domain.traceState.empty()?"null":J::Number(epsH.Value(domain.traceState,offset[Epsilon()]))},
             {"epsilon_H_current_unprojected",J::Number(profile->Dissipation(m_parameters.geometry.height))},
             {"selected",LawJSON(c,k,g,inner?"inner_stress_remainder":"regularization")},{"same_state_Original",inner?"null":LawJSON(original,k,g)},
-            {"same_state_Regularized",inner?"null":LawJSON(regularized,k,g)}});
+            {"same_state_Regularized",inner || CalibratedStandard()?"null":LawJSON(regularized,k,g)}});
         if(eigen<minimum[region]){minimum[region]=eigen;minima[region]=item;}
         if(originalEigen<minimum[2]){minimum[2]=originalEigen;minima[2]=item;}
         if(regularizedEigen<minimum[3]){minimum[3]=regularizedEigen;minima[3]=item;}return item;
@@ -430,9 +430,9 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
     return J::Object({{"audit_revision",J::Quote(AuditRevision())},{"state_sha256",J::Quote(before)},{"scalar_budget",ScalarDomainJSON(domain)},
         {"minimum_inner",nativeInner},{"minimum_outer",nativeOuter},
         {"minimum_with_explicit_neighbors_inner",minima[0]},{"minimum_with_explicit_neighbors_outer",minima[1]},
-        {"minimum_same_state_Original_outer",minima[2]},{"minimum_same_state_Regularized_outer",minima[3]},{"one_sided_witnesses",J::List(neighbors)},
+        {"minimum_same_state_Original_outer",minima[2]},{"minimum_same_state_Regularized_outer",CalibratedStandard()?"null":minima[3]},{"one_sided_witnesses",J::List(neighbors)},
         {"inventory_counts",J::Object(inventory)},{"offsets",J::Numbers(offset)},
-        {"same_state_Regularized_definition",J::Quote(PrescribedInflow()?(AnalyticalNeutralInflow()?"beta=.4; immutable AnalyticalNeutralInflowV1 physical incoming-height gamma/S_ref":"beta=.4; immutable FiniteInflowV1 gamma/S_ref; same diffusion and fields"):"beta=.4; gamma=kappa*u_star*wall_distance; incoming reference strain; same diffusion and fields")},
+        {"same_state_Regularized_definition",J::Quote(CalibratedStandard()?"not applicable: selected calibrated standard has no CLS regularization; use explicit frozen-field law comparison":PrescribedInflow()?(AnalyticalNeutralInflow()?"beta=.4; immutable AnalyticalNeutralInflowV1 physical incoming-height gamma/S_ref":"beta=.4; immutable FiniteInflowV1 gamma/S_ref; same diffusion and fields"):"beta=.4; gamma=kappa*u_star*wall_distance; incoming reference strain; same diffusion and fields")},
         {"semantics",J::Quote("refreshed same-stage tensors; physical gradients on identified native elements; no averaging, lifting or acceptance waiver")},
         {"governing_solves","0"},{"physical_commits","0"},{"selected_state_unchanged","true"}});
 }
