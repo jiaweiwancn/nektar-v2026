@@ -26,18 +26,24 @@ def verify(v):
     return p
 
 def runtime(root):
-    rt=root/'runtime';rt.mkdir();(rt/'glibc').mkdir();(rt/'geometry').mkdir()
+    rt=root/'runtime';rt.mkdir(exist_ok=True);(rt/'glibc').mkdir(exist_ok=True);(rt/'geometry').mkdir(exist_ok=True)
+    def identical_copy(source,dest):
+        if dest.exists():assert sha(source)==sha(dest),'partial preparation differs: '+str(dest)
+        else:shutil.copyfile(source,dest)
+        dest.chmod(0o755)
     old=load(H10/'setup.json');aliases=[]
     for rec in old['private_libraries']+[old['geometry']]:
         src=verify(rec);dest=rt/('geometry'if rec==old['geometry']else'glibc')/src.name
-        shutil.copyfile(src,dest);dest.chmod(0o755)
+        identical_copy(src,dest)
         assert sha(dest)==rec['sha256'];aliases.append(dict(original=rec,copy=file_id(dest)))
     executables=[]
     for name in ('IncNavierStokesSolver','RANSWallResolutionProbe'):
-        source=root/'build'/name;dest=rt/(name+'.elf');shutil.copyfile(source,dest);dest.chmod(0o755)
+        source=root/'build'/name;dest=rt/(name+'.elf');identical_copy(source,dest)
         wrapper=rt/name
-        wrapper.write_text('#!/bin/sh\nexec '+shlex.quote(str(rt/'glibc/ld-linux-x86-64.so.2'))+' --library-path '+
-            shlex.quote(str(rt/'glibc')+':'+str(rt/'geometry')+':/home/jay/.local/opt/nektar-v2026-mpi/lib64')+' '+shlex.quote(str(dest))+' "$@"\n')
+        text='#!/bin/sh\nexec '+shlex.quote(str(rt/'glibc/ld-linux-x86-64.so.2'))+' --library-path '+\
+            shlex.quote(str(rt/'glibc')+':'+str(rt/'geometry')+':/home/jay/.local/opt/nektar-v2026-mpi/lib64')+' '+shlex.quote(str(dest))+' "$@"\n'
+        if wrapper.exists():assert wrapper.read_text()==text
+        else:wrapper.write_text(text)
         wrapper.chmod(0o755);executables.append(dict(build=file_id(source),ELF=file_id(dest),wrapper=file_id(wrapper)))
     commands=load(root/'build/compile_commands.json')
     assert all('-ffp-contract=off'in x['command']and'-fno-fast-math'in x['command']for x in commands)
