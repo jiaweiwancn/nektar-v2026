@@ -26,7 +26,7 @@ def report_summary(path,execution):
     result={k:r[k] for k in keys if k in r}
     result.update(execution=execution,report_sha256=sha(path),state_sha256=exact_vector_hash(r['state']),
         initial_sha256=exact_vector_hash(r['initial']),checkpoint=r['checkpoint'],
-        history_sha256=artifact_hash(r['checkpoint']),stored_slots=len(r['state']))
+        history_sha256=artifact_hash(r['checkpoint']) if r['checkpoint'] else None,stored_slots=len(r['state']))
     return r,result
 
 
@@ -89,6 +89,11 @@ def main():
         native,summary=report_summary(folder/'case.evolution.json',e);result['trajectory']=summary
         result['execution_status']='pass' if e['exit_code']==0 else 'fail'
         completed=e['exit_code']==0 and not native['failure'] and abs(native['time']-a.target)<1e-13
+        if completed:require(bool(native['checkpoint']),'completed evolution did not publish a native history')
+        if not native['checkpoint']:
+            require(native['time']==0. and native['state']==r['state'],'unpublished accepted history requires a separate failure witness')
+            summary['last_accepted_checkpoint']=r['checkpoint']
+            summary['last_accepted_history_sha256']=artifact_hash(r['checkpoint'])
         result['physical_completion']='pass' if completed else 'fail'
         write_json(a.output/'progress.json',result)
         # A last accepted state can always be audited without erasing a failed candidate.
