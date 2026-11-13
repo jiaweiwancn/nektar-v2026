@@ -9,7 +9,7 @@ import numpy as np
 from cao_tamura_h2d_state import load
 from cao_tamura_initializer_context import NativeContext
 from cao_tamura_budget_h2g import case
-from cao_tamura_h2h_scalar import Context,Problem,Budget,solve,BLOCKS
+from cao_tamura_h2h_scalar import Context,Problem,Budget,BudgetExhausted,solve,BLOCKS
 from continue_cls_epawf_pimple import atomic,identity
 from diagnose_cls_accepted_covariance import run_probe
 from run_cls_epawf_picard import sha,state_hash,require,THREADS
@@ -26,6 +26,12 @@ def require_fresh(receipt,state,base,model):
  require(receipt.get('model_specification')==model,'H2h GL24 model mismatch')
  require(receipt.get('minimum_covariance',-float('inf'))>=1e-4*model['K0']-1e-12,'H2h GL24 positive covariance margin required')
  require(receipt.get('scalar_positive_finite') and receipt.get('scalar_envelopes_passed') and receipt.get('integrals_complete'),'H2h GL24 scalar gate')
+
+def terminal_scan(problem,coefficients,delta,budget):
+ # Reporting must not turn a correctly classified budget exit into a crash,
+ # spend an undeclared extra scan, or discard the saved terminal coefficients.
+ try:return problem.scan(coefficients,delta,budget)
+ except BudgetExhausted:return None
 
 def prepare(a):
  start=time.monotonic();old=NativeContext(a.parent/'standard-context/context.json');B=load(a.parent/'standard-B/best-candidate.json');require(state_hash(B['state'])==B_HASH and old.meta['base_sha256']==COLD_HASH and B['base_sha256']==COLD_HASH,'H2g B/cold identity')
@@ -57,7 +63,11 @@ def search(a):
   if np.any(coeff):state[allowed]+=coeff@Z[:,allowed]
   protected=np.ones(2804,bool);protected[allowed]=False;require(bytes_equal(state[protected],np.asarray(B['state'])[protected]),'fixed B bits changed');require(bytes_equal(state[:1520],B['state'][:1520]) and bytes_equal(state[2698:],B['state'][2698:]),'B velocity/pressure changed')
   candidate=dict(version='H2hFixedBScalarCandidateV1',stage='B',state=state.tolist(),state_sha256=state_hash(state),base_sha256=COLD_HASH,B_sha256=B_HASH,scalar_increments=coeff.tolist(),context_sha256=sha(a.context),basis_sha256=ctx.doc['basis_sha256'],divergence_limit=.06030809942199109,velocity_and_pressure_B_bitwise=True,classification=out['classification'])
-  atomic(a.output/'candidate.json',candidate);sc=P.scan(coeff,1e-4*K0,budget);j=sc['worst'];record=int(P.indices[j]);out['terminal']=dict(candidate_file=str(a.output/'candidate.json'),candidate_sha256=candidate['state_sha256'],minimum_covariance=sc['minimum'],normalized_covariance=sc['minimum']/K0,k_ratio=sc['k_ratio'],epsilon_ratio=sc['epsilon_ratio'],worst_record=record,physical=ctx.block('physical')[record].tolist(),gradient=ctx.block('gradient')[record].reshape(3,3).tolist(),k=float(sc['k'][j]),epsilon=float(sc['e'][j]),cold_k=float(P.kc[j]),cold_epsilon=float(P.ec[j]),strain_max_eigenvalue=float(P.s[j]))
+  atomic(a.output/'candidate.json',candidate);sc=terminal_scan(P,coeff,1e-4*K0,budget)
+  if sc is None:
+   out['terminal']=dict(candidate_file=str(a.output/'candidate.json'),candidate_sha256=candidate['state_sha256'],summary='extra report scan omitted: budget exhausted; prior optimizer classification retained')
+  else:
+   j=sc['worst'];record=int(P.indices[j]);out['terminal']=dict(candidate_file=str(a.output/'candidate.json'),candidate_sha256=candidate['state_sha256'],minimum_covariance=sc['minimum'],normalized_covariance=sc['minimum']/K0,k_ratio=sc['k_ratio'],epsilon_ratio=sc['epsilon_ratio'],worst_record=record,physical=ctx.block('physical')[record].tolist(),gradient=ctx.block('gradient')[record].reshape(3,3).tolist(),k=float(sc['k'][j]),epsilon=float(sc['e'][j]),cold_k=float(P.kc[j]),cold_epsilon=float(P.ec[j]),strain_max_eigenvalue=float(P.s[j]))
  out['budget']=budget.report();out['peak_RSS_KiB']=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss;atomic(a.output/'result.json',out)
 
 def certify(a):

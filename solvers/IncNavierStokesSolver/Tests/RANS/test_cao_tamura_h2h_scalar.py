@@ -7,7 +7,7 @@ import numpy as np
 import cao_tamura_h2h_scalar as engine
 from types import SimpleNamespace
 from cao_tamura_h2h_scalar import Problem,Budget,solve,BudgetExhausted,dual_check
-from run_cao_tamura_budget_h2h import require_fresh
+from run_cao_tamura_budget_h2h import require_fresh,terminal_scan
 from continue_cls_epawf_pimple import atomic
 
 def fixture(s=10.,blocked=False):
@@ -25,6 +25,7 @@ def main():
  try:
   out,x=solve(P,1.,Budget(seconds=15));assert out['classification']=='inconclusive' and 'numerical' in out['termination'];tests['numerical_failure_is_not_infeasibility']=True
  finally:engine.lp=original_lp
+ assert terminal_scan(P,np.zeros(16),1e-4,Budget(scans=0,seconds=15)) is None;tests['terminal_reporting_preserves_budget_exit']=True
  # Independent tensor diagonalization on non-equilibrium tuples; S=G+G^T.
  rng=np.random.default_rng(721);G=rng.normal(size=(400,3,3));S=G+G.transpose(0,2,1);k=np.exp(rng.normal(size=400));e=np.exp(rng.normal(size=400));R=(2/3)*k[:,None,None]*np.eye(3)-(.09*k*k/e)[:,None,None]*S
  analytic=(2/3)*k-.09*k*k/e*np.linalg.eigvalsh(S)[:,-1];error=float(np.max(abs(analytic-np.linalg.eigvalsh(R)[:,0])));assert error<1e-12;tests['independent_standard_tensor_formula_max_error']=error
