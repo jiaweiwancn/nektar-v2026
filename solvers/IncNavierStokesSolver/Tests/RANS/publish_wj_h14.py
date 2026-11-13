@@ -75,8 +75,9 @@ def native_closure(root,out):
         effective_native_source_commit='ec5fb45d',compiler='GNU11.4.0',cmake_cache=file_id(root/'build/CMakeCache.txt'),
         scope='actual existing objects plus source/header dependency bytes; unbuilt configured test objects excluded; final Python publication revision is distinct'))
 
-def main(root,source):
-    out=root/'publication-v1';out.mkdir();(out/'controls').mkdir();(out/'operations').mkdir()
+def main(root,source,version='v1'):
+    assert version.startswith('v')and version[1:].isdigit()
+    out=root/('publication-'+version);out.mkdir();(out/'controls').mkdir();(out/'operations').mkdir()
     def copy(p,name=None):
         p=Path(p);dest=out/(name or p.name);shutil.copyfile(p,dest);assert sha(dest)==sha(p);return file_id(dest)
     book=load(root/'accounting.json');copy(root/'accounting.json','accounting-at-publication.json')
@@ -222,12 +223,13 @@ def main(root,source):
     axes[2].axhline(.002068763923454,color='#b23b3b',linestyle='--',label='half-reference quality')
     axes[2].axhline(.004137527846908,color='.4',linestyle=':',label='exact neutral')
     axes[2].set_xlabel(r'$t U_\infty/H_h$');axes[2].set_ylabel(r'Finite-inventory $\min(m/\nu_{eff})$');axes[2].grid(alpha=.2);axes[2].legend(fontsize=7)
-    fig.suptitle('H14: unchanged6mm flat target; outlet profiles and bounded startup/pilot')
+    axes[2].set_xticks([0,.00125,.0025],['0','.00125','.0025'])
+    fig.suptitle('H14: unchanged 6 mm flat target; outlet profiles and bounded startup/pilot')
     fig.tight_layout();fig.savefig(out/'target-profiles-and-margin.png',dpi=160);plt.close(fig)
     table(out/'operation-accounting.csv',[dict(operation=k,phase=v['phase'],status=v['status'],charged_or_reserved_seconds=v.get('seconds',v['reserved_seconds']),peak_tree_RSS_bytes=v.get('peak_tree_rss_bytes'),reason=v.get('reason'))for k,v in book['entries'].items()])
     totals=dict(setup_charged_seconds=60,operations_charged_at_publication=sum(v.get('seconds',v['reserved_seconds'])for v in book['entries'].values()),
         closure_reserved_charged_seconds=300,allowance=7200,unknown_external_precheck_charge_seconds=5,
-        peak_successful_native_RSS_bytes=max((v.get('peak_tree_rss_bytes',0)for k,v in book['entries'].items()if v['status']=='PASS'and k in('target-full-domain-CP0-v1','target-cost-gated-pilot-v1','target-CP0-strict-view-v1')),default=0),
+        peak_successful_native_RSS_bytes=max((v.get('peak_tree_rss_bytes',0)for k,v in book['entries'].items()if v['status']=='PASS'and k in('target-full-domain-CP0-v1','target-cost-gated-pilot-v1','target-CP0-strict-view-v1','target-terminal-strict-view-v1')),default=0),
         failed_consumer_RSS_bytes=book['entries']['target-strict-gate-and-pilot-projection-v4']['peak_tree_rss_bytes'],
         source_python_commit=source,build_flags='-ffp-contract=off -fno-fast-math; RANS_BUILD_SOLVER=ON; Release GNU11.4.0',
         rank=1,numerical_threads=1,compile_parallel=8,hard_server_worker_limit=72)
@@ -249,9 +251,11 @@ def main(root,source):
     save(out/'manifest.json',dict(schema='WJH14CompactV1',artifacts=artifacts))
     save(out/'seal.json',dict(manifest=file_id(out/'manifest.json'),parent_H13_manifest=file_id(H13/'publication-v1/manifest.json'),
         publication_accounting_snapshot=file_id(out/'accounting-at-publication.json'),final_closure='separate subsequent immutable snapshot, never relabel this publication snapshot'))
-    with tarfile.open(root/'publication-v1.tar.gz','w:gz')as t:t.add(out,arcname='publication-v1')
-    save(root/'publication-transport.json',file_id(root/'publication-v1.tar.gz'))
+    transport=root/(out.name+'.tar.gz')
+    with tarfile.open(transport,'w:gz')as t:t.add(out,arcname=out.name)
+    save(root/(out.name+'-transport.json'),file_id(transport))
     print('publication complete',statuses,flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--source-commit',required=True);a=p.parse_args();main(a.root,a.source_commit)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--source-commit',required=True)
+    p.add_argument('--version',default='v1');a=p.parse_args();main(a.root,a.source_commit,a.version)
