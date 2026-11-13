@@ -3,6 +3,7 @@
 #define NEKTAR_RANS_WALL_MAPPED_ALGEBRA_H
 
 #include <IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <algorithm>
 #include <cmath>
@@ -116,16 +117,20 @@ inline std::vector<int> BandPermutation(const MappedMatrix &a)
 class MappedBandFactor
 {
 public:
+    struct Audit {int n,lower,upper;std::uint64_t nonzeros,bytes;bool mass;std::vector<int> bandToNative;};
+    inline static std::vector<Audit> audits;
     // Factor-storage ceiling is checked with 64-bit arithmetic BEFORE allocation.
     explicit MappedBandFactor(const MappedMatrix &a,bool positiveMass=false,
         std::uint64_t maximumBytes=512ULL*1024*1024):n(a.size()),spd(positiveMass),perm(BandPermutation(a)),inverse(n)
     {
+        RANSWallTiming::Scope timing("mapped.band.factor");
         for(int i=0;i<n;++i)inverse[perm[i]]=i;
         for(int i=0;i<n;++i)a.Each(i,[&](int j,double v){
             kl=std::max(kl,inverse[i]-inverse[j]);ku=std::max(ku,inverse[j]-inverse[i]);
             if(spd)Require(std::abs(v-a.Get(j,i))<=1e-12*std::max(1.,std::abs(v)),"consistent mass is not symmetric");});
         kd=std::max(kl,ku);ld=spd?kd+1:2*kl+ku+1;
         const std::uint64_t bytes=std::uint64_t(n)*ld*sizeof(double);
+        audits.push_back({n,kl,ku,a.Nonzeros(),bytes,spd,perm});
         Require(bytes<=maximumBytes,"mapped band fill exceeds factor storage reservation");
         values.assign(std::uint64_t(n)*ld,0.);pivots.resize(spd?0:n);
         for(int i=0;i<n;++i)a.Each(i,[&](int j,double v){
@@ -139,6 +144,7 @@ public:
     }
     Vector Apply(const Vector &rhs,bool transpose=false) const
     {
+        RANSWallTiming::Scope timing("mapped.band.solve");
         auto x=Permute(rhs);int info=0;
         if(spd)Lapack::Dpbtrs('L',n,kd,1,values.data(),ld,x.data(),n,info);
         else Lapack::Dgbtrs(transpose?'T':'N',n,kl,ku,1,values.data(),ld,pivots.data(),x.data(),n,info);

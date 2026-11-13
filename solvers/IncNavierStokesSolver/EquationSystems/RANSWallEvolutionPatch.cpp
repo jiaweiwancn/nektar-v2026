@@ -177,6 +177,7 @@ double RANSWallEvolutionPatch::DependentEpsilon(const Vector &s,const RANSWallCo
 }
 RANSWallEvolutionPatch::BlockMatrix RANSWallEvolutionPatch::PhysicalMass(int block,int region) const
 {
+    RANSWallTiming::Scope timing("mass.physical.assembly");
     if(!Mapped() && region<0)return fields[block]->ExecutionMass();
     const bool regional=region>=0 && (block<m_dimension || block==K());
     if(regional && !m_regionalMass[region].empty())return m_regionalMass[region];
@@ -193,6 +194,7 @@ RANSWallEvolutionPatch::BlockMatrix RANSWallEvolutionPatch::PhysicalMass(int blo
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PhysicalProject(int block,const RANSWallEvolutionFunction &f,double time) const
 {
+    RANSWallTiming::Scope timing("projection.physical");
     const auto function=[&](const RANSWallCoordinate &p){return f(p,time);};
     auto values=fields[block]->Project(function);
     if(!Mapped() || (m_mapping.PlanarConstantHeight() && !m_mapping.compositeTunnel))return values;
@@ -1123,12 +1125,16 @@ std::string RANSWallEvolutionPatch::DenseEvolutionCapacityJSON() const
     namespace J=RANSWallSolveJson;
     if(MappedBlock())
     {
-        std::vector<std::string> matrices;
+        std::vector<std::string> matrices,factors;
         for(int b=0;b<m_mass.size();++b)matrices.push_back(J::Object({{"block",J::Number(b)},{"n",J::Number(size[b])},
             {"nonzeros",J::Number(m_mass[b].Nonzeros())},{"storage",J::Quote("sparse native rows")}}));
+        for(const auto &a:MappedBandFactor::audits)factors.push_back(J::Object({{"n",J::Number(a.n)},
+            {"lower_bandwidth",J::Number(a.lower)},{"upper_bandwidth",J::Number(a.upper)},
+            {"nonzeros",J::Number(a.nonzeros)},{"factor_payload_bytes",J::Number(a.bytes)},
+            {"consistent_mass",J::Boolean(a.mass)},{"band_to_native",J::Numbers(a.bandToNative)}}));
         return J::Object({{"backend",J::Quote("MappedBlockV1")},{"state_limit","24688"},{"pressure_limit","1024"},
             {"factor_payload_limit_bytes","536870912"},{"resource_design_sha256",J::Quote(m_mappedResourceDesign)},
-            {"legacy_dense_capacity","3000"},{"legacy_4331_route_unchanged","true"},{"mass_matrices",J::List(matrices)}});
+            {"legacy_dense_capacity","3000"},{"legacy_4331_route_unchanged","true"},{"mass_matrices",J::List(matrices)},{"band_factor_allocations",J::List(factors)}});
     }
     return J::Object({{"setting",J::Quote("RANSWallDenseEvolutionCapacity")},
         {"requested",J::Quote(m_denseCapacityRequest)},{"effective",J::Number(m_denseCapacity)},

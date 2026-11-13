@@ -312,6 +312,7 @@ std::vector<RANSWallGlobalPoint> RANSWallGlobalField::Quadrature(int order) cons
 }
 RANSWallAlgebra::MappedMatrix RANSWallGlobalField::ExecutionMass() const
 {
+    RANSWallTiming::Scope timing("mass.canonical.assembly");
     if(!m_mappedBlock)return Mass();
     {
         // Same native quadrature, contribution order and long-double sums;
@@ -337,6 +338,7 @@ RANSWallGlobalField::WallMatrix RANSWallGlobalField::Mass() const
 }
 RANSWallGlobalField::Vector RANSWallGlobalField::Project(const RANSWallFunction &function) const
 {
+    RANSWallTiming::Scope timing("projection.canonical");
     Require(static_cast<bool>(function),"missing projection function");
     const auto quadrature=Quadrature();bool first=true,isConstant=true;double constant=0;
     for(const auto &q:quadrature)
