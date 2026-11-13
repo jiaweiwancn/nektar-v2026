@@ -48,6 +48,9 @@ def request(c):
 
 def classify(packet,c):
     require(packet['status']=='pass','RN actual initialized state rejected')
+    receipt=packet['initialization_receipt']
+    require(receipt['open_explicit_implicit_agreement'] and receipt['explicit_boundary_sha256']==receipt['implicit_boundary_sha256'],
+        'RN explicit/implicit live essential boundary mismatch')
     o=packet['observation'];s=np.asarray(o['state']);off=o['offsets'];f=packet['open_frozen_systems'];top=packet['open_boundary']['top_faces']
     require(bool(top),'no consumed RN top rows')
     col=Column(c['model'],c['K0'],c['H'],c['roughness_input'],c['nu'],order=96)
@@ -98,6 +101,11 @@ def classify(packet,c):
     free=sorted(set(range(len(s)))-fixed)
     eps_signal=float(np.max(abs(e_load[free])));shear_signal=float(np.max(abs(2*tx_load[free])))
     require(eps_signal>1e-8 and shear_signal>1e-8,'nondiscriminating top negative controls')
+    omitted=copy.deepcopy(packet)
+    for f in omitted['open_boundary']['top_faces']:f['epsilon_diffusive_datum']=0.
+    zero_flux_balance=weak(omitted,c)
+    require(zero_flux_balance['equations']['outer_epsilon']['status']=='fail',
+        'zero epsilon top flux did not break the continuous reference identity')
     mixed=packet['mixed_space'];rows=np.asarray(mixed['rows'],int);nv=int(mixed['velocity_size']);mat=np.asarray(mixed['matrix'])
     mass=block_diag(*[np.asarray(m) for m in f['masses']],np.ones((1,1)))[np.ix_(rows,rows)]
     schur=mat[nv:,:nv]@np.linalg.solve(mass[:nv,:nv],mat[:nv,nv:])
@@ -113,6 +121,8 @@ def classify(packet,c):
         top_trace_mode_ids={str(b):sorted(v) for b,v in mode_ids.items()},free_top_mode_ids=free_top,
         top_physical_length=length,prescribed_epsilon_outward_conservative_flux=col.um**4/(parameters(c['model'])['sigma_epsilon']*c['Z']),
         zero_epsilon_flux_negative_signal=eps_signal,reversed_shear_negative_signal=shear_signal,
+        zero_epsilon_flux_continuous_negative=zero_flux_balance['equations']['outer_epsilon'],
+        initialization_receipt=receipt,
         pressure_minimum_singular_ratio=ratio,constant_pressure_action=action,additional_pressure_null_modes=int(np.sum(singular<=singular[0]*1e-10)),
         scope='complete actual governing operator/frozen matrices and finite mixed-pressure fixture; no formal inf-sup or physical preservation claim')
 
