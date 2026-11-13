@@ -83,9 +83,10 @@ public:
     // Read-only accuracy monitor. Cached rows/targets depend only on this
     // immutable space and the stored neutral reference, never on validity.
     Vector NeutralAccuracy(const Vector&,double,const RANSWallEvolutionData&) const;
+    Vector ManufacturedAccuracy(const Vector&,const Vector&,double,const RANSWallEvolutionData&) const;
     std::string PreservationIdentity(bool legacyOperator=false) const;
     std::string PreservationPacket(const Vector &state,double time,const RANSWallEvolutionData &data,
-        bool basis,const std::vector<RANSWallCoordinate> &grid={},const std::vector<int> &sides={}) const;
+        bool basis,const std::vector<RANSWallCoordinate> &grid={},const std::vector<int> &sides={},bool ct6Primitives=false) const;
     std::string EvaluationReuseChecks(const Vector &,const Vector &,double,const RANSWallEvolutionData &);
     RANSWallEvolutionPatch(const LibUtilities::SessionReaderSharedPtr &serialSession,
         const SpatialDomains::MeshGraphSharedPtr &graph,

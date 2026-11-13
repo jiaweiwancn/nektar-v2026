@@ -212,7 +212,9 @@ bool RANSUsesAcceptedManufactured(const LibUtilities::SessionReaderSharedPtr &s)
 std::string RANSAcceptedManufacturedIdentity(const LibUtilities::SessionReaderSharedPtr &s)
 {
     Require(RANSUsesAcceptedManufactured(s),"manufactured boundary requires CT6ContinuousV1");
-    for(const std::string f:{"InitialConditionsInner","InitialConditionsOuter","BoundaryValuesInner","BoundaryValuesOuter","BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","OutletTotalTractionInner","OutletTotalTractionOuter","OutletDiffusiveFluxInner","OutletDiffusiveFluxOuter"})Require(!s->DefinesFunction(f),"CT6 provider forbids competing physical production functions");
+    for(const std::string f:{"InitialConditionsInner","InitialConditionsOuter","InitialPerturbationInner","InitialPerturbationOuter","BoundaryValuesInner","BoundaryValuesOuter","BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","OutletTotalTractionInner","OutletTotalTractionOuter","OutletDiffusiveFluxInner","OutletDiffusiveFluxOuter"})Require(!s->DefinesFunction(f),"CT6 provider forbids competing physical production functions");
+    double perturbation;s->LoadParameter("RANSWallAcceptedKAmplitude",perturbation,0.);
+    Require(perturbation==0,"CT6 manufactured input forbids an undeclared initial perturbation");
     std::ostringstream o;o<<std::setprecision(17)<<"AcceptedManufacturedOpenV1:CT6ContinuousV1:Cartesian-stress:chart-functions:Pi-absolute:no-mean-gauge:no-state-restoration";
     const std::set<std::string> work{"NUMSTEPS","TIMESTEP","TIME","IO_CHECKSTEPS","IO_INFOSTEPS","IO_TIMER_LEVEL","RANSWALLNORMALORDER","RANSWALLTANGENTIALORDER","RANSWALLMASSORDER","RANSWALLVOLUMEORDER","RANSWALLINTERFACEORDER"};
     for(const auto &[k,v]:s->GetParameters())if(!work.count(k))o<<'|'<<k<<'='<<v;

@@ -218,7 +218,13 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         m_session->LoadSolverInfo("RANSWallNeutralBoundaryPolicy",m_neutralBoundaryPolicy,"Legacy");
         Require(m_neutralBoundaryPolicy=="Legacy" || (m_neutralBoundaryPolicy=="FrozenReferenceV1" && m_neutral && m_eta==0 && m_patch->NewModels() && m_patch->PimpleSingleSweep()),"unsupported neutral boundary policy");
         m_session->LoadSolverInfo("RANSWallPilotAccuracy",m_pilotAccuracy,"Off");
-        Require(m_pilotAccuracy=="Off" || (m_pilotAccuracy=="NeutralV1" && m_neutral && m_eta==0 && m_patch->NewModels() && m_patch->PimpleSingleSweep()),"unsupported pilot accuracy policy");
+        Require(m_pilotAccuracy=="Off" || (m_pilotAccuracy=="CT6ManufacturedV1" && m_patch->CurvedManufactured() && m_eta==0) ||
+            (m_pilotAccuracy=="NeutralV1" && m_neutral && m_eta==0 && m_patch->NewModels() && m_patch->PimpleSingleSweep()),"unsupported pilot accuracy policy");
+        if(m_patch->CurvedManufactured())
+        {
+            int requestedSteps;m_session->LoadParameter("NumSteps",requestedSteps,0);
+            Require(requestedSteps==0 || m_pilotAccuracy=="CT6ManufacturedV1","CT6 evolution requires its declared manufactured accuracy observer");
+        }
         Require(m_pilotAccuracy!="NeutralV1" || (m_direction[0]>0 && m_direction[1]==0),
             "NeutralV1 accuracy observer requires canonical positive-x reference direction");
         m_session->LoadSolverInfo("RANSWallRestart",m_restart,"None");m_session->LoadSolverInfo("RANSWallCheckpoint",m_checkpointBase,"None");
@@ -240,7 +246,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         }
         if(m_patch->OpenBoundary())
         {
-            Require(!m_neutral && m_neutralBoundaryPolicy=="Legacy" && m_pilotAccuracy=="Off",
+            Require(!m_neutral && m_neutralBoundaryPolicy=="Legacy" && (m_pilotAccuracy=="Off" ||
+                (m_patch->CurvedManufactured() && m_pilotAccuracy=="CT6ManufacturedV1")),
                 "AcceptedOpenFlatV1 requires its explicit physical-function/provider route, ordinary restart and its own diagnostics");
             m_data=LoadRANSAcceptedOpenData(m_serialSession,*m_patch);
         }
@@ -430,6 +437,15 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
             if(accuracy[1]>1e-4)reasons.push_back("pilot_vertical_velocity_accuracy_exit");
             if(accuracy[10]>1e-3)reasons.push_back("pilot_mean_wall_traction_accuracy_exit");
             if(audit.at("interface")[3]/(m_ustar*m_ustar)>1e-3)reasons.push_back("pilot_interface_traction_accuracy_exit");
+        }
+        if(reasons.empty() && m_pilotAccuracy=="CT6ManufacturedV1")
+        {
+            const auto accuracy=m_patch->ManufacturedAccuracy(state,m_initial,time,alpha?m_implicitData:m_data);
+            audit["manufactured_accuracy_E_D_tractions"]=accuracy;
+            for(int j=0;j<5;++j)if(!std::isfinite(accuracy[j]) || accuracy[j]>(j==4?.01:.005))
+                reasons.push_back("CT6_manufactured_field_accuracy_exit_"+std::to_string(j));
+            for(int j=10;j<14;++j)if(!std::isfinite(accuracy[j]) || accuracy[j]>.005)
+                reasons.push_back("CT6_manufactured_traction_accuracy_exit_"+std::to_string(j));
         }
         if(!reasons.empty())
         {
@@ -1016,7 +1032,9 @@ void RANSEquilibriumWallEvolution::WriteReport() const
         p.geometry.tailStart,p.model.Q()*m_ustar*m_ustar,p.model.Q(),p.model.Kappa()});
     out<<",\"quadrature_orders\":";Write(out,{static_cast<double>(p.tangentialOrder),static_cast<double>(p.normalOrder)});
     out<<",\"ustar\":"<<m_ustar<<",\"direction\":";Write(out,{m_direction[0],m_direction[1]});
-    out<<",\"pilot_accuracy_semantics\":"<<Quoted("NeutralV1 canonical positive-x; E is analytical-reference error; legacy D entries 5..9 measure change from fixed neutral polynomial reference, not drift from a perturbed initial state");
+    out<<",\"pilot_accuracy_semantics\":"<<Quoted(m_pilotAccuracy=="CT6ManufacturedV1"?
+        "CT6 E: continuous time-dependent manufactured error, absolute Pi; D: drift from actual initialized coefficients; entries10..13: ground error, full interface jump, inner/outer interface errors; entry14: fixed volume order6":
+        "NeutralV1 canonical positive-x; E is analytical-reference error; legacy D entries 5..9 measure change from fixed neutral polynomial reference, not drift from a perturbed initial state");
     out<<",\"cell_ownership\":[";int ownerCount=0;
     for(const auto &e:m_patch->fields[0]->Elements())
     {if(ownerCount++)out<<',';Write(out,{static_cast<double>(e.geometry),static_cast<double>(m_patch->Owner(e.geometry))});}out<<']';

@@ -7,7 +7,7 @@ from rans_qualification import THREADS,write_json,exact_vector_hash
 os.environ.update(THREADS)
 from ct_accepted6_cases import make,request
 from ct_accepted6_metrics import metrics
-from ct_accepted6_operator import reconstruct,continuous_weak,geometry_qualification
+from ct_accepted6_operator import reconstruct,continuous_weak,geometry_qualification,represented_consistency
 from ct_accepted_open import run,probe,require
 from ct_accepted_pilot import artifact_hash
 from rans_request_manifest import RequestManifest,runtime_identity,sha
@@ -48,6 +48,7 @@ def main():
             row.update(packet_sha256=sha(folder/'initial.json'),packet_path=str(folder/'initial.json'),
                 physical_metrics=metrics(packet,model),all_row=reconstruct(packet,model),
                 continuous_weak=continuous_weak(packet,model),geometry=geometry_qualification(packet),
+                represented_consistency=represented_consistency(packet,model),
                 raw_native_audit=packet['observation']['audit_alpha_zero'],
                 actual_quadrature=packet['observation']['actual_quadrature'])
             row['status']='pass' if all(row[k]['status']=='pass' for k in ('physical_metrics','all_row','continuous_weak','geometry')) else 'fail'

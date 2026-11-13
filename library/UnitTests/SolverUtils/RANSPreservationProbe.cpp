@@ -50,7 +50,7 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
     const auto state=patch.Project(functions,0.);
     const auto zeroNormal=patch.fields[patch.K()]->Project([=](const auto &x){return K0*(1+.02*x[0]);});
     RANSWallEvolutionData data(2);std::vector<std::string> rows;
-    double maximum=0,tiltedSignal=0,omittedTiltSignal=0;
+    double maximum=0,tiltedSignal=0,omittedTiltSignal=0,fixedChartSignal=0,minimumCovariance=1e100;
     const auto dot=[](const RANSVector &a,const RANSVector &b)
     {double x=0;for(int j=0;j<3;++j)x+=a[j]*b[j];return x;};
     for(const auto &face:patch.Surface(0,2,H0,1,12))
@@ -58,6 +58,12 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
         const auto q=face.test.coordinate;const auto g=patch.Mapping().At(q);
         const auto &m=patch.Mapping();
         const double Hp=m.heightSlopeX+m.heightAmplitude*m.heightWaveX*std::cos(m.heightWaveX*q[0]);
+        const double height=H0+m.heightAmplitude*std::sin(m.heightWaveX*q[0]);
+        const double graph=m.amplitude*std::exp(-q[0]*q[0]/(m.lengthX*m.lengthX));
+        const double graphDerivative=-2*q[0]*graph/(m.lengthX*m.lengthX),a=std::hypot(1.,graphDerivative);
+        const double gamma=-(4*q[0]*q[0]/std::pow(m.lengthX,4)-2/(m.lengthX*m.lengthX))*graph/(a*a*a);
+        const double J=1+height*gamma;
+        maximum=std::max({maximum,std::abs(g.height-height),std::abs(g.baseArea-a),std::abs(g.J-J)});
         const double qH=Hp/(g.baseArea*g.J);
         RANSVector N{},area=patch.Mapping().MatchingArea(q);
         for(int j=0;j<3;++j)N[j]=(g.normal[j]-qH*g.tangent1[j])/std::sqrt(1+qH*qH);
@@ -70,6 +76,15 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
         const double dependent=patch.DependentEpsilon(state,q,0.,data);
         const double expected=std::pow(sampled/p.model.Q(),1.5)/(p.model.Kappa()*g.height);
         maximum=std::max(maximum,std::abs(dependent-expected));
+        const auto forcing=patch.ForcingParts(state,q,0.,data);
+        // p_o=.03q-.01rho and k=K0(1+.02q+.03rho/H0).
+        // Differentiate at fixed PHYSICAL r, then take the outer trace.
+        const double gp=.03+.01*H0*Hp/height,gk=.02*K0-.03*K0*Hp/height;
+        const double expectedMechanical=(gp-2*gk/3)/(a*J);
+        const double wrongChart=(.03-2*(.02*K0)/3)/(a*J);
+        const double mechanicalDefect=std::abs(dot(forcing[0],g.tangent1)-expectedMechanical);
+        maximum=std::max(maximum,mechanicalDefect);
+        fixedChartSignal=std::max(fixedChartSignal,std::abs(wrongChart-expectedMechanical));
         RANSVector u{face.test.Value(state,patch.offset[0]),0,face.test.Value(state,patch.offset[1])};
         const double mH=g.J*(dot(u,g.normal)-dot(u,g.tangent1)*qH);
         maximum=std::max(maximum,std::abs(mH-dot(u,area)/g.baseArea));
@@ -79,20 +94,24 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
             const bool outer=side>0;const auto v=patch.Point(0,q,side);
             const auto kg=patch.Point(patch.K(),q,side).Gradient(state,patch.offset[patch.K()]);
             const double k=v.Value(state,patch.offset[patch.K()]);
-            RANSTensor G{},T{};G[0]=v.Gradient(state,patch.offset[0]);G[2]=v.Gradient(state,patch.offset[1]);
+            RANSTensor G{},T{},R{};G[0]=v.Gradient(state,patch.offset[0]);G[2]=v.Gradient(state,patch.offset[1]);
             const double pi=patch.Point(patch.InnerPressure()+outer,q,side).Value(state,patch.offset[patch.InnerPressure()+outer]);
-            double D=0;
+            double D=0,production=0,radicand=0;bool radicandDefined=false;
             if(outer)
             {
                 const double eps=patch.Point(patch.Epsilon(),q,side).Value(state,patch.offset[patch.Epsilon()]);
-                const auto law=patch.OuterClosure(k,eps,G,q);D=law.kDiffusion;
+                const auto law=patch.OuterClosure(k,eps,G,q);D=law.kDiffusion;R=law.reynoldsStress;production=law.production;
+                radicand=law.a95Radicand;radicandDefined=law.a95RadicandDefined;
                 for(int i=0;i<3;++i)for(int j=0;j<3;++j)T[i][j]=-law.reynoldsStress[i][j]+(i==j?2*k/3-pi:0);
             }
             else
             {
                 const double nt=profile->Original().EddyViscosity(g.height);D=p.geometry.molecularNu+nt/p.model.Parameters().sigmaK;
-                T=RANSWallInnerMeanStress(patch.InnerStress(k,nt,G),p.geometry.molecularNu,pi);
+                const auto law=patch.InnerStress(k,nt,G);R=law.reynoldsStress;production=law.production;
+                T=RANSWallInnerMeanStress(law,p.geometry.molecularNu,pi);
             }
+            const auto covariance=J::Eigenvalues(R);minimumCovariance=std::min(minimumCovariance,covariance[0]);
+            Require(J::CovarianceAdmissible(covariance[0],K0),"CT6 static sampled covariance failure");
             const double dr=dot(kg,g.normal),dt=dot(kg,g.tangent1);
             const double normalFlux=mH*k-g.J*D*(dr-qH*dt);
             const double physicalFlux=dot(u,area)*k/g.baseArea-D*dot(kg,area)/g.baseArea;
@@ -112,17 +131,24 @@ std::string StaticCT6Transmission(RANSWallEvolutionPatch &patch)
             regions.push_back(J::Object({{"side",J::Number(side)},{"geometry",J::Number(v.geometry)},
                 {"k_gradient",J::Numbers(kg)},{"normal_flux",J::Number(normalFlux)},
                 {"Cartesian_flux",J::Number(physicalFlux)},{"traction_per_ground_area",J::Numbers(a)},
+                {"Reynolds_stress",J::Rows(R)},{"covariance_eigenvalues",J::Numbers(covariance)},
+                {"raw_divergence",J::Number(G[0][0]+G[2][2])},{"signed_production",J::Number(production)},
+                {"A95_radicand",radicandDefined?J::Number(radicand):"null"},
                 {"zero_base_normal_gradient_tilted_diffusion",J::Number(tilt)}}));
         }
         rows.push_back(J::Object({{"chart",J::Numbers(q)},{"physical",J::Numbers(g.point)},
             {"H",J::Number(g.height)},{"qH",J::Number(qH)},{"J",J::Number(g.J)},
             {"normal",J::Numbers(N)},{"cofactor",J::Numbers(area)},{"mH",J::Number(mH)},
+            {"mechanical_sampler_defect",J::Number(mechanicalDefect)},
+            {"fixed_chart_wrong_sampler_difference",J::Number(wrongChart-expectedMechanical)},
             {"dependent_epsilon",J::Number(dependent)},{"regions",J::List(regions)}}));
     }
-    Require(maximum<=2e-10 && tiltedSignal>1e-8 && omittedTiltSignal>1e-8,"CT6 static transmission identity or discriminating signal failed");
+    Require(maximum<=2e-10 && tiltedSignal>1e-8 && omittedTiltSignal>1e-8 && fixedChartSignal>1e-8,"CT6 static transmission identity or discriminating signal failed");
     return J::Object({{"schema",J::Quote("CT6StaticTransmissionV1")},{"status",J::Quote("pass")},
         {"stored_slots",J::Number(patch.Size())},{"maximum_primitive_defect",J::Number(maximum)},
         {"tilted_diffusion_signal",J::Number(tiltedSignal)},{"omitted_tilt_signal",J::Number(omittedTiltSignal)},
+        {"fixed_chart_derivative_signal",J::Number(fixedChartSignal)},
+        {"minimum_sampled_covariance",J::Number(minimumCovariance)},
         {"rows",J::List(rows)},{"scope",J::Quote("native geometry/profile/trace identity; full traction and conservative k-flux evaluated on both sides; arbitrary polynomial probe fields are not a transmission solution; no variable-height evolution")}});
 }
 
@@ -172,6 +198,82 @@ std::string ContinuousCT6Samples(const RANSWallEvolutionPatch &patch,const Tree 
     return J::Object({{"schema",J::Quote("CT6ContinuousNativeCrossCheckV1")},{"status",J::Quote("execution_completed")},
         {"time",J::Number(time)},{"stored_slots",J::Number(patch.Size())},{"samples",J::List(rows)},
         {"scope",J::Quote("independent continuous-data provider and production constitutive/profile evaluations; zero governing solves; primitive agreement classified by external oracle")}});
+}
+
+std::string ZeroCurvatureCT6Comparison(RANSWallEvolutionPatch &curved,
+    const SpatialDomains::MeshGraphSharedPtr &graph,const std::vector<std::string> &files)
+{
+    Require(curved.CurvedManufactured() && !curved.Mapped() && curved.Size()<500,
+        "zero-curvature comparison requires the small CT6 amplitude-zero fixture");
+    char name[]="ct6-flat-comparison";char *args[]{name,nullptr};
+    auto flatSession=LibUtilities::SessionReader::CreateInstance(1,args,files,LibUtilities::CommSerial::create(1,args));
+    flatSession->InitSession();flatSession->SetSolverInfo("GlobalSysSoln","DirectFull");
+    flatSession->SetSolverInfo("RANSWallCurvedCapability","Off");
+    flatSession->SetSolverInfo("RANSWallManufactured","Off");
+    flatSession->SetSolverInfo("RANSWallPilotAccuracy","Off");
+    flatSession->SetSolverInfo("RANSWallBoundaryPolicy","AcceptedOpenFlatV1");
+    flatSession->SetSolverInfo("RANSWallFunctionCoordinates","Physical");
+    auto map=curved.Mapping();map.kind=RANSWallNormalMap::Kind::Flat;map.amplitude=0;
+    RANSWallEvolutionPatch flat(flatSession,graph,curved.Comm(),curved.Parameters(),map);
+    const RANSWallManufactured provider(curved);auto cd=provider.Data();
+    const auto state=curved.Lift(curved.Project(provider.InitialFunctions(),0.),0.,cd);
+    auto fd=cd;fd.openBoundaryIdentity=flat.OpenBoundaryIdentity();fd.Touch();
+    Require(flat.Size()==curved.Size(),"zero-curvature native dimensions differ");
+    const auto a=curved.Residual(state,state,0.,0.,cd,false,false),b=flat.Residual(state,state,0.,0.,fd,false,false);
+    double raw=0,scale=1.;for(int i=0;i<a.size();++i){raw=std::max(raw,std::abs(a[i]-b[i]));scale=std::max({scale,std::abs(a[i]),std::abs(b[i])});}
+    Tree ca,fa;std::istringstream ci(curved.OpenFrozenSystemsPacket(state,0.,cd)),fi(flat.OpenFrozenSystemsPacket(state,0.,fd));
+    boost::property_tree::read_json(ci,ca);boost::property_tree::read_json(fi,fa);
+    Require(ca.get_child("blocks").size()==fa.get_child("blocks").size(),"zero-curvature block count differs");
+    double matrix=0;auto ib=ca.get_child("blocks").begin(),jb=fa.get_child("blocks").begin();
+    for(;ib!=ca.get_child("blocks").end();++ib,++jb)
+    {
+        Require(jb!=fa.get_child("blocks").end() && ib->second.get<int>("block")==jb->second.get<int>("block"),"zero-curvature block identities differ");
+        Require(Values(ib->second,"rows")==Values(jb->second,"rows"),"zero-curvature constrained rows differ");
+        Require(ib->second.get_child("matrix").size()==jb->second.get_child("matrix").size(),"zero-curvature matrix row count differs");
+        auto ir=ib->second.get_child("matrix").begin(),jr=jb->second.get_child("matrix").begin();
+        for(;ir!=ib->second.get_child("matrix").end();++ir,++jr)
+        {
+            Require(jr!=jb->second.get_child("matrix").end(),"zero-curvature matrix shape differs");
+            Require(ir->second.size()==jr->second.size(),"zero-curvature matrix column count differs");
+            auto x=ir->second.begin(),y=jr->second.begin();
+            for(;x!=ir->second.end();++x,++y)
+            {Require(y!=jr->second.end(),"zero-curvature matrix width differs");matrix=std::max(matrix,std::abs(x->second.get_value<double>()-y->second.get_value<double>()));}
+        }
+    }
+    double profile=0,constitutive=0;
+    const RANSWallCoordinate H{.1,0,curved.Parameters().geometry.height};
+    const auto cp=curved.StateProfile(state,H,0.,cd),fp=flat.StateProfile(state,H,0.,fd);
+    for(double r:{0.,.1,.25,.5})
+        for(const auto &pair:std::vector<std::pair<double,double>>{{cp->Dissipation(r),fp->Dissipation(r)},
+            {cp->ReferenceK(r),fp->ReferenceK(r)},{cp->ReferenceKGradient(r),fp->ReferenceKGradient(r)},
+            {cp->ReferenceKFlux(r),fp->ReferenceKFlux(r)},{cp->ReferenceKDiffusivity(r),fp->ReferenceKDiffusivity(r)}})
+            profile=std::max(profile,std::abs(pair.first-pair.second));
+    for(int side:{-1,1})
+    {
+        RANSTensor cg{},fg{};for(int component=0;component<2;++component)
+        {cg[component?2:0]=curved.Point(0,H,side).Gradient(state,curved.offset[component]);fg[component?2:0]=flat.Point(0,H,side).Gradient(state,flat.offset[component]);}
+        const auto kv=curved.Point(0,H,side).Value(state,curved.offset[curved.K()]);
+        if(side>0)
+        {
+            const double e=curved.Point(curved.Epsilon(),H,1).Value(state,curved.offset[curved.Epsilon()]);
+            const auto x=curved.OuterClosure(kv,e,cg,H),y=flat.OuterClosure(kv,e,fg,H);
+            constitutive=std::max(constitutive,std::abs(x.production-y.production));
+            for(int i=0;i<3;++i)for(int j=0;j<3;++j)constitutive=std::max(constitutive,std::abs(x.reynoldsStress[i][j]-y.reynoldsStress[i][j]));
+        }
+        else
+        {
+            const auto x=curved.InnerStress(kv,cp->Original().EddyViscosity(H[2]),cg),y=flat.InnerStress(kv,fp->Original().EddyViscosity(H[2]),fg);
+            constitutive=std::max(constitutive,std::abs(x.production-y.production));
+            for(int i=0;i<3;++i)for(int j=0;j<3;++j)constitutive=std::max(constitutive,std::abs(x.reynoldsStress[i][j]-y.reynoldsStress[i][j]));
+        }
+    }
+    Require(std::max({raw/scale,matrix,profile,constitutive})<=2e-10,"zero-curvature flat/CT6 operator disagreement");
+    return J::Object({{"schema",J::Quote("CT6ZeroCurvatureFlatComparisonV1")},{"status",J::Quote("pass")},
+        {"stored_slots",J::Number(curved.Size())},{"raw_scaled_defect",J::Number(raw/scale)},
+        {"frozen_matrix_defect",J::Number(matrix)},{"profile_defect",J::Number(profile)},
+        {"constitutive_defect",J::Number(constitutive)},
+        {"curved_identity",J::Quote(curved.PreservationIdentity())},{"flat_identity",J::Quote(flat.PreservationIdentity())},
+        {"scope",J::Quote("same native state and same physical C++ functions passed explicitly to ordinary flat and CT6-zero operators; policy identities remain distinct; no checkpoint relabelling or governing solve")}});
 }
 
 // Physical volume/face integration, deliberately independent of assembled
@@ -497,6 +599,8 @@ int main(int argc,char **argv)
         }
         if(request.get<std::string>("operation","")=="ct6_continuous_samples")
         {std::ofstream out(argv[3]);out<<ContinuousCT6Samples(patch,request)<<'\n';return 0;}
+        if(request.get<std::string>("operation","")=="ct6_zero_flat")
+        {std::ofstream out(argv[3]);out<<ZeroCurvatureCT6Comparison(patch,graph,files)<<'\n';return 0;}
         Require(patch.Dimension()==2 && (!patch.Mapped() || patch.CurvedVerification()) && (patch.AcceptedAWF() || patch.UniformEPFlat()),
             "neutral preservation probe supports accepted or EP plateau references, serial flat2D only");
         RANSWallEvolutionData data(2);Vector state,reference;double time=request.get<double>("time",0.);
@@ -546,7 +650,8 @@ int main(int argc,char **argv)
         const auto targetReference=open?reference:patch.NeutralReference(receiptUs,{receiptDx,receiptDy});
         const auto receipt=patch.InitializationReceipt(state,reference,time,data,data,patch.FixedReferenceBoundary(targetReference));
         const auto stateCopy=state;
-        const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid,sides);
+        const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid,sides,
+            request.get<bool>("export_ct6_primitives",false));
         std::string resolution="null",testBasis="null",constitutive="null";
         if(request.get<bool>("export_constitutive",false))
         {

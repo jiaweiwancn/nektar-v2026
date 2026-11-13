@@ -273,13 +273,44 @@ def frozen_systems(packet,model,amplitude=.005):
     singular=np.linalg.svd(normalized,compute_uv=False);relative=float(singular[-1]/singular[0])
     constant=np.asarray(packet['mixed_space']['pressure_constant_with_zero_gauge'])[nv:]
     constant_action=float(np.linalg.norm(B@constant)/np.linalg.norm(constant))
-    maximum=max(max(row.values()) for row in blocks.values())
-    return dict(schema='CT6IndependentFrozenSystemsV1',status='pass' if maximum<=2e-10 and relative>1e-11 and constant_action>1e-8 else 'fail',
+    maximum=max(max(row.values()) for row in blocks.values());mass_minimum=float(np.linalg.eigvalsh(M)[0]);mass_symmetry=float(np.max(abs(M-M.T)))
+    return dict(schema='CT6IndependentFrozenSystemsV1',status='pass' if maximum<=2e-10 and relative>1e-11 and constant_action>1e-8 and mass_minimum>0 and mass_symmetry<=2e-10 else 'fail',
         blocks=blocks,pressure_unknowns=len(constant),free_velocity_unknowns=nv,
-        free_mass_symmetry=float(np.max(abs(M-M.T))),minimum_free_mass_eigenvalue=float(np.linalg.eigvalsh(M)[0]),
+        free_mass_symmetry=mass_symmetry,minimum_free_mass_eigenvalue=mass_minimum,
         normalized_consistent_mass_pressure_minimum_singular_ratio=relative,
         constant_pressure_action=constant_action,additional_pressure_null_modes=int(np.sum(singular<=singular[0]*1e-11)),
         scope='actual constrained matrix, projected roughness-volume pressure columns in both Cartesian components, prescribed outlet advection and frozen scalar reaction; consistent free-mass pressure action, no mean multiplier; finite fixture only')
+
+
+def represented_consistency(packet,model):
+    """A time-dependent MMS has r_spatial = -load(analytical time derivative).
+
+    Keep r_spatial unchanged and visible. Adding the independent continuous
+    storage load here is a read-only consistency test, never a solver source.
+    """
+    o=packet['observation'];off=o['offsets'];p=parameters(model);storage=np.zeros(len(o['state']))
+    for point in o['volume']:
+        d=point['CT6_prescribed_data'];v=point['velocity_k'];w=point['weight']
+        for b,dt in ((0,d['continuous_dtU'][0]),(1,d['continuous_dtU'][2]),(2,d['continuous_dtk'])):
+            storage[np.asarray(v['ids'],int)+off[b]]+=w*np.asarray(v['phi'])*dt
+        if point['region']:
+            e=point['epsilon'];storage[np.asarray(e['ids'],int)+off[3]]+=w*np.asarray(e['phi'])*d['continuous_dtepsilon']
+    spatial=np.asarray(packet['resolution']['native']['spatial_unmasked']);r=spatial+storage
+    fixed={int(row) for row,value in packet['resolution']['constraints']};blocks={}
+    scales=[.2,.2,p['q']*.16,.4**3/(p['kappa']*.5),.2,.2]
+    for b,name in enumerate(('momentum_x','momentum_z','k','outer_epsilon','continuity_inner','continuity_outer')):
+        ids=[i for i in range(o['sizes'][b]) if off[b]+i not in fixed]
+        if not ids:
+            blocks[name]=dict(free_rows=0,scaled_mass_dual=0.,scaled_maximum=0.);continue
+        mass=np.asarray(packet['resolution']['mass'][b])[np.ix_(ids,ids)]
+        load=r[np.asarray(ids)+off[b]];dual=math.sqrt(max(0.,float(load@np.linalg.solve(mass,load))))
+        volume=sum(point['weight'] for point in o['volume'] if b not in (3,4,5) or (point['region']==(0 if b==4 else 1)))
+        blocks[name]=dict(free_rows=len(ids),scaled_mass_dual=dual/(scales[b]*math.sqrt(volume)),
+            scaled_maximum=float(np.max(abs(load)))/(scales[b]*volume),
+            native_alpha_zero_load_maximum=float(np.max(abs(spatial[np.asarray(ids)+off[b]]))),
+            analytical_storage_load_maximum=float(np.max(abs(storage[np.asarray(ids)+off[b]]))))
+    return dict(schema='CT6RepresentedMMSConsistencyV1',blocks=blocks,
+        scope='unmodified native alpha-zero load plus independently differentiated analytical storage on free native test rows; time-discrete stage residual and analytical weak oracle remain separate; no governing cancellation')
 
 
 def main():
@@ -289,6 +320,7 @@ def main():
     packet=json.loads(a.packet.read_text());result=reconstruct(packet,a.model,a.amplitude)
     result['continuous_weak']=continuous_weak(packet,a.model)
     result['geometry']=geometry_qualification(packet,a.amplitude)
+    result['represented_consistency']=represented_consistency(packet,a.model)
     result['status']='pass' if result['status']==result['continuous_weak']['status']==result['geometry']['status']=='pass' else 'fail'
     write_json(a.output,result)
     return 0 if result['status']=='pass' else 1

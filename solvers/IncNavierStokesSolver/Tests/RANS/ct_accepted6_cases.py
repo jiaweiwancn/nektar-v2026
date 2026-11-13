@@ -34,6 +34,7 @@ def make(folder, runtime, model='A95', degree=3, dt=.002, steps=0,
                     RANSWallMap='Gaussian', RANSWallManufactured='Off' if static else 'CT6ContinuousV1',
                     RANSWallReference='Functions', RANSWallFunctionCoordinates='Chart',
                     RANSOpenTop='DirichletCompatibleV1', RANSOpenBackflow='RejectV1',
+                    RANSWallPilotAccuracy='Off' if static else 'CT6ManufacturedV1',
                     RANSWallPimpleSnapshots='On', RANSWallEvaluationReuse='Off')
     for k, v in settings.items():
         set_info(root, k, v)
@@ -79,7 +80,7 @@ def request(small=False):
     g, sides = grid()
     return dict(operation='functions', export_basis=True, export_test_basis=True,
         export_constitutive=True, export_resolution=True, export_tensor_validation=True,
-        export_manufactured=True, export_open_verification=small,
+        export_manufactured=True, export_ct6_primitives=True, export_open_verification=small,
         export_mixed_space=small, grid=g, grid_sides=sides)
 
 

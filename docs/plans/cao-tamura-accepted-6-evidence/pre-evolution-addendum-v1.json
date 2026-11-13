@@ -1,0 +1,23 @@
+{
+  "schema": "CT6PreEvolutionExecutionAddendumV1",
+  "base_contract": "CT-Accepted-6-V1",
+  "source_start": "7d32b43dc9d176628cfef1dbae2aee02a86ce330",
+  "governing_native_evolution_started": false,
+  "specifications": {
+    "docs/literature/accepted_awf_appendix_A93_A95_E94_E95.tex": "17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40",
+    "docs/literature/A93_A95_E94_E95_neutral_ABL_EP_AWF_combined.tex": "056a85c2aea5ce4ca168caf561613e662416bb6b7d7177451ba5038d2cf68a64"
+  },
+  "changes": {
+    "manufactured_primitives": "explicit export_ct6_primitives flag; full basis, forcing, continuous-reference and cell-face exports only when requested; ordinary scalar budgets retain native basis, all mandatory audits and all four controls",
+    "accepted_state_accuracy": "CT6ManufacturedV1 opt-in observer, required for CT6 evolution; field E against current continuous time-dependent solution, absolute Pi; D against actual initialized coefficient vector; ground and both interface-side reference tractions plus interface jump",
+    "accuracy_inventory": "fixed Gauss6 per canonical cell for value RMS (squared P4 polynomials have degree8); Gauss12 physical ground/interface faces; compare against higher-order native rows in independent milestone audits",
+    "numerical_limits": "unchanged .005 scaled RMS fields and tractions, .01 absolute-Pi RMS; no new constitutive rejection at a diagnostic-only predictor",
+    "restart": "existing physics signature already fingerprints non-Off pilot policy; Off/CT6ManufacturedV1 histories are incompatible; fresh histories for admitted evolution",
+    "initial_history": "fresh native zero-step initialization for each timestep; same-space pair actual coefficients must match exactly"
+  },
+  "residual_interpretation": "time-dependent MMS r_spatial is generally -load(analytical time derivative), not a steady zero. Report unmodified alpha-zero loads and, separately, read-only represented consistency r_spatial+independent continuous storage on free test rows. No diagnostic load is used in evolution.",
+  "pressure_interpretation": "absolute prescribed-traction convention; no mean removal in field/traction comparisons; generic solver ExactSolution output defaults to zero and is not the manufactured error",
+  "storage": "active /media/jay/\u65b0\u52a0\u53771 via ntfs-3g after user-coordinated recovery; original CT6 preparations and all CT1-CT5 evidence retained; new source/build/run root recovered-v1",
+  "temporary_IPC": "small owned /tmp/nektar-ct6-ipc-20261113 directory for OpenMPI process IPC; heavy TMPDIR and numerical outputs stay in experiment storage; no MPI numerical qualification implied",
+  "unchanged": "physical fits/data, models/coefficient resolution, source constructions, PIMPLE ordering, geometry/ownership rules, primary mesh and all accuracy/operator thresholds"
+}

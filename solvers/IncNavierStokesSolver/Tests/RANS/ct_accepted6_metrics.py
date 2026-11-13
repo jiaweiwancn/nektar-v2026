@@ -65,6 +65,7 @@ def metrics(packet,model,initial_state=None):
             scaled_drift_from_actual_initial=float(math.sqrt(drift[j]/volumes[j])/scales[j]) if initial_state is not None else None)
             for j,name in enumerate(('U','w','k','outer_epsilon','Pi'))}
     trace,trace_defect=endpoint_trace(packet,s);wall=0.;wall_measure=0.;wall_mean=np.zeros(3);wall_exact=np.zeros(3);interface={};outlet=0.;outlet_measure=0.
+    interface_error=[0.,0.];interface_measure=[0.,0.]
     for face in o['faces']:
         region=face['region'];q=face['coordinate'];v=face['velocity_k'];U=np.zeros(3);G=np.zeros((3,3))
         for b,axis in enumerate((0,2)):U[axis],G[axis]=row_value(v,s,off[b])
@@ -80,6 +81,7 @@ def metrics(packet,model,initial_state=None):
             wall_mean+=weight*traction;wall_exact+=weight*truth
         if face['interface']:
             key=tuple(q);interface.setdefault(key,[]).append(dict(traction=traction,flux=float((U*k-D*gk)@normal),weight=weight))
+            interface_error[region]+=weight*float((traction-truth)@(traction-truth));interface_measure[region]+=weight
         elif q[0]==max(e['upper'][0] for e in o['elements']):
             outlet+=weight*float((traction-truth)@(traction-truth));outlet_measure+=weight
     jump=0.;flux=0.;iw=0.
@@ -90,10 +92,13 @@ def metrics(packet,model,initial_state=None):
     traction=dict(ground_scaled_RMS=math.sqrt(wall/wall_measure)/.16,
         ground_signed_mean=(wall_mean/wall_measure).tolist(),ground_reference_mean=(wall_exact/wall_measure).tolist(),
         full_interface_jump_scaled_RMS=math.sqrt(jump/iw)/.16,
+        inner_interface_reference_error_scaled_RMS=math.sqrt(interface_error[0]/interface_measure[0])/.16,
+        outer_interface_reference_error_scaled_RMS=math.sqrt(interface_error[1]/interface_measure[1])/.16,
         conservative_k_interface_jump_scaled_RMS=math.sqrt(flux/iw)/(K0*.2),
         outlet_reconstruction_scaled_RMS=math.sqrt(outlet/outlet_measure)/.16,
         current_endpoint_trace_restriction_defect=trace_defect)
-    limits=np.array([.005,.005,.005,.005,.01]);passed=bool(np.all(rms<=limits)) and max(traction['ground_scaled_RMS'],traction['full_interface_jump_scaled_RMS'])<=.005
+    limits=np.array([.005,.005,.005,.005,.01]);passed=bool(np.all(rms<=limits)) and max(traction[k] for k in
+        ('ground_scaled_RMS','full_interface_jump_scaled_RMS','inner_interface_reference_error_scaled_RMS','outer_interface_reference_error_scaled_RMS'))<=.005
     return dict(schema='CT6ManufacturedPhysicalMetricsV1',status='pass' if passed else 'fail',
         fields=fields,traction=traction,pressure='absolute augmented Pi, no fitted gauge subtraction',
         field_limits=dict(zip(('U','w','k','outer_epsilon','Pi'),limits.tolist(),strict=True)),

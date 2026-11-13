@@ -85,6 +85,66 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::NeutralAccuracy(const Vec
     Require(std::all_of(result.begin(),result.end(),[](double v){return std::isfinite(v);}),"nonfinite neutral accuracy measurement");
     return result;
 }
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ManufacturedAccuracy(const Vector &s,const Vector &initial,
+    double time,const RANSWallEvolutionData &data) const
+{
+    RANSWallTiming::Scope timing("audit.manufactured_accuracy");
+    Require(CurvedManufactured() && initial.size()==s.size(),"CT6 accuracy requires its manufactured route and actual initial vector");
+    const RANSWallManufactured exact(*this);const double K0=m_parameters.model.Q()*.16;
+    const std::array<double,5> scale{.2,.2,K0,.4*.4*.4/(m_parameters.model.Kappa()*m_parameters.geometry.height),.1};
+    std::array<long double,5> error{},drift{},volume{};
+    for(const auto &v:Quadrature(0,6))
+    {
+        const bool outer=v.coordinate[2]>m_parameters.geometry.height;const auto truth=exact.At(v.coordinate,time,outer);
+        const auto ep=outer?GeometryPoint(Epsilon(),v.geometry,v.coordinate):RANSWallGlobalPoint{};
+        const auto pressure=GeometryPoint(InnerPressure()+outer,v.geometry,v.coordinate);
+        const std::array<double,5> actual{v.Value(s,offset[0]),v.Value(s,offset[1]),v.Value(s,offset[K()]),
+            outer?ep.Value(s,offset[Epsilon()]):0.,pressure.Value(s,offset[InnerPressure()+outer])};
+        const std::array<double,5> start{v.Value(initial,offset[0]),v.Value(initial,offset[1]),v.Value(initial,offset[K()]),
+            outer?ep.Value(initial,offset[Epsilon()]):0.,pressure.Value(initial,offset[InnerPressure()+outer])};
+        for(int b=0;b<5;++b)if(b!=3 || outer)
+        {
+            const double e=(actual[b]-truth.value[b])/scale[b],d=(actual[b]-start[b])/scale[b];
+            error[b]+=v.weight*e*e;drift[b]+=v.weight*d*d;volume[b]+=v.weight;
+        }
+    }
+    Vector result(15);for(int b=0;b<5;++b){result[b]=std::sqrt(error[b]/volume[b]);result[b+5]=std::sqrt(drift[b]/volume[b]);}
+    long double ground=0,groundArea=0,jump=0,innerError=0,outerError=0,interfaceArea=0;
+    const auto stress=[&](const RANSWallCoordinate &q,int side)
+    {
+        const int traceSide=q[2]==m_parameters.geometry.height?side:0;
+        const auto v=Point(0,q,traceSide);RANSTensor G{},T{};for(int a=0;a<2;++a)G[PhysicalAxis(a)]=v.Gradient(s,offset[a]);
+        const double k=v.Value(s,offset[K()]),pi=Point(side<0?InnerPressure():OuterPressure(),q,traceSide).Value(s,offset[side<0?InnerPressure():OuterPressure()]);
+        if(side<0)
+        {const auto f=StateProfile(s,q,time,data);T=RANSWallInnerMeanStress(InnerStress(k,f->Original().EddyViscosity(Distance(q)),G),m_parameters.geometry.molecularNu,pi);}
+        else
+        {
+            const double e=Point(Epsilon(),q,1).Value(s,offset[Epsilon()]);const auto law=OuterClosure(k,e,G,q);
+            for(int i=0;i<3;++i)for(int j=0;j<3;++j)T[i][j]=-law.reynoldsStress[i][j]+(i==j?2*k/3-pi:0.);
+        }
+        return T;
+    };
+    for(const auto &face:Surface(0,2,0.,-1,12))
+    {
+        const auto &q=face.test.coordinate;const auto actual=stress(q,-1),truth=exact.At(q,time,false).stress;
+        const double measure=std::hypot(face.area[0],face.area[1],face.area[2]),w=face.weight*measure;groundArea+=w;
+        for(int i=0;i<3;++i){double d=0;for(int j=0;j<3;++j)d+=(actual[i][j]-truth[i][j])*face.area[j]/measure;ground+=w*d*d;}
+    }
+    for(const auto &face:Surface(0,2,m_parameters.geometry.height,1,12))
+    {
+        const auto &q=face.test.coordinate;const auto inner=stress(q,-1),outer=stress(q,1),truth=exact.At(q,time,false).stress;
+        const double measure=std::hypot(face.area[0],face.area[1],face.area[2]),w=face.weight*measure;interfaceArea+=w;
+        for(int i=0;i<3;++i)
+        {
+            double d=0,di=0,dout=0;
+            for(int j=0;j<3;++j){const double n=face.area[j]/measure;d+=(inner[i][j]-outer[i][j])*n;di+=(inner[i][j]-truth[i][j])*n;dout+=(outer[i][j]-truth[i][j])*n;}
+            jump+=w*d*d;innerError+=w*di*di;outerError+=w*dout*dout;
+        }
+    }
+    result[10]=std::sqrt(ground/groundArea)/.16;result[11]=std::sqrt(jump/interfaceArea)/.16;
+    result[12]=std::sqrt(innerError/interfaceArea)/.16;result[13]=std::sqrt(outerError/interfaceArea)/.16;
+    result[14]=6;return result;
+}
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s,const Vector &history,
     double alpha,double time,const RANSWallEvolutionData &data,double ustar,bool constitutiveReconstruction) const
 {
@@ -453,7 +513,7 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
     return out.str();
 }
 std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,double time,
-    const RANSWallEvolutionData &data,bool basis,const std::vector<RANSWallCoordinate> &grid,const std::vector<int> &sides) const
+    const RANSWallEvolutionData &data,bool basis,const std::vector<RANSWallCoordinate> &grid,const std::vector<int> &sides,bool ct6Primitives) const
 {
     namespace J=RANSWallSolveJson;
     Require(NewModels() && Dimension()==2 && (!Mapped() || CurvedVerification()) && m_comm->GetSize()==1,
@@ -468,7 +528,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         {"element",J::Number(p.element)},
         {"endpoint_roundoff_axes",J::Number(p.endpointRoundoffAxes)},
         {"raw_local_coordinate",J::Numbers(p.rawLocalCoordinate)}};
-     if(CurvedVerification() && block>=0)
+     if(CurvedVerification() && ct6Primitives && block>=0)
      {
          const auto chart=fields[block]->ElementPoint(p.element,p.coordinate);
          Require(chart.ids==p.ids,"CT6 exported chart/physical row ownership differs");
@@ -477,7 +537,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
      }
      return J::Object(result);};
     std::unique_ptr<RANSWallManufactured> manufactured;
-    if(CurvedManufactured())manufactured=std::make_unique<RANSWallManufactured>(*this);
+    if(CurvedManufactured() && ct6Primitives)manufactured=std::make_unique<RANSWallManufactured>(*this);
     auto point=[&](const VolumePoint &q,int region)
     {
         std::vector<std::pair<std::string,std::string>> fields{{"coordinate",J::Numbers(q.v.coordinate)},{"weight",J::Number(q.weight)},
@@ -574,7 +634,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         for(const auto &q:Quadrature(InnerPressure()+region))mass.push_back(J::Object({
             {"coordinate",J::Numbers(q.coordinate)},{"weight",J::Number(q.weight)},{"region",J::Number(region)},{"pressure",row(q,InnerPressure()+region)}}));
     }
-    if(basis && CurvedVerification())for(int block:{0,Epsilon(),InnerPressure(),OuterPressure()})
+    if(basis && CurvedVerification() && ct6Primitives)for(int block:{0,Epsilon(),InnerPressure(),OuterPressure()})
     {
         std::array<std::set<double>,3> locations;
         for(const auto &e:fields[block]->Elements())for(int axis:{0,2})
