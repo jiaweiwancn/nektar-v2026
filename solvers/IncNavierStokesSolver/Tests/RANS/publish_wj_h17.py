@@ -101,7 +101,7 @@ def publish(root):
             if v.get('kind')=='target':
                 p=root/'operations'/label/'timing.jsonl'
                 if p.exists():timings.extend(json.loads(s)for s in p.read_text().splitlines())
-        names=('native.step','native.startup','native.acceptance_audit','audit.WJ.owned_rows_gradients','audit.WJ.velocity_accessor_validation','audit.WJ.scalar_row_accessor','audit.WJ.current_state_contractions','audit.WJ.principal_full_search','pimple.single_sweep','monitor.checkpoint_and_publish','monitor.independent_wait','monitor.qualification_commit')
+        names=('native.step','startup.object','startup.initialize','native.acceptance_audit','audit.WJ.owned_rows_gradients','audit.WJ.velocity_accessor_validation','audit.WJ.scalar_row_accessor','audit.WJ.current_state_contractions','audit.WJ.principal_full_search','pimple.sweep','monitor.checkpoint_and_publish','monitor.independent_wait','monitor.qualification_commit')
         selected=[dict(step=v['step'],time=v['time'],name=v['name'],wall_seconds=v['wall_seconds'],cpu_seconds=v['process_cpu_seconds'],calls=v.get('calls',1),clock_scope=v.get('clock_scope','inclusive scope; do not add nested intervals'))for v in timings if v['name']in names]
         table(out/'target-native-timing.csv',selected)
         means={name:sum(v['wall_seconds']for v in selected if v['name']==name and v['step']in (2,3,4))/3 for name in names}
