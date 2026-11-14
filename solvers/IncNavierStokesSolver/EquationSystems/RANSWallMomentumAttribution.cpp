@@ -24,7 +24,14 @@ std::string RANSWallEvolutionPatch::MomentumAttributionPacket(const Vector &stat
     Require(SerialSparse() && !Mapped() && m_dimension==2 && DisplacedAccepted() && RichardsNorrisTop() &&
         m_parameters.model.Model()==RANSModel::A95 && m_eta==0.,"CT10 attribution requires the unanchored displaced A95 flat/RN sparse route");
     Require(!exportPoints || Size()<=12000,"CT10 full native point export is limited to12000 slots; aggregate sparse loads remain available");
-    const int nm=offset[K()];const auto s=ExternalLift(state,time,data);Refresh(s,time,&data);
+    // Mirror Residual's effective-input policy and expose the lift explicitly.
+    // This is distinct from raw accepted-state traction, whose epsilon lag is
+    // measured directly from stored coefficients without this diagnostic lift.
+    const int nm=offset[K()];const auto s=MatchingEnabled()?ExternalLift(state,time,data):state;
+    double inputLift=0.;std::vector<int> liftedRows;Vector liftedDelta;
+    for(int i=0;i<Size();++i)if(s[i]!=state[i])
+    {liftedRows.push_back(i);liftedDelta.push_back(s[i]-state[i]);inputLift=std::max(inputLift,std::abs(s[i]-state[i]));}
+    Refresh(s,time,&data);
     double us,level;m_sparseSession->LoadParameter("RANSWallFrictionVelocity",us);m_sparseSession->LoadParameter("RANSOpenPressureLevel",level,0.);
     const auto &model=m_parameters.model;const auto &g=m_parameters.geometry;
     const double H=g.height,d=AerodynamicDisplacement(),K0=model.Q()*us*us,A=us*us*us/model.Kappa();
@@ -196,7 +203,10 @@ std::string RANSWallEvolutionPatch::MomentumAttributionPacket(const Vector &stat
     auto constraints=Constraints(s,time,data);std::vector<int> free,fixed;Vector constrained(total),reactions(nm);
     for(int i=0;i<nm;++i)if(constraints.count(i)){fixed.push_back(i);reactions[i]=native[i];constrained[i]=s[i]-constraints.at(i);}else free.push_back(i);
     std::vector<std::string> elements;for(const auto &e:fields[0]->Elements())elements.push_back(J::Object({{"geometry",J::Number(e.geometry)},{"lower",J::Numbers(e.lower)},{"upper",J::Numbers(e.upper)}}));
-    return J::Object({{"schema",J::Quote("CT10SignedMomentumV1")},{"identity",J::Quote(PreservationIdentity())},
+    return J::Object({{"schema",J::Quote("CT10SignedMomentumV2")},{"identity",J::Quote(PreservationIdentity())},
+        {"governing_matching_enabled",J::Boolean(MatchingEnabled())},{"maximum_input_lift_difference",J::Number(inputLift)},
+        {"input_lift_rows",J::Numbers(liftedRows)},{"input_lift_delta",J::Numbers(liftedDelta)},
+        {"input_policy",J::Quote("same effective input as governing Residual; raw accepted-state traction/epsilon lag remain separate; no input state or history is modified")},
         {"read_only","true"},{"momentum_size",J::Number(nm)},{"offsets",J::Numbers(offset)},
         {"actual",J::Object(actualJson)},{"analytic",J::Object(analyticJson)},{"total_actual",J::Numbers(total)},
         {"total_analytic",J::Numbers(totalA)},{"native_raw",J::Numbers(Vector(native.begin(),native.begin()+nm))},
