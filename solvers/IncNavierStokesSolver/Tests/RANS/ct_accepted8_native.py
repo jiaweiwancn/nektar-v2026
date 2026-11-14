@@ -135,7 +135,10 @@ def preflight(a):
         result['counts'][str(degree)]=dict(packet,packet_sha256=sha(folder/'count.json'))
     require(result['counts']['4']['stored_slots']<=3000,'CT8 declared P4 count exceeds cap; no trajectory admitted')
     # Small physical-data fixture for every free native mode and full matrices.
-    q=copy.deepcopy(c);q.update(Z=.5,knots=[0.,c['H']/4,c['H'],.5])
+    # Align the only nonsmooth analytical-k second derivative with a face
+    # panel. Physical strip already contains this breakpoint. The all-mode
+    # fixture stays below500, without relaxing the weak identity tolerance.
+    q=copy.deepcopy(c);q.update(Z=.5,knots=[0.,col(c).cutoff,c['H'],.5])
     for degree in (3,4):
         cc=copy.deepcopy(q);cc.update(degree=degree,pressure_degree=degree-2);folder=a.output/('operator-p'+str(degree));make(folder,a.runtime,cc,.002,0)
         packet,e=probe(a.runtime,folder,request(cc,True),'operator');require(e['exit_code']==0,'native displaced operator rejected:'+str(packet.get('failure')))
