@@ -47,7 +47,7 @@ def request(c):
         export_open_verification=True,export_mixed_space=True)
 
 
-def classify(packet,c,column=None,reference_function=None):
+def classify(packet,c,column=None,reference_function=None,tensor_proof=None):
     require(packet['status']=='pass','RN actual initialized state rejected')
     receipt=packet['initialization_receipt']
     require(receipt['open_explicit_implicit_agreement'] and receipt['explicit_boundary_sha256']==receipt['implicit_boundary_sha256'],
@@ -116,7 +116,7 @@ def classify(packet,c,column=None,reference_function=None):
     action=float(np.linalg.norm(mat@np.asarray(mixed['pressure_constant_with_zero_gauge'])))
     require(ratio>1e-10 and action>1e-8 and not any(off[4]<=i<off[6] for i in external),'RN absolute-pressure rank/constraints')
     require(off[6] not in rows,'unused gauge included in physical pressure solve')
-    for field in packet['tensor_validation']['fields']:
+    for field in (packet['tensor_validation'] if tensor_proof is None else tensor_proof)['fields']:
         require(max(field['defects_value_dx_dz_dxz_dzz_mass_polynomial_faces'])<=2e-10,'native all-mode basis/face checks')
     return dict(status='pass',actual_stored_slots=len(s),defects=defects,continuous_native_test_maximum=maximum,
         top_trace_mode_ids={str(b):sorted(v) for b,v in mode_ids.items()},free_top_mode_ids=free_top,

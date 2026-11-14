@@ -53,11 +53,11 @@ def inventory(c):
         for side in (-1,1):grid.append([xx,0.,c['H']]);sides.append(side)
     return grid,sides,weights,n
 
-def request(c,operator=False):
+def request(c,operator=False,tensor=True):
     g,s,_,_=inventory(c)
     return dict(operation='functions',grid=g,grid_sides=s,export_basis=True,export_test_basis=True,export_constitutive=True,
         export_neutral_composite_reference=True,export_resolution=operator,export_open_verification=operator,
-        export_mixed_space=operator,export_tensor_validation=operator)
+        export_mixed_space=operator,export_tensor_validation=operator and tensor)
 
 def binding(p,c):
     o=p['observation'];require(o['resolved_descriptor'].startswith('A95:OriginalHighRe-v1'),'foreign actual descriptor')
@@ -127,7 +127,11 @@ def budgets(rt,folder,ini,native,c):
 
 def preflight(a):
     c=read(a.reference)['case'];m=RequestManifest(a.output,dict(schema='CT8NativePreflightV1',case=c,contract=sha(a.contract),reference=sha(a.reference),runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),source=sha(Path(__file__))))
-    result=dict(schema='CT8NativePreflightV1',case=c,counts={},small_operator={},initial={},status='fail')
+    proof_path=a.basis_proof;proof=read(proof_path);proof_result=read(proof_path.parent.parent/'results.json')
+    require(proof_result['status']=='pass' and proof_result['checks']['A95-p4']['packet_sha256']==sha(proof_path),'unqualified or changed all-mode basis proof')
+    require(read(proof_path.parent.parent/'request-manifest.json')['request']['runtime']==runtime_identity(a.runtime/'RANSPreservationProbe'),'foreign basis verification runtime')
+    result=dict(schema='CT8NativePreflightV1',case=c,counts={},small_operator={},initial={},status='fail',basis_proof=dict(path=str(proof_path),sha256=sha(proof_path),
+        scope='same rebuilt runtime, native Modified_A P4/P2 transform/derivative/face and mass checks; separate small d0 basis fixture, no replacement of displaced governing rows'))
     # Count both declared degree layouts without allocating a governing matrix.
     for degree in (3,4):
         q=copy.deepcopy(c);q.update(degree=degree,pressure_degree=degree-2);folder=a.output/('count-p'+str(degree));make(folder,a.runtime,q,.002,0)
@@ -135,14 +139,14 @@ def preflight(a):
         result['counts'][str(degree)]=dict(packet,packet_sha256=sha(folder/'count.json'))
     require(result['counts']['4']['stored_slots']<=3000,'CT8 declared P4 count exceeds cap; no trajectory admitted')
     # Small physical-data fixture for every free native mode and full matrices.
-    # Align the only nonsmooth analytical-k second derivative with a face
-    # panel. Physical strip already contains this breakpoint. The all-mode
-    # fixture stays below500, without relaxing the weak identity tolerance.
-    q=copy.deepcopy(c);q.update(Z=.5,knots=[0.,col(c).cutoff,c['H'],.5])
+    # Resolve the actual analytical breakpoints. Tensor transform checks use
+    # their separately bound small fixture; the displaced full operator and
+    # pressure rank use THESE actual rows/matrices, never substituted bases.
+    q=copy.deepcopy(c);q.update(Z=.5,knots=sorted(set([0.,c['H']/4,c['H']/2,col(c).cutoff,c['roughness_input'],c['H'],.3,.5])))
     for degree in (3,4):
         cc=copy.deepcopy(q);cc.update(degree=degree,pressure_degree=degree-2);folder=a.output/('operator-p'+str(degree));make(folder,a.runtime,cc,.002,0)
-        packet,e=probe(a.runtime,folder,request(cc,True),'operator');require(e['exit_code']==0,'native displaced operator rejected:'+str(packet.get('failure')))
-        binding(packet,cc);out=operator_classify(packet,cc,column=col(cc),reference_function=reference)
+        packet,e=probe(a.runtime,folder,request(cc,True,tensor=False),'operator');require(e['exit_code']==0,'native displaced operator rejected:'+str(packet.get('failure')))
+        binding(packet,cc);out=operator_classify(packet,cc,column=col(cc),reference_function=reference,tensor_proof=proof['tensor_validation'])
         out['continuous_provider']=oracle_agreement(packet,cc)
         require(out['continuous_provider']['status']=='pass','continuous provider mismatch')
         for name,kwargs in [('pressure',dict(wrong_pressure=True)),('constant_inner_k',dict(constant_inner_k=True))]:
@@ -217,6 +221,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--mode',choices=('preflight','advance'),required=True)
     for name in ('runtime','reference','contract','output'):p.add_argument('--'+name,type=Path,required=True)
     p.add_argument('--preflight',type=Path);p.add_argument('--parent',type=Path);p.add_argument('--target',type=float)
+    p.add_argument('--basis-proof',type=Path)
     a=p.parse_args();os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     try:r=preflight(a) if a.mode=='preflight' else advance(a)
     except Exception as error:

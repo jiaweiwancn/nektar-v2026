@@ -21,7 +21,7 @@ from rans_request_manifest import RequestManifest,runtime_identity,sha
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','reference','output'):p.add_argument('--'+k,type=Path,required=True)
-    a=p.parse_args();os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');c=read(a.reference)['case'];c.update(Z=.5,knots=[0.,col(c).cutoff,c['H'],.5],degree=3,pressure_degree=1)
+    a=p.parse_args();os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');c=read(a.reference)['case'];c.update(Z=.5,knots=sorted(set([0.,c['H']/4,c['H']/2,col(c).cutoff,c['roughness_input'],c['H'],.3,.5])),degree=3,pressure_degree=1)
     m=RequestManifest(a.output,dict(schema='CT8DisplacedCompatibilityV1',case=c,reference=sha(a.reference),source=sha(Path(__file__)),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver')));result=dict(checks={},status='fail')
     def evolve(label,steps=2,restart=None,change=None):
         folder=a.output/label;make(folder,a.runtime,c,1e-6,steps,restart)
@@ -41,7 +41,7 @@ def main():
         reason=wrong['failure']+(dest/'solver.log').read_text()[-1000:];require(e['exit_code']!=0 and 'signature' in reason.lower(),'stale fit history wrong rejection')
         result['checks']['stale_boundary_history']=dict(status='pass',reason=reason)
         dest,shifted,e=evolve('pressure_level',change=lambda r:set_parameter(r,'RANSOpenPressureLevel',.125));require(e['exit_code']==0,'pressure offset evolution rejected')
-        ini,pe=probe(a.runtime,folder,request(c,True),'operator');require(pe['exit_code']==0,'operator fixture unavailable');binding(ini,c)
+        ini,pe=probe(a.runtime,folder,request(c,True,tensor=False),'operator');require(pe['exit_code']==0,'operator fixture unavailable');binding(ini,c)
         off=ini['observation']['offsets'];expected=np.zeros(len(full['state']))
         for q in ini['observation']['pressure_mass']:
             row=q['pressure'];expected[np.array(row['ids'],int)+off[4+q['region']]]=.125*np.asarray(row['constant'])
