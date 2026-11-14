@@ -14,6 +14,7 @@ from wj_h7_analysis import Rows
 from wj_h4_points import physical,owners,aligned,vector_hash
 from study_wj_h14 import stored_reference
 from study_wj_h15 import xml_case,qualified_step
+from finish_wj_h15 import scaled_norms,fetch_rows,exterior_rows
 
 def tensor_fixture():
     """Coefficient/owner fixture at fixed6mm; no PDE run or reference seed."""
@@ -36,6 +37,33 @@ def tensor_fixture():
     r['offsets'].append(len(state));return r,state,c
 
 class PersistentMonitoring(unittest.TestCase):
+    def test_reference_and_drift_scales_do_not_use_the_observed_error(self):
+        from types import SimpleNamespace
+        c=SimpleNamespace(K=.01,A=.002,H=.15,u_tau=.051)
+        raw={'outer':{'U':{'L2':0.,'sampled_max':.001},'k':{'L2':.0002,'sampled_max':0.},'pi':{'L2':0.,'sampled_max':.0003}}}
+        scaled=scaled_norms(raw,c)
+        self.assertEqual(scaled['outer']['U'],raw['outer']['U'])
+        self.assertAlmostEqual(scaled['outer']['k']['L2'],.02)
+        self.assertEqual(scaled['outer']['pi']['L2'],0.)
+        self.assertAlmostEqual(scaled['outer']['pi']['sampled_max'],.0003/.051**2)
+    def test_fetch_ranges_keep_distinct_normal_face_owners(self):
+        from types import SimpleNamespace
+        points=[]
+        for side,lo,hi in (('upper',.15,.3),('lower',.3,.6)):
+            for x in (-10.,15.):points.append(([x,0,.3875],dict(lower=[-10.,0,lo],upper=[15.,0,hi],normal_side=side,region='outer')))
+        rows=SimpleNamespace(rows=points,point_count=4)
+        d={k:np.array([1.,3.,7.,11.])for k in ('U','G','k','pi','K','rc','epsilon')}
+        ranges=fetch_rows(rows,d);self.assertEqual(len(ranges),2)
+        self.assertEqual([v['U']['range']for v in ranges],[2.,4.])
+        self.assertEqual({v['normal_side']for v in ranges},{'upper','lower'})
+    def test_exterior_reactions_refresh_but_prescribed_traction_stays_fixed(self):
+        r,s,c=tensor_fixture();rows=Rows(r,[physical(r,[0.,0,.3]),physical(r,[8.,0,.3])],c,include_volume=False)
+        a=rows.evaluate(s,principal=False);b=copy.deepcopy(a);b['T']+=.004*np.eye(3)
+        ea=exterior_rows(rows,a);eb=exterior_rows(rows,b)
+        inlet=next(i for i,v in enumerate(ea)if v['role']=='inlet');outlet=next(i for i,v in enumerate(ea)if v['role']=='outlet')
+        self.assertAlmostEqual(eb[inlet]['actual_traction'][0]-ea[inlet]['actual_traction'][0],-.004)
+        self.assertEqual(ea[outlet]['prescribed_complete_traction'],eb[outlet]['prescribed_complete_traction'])
+        self.assertAlmostEqual(ea[outlet]['prescribed_complete_traction'][2],c.u_tau**2,places=13)
     def test_only_durable_native_commit_is_a_qualified_restart_cursor(self):
         with tempfile.TemporaryDirectory()as d:
             folder=Path(d);monitor=folder/'monitor';monitor.mkdir()
