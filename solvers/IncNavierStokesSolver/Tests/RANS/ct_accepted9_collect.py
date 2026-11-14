@@ -27,11 +27,12 @@ def compact(value):
     return result
 
 def timing(path):
-    rows=[json.loads(x) for x in path.read_text().splitlines()];totals={};steps={}
-    for q in rows:
-        entry=totals.setdefault(q['name'],dict(calls=0,exclusive_cpu=0.,exclusive_wall=0.));entry['calls']+=q.get('calls',1)
-        entry['exclusive_cpu']+=q['exclusive_process_cpu_seconds'];entry['exclusive_wall']+=q['exclusive_wall_seconds']
-        s=steps.setdefault(str(q['step']),dict(exclusive_cpu=0.,exclusive_wall=0.));s['exclusive_cpu']+=q['exclusive_process_cpu_seconds'];s['exclusive_wall']+=q['exclusive_wall_seconds']
+    totals={};steps={}
+    with path.open() as stream:
+        for line in stream:
+            q=json.loads(line);entry=totals.setdefault(q['name'],dict(calls=0,exclusive_cpu=0.,exclusive_wall=0.));entry['calls']+=q.get('calls',1)
+            entry['exclusive_cpu']+=q['exclusive_process_cpu_seconds'];entry['exclusive_wall']+=q['exclusive_wall_seconds']
+            s=steps.setdefault(str(q['step']),dict(exclusive_cpu=0.,exclusive_wall=0.));s['exclusive_cpu']+=q['exclusive_process_cpu_seconds'];s['exclusive_wall']+=q['exclusive_wall_seconds']
     return dict(path=str(path),sha256=sha(path),names=totals,steps=steps,scope='exclusive native process intervals only; nested inclusive totals are never added; detailed aggregation includes clock overhead when explicitly enabled')
 
 def pressure_vectors(root,ct8):
@@ -73,6 +74,16 @@ def failure_witnesses(root):
         out[label]=row
     return out
 
+def residual_refinements(folders):
+    out={};prefix='RANS sparse refinement '
+    for folder in folders:
+        for path in folder.rglob('*.log'):
+            records=[json.loads(line.split(prefix,1)[1]) for line in path.read_text(errors='replace').splitlines() if prefix in line]
+            if not records:continue
+            require(all(1<=r['steps']<=3 and 0<=r['final_residual']<=r['bound'] for r in records),'linear refinement log violates unchanged residual contract')
+            out[str(path)]=dict(sha256=sha(path),factor_reused_solve_count=len(records),linear_residual_corrections=sum(r['steps'] for r in records),maximum_steps=max(r['steps'] for r in records),worst_final_residual_over_bound=max(r['final_residual']/r['bound'] for r in records),first_record=records[0])
+    return dict(scope='linear algebra corrections within the same frozen-system solve, not extra governing equation stages or PIMPLE sweeps',logs=out)
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','ct8','output'):p.add_argument('--'+k,type=Path,required=True)
@@ -111,6 +122,7 @@ def main():
     write_json(a.output/'retained-attempts.json',failure_witnesses(a.root))
     profiles={str(p.relative_to(a.root)):timing(p) for p in list((a.root/a.equivalence).glob('*/timing.jsonl'))+list((a.root/a.capacity).glob('*/*-timing.jsonl'))}
     write_json(a.output/'cost.json',profiles)
+    write_json(a.output/'linear-refinement.json',residual_refinements([a.root/x for x in (a.controls,a.equivalence,a.capacity)]))
     resources={}
     for file in sorted(a.root.glob('launch-*/execution.json')):
         q=n.read(file);q['high_water_receipts']={p.name:dict(sha256=sha(p),records=[json.loads(x) for x in p.read_text().splitlines()]) for p in file.parent.glob('*highwater.jsonl')};events=file.parent/'worker-guard-events.jsonl';q['suspensions']=[json.loads(x) for x in events.read_text().splitlines()] if events.exists() else [];resources[str(file.parent.name)]=q
