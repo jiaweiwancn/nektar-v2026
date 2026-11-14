@@ -60,13 +60,13 @@ def compact_pair(q):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','ct8','output'):p.add_argument('--'+k,type=Path,required=True)
-    a=p.parse_args();required=['pressure-comparison-v2','pressure-diagnosis-v1','controls-v3','equivalence-v1','capacity-v1','build-v5'];sources={};bodies={}
+    a=p.parse_args();required=['pressure-comparison-v2','pressure-diagnosis-v1','controls-v4','equivalence-v2','capacity-v2','build-v6'];sources={};bodies={}
     for label in required:
         path=a.root/label
         if (path/'completed-artifacts.json').exists():sources[label]=dict(path=str(path),sha256=sha(path/'results.json'),request=sha(path/'request-manifest.json'),seal=sha(path/'completed-artifacts.json'));bodies[label]=sealed(path)
         else:sources[label]=dict(status='missing_or_incomplete',path=str(path))
     m=RequestManifest(a.output,dict(schema='CT9FinalEvidenceV1',source=sha(Path(__file__)),sources=sources,contract=sha(Path(__file__).resolve().parents[4]/'docs/plans/cao-tamura-accepted-9-evidence/contract.json')))
-    pressure=bodies.get('pressure-comparison-v2');diagnosis=bodies.get('pressure-diagnosis-v1');controls=bodies.get('controls-v3');equivalence=bodies.get('equivalence-v1');capacity=bodies.get('capacity-v1');build=bodies.get('build-v5')
+    pressure=bodies.get('pressure-comparison-v2');diagnosis=bodies.get('pressure-diagnosis-v1');controls=bodies.get('controls-v4');equivalence=bodies.get('equivalence-v2');capacity=bodies.get('capacity-v2');build=bodies.get('build-v6')
     if pressure:
         write_json(a.output/'pressure-pair.json',compact(compact_pair(pressure)));write_json(a.output/'pressure-vectors.json',pressure_vectors(a.root,a.ct8))
     if diagnosis:write_json(a.output/'pressure-diagnosis.json',compact(diagnosis))
@@ -83,7 +83,7 @@ def main():
                 if key in row:row[key]={k:v for k,v in row[key].items() if k not in ('effective_initial','live_fixed_boundary')}
         write_json(a.output/'capacity.json',compact(cap))
     if build:write_json(a.output/'runtime.json',compact(build))
-    profiles={str(p.relative_to(a.root)):timing(p) for p in list((a.root/'equivalence-v1').glob('*/timing.jsonl'))+list((a.root/'capacity-v1').glob('*/*-timing.jsonl'))}
+    profiles={str(p.relative_to(a.root)):timing(p) for p in list((a.root/'equivalence-v2').glob('*/timing.jsonl'))+list((a.root/'capacity-v2').glob('*/*-timing.jsonl'))}
     write_json(a.output/'cost.json',profiles)
     resources={}
     for file in sorted(a.root.glob('launch-*/execution.json')):

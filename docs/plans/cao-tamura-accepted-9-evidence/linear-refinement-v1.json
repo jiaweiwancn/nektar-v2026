@@ -1,0 +1,12 @@
+{
+  "schema": "CT9DirectResidualRefinementAmendmentV1",
+  "parent": "contract.json",
+  "witness": "capacity-v1/intermediate-p3/frozen.json and frozen-timing.jsonl; initial state/startup passed, frozen linear operation rejected its true direct-solve residual",
+  "preserved": "original failed runtime and receipt remain archived; target-p3 separately passed the original implementation",
+  "prospective_component": "EigenLU-LDLT-IR3; reuse the same factor for at most three residual corrections, with extended sparse residual accumulation",
+  "unchanged_gate": "max|A*x-b| <= 2e-12 max|b| + 1e-25; unchanged original matrix, free masks and RHS",
+  "scope": "linear algebra refinement inside a single frozen-system solve, not additional governing sweeps or physical/model corrections",
+  "identity": "IR3 appended to backend numerical checkpoint and preservation signatures; fresh histories for the revised component",
+  "stopping": "retain failure with rows, matrix kind, nnz, RHS, solution, initial/final residual and bound if three refinements fail",
+  "verification": "fresh runtime algebra/operator/history/offset controls and pressure-pair equivalence; same fixed increasing meshes with new immutable destinations"
+}

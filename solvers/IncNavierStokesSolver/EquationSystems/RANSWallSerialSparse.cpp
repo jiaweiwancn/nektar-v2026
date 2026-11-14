@@ -7,6 +7,9 @@
 #include <fstream>
 #include <numeric>
 #include <cmath>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
 #ifdef NEKTAR_RANS_HAVE_EIGEN_SPARSE
 #include <Eigen/SparseLU>
 #include <Eigen/SparseCholesky>
@@ -111,7 +114,9 @@ SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass):m_impl(std::
         Require(m_impl->lu.info()==Eigen::Success,"singular sparse stage/preconditioner");
         m_impl->nonzeros=m_impl->lu.nnzL()+m_impl->lu.nnzU();
     }
-    Require(m_impl->nonzeros<=30000000,"sparse factor exceeds declared30M fill budget");
+    Require(m_impl->nonzeros<=30000000,"sparse factor exceeds declared30M fill budget: rows="+
+        std::to_string(m.Rows())+", matrix_nnz="+std::to_string(m.NonZeros())+", factor_nnz="+
+        std::to_string(m_impl->nonzeros)+", mass="+std::to_string(positiveMass));
 #else
     Require(false,"AcceptedSerialSparseV1 requires an explicitly Eigen-enabled isolated build");
 #endif
@@ -121,11 +126,39 @@ Vector SparseFactor::Apply(const Vector &rhs) const
     RANSWallTiming::Scope timing("sparse.solve_validate");
     Require(rhs.size()==static_cast<std::size_t>(m_impl->matrix.Rows()),"sparse solve shape");
 #ifdef NEKTAR_RANS_HAVE_EIGEN_SPARSE
-    Eigen::Map<const Eigen::VectorXd> b(rhs.data(),rhs.size());Eigen::VectorXd x;
-    if(m_impl->mass)x=m_impl->ldlt.solve(b);else x=m_impl->lu.solve(b);
-    Require(x.allFinite(),"nonfinite sparse solution");Vector result(x.data(),x.data()+x.size());
-    auto residual=m_impl->matrix.Apply(result);for(int i=0;i<rhs.size();++i)residual[i]-=rhs[i];
-    Require(Maximum(residual)<=2e-12*Maximum(rhs)+1e-25,"sparse direct true residual exceeds contract");return result;
+    const auto solve=[&](const Vector &r)
+    {
+        Eigen::Map<const Eigen::VectorXd> b(r.data(),r.size());Eigen::VectorXd x;
+        if(m_impl->mass)x=m_impl->ldlt.solve(b);else x=m_impl->lu.solve(b);
+        Require(x.allFinite(),"nonfinite sparse solution");return Vector(x.data(),x.data()+x.size());
+    };
+    Vector result=solve(rhs);const double bound=2e-12*Maximum(rhs)+1e-25;double initial=0.;
+    for(int refinement=0;refinement<=3;++refinement)
+    {
+        // Extended accumulation checks the ORIGINAL unscaled sparse system.
+        // Refinement reuses its factor and never changes a coefficient, mask,
+        // physical source, governing stage or acceptance tolerance.
+        auto residual=m_impl->matrix.Apply(result);for(int i=0;i<rhs.size();++i)residual[i]-=rhs[i];
+        const double defect=Maximum(residual);if(refinement==0)initial=defect;
+        if(defect<=bound)
+        {
+            if(refinement)std::cerr<<std::setprecision(17)<<"RANS sparse refinement {\"rows\":"<<rhs.size()
+                <<",\"mass\":"<<(m_impl->mass?"true":"false")<<",\"steps\":"<<refinement
+                <<",\"initial_residual\":"<<initial<<",\"final_residual\":"<<defect<<",\"bound\":"<<bound<<"}\n";
+            return result;
+        }
+        if(refinement==3)
+        {
+            std::ostringstream context;context<<std::setprecision(17)<<"sparse direct true residual exceeds contract: rows="<<rhs.size()
+                <<", mass="<<m_impl->mass<<", nnz="<<m_impl->matrix.NonZeros()<<", rhs="<<Maximum(rhs)
+                <<", solution="<<Maximum(result)<<", initial="<<initial<<", final="<<defect<<", bound="<<bound<<", refinements=3";
+            Require(false,context.str());
+        }
+        RANSWallTiming::Scope refinementTiming("sparse.residual_refinement");
+        for(auto &v:residual)v=-v;const auto correction=solve(residual);
+        for(int i=0;i<result.size();++i)result[i]+=correction[i];
+    }
+    Require(false,"unreachable sparse refinement exit");return {};
 #else
     Require(false,"sparse factor not compiled");return {};
 #endif

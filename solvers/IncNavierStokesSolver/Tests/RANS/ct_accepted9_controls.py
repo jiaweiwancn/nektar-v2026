@@ -74,9 +74,10 @@ def compare_packets(dense,sparse,c):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','ct8','output'):p.add_argument('--'+k,type=Path,required=True)
+    p.add_argument('--old-backend-controls',type=Path)
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     pre=n.read(a.ct8/'preflight-v6/results.json');c=copy.deepcopy(pre['case']);c.update(Z=.5,knots=sorted(set([0.,c['H']/4,c['H']/2,n.col(c).cutoff,c['roughness_input'],c['H'],.3,.5])))
-    m=RequestManifest(a.output,dict(schema='CT9BackendControlsV1',source=sha(Path(__file__)),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.runtime/'RANSPreservationProbe'),case=c,operator_tolerance=2e-10,trajectory_tolerance=1e-8))
+    m=RequestManifest(a.output,dict(schema='CT9BackendControlsV1',source=sha(Path(__file__)),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.runtime/'RANSPreservationProbe'),case=c,operator_tolerance=2e-10,trajectory_tolerance=1e-8,old_backend_controls=sha(a.old_backend_controls/'results.json') if a.old_backend_controls else None))
     result=dict(schema='CT9BackendControlsV1',checks={},status='incomplete')
     def check(name,fn):
         try:result['checks'][name]=fn()
@@ -112,6 +113,11 @@ def main():
         negative=[]
         for name,modify,word,restart in [('backend_history',None,'signature',Path(one['checkpoint'])),('stale_fit',lambda root:set_info(root,'RANSOpenFitPolicy','ForeignFitV1'),'signature',Path(one['checkpoint'])),('wrong_model',lambda root:set_info(root,'TurbulenceModel','A93'),'A95',None),('unsupported_cache',lambda root:set_info(root,'RANSWallEvaluationReuse','ExactStepV1'),'caching',None),('wrong_method',lambda root:setattr(root.find('CONDITIONS/TIMEINTEGRATIONSCHEME/ORDER'),'text','2'),'IMEX1',None)]:
             dest,q,e=evolve(name,0,restart,modify,sparse=name!='backend_history');message=q.get('failure','')+(dest/'solver.log').read_text()[-4000:];require(e['exit_code']!=0 and word.lower() in message.lower(),'wrong negative outcome:'+name+message);negative.append(dict(name=name,status='pass',reason=message[-2000:],execution=e))
+        if a.old_backend_controls:
+            old=n.read(a.old_backend_controls/'results.json');require(old['status']=='pass','old component controls incomplete');oldreport=a.old_backend_controls/'one/case.evolution.json'
+            require(sha(oldreport)==old['checks']['restart_rollback_backend_identity']['native_reports'][str(oldreport.parent)],'changed prototype history witness');previous=n.read(oldreport)
+            require('AcceptedSerialSparseV1' in previous['signature'] and 'IR3' not in previous['signature'],'wrong pre-refinement component')
+            dest,q,e=evolve('old_component_history',0,Path(previous['checkpoint']));message=q.get('failure','')+(dest/'solver.log').read_text()[-3000:];require(e['exit_code']!=0 and 'signature' in message.lower(),'old numerical component history accepted');negative.append(dict(name='old_component_history',status='pass',reason=message[-2000:],execution=e))
         return dict(status='pass',uninterrupted_state=exact_vector_hash(full['state']),continued_state=exact_vector_hash(continued['state']),dense_sparse_state_maximum=defect,rebuilt_dense_CT8_history_bitwise_equal=True,legacy_native_report_sha256=sha(a.ct8/'controls-v2/full/case.evolution.json'),negative=negative,rollback_failure=rejected['failure'],native_reports={str(f):sha(f/'case.evolution.json') for f in (first,end,failed,dense)})
     check('restart_rollback_backend_identity',histories)
     def pressure_level():
