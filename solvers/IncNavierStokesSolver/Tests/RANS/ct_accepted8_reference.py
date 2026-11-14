@@ -106,9 +106,17 @@ def native_checks(rt,out,f,root):
         old=sample('original-'+str(gamma),req,col)
         require(new==old,'d0 profile arithmetic changed')
     base=dict(model='A95',K=K,H=H,hr=hr,nu=nu,displacement=d,displacement_policy=POLICY,r=[0.,H],order=96)
+    center=column(K,H,hr,nu,d);boundary=H-center.A*H/center.PJ
+    # Resolve either side beyond binary64 budget-rounding uncertainty. The
+    # equality itself is also checked by comparing native minimum integrals.
+    dl=boundary-1e-9*H;dc=column(K,H,hr,nu,dl)
+    near=sample('budget-boundary-admissible',dict(base,displacement=dl),dc)
+    require(abs(near['cutoff']/H-1)<1e-7,'monotone cutoff fails to approach H')
+    sample('budget-boundary-inadmissible',dict(base,displacement=boundary+1e-9*H),reason='cutoff_budget_inadmissible')
     for label,change,why in [('negative-d',dict(displacement=-.01),'0<=d<H'),('height',dict(displacement=H),'0<=d<H'),
         ('roughness',dict(hr=H),'0<=h<H'),('metric',dict(gamma=-2/H),'metric'),('budget',dict(hr=0.,displacement=H*.999),'cutoff_budget_inadmissible'),
-        ('foreign-model',dict(model='A93'),'Natural A95'),('unshifted-d',dict(displacement_policy='UnshiftedV1'),'UnshiftedV1')]:sample(label,dict(base,**change),reason=why)
+        ('foreign-model',dict(model='A93'),'Natural A95'),('unshifted-d',dict(displacement_policy='UnshiftedV1'),'UnshiftedV1'),
+        ('sample',dict(sample=H/2),'endpoint'),('tail',dict(tail=H/2),'endpoint')]:sample(label,dict(base,**change),reason=why)
     return dict(status='pass',checks=rows)
 
 

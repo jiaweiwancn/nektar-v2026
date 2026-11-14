@@ -7,7 +7,7 @@ Use the owned command launcher. New immutable destinations are required.
 import argparse,copy,json,math,os,shutil,xml.etree.ElementTree as ET
 from pathlib import Path
 from functools import lru_cache
-from rans_qualification import THREADS,exact_vector_hash
+from rans_qualification import THREADS,exact_vector_hash,audited_extrema
 os.environ.update(THREADS)
 import numpy as np
 from numpy.polynomial.legendre import leggauss
@@ -24,6 +24,7 @@ from ct_accepted_open import run,probe,row_value
 from ct_accepted6_audit import captured_k_matrix
 from ct_accepted8_gate import pair as pair_gate
 from ct_accepted4_reference import resistance
+from ct_accepted5_traction import profiles as traction_profiles,difference as traction_difference
 from compare_cls_epawf_pimple import same_history
 from run_cls_epawf_picard import set_info,set_parameter,write
 from rans_request_manifest import RequestManifest,runtime_identity,sha
@@ -210,11 +211,14 @@ def advance(a):
         row=dict(directory=str(folder),execution=e,time=native['time'],failure=native['failure'],state_sha256=exact_vector_hash(native['state']),native_report_sha256=sha(folder/'case.evolution.json'),history_sha256=artifact_hash(native['checkpoint']),signature=native['signature'],initialization_receipt=native['initialization_receipt'],history_times=native['native_history_times'])
         require(':resolved=A95:OriginalHighRe-v1' in native['signature'] and POLICY in native['signature'],'foreign history descriptor')
         row['accepted_metrics']=[dict(time=t,**physical_metrics(ini,s,c,pre['weights'],pre['global_count'])) for t,s in zip(native['audit_times'],native['accepted_states'],strict=True)]
+        row['traction_history']=[dict(time=t,profile=traction_profiles(ini,s,c)) for t,s in zip(native['audit_times'],native['accepted_states'],strict=True)]
         row['first_accuracy_crossing']=next((v for v in row['accepted_metrics'] if v['status']!='pass'),None)
         row['domain']=domain(ini,native,c);row['budgets']=budgets(a.runtime,folder,ini,native,c) if native['steps'] else dict(gate=dict(status='missing'))
         g,sides,_,_=inventory(c);req=replay(ini,native['state'],native['time'],g,export_constitutive=True);req['grid_sides']=sides
         packet,pe=probe(a.runtime,folder,req,'endpoint');row['constitutive']=constitutive_comparison(packet,c) if pe['exit_code']==0 else dict(status='fail',reason=packet.get('failure'));row['corrections']=sum(v.get('bound_calls',0) for v in native['pimple_attempts']);row['extra_solves']=sum(v.get('additional_governing_equation_solves',0) for v in native['pimple_attempts'])
         row['refreshed_epsilon_trace_lag']=max((v.get('refreshed_trace_defect',0) for v in native['pimple_attempts']),default=0.)
+        row['native_audited_extrema']=audited_extrema(native)
+        row['final_native_audit']=native.get('state_audits',[])[-1:]
         result['members'][name]=row;packets.append((ini,native));write_json(a.output/'progress.json',result)
     reasons=[];temporal={};times=[n['time'] for _,n in packets]
     if any(abs(t-target)>1e-13 for t in times):reasons.append('incomplete_endpoints')
@@ -229,7 +233,14 @@ def advance(a):
         if row['failure'] or row['accepted_metrics'][-1]['status']!='pass' or row['domain']['status']!='pass':reasons.append(name+':physical_or_accuracy')
         if row['budgets']['gate']['status']!='pass' or row['constitutive']['status']!='pass':reasons.append(name+':budget_or_constitutive')
         if row['corrections'] or row['extra_solves']:reasons.append(name+':forbidden_correction')
-    result.update(temporal=temporal,status='complete')
+    result.update(temporal=temporal,status='complete',traction_temporal={})
+    if all(abs(t-target)<1e-13 for t in times):
+        rows=list(result['members'].values());end=[r['traction_history'][-1]['profile'] for r in rows]
+        spread=traction_difference(*end,c);drifts=[traction_difference(r['traction_history'][0]['profile'],r['traction_history'][-1]['profile'],c) for r in rows]
+        for name in ('ground','interface','signed_mean'):
+            delta=abs(spread['signed_mean_difference']) if name=='signed_mean' else spread['profiles'][name]['normalized_weighted_RMS']
+            drift=max(abs(q['signed_mean_difference']) if name=='signed_mean' else q['profiles'][name]['normalized_weighted_RMS'] for q in drifts)
+            limit=max(1e-7,.1*drift);result['traction_temporal'][name]=dict(spread=delta,measured_drift=drift,limit=limit,status='pass' if delta<=limit else 'unresolved')
     result['qualification']=pair_gate(result)
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return result
 

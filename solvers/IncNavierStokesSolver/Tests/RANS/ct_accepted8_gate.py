@@ -34,4 +34,9 @@ def pair(result):
     for f,q in temporal.items():
         drift=q.get('measured_drift');d=q.get('difference',{});rms,scale=d.get('weighted_RMS'),d.get('scale')
         if not finite(drift) or drift<0 or not finite(rms) or rms<0 or not finite(scale) or scale<=0 or rms/scale>max(1e-7,.1*drift):reasons.append('temporal:'+f)
+    traction=result.get('traction_temporal',{})
+    if set(traction)!={'ground','interface','signed_mean'}:reasons.append('missing_traction_temporal_coverage')
+    for name,q in traction.items():
+        s,d=q.get('spread'),q.get('measured_drift')
+        if not finite(s) or s<0 or not finite(d) or d<0 or s>max(1e-7,.1*d):reasons.append('traction_temporal:'+name)
     return dict(status='pass' if not reasons else 'fail',reasons=reasons,scope='bounded strip only; complete prerequisites and model/state/history binding are required independently')

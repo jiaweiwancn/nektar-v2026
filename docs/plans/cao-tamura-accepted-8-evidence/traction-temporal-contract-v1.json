@@ -1,0 +1,9 @@
+{
+  "schema":"CT8TractionTemporalContractV1",
+  "timing":"before any central strip advancement; static and tiny compatibility steps are separate implementation checks",
+  "data":"actual current endpoint K and FE gradients at common owned ground and both interface faces, single absolute pressure convention",
+  "quantities":["signed mean ground traction","ground traction physical weighted RMS profile difference","full two-sided interface traction physical weighted RMS profile difference"],
+  "scale":"u_tau squared",
+  "limit":"timestep spread <= max(1e-7,.1*measured drift from actual initialized traction profile) for each quantity; raw ground/interface error limits remain1e-3",
+  "forbidden":"differences of absolute error norms as a substitute for signed/profile differences; prescribed tractions or row reactions substituted for actual gradients"
+}
