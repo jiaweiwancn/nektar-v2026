@@ -48,6 +48,10 @@ class PressureImages:
         for i,(q,r) in enumerate(zip(initial['test_basis'][:count],self.regions,strict=True)):
             for j,v in zip(q['pressure']['ids'],q['pressure']['phi'],strict=True):rr.append(i);cc.append(inv[off[4+int(r)]+j]);vv.append(v)
         self.B=csr_matrix((vv,(rr,cc)),shape=(count,len(inv)))
+        ir=[];ic=[];iv=[];self.ifaces=[f for f in initial['observation']['faces'] if f['interface']]
+        for i,f in enumerate(self.ifaces):
+            for j,v in zip(f['pressure']['ids'],f['pressure']['phi'],strict=True):ir.append(i);ic.append(inv[off[4+f['region']]+j]);iv.append(v)
+        self.IB=csr_matrix((iv,(ir,ic)),shape=(len(self.ifaces),len(inv)))
         self.W=LinearOperator((len(inv),len(inv)),matvec=lambda p:self.D@self.lu.solve(self.G@p))
         pc=(self.D@diags(1/self.M.diagonal())@self.G).tocsc();self.pc=splu(pc)
         self.P=LinearOperator(self.W.shape,matvec=self.pc.solve);self.receipts=[]
@@ -58,6 +62,13 @@ class PressureImages:
             w=self.weights[mask];x=v[mask];mean=float(w@x/w.sum())
             out[name]=dict(weighted_RMS=float(np.sqrt(w@(x*x)/w.sum())),signed_mean=mean,spatial_variation_RMS=float(np.sqrt(w@((x-mean)**2)/w.sum())),scale=self.scale)
         out['maximum_scaled_value']=float(max(abs(v),default=0))/self.scale
+        iv=self.IB@p;pairs={}
+        for f,x in zip(self.ifaces,iv,strict=True):pairs.setdefault(round(f['coordinate'][0],14),[]).append((f['region'],float(x),f['weight']))
+        jumps=[]
+        for qs in pairs.values():
+            require(len(qs)==2 and {q[0] for q in qs}=={0,1},'pressure image interface side coverage')
+            inn=next(q for q in qs if not q[0]);outer=next(q for q in qs if q[0]);jumps.append((inn[1]-outer[1],inn[2]))
+        out['interface_inner_minus_outer']=dict(signed_mean=sum(x*w for x,w in jumps)/sum(w for _,w in jumps),weighted_RMS=math.sqrt(sum(x*x*w for x,w in jumps)/sum(w for _,w in jumps)),scale=self.scale)
         return out
 
     def inner(self,a,b):return float((self.B@a)@(self.weights*(self.B@b)))
@@ -136,6 +147,8 @@ def attribution(p,images,c):
     actual={k:np.asarray(v) for k,v in p['actual'].items()};analytic={k:np.asarray(v) for k,v in p['analytic'].items()};delta={k:actual[k]-analytic[k] for k in actual}
     total={name:sum(vals.values(),np.zeros(p['momentum_size'])) for name,vals in [('actual',actual),('analytic',analytic),('delta',delta)]}
     error=float(max(abs(total['actual']-np.asarray(p['native_raw']))));require(error<=2e-10,'native signed sum failed')
+    frozen_error=float(max(abs(total['actual'][images.rows[:images.nv]]-np.asarray(images.s['frozen_flow_residual'][:images.nv]))))
+    require(frozen_error<=2e-10,'initial original momentum differs from actual frozen momentum load')
     full={name:images.image(v,name) for name,v in total.items()};den=images.inner(full['delta'],full['delta']);require(den>0,'no resolved representation pressure image')
     vectors={};table={};off=p['offsets']
     for key in actual:
@@ -166,7 +179,8 @@ def attribution(p,images,c):
     width,i,j=min(choices);uniform=width>math.ceil(len(rows)/3);selected=list(range(len(rows))) if uniform else list(range(i,j+1))
     knots=sorted(set(c['knots']+[(rows[k]['lower']+rows[k]['upper'])/2 for k in selected]))
     selection=dict(schema='CT10SingleRadialContrastV1',status='selected_before_evolution',rule='contract80percent_absolute_signed_alignment,smallest_contiguous_band;uniform_if_more_than_one_third',uniform=uniform,diagnosed_band=[rows[i]['lower'],rows[j]['upper']],selected_bands=[[rows[k]['lower'],rows[k]['upper']] for k in selected],knots=knots,old_knots=c['knots'],degree=4,pressure_degree=2,continuous_physical_inputs_unchanged=True,signal_captured=float(signal[i:j+1].sum()/signal.sum()))
-    return dict(schema='CT10PressureAttributionV1',status='pass',native_reconstruction=error,component_images=table,total_images={k:images.measure(v) for k,v in full.items()},axis_images=axes,bands=rows,band_normalized_Gram=gram,signed_component_sum_error=sumerr,signed_band_sum_error=banderr,tighter_repeat_difference=unc,pressure_solves=images.receipts,selection=selection),dict(total={k:v.tolist() for k,v in full.items()},components={k:v.tolist() for k,v in vectors.items()},bands=[v.tolist() for v in band_vectors])
+    names=list(vectors);cg=[[images.inner(vectors[x],vectors[y])/den for y in names] for x in names]
+    return dict(schema='CT10PressureAttributionV1',status='pass',native_reconstruction=error,frozen_momentum_agreement=frozen_error,component_images=table,component_Gram_order=names,component_normalized_Gram=cg,total_images={k:images.measure(v) for k,v in full.items()},axis_images=axes,bands=rows,band_normalized_Gram=gram,signed_component_sum_error=sumerr,signed_band_sum_error=banderr,tighter_repeat_difference=unc,pressure_solves=images.receipts,selection=selection),dict(total={k:v.tolist() for k,v in full.items()},components={k:v.tolist() for k,v in vectors.items()},bands=[v.tolist() for v in band_vectors])
 
 
 def main():
