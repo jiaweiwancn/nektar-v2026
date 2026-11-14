@@ -6,7 +6,7 @@ Run with ct_accepted3_command.py. No state, boundary, checkpoint or governing
 operator is changed. Local loads have sparse native support; Schur actions use
 consistent mass solves without materializing M^-1 G or a dense Schur matrix.
 """
-import argparse,copy,inspect,math,os,resource,shutil
+import argparse,copy,inspect,math,os,resource,shutil,xml.etree.ElementTree as ET
 from pathlib import Path
 from functools import lru_cache
 from rans_qualification import THREADS,exact_vector_hash
@@ -22,6 +22,7 @@ from ct_accepted_open import probe,require,row_value
 from ct_accepted_pilot import replay
 from ct_accepted_feasibility import write_json
 from rans_request_manifest import RequestManifest,sha,runtime_identity
+from run_cls_epawf_picard import set_parameter,write
 
 
 def matrix(info):
@@ -148,7 +149,7 @@ def tensors_and_loads(packet,initial,c):
     return dict(status='pass',primitive_defects=defects,load_reconstruction=comparisons,partition_defect=partition,constant_gradient_defect=gradconst,integrated_volume=volume,expected_volume=[(c['x'][-1]-c['x'][0])*c['H'],(c['x'][-1]-c['x'][0])*(c['Z']-c['H'])],scope='independent profile quadrature and spectral-tensor formulas; native test rows, owners, coordinates and weights unchanged')
 
 
-def attribution(p,images,c):
+def attribution(p,images,c,select=True):
     actual={k:np.asarray(v) for k,v in p['actual'].items()};analytic={k:np.asarray(v) for k,v in p['analytic'].items()};delta={k:actual[k]-analytic[k] for k in actual}
     total={name:sum(vals.values(),np.zeros(p['momentum_size'])) for name,vals in [('actual',actual),('analytic',analytic),('delta',delta)]}
     error=float(max(abs(total['actual']-np.asarray(p['native_raw']))));require(error<=2e-10,'native signed sum failed')
@@ -188,6 +189,7 @@ def attribution(p,images,c):
     width,i,j=min(choices);uniform=width>math.ceil(len(rows)/3);selected=list(range(len(rows))) if uniform else list(range(i,j+1))
     knots=sorted(set(c['knots']+[(rows[k]['lower']+rows[k]['upper'])/2 for k in selected]))
     selection=dict(schema='CT10SingleRadialContrastV1',status='selected_before_evolution',rule='contract80percent_absolute_signed_alignment,smallest_contiguous_band;uniform_if_more_than_one_third',uniform=uniform,diagnosed_band=[rows[i]['lower'],rows[j]['upper']],selected_bands=[[rows[k]['lower'],rows[k]['upper']] for k in selected],knots=knots,old_knots=c['knots'],degree=4,pressure_degree=2,continuous_physical_inputs_unchanged=True,signal_captured=float(signal[i:j+1].sum()/signal.sum()))
+    if not select:selection=None  # A posteriori attribution is not another mesh selection.
     names=list(vectors);cg=[[images.inner(vectors[x],vectors[y])/den for y in names] for x in names]
     return dict(schema='CT10PressureAttributionV1',status='pass',native_reconstruction=error,frozen_momentum_agreement=frozen_error,negative_controls=negative,component_images=table,component_Gram_order=names,component_normalized_Gram=cg,total_images={k:images.measure(v) for k,v in full.items()},axis_images=axes,bands=rows,band_normalized_Gram=gram,signed_component_sum_error=sumerr,signed_band_sum_error=banderr,tighter_repeat_difference=unc,pressure_solves=images.receipts,selection=selection),dict(total={k:v.tolist() for k,v in full.items()},components={k:v.tolist() for k,v in vectors.items()},bands=[v.tolist() for v in band_vectors])
 
@@ -196,9 +198,15 @@ def main():
     a=argparse.ArgumentParser(description=__doc__)
     for key in ('ct8','ct9','runtime','contract','output'):a.add_argument('--'+key,type=Path,required=True)
     a.add_argument('--capture',type=Path,help='reuse unchanged native point export from a preserved diagnostic attempt')
+    a.add_argument('--cohort',type=Path,help='read-only attribution of the already frozen single candidate')
+    a.add_argument('--static',type=Path,help='candidate static receipt, including its common physical test rows')
     a=a.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
-    pre=sealed(a.ct8/'preflight-v6');base=sealed(a.ct9/'equivalence-v2');c=pre['case'];member=base['members']['0.001'];folder=Path(member['directory']);native=n.read(folder/'case.evolution.json');require(sha(folder/'case.evolution.json')==member['native_report_sha256'],'changed baseline')
-    initial_path=a.ct9/'equivalence-v2/zero-0.001/initial.json';initial=n.read(initial_path);attempt=next(x for x in native['pimple_attempts'] if x['scheduled_complete']);sp=Path(attempt['flow_snapshot']);require(sha(sp)==attempt['flow_snapshot_sha256'],'changed snapshot');snap=n.read(sp)
+    if a.cohort:
+        pre=sealed(a.static);base=sealed(a.cohort);c=base['case'];initial_path=Path(pre['initial']['candidate-0.001']['directory'])/'initial.json'
+        require(c==pre['cases']['candidate'],'foreign candidate attribution')
+    else:pre=sealed(a.ct8/'preflight-v6');base=sealed(a.ct9/'equivalence-v2');c=pre['case'];initial_path=a.ct9/'equivalence-v2/zero-0.001/initial.json'
+    member=base['members']['0.001'];folder=Path(member['directory']);native=n.read(folder/'case.evolution.json');require(sha(folder/'case.evolution.json')==member['native_report_sha256'],'changed compared report')
+    initial=n.read(initial_path);n.binding(initial,c);attempt=next(x for x in native['pimple_attempts'] if x['scheduled_complete']);sp=Path(attempt['flow_snapshot']);require(sha(sp)==attempt['flow_snapshot_sha256'],'changed snapshot');snap=n.read(sp)
     require(snap['input']==initial['observation']['state'],'initial frozen snapshot differs from actual projected state')
     m=RequestManifest(a.output,dict(schema='CT10SignedDiagnosisV1',contract=sha(a.contract),case=c,source=sha(Path(__file__)),diagnostic_runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),governing_runtime=runtime_identity(a.ct9/'build-v8/runtime/IncNavierStokesSolver'),baseline_report=sha(folder/'case.evolution.json'),initial=sha(initial_path),snapshot=sha(sp),state=exact_vector_hash(snap['input']),reused_native_capture=dict(path=str(a.capture),sha256=sha(a.capture/'initial/loads.json')) if a.capture else None))
     dest=a.output/'initial';dest.mkdir();shutil.copy2(folder/'case.xml',dest/'case.xml')
@@ -210,7 +218,15 @@ def main():
     else:packet,e=probe(a.runtime,dest,req,'loads');packet_path=dest/'loads.json'
     require(e['exit_code']==0,'native CT10 load export failed:'+str(packet.get('failure')));require(packet['observation']['state']==snap['input'],'diagnostic changed coefficients')
     p=packet['ct10_momentum'];independent=tensors_and_loads(packet,initial,c);write_json(a.output/'independent.json',independent)
-    result,vectors=attribution(p,PressureImages(snap,initial,c,pre['weights'],pre['global_count']),c)
+    images=PressureImages(snap,initial,c,pre['weights'],pre['global_count']);result,vectors=attribution(p,images,c,select=not a.cohort)
+    quad=[];native_delta=np.asarray(p['total_actual'])-np.asarray(p['total_analytic'])
+    for orders in ((48,12,12,16,64),(64,16,12,20,64)):
+        sub=a.output/('q'+str(orders[0]));sub.mkdir();root=ET.parse(folder/'case.xml').getroot()
+        for key,value in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),orders,strict=True):set_parameter(root,key,value)
+        write(root,sub/'case.xml');qreq=replay(initial,snap['input'],0.,[],export_ct10_momentum=True,ct10_export_points=False);qp,qe=probe(a.runtime,sub,qreq,'loads');require(qe['exit_code']==0,'frozen component quadrature replay failed')
+        require(qp['observation']['state']==snap['input'],'quadrature replay changed coefficients');qq=qp['ct10_momentum'];dr=np.asarray(qq['total_actual'])-np.asarray(qq['total_analytic'])-native_delta;pv=images.image(dr,'quadrature'+str(orders[0]));pm=images.measure(pv)
+        require(pm['maximum_scaled_value']<1e-8,'governing quadrature uncertainty exceeds pressure attribution budget');quad.append(dict(orders=orders,packet_sha256=sha(sub/'loads.json'),execution=qe,maximum_delta_load_change=float(max(abs(dr))),pressure_image_change=pm))
+    result['frozen_quadrature']=quad
     result.update(independent=independent,execution=e,packet_path=str(packet_path),packet_sha256=sha(packet_path),baseline_native_report_sha256=sha(folder/'case.evolution.json'),snapshot_sha256=sha(sp),initial_sha256=sha(initial_path),actual_initial_sha256=exact_vector_hash(snap['input']),native_counts=dict(stored=len(snap['input']),free_velocity=snap['velocity_size'],free_pressure=len(snap['rows'])-snap['velocity_size']),native_point_count=len(p['volume_points']),local_sparse_entries=sum(len(t['ids']) for q in p['local_sparse'] for t in q['terms'].values()))
     write_json(a.output/'pressure-vectors.json',vectors);write_json(a.output/'selection.json',result['selection']);write_json(a.output/'results.json',result);m.seal(a.output,['results.json','selection.json','independent.json','pressure-vectors.json']);print('CT10 diagnosis complete',result['selection'],flush=True);return 0
 if __name__=='__main__':raise SystemExit(main())
