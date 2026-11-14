@@ -1,0 +1,63 @@
+{
+  "schema": "CT8PublicationScopeV1",
+  "compact_decision_sha256": "033d68efcf2bfd3e4d706e7ba932ea9b0cbec85c5f753982d52611feee0e6829",
+  "compact_seal_sha256": "9249fd2b881096e2a2cb4c8eb1b44a7766544e4ac79df46920e0e2b0197a734f",
+  "physical_reference_manifest_sha256": "004bc0fc82054296a68d56de77751fc1f0a41570ee16b0a174ae8087f262d296",
+  "scope": {
+    "input_mean_fit": "central_pass_8_corner_roots_fail",
+    "central_mathematical_reference": "pass",
+    "native_kernel_operator_top_interface": "pass",
+    "displaced_restart_rollback": "pass",
+    "historical_flat_and_curved_equivalence": "pass",
+    "physical_completion": "both_T008_pass",
+    "physical_domain_mass_traction_budgets": "pass",
+    "bounded_flat_preservation": "fail_temporal_Pi",
+    "T002": "not_executed_failed_uncertainty_gate",
+    "full_domain": "blocked_3000slot_guard",
+    "terrain": "not_admitted",
+    "CT6_CT7": "historical_failures_unchanged"
+  },
+  "publication_resource": "closed_pass",
+  "resources": {
+    "collector": {
+      "maximum_aggregate": 5,
+      "maximum_project": 5,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "verification": {
+      "maximum_aggregate": 3,
+      "maximum_project": 3,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "environment": {
+      "maximum_aggregate": 3,
+      "maximum_project": 3,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    }
+  },
+  "clarifications": {
+    "collection_resource": "collector and verification receipts now closed; original sealed decision is not edited",
+    "physical_applicability": "flat mean-profile input calibration performed; no benchmark-prediction validation, developed precursor or terrain admission"
+  },
+  "tested_source": {
+    "start": "6f545f53299915657a18368ac18879a7fda935e5",
+    "governing_implementation": "4889a8f6",
+    "runtime_build": "e6bbe66a",
+    "physical_controller": "ba86ac0c",
+    "completed_diagnostics": "23cd84b7",
+    "final_changes": "documentation, metadata manifests and collector wording only; no trajectory regeneration"
+  },
+  "environment_sha256": "a3a5abd5746d66d25d8b2ef6d5f72a2490e9c6b45c9f0a7219f511b1816a4646"
+}

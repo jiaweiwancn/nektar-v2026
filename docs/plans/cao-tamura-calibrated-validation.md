@@ -1,5 +1,22 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-8: the explicitly versioned same-physical-wall displaced
+> Accepted route is implemented for Natural A95 at H_A=7.5mm. The physical
+> z<=25mm three-point fit gives z0=.181249431mm and h_s=6.844974060mm;
+> the central reference is admissible, while eight extraction corners have
+> no roughness root. Independent shifted-kernel, native all-row/frozen/top/
+> pressure-rank and history controls pass. Fresh2,957-slot full-height strips
+> at dt=.002/.001 both reach T=.008 with passing domain, traction, field-drift,
+> mass and complete physical budgets. Absolute-pressure timestep spread fails
+> the unchanged limit (4.80446e-6 versus8.41188e-7), so T=.02 is withheld.
+> Small physical error does not replace uncertainty qualification. The new
+> full-target-domain inventory still exceeds the unchanged dense guard;
+> full-domain preservation and displaced terrain evolution are unattempted.
+> Next: close the small-strip pressure/time-level uncertainty and qualify the
+> separately versioned serial consistent-mass/Schur-action backend before
+> full-domain flat preservation. See [CT-Accepted-8](cao-tamura-accepted-8.md).
+> CT1--CT7 failures, observation data and sealed histories remain unchanged.
+
 > CT-Accepted-7 (2026-11-14): the separately versioned Richards--Norris flat
 > top passes independent all-row/frozen/rank/flux controls and corrected,
 > native-model-bound A93/A95/E94E95 two-step smokes. A preliminary mislabeled

@@ -85,7 +85,7 @@ def main():
                 log=f.parent/(str(i)+'.log');failures['completion-job-'+str(i)]=dict(execution=row,log=str(log),log_sha256=sha(log),log_tail=log.read_text()[-3000:],scope='independent diagnostic execution failure, not a new physical trajectory or a relabelled qualification')
     write_json(a.output/'failed-preparations.json',failures)
     write_json(a.output/'decision.json',dict(schema='CT-Accepted-8-DecisionV1',scopes=scopes,
-        physical_applicability='conditional central flat idealization; not experimental calibration/validation, developed precursor or terrain admission',
+        physical_applicability='conditional central flat mean-profile input calibration; no benchmark-prediction validation, developed precursor or terrain admission',
         historical_CT4_CT7='unchanged, including narrow A93 traction, CT4 pressure interpretation and CT6/7 failed time/degree gates',collection_resource='attach this family closed execution/resource receipts before publication; no pending physical trajectory'))
     g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','core.filemode=false'];revision=subprocess.check_output(g+['rev-parse','HEAD'],cwd=s,text=True).strip()
     changed=subprocess.check_output(g+['diff','--name-only','6f545f53299915657a18368ac18879a7fda935e5..HEAD'],cwd=s,text=True).splitlines()

@@ -1,0 +1,4897 @@
+{
+  "launch-build-v1": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_build.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114",
+      "--previous",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v1"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 410.07039416299085,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 830.164598,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 13,
+      "maximum_project": 13,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "6626b8cabf8f8aded4cb4a128c56a47273314fcd39983d399fab3b328ae711d2",
+    "project_highwater": [
+      {
+        "time_unix": 1794626018.2895615,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 152510,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626018.8498614,
+        "project_threads": 5,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 152510,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 152511,
+            "parent": 152510,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 152513,
+            "parent": 152511,
+            "threads": 1,
+            "name": "git",
+            "state": "S"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626021.1041713,
+        "project_threads": 6,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 152510,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 152511,
+            "parent": 152510,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 152517,
+            "parent": 152511,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S"
+          },
+          {
+            "pid": 152550,
+            "parent": 152517,
+            "threads": 1,
+            "name": "python3.10",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626023.88256,
+        "project_threads": 13,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 152510,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 152511,
+            "parent": 152510,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 152560,
+            "parent": 152511,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S"
+          },
+          {
+            "pid": 152561,
+            "parent": 152560,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 152563,
+            "parent": 152561,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 152566,
+            "parent": 152563,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 152570,
+            "parent": 152566,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 152575,
+            "parent": 152570,
+            "threads": 1,
+            "name": "c++",
+            "state": "S"
+          },
+          {
+            "pid": 152576,
+            "parent": 152570,
+            "threads": 1,
+            "name": "c++",
+            "state": "S"
+          },
+          {
+            "pid": 152577,
+            "parent": 152575,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R"
+          },
+          {
+            "pid": 152578,
+            "parent": 152576,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794626018.2906353,
+        "active_before_actions": 3,
+        "external": 2,
+        "owned_roots": [
+          152510
+        ],
+        "processes": [
+          {
+            "pid": 152506,
+            "parent": 152502,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152507,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152510,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626018.85098,
+        "active_before_actions": 5,
+        "external": 2,
+        "owned_roots": [
+          152510
+        ],
+        "processes": [
+          {
+            "pid": 152506,
+            "parent": 152502,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152507,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152510,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152511,
+            "parent": 152510,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152513,
+            "parent": 152511,
+            "threads": 1,
+            "name": "git",
+            "state": "S",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626021.1052163,
+        "active_before_actions": 6,
+        "external": 2,
+        "owned_roots": [
+          152510
+        ],
+        "processes": [
+          {
+            "pid": 152506,
+            "parent": 152502,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152507,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152510,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152511,
+            "parent": 152510,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152517,
+            "parent": 152511,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152550,
+            "parent": 152517,
+            "threads": 1,
+            "name": "python3.10",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626023.8836007,
+        "active_before_actions": 13,
+        "external": 2,
+        "owned_roots": [
+          152510
+        ],
+        "processes": [
+          {
+            "pid": 152506,
+            "parent": 152502,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152507,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152510,
+            "parent": 152506,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152511,
+            "parent": 152510,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152560,
+            "parent": 152511,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152561,
+            "parent": 152560,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152563,
+            "parent": 152561,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152566,
+            "parent": 152563,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152570,
+            "parent": 152566,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152575,
+            "parent": 152570,
+            "threads": 1,
+            "name": "c++",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152576,
+            "parent": 152570,
+            "threads": 1,
+            "name": "c++",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152577,
+            "parent": 152575,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 152578,
+            "parent": 152576,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  },
+  "launch-build-v2": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_build.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114",
+      "--previous",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v2"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 54.31895775499288,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 62.530674000000005,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 13,
+      "maximum_project": 13,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "bfaabb9e9deaef46ce9cd3e7235b050eccae07e8d1bb53df9ba052c21e95879c",
+    "project_highwater": [
+      {
+        "time_unix": 1794627728.004389,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157774,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627728.5744314,
+        "project_threads": 5,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157774,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157775,
+            "parent": 157774,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157777,
+            "parent": 157775,
+            "threads": 1,
+            "name": "git",
+            "state": "S"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627730.851714,
+        "project_threads": 6,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157774,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157775,
+            "parent": 157774,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157782,
+            "parent": 157775,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S"
+          },
+          {
+            "pid": 157787,
+            "parent": 157782,
+            "threads": 1,
+            "name": "python3.10",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627733.1160126,
+        "project_threads": 11,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157774,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157775,
+            "parent": 157774,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157795,
+            "parent": 157775,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S"
+          },
+          {
+            "pid": 157796,
+            "parent": 157795,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 157798,
+            "parent": 157796,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 157802,
+            "parent": 157798,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 157803,
+            "parent": 157802,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 157804,
+            "parent": 157803,
+            "threads": 1,
+            "name": "sh",
+            "state": "S"
+          },
+          {
+            "pid": 157805,
+            "parent": 157804,
+            "threads": 1,
+            "name": "cmake",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627755.6962814,
+        "project_threads": 13,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157774,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157775,
+            "parent": 157774,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157795,
+            "parent": 157775,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S"
+          },
+          {
+            "pid": 157796,
+            "parent": 157795,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 157798,
+            "parent": 157796,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 157802,
+            "parent": 157798,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 157830,
+            "parent": 157802,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 157860,
+            "parent": 157830,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S"
+          },
+          {
+            "pid": 157861,
+            "parent": 157860,
+            "threads": 1,
+            "name": "c++",
+            "state": "S"
+          },
+          {
+            "pid": 157863,
+            "parent": 157861,
+            "threads": 1,
+            "name": "collect2",
+            "state": "S"
+          },
+          {
+            "pid": 157864,
+            "parent": 157863,
+            "threads": 1,
+            "name": "ld",
+            "state": "R"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794627728.0053697,
+        "active_before_actions": 3,
+        "external": 2,
+        "owned_roots": [
+          157774
+        ],
+        "processes": [
+          {
+            "pid": 157770,
+            "parent": 157769,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157771,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157774,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627728.5754428,
+        "active_before_actions": 5,
+        "external": 2,
+        "owned_roots": [
+          157774
+        ],
+        "processes": [
+          {
+            "pid": 157770,
+            "parent": 157769,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157771,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157774,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157775,
+            "parent": 157774,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157777,
+            "parent": 157775,
+            "threads": 1,
+            "name": "git",
+            "state": "S",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627730.8529484,
+        "active_before_actions": 6,
+        "external": 2,
+        "owned_roots": [
+          157774
+        ],
+        "processes": [
+          {
+            "pid": 157770,
+            "parent": 157769,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157771,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157774,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157775,
+            "parent": 157774,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157782,
+            "parent": 157775,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157787,
+            "parent": 157782,
+            "threads": 1,
+            "name": "python3.10",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627733.117437,
+        "active_before_actions": 11,
+        "external": 2,
+        "owned_roots": [
+          157774
+        ],
+        "processes": [
+          {
+            "pid": 157770,
+            "parent": 157769,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157771,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157774,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157775,
+            "parent": 157774,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157795,
+            "parent": 157775,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157796,
+            "parent": 157795,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157798,
+            "parent": 157796,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157802,
+            "parent": 157798,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157803,
+            "parent": 157802,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157804,
+            "parent": 157803,
+            "threads": 1,
+            "name": "sh",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157805,
+            "parent": 157804,
+            "threads": 1,
+            "name": "cmake",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627755.6973624,
+        "active_before_actions": 13,
+        "external": 2,
+        "owned_roots": [
+          157774
+        ],
+        "processes": [
+          {
+            "pid": 157770,
+            "parent": 157769,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157771,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157774,
+            "parent": 157770,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157775,
+            "parent": 157774,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157795,
+            "parent": 157775,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157796,
+            "parent": 157795,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157798,
+            "parent": 157796,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157802,
+            "parent": 157798,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157830,
+            "parent": 157802,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157860,
+            "parent": 157830,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157861,
+            "parent": 157860,
+            "threads": 1,
+            "name": "c++",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157863,
+            "parent": 157861,
+            "threads": 1,
+            "name": "collect2",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157864,
+            "parent": 157863,
+            "threads": 1,
+            "name": "ld",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  },
+  "launch-build-v3": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_build.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114",
+      "--previous",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-4-20261112",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v3"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 44.56338878700626,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 41.840028000000004,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 13,
+      "maximum_project": 13,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "fd8fc476af87878d4a014fb3adcfd5f53870eee458ece9dc0aeda392f9a05c20",
+    "project_highwater": [
+      {
+        "time_unix": 1794628505.87125,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 160111,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628506.4415195,
+        "project_threads": 5,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 160111,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 160112,
+            "parent": 160111,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 160114,
+            "parent": 160112,
+            "threads": 1,
+            "name": "git",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628507.5688193,
+        "project_threads": 6,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 160111,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 160112,
+            "parent": 160111,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          },
+          {
+            "pid": 160117,
+            "parent": 160112,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S"
+          },
+          {
+            "pid": 160123,
+            "parent": 160117,
+            "threads": 1,
+            "name": "python3.10",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628509.8187444,
+        "project_threads": 11,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 160111,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 160112,
+            "parent": 160111,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 160130,
+            "parent": 160112,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S"
+          },
+          {
+            "pid": 160131,
+            "parent": 160130,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 160133,
+            "parent": 160131,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 160136,
+            "parent": 160133,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 160143,
+            "parent": 160136,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 160144,
+            "parent": 160143,
+            "threads": 1,
+            "name": "sh",
+            "state": "S"
+          },
+          {
+            "pid": 160145,
+            "parent": 160144,
+            "threads": 1,
+            "name": "cmake",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628530.0686445,
+        "project_threads": 13,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 160111,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 160112,
+            "parent": 160111,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 160130,
+            "parent": 160112,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S"
+          },
+          {
+            "pid": 160131,
+            "parent": 160130,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 160133,
+            "parent": 160131,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 160136,
+            "parent": 160133,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 160160,
+            "parent": 160136,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S"
+          },
+          {
+            "pid": 160191,
+            "parent": 160160,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S"
+          },
+          {
+            "pid": 160192,
+            "parent": 160191,
+            "threads": 1,
+            "name": "c++",
+            "state": "S"
+          },
+          {
+            "pid": 160193,
+            "parent": 160192,
+            "threads": 1,
+            "name": "collect2",
+            "state": "S"
+          },
+          {
+            "pid": 160194,
+            "parent": 160193,
+            "threads": 1,
+            "name": "ld",
+            "state": "R"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794628505.8722193,
+        "active_before_actions": 3,
+        "external": 2,
+        "owned_roots": [
+          160111
+        ],
+        "processes": [
+          {
+            "pid": 160107,
+            "parent": 160106,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 160108,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 160111,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628506.4426892,
+        "active_before_actions": 5,
+        "external": 2,
+        "owned_roots": [
+          160111
+        ],
+        "processes": [
+          {
+            "pid": 160107,
+            "parent": 160106,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 160108,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 160111,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160112,
+            "parent": 160111,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160114,
+            "parent": 160112,
+            "threads": 1,
+            "name": "git",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628507.570059,
+        "active_before_actions": 6,
+        "external": 2,
+        "owned_roots": [
+          160111
+        ],
+        "processes": [
+          {
+            "pid": 160107,
+            "parent": 160106,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 160108,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 160111,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160112,
+            "parent": 160111,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 160117,
+            "parent": 160112,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160123,
+            "parent": 160117,
+            "threads": 1,
+            "name": "python3.10",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628509.8197687,
+        "active_before_actions": 11,
+        "external": 2,
+        "owned_roots": [
+          160111
+        ],
+        "processes": [
+          {
+            "pid": 160107,
+            "parent": 160106,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 160108,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 160111,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160112,
+            "parent": 160111,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160130,
+            "parent": 160112,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160131,
+            "parent": 160130,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160133,
+            "parent": 160131,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160136,
+            "parent": 160133,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160143,
+            "parent": 160136,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160144,
+            "parent": 160143,
+            "threads": 1,
+            "name": "sh",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160145,
+            "parent": 160144,
+            "threads": 1,
+            "name": "cmake",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628530.0698068,
+        "active_before_actions": 13,
+        "external": 2,
+        "owned_roots": [
+          160111
+        ],
+        "processes": [
+          {
+            "pid": 160107,
+            "parent": 160106,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 160108,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 160111,
+            "parent": 160107,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160112,
+            "parent": 160111,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160130,
+            "parent": 160112,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160131,
+            "parent": 160130,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160133,
+            "parent": 160131,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160136,
+            "parent": 160133,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160160,
+            "parent": 160136,
+            "threads": 1,
+            "name": "gmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160191,
+            "parent": 160160,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160192,
+            "parent": 160191,
+            "threads": 1,
+            "name": "c++",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160193,
+            "parent": 160192,
+            "threads": 1,
+            "name": "collect2",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160194,
+            "parent": 160193,
+            "threads": 1,
+            "name": "ld",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  },
+  "launch-completion-v1": {
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "import json,subprocess,time,pathlib,sys\nroot=pathlib.Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/completion-jobs-v1\");root.mkdir()\ncalls=json.loads(\"[[\\\"ctest\\\",\\\"--test-dir\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build\\\",\\\"-R\\\",\\\"^(CT[678]|RANSNewModelsIndependentOracle)\\\",\\\"--parallel\\\",\\\"1\\\",\\\"--output-on-failure\\\"],[\\\"python3\\\",\\\"-B\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted6_regression.py\\\",\\\"--runtime\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v3/runtime\\\",\\\"--ct5\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112\\\",\\\"--member\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1/evolution-v2/A95-p4-dt002\\\",\\\"--output\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/regression-v1\\\"],[\\\"python3\\\",\\\"-B\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_pressure.py\\\",\\\"--preflight\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v6\\\",\\\"--pair\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/strip-T008-v1\\\",\\\"--output\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/pressure-diagnosis-v1\\\"],[\\\"python3\\\",\\\"-B\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_assess.py\\\",\\\"--runtime\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v3/runtime\\\",\\\"--reference\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json\\\",\\\"--old\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1\\\",\\\"--ct7\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113\\\",\\\"--data\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-validation-data\\\",\\\"--observation-audit\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112/observations-v1/results.json\\\",\\\"--output\\\",\\\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/assessment-v3\\\"]]\")\nrows=[]\nfor i,cmd in enumerate(calls):\n start=time.time()\n with (root/(str(i)+\".log\")).open(\"w\") as out:r=subprocess.run(cmd,stdout=out,stderr=subprocess.STDOUT)\n rows.append(dict(command=cmd,exit_code=r.returncode,wall_seconds=time.time()-start));(root/\"results.json\").write_text(json.dumps(dict(status=\"pass\" if all(q[\"exit_code\"]==0 for q in rows) else \"fail\",jobs=rows),indent=2));print(i,r.returncode,flush=True)\nsys.exit(0 if all(q[\"exit_code\"]==0 for q in rows) else 1)\n"
+    ],
+    "exit_code": 1,
+    "wall_seconds": 811.6505103750096,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 1128.636057,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 20,
+      "maximum_project": 12,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "478634d676f3c2fa9d13943289afcd39a91d0ffcf20036796617f75c3124c096",
+    "project_highwater": [
+      {
+        "time_unix": 1794631121.1574008,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 165858,
+            "parent": 165854,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794631121.719945,
+        "project_threads": 7,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 165858,
+            "parent": 165854,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 165859,
+            "parent": 165858,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 165860,
+            "parent": 165859,
+            "threads": 1,
+            "name": "ctest",
+            "state": "S"
+          },
+          {
+            "pid": 165861,
+            "parent": 165860,
+            "threads": 1,
+            "name": "python3.10",
+            "state": "R"
+          },
+          {
+            "pid": 165862,
+            "parent": 165861,
+            "threads": 1,
+            "name": "RANSNewModelsPr",
+            "state": "S"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794631125.1195428,
+        "project_threads": 12,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 165858,
+            "parent": 165854,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 165859,
+            "parent": 165858,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 165894,
+            "parent": 165859,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          },
+          {
+            "pid": 165907,
+            "parent": 165894,
+            "threads": 3,
+            "name": "IncNavierStokes",
+            "state": "Rl"
+          },
+          {
+            "pid": 165908,
+            "parent": 165907,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794631121.1586857,
+        "active_before_actions": 11,
+        "external": 10,
+        "owned_roots": [
+          165858
+        ],
+        "processes": [
+          {
+            "pid": 165773,
+            "parent": 165772,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165779,
+            "parent": 165778,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165785,
+            "parent": 165784,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165830,
+            "parent": 165829,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165835,
+            "parent": 165834,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165840,
+            "parent": 165839,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165845,
+            "parent": 165844,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165851,
+            "parent": 165850,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165854,
+            "parent": 165853,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 165855,
+            "parent": 165854,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 165858,
+            "parent": 165854,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794631121.7212176,
+        "active_before_actions": 15,
+        "external": 10,
+        "owned_roots": [
+          165858
+        ],
+        "processes": [
+          {
+            "pid": 165773,
+            "parent": 165772,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165779,
+            "parent": 165778,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165785,
+            "parent": 165784,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165830,
+            "parent": 165829,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165835,
+            "parent": 165834,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165840,
+            "parent": 165839,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165845,
+            "parent": 165844,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165851,
+            "parent": 165850,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165854,
+            "parent": 165853,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 165855,
+            "parent": 165854,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 165858,
+            "parent": 165854,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 165859,
+            "parent": 165858,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 165860,
+            "parent": 165859,
+            "threads": 1,
+            "name": "ctest",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 165861,
+            "parent": 165860,
+            "threads": 1,
+            "name": "python3.10",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 165862,
+            "parent": 165861,
+            "threads": 1,
+            "name": "RANSNewModelsPr",
+            "state": "S",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794631125.1204674,
+        "active_before_actions": 20,
+        "external": 10,
+        "owned_roots": [
+          165858
+        ],
+        "processes": [
+          {
+            "pid": 165830,
+            "parent": 165829,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165840,
+            "parent": 165839,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165845,
+            "parent": 165844,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165851,
+            "parent": 165850,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165854,
+            "parent": 165853,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 165855,
+            "parent": 165854,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165858,
+            "parent": 165854,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 165859,
+            "parent": 165858,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 165871,
+            "parent": 165870,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165876,
+            "parent": 165875,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165883,
+            "parent": 165882,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 165894,
+            "parent": 165859,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 165907,
+            "parent": 165894,
+            "threads": 3,
+            "name": "IncNavierStokes",
+            "state": "Rl",
+            "owned": true
+          },
+          {
+            "pid": 165908,
+            "parent": 165907,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl",
+            "owned": true
+          },
+          {
+            "pid": 165922,
+            "parent": 165921,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          }
+        ]
+      }
+    ]
+  },
+  "launch-independent-v1": {
+    "command": [
+      "bash",
+      "-c",
+      "ct8_status=0; 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_inspect.py' '--root' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/inspection-v1.json' || ct8_status=1; 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted7_top.py' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v1/runtime' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/legacy-top-v1' || ct8_status=1; 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_assess.py' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v1/runtime' '--reference' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json' '--old' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1' '--ct7' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113' '--data' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-validation-data' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/assessment-v1' || ct8_status=1; exit \"$ct8_status\""
+    ],
+    "exit_code": 1,
+    "wall_seconds": 111.9612782990007,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 133.714059,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 12,
+      "maximum_project": 12,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "09dc2dd7b2a39cafdd5baaa78ba9d8ffaf859fbd9a6830b108e17fcc65703bec",
+    "project_highwater": [
+      {
+        "time_unix": 1794627325.4706628,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157022,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627326.0429246,
+        "project_threads": 5,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157022,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157023,
+            "parent": 157022,
+            "threads": 1,
+            "name": "bash",
+            "state": "S"
+          },
+          {
+            "pid": 157024,
+            "parent": 157023,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627327.1821523,
+        "project_threads": 7,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157022,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157023,
+            "parent": 157022,
+            "threads": 1,
+            "name": "bash",
+            "state": "S"
+          },
+          {
+            "pid": 157026,
+            "parent": 157023,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          },
+          {
+            "pid": 157039,
+            "parent": 157026,
+            "threads": 1,
+            "name": "RANSPreservatio",
+            "state": "S"
+          },
+          {
+            "pid": 157040,
+            "parent": 157039,
+            "threads": 1,
+            "name": "orted",
+            "state": "Ss"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627327.7532012,
+        "project_threads": 12,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157022,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157023,
+            "parent": 157022,
+            "threads": 1,
+            "name": "bash",
+            "state": "S"
+          },
+          {
+            "pid": 157026,
+            "parent": 157023,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          },
+          {
+            "pid": 157039,
+            "parent": 157026,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Rl"
+          },
+          {
+            "pid": 157040,
+            "parent": 157039,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794627325.471787,
+        "active_before_actions": 3,
+        "external": 2,
+        "owned_roots": [
+          157022
+        ],
+        "processes": [
+          {
+            "pid": 157018,
+            "parent": 157017,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157019,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157022,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627326.043941,
+        "active_before_actions": 5,
+        "external": 2,
+        "owned_roots": [
+          157022
+        ],
+        "processes": [
+          {
+            "pid": 157018,
+            "parent": 157017,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157019,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157022,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157023,
+            "parent": 157022,
+            "threads": 1,
+            "name": "bash",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157024,
+            "parent": 157023,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627327.1830027,
+        "active_before_actions": 7,
+        "external": 2,
+        "owned_roots": [
+          157022
+        ],
+        "processes": [
+          {
+            "pid": 157018,
+            "parent": 157017,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157019,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 157022,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157023,
+            "parent": 157022,
+            "threads": 1,
+            "name": "bash",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157026,
+            "parent": 157023,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 157039,
+            "parent": 157026,
+            "threads": 1,
+            "name": "RANSPreservatio",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157040,
+            "parent": 157039,
+            "threads": 1,
+            "name": "orted",
+            "state": "Ss",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627327.7545183,
+        "active_before_actions": 12,
+        "external": 2,
+        "owned_roots": [
+          157022
+        ],
+        "processes": [
+          {
+            "pid": 157018,
+            "parent": 157017,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157019,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157022,
+            "parent": 157018,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157023,
+            "parent": 157022,
+            "threads": 1,
+            "name": "bash",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157026,
+            "parent": 157023,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 157039,
+            "parent": 157026,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Rl",
+            "owned": true
+          },
+          {
+            "pid": 157040,
+            "parent": 157039,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  },
+  "launch-physical-v1": {
+    "command": [
+      "bash",
+      "-c",
+      "'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_reference.py' '--data' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-validation-data' '--contract' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-accepted-8-evidence/contract.json' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v3/runtime' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v3' && 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_native.py' '--mode' 'advance' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v3/runtime' '--reference' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json' '--contract' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-accepted-8-evidence/contract.json' '--preflight' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v6' '--controls' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/controls-v2' '--target' '.008' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/strip-T008-v1'"
+    ],
+    "exit_code": 1,
+    "wall_seconds": 527.4089501449926,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 691.2694879999999,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 11,
+      "maximum_project": 11,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "4eac69628b771024a1df5e178880f9b59ae8743ead5a84111e138717a8879cb5",
+    "project_highwater": [
+      {
+        "time_unix": 1794629356.4452472,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 161799,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794629357.013567,
+        "project_threads": 5,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 161799,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 161800,
+            "parent": 161799,
+            "threads": 1,
+            "name": "bash",
+            "state": "S"
+          },
+          {
+            "pid": 161801,
+            "parent": 161800,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794629366.0804315,
+        "project_threads": 7,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 161799,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 161800,
+            "parent": 161799,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          },
+          {
+            "pid": 161869,
+            "parent": 161800,
+            "threads": 1,
+            "name": "IncNavierStokes",
+            "state": "S"
+          },
+          {
+            "pid": 161870,
+            "parent": 161869,
+            "threads": 2,
+            "name": "orted",
+            "state": "Rsl"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794629366.640601,
+        "project_threads": 11,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 161799,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 161800,
+            "parent": 161799,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 161869,
+            "parent": 161800,
+            "threads": 3,
+            "name": "IncNavierStokes",
+            "state": "Rl"
+          },
+          {
+            "pid": 161870,
+            "parent": 161869,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794629356.4464328,
+        "active_before_actions": 3,
+        "external": 2,
+        "owned_roots": [
+          161799
+        ],
+        "processes": [
+          {
+            "pid": 161795,
+            "parent": 161794,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 161796,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 161799,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794629357.014878,
+        "active_before_actions": 5,
+        "external": 2,
+        "owned_roots": [
+          161799
+        ],
+        "processes": [
+          {
+            "pid": 161795,
+            "parent": 161794,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 161796,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 161799,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 161800,
+            "parent": 161799,
+            "threads": 1,
+            "name": "bash",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 161801,
+            "parent": 161800,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794629366.0817924,
+        "active_before_actions": 7,
+        "external": 2,
+        "owned_roots": [
+          161799
+        ],
+        "processes": [
+          {
+            "pid": 161795,
+            "parent": 161794,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 161796,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 161799,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 161800,
+            "parent": 161799,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 161869,
+            "parent": 161800,
+            "threads": 1,
+            "name": "IncNavierStokes",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 161870,
+            "parent": 161869,
+            "threads": 2,
+            "name": "orted",
+            "state": "Rsl",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794629366.641505,
+        "active_before_actions": 11,
+        "external": 2,
+        "owned_roots": [
+          161799
+        ],
+        "processes": [
+          {
+            "pid": 161795,
+            "parent": 161794,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 161796,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 161799,
+            "parent": 161795,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 161800,
+            "parent": 161799,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 161869,
+            "parent": 161800,
+            "threads": 3,
+            "name": "IncNavierStokes",
+            "state": "Rl",
+            "owned": true
+          },
+          {
+            "pid": 161870,
+            "parent": 161869,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  },
+  "launch-preflight-v2": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_native.py",
+      "--mode",
+      "preflight",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v1/runtime",
+      "--reference",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json",
+      "--contract",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-accepted-8-evidence/contract.json",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v2"
+    ],
+    "exit_code": 1,
+    "wall_seconds": 21.604662341997027,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 24.487484,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 19,
+      "maximum_project": 11,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "c9e6707c5a97a8c4599fc792d755733a445bfdcfa1f86e4e2de8e61130ff3faa",
+    "project_highwater": [
+      {
+        "time_unix": 1794626805.3697026,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 155251,
+            "parent": 155247,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626805.9482348,
+        "project_threads": 4,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 155251,
+            "parent": 155247,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 155252,
+            "parent": 155251,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626806.541137,
+        "project_threads": 11,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 155251,
+            "parent": 155247,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 155252,
+            "parent": 155251,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 155278,
+            "parent": 155252,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Sl"
+          },
+          {
+            "pid": 155279,
+            "parent": 155278,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794626805.3706203,
+        "active_before_actions": 11,
+        "external": 10,
+        "owned_roots": [
+          155251
+        ],
+        "processes": [
+          {
+            "pid": 155096,
+            "parent": 155095,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155101,
+            "parent": 155100,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155125,
+            "parent": 155124,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155150,
+            "parent": 155149,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155165,
+            "parent": 155164,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155185,
+            "parent": 155184,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155189,
+            "parent": 155188,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155197,
+            "parent": 155196,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155247,
+            "parent": 155246,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 155248,
+            "parent": 155247,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 155251,
+            "parent": 155247,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626805.949568,
+        "active_before_actions": 12,
+        "external": 10,
+        "owned_roots": [
+          155251
+        ],
+        "processes": [
+          {
+            "pid": 155101,
+            "parent": 155100,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155125,
+            "parent": 155124,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155165,
+            "parent": 155164,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155185,
+            "parent": 155184,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155189,
+            "parent": 155188,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155197,
+            "parent": 155196,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155247,
+            "parent": 155246,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 155248,
+            "parent": 155247,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 155251,
+            "parent": 155247,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 155252,
+            "parent": 155251,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 155257,
+            "parent": 155256,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155276,
+            "parent": 155275,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626806.5425675,
+        "active_before_actions": 19,
+        "external": 10,
+        "owned_roots": [
+          155251
+        ],
+        "processes": [
+          {
+            "pid": 155101,
+            "parent": 155100,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155125,
+            "parent": 155124,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155165,
+            "parent": 155164,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155185,
+            "parent": 155184,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155189,
+            "parent": 155188,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155197,
+            "parent": 155196,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155247,
+            "parent": 155246,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 155248,
+            "parent": 155247,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 155251,
+            "parent": 155247,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 155252,
+            "parent": 155251,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 155257,
+            "parent": 155256,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155276,
+            "parent": 155275,
+            "threads": 1,
+            "name": "cc1plus",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 155278,
+            "parent": 155252,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Sl",
+            "owned": true
+          },
+          {
+            "pid": 155279,
+            "parent": 155278,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  },
+  "launch-preflight-v3": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_native.py",
+      "--mode",
+      "preflight",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v1/runtime",
+      "--reference",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json",
+      "--contract",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-accepted-8-evidence/contract.json",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v3"
+    ],
+    "exit_code": 1,
+    "wall_seconds": 17.159085512990714,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 20.464881,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 11,
+      "maximum_project": 11,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "b5852bafb9e84e397598166071f10a310c409f22ee9f2f900e58a6bac03524e0",
+    "project_highwater": [
+      {
+        "time_unix": 1794626975.1677148,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 156350,
+            "parent": 156346,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626975.7425766,
+        "project_threads": 4,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 156350,
+            "parent": 156346,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 156351,
+            "parent": 156350,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626976.331715,
+        "project_threads": 11,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 156350,
+            "parent": 156346,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 156351,
+            "parent": 156350,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 156364,
+            "parent": 156351,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Sl"
+          },
+          {
+            "pid": 156365,
+            "parent": 156364,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794626975.1720803,
+        "active_before_actions": 3,
+        "external": 2,
+        "owned_roots": [
+          156350
+        ],
+        "processes": [
+          {
+            "pid": 156346,
+            "parent": 156345,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 156347,
+            "parent": 156346,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 156350,
+            "parent": 156346,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626975.7439094,
+        "active_before_actions": 4,
+        "external": 2,
+        "owned_roots": [
+          156350
+        ],
+        "processes": [
+          {
+            "pid": 156346,
+            "parent": 156345,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 156347,
+            "parent": 156346,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 156350,
+            "parent": 156346,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 156351,
+            "parent": 156350,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626976.3330688,
+        "active_before_actions": 11,
+        "external": 2,
+        "owned_roots": [
+          156350
+        ],
+        "processes": [
+          {
+            "pid": 156346,
+            "parent": 156345,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 156347,
+            "parent": 156346,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 156350,
+            "parent": 156346,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 156351,
+            "parent": 156350,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 156364,
+            "parent": 156351,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Sl",
+            "owned": true
+          },
+          {
+            "pid": 156365,
+            "parent": 156364,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  },
+  "launch-preflight-v4": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_native.py",
+      "--mode",
+      "preflight",
+      "--runtime",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v1/runtime",
+      "--reference",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json",
+      "--contract",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-accepted-8-evidence/contract.json",
+      "--basis-proof",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/legacy-top-v1/A95-p4/native.json",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v4"
+    ],
+    "exit_code": 1,
+    "wall_seconds": 15.357720021987916,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 19.436211999999998,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 11,
+      "maximum_project": 11,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "e2f0a19732fc36ef35128e762606206e0b41aa31ec7308df3eee4fb9b82976fd",
+    "project_highwater": [
+      {
+        "time_unix": 1794627518.4155083,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157502,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627518.979488,
+        "project_threads": 4,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157502,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157503,
+            "parent": 157502,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627520.1098096,
+        "project_threads": 6,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157502,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157503,
+            "parent": 157502,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          },
+          {
+            "pid": 157527,
+            "parent": 157503,
+            "threads": 1,
+            "name": "RANSPreservatio",
+            "state": "S"
+          },
+          {
+            "pid": 157528,
+            "parent": 157527,
+            "threads": 1,
+            "name": "orted",
+            "state": "Rs"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627520.6740224,
+        "project_threads": 11,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 157502,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157503,
+            "parent": 157502,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 157527,
+            "parent": 157503,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Sl"
+          },
+          {
+            "pid": 157528,
+            "parent": 157527,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794627518.4166584,
+        "active_before_actions": 3,
+        "external": 2,
+        "owned_roots": [
+          157502
+        ],
+        "processes": [
+          {
+            "pid": 157498,
+            "parent": 157497,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157499,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 157502,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627518.980694,
+        "active_before_actions": 4,
+        "external": 2,
+        "owned_roots": [
+          157502
+        ],
+        "processes": [
+          {
+            "pid": 157498,
+            "parent": 157497,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157499,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 157502,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157503,
+            "parent": 157502,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627520.1108725,
+        "active_before_actions": 6,
+        "external": 2,
+        "owned_roots": [
+          157502
+        ],
+        "processes": [
+          {
+            "pid": 157498,
+            "parent": 157497,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157499,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 157502,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157503,
+            "parent": 157502,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 157527,
+            "parent": 157503,
+            "threads": 1,
+            "name": "RANSPreservatio",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157528,
+            "parent": 157527,
+            "threads": 1,
+            "name": "orted",
+            "state": "Rs",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627520.6751132,
+        "active_before_actions": 11,
+        "external": 2,
+        "owned_roots": [
+          157502
+        ],
+        "processes": [
+          {
+            "pid": 157498,
+            "parent": 157497,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 157499,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 157502,
+            "parent": 157498,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157503,
+            "parent": 157502,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 157527,
+            "parent": 157503,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Sl",
+            "owned": true
+          },
+          {
+            "pid": 157528,
+            "parent": 157527,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  },
+  "launch-reference-v1": {
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_reference.py",
+      "--data",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-validation-data",
+      "--contract",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-accepted-8-evidence/contract.json",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v1"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 6.779616578001878,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 7.139655,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 4,
+      "maximum_project": 4,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "8c42460a4d6dd6f4d11c4e83b6341fb0ba1efd065e1a87572271b0042a77c08c",
+    "project_highwater": [
+      {
+        "time_unix": 1794625875.1860678,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 152445,
+            "parent": 152441,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794625875.7485707,
+        "project_threads": 4,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 152445,
+            "parent": 152441,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 152446,
+            "parent": 152445,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794625875.1870244,
+        "active_before_actions": 3,
+        "external": 2,
+        "owned_roots": [
+          152445
+        ],
+        "processes": [
+          {
+            "pid": 152441,
+            "parent": 152440,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152442,
+            "parent": 152441,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152445,
+            "parent": 152441,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794625875.749532,
+        "active_before_actions": 4,
+        "external": 2,
+        "owned_roots": [
+          152445
+        ],
+        "processes": [
+          {
+            "pid": 152441,
+            "parent": 152440,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152442,
+            "parent": 152441,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 152445,
+            "parent": 152441,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 152446,
+            "parent": 152445,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  },
+  "launch-verification-v1": {
+    "command": [
+      "bash",
+      "-c",
+      "'cmake' '-S' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build' '-DCMAKE_BUILD_TYPE=Release' '-DRANS_BUILD_SOLVER=ON' '-DRANS_PREBUILT_SPATIAL_LIBRARY=/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/dependency/libSpatialDomains.so.5.9.0' '-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake' && 'ctest' '--test-dir' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build' '-R' '^CT[678]' '--parallel' '1' '--output-on-failure' && 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_reference.py' '--data' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-validation-data' '--contract' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-accepted-8-evidence/contract.json' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v1/runtime' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2' && 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_native.py' '--mode' 'preflight' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v1/runtime' '--reference' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json' '--contract' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-accepted-8-evidence/contract.json' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v1'"
+    ],
+    "exit_code": 1,
+    "wall_seconds": 25.485812951999833,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 28.012326,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 11,
+      "maximum_project": 11,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "e5ac71e3ce86ad3763dcf2db891cbd08303c727e6e5649f56c560d5cf0ab4d11",
+    "project_highwater": [
+      {
+        "time_unix": 1794626567.6959875,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 154378,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626568.2686846,
+        "project_threads": 6,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 154378,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 154379,
+            "parent": 154378,
+            "threads": 1,
+            "name": "bash",
+            "state": "S"
+          },
+          {
+            "pid": 154380,
+            "parent": 154379,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S"
+          },
+          {
+            "pid": 154385,
+            "parent": 154380,
+            "threads": 1,
+            "name": "python3.10",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626578.4454215,
+        "project_threads": 9,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 154378,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 154379,
+            "parent": 154378,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 154455,
+            "parent": 154379,
+            "threads": 1,
+            "name": "RANSPreservatio",
+            "state": "S"
+          },
+          {
+            "pid": 154456,
+            "parent": 154455,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626579.0084295,
+        "project_threads": 11,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 154378,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 154379,
+            "parent": 154378,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          },
+          {
+            "pid": 154455,
+            "parent": 154379,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Sl"
+          },
+          {
+            "pid": 154456,
+            "parent": 154455,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794626567.697272,
+        "active_before_actions": 3,
+        "external": 2,
+        "owned_roots": [
+          154378
+        ],
+        "processes": [
+          {
+            "pid": 154374,
+            "parent": 154373,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 154375,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 154378,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626568.2698236,
+        "active_before_actions": 6,
+        "external": 2,
+        "owned_roots": [
+          154378
+        ],
+        "processes": [
+          {
+            "pid": 154374,
+            "parent": 154373,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 154375,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 154378,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 154379,
+            "parent": 154378,
+            "threads": 1,
+            "name": "bash",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 154380,
+            "parent": 154379,
+            "threads": 1,
+            "name": "cmake",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 154385,
+            "parent": 154380,
+            "threads": 1,
+            "name": "python3.10",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626578.446641,
+        "active_before_actions": 9,
+        "external": 2,
+        "owned_roots": [
+          154378
+        ],
+        "processes": [
+          {
+            "pid": 154374,
+            "parent": 154373,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 154375,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 154378,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 154379,
+            "parent": 154378,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 154455,
+            "parent": 154379,
+            "threads": 1,
+            "name": "RANSPreservatio",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 154456,
+            "parent": 154455,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794626579.0093768,
+        "active_before_actions": 11,
+        "external": 2,
+        "owned_roots": [
+          154378
+        ],
+        "processes": [
+          {
+            "pid": 154374,
+            "parent": 154373,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 154375,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 154378,
+            "parent": 154374,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 154379,
+            "parent": 154378,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 154455,
+            "parent": 154379,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Sl",
+            "owned": true
+          },
+          {
+            "pid": 154456,
+            "parent": 154455,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  },
+  "launch-verification-v2": {
+    "command": [
+      "bash",
+      "-c",
+      "ct8_status=0; 'ctest' '--test-dir' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build' '-R' '^CT[678]' '--parallel' '1' '--output-on-failure' || ct8_status=1; 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted7_top.py' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v2/runtime' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/legacy-top-v2' || ct8_status=1; 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_native.py' '--mode' 'preflight' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v2/runtime' '--reference' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json' '--contract' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-accepted-8-evidence/contract.json' '--basis-proof' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/legacy-top-v2/A95-p4/native.json' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v5' || ct8_status=1; 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_controls.py' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v2/runtime' '--reference' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/controls-v1' || ct8_status=1; 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_assess.py' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v2/runtime' '--reference' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json' '--old' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-6-20261113/recovered-v1' '--ct7' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-7-20261113' '--data' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-validation-data' '--observation-audit' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-5-20261112/observations-v1/results.json' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/assessment-v2' || ct8_status=1; exit \"$ct8_status\""
+    ],
+    "exit_code": 1,
+    "wall_seconds": 266.01271023800655,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 331.95638099999996,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 12,
+      "maximum_project": 12,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "a7a35e0416171f5c06624c687d149ed1733c599d344240f13c24bd0ed5ce2462",
+    "project_highwater": [
+      {
+        "time_unix": 1794627982.9641182,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 158238,
+            "parent": 158234,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627983.5351114,
+        "project_threads": 5,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 158238,
+            "parent": 158234,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 158239,
+            "parent": 158238,
+            "threads": 1,
+            "name": "bash",
+            "state": "S"
+          },
+          {
+            "pid": 158248,
+            "parent": 158239,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627984.6687613,
+        "project_threads": 12,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 158238,
+            "parent": 158234,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 158239,
+            "parent": 158238,
+            "threads": 1,
+            "name": "bash",
+            "state": "S"
+          },
+          {
+            "pid": 158248,
+            "parent": 158239,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          },
+          {
+            "pid": 158262,
+            "parent": 158248,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Sl"
+          },
+          {
+            "pid": 158263,
+            "parent": 158262,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794627982.9652674,
+        "active_before_actions": 3,
+        "external": 2,
+        "owned_roots": [
+          158238
+        ],
+        "processes": [
+          {
+            "pid": 158234,
+            "parent": 158233,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 158235,
+            "parent": 158234,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 158238,
+            "parent": 158234,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627983.5361564,
+        "active_before_actions": 5,
+        "external": 2,
+        "owned_roots": [
+          158238
+        ],
+        "processes": [
+          {
+            "pid": 158234,
+            "parent": 158233,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 158235,
+            "parent": 158234,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 158238,
+            "parent": 158234,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 158239,
+            "parent": 158238,
+            "threads": 1,
+            "name": "bash",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 158248,
+            "parent": 158239,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794627984.670093,
+        "active_before_actions": 12,
+        "external": 2,
+        "owned_roots": [
+          158238
+        ],
+        "processes": [
+          {
+            "pid": 158234,
+            "parent": 158233,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 158235,
+            "parent": 158234,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 158238,
+            "parent": 158234,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 158239,
+            "parent": 158238,
+            "threads": 1,
+            "name": "bash",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 158248,
+            "parent": 158239,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 158262,
+            "parent": 158248,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Sl",
+            "owned": true
+          },
+          {
+            "pid": 158263,
+            "parent": 158262,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  },
+  "launch-verification-v3": {
+    "command": [
+      "bash",
+      "-c",
+      "ct8_status=0; 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_native.py' '--mode' 'preflight' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v3/runtime' '--reference' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json' '--contract' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/docs/plans/cao-tamura-accepted-8-evidence/contract.json' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v6' || ct8_status=1; 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_controls.py' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v3/runtime' '--reference' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/reference-v2/results.json' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/controls-v2' || ct8_status=1; exit \"$ct8_status\""
+    ],
+    "exit_code": 0,
+    "wall_seconds": 205.87550898399786,
+    "allocation_wait_seconds": 0.0,
+    "process_cpu_seconds": 260.269198,
+    "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals",
+    "resource": {
+      "maximum_aggregate": 12,
+      "maximum_project": 12,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "pass",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "execution_sha256": "2b0031478fc2127f0d6b059d17a630dc86fcc020b71c08780bc9bca6f72e3827",
+    "project_highwater": [
+      {
+        "time_unix": 1794628611.6994197,
+        "project_threads": 3,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 160407,
+            "parent": 160403,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628612.2694826,
+        "project_threads": 5,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 160407,
+            "parent": 160403,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 160408,
+            "parent": 160407,
+            "threads": 1,
+            "name": "bash",
+            "state": "S"
+          },
+          {
+            "pid": 160409,
+            "parent": 160408,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628612.836003,
+        "project_threads": 12,
+        "control_helpers": 2,
+        "processes": [
+          {
+            "pid": 160407,
+            "parent": 160403,
+            "threads": 1,
+            "name": "python3",
+            "state": "S"
+          },
+          {
+            "pid": 160408,
+            "parent": 160407,
+            "threads": 1,
+            "name": "bash",
+            "state": "S"
+          },
+          {
+            "pid": 160409,
+            "parent": 160408,
+            "threads": 1,
+            "name": "python3",
+            "state": "R"
+          },
+          {
+            "pid": 160422,
+            "parent": 160409,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Rl"
+          },
+          {
+            "pid": 160423,
+            "parent": 160422,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl"
+          }
+        ]
+      }
+    ],
+    "aggregate_highwater": [
+      {
+        "time_unix": 1794628611.7037039,
+        "active_before_actions": 3,
+        "external": 2,
+        "owned_roots": [
+          160407
+        ],
+        "processes": [
+          {
+            "pid": 160403,
+            "parent": 160402,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 160404,
+            "parent": 160403,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 160407,
+            "parent": 160403,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628612.2707403,
+        "active_before_actions": 5,
+        "external": 2,
+        "owned_roots": [
+          160407
+        ],
+        "processes": [
+          {
+            "pid": 160403,
+            "parent": 160402,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 160404,
+            "parent": 160403,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 160407,
+            "parent": 160403,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160408,
+            "parent": 160407,
+            "threads": 1,
+            "name": "bash",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160409,
+            "parent": 160408,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          }
+        ]
+      },
+      {
+        "time_unix": 1794628612.8373349,
+        "active_before_actions": 12,
+        "external": 2,
+        "owned_roots": [
+          160407
+        ],
+        "processes": [
+          {
+            "pid": 160403,
+            "parent": 160402,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": false
+          },
+          {
+            "pid": 160404,
+            "parent": 160403,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": false
+          },
+          {
+            "pid": 160407,
+            "parent": 160403,
+            "threads": 1,
+            "name": "python3",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160408,
+            "parent": 160407,
+            "threads": 1,
+            "name": "bash",
+            "state": "S",
+            "owned": true
+          },
+          {
+            "pid": 160409,
+            "parent": 160408,
+            "threads": 1,
+            "name": "python3",
+            "state": "R",
+            "owned": true
+          },
+          {
+            "pid": 160422,
+            "parent": 160409,
+            "threads": 3,
+            "name": "RANSPreservatio",
+            "state": "Rl",
+            "owned": true
+          },
+          {
+            "pid": 160423,
+            "parent": 160422,
+            "threads": 4,
+            "name": "orted",
+            "state": "Ssl",
+            "owned": true
+          }
+        ]
+      }
+    ]
+  }
+}

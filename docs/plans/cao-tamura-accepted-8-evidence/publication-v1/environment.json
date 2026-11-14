@@ -1,0 +1,27 @@
+{
+  "schema": "CT8EnvironmentPublicationV1",
+  "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "platform": "Linux-6.8.0-149-generic-x86_64-with-glibc2.35",
+  "numpy": "1.21.5",
+  "scipy": "1.8.0",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "sdk_config": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake/Nektar++Config.cmake",
+  "sdk_sha256": "2dcd67abc79cbe62b75cbe81d8e1c8a2af4548e5ce6a2671f9f36d4973859a55",
+  "sdk_MPI_PETSC_lines": [
+    "SET(NEKTAR++_DEFINITIONS -DNEKTAR_MPI_TYPE=0 -DNEKTAR_USE_MPI -DNEKTAR_USE_SCOTCH -DTIXML_USE_STL -DNEKTAR_MEMORY_POOL_ENABLED)",
+    "SET(NEKTAR_USE_MPI \"ON\")",
+    "IF( NEKTAR_USE_MPI )",
+    "        ${NEKTAR++_DEFINITIONS} \"-DNEKTAR_USE_MPI\")",
+    "ENDIF( NEKTAR_USE_MPI )"
+  ],
+  "storage": "/dev/sda2 fuseblk /media/jay/\u65b0\u52a0\u53771",
+  "legacy_bridge": "/media/jay/\u65b0\u52a0\u5377",
+  "summary_sha256": "331cfaf4239e42eba06eaa9bf2e3425e8db047ea80e4f74d40ba444968f0d995"
+}

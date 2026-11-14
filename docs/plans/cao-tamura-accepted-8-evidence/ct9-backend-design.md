@@ -4,6 +4,24 @@ This is a prospective implementation contract, not a CT8 scalability result.
 The CT8 7.5mm radial inventory supersedes the CT7 capacity *input* only; CT7
 counts and blocked decisions remain immutable. No dense guard is raised here.
 
+CT8's central displaced strip completes both histories through T=.008, but
+its absolute-pressure timestep uncertainty fails: scaled spread
+4.804457393280823e-6 exceeds 8.411880056796802e-7. T=.02 is withheld.
+This is independent of capacity. Backend implementation/equivalence may proceed;
+physical full-domain preservation must additionally close that numerical gate
+under a prospectively declared, bounded pressure/time-level study. A sparse
+solver is not presumed to remedy the failure. No additional CT8 timestep was
+introduced to search for a pass.
+
+The new native affine target counts are33,267(P3/P1) and60,907(P4/P2)
+on930elements. A single hypothetical combined dense binary64 matrix would
+occupy8,853,546,312/29,677,301,192bytes, respectively, as reported by the
+native counter; no such matrix is allocated in CT8. This is a capacity
+illustration, not a measured peak-RSS estimate for the present block algorithm.
+The paired terrain's geometry is checked independently, but its physical-H
+region classifier is not supported by the affine field-count path. A later
+mapped region-aware inventory must not reuse global-y classification.
+
 The inspected authoritative Release SDK has `NEKTAR_USE_MPI=ON` and
 `NEKTAR_USE_PETSC=OFF`. `cmake/ThirdPartyPETSc.cmake` and the MultiRegions PETSc
 adapters exist in source; this does not make PETSc available in the tested
@@ -66,7 +84,9 @@ governing M inverse or stored one-sweep equations.
 5. Reconstruct initial full-height reference error and unforced spatial loads.
    Preserve the continuous CT8 physical fit, displacement, surface parameter,
    Richards--Norris top and absolute outlet traction. No residual restoration.
-6. Predeclare independent timestep histories and duration in target-domain
+6. First close the retained small-strip absolute-pressure uncertainty with
+   an independently specified diagnostic/qualification contract; retain
+   the CT8 failed pair. Predeclare independent timestep histories and duration in target-domain
    transit times. Advance `.01,.1,1` transit stages only on passing field,
    traction, domain, mass, complete scalar-budget and temporal-uncertainty gates.
    The small strip is an equivalence case, not full-domain preservation.
@@ -87,6 +107,7 @@ its guard unchanged. Verify installed dependencies before selecting a sparse
 solver. Demonstrate dense/scalable operator, pressure-level, trajectory,
 restart/rollback and complete-budget equivalence on the sealed small cases.
 Then perform measured increasing-mesh preflight and, only when independently
-admitted, the staged full-target-domain flat neutral-preservation test with
+admitted, including closure of CT8's small-strip pressure uncertainty, the
+staged full-target-domain flat neutral-preservation test with
 fresh paired histories and declared flow-through horizon. Preserve failed gates;
 do not begin curved production, retune the reference, or claim hill validation.

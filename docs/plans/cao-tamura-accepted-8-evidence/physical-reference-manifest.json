@@ -1,0 +1,86 @@
+{
+  "schema": "CT8PhysicalReferenceManifestV1",
+  "source_artifact": "qualified-v1/fit-and-reference.json",
+  "source_sha256": "80e143c113d18ddbe017ec33723ddc6ed5566bd400b7c758a7d85124b8b3fe92",
+  "contract_sha256": "b373b9df61565b03c5c398d372bc592073b7ed13577ace9c6e3c1bc9c33ede1f",
+  "physical_inputs": {
+    "model": "A95",
+    "policy": "Natural",
+    "provider": "DisplacedNeutralCompositeV1",
+    "wall_policy": "SamePhysicalWallDisplacedAcceptedV1",
+    "fit_policy": "CT8PhysicalBelow25mmEqualIds012V1",
+    "H": 0.1875,
+    "H_mm": 7.5,
+    "Z": 20.0,
+    "displacement": 0.0875,
+    "nu": 9.523809523809524e-05,
+    "ustar": 0.07426793792441279,
+    "B": 0.9919449895413243,
+    "K0": 0.021081109428869052,
+    "z0_m": 0.00018124943074282322,
+    "roughness_input": 0.1711243515027194,
+    "coordinate": "physical floor r=z=0; zeta=z-d only in outer log/epsilon; fixed Hh40mm normalization"
+  },
+  "normalization": {
+    "Hh_m": 0.04,
+    "ustar_over_Uinf": 0.051,
+    "original_measured40mm": 0.6867027875730971,
+    "renormalized_to_fitted_U40": false
+  },
+  "resolved_parameters": {
+    "q": 3.8220004260766363,
+    "kappa": 0.404060995298521,
+    "sigma_epsilon": 1.3,
+    "c_mu_wall": 0.0684571063448523,
+    "c_l_wall": 3.0191384281487186,
+    "alpha": 0.20668148044560702
+  },
+  "fit": {
+    "series": "f3a_R",
+    "ids": [
+      0,
+      1,
+      2
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "selection": "physical z<=25mm before displacement",
+    "K_fitted": false
+  },
+  "central_roughness_root": {
+    "status": "root",
+    "h_s": 0.1711243515027194,
+    "h_s_mm": 6.844974060108776,
+    "target": 0.5687211477403635,
+    "root_defect": 1.1102230246251565e-16,
+    "bracket_residuals": [
+      0.5836663052936935,
+      -0.01507095579912865
+    ]
+  },
+  "dataset_sha256": {
+    "profiles.csv": "f696657990c1d207a303777f17dd574049239143e6fa2c286f0d87650fd614f2",
+    "snapshot.json": "2432937f6ab1b7dd41351e56e3cd4ce31a24e8cc2f63449404af2c3a688b7429",
+    "source_manifest.json": "8c0cab03d1fe4c1301386539d584a20754d9a0641feaf98e3fdd2f2079e778f8",
+    "extraction.json": "7e5e5fe15fb43c0e6c6c1102197f018ed7cdc758d45e630100977e9de9c370a3"
+  },
+  "specification_sha256": {
+    "accepted_awf_appendix_A93_A95_E94_E95.tex": "17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40",
+    "A93_A95_E94_E95_neutral_ABL_EP_AWF_combined.tex": "056a85c2aea5ce4ca168caf561613e662416bb6b7d7177451ba5038d2cf68a64"
+  },
+  "boundary": {
+    "policy": "AcceptedRichardsNorrisFlatV1",
+    "pressure": "absolute outlet traction; no additional pressure gauge",
+    "top": "w=0;tx=ustar2;gk=0;geps=-ustar4/(sigmaE*(Z-d))",
+    "physical_floor": 0.0
+  },
+  "oracle_label_note": {
+    "oracle": "SamePhysicalWallDisplacedAcceptedCandidateV1",
+    "native": "SamePhysicalWallDisplacedAcceptedV1",
+    "scope": "inherited CT7 independent-oracle label; actual native configuration/signature uses the implemented policy"
+  },
+  "scope": "central flat input calibration and explicit wall extension; 8 extraction corners fail resistance roots; no full-domain/terrain admission"
+}

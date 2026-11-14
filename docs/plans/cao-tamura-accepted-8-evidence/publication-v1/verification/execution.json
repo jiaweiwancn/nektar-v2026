@@ -1,0 +1,33 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "-c",
+    "import json,pathlib,hashlib,collections\nr=pathlib.Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114\"); d=r/\"qualified-v1\"\nread=lambda p:json.loads(p.read_text())\ns=read(d/\"completed-artifacts.json\");assert all(hashlib.sha256((d/k).read_bytes()).hexdigest()==v for k,v in s[\"files\"].items())\np=read(d/\"pair-T0.008.json\");pre=read(d/\"native-preflight.json\");prs=read(d/\"pressure-diagnosis.json\");dom=read(d/\"domain.json\");obs=read(d/\"observations.json\");prov=read(d/\"provenance.json\");cost=read(d/\"resource-costs.json\")\nout=dict(schema=\"CT8PublicationSummaryV1\",compact_seal_verified=True,gate=p[\"recomputed_qualification\"],publication_resource=read(r/\"launch-publication-v1/resource-final.json\"),counts={k:v[\"stored_slots\"] for k,v in pre[\"counts\"].items()},members={},pressure=prs,domain=dict(cases={k:dict(slots=v.get(\"native_count\",{}).get(\"stored_slots\"),geometry_keys=list(v[\"native_geometry\"][\"32\"])) for k,v in dom[\"cases\"].items()},radial_grid=dom[\"radial_grid\"],certificate=dom[\"geometry_certificate\"]),indicators=obs[\"indicators\"],observation_counts=dict(collections.Counter(q[\"CT8_nominal\"] for q in obs[\"rows\"])),overlapping=obs[\"interface_overlapping\"],projection_contrast=pre[\"projection_contrast\"],initial=pre[\"initial\"],compiler=prov[\"build\"][\"compiler\"],source=prov[\"source_revision\"],resource_max=dict(project=max(v[\"resource\"][\"maximum_project\"] for v in cost.values()),aggregate=max(v[\"resource\"][\"maximum_aggregate\"] for v in cost.values())),cost={k:{x:v[x] for x in (\"exit_code\",\"process_cpu_seconds\",\"wall_seconds\",\"allocation_wait_seconds\")} for k,v in cost.items()})\nfor k,v in p[\"members\"].items():\n out[\"members\"][k]={x:v[x] for x in (\"time\",\"failure\",\"execution\",\"state_sha256\",\"history_sha256\",\"domain\",\"constitutive\",\"corrections\",\"extra_solves\",\"first_accuracy_crossing\")};out[\"members\"][k][\"endpoint\"]=v[\"accepted_metrics\"][-1];out[\"members\"][k][\"budgets\"]=v[\"budgets\"]\n(r/\"publication-summary-v1.json\").write_text(json.dumps(out,indent=2));print(\"CT8 compact seal and closed publication resources verified\",flush=True)\n"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 169675,
+  "guard_pid": 169676,
+  "owned_family_pid": 169679,
+  "wall_seconds": 0.6408726789959474,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 0.29594,
+  "resource": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}

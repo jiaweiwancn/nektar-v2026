@@ -1,0 +1,33 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "-c",
+    "import json,os,sys,platform,pathlib,subprocess,numpy,scipy,hashlib\nr=pathlib.Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114\")\nconfig=pathlib.Path(\"/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake/Nektar++Config.cmake\")\ntext=config.read_text()\nrecord=dict(schema=\"CT8EnvironmentPublicationV1\",python=sys.version,platform=platform.platform(),numpy=numpy.__version__,scipy=scipy.__version__,threads={k:os.environ.get(k) for k in (\"OMP_NUM_THREADS\",\"OPENBLAS_NUM_THREADS\",\"MKL_NUM_THREADS\",\"BLIS_NUM_THREADS\",\"NUMEXPR_NUM_THREADS\",\"VECLIB_MAXIMUM_THREADS\")},sdk_config=str(config),sdk_sha256=hashlib.sha256(config.read_bytes()).hexdigest(),sdk_MPI_PETSC_lines=[s for s in text.splitlines() if \"NEKTAR_USE_MPI\" in s or \"NEKTAR_USE_PETSC\" in s],storage=subprocess.check_output([\"findmnt\",\"-n\",\"-o\",\"SOURCE,FSTYPE,TARGET\",\"/media/jay/\u65b0\u52a0\u53771\"],text=True).strip(),legacy_bridge=os.path.realpath(\"/media/jay/\u65b0\u52a0\u5377\"),summary_sha256=hashlib.sha256((r/\"publication-summary-v1.json\").read_bytes()).hexdigest())\n(r/\"environment-v1.json\").write_text(json.dumps(record,indent=2));print(\"CT8 environment recorded\",flush=True)\n"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 170389,
+  "guard_pid": 170390,
+  "owned_family_pid": 170393,
+  "wall_seconds": 0.6743356480001239,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 0.33569099999999996,
+  "resource": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}

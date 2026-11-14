@@ -1,0 +1,80 @@
+{
+  "preflight-v1": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v1/failure.json",
+    "sha256": "72cc311695af41bde9c8f122e87a6c04009f8422c1336e36384a8f3926921188",
+    "body": {
+      "schema": "CT8ExecutionFailureV1",
+      "status": "fail",
+      "failure": "ValueError('native displaced operator rejected:EP-AWF patch: tensor validation requires a small serial affine 2D fixture')"
+    },
+    "scope": "retained static preparation, no admitted primary trajectory"
+  },
+  "preflight-v2": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v2/failure.json",
+    "sha256": "0adf582ebc4d4c7fe694d02a72a529dc189f8decb556d0c9436b9e983b2768bc",
+    "body": {
+      "schema": "CT8ExecutionFailureV1",
+      "status": "fail",
+      "failure": "ValueError(\"continuous RN reference balance on native tests:{'status': 'fail', 'equations': {'momentum_x': {'free_maximum': 2.6271920910849958e-15, 'scale': 0.002757863301772216, 'scaled_free_maximum': 9.52618677436532e-13, 'limit': 2e-09, 'status': 'pass', 'free_rows': 54, 'prescribed_rows': 16}, 'momentum_z': {'free_maximum': 8.442269438213673e-19, 'scale': 0.002757863301772216, 'scaled_free_maximum': 3.0611631232007153e-16, 'limit': 2e-09, 'status': 'pass', 'free_rows': 48, 'prescribed_rows': 22}, 'k_shared_once': {'free_maximum': 1.7731937311836777e-12, 'scale': 0.0007828252632205, 'scaled_free_maximum': 2.2651207293551774e-09, 'limit': 2e-09, 'status': 'fail', 'free_rows': 60, 'prescribed_rows': 10}, 'outer_epsilon': {'free_maximum': 5.9824104586544826e-15, 'scale': 0.00037646840847099127, 'scaled_free_maximum': 1.5890869788920036e-11, 'limit': 2e-09, 'status': 'pass', 'free_rows': 18, 'prescribed_rows': 10}, 'inner_continuity': {'free_maximum': 0.0, 'scale': 0.037133968962206394, 'scaled_free_maximum': 0.0, 'limit': 2e-09, 'status': 'pass', 'free_rows': 9, 'prescribed_rows': 0}, 'outer_continuity': {'free_maximum': 0.0, 'scale': 0.037133968962206394, 'scaled_free_maximum': 0.0, 'limit': 2e-09, 'status': 'pass', 'free_rows': 6, 'prescribed_rows': 0}}, 'prescribed_row_reaction_maximum': 0.09511550953651712, 'scope': 'independent analytical values/gradients and model sources on native integration/test rows; original conservative outlet terms; interface shared rows counted once; constrained row reactions distinct; not residual cancellation or actual-state equilibrium'}\")"
+    },
+    "scope": "retained static preparation, no admitted primary trajectory"
+  },
+  "preflight-v3": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v3/failure.json",
+    "sha256": "2a49d1c55e1e6670f16a301b16a213704bfa3d12f10b7b10d2f805a92131704d",
+    "body": {
+      "schema": "CT8ExecutionFailureV1",
+      "status": "fail",
+      "failure": "ValueError('native displaced operator rejected:None')"
+    },
+    "scope": "retained static preparation, no admitted primary trajectory"
+  },
+  "preflight-v4": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v4/failure.json",
+    "sha256": "6d9e215bff4a87e194ba034c13b7338c37cd46ad479c45d2bbbb96042cc2909c",
+    "body": {
+      "schema": "CT8ExecutionFailureV1",
+      "status": "fail",
+      "failure": "ValueError('native displaced operator rejected:EP-AWF patch: mixed rank packet is restricted to a small canonical new-model one-sweep fixture')"
+    },
+    "scope": "retained static preparation, no admitted primary trajectory"
+  },
+  "preflight-v5": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v5/failure.json",
+    "sha256": "a47cb15cf74cae994286a6231cd570a7870a6e1bda25fbefc61bba60fd421555",
+    "body": {
+      "schema": "CT8ExecutionFailureV1",
+      "status": "fail",
+      "failure": "ValueError('native displaced operator rejected:EP-AWF patch: open frozen-system export requires a small verification fixture')"
+    },
+    "scope": "retained static preparation, no admitted primary trajectory"
+  },
+  "controls-v1": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/controls-v1/results.json",
+    "sha256": "950c67ec6dfd09eb2b47a93e2a5f7faf3944d82d13c709b3711e1e6d5e4a67c1",
+    "status": "fail",
+    "failure": "ValueError('operator fixture unavailable')",
+    "scope": "retained independent diagnostic preparation"
+  },
+  "completion-job-2": {
+    "execution": {
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_pressure.py",
+        "--preflight",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v6",
+        "--pair",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/strip-T008-v1",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/pressure-diagnosis-v1"
+      ],
+      "exit_code": 1,
+      "wall_seconds": 3.1859819889068604
+    },
+    "log": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/completion-jobs-v1/2.log",
+    "log_sha256": "d90e37a1a6c00b15ae035f104479f7421ead798435d71ead09ff6448abe28fd3",
+    "log_tail": "Traceback (most recent call last):\n  File \"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_pressure.py\", line 76, in <module>\n    if __name__=='__main__':raise SystemExit(main())\n  File \"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_pressure.py\", line 47, in main\n    start=at(initial_state);truth=np.asarray([reference(col(c),q[2],bool(r))[3] for q,r in zip(o['grid'][:n],regions,strict=True)])\n  File \"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_pressure.py\", line 46, in at\n    def at(s):return np.asarray([row_value(q['pressure'],s,off[4+int(r)])[0] for q,r in zip(initial['test_basis'][:n],regions,strict=True)])\n  File \"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_pressure.py\", line 46, in <listcomp>\n    def at(s):return np.asarray([row_value(q['pressure'],s,off[4+int(r)])[0] for q,r in zip(initial['test_basis'][:n],regions,strict=True)])\n  File \"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_open.py\", line 189, in row_value\n    return phi@state[ids],d@state[ids]\nTypeError: only integer scalar arrays can be converted to a scalar index\n",
+    "scope": "independent diagnostic execution failure, not a new physical trajectory or a relabelled qualification"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "command": [
+    "bash",
+    "-c",
+    "'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_pressure.py' '--preflight' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v6' '--pair' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/strip-T008-v1' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/pressure-diagnosis-v2' && 'python3' '-B' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted8_collect.py' '--root' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114' '--preflight' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/preflight-v6' '--controls' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/controls-v2' '--assessment' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/assessment-v3' '--pressure' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/pressure-diagnosis-v2' '--regression' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/regression-v1' '--runtime' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/build-v3/runtime' '--pair' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/strip-T008-v1' '--output' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-8-20261114/qualified-v1'"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 169444,
+  "guard_pid": 169445,
+  "owned_family_pid": 169448,
+  "wall_seconds": 10.80834465000953,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 10.10726,
+  "resource": {
+    "maximum_aggregate": 5,
+    "maximum_project": 5,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}

@@ -1,0 +1,50 @@
+{
+  "0.008/missing_member": {
+    "status": "pass",
+    "expected_reason": "missing_timestep_member",
+    "reasons": [
+      "missing_timestep_member",
+      "temporal:Pi"
+    ]
+  },
+  "0.008/missing_epsilon": {
+    "status": "pass",
+    "expected_reason": "0.002:budget_primitives",
+    "reasons": [
+      "0.002:budget_primitives",
+      "temporal:Pi"
+    ]
+  },
+  "0.008/foreign_model": {
+    "status": "pass",
+    "expected_reason": "0.002:foreign_identity",
+    "reasons": [
+      "0.002:foreign_identity",
+      "temporal:Pi"
+    ]
+  },
+  "0.008/incomplete_endpoint": {
+    "status": "pass",
+    "expected_reason": "0.002:incomplete_or_rejected",
+    "reasons": [
+      "0.002:incomplete_or_rejected",
+      "temporal:Pi"
+    ]
+  },
+  "0.008/wrong_timestep_primitive": {
+    "status": "pass",
+    "expected_reason": "temporal:U",
+    "reasons": [
+      "temporal:U",
+      "temporal:Pi"
+    ]
+  },
+  "0.008/wrong_matrix": {
+    "status": "pass",
+    "expected_reason": "0.002:captured_frozen_matrix",
+    "reasons": [
+      "0.002:captured_frozen_matrix",
+      "temporal:Pi"
+    ]
+  }
+}

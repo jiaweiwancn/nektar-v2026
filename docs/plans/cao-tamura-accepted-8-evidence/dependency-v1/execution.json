@@ -1,0 +1,33 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "-c",
+    "import pathlib,json,hashlib,subprocess\np=pathlib.Path(\"/home/jay/build/nektar-v2026-mpi/CMakeCache.txt\");s=p.read_text();r=dict(schema=\"CT8InstalledDependencyAuditV1\",cache=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),flags=[x for x in s.splitlines() if x.startswith((\"NEKTAR_USE_PETSC:\",\"NEKTAR_USE_MPI:\",\"CMAKE_BUILD_TYPE:\"))],command=\"read only; no dependency installed or rebuilt\");print(json.dumps(r,indent=2),flush=True)\n"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 170804,
+  "guard_pid": 170805,
+  "owned_family_pid": 170808,
+  "wall_seconds": 0.6333371039945632,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 0.241135,
+  "resource": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}
