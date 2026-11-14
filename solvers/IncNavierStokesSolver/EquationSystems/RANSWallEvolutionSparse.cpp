@@ -86,6 +86,38 @@ std::string RANSWallEvolutionPatch::SparseBackendPacket(const Vector &state,doub
         scalars.push_back(J::Object({{"block",J::Number(b)},{"rows",J::Number(block.rows.size())},{"nnz",J::Number(block.csr.NonZeros())},
             {"factor_nnz",J::Number(factor.FactorNonZeros())},{"maximum_true_residual",J::Number(Maximum(error))},{"diagnostic_increment",J::Numbers(delta)}}));
     }
+    // Bounded aggregate reference errors on the actual native mass rows.
+    // No per-volume dense packets or changed physical/reference coefficients.
+    double us,level;m_sparseSession->LoadParameter("RANSWallFrictionVelocity",us);
+    m_sparseSession->LoadParameter("RANSOpenPressureLevel",level,0.);
+    const auto &model=m_parameters.model;const double H=m_parameters.geometry.height;
+    const double K0=model.Q()*us*us,A=us*us*us/model.Kappa(),d=AerodynamicDisplacement();
+    const auto referenceProfile=Profile(K0,{lower[0],0.,0.});
+    SolverUtils::RANSTensor referenceG{};referenceG[0][2]=us/(model.Kappa()*(H-d));
+    const auto referenceLaw=OuterClosure(K0,A/(H-d),referenceG,{lower[0],0.,H});
+    std::array<long double,5> square{},gradientSquare{},volume{};
+    Vector largest(5),scales{us,us,K0,A/(H-d),us*us};
+    for(const auto &q:Quadrature(0))
+    {
+        const bool outer=q.coordinate[2]>=H;const double z=q.coordinate[2];
+        const double du=outer?us/(model.Kappa()*(z-d)):us*us/referenceProfile->Original().TotalViscosity(z);
+        const double dk=outer?0.:referenceProfile->ReferenceKGradient(z);
+        for(int b=0;b<5;++b)
+        {
+            if(b==3 && !outer)continue;
+            const int block=b==4?InnerPressure()+outer:b;
+            const auto row=block==0 || block==1 || block==K()?q:GeometryPoint(block,q.geometry,q.coordinate);
+            const double expected=b==4?level-(outer?referenceLaw.quadraticStress[2][2]:0.):data.boundary[b](q.coordinate,time);
+            const RANSWallCoordinate gradient{0.,0.,b==0?du:b==K()?dk:b==3?-A/((z-d)*(z-d)):0.};
+            const double delta=row.Value(state,offset[block])-expected;const auto actualGradient=row.Gradient(state,offset[block]);
+            square[b]+=q.weight*delta*delta;volume[b]+=q.weight;largest[b]=std::max(largest[b],std::abs(delta));
+            for(int axis=0;axis<3;++axis)gradientSquare[b]+=q.weight*(actualGradient[axis]-gradient[axis])*(actualGradient[axis]-gradient[axis]);
+        }
+    }
+    std::vector<std::string> errors;for(int b=0;b<5;++b)errors.push_back(J::Object({{"block",J::Number(b)},
+        {"weighted_RMS",J::Number(std::sqrt(square[b]/volume[b]))},{"true_L2",J::Number(std::sqrt(square[b]))},
+        {"gradient_weighted_RMS",J::Number(std::sqrt(gradientSquare[b]/volume[b]))},{"maximum",J::Number(largest[b])},
+        {"scale",J::Number(scales[b])},{"physical_volume",J::Number(volume[b])}}));
     return J::Object({{"schema",J::Quote("AcceptedSerialSparsePacketV1")},{"read_only","true"},{"alpha",J::Number(alpha)},
         {"identity",J::Quote(PreservationIdentity())},{"stored_slots",J::Number(Size())},{"masses",J::List(masses)},
         {"flow_rows",J::Number(flow.rows.size())},{"flow_nnz",J::Number(flow.csr.NonZeros())},
@@ -96,6 +128,7 @@ std::string RANSWallEvolutionPatch::SparseBackendPacket(const Vector &state,doub
         {"true_pressure_residual",J::Number(Maximum(r.pressureDefect))},{"true_continuity",J::Number(Maximum(r.constraints))},
         {"splitting_identity",J::Number(Maximum(r.identity))},{"predictor",J::Numbers(r.predictor)},
         {"pressure_increment",J::Numbers(r.dz)},{"consistent_mass_correction",J::Numbers(r.bGz)},{"scalars",J::List(scalars)},
+        {"continuous_reference_errors",J::List(errors)},
         {"scope",J::Quote("frozen initial-state diagnostic linear operations only; no evolution or extra governing sweep; consistent mass in action, diagonal mass only in named preconditioner; no dense Schur or M-inverse-G columns")}});
 }
 }

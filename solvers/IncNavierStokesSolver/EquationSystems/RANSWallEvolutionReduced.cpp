@@ -58,6 +58,7 @@ RANSWallEvolutionPatch::PicardFlowResult RANSWallEvolutionPatch::
                          const RANSWallEvolutionData &data,
                          const std::map<int, double> &external) const
 {
+    RANSWallAlgebra::Require(!SerialSparse(),"legacy dense reduced-flow/action route is unsupported by AcceptedSerialSparseV1");
     PicardFlowResult result;
     result.block =
         AssemblePicardBlock(0, state, history, alpha, time, data, external);

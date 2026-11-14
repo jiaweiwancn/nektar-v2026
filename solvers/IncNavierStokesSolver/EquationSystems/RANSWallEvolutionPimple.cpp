@@ -254,6 +254,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         if(m_pimpleVerify)
         {
             const auto exact=PicardFlowCorrection(base,history,alpha,time,data,external);
+            auto step=du;step.insert(step.end(),dz.begin(),dz.end());
             Vector difference=step;for(int i=0;i<step.size();++i)difference[i]-=exact.step[i];
             put("verification_exact_flow_coefficient_difference",J::Number(Maximum(difference)));
             put("verification_extra_momentum_inverse_applications",J::Number(np+1+4));

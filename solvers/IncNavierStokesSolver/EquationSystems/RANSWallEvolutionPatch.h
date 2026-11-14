@@ -54,11 +54,11 @@ struct RANSWallEvolutionData
     explicit RANSWallEvolutionData(int dimension);
 };
 
-/** Analytically mapped 2D/3D native CG stage with globally ordered replicated coefficients.
- * Physical cell quadrature is owned once across the supplied communicator;
- * residuals are collectively assembled and one root solves the dense stage.
- * This bounded reference backend is deliberately distinct from a scalable
- * distributed sparse solver. Inner/outer pressure and all histories survive.
+/** Native CG stage with globally ordered coefficients. The bounded legacy
+ * route uses replicated dense stages. AcceptedSerialSparseV1 separately
+ * admits serial flat displaced A95/RN one-sweep stages, consistent sparse
+ * masses and a matrix-free pressure action. Neither is a distributed solver.
+ * Inner/outer pressure and all histories survive unchanged-method restarts.
  */
 class RANSWallEvolutionPatch
 {
