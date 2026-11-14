@@ -15,7 +15,7 @@ from wj7_command import owned_groups
 from run_wj_h10 import runtime_snapshot
 
 ROOT='wj-h15-persistent-neutral-20261114'
-CAPS={'operation':1200,'build':1200,'qualification':1800,'target':1800,'closure':300}
+CAPS={'operation':1200,'build':1200,'qualification':1800,'target':1800,'target_readback':120,'closure':300}
 
 def size(path):
     """Bounded walk tolerates vanished atomic temporaries, never real I/O errors.
@@ -49,7 +49,18 @@ def execute(root,label,argv,seconds,phase='operation',workers=1):
         halt_admission(b,phase);assert label not in b['entries']
         charged=lambda pp:sum(v.get('seconds',v['reserved_seconds'])for v in b['entries'].values()if v['phase']in pp)
         assert 60+charged(set(CAPS)-{'closure'})+(0 if phase=='closure'else seconds)+300<=7200
-        if phase!='operation':assert charged({phase})+seconds<=CAPS[phase]
+        if phase in ('target','target_readback'):assert charged({'target','target_readback'})+seconds<=1800
+        elif phase!='operation':assert charged({phase})+seconds<=CAPS[phase]
+        if phase=='target_readback':
+            # The final read is protected even after a native/protocol stop.
+            # It is not another restart block, and cannot admit a governor.
+            admission=load(root/'target-final-strict-admission.json')
+            assert list(map(str,argv))==admission['command']
+            assert not b.get('target_strict_readbacks'),'one final target strict read only'
+            assert not(root/'science/target/view/native.json').exists()
+            assert Path(argv[0])==root/'runtime/RANSWallResolutionProbe'
+            for v in admission['inputs']:assert sha(v['path'])==v['sha256']
+            b['target_strict_readbacks']=1
         if phase=='target':
             assert (root/'target-admission.json').exists(),'target preflight remains closed'
             admission=load(root/'target-admission.json');assert admission['status']=='PASS'

@@ -223,6 +223,21 @@ def qualified_step(folder):
     assert load(folder/f'monitor/step-{step}.qualification-commit.json')==committed
     return step
 
+def final_cp0_intent(root):
+    """One final strict view of the actual last qualified state after stop."""
+    folder=root/'science/target';r=load(folder/'case.evolution.json')
+    assert r['native_completed']==1 and r['independently_qualified']==0
+    assert qualified_step(folder)==0 and r['failure']=='R3 durable progress: stale/duplicate observer ACK'
+    cp0=next(v for v in load(H14/'publication-v2/state-bindings.json')['states']if v['case']=='cp0')
+    assert Path(r['last_qualified_checkpoint'])==verify(cp0['checkpoint']).parent
+    out=root/'science/final-qualified-cp0-view';out.mkdir()
+    request=dict(operation='open_checks',inner_stress_model='Linear',native_report=str(verify(cp0['producer'])),native_report_sha256=cp0['producer']['sha256'],
+        native_checkpoint=r['last_qualified_checkpoint'],checkpoint_sha256=cp0['checkpoint']['sha256'],weak=True,weak_compact=True,assembly=False,reuse=False,retain_scalar_observations=False)
+    atomic(out/'request.json',request)
+    command=[str(root/'runtime/RANSWallResolutionProbe'),str(verify(cp0['xml'])),str(out/'request.json'),str(out/'native.json')]
+    atomic(root/'target-final-strict-admission.json',dict(status='PASS',command=command,inputs=[identity(out/'request.json'),cp0['producer'],cp0['checkpoint'],cp0['xml'],identity(root/'runtime/RANSWallResolutionProbe.elf'),identity(root/'runtime/RANSWallResolutionProbe')],
+        role='last qualified checkpoint remains original H14 CP0; no completed-stage sidecar exists at CP0',completed_but_unqualified=identity(folder/'CP/State.bin'),native_failure=identity(folder/'case.evolution.json'),new_governing_attempts=0))
+
 def target(root):
     began=time.monotonic();folder=root/'science/target';states=load(H14/'publication-v2/state-bindings.json')['states'];cp0=next(v for v in states if v['case']=='cp0');cp1=next(v for v in states if v['case']=='pilot1')
     code=None;failure=None
@@ -245,7 +260,7 @@ def target(root):
     if code!=0:raise RuntimeError('native target stopped: '+str(r.get('failure')))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('setup','small-cache','small','runtime-qualify','admission','target','small-strict-intent','small-strict-finish'),required=True);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('setup','small-cache','small','runtime-qualify','admission','target','final-cp0-intent','small-strict-intent','small-strict-finish'),required=True);a=p.parse_args()
     if a.mode=='small-strict-intent':print(json.dumps(strict_request(a.root,a.root/'science/small/pass')))
     elif a.mode=='small-strict-finish':strict_finish(a.root/'science/small/pass')
     else:globals()[a.mode.replace('-','_')](a.root)

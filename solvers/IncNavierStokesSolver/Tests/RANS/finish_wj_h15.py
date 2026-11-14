@@ -78,7 +78,7 @@ def csv_rows(path,records):
         writer=csv.DictWriter(f,fieldnames=list(records[0]));writer.writeheader();writer.writerows(records)
 
 def analysis(root):
-    folder=root/'science/target';end=qualified_step(folder);assert end>0
+    folder=root/'science/target';qualified=qualified_step(folder);outcome=load(folder/'case.evolution.json');end=outcome['native_completed'];assert end>0
     out=root/'science/analysis-v1';out.mkdir()
     cache,manifest=load_cache(root/'science/observer-cache/manifest.json')
     inventory=load(folder/f'monitor/step-{end}.ready.inventory.json')
@@ -95,7 +95,7 @@ def analysis(root):
     for step in range(end+1):
         state=cache.qh0 if step==0 else reports[step]['state'];result,data=assess(rows,state,initial,step);s=result['summary']
         assert s['status']=='PASS','final-union retrospective qualification failed'
-        current=dict(step=step,time=step*.0025,reused_initial_state=step==0,inventory=identity(folder/f'monitor/step-{end}.ready.inventory.json'),quality=s['status'],
+        current=dict(step=step,time=step*.0025,reused_initial_state=step==0,independently_qualified_restart_eligible=step<=qualified,inventory=identity(folder/f'monitor/step-{end}.ready.inventory.json'),quality=s['status'],
             E_initial=initial_errors,E_eq=s['reference_error'],E_drift=s['initial_drift'],scaled_E_initial=scaled_norms(initial_errors,rows.config),scaled_E_eq=scaled_norms(s['reference_error'],rows.config),scaled_E_drift=scaled_norms(s['initial_drift'],rows.config),summary=s,all_regional_Q1_moments=result['all_regional_Q1_moments'])
         atomic(out/f'step-{step}.json',current)
         atomic(out/f'step-{step}-fetch.json',fetch_rows(rows,data))
@@ -111,13 +111,13 @@ def analysis(root):
                 point['root_derivative']=3*N*N-3.6*N-2*ww-2.7*ss
                 point['root_residual']=(N-1.8)*(N*N-2*ww)-2.7*ss*N
             histories.append(point)
-        row=dict(step=step,time=step*.0025,new_scientific_progress=step>=2,min_in_plane=s['min_in_plane'],min_transverse=s['min_transverse'],min_covariance=s['min_covariance'],max_strong_divergence=s['raw_divergence_max'],max_inner_Q1=result['all_regional_Q1_moments']['4']['maximum'],max_outer_Q1=result['all_regional_Q1_moments']['5']['maximum'],U_eq_L2=s['reference_error']['full']['U']['L2'],U_drift_L2=s['initial_drift']['full']['U']['L2'],E_G=s['errors']['E_G'],E_epsilon=s['errors']['E_epsilon'],E_U=s['errors']['E_U'],E_k=s['errors']['E_k'])
+        row=dict(step=step,time=step*.0025,new_scientific_progress=step>=2,qualified_restart_eligible=step<=qualified,min_in_plane=s['min_in_plane'],min_transverse=s['min_transverse'],min_covariance=s['min_covariance'],max_strong_divergence=s['raw_divergence_max'],max_inner_Q1=result['all_regional_Q1_moments']['4']['maximum'],max_outer_Q1=result['all_regional_Q1_moments']['5']['maximum'],U_eq_L2=s['reference_error']['full']['U']['L2'],U_drift_L2=s['initial_drift']['full']['U']['L2'],E_G=s['errors']['E_G'],E_epsilon=s['errors']['E_epsilon'],E_U=s['errors']['E_U'],E_k=s['errors']['E_k'])
         timeline.append(row)
         if step:
             live=load(folder/f'monitor/step-{step}.ready.result.json');r=reports[step]
             step_records.append(dict(step=step,time=r['time'],native_hard_status='PASS',independent_live_status=live['status'],retrospective_final_union_status=s['status'],source_report=identity(folder/f'monitor/step-{step}.report.json'),native_compute_seconds=live['native_compute_seconds'],independent_seconds=live['measured_independent_seconds'],cache=live['cache'],replay=live['replay'],frozen_subsolve=r['pimple_attempts'][0],completed_stage=r['stage_audits']))
     atomic(out/'witness-history.json',histories);atomic(out/'native-and-independent.json',step_records);csv_rows(out/'timeline.csv',timeline)
-    atomic(out/'summary.json',dict(status='PASS',qualified=end,new_scientific_progress=max(0,end-1),final_union_owner_rows=rows.point_count,physical_quadrature_rows=len(rows.rows)-rows.point_count,cache=stats,
+    atomic(out/'summary.json',dict(status='PASS'if qualified==end else'OBSTRUCTED_PROTOCOL',passive_physical_inventory='PASS',native_completed=end,qualified=qualified,new_scientific_progress=max(0,qualified-1),final_union_owner_rows=rows.point_count,physical_quadrature_rows=len(rows.rows)-rows.point_count,cache=stats,
         exact_reference_role='analytical continuum control; never a state reset',qh0_role='original H14 actual initialized state',internal_reference_role='original native fixed_reference/defect, separately hash-bound',comparison_scales=dict(U=1,G=1,k=rows.config.K,epsilon=rows.config.A/rows.config.H,R=rows.config.u_tau**2,pi=rows.config.u_tau**2),
         clocks=dict(horizon=505.02466521278404,terminal_window=[447.8483832973273,505.02466521278404],dt=.0025,required_steps=202010),references=manifest['reference_identity']))
     figures(out,timeline,step_records)
@@ -131,7 +131,7 @@ def figures(out,timeline,steps):
     axes[0].axhline(.002068763923454,color='tab:red',ls='--',label='half-reference quality gate');axes[0].set(xlabel='T [Hh/U∞]',ylabel='m / νeff');axes[0].legend(fontsize=8)
     axes[1].plot(t,[v['U_eq_L2']for v in timeline],'o-',label='current − analytical reference')
     axes[1].plot(t,[v['U_drift_L2']for v in timeline],'s-',label='current − original initialized qh0');axes[1].set(xlabel='T [Hh/U∞]',ylabel='Physical full-domain velocity L2');axes[1].legend(fontsize=8)
-    fig.suptitle('Fixed 6 mm full-domain neutral control; stage 1 is H14 replay');fig.savefig(out/'margins-and-drift.png',dpi=160);plt.close(fig)
+    fig.suptitle('Fixed 6 mm control: native replay complete; protocol qualification stopped');fig.savefig(out/'margins-and-drift.png',dpi=160);plt.close(fig)
     fig,ax=plt.subplots(figsize=(6.5,3.3),constrained_layout=True)
     ax.plot([v['step']for v in steps],[v['native_compute_seconds']for v in steps],'o-',label='native compute before publication/wait')
     ax.plot([v['step']for v in steps],[v['independent_seconds']for v in steps],'s-',label='independent assessment/publication')
