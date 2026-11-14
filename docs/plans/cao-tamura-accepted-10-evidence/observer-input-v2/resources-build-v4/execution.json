@@ -1,0 +1,42 @@
+{
+  "command": [
+    "timeout",
+    "-k",
+    "30s",
+    "7200",
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted10_build.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114",
+    "--ct9",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/build-v4"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 207811,
+  "guard_pid": 207827,
+  "owned_family_pid": 207830,
+  "wall_seconds": 22.011969501007115,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 19.340757,
+  "resource": {
+    "maximum_aggregate": 18,
+    "maximum_project": 14,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}

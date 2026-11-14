@@ -1,0 +1,45 @@
+{
+  "schema": "CT10AuditCapacityV1",
+  "status": "fail",
+  "controls": {
+    "native": {
+      "orders": [
+        32,
+        8,
+        12,
+        12,
+        64
+      ],
+      "face_order": 16,
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/RANSPreservationProbe",
+          "case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/target-audit-capacity-v1/native/request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/target-audit-capacity-v1/native/packet.json"
+        ],
+        "pid": 206081,
+        "exit_code": 1,
+        "wall_seconds": 159.8225766089745,
+        "process_cpu_seconds": 159.056189,
+        "peak_RSS_KiB": 11387496,
+        "peak_virtual_KiB": 16777216,
+        "control_wall_limit_reached": false,
+        "actual_mapped_files_catalog_sha256": "2a3f3d613ea88302b08685d53be47250a0100f9f5f0e5c41893cbfc85d41a6d5"
+      },
+      "request_sha256": "7de2c4324fe8a2c7c45d896997c657ba3561f101aa056df60dc3f275af211fea",
+      "configuration_sha256": "b0c215645369b1a904478dd2808d0ef8ab74097202a9c304cc6b6b83f08e5362",
+      "packet_sha256": "e2704482b20fa0046eac9d762662c1eee8b88352e78d60509fb36476fb39d558",
+      "status": "failed_required_audit_capacity",
+      "reason": "std::bad_alloc"
+    }
+  },
+  "physical_budget_qualification": "not_supplied_by_this_static_fixture",
+  "native_trajectory": "not_run",
+  "first_failure": {
+    "control": "native",
+    "reason": "std::bad_alloc",
+    "state_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+    "directory": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/target-audit-capacity-v1/native"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "-c",
+    "import os,sys,json,shutil,subprocess,tarfile\nfrom pathlib import Path\nr=Path(sys.argv[1]);sys.path.insert(0,str(r/'source/solvers/IncNavierStokesSolver/Tests/RANS'))\nfrom rans_request_manifest import RequestManifest,sha\nfrom ct_accepted_feasibility import write_json\nout=r/'observer-input-v2'\nrequests={}\nfor name in ('build-v4','input-control-v1'):\n p=r/name;req=json.loads((p/'request-manifest.json').read_text());seal=json.loads((p/'completed-artifacts.json').read_text())\n assert req['sha256']==seal['request_sha256']\n for f,h in seal['files'].items():assert sha(p/f)==h\n e=json.loads((r/('resources-'+name)/'execution.json').read_text())\n assert e['exit_code']==0 and e['resource']['aggregate_status']==e['resource']['project_status']=='pass'\n requests[name]={'request_sha256':sha(p/'request-manifest.json'),'seal_sha256':sha(p/'completed-artifacts.json'),'resource_sha256':sha(r/('resources-'+name)/'execution.json')}\ndata=json.loads((r/'input-control-v1/results.json').read_text());assert data['status']=='pass'\nrevision=subprocess.check_output(['git','-c','core.preloadIndex=false','-c','index.threads=1','rev-parse','HEAD'],cwd=r/'source',text=True).strip()\nm=RequestManifest(out,{'schema':'CT10ObserverInputSupplementV2','source_revision':revision,'inputs':requests,'scope':'read-only observer input transparency; original initial attribution and governing histories unchanged; raw traction remains separate'})\nfor name in requests:\n dest=out/name;dest.mkdir()\n for f in ('results.json','request-manifest.json','completed-artifacts.json'):shutil.copy2(r/name/f,dest/f)\n dest=out/('resources-'+name);dest.mkdir()\n for p in (r/('resources-'+name)).iterdir():\n  if p.is_file() and p.suffix in ('.json','.jsonl'):shutil.copy2(p,dest/p.name)\nbuild=json.loads((r/'build-v4/results.json').read_text())\nwrite_json(out/'provenance.json',{'source_revision':revision,'diagnostic':build['diagnostic'],'governing':build['governing'],'schema':'CT10SignedMomentumV2','checks':{k:{n:v[n] for n in ('status','time','state_sha256','maximum_original_residual_difference','governing_matching_enabled','maximum_input_lift_difference')} for k,v in data['checks'].items()},'original_qualified_v1_seal':sha(r/'qualified-v1/completed-artifacts.json'),'scope':'governing Residual effective-input policy is exposed; no governing source/state/history changes; raw accepted-state traction and epsilon lag remain direct coefficient diagnostics'})\nfiles=[str(p.relative_to(out)) for p in out.rglob('*') if p.is_file() and p.name not in ('request-manifest.json','completed-artifacts.json')]\n# Also bind nested manifests and seals.\nfiles+= [str(p.relative_to(out)) for p in out.rglob('*') if p.is_file() and p.parent!=out and p.name in ('request-manifest.json','completed-artifacts.json')]\nm.seal(out,files)\nwith tarfile.open(r/'observer-input-v2.tar.gz','w:gz') as t:t.add(out,arcname=out.name)\nprint(json.dumps({'checks':json.loads((out/'provenance.json').read_text())['checks'],'diagnostic':build['diagnostic'],'archive_sha256':sha(r/'observer-input-v2.tar.gz')},indent=2))\n",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 208195,
+  "guard_pid": 208196,
+  "owned_family_pid": 208199,
+  "wall_seconds": 0.6399629059887957,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 0.47335399999999994,
+  "resource": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}

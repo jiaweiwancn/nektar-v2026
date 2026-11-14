@@ -1,5 +1,22 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-10: signed native-load/pressure-image attribution identifies outer
+> nonlinear normal-stress representation as the main strip pressure driver;
+> large volume/outlet advection images cancel. One prospectively selected P4/P2
+> bisection of the first two outer slabs gives3,265 slots and passes the unchanged
+> .001/.0005 field, absolute-pressure/traction uncertainty, domain, mass and
+> complete scalar-budget criteria throughT=.02. The unchanged baseline still
+> fails pressure uncertainty; CT8/CT9 failures are preserved. Actual60,907-slot
+> target initial/operator/quadrature checks pass, but the required physical-scalar
+> observer fails its first capacity control with std::bad_alloc at the declared
+>16-GiB address-space bound. Target evolution and .01-transit preservation remain
+> unattempted, T=0. Fresh closed resources pass, peak 14 project /18 aggregate.
+> Next: bounded/streamed physical-scalar observation with old/new all-row/stage/
+> face equivalence, then the contracted paired target stepping/cost check before
+> full-domain preservation. See [CT-Accepted-10](cao-tamura-accepted-10.md).
+> Terrain, curved temporal/spatial, physical-interface/approach-layer and other
+> model admission questions remain separate; this is not hill validation.
+
 > CT-Accepted-9: the separately versioned serial CSR/consistent-mass backend
 > passes dense/scalable operator, trajectory, pressure-level and history/rollback
 > checks for the declared A95 displaced Accepted/Richards–Norris route. Actual

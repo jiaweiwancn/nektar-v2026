@@ -1,0 +1,220 @@
+{
+  "schema": "CT10ObservationalControlsV1",
+  "status": "pass",
+  "face_count": 3200,
+  "state_sha256": "05cd7fe6ffee6ec580e530a8412f230fba549b4e42b9414d537754333ef63694",
+  "face_parity": "bitwise JSON row/weight/owner/side equality with sealed CT9",
+  "audit_defects": {
+    "accepted_awf_covariance": 0.0,
+    "accepted_awf_hard_admissible": 0.0,
+    "accepted_awf_inner_minimum_point": 0.0,
+    "accepted_awf_outer_minimum_point": 0.0,
+    "accepted_awf_reference_departure": 0.0,
+    "accepted_awf_scalar_domain": 0.0,
+    "accepted_awf_sources": 0.0,
+    "admissible": 0.0,
+    "common_velocity_k_dependent_epsilon_trace_defects": 0.0,
+    "constitutive_modification": 0.0,
+    "coupled_norms": 0.0,
+    "energy": 0.0,
+    "inner_zero_covariance": 0.0,
+    "interface": 0.0,
+    "interface_inner": 0.0,
+    "interface_outer": 0.0,
+    "mass_volume": 0.0,
+    "momentum_k_load_and_boundary_reaction": 0.0,
+    "native_A95_minimum_radicand_geometry_element_side_block": 0.0,
+    "native_A95_minimum_radicand_point": 0.0,
+    "native_A95_radicand_range": 0.0,
+    "native_inner_covariance_tensor_row_major": 0.0,
+    "native_inner_covariance_witness_gradient_row_major": 0.0,
+    "native_inner_minimum_geometry_element_side_block": 0.0,
+    "native_k_inner_outer_shared_interface_constant_test": 0.0,
+    "native_k_inner_outer_shared_interface_dual": 0.0,
+    "native_k_inner_outer_shared_interface_max_row": 0.0,
+    "native_k_inner_outer_shared_interface_row_counts": 0.0,
+    "native_outer_covariance_tensor_row_major": 0.0,
+    "native_outer_covariance_witness_gradient_row_major": 0.0,
+    "native_outer_isotropic_production_work_maximum": 0.0,
+    "native_outer_isotropic_production_work_witness": 0.0,
+    "native_outer_minimum_geometry_element_side_block": 0.0,
+    "native_raw_divergence_maximum_witness": 0.0,
+    "native_raw_divergence_range": 0.0,
+    "outer_constitutive_range": 0.0,
+    "outer_tangent_diagnostic_available": 0.0,
+    "physical_sample_K": 0.0,
+    "physical_sample_outer": 0.0,
+    "prescribed_source_inner": 0.0,
+    "r4_outer_gradient_witness": 0.0,
+    "reconstruction_dense": 0.0,
+    "reconstruction_native": 0.0,
+    "roughness": 0.0,
+    "scalar_minimum_point_0": 0.0,
+    "scalar_minimum_point_1": 0.0,
+    "scalar_minimum_point_2": 0.0,
+    "source_volume_inner": 0.0,
+    "source_volume_outer": 0.0,
+    "strong_continuity": 0.0,
+    "wall_cutoff_activity": 0.0,
+    "wall_cutoff_limiting_point": 0.0,
+    "wall_cutoff_required_budget": 0.0
+  },
+  "execution": {
+    "command": [
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/build-v3/runtime/RANSPreservationProbe",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/controls-v1/faces/case.xml",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/controls-v1/faces/faces-request.json",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/controls-v1/faces/faces.json"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 8.591395566007122,
+    "process_cpu_seconds": 7.917404999999999,
+    "peak_RSS_KiB": 788208,
+    "actual_mapped_files_catalog_sha256": "6572129c90273902fd540e8b40344302845a6ce764534e73f53b8ff8b60e3fc9"
+  },
+  "packet_sha256": "6d89886314c65138db0ae9b888fa4423d5c37fe501dd195a5a3a5ccad3fcafcb",
+  "unchanged_dense_export_guard": {
+    "status": "pass",
+    "reason": "EP-AWF patch: dense per-element global-load localization is restricted to at-most1000-slot sparse verification; select aggregate sparse resolution",
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/build-v3/runtime/RANSPreservationProbe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/controls-v1/dense-guard/case.xml",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/controls-v1/dense-guard/negative-request.json",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/controls-v1/dense-guard/negative.json"
+      ],
+      "exit_code": 1,
+      "wall_seconds": 5.952086917008273,
+      "process_cpu_seconds": 5.411291,
+      "peak_RSS_KiB": 238768,
+      "actual_mapped_files_catalog_sha256": "dd66dd7dbe4370239398f9c11ebeb4a3d579414ca8f72b45b62b120e96fb3ebc"
+    }
+  },
+  "gate_controls": {
+    "scope": "synthetic classifier fixtures only; no native or physical qualification claim",
+    "positive": "pass",
+    "negative": {
+      "missing_member": {
+        "status": "pass",
+        "expected_rejection": "missing_member",
+        "observed": {
+          "status": "fail",
+          "reasons": [
+            "missing_member"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      },
+      "wrong_horizon": {
+        "status": "pass",
+        "expected_rejection": "foreign_target_request",
+        "observed": {
+          "status": "fail",
+          "reasons": [
+            "foreign_target_request"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      },
+      "incomplete_accepted_endpoint": {
+        "status": "pass",
+        "expected_rejection": "accepted_coverage",
+        "observed": {
+          "status": "fail",
+          "reasons": [
+            "0.001:accepted_coverage"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      },
+      "wrong_model": {
+        "status": "pass",
+        "expected_rejection": "foreign_physics",
+        "observed": {
+          "status": "fail",
+          "reasons": [
+            "0.001:foreign_physics_or_backend"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      },
+      "missing_outer_epsilon": {
+        "status": "pass",
+        "expected_rejection": "budget_coverage",
+        "observed": {
+          "status": "fail",
+          "reasons": [
+            "0.001:budget_coverage_or_accuracy"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      },
+      "missing_control": {
+        "status": "pass",
+        "expected_rejection": "budget_coverage",
+        "observed": {
+          "status": "fail",
+          "reasons": [
+            "0.001:budget_coverage_or_accuracy"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      },
+      "foreign_budget_state": {
+        "status": "pass",
+        "expected_rejection": "budget_state_configuration_identity",
+        "observed": {
+          "status": "fail",
+          "reasons": [
+            "0.001:budget_state_configuration_identity"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      },
+      "nonfinite_primitive": {
+        "status": "pass",
+        "expected_rejection": "budget_coverage",
+        "observed": {
+          "status": "fail",
+          "reasons": [
+            "0.001:budget_coverage_or_accuracy"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      },
+      "stale_boundary": {
+        "status": "pass",
+        "expected_rejection": "boundary_identity",
+        "observed": {
+          "status": "fail",
+          "reasons": [
+            "0.001:boundary_identity"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      },
+      "pass_label_failed_pressure": {
+        "status": "pass",
+        "expected_rejection": "drift:Pi",
+        "observed": {
+          "status": "fail",
+          "reasons": [
+            "0.001:drift:Pi"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      },
+      "pass_label_relaxed_temporal_limit": {
+        "status": "pass",
+        "expected_rejection": "temporal:Pi",
+        "observed": {
+          "status": "fail",
+          "reasons": [
+            "temporal:Pi"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      }
+    }
+  }
+}

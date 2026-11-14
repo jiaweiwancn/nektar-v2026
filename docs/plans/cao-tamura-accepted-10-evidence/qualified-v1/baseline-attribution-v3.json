@@ -1,0 +1,5176 @@
+{
+  "schema": "CT10PressureAttributionV1",
+  "status": "pass",
+  "native_reconstruction": 1.0658141036401503e-14,
+  "frozen_momentum_agreement": 7.737066457048324e-15,
+  "negative_controls": {
+    "omit_augmented_pressure": {
+      "status": "pass",
+      "intended_failure": "signed_native_free_row_reconstruction",
+      "maximum_wrong_row_defect": 0.02625369010757238,
+      "limit": 2e-10
+    },
+    "reverse_natural_traction": {
+      "status": "pass",
+      "intended_failure": "signed_native_free_row_reconstruction",
+      "maximum_wrong_row_defect": 0.10501476043028957,
+      "limit": 2e-10
+    },
+    "omit_nonlinear_normal": {
+      "status": "pass",
+      "intended_failure": "signed_native_free_row_reconstruction",
+      "maximum_wrong_row_defect": 0.026253696401498158,
+      "limit": 2e-10
+    }
+  },
+  "component_images": {
+    "inner/outlet/natural_advection": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.013266180230687374,
+          "signed_mean": 0.001717014815879604,
+          "spatial_variation_RMS": 0.013154596080272874,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.12564622839207462,
+          "signed_mean": 0.11858457868070811,
+          "spatial_variation_RMS": 0.04152917538637531,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.005315404672156908,
+          "signed_mean": 0.0006110126341935298,
+          "spatial_variation_RMS": 0.0052801695417517966,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 49.67387203866442,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0032947689263990165,
+          "weighted_RMS": 0.011672921586398552,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.013266180131061702,
+          "signed_mean": 0.0017170148011329653,
+          "spatial_variation_RMS": 0.013154595981726944,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.12564622741967357,
+          "signed_mean": 0.11858457755298206,
+          "spatial_variation_RMS": 0.0415291756645507,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.005315404638688855,
+          "signed_mean": 0.000611012629979819,
+          "spatial_variation_RMS": 0.0052801695085480105,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 49.67387210027659,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0032947691927559756,
+          "weighted_RMS": 0.01167292252460838,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 1.302269729156325e-10,
+          "signed_mean": 1.474663876100749e-11,
+          "spatial_variation_RMS": 1.293893392827293e-10,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.2722636614301228e-09,
+          "signed_mean": 1.127726050468293e-09,
+          "spatial_variation_RMS": 5.889726473196922e-10,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 4.2438902431096605e-11,
+          "signed_mean": 4.213710574503207e-12,
+          "spatial_variation_RMS": 4.2229197041270594e-11,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 9.059821985427256e-07,
+        "interface_inner_minus_outer": {
+          "signed_mean": -2.6635696110021463e-10,
+          "weighted_RMS": 9.387272909129322e-10,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": -0.0007217774487305532,
+      "maximum_load_difference": 1.0544097541032474e-09,
+      "free_signed_load_sum": 1.5539404109234984e-09
+    },
+    "inner/outlet/natural_traction": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.00011908761175224121,
+          "signed_mean": -1.535521283509005e-05,
+          "spatial_variation_RMS": 0.00011809350833827242,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.00113202037013828,
+          "signed_mean": -0.0010776803716623133,
+          "spatial_variation_RMS": 0.0003465185924907731,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 4.678242181435632e-05,
+          "signed_mean": -5.301662436094248e-06,
+          "spatial_variation_RMS": 4.648104308457448e-05,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.6076377448490323,
+        "interface_inner_minus_outer": {
+          "signed_mean": 3.459733193197e-05,
+          "weighted_RMS": 0.00014408851286664068,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.00011908761175224121,
+          "signed_mean": -1.535521283509005e-05,
+          "spatial_variation_RMS": 0.00011809350833827242,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.00113202037013828,
+          "signed_mean": -0.0010776803716623133,
+          "spatial_variation_RMS": 0.0003465185924907731,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 4.678242181435632e-05,
+          "signed_mean": -5.301662436094248e-06,
+          "spatial_variation_RMS": 4.648104308457448e-05,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.6076377448490323,
+        "interface_inner_minus_outer": {
+          "signed_mean": 3.459733193197e-05,
+          "weighted_RMS": 0.00014408851286664068,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "inner/volume/advection": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.013266180230687343,
+          "signed_mean": -0.0017170148158796004,
+          "spatial_variation_RMS": 0.013154596080272843,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.12564622839207432,
+          "signed_mean": -0.11858457868070789,
+          "spatial_variation_RMS": 0.04152917538637503,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.005315404672156901,
+          "signed_mean": -0.0006110126341935284,
+          "spatial_variation_RMS": 0.00528016954175179,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 49.67387203866425,
+        "interface_inner_minus_outer": {
+          "signed_mean": -0.003294768926399064,
+          "weighted_RMS": 0.011672921586398564,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0132661801310618,
+          "signed_mean": -0.0017170148011328792,
+          "spatial_variation_RMS": 0.01315459598172705,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.1256462274196745,
+          "signed_mean": -0.11858457755298313,
+          "spatial_variation_RMS": 0.04152917566455039,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.005315404638688891,
+          "signed_mean": -0.0006110126299797224,
+          "spatial_variation_RMS": 0.005280169508548058,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 49.67387210027649,
+        "interface_inner_minus_outer": {
+          "signed_mean": -0.003294769192755975,
+          "weighted_RMS": 0.011672922524608413,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 1.3022684052869906e-10,
+          "signed_mean": -1.4746720834932388e-11,
+          "spatial_variation_RMS": 1.2938919668466839e-10,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.272262331952549e-09,
+          "signed_mean": -1.1277247250474865e-09,
+          "spatial_variation_RMS": 5.889723132897755e-10,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 4.243886953363677e-11,
+          "signed_mean": -4.213805968567523e-12,
+          "spatial_variation_RMS": 4.2229154461725945e-11,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 9.059822125895408e-07,
+        "interface_inner_minus_outer": {
+          "signed_mean": 2.66356911877436e-10,
+          "weighted_RMS": 9.387273119105913e-10,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0007217765840060748,
+      "maximum_load_difference": 1.0544097542523252e-09,
+      "free_signed_load_sum": -1.5539403336462977e-09
+    },
+    "inner/volume/augmented_pressure": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "inner/volume/linear_normal": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 6.025686665148152e-20,
+          "signed_mean": 7.293951803486388e-21,
+          "spatial_variation_RMS": 5.981377973128636e-20,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 5.816549643969796e-19,
+          "signed_mean": 5.148979821503321e-19,
+          "spatial_variation_RMS": 2.705597264656514e-19,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.152815633742287e-20,
+          "signed_mean": 2.4901281724436844e-21,
+          "spatial_variation_RMS": 2.1383656772715995e-20,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.824818761106597e-16,
+        "interface_inner_minus_outer": {
+          "signed_mean": 1.814770361560108e-21,
+          "weighted_RMS": 9.691954030992133e-21,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 6.025686665148152e-20,
+          "signed_mean": 7.293951803486388e-21,
+          "spatial_variation_RMS": 5.981377973128636e-20,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 5.816549643969796e-19,
+          "signed_mean": 5.148979821503321e-19,
+          "spatial_variation_RMS": 2.705597264656514e-19,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.152815633742287e-20,
+          "signed_mean": 2.4901281724436844e-21,
+          "spatial_variation_RMS": 2.1383656772715995e-20,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.824818761106597e-16,
+        "interface_inner_minus_outer": {
+          "signed_mean": 1.814770361560108e-21,
+          "weighted_RMS": 9.691954030992133e-21,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": -3.259695400657313e-13,
+      "maximum_load_difference": 3.363915585653392e-20,
+      "free_signed_load_sum": 4.600534325275015e-20
+    },
+    "inner/volume/linear_shear": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.000527600739568059,
+          "signed_mean": 6.472370243685866e-05,
+          "spatial_variation_RMS": 0.0005236156822858039,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.004588682395181779,
+          "signed_mean": 0.003673964983634185,
+          "spatial_variation_RMS": 0.002749179409002084,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0002858822999858625,
+          "signed_mean": 3.056684488609535e-05,
+          "spatial_variation_RMS": 0.0002842434826674414,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.2149674714646754,
+        "interface_inner_minus_outer": {
+          "signed_mean": -0.00014323183047898298,
+          "weighted_RMS": 0.0003350968572067852,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0005275815048383328,
+          "signed_mean": 6.472115731086982e-05,
+          "spatial_variation_RMS": 0.0005235966157681135,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.004588493836329032,
+          "signed_mean": 0.0036737823761360372,
+          "spatial_variation_RMS": 0.0027491087171703055,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.00028587510840576765,
+          "signed_mean": 3.056600382041081e-05,
+          "spatial_variation_RMS": 0.0002842363400701255,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.214948548401248,
+        "interface_inner_minus_outer": {
+          "signed_mean": -0.00014323386669916718,
+          "weighted_RMS": 0.00033510706253577605,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 2.48877439698199e-08,
+          "signed_mean": 2.545125988876436e-09,
+          "spatial_variation_RMS": 2.4757264259365422e-08,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 2.4542158315938233e-07,
+          "signed_mean": 1.826074981480564e-07,
+          "spatial_variation_RMS": 1.6397028724913903e-07,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 7.43270026399569e-09,
+          "signed_mean": 8.410656845308835e-10,
+          "spatial_variation_RMS": 7.384960509624016e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.00021435327230842096,
+        "interface_inner_minus_outer": {
+          "signed_mean": 2.03622018411006e-09,
+          "weighted_RMS": 2.1370188937441382e-08,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": -0.09913719069237853,
+      "maximum_load_difference": 2.0120977348813072e-07,
+      "free_signed_load_sum": 3.6215572051845524e-08
+    },
+    "inner/volume/molecular_normal": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 1.996146779580614e-21,
+          "signed_mean": 2.43237398970083e-22,
+          "spatial_variation_RMS": 1.9812716960004065e-21,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.9358700562843978e-20,
+          "signed_mean": 1.750954596153629e-20,
+          "spatial_variation_RMS": 8.256820677640024e-21,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 6.8970520506438415e-22,
+          "signed_mean": 7.983384790478758e-23,
+          "spatial_variation_RMS": 6.850692130154585e-22,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 5.780762255904006e-18,
+        "interface_inner_minus_outer": {
+          "signed_mean": 4.2223736096885524e-23,
+          "weighted_RMS": 1.9893946920630796e-22,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 1.996146779580614e-21,
+          "signed_mean": 2.43237398970083e-22,
+          "spatial_variation_RMS": 1.9812716960004065e-21,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.9358700562843978e-20,
+          "signed_mean": 1.750954596153629e-20,
+          "spatial_variation_RMS": 8.256820677640024e-21,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 6.8970520506438415e-22,
+          "signed_mean": 7.983384790478758e-23,
+          "spatial_variation_RMS": 6.850692130154585e-22,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 5.780762255904006e-18,
+        "interface_inner_minus_outer": {
+          "signed_mean": 4.2223736096885524e-23,
+          "weighted_RMS": 1.9893946920630796e-22,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": -1.1058000877011133e-14,
+      "maximum_load_difference": 1.0602389765015296e-21,
+      "free_signed_load_sum": 1.6073339303881187e-21
+    },
+    "inner/volume/molecular_shear": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.00017072919107129992,
+          "signed_mean": 1.9597689650370488e-05,
+          "spatial_variation_RMS": 0.0001696006699403873,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.001651648018524053,
+          "signed_mean": 0.0013772883199229453,
+          "spatial_variation_RMS": 0.0009116019201922847,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 6.006522762434855e-05,
+          "signed_mean": 6.748882423816142e-06,
+          "spatial_variation_RMS": 5.968487375871973e-05,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.9328942414383731,
+        "interface_inner_minus_outer": {
+          "signed_mean": -1.8491816372683064e-06,
+          "weighted_RMS": 4.919339926843276e-06,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.00017071875027018402,
+          "signed_mean": 1.959651482675581e-05,
+          "spatial_variation_RMS": 0.00016959029541945548,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0016515461389885844,
+          "signed_mean": 0.0013772040839315036,
+          "spatial_variation_RMS": 0.0009115446014378496,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 6.00617819244227e-05,
+          "signed_mean": 6.748493668035799e-06,
+          "spatial_variation_RMS": 5.9681450059037516e-05,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.9328213045602024,
+        "interface_inner_minus_outer": {
+          "signed_mean": -1.849244139893732e-06,
+          "weighted_RMS": 4.919509749738208e-06,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 1.0472993644658739e-08,
+          "signed_mean": 1.174823614670402e-09,
+          "spatial_variation_RMS": 1.0406891243569094e-08,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.0219781984895202e-07,
+          "signed_mean": 8.423599144199454e-08,
+          "spatial_variation_RMS": 5.7867885114829245e-08,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 3.44655798503009e-09,
+          "signed_mean": 3.887557803424128e-10,
+          "spatial_variation_RMS": 3.424562875379139e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 7.293687817063093e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": 6.250262542393202e-11,
+          "weighted_RMS": 4.397941067143808e-10,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": -0.049942183987699194,
+      "maximum_load_difference": 1.734269162686819e-08,
+      "free_signed_load_sum": -1.154097217838611e-07
+    },
+    "inner/volume/nonlinear_normal": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "inner/volume/nonlinear_shear": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "inner/volume/rough_inertia": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "inner/volume/rough_pressure": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "outer/outlet/natural_advection": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 1.9232416773192669,
+          "signed_mean": 1.8693582629188854,
+          "spatial_variation_RMS": 0.452059989641549,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.23185012513987344,
+          "signed_mean": 0.20986382854853647,
+          "spatial_variation_RMS": 0.09854772445026547,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 1.9321891217982106,
+          "signed_mean": 1.885063257565923,
+          "spatial_variation_RMS": 0.4241359656646573,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 430.2616663206995,
+        "interface_inner_minus_outer": {
+          "signed_mean": -0.0030652073982068455,
+          "weighted_RMS": 0.011334341297336011,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 1.9232417214615822,
+          "signed_mean": 1.8693584350185977,
+          "spatial_variation_RMS": 0.4520594657733969,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.23186092827363367,
+          "signed_mean": 0.20987538479933804,
+          "spatial_variation_RMS": 0.09854853076145201,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 1.9321891538837672,
+          "signed_mean": 1.8850633219291903,
+          "spatial_variation_RMS": 0.42413582577206826,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 430.2617310954881,
+        "interface_inner_minus_outer": {
+          "signed_mean": -0.0030646778481362726,
+          "weighted_RMS": 0.011332748136299114,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 1.2611818499194962e-06,
+          "signed_mean": -1.720997129034184e-07,
+          "spatial_variation_RMS": 1.2493843873624016e-06,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.2170926761844526e-05,
+          "signed_mean": -1.1556250801594825e-05,
+          "spatial_variation_RMS": 3.818969187205136e-06,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 4.5139501965432164e-07,
+          "signed_mean": -6.43632672691148e-08,
+          "spatial_variation_RMS": 4.4678275883830817e-07,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.003252531402875721,
+        "interface_inner_minus_outer": {
+          "signed_mean": -5.29550070568069e-07,
+          "weighted_RMS": 1.6005353788401072e-06,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 7.434781910348793,
+      "maximum_load_difference": 3.7966320406979115e-07,
+      "free_signed_load_sum": 2.1988221644993043e-08
+    },
+    "outer/outlet/natural_traction": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0113490985448047,
+          "signed_mean": 0.011317034121911254,
+          "spatial_variation_RMS": 0.0008525118551577655,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0037744691469087576,
+          "signed_mean": 0.0033486732596710285,
+          "spatial_variation_RMS": 0.001741552393966466,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.011396760876575695,
+          "signed_mean": 0.011392444477074411,
+          "spatial_variation_RMS": 0.00031363563991225945,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.1229417613879265,
+        "interface_inner_minus_outer": {
+          "signed_mean": -0.00015983786929807436,
+          "weighted_RMS": 0.0005715143449811039,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0113490985448047,
+          "signed_mean": 0.011317034121911254,
+          "spatial_variation_RMS": 0.0008525118551577655,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0037744691469087576,
+          "signed_mean": 0.0033486732596710285,
+          "spatial_variation_RMS": 0.001741552393966466,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.011396760876575695,
+          "signed_mean": 0.011392444477074411,
+          "spatial_variation_RMS": 0.00031363563991225945,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.1229417613879265,
+        "interface_inner_minus_outer": {
+          "signed_mean": -0.00015983786929807436,
+          "weighted_RMS": 0.0005715143449811039,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "outer/top/natural_advection": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "outer/top/natural_traction": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.00025583071208463786,
+          "signed_mean": -3.4473291349286114e-05,
+          "spatial_variation_RMS": 0.00025349742686915015,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 9.728353448635993e-12,
+          "signed_mean": -8.684201188626983e-12,
+          "spatial_variation_RMS": 4.384690472204113e-12,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.00025703841688733,
+          "signed_mean": -3.479953692655822e-05,
+          "spatial_variation_RMS": 0.0002546718280172387,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.46541575473215574,
+        "interface_inner_minus_outer": {
+          "signed_mean": 4.133262422547908e-13,
+          "weighted_RMS": 5.637923622757902e-13,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.00025583071208463786,
+          "signed_mean": -3.4473291349286114e-05,
+          "spatial_variation_RMS": 0.00025349742686915015,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 9.728353448635993e-12,
+          "signed_mean": -8.684201188626983e-12,
+          "spatial_variation_RMS": 4.384690472204113e-12,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.00025703841688733,
+          "signed_mean": -3.479953692655822e-05,
+          "spatial_variation_RMS": 0.0002546718280172387,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.46541575473215574,
+        "interface_inner_minus_outer": {
+          "signed_mean": 4.133262422547908e-13,
+          "weighted_RMS": 5.637923622757902e-13,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "outer/volume/advection": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 1.9232416773192502,
+          "signed_mean": -1.8693582629188623,
+          "spatial_variation_RMS": 0.45205998964157235,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.23185012513982667,
+          "signed_mean": -0.2098638285484907,
+          "spatial_variation_RMS": 0.09854772445025281,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 1.9321891217981935,
+          "signed_mean": -1.8850632575658997,
+          "spatial_variation_RMS": 0.42413596566468165,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 430.26166632070033,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0030652073982084796,
+          "weighted_RMS": 0.01133434129733743,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 1.9232417214615103,
+          "signed_mean": -1.8693584350184964,
+          "spatial_variation_RMS": 0.4520594657735082,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.23186092827340027,
+          "signed_mean": -0.20987538479910411,
+          "spatial_variation_RMS": 0.09854853076140109,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 1.9321891538836948,
+          "signed_mean": -1.8850633219290902,
+          "spatial_variation_RMS": 0.4241358257721832,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 430.26173109548427,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0030646778481237444,
+          "weighted_RMS": 0.01133274813629262,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 1.2611818223977375e-06,
+          "signed_mean": 1.7209963513360612e-07,
+          "spatial_variation_RMS": 1.2493843702933687e-06,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.2170926568994574e-05,
+          "signed_mean": 1.1556250613425043e-05,
+          "spatial_variation_RMS": 3.818969142003018e-06,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 4.5139499124122124e-07,
+          "signed_mean": 6.436319054409726e-08,
+          "spatial_variation_RMS": 4.4678274118484755e-07,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0032525313526467372,
+        "interface_inner_minus_outer": {
+          "signed_mean": 5.295500847312192e-07,
+          "weighted_RMS": 1.600535387563737e-06,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": -7.434781705723431,
+      "maximum_load_difference": 3.796632040871384e-07,
+      "free_signed_load_sum": -2.1988183386098185e-08
+    },
+    "outer/volume/augmented_pressure": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.005688047502881393,
+          "signed_mean": -0.005661321994801677,
+          "spatial_variation_RMS": 0.000550742831283351,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 6.629426365598754e-14,
+          "signed_mean": 6.166886062468362e-14,
+          "spatial_variation_RMS": 2.4328605034874762e-14,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.005714899174563791,
+          "signed_mean": -0.005714899174563792,
+          "spatial_variation_RMS": 5.113590140681767e-14,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.036109942621734,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.005714899174565898,
+          "weighted_RMS": 0.005714899174565896,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.005688047502881393,
+          "signed_mean": -0.005661321994801677,
+          "spatial_variation_RMS": 0.000550742831283351,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 6.629426365598754e-14,
+          "signed_mean": 6.166886062468362e-14,
+          "spatial_variation_RMS": 2.4328605034874762e-14,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.005714899174563791,
+          "signed_mean": -0.005714899174563792,
+          "spatial_variation_RMS": 5.113590140681767e-14,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.036109942621734,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.005714899174565898,
+          "weighted_RMS": 0.005714899174565896,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "outer/volume/linear_normal": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 2.3719092185942345e-17,
+          "signed_mean": 1.4933452549268928e-17,
+          "spatial_variation_RMS": 1.8427895405714804e-17,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.4305461611087013e-18,
+          "signed_mean": 1.287970042478689e-18,
+          "spatial_variation_RMS": 6.225716735768552e-19,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.383065699971831e-17,
+          "signed_mean": 1.5062589607692804e-17,
+          "spatial_variation_RMS": 1.8466689127952744e-17,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.556922924697579e-14,
+        "interface_inner_minus_outer": {
+          "signed_mean": -7.881652630192008e-19,
+          "weighted_RMS": 8.217114273978617e-19,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 7.256652944782044e-19,
+          "signed_mean": -5.71503455466789e-19,
+          "spatial_variation_RMS": 4.471844362225268e-19,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 3.5122364390427177e-19,
+          "signed_mean": 2.488210858346687e-19,
+          "spatial_variation_RMS": 2.4788326946660018e-19,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 7.282899120523797e-19,
+          "signed_mean": -5.792667792015032e-19,
+          "spatial_variation_RMS": 4.414251856326054e-19,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.0007893867732812e-16,
+        "interface_inner_minus_outer": {
+          "signed_mean": -8.389822792748621e-19,
+          "weighted_RMS": 8.433591076595158e-19,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 2.4160945541111136e-17,
+          "signed_mean": 1.550495600473571e-17,
+          "spatial_variation_RMS": 1.852964189432025e-17,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.24571252994225e-18,
+          "signed_mean": 1.0391489566440202e-18,
+          "spatial_variation_RMS": 6.870001114707078e-19,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.4274700076238352e-17,
+          "signed_mean": 1.564185638689431e-17,
+          "spatial_variation_RMS": 1.8563226889824408e-17,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.5614881865213205e-14,
+        "interface_inner_minus_outer": {
+          "signed_mean": 5.0817016255661354e-20,
+          "weighted_RMS": 2.3083380695300766e-19,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": -4.5020048284216766e-12,
+      "maximum_load_difference": 1.3524221439279757e-16,
+      "free_signed_load_sum": 1.2334507906976897e-15
+    },
+    "outer/volume/linear_shear": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.00074275351469117,
+          "signed_mean": -5.0275657009378646e-05,
+          "spatial_variation_RMS": 0.000741050026582795,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0062264661389722685,
+          "signed_mean": -0.005130046419073731,
+          "spatial_variation_RMS": 0.003528668915882733,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0004358965850216922,
+          "signed_mean": -2.2021166743847543e-06,
+          "spatial_variation_RMS": 0.0004358910225225173,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.668400926264469,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.00014506784504232631,
+          "weighted_RMS": 0.00034000986180030387,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0007427657898508754,
+          "signed_mean": -5.0277813491723196e-05,
+          "spatial_variation_RMS": 0.0007410621836548444,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0062265649617908375,
+          "signed_mean": -0.005130208928924509,
+          "spatial_variation_RMS": 0.0035286070295492754,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0004359043403333126,
+          "signed_mean": -2.2027556169649474e-06,
+          "spatial_variation_RMS": 0.0004358987747047615,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.6683601777978434,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0001450426142892801,
+          "weighted_RMS": 0.0003399659674205917,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 3.742430245163794e-08,
+          "signed_mean": 2.156482344539433e-09,
+          "spatial_variation_RMS": 3.73621198259596e-08,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 2.019647799719875e-07,
+          "signed_mean": 1.6250985077831624e-07,
+          "spatial_variation_RMS": 1.1991797508773535e-07,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 3.2059476245396366e-08,
+          "signed_mean": 6.389425801819231e-10,
+          "spatial_variation_RMS": 3.20531085779268e-08,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0002358651033769962,
+        "interface_inner_minus_outer": {
+          "signed_mean": 2.523075304607972e-08,
+          "weighted_RMS": 6.33682740694766e-08,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": -0.06933228998320212,
+      "maximum_load_difference": 4.054218423788345e-07,
+      "free_signed_load_sum": 1.478902029316118e-06
+    },
+    "outer/volume/molecular_normal": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "outer/volume/molecular_shear": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "outer/volume/nonlinear_normal": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0056640724220719365,
+          "signed_mean": -0.005639940036552541,
+          "spatial_variation_RMS": 0.0005222956888273029,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0028361557173908303,
+          "signed_mean": -0.0021929115843045094,
+          "spatial_variation_RMS": 0.0017985877895481724,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.005684118644668119,
+          "signed_mean": -0.005672561756920818,
+          "spatial_variation_RMS": 0.0003622814935697764,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.0623937192124289,
+        "interface_inner_minus_outer": {
+          "signed_mean": -0.005587671964884902,
+          "weighted_RMS": 0.005602722276353243,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.005664065956786241,
+          "signed_mean": -0.005639923481475189,
+          "spatial_variation_RMS": 0.0005224043318442329,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.002835299312145735,
+          "signed_mean": -0.002191770410811132,
+          "spatial_variation_RMS": 0.0017986285485744056,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.005684116184579341,
+          "signed_mean": -0.00567255584491996,
+          "spatial_variation_RMS": 0.00036233546067312593,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.0624152067758428,
+        "interface_inner_minus_outer": {
+          "signed_mean": -0.0055896181410638405,
+          "weighted_RMS": 0.005604669994948064,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 1.5115794006251802e-07,
+          "signed_mean": -1.6555077350666137e-08,
+          "spatial_variation_RMS": 1.502486347953194e-07,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.1963066938762775e-06,
+          "signed_mean": -1.141173493376782e-06,
+          "spatial_variation_RMS": 3.589885288242819e-07,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 9.757537234891697e-08,
+          "signed_mean": -5.912000858305417e-09,
+          "spatial_variation_RMS": 9.739610636406975e-08,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.000497566314457023,
+        "interface_inner_minus_outer": {
+          "signed_mean": 1.946176178934114e-06,
+          "weighted_RMS": 1.948383482177918e-06,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 1.2184116682591881,
+      "maximum_load_difference": 1.4460649452163374e-07,
+      "free_signed_load_sum": -2.37872511720976e-07
+    },
+    "outer/volume/nonlinear_shear": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 2.6556270335261157e-18,
+          "signed_mean": 7.890137081073837e-21,
+          "spatial_variation_RMS": 2.6556153123017566e-18,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 8.517646559234158e-19,
+          "signed_mean": 7.950156826728498e-19,
+          "spatial_variation_RMS": 3.0570098688842507e-19,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.6668765459505075e-18,
+          "signed_mean": 4.409994256311197e-22,
+          "spatial_variation_RMS": 2.666876509488284e-18,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.3907823168885004e-15,
+        "interface_inner_minus_outer": {
+          "signed_mean": 1.3465858428313006e-20,
+          "weighted_RMS": 1.1277391042450062e-19,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 2.6556270335261157e-18,
+          "signed_mean": 7.890137081073837e-21,
+          "spatial_variation_RMS": 2.6556153123017566e-18,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 8.517646559234158e-19,
+          "signed_mean": 7.950156826728498e-19,
+          "spatial_variation_RMS": 3.0570098688842507e-19,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.6668765459505075e-18,
+          "signed_mean": 4.409994256311197e-22,
+          "spatial_variation_RMS": 2.666876509488284e-18,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.3907823168885004e-15,
+        "interface_inner_minus_outer": {
+          "signed_mean": 1.3465858428313006e-20,
+          "weighted_RMS": 1.1277391042450062e-19,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 1.3210616677248484e-12,
+      "maximum_load_difference": 1.0195253977832228e-16,
+      "free_signed_load_sum": 8.26244982999678e-16
+    },
+    "outer/volume/rough_inertia": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "outer/volume/rough_pressure": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    },
+    "prescribed_body": {
+      "actual": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "analytic": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "difference": {
+        "whole": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 0.0,
+          "signed_mean": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0,
+        "interface_inner_minus_outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 0.0,
+      "maximum_load_difference": 0.0,
+      "free_signed_load_sum": 0.0
+    }
+  },
+  "component_Gram_order": [
+    "inner/outlet/natural_advection",
+    "inner/outlet/natural_traction",
+    "inner/volume/advection",
+    "inner/volume/augmented_pressure",
+    "inner/volume/linear_normal",
+    "inner/volume/linear_shear",
+    "inner/volume/molecular_normal",
+    "inner/volume/molecular_shear",
+    "inner/volume/nonlinear_normal",
+    "inner/volume/nonlinear_shear",
+    "inner/volume/rough_inertia",
+    "inner/volume/rough_pressure",
+    "outer/outlet/natural_advection",
+    "outer/outlet/natural_traction",
+    "outer/top/natural_advection",
+    "outer/top/natural_traction",
+    "outer/volume/advection",
+    "outer/volume/augmented_pressure",
+    "outer/volume/linear_normal",
+    "outer/volume/linear_shear",
+    "outer/volume/molecular_normal",
+    "outer/volume/molecular_shear",
+    "outer/volume/nonlinear_normal",
+    "outer/volume/nonlinear_shear",
+    "outer/volume/rough_inertia",
+    "outer/volume/rough_pressure",
+    "prescribed_body"
+  ],
+  "component_normalized_Gram": [
+    [
+      1.2623240871141262e-06,
+      0.0,
+      -1.2623228038509342e-06,
+      0.0,
+      4.787674303104534e-16,
+      0.00019460946642666695,
+      1.6623621249645864e-17,
+      8.929748212074286e-05,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.011832920517834095,
+      0.0,
+      0.0,
+      0.0,
+      0.011832920270551349,
+      0.0,
+      1.1613764974145149e-15,
+      0.00016097084030598931,
+      0.0,
+      0.0,
+      -0.001166655238733595,
+      9.067588549304893e-16,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      -1.2623228038509342e-06,
+      0.0,
+      1.2623215205931332e-06,
+      0.0,
+      -4.787668804282407e-16,
+      -0.0001946092707346651,
+      -1.6623602438411858e-17,
+      -8.929739181982708e-05,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.011832907461837414,
+      0.0,
+      0.0,
+      0.0,
+      -0.011832907214553061,
+      0.0,
+      -1.1614845447446355e-15,
+      -0.000160970604077305,
+      0.0,
+      0.0,
+      0.0011666538517875096,
+      -9.067646321628218e-16,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      4.787674303104534e-16,
+      0.0,
+      -4.787668804282407e-16,
+      0.0,
+      2.7026018354584023e-25,
+      7.544474501924302e-14,
+      8.855067754694219e-27,
+      3.3958298815573715e-14,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -5.0689344053553196e-12,
+      0.0,
+      0.0,
+      0.0,
+      5.068934291263235e-12,
+      0.0,
+      4.667035833756857e-25,
+      8.267413135373615e-14,
+      0.0,
+      0.0,
+      -5.180467157718725e-13,
+      3.9200056616827525e-25,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.00019460946642666698,
+      0.0,
+      -0.0001946092707346651,
+      0.0,
+      7.544474501924302e-14,
+      0.04610415203857046,
+      2.6055719931045947e-15,
+      0.01774577991451778,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -1.8627720504040712,
+      0.0,
+      0.0,
+      0.0,
+      1.8627720077686836,
+      0.0,
+      2.2037963156771405e-13,
+      0.02438431285460666,
+      0.0,
+      0.0,
+      -0.18737143567499198,
+      1.6170708763042747e-13,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      1.6623621249645864e-17,
+      0.0,
+      -1.6623602438411858e-17,
+      0.0,
+      8.855067754694219e-27,
+      2.6055719931045947e-15,
+      2.9658823729695517e-28,
+      1.1770377365561302e-15,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -1.7337565937254883e-13,
+      0.0,
+      0.0,
+      0.0,
+      1.733756555193836e-13,
+      0.0,
+      1.5900293735976827e-26,
+      2.7737824767692523e-15,
+      0.0,
+      0.0,
+      -1.761439310101306e-14,
+      1.3310927409828602e-26,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      8.929748212074286e-05,
+      0.0,
+      -8.92973918198271e-05,
+      0.0,
+      3.3958298815573715e-14,
+      0.01774577991451778,
+      1.1770377365561302e-15,
+      0.008164144033295424,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.8566826305027189,
+      0.0,
+      0.0,
+      0.0,
+      0.8566826107869663,
+      0.0,
+      1.049765502720833e-13,
+      0.010555308853820635,
+      0.0,
+      0.0,
+      -0.0864074168699663,
+      7.541922159576451e-14,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      -0.011832920517834095,
+      0.0,
+      0.011832907461837414,
+      0.0,
+      -5.0689344053553196e-12,
+      -1.8627720504040717,
+      -1.7337565937254883e-13,
+      -0.8566826305027189,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      118.39255747091822,
+      0.0,
+      0.0,
+      0.0,
+      -118.39255488732978,
+      0.0,
+      -4.484173651081735e-11,
+      -1.654009266518214,
+      0.0,
+      0.0,
+      11.80824585629513,
+      -4.076750213875628e-12,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.011832920270551349,
+      0.0,
+      -0.011832907214553063,
+      0.0,
+      5.068934291263235e-12,
+      1.8627720077686836,
+      1.733756555193836e-13,
+      0.8566826107869663,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -118.39255488732978,
+      0.0,
+      0.0,
+      0.0,
+      118.39255230374688,
+      0.0,
+      4.4841737233437954e-11,
+      1.6540092849471375,
+      0.0,
+      0.0,
+      -11.808245607747548,
+      4.076749052550072e-12,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      1.1613764974145149e-15,
+      0.0,
+      -1.1614845447446355e-15,
+      0.0,
+      4.667035833756857e-25,
+      2.2037963156771405e-13,
+      1.5900293735976827e-26,
+      1.049765502720833e-13,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -4.484173651081735e-11,
+      0.0,
+      0.0,
+      0.0,
+      4.4841737233437954e-11,
+      0.0,
+      4.3450705352351905e-20,
+      -4.718667157593836e-12,
+      0.0,
+      0.0,
+      -1.0869614184572767e-13,
+      -3.8819705948841114e-22,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.00016097084030598931,
+      0.0,
+      -0.000160970604077305,
+      0.0,
+      8.267413135373615e-14,
+      0.02438431285460666,
+      2.7737824767692523e-15,
+      0.010555308853820635,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -1.654009266518214,
+      0.0,
+      0.0,
+      0.0,
+      1.6540092849471375,
+      0.0,
+      -4.718667157593836e-12,
+      0.10425008233821721,
+      0.0,
+      0.0,
+      -0.20852199250475675,
+      -3.3394717046912485e-13,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      -0.001166655238733595,
+      0.0,
+      0.0011666538517875098,
+      0.0,
+      -5.180467157718725e-13,
+      -0.18737143567499195,
+      -1.761439310101306e-14,
+      -0.0864074168699663,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      11.808245856295128,
+      0.0,
+      0.0,
+      0.0,
+      -11.808245607747548,
+      0.0,
+      -1.086961418457277e-13,
+      -0.20852199250475675,
+      0.0,
+      0.0,
+      1.7007125156352763,
+      1.4178825623915237e-12,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      9.067588549304891e-16,
+      0.0,
+      -9.06764632162822e-16,
+      0.0,
+      3.9200056616827525e-25,
+      1.6170708763042747e-13,
+      1.3310927409828602e-26,
+      7.54192215957645e-14,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -4.076750213875627e-12,
+      0.0,
+      0.0,
+      0.0,
+      4.076749052550072e-12,
+      0.0,
+      -3.881970594884112e-22,
+      -3.3394717046912485e-13,
+      0.0,
+      0.0,
+      1.4178825623915237e-12,
+      5.24932110871625e-22,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "total_images": {
+    "actual": {
+      "whole": {
+        "weighted_RMS": 1.1590856040150279e-07,
+        "signed_mean": -1.0678644368775057e-08,
+        "spatial_variation_RMS": 1.1541560088997524e-07,
+        "scale": 0.005515726603544432
+      },
+      "inner": {
+        "weighted_RMS": 7.740253010548834e-07,
+        "signed_mean": -7.118201527377578e-07,
+        "spatial_variation_RMS": 3.040184810657041e-07,
+        "scale": 0.005515726603544432
+      },
+      "outer": {
+        "weighted_RMS": 8.883736779791949e-08,
+        "signed_mean": -4.043235772223164e-09,
+        "spatial_variation_RMS": 8.874531064655211e-08,
+        "scale": 0.005515726603544432
+      },
+      "maximum_scaled_value": 0.00046609897704520773,
+      "interface_inner_minus_outer": {
+        "signed_mean": 1.9735056547898127e-06,
+        "weighted_RMS": 1.9746096092642177e-06,
+        "scale": 0.005515726603544432
+      }
+    },
+    "analytic": {
+      "whole": {
+        "weighted_RMS": 3.835382962546559e-15,
+        "signed_mean": -4.869320742890107e-16,
+        "spatial_variation_RMS": 3.8043474636816525e-15,
+        "scale": 0.005515726603544432
+      },
+      "inner": {
+        "weighted_RMS": 9.229999462619927e-16,
+        "signed_mean": -8.304707770600043e-16,
+        "spatial_variation_RMS": 4.0279919221492204e-16,
+        "scale": 0.005515726603544432
+      },
+      "outer": {
+        "weighted_RMS": 3.8524424648273415e-15,
+        "signed_mean": -4.836809193731967e-16,
+        "spatial_variation_RMS": 3.821958360976643e-15,
+        "scale": 0.005515726603544432
+      },
+      "maximum_scaled_value": 2.3673018839929898e-12,
+      "interface_inner_minus_outer": {
+        "signed_mean": -3.143588514581696e-17,
+        "weighted_RMS": 1.069352882379393e-16,
+        "scale": 0.005515726603544432
+      }
+    },
+    "delta": {
+      "whole": {
+        "weighted_RMS": 1.1590856016435216e-07,
+        "signed_mean": -1.0678643879825685e-08,
+        "spatial_variation_RMS": 1.1541560069705094e-07,
+        "scale": 0.005515726603544432
+      },
+      "inner": {
+        "weighted_RMS": 7.740253000288225e-07,
+        "signed_mean": -7.11820151781747e-07,
+        "spatial_variation_RMS": 3.0401848069174887e-07,
+        "scale": 0.005515726603544432
+      },
+      "outer": {
+        "weighted_RMS": 8.883736757017898e-08,
+        "signed_mean": -4.0432352876939355e-09,
+        "spatial_variation_RMS": 8.874531044065053e-08,
+        "scale": 0.005515726603544432
+      },
+      "maximum_scaled_value": 0.00046609897688817714,
+      "interface_inner_minus_outer": {
+        "signed_mean": 1.9735056548262347e-06,
+        "weighted_RMS": 1.9746096092975243e-06,
+        "scale": 0.005515726603544432
+      }
+    }
+  },
+  "axis_images": {
+    "streamwise": {
+      "image": {
+        "whole": {
+          "weighted_RMS": 4.411261620616635e-08,
+          "signed_mean": 2.8527726419853175e-09,
+          "spatial_variation_RMS": 4.4020274837916114e-08,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 3.178244683133266e-07,
+          "signed_mean": 2.3170757689994294e-07,
+          "spatial_variation_RMS": 2.175407811556394e-07,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 3.175508368654745e-08,
+          "signed_mean": 6.869543051592186e-10,
+          "spatial_variation_RMS": 3.174765241277307e-08,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.00023231804487597348,
+        "interface_inner_minus_outer": {
+          "signed_mean": 1.594043356795074e-08,
+          "weighted_RMS": 3.8764244854712016e-08,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": -0.08302676516967562
+    },
+    "normal": {
+      "image": {
+        "whole": {
+          "weighted_RMS": 1.327087497268407e-07,
+          "signed_mean": -1.3531416518415055e-08,
+          "spatial_variation_RMS": 1.3201709366997294e-07,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 9.912502590197547e-07,
+          "signed_mean": -9.435277286823935e-07,
+          "spatial_variation_RMS": 3.0386263543610243e-07,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 9.208391272070255e-08,
+          "signed_mean": -4.730189589418411e-09,
+          "spatial_variation_RMS": 9.196234168616045e-08,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.00046682126168087686,
+        "interface_inner_minus_outer": {
+          "signed_mean": 1.9575652212582104e-06,
+          "weighted_RMS": 1.9581867873901974e-06,
+          "scale": 0.005515726603544432
+        }
+      },
+      "signed_alignment": 1.0830267651705676
+    }
+  },
+  "bands": [
+    {
+      "lower": 0,
+      "upper": 0.0029296875,
+      "signed_alignment": -0.1682443045945915,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 3.4998209783732e-08,
+          "signed_mean": 3.928854424135875e-09,
+          "spatial_variation_RMS": 3.477698651378612e-08,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 3.4148538910950127e-07,
+          "signed_mean": 2.817116269506006e-07,
+          "spatial_variation_RMS": 1.9300474143427973e-07,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 1.1527376173112751e-08,
+          "signed_mean": 1.2999953781440951e-09,
+          "spatial_variation_RMS": 1.1453838372059018e-08,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0002468505432998183,
+        "interface_inner_minus_outer": {
+          "signed_mean": 1.1224914513831993e-10,
+          "weighted_RMS": 1.560973949201766e-10,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 2.9280102968802643e-08
+    },
+    {
+      "lower": 0.0029296875,
+      "upper": 0.005859375,
+      "signed_alignment": 0.003442557772098241,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 7.429382309858094e-10,
+          "signed_mean": -8.055003749171137e-11,
+          "spatial_variation_RMS": 7.385586682995523e-10,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 7.284706847107581e-09,
+          "signed_mean": -5.797208630598858e-09,
+          "spatial_variation_RMS": 4.411272598877356e-09,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.344565316193521e-10,
+          "signed_mean": -2.644916752539771e-11,
+          "spatial_variation_RMS": 2.3295988228918235e-10,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.0222979356573377e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": -2.3027038672495993e-12,
+          "weighted_RMS": 3.1154029959797584e-12,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 2.508124464669798e-08
+    },
+    {
+      "lower": 0.005859375,
+      "upper": 0.01171875,
+      "signed_alignment": 0.0034297901195768136,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 1.057088688442816e-09,
+          "signed_mean": -8.05554202752742e-11,
+          "spatial_variation_RMS": 1.0540148573421662e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.0677040414352459e-08,
+          "signed_mean": -5.943686635296907e-09,
+          "spatial_variation_RMS": 8.869711449145831e-09,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.2170903749035909e-10,
+          "signed_mean": -2.506837407633129e-11,
+          "spatial_variation_RMS": 2.2028725320832927e-10,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.942988460498353e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": -2.2811187166518246e-12,
+          "weighted_RMS": 2.7276859178468213e-12,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 7.692633140596213e-08
+    },
+    {
+      "lower": 0.01171875,
+      "upper": 0.0234375,
+      "signed_alignment": 2.3334400861638267e-05,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 2.671998082551706e-09,
+          "signed_mean": 4.2679134360912085e-12,
+          "spatial_variation_RMS": 2.6719946740356536e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 2.757465556316201e-08,
+          "signed_mean": -7.458264346204187e-10,
+          "spatial_variation_RMS": 2.7564567334831194e-08,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 1.0625118637500121e-10,
+          "signed_mean": 1.1366598118014019e-11,
+          "spatial_variation_RMS": 1.0564144571766709e-10,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 7.311864932145686e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": 2.2836742588195103e-13,
+          "weighted_RMS": 9.32904024201194e-12,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 1.2933786240950763e-07
+    },
+    {
+      "lower": 0.0234375,
+      "upper": 0.046875,
+      "signed_alignment": 0.00024942613675878406,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 6.800946460041461e-09,
+          "signed_mean": 6.151782520666473e-11,
+          "spatial_variation_RMS": 6.80066822522113e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 7.000920755307162e-08,
+          "signed_mean": 2.499065987928432e-10,
+          "spatial_variation_RMS": 7.000876151526278e-08,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 5.533148005729171e-10,
+          "signed_mean": 5.973496615064412e-11,
+          "spatial_variation_RMS": 5.50080905278513e-10,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.00013774737476215847,
+        "interface_inner_minus_outer": {
+          "signed_mean": -6.226956276310361e-12,
+          "weighted_RMS": 7.643054134354686e-11,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 1.4222818916669843e-07
+    },
+    {
+      "lower": 0.046875,
+      "upper": 0.09375,
+      "signed_alignment": 0.006218005403787272,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 8.136507441301262e-09,
+          "signed_mean": -2.043279694400391e-10,
+          "spatial_variation_RMS": 8.133941444543065e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 8.142214915118835e-08,
+          "signed_mean": 9.742855559590778e-10,
+          "spatial_variation_RMS": 8.141631986311966e-08,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.022103374684152e-09,
+          "signed_mean": -2.154820406583273e-10,
+          "spatial_variation_RMS": 2.0105893534142566e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 8.235540563811505e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": -3.26248184058642e-10,
+          "weighted_RMS": 1.423052409030981e-09,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 1.7522939927546523e-07
+    },
+    {
+      "lower": 0.09375,
+      "upper": 0.15314840882128453,
+      "signed_alignment": 0.009591818500290948,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 9.30212722913305e-09,
+          "signed_mean": -2.6157697188905556e-10,
+          "spatial_variation_RMS": 9.298448713347612e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 9.305680142899027e-08,
+          "signed_mean": -5.6695278542885895e-09,
+          "spatial_variation_RMS": 9.288393158186171e-08,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.323082526871296e-09,
+          "signed_mean": -2.1039762599883906e-10,
+          "spatial_variation_RMS": 2.313535231118986e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 9.866878186337748e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": -9.015482235578322e-10,
+          "weighted_RMS": 3.895129904119136e-09,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 1.1101893769045916e-07
+    },
+    {
+      "lower": 0.15314840882128453,
+      "upper": 0.1711243515027194,
+      "signed_alignment": -0.0004643342206640659,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 7.377362576735783e-09,
+          "signed_mean": 2.5487153677042933e-10,
+          "spatial_variation_RMS": 7.3729586387261066e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 7.052566624223715e-08,
+          "signed_mean": -2.063821891132429e-09,
+          "spatial_variation_RMS": 7.049546253563496e-08,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.805213910558222e-09,
+          "signed_mean": 2.7681500769695483e-10,
+          "spatial_variation_RMS": 2.7915226195578442e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.00015056115306008645,
+        "interface_inner_minus_outer": {
+          "signed_mean": 2.365080064213402e-09,
+          "weighted_RMS": 1.7902228557282134e-08,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 2.0509918161248709e-07
+    },
+    {
+      "lower": 0.1711243515027194,
+      "upper": 0.1875,
+      "signed_alignment": -0.0033256682008726388,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 9.708555134398988e-10,
+          "signed_mean": 9.744830314448221e-11,
+          "spatial_variation_RMS": 9.659525123891499e-10,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 8.056593488690878e-09,
+          "signed_mean": 4.127741934631936e-09,
+          "spatial_variation_RMS": 6.9188470978261436e-09,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 5.806915300573753e-10,
+          "signed_mean": 5.930672303576812e-11,
+          "spatial_variation_RMS": 5.776550576971818e-10,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.537116556885064e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": 8.597724161436136e-10,
+          "weighted_RMS": 3.4617677027478955e-09,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 1.9518836848986498e-08
+    },
+    {
+      "lower": 0.1875,
+      "upper": 0.28125,
+      "signed_alignment": 0.9953508534079343,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 1.2202471519117481e-07,
+          "signed_mean": -1.2671232167104343e-08,
+          "spatial_variation_RMS": 1.213650320020337e-07,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 8.707966222421352e-07,
+          "signed_mean": -8.231709795161578e-07,
+          "spatial_variation_RMS": 2.8403572977835246e-07,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 8.862691955396304e-08,
+          "signed_mean": -5.000887554968191e-09,
+          "spatial_variation_RMS": 8.848571632352423e-08,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.0004478374915926321,
+        "interface_inner_minus_outer": {
+          "signed_mean": 1.891149380417812e-06,
+          "weighted_RMS": 1.8912849916241164e-06,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 4.0542184237888546e-07
+    },
+    {
+      "lower": 0.28125,
+      "upper": 0.421875,
+      "signed_alignment": 0.09293137989854049,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 2.611347850883984e-08,
+          "signed_mean": -1.4582657779378718e-09,
+          "spatial_variation_RMS": 2.6072729445774098e-08,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.5585997403677468e-07,
+          "signed_mean": -1.458303647150822e-07,
+          "spatial_variation_RMS": 5.500760160023514e-08,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.1411943409845172e-08,
+          "signed_mean": -9.19683116557486e-11,
+          "spatial_variation_RMS": 2.1411745898362967e-08,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 0.00014440956598166376,
+        "interface_inner_minus_outer": {
+          "signed_mean": 8.298126151053995e-08,
+          "weighted_RMS": 8.779649291020077e-08,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 1.9285310833699887e-07
+    },
+    {
+      "lower": 0.421875,
+      "upper": 0.6328125,
+      "signed_alignment": 0.011981786912952952,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 3.5797794772522636e-09,
+          "signed_mean": -1.6149250263997656e-11,
+          "spatial_variation_RMS": 3.5797430504817525e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.032837798864764e-08,
+          "signed_mean": -9.871119714660719e-09,
+          "spatial_variation_RMS": 3.0391425526318363e-09,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 3.4534838525631795e-09,
+          "signed_mean": 7.711545444638143e-11,
+          "spatial_variation_RMS": 3.4526227605401877e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.5325837453442933e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": -2.2009555691736682e-09,
+          "weighted_RMS": 3.422118811305514e-09,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 8.759095215804535e-08
+    },
+    {
+      "lower": 0.6328125,
+      "upper": 0.94921875,
+      "signed_alignment": 0.004608799667586313,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 5.4511073357842475e-09,
+          "signed_mean": 6.657831608334163e-11,
+          "spatial_variation_RMS": 5.4507007360584705e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 6.054696774620166e-10,
+          "signed_mean": -1.3912197787077474e-10,
+          "spatial_variation_RMS": 5.892695525812291e-10,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 5.476523742275182e-09,
+          "signed_mean": 6.852500656240264e-11,
+          "spatial_variation_RMS": 5.47609501590133e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.143952918406584e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": -4.5576329506611503e-10,
+          "weighted_RMS": 5.411579169774873e-10,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 9.28816147327538e-08
+    },
+    {
+      "lower": 0.94921875,
+      "upper": 1.423828125,
+      "signed_alignment": 0.004211757807720096,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 6.7909484911836215e-09,
+          "signed_mean": 9.106285470544488e-11,
+          "spatial_variation_RMS": 6.790337912534397e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 3.2429109090509153e-10,
+          "signed_mean": 2.5691976623022376e-10,
+          "spatial_variation_RMS": 1.978811394767613e-10,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 6.822933714330302e-09,
+          "signed_mean": 8.949323093707167e-11,
+          "spatial_variation_RMS": 6.822346768653842e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 2.096237939157601e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": -5.905940811266968e-11,
+          "weighted_RMS": 6.887503096139547e-11,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 1.255435169711383e-07
+    },
+    {
+      "lower": 1.423828125,
+      "upper": 2.1357421875,
+      "signed_alignment": 0.005860691181195248,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 7.86238641475613e-09,
+          "signed_mean": 1.2938517262998263e-10,
+          "spatial_variation_RMS": 7.861321747139296e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 8.932272177608225e-11,
+          "signed_mean": 7.656590600294412e-11,
+          "spatial_variation_RMS": 4.6002289762964235e-11,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 7.899497749385144e-09,
+          "signed_mean": 1.2988503950657923e-10,
+          "spatial_variation_RMS": 7.898429879985851e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.7559860093047445e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": -7.11059910764525e-12,
+          "weighted_RMS": 8.438809085692937e-12,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 1.8056995987336677e-07
+    },
+    {
+      "lower": 2.1357421875,
+      "upper": 3.20361328125,
+      "signed_alignment": 0.006687138269592468,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 8.422528115279443e-09,
+          "signed_mean": 1.910161576042428e-10,
+          "spatial_variation_RMS": 8.420361790339343e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.4523123265497677e-11,
+          "signed_mean": 1.2642567495398847e-11,
+          "spatial_variation_RMS": 7.147488825393464e-12,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 8.46228838252749e-09,
+          "signed_mean": 1.9270423574407412e-10,
+          "spatial_variation_RMS": 8.460093956132284e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.3814711852208688e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": -7.664411641298362e-13,
+          "weighted_RMS": 9.998456763110972e-13,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 2.69031261823649e-07
+    },
+    {
+      "lower": 3.20361328125,
+      "upper": 4.805419921875,
+      "signed_alignment": 0.005038162636548241,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 8.363573878648008e-09,
+          "signed_mean": 2.8284745337364375e-10,
+          "spatial_variation_RMS": 8.358789705556862e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.850302642035766e-12,
+          "signed_mean": 1.627835881148919e-12,
+          "spatial_variation_RMS": 8.796420926539714e-13,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 8.403055955547209e-09,
+          "signed_mean": 2.8550883776631723e-10,
+          "spatial_variation_RMS": 8.39820421849902e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.1492121591419873e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": -5.944250173070513e-14,
+          "weighted_RMS": 1.2407088555187248e-13,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 4.0909426535229443e-07
+    },
+    {
+      "lower": 4.805419921875,
+      "upper": 7.2081298828125,
+      "signed_alignment": 0.0018094732138819562,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 8.327081397169949e-09,
+          "signed_mean": 3.9212932758276244e-10,
+          "spatial_variation_RMS": 8.317843421557257e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.9909050659926157e-13,
+          "signed_mean": 1.7884534900430353e-13,
+          "spatial_variation_RMS": 8.747211531385e-14,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 8.366391205238296e-09,
+          "signed_mean": 3.9583863814017987e-10,
+          "spatial_variation_RMS": 8.357021812323097e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 8.627718094901004e-06,
+        "interface_inner_minus_outer": {
+          "signed_mean": 1.6254903428408578e-15,
+          "weighted_RMS": 2.2214708328875722e-14,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 6.259240485917417e-07
+    },
+    {
+      "lower": 7.2081298828125,
+      "upper": 10.81219482421875,
+      "signed_alignment": -0.00018981494240688607,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 8.377188428469778e-09,
+          "signed_mean": 1.9044612802908996e-10,
+          "spatial_variation_RMS": 8.375023357484245e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.3825869633188428e-14,
+          "signed_mean": 1.2944673741543208e-14,
+          "spatial_variation_RMS": 4.856963335143023e-15,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 8.416734777755416e-09,
+          "signed_mean": 1.9224833481163268e-10,
+          "spatial_variation_RMS": 8.414538899835194e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 8.506890411469894e-06,
+        "interface_inner_minus_outer": {
+          "signed_mean": 2.3353676476859203e-15,
+          "weighted_RMS": 5.374722691924078e-15,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 9.111043359766313e-07
+    },
+    {
+      "lower": 10.81219482421875,
+      "upper": 16.218292236328125,
+      "signed_alignment": 0.024828107861615007,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 2.310376247865936e-08,
+          "signed_mean": -4.747521532199981e-09,
+          "spatial_variation_RMS": 2.261072488823845e-08,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 4.829123835809164e-15,
+          "signed_mean": -3.599262439297513e-15,
+          "spatial_variation_RMS": 3.219588003866693e-15,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 2.321282884007614e-08,
+          "signed_mean": -4.7924507239943404e-09,
+          "spatial_variation_RMS": 2.271272416106788e-08,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 1.5802664163891577e-05,
+        "interface_inner_minus_outer": {
+          "signed_mean": 9.864947709641483e-16,
+          "weighted_RMS": 1.5052945819671673e-15,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 9.050291520651399e-07
+    },
+    {
+      "lower": 16.218292236328125,
+      "upper": 20,
+      "signed_alignment": -0.004038957569396769,
+      "pressure": {
+        "whole": {
+          "weighted_RMS": 9.303497787757294e-09,
+          "signed_mean": 3.151108334671118e-09,
+          "spatial_variation_RMS": 8.753604249106255e-09,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 9.676314815647654e-16,
+          "signed_mean": -9.114249029902471e-16,
+          "spatial_variation_RMS": 3.2498512323557465e-16,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 9.347416982870949e-09,
+          "signed_mean": 3.1809295578202916e-09,
+          "spatial_variation_RMS": 8.78953305926142e-09,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 8.348330869635118e-06,
+        "interface_inner_minus_outer": {
+          "signed_mean": -1.457325317987763e-16,
+          "weighted_RMS": 3.4073168660914373e-16,
+          "scale": 0.005515726603544432
+        }
+      },
+      "load_maximum": 6.648211385851255e-07
+    }
+  ],
+  "band_normalized_Gram": [
+    [
+      0.09117182287635175,
+      -0.0018957021849204804,
+      -0.002040995436415015,
+      -0.0007245395249309482,
+      -0.0006560937580260695,
+      0.0017295884992262393,
+      -0.005522925310063545,
+      0.002016496214626161,
+      0.0014247563544270729,
+      -0.21171083924826506,
+      -0.03968190555542186,
+      -0.002524289804886081,
+      1.788557642328902e-05,
+      0.00010914022003340674,
+      3.599121642749018e-05,
+      6.416273290070395e-06,
+      8.11129408087817e-07,
+      7.884778418594418e-08,
+      2.202864013709347e-09,
+      -3.3206260746108007e-09,
+      -1.1170692392391099e-10
+    ],
+    [
+      -0.0018957021849204804,
+      4.108415818948493e-05,
+      4.506391201302726e-05,
+      1.6510856705224874e-05,
+      1.172101046339979e-05,
+      -3.860018175992142e-05,
+      0.00011417160103397816,
+      -4.1157924869019314e-05,
+      -2.9294548904153424e-05,
+      0.004354404281932461,
+      0.0008159612526102816,
+      5.188038415248466e-05,
+      -3.6250833752417044e-07,
+      -2.2361211584770222e-06,
+      -7.36743239344155e-07,
+      -1.3127824235947112e-07,
+      -1.659807712991509e-08,
+      -1.6148047000770483e-09,
+      -4.5625096247582054e-11,
+      6.775419202569288e-11,
+      2.325527163531453e-12
+    ],
+    [
+      -0.002040995436415015,
+      4.506391201302726e-05,
+      8.31748122576307e-05,
+      2.7726741979915007e-05,
+      -1.653809635132381e-06,
+      -5.896317239522404e-05,
+      0.00011987461876472721,
+      -3.969494492501623e-05,
+      -2.978968749780701e-05,
+      0.0044445785458908154,
+      0.0008311832862519061,
+      5.271581486330212e-05,
+      -3.307101123083262e-07,
+      -2.2240895383271304e-06,
+      -7.284273624026788e-07,
+      -1.2937440872709975e-07,
+      -1.6372328832128276e-08,
+      -1.6019230543734037e-09,
+      -4.86937672714409e-11,
+      6.551675357404471e-11,
+      2.5612327559501436e-12
+    ],
+    [
+      -0.0007245395249309482,
+      1.651085670522487e-05,
+      2.7726741979915e-05,
+      0.0005314241203428462,
+      -0.0001997892266136601,
+      -0.00015429620358785114,
+      3.48428812481231e-05,
+      1.3992958173401078e-05,
+      -1.8446613840534044e-06,
+      0.00041125396536946144,
+      6.426542717048499e-05,
+      3.203331355417962e-06,
+      2.5158129328303724e-07,
+      2.0864109678483542e-07,
+      9.998716073940278e-08,
+      2.0853684876179035e-08,
+      2.5294715505914453e-09,
+      1.8086652729158306e-10,
+      -1.955100891056522e-11,
+      -1.9785686061783743e-11,
+      1.5686007171705039e-12
+    ],
+    [
+      -0.0006560937580260693,
+      1.1721010463399792e-05,
+      -1.6538096351323795e-06,
+      -0.00019978922661366012,
+      0.0034427674628150352,
+      -0.0014703403870904587,
+      8.399595322111857e-05,
+      9.674228105341054e-05,
+      1.0401710494322561e-05,
+      -0.0008417664808720491,
+      -0.00021415464971532707,
+      -1.6644443184244056e-05,
+      1.1775002312976116e-06,
+      2.0770697847107475e-06,
+      8.088665219923401e-07,
+      1.562321324227958e-07,
+      1.9341084734088927e-08,
+      1.6262393825459193e-09,
+      -5.082643959750558e-11,
+      -1.1613636174351218e-10,
+      4.845980081359909e-12
+    ],
+    [
+      0.0017295884992262393,
+      -3.860018175992142e-05,
+      -5.896317239522404e-05,
+      -0.0001542962035878512,
+      -0.001470340387090459,
+      0.004927708736626142,
+      -0.0010468158408225856,
+      -0.00026087980980344326,
+      -3.406526738877983e-05,
+      0.001957261946745596,
+      0.0006356794240236922,
+      4.7281462263237105e-05,
+      -4.762486230789697e-06,
+      -7.305208683542019e-06,
+      -2.8584049191839114e-06,
+      -5.540468715644283e-07,
+      -6.853179515474588e-08,
+      -5.721285630438579e-09,
+      1.9721292618868078e-10,
+      4.176895105505226e-10,
+      -1.8661676240661383e-11
+    ],
+    [
+      -0.005522925310063545,
+      0.00011417160103397816,
+      0.00011987461876472724,
+      3.48428812481231e-05,
+      8.399595322111855e-05,
+      -0.0010468158408225858,
+      0.006440706789399904,
+      -0.0019515231221405953,
+      -0.0001512863548118765,
+      0.009099780933289954,
+      0.0022674628697818638,
+      0.00012049686980253338,
+      -3.830972157930168e-06,
+      -9.033221948985401e-06,
+      -3.3719765207559265e-06,
+      -6.403878684711825e-07,
+      -8.018117908902806e-08,
+      -7.1262483840136885e-09,
+      6.285616414817622e-11,
+      4.319444688816753e-10,
+      -9.740077119375762e-12
+    ],
+    [
+      0.002016496214626161,
+      -4.115792486901932e-05,
+      -3.969494492501623e-05,
+      1.3992958173401078e-05,
+      9.674228105341057e-05,
+      -0.00026087980980344326,
+      -0.0019515231221405953,
+      0.004051083871834123,
+      0.00010432822079420344,
+      -0.003276954269779362,
+      -0.001110726963301149,
+      -8.15865098210475e-05,
+      2.448641013613765e-06,
+      8.732819246630836e-06,
+      3.5735336781140303e-06,
+      6.978837663668358e-07,
+      8.632116728214272e-08,
+      7.2718060509960304e-09,
+      -2.0743664245451499e-10,
+      -5.061043978566281e-10,
+      2.0420477451872654e-11
+    ],
+    [
+      0.0014247563544270729,
+      -2.9294548904153424e-05,
+      -2.9789687497807008e-05,
+      -1.8446613840534054e-06,
+      1.040171049432256e-05,
+      -3.406526738877983e-05,
+      -0.0001512863548118765,
+      0.00010432822079420344,
+      7.015815840347167e-05,
+      -0.0039002869235219314,
+      -0.0007373644103706513,
+      -5.4237778034985264e-05,
+      -7.922701119684471e-07,
+      2.4816136362708523e-06,
+      9.611688468729137e-07,
+      1.8178129344934138e-07,
+      2.2732829190791658e-08,
+      2.06159495009036e-09,
+      5.3366474844921145e-12,
+      -1.1188748544652872e-10,
+      6.026737379328127e-13
+    ],
+    [
+      -0.21171083924826506,
+      0.004354404281932461,
+      0.004444578545890815,
+      0.00041125396536946133,
+      -0.0008417664808720495,
+      0.0019572619467455965,
+      0.009099780933289952,
+      -0.0032769542697793624,
+      -0.0039002869235219314,
+      1.1083185022055457,
+      0.07546089541619509,
+      0.010042584750727158,
+      0.0011109909869314197,
+      -5.33660749709404e-05,
+      -5.6053430992005004e-05,
+      -9.154218871425884e-06,
+      -8.069399897507751e-07,
+      -1.1421019740744984e-07,
+      -4.018648737949819e-08,
+      -1.9059521456308576e-08,
+      2.2638880922807062e-09
+    ],
+    [
+      -0.03968190555542186,
+      0.0008159612526102815,
+      0.0008311832862519061,
+      6.426542717048496e-05,
+      -0.00021415464971532707,
+      0.0006356794240236922,
+      0.0022674628697818638,
+      -0.0011107269633011487,
+      -0.0007373644103706512,
+      0.0754608954161951,
+      0.05075729063066539,
+      0.0028368098012004177,
+      0.0007819726974380584,
+      0.0001722229521431556,
+      4.109897282806545e-05,
+      9.199594379388986e-06,
+      1.4449998693141596e-06,
+      1.0006279092031979e-07,
+      -3.173928889543076e-08,
+      -2.5863031021701968e-08,
+      1.8407598247349638e-09
+    ],
+    [
+      -0.002524289804886081,
+      5.188038415248466e-05,
+      5.271581486330212e-05,
+      3.203331355417961e-06,
+      -1.6644443184244056e-05,
+      4.728146226323711e-05,
+      0.00012049686980253338,
+      -8.15865098210475e-05,
+      -5.4237778034985264e-05,
+      0.010042584750727156,
+      0.0028368098012004177,
+      0.0009538531667192893,
+      0.00045723768294872544,
+      6.518903820739317e-05,
+      2.0943627182277642e-05,
+      5.430246360717252e-06,
+      8.573345620652864e-07,
+      7.905795096558095e-08,
+      -7.550811139570522e-09,
+      -1.0017114679188073e-08,
+      4.5744751442943703e-10
+    ],
+    [
+      1.788557642328902e-05,
+      -3.6250833752417055e-07,
+      -3.307101123083261e-07,
+      2.5158129328303713e-07,
+      1.1775002312976116e-06,
+      -4.762486230789698e-06,
+      -3.83097215793017e-06,
+      2.4486410136137653e-06,
+      -7.922701119684471e-07,
+      0.0011109909869314197,
+      0.0007819726974380584,
+      0.00045723768294872544,
+      0.0022117622704049757,
+      0.0001647223691661233,
+      -0.00011537600099093153,
+      -1.2903836336325398e-05,
+      -1.3744757533590852e-06,
+      -9.437596952143416e-09,
+      6.148269104270945e-08,
+      3.501374649769378e-08,
+      -3.420637395035751e-09
+    ],
+    [
+      0.00010914022003340674,
+      -2.2361211584770222e-06,
+      -2.2240895383271304e-06,
+      2.0864109678483542e-07,
+      2.077069784710747e-06,
+      -7.305208683542019e-06,
+      -9.033221948985401e-06,
+      8.732819246630836e-06,
+      2.4816136362708523e-06,
+      -5.336607497094041e-05,
+      0.00017222295214315558,
+      6.518903820739316e-05,
+      0.00016472236916612333,
+      0.0034326525820650255,
+      0.00043477531404899805,
+      -9.424002498076253e-05,
+      -1.2210432160067377e-05,
+      -4.315122313668036e-07,
+      3.8382589840558194e-07,
+      2.391595571199385e-07,
+      -2.1128730601845066e-08
+    ],
+    [
+      3.599121642749018e-05,
+      -7.367432393441548e-07,
+      -7.284273624026789e-07,
+      9.998716073940279e-08,
+      8.088665219923401e-07,
+      -2.858404919183912e-06,
+      -3.3719765207559265e-06,
+      3.5735336781140303e-06,
+      9.611688468729137e-07,
+      -5.6053430992005004e-05,
+      4.109897282806545e-05,
+      2.0943627182277642e-05,
+      -0.00011537600099093153,
+      0.00043477531404899794,
+      0.004601270303468674,
+      0.0008194919542726916,
+      6.977834720144348e-05,
+      8.033666227050672e-06,
+      2.1942254147429412e-06,
+      8.855867345260914e-07,
+      -9.075156178738573e-08
+    ],
+    [
+      6.416273290070395e-06,
+      -1.3127824235947112e-07,
+      -1.2937440872709975e-07,
+      2.0853684876179038e-08,
+      1.562321324227958e-07,
+      -5.540468715644283e-07,
+      -6.403878684711825e-07,
+      6.978837663668358e-07,
+      1.8178129344934138e-07,
+      -9.154218871425887e-06,
+      9.199594379388986e-06,
+      5.430246360717252e-06,
+      -1.2903836336325394e-05,
+      -9.424002498076253e-05,
+      0.0008194919542726916,
+      0.0052802430886773775,
+      0.0005682059318738364,
+      0.00011211861507869178,
+      5.848447083044159e-06,
+      -3.063263318361305e-06,
+      -5.6332679075550004e-08
+    ],
+    [
+      8.11129408087817e-07,
+      -1.659807712991509e-08,
+      -1.6372328832128276e-08,
+      2.5294715505914458e-09,
+      1.9341084734088927e-08,
+      -6.85317951547459e-08,
+      -8.018117908902804e-08,
+      8.632116728214272e-08,
+      2.2732829190791658e-08,
+      -8.069399897507753e-07,
+      1.4449998693141594e-06,
+      8.573345620652864e-07,
+      -1.3744757533590852e-06,
+      -1.2210432160067377e-05,
+      6.977834720144348e-05,
+      0.0005682059318738362,
+      0.005206582725478342,
+      -0.0005935313115639367,
+      -0.00012574046081507292,
+      -7.972535904558299e-05,
+      3.92212657024093e-06
+    ],
+    [
+      7.884778418594418e-08,
+      -1.6148047000770483e-09,
+      -1.6019230543734037e-09,
+      1.80866527291583e-10,
+      1.6262393825459193e-09,
+      -5.721285630438579e-09,
+      -7.1262483840136885e-09,
+      7.2718060509960304e-09,
+      2.06159495009036e-09,
+      -1.1421019740744984e-07,
+      1.0006279092031978e-07,
+      7.905795096558095e-08,
+      -9.437596952143407e-09,
+      -4.3151223136680357e-07,
+      8.033666227050672e-06,
+      0.00011211861507869178,
+      -0.0005935313115639368,
+      0.005161246458020108,
+      -0.002198660061001967,
+      -0.0007261953198887732,
+      4.676422021718084e-05
+    ],
+    [
+      2.2028640137093474e-09,
+      -4.562509624758204e-11,
+      -4.86937672714409e-11,
+      -1.9551008910565213e-11,
+      -5.082643959750559e-11,
+      1.9721292618868076e-10,
+      6.285616414817621e-11,
+      -2.0743664245451496e-10,
+      5.336647484492116e-12,
+      -4.018648737949819e-08,
+      -3.173928889543077e-08,
+      -7.550811139570522e-09,
+      6.148269104270945e-08,
+      3.83825898405582e-07,
+      2.1942254147429417e-06,
+      5.848447083044159e-06,
+      -0.0001257404608150729,
+      -0.002198660061001967,
+      0.005223547476636161,
+      -0.003330370311379643,
+      0.0002329962119833954
+    ],
+    [
+      -3.3206260746108003e-09,
+      6.775419202569288e-11,
+      6.551675357404471e-11,
+      -1.9785686061783743e-11,
+      -1.1613636174351221e-10,
+      4.1768951055052263e-10,
+      4.319444688816753e-10,
+      -5.061043978566281e-10,
+      -1.1188748544652872e-10,
+      -1.9059521456308576e-08,
+      -2.5863031021701968e-08,
+      -1.0017114679188073e-08,
+      3.501374649769378e-08,
+      2.391595571199385e-07,
+      8.855867345260914e-07,
+      -3.063263318361304e-06,
+      -7.9725359045583e-05,
+      -0.0007261953198887732,
+      -0.003330370311379643,
+      0.039731448653484866,
+      -0.01076508122476903
+    ],
+    [
+      -1.1170692392391099e-10,
+      2.325527163531453e-12,
+      2.5612327559501436e-12,
+      1.5686007171705039e-12,
+      4.845980081359909e-12,
+      -1.8661676240661383e-11,
+      -9.740077119375762e-12,
+      2.042047745187265e-11,
+      6.026737379328128e-13,
+      2.2638880922807062e-09,
+      1.8407598247349638e-09,
+      4.574475144294371e-10,
+      -3.420637395035752e-09,
+      -2.1128730601845066e-08,
+      -9.075156178738573e-08,
+      -5.633267907555006e-08,
+      3.9221265702409315e-06,
+      4.676422021718084e-05,
+      0.00023299621198339545,
+      -0.01076508122476903,
+      0.006442604853428288
+    ]
+  ],
+  "signed_component_sum_error": {
+    "whole": {
+      "weighted_RMS": 2.7172377381457514e-13,
+      "signed_mean": -7.935911993483179e-14,
+      "spatial_variation_RMS": 2.598767772218276e-13,
+      "scale": 0.005515726603544432
+    },
+    "inner": {
+      "weighted_RMS": 1.989988698451e-13,
+      "signed_mean": -1.8806866028669087e-13,
+      "spatial_variation_RMS": 6.504405597436501e-14,
+      "scale": 0.005515726603544432
+    },
+    "outer": {
+      "weighted_RMS": 2.7231926725170427e-13,
+      "signed_mean": -7.833032302298455e-14,
+      "spatial_variation_RMS": 2.6081055157263104e-13,
+      "scale": 0.005515726603544432
+    },
+    "maximum_scaled_value": 2.08003715655736e-10,
+    "interface_inner_minus_outer": {
+      "signed_mean": 1.4077485963055257e-14,
+      "weighted_RMS": 2.0890905567282515e-14,
+      "scale": 0.005515726603544432
+    }
+  },
+  "signed_band_sum_error": {
+    "whole": {
+      "weighted_RMS": 6.8084500357149656e-15,
+      "signed_mean": -1.4994034171561985e-15,
+      "spatial_variation_RMS": 6.641293645175421e-15,
+      "scale": 0.005515726603544432
+    },
+    "inner": {
+      "weighted_RMS": 1.2837496524758225e-15,
+      "signed_mean": -1.1930319678007436e-15,
+      "spatial_variation_RMS": 4.740125462867828e-16,
+      "scale": 0.005515726603544432
+    },
+    "outer": {
+      "weighted_RMS": 6.839450732672164e-15,
+      "signed_mean": -1.502302831503411e-15,
+      "spatial_variation_RMS": 6.672418791345957e-15,
+      "scale": 0.005515726603544432
+    },
+    "maximum_scaled_value": 3.610372480455514e-12,
+    "interface_inner_minus_outer": {
+      "signed_mean": -4.494395640474736e-17,
+      "weighted_RMS": 1.4074795095276825e-16,
+      "scale": 0.005515726603544432
+    }
+  },
+  "tighter_repeat_difference": {
+    "whole": {
+      "weighted_RMS": 2.3232159562606075e-18,
+      "signed_mean": 1.4741479344895985e-18,
+      "spatial_variation_RMS": 1.795611385201135e-18,
+      "scale": 0.005515726603544432
+    },
+    "inner": {
+      "weighted_RMS": 1.6730223292957048e-18,
+      "signed_mean": 1.434518186609354e-18,
+      "spatial_variation_RMS": 8.609072462286724e-19,
+      "scale": 0.005515726603544432
+    },
+    "outer": {
+      "weighted_RMS": 2.328502145287356e-18,
+      "signed_mean": 1.47452297942222e-18,
+      "spatial_variation_RMS": 1.8021387914818433e-18,
+      "scale": 0.005515726603544432
+    },
+    "maximum_scaled_value": 1.0398562448608842e-15,
+    "interface_inner_minus_outer": {
+      "signed_mean": -3.5822435060963016e-21,
+      "weighted_RMS": 2.1389722106800436e-20,
+      "scale": 0.005515726603544432
+    }
+  },
+  "pressure_solves": [
+    {
+      "label": "actual",
+      "iterations": 80,
+      "rhs_norm": 8.615758469650097e-05,
+      "true_relative_residual": 1.4574970157925669e-12,
+      "maximum_mass_defect": 1.0352992546713694e-20
+    },
+    {
+      "label": "analytic",
+      "iterations": 75,
+      "rhs_norm": 3.2712061197196473e-12,
+      "true_relative_residual": 1.002156227750125e-12,
+      "maximum_mass_defect": 2.3705270201891405e-28
+    },
+    {
+      "label": "delta",
+      "iterations": 80,
+      "rhs_norm": 8.615758465598867e-05,
+      "true_relative_residual": 1.4591376136204592e-12,
+      "maximum_mass_defect": 5.770411953169921e-21
+    },
+    {
+      "label": "actual/inner/outlet/natural_advection",
+      "iterations": 79,
+      "rhs_norm": 3.225883451981275,
+      "true_relative_residual": 1.3548433210774683e-12,
+      "maximum_mass_defect": 1.3049482229628357e-17
+    },
+    {
+      "label": "analytic/inner/outlet/natural_advection",
+      "iterations": 79,
+      "rhs_norm": 3.2258834558860827,
+      "true_relative_residual": 1.3517710085352777e-12,
+      "maximum_mass_defect": 2.6020852139652106e-17
+    },
+    {
+      "label": "actual/inner/outlet/natural_traction",
+      "iterations": 83,
+      "rhs_norm": 0.007037599072007147,
+      "true_relative_residual": 1.843946742226657e-12,
+      "maximum_mass_defect": 4.261677632676834e-19
+    },
+    {
+      "label": "analytic/inner/outlet/natural_traction",
+      "iterations": 83,
+      "rhs_norm": 0.007037599072007147,
+      "true_relative_residual": 1.843946742226657e-12,
+      "maximum_mass_defect": 4.261677632676834e-19
+    },
+    {
+      "label": "actual/inner/volume/advection",
+      "iterations": 79,
+      "rhs_norm": 3.225883451981269,
+      "true_relative_residual": 1.3547450031528167e-12,
+      "maximum_mass_defect": 2.2551405187698492e-17
+    },
+    {
+      "label": "analytic/inner/volume/advection",
+      "iterations": 79,
+      "rhs_norm": 3.225883455886082,
+      "true_relative_residual": 1.3541353490723055e-12,
+      "maximum_mass_defect": 1.3010426069826053e-17
+    },
+    {
+      "label": "actual/inner/volume/linear_normal",
+      "iterations": 80,
+      "rhs_norm": 3.831589933582523e-18,
+      "true_relative_residual": 1.542143984061265e-12,
+      "maximum_mass_defect": 3.6581384197589587e-35
+    },
+    {
+      "label": "actual/inner/volume/linear_shear",
+      "iterations": 91,
+      "rhs_norm": 0.00750399886774248,
+      "true_relative_residual": 1.3697411806141175e-12,
+      "maximum_mass_defect": 6.505213034913027e-19
+    },
+    {
+      "label": "analytic/inner/volume/linear_shear",
+      "iterations": 91,
+      "rhs_norm": 0.0075040781933878795,
+      "true_relative_residual": 1.3671149474012494e-12,
+      "maximum_mass_defect": 1.1926223897340549e-18
+    },
+    {
+      "label": "actual/inner/volume/molecular_normal",
+      "iterations": 81,
+      "rhs_norm": 1.1595994080446944e-19,
+      "true_relative_residual": 1.823884202367726e-12,
+      "maximum_mass_defect": 7.52316384526264e-37
+    },
+    {
+      "label": "actual/inner/volume/molecular_shear",
+      "iterations": 88,
+      "rhs_norm": 0.0018968875410366797,
+      "true_relative_residual": 1.560300451191471e-12,
+      "maximum_mass_defect": 2.541098841762901e-20
+    },
+    {
+      "label": "analytic/inner/volume/molecular_shear",
+      "iterations": 88,
+      "rhs_norm": 0.001896888625253177,
+      "true_relative_residual": 1.559795441792348e-12,
+      "maximum_mass_defect": 2.710505431213761e-20
+    },
+    {
+      "label": "actual/outer/outlet/natural_advection",
+      "iterations": 72,
+      "rhs_norm": 3089.3946489381233,
+      "true_relative_residual": 2.7429264030292205e-13,
+      "maximum_mass_defect": 2.6645352591003757e-14
+    },
+    {
+      "label": "analytic/outer/outlet/natural_advection",
+      "iterations": 72,
+      "rhs_norm": 3089.3946685013802,
+      "true_relative_residual": 2.794033715860191e-13,
+      "maximum_mass_defect": 2.6645352591003757e-14
+    },
+    {
+      "label": "actual/outer/outlet/natural_traction",
+      "iterations": 74,
+      "rhs_norm": 17.16119769991805,
+      "true_relative_residual": 4.857081240563186e-13,
+      "maximum_mass_defect": 1.014416415657962e-16
+    },
+    {
+      "label": "analytic/outer/outlet/natural_traction",
+      "iterations": 74,
+      "rhs_norm": 17.16119769991805,
+      "true_relative_residual": 4.857081240563186e-13,
+      "maximum_mass_defect": 1.014416415657962e-16
+    },
+    {
+      "label": "actual/outer/top/natural_traction",
+      "iterations": 78,
+      "rhs_norm": 0.005322734228562315,
+      "true_relative_residual": 1.6013642983114655e-12,
+      "maximum_mass_defect": 8.131516293641283e-19
+    },
+    {
+      "label": "analytic/outer/top/natural_traction",
+      "iterations": 78,
+      "rhs_norm": 0.005322734228562315,
+      "true_relative_residual": 1.6013642983114655e-12,
+      "maximum_mass_defect": 8.131516293641283e-19
+    },
+    {
+      "label": "actual/outer/volume/advection",
+      "iterations": 72,
+      "rhs_norm": 3089.39464893812,
+      "true_relative_residual": 2.7324831359443735e-13,
+      "maximum_mass_defect": 1.5839167563124278e-14
+    },
+    {
+      "label": "analytic/outer/volume/advection",
+      "iterations": 72,
+      "rhs_norm": 3089.3946685013807,
+      "true_relative_residual": 2.711620824848729e-13,
+      "maximum_mass_defect": 1.1461970839881229e-14
+    },
+    {
+      "label": "actual/outer/volume/augmented_pressure",
+      "iterations": 74,
+      "rhs_norm": 8.584562291434839,
+      "true_relative_residual": 2.48514462876062e-13,
+      "maximum_mass_defect": 4.780403083365477e-17
+    },
+    {
+      "label": "analytic/outer/volume/augmented_pressure",
+      "iterations": 74,
+      "rhs_norm": 8.584562291434839,
+      "true_relative_residual": 2.48514462876062e-13,
+      "maximum_mass_defect": 4.780403083365477e-17
+    },
+    {
+      "label": "actual/outer/volume/linear_normal",
+      "iterations": 77,
+      "rhs_norm": 2.2878905640206878e-14,
+      "true_relative_residual": 4.922548898267562e-13,
+      "maximum_mass_defect": 8.320017359752859e-31
+    },
+    {
+      "label": "analytic/outer/volume/linear_normal",
+      "iterations": 75,
+      "rhs_norm": 1.1197957840770625e-15,
+      "true_relative_residual": 3.707369505230101e-13,
+      "maximum_mass_defect": 5.760390373727962e-33
+    },
+    {
+      "label": "actual/outer/volume/linear_shear",
+      "iterations": 92,
+      "rhs_norm": 0.010085115044709256,
+      "true_relative_residual": 3.8900220704708295e-13,
+      "maximum_mass_defect": 4.85722573273506e-17
+    },
+    {
+      "label": "analytic/outer/volume/linear_shear",
+      "iterations": 92,
+      "rhs_norm": 0.010085249954028321,
+      "true_relative_residual": 3.8585862023756856e-13,
+      "maximum_mass_defect": 2.42861286636753e-17
+    },
+    {
+      "label": "actual/outer/volume/nonlinear_normal",
+      "iterations": 75,
+      "rhs_norm": 8.583491103952968,
+      "true_relative_residual": 3.0950385043619605e-13,
+      "maximum_mass_defect": 2.5830786228654344e-17
+    },
+    {
+      "label": "analytic/outer/volume/nonlinear_normal",
+      "iterations": 75,
+      "rhs_norm": 8.583493209419576,
+      "true_relative_residual": 3.100300588987588e-13,
+      "maximum_mass_defect": 4.780403083365477e-17
+    },
+    {
+      "label": "actual/outer/volume/nonlinear_shear",
+      "iterations": 86,
+      "rhs_norm": 3.013353801299689e-16,
+      "true_relative_residual": 1.2301272069383774e-12,
+      "maximum_mass_defect": 3.3280069439011436e-31
+    },
+    {
+      "label": "streamwise",
+      "iterations": 90,
+      "rhs_norm": 3.5481946125578835e-06,
+      "true_relative_residual": 9.038826754941857e-13,
+      "maximum_mass_defect": 5.0027883447207114e-21
+    },
+    {
+      "label": "normal",
+      "iterations": 77,
+      "rhs_norm": 8.643226306763125e-05,
+      "true_relative_residual": 1.3348771977232787e-12,
+      "maximum_mass_defect": 5.770411953169921e-21
+    },
+    {
+      "label": "band/(0, 0.0029296875)",
+      "iterations": 87,
+      "rhs_norm": 4.171801053372012e-07,
+      "true_relative_residual": 1.6807165286441773e-12,
+      "maximum_mass_defect": 6.079777502264753e-23
+    },
+    {
+      "label": "band/(0.0029296875, 0.005859375)",
+      "iterations": 80,
+      "rhs_norm": 2.96880275014354e-07,
+      "true_relative_residual": 1.032968732029011e-12,
+      "maximum_mass_defect": 2.713152409173931e-22
+    },
+    {
+      "label": "band/(0.005859375, 0.01171875)",
+      "iterations": 81,
+      "rhs_norm": 6.299683596812203e-07,
+      "true_relative_residual": 1.2307744679316964e-12,
+      "maximum_mass_defect": 4.902252386060088e-22
+    },
+    {
+      "label": "band/(0.01171875, 0.0234375)",
+      "iterations": 82,
+      "rhs_norm": 1.1103917494223326e-06,
+      "true_relative_residual": 1.0218538684965967e-12,
+      "maximum_mass_defect": 6.817621142616293e-22
+    },
+    {
+      "label": "band/(0.0234375, 0.046875)",
+      "iterations": 86,
+      "rhs_norm": 1.3986504040176777e-06,
+      "true_relative_residual": 1.3118748647151423e-12,
+      "maximum_mass_defect": 1.3234889800848443e-21
+    },
+    {
+      "label": "band/(0.046875, 0.09375)",
+      "iterations": 88,
+      "rhs_norm": 9.64446835256139e-07,
+      "true_relative_residual": 1.4197075649777594e-12,
+      "maximum_mass_defect": 5.510243830040131e-22
+    },
+    {
+      "label": "band/(0.09375, 0.15314840882128453)",
+      "iterations": 89,
+      "rhs_norm": 6.769641006691572e-07,
+      "true_relative_residual": 1.9175073420641137e-12,
+      "maximum_mass_defect": 1.4492204331929045e-21
+    },
+    {
+      "label": "band/(0.15314840882128453, 0.1711243515027194)",
+      "iterations": 86,
+      "rhs_norm": 1.5914920078697002e-06,
+      "true_relative_residual": 1.7199837650735276e-12,
+      "maximum_mass_defect": 1.5484821066992678e-21
+    },
+    {
+      "label": "band/(0.1711243515027194, 0.1875)",
+      "iterations": 84,
+      "rhs_norm": 2.4616623837958537e-07,
+      "true_relative_residual": 1.5735073848208698e-12,
+      "maximum_mass_defect": 7.155112298583689e-23
+    },
+    {
+      "label": "band/(0.1875, 0.28125)",
+      "iterations": 76,
+      "rhs_norm": 8.420420698313104e-05,
+      "true_relative_residual": 1.4353296234240898e-12,
+      "maximum_mass_defect": 1.3399699765704598e-21
+    },
+    {
+      "label": "band/(0.28125, 0.421875)",
+      "iterations": 81,
+      "rhs_norm": 2.91360482854723e-06,
+      "true_relative_residual": 1.5239487343689163e-12,
+      "maximum_mass_defect": 6.609173094298691e-22
+    },
+    {
+      "label": "band/(0.421875, 0.6328125)",
+      "iterations": 88,
+      "rhs_norm": 4.180645847150287e-07,
+      "true_relative_residual": 1.0212838537250173e-12,
+      "maximum_mass_defect": 3.2508198073333988e-22
+    },
+    {
+      "label": "band/(0.6328125, 0.94921875)",
+      "iterations": 86,
+      "rhs_norm": 6.092835090739387e-07,
+      "true_relative_residual": 7.586870231762353e-13,
+      "maximum_mass_defect": 5.318771338715968e-22
+    },
+    {
+      "label": "band/(0.94921875, 1.423828125)",
+      "iterations": 84,
+      "rhs_norm": 1.0180261491762867e-06,
+      "true_relative_residual": 1.239104046988584e-12,
+      "maximum_mass_defect": 6.749793798432706e-22
+    },
+    {
+      "label": "band/(1.423828125, 2.1357421875)",
+      "iterations": 83,
+      "rhs_norm": 1.5811335479880993e-06,
+      "true_relative_residual": 1.4422999083879315e-12,
+      "maximum_mass_defect": 7.510799961981491e-22
+    },
+    {
+      "label": "band/(2.1357421875, 3.20361328125)",
+      "iterations": 84,
+      "rhs_norm": 2.400014799514302e-06,
+      "true_relative_residual": 1.147857769808509e-12,
+      "maximum_mass_defect": 8.07328277851755e-22
+    },
+    {
+      "label": "band/(3.20361328125, 4.805419921875)",
+      "iterations": 83,
+      "rhs_norm": 3.606318043676088e-06,
+      "true_relative_residual": 8.013298215577367e-13,
+      "maximum_mass_defect": 1.853349861213343e-21
+    },
+    {
+      "label": "band/(4.805419921875, 7.2081298828125)",
+      "iterations": 81,
+      "rhs_norm": 5.309352261819474e-06,
+      "true_relative_residual": 1.314709563893843e-12,
+      "maximum_mass_defect": 1.8547457284970263e-21
+    },
+    {
+      "label": "band/(7.2081298828125, 10.81219482421875)",
+      "iterations": 79,
+      "rhs_norm": 6.67964801634832e-06,
+      "true_relative_residual": 1.0734410931324183e-12,
+      "maximum_mass_defect": 5.1895502173987e-21
+    },
+    {
+      "label": "band/(10.81219482421875, 16.218292236328125)",
+      "iterations": 78,
+      "rhs_norm": 1.3631300344155908e-05,
+      "true_relative_residual": 1.0541058668777852e-12,
+      "maximum_mass_defect": 4.327808964877441e-21
+    },
+    {
+      "label": "band/(16.218292236328125, 20)",
+      "iterations": 74,
+      "rhs_norm": 1.1250574135987881e-05,
+      "true_relative_residual": 9.326035522037314e-13,
+      "maximum_mass_defect": 3.705769144237564e-22
+    },
+    {
+      "label": "delta-tighter",
+      "iterations": 87,
+      "rhs_norm": 8.615758465598867e-05,
+      "true_relative_residual": 1.3789268518180787e-14,
+      "maximum_mass_defect": 5.770411953169921e-21
+    },
+    {
+      "label": "quadrature48",
+      "iterations": 82,
+      "rhs_norm": 3.591327507734524e-12,
+      "true_relative_residual": 1.0944084327996981e-12,
+      "maximum_mass_defect": 4.872202165871274e-28
+    },
+    {
+      "label": "quadrature64",
+      "iterations": 78,
+      "rhs_norm": 6.503938540296988e-12,
+      "true_relative_residual": 1.3139024723389704e-12,
+      "maximum_mass_defect": 3.8496412174785376e-28
+    }
+  ],
+  "selection": {
+    "schema": "CT10SingleRadialContrastV1",
+    "status": "selected_before_evolution",
+    "rule": "contract80percent_absolute_signed_alignment,smallest_contiguous_band;uniform_if_more_than_one_third",
+    "uniform": false,
+    "diagnosed_band": [
+      0.1875,
+      0.421875
+    ],
+    "selected_bands": [
+      [
+        0.1875,
+        0.28125
+      ],
+      [
+        0.28125,
+        0.421875
+      ]
+    ],
+    "knots": [
+      0.0,
+      0.0029296875,
+      0.005859375,
+      0.01171875,
+      0.0234375,
+      0.046875,
+      0.09375,
+      0.15314840882128453,
+      0.1711243515027194,
+      0.1875,
+      0.234375,
+      0.28125,
+      0.3515625,
+      0.421875,
+      0.6328125,
+      0.94921875,
+      1.423828125,
+      2.1357421875,
+      3.20361328125,
+      4.805419921875,
+      7.2081298828125,
+      10.81219482421875,
+      16.218292236328125,
+      20.0
+    ],
+    "old_knots": [
+      0.0,
+      0.0029296875,
+      0.005859375,
+      0.01171875,
+      0.0234375,
+      0.046875,
+      0.09375,
+      0.15314840882128453,
+      0.1711243515027194,
+      0.1875,
+      0.28125,
+      0.421875,
+      0.6328125,
+      0.94921875,
+      1.423828125,
+      2.1357421875,
+      3.20361328125,
+      4.805419921875,
+      7.2081298828125,
+      10.81219482421875,
+      16.218292236328125,
+      20.0
+    ],
+    "degree": 4,
+    "pressure_degree": 2,
+    "continuous_physical_inputs_unchanged": true,
+    "signal_captured": 0.8046293397525043
+  },
+  "frozen_quadrature": [
+    {
+      "orders": [
+        48,
+        12,
+        12,
+        16,
+        64
+      ],
+      "packet_sha256": "f5b21bb3472ec18b6629a20573acdaf427571922bc1a6c0bd58b24abf1bd930b",
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/build-v2/runtime/RANSPreservationProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/baseline-attribution-v3/q48/case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/baseline-attribution-v3/q48/loads-request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/baseline-attribution-v3/q48/loads.json"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 14.936438872013241,
+        "process_cpu_seconds": 14.317098000000001,
+        "peak_RSS_KiB": 355340,
+        "actual_mapped_files_catalog_sha256": "de629df07618f7c7cca1fc6458a17ecc984fcc60cc5c15aea917accfdc96db51"
+      },
+      "maximum_delta_load_change": 1.708439184513722e-14,
+      "pressure_image_change": {
+        "whole": {
+          "weighted_RMS": 6.9735264461377845e-15,
+          "signed_mean": 5.656351764193796e-16,
+          "spatial_variation_RMS": 6.950548751154839e-15,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 1.2396450800908898e-15,
+          "signed_mean": -1.1357641768879098e-15,
+          "spatial_variation_RMS": 4.967490906802727e-16,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 7.005408588885198e-15,
+          "signed_mean": 5.817367475863254e-16,
+          "spatial_variation_RMS": 6.98121277814494e-15,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 7.357216103322755e-12,
+        "interface_inner_minus_outer": {
+          "signed_mean": -6.299883937535751e-17,
+          "weighted_RMS": 1.950011330792918e-16,
+          "scale": 0.005515726603544432
+        }
+      }
+    },
+    {
+      "orders": [
+        64,
+        16,
+        12,
+        20,
+        64
+      ],
+      "packet_sha256": "64acf23358a0607a8bfa31bb3c433b4f6eb00fb772aa06bc08fda8529827236d",
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/build-v2/runtime/RANSPreservationProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/baseline-attribution-v3/q64/case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/baseline-attribution-v3/q64/loads-request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/baseline-attribution-v3/q64/loads.json"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 26.988312341010896,
+        "process_cpu_seconds": 26.381669,
+        "peak_RSS_KiB": 530040,
+        "actual_mapped_files_catalog_sha256": "3ea4508391d54c6c7bc4ad8538f6b089bd9bd0e60124f80ac6194f6c703f25c3"
+      },
+      "maximum_delta_load_change": 2.8341453654221704e-14,
+      "pressure_image_change": {
+        "whole": {
+          "weighted_RMS": 8.743099998788221e-15,
+          "signed_mean": -7.063635786421896e-16,
+          "spatial_variation_RMS": 8.714519383395644e-15,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "weighted_RMS": 5.449154926274761e-15,
+          "signed_mean": -5.161764606795742e-15,
+          "spatial_variation_RMS": 1.746274764913956e-15,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "weighted_RMS": 8.768364299725796e-15,
+          "signed_mean": -6.641989001423136e-16,
+          "spatial_variation_RMS": 8.743171753646133e-15,
+          "scale": 0.005515726603544432
+        },
+        "maximum_scaled_value": 6.327899682966103e-12,
+        "interface_inner_minus_outer": {
+          "signed_mean": -1.0301833963586176e-16,
+          "weighted_RMS": 3.261581374470781e-16,
+          "scale": 0.005515726603544432
+        }
+      }
+    }
+  ],
+  "pressure_conditions": {
+    "maximum_C": 0.0,
+    "unused_gauge_in_system": false,
+    "M_rows": 1336,
+    "M_nnz": 39320,
+    "G_nnz": 15990,
+    "D_nnz": 15158,
+    "alpha_of_retained_snapshot": 1000,
+    "snapshot": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/equivalence-v2/0.001/pimple-states/flow-t0.001-bd25baabffd9.json",
+    "absolute_pressure": true,
+    "scope": "complete native free rows and consistent mass; no stored M^-1G or dense W"
+  },
+  "independent": {
+    "status": "pass",
+    "primitive_defects": {
+      "rough_pressure": 2.4748721590602446e-16,
+      "rough_inertia": 1.8184530609002802e-14,
+      "endpoint_K": 6.938893903907228e-18,
+      "u": 1.1102230246251565e-15,
+      "G": 3.448352714485736e-13,
+      "k": 8.326672684688674e-17,
+      "epsilon": 1.0408340855860843e-17,
+      "Pi": 4.336808689942018e-18,
+      "nt_aux": 1.734723475976807e-18,
+      "molecular": 3.2837773299154716e-17,
+      "linear": 6.16066337349122e-14,
+      "nonlinear": 4.787318890605781e-14
+    },
+    "load_reconstruction": {
+      "actual": {
+        "maximum_defect": 5.2955956505817994e-15,
+        "components": {
+          "inner/outlet/natural_advection": 1.734723475976807e-18,
+          "inner/outlet/natural_traction": 5.421010862427522e-20,
+          "inner/volume/advection": 3.3605502786722332e-18,
+          "inner/volume/augmented_pressure": 0.0,
+          "inner/volume/linear_normal": 3.1121748274612355e-19,
+          "inner/volume/linear_shear": 3.806566064960826e-18,
+          "inner/volume/molecular_normal": 8.08174110290238e-21,
+          "inner/volume/molecular_shear": 7.453889935837843e-20,
+          "inner/volume/nonlinear_normal": 0.0,
+          "inner/volume/nonlinear_shear": 0.0,
+          "inner/volume/rough_inertia": 8.384419501693662e-18,
+          "inner/volume/rough_pressure": 1.1076396605488538e-19,
+          "outer/outlet/natural_advection": 8.881784197001252e-16,
+          "outer/outlet/natural_traction": 1.3877787807814457e-17,
+          "outer/top/natural_advection": 0.0,
+          "outer/top/natural_traction": 1.0842021724855044e-19,
+          "outer/volume/advection": 3.552713678800501e-15,
+          "outer/volume/augmented_pressure": 8.779231800494806e-18,
+          "outer/volume/linear_normal": 5.2955956505817994e-15,
+          "outer/volume/linear_shear": 6.661338147750939e-16,
+          "outer/volume/molecular_normal": 0.0,
+          "outer/volume/molecular_shear": 0.0,
+          "outer/volume/nonlinear_normal": 3.434752482434078e-16,
+          "outer/volume/nonlinear_shear": 4.1154116557000376e-15,
+          "outer/volume/rough_inertia": 0.0,
+          "outer/volume/rough_pressure": 0.0,
+          "prescribed_body": 0.0
+        }
+      },
+      "analytic": {
+        "maximum_defect": 1.1102230246251565e-16,
+        "components": {
+          "inner/outlet/natural_advection": 1.734723475976807e-18,
+          "inner/outlet/natural_traction": 5.421010862427522e-20,
+          "inner/volume/advection": 1.1810286262685116e-18,
+          "inner/volume/augmented_pressure": 0.0,
+          "inner/volume/linear_normal": 0.0,
+          "inner/volume/linear_shear": 1.0842021724855044e-19,
+          "inner/volume/molecular_normal": 0.0,
+          "inner/volume/molecular_shear": 2.710505431213761e-20,
+          "inner/volume/nonlinear_normal": 0.0,
+          "inner/volume/nonlinear_shear": 0.0,
+          "inner/volume/rough_inertia": 0.0,
+          "inner/volume/rough_pressure": 0.0,
+          "outer/outlet/natural_advection": 0.0,
+          "outer/outlet/natural_traction": 1.3877787807814457e-17,
+          "outer/top/natural_advection": 0.0,
+          "outer/top/natural_traction": 1.0842021724855044e-19,
+          "outer/volume/advection": 1.1102230246251565e-16,
+          "outer/volume/augmented_pressure": 3.469446951953614e-18,
+          "outer/volume/linear_normal": 3.907535039251498e-18,
+          "outer/volume/linear_shear": 6.938893903907228e-18,
+          "outer/volume/molecular_normal": 0.0,
+          "outer/volume/molecular_shear": 0.0,
+          "outer/volume/nonlinear_normal": 3.469446951953614e-18,
+          "outer/volume/nonlinear_shear": 0.0,
+          "outer/volume/rough_inertia": 0.0,
+          "outer/volume/rough_pressure": 0.0,
+          "prescribed_body": 0.0
+        }
+      }
+    },
+    "partition_defect": 8.881784197001252e-16,
+    "constant_gradient_defect": 3.751665644813329e-12,
+    "integrated_volume": [
+      0.046874999999999625,
+      4.953125000000013
+    ],
+    "expected_volume": [
+      0.046875,
+      4.953125
+    ],
+    "scope": "independent profile quadrature and spectral-tensor formulas; native test rows, owners, coordinates and weights unchanged"
+  },
+  "execution": {
+    "command": [
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/build-v2/runtime/RANSPreservationProbe",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/diagnosis-v1/initial/case.xml",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/diagnosis-v1/initial/loads-request.json",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/diagnosis-v1/initial/loads.json"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 13.086990374009474,
+    "process_cpu_seconds": 12.104815,
+    "peak_RSS_KiB": 527776,
+    "actual_mapped_files_catalog_sha256": "f6bd51db773503077ca729673dad65ba95276632eb93f2723d32b84a4f87acf9"
+  },
+  "packet_path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/diagnosis-v1/initial/loads.json",
+  "packet_sha256": "30c5dd2db794c23f852fd92582bb8a278a0e4370b33bcbf6471b4c9549c3f8d7",
+  "baseline_native_report_sha256": "e9b95ff7798c70eb09bc6412b5c3156f9ee47fce50df59fd2aa428eb2e34e080",
+  "snapshot_sha256": "ac553a6fe33e91a57ecf6398d56925d6f0041c1d5a1720cc676dc1f24e32d667",
+  "initial_sha256": "ead3c315d22a168e8a7f0c0c4900fba2df746ff4668f6cc3fef25df4760be2aa",
+  "actual_initial_sha256": "05cd7fe6ffee6ec580e530a8412f230fba549b4e42b9414d537754333ef63694",
+  "native_counts": {
+    "stored": 2957,
+    "free_velocity": 1336,
+    "free_pressure": 220
+  },
+  "native_point_count": 12160,
+  "local_sparse_entries": 46600
+}
