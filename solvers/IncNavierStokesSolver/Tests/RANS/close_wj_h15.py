@@ -47,6 +47,7 @@ def verify_all(root):
     book=load(root/'accounting.json');entries=book['entries'];known=[v.get('peak_tree_rss_bytes',0)for v in entries.values()if v['phase']!='build'];build=[v.get('peak_tree_rss_bytes',0)for v in entries.values()if v['phase']=='build']
     assert max(known)<8*1024**3 and max(build)<16*1024**3
     assert book['target_halt']['native_completed']==1 and book['target_reserved_maximum_attempts']==4 and book['target_native_blocks']==book['target_strict_readbacks']==1
+    atomic(out/'post-stop-build-binaries.json',dict(builds=[dict(directory=str(root/name),binaries=[identity(root/name/exe)for exe in ('IncNavierStokesSolver','RANSWallResolutionProbe')],link_commands=[identity(root/name/'CMakeFiles'/(exe+'.dir')/'link.txt')for exe in ('IncNavierStokesSolver','RANSWallResolutionProbe')])for name in ('build-protocol-v5','build-bounded-v6')],governor_and_reader_execution='NOT_RUN after repair; original runtime remains separately pinned'))
     atomic(out/'verification.json',dict(status='PASS',publication=identity(pub/'manifest.json'),compact_artifacts=len(m['artifacts']),remote_heavy_files=len(heavy['files']),decoded_logs=len(decoded),
         science_bytes=science,scientific_output_conservative_bytes=science_output,entire_new_root_bytes=entire,source_build_runtime_bytes=source_build,peak_scientific_application_tree_RSS=max(known),peak_build_tree_RSS=max(build),
         no_following_target_stage=True,original_parent_ledger_unchanged=True,completed_replay_qualification='OBSTRUCTED_PROTOCOL; never promoted',last_qualified='original H14 CP0',scope='selected new-root bytes rehashed on Linux; not a claim that remote heavy bytes were read on Mac'))
@@ -72,7 +73,7 @@ def finalize(root):
         with(folder/'command.log').open('rb')as f,gzip.open(dest/'command.log.gz','wb')as g:shutil.copyfileobj(f,g)
         logs.append(dict(raw=identity(folder/'command.log'),compressed=identity(dest/'command.log.gz')))
     atomic(out/'final-log-bindings.json',logs)
-    atomic(out/'seal.json',dict(accounting=identity(out/'accounting-final.json'),verification=identity(out/'verification.json'),publication=identity(root/'publication-v3/manifest.json'),historical_first_partial=identity(root/'publication-v1-partial-status.json'),final_logs=identity(out/'final-log-bindings.json')))
+    atomic(out/'seal.json',dict(accounting=identity(out/'accounting-final.json'),verification=identity(out/'verification.json'),publication=identity(root/'publication-v3/manifest.json'),historical_first_partial=identity(root/'publication-v1-partial-status.json'),final_logs=identity(out/'final-log-bindings.json'),post_stop_binaries=identity(out/'post-stop-build-binaries.json')))
     archive=root/'h15-compact-final-v3.tar.gz'
     with tarfile.open(archive,'x:gz')as t:
         for name in ('publication-v1','publication-v1-partial-status.json','publication-v2','publication-v3','closure-v1','closure-v2','closure-v3'):t.add(root/name,arcname=name)
