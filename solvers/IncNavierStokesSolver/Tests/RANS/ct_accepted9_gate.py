@@ -5,6 +5,33 @@ from ct_accepted_budget_gate import physical_budgets
 
 FIELDS={'U','w','k','outer_epsilon','Pi'}
 def finite(x):return isinstance(x,(int,float)) and not isinstance(x,bool) and math.isfinite(x)
+def backend_controls(result):
+    """Required primitive scope; a pass label cannot replace its evidence."""
+    reasons=[];rows=result.get('checks',{});operators={'d0-p3','d0-p4','displaced-p3','displaced-p4'}
+    if result.get('schema')!='CT9BackendControlsV2':reasons.append('foreign_control_schema')
+    if set(rows)!=operators|{'restart_rollback_backend_identity','absolute_pressure_level'}:reasons.append('missing_required_control')
+    required={'raw_residual','constrained_residual','external_constraints','traction_load','diffusive_load','advection_load','predictor','pressure_increment','consistent_mass_correction','scalar_increment_2','scalar_increment_3'}|{'mass_'+str(i) for i in range(6)}|{'block_'+str(i)+'_'+key for i in (0,2,3) for key in ('matrix','residual')}
+    for name in operators:
+        q=rows.get(name,{});d=q.get('defects',{})
+        if q.get('status')!='pass' or not required<=set(d) or any(not finite(x) or not 0<=x<=2e-10 for x in d.values()):reasons.append(name+':operator_primitives')
+        for key in ('negative_roughness_pressure_omission_signal','negative_sign_signal','negative_mass_replacement_signal','negative_stale_mask_signal'):
+            x=q.get(key)
+            if not finite(x) or x<=1e-9:reasons.append(name+':nondiscriminating_negative')
+        artifacts=q.get('artifacts',[])
+        if len(artifacts)!=2:reasons.append(name+':missing_native_member')
+        for a in artifacts:
+            r=a.get('independent',{});rank=r.get('pressure_minimum_singular_ratio');constant=r.get('constant_pressure_action');defects=r.get('defects',{})
+            if r.get('status')!='pass' or not defects or any(not finite(x) or not 0<=x<=2e-10 for x in defects.values()) or not finite(rank) or rank<=1e-10 or not finite(constant) or constant<=1e-8 or r.get('additional_pressure_null_modes')!=0:reasons.append(name+':independent_rank_or_operator')
+    h=rows.get('restart_rollback_backend_identity',{});x=h.get('dense_sparse_state_maximum')
+    if h.get('status')!='pass' or not h.get('uninterrupted_state') or h.get('uninterrupted_state')!=h.get('continued_state') or h.get('rebuilt_dense_CT8_history_bitwise_equal') is not True or not finite(x) or not 0<=x<=1e-10:reasons.append('history_primitives')
+    negative={q.get('name'):q for q in h.get('negative',[])}
+    for name,word in [('backend_history','signature'),('stale_fit','signature'),('wrong_model','a95'),('unsupported_cache','caching')]:
+        q=negative.get(name,{})
+        if q.get('status')!='pass' or word not in q.get('reason','').lower():reasons.append('history_negative:'+name)
+    offset=rows.get('absolute_pressure_level',{});x=offset.get('maximum_coefficient_defect')
+    if offset.get('status')!='pass' or offset.get('shift')!=.125 or not finite(x) or not 0<=x<=2e-10:reasons.append('absolute_pressure_primitive')
+    return dict(status='pass' if not reasons else 'fail',reasons=sorted(set(reasons)))
+
 def pair(result):
     reasons=[];expected=result.get('required_dt',[]);members=result.get('members',{});target=result.get('target')
     if result.get('schema')!='CT9PhysicalPairV1':reasons.append('foreign_schema')

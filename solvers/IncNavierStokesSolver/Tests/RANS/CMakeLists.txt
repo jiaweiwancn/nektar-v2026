@@ -463,6 +463,11 @@ set_tests_properties(RANSObservationKernels PROPERTIES
     PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
 find_package(Python3 QUIET COMPONENTS Interpreter)
 if(Python3_Interpreter_FOUND)
+    if(RANS_ENABLE_SERIAL_SPARSE)
+        add_test(NAME CT9BackendAdmission COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_ct_accepted9_gate.py)
+        set_tests_properties(CT9BackendAdmission PROPERTIES PROCESSORS 1 TIMEOUT 30
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;PYTHONDONTWRITEBYTECODE=1")
+    endif()
     add_test(NAME RANSImmutableRequestManifest COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_request_manifest.py)
     set_tests_properties(RANSImmutableRequestManifest PROPERTIES PROCESSORS 1 TIMEOUT 30)
     add_test(NAME RANSWallTimingChecks COMMAND ${Python3_EXECUTABLE} -B

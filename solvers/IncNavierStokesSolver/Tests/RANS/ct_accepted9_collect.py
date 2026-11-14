@@ -7,7 +7,7 @@ from rans_qualification import THREADS,exact_vector_hash
 os.environ.update(THREADS)
 import numpy as np
 import ct_accepted8_native as n
-from ct_accepted9_gate import pair
+from ct_accepted9_gate import pair,backend_controls
 from ct_accepted9_pressure_run import sealed
 from ct_accepted_feasibility import write_json,require
 from rans_request_manifest import RequestManifest,sha
@@ -63,7 +63,7 @@ def main():
         q=n.read(file);resources[str(file.parent.name)]=q
     resource_pass=bool(resources) and all(q['resource']['aggregate_status']==q['resource']['project_status']=='pass' for q in resources.values())
     write_json(a.output/'resources.json',resources)
-    decision=dict(schema='CT9RequiredScopeV1',physical_reference='CT8 central mathematical feasibility retained; eight failed extraction corners unchanged',pressure_reconstruction='pass' if diagnosis and diagnosis['status']=='pass' else 'incomplete',pressure_uncertainty=pair(pressure) if pressure else dict(status='incomplete'),backend_operator='pass' if controls and controls['status']=='pass' else 'failed_or_incomplete',backend_trajectory='pass' if equivalence and equivalence['backend_status']=='pass' else 'failed_or_incomplete',capacity='pass' if capacity and capacity['status']=='pass' else 'failed_or_incomplete',resources='pass' if resource_pass else 'failed_or_incomplete',target_preservation='not_admitted',terrain_readiness='unsupported mapped field numbering/operators and historical curved temporal/degree gates remain open',sources=sources)
+    decision=dict(schema='CT9RequiredScopeV1',physical_reference='CT8 central mathematical feasibility retained; eight failed extraction corners unchanged',pressure_reconstruction='pass' if diagnosis and diagnosis['status']=='pass' else 'incomplete',pressure_uncertainty=pair(pressure) if pressure else dict(status='incomplete'),backend_operator='pass' if controls and backend_controls(controls)['status']=='pass' else 'failed_or_incomplete',backend_trajectory='pass' if equivalence and equivalence['backend_status']=='pass' else 'failed_or_incomplete',capacity='pass' if capacity and capacity['status']=='pass' else 'failed_or_incomplete',resources='pass' if resource_pass else 'failed_or_incomplete',target_preservation='not_admitted',terrain_readiness='unsupported mapped field numbering/operators and historical curved temporal/degree gates remain open',sources=sources)
     decision['physical_continuation_admitted']=False
     # A completed investigation may have an explicit failed physical gate.
     # Its completion cannot become permission to evolve the target domain.

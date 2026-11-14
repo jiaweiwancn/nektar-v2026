@@ -13,7 +13,7 @@ os.environ.update(THREADS)
 import ct_accepted8_native as n
 from ct_accepted9_controls import enable
 from ct_accepted9_pressure_run import sealed
-from ct_accepted9_gate import pair
+from ct_accepted9_gate import pair,backend_controls
 from ct_accepted_pilot import replay,constitutive_comparison,artifact_hash
 from ct_accepted3_metrics import domain
 from ct_accepted_open import run,probe,require
@@ -25,7 +25,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','ct8','controls','output'):p.add_argument('--'+k,type=Path,required=True)
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
-    controls=sealed(a.controls);require(controls['status']=='pass','small backend equivalence controls not admitted');pre=sealed(a.ct8/'preflight-v6');old=sealed(a.ct8/'strip-T008-v1');c=pre['case'];count=pre['global_count'];weights=pre['weights'];n.reference=lru_cache(None)(n.reference)
+    controls=sealed(a.controls);require(backend_controls(controls)['status']=='pass','small backend equivalence primitives not admitted');require(n.read(a.controls/'request-manifest.json')['request']['runtime']==runtime_identity(a.runtime/'IncNavierStokesSolver'),'foreign actual backend runtime');pre=sealed(a.ct8/'preflight-v6');old=sealed(a.ct8/'strip-T008-v1');c=pre['case'];count=pre['global_count'];weights=pre['weights'];n.reference=lru_cache(None)(n.reference)
     require(old['qualification']['reasons']==['temporal:Pi'],'historical classification changed')
     m=RequestManifest(a.output,dict(schema='CT9BackendTrajectoryEquivalenceV1',ct8_pair=sha(a.ct8/'strip-T008-v1/results.json'),controls=sha(a.controls/'results.json'),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),source=sha(Path(__file__)),dt=[.002,.001],target=.008,backend='AcceptedSerialSparseV1',maximum_scaled_equivalence=1e-8,scope='new histories; old dense physical failure expected and independently recomputed'))
     result=dict(schema='CT9PhysicalPairV1',required_dt=[.002,.001],target=.008,case=c,members={},equivalence={},temporal={},traction_temporal={});packets=[]
@@ -39,6 +39,7 @@ def main():
             require(z['initialization_receipt'][key]==pre['initial'][name]['initialization_receipt'][key],'effective physical boundary/reference mismatch:'+key)
         folder=a.output/name;n.make(folder,a.runtime,c,dt,round(.008/dt),Path(z['checkpoint']),zero/'case.xml');os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'timing.jsonl');e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');os.environ.pop('NEKTAR_RANS_TIMING_FILE');r=n.read(folder/'case.evolution.json')
         require(r['accepted_states'][0]==z['state'],'sparse consumed history mismatch')
+        require('AcceptedSerialSparseV1' in r['signature'] and all(x.get('linear_backend')=='AcceptedSerialSparseV1' for x in r['pimple_attempts']),'native trajectory did not consume the requested backend')
         row=dict(dt=r['dt'],time=r['time'],directory=str(folder),failure=r['failure'],execution=e,signature=r['signature'],initialization_receipt=r['initialization_receipt'],actual_initial_sha256=exact_vector_hash(z['state']),native_report_sha256=sha(folder/'case.evolution.json'),history_sha256=artifact_hash(r['checkpoint']))
         row['accepted_metrics']=[dict(time=t,**n.physical_metrics(ini,s,c,weights,count)) for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)];row['traction_history']=[dict(time=t,profile=profiles(ini,s,c)) for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)];row['actual_initial_traction_profile']=profiles(ini,z['state'],c)
         row['domain']=domain(ini,r,c);row['budgets']=n.budgets(a.runtime,folder,ini,r,c) if r['steps'] else dict(gate=dict(status='missing'))
