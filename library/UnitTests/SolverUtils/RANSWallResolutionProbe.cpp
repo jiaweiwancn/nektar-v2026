@@ -238,6 +238,10 @@ int main(int argc,char **argv)
                 const auto &side=packet.get_child("completed_sidecar"),&cursor=packet.get_child("qualified_cursor");
                 RANSWallMonitor::CheckPin(side);RANSWallMonitor::CheckPin(cursor);
                 const auto q=RANSWallMonitor::Read(cursor.get<std::string>("path"));const auto &b=q.get_child("binding");
+                Require(q.get<std::string>("schema")=="WJQualificationCommitV1","strict bounded cursor was not committed after valid ACK");
+                RANSWallMonitor::CheckPin(q.get_child("consumed_ack"));RANSWallMonitor::CheckPin(q.get_child("prepared_cursor"));
+                const auto consumed=RANSWallMonitor::Read(q.get<std::string>("consumed_ack.path"));
+                RANSWallMonitor::SameObject(b,consumed.get_child("binding"));Require(consumed.get<std::string>("status")=="PASS","strict cursor consumed a failed ACK");
                 Require(b.get<std::string>("checkpoint_sha256")==checkpointHash && b.get<std::string>("report_sha256")==reportHash &&
                     b.get<std::string>("callback_sidecar_sha256")==side.get<std::string>("sha256") &&
                     b.get<std::string>("state_sha256")==RANSWallR3::Hash(state) && b.get<std::string>("time_bits")==RANSWallMonitor::Bits(time),

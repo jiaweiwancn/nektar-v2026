@@ -68,12 +68,12 @@ def wall_batch(K,H,h,nu):
 
 class Rows:
     """Sparse physical observation rows, fixed by mesh/map and explicit owners."""
-    def __init__(self,r,points,c,*,owner_lookup=None,geometry_cache=None):
+    def __init__(self,r,points,c,*,owner_lookup=None,geometry_cache=None,include_volume=True):
         self.report=r;self.config=c;rows=[];weights=[]
         for p in points:
             for o in (owner_lookup(p)if owner_lookup is not None else owners(r,p)):rows.append((list(p),o));weights.append(0.)
         self.point_count=len(rows);g,w=np.polynomial.legendre.leggauss(8)
-        for el in r['fields'][0]['mesh']:
+        for el in (r['fields'][0]['mesh']if include_volume else ()):
             lo,hi=el['lower'],el['upper'];za=physical(r,lo)[2];zb=physical(r,hi)[2]
             cuts=sorted(set([za,zb]+[c.d0+v for v in (c.w['rc'],c.h,max(0.,c.w['zv']))if za<c.d0+v<zb]))
             for a,b in zip(cuts[:-1],cuts[1:]):
@@ -92,7 +92,9 @@ class Rows:
                 px,dx=point_basis(el['degree'],[2*(x-lo[0])/(hi[0]-lo[0])-1]);pr,dr=point_basis(el['degree'],[2*(rho-lo[2])/(hi[2]-lo[2])-1]);J=1 if not self.outer[i]else mapping(r)[3]
                 compiled.append((np.asarray(el['ids'])+r['offsets'][block],np.outer(pr[0],px[0]).ravel()*el['sign'],
                     np.outer(pr[0],dx[0]).ravel()*el['sign']*2/(hi[0]-lo[0]),np.outer(dr[0],px[0]).ravel()*el['sign']*2/(hi[2]-lo[2])/J))
-            self.maps[block]=(active,tuple(np.array(v)for v in zip(*compiled)))
+            nc=(r['fields'][block]['mesh'][0]['degree']+1)**2
+            self.maps[block]=(active,tuple(np.array(v)for v in zip(*compiled))if compiled else
+                (np.empty((0,nc),dtype=int),np.empty((0,nc)),np.empty((0,nc)),np.empty((0,nc))))
         # Endpoint K uses its own outer interface value, never local k.
         self.kmap=[]
         for p,o in rows:
