@@ -831,6 +831,8 @@ if(Python3_Interpreter_FOUND)
 endif()
 
 # Checkpoint-monitoring policy fixtures only; no solver evolution is admitted by CTest.
-add_test(NAME WJH18CheckpointAuditsPython COMMAND ${PYTHON_EXECUTABLE} -B -m unittest test_wj_h18_checkpoint_audits)
+if(Python3_Interpreter_FOUND)
+add_test(NAME WJH18CheckpointAuditsPython COMMAND ${Python3_EXECUTABLE} -B -m unittest test_wj_h18_checkpoint_audits)
 set_tests_properties(WJH18CheckpointAuditsPython PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     PROCESSORS 1 TIMEOUT 60 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1")
+endif()
