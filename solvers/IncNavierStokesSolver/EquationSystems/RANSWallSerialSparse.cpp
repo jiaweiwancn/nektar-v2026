@@ -155,7 +155,11 @@ Vector SparseFactor::Apply(const Vector &rhs) const
             Require(false,context.str());
         }
         RANSWallTiming::Scope refinementTiming("sparse.residual_refinement");
-        for(auto &v:residual)v=-v;const auto correction=solve(residual);
+        for(auto &v:residual)
+        {
+            v=-v;
+        }
+        const auto correction=solve(residual);
         for(int i=0;i<result.size();++i)result[i]+=correction[i];
     }
     Require(false,"unreachable sparse refinement exit");return {};
