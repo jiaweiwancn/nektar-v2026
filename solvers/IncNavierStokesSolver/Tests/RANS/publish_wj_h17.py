@@ -52,18 +52,20 @@ def publish(root):
             dest=out/'operations'/label/'command.log.gz';dest.parent.mkdir(parents=True,exist_ok=True)
             with p.open('rb')as f,gzip.open(dest,'wb')as g:shutil.copyfileobj(f,g)
     table(out/'operations.csv',operations)
-    audit_records=[];audit_payloads=[]
+    audit_records=[];audit_payloads=[];counter_summaries=[]
     for policy in ('Off','PatchExactV1'):
         folder=root/'science/audits'/policy
         copy(folder/'native.json.progress.json','audit-'+policy+'-progress.json')
         p=folder/'native.json'
         if not p.exists():continue
         v=load(p);audit_payloads.append(identity(p))
+        counter_summaries.append(dict(policy=policy,immutable_catalog=v['immutable_rows'],scoped_dynamic_reuse=v['dynamic_reuse'],scope='whole batch, including strict imports and affected-output checks; audit-only visit commitments are separate',cold_role=v['results'][0]['operation_seconds'],return_to_A_role=v['results'][-1]['operation_seconds']))
         with p.open('rb')as f,gzip.open(out/('complete-'+policy+'.json.gz'),'wb')as g:shutil.copyfileobj(f,g)
         for n,r in enumerate(v['results']):
             c=r['complete'];s=r['rows_after']
-            audit_records.append(dict(policy=policy,ordinal=n,absolute_step=r['step'],time=r['time'],alpha=r['alpha'],audit_seconds=r['audit_seconds'],commitment_seconds=c['commitment_wall_seconds'],audit_less_commitment_seconds=r['audit_seconds']-c['commitment_wall_seconds'],operation_seconds=r['operation_seconds'],row_requests=c['ordered_rows']['count'],observation_visits=c['ordered_observations']['count'],row_stream=c['ordered_rows']['root_sha256'],observation_stream=c['ordered_observations']['root_sha256'],audit_hash=c['audit_numerical_sha256'],constructs=s['constructs'],hits=s['hits'],misses=s['misses'],evictions=s['evictions'],bypasses=s['bypasses'],resident_entries=s['resident_entries'],live_bytes=s['live_bytes'],retained_bytes=s['retained_after_eviction_bytes']))
+            audit_records.append(dict(policy=policy,ordinal=n,absolute_step=r['step'],time=r['time'],alpha=r['alpha'],import_seconds=r['import_seconds'],audit_seconds=r['audit_seconds'],commitment_seconds=c['commitment_wall_seconds'],audit_less_commitment_seconds=r['audit_seconds']-c['commitment_wall_seconds'],operation_seconds=r['operation_seconds'],audit_row_requests=c['ordered_rows']['count'],observation_visits=c['ordered_observations']['count'],row_stream=c['ordered_rows']['root_sha256'],observation_stream=c['ordered_observations']['root_sha256'],audit_hash=c['audit_numerical_sha256'],catalog_constructs=s['constructs'],catalog_hits=s['hits'],catalog_misses=s['misses'],catalog_evictions=s['evictions'],catalog_bypasses=s['bypasses'],resident_entries=s['resident_entries'],catalog_live_bytes=s['live_bytes'],retained_bytes=s['retained_after_eviction_bytes']))
     table(out/'saved-audit-cost.csv',audit_records)
+    atomic(out/'native-row-counters.json',dict(policies=counter_summaries,note='Off has no persistent catalog; its actual constructs/hits are scoped_dynamic_reuse counters, not the zero-valued catalog fields'))
     target=root/'science/target';stages=[];bindings=[]
     for n in range(1,5):
         directory=target/'monitor';p=directory/f'step-{n}.ready.json'
@@ -80,6 +82,17 @@ def publish(root):
         bindings.append(dict(step=n,state=ready['binding']['state_sha256'],reference=ready['binding']['fixed_reference_sha256'],defect=ready['binding']['fixed_defect_sha256'],native_history=[vector_hash(v)for v in cp['native_history']],native_history_times=cp['native_history_times'],ready=identity(p),report=ready['report'],checkpoint=ready['checkpoint'],callback=ready['callback'],commit=identity(commit)if commit.exists()else None))
     table(out/'target-timeline.csv',stages)
     atomic(out/'heavy-input-bindings.json',dict(audits=audit_payloads,target=bindings,scope='files stay in original Linux roots; state-vector hashes differ from checkpoint file hashes'))
+    if len(stages)==4 and all(v['qualified']for v in stages):
+        # Reuse the already qualified final-union evaluation of the EXACT same
+        # physical states under unchanged independent numerical functions.
+        # This is copied H16 evidence, never a newly executed H17 scan.
+        old=root.parent/'wj-h16-repaired-monitor-20261114'
+        index=load(old/'authoritative-index-v1.json');manifest=load(verify(index['publication']))
+        pins={v['path']:v for v in manifest['files']};reused=[]
+        for name in ('summary.json','timeline.csv',*[f'step-{n}.json'for n in range(5)]):
+            p=old/'publication-v1/analysis'/name;pin=pins[str(p)];verify(pin)
+            copy(p,'reused-H16-final-union/'+name);reused.append(pin)
+        atomic(out/'retrospective-reuse-binding.json',dict(status='REUSED_H16_PASS',new_H17_scans=0,new_scientific_steps=0,original_publication=index['publication'],copied=reused,per_stage_exact_native_and_independent_parity=[identity(target/f'monitor/step-{n}.independent-replay-parity.json')for n in range(1,5)],scope='H16 final union11456 points/17521 owners plus44800 physical Gauss rows; earlier online inventories were unchanged; original H16 progress counts in copied history remain historical'))
     for name in ('target-outcome.json','view/result.json','execution-diff.json','intent.json'):
         copy(target/name,'target/'+name.replace('/','--'))
     for case in ('A','B'):
