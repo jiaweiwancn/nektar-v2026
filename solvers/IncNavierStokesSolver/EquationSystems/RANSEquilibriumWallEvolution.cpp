@@ -279,7 +279,7 @@ void RANSEquilibriumWallEvolution::InitialiseMonitoring()
         RANSWallR3::Hash(cp.fixedReference)==RANSWallR3::Hash(m_patch->Reference()) && RANSWallR3::Hash(cp.fixedDefect)==RANSWallR3::Hash(m_patch->Defect()),
         "monitor original qh0/reference/defect differs");
     Require(m_patch->InitializationWork()==Vector({0.,0.}) && m_patch->InitialVelocityCalls()==0,"bounded restore performed initialization work");
-    m_qualifiedCheckpoint=m_restart;
+    m_qualifiedCheckpoint=m_checkpointAudit?std::filesystem::path(original.get<std::string>("path")).parent_path().string():m_restart;
     if(auto p=m_monitor.get_child_optional("restart_callback"))
     {
         M::CheckPin(*p);auto side=M::Read(p->get<std::string>("path"));
@@ -324,8 +324,11 @@ void RANSEquilibriumWallEvolution::InitialiseMonitoring()
         const auto verified=M::Read(result);M::SameObject(verified.get_child("binding"),M::Read(m_monitorDirectory+"/startup.ready.json").get_child("binding"));
         M::CheckPin(verified.get_child("result"));
         Require(verified.get<std::string>("status")=="PASS" && M::Read(verified.get<std::string>("result.path")).get<std::string>("status")=="PASS","startup independent audit failed");
-        M::Atomic(m_monitorDirectory+"/startup.verification-commit.json",J::Object({{"schema",J::Quote("WJStartupVerificationCommitV1")},
-            {"binding",binding},{"result",RANSWallR3::Pin(result)},{"checkpoint",RANSWallR3::Pin(m_restart+"/State.bin")}}));
+        const auto commit=J::Object({{"schema",J::Quote("WJStartupVerificationCommitV1")},
+            {"binding",binding},{"result",RANSWallR3::Pin(result)},{"checkpoint",RANSWallR3::Pin(m_restart+"/State.bin")},
+            {"completion",m_integrator->Steps()>0?RANSWallR3::Pin(m_monitor.get<std::string>("restart_completion.path")):"null"}});
+        M::Atomic(m_monitorDirectory+"/startup.verification-commit.json",commit);
+        M::Atomic(m_monitorDirectory+"/latest-fully-verified-checkpoint.json",commit,false);
         m_qualifiedCheckpoint=m_restart;
     }
     TrimMonitoring();
@@ -364,7 +367,7 @@ void RANSEquilibriumWallEvolution::CompleteMonitoring(double nativeSeconds)
     const int fd=::open((m_lastCheckpoint+"/State.bin").c_str(),O_RDONLY);Require(fd>=0,"cannot fsync completed checkpoint");
     const int synced=::fsync(fd);::close(fd);Require(synced==0,"completed checkpoint fsync failed");M::CheckpointDirectories(m_lastCheckpoint);
     Require(!m_acceptedStates.empty() && RANSWallR3::Hash(m_state)==RANSWallR3::Hash(m_acceptedStates.back()),"completed state differs from online candidate");
-    m_wjAuditPackets.back()=m_patch->WJAuditPacket(m_fullAuditCurrent?m_stateAudits.back():RANSWallEvolutionPatch::Diagnostic{},m_state,m_lastHistory,m_stageAlpha,m_stageTime,"completed_stage");
+    m_wjAuditPackets.back()=m_patch->WJAuditPacket(m_fullAuditCurrent?m_stateAudits.back():RANSWallEvolutionPatch::Diagnostic{},m_state,m_lastHistory,m_stageAlpha,m_stageTime,m_fullAuditCurrent?"completed_stage":"completed_stage_online_only");
     const auto step=m_integrator->Steps();const auto stem="step-"+std::to_string(step),prefix=m_monitorDirectory+"/"+stem;
     M::Atomic(prefix+".callback.json",J::Object({{"schema",J::Quote("WJCompletedCallbackV1")},{"step",J::Number(step)},
         {"state_sha256",J::Quote(RANSWallR3::Hash(m_state))},{"callback_history",J::Numbers(m_lastHistory)},

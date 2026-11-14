@@ -45,6 +45,23 @@ OpenImportedState ImportOpenState(RANSWallEvolutionPatch &patch,
                 const auto &side=packet.get_child("completed_sidecar"),&cursor=packet.get_child("qualified_cursor");
                 RANSWallMonitor::CheckPin(side);RANSWallMonitor::CheckPin(cursor);
                 const auto q=RANSWallMonitor::Read(cursor.get<std::string>("path"));const auto &b=q.get_child("binding");
+                if(q.get<std::string>("schema")=="WJStartupVerificationCommitV1")
+                {
+                    const auto callback=RANSWallMonitor::PendingCompletion(q.get_child("completion"),cp);
+                    const auto completion=RANSWallMonitor::Read(q.get<std::string>("completion.path"));
+                    RANSWallMonitor::CheckPin(q.get_child("result"));const auto verified=RANSWallMonitor::Read(q.get<std::string>("result.path"));
+                    RANSWallMonitor::SameObject(b,verified.get_child("binding"));RANSWallMonitor::CheckPin(verified.get_child("result"));
+                    const auto assessed=RANSWallMonitor::Read(verified.get<std::string>("result.path"));
+                    RANSWallMonitor::SameObject(b,assessed.get_child("binding"));
+                    Require(verified.get<std::string>("status")=="PASS" && assessed.get<std::string>("status")=="PASS" &&
+                        q.get<std::string>("checkpoint.sha256")==checkpointHash && completion.get<std::string>("report.sha256")==reportHash &&
+                        completion.get<std::string>("callback.sha256")==side.get<std::string>("sha256") &&
+                        b.get<std::string>("state_sha256")==RANSWallR3::Hash(state) && b.get<std::string>("time_bits")==RANSWallMonitor::Bits(time) &&
+                        b.get<std::size_t>("absolute_step")==cp.integration.steps && b.get<std::string>("callback_history_sha256")==callback.get<std::string>("callback_history_sha256"),
+                        "strict pending startup verification commit differs");
+                }
+                else
+                {
                 Require(q.get<std::string>("schema")=="WJQualificationCommitV1","strict bounded cursor was not committed after valid ACK");
                 RANSWallMonitor::CheckPin(q.get_child("consumed_ack"));RANSWallMonitor::CheckPin(q.get_child("prepared_cursor"));
                 const auto consumed=RANSWallMonitor::Read(q.get<std::string>("consumed_ack.path"));
@@ -57,6 +74,8 @@ OpenImportedState ImportOpenState(RANSWallEvolutionPatch &patch,
                 Require(callback.get<std::string>("schema")=="WJCompletedCallbackV1" && callback.get<std::string>("state_sha256")==RANSWallR3::Hash(state) &&
                     callback.get<std::string>("time_bits")==RANSWallMonitor::Bits(time) && callback.get<double>("alpha_mass")==1/dt &&
                     RANSWallR3::Hash(Read(callback,"callback_history"))==b.get<std::string>("callback_history_sha256"),"bounded strict genuine callback differs");
+                }
+
             }
             const auto producerSteps=native.get<std::size_t>("steps");
             const auto &accepted=native.get_child("accepted_states"),&packets=native.get_child("wj_audit_packets");

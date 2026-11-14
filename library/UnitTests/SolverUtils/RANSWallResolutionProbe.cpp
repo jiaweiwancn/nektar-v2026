@@ -275,6 +275,7 @@ int main(int argc,char **argv)
                 reject([&]{ImportOpenState(patch,serial,us,qualified,data);});
             }
             if(auto qualified=packet.get_child_optional("qualified_anchor"))ImportOpenState(patch,serial,us,*qualified,data);
+            if(auto qualified=packet.get_child_optional("startup_qualified_anchor"))ImportOpenState(patch,serial,us,*qualified,data);
             Require(bound && domain && patch.CompleteWJCalls()==before,"off-cadence native guards were lost or called complete audit");
             std::ofstream out(argv[3]);out<<J::Object({{"status",J::Quote("PASS")},{"stop_on_bound",J::Boolean(bound)},
                 {"scalar_domain_rejected",J::Boolean(domain)},{"domain_failure",J::Quote(scalar.failure)},

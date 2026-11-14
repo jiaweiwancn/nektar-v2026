@@ -849,7 +849,7 @@ std::string RANSWallEvolutionPatch::WJAuditPacket(const Diagnostic &audit,const 
     }
     for(const std::string name:{"scalar_domain","inner_covariance","outer_covariance","root_branch","root_residual",
         "scalar_viscosities","principal_in_plane","principal_transverse","raw_work","profile_gate","profile_budget"})
-        if(!audit.count("wj_condition_"+name))conditions.push_back({name,J::Object({{"passed","null"},{"margins","[]"},{"evaluation",J::Quote("not_evaluated_after_scalar_domain_exit")}})});
+        if(!audit.count("wj_condition_"+name))conditions.push_back({name,J::Object({{"passed","null"},{"margins","[]"},{"evaluation",J::Quote(phase.find("online_only")!=std::string::npos?"NOT_SCHEDULED":"not_evaluated_after_scalar_domain_exit")}})});
     for(const std::string polarization:{"in_plane","transverse"})
     {
         const auto found=audit.find("wj_principal_"+polarization+"_witness");if(found==audit.end())continue;

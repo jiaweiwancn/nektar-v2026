@@ -25,7 +25,7 @@ def component(root):
     completion=root/'science/small/A/monitor/step-1.completion.json';c=load(completion)
     anchor=load(root/'inputs/small/step-2.json')
     request=dict(operation='checkpoint_policy_checks',inner_stress_model='Linear',import_role='PendingNativeV1',native_completion=identity(completion),
-        native_report=c['report']['path'],native_report_sha256=c['report']['sha256'],native_checkpoint=str(verify(c['checkpoint']).parent),checkpoint_sha256=c['checkpoint']['sha256'],qualified_anchor=completed_request(anchor))
+        native_report=c['report']['path'],native_report_sha256=c['report']['sha256'],native_checkpoint=str(verify(c['checkpoint']).parent),checkpoint_sha256=c['checkpoint']['sha256'],qualified_anchor=completed_request(anchor),startup_qualified_anchor=dict(native_report=c['report']['path'],native_report_sha256=c['report']['sha256'],native_checkpoint=str(Path(c['checkpoint']['path']).parent),checkpoint_sha256=c['checkpoint']['sha256'],completed_sidecar=c['callback'],qualified_cursor=identity(root/'science/small/B/monitor/startup.verification-commit.json')))
     atomic(folder/'request.json',request)
     cmd=[str(root/'runtime/RANSWallResolutionProbe'),str(root/'science/small/A/case.xml'),str(folder/'request.json'),str(folder/'native.json')]
     with(folder/'native.log').open('x')as log:code=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT).returncode
