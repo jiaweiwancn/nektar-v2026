@@ -805,6 +805,11 @@ if(Python3_Interpreter_FOUND)
 endif()
 
 if(Python3_Interpreter_FOUND)
+    add_test(NAME WJH15PersistentMonitoring
+        COMMAND ${Python3_EXECUTABLE} -B -m unittest -v test_wj_h15_monitoring)
+    set_tests_properties(WJH15PersistentMonitoring PROPERTIES
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROCESSORS 1 TIMEOUT 120
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1")
     add_test(NAME WJH14FixedHeightExecution
         COMMAND ${Python3_EXECUTABLE} -B -m unittest -v test_wj_h14_execution)
     set_tests_properties(WJH14FixedHeightExecution PROPERTIES

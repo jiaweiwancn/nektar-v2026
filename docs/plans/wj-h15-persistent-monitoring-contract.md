@@ -60,6 +60,9 @@ completed-unqualified state separately from the last qualified checkpoint.
 ## Persistent assessment and qualification
 
 Build the existing H14 immutable owner/basis/maps/physical Gauss8 support once.
+The qualification operation may save a private hash-bound immutable cache and
+load those same arrays into the persistent target observer; loading is not a
+second build. Cache data are source/profile/qh0-bound and never evolved states.
 Preserve every5x5 Lobatto owner, fixed physical observations, H14 witnesses,
 new native witnesses with the same1e-6 neighborhoods, and all pressure moments.
 Static identity includes source, geometry/space/signs/quadrature; reference caches

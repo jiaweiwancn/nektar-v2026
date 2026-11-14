@@ -4,6 +4,7 @@
 import argparse
 from collections import OrderedDict
 import hashlib
+import importlib
 import json
 import math
 import os
@@ -45,6 +46,14 @@ def atomic(p,v,immutable=True):
     finally:os.close(fd)
 def pkey(p):return tuple(float(v).hex()for v in p)
 def okey(p,o):return pkey(p)+(o['geometry'],o['normal_side'],o['x_side'],o['interface_role'])
+def source_identities():
+    names=('wj_h15_observer','wj_h7_analysis','wj_h14_execution','wj_h4_points','wj_h3_analysis','wj_h5_neutral','wj_h2_profiles','validate_cls_epawf_m3','study_wj_h14')
+    return [identity(Path(importlib.import_module(n).__file__))for n in names]
+def reference_identity(root,r):
+    shape={k:r[k]for k in ('fields','offsets','map_parameters','geometry_signature','parameters','quadrature_orders')}
+    return dict(qh0=vector_hash(r['state']),fixed_reference=vector_hash(r['fixed_reference']),fixed_defect=vector_hash(r['fixed_defect']),
+        physical_signature_sha256=hashlib.sha256(r['signature'].encode()).hexdigest(),geometry_space_sha256=hashlib.sha256(json.dumps(shape,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+        profile=identity(H14/'science/target-resource-design-v1.json'),native_runtime_manifest=identity(root/'science/runtime-build-v1.json'),rule=RULE)
 
 class BoundedIndex(OwnerIndex):
     def basis(self,degree,x):
@@ -154,7 +163,7 @@ def parity(root):
         inv=load(verify(a['inventory']));inventories[name]=inv;expected[name]=a
         for p in inv['points']:points.setdefault(pkey(p['physical']),p['physical'])
     r=reports['cp0'];assert len(r['state'])==24688
-    reference=dict(qh0=vector_hash(r['state']),fixed_reference=vector_hash(r['fixed_reference']),fixed_defect=vector_hash(r['fixed_defect']),profile=identity(H14/'science/target-resource-design-v1.json'),rule=RULE)
+    reference=reference_identity(root,r)
     cache=PersistentRows(r,list(points.values()),r['state'],reference);decisions=[]
     for name in ('cp0','pilot1'):
         rr,init,stats=cache.view([v['physical']for v in inventories[name]['points']]);new,_=assess(rr,reports[name]['state'],init,reports[name]['steps']);old=expected[name]['states'][0]
@@ -166,14 +175,14 @@ def parity(root):
         decisions.append(dict(case=name,status='PASS',owner_rows=rr.point_count,physical_rows=len(rr.rows),source_report=bindings[0 if name=='cp0'else 1]['producer']))
     path=out/'immutable-cache.pickle'
     with path.open('xb')as f:pickle.dump(cache,f,protocol=5);f.flush();os.fsync(f.fileno())
-    source_files=[Path(__file__),Path(Rows.__init__.__code__.co_filename)]
-    atomic(out/'manifest.json',dict(status='PASS',cache=identity(path),reference_identity=reference,source_files=[identity(p)for p in source_files],
+    atomic(out/'manifest.json',dict(status='PASS',cache=identity(path),reference_identity=reference,source_files=source_identities(),
         baseline_points=list(points.values()),parity=decisions,build_seconds=cache.build_seconds,scope='private verified immutable data only; current states never cached'))
     print('persistent cache parity PASS',cache.build_seconds,flush=True)
 
 def load_cache(manifest):
     m=load(manifest);assert m['status']=='PASS'
     for v in m['source_files']:verify(v)
+    verify(m['reference_identity']['native_runtime_manifest']);verify(m['reference_identity']['profile'])
     with verify(m['cache']).open('rb')as f:cache=pickle.load(f)
     assert cache.reference_identity==m['reference_identity'];return cache,m
 

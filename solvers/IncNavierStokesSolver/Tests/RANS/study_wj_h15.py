@@ -14,7 +14,7 @@ import uuid
 import xml.etree.ElementTree as ET
 from run_wj_h4 import THREADS,load
 os.environ.update(THREADS)
-from wj_h15_observer import PersistentRows,identity,verify,atomic,vector_hash,RULE,H14
+from wj_h15_observer import PersistentRows,identity,verify,atomic,vector_hash,RULE,H14,source_identities,reference_identity
 from study_wj_h14 import runtime as prepare_runtime
 from wj3_measure import checkpoint_payload
 from cls_epawf_m3_cases import set_info,set_parameter,write
@@ -23,7 +23,7 @@ HERE=Path(__file__).resolve().parent
 
 def setup(root):
     prepare_runtime(root)
-    build=load(root/'science/runtime-build.json');build['package']='H15';build['native_source_revision']='bea8c874 plus recorded overlays'
+    build=load(root/'science/runtime-build.json');build['package']='H15';build['native_source_revision']='397bae1701081c0f8b5663b7bf8bb140220283ed'
     atomic(root/'science/runtime-build-v1.json',build)
     parent=load(H14/'publication-v2/state-bindings.json');selected=[]
     for v in parent['states']:
@@ -35,14 +35,12 @@ def small_cache(root):
     out=root/'science/small-cache';out.mkdir()
     control=load(H14/'publication-v2/controls/restart-rollback-checks.json')['counts']['cp0']['producer'];r=load(verify(control))
     old=load(H14/'science/small/cp0/assessment-v2/result.json');inv=load(verify(old['inventory']));points=[v['physical']for v in inv['points']]
-    ref=dict(qh0=vector_hash(r['state']),fixed_reference=vector_hash(r['fixed_reference']),fixed_defect=vector_hash(r['fixed_defect']),profile=identity(H14/'science/target-resource-design-v1.json'),rule=RULE)
+    ref=reference_identity(root,r)
     cache=PersistentRows(r,points,r['state'],ref)
     import pickle
     p=out/'immutable-cache.pickle'
     with p.open('xb')as f:pickle.dump(cache,f,protocol=5);f.flush();os.fsync(f.fileno())
-    from wj_h7_analysis import Rows
-    import wj_h15_observer
-    atomic(out/'manifest.json',dict(status='PASS',cache=identity(p),reference_identity=ref,source_files=[identity(Path(wj_h15_observer.__file__)),identity(Path(Rows.__init__.__code__.co_filename))],baseline_points=points,build_seconds=cache.build_seconds,original_report=control))
+    atomic(out/'manifest.json',dict(status='PASS',cache=identity(p),reference_identity=ref,source_files=source_identities(),baseline_points=points,build_seconds=cache.build_seconds,original_report=control))
 
 def xml_case(original,folder,cp,steps,retention=True,fault='Off',hard=False):
     folder.mkdir(parents=True);x=ET.parse(original).getroot()
