@@ -1,0 +1,118 @@
+{
+  "total_governing_attempts": 11,
+  "small_verification_attempts": 10,
+  "target_replay_attempts": 1,
+  "target_new_scientific_steps": 0,
+  "reserved_unlaunched_target_stages": 3,
+  "records": [
+    {
+      "case": "legacy",
+      "governing_attempts": 2,
+      "native_completed": 2,
+      "independent_committed": null,
+      "failure": "",
+      "producer": {
+        "path": "/home/jay/build/wj-h15-persistent-neutral-20261114/science/small/legacy/case.evolution.json",
+        "bytes": 6351885,
+        "sha256": "05469a87d5d3d156d810b27937d4fd2230ed743ccc07bfe1894c01b383199791"
+      }
+    },
+    {
+      "case": "pass",
+      "governing_attempts": 2,
+      "native_completed": 2,
+      "independent_committed": 2,
+      "failure": "",
+      "producer": {
+        "path": "/home/jay/build/wj-h15-persistent-neutral-20261114/science/small/pass/case.evolution.json",
+        "bytes": 1946,
+        "sha256": "959ff66785a37d29fbad334b194c96068bda5911a2e9132a1fdd8ccfbb841105"
+      }
+    },
+    {
+      "case": "restart",
+      "governing_attempts": 1,
+      "native_completed": 1,
+      "independent_committed": 1,
+      "failure": "",
+      "producer": {
+        "path": "/home/jay/build/wj-h15-persistent-neutral-20261114/science/small/restart/case.evolution.json",
+        "bytes": 1951,
+        "sha256": "c1265411c1ac61b3e5684d8184c0c5ecff5d4f85dda02ecd613b6acf4bcf36ef"
+      }
+    },
+    {
+      "case": "observer-fail",
+      "governing_attempts": 1,
+      "native_completed": 1,
+      "independent_committed": 0,
+      "failure": "R3 durable progress: independent observer qualification failed",
+      "producer": {
+        "path": "/home/jay/build/wj-h15-persistent-neutral-20261114/science/small/observer-fail/case.evolution.json",
+        "bytes": 2017,
+        "sha256": "8f8c1fa0abe97791c95c2cd5717d3fa3062e2df2cbfe41fdf973b1f97f63d0fe"
+      }
+    },
+    {
+      "case": "timeout",
+      "governing_attempts": 1,
+      "native_completed": 1,
+      "independent_committed": 0,
+      "failure": "R3 durable progress: observer ACK timeout",
+      "producer": {
+        "path": "/home/jay/build/wj-h15-persistent-neutral-20261114/science/small/timeout/case.evolution.json",
+        "bytes": 1984,
+        "sha256": "c0f1a513cf75435413a198b95f027c99dcea8dc41b69d1825a06a03cfdccfdd4"
+      }
+    },
+    {
+      "case": "stale",
+      "governing_attempts": 1,
+      "native_completed": 1,
+      "independent_committed": 0,
+      "failure": "R3 durable progress: monitor binding differs: nonce",
+      "producer": {
+        "path": "/home/jay/build/wj-h15-persistent-neutral-20261114/science/small/stale/case.evolution.json",
+        "bytes": 1990,
+        "sha256": "209094181b3c86be00703abbeb8f02f8655d59ac3ab7d0aad6e1397bd45cd313"
+      }
+    },
+    {
+      "case": "native-reject",
+      "governing_attempts": 1,
+      "native_completed": 0,
+      "independent_committed": 0,
+      "failure": "WJ hard audit exit; candidate/history retained: deliberate_PIMPLE_WJ_hard_audit_rejection",
+      "producer": {
+        "path": "/home/jay/build/wj-h15-persistent-neutral-20261114/science/small/native-reject/case.evolution.json",
+        "bytes": 1952,
+        "sha256": "03d51c34bfdf04a587c9902269781084f6d82162c40dbcb5a3531fb723562b37"
+      }
+    },
+    {
+      "case": "post-callback",
+      "governing_attempts": 1,
+      "native_completed": 0,
+      "independent_committed": 0,
+      "failure": "deliberate post-implicit integrator failure; no time commit",
+      "producer": {
+        "path": "/home/jay/build/wj-h15-persistent-neutral-20261114/science/small/post-callback/case.evolution.json",
+        "bytes": 1922,
+        "sha256": "b8bc40cd2139b45d6c85e5600d2780be4912d3e06d1f89acf9297227e7c53954"
+      }
+    },
+    {
+      "case": "target_replay_only",
+      "governing_attempts": 1,
+      "native_completed": 1,
+      "independent_committed": 0,
+      "failure": "R3 durable progress: stale/duplicate observer ACK",
+      "producer": {
+        "path": "/home/jay/build/wj-h15-persistent-neutral-20261114/science/target/case.evolution.json",
+        "bytes": 2051,
+        "sha256": "aacf1a029cb79ddbdc3cd41ca9e1a3534cdb843c88d1fdc61d97be8aab992974"
+      }
+    }
+  ],
+  "unit_catalog_calls": "synthetic, excluded from governing counts"
+}

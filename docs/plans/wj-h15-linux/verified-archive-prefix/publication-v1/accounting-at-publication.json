@@ -1,0 +1,382 @@
+{
+  "schema": "WJH15LedgerV1",
+  "root": "/home/jay/build/wj-h15-persistent-neutral-20261114",
+  "ceiling_seconds": 7200,
+  "setup_charged_seconds": 60,
+  "closure_reserve_seconds": 300,
+  "closed": false,
+  "entries": {
+    "selected-source-preparation-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 0.56913202200667,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 2035712,
+      "log_sha256": "2f156025c4a0a3f020b28940f972393992e2bf849c82bddeed339db1d4e7c1cf"
+    },
+    "source-and-runtime-inputs-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 0.5656472789996769,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1253376,
+      "log_sha256": "9e9ea92cd72de0e82417fedc309992813369f980fd125fddbc97e709291d7b48"
+    },
+    "configure-v1": {
+      "status": "PASS",
+      "phase": "build",
+      "reserved_seconds": 60.0,
+      "seconds": 1.7647901400050614,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 60297216,
+      "log_sha256": "195a11a8465a0a81557b5a87bec6b29fc9b2d0c1712725edc646264a13d26201"
+    },
+    "focused-build-v1": {
+      "status": "PASS",
+      "phase": "build",
+      "reserved_seconds": 900.0,
+      "seconds": 114.09689118500683,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 7635873792,
+      "log_sha256": "0c0e80a4b2f84559405e018c2f63c9d836c58d4e7d23c1c978b4eded8dca7f6e"
+    },
+    "observer-source-and-cursor-v2": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30.0,
+      "seconds": 0.5832401189982193,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 880640,
+      "log_sha256": "5d02fd7c6502a4b7ab381b696a862dc3993e2146430c15c63d1d6249e54c7f93"
+    },
+    "qualification-cursor-build-v2": {
+      "status": "PASS",
+      "phase": "build",
+      "reserved_seconds": 300.0,
+      "seconds": 38.64869464299409,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1307521024,
+      "log_sha256": "9e1f1fe6c1fa72c2623ebcf2f012f0a7a36cd62c4e6d5d4a665dac21af9307b2"
+    },
+    "final-native-and-cache-source-v3": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30.0,
+      "seconds": 0.5797788560012123,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1839104,
+      "log_sha256": "22f995eba6c01db92bdca0e4953935bdb4c6c6b59bd6456f4d4fe525fba17144"
+    },
+    "bounded-audit-build-v3": {
+      "status": "PASS",
+      "phase": "build",
+      "reserved_seconds": 600.0,
+      "seconds": 76.1498880470026,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 7574732800,
+      "log_sha256": "52cafbc788026dec677a84e9c49db8db6e23604e653895c1110e9fafce80a763"
+    },
+    "native-protocol-catalog-fixture-v1": {
+      "status": "FAIL_PARENT_MONITOR_NATIVE_PASS",
+      "phase": "qualification",
+      "reserved_seconds": 90,
+      "seconds": 90,
+      "unknown_duration_charged": true,
+      "native_test_exit": 0,
+      "child_elapsed_reported_seconds": 33.36,
+      "reason": "parent du/stat race during immutable publication; full reservation charged; child independently completed PASS; zero governing attempts",
+      "log_sha256": "7b5e20f72b94f472fbed017c9c4809de89b560e941aa7cf99e77708cd92e8b7d"
+    },
+    "focused-observer-methods-v1": {
+      "status": "FAIL",
+      "phase": "qualification",
+      "reserved_seconds": 120.0,
+      "seconds": 0.6605403739959002,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 819200,
+      "log_sha256": "3acd6458a06c9d76cd8eeed51bfa2e4f3dee05305b894e2129e30e51a5763de2"
+    },
+    "selected-python-closure-v4": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30.0,
+      "seconds": 0.6567603719886392,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1888256,
+      "log_sha256": "5d5ce494bf80f76b984a8237b9836483a569ea2289e3c52d81b7a111da58ba89"
+    },
+    "focused-observer-methods-v2": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 120.0,
+      "seconds": 3.2429699880012777,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 113496064,
+      "log_sha256": "24210dcf8be6084e1e0bcea8d51cf3b02b0e18ad201ebe50787bc3ac79755d69"
+    },
+    "runtime-and-selected-imports-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 1.2980835229973309,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101261312,
+      "log_sha256": "7538c46280aa52842123d4738e44767c5d97e9da1e5151ff0e2ee53931896608"
+    },
+    "small-immutable-cache-v1": {
+      "status": "FAIL",
+      "phase": "qualification",
+      "reserved_seconds": 90.0,
+      "seconds": 3.8918132260005223,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 146964480,
+      "log_sha256": "f1b8b4b9a12508e4151ebe2b567e441890cb46621cbbc5cb6114f2ed2b1859d5"
+    },
+    "focused-cache-serialization-methods-v3": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 120.0,
+      "seconds": 3.2147553719987627,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 117473280,
+      "log_sha256": "513393f2d9a9cf14231321314a44c12d2463f66fe1d7202454cf720770b66960"
+    },
+    "small-immutable-cache-v2": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 90.0,
+      "seconds": 3.875500178008224,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 143777792,
+      "log_sha256": "42427fc3fa823cc282c2d3f94449fc4e04a5202a5e2ee159c69425b19b2f67d5"
+    },
+    "retained-target-persistent-parity-v1": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 600.0,
+      "seconds": 276.9712374609953,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1097412608,
+      "log_sha256": "5adb28f30c489b3b56f99f40083047321279783e9af2bfb4b424f018edb15321"
+    },
+    "small-controls-prelaunch-import-v1": {
+      "status": "FAIL_ZERO_LAUNCH_IMPORT",
+      "phase": "operation",
+      "reserved_seconds": 5,
+      "seconds": 5,
+      "unknown_duration_charged": true,
+      "native_launches": 0,
+      "governing_attempts": 0,
+      "reason": "coordinator imported without its source dependency PYTHONPATH; failed before reservation/child spawn; conservatively charged5s"
+    },
+    "small-native-protocol-controls-v1": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 600.0,
+      "seconds": 125.50896821300557,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 958304256,
+      "log_sha256": "2d4b73ab910f18c47b3619ad5a0c72d01d98e2c963e879ef86a1ca82b924b995"
+    },
+    "qualified-cursor-methods-v4": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 120.0,
+      "seconds": 3.2644585859961808,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 114647040,
+      "log_sha256": "3929b0a5c186d99741cc798851b16403b7690d5b7a55801bbeeb4d5e2e464f1d"
+    },
+    "small-genuine-strict-view-v1": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 120.0,
+      "seconds": 8.184806828008732,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 494391296,
+      "log_sha256": "066e8d981ae753373e0b97a71b0f19ce94f3ce949347a4ff25ecb63ab407b256"
+    },
+    "native-exec-runtime-and-target-admission-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 3.8950976389896823,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 97591296,
+      "log_sha256": "4dfb7b598ace65677a72c57950307ec140d2a847bc791d36e28265a1f4534460"
+    },
+    "single-four-stage-target-v1": {
+      "status": "PASS",
+      "phase": "target",
+      "reserved_seconds": 1800,
+      "seconds": 160.70086280899704,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 6266638336,
+      "log_sha256": "5e0aeba1b2c0b79f124da66ae4bafa216b1b7697c15a9f3f9292498cafa1bbb2"
+    },
+    "retained-protocol-stop-and-final-view-intent-v1": {
+      "status": "FAIL",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 1.3029268399986904,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 100311040,
+      "log_sha256": "502f093751ab983443df46887671de1d95ea8ec5435e77b1b928d053b8225022"
+    },
+    "protocol-stop-and-repair-source-v2": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 1.324709291002364,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 93929472,
+      "log_sha256": "020a3f0ae53031ec9fe728e2255f62567eee4deead357048cb0302212b3158cb"
+    },
+    "protocol-repair-configure-v4": {
+      "status": "FAIL",
+      "phase": "build",
+      "reserved_seconds": 60.0,
+      "seconds": 0.6743489290092839,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 2023424,
+      "log_sha256": "21a34c8ac573d673ca0f096f44bf95b098c1cee718595feeaaee1a6f8d23557a"
+    },
+    "protocol-repair-configure-v5": {
+      "status": "PASS",
+      "phase": "build",
+      "reserved_seconds": 60,
+      "seconds": 1.953746029001195,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 66281472,
+      "log_sha256": "ec7567b1fd1f760d7d9c42340027de51d2bede0495761eacd25ae5f95bb6691d"
+    },
+    "protocol-repair-build-v5": {
+      "status": "PASS",
+      "phase": "build",
+      "reserved_seconds": 600,
+      "seconds": 113.33861451900157,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 7666626560,
+      "log_sha256": "6aa65ce472b5cd2fbf6381b41c36338a30b16399fa718735aa288c44f048b27a"
+    },
+    "post-stop-passive-methods-v5": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 120.0,
+      "seconds": 3.9073822289938107,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 116035584,
+      "log_sha256": "123250a9932f89e39d9584e452b4d9d56d71158fc1288a6162ba48006801f074"
+    },
+    "final-qualified-CP0-intent-v2": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 1.3114201900025364,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 94875648,
+      "log_sha256": "1d55c8cdaff21ad78595ad8d2e0f5dc81409fbfeeb74ca661c4ee1b4f393656d"
+    },
+    "completed-replay-passive-views-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 120.0,
+      "seconds": 15.712757697998313,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 859975680,
+      "log_sha256": "db991bde11264dabe9152ec461229feb622aa1093c083650e72a2643a8f0ba3f"
+    },
+    "last-qualified-CP0-strict-readback-v1": {
+      "status": "PASS",
+      "phase": "target_readback",
+      "reserved_seconds": 120,
+      "seconds": 31.37531385399052,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 4211453952,
+      "log_sha256": "018b6731130becaa7ff9002cfac56f8a023be02def813381c308695eba3012e2"
+    },
+    "old-and-corrected-atomic-ACK-regression-v2": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 120.0,
+      "seconds": 72.3692951490084,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 442200064,
+      "log_sha256": "8c4b27b211e3ad2b0cf42f3d50f043322a9f2e5e9d7f9ed6698579f6f6d4732e"
+    },
+    "bounded-stream-configure-v6": {
+      "status": "PASS",
+      "phase": "build",
+      "reserved_seconds": 60,
+      "seconds": 1.4616981360013597,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 78749696,
+      "log_sha256": "3d9ceb1a6da78f83ff18975b873cf8753ef3fa5a4b7346ca2510d941e4e2485d"
+    },
+    "bounded-stream-build-v6": {
+      "status": "PASS",
+      "phase": "build",
+      "reserved_seconds": 600,
+      "seconds": 124.0758499049989,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 8160796672,
+      "log_sha256": "356fbfa76695e9308fc0673cddead61a3d96215df1b5e07e6611d5867770f442"
+    },
+    "compact-publication-v1": {
+      "status": "RESERVED",
+      "phase": "operation",
+      "reserved_seconds": 120.0
+    }
+  },
+  "target_reserved_maximum_attempts": 4,
+  "target_native_blocks": 1,
+  "target_halt": {
+    "category": "PROTOCOL_ATOMIC_ACK_TEMPORARY_FALSE_POSITIVE",
+    "first_reason": "R3 durable progress: stale/duplicate observer ACK",
+    "native_completed": 1,
+    "independently_qualified": 0,
+    "new_scientific_progress": 0,
+    "producer": {
+      "path": "/home/jay/build/wj-h15-persistent-neutral-20261114/science/target/case.evolution.json",
+      "bytes": 2051,
+      "sha256": "aacf1a029cb79ddbdc3cd41ca9e1a3534cdb843c88d1fdc61d97be8aab992974"
+    },
+    "retry_allowed": false
+  },
+  "target_strict_readbacks": 1
+}
