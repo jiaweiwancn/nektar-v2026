@@ -1,0 +1,35 @@
+{
+  "schema": "CT-Accepted-10-DiagnosticV1",
+  "starting_revision": "af87414abc2b583492c3a9f3466b25cb0fe5285a",
+  "physical_authority": "../cao-tamura-accepted-8-evidence/physical-reference-manifest.json",
+  "physics": "Original Natural A95; SamePhysicalWallDisplacedAcceptedV1; DisplacedNeutralCompositeV1; floor0,H=7.5mm,d=3.5mm; fixed physical-height ids012 mean fit and normalization; actual endpoint K, transported nonconstant inner k, dependent epsilon; finite inner nu, zero outer molecular diffusion; full signed production/covariance; full-height inlet, RN top, absolute nonlinear outlet traction",
+  "governing": {"runtime": "CT9 build-v8/runtime", "solver_sha256": "5830a2cd8a4b0b5b12095555171eb28bc0f63e1daa97652d63da244c3fd808c7", "component": "CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000", "method": "IMEX1 single sweep,cacheOff; unchanged mass,source,history and trace treatment", "forbidden": "physics/input retuning,clipping,floors,restoration,cancellation,pressure reset/regauging,post-k repair,extra governing sweeps,new spaces or backend expansion"},
+  "diagnostic": {
+    "scope": "actual strip, both momentum components; read-only native row generation and independently checked continuous/represented stress loads",
+    "storage": "fixed small collection of global momentum component/region vectors; sparse local row support per generating element, never element-count times global-size dense arrays; original dense-export guard retained",
+    "components": ["augmented_pressure", "molecular_normal", "molecular_shear", "linear_normal", "linear_shear", "nonlinear_normal", "nonlinear_shear", "conservative_advection", "rough_pressure", "rough_inertia", "prescribed_body", "natural_traction", "natural_advection"],
+    "reference": "analytical composite values/gradients on identical native integration/test rows; no polynomial surrogate; independent oracle verifies tensors, finite-nu resistance and native load reconstruction",
+    "interface": "common velocity test rows receive both volume sides once; outward one-sided interface fluxes are separate diagnostics, not extra governing loads",
+    "rows": "retain all raw momentum rows, actual free velocity IDs and prescribed reactions; apply constraint replacement separately",
+    "pressure_image": "-W^-1 D M^-1 r_j with complete actual G,D,consistent free M,C=0 and unused gauge excluded; signed component and band sums and cross-products retained",
+    "solves": "independent sparse direct consistent mass and matrix-free pressure diagnostic solves with true residual checks; tighter repeat and signed-sum uncertainty check; no diagnostic solve enters a history",
+    "row_limit": 2e-10,
+    "row_scale": "max(1,maximum original load or contribution magnitude); absolute primitive also reported",
+    "pressure_uncertainty_scale": "u_tau^2",
+    "pressure_uncertainty_limit": 1e-8,
+    "quadrature": "native governing policy plus held-coefficient 48/64 controls; pressure observation norm separate; no observation-gauge subtraction"
+  },
+  "selection": {
+    "space": "P4/P2, unchanged x partition,roof,interface,continuous functions and projection",
+    "signal": "band signed alignment a_j=<deltaPi_j,deltaPi_total>_physical_mass/||deltaPi_total||^2 from represented-minus-continuous loads, not isolated unsigned stress norms",
+    "rule": "find the smallest contiguous set of existing radial slabs containing at least80 percent of sum|a_j| (ties lowest height); if it occupies at most ceil(number_of_slabs/3), bisect that band; otherwise uniformly bisect all radial slabs once",
+    "checks": "signed band sum, cancellation and native/continuous row reconstruction must pass before selection; freeze exact nodes, native count, physical input and static state before histories",
+    "maximum_candidates": 1
+  },
+  "histories": {"baseline": "reuse sealed CT9 sparse .001 only after exact full-identity verification; add fresh sparse .0005 toT=.008 and compare with sealed dense .0005 under1e-8 scaled equivalence", "candidate_dt": [0.001,0.0005], "target": 0.008, "maximum_new_primary_histories": 3, "initialization": "fresh same-space identical actual coefficient vectors and independent dt histories; cross-space continuous input identical, projections separate", "continuation": "only a complete passing unambiguous candidate pair may continue unchanged dt/method toT=.02, drift always from actual time-zero state", "stop": "first genuine physical/accuracy rejection retained; no additional mesh or timestep search"},
+  "acceptance": {"field_drift": 0.001, "vertical_drift": 0.0001, "traction": 0.001, "mass": 1e-8, "complete_physical_budgets": 0.02, "field_and_traction_temporal": "delta<=max(1e-7,.1*measured_drift)", "pressure": "absolute Pi; both global and regional diagnostics", "budget_controls": ["native","q48f16","q64f16","q64f32"], "budget_equations": ["inner_k","outer_k","outer_epsilon","whole_k"], "reconstruction": ["k","outer_epsilon"], "domains": "all mandatory scalar,covariance,A95 radicand,cutoff and finite-state inventories unchanged; no new predictor-domain rejection", "report": "also delta divided by absolute preservation tolerance; this does not replace the frozen relative rule"},
+  "comparison": "common physical integration grid resolving both meshes and active analytical breaks; explicit interface sides; value/gradient projection error, drift, absolute reference error, temporal and spatial differences distinct; no convergence-order inference from two spaces",
+  "target": {"extent": [-25,30], "roof": 20, "H": 0.1875, "transit": 40.621637857609905, "first_stage": 0.40621637857609905, "prerequisites": "passing complete strip contract, target-specific reference/load/traction/quadrature/domain preflights, justified dt pair and finite measured accepted-step resource plan", "segments": "at most64 steps per genuine same-method segment", "resource_stage": "declare finite CPU/wall,storage,checkpoint and step ceilings in a prospective target-admission receipt before launch", "mesh": "any target amendment must retain matched flat/terrain definition and receive new native count/nnz/fill/memory receipts", "terrain_evolution": "outside scope"},
+  "resources": {"project_workers": 16,"aggregate_workers": 72,"numerical_library_threads": 1,"compiler_jobs": 2,"numerical_families": 1,"launcher": "ct_accepted3_command.py","root": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-10-20261114","process_memory_GiB": 16,"single_family_wall_limit_seconds": 7200},
+  "historical": "CT8/CT9 pressure failures,eight extraction failures,observation roles and curved temporal/spatial failures immutable; A95 does not admit other models or terrain"
+}
