@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Compact CT9 evidence; recompute physical primitives before aggregation."""
-import argparse,copy,os,json,hashlib
+import argparse,copy,os,json,hashlib,math
 from pathlib import Path
 from rans_qualification import THREADS,exact_vector_hash
 os.environ.update(THREADS)
@@ -9,7 +9,7 @@ import numpy as np
 import ct_accepted8_native as n
 from ct_accepted9_gate import pair,backend_controls,backend_trajectory,capacity as capacity_gate
 from ct_accepted9_pressure_run import sealed
-from ct_accepted_feasibility import write_json,require
+from ct_accepted_feasibility import write_json,require,parameters
 from rans_request_manifest import RequestManifest,sha,canonical
 
 LIBRARIES={}
@@ -84,6 +84,16 @@ def residual_refinements(folders):
             out[str(path)]=dict(sha256=sha(path),factor_reused_solve_count=len(records),linear_residual_corrections=sum(r['steps'] for r in records),maximum_steps=max(r['steps'] for r in records),worst_final_residual_over_bound=max(r['final_residual']/r['bound'] for r in records),first_record=records[0])
     return dict(scope='linear algebra corrections within the same frozen-system solve, not extra governing equation stages or PIMPLE sweeps',logs=out)
 
+def target_transit(ct8,capacity):
+    from scipy.integrate import quad
+    c=sealed(ct8/'preflight-v6')['case'];column=n.col(c);H=c['H'];d=c['displacement'];target=capacity['cases']['target-p4']['case'];Z=target['Z'];length=target['x'][-1]-target['x'][0];us=c['ustar'];kappa=parameters(c['model'])['kappa']
+    require(c['model']=='A95' and Z==20. and length==55.,'foreign target/reference transit request')
+    cuts=sorted({0.,H,*[z for z in (column.zv,c['roughness_input'],column.cutoff) if 0<z<H]})
+    inner=sum(quad(lambda z:us**2*(H-z)/column.D(z),a,b,epsabs=1e-14,epsrel=1e-12)[0] for a,b in zip(cuts[:-1],cuts[1:],strict=True))
+    primitive=lambda y:c['B']*y+us/kappa*(y*math.log(y)-y)
+    flow=inner+primitive(Z-d)-primitive(H-d);bulk=flow/Z;transit=length/bulk
+    return dict(schema='CT9TargetReferenceTransitV1',definition='length divided by full-height reference bulk velocity, including finite-nu inner resistance; independent quadrature plus analytic outer-log integral',length=length,roof=Z,inner_integral=inner,volume_flow_per_width=flow,bulk_velocity=bulk,transit_time=transit,stage_times={str(f):f*transit for f in (.01,.1,1.)},physical_trajectories='not_admitted: independent pressure gate failed; no target timestep or campaign is silently assigned')
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','ct8','output'):p.add_argument('--'+k,type=Path,required=True)
@@ -120,6 +130,7 @@ def main():
         write_json(a.output/'capacity.json',compact(cap))
     if build:write_json(a.output/'runtime.json',compact(build))
     write_json(a.output/'retained-attempts.json',failure_witnesses(a.root))
+    if capacity:write_json(a.output/'target-transit.json',target_transit(a.ct8,capacity))
     profiles={str(p.relative_to(a.root)):timing(p) for p in list((a.root/a.equivalence).glob('*/timing.jsonl'))+list((a.root/a.capacity).glob('*/*-timing.jsonl'))}
     write_json(a.output/'cost.json',profiles)
     write_json(a.output/'linear-refinement.json',residual_refinements([a.root/x for x in (a.controls,a.equivalence,a.capacity)]))
