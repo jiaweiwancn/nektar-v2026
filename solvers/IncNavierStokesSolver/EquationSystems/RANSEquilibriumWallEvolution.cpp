@@ -308,6 +308,11 @@ std::string RANSEquilibriumWallEvolution::MonitoringPacket(const std::string &ph
 {
     namespace J=RANSWallSolveJson;const auto snapshot=m_integrator->Capture();std::vector<std::string> h;
     for(const auto &v:snapshot.history)h.push_back(J::Numbers(v));
+    auto tail=[](const std::vector<Vector> &rows,std::size_t maximum)
+    {std::vector<std::string> values;for(auto i=rows.size()-std::min(rows.size(),maximum);i<rows.size();++i)values.push_back(RANSWallSolveJson::Numbers(rows[i]));return RANSWallSolveJson::List(values);};
+    const auto explicitCount=std::min<std::size_t>(2,m_explicitAudits.size());
+    std::vector<std::pair<std::string,std::string>> hardAudit;
+    if(!m_stateAudits.empty())for(const auto &v:m_stateAudits.back())hardAudit.push_back({v.first,J::Numbers(v.second)});
     return J::Object({{"schema",J::Quote(phase=="completed_stage"?"WJCompletedStepV1":"WJMonitoringStartupV1")},
         {"retention_mode",J::Quote("BoundedV1")},{"signature",J::Quote(m_signature)},{"dt",J::Number(m_timestep)},
         {"steps",J::Number(snapshot.steps)},{"time",J::Number(m_time)},{"state",J::Numbers(m_state)},
@@ -316,6 +321,9 @@ std::string RANSEquilibriumWallEvolution::MonitoringPacket(const std::string &ph
         {"accepted_states",J::List({J::Numbers(m_state)})},{"wj_audit_packets",J::List(m_wjAuditPackets.empty()?std::vector<std::string>{}:std::vector<std::string>{m_wjAuditPackets.back()})},
         {"last_stage_history",J::Numbers(m_lastHistory)},{"last_stage_time",J::Number(m_stageTime)},{"last_stage_alpha",J::Number(m_stageAlpha)},
         {"stage_audits",m_stageAudits.empty()?"[]":J::List({J::Numbers(m_stageAudits.back())})},
+        {"step_audits",tail(m_stepAudits,1)},{"explicit_audits",tail(m_explicitAudits,2)},
+        {"first_retained_explicit_call",J::Number(explicitCount?m_explicitTotal-explicitCount+1:0)},
+        {"actual_explicit_calls",J::Number(m_explicitTotal)},{"native_hard_audit",J::Object(hardAudit)},
         {"pimple_attempts",J::List(m_patch->PimpleRecords())},{"implicit_callback_count",J::Number(m_implicitCallbacks)},
         {"initialization_lift_calls_iterations",J::Numbers(m_patch->InitializationWork())},{"initial_velocity_calls",J::Number(m_patch->InitialVelocityCalls())},
         {"failure",J::Quote("")},{"native_completed_in_process",J::Number(m_nativeCompleted)}});
@@ -385,11 +393,14 @@ void RANSEquilibriumWallEvolution::AbortMonitoring() const
         range=J::Object({{"time",J::Number(e.time)},{"alpha",J::Number(e.alpha)},{"reasons",J::List(reasons)},
             {"native_rejected_audit",m_patch->WJAuditPacket(e.audit,e.state,e.history,e.alpha,e.time,"rejected_stage")}});
     }
+    auto rows=[](const std::vector<Vector> &v){std::vector<std::string> a;for(const auto &r:v)a.push_back(RANSWallSolveJson::Numbers(r));return RANSWallSolveJson::List(a);};
     M::Atomic(m_monitorDirectory+"/first-aborted.json",J::Object({{"status",J::Quote("ABORTED_NOT_COMPLETED")},{"failure",J::Quote(reason)},
         {"attempted_step",J::Number(m_integrator->Steps()+1)},{"candidate",J::Numbers(m_rejectedState.empty()?m_state:m_rejectedState)},
         {"candidate_binary",RANSWallR3::Pin(candidateFile)},{"callback_history_binary",RANSWallR3::Pin(historyFile)},
         {"callback_history",J::Numbers(m_activeHistory)},{"attempts",J::List(m_patch->PimpleRecords())},
-        {"provisional_audits",J::List(m_wjAuditPackets)},{"first_native_range_event",range}}));
+        {"provisional_audits",J::List(m_wjAuditPackets)},{"provisional_stage_audits",rows(m_stageAudits)},
+        {"provisional_explicit_audits",rows(m_explicitAudits)},{"actual_explicit_calls",J::Number(m_explicitTotal)},
+        {"first_native_range_event",range}}));
 }
 void RANSEquilibriumWallEvolution::WriteBoundedReport() const
 {
