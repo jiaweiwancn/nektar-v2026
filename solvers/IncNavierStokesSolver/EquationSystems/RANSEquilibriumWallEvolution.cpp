@@ -259,10 +259,11 @@ void RANSEquilibriumWallEvolution::ConfigureMonitoring()
     m_monitor=M::Read(m_monitorIntentPath);Require(m_monitor.get<std::string>("schema")=="WJMonitorIntentV1","wrong monitor intent schema");
     m_monitorDirectory=m_monitor.get<std::string>("directory");
     Require(m_monitor.get<std::string>("nonce").size()>=16 && m_monitor.get<double>("ack_timeout_seconds")>0 &&
-        m_monitor.get<double>("ack_timeout_seconds")<=120 && m_monitor.get<std::size_t>("maximum_absolute_step")<=4,"invalid bounded monitoring limits");
+        m_monitor.get<double>("ack_timeout_seconds")<=120 && (m_checkpointAudit || m_monitor.get<std::size_t>("maximum_absolute_step")<=4),"invalid bounded monitoring limits");
     if(m_checkpointAudit)m_schedule=M::CheckpointSchedule::From(m_monitor,m_timestep);
     Require(!std::filesystem::exists(m_monitorDirectory+"/factors"),"monitor factor output cannot be reused");
     M::Factors().Configure(m_monitorDirectory+"/factors",m_monitor.get<std::string>("scope_sha256"));
+    if(m_checkpointAudit)M::Factors().Recording(false);
     m_session->LoadSolverInfo("RANSWallMonitorFault",m_monitorFault,"Off");
     Require(m_monitorFault=="Off" || m_monitorFault=="AfterImplicitV1","unknown small monitoring fault");
 }
@@ -800,7 +801,14 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             const auto wjPackets=m_wjAuditPackets.size();
             const auto stages=m_stageAudits.size(),audits=m_stateAudits.size(),states=m_acceptedStates.size(),times=m_auditTimes.size();
             const auto explicits=m_explicitAudits.size();
-            if(m_checkpointAudit)m_patch->SelectSubstepEvidence(false); // no selected rich steps in H18 pilot; bound events still captured
+            if(m_checkpointAudit)
+            {
+                bool selected=false;
+                if(auto steps=m_monitor.get_child_optional("substep_evidence_steps"))for(const auto &n:*steps)
+                    selected=selected || n.second.get_value<std::size_t>()==m_integrator->Steps()+1;
+                m_patch->SelectSubstepEvidence(selected); // bound events still capture the available k operator
+                RANSWallMonitor::Factors().Recording(selected || ScientificDue(m_integrator->Steps()+1));
+            }
             Vector diff;
             try{RANSWallTiming::Scope advanceTiming("native.advance");diff=m_integrator->Advance();}
             catch(...)

@@ -231,10 +231,54 @@ int main(int argc,char **argv)
             RANSWallMonitor::StopOnBound("{\"bound_activations\":0}");
             auto bad=imported.cp.coupledState;for(int i=patch.offset[patch.K()];i<patch.offset[patch.K()+1];++i)bad[i]=-1.;
             const auto scalar=patch.ScalarDomain(bad,imported.cp.integration.time,data,true);domain=!scalar.admissible;
+            int integrity=0;
+            if(packet.get<std::string>("import_role","")=="PendingNativeV1")
+            {
+                auto reject=[&](auto call){bool failed=false;try{call();}catch(const std::exception &){failed=true;}
+                    Require(failed,"corrupt pending completion was accepted");++integrity;};
+                const auto pin=packet.get_child("native_completion");
+                auto altered=imported.cp;altered.integration.steps++;
+                reject([&]{RANSWallMonitor::PendingCompletion(pin,altered);});
+                altered=imported.cp;altered.integration.time+=imported.dt;
+                reject([&]{RANSWallMonitor::PendingCompletion(pin,altered);});
+                altered=imported.cp;altered.integration.dt*=2;
+                reject([&]{RANSWallMonitor::PendingCompletion(pin,altered);});
+                altered=imported.cp;altered.signature+="wrong configuration";
+                reject([&]{RANSWallMonitor::PendingCompletion(pin,altered);});
+                altered=imported.cp;altered.integration.history.back()[0]+=1.;
+                reject([&]{RANSWallMonitor::PendingCompletion(pin,altered);});
+                const auto temp=std::string(argv[3])+".corruption";std::filesystem::create_directory(temp);
+                auto publishTree=[&](const std::string &name,const Tree &value)
+                {std::ostringstream text;boost::property_tree::write_json(text,value);RANSWallMonitor::Atomic(temp+"/"+name,text.str());
+                 Tree t;t.put("path",temp+"/"+name);t.put("bytes",std::filesystem::file_size(temp+"/"+name));t.put("sha256",RANSWallR3::HashFile(temp+"/"+name));return t;};
+                auto c=RANSWallMonitor::Read(pin.get<std::string>("path"));c.erase("callback");
+                const auto missingPin=publishTree("missing-callback.json",c);
+                reject([&]{RANSWallMonitor::PendingCompletion(missingPin,imported.cp);});
+                c=RANSWallMonitor::Read(pin.get<std::string>("path"));
+                auto cb=RANSWallMonitor::Read(c.get<std::string>("callback.path"));cb.put("alpha_mass",1/imported.dt+1.);
+                cb.put("alpha_bits",RANSWallMonitor::Bits(1/imported.dt+1.));
+                const auto wrongCallback=publishTree("wrong-alpha.json",cb);c.put_child("callback",wrongCallback);
+                c.put("binding.callback_sidecar_sha256",wrongCallback.get<std::string>("sha256"));
+                const auto wrongAlpha=publishTree("wrong-callback-manifest.json",c);
+                reject([&]{RANSWallMonitor::PendingCompletion(wrongAlpha,imported.cp);});
+                auto alteredPin=pin;alteredPin.put("sha256",std::string(64,'0'));
+                reject([&]{RANSWallMonitor::PendingCompletion(alteredPin,imported.cp);});
+                std::ifstream in(imported.cpPath+"/State.bin",std::ios::binary);std::string bytes((std::istreambuf_iterator<char>(in)),{});
+                for(int variant=0;variant<2;++variant)
+                {
+                    auto changed=bytes;if(variant==0)changed.resize(changed.size()-7);else changed[changed.size()/2]^=1;
+                    const auto directory=temp+"/state-"+std::to_string(variant);std::filesystem::create_directory(directory);
+                    RANSWallMonitor::Atomic(directory+"/State.bin",changed);
+                    reject([&]{RANSWallTimeIntegration::ReadCheckpoint(directory,imported.cp.signature,1,imported.dt,patch.Size(),patch.DifferentialSize());});
+                }
+                auto qualified=packet;qualified.put("import_role","QualifiedV1");qualified.erase("qualified_cursor");
+                reject([&]{ImportOpenState(patch,serial,us,qualified,data);});
+            }
+            if(auto qualified=packet.get_child_optional("qualified_anchor"))ImportOpenState(patch,serial,us,*qualified,data);
             Require(bound && domain && patch.CompleteWJCalls()==before,"off-cadence native guards were lost or called complete audit");
             std::ofstream out(argv[3]);out<<J::Object({{"status",J::Quote("PASS")},{"stop_on_bound",J::Boolean(bound)},
                 {"scalar_domain_rejected",J::Boolean(domain)},{"domain_failure",J::Quote(scalar.failure)},
-                {"full_audit_calls",J::Number(patch.CompleteWJCalls()-before)},{"initialization_work",J::Numbers(patch.InitializationWork())},
+                {"pending_integrity_rejections",J::Number(integrity)},{"full_audit_calls",J::Number(patch.CompleteWJCalls()-before)},{"initialization_work",J::Numbers(patch.InitializationWork())},
                 {"governing_solves","0"},{"import_role",J::Quote(packet.get<std::string>("import_role","QualifiedV1"))}})<<'\n';return 0;
         }
         if(operation=="open_checks")

@@ -177,12 +177,13 @@ class FactorCatalog
 {
     struct Entry {std::string key,id;};
     std::list<Entry> entries;std::size_t bytes=0;
-    std::string directory,signature;std::uint64_t calls=0,definitions=0,evictions=0;
+    std::string directory,signature;bool recording=true;std::uint64_t calls=0,definitions=0,evictions=0;
 public:
-    bool Enabled()const{return !directory.empty();}
+    bool Enabled()const{return !directory.empty() && recording;}
+    void Recording(bool value){recording=value;}
     const std::string &Directory()const{return directory;}
     void Configure(const std::string &p,const std::string &s)
-    {D::Check(!Enabled(),"factor catalog configured twice");directory=p;signature=s;std::filesystem::create_directories(p);}
+    {D::Check(directory.empty(),"factor catalog configured twice");directory=p;signature=s;std::filesystem::create_directories(p);}
     void Record(const std::string &pattern,const std::string &metadata)
     {
         const std::string key=signature+pattern;auto it=std::find_if(entries.begin(),entries.end(),[&](const Entry &e){return e.key==key;});std::string id;
