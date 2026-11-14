@@ -411,7 +411,7 @@ std::string RANSWallEvolutionPatch::MixedSpaceRankPacket(const Vector &state,dou
 std::string RANSWallEvolutionPatch::OpenFrozenSystemsPacket(const Vector &state,double time,
     const RANSWallEvolutionData &data) const
 {
-    Require(OpenBoundary() && Size()<500,"open frozen-system export requires a small verification fixture");
+    Require(OpenBoundary() && Size()<=1000,"open frozen-system export requires an at-most1000-slot verification fixture");
     auto external=ExternalConstraints(time,data);
     // Match the governing one-sweep corner precedence: the dependent trace
     // is an epsilon row, including its compatible inlet corner.

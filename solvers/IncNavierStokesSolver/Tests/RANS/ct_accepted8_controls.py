@@ -41,7 +41,8 @@ def main():
         reason=wrong['failure']+(dest/'solver.log').read_text()[-1000:];require(e['exit_code']!=0 and 'signature' in reason.lower(),'stale fit history wrong rejection')
         result['checks']['stale_boundary_history']=dict(status='pass',reason=reason)
         dest,shifted,e=evolve('pressure_level',change=lambda r:set_parameter(r,'RANSOpenPressureLevel',.125));require(e['exit_code']==0,'pressure offset evolution rejected')
-        ini,pe=probe(a.runtime,folder,request(c,True,tensor=False),'operator');require(pe['exit_code']==0,'operator fixture unavailable');binding(ini,c)
+        req=request(c);req['export_resolution']=True
+        ini,pe=probe(a.runtime,folder,req,'operator');require(pe['exit_code']==0,'operator fixture unavailable');binding(ini,c)
         off=ini['observation']['offsets'];expected=np.zeros(len(full['state']))
         for q in ini['observation']['pressure_mass']:
             row=q['pressure'];expected[np.array(row['ids'],int)+off[4+q['region']]]=.125*np.asarray(row['constant'])
