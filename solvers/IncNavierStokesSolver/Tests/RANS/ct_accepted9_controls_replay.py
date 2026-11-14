@@ -2,18 +2,22 @@
 # SPDX-License-Identifier: MIT
 """Recompute saved CT9 operator controls after a collector key correction.
 
-No native operation or trajectory is rerun. The original failed receipt stays
-sealed; complete native packets and all history identities are bound first.
+No existing native operation or trajectory is rerun. A new, explicitly shifted
+absolute-pressure control is added. The original failed receipt stays sealed;
+complete native packets and all history identities are bound first.
 """
-import argparse,os
+import argparse,os,xml.etree.ElementTree as ET
 from pathlib import Path
 from rans_qualification import THREADS
 os.environ.update(THREADS)
 from ct_accepted9_controls import compare_packets
+from ct_accepted9_controls import enable,maximum
 from ct_accepted9_pressure_run import sealed
 from ct_accepted7_top import classify
 import ct_accepted8_native as n
-from ct_accepted_open import require
+from ct_accepted_open import require,run
+from run_cls_epawf_picard import set_parameter,write
+import numpy as np
 from compare_cls_epawf_pimple import same_history
 from ct_accepted_feasibility import write_json
 from rans_request_manifest import RequestManifest,sha,runtime_identity
@@ -40,5 +44,14 @@ def main():
     full,continued,one,rejected,dense=[n.read(a.source/f/'case.evolution.json') for f in ('full','continued','one','rollback','dense-full')]
     require(same_history(full,continued) and same_history(one,rejected) and same_history(dense,n.read(a.ct8/'controls-v2/full/case.evolution.json')),'actual history/rollback/default-dense equality failed')
     result['checks']['restart_rollback_backend_identity']=history
-    result['status']='pass' if len(result['checks'])==5 and all(v['status']=='pass' for v in result['checks'].values()) else 'fail';write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return 0 if result['status']=='pass' else 1
+    try:
+        c=request['case'];c.update(degree=3,pressure_degree=1);dest=a.output/'pressure-offset';n.make(dest,a.runtime,c,1e-6,2);enable(dest);root=ET.parse(dest/'case.xml').getroot();set_parameter(root,'RANSOpenPressureLevel',.125);write(root,dest/'case.xml')
+        execution=run([a.runtime/'IncNavierStokesSolver','case.xml'],dest,'solver.log');shifted=n.read(dest/'case.evolution.json');require(execution['exit_code']==0 and not shifted['failure'],'shifted sparse pressure-level control rejected')
+        packet=n.read(a.source/'displaced-p3-sparse/operator.json');off=packet['observation']['offsets'];expected=np.zeros(len(full['state']))
+        for q in packet['observation']['pressure_mass']:
+            row=q['pressure'];expected[np.asarray(row['ids'],int)+off[4+q['region']]]=.125*np.asarray(row['constant'])
+        error=maximum(np.asarray(shifted['state'])-full['state']-expected);require(error<2e-10,'absolute traction/pressure offset changed sparse physical fields')
+        result['checks']['absolute_pressure_level']=dict(status='pass',shift=.125,maximum_coefficient_defect=error,native_report_sha256=sha(dest/'case.evolution.json'),execution=execution,scope='one new two-tiny-step pressure-level control; prior native histories are reused unchanged')
+    except Exception as error:result['checks']['absolute_pressure_level']=dict(status='fail',failure=repr(error))
+    result['status']='pass' if len(result['checks'])==6 and all(v['status']=='pass' for v in result['checks'].values()) else 'fail';write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return 0 if result['status']=='pass' else 1
 if __name__=='__main__':raise SystemExit(main())
