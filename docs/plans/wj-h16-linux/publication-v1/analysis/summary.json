@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "native_completed": 4,
+  "qualified": 4,
+  "new_scientific_progress": 3,
+  "final_union_owner_rows": 17521,
+  "quadrature_rows": 44800,
+  "final_required_points": 11456,
+  "cache": {
+    "extension_seconds": 0.06723362297634594,
+    "extensions": 5,
+    "variable_points": 5,
+    "variable_limit": 512,
+    "evictions": 0,
+    "basis_keys": 756,
+    "matching_rows": 194
+  },
+  "reference_identity": {
+    "qh0": "631caa32a59ff43253f1fcac4effd955eb68b8529d9c28f29e615cf14ca0f077",
+    "fixed_reference": "9e2af3379f05a2ffbadc2cee491aefcab33900674c8b7ca6af380c922399d849",
+    "fixed_defect": "cf3dba7cf72ffc915d727bae7aad2b12c60eff2f1bb077159e9ee95a71268cbd",
+    "physical_signature_sha256": "21ba0fa5200173541f02c1fa0772049796b10f98e971bc3128a9814dad19c50a",
+    "geometry_space_sha256": "ea092a6d0ac130423b83f2761266dcdaea6fdb16d4397d666e6d38bd4f59d1cf",
+    "profile": {
+      "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target-resource-design-v1.json",
+      "bytes": 24397,
+      "sha256": "d07338a01ef7d5f46015dca57b7e49934f3e7637dda2235079ebbda2d8b215f9"
+    },
+    "native_runtime_manifest": {
+      "path": "/home/jay/build/wj-h15-persistent-neutral-20261114/science/runtime-build-v1.json",
+      "bytes": 352164,
+      "sha256": "c7ddfa27a653f1ea05fc9335d017fe1f5f3c1977a769ca28324be6b201f8f80b"
+    },
+    "rule": "H14 all5x5/all owners+fixed physical observations+all retained/native witness1e-6; physical Gauss8 support; current-state recomputation; H15 immutable cache v1"
+  },
+  "clocks": {
+    "horizon": 505.02466521278404,
+    "terminal_window": [
+      447.8483832973273,
+      505.02466521278404
+    ],
+    "dt": 0.0025,
+    "required_steps": 202010
+  },
+  "costs": {
+    "warm_samples": 3,
+    "native_mean_seconds": 83.05638152533334,
+    "observed_native_plus_assessment_mean_seconds": 89.9348845819984,
+    "native_only_conditional_days": 194.1923568510716,
+    "observed_loop_lower_bound_days": 210.27483836122104,
+    "additional_costs": "checkpoint/ready/wait/native commit, startup, strict read, future witness growth not added to inclusive nested timers; no duration admission"
+  },
+  "scope": "finite four-stage support, not unrestricted duration-bounded monitoring; application/experimental drift budgets unresolved"
+}

@@ -1,0 +1,55 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path; from run_wj_h4 import load; r=Path(\"/home/jay/build/wj-h16-repaired-monitor-20261114\"); print((r/\"operations/selected-scientific-imports-v1/command.log\").read_text()); m=load(r.parent/\"wj-h15-persistent-neutral-20261114/publication-v3/remote-heavy-manifest.json\"); print([v for v in m[\"files\"] if \"/science/small/legacy/CP\" in v[\"path\"] and v[\"path\"].endswith(\"/State.bin\")])"
+  ],
+  "phase": "operation",
+  "kind": "passive",
+  "reserved_seconds": 30.0,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 174386,
+        "parent": 174385,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h16.py --root /home/jay/build/wj-h16-repaired-monitor-20261114 --label import-diagnosis-v1 --seconds 30 --phase operation -- python3 -B -c from pathlib import Path; from run_wj_h4 import load; r=Path(\"/home/jay/build/wj-h16-repaired-monitor-20261114\"); print((r/\"operations/selected-scientific-imports-v1/command.log\").read_text()); m=load(r.parent/\"wj-h15-persistent-neutral-20261114/publication-v3/remote-heavy-manifest.json\"); print([v for v in m[\"files\"] if \"/science/small/legacy/CP\" in v[\"path\"] and v[\"path\"].endswith(\"/State.bin\")])"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {},
+  "driver": "757ba085f7024c5c7f4766018dfb2c4db7057888c577900745a6d6796a4cb623",
+  "status": "PASS",
+  "seconds": 0.6449905269982992,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 20680704,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "d3819d7874c27d1ec7c86df13b81c4d9e21d8c483056feae3ab3b9d42fbae9b3"
+}

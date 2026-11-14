@@ -1,0 +1,79 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path; import json; r=Path(\"/home/jay/build/wj-h16-repaired-monitor-20261114/science/target/monitor\"); c=r/\"qualified-cursor.json\"; print(\"qualified_cursor\",json.loads(c.read_text())[\"binding\"][\"absolute_step\"] if c.exists() else None); p=r/\"step-1.ready.json\"; v=json.loads(p.read_text()) if p.exists() else None; print(\"H14_callback\",v[\"binding\"][\"callback_history_sha256\"] if v else None); assert not v or v[\"binding\"][\"callback_history_sha256\"]==\"40d7d7178d0ec1cada609e6267ce46b582ba869daf4725e5ed501759e87bed1a\"; print(\"native_tail\",(r.parent/\"native.log\").read_text()[-400:]); print(\"results\",[(p.name,json.loads(p.read_text())[\"status\"])for p in r.glob(\"step-*.ready.result.json\")])"
+  ],
+  "phase": "operation",
+  "kind": "passive",
+  "reserved_seconds": 30.0,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 11,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 174705,
+        "parent": 174377,
+        "threads": 1,
+        "args": "python3 -B -"
+      },
+      {
+        "pid": 174708,
+        "parent": 174707,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h16.py --root /home/jay/build/wj-h16-repaired-monitor-20261114 --mode target"
+      },
+      {
+        "pid": 174710,
+        "parent": 174708,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/wj_h16_observer.py --root /home/jay/build/wj-h16-repaired-monitor-20261114 --mode daemon --intent /home/jay/build/wj-h16-repaired-monitor-20261114/science/target/intent.json --compat /home/jay/build/wj-h16-repaired-monitor-20261114/science/target-cache-compatibility.json --behavior PASS"
+      },
+      {
+        "pid": 174714,
+        "parent": 174713,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 9 --singleton-died-pipe 10 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 175027,
+        "parent": 175026,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h16.py --root /home/jay/build/wj-h16-repaired-monitor-20261114 --label target-protocol-status-v3 --seconds 30 --phase operation -- python3 -B -c from pathlib import Path; import json; r=Path(\"/home/jay/build/wj-h16-repaired-monitor-20261114/science/target/monitor\"); c=r/\"qualified-cursor.json\"; print(\"qualified_cursor\",json.loads(c.read_text())[\"binding\"][\"absolute_step\"] if c.exists() else None); p=r/\"step-1.ready.json\"; v=json.loads(p.read_text()) if p.exists() else None; print(\"H14_callback\",v[\"binding\"][\"callback_history_sha256\"] if v else None); assert not v or v[\"binding\"][\"callback_history_sha256\"]==\"40d7d7178d0ec1cada609e6267ce46b582ba869daf4725e5ed501759e87bed1a\"; print(\"native_tail\",(r.parent/\"native.log\").read_text()[-400:]); print(\"results\",[(p.name,json.loads(p.read_text())[\"status\"])for p in r.glob(\"step-*.ready.result.json\")])"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {},
+  "driver": "757ba085f7024c5c7f4766018dfb2c4db7057888c577900745a6d6796a4cb623",
+  "status": "PASS",
+  "seconds": 0.6541117779997876,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 20496384,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "df404f866f567a2f1767421a8d867dff90583ad262fa87efcaf20dae2330b788"
+}

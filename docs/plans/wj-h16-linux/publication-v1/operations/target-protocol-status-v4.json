@@ -1,0 +1,79 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path; import json; r=Path(\"/home/jay/build/wj-h16-repaired-monitor-20261114/science/target/monitor\"); c=r/\"qualified-cursor.json\"; print(\"qualified_cursor\",json.loads(c.read_text())[\"binding\"][\"absolute_step\"] if c.exists() else None); print(\"completed\",[(p.name,json.loads(p.read_text())[\"status\"],json.loads(p.read_text())[\"native_compute_seconds\"],json.loads(p.read_text())[\"summary\"][\"min_in_plane\"])for p in r.glob(\"step-*.ready.result.json\")]); print(\"outcome\",(r.parent/\"target-outcome.json\").read_text()if(r.parent/\"target-outcome.json\").exists()else None)"
+  ],
+  "phase": "operation",
+  "kind": "passive",
+  "reserved_seconds": 30.0,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 11,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 174705,
+        "parent": 174377,
+        "threads": 1,
+        "args": "python3 -B -"
+      },
+      {
+        "pid": 174708,
+        "parent": 174707,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h16.py --root /home/jay/build/wj-h16-repaired-monitor-20261114 --mode target"
+      },
+      {
+        "pid": 174710,
+        "parent": 174708,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/wj_h16_observer.py --root /home/jay/build/wj-h16-repaired-monitor-20261114 --mode daemon --intent /home/jay/build/wj-h16-repaired-monitor-20261114/science/target/intent.json --compat /home/jay/build/wj-h16-repaired-monitor-20261114/science/target-cache-compatibility.json --behavior PASS"
+      },
+      {
+        "pid": 174714,
+        "parent": 174713,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 9 --singleton-died-pipe 10 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 175285,
+        "parent": 175284,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h16.py --root /home/jay/build/wj-h16-repaired-monitor-20261114 --label target-protocol-status-v4 --seconds 30 --phase operation -- python3 -B -c from pathlib import Path; import json; r=Path(\"/home/jay/build/wj-h16-repaired-monitor-20261114/science/target/monitor\"); c=r/\"qualified-cursor.json\"; print(\"qualified_cursor\",json.loads(c.read_text())[\"binding\"][\"absolute_step\"] if c.exists() else None); print(\"completed\",[(p.name,json.loads(p.read_text())[\"status\"],json.loads(p.read_text())[\"native_compute_seconds\"],json.loads(p.read_text())[\"summary\"][\"min_in_plane\"])for p in r.glob(\"step-*.ready.result.json\")]); print(\"outcome\",(r.parent/\"target-outcome.json\").read_text()if(r.parent/\"target-outcome.json\").exists()else None)"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {},
+  "driver": "757ba085f7024c5c7f4766018dfb2c4db7057888c577900745a6d6796a4cb623",
+  "status": "PASS",
+  "seconds": 0.6448373659950448,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 20983808,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "fed691d6593aeef37a4c00b00db3d3a1a5e2fb63216bd89368ac7d6ed60079d5"
+}

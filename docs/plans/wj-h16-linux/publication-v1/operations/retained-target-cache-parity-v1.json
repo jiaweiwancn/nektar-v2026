@@ -1,0 +1,63 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/wj_h16_observer.py",
+    "--root",
+    "/home/jay/build/wj-h16-repaired-monitor-20261114",
+    "--mode",
+    "parity"
+  ],
+  "phase": "qualification",
+  "kind": "passive",
+  "reserved_seconds": 120.0,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 174215,
+        "parent": 174135,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h16.py --root /home/jay/build/wj-h16-repaired-monitor-20261114 --label retained-target-cache-parity-v1 --seconds 120 --phase qualification -- python3 -B /home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/wj_h16_observer.py --root /home/jay/build/wj-h16-repaired-monitor-20261114 --mode parity"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/wj_h16_observer.py": {
+      "sha256": "dded86813b60b4bbf3cb9a8cdbeec220b30ca4781ac91a04535a62a2a8263bfe",
+      "bytes": 6909
+    }
+  },
+  "driver": "757ba085f7024c5c7f4766018dfb2c4db7057888c577900745a6d6796a4cb623",
+  "status": "PASS",
+  "seconds": 18.344973301005666,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 1058193408,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "013c3c24c87539cb5901ebdad5137a8ef95d4bbba552aa672b2d6929ca55866b"
+}

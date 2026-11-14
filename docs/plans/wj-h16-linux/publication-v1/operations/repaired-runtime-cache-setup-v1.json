@@ -1,0 +1,63 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h16.py",
+    "--root",
+    "/home/jay/build/wj-h16-repaired-monitor-20261114",
+    "--mode",
+    "setup"
+  ],
+  "phase": "qualification",
+  "kind": "passive",
+  "reserved_seconds": 90.0,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 174136,
+        "parent": 174135,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h16.py --root /home/jay/build/wj-h16-repaired-monitor-20261114 --label repaired-runtime-cache-setup-v1 --seconds 90 --phase qualification -- python3 -B /home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h16.py --root /home/jay/build/wj-h16-repaired-monitor-20261114 --mode setup"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h16-repaired-monitor-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h16.py": {
+      "sha256": "d524dc8eab56ace1b5f052a45e1052cf36b3ac0f7d7251a161c7f3a68620d3da",
+      "bytes": 18739
+    }
+  },
+  "driver": "757ba085f7024c5c7f4766018dfb2c4db7057888c577900745a6d6796a4cb623",
+  "status": "PASS",
+  "seconds": 1.9456189530028496,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 123691008,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "c291f16d1f6904a4f9d9027d20fef075657a02c3251454aca0a1a400e3640b80"
+}

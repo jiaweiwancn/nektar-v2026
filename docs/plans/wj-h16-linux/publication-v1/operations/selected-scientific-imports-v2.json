@@ -1,0 +1,60 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nfrom run_wj_h4 import load\nfrom wj_h15_observer import verify,identity,atomic,H14\nfrom wj3_measure import checkpoint_payload\nfrom wj_h4_points import vector_hash\nr=Path('/home/jay/build/wj-h16-repaired-monitor-20261114');old=r.parent/'wj-h15-persistent-neutral-20261114';selected=[];steps=[]\nfor v in load(old/'publication-v3/remote-heavy-manifest.json')['files']:\n if '/science/small/legacy/CP'in v['path']and v['path'].endswith('/State.bin'):\n  verify(v);selected.append(v);steps.append(checkpoint_payload(Path(v['path']).parent)['steps'])\nassert set(steps)=={1,2}  # final legacy write duplicates step2 under another generation\nfor v in load(H14/'publication-v2/state-bindings.json')['states']:\n for k in ('producer','checkpoint','xml'):verify(v[k]);selected.append(v[k])\n cp=checkpoint_payload(Path(v['checkpoint']['path']).parent,include_reference=True);p=load(v['producer']['path'])\n for k in ('state','fixed_reference','fixed_defect'):assert vector_hash(cp[k])==vector_hash(p[k])\n assert cp['native_history_times']==p['native_history_times']and all(vector_hash(a)==vector_hash(b)for a,b in zip(cp['native_history'],p['native_history']))\natomic(r/'science/scientific-imports-v2.json',dict(status='PASS',selected=selected,legacy_serialized_steps=steps,legacy_no_replay=True,H14_original_inputs=True,passive_v1_failure='incorrect expected number of checkpoint generations; no native work'))\n"
+  ],
+  "phase": "qualification",
+  "kind": "passive",
+  "reserved_seconds": 60,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 174394,
+        "parent": 174377,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    }
+  },
+  "driver": "757ba085f7024c5c7f4766018dfb2c4db7057888c577900745a6d6796a4cb623",
+  "status": "PASS",
+  "seconds": 2.6932010619930224,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 356933632,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "c2e69334e3192988f61f1bb0e010f3d62e4811c20993982184d9dc82fb043f50"
+}
