@@ -25,7 +25,7 @@ def tensor_fixture():
         r['offsets'].append(len(state));fm=[];local=0;p=1 if b>=4 else 3
         for e in mesh:
             inner=e['upper'][2]<=c.H
-            if b==3and inner or b==4and not inner or b==5and inner:continue
+            if b==3 and inner or b==4 and not inner or b==5 and inner:continue
             n=(p+1)**2;v=np.zeros((p+1,p+1));sign=np.ones(n);sign[2::5]=-1
             for j,rho in enumerate((e['lower'][2],e['upper'][2])):
                 value=.01*rho if b==0 else c.K if b==2 else .001 if b==3 else 0.

@@ -125,18 +125,18 @@ def small(root):
         assert r['initialization_work']==[0,0]and r['initializer_calls']==0
         if expected:
             end=checkpoint_payload(r['last_qualified_checkpoint'],include_reference=True)
-            assert r['steps']==2and r['independently_qualified']==(2 if name=='pass'else 1)
+            assert r['steps']==2 and r['independently_qualified']==(2 if name=='pass'else 1)
             for k in ('state','fixed_reference','fixed_defect'):assert vector_hash(end[k])==vector_hash(legacy[k]),k
             assert all(vector_hash(a)==vector_hash(b)for a,b in zip(end['native_history'],legacy['native_history']))and end['native_history_times']==legacy['native_history_times']
         elif name in ('observer-fail','timeout','stale'):
-            assert r['native_completed']==1and r['independently_qualified']==0and r['steps']==1
+            assert r['native_completed']==1 and r['independently_qualified']==0 and r['steps']==1
             assert Path(r['last_qualified_checkpoint'])==cp and Path(r['last_completed_checkpoint'])!=cp
             assert not(out/name/'monitor/step-2.ready.json').exists()and not(out/name/'monitor/step-1.qualification-commit.json').exists()
         else:
-            assert r['steps']==0and r['native_completed']==0and r['aborted_advances']==1
+            assert r['steps']==0 and r['native_completed']==0 and r['aborted_advances']==1
             aborted=load(out/name/'monitor/first-aborted.json');assert aborted['status']=='ABORTED_NOT_COMPLETED'
             assert not(out/name/'monitor/step-1.ready.json').exists()
-        assert r['resident_accepted_states']<=2and r['resident_wj_packets']<=2and r['resident_pimple_records']<=1and r['factor_catalog']['resident_definitions']<=16
+        assert r['resident_accepted_states']<=2 and r['resident_wj_packets']<=2 and r['resident_pimple_records']<=1 and r['factor_catalog']['resident_definitions']<=16
         records.append(dict(case=name,native_exit=code,summary=identity(out/name/'case.evolution.json'),status='PASS',native_completed=r['native_completed'],independently_qualified=r['independently_qualified'],failure=r['failure']))
     atomic(out/'qualification.json',dict(status='PASS',small_attempts=10,records=records,legacy_final=identity(out/'legacy/case.evolution.json')))
     print('small native/protocol/restart/rollback qualification PASS',flush=True)
