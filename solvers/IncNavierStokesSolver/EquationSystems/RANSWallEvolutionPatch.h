@@ -66,6 +66,8 @@ class RANSWallEvolutionPatch
 public:
     using Vector=RANSWallAlgebra::Vector;
     using WallMatrix=RANSWallAlgebra::DenseMatrix;
+    using SparseMatrix=RANSWallAlgebra::SparseMatrix;
+    bool SerialSparse() const { return m_linearBackend=="AcceptedSerialSparseV1"; }
     using Diagnostic=std::map<std::string,Vector>;
     class EvaluationScope
     {
@@ -82,6 +84,7 @@ public:
     // overrides, allowing the very same coefficient state to be integrated
     // at several orders; it includes physics, mesh, spaces and native maps.
     std::string InitializationReceipt(const Vector&,const Vector&,double,const RANSWallEvolutionData&,const RANSWallEvolutionData&,const std::map<int,double>&) const;
+    std::string SparseBackendPacket(const Vector&,double,const RANSWallEvolutionData&,double alpha) const;
     // Read-only accuracy monitor. Cached rows/targets depend only on this
     // immutable space and the stored neutral reference, never on validity.
     Vector NeutralAccuracy(const Vector&,double,const RANSWallEvolutionData&) const;
@@ -415,17 +418,26 @@ private:
     {
     public:
         explicit Factor(const WallMatrix &matrix);
+        explicit Factor(const SparseMatrix &matrix,bool mass=false);
         Vector Apply(Vector rhs,bool transpose=false) const;
     private:
         int n;
         Vector lu;
         std::vector<int> pivots;
+        std::shared_ptr<RANSWallAlgebra::SparseFactor> sparse;
     };
     struct PicardBlock
     {
         std::vector<int> rows;
         WallMatrix matrix;
+        SparseMatrix csr;
+        bool sparse=false;
         Vector residual;
+        double &Entry(int i,int j) { return sparse?csr.Entry(i,j):matrix[i][j]; }
+        double Get(int i,int j) const { return sparse?csr.Get(i,j):matrix[i][j]; }
+        Vector Apply(const Vector &x) const { return sparse?csr.Apply(x):RANSWallAlgebra::Multiply(matrix,x); }
+        WallMatrix ExportDense() const { return sparse?csr.DenseForVerification():matrix; }
+        void ClearRow(int i) { if(sparse)csr.ClearRow(i);else std::fill(matrix[i].begin(),matrix[i].end(),0.); }
     };
     struct PicardFlowResult
     {
@@ -439,6 +451,15 @@ private:
         const std::map<int,double> &external) const;
     Vector SolvePimpleSingleSweep(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations) const;
+    struct SparseFlowResult
+    {
+        SparseMatrix a,m,g,d,c;
+        Vector predictor,dz,bGz,Gz,du,defect,identity,constraints,predictorDefect,pressureDefect;
+        int massApplications=0,iterations=0;
+        std::size_t predictorFill=0,massFill=0,preconditionerFill=0;
+    };
+    SparseFlowResult SparseFlowCorrection(const PicardBlock &,int nv,double alpha,
+        const std::function<void(const std::string&)> &event={}) const;
     struct NonKResponse
     {
         bool converged=false;
@@ -593,6 +614,9 @@ private:
     std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> Profile(double k,const RANSWallCoordinate &chart={},double weight=-1) const;
     RANSWallGlobalPoint Transform(RANSWallGlobalPoint point) const;
     WallMatrix PhysicalMass(int block,int region=-1) const;
+    SparseMatrix SparsePhysicalMass(int block,int region=-1) const;
+    Vector MassApply(int block,const Vector&,int region=-1) const;
+    double MassEntry(int block,int i,int j) const;
     Vector PhysicalProject(int block,const RANSWallEvolutionFunction &function,double time) const;
     void Refresh(const Vector &state,double time=0,const RANSWallEvolutionData *data=nullptr) const;
     Vector ExternalLift(const Vector &state,double time,const RANSWallEvolutionData &data) const;
@@ -603,6 +627,8 @@ private:
     struct SolverCache;
     int m_dimension;
     LibUtilities::CommSharedPtr m_comm;
+    LibUtilities::SessionReaderSharedPtr m_sparseSession;
+    std::string m_linearBackend="ReplicatedDenseV1";
     RANSWallPatchParameters m_parameters;
     SolverUtils::RANSWallNormalMap m_mapping;
     int m_ownershipShift=0;
@@ -628,6 +654,8 @@ private:
     mutable std::map<std::array<double,3>,ProfilePair> m_profileCache;
     mutable std::map<std::array<double,3>,std::shared_ptr<SolverUtils::EquilibriumAWFProfiles>> m_prospectiveProfileCache;
     std::vector<WallMatrix> m_mass;
+    std::vector<SparseMatrix> m_sparseMass;
+    mutable std::array<SparseMatrix,2> m_regionalSparseMass;
     mutable std::array<WallMatrix,2> m_regionalMass;
     mutable Vector m_boundaryFlux,m_boundaryDirection;
     mutable double m_boundaryCost=0;

@@ -226,11 +226,13 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     for(int block=0;block<InnerPressure();++block)
     {
         Vector delta(size[block]);for(int j=0;j<size[block];++j)delta[j]=s[offset[block]+j]-history[offset[block]+j];
-        const auto baseline=Multiply(m_mass[block],delta);
+        const auto baseline=MassApply(block,delta);
         for(int i=0;i<size[block];++i)
         {
             long double wide=0,wideDelta=0;
-            for(int j=0;j<size[block];++j)
+            if(SerialSparse())m_sparseMass[block].Each(i,[&](int j,double value)
+            {wide+=(long double)value*delta[j];wideDelta+=(long double)value*((long double)s[offset[block]+j]-history[offset[block]+j]);});
+            else for(int j=0;j<size[block];++j)
             {wide+=(long double)m_mass[block][i][j]*delta[j];
              wideDelta+=(long double)m_mass[block][i][j]*((long double)s[offset[block]+j]-history[offset[block]+j]);}
             mass.Add(offset[block]+i,alpha*baseline[i],(long double)alpha*wide);
@@ -323,6 +325,7 @@ RANSWallScalarMassRate RANSWallResolutionMassRate(const RANSWallEvolutionPatch &
     const RANSWallCoordinate &contact,const Vector &boundaryRate)
 {
     Require(block==patch.K() || block==patch.Epsilon(),"contact rate requires a scalar block");
+    Require(!patch.SerialSparse(),"optional semidiscrete contact-rate/research action is not qualified for AcceptedSerialSparseV1");
     const int n=patch.size[block],offset=patch.offset[block];const auto mass=patch.fields[block]->Mass();
     RANSWallScalarMassRate result;result.boundaryRate=boundaryRate.empty()?Vector(n):boundaryRate;
     Require(result.boundaryRate.size()==n,"scalar boundary-rate shape differs");

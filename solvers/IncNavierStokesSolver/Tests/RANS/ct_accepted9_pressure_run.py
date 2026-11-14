@@ -51,7 +51,7 @@ def main():
     row['corrections']=sum(v.get('bound_calls',0) for v in r['pimple_attempts']);row['extra_solves']=sum(v.get('additional_governing_equation_solves',0) for v in r['pimple_attempts']);row['native_audited_extrema']=audited_extrema(r)
     oldrow=copy.deepcopy(old['members']['0.001']);oldrow.update(dt=old_native['dt'],actual_initial_sha256=exact_vector_hash(old_native['accepted_states'][0]),reuse_receipt_sha256=sha(a.ct8/'strip-T008-v1/results.json'))
     result=dict(schema='CT9PhysicalPairV1',required_dt=[.001,.0005],target=.008,case=c,members={'0.001':oldrow,'0.0005':row},same_actual_initial=r['accepted_states'][0]==old_native['accepted_states'][0],temporal={},traction_temporal={},common_time_fields=[],historical_CT8='failed temporal:Pi unchanged')
-    if r['time']==old_native['time']==.008:
+    if abs(r['time']-.008)<1e-13 and abs(old_native['time']-.008)<1e-13:
         end=[n.observations(ini,v,pre['global_count']) for v in (old_native['state'],r['state'])];delta=n.norms(*end,pre['weights'],ini['observation']['grid_regions'][:pre['global_count']],c)
         for f,v in delta.items():
             drift=max(x['accepted_metrics'][-1]['drift'][f]['scaled'] for x in result['members'].values());result['temporal'][f]=dict(difference=v,measured_drift=drift,limit=max(1e-7,.1*drift))

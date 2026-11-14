@@ -841,7 +841,9 @@ int main(int argc,char **argv)
         const auto stateCopy=state;
         const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid,sides,
             request.get<bool>("export_ct6_primitives",false));
-        std::string resolution="null",testBasis="null",constitutive="null";
+        std::string resolution="null",testBasis="null",constitutive="null",sparseBackend="null";
+        if(request.get<bool>("export_sparse_backend",false))
+            sparseBackend=patch.SparseBackendPacket(state,time,data,request.get<double>("sparse_alpha",500.));
         if(request.get<bool>("export_constitutive",false))
         {
             std::vector<std::string> rows;
@@ -876,7 +878,8 @@ int main(int argc,char **argv)
             std::vector<std::pair<std::string,std::string>> local;
             for(const auto &[key,terms]:r.elementTerms)local.push_back({key,Maps(terms)});
             std::vector<std::string> masses;
-            for(int b=0;b<patch.Gauge();++b)masses.push_back(J::Rows(patch.fields[b]->Mass()));
+            if(!patch.SerialSparse() || patch.Size()<=1000)
+                for(int b=0;b<patch.Gauge();++b)masses.push_back(J::Rows(patch.SerialSparse()?patch.fields[b]->SparseMass().DenseForVerification():patch.fields[b]->Mass()));
             std::vector<std::string> keys;for(const auto &key:RANSWallResolutionSpatialTerms())keys.push_back(J::Quote(key));
             std::set<double> cuts;for(const auto &e:patch.fields[0]->Elements())
             {cuts.insert(e.lower[2]);cuts.insert(e.upper[2]);}
@@ -934,6 +937,7 @@ int main(int argc,char **argv)
                     {"test",Row(q)}}));
             }
             resolution=J::Object({{"schema",J::Quote("ModelAwareSpatialResolutionV1")},
+                {"mass_storage",J::Quote(patch.SerialSparse() && patch.Size()>1000?"CSR; optional dense mass export omitted above1000 slots":"dense small-fixture verification")},
                 {"terms",Maps(r.terms)},{"native",Maps(r.native)},{"norms",Maps(r.norms)},
                 {"constraints",J::Constraints(r.constraints)},{"effective_state",J::Numbers(r.effectiveState)},
                 {"physical_term_names",J::List(keys)},{"element_terms",J::Object(local)},
@@ -1032,6 +1036,7 @@ int main(int argc,char **argv)
             {"initialization_receipt",receipt},{"reference",J::Numbers(reference)},{"fixed_boundary",J::Constraints(data.fixedBoundary)},
             {"elapsed_seconds",J::Number(elapsed)},{"observation",observation},
             {"resolution",resolution},{"test_basis",testBasis},{"native_constitutive",constitutive},{"physical_scalar_budget",physicalBudget},
+            {"sparse_backend",sparseBackend},
             {"tensor_validation",tensorValidation},{"mixed_space",mixedSpace}});
         if(open){output.pop_back();output+=",\"open_boundary\":"+openPacket+",\"open_frozen_systems\":"+openSystems+"}";}
         if(patch.CurvedManufactured())

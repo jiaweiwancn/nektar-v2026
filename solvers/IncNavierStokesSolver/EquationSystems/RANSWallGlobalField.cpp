@@ -138,6 +138,7 @@ RANSWallGlobalField::RANSWallGlobalField(
                                                  std::array<int,3>{0,1,2})
 {
     RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
+    m_serialSparse=session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",false);
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");
     auto subset=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(*full,elements,true);
@@ -348,6 +349,7 @@ std::vector<RANSWallGlobalPoint> RANSWallGlobalField::Quadrature(int order) cons
 }
 RANSWallGlobalField::WallMatrix RANSWallGlobalField::Mass() const
 {
+    Require(!m_serialSparse,"global dense mass is unavailable under AcceptedSerialSparseV1");
     RANSWallTiming::Scope timing("mass.assemble",true,true);
     std::vector<std::vector<long double>> mass(Size(),std::vector<long double>(Size()));
     for(const auto &q:Quadrature())
@@ -356,6 +358,19 @@ RANSWallGlobalField::WallMatrix RANSWallGlobalField::Mass() const
     WallMatrix result(Size(),Vector(Size()));
     for(int i=0;i<Size();++i)for(int j=0;j<Size();++j)result[i][j]=mass[i][j];
     return result;
+}
+RANSWallAlgebra::SparseMatrix RANSWallGlobalField::SparseMass() const
+{
+    RANSWallTiming::Scope timing("sparse.mass_assemble",true,true);
+    // Same physical points, signs and per-entry long-double accumulation as
+    // Mass(), without its global quadratic staging array.
+    std::vector<std::map<int,long double>> wide(Size());
+    for(const auto &q:Quadrature())
+        for(int i=0;i<q.ids.size();++i)for(int j=0;j<q.ids.size();++j)
+            wide[q.ids[i]][q.ids[j]]+=(long double)q.weight*q.phi[i]*q.phi[j];
+    RANSWallAlgebra::SparseMatrix result(Size(),Size());
+    for(int i=0;i<Size();++i)for(auto [j,v]:wide[i])if(v!=0.)result.Entry(i,j)=static_cast<double>(v);
+    result.Finalize();return result;
 }
 RANSWallGlobalField::Vector RANSWallGlobalField::RestrictCoefficients(
     const RANSWallGlobalField &source,const Vector &state,int offset) const
@@ -425,6 +440,22 @@ RANSWallGlobalField::Vector RANSWallGlobalField::Project(const RANSWallFunction 
         }
     }
     for(int j=0;j<Size();++j){Require(count[j]>0,"unmapped projection coefficient");result[j]/=count[j];}
+    if(m_serialSparse)
+    {
+        const auto mass=SparseMass();const RANSWallAlgebra::SparseFactor factor(mass,true);
+        for(int iteration=0;iteration<3;++iteration)
+        {
+            std::vector<long double> load(Size());
+            for(const auto &q:quadrature)
+            {
+                const double defect=Sample(function,q.coordinate)-q.Value(result);
+                for(int j=0;j<q.ids.size();++j)load[q.ids[j]]+=(long double)q.weight*q.phi[j]*defect;
+            }
+            const auto correction=factor.Apply(Vector(load.begin(),load.end()));
+            for(int j=0;j<Size();++j)result[j]+=correction[j];
+        }
+        return result;
+    }
     const auto mass=Mass();
     for(int iteration=0;iteration<3;++iteration)
     {
@@ -606,6 +637,7 @@ RANSWallGlobalField::Vector RANSWallGlobalField::RadialProject(
             injection[id]=radialId;sign[id]=orientation;
         }
     }
+    Require(!m_serialSparse || n+constraints.size()<=2048,"bounded sparse-route radial projection dimension exceeded");
     WallMatrix mass(n,Vector(n));std::vector<long double> load(n);bool constant=true,firstSample=true;double value=0;
     auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(32,LibUtilities::eGaussGaussLegendre)];
     const auto gauss=rule->GetZ(),weights=rule->GetW();

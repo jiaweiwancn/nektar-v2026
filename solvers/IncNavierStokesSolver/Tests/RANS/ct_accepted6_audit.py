@@ -58,8 +58,18 @@ def budget(packet,model):
 def captured_k_matrix(packet,snapshot):
     path=Path(snapshot['matrix_file']);require(sha(path)==snapshot['matrix_sha256'],'changed captured governing k matrix')
     rows=np.asarray(snapshot['transport_rows'],int);n=len(rows)
-    A=np.fromfile(path,dtype=np.float64);require(A.size==n*n,'captured governing k matrix shape mismatch')
-    A=A.reshape(n,n);delta=np.asarray(snapshot['raw_increment']);r=np.asarray(snapshot['transport_residual'])
+    if snapshot.get('matrix_encoding','').startswith('RANSCSR1'):
+        from scipy.sparse import csr_matrix
+        with path.open('rb') as stream:
+            require(stream.read(8)==b'RANSCSR1','captured CSR magic mismatch')
+            shape=np.fromfile(stream,dtype='<u8',count=3);require(len(shape)==3 and tuple(shape[:2])==(n,n),'captured CSR dimensions')
+            nz=int(shape[2]);ptr=np.fromfile(stream,dtype='<u8',count=n+1);ids=np.fromfile(stream,dtype='<u4',count=nz);values=np.fromfile(stream,dtype='<f8',count=nz)
+            require(len(ptr)==n+1 and len(ids)==len(values)==nz and ptr[0]==0 and ptr[-1]==nz and np.all(ptr[1:]>=ptr[:-1]) and np.all(ids<n) and np.all(np.isfinite(values)) and not stream.read(1),'invalid captured CSR data')
+        A=csr_matrix((values,ids,ptr),shape=(n,n))
+    else:
+        A=np.fromfile(path,dtype=np.float64);require(A.size==n*n,'captured governing k matrix shape mismatch')
+        A=A.reshape(n,n)
+    delta=np.asarray(snapshot['raw_increment']);r=np.asarray(snapshot['transport_residual'])
     require(delta.shape==r.shape==(n,),'captured governing k vector shape mismatch')
     expected=r+A@delta
     raw=np.asarray(packet['physical_scalar_budget']['reconciliation']['assembled']['k']['native_raw_frozen_load'])

@@ -7,6 +7,12 @@ IF (NOT NEKTAR_BUILD_SOLVERS)
 ENDIF()
 
 IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
+    OPTION(NEKTAR_RANS_SERIAL_SPARSE "Enable the guarded serial Accepted sparse backend" OFF)
+    IF(NEKTAR_RANS_SERIAL_SPARSE)
+        FIND_PACKAGE(Eigen3 3.3 REQUIRED NO_MODULE)
+        INCLUDE_DIRECTORIES(SYSTEM ${EIGEN3_INCLUDE_DIRS})
+        ADD_DEFINITIONS(-DNEKTAR_RANS_HAVE_EIGEN_SPARSE)
+    ENDIF()
     ADD_SOLVER_EXECUTABLE(IncNavierStokesSolver
         SOURCES ./IncNavierStokesSolver.cpp
         LIBRARY_SOURCES
@@ -26,6 +32,8 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSWallInterface.cpp
         ./EquationSystems/RANSEquilibriumWallSystem.cpp
         ./EquationSystems/RANSWallGlobalField.cpp
+        ./EquationSystems/RANSWallSerialSparse.cpp
+        ./EquationSystems/RANSWallEvolutionSparse.cpp
         ./EquationSystems/RANSWallEvolutionPatch.cpp
         ./EquationSystems/RANSWallEvolutionOpenBoundary.cpp
     ./EquationSystems/RANSWallManufactured.cpp

@@ -7,6 +7,7 @@
 
 #include <IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallNumericalOperator.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSerialSparse.h>
 #include <algorithm>
 #include <array>
 #include <functional>
@@ -88,6 +89,8 @@ public:
     std::array<Vector,3> RadialGradientDerivative(const RANSWallGlobalPoint &point) const;
     std::vector<RANSWallGlobalPoint> Quadrature(int order=0) const;
     WallMatrix Mass() const;
+    RANSWallAlgebra::SparseMatrix SparseMass() const;
+    bool UsesSparseMass() const { return m_serialSparse; }
     Vector Project(const RANSWallFunction &function) const;
     /** Exact signed native coefficient restriction to the same geometries and
      * basis, avoiding a coordinate search/reprojection during field export. */
@@ -120,6 +123,7 @@ private:
     struct BasisData;
     MultiRegions::ContFieldSharedPtr m_field;
     int m_dimension;
+    bool m_serialSparse=false;
     std::array<int,3> m_axes{};
     std::vector<Element> m_elements;
     std::vector<std::array<std::shared_ptr<BasisData>,3>> m_elementBasis;

@@ -337,10 +337,14 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
             }
             count[group]=ids.size();
             if(ids.empty())continue;
-            WallMatrix mass(ids.size(),Vector(ids.size()));
-            for(int i=0;i<ids.size();++i)for(int j=0;j<ids.size();++j)
-                mass[i][j]=m_mass[K()][ids[i]][ids[j]];
-            const auto inverse=Factor(mass).Apply(load);
+            Vector inverse;
+            if(SerialSparse())inverse=RANSWallAlgebra::SparseFactor(m_sparseMass[K()].Restrict(ids),true).Apply(load);
+            else
+            {
+                WallMatrix mass(ids.size(),Vector(ids.size()));
+                for(int i=0;i<ids.size();++i)for(int j=0;j<ids.size();++j)mass[i][j]=m_mass[K()][ids[i]][ids[j]];
+                inverse=Factor(mass).Apply(load);
+            }
             long double square=0;for(int i=0;i<load.size();++i)square+=(long double)load[i]*inverse[i];
             dual[group]=std::sqrt(std::max(0.L,square))/(K0*ustar/m_parameters.geometry.height*std::sqrt(m_volumes[K()]));
         }
@@ -504,6 +508,7 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
         }
     }
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
+    if(SerialSparse())out<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(CurvedVerification())out<<":curved="<<CurvedCapabilityName()<<":"<<m_mapping.Signature()<<":CT6-conservative-v1";
     if(OpenBoundary())
     {

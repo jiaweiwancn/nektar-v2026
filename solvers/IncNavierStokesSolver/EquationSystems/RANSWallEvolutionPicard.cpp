@@ -37,6 +37,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PicardKMass(
     const std::vector<int> &rows) const
 {
     const int first = offset[K()];
+    Require(!SerialSparse(),"dense k-action/bound research mass unsupported on serial sparse backend");
     WallMatrix mass(rows.size(), Vector(rows.size()));
     for (int i = 0; i < rows.size(); ++i)
         for (int j = 0; j < rows.size(); ++j)
@@ -80,7 +81,8 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
         }
     }
     const auto n = system.rows.size();
-    system.matrix.assign(n, Vector(n));
+    system.sparse=SerialSparse();
+    if(system.sparse)system.csr=SparseMatrix(n,n);else system.matrix.assign(n, Vector(n));
     system.residual.assign(n, 0.);
     const auto &model = m_parameters.model.Parameters();
     const double nu   = m_parameters.geometry.molecularNu;
@@ -108,7 +110,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             {
                 const int col = index[offset[block] + point.ids[j]];
                 if (col >= 0)
-                    system.matrix[row][col] +=
+                    system.Entry(row,col) +=
                         weight * ((test * rate - adv) * point.phi[j] +
                                   diffusion * (dx * point.derivative[0][j] +
                                                dz * point.derivative[2][j]));
@@ -222,7 +224,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                                     viscosity * (dx * q.v.derivative[0][j] +
                                                  dz * q.v.derivative[2][j]) -
                                     (dx * u[0] + dz * u[2]) * q.v.phi[j];
-                            system.matrix[row][col] += q.weight * value;
+                            system.Entry(row,col) += q.weight * value;
                         }
                     }
                     if (forcingPressure && (aa == 0 || CurvedVerification()))
@@ -239,7 +241,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                                     auto H=q.v.coordinate;H[2]=m_parameters.geometry.height;const auto normal=m_mapping.At(H).normal;
                                     derivative=fp.derivative[aa][p];for(int axis=0;axis<3;++axis)derivative-=normal[aa]*normal[axis]*fp.derivative[axis][p];
                                 }
-                                system.matrix[row][index[offset[OuterPressure()]+fp.ids[p]]]-=q.weight*q.v.phi[i]*derivative;
+                                system.Entry(row,index[offset[OuterPressure()]+fp.ids[p]])-=q.weight*q.v.phi[i]*derivative;
                             }
                     }
                 }
@@ -249,8 +251,8 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 {
                     const int pressure = index[offset[pBlock] + q.p.ids[p]];
                     const double entry = q.weight * q.p.phi[p] * testDerivative;
-                    system.matrix[row][pressure] -= entry;
-                    system.matrix[pressure][row] += entry;
+                    system.Entry(row,pressure) -= entry;
+                    system.Entry(pressure,row) += entry;
                 }
             }
         }
@@ -307,7 +309,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                     for(int j=0;j<q.ids.size();++j)
                     {
                         const int col=index[offset[b]+q.ids[j]];
-                        if(col>=0)system.matrix[row][col]+=face.weight*q.phi[i]*un*q.phi[j];
+                        if(col>=0)system.Entry(row,col)+=face.weight*q.phi[i]*un*q.phi[j];
                     }
                 }
         }
@@ -319,7 +321,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
         Vector change(size[b]);
         for (int j = 0; j < size[b]; ++j)
             change[j] = s[offset[b] + j] - history[offset[b] + j];
-        const auto storage = Multiply(m_mass[b], change);
+        const auto storage = MassApply(b, change);
         for (int i = 0; i < size[b]; ++i)
         {
             const int row = index[offset[b] + i];
@@ -330,7 +332,12 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 system.residual[row] -= body[offset[b] + i];
             if (m_eta)
                 system.residual[row] -= m_eta * m_defect[offset[b] + i];
-            for (int j = 0; j < size[b]; ++j)
+            if(SerialSparse())m_sparseMass[b].Each(i,[&](int j,double value)
+            {
+                const int col=index[offset[b]+j];
+                if(col>=0)system.Entry(row,col)+=(alpha+m_picardPseudoAlpha)*value;
+            });
+            else for (int j = 0; j < size[b]; ++j)
             {
                 const int col = index[offset[b] + j];
                 if (col >= 0)
@@ -363,12 +370,13 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             const int row = index[offset[block] + id];
             Require(row >= 0,
                     "Picard matching trace overlaps external lifting");
-            std::fill(system.matrix[row].begin(), system.matrix[row].end(), 0.);
-            system.matrix[row][row] = 1.;
+            system.ClearRow(row);
+            system.Entry(row,row) = 1.;
             system.residual[row] =
                 s[offset[block] + id] - (value + trace[1].at(id));
         }
     }
+    if(system.sparse)system.csr.Finalize();
     return system;
 }
 
@@ -381,7 +389,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FrozenScalarWeakLoad(
     const auto native=AssemblePicardBlock(block,frozen,previous,alpha,time,data,{},true);
     Vector delta(native.rows.size());
     for(int j=0;j<delta.size();++j)delta[j]=solved[native.rows[j]]-frozen[native.rows[j]];
-    const auto action=Multiply(native.matrix,delta);auto result=native.residual;
+    const auto action=native.Apply(delta);auto result=native.residual;
     Require(result.size()==size[block],"raw scalar audit lost a native row");
     for(int j=0;j<result.size();++j)result[j]+=action[j];
     return result;
@@ -402,7 +410,7 @@ std::string RANSWallEvolutionPatch::MixedSpaceRankPacket(const Vector &state,dou
             if(row>=offset[b] && row<offset[b+1])constant[j]=m_constants[b][row-offset[b]];
     }
     return J::Object({{"schema",J::Quote("NativeMixedSpaceRankV1")},{"rows",J::Numbers(block.rows)},
-        {"matrix",J::Rows(block.matrix)},{"velocity_size",J::Number(velocity)},
+        {"matrix",J::Rows(block.ExportDense())},{"velocity_size",J::Number(velocity)},
         {"pressure_constant_with_zero_gauge",J::Numbers(constant)},
         {"scope",J::Quote(OpenBoundary()?"actual open constrained matrix, alpha=1; absolute total traction fixes pressure; unused gauge excluded; finite fixture only":
             "actual constrained one-sweep mixed matrix, alpha=1; one common pressure gauge; finite fixture only, not an inf-sup theorem")}});
@@ -421,9 +429,9 @@ std::string RANSWallEvolutionPatch::OpenFrozenSystemsPacket(const Vector &state,
     {
         const auto s=AssemblePicardBlock(b,state,state,1.,time,data,external);
         blocks.push_back(J::Object({{"block",J::Number(b)},{"rows",J::Numbers(s.rows)},
-            {"matrix",J::Rows(s.matrix)},{"residual",J::Numbers(s.residual)}}));
+            {"matrix",J::Rows(s.ExportDense())},{"residual",J::Numbers(s.residual)}}));
     }
-    for(int b=0;b<Gauge();++b)masses.push_back(J::Rows(m_mass[b]));
+    for(int b=0;b<Gauge();++b)masses.push_back(J::Rows(SerialSparse()?m_sparseMass[b].DenseForVerification():m_mass[b]));
     const auto raw=Residual(state,state,1.,time,data,false,false);
     return J::Object({{"schema",J::Quote("AcceptedOpenFrozenSystemsV1")},
         {"alpha","1"},{"blocks",J::List(blocks)},{"masses",J::List(masses)},

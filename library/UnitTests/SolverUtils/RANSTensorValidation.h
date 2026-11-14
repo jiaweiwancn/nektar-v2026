@@ -63,7 +63,7 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
                     cg->GetLocalToGlobalSign(start+i)*cg->GetLocalToGlobalSign(start+j)*exp->Integral(product);
             }
         }
-        const auto mass=field.Mass();
+        const auto mass=field.UsesSparseMass()?field.SparseMass().DenseForVerification():field.Mass();
         for(int i=0;i<field.Size();++i)for(int j=0;j<field.Size();++j)
             defects[5]=std::max(defects[5],std::abs(mass[i][j]-independentMass[i][j]));
         for(int kind=0;kind<3;++kind)

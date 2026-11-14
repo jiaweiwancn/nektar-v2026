@@ -48,8 +48,11 @@ RANSWallEvolutionPatch::Factor::Factor(const WallMatrix &a):n(a.size()),lu(n*n),
     if(info<0)throw std::logic_error("invalid evolution factorisation argument");
     Require(info==0,"singular evolution stage/mass matrix");
 }
+RANSWallEvolutionPatch::Factor::Factor(const SparseMatrix &a,bool mass):n(a.Rows()),
+    sparse(std::make_shared<RANSWallAlgebra::SparseFactor>(a,mass)) {}
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Factor::Apply(Vector rhs,bool transpose) const
 {
+    if(sparse){Require(!transpose,"sparse transpose/action route unsupported");return sparse->Apply(rhs);}
     RANSWallTiming::Scope timing("dense.triangular_solve");
     if(rhs.size()!=static_cast<std::size_t>(n))
         throw std::logic_error("evolution factor right-hand side shape mismatch");
@@ -155,6 +158,7 @@ double RANSWallEvolutionPatch::DependentEpsilon(const Vector &s,const RANSWallCo
 }
 RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PhysicalMass(int block,int region) const
 {
+    Require(!SerialSparse(),"global dense physical mass unavailable on serial sparse route");
     if(!Mapped() && region<0)return fields[block]->Mass();
     const bool regional=region>=0 && (block<m_dimension || block==K());
     if(regional && !m_regionalMass[region].empty())return m_regionalMass[region];
@@ -169,6 +173,31 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PhysicalMass(int bloc
     if(regional)m_regionalMass[region]=mass;
     return mass;
 }
+RANSWallEvolutionPatch::SparseMatrix RANSWallEvolutionPatch::SparsePhysicalMass(int block,int region) const
+{
+    Require(SerialSparse() && !Mapped(),"sparse physical mass is flat only");
+    if(region<0)return fields[block]->SparseMass();
+    const bool regional=block<m_dimension || block==K();
+    if(regional && m_regionalSparseMass[region].Rows())return m_regionalSparseMass[region];
+    SparseMatrix mass(size[block],size[block]);
+    for(const auto &q:Quadrature(block))
+    {
+        if(region==0 && q.coordinate[2]>m_parameters.geometry.height)continue;
+        if(region==1 && q.coordinate[2]<m_parameters.geometry.height)continue;
+        for(int i=0;i<q.ids.size();++i)for(int j=0;j<q.ids.size();++j)
+            mass.Entry(q.ids[i],q.ids[j])+=q.weight*q.phi[i]*q.phi[j];
+    }
+    mass.Finalize();if(regional)m_regionalSparseMass[region]=mass;return mass;
+}
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::MassApply(int b,const Vector &x,int region) const
+{
+    if(region<0)return SerialSparse()?m_sparseMass[b].Apply(x):Multiply(m_mass[b],x);
+    if(b==Epsilon() && region==0)return Vector(size[b]);
+    if(b==Epsilon() && region==1)return MassApply(b,x);
+    return SerialSparse()?SparsePhysicalMass(b,region).Apply(x):Multiply(PhysicalMass(b,region),x);
+}
+double RANSWallEvolutionPatch::MassEntry(int b,int i,int j) const
+{ return SerialSparse()?m_sparseMass[b].Get(i,j):m_mass[b][i][j]; }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PhysicalProject(int block,const RANSWallEvolutionFunction &f,double time) const
 {
     RANSWallTiming::Scope timing("initialization.field_projection",true,true);
@@ -191,11 +220,16 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PhysicalProject(int block
 RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReaderSharedPtr &session,
     const SpatialDomains::MeshGraphSharedPtr &graph,const LibUtilities::CommSharedPtr &comm,
     const RANSWallPatchParameters &parameters,const RANSWallNormalMap &mapping):
-    m_dimension(graph->GetMeshDimension()),m_comm(comm),m_parameters(parameters),m_mapping(mapping)
+    m_dimension(graph->GetMeshDimension()),m_comm(comm),m_sparseSession(session),m_parameters(parameters),m_mapping(mapping)
 {
     Require((m_dimension==2 || m_dimension==3) && session->GetComm()->GetSize()==1,
             "evolution requires a full serial native mesh on each collective rank");
     parameters.geometry.Validate();m_mapping.dimension=m_dimension;m_mapping.height=parameters.geometry.height;
+    session->LoadSolverInfo("RANSWallLinearBackend",m_linearBackend,"ReplicatedDenseV1");
+    Require(m_linearBackend=="ReplicatedDenseV1" || SerialSparse(),"unknown wall linear backend");
+#ifndef NEKTAR_RANS_HAVE_EIGEN_SPARSE
+    Require(!SerialSparse(),"AcceptedSerialSparseV1 needs the explicitly enabled Eigen sparse build");
+#endif
     session->LoadSolverInfo("RANSWallFormulation",m_formulation,"EPAWF");
     session->LoadSolverInfo("RANSWallBoundaryPolicy",m_boundaryPolicy,"Closed");
     Require(m_boundaryPolicy=="Closed" || OpenBoundary(),"unknown native wall-evolution boundary policy");
@@ -304,6 +338,16 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(NewModels() && AcceptedAWF() && PimpleSingleSweep() && m_dimension==2 && (!Mapped() || CurvedManufactured()) && m_comm->GetSize()==1,
             "AcceptedOpenFlatV1 supports only serial flat2D original new-model Accepted one-sweep evolution");
         Require(!m_evaluationReuse,"AcceptedOpenFlatV1 evaluation caching is not qualified; select Off");
+        if(SerialSparse())
+        {
+            const bool zero=session->MatchSolverInfo("RANSWallSparseVerification","ZeroDisplacementV1",false);
+            Require(parameters.model.Model()==RANSModel::A95 && parameters.model.KappaPolicy()==RANSKappaPolicy::Natural &&
+                !Mapped() && RichardsNorrisTop() && PimpleSingleSweep() && !m_pimpleVerify && !PimpleKBoundEnabled() &&
+                (DisplacedAccepted() || (zero && m_options.aerodynamicDisplacement==0)),
+                "AcceptedSerialSparseV1 requires admitted A95 displaced flat/RN one-sweep; only explicit bounded d0 verification is additional");
+            Require(session->DefinesParameter("FlexibleGMRES") && session->GetParameter("FlexibleGMRES")==1,
+                "serial sparse policy requires explicit FlexibleGMRES=1");
+        }
         std::string top,backflow,coordinates;
         session->LoadSolverInfo("RANSOpenTop",top,"Missing");
         session->LoadSolverInfo("RANSOpenBackflow",backflow,"Missing");
@@ -317,6 +361,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(std::isfinite(m_openVelocityScale) && m_openVelocityScale>0,"invalid open-boundary velocity scale");
         m_openBoundaryIdentity=RANSAcceptedOpenBoundaryIdentity(session);
     }
+    Require(!SerialSparse() || OpenBoundary(),"serial sparse closed/nonlinear/action route unsupported");
     Require(!m_evaluationReuse || (m_dimension==2 && !Mapped() && PimpleSingleSweep()),
         "ExactStepV1 is restricted to the serial flat2D one-sweep pilot");
     session->LoadSolverInfo("RANSWallPimpleKInventory",m_pimpleKInventory,"LegacyV1");
@@ -537,8 +582,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     if(OpenBoundary())
     {
         const int degree=fields[0]->Elements().front().degree;
-        Require((degree==3 || degree==4) && !directional && Size()<=3000,
+        Require((degree==3 || degree==4) && !directional && (SerialSparse()?Size()<=70000:Size()<=3000),
             "AcceptedOpenFlatV1 is bounded to isotropic p3/p1 or p4/p2 and at most 3000 stored unknowns");
+        if(SerialSparse() && !DisplacedAccepted())Require(Size()<=1000,"d0 sparse verification exceeds1000 slots");
         std::set<double> columns;
         for(int b=0;b<Gauge();++b)for(const auto &element:fields[b]->Elements())
         {
@@ -550,15 +596,16 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(fields[K()]->Size()==velocity->Size(),"different velocity/k polynomial spaces are not supported");
     for(int b=0;b<Gauge();++b)
     {
-        m_mass.push_back(b>0 && b<m_dimension?m_mass[0]:PhysicalMass(b));
+        if(SerialSparse())m_sparseMass.push_back(b>0 && b<m_dimension?m_sparseMass[0]:SparsePhysicalMass(b));
+        else m_mass.push_back(b>0 && b<m_dimension?m_mass[0]:PhysicalMass(b));
         m_constants.push_back(fields[b]->Project([](const RANSWallCoordinate&){return 1.;}));
     }
     m_volumes.resize(Gauge());
-    for(int b=0;b<Gauge();++b)m_volumes[b]=std::inner_product(m_constants[b].begin(),m_constants[b].end(),Multiply(m_mass[b],m_constants[b]).begin(),0.);
+    for(int b=0;b<Gauge();++b)m_volumes[b]=std::inner_product(m_constants[b].begin(),m_constants[b].end(),MassApply(b,m_constants[b]).begin(),0.);
     const double volume=m_volumes[0];
     for(int side=0;side<2;++side)
     {
-        const int b=InnerPressure()+side;m_pressureMean[side]=Multiply(m_mass[b],m_constants[b]);
+        const int b=InnerPressure()+side;m_pressureMean[side]=MassApply(b,m_constants[b]);
         for(double &v:m_pressureMean[side])v/=volume;
     }
     m_options.requestedWeight=AcceptedAWF()?1:parameters.chi;m_options.quadratureOrder=parameters.normalOrder;
@@ -1041,11 +1088,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
     {
         Vector delta(size[b]);for(int i=0;i<size[b];++i)delta[i]=s[offset[b]+i]-history[offset[b]+i];
         Vector load;
-        if(region<0)load=Multiply(m_mass[b],delta);
+        if(region<0)load=MassApply(b,delta);
         else
         {
-            const auto mass=b==Epsilon()?(region==1?m_mass[b]:WallMatrix(size[b],Vector(size[b]))):PhysicalMass(b,region);
-            load=Multiply(mass,delta);
+            load=MassApply(b,delta,region);
         }for(int i=0;i<size[b];++i)r[offset[b]+i]+=alpha*load[i];
     }
     if(!OpenBoundary())for(int side=0;side<2;++side)if(region<0 || side==region)for(int i=0;i<m_pressureMean[side].size();++i)
@@ -1068,9 +1114,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Norms(const Vector &r,con
         if(free.empty()){norms.push_back(0);continue;}
         if(free!=m_solver->free[b] || !m_solver->massFactors[b])
         {
-            WallMatrix mass(free.size(),Vector(free.size()));
-            for(int i=0;i<free.size();++i)for(int j=0;j<free.size();++j)mass[i][j]=m_mass[b][free[i]][free[j]];
-            m_solver->free[b]=free;m_solver->massFactors[b]=std::make_shared<Factor>(mass);
+            if(SerialSparse())m_solver->massFactors[b]=std::make_shared<Factor>(m_sparseMass[b].Restrict(free),true);
+            else
+            {
+                WallMatrix mass(free.size(),Vector(free.size()));
+                for(int i=0;i<free.size();++i)for(int j=0;j<free.size();++j)mass[i][j]=m_mass[b][free[i]][free[j]];
+                m_solver->massFactors[b]=std::make_shared<Factor>(mass);
+            }
+            m_solver->free[b]=free;
         }
         const auto inverse=m_solver->massFactors[b]->Apply(load);long double square=0;
         for(int i=0;i<load.size();++i)square+=(long double)load[i]*inverse[i];
@@ -1093,7 +1144,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::StateNorms(const Vector &
     for(int b=0;b<Gauge();++b)
     {
         Vector delta(size[b]);for(int i=0;i<size[b];++i)delta[i]=s[offset[b]+i]-reference[offset[b]+i];
-        const auto load=Multiply(m_mass[b],delta);long double sum=0;for(int i=0;i<size[b];++i)sum+=(long double)delta[i]*load[i];
+        const auto load=MassApply(b,delta);long double sum=0;for(int i=0;i<size[b];++i)sum+=(long double)delta[i]*load[i];
         const double scale=b<m_dimension?us:(b==K()?m_parameters.model.Q()*us*us:
             (b==Epsilon()?us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height):us*us));
         norms.push_back(std::sqrt(std::max(0.L,sum))/(scale*std::sqrt(m_volumes[b])));
@@ -1112,7 +1163,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
     Require(!StaticTransmissionOnly(),"CT6 static transmission does not enable variable-height evolution");
-    Require(Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
+    Require(SerialSparse() || Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
     if(PimpleSingleSweep())
     {
         Require(!condensed && m_eta==0.,"PimpleSingleSweep requires uncondensed eta-zero physical equations");
@@ -1742,7 +1793,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector
     {
         Vector current(size[b]),delta(size[b]);
         for(int i=0;i<size[b];++i){current[i]=s[offset[b]+i];delta[i]=current[i]-history[offset[b]+i];}
-        const auto change=Multiply(m_mass[b],delta),stored=Multiply(m_mass[b],current);
+        const auto change=MassApply(b,delta),stored=MassApply(b,current);
         for(int i=0;i<size[b];++i)
         {
             const double test=b==K()?m_constants[b][i]:current[i];
@@ -1771,6 +1822,7 @@ std::string RANSWallEvolutionPatch::Signature() const
         text<<":layout=UniformDirectionalModifiedA2DV1";
     if(OpenBoundary())text<<":boundary="<<m_openBoundaryIdentity;
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
+    if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();
     if(NewModels())text<<":resolved="<<m_parameters.model.Signature();

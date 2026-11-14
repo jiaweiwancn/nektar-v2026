@@ -597,6 +597,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::ScalarFeasibleJacobia
     const Vector &s,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
     std::vector<std::string> *metadata,bool scalarOnly) const
 {
+    Require(!SerialSparse(),"nonlinear/scalar action unsupported on AcceptedSerialSparseV1");
     Require(Size()<=3000,"ScalarFeasibleR2 retains the 3000-unknown dense guard");
     if(m_nonlinearPolicy=="ScalarFeasibleR3")
     {

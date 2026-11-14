@@ -6,6 +6,12 @@ find_package(Nektar++ REQUIRED)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 get_filename_component(RANS_SOURCE_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../.." ABSOLUTE)
+option(RANS_ENABLE_SERIAL_SPARSE "Build the explicitly guarded CT9 serial sparse adapter" OFF)
+if(RANS_ENABLE_SERIAL_SPARSE)
+    find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+    include_directories(SYSTEM ${EIGEN3_INCLUDE_DIRS})
+    add_definitions(-DNEKTAR_RANS_HAVE_EIGEN_SPARSE)
+endif()
 add_executable(RANSReducedModelChecks test_cls_epawf_reduced_model.cpp)
 target_include_directories(RANSReducedModelChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
@@ -31,6 +37,19 @@ add_library(RANSKernels STATIC
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallGeometry.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallNormalMap.cpp)
 target_compile_definitions(RANSKernels PRIVATE SOLVER_UTILS_EXPORTS)
+target_include_directories(RANSKernels PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_sources(RANSKernels PRIVATE
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallSerialSparse.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSparse.cpp)
+if(RANS_ENABLE_SERIAL_SPARSE)
+    add_executable(CT9SparseAlgebraChecks test_ct_accepted9_sparse.cpp
+        ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp)
+    target_include_directories(CT9SparseAlgebraChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+    target_link_libraries(CT9SparseAlgebraChecks RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+    add_test(NAME CT9SparseAlgebraChecks COMMAND CT9SparseAlgebraChecks)
+    set_tests_properties(CT9SparseAlgebraChecks PROPERTIES PROCESSORS 1 TIMEOUT 60
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+endif()
 add_executable(RANSAcceptedAWFProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSAcceptedAWFProbe.cpp)
 target_link_libraries(RANSAcceptedAWFProbe RANSKernels)
@@ -291,6 +310,10 @@ if(RANS_BUILD_SOLVER)
     foreach(rans_source ${rans_solver_sources})
         list(APPEND rans_absolute_sources ${RANS_SOLVER_ROOT}/${rans_source})
     endforeach()
+    # These objects are supplied once by the private RANSKernels archive.
+    list(REMOVE_ITEM rans_absolute_sources
+        ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallSerialSparse.cpp
+        ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionSparse.cpp)
     add_executable(IncNavierStokesSolver ${rans_absolute_sources})
     target_include_directories(IncNavierStokesSolver PRIVATE ${RANS_SOURCE_ROOT}/solvers)
     target_link_libraries(IncNavierStokesSolver RANSKernels RANSSpatialDomains

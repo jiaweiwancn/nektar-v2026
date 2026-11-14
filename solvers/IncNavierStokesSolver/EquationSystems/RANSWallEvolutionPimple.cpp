@@ -92,7 +92,34 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         const auto flow=AssemblePicardBlock(0,s,history,alpha,time,data,external);
         const int nv=std::lower_bound(flow.rows.begin(),flow.rows.end(),DifferentialSize())-flow.rows.begin();
         const int np=flow.rows.size()-nv;
-        WallMatrix a(nv,Vector(nv)),m(nv,Vector(nv)),g(nv,Vector(np)),d(np,Vector(nv));
+        WallMatrix a,m,g,d,bg,schur;
+        Vector predictor,dz,predictorDefect,pressureDefect,bGz,Gz,du,defect,identity,constraints;
+        std::shared_ptr<Factor> denseMass;
+        std::unique_ptr<RANSWallTiming::Scope> correctionTiming;
+        std::shared_ptr<SparseFlowResult> sparseFlow;
+        if(SerialSparse())
+        {
+            const auto event=[&](const std::string &phase)
+            {
+                if(phase=="momentum_attempt")++momentumAttempts;
+                if(phase=="momentum_complete")++momentum;
+                if(phase=="pressure_attempt")++pressureAttempts;
+                if(phase=="pressure_complete")++pressure;
+                if(phase=="mass")++massApplications;
+            };
+            sparseFlow=std::make_shared<SparseFlowResult>(SparseFlowCorrection(flow,nv,alpha,event));
+            correctionTiming=std::make_unique<RANSWallTiming::Scope>("flow.correction_validate");
+            const auto &r=*sparseFlow;predictor=r.predictor;dz=r.dz;predictorDefect=r.predictorDefect;
+            pressureDefect=r.pressureDefect;bGz=r.bGz;Gz=r.Gz;du=r.du;defect=r.defect;identity=r.identity;constraints=r.constraints;
+            for(int i=0;i<nv;++i)s[flow.rows[i]]+=du[i];
+            for(int j=0;j<np;++j)s[flow.rows[nv+j]]+=dz[j];
+            put("linear_backend",J::Quote("AcceptedSerialSparseV1"));put("flow_matrix_nonzeros",J::Number(flow.csr.NonZeros()));
+            put("predictor_factor_nonzeros",J::Number(r.predictorFill));put("mass_factor_nonzeros",J::Number(r.massFill));
+            put("pressure_preconditioner_factor_nonzeros",J::Number(r.preconditionerFill));put("pressure_krylov_iterations",J::Number(r.iterations));
+        }
+        else
+        {
+        a.assign(nv,Vector(nv));m.assign(nv,Vector(nv));g.assign(nv,Vector(np));d.assign(np,Vector(nv));
         for(int i=0;i<nv;++i)
         {
             std::copy_n(flow.matrix[i].begin(),nv,a[i].begin());
@@ -109,20 +136,20 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         RANSWallTiming::Scope momentumFactorTiming("momentum.factorize");
         const Factor momentumFactor(a);momentumFactorTiming.Stop();
         RANSWallTiming::Scope massFactorTiming("pressure.mass_factorize");
-        const Factor mass(m);massFactorTiming.Stop();
+        denseMass=std::make_shared<Factor>(m);massFactorTiming.Stop();
         RANSWallTiming::Scope predictorTiming("momentum.solve_validate");
-        const auto predictor=momentumFactor.Apply(rhs);
-        auto predictorDefect=Multiply(a,predictor);
+        predictor=momentumFactor.Apply(rhs);
+        predictorDefect=Multiply(a,predictor);
         for(int i=0;i<nv;++i)predictorDefect[i]-=rhs[i];
         Require(Maximum(predictorDefect)<=1e-10*std::max(1.,Maximum(rhs)),"PIMPLE predictor linear residual");
         ++momentum;predictorTiming.Stop();
         RANSWallTiming::Scope pressureBuildTiming("pressure.build");
         // B = (alpha M_free)^-1. This is never a full momentum inverse.
-        WallMatrix bg(np,Vector(nv)),schur(np,Vector(np));
+        bg.assign(np,Vector(nv));schur.assign(np,Vector(np));
         for(int j=0;j<np;++j)
         {
             for(int i=0;i<nv;++i)rhs[i]=g[i][j];
-            ++massApplications;bg[j]=mass.Apply(rhs);
+            ++massApplications;bg[j]=denseMass->Apply(rhs);
             for(auto &x:bg[j])x/=alpha;
             const auto column=Multiply(d,bg[j]);
             for(int i=0;i<np;++i)schur[i][j]=column[i]-flow.matrix[nv+i][nv+j];
@@ -131,22 +158,23 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         for(int i=0;i<np;++i)pressureRhs[i]+=flow.residual[nv+i];
         pressureBuildTiming.Stop();
         RANSWallTiming::Scope pressureSolveTiming("pressure.solve_validate");
-        ++pressureAttempts;const auto dz=Factor(schur).Apply(pressureRhs);
-        auto pressureDefect=Multiply(schur,dz);
+        ++pressureAttempts;dz=Factor(schur).Apply(pressureRhs);
+        pressureDefect=Multiply(schur,dz);
         for(int i=0;i<np;++i)pressureDefect[i]-=pressureRhs[i];
         Require(Maximum(pressureDefect)<=1e-10*std::max(1.,Maximum(pressureRhs)),"PIMPLE pressure linear residual");
         ++pressure;pressureSolveTiming.Stop();
-        RANSWallTiming::Scope correctionTiming("flow.correction_validate");
-        Vector bGz(nv),Gz=Multiply(g,dz),du=predictor;
+        correctionTiming=std::make_unique<RANSWallTiming::Scope>("flow.correction_validate");
+        bGz.assign(nv,0.);Gz=Multiply(g,dz);du=predictor;
         for(int i=0;i<nv;++i)for(int j=0;j<np;++j)bGz[i]+=bg[j][i]*dz[j];
         for(int i=0;i<nv;++i){du[i]-=bGz[i];s[flow.rows[i]]+=du[i];}
         for(int j=0;j<np;++j)s[flow.rows[nv+j]]+=dz[j];
         auto step=du;step.insert(step.end(),dz.begin(),dz.end());
-        auto defect=Multiply(flow.matrix,step);
+        defect=flow.Apply(step);
         for(int i=0;i<defect.size();++i)defect[i]+=flow.residual[i];
-        auto abGz=Multiply(a,bGz);Vector identity(nv),constraints(np);
+        auto abGz=Multiply(a,bGz);identity.resize(nv);constraints.resize(np);
         for(int i=0;i<nv;++i)identity[i]=defect[i]-(Gz[i]-abGz[i]);
         for(int i=0;i<np;++i)constraints[i]=defect[nv+i];
+        }
         double boundary=0;for(auto [row,value]:external)boundary=std::max(boundary,std::abs(s[row]-value));
         put("pressure_inverse",J::Quote("alpha^-1 consistent free-velocity mass inverse"));
         put("velocity_size",J::Number(nv));put("pressure_gauge_size",J::Number(np));
@@ -179,6 +207,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                     {"sha256",J::Quote(RANSWallR3::HashFile(path))},{"rows",J::Number(matrix.size())},
                     {"columns",J::Number(matrix.empty()?0:matrix.front().size())}});
             };
+            auto saveSparse=[&](const SparseMatrix &matrix,const std::string &name)
+            {
+                const auto path=stem+"."+name+".csr";matrix.Write(path);
+                return J::Object({{"file",J::Quote(std::filesystem::absolute(path).string())},{"sha256",J::Quote(RANSWallR3::HashFile(path))},
+                    {"rows",J::Number(matrix.Rows())},{"columns",J::Number(matrix.Columns())},{"nnz",J::Number(matrix.NonZeros())},{"encoding",J::Quote("RANSCSR1-native-little-endian")}});
+            };
             auto predictorState=base;
             for(int i=0;i<nv;++i)predictorState[flow.rows[i]]+=predictor[i];
             const auto packet=stem+".json";std::ofstream out(packet);
@@ -191,9 +225,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                 {"fixed_reference",J::Numbers(m_reference)},
                 {"fixed_boundary",J::Constraints(data.fixedBoundary)},
                 {"frozen_flow_residual",J::Numbers(flow.residual)},
-                {"frozen_flow_matrix",saveMatrix(flow.matrix,"system")},
-                {"free_velocity_mass",saveMatrix(m,"mass")},
-                {"pressure_operator",J::Rows(schur)},
+                {"frozen_flow_matrix",SerialSparse()?saveSparse(flow.csr,"system"):saveMatrix(flow.matrix,"system")},
+                {"free_velocity_mass",SerialSparse()?saveSparse(sparseFlow->m,"mass"):saveMatrix(m,"mass")},
+                {"pressure_operator",SerialSparse()?J::Object({{"kind",J::Quote("consistent-mass Schur action")},{"G",saveSparse(sparseFlow->g,"G")},{"D",saveSparse(sparseFlow->d,"D")},{"C",saveSparse(sparseFlow->c,"C")},{"alpha",J::Number(alpha)}}):J::Rows(schur)},
                 {"predictor_increment",J::Numbers(predictor)},
                 {"pressure_increment",J::Numbers(dz)},
                 {"subtracted_mass_velocity_correction",J::Numbers(bGz)},
@@ -203,7 +237,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                 {"splitting_identity_defect",J::Numbers(identity)},
                 {"predictor_linear_residual",J::Numbers(predictorDefect)},
                 {"pressure_linear_residual",J::Numbers(pressureDefect)},
-                {"matrix_encoding",J::Quote("row-major native IEEE754 binary64")},
+                {"matrix_encoding",J::Quote(SerialSparse()?"per-matrix RANSCSR1-native-little-endian":"row-major native IEEE754 binary64")},
                 {"scope",J::Quote("computed flow stages before constitutive residual; physical corrected stress may be undefined")}})<<'\n';
             out.close();Require(out.good(),"could not save computed flow snapshot");
             put("flow_snapshot",J::Quote(std::filesystem::absolute(packet).string()));
@@ -229,7 +263,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             // small-dt approximation without changing physical trajectory.
             auto representative=Gz;
             if(Maximum(representative)==0.)for(int i=0;i<nv;++i)representative[i]=g[i][0];
-            const auto inverseMass=mass.Apply(representative);
+            const auto inverseMass=denseMass->Apply(representative);
             for(double factor:{1.,4.,16.,64.})
             {
                 auto shifted=a;for(int i=0;i<nv;++i)for(int j=0;j<nv;++j)shifted[i][j]+=(factor-1.)*alpha*m[i][j];
@@ -241,7 +275,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             put("verification_extra_mass_inverse_applications","1");
             put("verification_pressure_action_dt_absolute_relative",J::List(actions));
         }
-        check(s,"flow");correctionTiming.Stop();flowTiming.Stop();
+        check(s,"flow");correctionTiming->Stop();flowTiming.Stop();
         const auto flowState=s;
         auto budget=[&](const char *phase,const Vector &q)
         {
@@ -267,8 +301,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             auto rhs=block.residual;for(auto &x:rhs)x=-x;
             if(b==Epsilon())++epsilonAttempts;else ++kAttempts;
             RANSWallTiming::Scope scalarSolveTiming(b==Epsilon()?"epsilon.solve_validate":"k.solve_validate");
-            const auto delta=Factor(block.matrix).Apply(rhs);
-            auto linear=Multiply(block.matrix,delta);
+            const auto delta=(block.sparse?Factor(block.csr):Factor(block.matrix)).Apply(rhs);
+            auto linear=block.Apply(delta);
             for(int i=0;i<linear.size();++i)linear[i]-=rhs[i];
             Require(Maximum(linear)<1e-10*std::max(1.,Maximum(rhs)),"PIMPLE scalar linear residual");
             if(b==Epsilon())++epsilon;else ++k;scalarSolveTiming.Stop();
@@ -278,12 +312,18 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                 const int row=block.rows[i];
                 const bool trace=b==Epsilon() && m_traceIds.count(row-offset[b]);
                 if(trace)imposed=std::max(imposed,std::abs(block.residual[i]+delta[i]));
-                else if(b==Epsilon())for(int j=0;j<block.rows.size();++j)if(m_traceIds.count(block.rows[j]-offset[b]))
+                else if(b==Epsilon())
                 {
-                    traceColumns=std::max(traceColumns,std::abs(block.matrix[i][j]));
-                    const double massEntry=m_mass[b][row-offset[b]][block.rows[j]-offset[b]];
-                    traceMass=std::max(traceMass,std::abs(alpha*massEntry));
-                    traceStorage=std::max(traceStorage,std::abs(alpha*massEntry*(s[block.rows[j]]-history[block.rows[j]]+delta[j])));
+                    const auto inspect=[&](int j,double entry)
+                    {
+                        if(!m_traceIds.count(block.rows[j]-offset[b]))return;
+                        traceColumns=std::max(traceColumns,std::abs(entry));
+                        const double massEntry=MassEntry(b,row-offset[b],block.rows[j]-offset[b]);
+                        traceMass=std::max(traceMass,std::abs(alpha*massEntry));
+                        traceStorage=std::max(traceStorage,std::abs(alpha*massEntry*(s[block.rows[j]]-history[block.rows[j]]+delta[j])));
+                    };
+                    if(SerialSparse())block.csr.Each(i,inspect);
+                    else for(int j=0;j<block.rows.size();++j)inspect(j,block.matrix[i][j]);
                 }
             }
             const auto preScalar=s;
@@ -324,9 +364,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                     const auto stem=(std::filesystem::path(m_pimpleSnapshotDirectory)/
                         ("k-t"+J::Number(time)+"-"+RANSWallR3::Hash(history).substr(0,12))).string();
                     const auto matrix=stem+".matrix.bin";
-                    std::ofstream mat(matrix,std::ios::binary);
-                    for(const auto &row:block.matrix)mat.write(reinterpret_cast<const char*>(row.data()),row.size()*sizeof(double));
-                    mat.close();Require(mat.good(),"could not save frozen k matrix");
+                    if(SerialSparse())block.csr.Write(matrix);
+                    else
+                    {
+                        std::ofstream mat(matrix,std::ios::binary);
+                        for(const auto &row:block.matrix)mat.write(reinterpret_cast<const char*>(row.data()),row.size()*sizeof(double));
+                        mat.close();Require(mat.good(),"could not save frozen k matrix");
+                    }
                     const auto packet=stem+".json";std::ofstream out(packet);
                     out<<J::Object({{"schema","1"},{"time",J::Number(time)},{"alpha",J::Number(alpha)},
                         {"committed",J::Numbers(base)},{"post_flow",J::Numbers(flowState)},{"pre_k",J::Numbers(preScalar)},
@@ -337,7 +381,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                         {"raw_increment",J::Numbers(delta)},{"raw_linear_residual",J::Numbers(linear)},
                         {"matrix_file",J::Quote(std::filesystem::absolute(matrix).string())},
                         {"matrix_sha256",J::Quote(RANSWallR3::HashFile(matrix))},
-                        {"matrix_encoding",J::Quote("row-major native IEEE754 binary64")},
+                        {"matrix_encoding",J::Quote(SerialSparse()?"RANSCSR1-native-little-endian":"row-major native IEEE754 binary64")},
                         {"k_bound",PimpleKBoundEnabled()?bounded.report:"null"}})<<'\n';
                     out.close();Require(out.good(),"could not save raw/corrected k snapshot");
                     put("k_snapshot",J::Quote(std::filesystem::absolute(packet).string()));
