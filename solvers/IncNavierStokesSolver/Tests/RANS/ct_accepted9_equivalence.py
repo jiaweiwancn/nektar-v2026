@@ -13,7 +13,7 @@ os.environ.update(THREADS)
 import ct_accepted8_native as n
 from ct_accepted9_controls import enable
 from ct_accepted9_pressure_run import sealed
-from ct_accepted9_gate import pair,backend_controls
+from ct_accepted9_gate import pair,backend_controls,backend_trajectory
 from ct_accepted_pilot import replay,constitutive_comparison,artifact_hash
 from ct_accepted3_metrics import domain
 from ct_accepted_open import run,probe,require
@@ -62,6 +62,6 @@ def main():
     rows=list(result['members'].values());tr=difference(*(x['traction_history'][-1]['profile'] for x in rows),c);drifts=[difference(x['actual_initial_traction_profile'],x['traction_history'][-1]['profile'],c) for x in rows]
     for f in ('ground','interface','signed_mean'):
         d=abs(tr['signed_mean_difference']) if f=='signed_mean' else tr['profiles'][f]['normalized_weighted_RMS'];v=max(abs(x['signed_mean_difference']) if f=='signed_mean' else x['profiles'][f]['normalized_weighted_RMS'] for x in drifts);result['traction_temporal'][f]=dict(spread=d,measured_drift=v,limit=max(1e-7,.1*v))
-    result['physical_qualification']=pair(result);result['backend_status']='pass' if all(x['status']=='pass' for x in result['equivalence'].values()) and result['physical_qualification']['reasons']==old['qualification']['reasons'] else 'fail';result['physical_continuation_admitted']=False
+    result['physical_qualification']=pair(result);result['backend_qualification']=backend_trajectory(result);result['backend_status']=result['backend_qualification']['status'];result['physical_continuation_admitted']=False
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);print('CT9 backend',result['backend_status'],'physical',result['physical_qualification'],flush=True);return 0 if result['backend_status']=='pass' else 1
 if __name__=='__main__':raise SystemExit(main())

@@ -11,6 +11,7 @@ from rans_qualification import THREADS,exact_vector_hash
 os.environ.update(THREADS)
 import ct_accepted8_native as n
 from ct_accepted9_controls import enable
+from ct_accepted9_gate import capacity as capacity_gate
 from ct_accepted9_pressure_run import sealed
 from ct_accepted7_domain import X
 from ct_accepted_open import run,probe,require
@@ -60,5 +61,5 @@ def main():
             row['status']='static_capacity_pass';row['physical_preservation_qualification']='not_run'
         except Exception as error:row.update(status='failed_capacity_or_reference_preflight',failure=repr(error));os.environ.pop('NEKTAR_RANS_TIMING_FILE',None)
         row['output_bytes']=sum(f.stat().st_size for f in folder.rglob('*') if f.is_file());result['cases'][label]=row;write_json(a.output/'progress.json',result);print('CT9 capacity',label,row['status'],flush=True)
-    result['status']='pass' if len(result['cases'])==3 and all(q['status']=='static_capacity_pass' for q in result['cases'].values()) else 'fail';write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return 0 if result['status']=='pass' else 1
+    result['classification']=capacity_gate(result);result['status']=result['classification']['status'];write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return 0 if result['status']=='pass' else 1
 if __name__=='__main__':raise SystemExit(main())
