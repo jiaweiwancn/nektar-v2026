@@ -48,7 +48,16 @@ int main(int argc,char **argv)
         };
         check("pass","",true);check("atomic-dual-name","publishing",true);check("failed","FAIL",false);check("stale","binding",false);check("malformed","malformed",false);check("duplicate","duplicate",false);check("timeout","timeout",false);check("temporary-only","temporary-only",false);
         bool overwritten=false;try{M::Atomic(root+"/pass/inventory.json","replacement");overwritten=true;}catch(const std::exception&){}
-        D::Check(!overwritten,"immutable output overwritten");std::cout<<"bounded catalog and protocol checks PASS "<<summary<<'\n';return 0;
+        D::Check(!overwritten,"immutable output overwritten");
+        const auto partial=root+"/partial";std::filesystem::create_directories(partial);
+        M::Atomic(partial+"/qualified-cursor.json","old-published-commit");
+        M::Atomic(partial+"/step-2.qualification-commit.json","valid-new-step-commit");
+        M::Atomic(partial+"/qualified-cursor.json.tmp-"+std::to_string(getpid()),"incomplete pointer publication");
+        bool pointerPublished=false;
+        try{M::Atomic(partial+"/qualified-cursor.json","new-published-commit",false);pointerPublished=true;}catch(const std::exception&){}
+        std::ifstream oldCursor(partial+"/qualified-cursor.json");std::string oldBytes;std::getline(oldCursor,oldBytes);
+        D::Check(!pointerPublished && oldBytes=="old-published-commit" && std::filesystem::exists(partial+"/step-2.qualification-commit.json"),"partial pointer publication lost prior cursor or separate step commit");
+        std::cout<<"bounded catalog and protocol checks PASS "<<summary<<'\n';return 0;
     }
     catch(const std::exception &e){std::cerr<<e.what()<<'\n';return 1;}
 }
