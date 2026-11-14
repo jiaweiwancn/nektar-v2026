@@ -17,6 +17,8 @@ from run_wj_h7 import update_journal
 def verify_all(root):
     out=root/'closure-v1';out.mkdir();pub=root/'publication-v1';verify(load(pub/'seal.json')['manifest']);manifest=load(pub/'manifest.json')
     for v in manifest['files']:verify(v)
+    supplement=root/'publication-supplement-v1';verify(load(supplement/'seal.json')['manifest'])
+    for v in load(supplement/'manifest.json')['files']:verify(v)
     heavy=load(pub/'remote-heavy-manifest.json')
     for v in heavy['files']:verify(v)
     verify(load(root/'inputs/essential-index.json')['old_ledger_unchanged'])
@@ -50,10 +52,10 @@ def finalize(root):
         b.update(closed=True,closure_charged_seconds=300,closure_actual_verified_seconds=actual_closure,total_charged_seconds=total,phase_charged_seconds=phases,final_outcome=gates['scope_result'],target_actual_completed=gates['target'].get('native_completed',0),target_committed_qualified=gates['target'].get('independently_committed',0),new_scientific_progress=gates['target'].get('new_scientific_progress',0),fresh_CP0s=0,new_strict_readbacks=len(b['strict_reservations']),unknown_duration_charged_seconds=sum(v.get('seconds',v['reserved_seconds'])for v in b['entries'].values()if v.get('unknown_attempts')))
     update_journal(root/'accounting.json',close);atomic(out/'accounting-final.json',load(root/'accounting.json'))
     atomic(out/'source-runtime-index.json',dict(native=identity(root/'science/runtime-build-v1.json'),compiled_inputs=identity(root/'science/compiled-source-objects.json'),frozen_execution=identity(root/'execution-config.json'),actual_native_maps=identity(root/'publication-v1/native-runtime-observed.json'),historical_cache_compatibility=identity(root/'science/target-cache-compatibility.json'),essential_H15_provenance=identity(root/'inputs/essential-index.json')))
-    atomic(out/'seal.json',dict(accounting=identity(out/'accounting-final.json'),verification=identity(out/'verification.json'),source_runtime=identity(out/'source-runtime-index.json'),publication=identity(root/'publication-v1/manifest.json'),publication_snapshot_is_not_final_accounting=True))
+    atomic(out/'seal.json',dict(accounting=identity(out/'accounting-final.json'),verification=identity(out/'verification.json'),source_runtime=identity(out/'source-runtime-index.json'),publication=identity(root/'publication-v1/manifest.json'),supplement=identity(root/'publication-supplement-v1/manifest.json'),publication_snapshot_is_not_final_accounting=True))
     archive=root/'h16-compact-v1.tar.gz'
     with tarfile.open(archive,'x:gz')as t:
-        for n in ('publication-v1','closure-v1'):t.add(root/n,arcname=n)
+        for n in ('publication-v1','publication-supplement-v1','closure-v1'):t.add(root/n,arcname=n)
     atomic(root/'authoritative-index-v1.json',dict(status=gates['scope_result'],root=str(root),publication=identity(root/'publication-v1/manifest.json'),component_gates=identity(root/'publication-v1/component-gates.json'),closure=identity(out/'seal.json'),accounting=identity(out/'accounting-final.json'),archive=identity(archive),heavy_transport='NOT_REQUESTED: selected files verified in place; original coefficient/matrix bytes remain Linux'))
     print(json.dumps(dict(index=identity(root/'authoritative-index-v1.json'),closed_charge=load(root/'accounting.json')['total_charged_seconds'],archive=identity(archive))),flush=True)
 
