@@ -109,6 +109,10 @@ std::string RANSWallEvolutionPatch::CompleteAuditCommitment(const Vector &state,
 {
     Require(!m_auditCommitment && !m_evaluation,"complete audit batch requires fresh dynamic scope");
     const std::uint64_t one=1;Require(*reinterpret_cast<const unsigned char*>(&one)==1,"audit commitment requires qualified little-endian host");
+    // Match the native startup/implicit callback's ExactStepV1 scope in BOTH
+    // policies. The scope ends after this call, so A -> B -> A cannot reuse a
+    // prior state's domain/profile/residual results; only structural rows live.
+    EvaluationScope evaluation(*this,data,time);
     m_auditCommitment=std::make_shared<AuditCommitment>();
     struct Reset{std::shared_ptr<AuditCommitment> &p;~Reset(){p.reset();}}reset{m_auditCommitment};
     const auto began=std::chrono::steady_clock::now();const auto before=m_completeWJCalls;
