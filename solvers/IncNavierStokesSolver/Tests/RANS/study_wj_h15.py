@@ -32,7 +32,7 @@ def setup(root):
     atomic(root/'science/imports.json',dict(parent_manifest=identity(H14/'publication-v2/manifest.json'),selected=selected,aliases=[],prior_ledger_unchanged=identity(H14/'closure-v1/accounting-final.json')))
 
 def small_cache(root):
-    out=root/'science/small-cache';out.mkdir()
+    out=root/'science/small-cache-v2';out.mkdir()
     control=load(H14/'publication-v2/controls/restart-rollback-checks.json')['counts']['cp0']['producer'];r=load(verify(control))
     old=load(H14/'science/small/cp0/assessment-v2/result.json');inv=load(verify(old['inventory']));points=[v['physical']for v in inv['points']]
     ref=reference_identity(root,r)
@@ -111,7 +111,7 @@ def run_observed(root,folder,cache_manifest,original_cp0,*,behavior='PASS',resta
 
 def small(root):
     parent=H14/'science/small/cp0';base=parent/'case.xml';cp=Path(load(parent/'case.evolution.json')['checkpoint']);out=root/'science/small';out.mkdir()
-    cache=root/'science/small-cache/manifest.json';records=[]
+    cache=root/'science/small-cache-v2/manifest.json';records=[]
     xml_case(base,out/'legacy',cp,2,retention=False)
     with(out/'legacy/native.log').open('x')as log:code=subprocess.run([str(root/'runtime/IncNavierStokesSolver'),str(out/'legacy/case.xml')],stdout=log,stderr=subprocess.STDOUT).returncode
     assert code==0;legacy=load(out/'legacy/case.evolution.json')

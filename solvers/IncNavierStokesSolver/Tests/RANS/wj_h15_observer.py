@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Fixed-case immutable rows and a durable, independently qualifying observer."""
 import argparse
+import copy
 from collections import OrderedDict
 import hashlib
 import importlib
@@ -85,6 +86,24 @@ class PersistentRows:
         for j,(p,o)in enumerate(self.base.rows[:self.base.point_count]):self.known[pkey(p)].append(j)
         self.inverse={}
         self.build_seconds=time.monotonic()-began
+
+    def __getstate__(self):
+        # wall() carries local analytic callables. Store immutable numerical
+        # data only; recreate callable wrappers from the same pinned H13 record
+        # on load, without any fit, inverse, FE projection or basis rebuild.
+        state=dict(self.__dict__);state['config']=None
+        state['reference_parameters']={k:getattr(self.config,k)for k in ('H','h','z0_e','u_tau','nu','d0','top','d_nu')}
+        state['base']=copy.copy(self.base);state['base'].config=None
+        state['variable']=OrderedDict()
+        for k,(rows,initial)in self.variable.items():
+            rows=copy.copy(rows);rows.config=None;state['variable'][k]=(rows,initial)
+        return state
+
+    def __setstate__(self,state):
+        values=state.pop('reference_parameters');self.__dict__.update(state);self.config=stored_reference()
+        assert all(bits(getattr(self.config,k))==bits(v)for k,v in values.items()),'cached reference parameter bytes differ'
+        self.base.config=self.config
+        for rows,initial in self.variable.values():rows.config=self.config
 
     def _inverse(self,rows,b):
         # Only the immutable base is permanent. Variable-object inverses belong

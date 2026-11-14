@@ -2,6 +2,7 @@
 import copy
 import json
 import os
+import pickle
 from pathlib import Path
 import tempfile
 import unittest
@@ -35,6 +36,13 @@ def tensor_fixture():
     r['offsets'].append(len(state));return r,state,c
 
 class PersistentMonitoring(unittest.TestCase):
+    def test_cache_roundtrip_contains_data_not_local_wall_callables(self):
+        r,s,c=tensor_fixture();p=[physical(r,[4.,0,c.H])];cache=PersistentRows(r,p,s,{})
+        before,initial,_=cache.view(p);after=pickle.loads(pickle.dumps(cache,protocol=5));rows,restored,_=after.view(p)
+        self.assertEqual(before.rows,rows.rows)
+        for b in range(6):
+            for x,y in zip(before.maps[b][1],rows.maps[b][1]):self.assertEqual(x.tobytes(),y.tobytes())
+        for k in initial:self.assertEqual(initial[k].tobytes(),restored[k].tobytes())
     def test_disk_monitor_tolerates_only_transient_names(self):
         from run_wj_h15 import size
         with tempfile.TemporaryDirectory()as d:
