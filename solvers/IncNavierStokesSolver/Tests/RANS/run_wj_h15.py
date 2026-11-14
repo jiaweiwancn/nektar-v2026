@@ -7,7 +7,7 @@ from pathlib import Path
 import signal
 import subprocess
 import time
-from run_wj_h4 import load, save, sha, THREADS, input_files, size
+from run_wj_h4 import load, save, sha, THREADS, input_files
 os.environ.update(THREADS)  # before any optional admission module imports NumPy
 from run_wj_h7 import update_journal, complete_operation
 from wj6_resources import scientific_workers, tree_usage
@@ -16,6 +16,21 @@ from run_wj_h10 import runtime_snapshot
 
 ROOT='wj-h15-persistent-neutral-20261114'
 CAPS={'operation':1200,'build':1200,'qualification':1800,'target':1800,'closure':300}
+
+def size(path):
+    """Bounded walk tolerates vanished atomic temporaries, never real I/O errors.
+
+    Live temporary files count. A link/rename may remove a name during stat;
+    final stable bytes are checked again after the command. Shared hard links
+    may be conservatively counted twice during publication.
+    """
+    total=0
+    def fail(error):raise error
+    for directory,dirs,files in os.walk(path,onerror=fail):
+        for name in dirs+files:
+            try:total+=os.stat(Path(directory)/name,follow_symlinks=False).st_size
+            except FileNotFoundError:pass
+    return total
 
 def halt_admission(book,phase):
     assert not book['closed'],'closed H15 allocation'
@@ -66,11 +81,13 @@ def execute(root,label,argv,seconds,phase='operation',workers=1):
     with(folder/'command.log').open('x')as log:
         p=subprocess.Popen(['/usr/bin/time','-v',*map(str,argv)],cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True,preexec_fn=limits)
         while p.poll()is None:
-            rss,n=tree_usage(p.pid);peak=max(peak,rss);groups|=owned_groups(p.pid);mappings(p.pid)
-            if rss>rssLimit or time.monotonic()-start>seconds:reason='RESOURCE_LIMIT RSS/time'
-            if (root/'science').exists()and size(root/'science')>2*1024**3:reason='RESOURCE_LIMIT scientific output'
-            if (root/'build').exists()and size(root/'build')>8*1024**3:reason='RESOURCE_LIMIT build footprint'
-            if scientific_workers()['workers']>72:reason='RESOURCE_LIMIT server workers'
+            try:
+                rss,n=tree_usage(p.pid);peak=max(peak,rss);groups|=owned_groups(p.pid);mappings(p.pid)
+                if rss>rssLimit or time.monotonic()-start>seconds:reason='RESOURCE_LIMIT RSS/time'
+                if (root/'science').exists()and size(root/'science')>2*1024**3:reason='RESOURCE_LIMIT scientific output'
+                if (root/'build').exists()and size(root/'build')>8*1024**3:reason='RESOURCE_LIMIT build footprint'
+                if scientific_workers()['workers']>72:reason='RESOURCE_LIMIT server workers'
+            except Exception as error:reason='OPERATIONAL_MONITOR_ERROR '+repr(error);groups.add(p.pid)
             if reason:
                 for g in groups:
                     try:os.killpg(g,signal.SIGTERM)
@@ -83,7 +100,8 @@ def execute(root,label,argv,seconds,phase='operation',workers=1):
                 try:os.killpg(g,signal.SIGKILL)
                 except ProcessLookupError:pass
             code=p.wait()
-    entry=dict(status=('OBSTRUCTED'if reason.startswith('RUNTIME_')else'RESOURCE_LIMIT')if reason else'PASS'if code==0 else'FAIL',phase=phase,reserved_seconds=seconds,
+    if not reason and ((root/'science').exists()and size(root/'science')>2*1024**3):reason='RESOURCE_LIMIT final scientific output'
+    entry=dict(status=('OBSTRUCTED'if reason.startswith(('RUNTIME_','OPERATIONAL_'))else'RESOURCE_LIMIT')if reason else'PASS'if code==0 else'FAIL',phase=phase,reserved_seconds=seconds,
         seconds=time.monotonic()-start,exit=code,reason=reason,peak_tree_rss_bytes=peak,log_sha256=sha(folder/'command.log'))
     if reason and reason.startswith('RUNTIME_'):
         def halt(b):b.setdefault('runtime_halt',dict(operation=label,reason=reason))

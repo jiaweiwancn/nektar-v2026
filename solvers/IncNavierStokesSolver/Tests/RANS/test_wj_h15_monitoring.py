@@ -35,6 +35,17 @@ def tensor_fixture():
     r['offsets'].append(len(state));return r,state,c
 
 class PersistentMonitoring(unittest.TestCase):
+    def test_disk_monitor_tolerates_only_transient_names(self):
+        from run_wj_h15 import size
+        with tempfile.TemporaryDirectory()as d:
+            p=Path(d)/'stable';p.write_bytes(b'abc');real=os.stat
+            def transient(path,**kw):
+                if str(path)==str(p):raise FileNotFoundError(str(path))
+                return real(path,**kw)
+            with patch('run_wj_h15.os.stat',side_effect=transient):self.assertEqual(size(d),0)
+            with patch('run_wj_h15.os.stat',side_effect=OSError('concrete EIO')):
+                with self.assertRaises(OSError):size(d)
+            self.assertEqual(size(d),3)
     def test_atomic_pin_and_signed_zero(self):
         with tempfile.TemporaryDirectory()as d:
             p=Path(d)/'receipt.json';atomic(p,dict(value=-0.));self.assertEqual(verify(identity(p)),p)
