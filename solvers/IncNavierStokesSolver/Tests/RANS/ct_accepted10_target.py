@@ -36,7 +36,7 @@ def main():
     dest=a.output/'target';dest.mkdir();shutil.copy2(folder/'case.xml',dest/'case.xml');grid,sides,weights,count=n.inventory(c)
     req=replay(initial,native['state'],0.,grid,grid_sides=sides,export_faces_only=True,export_test_basis=True,export_neutral_composite_reference=True,export_ct10_momentum=True,ct10_export_points=False,export_sparse_backend=True,sparse_alpha=1000.)
     packet,e=probe(a.runtime,dest,req,'readiness');require(e['exit_code']==0,'target read-only preflight failed:'+str(packet.get('failure')));n.binding(packet,c);require(packet['observation']['state']==native['state'],'target replay changed native state')
-    metrics=n.physical_metrics(packet,native['state'],c,weights,count);dom=inventory(packet['test_basis'],packet['observation']['grid'],native['state'],packet['observation']['offsets'],'A95',packet['observation']['grid_sides']);mom=packet['ct10_momentum'];free=np.asarray(mom['free_rows'],int);actual=np.asarray(mom['total_actual']);analytic=np.asarray(mom['total_analytic']);delta=actual-analytic
+    metrics=n.physical_metrics(packet,native['state'],c,weights,count);dom=inventory(packet['test_basis'],packet['observation']['grid'],np.asarray(native['state']),packet['observation']['offsets'],'A95',packet['observation']['grid_sides']);mom=packet['ct10_momentum'];free=np.asarray(mom['free_rows'],int);actual=np.asarray(mom['total_actual']);analytic=np.asarray(mom['total_analytic']);delta=actual-analytic
     terms={}
     for key,v in mom['actual'].items():
         dr=np.asarray(v)-np.asarray(mom['analytic'][key]);terms[key]=dict(free_maximum=float(max(abs(dr[free]))),free_signed_sum=float(np.sum(dr[free])),prescribed_maximum=float(max(abs(dr[np.asarray(mom['fixed_rows'],int)]))))

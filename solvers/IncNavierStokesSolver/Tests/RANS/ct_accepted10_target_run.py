@@ -11,6 +11,7 @@ from functools import lru_cache
 from rans_qualification import THREADS,exact_vector_hash,audited_extrema
 os.environ.update(THREADS)
 import ct_accepted8_native as n
+import numpy as np
 from ct_accepted9_pressure_run import sealed
 from ct_accepted9_gate import pair as strip_pair,FIELDS,finite
 from ct_accepted9_controls import enable
@@ -69,8 +70,9 @@ def target_pair(q):
 
 def bounded_budgets(rt,folder,ini,r,c):
     """Same existing physical integration; omit redundant exported volume rows."""
-    binding=dict(model=c['model'],policy=c['wall_policy'],dt=r['dt'],time=r['time'],state_sha256=exact_vector_hash(r['state']),configuration_sha256=sha(folder/'case.xml'),native_report_sha256=sha(folder/'case.evolution.json'),actual_k_stage_sha256=r['pimple_attempts'][-1]['k_snapshot_sha256'])
-    result=dict(budgets={},budget_binding=binding);attempt=next(x for x in reversed(r['pimple_attempts']) if x['scheduled_complete']);path=Path(attempt['k_snapshot']);require(sha(path)==attempt['k_snapshot_sha256'],'changed actual target scalar stage');snap=n.read(path)
+    attempt=next(x for x in reversed(r['pimple_attempts']) if x['scheduled_complete'])
+    binding=dict(model=c['model'],policy=c['wall_policy'],dt=r['dt'],time=r['time'],state_sha256=exact_vector_hash(r['state']),configuration_sha256=sha(folder/'case.xml'),native_report_sha256=sha(folder/'case.evolution.json'),actual_k_stage_sha256=attempt['k_snapshot_sha256'])
+    result=dict(budgets={},budget_binding=binding);path=Path(attempt['k_snapshot']);require(sha(path)==attempt['k_snapshot_sha256'],'changed actual target scalar stage');snap=n.read(path)
     for label,orders,face in n.CONTROLS:
         dest=folder/label;dest.mkdir();root=ET.parse(folder/'case.xml').getroot()
         for k,v in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),orders,strict=True):set_parameter(root,k,v)
@@ -99,7 +101,7 @@ def main():
         folder=a.output/name;n.make(folder,a.runtime,c,dt,round(.002/dt),Path(z['checkpoint']),zero/'case.xml');os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'timing.jsonl');e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');os.environ.pop('NEKTAR_RANS_TIMING_FILE',None);r=n.read(folder/'case.evolution.json');require(r['accepted_states'][0]==z['state'],'target did not consume native history')
         row=dict(dt=dt,time=r['time'],directory=str(folder),failure=r['failure'],signature=r['signature'],execution=e,actual_initial_sha256=exact_vector_hash(z['state']),state_sha256=exact_vector_hash(r['state']),configuration_sha256=sha(folder/'case.xml'),native_report_sha256=sha(folder/'case.evolution.json'),history_sha256=artifact_hash(r['checkpoint']),initialization_receipt=r['initialization_receipt'])
         row['accepted_metrics']=[dict(time=t,**n.physical_metrics(ini,s,c,weights,count)) for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)];row['traction_history']=[dict(time=t,profile=profiles(ini,s,c)) for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)];row['actual_initial_traction_profile']=profiles(ini,z['state'],c)
-        fixed=inventory(ini['test_basis'],ini['observation']['grid'],r['state'],ini['observation']['offsets'],'A95',ini['observation']['grid_sides']);row['domain']=dict(status='pass' if not r['failure'] and fixed['domain_failure_count']==0 and fixed['minima']['covariance']['value']>=-1e-10*c['K0'] else 'fail',fixed=fixed,native_scope='mandatory production accepted-state and stage checks retained in native report',native_audited_extrema=audited_extrema(r))
+        fixed=inventory(ini['test_basis'],ini['observation']['grid'],np.asarray(r['state']),ini['observation']['offsets'],'A95',ini['observation']['grid_sides']);row['domain']=dict(status='pass' if not r['failure'] and fixed['domain_failure_count']==0 and fixed['minima']['covariance']['value']>=-1e-10*c['K0'] else 'fail',fixed=fixed,native_scope='mandatory production accepted-state and stage checks retained in native report',native_audited_extrema=audited_extrema(r))
         row['budgets']=bounded_budgets(a.runtime,folder,ini,r,c) if r['steps'] else dict(gate=dict(status='missing'))
         grid,sides,_,_=n.inventory(c);req=replay(ini,r['state'],r['time'],grid,grid_sides=sides,export_constitutive=True);q,pe=probe(a.runtime,folder,req,'constitutive');row['constitutive']=constitutive_comparison(q,c) if pe['exit_code']==0 else dict(status='fail',failure=q.get('failure'))
         row['corrections']=sum(x.get('bound_calls',0) for x in r['pimple_attempts']);row['extra_solves']=sum(x.get('additional_governing_equation_solves',0) for x in r['pimple_attempts']);row['actual_stage_checks']=[{k:x.get(k) for k in ('time','pressure_krylov_iterations','frozen_momentum_defect','corrected_continuity_gauge','bound_calls','additional_governing_equation_solves')} for x in r['pimple_attempts']];out['members'][name]=row;reports[name]=r;write_json(a.output/'progress.json',out);print('CT10 target',name,r['time'],r['failure'],flush=True)

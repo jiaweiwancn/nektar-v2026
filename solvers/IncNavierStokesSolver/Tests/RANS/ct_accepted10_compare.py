@@ -41,7 +41,7 @@ def gradients(p,s,c,weights,count):
 
 
 def outlet(p,s,c):
-    off=p['observation']['offsets'];col=n.col(c);ref=n.reference(col,c['H'],True);G=np.zeros((3,3));G[0,2]=ref[4]
+    s=np.asarray(s);off=p['observation']['offsets'];col=n.col(c);ref=n.reference(col,c['H'],True);G=np.zeros((3,3));G[0,2]=ref[4]
     from validate_a93_a95_e94e95 import oracle
     Q=oracle('A95',col.K,ref[2],G)['Q'];expected=[np.array([0.,col.t0]),np.array([Q[2,2]-Q[0,0],col.t0])];square=den=0.;witness=None
     for f in p['observation']['faces']:
@@ -83,7 +83,7 @@ def main():
         if t in (0.,.001,.002,.004,.008):
             rows['state_checks']={}
             for label in reports:
-                state=reports[label]['0.0005'][t];ini=ip[label]
+                state=np.asarray(reports[label]['0.0005'][t]);ini=ip[label]
                 rows['state_checks'][label]=dict(gradients=gradients(ini,state,c,w,count),constitutive=inventory(ini['test_basis'],ini['observation']['grid'],state,ini['observation']['offsets'],'A95',ini['observation']['grid_sides']),outlet=outlet(ini,state,c))
         out['times'][str(t)]=rows
     out['status']='comparison_completed';write_json(a.output/'results.json',out);m.seal(a.output,['results.json']);print('CT10 common-space comparison complete',flush=True);return 0
