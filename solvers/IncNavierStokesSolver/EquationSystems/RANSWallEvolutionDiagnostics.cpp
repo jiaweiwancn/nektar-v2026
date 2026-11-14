@@ -603,10 +603,11 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
             // Keep owner and side validation after the same factory access;
             // warm the valid request before each adverse descriptor.
             const double H=m_parameters.geometry.height;
-            for(const auto &el:fields[0]->Elements())if(Same(el.lower[2],H) || Same(el.upper[2],H))
+            const auto sameHeight=[](double a,double b){return std::abs(a-b)<=1e-12*std::max({1.,std::abs(a),std::abs(b)});};
+            for(const auto &el:fields[0]->Elements())if(sameHeight(el.lower[2],H) || sameHeight(el.upper[2],H))
             {
                 ScalarObservation p;p.block=K();p.geometry=el.geometry;
-                p.coordinate={(el.lower[0]+el.upper[0])/2,0,H};p.side=Same(el.upper[2],H)?-1:1;
+                p.coordinate={(el.lower[0]+el.upper[0])/2,0,H};p.side=sameHeight(el.upper[2],H)?-1:1;
                 const auto record=[&](const ScalarObservation &q)
                 {
                     try{const auto row=ResolveObservation(q).velocity;return J::Object({{"geometry",J::Number(row->geometry)},

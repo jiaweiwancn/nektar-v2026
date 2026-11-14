@@ -66,7 +66,8 @@ struct RANSWallEvolutionPatch::AuditCommitment
         void End(){++count;if(++chunkCount==4096)Flush();}
         void Flush()
         {
-            if(!chunkCount)return;Require(chunks.size()<16384,"bounded audit commitment chunk limit");
+            if(!chunkCount)return;
+            Require(chunks.size()<16384,"bounded audit commitment chunk limit");
             const auto hash=chunk.Finish();const auto ordinal=chunks.size();
             // Root commits to the ordered, framed SHA256 chunk commitments;
             // the byte stream is hashed once, not retained or rounded to JSON.
@@ -82,20 +83,24 @@ struct RANSWallEvolutionPatch::AuditCommitment
 
 void RANSWallEvolutionPatch::CommitAuditRow(const RowKey &key,const RANSWallGlobalPoint &r) const
 {
-    if(!m_auditCommitment)return;const auto began=std::chrono::steady_clock::now();auto &s=m_auditCommitment->rows;
+    if(!m_auditCommitment)return;
+    const auto began=std::chrono::steady_clock::now();auto &s=m_auditCommitment->rows;
     s.Begin(key);for(auto v:key)s.Integer(v);s.Values(r.ids);s.Values(r.phi);s.Values(r.constant);
-    for(const auto &v:r.derivative)s.Values(v);s.Number(r.weight);s.Integer(r.columnAverage);s.End();
+    for(const auto &v:r.derivative)s.Values(v);
+    s.Number(r.weight);s.Integer(r.columnAverage);s.End();
     m_auditCommitment->seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-began).count();
 }
 void RANSWallEvolutionPatch::CommitAuditObservation(const ScalarObservation &p,const RANSWallGlobalPoint &r,
     double k,double epsilon,const RANSTensor &g,const Vector &state) const
 {
-    if(!m_auditCommitment)return;const auto began=std::chrono::steady_clock::now();auto &s=m_auditCommitment->observations;
+    if(!m_auditCommitment)return;
+    const auto began=std::chrono::steady_clock::now();auto &s=m_auditCommitment->observations;
     const RowKey key{Bits(p.block),Bits(r.geometry),Bits(r.element),Bits(p.side+1),Bit(p.coordinate[0]),Bit(p.coordinate[1]),Bit(p.coordinate[2])};
     s.Begin(key);for(auto v:key)s.Integer(v);s.Text(p.inventory);s.Integer(p.dependentTrace);s.Integer(p.strict);
     s.Number(p.value);s.Number(p.scale);s.Number(p.weight);s.Number(k);s.Number(epsilon);
     for(const auto &row:g)for(double v:row)s.Number(v);
-    for(int a=0;a<m_dimension;++a)s.Number(r.Value(state,offset[a]));s.End();
+    for(int a=0;a<m_dimension;++a)s.Number(r.Value(state,offset[a]));
+    s.End();
     m_auditCommitment->seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-began).count();
 }
 
