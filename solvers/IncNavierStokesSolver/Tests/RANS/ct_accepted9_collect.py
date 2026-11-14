@@ -35,13 +35,13 @@ def compact_pair(q):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','ct8','output'):p.add_argument('--'+k,type=Path,required=True)
-    a=p.parse_args();required=['pressure-comparison-v2','pressure-diagnosis-v1','controls-v1','equivalence-v1','capacity-v1','build-v4'];sources={};bodies={}
+    a=p.parse_args();required=['pressure-comparison-v2','pressure-diagnosis-v1','controls-v2','equivalence-v1','capacity-v1','build-v4'];sources={};bodies={}
     for label in required:
         path=a.root/label
         if (path/'completed-artifacts.json').exists():sources[label]=dict(path=str(path),sha256=sha(path/'results.json'),request=sha(path/'request-manifest.json'),seal=sha(path/'completed-artifacts.json'));bodies[label]=sealed(path)
         else:sources[label]=dict(status='missing_or_incomplete',path=str(path))
     m=RequestManifest(a.output,dict(schema='CT9FinalEvidenceV1',source=sha(Path(__file__)),sources=sources,contract=sha(Path(__file__).resolve().parents[4]/'docs/plans/cao-tamura-accepted-9-evidence/contract.json')))
-    pressure=bodies.get('pressure-comparison-v2');diagnosis=bodies.get('pressure-diagnosis-v1');controls=bodies.get('controls-v1');equivalence=bodies.get('equivalence-v1');capacity=bodies.get('capacity-v1');build=bodies.get('build-v4')
+    pressure=bodies.get('pressure-comparison-v2');diagnosis=bodies.get('pressure-diagnosis-v1');controls=bodies.get('controls-v2');equivalence=bodies.get('equivalence-v1');capacity=bodies.get('capacity-v1');build=bodies.get('build-v4')
     if pressure:
         write_json(a.output/'pressure-pair.json',compact_pair(pressure));write_json(a.output/'pressure-vectors.json',pressure_vectors(a.root,a.ct8))
     if diagnosis:write_json(a.output/'pressure-diagnosis.json',diagnosis)

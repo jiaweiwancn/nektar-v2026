@@ -5,7 +5,7 @@
 Zero time only. A pressure-study failure forbids physical full-domain evolution
 but does not forbid this separately authorized capacity measurement.
 """
-import argparse,copy,os,resource
+import argparse,copy,os,resource,xml.etree.ElementTree as ET
 from pathlib import Path
 from rans_qualification import THREADS,exact_vector_hash
 os.environ.update(THREADS)
@@ -15,6 +15,7 @@ from ct_accepted9_pressure_run import sealed
 from ct_accepted7_domain import X
 from ct_accepted_open import run,probe,require
 from ct_accepted_feasibility import write_json
+from run_cls_epawf_picard import set_info,write
 from rans_request_manifest import RequestManifest,sha,runtime_identity
 
 def samples(c):
@@ -39,6 +40,10 @@ def main():
         try:
             count,e=probe(a.runtime,folder,dict(operation='native_layout_inventory'),'count');require(e['exit_code']==0,'actual native count failed');row.update(native_count=count,count_execution=e);require(count['stored_slots']<=70000,'new backend count guard')
             if label.startswith('target'):require(count['stored_slots']==(33267 if degree==3 else 60907),'target changed native count')
+            if label=='intermediate-p3':
+                negative=folder/'dense-guard';negative.mkdir();root=ET.parse(folder/'case.xml').getroot();set_info(root,'RANSWallLinearBackend','ReplicatedDenseV1');write(root,negative/'case.xml')
+                packet,e=probe(a.runtime,negative,dict(operation='functions'),'negative');require(e['exit_code']!=0 and '3000' in packet.get('failure',''),'old dense guard was bypassed')
+                row['unchanged_dense_guard_negative']=dict(status='pass',reason=packet['failure'],execution=e,packet_sha256=sha(negative/'negative.json'))
             os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'initial-timing.jsonl');e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');os.environ.pop('NEKTAR_RANS_TIMING_FILE',None);row['startup_execution']=e
             require((folder/'case.evolution.json').exists(),'fresh zero-step report unavailable');native=n.read(folder/'case.evolution.json');row.update(zero_time=native['time'],zero_state_sha256=exact_vector_hash(native['state']),history=native['checkpoint'],native_report_sha256=sha(folder/'case.evolution.json'),initialization=native['initialization_receipt'],startup_physical_failure=native['failure'],initial_raw_spatial_norms=native.get('raw_reference_norms'))
             require(e['exit_code']==0 and not native['failure'] and native['time']==0.,'zero-step startup/domain failed:'+str(native['failure']))

@@ -39,7 +39,7 @@ def compare_packets(dense,sparse,c):
     for x,y in zip(a['blocks'],b['blocks'],strict=True):
         require(x['block']==y['block'] and x['rows']==y['rows'],'free mask changed')
         for key in ('matrix','residual'):checks['block_'+str(x['block'])+'_'+key]=maximum(np.asarray(x[key])-y[key])
-    for key in ('traction_load','diffusive_load','advective_load'):
+    for key in ('traction_load','diffusive_load','advection_load'):
         checks[key]=maximum(np.asarray(dense['open_boundary'][key])-sparse['open_boundary'][key])
     require(max(checks.values())<=2e-10,'dense/CSR complete row mismatch:'+str(checks))
     # Independent direct linear algebra checks the Nektar matrix-free GMRES
