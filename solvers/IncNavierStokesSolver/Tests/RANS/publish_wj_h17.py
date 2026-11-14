@@ -10,7 +10,8 @@ from pathlib import Path
 import shutil
 from run_wj_h4 import THREADS,load
 os.environ.update(THREADS)
-from wj_h15_observer import identity,verify,atomic
+from wj_h15_observer import identity,verify,atomic,vector_hash
+from wj3_measure import checkpoint_payload
 
 HORIZON=505.02466521278404
 WINDOW=[447.8483832973273,505.02466521278404]
@@ -74,7 +75,9 @@ def publish(root):
             copy(directory/name,'target/'+name)
         if result:
             atomic(out/f'target/step-{n}-physical-summary.json',dict(summary=result['summary'],all_regional_Q1_moments=result['all_regional_Q1_moments'],scope='same live H16 inventory',source=identity(result_path)))
-        bindings.append(dict(step=n,state=r['state_sha256'],reference=r['fixed_reference_sha256']if 'fixed_reference_sha256'in r else ready['binding']['fixed_reference_sha256'],defect=ready['binding']['fixed_defect_sha256'],native_history=r['native_history_sha256']if 'native_history_sha256'in r else [ready['binding'].get('native_history_sha256')],ready=identity(p),report=ready['report'],checkpoint=ready['checkpoint'],callback=ready['callback'],commit=identity(commit)if commit.exists()else None))
+        cp=checkpoint_payload(verify(ready['checkpoint']).parent,include_reference=True)
+        assert vector_hash(cp['state'])==ready['binding']['state_sha256']
+        bindings.append(dict(step=n,state=ready['binding']['state_sha256'],reference=ready['binding']['fixed_reference_sha256'],defect=ready['binding']['fixed_defect_sha256'],native_history=[vector_hash(v)for v in cp['native_history']],native_history_times=cp['native_history_times'],ready=identity(p),report=ready['report'],checkpoint=ready['checkpoint'],callback=ready['callback'],commit=identity(commit)if commit.exists()else None))
     table(out/'target-timeline.csv',stages)
     atomic(out/'heavy-input-bindings.json',dict(audits=audit_payloads,target=bindings,scope='files stay in original Linux roots; state-vector hashes differ from checkpoint file hashes'))
     for name in ('target-outcome.json','view/result.json','execution-diff.json','intent.json'):
@@ -93,7 +96,17 @@ def publish(root):
     atomic(out/'component-gates.json',gates)
     if len(stages)==4:
         native=sum(v['native_compute_seconds']for v in stages[1:])/3;assessment=sum(v['independent_seconds']for v in stages[1:])/3
-        atomic(out/'conditional-cost.json',dict(horizon=HORIZON,terminal_window=WINDOW,steps=STEPS,warm_native_seconds=native,warm_assessment_seconds=assessment,native_only_days=native*STEPS/86400,observed_compute_plus_assessment_days=(native+assessment)*STEPS/86400,inclusive_loop_forecast='requires inclusive native.step timing; compute+assessment is not inclusive publication/wait/commit',H16_inclusive_days=211.896222547,scope='conditional arithmetic, not duration admission; future witness growth/startup/terminal work unresolved'))
+        timings=[]
+        for label,v in entries.items():
+            if v.get('kind')=='target':
+                p=root/'operations'/label/'timing.jsonl'
+                if p.exists():timings.extend(json.loads(s)for s in p.read_text().splitlines())
+        names=('native.step','native.startup','native.acceptance_audit','audit.WJ.owned_rows_gradients','audit.WJ.velocity_accessor_validation','audit.WJ.scalar_row_accessor','audit.WJ.current_state_contractions','audit.WJ.principal_full_search','pimple.single_sweep','monitor.checkpoint_and_publish','monitor.independent_wait','monitor.qualification_commit')
+        selected=[dict(step=v['step'],time=v['time'],name=v['name'],wall_seconds=v['wall_seconds'],cpu_seconds=v['process_cpu_seconds'],calls=v.get('calls',1),clock_scope=v.get('clock_scope','inclusive scope; do not add nested intervals'))for v in timings if v['name']in names]
+        table(out/'target-native-timing.csv',selected)
+        means={name:sum(v['wall_seconds']for v in selected if v['name']==name and v['step']in (2,3,4))/3 for name in names}
+        inclusive=means['native.step']
+        atomic(out/'conditional-cost.json',dict(horizon=HORIZON,terminal_window=WINDOW,steps=STEPS,warm_native_seconds=native,warm_assessment_seconds=assessment,warm_inclusive_loop_seconds=inclusive,warm_timing_means=means,native_only_days=native*STEPS/86400,observed_compute_plus_assessment_days=(native+assessment)*STEPS/86400,inclusive_loop_days=inclusive*STEPS/86400,H16_inclusive_days=211.896222547,scope='conditional arithmetic, not duration admission; inclusive loop includes publication/wait/commit; nested timers are not added; audit CPU0 is unmeasured; future witness growth/startup/terminal work unresolved'))
     figures(out,audit_records,stages)
     seal(out)
     atomic(root/'authoritative-index-v1.json',dict(publication=identity(out/'manifest.json'),component_gates=identity(out/'component-gates.json'),ledger_state='OPEN publication snapshot, separately closed later',new_scientific_steps=0))
