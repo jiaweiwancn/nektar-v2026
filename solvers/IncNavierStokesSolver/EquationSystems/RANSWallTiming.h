@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <stdexcept>
 #include <string>
+#include <map>
 #include <vector>
 #include <unistd.h>
 
@@ -70,6 +71,29 @@ public:
             <<",\"exclusive_wall_seconds\":"<<std::max(0.,wall-childrenWall)
             <<",\"exclusive_process_cpu_seconds\":"<<std::max(0.,processCpu-childrenCpu)<<"}\n";
         s=nullptr;
+    }
+};
+// Per-point audit buckets accumulate clocks in memory and serialize once.
+// Buckets are disjoint wall intervals; parent Scope retains the unbucketed work.
+class Accumulator
+{
+    std::map<std::string,std::pair<long,double>> values;
+public:
+    class Part
+    {
+        Accumulator *owner;std::string name;std::chrono::steady_clock::time_point began;
+    public:
+        Part(Accumulator &a,const std::string &n):owner(Get().enabled?&a:nullptr),name(n)
+        {if(owner)began=std::chrono::steady_clock::now();}
+        void Stop(){if(!owner)return;auto &v=owner->values[name];++v.first;v.second+=std::chrono::duration<double>(std::chrono::steady_clock::now()-began).count();owner=nullptr;}
+        ~Part(){Stop();}
+    };
+    ~Accumulator()
+    {
+        auto &s=Get();if(!s.enabled)return;
+        for(const auto &[name,v]:values)s.out<<"{\"schema\":1,\"pid\":"<<getpid()<<",\"id\":"<<++s.next<<",\"parent_id\":0,\"step\":"<<s.step
+            <<",\"time\":"<<s.time<<",\"name\":"<<std::quoted(name)<<",\"calls\":"<<v.first<<",\"wall_seconds\":"<<v.second
+            <<",\"exclusive_wall_seconds\":"<<v.second<<",\"process_cpu_seconds\":0,\"exclusive_process_cpu_seconds\":0,\"clock_scope\":\"accumulated disjoint wall only; CPU not measured\"}\n";
     }
 };
 }

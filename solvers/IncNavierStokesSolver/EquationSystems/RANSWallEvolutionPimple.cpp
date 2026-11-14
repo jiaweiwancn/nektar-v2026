@@ -37,6 +37,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     int momentum=0,pressure=0,epsilon=0,k=0,massApplications=0;
     int momentumAttempts=0,pressureAttempts=0,epsilonAttempts=0,kAttempts=0;
     int boundCalls=0,boundActivations=0,boundIterations=0,boundMass=0,boundKKT=0;
+    bool recorded=false;
     auto put=[&](const std::string &key,const std::string &value){record.emplace_back(key,value);};
     // Passive copies of already assembled/factored systems. This observer never
     // applies a factor or changes a governing right-hand side or trajectory.
@@ -89,7 +90,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         put("bound_active_set_iterations",J::Number(boundIterations));put("bound_mass_factor_applications",J::Number(boundMass));
         put("bound_kkt_solves",J::Number(boundKKT));
         put("seconds",J::Number(std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count()));
-        m_pimpleRecords.push_back(J::Object(record));
+        if(RANSWallMonitor::Factors().Enabled())m_pimpleRecords.clear();
+        m_pimpleRecords.push_back(J::Object(record));recorded=true;
+        if(RANSWallMonitor::Factors().Enabled())
+            RANSWallMonitor::Atomic(RANSWallMonitor::Factors().Directory()+"/attempt-"+J::Number(time)+"-"+RANSWallR3::Hash(history)+".json",
+                J::Object({{"schema",J::Quote("WJImplicitAttemptV1")},{"status",J::Quote("PROVISIONAL_NOT_TIME_COMMIT")},{"attempt",m_pimpleRecords.back()}}));
         std::cout<<"EP-AWF PIMPLE "<<m_pimpleRecords.back()<<std::endl;
     };
     auto check=[&](const Vector &q,const char *phase)
@@ -408,7 +413,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         m_lastFeasibleState=s;
         finalTiming.Stop();publish(true,"");return s;
     }
-    catch(const std::exception &error){m_lastFeasibleState=s;publish(false,error.what());throw;}
+    catch(const std::exception &error){m_lastFeasibleState=s;if(!recorded)publish(false,error.what());throw;}
 }
 
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::PhysicalSamples(

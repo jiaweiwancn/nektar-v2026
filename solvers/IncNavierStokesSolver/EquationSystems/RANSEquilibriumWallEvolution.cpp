@@ -115,6 +115,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         const std::vector<std::string> expected=dim==2?std::vector<std::string>{"u","v","k",epsilonName,"p"}:
             std::vector<std::string>{"u","v","w","k",epsilonName,"p"};
         Require(m_session->GetVariables()==expected,model=="WJHighRe"?"WJ evolution variables must be native velocity components,k,epsilon,p":"legacy evolution variables must be native velocity components,k,eps_tilde,p");
+        ConfigureMonitoring();
         RANSWallPatchParameters parameters;
         m_session->LoadParameter("RANSWallHeight",parameters.geometry.height,2.);
         m_session->LoadParameter("RANSWallRoughness",parameters.geometry.roughness,.1);
@@ -200,6 +201,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         }
         m_session->LoadSolverInfo("RANSWallRestart",m_restart,"None");m_session->LoadSolverInfo("RANSWallCheckpoint",m_checkpointBase,"None");
         Require(m_timestep>0,"evolution requires positive fixed TimeStep");m_data=RANSWallEvolutionData(dim);
+        if(m_bounded)Require(m_patch->MappedBlock() && m_patch->WJ() && m_patch->PimpleSingleSweep() && m_order==1 &&
+            m_diagnostics && m_restart!="None" && m_checkpointBase!="None","BoundedV1 requires the admitted serial WJ mapped restart route");
         for(int a=0;a<dim;++a)
         {m_data.innerBody[a]=Function("BodyForceInner",expected[a]);m_data.outerBody[a]=Function("BodyForceOuter",expected[a]);}
         m_data.innerKSource=Function("ScalarSourceInner","k");m_data.outerKSource=Function("ScalarSourceOuter","k");m_data.outerEpsilonSource=Function("ScalarSourceOuter",m_patch->EpsilonName());
@@ -238,6 +241,154 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
 std::string RANSEquilibriumWallEvolution::PhysicsSignature() const
 {
     return RANSWallPhysicsSignature(*m_patch,m_serialSession,m_eta,m_neutral,m_ustar,m_direction,m_chartFunctions);
+}
+void RANSEquilibriumWallEvolution::ConfigureMonitoring()
+{
+    namespace M=RANSWallMonitor;
+    std::string mode;m_session->LoadSolverInfo("RANSWallRetention",mode,"Off");
+    Require(mode=="Off" || mode=="BoundedV1","unknown wall retention mode");m_bounded=mode=="BoundedV1";
+    if(!m_bounded)return;
+    Require(m_session->GetComm()->GetSize()==1,"bounded monitoring is serial");
+    m_session->LoadSolverInfo("RANSWallMonitorIntent",m_monitorIntentPath,"None");
+    m_monitor=M::Read(m_monitorIntentPath);Require(m_monitor.get<std::string>("schema")=="WJMonitorIntentV1","wrong monitor intent schema");
+    m_monitorDirectory=m_monitor.get<std::string>("directory");
+    Require(m_monitor.get<std::string>("nonce").size()>=16 && m_monitor.get<double>("ack_timeout_seconds")>0 &&
+        m_monitor.get<double>("ack_timeout_seconds")<=120 && m_monitor.get<std::size_t>("maximum_absolute_step")<=4,"invalid bounded monitoring limits");
+    Require(!std::filesystem::exists(m_monitorDirectory+"/factors"),"monitor factor output cannot be reused");
+    M::Factors().Configure(m_monitorDirectory+"/factors",m_monitor.get<std::string>("scope_sha256"));
+    m_session->LoadSolverInfo("RANSWallMonitorFault",m_monitorFault,"Off");
+    Require(m_monitorFault=="Off" || m_monitorFault=="AfterImplicitV1","unknown small monitoring fault");
+}
+void RANSEquilibriumWallEvolution::InitialiseMonitoring()
+{
+    namespace M=RANSWallMonitor;namespace J=RANSWallSolveJson;
+    Require(m_monitorFault=="Off" || m_patch->Size()<=3000,"monitor fault is small-fixture only");
+    const auto original=m_monitor.get_child("original_qh0_checkpoint");M::CheckPin(original);
+    const auto cp=RANSWallTimeIntegration::ReadCheckpoint(std::filesystem::path(original.get<std::string>("path")).parent_path().string(),
+        m_signature,m_order,m_timestep,m_patch->Size(),m_patch->DifferentialSize());
+    Require(cp.integration.steps==0 && cp.integration.time==0,"original qh0 is not CP0");m_qh0=cp.coupledState;
+    Require(RANSWallR3::Hash(m_qh0)==m_monitor.get<std::string>("original_qh0_state_sha256") &&
+        RANSWallR3::Hash(cp.fixedReference)==RANSWallR3::Hash(m_patch->Reference()) && RANSWallR3::Hash(cp.fixedDefect)==RANSWallR3::Hash(m_patch->Defect()),
+        "monitor original qh0/reference/defect differs");
+    Require(m_patch->InitializationWork()==Vector({0.,0.}) && m_patch->InitialVelocityCalls()==0,"bounded restore performed initialization work");
+    m_qualifiedCheckpoint=m_restart;
+    if(auto p=m_monitor.get_child_optional("restart_callback"))
+    {
+        M::CheckPin(*p);auto side=M::Read(p->get<std::string>("path"));
+        Require(side.get<std::string>("state_sha256")==RANSWallR3::Hash(m_state) && side.get<std::string>("time_bits")==M::Bits(m_time),"restart callback state/time differs");
+        for(const auto &v:side.get_child("callback_history"))m_lastHistory.push_back(v.second.get_value<double>());
+        m_stageAlpha=side.get<double>("alpha_mass");m_stageTime=side.get<double>("time");
+        Require(m_lastHistory.size()==m_state.size() && RANSWallR3::Hash(m_lastHistory)==side.get<std::string>("callback_history_sha256") &&
+            m_stageAlpha==1/m_timestep && m_stageTime==m_time,"restart genuine callback binding differs");
+    }
+    std::vector<std::string> fields;
+    for(int b=0;b<m_patch->Gauge();++b)
+    {
+        auto f=m_patch->fields[b];auto map=f->Field()->GetLocalToGlobalMap();std::vector<std::string> elements;
+        for(int e=0;e<f->Elements().size();++e)
+        {
+            auto el=f->Elements()[e];std::vector<int> ids;Vector signs;
+            const int count=f->Field()->GetExp(e)->GetNcoeffs(),o=f->Field()->GetCoeff_Offset(e);
+            for(int j=0;j<count;++j){ids.push_back(map->GetLocalToGlobalMap(o+j));signs.push_back(map->GetLocalToGlobalSign(o+j));}
+            elements.push_back(J::Object({{"geometry",J::Number(el.geometry)},{"degree",J::Number(el.degree)},
+                {"lower",J::Numbers(Vector(el.lower.begin(),el.lower.end()))},{"upper",J::Numbers(Vector(el.upper.begin(),el.upper.end()))},
+                {"ids",J::Numbers(ids)},{"sign",J::Numbers(signs)}}));
+        }
+        fields.push_back(J::Object({{"size",J::Number(f->Size())},{"mesh",J::List(elements)}}));
+    }
+    M::Atomic(m_monitorDirectory+"/structure.json",J::Object({{"schema",J::Quote("WJMonitorStructureV1")},
+        {"fields",J::List(fields)},{"offsets",J::Numbers(m_patch->offset)},
+        {"geometry_signature",J::Quote(m_patch->Mapping().Signature())},{"physical_signature_sha256",J::Quote(RANSWallR3::Hash(m_signature))},
+        {"original_qh0_state_sha256",J::Quote(RANSWallR3::Hash(m_qh0))},{"intent",RANSWallR3::Pin(m_monitorIntentPath)}}));
+    M::Atomic(m_monitorDirectory+"/startup.json",MonitoringPacket("startup_reaudit_not_completed"));TrimMonitoring();
+}
+std::string RANSEquilibriumWallEvolution::MonitoringPacket(const std::string &phase) const
+{
+    namespace J=RANSWallSolveJson;const auto snapshot=m_integrator->Capture();std::vector<std::string> h;
+    for(const auto &v:snapshot.history)h.push_back(J::Numbers(v));
+    return J::Object({{"schema",J::Quote(phase=="completed_stage"?"WJCompletedStepV1":"WJMonitoringStartupV1")},
+        {"retention_mode",J::Quote("BoundedV1")},{"signature",J::Quote(m_signature)},{"dt",J::Number(m_timestep)},
+        {"steps",J::Number(snapshot.steps)},{"time",J::Number(m_time)},{"state",J::Numbers(m_state)},
+        {"checkpoint",J::Quote(m_lastCheckpoint)},{"fixed_reference",J::Numbers(m_patch->Reference())},{"fixed_defect",J::Numbers(m_patch->Defect())},
+        {"original_qh0_state_sha256",J::Quote(RANSWallR3::Hash(m_qh0))},{"native_history",J::List(h)},{"native_history_times",J::Numbers(snapshot.times)},
+        {"accepted_states",J::List({J::Numbers(m_state)})},{"wj_audit_packets",J::List(m_wjAuditPackets.empty()?std::vector<std::string>{}:std::vector<std::string>{m_wjAuditPackets.back()})},
+        {"last_stage_history",J::Numbers(m_lastHistory)},{"last_stage_time",J::Number(m_stageTime)},{"last_stage_alpha",J::Number(m_stageAlpha)},
+        {"stage_audits",m_stageAudits.empty()?"[]":J::List({J::Numbers(m_stageAudits.back())})},
+        {"pimple_attempts",J::List(m_patch->PimpleRecords())},{"implicit_callback_count",J::Number(m_implicitCallbacks)},
+        {"initialization_lift_calls_iterations",J::Numbers(m_patch->InitializationWork())},{"initial_velocity_calls",J::Number(m_patch->InitialVelocityCalls())},
+        {"failure",J::Quote("")},{"native_completed_in_process",J::Number(m_nativeCompleted)}});
+}
+void RANSEquilibriumWallEvolution::CompleteMonitoring(double nativeSeconds)
+{
+    namespace M=RANSWallMonitor;namespace J=RANSWallSolveJson;
+    RANSWallTiming::Scope publish("monitor.checkpoint_and_publish");Checkpoint();
+    const int fd=::open((m_lastCheckpoint+"/State.bin").c_str(),O_RDONLY);Require(fd>=0,"cannot fsync completed checkpoint");
+    const int synced=::fsync(fd);::close(fd);Require(synced==0,"completed checkpoint fsync failed");RANSWallR3::SyncDirectory(m_lastCheckpoint+"/State.bin");
+    Require(!m_stateAudits.empty() && RANSWallR3::Hash(m_state)==RANSWallR3::Hash(m_acceptedStates.back()),"completed state differs from native audited candidate");
+    m_wjAuditPackets.back()=m_patch->WJAuditPacket(m_stateAudits.back(),m_state,m_lastHistory,m_stageAlpha,m_stageTime,"completed_stage");
+    const auto step=m_integrator->Steps();const auto stem="step-"+std::to_string(step),prefix=m_monitorDirectory+"/"+stem;
+    M::Atomic(prefix+".callback.json",J::Object({{"schema",J::Quote("WJCompletedCallbackV1")},{"step",J::Number(step)},
+        {"state_sha256",J::Quote(RANSWallR3::Hash(m_state))},{"callback_history",J::Numbers(m_lastHistory)},
+        {"callback_history_sha256",J::Quote(RANSWallR3::Hash(m_lastHistory))},{"time",J::Number(m_stageTime)},
+        {"time_bits",J::Quote(M::Bits(m_stageTime))},{"alpha_mass",J::Number(m_stageAlpha)},{"alpha_bits",J::Quote(M::Bits(m_stageAlpha))}}));
+    M::Atomic(prefix+".report.json",MonitoringPacket("completed_stage"));
+    const auto binding=J::Object({{"nonce",J::Quote(m_monitor.get<std::string>("nonce"))},{"absolute_step",J::Quote(std::to_string(step))},
+        {"time_bits",J::Quote(M::Bits(m_time))},{"alpha_bits",J::Quote(M::Bits(m_stageAlpha))},{"state_sha256",J::Quote(RANSWallR3::Hash(m_state))},
+        {"callback_history_sha256",J::Quote(RANSWallR3::Hash(m_lastHistory))},{"checkpoint_sha256",J::Quote(RANSWallR3::HashFile(m_lastCheckpoint+"/State.bin"))},
+        {"callback_sidecar_sha256",J::Quote(RANSWallR3::HashFile(prefix+".callback.json"))},{"report_sha256",J::Quote(RANSWallR3::HashFile(prefix+".report.json"))},
+        {"original_qh0_sha256",J::Quote(RANSWallR3::Hash(m_qh0))},{"fixed_reference_sha256",J::Quote(RANSWallR3::Hash(m_patch->Reference()))},
+        {"fixed_defect_sha256",J::Quote(RANSWallR3::Hash(m_patch->Defect()))},{"physical_signature_sha256",J::Quote(RANSWallR3::Hash(m_signature))},
+        {"structure_sha256",J::Quote(RANSWallR3::HashFile(m_monitorDirectory+"/structure.json"))},
+        {"source_sha256",J::Quote(m_monitor.get<std::string>("source_sha256"))},{"observer_sha256",J::Quote(m_monitor.get<std::string>("observer_sha256"))},
+        {"inventory_rule_sha256",J::Quote(m_monitor.get<std::string>("inventory_rule_sha256"))}});
+    M::Atomic(prefix+".ready.json",J::Object({{"schema",J::Quote("WJCompletedReadyV1")},{"binding",binding},
+        {"checkpoint",RANSWallR3::Pin(m_lastCheckpoint+"/State.bin")},{"callback",RANSWallR3::Pin(prefix+".callback.json")},
+        {"report",RANSWallR3::Pin(prefix+".report.json")},{"structure",RANSWallR3::Pin(m_monitorDirectory+"/structure.json")},
+        {"native_compute_seconds",J::Number(nativeSeconds)},{"absolute_step",J::Number(step)},{"time",J::Number(m_time)}}));
+    TrimMonitoring();publish.Stop();
+    RANSWallTiming::Scope waiting("monitor.independent_wait");
+    const auto next=M::Wait(m_monitorDirectory,stem,RANSWallR3::HashFile(prefix+".ready.json"),binding,
+        m_monitor.get<double>("ack_timeout_seconds"),m_monitor.get<int>("observer_pid"));
+    ++m_independentQualified;m_qualifiedCheckpoint=m_lastCheckpoint;
+    Require(next!="RESOURCE_LIMIT","RESOURCE_LIMIT prospective next-stage/readback budget");
+    Require(next!="TERMINAL" || step==m_monitor.get<std::size_t>("maximum_absolute_step"),"premature terminal ACK");
+}
+void RANSEquilibriumWallEvolution::TrimMonitoring()
+{
+    auto last=[](auto &v,std::size_t n){if(v.size()>n)v.erase(v.begin(),v.end()-n);};
+    last(m_stageAudits,1);last(m_stepAudits,1);last(m_acceptedStates,1);last(m_stateAudits,1);last(m_auditTimes,1);last(m_wjAuditPackets,1);last(m_explicitAudits,2);
+}
+void RANSEquilibriumWallEvolution::AbortMonitoring() const
+{
+    namespace M=RANSWallMonitor;namespace J=RANSWallSolveJson;
+    if(std::filesystem::exists(m_monitorDirectory+"/first-aborted.json"))return;
+    std::string reason="unknown Advance exception";try{std::rethrow_exception(std::current_exception());}catch(const std::exception &e){reason=e.what();}
+    M::Atomic(m_monitorDirectory+"/first-aborted.json",J::Object({{"status",J::Quote("ABORTED_NOT_COMPLETED")},{"failure",J::Quote(reason)},
+        {"attempted_step",J::Number(m_integrator->Steps()+1)},{"candidate",J::Numbers(m_rejectedState.empty()?m_state:m_rejectedState)},
+        {"callback_history",J::Numbers(m_activeHistory)},{"attempts",J::List(m_patch->PimpleRecords())},
+        {"provisional_audits",J::List(m_wjAuditPackets)}}));
+}
+void RANSEquilibriumWallEvolution::WriteBoundedReport() const
+{
+    namespace M=RANSWallMonitor;namespace J=RANSWallSolveJson;
+    try
+    {
+        M::Atomic(m_sessionName+".evolution.json",J::Object({{"schema",J::Quote("WJBoundedRunV1")},{"retention_mode",J::Quote("BoundedV1")},
+            {"failure",J::Quote(m_failure)},{"time",J::Number(m_time)},{"steps",J::Number(m_integrator->Steps())},
+            {"state_sha256",J::Quote(RANSWallR3::Hash(m_state))},{"native_completed",J::Number(m_nativeCompleted)},
+            {"independently_qualified",J::Number(m_independentQualified)},{"aborted_advances",J::Number(m_aborted)},
+            {"last_completed_checkpoint",J::Quote(m_lastCheckpoint)},{"last_qualified_checkpoint",J::Quote(m_qualifiedCheckpoint)},
+            {"original_qh0_sha256",J::Quote(RANSWallR3::Hash(m_qh0))},{"fixed_reference_sha256",J::Quote(RANSWallR3::Hash(m_patch->Reference()))},
+            {"raw_reference_norms",J::Numbers(m_rawNorms)},{"corrected_reference_norms",J::Numbers(m_correctedNorms)},
+            {"fixed_defect_sha256",J::Quote(RANSWallR3::Hash(m_patch->Defect()))},{"initialization_work",J::Numbers(m_patch->InitializationWork())},
+            {"initializer_calls",J::Number(m_patch->InitialVelocityCalls())},{"implicit_callbacks",J::Number(m_implicitCallbacks)},
+            {"explicit_calls",J::Number(m_explicitTotal)},{"resident_accepted_states",J::Number(m_acceptedStates.size())},
+            {"resident_audits",J::Number(m_stateAudits.size())},{"resident_wj_packets",J::Number(m_wjAuditPackets.size())},
+            {"resident_stage_records",J::Number(m_stageAudits.size())},{"resident_step_records",J::Number(m_stepAudits.size())},
+            {"resident_explicit_records",J::Number(m_explicitAudits.size())},{"resident_pimple_records",J::Number(m_patch->PimpleRecords().size())},
+            {"factor_catalog",M::Factors().Summary()},{"evidence_directory",J::Quote(m_monitorDirectory)}}),false);
+    }
+    catch(const std::exception &e){if(m_failure.empty())throw;std::cerr<<"bounded failure report: "<<e.what()<<std::endl;}
 }
 void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
 {
@@ -335,6 +486,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
         if(m_patch->OpenBoundary())m_patch->ValidateOutlet(m_state,"startup");
         if(m_diagnostics)RecordAudit(m_state,m_state,0,m_time);
         if(m_patch->PimpleSingleSweep())m_physicalSamples=m_patch->PhysicalSamples(m_state,m_time,m_data);
+        if(m_bounded)InitialiseMonitoring();
         UpdateFields();
     }
     catch(const std::exception &error)
@@ -361,6 +513,7 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
     RANSWallEvolutionPatch::EvaluationScope evaluation(*m_patch,m_implicitData,time);
     ++m_implicitCallbacks;
     auto fullHistory=m_state;std::copy(history.begin(),history.end(),fullHistory.begin());int iterations=0;
+    if(m_bounded)m_activeHistory=fullHistory;
     Vector candidate;
     try
     {
@@ -426,7 +579,7 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
             m_rejectedState=state;m_rangeEvents.push_back({time,alpha,state,history,audit,reasons,true});
             throw std::runtime_error("WJ hard audit exit; candidate/history retained: "+reasons.front());
         }
-        m_wjAuditPackets.push_back(m_patch->WJAuditPacket(audit,state,history,alpha,time,alpha>0?"completed_stage":"startup"));
+        m_wjAuditPackets.push_back(m_patch->WJAuditPacket(audit,state,history,alpha,time,alpha>0?(m_bounded?"implicit_provisional":"completed_stage"):"startup"));
         m_stateAudits.push_back(std::move(audit));m_auditTimes.push_back(time);m_acceptedStates.push_back(state);return;
     }
     if(m_patch->AcceptedAWF())
@@ -520,9 +673,11 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
 }
 RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Explicit(const Vector &state,double time)
 {
+    if(m_bounded && m_monitorFault=="AfterImplicitV1" && m_stageAlpha>0 && time==m_stageTime)
+        throw std::runtime_error("deliberate post-implicit integrator failure; no time commit");
     RANSWallTiming::Scope timing("native.explicit");
     auto full=m_state;std::copy(state.begin(),state.end(),full.begin());const auto derivative=m_patch->ExplicitBody(full,time,m_data);
-    m_explicitAudits.push_back({time,Maximum(derivative)});return derivative;
+    m_explicitAudits.push_back({time,Maximum(derivative)});++m_explicitTotal;return derivative;
 }
 void RANSEquilibriumWallEvolution::v_DoSolve()
 {
@@ -535,6 +690,12 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
         {
             RANSWallTiming::Context timingContext(m_integrator->Steps()+1,m_time+m_timestep);
             RANSWallTiming::Scope stepTiming("native.step");
+            const auto nativeBegin=std::chrono::steady_clock::now();
+            if(m_bounded)
+            {
+                Require(m_integrator->Steps()<m_monitor.get<std::size_t>("maximum_absolute_step"),"monitor absolute-step ceiling");
+                Require(::kill(m_monitor.get<int>("observer_pid"),0)==0,"observer exited before next advance");
+            }
             // Native GLM work after the implicit callback can still fail
             // (e.g. a nonfinite explicit evaluation). Keep the coupled state
             // and accepted diagnostics transactional as well as native history.
@@ -544,16 +705,19 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             const double committedStageTime=m_stageTime,committedStageAlpha=m_stageAlpha;
             const auto wjPackets=m_wjAuditPackets.size();
             const auto stages=m_stageAudits.size(),audits=m_stateAudits.size(),states=m_acceptedStates.size(),times=m_auditTimes.size();
+            const auto explicits=m_explicitAudits.size();
             Vector diff;
             try{RANSWallTiming::Scope advanceTiming("native.advance");diff=m_integrator->Advance();}
             catch(...)
             {
+                if(m_bounded){++m_aborted;try{AbortMonitoring();}catch(const std::exception &e){std::cerr<<"abort stream failed: "<<e.what()<<std::endl;}}
                 if(single)
                 {
                     if(m_rejectedState.empty())m_rejectedState=m_state;
                     m_state=committedState;m_lastHistory=committedHistory;m_physicalSamples=committedSamples;
                     m_stageTime=committedStageTime;m_stageAlpha=committedStageAlpha;
                     m_wjAuditPackets.resize(wjPackets);m_stageAudits.resize(stages);m_stateAudits.resize(audits);m_acceptedStates.resize(states);m_auditTimes.resize(times);
+                    if(m_bounded)m_explicitAudits.resize(explicits);
                 }
                 throw;
             }
@@ -562,9 +726,17 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             Vector record{m_time,static_cast<double>(m_integrator->Steps()),Maximum(drift),m_patch->AnchorEnergyWork(m_state)};
             record.insert(record.end(),drift.begin(),drift.end());m_stepAudits.push_back(record);
             if(m_session->GetComm()->GetRank()==0)std::cout<<"EP-AWF IMEX"<<m_order<<" step "<<m_integrator->Steps()<<" time "<<m_time<<" stage scaled residual "<<m_stageAudits.back()[4]<<std::endl;
-            if(m_checksteps>0 && m_integrator->Steps()%m_checksteps==0 && m_checkpointBase!="None")Checkpoint();
+            if(m_bounded)
+            {
+                ++m_nativeCompleted;
+                // End native-only compute before checkpoint/publication and
+                // rendezvous; native.step keeps its historical inclusive span.
+                const double nativeSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-nativeBegin).count();
+                CompleteMonitoring(nativeSeconds);TrimMonitoring();
+            }
+            else if(m_checksteps>0 && m_integrator->Steps()%m_checksteps==0 && m_checkpointBase!="None")Checkpoint();
         }
-        if(m_checkpointBase!="None")Checkpoint();
+        if(!m_bounded && m_checkpointBase!="None")Checkpoint();
         if(m_patch->Mapped() || m_patch->TransitionEnabled() || m_diagnostics)
         {
             m_roughnessBudget=m_patch->RoughnessBudget(m_state,m_time,m_data);
@@ -979,6 +1151,7 @@ void RANSEquilibriumWallEvolution::WriteMappedField(const std::string &name,cons
 }
 void RANSEquilibriumWallEvolution::WriteReport() const
 {
+    if(m_bounded){WriteBoundedReport();return;}
     RANSWallTiming::Scope timing("output.report");
     // No collective calls here: only rank zero writes already assembled state.
     std::ofstream out(m_sessionName+".evolution.json");out<<std::setprecision(17);

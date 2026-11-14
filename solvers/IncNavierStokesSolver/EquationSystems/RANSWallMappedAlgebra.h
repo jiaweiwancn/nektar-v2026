@@ -4,6 +4,7 @@
 
 #include <IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallMonitor.h>
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <algorithm>
 #include <cmath>
@@ -77,7 +78,20 @@ public:
         for(int j=0;j<cols.size();++j){Require(cols[j]>=0 && cols[j]<m && index[cols[j]]<0,"invalid mapped restriction");index[cols[j]]=j;}
         for(int i=0;i<rows.size();++i){Require(rows[i]>=0 && rows[i]<n,"invalid mapped restriction row");Each(rows[i],[&](int j,double v){if(index[j]>=0)a.Add(i,index[j],v);});}
         if(massMetric && rows==cols)a.ConsistentMass();
+        if(RANSWallMonitor::Factors().Enabled())
+        {
+            a.restriction=restriction;const std::uint64_t nr=rows.size(),nc=cols.size();
+            a.restriction.append(reinterpret_cast<const char*>(&nr),sizeof nr);
+            a.restriction.append(reinterpret_cast<const char*>(rows.data()),rows.size()*sizeof(int));
+            a.restriction.append(reinterpret_cast<const char*>(&nc),sizeof nc);
+            a.restriction.append(reinterpret_cast<const char*>(cols.data()),cols.size()*sizeof(int));
+        }
         return a;
+    }
+    std::string Pattern()const
+    {
+        std::string p;for(std::uint64_t x:{std::uint64_t(n),std::uint64_t(m),std::uint64_t(restriction.size())})p.append(reinterpret_cast<const char*>(&x),sizeof x);
+        p+=restriction;for(int i=0;i<n;++i)Each(i,[&](int j,double){p.append(reinterpret_cast<const char*>(&i),sizeof i);p.append(reinterpret_cast<const char*>(&j),sizeof j);});return p;
     }
     std::uint64_t Nonzeros() const
     {std::uint64_t result=0;for(int i=0;i<n;++i)Each(i,[&](int,double){++result;});return result;}
@@ -90,6 +104,7 @@ private:
     DenseMatrix dense;
     std::vector<std::map<int,double>> entries;
     int n=0,m=0;bool compressed=false,massMetric=false;
+    std::string restriction;
 };
 
 // Explicit native->band permutation: perm[band_index]=native_index.
@@ -132,6 +147,14 @@ public:
             if(spd)Require(std::abs(v-a.Get(j,i))<=1e-12*std::max(1.,std::abs(v)),"consistent mass is not symmetric");});
         kd=std::max(kl,ku);ld=spd?kd+1:2*kl+ku+1;
         const std::uint64_t bytes=std::uint64_t(n)*ld*sizeof(double);
+        if(RANSWallMonitor::Factors().Enabled())
+        {
+            namespace J=RANSWallSolveJson;
+            RANSWallMonitor::Factors().Record(a.Pattern()+std::string(1,spd?'M':'A'),J::Object({{"n",J::Number(n)},
+                {"lower_bandwidth",J::Number(kl)},{"upper_bandwidth",J::Number(ku)},{"nonzeros",J::Number(a.Nonzeros())},
+                {"factor_payload_bytes",J::Number(bytes)},{"consistent_mass",J::Boolean(spd)},{"band_to_native",J::Numbers(perm)}}));
+            audits.clear();
+        }
         audits.push_back({n,kl,ku,a.Nonzeros(),bytes,spd,perm});
         Require(bytes<=maximumBytes,"mapped band fill exceeds factor storage reservation");
         values.assign(std::uint64_t(n)*ld,0.);pivots.resize(spd?0:n);

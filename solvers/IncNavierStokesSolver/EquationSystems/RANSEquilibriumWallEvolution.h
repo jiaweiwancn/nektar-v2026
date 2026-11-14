@@ -42,6 +42,18 @@ private:
     void RunR3StageTest();
     Vector LoadR3Predictor(const Vector &history,double time);
     std::string PhysicsSignature() const;
+    void ConfigureMonitoring();
+    void InitialiseMonitoring();
+    void CompleteMonitoring(double nativeSeconds);
+    void AbortMonitoring() const;
+    void WriteBoundedReport() const;
+    std::string MonitoringPacket(const std::string &phase) const;
+    void TrimMonitoring();
+    bool m_bounded=false;
+    RANSWallMonitor::Tree m_monitor;
+    std::string m_monitorDirectory,m_monitorIntentPath,m_monitorFault,m_qualifiedCheckpoint;
+    Vector m_qh0,m_activeHistory;
+    std::size_t m_nativeCompleted=0,m_independentQualified=0,m_explicitTotal=0,m_aborted=0;
     LibUtilities::SessionReaderSharedPtr m_serialSession;
     std::shared_ptr<RANSWallEvolutionPatch> m_patch;
     std::unique_ptr<RANSWallTimeIntegration> m_integrator;

@@ -669,6 +669,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
     double alpha,double time,const RANSWallEvolutionData &data,bool rangesOnly) const
 {
     Require(WJ(),"WJ audit requires WJ model ownership");
+    RANSWallTiming::Scope totalTiming("audit.WJ.total");RANSWallTiming::Accumulator buckets;
     const auto domain=ScalarDomain(state,time,data,true);
     Diagnostic audit;
     audit["wj_scalar_domain"]={domain.admissible?1.:0.,domain.minimumInnerK,domain.minimumOuterK,
@@ -690,6 +691,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
     for(const auto &p:domain.observations)
     {
         if(p.block!=K() && !p.dependentTrace)continue;
+        RANSWallTiming::Accumulator::Part rowsTiming(buckets,"audit.WJ.owned_rows_gradients");
         const auto provenance=ResolveObservation(p);const auto &row=*provenance.velocity;
         const double k=GeometryPoint(K(),row.geometry,p.coordinate).Value(state,offset[K()]);
         RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=row.Gradient(state,offset[a]);
@@ -697,8 +699,10 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
         const double epsilon=inner?0:p.dependentTrace?p.value:GeometryPoint(Epsilon(),row.geometry,p.coordinate).Value(state,offset[Epsilon()]);
         if(!seen.emplace(row.geometry,p.coordinate,epsilon).second)continue;
         const bool atH=std::abs(p.coordinate[2]-m_parameters.geometry.height)<1e-12;
+        rowsTiming.Stop();
         if(inner)
         {
+            RANSWallTiming::Accumulator::Part wallTiming(buckets,"audit.WJ.inner_profile_covariance");
             ++innerCount;if(atH)++innerH;
             const auto profile=StateProfile(state,p.coordinate,time,data);
             const auto law=InnerStress(k,profile->Original().EddyViscosity(Distance(p.coordinate)),g);
@@ -707,7 +711,9 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
             continue;
         }
         ++outerCount;if(atH)++outerH;
+        RANSWallTiming::Accumulator::Part closureTiming(buckets,"audit.WJ.outer_closure_covariance");
         const auto law=OuterClosure(k,epsilon,g,p.coordinate);const double eigen=RANSWallSolveJson::Eigenvalues(law.reynoldsStress)[0];
+        closureTiming.Stop();
         if(eigen<covariance[1]){covariance[1]=eigen;outerWitness={double(row.geometry),double(row.element),double(provenance.radialSide),p.coordinate[0],p.coordinate[2],k,epsilon,eigen};}
         root[0]=std::min(root[0],law.wj.n);root[2]=std::min(root[2],law.wj.rootDerivative);const double n=law.wj.n;
         const double iv[3]={law.wj.s,law.wj.w,law.wj.i4};
@@ -720,7 +726,9 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
         double actual=0;for(int a=0;a<3;++a)for(int b=0;b<3;++b)actual-=law.reynoldsStress[a][b]*g[a][b];
         work[0]=std::max(work[0],std::max(std::abs(actual-law.production),std::abs(law.productionDev-law.production-2*k*law.divergence/3)));
         work[1]=std::max(work[1],std::abs(law.divergence));
-        const auto values=WJPrincipal(k,epsilon,g,m_parameters.wj);
+        RANSWallTiming::Accumulator::Part principalTiming(buckets,"audit.WJ.principal_full_search");
+        const auto values=WJPrincipal(k,epsilon,g,m_parameters.wj);principalTiming.Stop();
+        RANSWallTiming::Accumulator::Part witnessTiming(buckets,"audit.WJ.witness_implicit_tangent");
         for(int i=0;i<2;++i)if(values.value[i]<principal[i])
         {
             principal[i]=values.value[i];const double angle=values.angle[i],c=std::cos(angle),s=std::sin(angle);

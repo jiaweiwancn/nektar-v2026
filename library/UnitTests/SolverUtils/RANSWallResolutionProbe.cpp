@@ -186,6 +186,8 @@ int main(int argc,char **argv)
         if(model=="WJHighRe")LoadWJNativeConfiguration(serial,p);
         const auto operation=packet.get<std::string>("operation","");
         std::string backend;serial->LoadSolverInfo("RANSWallLinearBackend",backend,"Dense");
+        std::string retention;serial->LoadSolverInfo("RANSWallRetention",retention,"Off");
+        if(retention=="BoundedV1")RANSWallMonitor::Factors().Configure(std::string(argv[3])+".factors",RANSWallR3::HashFile(argv[1]));
         if(backend=="MappedBlockV1")Require(operation=="open_checks" || operation=="initializer_checks" || operation=="mapped_backend_checks",
             "MappedBlockV1 does not support legacy dense matrix observers");
         RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
@@ -230,6 +232,21 @@ int main(int argc,char **argv)
             double dt;serial->LoadParameter("TimeStep",dt);
             const auto cp=RANSWallTimeIntegration::ReadCheckpoint(cpPath,signature,1,dt,patch.Size(),patch.DifferentialSize());
             const auto &state=cp.coupledState;const double time=cp.integration.time;
+            if(native.get<std::string>("retention_mode","")=="BoundedV1")
+            {
+                Require(native.get<std::string>("schema")=="WJCompletedStepV1","bounded strict read requires a genuine completed producer");
+                const auto &side=packet.get_child("completed_sidecar"),&cursor=packet.get_child("qualified_cursor");
+                RANSWallMonitor::CheckPin(side);RANSWallMonitor::CheckPin(cursor);
+                const auto q=RANSWallMonitor::Read(cursor.get<std::string>("path"));const auto &b=q.get_child("binding");
+                Require(b.get<std::string>("checkpoint_sha256")==checkpointHash && b.get<std::string>("report_sha256")==reportHash &&
+                    b.get<std::string>("callback_sidecar_sha256")==side.get<std::string>("sha256") &&
+                    b.get<std::string>("state_sha256")==RANSWallR3::Hash(state) && b.get<std::string>("time_bits")==RANSWallMonitor::Bits(time),
+                    "bounded strict qualified cursor/producer differs");
+                const auto callback=RANSWallMonitor::Read(side.get<std::string>("path"));
+                Require(callback.get<std::string>("schema")=="WJCompletedCallbackV1" && callback.get<std::string>("state_sha256")==RANSWallR3::Hash(state) &&
+                    callback.get<std::string>("time_bits")==RANSWallMonitor::Bits(time) && callback.get<double>("alpha_mass")==1/dt &&
+                    RANSWallR3::Hash(Read(callback,"callback_history"))==b.get<std::string>("callback_history_sha256"),"bounded strict genuine callback differs");
+            }
             const auto producerSteps=native.get<std::size_t>("steps");
             const auto &accepted=native.get_child("accepted_states"),&packets=native.get_child("wj_audit_packets");
             Require(!accepted.empty() && accepted.size()==packets.size() && producerSteps+1>=accepted.size(),"open accepted lineage shape differs");
@@ -269,7 +286,7 @@ int main(int argc,char **argv)
             {
                 RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,time);
                 patch.ValidateOutlet(state,"immutable_readback");
-                domain=patch.ScalarDomainJSON(patch.ScalarDomain(state,time,data,true),true);
+                domain=patch.ScalarDomainJSON(patch.ScalarDomain(state,time,data,true),packet.get<bool>("retain_scalar_observations",true));
                 std::vector<RANSWallCoordinate> locations;
                 if(auto requested=packet.get_child_optional("physical_observations"))for(const auto &entry:*requested)
                 {RANSWallCoordinate q{};int i=0;for(const auto &v:entry.second){Require(i<3,"physical observation shape");q[i++]=v.second.get_value<double>();}Require(i==3,"physical observation shape");locations.push_back(q);}
