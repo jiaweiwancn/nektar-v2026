@@ -69,7 +69,7 @@ def setup(root):
     for scope in ('target','small'):
         v=load(root/f'inputs/{scope}/step-{4 if scope=="target"else 2}.json')
         atomic(root/f'inputs/{scope}/common-support.json',load(verify(v['inventory'])))
-    files=[identity(HERE/n)for n in ('run_wj_h18.py','study_wj_h18.py','wj_h18_observer.py','test_wj_h18_checkpoint_audits.py')]
+    files=[identity(HERE/n)for n in ('run_wj_h18.py','study_wj_h18.py','wj_h18_observer.py','test_wj_h18_checkpoint_audits.py','wj_h18_checks.py')]
     for n in ('runtime-build-v1.json','runtime-dependencies-v1.json','compiled-source-objects.json','target-cache-compatibility.json','small-cache-compatibility.json'):files.append(identity(root/'science'/n))
     for v in b['executables']:files.extend((v['ELF'],v['wrapper']))
     for v in load(root/'science/target-cache-compatibility.json')['active_sources']:files.append(v['active'])
@@ -85,7 +85,7 @@ def coordinate(root,folder,cp0,scope,steps,*,policy='CheckpointAuditV1',restart_
         scope_sha256=hashlib.sha256((identity(xml)['sha256']+identity(root/'execution-config.json')['sha256']).encode()).hexdigest(),
         source_sha256=identity(root/'science/runtime-build-v1.json')['sha256'],observer_sha256=identity(HERE/'wj_h18_observer.py')['sha256'],inventory_rule_sha256=hashlib.sha256(RULE.encode()).hexdigest(),
         original_qh0_checkpoint=identity(Path(cp0)/'State.bin'),original_qh0_state_sha256=vector_hash(qh0['state']),maximum_absolute_step=restored['steps']+steps,
-        restored_absolute_step=restored['steps'],recovery_stride=1,scientific_stride=4 if scope=='target'else 2,dt_bits=bits(restored['dt']),ack_timeout_seconds=90.,strict_reserve_seconds=120,
+        restored_absolute_step=restored['steps'],recovery_stride=1,scientific_stride=4 if scope=='target'else 2,dt_bits=bits(restored['dt']),ack_timeout_seconds=90.,strict_reserve_seconds=120,substep_evidence_steps=[],preserve_qualification_artifacts=True,
         common_support=identity(root/f'inputs/{scope}/common-support.json'),expected_manifest=identity(root/f'inputs/{scope}/manifest.json'))
     if restart_completion:
         intent['restart_completion']=identity(restart_completion);intent['restart_callback']=load(restart_completion)['callback']
@@ -134,6 +134,7 @@ def coordinate(root,folder,cp0,scope,steps,*,policy='CheckpointAuditV1',restart_
             pimple=report['pimple_attempts'][0]
             assert all(pimple[k]==1 for k in ('momentum_predictor_solves','pressure_system_solves','k_transport_solves','epsilon_transport_solves','bound_calls'))
             assert pimple['bound_activations']==pimple['additional_correction_or_restoration_solves']==0
+            assert pimple['k_bound']['raw_sha256']==pimple['k_bound']['corrected_sha256']
             if policy!='Off':
                 assert report['native_full_audit_status']==('PASS'if full else'NOT_SCHEDULED')
                 if not full:assert report['native_hard_audit']=={}and report['wj_audit_packets'][0]['principal_witnesses']=={}and not(directory/f'step-{step}.ready.json').exists()
@@ -162,7 +163,14 @@ def target(root,name):
 
 
 def strict(root):
-    reserve_strict(root,'target');folder=root/'science/target/B';cmd=strict_request(root,folder)
+    reserve_strict(root,'target')
+    folder=next((root/f'science/target/{name}'for name in ('B','A')if(root/f'science/target/{name}/monitor/qualified-cursor.json').exists()),None)
+    if folder is not None:cmd=strict_request(root,folder)
+    else:
+        v=next(v for v in load(H14/'publication-v2/state-bindings.json')['states']if v['case']=='cp0')
+        folder=root/'science/target/final-original-CP0';out=folder/'view';out.mkdir(parents=True)
+        atomic(out/'request.json',dict(operation='open_checks',inner_stress_model='Linear',weak=True,weak_compact=True,assembly=False,reuse=False,retain_scalar_observations=False,**cp_request(v)))
+        cmd=[str(root/'runtime/RANSWallResolutionProbe'),str(verify(v['xml'])),str(out/'request.json'),str(out/'native.json')]
     with(folder/'view/native.log').open('x')as log:code=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT).returncode
     checked_exit(code);p=load(folder/'view/native.json')
     assert p['initialization_work']==[0,0]and p['initial_velocity_calls']==p['governing_solves']==0
