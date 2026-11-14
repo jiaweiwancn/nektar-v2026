@@ -841,7 +841,9 @@ int main(int argc,char **argv)
         const auto stateCopy=state;
         const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid,sides,
             request.get<bool>("export_ct6_primitives",false));
-        std::string resolution="null",testBasis="null",constitutive="null",sparseBackend="null";
+        std::string resolution="null",testBasis="null",constitutive="null",sparseBackend="null",ct10Momentum="null";
+        if(request.get<bool>("export_ct10_momentum",false))
+            ct10Momentum=patch.MomentumAttributionPacket(state,time,data,request.get<bool>("ct10_export_points",true));
         if(request.get<bool>("export_sparse_backend",false))
             sparseBackend=patch.SparseBackendPacket(state,time,data,request.get<double>("sparse_alpha",500.));
         if(request.get<bool>("export_constitutive",false))
@@ -1039,6 +1041,7 @@ int main(int argc,char **argv)
             {"elapsed_seconds",J::Number(elapsed)},{"observation",observation},
             {"resolution",resolution},{"test_basis",testBasis},{"native_constitutive",constitutive},{"physical_scalar_budget",physicalBudget},
             {"sparse_backend",sparseBackend},
+            {"ct10_momentum",ct10Momentum},
             {"tensor_validation",tensorValidation},{"mixed_space",mixedSpace}});
         if(open){output.pop_back();output+=",\"open_boundary\":"+openPacket+",\"open_frozen_systems\":"+openSystems+"}";}
         if(patch.CurvedManufactured())

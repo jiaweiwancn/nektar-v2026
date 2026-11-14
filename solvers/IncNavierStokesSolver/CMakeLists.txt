@@ -34,6 +34,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSWallGlobalField.cpp
         ./EquationSystems/RANSWallSerialSparse.cpp
         ./EquationSystems/RANSWallEvolutionSparse.cpp
+        ./EquationSystems/RANSWallMomentumAttribution.cpp
         ./EquationSystems/RANSWallEvolutionPatch.cpp
         ./EquationSystems/RANSWallEvolutionOpenBoundary.cpp
     ./EquationSystems/RANSWallManufactured.cpp
@@ -222,6 +223,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             EquationSystems/RANSWallEvolutionActions.cpp
             EquationSystems/RANSWallEvolutionNonpressure.cpp
             EquationSystems/RANSWallEvolutionResolution.cpp
+            EquationSystems/RANSWallMomentumAttribution.cpp
             EquationSystems/RANSWallEvolutionFeasible.cpp
             EquationSystems/RANSWallEvolutionPicard.cpp
             EquationSystems/RANSWallEvolutionPimple.cpp

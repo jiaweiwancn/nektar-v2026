@@ -41,6 +41,8 @@ target_include_directories(RANSKernels PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_sources(RANSKernels PRIVATE
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallSerialSparse.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSparse.cpp)
+target_sources(RANSKernels PRIVATE
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallMomentumAttribution.cpp)
 if(RANS_ENABLE_SERIAL_SPARSE)
     add_executable(CT9SparseAlgebraChecks test_ct_accepted9_sparse.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp)

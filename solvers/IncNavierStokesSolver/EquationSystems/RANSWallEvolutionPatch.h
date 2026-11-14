@@ -371,6 +371,10 @@ public:
     ResidualResolutionResult ResidualResolutionComponents(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false,
         bool originalOuterCounterfactual=false,bool localize=false) const;
+    /** Read-only signed momentum loads with sparse generating-element support.
+     * No global dense element vectors, field repair or governing solve. */
+    std::string MomentumAttributionPacket(const Vector&,double,const RANSWallEvolutionData&,
+        bool exportPoints=true) const;
     /** Read-only constitutive inventory and one-sided tensor witnesses. No
      * lift, correction, governing solve or change to the selected model. */
     std::string ConstitutiveStateDiagnostic(const Vector &state,double time,
