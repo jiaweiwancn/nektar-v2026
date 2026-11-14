@@ -133,7 +133,7 @@ def figures(out,audits,stages):
     for policy in ('Off','PatchExactV1'):
         rows=[r for r in audits if r['policy']==policy]
         if rows:axes[0].plot([r['ordinal']for r in rows],[r['audit_less_commitment_seconds']for r in rows],'o-',label=policy)
-    axes[0].set(xlabel='Saved audit ordinal (steps 0,1,2,3,4,0)',ylabel='Audit wall minus measured commitment time (s)',title='Identical saved-state operations');axes[0].legend()
+    axes[0].set(xlabel='Saved audit ordinal (steps 0,1,2,3,4,0)',ylabel='Audit less commitment (s)',title='Identical saved-state operations');axes[0].legend()
     if stages:
         axes[1].plot([r['time']for r in stages],[r['native_compute_seconds']for r in stages],'o-',label='H17 native compute')
         axes[1].plot([r['time']for r in stages],[r['independent_seconds']for r in stages],'s-',label='Independent assessment')
