@@ -18,7 +18,7 @@ import numpy as np
 from run_wj_h4 import load
 from wj_h14_execution import OwnerIndex
 from wj_h7_analysis import Rows,classify
-from wj_h4_points import vector_hash,physical
+from wj_h4_points import vector_hash,physical,aligned
 from study_wj_h14 import stored_reference
 from study_wj_h9 import serial
 from wj3_measure import checkpoint_payload
@@ -178,7 +178,11 @@ def load_cache(manifest):
     assert cache.reference_identity==m['reference_identity'];return cache,m
 
 def daemon(root,intent_path,cache_manifest,behavior='PASS'):
+    wait=time.monotonic()
+    while not intent_path.exists():
+        assert time.monotonic()-wait<10,'missing immutable observer intent';time.sleep(.01)
     intent=load(intent_path);directory=Path(intent['directory']);directory.mkdir(parents=True,exist_ok=True)
+    assert intent['observer_pid']==os.getpid(),'observer PID/intent differs'
     cache,manifest=load_cache(cache_manifest);required=OrderedDict((pkey(p),p)for p in manifest['baseline_points']);seen=set()
     atomic(directory/'observer-started.json',dict(pid=os.getpid(),nonce=intent['nonce'],cache=manifest['cache'],memory_scope='immutable rows/reference/qh0 only'))
     while not(directory/'observer-stop.json').exists():
@@ -190,9 +194,12 @@ def daemon(root,intent_path,cache_manifest,behavior='PASS'):
             assert structure['fields']==cache.report['fields']and structure['offsets']==cache.report['offsets']and structure['geometry_signature']==cache.report['geometry_signature']
             for k in ('state','fixed_reference','fixed_defect'):assert vector_hash(cp[k])==vector_hash(report[k])
             assert vector_hash(cp['state'])==binding['state_sha256']and bits(cp['time'])==binding['time_bits']and cp['steps']==step
+            aligned(step,report['dt'],cp['time']);assert cp['dt']==report['dt']
             assert vector_hash(side['callback_history'])==binding['callback_history_sha256']and bits(side['alpha_mass'])==binding['alpha_bits']
             assert binding['original_qh0_sha256']==cache.reference_identity['qh0']and binding['fixed_reference_sha256']==cache.reference_identity['fixed_reference']and binding['fixed_defect_sha256']==cache.reference_identity['fixed_defect']
             packet=report['wj_audit_packets'][0];assert packet['phase']=='completed_stage'and packet['state_sha256']==binding['state_sha256']
+            assert packet['stage_history_sha256']==binding['callback_history_sha256']and bits(packet['time'])==binding['time_bits']and bits(packet['alpha_mass'])==binding['alpha_bits']
+            assert report['native_history_times']==cp['native_history_times']and all(vector_hash(a)==vector_hash(b)for a,b in zip(report['native_history'],cp['native_history']))
             add_witnesses(required,packet,cache.report,cache.config)
             rows,initial,stats=cache.view(list(required.values()));result,data=assess(rows,report['state'],initial,step)
             replay=None

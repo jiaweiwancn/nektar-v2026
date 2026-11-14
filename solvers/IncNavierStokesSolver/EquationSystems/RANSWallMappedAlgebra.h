@@ -152,6 +152,7 @@ public:
             namespace J=RANSWallSolveJson;
             RANSWallMonitor::Factors().Record(a.Pattern()+std::string(1,spd?'M':'A'),J::Object({{"n",J::Number(n)},
                 {"lower_bandwidth",J::Number(kl)},{"upper_bandwidth",J::Number(ku)},{"nonzeros",J::Number(a.Nonzeros())},
+                {"pattern_encoding",J::Quote("native uint64 rows,columns,restriction-byte-count; restriction bytes; sorted int32 row,column pairs; final ASCII M/A mass/general flag")},
                 {"factor_payload_bytes",J::Number(bytes)},{"consistent_mass",J::Boolean(spd)},{"band_to_native",J::Numbers(perm)}}));
             audits.clear();
         }

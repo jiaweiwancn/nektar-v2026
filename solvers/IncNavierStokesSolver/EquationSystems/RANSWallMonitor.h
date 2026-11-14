@@ -2,6 +2,7 @@
 #ifndef NEKTAR_RANS_WALL_MONITOR_H
 #define NEKTAR_RANS_WALL_MONITOR_H
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <chrono>
 #include <csignal>
@@ -106,13 +107,15 @@ public:
             id="factor-"+std::to_string(++definitions);const auto path=directory+"/"+id+".pattern.bin";Atomic(path,pattern);
             Atomic(directory+"/"+id+".json",J::Object({{"schema",J::Quote("WJFactorDefinitionV1")},
                 {"id",J::Quote(id)},{"scope_sha256",J::Quote(signature)},{"exact_pattern",D::Pin(path)},
-                {"pattern_encoding",J::Quote("native uint64 rows,columns,restriction-byte-count; restriction bytes; sorted native int32 row,column pairs; coefficients intentionally excluded")},{"metadata",metadata}}));
+                {"pattern_encoding",J::Quote("opaque exact structural key; native matrix metadata specifies its encoding; coefficients intentionally excluded")},{"metadata",metadata}}));
             // Huge patterns are still streamed, but are never resident catalog entries.
             while(!entries.empty() && (entries.size()>=16 || bytes+key.size()>32*1024*1024))
             {bytes-=entries.back().key.size();entries.pop_back();++evictions;}
             if(key.size()<=32*1024*1024){entries.push_front({key,id});bytes+=key.size();}
         }
         Append(directory+"/calls.jsonl",J::Object({{"call",J::Number(++calls)},{"definition",J::Quote(id)},
+            {"native_step",J::Number(RANSWallTiming::Get().step)},{"native_time_bits",J::Quote(Bits(RANSWallTiming::Get().time))},
+            {"timing_scope_id",J::Number(RANSWallTiming::Get().stack.empty()?0:RANSWallTiming::Get().stack.back()->Id())},
             {"resident_definitions",J::Number(entries.size())},{"resident_key_bytes",J::Number(bytes)},{"evictions",J::Number(evictions)}}));
     }
     std::string Summary()const{return J::Object({{"enabled",J::Boolean(Enabled())},{"calls",J::Number(calls)},

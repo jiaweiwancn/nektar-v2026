@@ -56,6 +56,8 @@ public:
         begin=Clock::now();cpu=std::clock();
     }
     Scope(const Scope&)=delete;Scope &operator=(const Scope&)=delete;
+    long Id()const{return id;}
+    const std::string &Name()const{return name;}
     ~Scope(){Stop();}
     void Stop() noexcept
     {

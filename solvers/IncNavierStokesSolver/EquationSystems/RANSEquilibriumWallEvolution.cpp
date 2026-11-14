@@ -249,6 +249,8 @@ void RANSEquilibriumWallEvolution::ConfigureMonitoring()
     Require(mode=="Off" || mode=="BoundedV1","unknown wall retention mode");m_bounded=mode=="BoundedV1";
     if(!m_bounded)return;
     Require(m_session->GetComm()->GetSize()==1,"bounded monitoring is serial");
+    std::string backend;m_session->LoadSolverInfo("RANSWallLinearBackend",backend,"Dense");
+    Require(backend=="MappedBlockV1","BoundedV1 requires explicit mapped allocation before construction");
     m_session->LoadSolverInfo("RANSWallMonitorIntent",m_monitorIntentPath,"None");
     m_monitor=M::Read(m_monitorIntentPath);Require(m_monitor.get<std::string>("schema")=="WJMonitorIntentV1","wrong monitor intent schema");
     m_monitorDirectory=m_monitor.get<std::string>("directory");
@@ -372,16 +374,30 @@ void RANSEquilibriumWallEvolution::AbortMonitoring() const
     namespace M=RANSWallMonitor;namespace J=RANSWallSolveJson;
     if(std::filesystem::exists(m_monitorDirectory+"/first-aborted.json"))return;
     std::string reason="unknown Advance exception";try{std::rethrow_exception(std::current_exception());}catch(const std::exception &e){reason=e.what();}
+    const auto &candidate=m_rejectedState.empty()?m_state:m_rejectedState;
+    const auto candidateFile=m_monitorDirectory+"/first-aborted-candidate.f64.bin",historyFile=m_monitorDirectory+"/first-aborted-history.f64.bin";
+    M::Atomic(candidateFile,std::string(reinterpret_cast<const char*>(candidate.data()),candidate.size()*sizeof(double)));
+    M::Atomic(historyFile,std::string(reinterpret_cast<const char*>(m_activeHistory.data()),m_activeHistory.size()*sizeof(double)));
+    std::string range="null";
+    if(!m_rangeEvents.empty())
+    {
+        const auto &e=m_rangeEvents.front();std::vector<std::string> reasons;for(const auto &r:e.reasons)reasons.push_back(J::Quote(r));
+        range=J::Object({{"time",J::Number(e.time)},{"alpha",J::Number(e.alpha)},{"reasons",J::List(reasons)},
+            {"native_rejected_audit",m_patch->WJAuditPacket(e.audit,e.state,e.history,e.alpha,e.time,"rejected_stage")}});
+    }
     M::Atomic(m_monitorDirectory+"/first-aborted.json",J::Object({{"status",J::Quote("ABORTED_NOT_COMPLETED")},{"failure",J::Quote(reason)},
         {"attempted_step",J::Number(m_integrator->Steps()+1)},{"candidate",J::Numbers(m_rejectedState.empty()?m_state:m_rejectedState)},
+        {"candidate_binary",RANSWallR3::Pin(candidateFile)},{"callback_history_binary",RANSWallR3::Pin(historyFile)},
         {"callback_history",J::Numbers(m_activeHistory)},{"attempts",J::List(m_patch->PimpleRecords())},
-        {"provisional_audits",J::List(m_wjAuditPackets)}}));
+        {"provisional_audits",J::List(m_wjAuditPackets)},{"first_native_range_event",range}}));
 }
 void RANSEquilibriumWallEvolution::WriteBoundedReport() const
 {
     namespace M=RANSWallMonitor;namespace J=RANSWallSolveJson;
     try
     {
+        const auto captured=m_integrator->Capture();std::vector<std::string> historyHashes;
+        for(const auto &h:captured.history)historyHashes.push_back(J::Quote(RANSWallR3::Hash(h)));
         M::Atomic(m_sessionName+".evolution.json",J::Object({{"schema",J::Quote("WJBoundedRunV1")},{"retention_mode",J::Quote("BoundedV1")},
             {"failure",J::Quote(m_failure)},{"time",J::Number(m_time)},{"steps",J::Number(m_integrator->Steps())},
             {"state_sha256",J::Quote(RANSWallR3::Hash(m_state))},{"native_completed",J::Number(m_nativeCompleted)},
@@ -392,6 +408,8 @@ void RANSEquilibriumWallEvolution::WriteBoundedReport() const
             {"fixed_defect_sha256",J::Quote(RANSWallR3::Hash(m_patch->Defect()))},{"initialization_work",J::Numbers(m_patch->InitializationWork())},
             {"initializer_calls",J::Number(m_patch->InitialVelocityCalls())},{"implicit_callbacks",J::Number(m_implicitCallbacks)},
             {"explicit_calls",J::Number(m_explicitTotal)},{"resident_accepted_states",J::Number(m_acceptedStates.size())},
+            {"native_history_sha256",J::List(historyHashes)},{"native_history_times",J::Numbers(captured.times)},
+            {"last_stage_history_sha256",J::Quote(RANSWallR3::Hash(m_lastHistory))},{"last_stage_time",J::Number(m_stageTime)},{"last_stage_alpha",J::Number(m_stageAlpha)},
             {"resident_audits",J::Number(m_stateAudits.size())},{"resident_wj_packets",J::Number(m_wjAuditPackets.size())},
             {"resident_stage_records",J::Number(m_stageAudits.size())},{"resident_step_records",J::Number(m_stepAudits.size())},
             {"resident_explicit_records",J::Number(m_explicitAudits.size())},{"resident_pimple_records",J::Number(m_patch->PimpleRecords().size())},
