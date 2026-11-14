@@ -1,0 +1,41 @@
+{
+  "schema": "CT10TargetPreflightAndSteppingV1",
+  "declared_before_target_trajectories": true,
+  "physical_authority": "CT8 central manifest, unchanged Natural A95 displaced Accepted/RN reference",
+  "mesh": "unchanged CT9 capacity-v2 target-p4:60907 stored slots,930 flat elements,P4/P2,x[-25,30],roof20,H=.1875; matched terrain definition retained, no terrain field admission",
+  "prerequisites": ["complete refined strip admission throughT=.02", "same pinned governing component and runtime", "actual target initial reference/projection,traction,domain,boundary and load preflight", "held-coefficient governing quadrature controls", "closed passing resource controls"],
+  "static": {
+    "coordinates": "common physical6-point Gauss inventory on actual target partitions plus analytic breaks and explicit interface sides",
+    "checks": "initial values and gradients,full domain/covariance/cutoff inventories,absolute pressure,ground/interface traction,top/outlet signed loads and native sum",
+    "row_limit": 2e-10,
+    "quadrature": "native,48/12/12/16/64,64/16/12/20/64 at identical coefficients; full native frozen consistent-mass flow action and absolute pressure increments",
+    "scaled_pressure_quadrature_limit": 1e-8,
+    "physical_reference_error_limits": "same .001 field,.0001 vertical,.001 traction,1e-8 mass limits; report raw spatial residual without cancellation"
+  },
+  "bounded_pair": {
+    "dt": [0.001,0.0005],
+    "endpoint": 0.002,
+    "steps": [2,4],
+    "rationale": "retain the strip-qualified pair only after checking the actual target minimum radial spacing equals the strip's and minimum tangential spacing is no smaller; evaluate actual reference velocities and scale indicators; target uncertainty must pass independently",
+    "initialization": "fresh zero-step histories for eachdt,bitwise equal actual coefficients within the target space and agreement with the sealed identical target initial representation",
+    "budgets": "all four controls and four equations plus both native reconstructions; physical gradients and actual consecutive/stage states; no row-reaction substitution",
+    "exports": "bounded existing native exports; full states/matrices remain outsideGit; production numerical checks unchanged",
+    "decision": "this paired stepping check is not .01 transit or a developed precursor"
+  },
+  "conditional_first_stage": {
+    "transit": 40.621637857609905,
+    "endpoint": 0.407,
+    "fraction": "at least .01transit,rounded upward to the common .001 timestep lattice",
+    "early_milestones": [0.008,0.02,0.1,0.407],
+    "maximum_steps_per_segment": 32,
+    "maximum_pair_steps": 2048,
+    "maximum_total_process_CPU_seconds": 24000,
+    "maximum_wall_seconds_excluding_resource_suspensions": 28800,
+    "maximum_new_storage_GiB": 24,
+    "admission": "paired check and every preceding physical/uncertainty gate pass; measured accepted-step and audit costs with25percent headroom fit these ceilings; evolved factor fill remains under40million; otherwise stop at the measured scope and report the resource gate",
+    "histories": "unchanged-method native continuation,originaltime-zero drift,no resets; no .1 or1transit extension in this allocation"
+  },
+  "resources": {"one_family": true,"project_workers": 16,"aggregate_workers": 72,"library_threads": 1,"process_address_space_GiB": 16,"single_family_wall_seconds": 7200,"compiler_jobs": 2},
+  "physical_limits": {"field_drift": 0.001,"vertical_drift": 0.0001,"traction": 0.001,"mass": 1e-8,"complete_scaled_physical_budgets": 0.02,"temporal": "delta<=max(1e-7,.1*measured_drift),absolute pressure; includes signed ground and full interface traction"},
+  "stopping": "first genuine domain,accuracy,uncertainty,solver,capacity or resource gate; preserve actual attempt and last accepted history; no second representation/time-step search"
+}

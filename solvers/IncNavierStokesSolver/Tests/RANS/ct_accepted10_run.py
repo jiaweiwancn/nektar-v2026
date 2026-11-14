@@ -80,11 +80,22 @@ def advance(a):
     parent=sealed(a.parent) if a.parent else None
     if a.target==.02:require(a.case=='candidate' and parent and parent['qualification']['status']=='pass' and parent['target']==.008,'candidate continuation not admitted')
     else:require(not parent and a.target==.008,'invalid primary history request')
-    m=RequestManifest(a.output,dict(schema='CT10CohortV1',case=c,kind=a.case,required_dt=[.001,.0005],target=a.target,preflight=sha(a.preflight/'results.json'),parent=sha(a.parent/'results.json') if parent else None,runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),source=sha(Path(__file__)),baseline_reuse=sha(a.ct9/'equivalence-v2/results.json') if a.case=='baseline' else None,contract=sha(a.contract)))
+    request=dict(schema='CT10CohortV1',case=c,kind=a.case,required_dt=[.001,.0005],target=a.target,preflight=sha(a.preflight/'results.json'),parent=sha(a.parent/'results.json') if parent else None,runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),source=sha(Path(__file__)),baseline_reuse=sha(a.ct9/'equivalence-v2/results.json') if a.case=='baseline' else None,contract=sha(a.contract))
+    reused={}
+    if a.reuse:
+        original=n.read(a.reuse/'request-manifest.json')['request'];require(all(original[k]==v for k,v in request.items() if k!='source'),'partial-member reuse request mismatch')
+        reused=n.read(a.reuse/'progress.json')['members'];request['explicit_completed_member_reuse']=dict(directory=str(a.reuse),request_sha256=sha(a.reuse/'request-manifest.json'),progress_sha256=sha(a.reuse/'progress.json'),reason='controller-only endpoint tolerance correction; no native artifact or history edited')
+    m=RequestManifest(a.output,request)
     out=dict(schema='CT9PhysicalPairV1',ct10_schema='CT10CohortV1',case=c,required_dt=[.001,.0005],target=a.target,members={});initials={};natives={}
     for dt in (.001,.0005):
         name=str(dt);initial_folder=Path(pre['initial']['baseline' if a.case=='baseline' else 'candidate-'+name]['directory']);ini=n.read(initial_folder/'initial.json');initials[name]=ini
-        if a.case=='baseline' and dt==.001:
+        if name in reused:
+            row=copy.deepcopy(reused[name]);folder=Path(row['directory']);r=n.read(folder/'case.evolution.json')
+            require(sha(folder/'case.evolution.json')==row['native_report_sha256'] and artifact_hash(r['checkpoint'])==row['history_sha256'] and r['dt']==dt and abs(r['time']-a.target)<1e-13,'changed/incomplete explicitly reused native member')
+            require(row['actual_initial_sha256']==exact_vector_hash(ini['observation']['state']),'reused member initial mismatch')
+            for label in ('native','q48f16','q64f16','q64f32'):require(sha(folder/label/'budget.json')==row['budgets']['budgets'][label]['packet_sha256'],'changed reused physical budget')
+            row['explicit_reuse_request_sha256']=sha(a.reuse/'request-manifest.json')
+        elif a.case=='baseline' and dt==.001:
             oldrow=copy.deepcopy(base['members'][name]);folder=Path(oldrow['directory']);r=n.read(folder/'case.evolution.json');require(sha(folder/'case.evolution.json')==oldrow['native_report_sha256'],'changed reused sparse baseline report');row=oldrow
             row.update(accepted_metrics=[dict(time=t,**n.physical_metrics(ini,s,c,weights,count)) for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)],traction_history=[dict(time=t,profile=profiles(ini,s,c)) for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)],actual_initial_traction_profile=profiles(ini,r['accepted_states'][0],c),reuse_receipt=sha(a.ct9/'equivalence-v2/results.json'))
         else:
@@ -94,7 +105,7 @@ def advance(a):
                 for k in BOUNDARY_KEYS:require(zero['initialization_receipt'][k]==previous['initialization_receipt'][k],'baseline finer changed physical initialization:'+k)
             else:zero_folder=initial_folder;zero=n.read(zero_folder/'case.evolution.json')
             require(zero['state']==ini['observation']['state'],'actual zero-step coefficient mismatch')
-            source=Path(parent['members'][name]['directory']) if parent else zero_folder;old=n.read(source/'case.evolution.json');require(old['dt']==dt and old['time']==(.008 if parent else 0.),'changed timestep/history lineage')
+            source=Path(parent['members'][name]['directory']) if parent else zero_folder;old=n.read(source/'case.evolution.json');require(old['dt']==dt and abs(old['time']-(.008 if parent else 0.))<1e-13,'changed timestep/history lineage')
             folder=a.output/name;n.make(folder,a.runtime,c,dt,round((a.target-old['time'])/dt),Path(old['checkpoint']),source/'case.xml');os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'timing.jsonl');e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');os.environ.pop('NEKTAR_RANS_TIMING_FILE',None);r=n.read(folder/'case.evolution.json');require(r['accepted_states'][0]==old['state'],'native did not consume unchanged restart state')
             row=collect(a.runtime,folder,ini,r,c,weights,count,zero);row['execution']=e
         out['members'][name]=row;natives[name]=r;write_json(a.output/'progress.json',out);print('CT10',a.case,name,r['time'],r['failure'],flush=True)
@@ -113,7 +124,7 @@ def advance(a):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('operation',choices=['preflight','advance'])
     for key in ('ct8','ct9','runtime','contract','output'):p.add_argument('--'+key,type=Path,required=True)
-    for key in ('diagnosis','preflight','parent'):p.add_argument('--'+key,type=Path)
+    for key in ('diagnosis','preflight','parent','reuse'):p.add_argument('--'+key,type=Path)
     p.add_argument('--case',choices=['baseline','candidate']);p.add_argument('--target',type=float,default=.008);a=p.parse_args()
     resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');require(sha(a.runtime/'IncNavierStokesSolver')==RUNTIME_SHA,'foreign governing runtime');n.reference=lru_cache(None)(n.reference)
     q=preflight(a) if a.operation=='preflight' else advance(a);return 0 if q.get('qualification',q).get('status')=='pass' else 1

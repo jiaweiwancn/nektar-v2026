@@ -518,7 +518,7 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
     return out.str();
 }
 std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,double time,
-    const RANSWallEvolutionData &data,bool basis,const std::vector<RANSWallCoordinate> &grid,const std::vector<int> &sides,bool ct6Primitives) const
+    const RANSWallEvolutionData &data,bool basis,const std::vector<RANSWallCoordinate> &grid,const std::vector<int> &sides,bool ct6Primitives,bool facesOnly) const
 {
     namespace J=RANSWallSolveJson;
     Require(NewModels() && Dimension()==2 && (!Mapped() || CurvedVerification()) && m_comm->GetSize()==1,
@@ -606,7 +606,10 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         for(const auto &q:m_outer)bodyVolume.push_back(point(q,1));
     }
     const double H=m_parameters.geometry.height;
-    if(basis)for(int region=0;region<2;++region)
+    // The bounded face-only observation uses exactly the same owner/side rows
+    // without serializing the entire volume catalog. Governing checks above
+    // and all numerical boundary operations are independent of this output flag.
+    if(basis || facesOnly)for(int region=0;region<2;++region)
     {
         for(int axis:{0,2})for(int side:{-1,1})
         {

@@ -91,7 +91,8 @@ public:
     Vector ManufacturedAccuracy(const Vector&,const Vector&,double,const RANSWallEvolutionData&) const;
     std::string PreservationIdentity(bool legacyOperator=false) const;
     std::string PreservationPacket(const Vector &state,double time,const RANSWallEvolutionData &data,
-        bool basis,const std::vector<RANSWallCoordinate> &grid={},const std::vector<int> &sides={},bool ct6Primitives=false) const;
+        bool basis,const std::vector<RANSWallCoordinate> &grid={},const std::vector<int> &sides={},bool ct6Primitives=false,
+        bool facesOnly=false) const;
     std::string EvaluationReuseChecks(const Vector &,const Vector &,double,const RANSWallEvolutionData &);
     RANSWallEvolutionPatch(const LibUtilities::SessionReaderSharedPtr &serialSession,
         const SpatialDomains::MeshGraphSharedPtr &graph,

@@ -840,7 +840,7 @@ int main(int argc,char **argv)
         const auto receipt=patch.InitializationReceipt(state,reference,time,data,data,patch.FixedReferenceBoundary(targetReference));
         const auto stateCopy=state;
         const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid,sides,
-            request.get<bool>("export_ct6_primitives",false));
+            request.get<bool>("export_ct6_primitives",false),request.get<bool>("export_faces_only",false));
         std::string resolution="null",testBasis="null",constitutive="null",sparseBackend="null",ct10Momentum="null";
         if(request.get<bool>("export_ct10_momentum",false))
             ct10Momentum=patch.MomentumAttributionPacket(state,time,data,request.get<bool>("ct10_export_points",true));
