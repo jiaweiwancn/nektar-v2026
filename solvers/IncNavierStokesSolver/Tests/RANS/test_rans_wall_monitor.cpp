@@ -29,14 +29,16 @@ int main(int argc,char **argv)
             M::Atomic(dir+"/cursor.json",J::Object({{"binding",binding},{"ready_sha256",J::Quote(readyHash)},{"inventory_sha256",J::Quote(inventoryHash)}}));
             std::string actual=binding;
             if(fault=="binding")actual.replace(actual.find("\"nonce\":\"nonce\""),15,"\"nonce\":\"stale\"");
-            if(fault!="timeout")M::Atomic(dir+"/step-1.ack.json",J::Object({{"schema",J::Quote("WJObserverAckV1")},{"status",J::Quote(fault=="FAIL"?"FAIL":"PASS")},
+            if(fault!="timeout" && fault!="temporary-only")M::Atomic(dir+"/step-1.ack.json",J::Object({{"schema",J::Quote("WJObserverAckV1")},{"status",J::Quote(fault=="FAIL"?"FAIL":"PASS")},
                 {"ready_sha256",J::Quote(readyHash)},{"binding",actual},{"result",D::Pin(dir+"/result.json")},{"qualified_cursor",D::Pin(dir+"/cursor.json")},
                 {"inventory",D::Pin(dir+"/inventory.json")},{"continuation",J::Quote("TERMINAL")}}));
             if(fault=="duplicate")M::Atomic(dir+"/step-0.ack.json","{}");
+            if(fault=="publishing")D::Check(::link((dir+"/step-1.ack.json").c_str(),(dir+"/step-1.ack.json.tmp-publishing").c_str())==0,"cannot represent atomic dual-name window");
+            if(fault=="temporary-only")M::Atomic(dir+"/step-1.ack.json.tmp-publishing","unpublished/incomplete");
             bool success=false;try{success=M::Wait(dir,"step-1",readyHash,binding,.06,getpid())=="TERMINAL";}catch(const std::exception&){}
             D::Check(success==pass,"incorrect protocol decision: "+name);
         };
-        check("pass","",true);check("failed","FAIL",false);check("stale","binding",false);check("duplicate","duplicate",false);check("timeout","timeout",false);
+        check("pass","",true);check("atomic-dual-name","publishing",true);check("failed","FAIL",false);check("stale","binding",false);check("duplicate","duplicate",false);check("timeout","timeout",false);check("temporary-only","temporary-only",false);
         bool overwritten=false;try{M::Atomic(root+"/pass/inventory.json","replacement");overwritten=true;}catch(const std::exception&){}
         D::Check(!overwritten,"immutable output overwritten");std::cout<<"bounded catalog and protocol checks PASS "<<summary<<'\n';return 0;
     }

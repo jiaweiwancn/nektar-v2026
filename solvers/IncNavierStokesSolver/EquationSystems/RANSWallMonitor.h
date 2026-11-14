@@ -61,8 +61,15 @@ inline std::string Wait(const std::string &directory,const std::string &stem,con
     {
         D::Check(::kill(observerPid,0)==0,"observer process exited before qualification");
         for(const auto &p:std::filesystem::directory_iterator(directory))
-            if(p.path().filename().string().find(".ack.json")!=std::string::npos)
+        {
+            // Only the final atomic name is a published ACK. During link /
+            // unlink publication both it and .ack.json.tmp-<pid> can exist;
+            // before publication the temporary alone must never authorize or
+            // reject a step. Consumed ACKs are separate durable evidence.
+            const auto name=p.path().filename().string();const std::string suffix=".ack.json";
+            if(name.size()>=suffix.size() && name.compare(name.size()-suffix.size(),suffix.size(),suffix)==0)
                 D::Check(p.path()==std::filesystem::path(ack),"stale/duplicate observer ACK");
+        }
         if(std::filesystem::exists(ack))
         {
             const auto a=Read(ack);const std::set<std::string> keys{"schema","status","ready_sha256","binding","result","qualified_cursor","continuation","inventory"};

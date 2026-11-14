@@ -148,6 +148,9 @@ class PersistentMonitoring(unittest.TestCase):
         b=dict(closed=False,coverage_halt={'first':'retained'})
         with self.assertRaises(AssertionError):halt_admission(b,'target')
         halt_admission(b,'closure');self.assertEqual(b['coverage_halt'],{'first':'retained'})
+        b=dict(closed=False,target_halt={'reason':'atomic ACK publication failure'})
+        with self.assertRaises(AssertionError):halt_admission(b,'target')
+        halt_admission(b,'qualification');self.assertEqual(b['target_halt']['reason'],'atomic ACK publication failure')
         self.assertEqual(CAPS['target'],1800);self.assertNotIn('target_cp0',CAPS)
 
 if __name__=='__main__':unittest.main()

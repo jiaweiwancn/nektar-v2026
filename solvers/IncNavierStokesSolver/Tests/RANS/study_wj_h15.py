@@ -242,6 +242,7 @@ def target(root):
         assert strict_code==0,'final strict readback failed';strict_finish(folder)
     print('target block',code,'completed',r.get('native_completed'),'qualified',qualified,'wall',time.monotonic()-began,flush=True)
     if failure:raise RuntimeError(failure)
+    if code!=0:raise RuntimeError('native target stopped: '+str(r.get('failure')))
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('setup','small-cache','small','runtime-qualify','admission','target','small-strict-intent','small-strict-finish'),required=True);a=p.parse_args()

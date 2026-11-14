@@ -36,6 +36,7 @@ def halt_admission(book,phase):
     assert not book['closed'],'closed H15 allocation'
     if phase in ('qualification','target'):
         assert not book.get('coverage_halt')and not book.get('runtime_halt'),'monotone H15 native/qualification halt'
+    if phase=='target':assert not book.get('target_halt'),'target execution/protocol halt; no retry'
 
 def execute(root,label,argv,seconds,phase='operation',workers=1):
     root=Path(root);assert root.name==ROOT and phase in CAPS and 0<seconds<=CAPS[phase]
