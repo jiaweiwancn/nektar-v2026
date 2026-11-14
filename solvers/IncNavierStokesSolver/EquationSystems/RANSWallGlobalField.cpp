@@ -138,7 +138,7 @@ RANSWallGlobalField::RANSWallGlobalField(
                                                  std::array<int,3>{0,1,2})
 {
     RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
-    m_serialSparse=session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",false);
+    session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",m_serialSparse,false);
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");
     auto subset=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(*full,elements,true);

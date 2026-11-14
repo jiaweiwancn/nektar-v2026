@@ -340,7 +340,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(!m_evaluationReuse,"AcceptedOpenFlatV1 evaluation caching is not qualified; select Off");
         if(SerialSparse())
         {
-            const bool zero=session->MatchSolverInfo("RANSWallSparseVerification","ZeroDisplacementV1",false);
+            bool zero=false;session->MatchSolverInfo("RANSWallSparseVerification","ZeroDisplacementV1",zero,false);
             Require(parameters.model.Model()==RANSModel::A95 && parameters.model.KappaPolicy()==RANSKappaPolicy::Natural &&
                 !Mapped() && RichardsNorrisTop() && PimpleSingleSweep() && !m_pimpleVerify && !PimpleKBoundEnabled() &&
                 (DisplacedAccepted() || (zero && m_options.aerodynamicDisplacement==0)),
