@@ -25,8 +25,8 @@ def run(root):
     libpath=str(root/'runtime/glibc')+':'+str(root/'runtime/geometry')+':/home/jay/.local/opt/nektar-v2026-mpi/lib64'
     records=[]
     for name,exe,expected in (('old-scanner',old_exe,1),('corrected-scanner',build/'RANSWallMonitorChecks',0)):
-        log=out/(name+'.log');files=set()
-        command=[str(loader),'--library-path',libpath,str(exe),str(out/name)]
+        log=out/(name+'.log');files=set();fixture=out/(name+'-records')
+        command=[str(loader),'--library-path',libpath,str(exe),str(fixture)]
         with log.open('x')as f:
             p=subprocess.Popen(command,stdout=f,stderr=subprocess.STDOUT)
             while p.poll()is None:
@@ -38,7 +38,7 @@ def run(root):
         if expected:assert 'incorrect protocol decision: atomic-dual-name'in log.read_text()
         else:assert 'bounded catalog and protocol checks PASS'in log.read_text()
         libc=[v for v in files if Path(v).name=='libc.so.6'];assert libc==[str(root/'runtime/glibc/libc.so.6')]
-        calls=[load_line for load_line in (out/name/'catalog/calls.jsonl').read_text().splitlines()]
+        calls=(fixture/'catalog/calls.jsonl').read_text().splitlines()
         import json
         calls=[json.loads(v)for v in calls]
         assert [v['call']for v in calls]==list(range(1,1101))
