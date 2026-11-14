@@ -56,6 +56,14 @@ def main(root,source):
     # Save snapshots before hashing; publication snapshot remains OPEN and is
     # never relabelled as the later final CLOSED journal.
     copy(root/'accounting.json','accounting-at-publication.json')
+    aliases=load(root/'source-program-aliases-v1.json')
+    copy(root/'source-program-aliases-v1.json','source-program-aliases.json')
+    for v in load(root/'target-admission.json')['inputs']:
+        if identity(v['path'])==v:continue
+        selected=[a for a in aliases['aliases']if a['original']==v]
+        assert len(selected)==1,'changed target input without an exact source alias: '+v['path']
+        p=verify(selected[0]['retained']);assert identity(p)['sha256']==v['sha256']
+        assert v['path'].endswith('/study_wj_h15.py'),'scientific inputs cannot be substituted through source aliases'
     for p in ('target-admission.json','target-final-strict-admission.json','protocol-repair-source-v4.json','bounded-stream-source-v6.json',
         'science/imports.json','science/runtime-build-v1.json','science/runtime-qualified-v1.json','science/small/qualification.json',
         'science/small/pass/view/result.json','science/final-qualified-cp0-view/result.json','science/protocol-repair-checks-v2/result.json',
