@@ -13,7 +13,7 @@ from wj_h15_observer import PersistentRows,atomic,bits,identity,verify,pkey
 from wj_h7_analysis import Rows
 from wj_h4_points import physical,owners,aligned,vector_hash
 from study_wj_h14 import stored_reference
-from study_wj_h15 import xml_case
+from study_wj_h15 import xml_case,qualified_step
 
 def tensor_fixture():
     """Coefficient/owner fixture at fixed6mm; no PDE run or reference seed."""
@@ -36,6 +36,17 @@ def tensor_fixture():
     r['offsets'].append(len(state));return r,state,c
 
 class PersistentMonitoring(unittest.TestCase):
+    def test_only_durable_native_commit_is_a_qualified_restart_cursor(self):
+        with tempfile.TemporaryDirectory()as d:
+            folder=Path(d);monitor=folder/'monitor';monitor.mkdir()
+            atomic(monitor/'step-1.qualified.json',dict(role='PREPARED_BEFORE_ACK'))
+            self.assertEqual(qualified_step(folder),0)
+            p=monitor/'payload';p.write_bytes(b'bound')
+            commit=dict(schema='WJQualificationCommitV1',binding={'absolute_step':'1'},**{k:identity(p)for k in ('checkpoint','callback','report','consumed_ack','prepared_cursor')})
+            atomic(monitor/'step-1.qualification-commit.json',commit);atomic(monitor/'qualified-cursor.json',commit)
+            self.assertEqual(qualified_step(folder),1)
+            p.write_bytes(b'changed')
+            with self.assertRaises(AssertionError):qualified_step(folder)
     def test_cache_roundtrip_contains_data_not_local_wall_callables(self):
         r,s,c=tensor_fixture();p=[physical(r,[4.,0,c.H])];cache=PersistentRows(r,p,s,{})
         before,initial,_=cache.view(p);after=pickle.loads(pickle.dumps(cache,protocol=5));rows,restored,_=after.view(p)

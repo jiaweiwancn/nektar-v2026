@@ -164,9 +164,40 @@ def strict_finish(folder):
     assert p['report_sha256']==req['native_report_sha256']and p['checkpoint_sha256']==req['checkpoint_sha256']and p['scalar_domain']['admissible']
     atomic(folder/'view/result.json',dict(status='PASS',native=identity(folder/'view/native.json'),request=identity(folder/'view/request.json'),physical_mass_dual_norms=p['physical_mass_dual_norms'],weak=p['weak_checks'],interface=p['open_boundary'],selected_absolute_step=p['selected_absolute_step'],callback_history_sha256=p['callback_history_sha256']))
 
+def runtime_qualify(root):
+    """Check actual native-exec maps, excluding unrelated parent mappings."""
+    old=H14.parent/'wj-h10-flat-inlet-20261113'
+    historical=dict(path=str(old/'closure/runtime-observed.json'),bytes=307438,sha256='f8698dbe2108eb1f597696805b342f051c1ddac5cd2006fd655e5a682b43a502')
+    observed=load(verify(historical));assert observed['status']=='PASS'
+    prior=load(old/'runtime-qualified.json')['loaded']
+    for v in observed['libraries']:prior[v['path']]=v
+    build=load(root/'science/runtime-build-v1.json')
+    for v in build['executables']:verify(v['ELF']);verify(v['wrapper'])
+    for v in build['private_libraries']:verify(v['original']);verify(v['copy'])
+    libraries={};samples=[];executables=set()
+    for p in sorted((root/'operations').glob('*/native-exec-samples.json')):
+        for s in load(p):
+            assert s['status']=='PASS'
+            for native in s['native']:
+                assert native in [v['ELF']['path']for v in build['executables']]
+                executables.add(Path(native).name)
+            samples.append(dict(operation=p.parent.name,pid=s['pid'],native=s['native'],libc=s['libc']))
+            for f in s['files']:
+                if '.so'not in Path(f).name and not Path(f).name.startswith('ld-linux'):continue
+                key=f
+                if '/runtime/glibc/'in f:key=str(old/'runtime/glibc'/Path(f).name)
+                elif '/runtime/geometry/'in f:key=str(old/'runtime/geometry'/Path(f).name)
+                assert key in prior,'unqualified actual native dependency: '+f
+                actual=identity(f);expected=prior[key]
+                assert actual['sha256']==expected['sha256']and actual['bytes']==expected['bytes']
+                libraries[f]=dict(actual=actual,qualified=expected)
+    assert executables=={'IncNavierStokesSolver.elf','RANSWallResolutionProbe.elf'}
+    atomic(root/'science/runtime-qualified-v1.json',dict(status='PASS',native_exec_samples=samples,libraries=list(libraries.values()),compiled_build=identity(root/'science/runtime-build-v1.json'),historical_runtime=historical))
+
 def admission(root):
     assert load(root/'science/small/qualification.json')['status']=='PASS'and load(root/'science/observer-cache/manifest.json')['status']=='PASS'
     assert load(root/'science/small/pass/view/result.json')['status']=='PASS'
+    assert load(root/'science/runtime-qualified-v1.json')['status']=='PASS'
     # Conservative aggregate memory: use H14 governor peak (strict reader is
     # not concurrent with the observer) plus measured cache qualification RSS.
     book=load(root/'accounting.json');old=load(H14/'closure-v1/accounting-final.json');native=old['entries']['target-cost-gated-pilot-v1']['peak_tree_rss_bytes']
@@ -176,21 +207,44 @@ def admission(root):
     cp0=next(v for v in load(H14/'publication-v2/state-bindings.json')['states']if v['case']=='cp0')
     folder=root/'science/target';xml_case(verify(cp0['xml']),folder,verify(cp0['checkpoint']).parent,4)
     command=[sys.executable,'-B',str(HERE/'study_wj_h15.py'),'--root',str(root),'--mode','target']
-    atomic(root/'target-admission.json',dict(status='PASS',height_mm=6,state_size=24688,command=command,inputs=[identity(HERE/'study_wj_h15.py'),identity(HERE/'wj_h15_observer.py'),identity(folder/'case.xml'),identity(root/'science/observer-cache/manifest.json')],
+    inputs=[identity(HERE/'study_wj_h15.py'),identity(HERE/'wj_h15_observer.py'),identity(folder/'case.xml'),identity(root/'science/observer-cache/manifest.json'),identity(root/'science/runtime-build-v1.json'),identity(root/'science/runtime-qualified-v1.json')]
+    for executable in load(root/'science/runtime-build-v1.json')['executables']:
+        inputs.extend((executable['ELF'],executable['wrapper']))
+    inputs.extend((cp0['producer'],cp0['checkpoint'],cp0['xml']))
+    atomic(root/'target-admission.json',dict(status='PASS',height_mm=6,state_size=24688,command=command,inputs=inputs,
         cost_with25percent_headroom=forecast,phase_ceiling=1800,combined_RSS_forecast=combined,final_strict_reserved=120,closure_reserved=300))
+
+def qualified_step(folder):
+    cursor=folder/'monitor/qualified-cursor.json'
+    if not cursor.exists():return 0
+    committed=load(cursor);assert committed['schema']=='WJQualificationCommitV1'
+    for key in ('checkpoint','callback','report','consumed_ack','prepared_cursor'):verify(committed[key])
+    step=int(committed['binding']['absolute_step'])
+    assert load(folder/f'monitor/step-{step}.qualification-commit.json')==committed
+    return step
 
 def target(root):
     began=time.monotonic();folder=root/'science/target';states=load(H14/'publication-v2/state-bindings.json')['states'];cp0=next(v for v in states if v['case']=='cp0');cp1=next(v for v in states if v['case']=='pilot1')
-    code,r=run_observed(root,folder,root/'science/observer-cache/manifest.json',verify(cp0['checkpoint']).parent,replay=cp1['producer'],deadline=began+1800)
-    atomic(folder/'native-outcome.json',dict(native_exit=code,summary=identity(folder/'case.evolution.json'),native_completed=r['native_completed'],independently_qualified=r['independently_qualified'],new_progress=max(0,r['independently_qualified']-1),failure=r['failure']))
-    if r['independently_qualified']:
+    code=None;failure=None
+    try:
+        code,r=run_observed(root,folder,root/'science/observer-cache/manifest.json',verify(cp0['checkpoint']).parent,replay=cp1['producer'],deadline=began+1800)
+    except Exception as error:
+        # A coordinator/protocol failure never authorizes another native block.
+        # Still protect the one final read of an already committed qualified
+        # cursor; a prepared observer cursor is insufficient.
+        failure=repr(error)
+    summary=folder/'case.evolution.json';r=load(summary)if summary.exists()else {}
+    qualified=qualified_step(folder)
+    atomic(folder/'native-outcome.json',dict(native_exit=code,summary=identity(summary)if summary.exists()else None,native_completed=r.get('native_completed'),independently_qualified=qualified,new_progress=max(0,qualified-1),failure=failure or r.get('failure')))
+    if qualified:
         command=strict_request(root,folder)
         with(folder/'view/native.log').open('x')as log:strict_code=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT).returncode
         assert strict_code==0,'final strict readback failed';strict_finish(folder)
-    print('target block',code,'completed',r['native_completed'],'qualified',r['independently_qualified'],'wall',time.monotonic()-began,flush=True)
+    print('target block',code,'completed',r.get('native_completed'),'qualified',qualified,'wall',time.monotonic()-began,flush=True)
+    if failure:raise RuntimeError(failure)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('setup','small-cache','small','admission','target','small-strict-intent','small-strict-finish'),required=True);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('setup','small-cache','small','runtime-qualify','admission','target','small-strict-intent','small-strict-finish'),required=True);a=p.parse_args()
     if a.mode=='small-strict-intent':print(json.dumps(strict_request(a.root,a.root/'science/small/pass')))
     elif a.mode=='small-strict-finish':strict_finish(a.root/'science/small/pass')
     else:globals()[a.mode.replace('-','_')](a.root)
