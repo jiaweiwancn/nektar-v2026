@@ -1,0 +1,36 @@
+{
+  "installed_sdk_config": {
+    "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake/Nektar++Config.cmake",
+    "sha256": "2dcd67abc79cbe62b75cbe81d8e1c8a2af4548e5ce6a2671f9f36d4973859a55",
+    "selected_lines": [
+      "SET(NEKTAR++_DEFINITIONS -DNEKTAR_MPI_TYPE=0 -DNEKTAR_USE_MPI -DNEKTAR_USE_SCOTCH -DTIXML_USE_STL -DNEKTAR_MEMORY_POOL_ENABLED)",
+      "SET(NEKTAR_USE_MPI \"ON\")",
+      "IF( NEKTAR_USE_MPI )",
+      "        ${NEKTAR++_DEFINITIONS} \"-DNEKTAR_USE_MPI\")",
+      "ENDIF( NEKTAR_USE_MPI )"
+    ]
+  },
+  "installed_build_cache": {
+    "path": "/home/jay/build/nektar-v2026-mpi/CMakeCache.txt",
+    "sha256": "5b9e88a92b21fde031e85a0bb01ebb74220b094cddbe30d3fab6b5dd78bf915e",
+    "flags": [
+      "CMAKE_BUILD_TYPE:STRING=Release",
+      "NEKTAR_USE_MPI:BOOL=ON",
+      "NEKTAR_USE_PETSC:BOOL=OFF"
+    ]
+  },
+  "eigen_package": {
+    "exit_code": 0,
+    "version": "3.4.0-2ubuntu2",
+    "stderr": ""
+  },
+  "infrastructure": {
+    "library/LibUtilities/LinearAlgebra/SparseMatrix.hpp": "2579975e5e2db35c4bb0963223e1eed1cb2c3c86b8350d9ffada4251955b04e7",
+    "library/LibUtilities/LinearAlgebra/SparseUtils.hpp": "1cd9b0f8743671b41daf9fc54bca2114c3bcf1e8c48af82e874aa9a247ba5391",
+    "library/LibUtilities/LinearAlgebra/NekLinSysIter.h": "2f2d3f7d1c7d7f390e262e9d8f138909e2632a2d773876bad846628f96fc7522",
+    "library/LibUtilities/LinearAlgebra/NekLinSysIterGMRES.h": "208ccb073ad18d7b81ffc21d6a9d69e37bd29ff944deb43ef03653e7053a22e1",
+    "library/LibUtilities/LinearAlgebra/NekLinSysIterGMRES.cpp": "2c87b48b6338da0834bbdf2948a923197a9176aadd950460c35736e7c5a06196"
+  },
+  "choice": "private Eigen SparseLU/positive LDLT and installed Nektar GMRES callbacks; direct CSR adapter for combined regional/sampler links; no PETSc or shared installation change",
+  "audit_note": "SDK package exports MPI but omits PETSc; its actual OFF status is verified in the installed build cache, alongside executable/loaded-library hashes"
+}

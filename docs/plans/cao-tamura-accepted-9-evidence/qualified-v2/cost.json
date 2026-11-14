@@ -1,0 +1,1384 @@
+{
+  "equivalence-v2/0.001/timing.jsonl": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/equivalence-v2/0.001/timing.jsonl",
+    "sha256": "a03154d2bc225e4a5dec9d2ee1eab11cce9d7df51b70604e27e1aeca1b149498",
+    "names": {
+      "constitutive.refresh": {
+        "calls": 138,
+        "exclusive_cpu": 0.6586219999999997,
+        "exclusive_wall": 0.6587236359999997
+      },
+      "matching.constraints": {
+        "calls": 172,
+        "exclusive_cpu": 0.04278399999999999,
+        "exclusive_wall": 0.04284327599999998
+      },
+      "startup.object": {
+        "calls": 1,
+        "exclusive_cpu": 3.593876,
+        "exclusive_wall": 3.600145375
+      },
+      "residual": {
+        "calls": 86,
+        "exclusive_cpu": 4.982823999999999,
+        "exclusive_wall": 4.984873972999997
+      },
+      "sparse.factorize": {
+        "calls": 73,
+        "exclusive_cpu": 0.093571,
+        "exclusive_wall": 0.09362288899999996
+      },
+      "sparse.solve_validate": {
+        "calls": 1459,
+        "exclusive_cpu": 0.17056699999999975,
+        "exclusive_wall": 0.17067120699999977
+      },
+      "residual.mass_dual_norms": {
+        "calls": 38,
+        "exclusive_cpu": 0.014624000000000002,
+        "exclusive_wall": 0.017548002
+      },
+      "native.explicit": {
+        "calls": 9,
+        "exclusive_cpu": 0.054415,
+        "exclusive_wall": 0.054418412
+      },
+      "domain.compute": {
+        "calls": 41,
+        "exclusive_cpu": 26.76940599999999,
+        "exclusive_wall": 26.77576621799999
+      },
+      "domain.scalar": {
+        "calls": 41,
+        "exclusive_cpu": 0.40578499999999984,
+        "exclusive_wall": 0.40601137799999987
+      },
+      "audit.physical": {
+        "calls": 9,
+        "exclusive_cpu": 2.5775740000000003,
+        "exclusive_wall": 2.580155797
+      },
+      "audit.complete": {
+        "calls": 9,
+        "exclusive_cpu": 4.4662130000000015,
+        "exclusive_wall": 4.467654667
+      },
+      "native.acceptance_audit": {
+        "calls": 9,
+        "exclusive_cpu": 0.0042519999999999225,
+        "exclusive_wall": 0.004265860999999926
+      },
+      "output.project_fields": {
+        "calls": 2,
+        "exclusive_cpu": 0.000717,
+        "exclusive_wall": 0.0007282059999999999
+      },
+      "startup.initialize": {
+        "calls": 1,
+        "exclusive_cpu": 0.013849000000000222,
+        "exclusive_wall": 0.014551023999999968
+      },
+      "pimple.check.input": {
+        "calls": 8,
+        "exclusive_cpu": 0.03487600000000013,
+        "exclusive_wall": 0.0348781349999997
+      },
+      "flow.assembly": {
+        "calls": 8,
+        "exclusive_cpu": 10.991043999999999,
+        "exclusive_wall": 10.993919805
+      },
+      "sparse.pressure_gmres": {
+        "calls": 8,
+        "exclusive_cpu": 0.06667800000000003,
+        "exclusive_wall": 0.07546794600000001
+      },
+      "sparse.flow_linear_operation": {
+        "calls": 8,
+        "exclusive_cpu": 0.273093,
+        "exclusive_wall": 0.27375573
+      },
+      "io.flow_attempt_snapshot": {
+        "calls": 8,
+        "exclusive_cpu": 0.360325,
+        "exclusive_wall": 0.7239867939999999
+      },
+      "pimple.check.flow": {
+        "calls": 8,
+        "exclusive_cpu": 0.04205200000000009,
+        "exclusive_wall": 0.04206041000000005
+      },
+      "flow.correction_validate": {
+        "calls": 8,
+        "exclusive_cpu": 0.08724299999999996,
+        "exclusive_wall": 0.08725269299999983
+      },
+      "flow.total": {
+        "calls": 8,
+        "exclusive_cpu": 0.0005750000000006583,
+        "exclusive_wall": 0.0010744059999998612
+      },
+      "epsilon.assembly": {
+        "calls": 8,
+        "exclusive_cpu": 0.741756,
+        "exclusive_wall": 0.741938443
+      },
+      "epsilon.solve_validate": {
+        "calls": 8,
+        "exclusive_cpu": 0.0004850000000000001,
+        "exclusive_wall": 0.0004885600000000001
+      },
+      "pimple.check.epsilon": {
+        "calls": 8,
+        "exclusive_cpu": 0.031093000000000037,
+        "exclusive_wall": 0.03111175399999999
+      },
+      "epsilon.total": {
+        "calls": 8,
+        "exclusive_cpu": 0.0017420000000001323,
+        "exclusive_wall": 0.002047849999999851
+      },
+      "k.assembly": {
+        "calls": 8,
+        "exclusive_cpu": 2.103394,
+        "exclusive_wall": 2.10366191
+      },
+      "k.solve_validate": {
+        "calls": 8,
+        "exclusive_cpu": 0.000814,
+        "exclusive_wall": 0.0011512489999999998
+      },
+      "io.attempt_snapshot": {
+        "calls": 8,
+        "exclusive_cpu": 0.184297,
+        "exclusive_wall": 0.28360637
+      },
+      "pimple.check.k": {
+        "calls": 8,
+        "exclusive_cpu": 0.03549300000000022,
+        "exclusive_wall": 0.03549277499999992
+      },
+      "k.total": {
+        "calls": 8,
+        "exclusive_cpu": 0.001430999999999627,
+        "exclusive_wall": 0.001839777999999903
+      },
+      "pimple.final_refresh_diagnostics": {
+        "calls": 8,
+        "exclusive_cpu": 0.0006710000000000327,
+        "exclusive_wall": 0.0006988460000000585
+      },
+      "pimple.sweep": {
+        "calls": 8,
+        "exclusive_cpu": 0.007722999999998592,
+        "exclusive_wall": 0.012305699999999753
+      },
+      "native.physical_samples": {
+        "calls": 8,
+        "exclusive_cpu": 0.36987699999999996,
+        "exclusive_wall": 0.36998986700000003
+      },
+      "native.implicit": {
+        "calls": 8,
+        "exclusive_cpu": 0.003741999999999912,
+        "exclusive_wall": 0.00401906299999677
+      },
+      "native.advance": {
+        "calls": 8,
+        "exclusive_cpu": 0.0028890000000014737,
+        "exclusive_wall": 0.0031765309999984837
+      },
+      "io.checkpoint": {
+        "calls": 9,
+        "exclusive_cpu": 0.014162000000000001,
+        "exclusive_wall": 0.05134960899999999
+      },
+      "native.step": {
+        "calls": 8,
+        "exclusive_cpu": 0.007742999999999611,
+        "exclusive_wall": 0.008536954000001984
+      },
+      "native.solve_block": {
+        "calls": 1,
+        "exclusive_cpu": 0.04607500000000897,
+        "exclusive_wall": 0.046078977999989945
+      },
+      "output.report": {
+        "calls": 1,
+        "exclusive_cpu": 0.104369,
+        "exclusive_wall": 0.185239483
+      },
+      "output.fields_and_report": {
+        "calls": 1,
+        "exclusive_cpu": 0.004406999999999994,
+        "exclusive_wall": 0.009088447
+      },
+      "process": {
+        "calls": 1,
+        "exclusive_cpu": 0.2910350000000008,
+        "exclusive_wall": 0.7996962480000036
+      }
+    },
+    "steps": {
+      "-1": {
+        "exclusive_cpu": 6.402673000000007,
+        "exclusive_wall": 7.009913882999993
+      },
+      "1": {
+        "exclusive_cpu": 6.074451000000004,
+        "exclusive_wall": 6.131469173999994
+      },
+      "2": {
+        "exclusive_cpu": 6.622545000000004,
+        "exclusive_wall": 6.687780055
+      },
+      "3": {
+        "exclusive_cpu": 6.784613000000006,
+        "exclusive_wall": 6.853687568000002
+      },
+      "4": {
+        "exclusive_cpu": 6.532533999999997,
+        "exclusive_wall": 6.600129626000004
+      },
+      "5": {
+        "exclusive_cpu": 6.458044999999999,
+        "exclusive_wall": 6.5260290290000045
+      },
+      "6": {
+        "exclusive_cpu": 6.803885999999997,
+        "exclusive_wall": 6.869077905000005
+      },
+      "7": {
+        "exclusive_cpu": 7.024032000000002,
+        "exclusive_wall": 7.0936125379999995
+      },
+      "8": {
+        "exclusive_cpu": 6.955384000000005,
+        "exclusive_wall": 7.024194477000001
+      }
+    },
+    "scope": "exclusive native process intervals only; nested inclusive totals are never added; detailed aggregation includes clock overhead when explicitly enabled"
+  },
+  "equivalence-v2/0.002/timing.jsonl": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/equivalence-v2/0.002/timing.jsonl",
+    "sha256": "694b182e4c9e24d830f45fae16ae9458be15cdd70a4979d8a202e09b7d1fd008",
+    "names": {
+      "constitutive.refresh": {
+        "calls": 78,
+        "exclusive_cpu": 0.3343539999999997,
+        "exclusive_wall": 0.33471779
+      },
+      "matching.constraints": {
+        "calls": 100,
+        "exclusive_cpu": 0.016332000000000006,
+        "exclusive_wall": 0.016359205999999994
+      },
+      "startup.object": {
+        "calls": 1,
+        "exclusive_cpu": 3.1139069999999998,
+        "exclusive_wall": 3.1158856520000002
+      },
+      "residual": {
+        "calls": 50,
+        "exclusive_cpu": 2.5445070000000003,
+        "exclusive_wall": 2.546433001
+      },
+      "sparse.factorize": {
+        "calls": 41,
+        "exclusive_cpu": 0.045751,
+        "exclusive_wall": 0.045756491
+      },
+      "sparse.solve_validate": {
+        "calls": 778,
+        "exclusive_cpu": 0.0841009999999997,
+        "exclusive_wall": 0.08419810100000001
+      },
+      "residual.mass_dual_norms": {
+        "calls": 22,
+        "exclusive_cpu": 0.010157000000000001,
+        "exclusive_wall": 0.011440318999999997
+      },
+      "native.explicit": {
+        "calls": 5,
+        "exclusive_cpu": 0.027089999999999996,
+        "exclusive_wall": 0.027371943
+      },
+      "domain.compute": {
+        "calls": 21,
+        "exclusive_cpu": 13.211530999999999,
+        "exclusive_wall": 13.217400270000004
+      },
+      "domain.scalar": {
+        "calls": 21,
+        "exclusive_cpu": 0.10335000000000016,
+        "exclusive_wall": 0.103378623
+      },
+      "audit.physical": {
+        "calls": 5,
+        "exclusive_cpu": 1.317343,
+        "exclusive_wall": 1.318410757
+      },
+      "audit.complete": {
+        "calls": 5,
+        "exclusive_cpu": 2.3682600000000003,
+        "exclusive_wall": 2.369246404
+      },
+      "native.acceptance_audit": {
+        "calls": 5,
+        "exclusive_cpu": 0.002094999999999958,
+        "exclusive_wall": 0.002103442000000122
+      },
+      "output.project_fields": {
+        "calls": 2,
+        "exclusive_cpu": 0.000503,
+        "exclusive_wall": 0.000503781
+      },
+      "startup.initialize": {
+        "calls": 1,
+        "exclusive_cpu": 0.01352500000000001,
+        "exclusive_wall": 0.014275381000000253
+      },
+      "pimple.check.input": {
+        "calls": 4,
+        "exclusive_cpu": 0.013790999999999887,
+        "exclusive_wall": 0.014048868999999908
+      },
+      "flow.assembly": {
+        "calls": 4,
+        "exclusive_cpu": 5.165818,
+        "exclusive_wall": 5.167452742
+      },
+      "sparse.pressure_gmres": {
+        "calls": 4,
+        "exclusive_cpu": 0.03518000000000001,
+        "exclusive_wall": 0.039650550999999964
+      },
+      "sparse.flow_linear_operation": {
+        "calls": 4,
+        "exclusive_cpu": 0.13119400000000003,
+        "exclusive_wall": 0.13177439400000002
+      },
+      "io.flow_attempt_snapshot": {
+        "calls": 4,
+        "exclusive_cpu": 0.17487999999999998,
+        "exclusive_wall": 0.35777701900000003
+      },
+      "pimple.check.flow": {
+        "calls": 4,
+        "exclusive_cpu": 0.012730000000000019,
+        "exclusive_wall": 0.012730058999999905
+      },
+      "flow.correction_validate": {
+        "calls": 4,
+        "exclusive_cpu": 0.05091900000000005,
+        "exclusive_wall": 0.05092799900000011
+      },
+      "flow.total": {
+        "calls": 4,
+        "exclusive_cpu": 0.00021599999999932784,
+        "exclusive_wall": 0.0004191480000004244
+      },
+      "epsilon.assembly": {
+        "calls": 4,
+        "exclusive_cpu": 0.343742,
+        "exclusive_wall": 0.343788416
+      },
+      "epsilon.solve_validate": {
+        "calls": 4,
+        "exclusive_cpu": 0.00023300000000000003,
+        "exclusive_wall": 0.00023088099999999995
+      },
+      "pimple.check.epsilon": {
+        "calls": 4,
+        "exclusive_cpu": 0.012119000000000102,
+        "exclusive_wall": 0.01212224400000006
+      },
+      "epsilon.total": {
+        "calls": 4,
+        "exclusive_cpu": 0.0007939999999998504,
+        "exclusive_wall": 0.0010422229999998978
+      },
+      "k.assembly": {
+        "calls": 4,
+        "exclusive_cpu": 0.978446,
+        "exclusive_wall": 0.9788053939999999
+      },
+      "k.solve_validate": {
+        "calls": 4,
+        "exclusive_cpu": 0.0005320000000000004,
+        "exclusive_wall": 0.0011411899999999998
+      },
+      "io.attempt_snapshot": {
+        "calls": 4,
+        "exclusive_cpu": 0.088756,
+        "exclusive_wall": 0.13995937
+      },
+      "pimple.check.k": {
+        "calls": 4,
+        "exclusive_cpu": 0.0124439999999999,
+        "exclusive_wall": 0.012445708999999971
+      },
+      "k.total": {
+        "calls": 4,
+        "exclusive_cpu": 0.0005500000000001615,
+        "exclusive_wall": 0.0005617559999997468
+      },
+      "pimple.final_refresh_diagnostics": {
+        "calls": 4,
+        "exclusive_cpu": 0.00029700000000003335,
+        "exclusive_wall": 0.0005680240000000003
+      },
+      "pimple.sweep": {
+        "calls": 4,
+        "exclusive_cpu": 0.0022999999999999687,
+        "exclusive_wall": 0.004369298999998605
+      },
+      "native.physical_samples": {
+        "calls": 4,
+        "exclusive_cpu": 0.14508,
+        "exclusive_wall": 0.14523028799999999
+      },
+      "native.implicit": {
+        "calls": 4,
+        "exclusive_cpu": 0.0012219999999993902,
+        "exclusive_wall": 0.0015831960000012302
+      },
+      "native.advance": {
+        "calls": 4,
+        "exclusive_cpu": 0.0009550000000002612,
+        "exclusive_wall": 0.0009547320000002912
+      },
+      "io.checkpoint": {
+        "calls": 5,
+        "exclusive_cpu": 0.007075,
+        "exclusive_wall": 0.026304989
+      },
+      "native.step": {
+        "calls": 4,
+        "exclusive_cpu": 0.0017879999999985685,
+        "exclusive_wall": 0.0021707740000005415
+      },
+      "native.solve_block": {
+        "calls": 1,
+        "exclusive_cpu": 0.034972999999997256,
+        "exclusive_wall": 0.03524573699999678
+      },
+      "output.report": {
+        "calls": 1,
+        "exclusive_cpu": 0.09863,
+        "exclusive_wall": 0.174161488
+      },
+      "output.fields_and_report": {
+        "calls": 1,
+        "exclusive_cpu": 0.004452999999999999,
+        "exclusive_wall": 0.012208669000000005
+      },
+      "process": {
+        "calls": 1,
+        "exclusive_cpu": 0.23366000000000042,
+        "exclusive_wall": 0.7813233760000031
+      }
+    },
+    "steps": {
+      "-1": {
+        "exclusive_cpu": 5.7886579999999945,
+        "exclusive_wall": 6.430858696999997
+      },
+      "1": {
+        "exclusive_cpu": 5.8752109999999975,
+        "exclusive_wall": 5.937896190000001
+      },
+      "2": {
+        "exclusive_cpu": 6.287219999999996,
+        "exclusive_wall": 6.355974758000001
+      },
+      "3": {
+        "exclusive_cpu": 6.377214999999998,
+        "exclusive_wall": 6.442882503999999
+      },
+      "4": {
+        "exclusive_cpu": 6.4172790000000095,
+        "exclusive_wall": 6.488867548000002
+      }
+    },
+    "scope": "exclusive native process intervals only; nested inclusive totals are never added; detailed aggregation includes clock overhead when explicitly enabled"
+  },
+  "capacity-v2/intermediate-p3/frozen-timing.jsonl": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v2/intermediate-p3/frozen-timing.jsonl",
+    "sha256": "ef2dcd150f88291487489dbc2a2b65696e8eb011a125a2b0cd1700f09188f442",
+    "names": {
+      "constitutive.refresh": {
+        "calls": 13,
+        "exclusive_cpu": 0.4872850000009983,
+        "exclusive_wall": 0.4858831790001237
+      },
+      "matching.constraints": {
+        "calls": 13,
+        "exclusive_cpu": 0.008195000000000001,
+        "exclusive_wall": 0.008154133000000001
+      },
+      "residual": {
+        "calls": 6,
+        "exclusive_cpu": 1.041345000000371,
+        "exclusive_wall": 1.0398377140002264
+      },
+      "sparse.factorize": {
+        "calls": 14,
+        "exclusive_cpu": 0.068483,
+        "exclusive_wall": 0.068483936
+      },
+      "sparse.solve_validate": {
+        "calls": 105,
+        "exclusive_cpu": 0.03503999999999999,
+        "exclusive_wall": 0.03581977199999998
+      },
+      "residual.mass_dual_norms": {
+        "calls": 2,
+        "exclusive_cpu": 0.022295000000000002,
+        "exclusive_wall": 0.022294358
+      },
+      "domain.compute": {
+        "calls": 1,
+        "exclusive_cpu": 3.8885780001309413,
+        "exclusive_wall": 3.8703521700182275
+      },
+      "domain.scalar": {
+        "calls": 1,
+        "exclusive_cpu": 4.7000000000352316e-05,
+        "exclusive_wall": 4.71619999995454e-05
+      },
+      "audit.physical": {
+        "calls": 1,
+        "exclusive_cpu": 1.2886140000136388,
+        "exclusive_wall": 1.281638699998977
+      },
+      "audit.complete": {
+        "calls": 1,
+        "exclusive_cpu": 2.5162949981265434,
+        "exclusive_wall": 2.498414641826951
+      },
+      "flow.assembly": {
+        "calls": 1,
+        "exclusive_cpu": 2.1822659999999834,
+        "exclusive_wall": 2.1820222450000055
+      },
+      "sparse.residual_refinement": {
+        "calls": 1,
+        "exclusive_cpu": 1.8e-05,
+        "exclusive_wall": 1.7411e-05
+      },
+      "sparse.pressure_gmres": {
+        "calls": 1,
+        "exclusive_cpu": 0.008602000000000012,
+        "exclusive_wall": 0.009382838000000001
+      },
+      "sparse.flow_linear_operation": {
+        "calls": 1,
+        "exclusive_cpu": 0.042515,
+        "exclusive_wall": 0.042518985999999995
+      },
+      "epsilon.assembly": {
+        "calls": 1,
+        "exclusive_cpu": 0.26083199999997286,
+        "exclusive_wall": 0.26057918799999535
+      },
+      "k.assembly": {
+        "calls": 1,
+        "exclusive_cpu": 0.5287279999999847,
+        "exclusive_wall": 0.5281922479999954
+      },
+      "assembly.open_faces": {
+        "calls": 12,
+        "exclusive_cpu": 0.09329799999999248,
+        "exclusive_wall": 0.09260749600000498
+      },
+      "constitutive.outer_law": {
+        "calls": 478133,
+        "exclusive_cpu": 0.7348819999961069,
+        "exclusive_wall": 0.7388297919999045
+      },
+      "geometry.basis_lookup_evaluate": {
+        "calls": 7689314,
+        "exclusive_cpu": 5.424912000399874,
+        "exclusive_wall": 5.4703867122740135
+      },
+      "geometry.element_row": {
+        "calls": 3842081,
+        "exclusive_cpu": 9.373965000415868,
+        "exclusive_wall": 9.322846294961684
+      },
+      "geometry.evaluation_row": {
+        "calls": 2459795,
+        "exclusive_cpu": 3.312656000004164,
+        "exclusive_wall": 3.3216275259292094
+      },
+      "geometry.field_catalog": {
+        "calls": 7,
+        "exclusive_cpu": 0.014015,
+        "exclusive_wall": 0.014017075
+      },
+      "geometry.locate": {
+        "calls": 1110958,
+        "exclusive_cpu": 1.1456589999955138,
+        "exclusive_wall": 1.1629809189993408
+      },
+      "geometry.owner_catalog": {
+        "calls": 2250707,
+        "exclusive_cpu": 1.5241699999650584,
+        "exclusive_wall": 1.5667714100053038
+      },
+      "sparse.mass_assemble": {
+        "calls": 5,
+        "exclusive_cpu": 0.18524200000001823,
+        "exclusive_wall": 0.18629265400000333
+      }
+    },
+    "steps": {
+      "-1": {
+        "exclusive_cpu": 34.18793699904905,
+        "exclusive_wall": 34.20999856101397
+      }
+    },
+    "scope": "exclusive native process intervals only; nested inclusive totals are never added; detailed aggregation includes clock overhead when explicitly enabled"
+  },
+  "capacity-v2/intermediate-p3/initial-timing.jsonl": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v2/intermediate-p3/initial-timing.jsonl",
+    "sha256": "9bcdf01c88e7c22370d1d9cf4f4f434f4d5762696d87c4652f62c8e4967dd748",
+    "names": {
+      "constitutive.refresh": {
+        "calls": 13,
+        "exclusive_cpu": 0.4609550000009747,
+        "exclusive_wall": 0.459235849000307
+      },
+      "matching.constraints": {
+        "calls": 19,
+        "exclusive_cpu": 0.008442000000000002,
+        "exclusive_wall": 0.008407544000000003
+      },
+      "startup.object": {
+        "calls": 1,
+        "exclusive_cpu": 3.980776999999985,
+        "exclusive_wall": 3.9850530200003376
+      },
+      "residual": {
+        "calls": 9,
+        "exclusive_cpu": 1.4928610000003262,
+        "exclusive_wall": 1.4932285390000117
+      },
+      "sparse.factorize": {
+        "calls": 9,
+        "exclusive_cpu": 0.009822,
+        "exclusive_wall": 0.009820559999999999
+      },
+      "sparse.solve_validate": {
+        "calls": 35,
+        "exclusive_cpu": 0.007920000000000002,
+        "exclusive_wall": 0.007914112999999999
+      },
+      "residual.mass_dual_norms": {
+        "calls": 5,
+        "exclusive_cpu": 0.020898000000000003,
+        "exclusive_wall": 0.021290391999999998
+      },
+      "native.explicit": {
+        "calls": 1,
+        "exclusive_cpu": 0.021331,
+        "exclusive_wall": 0.021332737
+      },
+      "domain.compute": {
+        "calls": 1,
+        "exclusive_cpu": 3.8494480001234432,
+        "exclusive_wall": 3.8385306899909253
+      },
+      "domain.scalar": {
+        "calls": 1,
+        "exclusive_cpu": 4.099999999951365e-05,
+        "exclusive_wall": 4.0651000000835324e-05
+      },
+      "audit.physical": {
+        "calls": 1,
+        "exclusive_cpu": 1.2944000000138343,
+        "exclusive_wall": 1.2879227539981022
+      },
+      "audit.complete": {
+        "calls": 1,
+        "exclusive_cpu": 2.4697109981606467,
+        "exclusive_wall": 2.4574225640054728
+      },
+      "native.acceptance_audit": {
+        "calls": 1,
+        "exclusive_cpu": 9.299999999967667e-05,
+        "exclusive_wall": 9.49530000013965e-05
+      },
+      "output.project_fields": {
+        "calls": 2,
+        "exclusive_cpu": 0.001274,
+        "exclusive_wall": 0.0012743680000000001
+      },
+      "startup.initialize": {
+        "calls": 1,
+        "exclusive_cpu": 0.012493000000191046,
+        "exclusive_wall": 0.012833969000006107
+      },
+      "io.checkpoint": {
+        "calls": 1,
+        "exclusive_cpu": 0.00286,
+        "exclusive_wall": 0.010147475
+      },
+      "native.solve_block": {
+        "calls": 1,
+        "exclusive_cpu": 0.13361800000024665,
+        "exclusive_wall": 0.13362201100030785
+      },
+      "output.report": {
+        "calls": 1,
+        "exclusive_cpu": 0.039302,
+        "exclusive_wall": 0.062695832
+      },
+      "output.fields_and_report": {
+        "calls": 1,
+        "exclusive_cpu": 0.00476,
+        "exclusive_wall": 0.012492036999999998
+      },
+      "process": {
+        "calls": 1,
+        "exclusive_cpu": 0.4056759999999997,
+        "exclusive_wall": 0.953907454000003
+      },
+      "assembly.open_faces": {
+        "calls": 11,
+        "exclusive_cpu": 0.0852589999999932,
+        "exclusive_wall": 0.08457180100000769
+      },
+      "constitutive.outer_law": {
+        "calls": 504388,
+        "exclusive_cpu": 0.7730239999958299,
+        "exclusive_wall": 0.7734651930003195
+      },
+      "geometry.basis_lookup_evaluate": {
+        "calls": 7438322,
+        "exclusive_cpu": 5.239790000374602,
+        "exclusive_wall": 5.274452383222352
+      },
+      "geometry.element_row": {
+        "calls": 3716585,
+        "exclusive_cpu": 9.094720000425912,
+        "exclusive_wall": 9.033198097893356
+      },
+      "geometry.evaluation_row": {
+        "calls": 2392787,
+        "exclusive_cpu": 3.23905800000378,
+        "exclusive_wall": 3.247889765965431
+      },
+      "geometry.field_catalog": {
+        "calls": 7,
+        "exclusive_cpu": 0.014348,
+        "exclusive_wall": 0.014348406999999999
+      },
+      "geometry.locate": {
+        "calls": 1110262,
+        "exclusive_cpu": 1.1437079999954685,
+        "exclusive_wall": 1.161579068997907
+      },
+      "geometry.owner_catalog": {
+        "calls": 2183699,
+        "exclusive_cpu": 1.4496769999711177,
+        "exclusive_wall": 1.4969435429976419
+      },
+      "sparse.mass_assemble": {
+        "calls": 5,
+        "exclusive_cpu": 0.18580300000002065,
+        "exclusive_wall": 0.1861219020000053
+      }
+    },
+    "steps": {
+      "-1": {
+        "exclusive_cpu": 35.442068999066365,
+        "exclusive_wall": 36.04983767407249
+      }
+    },
+    "scope": "exclusive native process intervals only; nested inclusive totals are never added; detailed aggregation includes clock overhead when explicitly enabled"
+  },
+  "capacity-v2/target-p3/frozen-timing.jsonl": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v2/target-p3/frozen-timing.jsonl",
+    "sha256": "91fc8593b7d9197c1cace794b2ffcd0b46ff01cffd041f5b92fe792c418e180f",
+    "names": {
+      "constitutive.refresh": {
+        "calls": 13,
+        "exclusive_cpu": 1.8872720000174132,
+        "exclusive_wall": 1.878642786998572
+      },
+      "matching.constraints": {
+        "calls": 13,
+        "exclusive_cpu": 0.030614999999999885,
+        "exclusive_wall": 0.030609989999999993
+      },
+      "residual": {
+        "calls": 6,
+        "exclusive_cpu": 4.408314000002035,
+        "exclusive_wall": 4.403560933997134
+      },
+      "sparse.factorize": {
+        "calls": 14,
+        "exclusive_cpu": 0.802024,
+        "exclusive_wall": 0.8022344709999999
+      },
+      "sparse.solve_validate": {
+        "calls": 153,
+        "exclusive_cpu": 0.23264499999999977,
+        "exclusive_wall": 0.23274272
+      },
+      "residual.mass_dual_norms": {
+        "calls": 2,
+        "exclusive_cpu": 0.083346,
+        "exclusive_wall": 0.08334982799999999
+      },
+      "domain.compute": {
+        "calls": 1,
+        "exclusive_cpu": 15.382331998050127,
+        "exclusive_wall": 15.348473221767996
+      },
+      "domain.scalar": {
+        "calls": 1,
+        "exclusive_cpu": 2.800000000036107e-05,
+        "exclusive_wall": 2.8672000006224607e-05
+      },
+      "audit.physical": {
+        "calls": 1,
+        "exclusive_cpu": 5.568609000054016,
+        "exclusive_wall": 5.546895041951638
+      },
+      "audit.complete": {
+        "calls": 1,
+        "exclusive_cpu": 10.0664070035521,
+        "exclusive_wall": 10.019642315675497
+      },
+      "flow.assembly": {
+        "calls": 1,
+        "exclusive_cpu": 8.939767999999852,
+        "exclusive_wall": 8.9399951419999
+      },
+      "sparse.pressure_gmres": {
+        "calls": 1,
+        "exclusive_cpu": 0.04834800000000025,
+        "exclusive_wall": 0.049219061000000064
+      },
+      "sparse.flow_linear_operation": {
+        "calls": 1,
+        "exclusive_cpu": 0.2010510000000001,
+        "exclusive_wall": 0.20125756500000014
+      },
+      "epsilon.assembly": {
+        "calls": 1,
+        "exclusive_cpu": 0.9960269999998368,
+        "exclusive_wall": 0.9940254439999132
+      },
+      "k.assembly": {
+        "calls": 1,
+        "exclusive_cpu": 2.148647999999861,
+        "exclusive_wall": 2.147650700999927
+      },
+      "assembly.open_faces": {
+        "calls": 12,
+        "exclusive_cpu": 0.16219899999998275,
+        "exclusive_wall": 0.16154477599998063
+      },
+      "constitutive.outer_law": {
+        "calls": 1852061,
+        "exclusive_cpu": 2.859278999976139,
+        "exclusive_wall": 2.8702054929992444
+      },
+      "geometry.basis_lookup_evaluate": {
+        "calls": 29362306,
+        "exclusive_cpu": 20.756043999678038,
+        "exclusive_wall": 20.946410960504995
+      },
+      "geometry.element_row": {
+        "calls": 14678577,
+        "exclusive_cpu": 35.756847995262675,
+        "exclusive_wall": 35.53294982149305
+      },
+      "geometry.evaluation_row": {
+        "calls": 9447563,
+        "exclusive_cpu": 12.728397999235622,
+        "exclusive_wall": 12.798090153247498
+      },
+      "geometry.field_catalog": {
+        "calls": 7,
+        "exclusive_cpu": 0.054834999999999995,
+        "exclusive_wall": 0.054837269
+      },
+      "geometry.locate": {
+        "calls": 4285050,
+        "exclusive_cpu": 8.518608000476046,
+        "exclusive_wall": 8.53149310499988
+      },
+      "geometry.owner_catalog": {
+        "calls": 8642315,
+        "exclusive_cpu": 7.250306000630799,
+        "exclusive_wall": 7.408775662925822
+      },
+      "sparse.mass_assemble": {
+        "calls": 5,
+        "exclusive_cpu": 0.741917999999494,
+        "exclusive_wall": 0.7436942579999182
+      }
+    },
+    "steps": {
+      "-1": {
+        "exclusive_cpu": 139.62386899693405,
+        "exclusive_wall": 139.72632939356097
+      }
+    },
+    "scope": "exclusive native process intervals only; nested inclusive totals are never added; detailed aggregation includes clock overhead when explicitly enabled"
+  },
+  "capacity-v2/target-p3/initial-timing.jsonl": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v2/target-p3/initial-timing.jsonl",
+    "sha256": "b60f04554cd92c1aa6fadec885bde486a37fcb7580724f27ecdd86d90f51efae",
+    "names": {
+      "constitutive.refresh": {
+        "calls": 13,
+        "exclusive_cpu": 1.800554000017971,
+        "exclusive_wall": 1.7950966889989877
+      },
+      "matching.constraints": {
+        "calls": 19,
+        "exclusive_cpu": 0.03193499999999984,
+        "exclusive_wall": 0.03192062699999999
+      },
+      "startup.object": {
+        "calls": 1,
+        "exclusive_cpu": 5.331542000007543,
+        "exclusive_wall": 5.343689162000141
+      },
+      "residual": {
+        "calls": 9,
+        "exclusive_cpu": 6.017022000001833,
+        "exclusive_wall": 6.001606410005528
+      },
+      "sparse.factorize": {
+        "calls": 9,
+        "exclusive_cpu": 0.056193,
+        "exclusive_wall": 0.056258812
+      },
+      "sparse.solve_validate": {
+        "calls": 35,
+        "exclusive_cpu": 0.038326000000000006,
+        "exclusive_wall": 0.03815113200000001
+      },
+      "residual.mass_dual_norms": {
+        "calls": 5,
+        "exclusive_cpu": 0.08255800000000002,
+        "exclusive_wall": 0.083112005
+      },
+      "native.explicit": {
+        "calls": 1,
+        "exclusive_cpu": 0.08237900000000001,
+        "exclusive_wall": 0.082392815
+      },
+      "domain.compute": {
+        "calls": 1,
+        "exclusive_cpu": 15.416176998097988,
+        "exclusive_wall": 15.401351839803553
+      },
+      "domain.scalar": {
+        "calls": 1,
+        "exclusive_cpu": 5.099999999913507e-05,
+        "exclusive_wall": 5.0961999995990936e-05
+      },
+      "audit.physical": {
+        "calls": 1,
+        "exclusive_cpu": 5.208552000047371,
+        "exclusive_wall": 5.194764123971046
+      },
+      "audit.complete": {
+        "calls": 1,
+        "exclusive_cpu": 9.9475380040154,
+        "exclusive_wall": 9.920283874014629
+      },
+      "native.acceptance_audit": {
+        "calls": 1,
+        "exclusive_cpu": 0.00031599999999798456,
+        "exclusive_wall": 0.0003175730000037902
+      },
+      "output.project_fields": {
+        "calls": 2,
+        "exclusive_cpu": 0.00621,
+        "exclusive_wall": 0.006209147
+      },
+      "startup.initialize": {
+        "calls": 1,
+        "exclusive_cpu": 0.03751900000048636,
+        "exclusive_wall": 0.037506797999981245
+      },
+      "io.checkpoint": {
+        "calls": 1,
+        "exclusive_cpu": 0.006533,
+        "exclusive_wall": 0.028374948
+      },
+      "native.solve_block": {
+        "calls": 1,
+        "exclusive_cpu": 0.5918920000009902,
+        "exclusive_wall": 0.5913254739992848
+      },
+      "output.report": {
+        "calls": 1,
+        "exclusive_cpu": 0.137184,
+        "exclusive_wall": 0.215030589
+      },
+      "output.fields_and_report": {
+        "calls": 1,
+        "exclusive_cpu": 0.010478999999999988,
+        "exclusive_wall": 0.01527452700000001
+      },
+      "process": {
+        "calls": 1,
+        "exclusive_cpu": 1.3001179999999977,
+        "exclusive_wall": 1.8450621220000016
+      },
+      "assembly.open_faces": {
+        "calls": 11,
+        "exclusive_cpu": 0.14698099999998218,
+        "exclusive_wall": 0.14628405999999575
+      },
+      "constitutive.outer_law": {
+        "calls": 1954492,
+        "exclusive_cpu": 3.024799999973634,
+        "exclusive_wall": 3.057129930971706
+      },
+      "geometry.basis_lookup_evaluate": {
+        "calls": 28491234,
+        "exclusive_cpu": 20.23436899913267,
+        "exclusive_wall": 20.38007859197869
+      },
+      "geometry.element_row": {
+        "calls": 14243041,
+        "exclusive_cpu": 34.929994994966826,
+        "exclusive_wall": 34.712106076266274
+      },
+      "geometry.evaluation_row": {
+        "calls": 9200603,
+        "exclusive_cpu": 12.47644399932604,
+        "exclusive_wall": 12.500707519089588
+      },
+      "geometry.field_catalog": {
+        "calls": 7,
+        "exclusive_cpu": 0.053913,
+        "exclusive_wall": 0.053916211000000006
+      },
+      "geometry.locate": {
+        "calls": 4287298,
+        "exclusive_cpu": 8.310948000462755,
+        "exclusive_wall": 8.318459641006493
+      },
+      "geometry.owner_catalog": {
+        "calls": 8395355,
+        "exclusive_cpu": 6.637036000562223,
+        "exclusive_wall": 6.795939209005922
+      },
+      "sparse.mass_assemble": {
+        "calls": 5,
+        "exclusive_cpu": 0.7221609999994854,
+        "exclusive_wall": 0.7239050929999661
+      }
+    },
+    "steps": {
+      "-1": {
+        "exclusive_cpu": 132.63972499661318,
+        "exclusive_wall": 133.3763059621118
+      }
+    },
+    "scope": "exclusive native process intervals only; nested inclusive totals are never added; detailed aggregation includes clock overhead when explicitly enabled"
+  },
+  "capacity-v2/target-p4/frozen-timing.jsonl": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v2/target-p4/frozen-timing.jsonl",
+    "sha256": "9309bdb8129c322e471d5cf09cc1d2335ced43e62309704d05931ad754866a11",
+    "names": {
+      "constitutive.refresh": {
+        "calls": 13,
+        "exclusive_cpu": 1.8933920000204698,
+        "exclusive_wall": 1.887419379997967
+      },
+      "matching.constraints": {
+        "calls": 13,
+        "exclusive_cpu": 0.03052199999999988,
+        "exclusive_wall": 0.030434049999999997
+      },
+      "residual": {
+        "calls": 6,
+        "exclusive_cpu": 5.251626000002498,
+        "exclusive_wall": 5.246013599999734
+      },
+      "sparse.factorize": {
+        "calls": 14,
+        "exclusive_cpu": 2.633902,
+        "exclusive_wall": 2.634973641
+      },
+      "sparse.solve_validate": {
+        "calls": 322,
+        "exclusive_cpu": 1.3384329999999993,
+        "exclusive_wall": 1.3389781239999992
+      },
+      "residual.mass_dual_norms": {
+        "calls": 2,
+        "exclusive_cpu": 0.23641700000000002,
+        "exclusive_wall": 0.23651221
+      },
+      "domain.compute": {
+        "calls": 1,
+        "exclusive_cpu": 16.745145999169374,
+        "exclusive_wall": 16.723781807037263
+      },
+      "domain.scalar": {
+        "calls": 1,
+        "exclusive_cpu": 5.300000000119098e-05,
+        "exclusive_wall": 5.312200000417988e-05
+      },
+      "audit.physical": {
+        "calls": 1,
+        "exclusive_cpu": 6.167374999969221,
+        "exclusive_wall": 6.1511925209816205
+      },
+      "audit.complete": {
+        "calls": 1,
+        "exclusive_cpu": 10.937583005389214,
+        "exclusive_wall": 10.887944082530879
+      },
+      "flow.assembly": {
+        "calls": 1,
+        "exclusive_cpu": 24.122664999999845,
+        "exclusive_wall": 24.125422173000036
+      },
+      "sparse.pressure_gmres": {
+        "calls": 1,
+        "exclusive_cpu": 0.3426730000000011,
+        "exclusive_wall": 0.34492061200000124
+      },
+      "sparse.flow_linear_operation": {
+        "calls": 1,
+        "exclusive_cpu": 0.7114179999999992,
+        "exclusive_wall": 0.7116886600000005
+      },
+      "epsilon.assembly": {
+        "calls": 1,
+        "exclusive_cpu": 2.1528749999998578,
+        "exclusive_wall": 2.15175132099984
+      },
+      "k.assembly": {
+        "calls": 1,
+        "exclusive_cpu": 4.6759579999998575,
+        "exclusive_wall": 4.6766436269999865
+      },
+      "assembly.open_faces": {
+        "calls": 12,
+        "exclusive_cpu": 0.17244299999998214,
+        "exclusive_wall": 0.17180797500000447
+      },
+      "constitutive.outer_law": {
+        "calls": 1909969,
+        "exclusive_cpu": 2.9703139999700277,
+        "exclusive_wall": 2.9819097850126135
+      },
+      "geometry.basis_lookup_evaluate": {
+        "calls": 30185790,
+        "exclusive_cpu": 21.571493000481162,
+        "exclusive_wall": 21.763794485410507
+      },
+      "geometry.element_row": {
+        "calls": 15090319,
+        "exclusive_cpu": 38.48463799596176,
+        "exclusive_wall": 38.26649595145179
+      },
+      "geometry.evaluation_row": {
+        "calls": 9699903,
+        "exclusive_cpu": 13.144097999138708,
+        "exclusive_wall": 13.19881123339249
+      },
+      "geometry.field_catalog": {
+        "calls": 7,
+        "exclusive_cpu": 0.056437,
+        "exclusive_wall": 0.056437022
+      },
+      "geometry.locate": {
+        "calls": 4363108,
+        "exclusive_cpu": 8.63404100048009,
+        "exclusive_wall": 8.654790378008418
+      },
+      "geometry.owner_catalog": {
+        "calls": 8894655,
+        "exclusive_cpu": 7.5807530006773485,
+        "exclusive_wall": 7.7304631569108215
+      },
+      "sparse.mass_assemble": {
+        "calls": 5,
+        "exclusive_cpu": 1.8071859999994992,
+        "exclusive_wall": 1.8146750720000289
+      }
+    },
+    "steps": {
+      "-1": {
+        "exclusive_cpu": 171.66144100125882,
+        "exclusive_wall": 171.7869139897339
+      }
+    },
+    "scope": "exclusive native process intervals only; nested inclusive totals are never added; detailed aggregation includes clock overhead when explicitly enabled"
+  },
+  "capacity-v2/target-p4/initial-timing.jsonl": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v2/target-p4/initial-timing.jsonl",
+    "sha256": "d1c1fd458bab7ea799fbf62cfedec7165c61c0a38a286bf7b9ce21e11ff80ae8",
+    "names": {
+      "constitutive.refresh": {
+        "calls": 13,
+        "exclusive_cpu": 1.8491130000205989,
+        "exclusive_wall": 1.8479712139938287
+      },
+      "matching.constraints": {
+        "calls": 19,
+        "exclusive_cpu": 0.03439899999999978,
+        "exclusive_wall": 0.03440977700000001
+      },
+      "startup.object": {
+        "calls": 1,
+        "exclusive_cpu": 5.700774999994566,
+        "exclusive_wall": 5.720603282013737
+      },
+      "residual": {
+        "calls": 9,
+        "exclusive_cpu": 7.835277000002016,
+        "exclusive_wall": 7.8286676430062965
+      },
+      "sparse.factorize": {
+        "calls": 9,
+        "exclusive_cpu": 0.17795500000000003,
+        "exclusive_wall": 0.178024614
+      },
+      "sparse.solve_validate": {
+        "calls": 35,
+        "exclusive_cpu": 0.08312200000000002,
+        "exclusive_wall": 0.08317783700000002
+      },
+      "residual.mass_dual_norms": {
+        "calls": 5,
+        "exclusive_cpu": 0.24467899999999998,
+        "exclusive_wall": 0.245050189
+      },
+      "native.explicit": {
+        "calls": 1,
+        "exclusive_cpu": 0.083027,
+        "exclusive_wall": 0.083029208
+      },
+      "domain.compute": {
+        "calls": 1,
+        "exclusive_cpu": 16.566441999588186,
+        "exclusive_wall": 16.56271238812878
+      },
+      "domain.scalar": {
+        "calls": 1,
+        "exclusive_cpu": 3.499999999689862e-05,
+        "exclusive_wall": 3.618199999522176e-05
+      },
+      "audit.physical": {
+        "calls": 1,
+        "exclusive_cpu": 6.07696699997876,
+        "exclusive_wall": 6.064401344974023
+      },
+      "audit.complete": {
+        "calls": 1,
+        "exclusive_cpu": 10.697301005298002,
+        "exclusive_wall": 10.67211492861773
+      },
+      "native.acceptance_audit": {
+        "calls": 1,
+        "exclusive_cpu": 0.00044599999999661577,
+        "exclusive_wall": 0.00044795699999156113
+      },
+      "output.project_fields": {
+        "calls": 2,
+        "exclusive_cpu": 0.007813,
+        "exclusive_wall": 0.007811567
+      },
+      "startup.initialize": {
+        "calls": 1,
+        "exclusive_cpu": 0.055840000000543455,
+        "exclusive_wall": 0.056098153000021966
+      },
+      "io.checkpoint": {
+        "calls": 1,
+        "exclusive_cpu": 0.010661,
+        "exclusive_wall": 0.030057251
+      },
+      "native.solve_block": {
+        "calls": 1,
+        "exclusive_cpu": 0.7243899999995005,
+        "exclusive_wall": 0.7240687039974194
+      },
+      "output.report": {
+        "calls": 1,
+        "exclusive_cpu": 0.227509,
+        "exclusive_wall": 0.295199393
+      },
+      "output.fields_and_report": {
+        "calls": 1,
+        "exclusive_cpu": 0.013934000000000002,
+        "exclusive_wall": 0.016377626000000034
+      },
+      "process": {
+        "calls": 1,
+        "exclusive_cpu": 1.502227999999974,
+        "exclusive_wall": 2.0601083269999947
+      },
+      "assembly.open_faces": {
+        "calls": 11,
+        "exclusive_cpu": 0.15789899999998197,
+        "exclusive_wall": 0.15746584700000577
+      },
+      "constitutive.outer_law": {
+        "calls": 2012400,
+        "exclusive_cpu": 3.1067299999714444,
+        "exclusive_wall": 3.12221997402314
+      },
+      "geometry.basis_lookup_evaluate": {
+        "calls": 29314718,
+        "exclusive_cpu": 21.015300999915812,
+        "exclusive_wall": 21.240360190980716
+      },
+      "geometry.element_row": {
+        "calls": 14654783,
+        "exclusive_cpu": 37.8789339961767,
+        "exclusive_wall": 37.562931629562605
+      },
+      "geometry.evaluation_row": {
+        "calls": 9452943,
+        "exclusive_cpu": 12.794211999302703,
+        "exclusive_wall": 12.8286958312396
+      },
+      "geometry.field_catalog": {
+        "calls": 7,
+        "exclusive_cpu": 0.058305,
+        "exclusive_wall": 0.058308569
+      },
+      "geometry.locate": {
+        "calls": 4365356,
+        "exclusive_cpu": 8.449978000476298,
+        "exclusive_wall": 8.458101841014157
+      },
+      "geometry.owner_catalog": {
+        "calls": 8647695,
+        "exclusive_cpu": 6.910689000598117,
+        "exclusive_wall": 7.071584031989316
+      },
+      "sparse.mass_assemble": {
+        "calls": 5,
+        "exclusive_cpu": 1.6038039999994878,
+        "exclusive_wall": 1.6067229990000416
+      }
+    },
+    "steps": {
+      "-1": {
+        "exclusive_cpu": 143.86776500132268,
+        "exclusive_wall": 144.61675849954142
+      }
+    },
+    "scope": "exclusive native process intervals only; nested inclusive totals are never added; detailed aggregation includes clock overhead when explicitly enabled"
+  }
+}

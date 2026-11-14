@@ -60,6 +60,32 @@ not physical pressure uncertainty. The CT8 failed classification must remain
 failed under the new backend. Final gate outcomes and actual capacity metrics
 are supplied by the compact qualified evidence, not by this implementation note.
 
+The final frozen C++ revision is `1e73bf53353490e7117f36799250ef79208e8df6`.
+The qualified runtime is `build-v8/runtime`; its complete binary/header/loader
+identities are in `qualified-v2/runtime.json` and the loaded-file catalog.
+Direct residual refinement reuses a factor at most three times under the same
+true-residual bound. Its actual use is recorded separately from governing
+equation stages. The intermediate preconditioner needs one correction; the
+other final capacity cases need none. The original failures are not replaced.
+
+The ordinary solver build defaults this feature OFF. The production CMake
+switch is `NEKTAR_RANS_SERIAL_SPARSE`; the isolated test/runtime build uses
+`RANS_ENABLE_SERIAL_SPARSE`. Both require Eigen3 and preserve the installed SDK.
+The private build driver records the exact tested configuration. A qualified
+case explicitly selects:
+
+```xml
+<I PROPERTY="RANSWallLinearBackend" VALUE="AcceptedSerialSparseV1" />
+<!-- In PARAMETERS: -->
+<P> FlexibleGMRES = 1 </P>
+```
+
+All other admitted provider, wall, boundary, method and basis guards still
+apply. Old dense or earlier sparse-component checkpoints are not portable to
+this identity; create fresh histories. Within a component, genuine unchanged
+method/timestep restart is verified. Optional dense exports do not remove any
+mandatory physical-state or constitutive check.
+
 This is a serial flat prototype, not a distributed backend or an inf-sup,
 positivity, realizability, long-time or terrain theorem. The intended terrain
 still needs mapped region-aware numbering, joined-map Cartesian gradients,

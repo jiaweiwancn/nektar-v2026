@@ -1,0 +1,39 @@
+{
+  "schema": "CT9PostExitPublicationClosureV1",
+  "status": "pass",
+  "scope": "post-exit metadata only; original numerical/publication seals remain unchanged",
+  "archive_sha256": "5e014d71e6c02b94289021df82919de02cf7cdd1530b828b3ed50bb6c5280804",
+  "numerical_seal_sha256": "d4ed185a0f667b327d6822ed819226ecaf547e472ae15e28b0c56e05c46a551f",
+  "publication_seal_sha256": "2bff9bc92fb0f87908335c4cb17b59e7d10169cfd036f343fb6c2b7c465353fb",
+  "resource": {
+    "maximum_aggregate": 6,
+    "maximum_project": 6,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "additional_files": {
+    "archive-resource/resource-final.json": "4833c17794fc501abd519f89e5dfa7898628b7e63762bd26f53136fba3cc19a8",
+    "archive-resource/project-highwater.jsonl": "013c476f8fbbb4bc43629756cd4c89a410de43be8dc363ac3b5bdd63f6ad7889",
+    "archive-resource/worker-launch.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "archive-resource/worker-leases.json": "288f75591af248ffa8a0f3521da187b6dcf2e0a1f6b0de8c488290918b924b47",
+    "archive-resource/worker-guard.stop": "37a40f08d8548dba289b9b0bb35bcf63b359f6d37ee86044ebc6b6da080b9ec1",
+    "archive-resource/worker-guard-status.json": "743a2c124b8146be4235cdee44aac0b46da58cf55fe6bc39135d051d0c04030f",
+    "archive-resource/worker-guard-highwater.jsonl": "5fea08affe072bb484e0c127c0683e6f25f89fd2dfc28031c0ef2837c0e10cd5",
+    "archive-resource/execution.json": "22b759efb4b7d2baedc1201afade41815cdfdc9efeefe674ecfc6dd936670478",
+    "archive-resource/worker-bookings.jsonl": "30631aed7cadab0307fcbf8a97eff0be41fbb6a31724a553244b8f6054a09080",
+    "retained-publication-v1/resource-final.json": "4833c17794fc501abd519f89e5dfa7898628b7e63762bd26f53136fba3cc19a8",
+    "retained-publication-v1/project-highwater.jsonl": "d31dade8d53fc74ffc66d4cfc6c51c93d84394c04364872e2b47204e35885ffe",
+    "retained-publication-v1/worker-launch.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained-publication-v1/worker-leases.json": "61c649549d8006c582543213823919d1f473e94ee63f758d92a2399d9b2e5f2b",
+    "retained-publication-v1/worker-guard.stop": "37a40f08d8548dba289b9b0bb35bcf63b359f6d37ee86044ebc6b6da080b9ec1",
+    "retained-publication-v1/worker-guard-status.json": "dc4c9941e2bee051828393ab7cfd2795f0ec6f72ec474e87780a347d497d5da4",
+    "retained-publication-v1/worker-guard-highwater.jsonl": "38361132f668cd922678edc6948e697789a1d9d146482420a134f7cf64b68485",
+    "retained-publication-v1/execution.json": "411dc8e5c78999474c4b540bc5a28771905ba7238d2b7659d490a11ac88f1e7d",
+    "retained-publication-v1/worker-bookings.jsonl": "4f3859826a529541594e0794a7aa16168346bf73ac636ff903ef6681e4bffd30",
+    "retained-publication-v1/failed.log": "6c326eeb124b70e41b1f1d205c175dbe0fcc07dcedaf0762b916c2054bf7bec6"
+  },
+  "failed_publication": "v1 checked PETSc in an SDK export that does not export the flag; corrected v2/v3 use the installed build cache; no changed numerical outcome"
+}

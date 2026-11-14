@@ -1,0 +1,430 @@
+{
+  "build-v1": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v1",
+    "artifacts": {
+      "request-manifest.json": {
+        "sha256": "dc85d1fb62e6cfde2ef25fdfdb7a0eacee2f2f23e43f0a1262f560a923ca4487",
+        "bytes": 350
+      },
+      "progress.json": {
+        "sha256": "8adf56cb98f991b236907c06c6547a9d28772e6c8e214b7018b56f6bd09fb5c1",
+        "bytes": 12904
+      },
+      "0.log": {
+        "sha256": "cf373a6c968d7bd5c92e7c7caebb48c1d8c79096ddb32626dc29b89e44c28a35",
+        "bytes": 3209
+      },
+      "1.log": {
+        "sha256": "a73ebb8f8f7e8fc54ec109c0089fef36efb6d03e82957efcd8d3d2b9e214309d",
+        "bytes": 11403
+      }
+    }
+  },
+  "build-v2": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v2",
+    "artifacts": {
+      "request-manifest.json": {
+        "sha256": "864215591e93b94ecb67e4dd26387af41c7921d64e55b9b92527a343a8d4744d",
+        "bytes": 350
+      },
+      "progress.json": {
+        "sha256": "be3866cf2a3f9120d10a2e41bda9f4641d3f4b2c20956e7511479f9e7b0f1768",
+        "bytes": 12903
+      },
+      "0.log": {
+        "sha256": "e4e7bbc79afffcf67252531d28d1fada4215922ce474c56edb0e5905d2449298",
+        "bytes": 2818
+      },
+      "1.log": {
+        "sha256": "bc9976358d1a80d8d340b20da1108880ebf90da6bfd448feda789693553d6724",
+        "bytes": 7073
+      }
+    }
+  },
+  "build-v6": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v6",
+    "artifacts": {
+      "request-manifest.json": {
+        "sha256": "151391f77a3aca9cbb5c367ada5361de835fcdc2461767376da105b7f371773a",
+        "bytes": 350
+      },
+      "progress.json": {
+        "sha256": "f275f603ae3484ce77bc0ec67fd5e107aecdc469461921a0cdede7dc50ee0795",
+        "bytes": 12894
+      },
+      "0.log": {
+        "sha256": "e4e7bbc79afffcf67252531d28d1fada4215922ce474c56edb0e5905d2449298",
+        "bytes": 2818
+      },
+      "1.log": {
+        "sha256": "76817feec45e7ba3879dacae6193a2e156c2c84ca23c5f50cfdca8852dd6e051",
+        "bytes": 1752
+      }
+    }
+  },
+  "controls-v1": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v1",
+    "artifacts": {
+      "request-manifest.json": {
+        "sha256": "efc3a4ffc696c0ba2e581df93fdbbced0b572b8fff5cfa6feab165958a8cd8d8",
+        "bytes": 17805
+      },
+      "completed-artifacts.json": {
+        "sha256": "c526abad43fafb1c55137a14c7e0aa8fe5a937c1f5bc038ccafe986272bd76a2",
+        "bytes": 196
+      },
+      "results.json": {
+        "sha256": "69960fc180598f65ca083b1757d529fbf8829e82ec1cfe3472c9ef011b2f8437",
+        "bytes": 91100
+      },
+      "progress.json": {
+        "sha256": "1b8f019a5bd51de398c219e58433383c1776f1e5384a6a21d41af3a2770fb6f1",
+        "bytes": 91106
+      }
+    },
+    "status": "fail",
+    "failure": null,
+    "qualification": null,
+    "checks": {
+      "d0-p3": {
+        "status": "fail",
+        "failure": "KeyError('advective_load')"
+      },
+      "d0-p4": {
+        "status": "fail",
+        "failure": "KeyError('advective_load')"
+      },
+      "displaced-p3": {
+        "status": "fail",
+        "failure": "KeyError('advective_load')"
+      },
+      "displaced-p4": {
+        "status": "fail",
+        "failure": "KeyError('advective_load')"
+      },
+      "restart_rollback_backend_identity": {
+        "status": "pass"
+      }
+    }
+  },
+  "pressure-finer-v1": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/pressure-finer-v1",
+    "artifacts": {
+      "request-manifest.json": {
+        "sha256": "a6a42261c39f031229856c2a76e5dab0971cd55802fdce436c029bc7b3c2a3a8",
+        "bytes": 11762
+      },
+      "completed-artifacts.json": {
+        "sha256": "acb050e2a8a017d66dbae0747df24e9c97dca407a9db3cb2c774007e7113b2f0",
+        "bytes": 196
+      },
+      "results.json": {
+        "sha256": "9184aa9fc6df16ffde6f32ee756773310ccde393c4d915583cf2c56f89a02061",
+        "bytes": 17439042
+      }
+    },
+    "status": null,
+    "failure": null,
+    "qualification": {
+      "status": "fail",
+      "reasons": [
+        "missing_temporal_field",
+        "missing_traction_temporal"
+      ],
+      "scope": "prospective CT9 bounded pair; old CT8 gate and labels unchanged"
+    }
+  },
+  "capacity-v1": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1",
+    "artifacts": {
+      "request-manifest.json": {
+        "sha256": "cb0fe6dc389fe372f280371ddb109af0b952fd6971bab073729770d2dd46b673",
+        "bytes": 20604
+      },
+      "completed-artifacts.json": {
+        "sha256": "17053c494a768a45b78086e46a66433ad1fcdb334107f4cbc802c33c32e4255a",
+        "bytes": 196
+      },
+      "results.json": {
+        "sha256": "8b19781d7f67ad35c3f0815bc2904d905582de721b462c9fd8820243603075d8",
+        "bytes": 5244910
+      },
+      "progress.json": {
+        "sha256": "1e4a6a605a6964caa2a3c788cd4dcc7772f31d07324390716a697d72b87415ce",
+        "bytes": 5244916
+      }
+    },
+    "status": "fail",
+    "failure": null,
+    "qualification": null,
+    "cases": {
+      "intermediate-p3": {
+        "status": "failed_capacity_or_reference_preflight",
+        "failure": "ValueError('frozen native sparse operation failed:EP-AWF patch: sparse direct true residual exceeds contract')",
+        "native_count": {
+          "schema": "CT7NativeLayoutInventoryV1",
+          "status": "pass",
+          "read_only": true,
+          "numerical_evolution_performed": false,
+          "native_block_sizes": [
+            2275,
+            2275,
+            2275,
+            1750,
+            72,
+            216
+          ],
+          "stored_slots": 8864,
+          "basis_modes_by_field": [
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          "elements": 240,
+          "single_dense_double_matrix_bytes": 628563968,
+          "within_unchanged_3000_guard": false,
+          "scope": "actual serial affine native CG field maps only; no constitutive/reference admissibility, dense allocation, evolving solve or curved-map qualification"
+        },
+        "zero_state_sha256": "97b179bd051f983d98a3b2e41934e90696da5a92e52c53372d70a6e2c01a939a",
+        "native_report_sha256": "9baa4e424b7dd6eca9321de7234278d4102ff9c9627beae54813eac748f6b303",
+        "history": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/intermediate-p3/checkpoint",
+        "startup_execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v5/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 36.13878238599864,
+          "process_cpu_seconds": 35.458811000000004,
+          "peak_RSS_KiB": 751420,
+          "actual_mapped_files_catalog_sha256": "818bca8e1c5a0f0d356caae9f75767ad0b918bb6bba84e882e3cb1a96b5267b8"
+        },
+        "frozen_execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v5/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/intermediate-p3/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/intermediate-p3/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/intermediate-p3/frozen.json"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 34.37665201698837,
+          "process_cpu_seconds": 33.79836399999999,
+          "peak_RSS_KiB": 737088,
+          "actual_mapped_files_catalog_sha256": "e0fb4d53b1da04af607b6853108fcaee76e87902c06087ba9270956ed29af284"
+        }
+      },
+      "target-p3": {
+        "status": "static_capacity_pass",
+        "native_count": {
+          "schema": "CT7NativeLayoutInventoryV1",
+          "status": "pass",
+          "read_only": true,
+          "numerical_evolution_performed": false,
+          "native_block_sizes": [
+            8554,
+            8554,
+            8554,
+            6580,
+            256,
+            768
+          ],
+          "stored_slots": 33267,
+          "basis_modes_by_field": [
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          "elements": 930,
+          "single_dense_double_matrix_bytes": 8853546312,
+          "within_unchanged_3000_guard": false,
+          "scope": "actual serial affine native CG field maps only; no constitutive/reference admissibility, dense allocation, evolving solve or curved-map qualification"
+        },
+        "zero_state_sha256": "da368b7341c306ff62954e6acf9eaf2b82d48e152168db844bc74aca795a1973",
+        "native_report_sha256": "6f30b30b93cde7c524b3dd93c72e57ee95b16dea27212b88a00a76358304f1e0",
+        "history": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/target-p3/checkpoint",
+        "startup_execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v5/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 133.00197532700258,
+          "process_cpu_seconds": 132.191103,
+          "peak_RSS_KiB": 2655728,
+          "actual_mapped_files_catalog_sha256": "592fe8295477df4fe6aa49682697b47b75320aa64a1366db58bedb515a21c47a"
+        },
+        "frozen_execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v5/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/target-p3/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/target-p3/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/target-p3/frozen.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 144.02433301100973,
+          "process_cpu_seconds": 143.28922299999996,
+          "peak_RSS_KiB": 2636000,
+          "actual_mapped_files_catalog_sha256": "fa46834ee5509439bf9cf583cf79153ef665a0ff1bfae65c00889388a03fa771"
+        }
+      },
+      "target-p4": {
+        "status": "failed_capacity_or_reference_preflight",
+        "failure": "ValueError('frozen native sparse operation failed:EP-AWF patch: sparse factor exceeds declared30M fill budget')",
+        "native_count": {
+          "schema": "CT7NativeLayoutInventoryV1",
+          "status": "pass",
+          "read_only": true,
+          "numerical_evolution_performed": false,
+          "native_block_sizes": [
+            15125,
+            15125,
+            15125,
+            11625,
+            945,
+            2961
+          ],
+          "stored_slots": 60907,
+          "basis_modes_by_field": [
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              3
+            ]
+          ],
+          "elements": 930,
+          "single_dense_double_matrix_bytes": 29677301192,
+          "within_unchanged_3000_guard": false,
+          "scope": "actual serial affine native CG field maps only; no constitutive/reference admissibility, dense allocation, evolving solve or curved-map qualification"
+        },
+        "zero_state_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+        "native_report_sha256": "99c058c24981458e8584f790a44d088c8be304c9246f3c1e578f1f99a722c1fc",
+        "history": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/target-p4/checkpoint",
+        "startup_execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v5/runtime/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 144.66496599899256,
+          "process_cpu_seconds": 143.81267999999997,
+          "peak_RSS_KiB": 3562916,
+          "actual_mapped_files_catalog_sha256": "f13cffb3ec7af3237febe3b8a0fec6de89711775db85b840bd90749884635a61"
+        },
+        "frozen_execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v5/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/target-p4/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/target-p4/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/capacity-v1/target-p4/frozen.json"
+          ],
+          "exit_code": 1,
+          "wall_seconds": 163.6142182600015,
+          "process_cpu_seconds": 162.98538200000002,
+          "peak_RSS_KiB": 3623560,
+          "actual_mapped_files_catalog_sha256": "39f8a31b7d70de3e8a81970094f3ea6a79f50cd91db543b5ac17513e13f88de7"
+        }
+      }
+    }
+  },
+  "linear-recheck-intermediate-v1": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/linear-recheck-intermediate-v1",
+    "artifacts": {
+      "request-manifest.json": {
+        "sha256": "a2c30ebdbdb0f1baf69362641db47c5d06c1f102c4c3d5d1eccff0db31fcaab1",
+        "bytes": 105475
+      },
+      "completed-artifacts.json": {
+        "sha256": "8e5ab9b1b899fb5d176cb4101a37600691d9d651f339961a2aec5f84ec6eb7fe",
+        "bytes": 196
+      },
+      "results.json": {
+        "sha256": "46470ea7e8a4310feec099a804d66c61d2be32a8f1e2db4af95afbe3b99bbdc3",
+        "bytes": 1137728
+      }
+    },
+    "status": "pass",
+    "failure": null,
+    "qualification": null
+  },
+  "linear-recheck-p4-v1": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/linear-recheck-p4-v1",
+    "artifacts": {
+      "request-manifest.json": {
+        "sha256": "d7674b4fea27cd5e75e9888aba89a68ad7725ff0c46bb867b3c5f93fc0364f35",
+        "bytes": 326149
+      },
+      "completed-artifacts.json": {
+        "sha256": "7a100b3c690b056625703e43b74e6ee67c7df825c4d2f21a6e04fbda2ddabb49",
+        "bytes": 196
+      },
+      "results.json": {
+        "sha256": "e459afa69412af1e05fbebc637e4a22f626c6e8d5bea50de929198bd5ebaa852",
+        "bytes": 324695
+      }
+    },
+    "status": "fail",
+    "failure": "EP-AWF patch: sparse factor exceeds declared30M fill budget: rows=29636, matrix_nnz=2081794, factor_nnz=38165601, mass=0",
+    "qualification": null
+  }
+}

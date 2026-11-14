@@ -1,0 +1,1452 @@
+{
+  "schema": "CT9BackendControlsV2",
+  "checks": {
+    "d0-p3": {
+      "status": "pass",
+      "defects": {
+        "raw_residual": 0.0,
+        "constrained_residual": 0.0,
+        "external_constraints": 0.0,
+        "mass_0": 0.0,
+        "mass_1": 0.0,
+        "mass_2": 0.0,
+        "mass_3": 0.0,
+        "mass_4": 0.0,
+        "mass_5": 0.0,
+        "block_0_matrix": 0.0,
+        "block_0_residual": 0.0,
+        "block_3_matrix": 0.0,
+        "block_3_residual": 0.0,
+        "block_2_matrix": 0.0,
+        "block_2_residual": 0.0,
+        "traction_load": 0.0,
+        "diffusive_load": 0.0,
+        "advection_load": 0.0,
+        "predictor": 5.218048215738236e-15,
+        "pressure_increment": 4.9873299934333204e-18,
+        "consistent_mass_correction": 8.005748841632965e-16,
+        "scalar_increment_3": 1.6479873021779667e-17,
+        "scalar_increment_2": 3.99333344169861e-15
+      },
+      "negative_roughness_pressure_omission_signal": 0.11928571428571443,
+      "negative_sign_signal": 14.57973767830495,
+      "negative_mass_replacement_signal": 6.1145749710379524,
+      "negative_stale_mask_signal": 0.1801217731109758,
+      "flow_rows": 117,
+      "free_velocity": 102,
+      "free_pressure": 15,
+      "pressure_C": 0.0,
+      "pressure_true_residual": 1.6263032587282567e-18,
+      "pressure_iterations": 15,
+      "scope": "complete small matrices/rows and independent consistent-mass linear correction; no governing extra solve",
+      "artifacts": [
+        {
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p3-dense/operator.json",
+          "sha256": "52030f9a787bbcee2da2bdad3e7fa8b969cce89aa56298d2c36b1a69ac875624",
+          "independent": {
+            "status": "pass",
+            "actual_stored_slots": 254,
+            "defects": {
+              "all_row": 2.7050513135318904e-16,
+              "boundary_advection": 5.551115123125783e-17,
+              "boundary_traction": 0.0,
+              "boundary_diffusion": 0.0,
+              "frozen_0": 4.996003610813204e-16,
+              "residual_0": 8.881784197001252e-16,
+              "frozen_3": 1.1102230246251565e-16,
+              "residual_3": 1.4059052858526877e-17,
+              "frozen_2": 3.2742905609062234e-16,
+              "residual_2": 1.1102230246251565e-16
+            },
+            "continuous_native_test_maximum": 1.4847042478968256e-11,
+            "top_trace_mode_ids": {
+              "0": [
+                9,
+                10,
+                11,
+                38,
+                39,
+                44,
+                45
+              ],
+              "1": [
+                79,
+                80,
+                81,
+                108,
+                109,
+                114,
+                115
+              ],
+              "2": [
+                149,
+                150,
+                151,
+                178,
+                179,
+                184,
+                185
+              ],
+              "3": [
+                212,
+                213,
+                215,
+                220,
+                221,
+                228,
+                229
+              ]
+            },
+            "free_top_mode_ids": {
+              "0": [
+                9,
+                11,
+                38,
+                39,
+                44,
+                45
+              ],
+              "1": [],
+              "2": [
+                149,
+                151,
+                178,
+                179,
+                184,
+                185
+              ],
+              "3": [
+                212,
+                215,
+                220,
+                221,
+                228,
+                229
+              ]
+            },
+            "top_physical_length": 1.0,
+            "prescribed_epsilon_outward_conservative_flux": 0.019692307692307696,
+            "zero_epsilon_flux_negative_signal": 0.009846153846153857,
+            "reversed_shear_negative_signal": 0.16000000000000006,
+            "zero_epsilon_flux_continuous_negative": {
+              "free_maximum": 0.009846153846153794,
+              "scale": 0.12671354225164286,
+              "scaled_free_maximum": 0.07770403755740747,
+              "limit": 2e-09,
+              "status": "fail",
+              "free_rows": 18,
+              "prescribed_rows": 10
+            },
+            "initialization_receipt": {
+              "raw_initial_sha256": "cf8b262cef573cc8146e702f08113408a864719aaad820e1375e6a609340a1cd",
+              "effective_initial_sha256": "cf8b262cef573cc8146e702f08113408a864719aaad820e1375e6a609340a1cd",
+              "fixed_reference_sha256": "cf8b262cef573cc8146e702f08113408a864719aaad820e1375e6a609340a1cd",
+              "explicit_boundary_sha256": "426d5884fb6487cba01ece6b385eae24d9ff8aa10209db346c671d71017d7174",
+              "implicit_boundary_sha256": "426d5884fb6487cba01ece6b385eae24d9ff8aa10209db346c671d71017d7174",
+              "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+              "raw_effective_max_difference": 0,
+              "source_target_boundary_max_difference": 0,
+              "live_fixed_boundary_entry_count": 53,
+              "live_fixed_boundary_canonical_sha256": "3d36a4be9d275ccaf584fcb606d0070d29cb67cd698e77a3525a1339de6561d6",
+              "live_fixed_boundary_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "effective_initial_entry_count": 254,
+              "effective_initial_canonical_sha256": "4ec8a04f555d245fdf0d8c9fa6891cbcf09bdf4054b899dd04565c9e85f91ca3",
+              "effective_initial_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "open_boundary_definition": "AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=NeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-z-unshifted:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.31678385562910716|K0=0.6115200681722619|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40406099529852102|RANSOPENEQUILIBRIUMQ=3.8220004260766363|RANSOPENMEANINTERCEPT=3.7221290926419526|RANSOPENNATURALKAPPA=0.40406099529852102|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.40000000000000002|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.83971761447516569|ROUGHX=297.9038042055638|SLOPE=0.17946842304608929|YAPSCALE=0.60382768562974365|ZV=-0.024330256663533445",
+              "open_traction_load_sha256": "5f796e3a9f0b9a3baa28bd5fdd8fa14e46659d983b7c0c0ad514bcd60cca01d9",
+              "open_diffusive_load_sha256": "6e979bebe8517d54773ce88862b7f89ed946f66e2756930088a28fdb698f9fa1",
+              "open_advective_load_sha256": "9d2035fc5c60ff83bb9de3ff5ee6434fbf44290fe7b708ece59a1afb852773d4",
+              "open_explicit_implicit_agreement": true
+            },
+            "pressure_minimum_singular_ratio": 0.009845729897568298,
+            "constant_pressure_action": 0.597575396219311,
+            "additional_pressure_null_modes": 0,
+            "scope": "complete actual governing operator/frozen matrices and finite mixed-pressure fixture; no formal inf-sup or physical preservation claim"
+          },
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/RANSPreservationProbe",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p3-dense/case.xml",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p3-dense/operator-request.json",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p3-dense/operator.json"
+            ],
+            "exit_code": 0,
+            "wall_seconds": 7.7723245800007135,
+            "process_cpu_seconds": 7.094892000000001,
+            "peak_RSS_KiB": 838708,
+            "actual_mapped_files_catalog_sha256": "f8a15a27a93c09d746c6f26db46aa25dad597418611678adb440878edf587364"
+          }
+        },
+        {
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p3-sparse/operator.json",
+          "sha256": "02273b29e5bda2859ebd741ae34ddb56d9f7cfc8bb93cd109a55a48d2cb8a40f",
+          "independent": {
+            "status": "pass",
+            "actual_stored_slots": 254,
+            "defects": {
+              "all_row": 2.7050513135318904e-16,
+              "boundary_advection": 5.551115123125783e-17,
+              "boundary_traction": 0.0,
+              "boundary_diffusion": 0.0,
+              "frozen_0": 4.996003610813204e-16,
+              "residual_0": 8.881784197001252e-16,
+              "frozen_3": 1.1102230246251565e-16,
+              "residual_3": 1.4059052858526877e-17,
+              "frozen_2": 3.2742905609062234e-16,
+              "residual_2": 1.1102230246251565e-16
+            },
+            "continuous_native_test_maximum": 1.4847042478968256e-11,
+            "top_trace_mode_ids": {
+              "0": [
+                9,
+                10,
+                11,
+                38,
+                39,
+                44,
+                45
+              ],
+              "1": [
+                79,
+                80,
+                81,
+                108,
+                109,
+                114,
+                115
+              ],
+              "2": [
+                149,
+                150,
+                151,
+                178,
+                179,
+                184,
+                185
+              ],
+              "3": [
+                212,
+                213,
+                215,
+                220,
+                221,
+                228,
+                229
+              ]
+            },
+            "free_top_mode_ids": {
+              "0": [
+                9,
+                11,
+                38,
+                39,
+                44,
+                45
+              ],
+              "1": [],
+              "2": [
+                149,
+                151,
+                178,
+                179,
+                184,
+                185
+              ],
+              "3": [
+                212,
+                215,
+                220,
+                221,
+                228,
+                229
+              ]
+            },
+            "top_physical_length": 1.0,
+            "prescribed_epsilon_outward_conservative_flux": 0.019692307692307696,
+            "zero_epsilon_flux_negative_signal": 0.009846153846153857,
+            "reversed_shear_negative_signal": 0.16000000000000006,
+            "zero_epsilon_flux_continuous_negative": {
+              "free_maximum": 0.009846153846153794,
+              "scale": 0.12671354225164286,
+              "scaled_free_maximum": 0.07770403755740747,
+              "limit": 2e-09,
+              "status": "fail",
+              "free_rows": 18,
+              "prescribed_rows": 10
+            },
+            "initialization_receipt": {
+              "raw_initial_sha256": "cf8b262cef573cc8146e702f08113408a864719aaad820e1375e6a609340a1cd",
+              "effective_initial_sha256": "cf8b262cef573cc8146e702f08113408a864719aaad820e1375e6a609340a1cd",
+              "fixed_reference_sha256": "cf8b262cef573cc8146e702f08113408a864719aaad820e1375e6a609340a1cd",
+              "explicit_boundary_sha256": "426d5884fb6487cba01ece6b385eae24d9ff8aa10209db346c671d71017d7174",
+              "implicit_boundary_sha256": "426d5884fb6487cba01ece6b385eae24d9ff8aa10209db346c671d71017d7174",
+              "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+              "raw_effective_max_difference": 0,
+              "source_target_boundary_max_difference": 0,
+              "live_fixed_boundary_entry_count": 53,
+              "live_fixed_boundary_canonical_sha256": "3d36a4be9d275ccaf584fcb606d0070d29cb67cd698e77a3525a1339de6561d6",
+              "live_fixed_boundary_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "effective_initial_entry_count": 254,
+              "effective_initial_canonical_sha256": "4ec8a04f555d245fdf0d8c9fa6891cbcf09bdf4054b899dd04565c9e85f91ca3",
+              "effective_initial_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "open_boundary_definition": "AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=NeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-z-unshifted:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.31678385562910716|FLEXIBLEGMRES=1|K0=0.6115200681722619|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40406099529852102|RANSOPENEQUILIBRIUMQ=3.8220004260766363|RANSOPENMEANINTERCEPT=3.7221290926419526|RANSOPENNATURALKAPPA=0.40406099529852102|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.40000000000000002|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.83971761447516569|ROUGHX=297.9038042055638|SLOPE=0.17946842304608929|YAPSCALE=0.60382768562974365|ZV=-0.024330256663533445",
+              "open_traction_load_sha256": "5f796e3a9f0b9a3baa28bd5fdd8fa14e46659d983b7c0c0ad514bcd60cca01d9",
+              "open_diffusive_load_sha256": "6e979bebe8517d54773ce88862b7f89ed946f66e2756930088a28fdb698f9fa1",
+              "open_advective_load_sha256": "9d2035fc5c60ff83bb9de3ff5ee6434fbf44290fe7b708ece59a1afb852773d4",
+              "open_explicit_implicit_agreement": true
+            },
+            "pressure_minimum_singular_ratio": 0.009845729897568298,
+            "constant_pressure_action": 0.597575396219311,
+            "additional_pressure_null_modes": 0,
+            "scope": "complete actual governing operator/frozen matrices and finite mixed-pressure fixture; no formal inf-sup or physical preservation claim"
+          },
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/RANSPreservationProbe",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p3-sparse/case.xml",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p3-sparse/operator-request.json",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p3-sparse/operator.json"
+            ],
+            "exit_code": 0,
+            "wall_seconds": 8.579251992006903,
+            "process_cpu_seconds": 7.867558,
+            "peak_RSS_KiB": 840468,
+            "actual_mapped_files_catalog_sha256": "bfd03a48413c0f548ffc087ed0b00713910b6adf71c25d15f1d0052d0b13b707"
+          }
+        }
+      ]
+    },
+    "d0-p4": {
+      "status": "pass",
+      "defects": {
+        "raw_residual": 0.0,
+        "constrained_residual": 0.0,
+        "external_constraints": 0.0,
+        "mass_0": 0.0,
+        "mass_1": 0.0,
+        "mass_2": 0.0,
+        "mass_3": 0.0,
+        "mass_4": 0.0,
+        "mass_5": 0.0,
+        "block_0_matrix": 0.0,
+        "block_0_residual": 0.0,
+        "block_3_matrix": 0.0,
+        "block_3_residual": 0.0,
+        "block_2_matrix": 0.0,
+        "block_2_residual": 0.0,
+        "traction_load": 0.0,
+        "diffusive_load": 0.0,
+        "advection_load": 0.0,
+        "predictor": 3.3952875233556057e-15,
+        "pressure_increment": 1.4161035625376295e-16,
+        "consistent_mass_correction": 1.6774776012695725e-15,
+        "scalar_increment_3": 2.4580896129319796e-18,
+        "scalar_increment_2": 4.3125225612783424e-15
+      },
+      "negative_roughness_pressure_omission_signal": 0.11928571428571418,
+      "negative_sign_signal": 23.625186496609206,
+      "negative_mass_replacement_signal": 10.051282401743759,
+      "negative_stale_mask_signal": 0.18012177311097588,
+      "flow_rows": 224,
+      "free_velocity": 184,
+      "free_pressure": 40,
+      "pressure_C": 0.0,
+      "pressure_true_residual": 5.55653613398821e-19,
+      "pressure_iterations": 36,
+      "scope": "complete small matrices/rows and independent consistent-mass linear correction; no governing extra solve",
+      "artifacts": [
+        {
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p4-dense/operator.json",
+          "sha256": "1e860f49278d456f3f2b00f94fd42d3a484d8a51feaf3e37ecc9989cf831717c",
+          "independent": {
+            "status": "pass",
+            "actual_stored_slots": 437,
+            "defects": {
+              "all_row": 2.223873963757333e-16,
+              "boundary_advection": 4.440892098500626e-16,
+              "boundary_traction": 0.0,
+              "boundary_diffusion": 0.0,
+              "frozen_0": 7.494005416219807e-16,
+              "residual_0": 9.020562075079397e-16,
+              "frozen_3": 2.7755575615628914e-16,
+              "residual_3": 2.7755575615628914e-17,
+              "frozen_2": 3.7470027081099033e-16,
+              "residual_2": 1.1465522677328935e-16
+            },
+            "continuous_native_test_maximum": 1.4847042478968256e-11,
+            "top_trace_mode_ids": {
+              "0": [
+                9,
+                10,
+                11,
+                51,
+                52,
+                53,
+                60,
+                61,
+                62
+              ],
+              "1": [
+                126,
+                127,
+                128,
+                168,
+                169,
+                170,
+                177,
+                178,
+                179
+              ],
+              "2": [
+                243,
+                244,
+                245,
+                285,
+                286,
+                287,
+                294,
+                295,
+                296
+              ],
+              "3": [
+                353,
+                354,
+                356,
+                363,
+                364,
+                365,
+                375,
+                376,
+                377
+              ]
+            },
+            "free_top_mode_ids": {
+              "0": [
+                9,
+                11,
+                51,
+                52,
+                53,
+                60,
+                61,
+                62
+              ],
+              "1": [],
+              "2": [
+                243,
+                245,
+                285,
+                286,
+                287,
+                294,
+                295,
+                296
+              ],
+              "3": [
+                353,
+                356,
+                363,
+                364,
+                365,
+                375,
+                376,
+                377
+              ]
+            },
+            "top_physical_length": 1.0,
+            "prescribed_epsilon_outward_conservative_flux": 0.019692307692307696,
+            "zero_epsilon_flux_negative_signal": 0.009846153846153857,
+            "reversed_shear_negative_signal": 0.16000000000000006,
+            "zero_epsilon_flux_continuous_negative": {
+              "free_maximum": 0.009846153846153794,
+              "scale": 0.12671354225164286,
+              "scaled_free_maximum": 0.07770403755740747,
+              "limit": 2e-09,
+              "status": "fail",
+              "free_rows": 32,
+              "prescribed_rows": 13
+            },
+            "initialization_receipt": {
+              "raw_initial_sha256": "75b3a5c71a603dd3c3dddf6d000fdc23648a46f6936d3f1b5659451485136157",
+              "effective_initial_sha256": "75b3a5c71a603dd3c3dddf6d000fdc23648a46f6936d3f1b5659451485136157",
+              "fixed_reference_sha256": "75b3a5c71a603dd3c3dddf6d000fdc23648a46f6936d3f1b5659451485136157",
+              "explicit_boundary_sha256": "b9a92259b8d248c38339b729fb8e7fdaf7212798ea799f01997178a6fc15a933",
+              "implicit_boundary_sha256": "b9a92259b8d248c38339b729fb8e7fdaf7212798ea799f01997178a6fc15a933",
+              "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+              "raw_effective_max_difference": 0,
+              "source_target_boundary_max_difference": 0,
+              "live_fixed_boundary_entry_count": 69,
+              "live_fixed_boundary_canonical_sha256": "7ebe20fe40da647fb90457a849b040c356dcbd341bc7457fc9fbc836833091ee",
+              "live_fixed_boundary_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "effective_initial_entry_count": 437,
+              "effective_initial_canonical_sha256": "2e1f9cbce4275b8157b0df98728afc533d21c376b217992271e40b6eda81da06",
+              "effective_initial_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "open_boundary_definition": "AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=NeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-z-unshifted:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.31678385562910716|K0=0.6115200681722619|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40406099529852102|RANSOPENEQUILIBRIUMQ=3.8220004260766363|RANSOPENMEANINTERCEPT=3.7221290926419526|RANSOPENNATURALKAPPA=0.40406099529852102|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.40000000000000002|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.83971761447516569|ROUGHX=297.9038042055638|SLOPE=0.17946842304608929|YAPSCALE=0.60382768562974365|ZV=-0.024330256663533445",
+              "open_traction_load_sha256": "c228730ed3d107bbcb4b589e34cb403aeae0597f37654e5884ff4a95ad5e8a9e",
+              "open_diffusive_load_sha256": "f510f107ab57e6cc1d009c04a501d7800299037b10f1977576e9991c8da2cb4c",
+              "open_advective_load_sha256": "7891c379e108b2e3159877381c1193a286b070af6997e3113942c53b529b59e3",
+              "open_explicit_implicit_agreement": true
+            },
+            "pressure_minimum_singular_ratio": 0.0026172806456068176,
+            "constant_pressure_action": 0.597575396219311,
+            "additional_pressure_null_modes": 0,
+            "scope": "complete actual governing operator/frozen matrices and finite mixed-pressure fixture; no formal inf-sup or physical preservation claim"
+          },
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/RANSPreservationProbe",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p4-dense/case.xml",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p4-dense/operator-request.json",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p4-dense/operator.json"
+            ],
+            "exit_code": 0,
+            "wall_seconds": 9.57927269799984,
+            "process_cpu_seconds": 8.802103999999998,
+            "peak_RSS_KiB": 1241220,
+            "actual_mapped_files_catalog_sha256": "f625b50c94b10ed29ea931871ae9406030632d19e41c660013ec52a7738a1c0f"
+          }
+        },
+        {
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p4-sparse/operator.json",
+          "sha256": "59e8123a06d929a235e7cbfa592dbee6b3bcaad43c77bfc66c5f0c901dbba720",
+          "independent": {
+            "status": "pass",
+            "actual_stored_slots": 437,
+            "defects": {
+              "all_row": 2.223873963757333e-16,
+              "boundary_advection": 4.440892098500626e-16,
+              "boundary_traction": 0.0,
+              "boundary_diffusion": 0.0,
+              "frozen_0": 7.494005416219807e-16,
+              "residual_0": 9.020562075079397e-16,
+              "frozen_3": 2.7755575615628914e-16,
+              "residual_3": 2.7755575615628914e-17,
+              "frozen_2": 3.7470027081099033e-16,
+              "residual_2": 1.1465522677328935e-16
+            },
+            "continuous_native_test_maximum": 1.4847042478968256e-11,
+            "top_trace_mode_ids": {
+              "0": [
+                9,
+                10,
+                11,
+                51,
+                52,
+                53,
+                60,
+                61,
+                62
+              ],
+              "1": [
+                126,
+                127,
+                128,
+                168,
+                169,
+                170,
+                177,
+                178,
+                179
+              ],
+              "2": [
+                243,
+                244,
+                245,
+                285,
+                286,
+                287,
+                294,
+                295,
+                296
+              ],
+              "3": [
+                353,
+                354,
+                356,
+                363,
+                364,
+                365,
+                375,
+                376,
+                377
+              ]
+            },
+            "free_top_mode_ids": {
+              "0": [
+                9,
+                11,
+                51,
+                52,
+                53,
+                60,
+                61,
+                62
+              ],
+              "1": [],
+              "2": [
+                243,
+                245,
+                285,
+                286,
+                287,
+                294,
+                295,
+                296
+              ],
+              "3": [
+                353,
+                356,
+                363,
+                364,
+                365,
+                375,
+                376,
+                377
+              ]
+            },
+            "top_physical_length": 1.0,
+            "prescribed_epsilon_outward_conservative_flux": 0.019692307692307696,
+            "zero_epsilon_flux_negative_signal": 0.009846153846153857,
+            "reversed_shear_negative_signal": 0.16000000000000006,
+            "zero_epsilon_flux_continuous_negative": {
+              "free_maximum": 0.009846153846153794,
+              "scale": 0.12671354225164286,
+              "scaled_free_maximum": 0.07770403755740747,
+              "limit": 2e-09,
+              "status": "fail",
+              "free_rows": 32,
+              "prescribed_rows": 13
+            },
+            "initialization_receipt": {
+              "raw_initial_sha256": "75b3a5c71a603dd3c3dddf6d000fdc23648a46f6936d3f1b5659451485136157",
+              "effective_initial_sha256": "75b3a5c71a603dd3c3dddf6d000fdc23648a46f6936d3f1b5659451485136157",
+              "fixed_reference_sha256": "75b3a5c71a603dd3c3dddf6d000fdc23648a46f6936d3f1b5659451485136157",
+              "explicit_boundary_sha256": "b9a92259b8d248c38339b729fb8e7fdaf7212798ea799f01997178a6fc15a933",
+              "implicit_boundary_sha256": "b9a92259b8d248c38339b729fb8e7fdaf7212798ea799f01997178a6fc15a933",
+              "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+              "raw_effective_max_difference": 0,
+              "source_target_boundary_max_difference": 0,
+              "live_fixed_boundary_entry_count": 69,
+              "live_fixed_boundary_canonical_sha256": "7ebe20fe40da647fb90457a849b040c356dcbd341bc7457fc9fbc836833091ee",
+              "live_fixed_boundary_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "effective_initial_entry_count": 437,
+              "effective_initial_canonical_sha256": "2e1f9cbce4275b8157b0df98728afc533d21c376b217992271e40b6eda81da06",
+              "effective_initial_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "open_boundary_definition": "AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=NeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-z-unshifted:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.31678385562910716|FLEXIBLEGMRES=1|K0=0.6115200681722619|KAPPA=0.40406099529852102|KINVIS=1.5e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40406099529852102|RANSOPENEQUILIBRIUMQ=3.8220004260766363|RANSOPENMEANINTERCEPT=3.7221290926419526|RANSOPENNATURALKAPPA=0.40406099529852102|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=0.5|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.40000000000000002|RANSWALLSAMPLEHEIGHT=0.5|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.5|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.83971761447516569|ROUGHX=297.9038042055638|SLOPE=0.17946842304608929|YAPSCALE=0.60382768562974365|ZV=-0.024330256663533445",
+              "open_traction_load_sha256": "c228730ed3d107bbcb4b589e34cb403aeae0597f37654e5884ff4a95ad5e8a9e",
+              "open_diffusive_load_sha256": "f510f107ab57e6cc1d009c04a501d7800299037b10f1977576e9991c8da2cb4c",
+              "open_advective_load_sha256": "7891c379e108b2e3159877381c1193a286b070af6997e3113942c53b529b59e3",
+              "open_explicit_implicit_agreement": true
+            },
+            "pressure_minimum_singular_ratio": 0.0026172806456068176,
+            "constant_pressure_action": 0.597575396219311,
+            "additional_pressure_null_modes": 0,
+            "scope": "complete actual governing operator/frozen matrices and finite mixed-pressure fixture; no formal inf-sup or physical preservation claim"
+          },
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/RANSPreservationProbe",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p4-sparse/case.xml",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p4-sparse/operator-request.json",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/d0-p4-sparse/operator.json"
+            ],
+            "exit_code": 0,
+            "wall_seconds": 12.2607636340108,
+            "process_cpu_seconds": 11.484080999999998,
+            "peak_RSS_KiB": 1241492,
+            "actual_mapped_files_catalog_sha256": "e7531441b6e9f52493867f0542f15a457593e91db610c5d7fb1dbaccc4076db4"
+          }
+        }
+      ]
+    },
+    "displaced-p3": {
+      "status": "pass",
+      "defects": {
+        "raw_residual": 0.0,
+        "constrained_residual": 0.0,
+        "external_constraints": 0.0,
+        "mass_0": 0.0,
+        "mass_1": 0.0,
+        "mass_2": 0.0,
+        "mass_3": 0.0,
+        "mass_4": 0.0,
+        "mass_5": 0.0,
+        "block_0_matrix": 0.0,
+        "block_0_residual": 0.0,
+        "block_3_matrix": 0.0,
+        "block_3_residual": 0.0,
+        "block_2_matrix": 0.0,
+        "block_2_residual": 0.0,
+        "traction_load": 0.0,
+        "diffusive_load": 0.0,
+        "advection_load": 0.0,
+        "predictor": 2.983724378680108e-16,
+        "pressure_increment": 2.439454888092385e-18,
+        "consistent_mass_correction": 4.896799112030781e-16,
+        "scalar_increment_3": 1.1655173354219173e-18,
+        "scalar_increment_2": 1.7694179454963432e-16
+      },
+      "negative_roughness_pressure_omission_signal": 0.0066420880513302916,
+      "negative_sign_signal": 26.17770981271191,
+      "negative_mass_replacement_signal": 10.046419250306377,
+      "negative_stale_mask_signal": 0.03333333333333334,
+      "flow_rows": 273,
+      "free_velocity": 246,
+      "free_pressure": 27,
+      "pressure_C": 0.0,
+      "pressure_true_residual": 7.637325508477602e-19,
+      "pressure_iterations": 27,
+      "scope": "complete small matrices/rows and independent consistent-mass linear correction; no governing extra solve",
+      "artifacts": [
+        {
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p3-dense/operator.json",
+          "sha256": "ad32ba49c6601328f54d5689e48907f2ef8ec5b0fbadd69233236467c48a4535",
+          "independent": {
+            "status": "pass",
+            "actual_stored_slots": 539,
+            "defects": {
+              "all_row": 2.7755575615628914e-17,
+              "boundary_advection": 3.469446951953614e-18,
+              "boundary_traction": 0.0,
+              "boundary_diffusion": 0.0,
+              "frozen_0": 6.938893903907228e-17,
+              "residual_0": 1.3877787807814457e-17,
+              "frozen_3": 2.7755575615628914e-17,
+              "residual_3": 1.1011428314305904e-19,
+              "frozen_2": 5.551115123125783e-17,
+              "residual_2": 2.2688571585594485e-19
+            },
+            "continuous_native_test_maximum": 3.038068613433457e-14,
+            "top_trace_mode_ids": {
+              "0": [
+                21,
+                22,
+                23,
+                90,
+                91,
+                96,
+                97
+              ],
+              "1": [
+                175,
+                176,
+                177,
+                244,
+                245,
+                250,
+                251
+              ],
+              "2": [
+                329,
+                330,
+                331,
+                398,
+                399,
+                404,
+                405
+              ],
+              "3": [
+                468,
+                469,
+                470,
+                487,
+                488,
+                493,
+                494
+              ]
+            },
+            "free_top_mode_ids": {
+              "0": [
+                21,
+                23,
+                90,
+                91,
+                96,
+                97
+              ],
+              "1": [],
+              "2": [
+                329,
+                331,
+                398,
+                399,
+                404,
+                405
+              ],
+              "3": [
+                468,
+                470,
+                487,
+                488,
+                493,
+                494
+              ]
+            },
+            "top_physical_length": 0.25,
+            "prescribed_epsilon_outward_conservative_flux": 5.673331462013574e-05,
+            "zero_epsilon_flux_negative_signal": 7.09166432751697e-06,
+            "reversed_shear_negative_signal": 0.0013789316508861088,
+            "zero_epsilon_flux_continuous_negative": {
+              "free_maximum": 7.091664327516786e-06,
+              "scale": 0.00037646840847099127,
+              "scaled_free_maximum": 0.018837342438159013,
+              "limit": 2e-09,
+              "status": "fail",
+              "free_rows": 36,
+              "prescribed_rows": 13
+            },
+            "initialization_receipt": {
+              "raw_initial_sha256": "b7ba198c8a69e58997e84748e0d6fdc662c2ac13cb43f69b90079a59a766edee",
+              "effective_initial_sha256": "b7ba198c8a69e58997e84748e0d6fdc662c2ac13cb43f69b90079a59a766edee",
+              "fixed_reference_sha256": "b7ba198c8a69e58997e84748e0d6fdc662c2ac13cb43f69b90079a59a766edee",
+              "explicit_boundary_sha256": "a87575539434f3a39e9c366f342cfd75ddc099a343bcc0203d84a7d36445f0ac",
+              "implicit_boundary_sha256": "a87575539434f3a39e9c366f342cfd75ddc099a343bcc0203d84a7d36445f0ac",
+              "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+              "raw_effective_max_difference": 0,
+              "source_target_boundary_max_difference": 0,
+              "live_fixed_boundary_entry_count": 92,
+              "live_fixed_boundary_canonical_sha256": "09265cc3bde727d7f0ff64df808e447bd0d4e5dc66e7160a4ec635314e434da9",
+              "live_fixed_boundary_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "effective_initial_entry_count": 539,
+              "effective_initial_canonical_sha256": "1ac46ded6476bbdf13aead2064c94c7cebd3cecc7308aa5b16be077886aa85c5",
+              "effective_initial_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "open_boundary_definition": "AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=DisplacedNeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-floor-z;aerodynamic-zeta=z-d:wall_sink=SamePhysicalWallDisplacedAcceptedV1:fit=CT8PhysicalBelow25mmEqualIds012V1:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.0054069941025931944|K0=0.021081109428869052|KAPPA=0.40406099529852102|KINVIS=9.5238095238095241e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40406099529852102|RANSOPENDISPLACEMENT=0.087499999999999994|RANSOPENEQUILIBRIUMQ=3.8220004260766363|RANSOPENMEANINTERCEPT=0.99194498954132426|RANSOPENNATURALKAPPA=0.40406099529852102|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.074267937924412789|RANSWALLHEIGHT=0.1875|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.1711243515027194|RANSWALLSAMPLEHEIGHT=0.1875|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.1875|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.45342577746810153|ROUGHX=3.7269177273324865|SLOPE=0.033321874255448025|YAPSCALE=0.22643538211115388|ZV=-0.0057256413864533867",
+              "open_traction_load_sha256": "ca31dff15c2a78dcc85a251d50a5f635880487409de9603f2ff2c0fe391fe745",
+              "open_diffusive_load_sha256": "0fa3affa579ebf1f25b2197d815f3991f29210da8377072b1b57655f3523ddb1",
+              "open_advective_load_sha256": "b4d5ae68aa0ebff3cd7d6f4797857fc72c464629b7adf88a5d8564cab785f499",
+              "open_explicit_implicit_agreement": true
+            },
+            "pressure_minimum_singular_ratio": 0.005669687525749671,
+            "constant_pressure_action": 0.2169745371431284,
+            "additional_pressure_null_modes": 0,
+            "scope": "complete actual governing operator/frozen matrices and finite mixed-pressure fixture; no formal inf-sup or physical preservation claim"
+          },
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/RANSPreservationProbe",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p3-dense/case.xml",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p3-dense/operator-request.json",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p3-dense/operator.json"
+            ],
+            "exit_code": 0,
+            "wall_seconds": 7.2297812739998335,
+            "process_cpu_seconds": 6.522598999999999,
+            "peak_RSS_KiB": 779452,
+            "actual_mapped_files_catalog_sha256": "5aa257d952f314fb9ade4c5604dd9b83c4f336980aeb3fa07bcadb6b4b57c387"
+          }
+        },
+        {
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p3-sparse/operator.json",
+          "sha256": "d88f2422270ab8fa15b00ccee20bb99ffc740cb8cb0795376924b7f018b93e37",
+          "independent": {
+            "status": "pass",
+            "actual_stored_slots": 539,
+            "defects": {
+              "all_row": 2.7755575615628914e-17,
+              "boundary_advection": 3.469446951953614e-18,
+              "boundary_traction": 0.0,
+              "boundary_diffusion": 0.0,
+              "frozen_0": 6.938893903907228e-17,
+              "residual_0": 1.3877787807814457e-17,
+              "frozen_3": 2.7755575615628914e-17,
+              "residual_3": 1.1011428314305904e-19,
+              "frozen_2": 5.551115123125783e-17,
+              "residual_2": 2.2688571585594485e-19
+            },
+            "continuous_native_test_maximum": 3.038068613433457e-14,
+            "top_trace_mode_ids": {
+              "0": [
+                21,
+                22,
+                23,
+                90,
+                91,
+                96,
+                97
+              ],
+              "1": [
+                175,
+                176,
+                177,
+                244,
+                245,
+                250,
+                251
+              ],
+              "2": [
+                329,
+                330,
+                331,
+                398,
+                399,
+                404,
+                405
+              ],
+              "3": [
+                468,
+                469,
+                470,
+                487,
+                488,
+                493,
+                494
+              ]
+            },
+            "free_top_mode_ids": {
+              "0": [
+                21,
+                23,
+                90,
+                91,
+                96,
+                97
+              ],
+              "1": [],
+              "2": [
+                329,
+                331,
+                398,
+                399,
+                404,
+                405
+              ],
+              "3": [
+                468,
+                470,
+                487,
+                488,
+                493,
+                494
+              ]
+            },
+            "top_physical_length": 0.25,
+            "prescribed_epsilon_outward_conservative_flux": 5.673331462013574e-05,
+            "zero_epsilon_flux_negative_signal": 7.09166432751697e-06,
+            "reversed_shear_negative_signal": 0.0013789316508861088,
+            "zero_epsilon_flux_continuous_negative": {
+              "free_maximum": 7.091664327516786e-06,
+              "scale": 0.00037646840847099127,
+              "scaled_free_maximum": 0.018837342438159013,
+              "limit": 2e-09,
+              "status": "fail",
+              "free_rows": 36,
+              "prescribed_rows": 13
+            },
+            "initialization_receipt": {
+              "raw_initial_sha256": "b7ba198c8a69e58997e84748e0d6fdc662c2ac13cb43f69b90079a59a766edee",
+              "effective_initial_sha256": "b7ba198c8a69e58997e84748e0d6fdc662c2ac13cb43f69b90079a59a766edee",
+              "fixed_reference_sha256": "b7ba198c8a69e58997e84748e0d6fdc662c2ac13cb43f69b90079a59a766edee",
+              "explicit_boundary_sha256": "a87575539434f3a39e9c366f342cfd75ddc099a343bcc0203d84a7d36445f0ac",
+              "implicit_boundary_sha256": "a87575539434f3a39e9c366f342cfd75ddc099a343bcc0203d84a7d36445f0ac",
+              "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+              "raw_effective_max_difference": 0,
+              "source_target_boundary_max_difference": 0,
+              "live_fixed_boundary_entry_count": 92,
+              "live_fixed_boundary_canonical_sha256": "09265cc3bde727d7f0ff64df808e447bd0d4e5dc66e7160a4ec635314e434da9",
+              "live_fixed_boundary_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "effective_initial_entry_count": 539,
+              "effective_initial_canonical_sha256": "1ac46ded6476bbdf13aead2064c94c7cebd3cecc7308aa5b16be077886aa85c5",
+              "effective_initial_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "open_boundary_definition": "AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=DisplacedNeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-floor-z;aerodynamic-zeta=z-d:wall_sink=SamePhysicalWallDisplacedAcceptedV1:fit=CT8PhysicalBelow25mmEqualIds012V1:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.0054069941025931944|FLEXIBLEGMRES=1|K0=0.021081109428869052|KAPPA=0.40406099529852102|KINVIS=9.5238095238095241e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40406099529852102|RANSOPENDISPLACEMENT=0.087499999999999994|RANSOPENEQUILIBRIUMQ=3.8220004260766363|RANSOPENMEANINTERCEPT=0.99194498954132426|RANSOPENNATURALKAPPA=0.40406099529852102|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.074267937924412789|RANSWALLHEIGHT=0.1875|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.1711243515027194|RANSWALLSAMPLEHEIGHT=0.1875|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.1875|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.45342577746810153|ROUGHX=3.7269177273324865|SLOPE=0.033321874255448025|YAPSCALE=0.22643538211115388|ZV=-0.0057256413864533867",
+              "open_traction_load_sha256": "ca31dff15c2a78dcc85a251d50a5f635880487409de9603f2ff2c0fe391fe745",
+              "open_diffusive_load_sha256": "0fa3affa579ebf1f25b2197d815f3991f29210da8377072b1b57655f3523ddb1",
+              "open_advective_load_sha256": "b4d5ae68aa0ebff3cd7d6f4797857fc72c464629b7adf88a5d8564cab785f499",
+              "open_explicit_implicit_agreement": true
+            },
+            "pressure_minimum_singular_ratio": 0.005669687525749671,
+            "constant_pressure_action": 0.2169745371431284,
+            "additional_pressure_null_modes": 0,
+            "scope": "complete actual governing operator/frozen matrices and finite mixed-pressure fixture; no formal inf-sup or physical preservation claim"
+          },
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/RANSPreservationProbe",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p3-sparse/case.xml",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p3-sparse/operator-request.json",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p3-sparse/operator.json"
+            ],
+            "exit_code": 0,
+            "wall_seconds": 8.696056033004425,
+            "process_cpu_seconds": 7.985957999999997,
+            "peak_RSS_KiB": 779160,
+            "actual_mapped_files_catalog_sha256": "5cb0509739f535a9a4ac25334c10d41ce9ffb8865739d362d518d278f93bd143"
+          }
+        }
+      ]
+    },
+    "displaced-p4": {
+      "status": "pass",
+      "defects": {
+        "raw_residual": 0.0,
+        "constrained_residual": 0.0,
+        "external_constraints": 0.0,
+        "mass_0": 0.0,
+        "mass_1": 0.0,
+        "mass_2": 0.0,
+        "mass_3": 0.0,
+        "mass_4": 0.0,
+        "mass_5": 0.0,
+        "block_0_matrix": 0.0,
+        "block_0_residual": 0.0,
+        "block_3_matrix": 0.0,
+        "block_3_residual": 0.0,
+        "block_2_matrix": 0.0,
+        "block_2_residual": 0.0,
+        "traction_load": 0.0,
+        "diffusive_load": 0.0,
+        "advection_load": 0.0,
+        "predictor": 4.393187202911264e-16,
+        "pressure_increment": 8.01134349424958e-18,
+        "consistent_mass_correction": 1.2522200249495615e-15,
+        "scalar_increment_3": 4.9922004328800326e-20,
+        "scalar_increment_2": 3.565940945304824e-16
+      },
+      "negative_roughness_pressure_omission_signal": 0.006642088051330314,
+      "negative_sign_signal": 40.553535056116495,
+      "negative_mass_replacement_signal": 15.55482949406029,
+      "negative_stale_mask_signal": 0.023437500000000014,
+      "flow_rows": 520,
+      "free_velocity": 440,
+      "free_pressure": 80,
+      "pressure_C": 0.0,
+      "pressure_true_residual": 2.1537880635471969e-19,
+      "pressure_iterations": 49,
+      "scope": "complete small matrices/rows and independent consistent-mass linear correction; no governing extra solve",
+      "artifacts": [
+        {
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p4-dense/operator.json",
+          "sha256": "64a2d268e3c48f6e47256f11ed8c92af763394b2c59106b9dbe0a16c2e4d6cc3",
+          "independent": {
+            "status": "pass",
+            "actual_stored_slots": 945,
+            "defects": {
+              "all_row": 1.819098545435176e-17,
+              "boundary_advection": 1.734723475976807e-18,
+              "boundary_traction": 0.0,
+              "boundary_diffusion": 0.0,
+              "frozen_0": 6.938893903907228e-17,
+              "residual_0": 1.4094628242311558e-17,
+              "frozen_3": 3.122502256758253e-17,
+              "residual_3": 1.0842021724855044e-19,
+              "frozen_2": 2.6020852139652106e-17,
+              "residual_2": 4.474319194972833e-19
+            },
+            "continuous_native_test_maximum": 3.038068613433457e-14,
+            "top_trace_mode_ids": {
+              "0": [
+                21,
+                22,
+                23,
+                123,
+                124,
+                125,
+                132,
+                133,
+                134
+              ],
+              "1": [
+                282,
+                283,
+                284,
+                384,
+                385,
+                386,
+                393,
+                394,
+                395
+              ],
+              "2": [
+                543,
+                544,
+                545,
+                645,
+                646,
+                647,
+                654,
+                655,
+                656
+              ],
+              "3": [
+                789,
+                790,
+                791,
+                816,
+                817,
+                818,
+                825,
+                826,
+                827
+              ]
+            },
+            "free_top_mode_ids": {
+              "0": [
+                21,
+                23,
+                123,
+                124,
+                125,
+                132,
+                133,
+                134
+              ],
+              "1": [],
+              "2": [
+                543,
+                545,
+                645,
+                646,
+                647,
+                654,
+                655,
+                656
+              ],
+              "3": [
+                789,
+                791,
+                816,
+                817,
+                818,
+                825,
+                826,
+                827
+              ]
+            },
+            "top_physical_length": 0.25,
+            "prescribed_epsilon_outward_conservative_flux": 5.673331462013574e-05,
+            "zero_epsilon_flux_negative_signal": 7.09166432751697e-06,
+            "reversed_shear_negative_signal": 0.0013789316508861088,
+            "zero_epsilon_flux_continuous_negative": {
+              "free_maximum": 7.091664327516786e-06,
+              "scale": 0.00037646840847099127,
+              "scaled_free_maximum": 0.018837342438159013,
+              "limit": 2e-09,
+              "status": "fail",
+              "free_rows": 64,
+              "prescribed_rows": 17
+            },
+            "initialization_receipt": {
+              "raw_initial_sha256": "6672a46027652c16acab9bc78aafb273411a0f402d3512d1cbfe46fab39743c2",
+              "effective_initial_sha256": "6672a46027652c16acab9bc78aafb273411a0f402d3512d1cbfe46fab39743c2",
+              "fixed_reference_sha256": "6672a46027652c16acab9bc78aafb273411a0f402d3512d1cbfe46fab39743c2",
+              "explicit_boundary_sha256": "f86d1af1bfd21db2163db330937f1827a0e349aa2c49e7e0d28eb96850ff8fd6",
+              "implicit_boundary_sha256": "f86d1af1bfd21db2163db330937f1827a0e349aa2c49e7e0d28eb96850ff8fd6",
+              "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+              "raw_effective_max_difference": 0,
+              "source_target_boundary_max_difference": 0,
+              "live_fixed_boundary_entry_count": 121,
+              "live_fixed_boundary_canonical_sha256": "87a83ec6334445cfd008d68c3f494c7c2fbb7c12c82e125101714e9e31ff20e3",
+              "live_fixed_boundary_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "effective_initial_entry_count": 945,
+              "effective_initial_canonical_sha256": "165d1f9ddb6b4cd5de1e7f4ef45289463f95ec195e2952705f613dfea796ee9a",
+              "effective_initial_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "open_boundary_definition": "AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=DisplacedNeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-floor-z;aerodynamic-zeta=z-d:wall_sink=SamePhysicalWallDisplacedAcceptedV1:fit=CT8PhysicalBelow25mmEqualIds012V1:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.0054069941025931944|K0=0.021081109428869052|KAPPA=0.40406099529852102|KINVIS=9.5238095238095241e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40406099529852102|RANSOPENDISPLACEMENT=0.087499999999999994|RANSOPENEQUILIBRIUMQ=3.8220004260766363|RANSOPENMEANINTERCEPT=0.99194498954132426|RANSOPENNATURALKAPPA=0.40406099529852102|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.074267937924412789|RANSWALLHEIGHT=0.1875|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.1711243515027194|RANSWALLSAMPLEHEIGHT=0.1875|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.1875|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.45342577746810153|ROUGHX=3.7269177273324865|SLOPE=0.033321874255448025|YAPSCALE=0.22643538211115388|ZV=-0.0057256413864533867",
+              "open_traction_load_sha256": "deab835a8d8244af0ae7486096f0a8ad74a420ea579d212d795458aaf3c190ff",
+              "open_diffusive_load_sha256": "711bd8b8c82109eda705c12061409dac02c3f9a9abd5767622fe89afc81ab57a",
+              "open_advective_load_sha256": "517598e7a03f5efe8856e6128b0fa32f3e34aa4d9c3a3680ef4662b7541669b9",
+              "open_explicit_implicit_agreement": true
+            },
+            "pressure_minimum_singular_ratio": 0.0013775798465151142,
+            "constant_pressure_action": 0.2169745371431284,
+            "additional_pressure_null_modes": 0,
+            "scope": "complete actual governing operator/frozen matrices and finite mixed-pressure fixture; no formal inf-sup or physical preservation claim"
+          },
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/RANSPreservationProbe",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p4-dense/case.xml",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p4-dense/operator-request.json",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p4-dense/operator.json"
+            ],
+            "exit_code": 0,
+            "wall_seconds": 10.494109075996676,
+            "process_cpu_seconds": 9.698906000000001,
+            "peak_RSS_KiB": 1159312,
+            "actual_mapped_files_catalog_sha256": "a186494617426993ce96930b1283940cbdd03f1b6000df8df1f36f65591b96fa"
+          }
+        },
+        {
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p4-sparse/operator.json",
+          "sha256": "16ff457747ae9bcdc37d0bfc89ffe5ef727a45bff347399065a66c53ad0c4e83",
+          "independent": {
+            "status": "pass",
+            "actual_stored_slots": 945,
+            "defects": {
+              "all_row": 1.819098545435176e-17,
+              "boundary_advection": 1.734723475976807e-18,
+              "boundary_traction": 0.0,
+              "boundary_diffusion": 0.0,
+              "frozen_0": 6.938893903907228e-17,
+              "residual_0": 1.4094628242311558e-17,
+              "frozen_3": 3.122502256758253e-17,
+              "residual_3": 1.0842021724855044e-19,
+              "frozen_2": 2.6020852139652106e-17,
+              "residual_2": 4.474319194972833e-19
+            },
+            "continuous_native_test_maximum": 3.038068613433457e-14,
+            "top_trace_mode_ids": {
+              "0": [
+                21,
+                22,
+                23,
+                123,
+                124,
+                125,
+                132,
+                133,
+                134
+              ],
+              "1": [
+                282,
+                283,
+                284,
+                384,
+                385,
+                386,
+                393,
+                394,
+                395
+              ],
+              "2": [
+                543,
+                544,
+                545,
+                645,
+                646,
+                647,
+                654,
+                655,
+                656
+              ],
+              "3": [
+                789,
+                790,
+                791,
+                816,
+                817,
+                818,
+                825,
+                826,
+                827
+              ]
+            },
+            "free_top_mode_ids": {
+              "0": [
+                21,
+                23,
+                123,
+                124,
+                125,
+                132,
+                133,
+                134
+              ],
+              "1": [],
+              "2": [
+                543,
+                545,
+                645,
+                646,
+                647,
+                654,
+                655,
+                656
+              ],
+              "3": [
+                789,
+                791,
+                816,
+                817,
+                818,
+                825,
+                826,
+                827
+              ]
+            },
+            "top_physical_length": 0.25,
+            "prescribed_epsilon_outward_conservative_flux": 5.673331462013574e-05,
+            "zero_epsilon_flux_negative_signal": 7.09166432751697e-06,
+            "reversed_shear_negative_signal": 0.0013789316508861088,
+            "zero_epsilon_flux_continuous_negative": {
+              "free_maximum": 7.091664327516786e-06,
+              "scale": 0.00037646840847099127,
+              "scaled_free_maximum": 0.018837342438159013,
+              "limit": 2e-09,
+              "status": "fail",
+              "free_rows": 64,
+              "prescribed_rows": 17
+            },
+            "initialization_receipt": {
+              "raw_initial_sha256": "6672a46027652c16acab9bc78aafb273411a0f402d3512d1cbfe46fab39743c2",
+              "effective_initial_sha256": "6672a46027652c16acab9bc78aafb273411a0f402d3512d1cbfe46fab39743c2",
+              "fixed_reference_sha256": "6672a46027652c16acab9bc78aafb273411a0f402d3512d1cbfe46fab39743c2",
+              "explicit_boundary_sha256": "f86d1af1bfd21db2163db330937f1827a0e349aa2c49e7e0d28eb96850ff8fd6",
+              "implicit_boundary_sha256": "f86d1af1bfd21db2163db330937f1827a0e349aa2c49e7e0d28eb96850ff8fd6",
+              "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+              "raw_effective_max_difference": 0,
+              "source_target_boundary_max_difference": 0,
+              "live_fixed_boundary_entry_count": 121,
+              "live_fixed_boundary_canonical_sha256": "87a83ec6334445cfd008d68c3f494c7c2fbb7c12c82e125101714e9e31ff20e3",
+              "live_fixed_boundary_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "effective_initial_entry_count": 945,
+              "effective_initial_canonical_sha256": "165d1f9ddb6b4cd5de1e7f4ef45289463f95ec195e2952705f613dfea796ee9a",
+              "effective_initial_archive_scope": "complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input",
+              "open_boundary_definition": "AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=DisplacedNeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-floor-z;aerodynamic-zeta=z-d:wall_sink=SamePhysicalWallDisplacedAcceptedV1:fit=CT8PhysicalBelow25mmEqualIds012V1:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.0054069941025931944|FLEXIBLEGMRES=1|K0=0.021081109428869052|KAPPA=0.40406099529852102|KINVIS=9.5238095238095241e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40406099529852102|RANSOPENDISPLACEMENT=0.087499999999999994|RANSOPENEQUILIBRIUMQ=3.8220004260766363|RANSOPENMEANINTERCEPT=0.99194498954132426|RANSOPENNATURALKAPPA=0.40406099529852102|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.074267937924412789|RANSWALLHEIGHT=0.1875|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.1711243515027194|RANSWALLSAMPLEHEIGHT=0.1875|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.1875|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.45342577746810153|ROUGHX=3.7269177273324865|SLOPE=0.033321874255448025|YAPSCALE=0.22643538211115388|ZV=-0.0057256413864533867",
+              "open_traction_load_sha256": "deab835a8d8244af0ae7486096f0a8ad74a420ea579d212d795458aaf3c190ff",
+              "open_diffusive_load_sha256": "711bd8b8c82109eda705c12061409dac02c3f9a9abd5767622fe89afc81ab57a",
+              "open_advective_load_sha256": "517598e7a03f5efe8856e6128b0fa32f3e34aa4d9c3a3680ef4662b7541669b9",
+              "open_explicit_implicit_agreement": true
+            },
+            "pressure_minimum_singular_ratio": 0.0013775798465151142,
+            "constant_pressure_action": 0.2169745371431284,
+            "additional_pressure_null_modes": 0,
+            "scope": "complete actual governing operator/frozen matrices and finite mixed-pressure fixture; no formal inf-sup or physical preservation claim"
+          },
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/RANSPreservationProbe",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p4-sparse/case.xml",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p4-sparse/operator-request.json",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/displaced-p4-sparse/operator.json"
+            ],
+            "exit_code": 0,
+            "wall_seconds": 12.380599851996521,
+            "process_cpu_seconds": 11.55192000000001,
+            "peak_RSS_KiB": 1156868,
+            "actual_mapped_files_catalog_sha256": "9859f1513e87913c2b45f6f2d24ff85568c35ddab3a25fb0b54d8366caee7316"
+          }
+        }
+      ]
+    },
+    "restart_rollback_backend_identity": {
+      "status": "pass",
+      "uninterrupted_state": "2a912fbc0e4a44e903f1665f84a07c690896fc8ee9e0c0cad2a42d60ac240cfa",
+      "continued_state": "2a912fbc0e4a44e903f1665f84a07c690896fc8ee9e0c0cad2a42d60ac240cfa",
+      "dense_sparse_state_maximum": 7.32920668600201e-17,
+      "rebuilt_dense_CT8_history_bitwise_equal": true,
+      "legacy_native_report_sha256": "c474f9fc30e5b64099b64d8d58c76ac0f05e6727c8d7c1ebf07d11a9e8781bf7",
+      "negative": [
+        {
+          "name": "backend_history",
+          "status": "pass",
+          "reason": "Wall IMEX: checkpoint signature mismatch\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\n=======================================================================\n\t      Wall evolution: native IMEX, mapped multiregion CG\n\t  Physical dimension: 2\n\t     Global unknowns: 539\n\t         MPI backend: replicated global coefficients, owned-cell collective assembly\n\t  Correction weights: chi=0.000000, eta=0.000000\n=======================================================================\nEP-AWF evolution state/history: Wall IMEX: checkpoint signature mismatch\n",
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "wall_seconds": 3.6817444050102495,
+            "process_cpu_seconds": 3.1709589999999954,
+            "peak_RSS_KiB": 96576,
+            "actual_mapped_files_catalog_sha256": "866e771b2314ae0fb01dd4e560760d62d85f88ef0ecfc3fd0d2737ff7613f7be"
+          }
+        },
+        {
+          "name": "stale_fit",
+          "status": "pass",
+          "reason": "Wall IMEX: checkpoint signature mismatch\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\n=======================================================================\n\t      Wall evolution: native IMEX, mapped multiregion CG\n\t  Physical dimension: 2\n\t     Global unknowns: 539\n\t         MPI backend: replicated global coefficients, owned-cell collective assembly\n\t  Correction weights: chi=0.000000, eta=0.000000\n=======================================================================\nEP-AWF evolution state/history: Wall IMEX: checkpoint signature mismatch\n",
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "wall_seconds": 3.6105707090027863,
+            "process_cpu_seconds": 3.0269149999999936,
+            "peak_RSS_KiB": 98404,
+            "actual_mapped_files_catalog_sha256": "5d9fe0ceddd24a6a437a4385fb39f6e5e201985aa67317eb2a36a460fa0f4b3f"
+          }
+        },
+        {
+          "name": "wrong_model",
+          "status": "pass",
+          "reason": "\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\nEP-AWF evolution initialisation: EP-AWF patch: SamePhysicalWallDisplacedAcceptedV1 native scope is Natural A95 serial flat2D Richards-Norris one-sweep with 0<=d<H\n\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\nEP-AWF evolution initialisation: EP-AWF patch: SamePhysicalWallDisplacedAcceptedV1 native scope is Natural A95 serial flat2D Richards-Norris one-sweep with 0<=d<H\n",
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "wall_seconds": 0.718647713001701,
+            "process_cpu_seconds": 0.21896799999999672,
+            "peak_RSS_KiB": 58356,
+            "actual_mapped_files_catalog_sha256": "7765de28702f9cb38f048ae80aeb72cccf33b9a819e4dc590623a7356431da46"
+          }
+        },
+        {
+          "name": "unsupported_cache",
+          "status": "pass",
+          "reason": "\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\nEP-AWF evolution initialisation: EP-AWF patch: AcceptedOpenFlatV1 evaluation caching is not qualified; select Off\n\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\nEP-AWF evolution initialisation: EP-AWF patch: AcceptedOpenFlatV1 evaluation caching is not qualified; select Off\n",
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "wall_seconds": 0.7656469229987124,
+            "process_cpu_seconds": 0.22414000000000378,
+            "peak_RSS_KiB": 58596,
+            "actual_mapped_files_catalog_sha256": "97694ae16d729c65a222941fa0fb0878e35731c46e2522559eeb330e99dd9265"
+          }
+        },
+        {
+          "name": "wrong_method",
+          "status": "pass",
+          "reason": "\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\nEP-AWF evolution initialisation: EP-AWF patch: AcceptedSerialSparseV1 currently qualifies IMEX1 one-sweep only\n\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\nEP-AWF evolution initialisation: EP-AWF patch: AcceptedSerialSparseV1 currently qualifies IMEX1 one-sweep only\n",
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "wall_seconds": 0.7151731909980299,
+            "process_cpu_seconds": 0.20712500000000134,
+            "peak_RSS_KiB": 58668,
+            "actual_mapped_files_catalog_sha256": "cdc44ec7cd2b6bebd5a5592ca49239680208b7864d90abad7dc6188a60e0567b"
+          }
+        },
+        {
+          "name": "old_component_history",
+          "status": "pass",
+          "reason": "Wall IMEX: checkpoint signature mismatch\n\u001b[36mWarning : \u001b[0mLevel 0 assertion violation\nThe IO_CheckSteps parameter is now deprecated.\nPlease use the 'Checkpoint' filter instead\n\n=======================================================================\n\t      Wall evolution: native IMEX, mapped multiregion CG\n\t  Physical dimension: 2\n\t     Global unknowns: 539\n\t         MPI backend: replicated global coefficients, owned-cell collective assembly\n\t  Correction weights: chi=0.000000, eta=0.000000\n=======================================================================\nEP-AWF evolution state/history: Wall IMEX: checkpoint signature mismatch\n",
+          "execution": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "wall_seconds": 3.59935953799868,
+            "process_cpu_seconds": 3.0997160000000097,
+            "peak_RSS_KiB": 98152,
+            "actual_mapped_files_catalog_sha256": "3fb6816774f30e3e66e0e77df73a6f3004009d2382a6da31d78e796f5446877d"
+          }
+        }
+      ],
+      "rollback_failure": "accepted AWF hard audit exit; candidate/history retained: deliberate_PIMPLE_hard_audit_rejection",
+      "native_reports": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/one": "85f4bd7b1cba7d4d796ae428c591680b0e8f6c0de8c0ee35f7967cadb0dda4ea",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/continued": "7ba139a99b0211cb1f12333c9f2aef7b2091ddfde39ee08ed71ec47c6a497199",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/rollback": "8a28355a0bee9479bb35699efc6be0aa3dcbb537304f2550bae5fb33b992f652",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/controls-v4/dense-full": "a0eb0992bbea95d8fc6150a43640ad4e368d3aae0acaad8fc88a684b792dd3b0"
+      }
+    },
+    "absolute_pressure_level": {
+      "status": "pass",
+      "shift": 0.125,
+      "maximum_coefficient_defect": 2.4418245203605693e-12,
+      "native_report_sha256": "9da8f2900f51b403462ddebdaf9392f2a1b23c45b7bc8ad2ba4ed391f8b92ad2",
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+          "case.xml"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 10.346661721996497,
+        "process_cpu_seconds": 9.701337999999984,
+        "peak_RSS_KiB": 158052,
+        "actual_mapped_files_catalog_sha256": "e77cfa4cdc38f2b3f3b9dfcfebcc3fc66f28b1d4ba17650a2e0659590929e68d"
+      }
+    }
+  },
+  "status": "pass"
+}

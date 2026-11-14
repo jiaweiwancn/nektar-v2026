@@ -1,5 +1,19 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-9: the separately versioned serial CSR/consistent-mass backend
+> passes dense/scalable operator, trajectory, pressure-level and history/rollback
+> checks for the declared A95 displaced Accepted/Richards–Norris route. Actual
+> 33,267/60,907-slot flat target preflights pass without a global dense Schur or
+> mass-inverse-G columns; the dense3,000-slot guard is unchanged. The sole fresh
+> dense dt=.0005 member reaches T=.008, but the new.001/.0005 absolute-pressure
+> spread still fails (1.67715e-6 versus9.14165e-7). Initial continuity error is
+> negligible in the pressure decomposition; spatial weak momentum and splitting
+> remain distinct questions. No target-domain physical trajectory is admitted.
+> See [CT-Accepted-9](cao-tamura-accepted-9.md) for exact tested revisions,
+> resources, retained failures and the next bounded pressure/representation
+> study. CT4–CT8, curved temporal/degree, observation and physical-interface
+> qualifications remain unchanged. This is not precursor or hill validation.
+
 > CT-Accepted-8: the explicitly versioned same-physical-wall displaced
 > Accepted route is implemented for Natural A95 at H_A=7.5mm. The physical
 > z<=25mm three-point fit gives z0=.181249431mm and h_s=6.844974060mm;

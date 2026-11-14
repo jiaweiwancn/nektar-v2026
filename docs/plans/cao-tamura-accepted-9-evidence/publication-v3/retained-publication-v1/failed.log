@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted9_publish.py", line 51, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted9_publish.py", line 37, in main
+    require(any('PETSC' in s.upper() and ('OFF' in s.upper() or 'FALSE' in s.upper()) for s in config_lines),'PETSc dependency status not verified')
+  File "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted_feasibility.py", line 27, in require
+    if not condition:raise ValueError(reason)
+ValueError: PETSc dependency status not verified

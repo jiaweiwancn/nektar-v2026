@@ -57,3 +57,38 @@ Preserve failed build attempts, the initial incomplete temporal export,
 `capacity-v1` and the exact-state numerical rechecks. A corrected numerical
 component cannot retroactively qualify an earlier runtime or resume its evolved
 history under a modified signature.
+
+## Published scope
+
+`qualified-v2` is the final read-only compact export. The raw numerical sources
+are `controls-v4`, `equivalence-v2`, `capacity-v2`, `build-v8`,
+`pressure-diagnosis-v1` and `pressure-comparison-v2`. `publication-v3` binds the
+closed collector, installed dependency flags, source/specification hashes and
+focused CTest output. Its separate post-exit resource closure binds the archive
+launcher's own completed receipt without changing the earlier seal.
+
+The first successful `qualified-v1`/`publication-v2` remain in Linux storage.
+The final export replaces complete small-fixture initial vectors and boundary
+arrays by counts/hashes. All numerical primitives, comparisons, limits and
+outcomes are unchanged; no native trajectory was repeated for that reporting
+change. Full initial vectors remain in the original native packets and histories.
+
+To reproduce the final aggregation with new destinations, wrap these commands
+in the same owned launcher and environment above:
+
+```sh
+python3 -B "$tests/ct_accepted9_collect.py" --root "$root" --ct8 "$old" \
+  --controls controls-v4 --equivalence equivalence-v2 --capacity capacity-v2 \
+  --build build-v8 --output "$NEW_QUALIFIED"
+python3 -B "$tests/ct_accepted9_publish.py" --root "$root" \
+  --qualified "$NEW_QUALIFIED" --collector "$CLOSED_COLLECTOR_CONTROL" \
+  --build "$root/build-v8" --output "$NEW_PUBLICATION"
+```
+
+Wait for each outer launcher to close before beginning the next numerical
+family. Copy the publication launcher's resource receipt only after it exits.
+The two focused tests are `CT9SparseAlgebraChecks` and `CT9BackendAdmission`;
+run `ctest --test-dir "$root/build" -R '^CT9' --parallel 1 --output-on-failure`
+through the launcher with `LD_LIBRARY_PATH="$root/build-v8/runtime/lib"`.
+The actual C++ build revision is pinned independently of later driver/report
+commits. Reusing the frozen runtime preserves its exact binary/library identity.
