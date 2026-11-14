@@ -11,7 +11,7 @@ from ct_accepted5_geometry import closest_normal
 from ct_accepted7_domain import X,Z,NC,NR,certificate,curved_geometry
 from ct_accepted_open import probe,row_value
 from run_a93_a95_e94e95_matrix import case_xml
-from run_cls_epawf_picard import set_parameter,write
+from run_cls_epawf_picard import set_parameter,set_info,write
 from ct_accepted6_compare import observations
 from rans_request_manifest import RequestManifest,sha,runtime_identity
 
@@ -44,6 +44,7 @@ def observation_audit(data,case,audit_path):
     return dict(schema='CT8ObservationAuditV1',status='pass',source=sha(audit_path),height_A_mm=7.5,rows=out,
         interface_overlapping=[dict(series=q['series'],point_id=q['point_id'],x=q.get('x_over_Hh'),range=q['CT8_extraction_range']) for q in over],
         indicators=dict(H_plus=H*us/nu,zeta_plus=(H-d)*us/nu,outer_nu_over_nut=nu/(p['kappa']*us*(H-d)),
+            inner_auxiliary_nu_over_nut_H=nu/(p['kappa']*us*max(H-case['reference_column']['zv'],0.)),
             cube_clearance_mm=2.5,curvature_height_product=math.pi**2/12.5*H,metric_minimum_stretch=1-math.pi**2/12.5*H,
             historical_point1_screen_pass=False),
         Fig12='7mm RR observations are inside the AWF and require actual transported-state stresses, not outer equilibrium stress',
@@ -92,8 +93,13 @@ def domain(rt,dest,case):
             pars=root.find('CONDITIONS/PARAMETERS')
             for n in list(pars):pars.remove(n)
             for k,v in dict(NumSteps=0,TimeStep=.001,Time=0.,RANSWallHeight=H,RANSWallSampleHeight=H,RANSWallTailStart=H).items():set_parameter(root,k,v)
+            set_parameter(root,'RANSOpenDisplacement',case['displacement'])
+            for k,v in dict(RANSWallBoundaryPolicy='AcceptedRichardsNorrisFlatV1',RANSOpenTop='RichardsNorris2011V1',RANSOpenBackflow='RejectV1',
+                RANSWallReference='Functions',RANSOpenReference=case['provider'],RANSWallDisplacementPolicy=case['wall_policy'],RANSOpenFitPolicy=case['fit_policy']).items():set_info(root,k,v)
             for f in list(root.findall('CONDITIONS/FUNCTION')):root.find('CONDITIONS').remove(f)
-            write(root,xml);row=dict(mesh_sha256=sha(xml),degree=degree,physical_reference=case,geometry_only=True)
+            physical={k:v for k,v in case.items() if k not in ('x','knots','degree','pressure_degree','integration')}
+            write(root,xml);row=dict(mesh_sha256=sha(xml),degree=degree,physical_reference=physical,geometry_only=True,
+                target_x=X,target_roof=Z,boundary='same displaced/Richards-Norris inlet/top/outlet semantics; physical coefficients intentionally external to geometry-only session; no executable production admission')
             if kind=='flat':
                 q,e=probe(rt,folder,dict(operation='native_layout_inventory'),'count');require(e['exit_code']==0,'native capacity count failed');row['native_count']=q
             row['native_geometry']={}
