@@ -11,6 +11,13 @@ from study_wj_h17 import protected,CAP_BYTES,CAP_ENTRIES,POLICIES
 from run_wj_h17 import halt,reserve_strict,small_selection
 
 class ExactRows(unittest.TestCase):
+    def test_coordinator_command_matches_observer_parser(self):
+        from study_wj_h17 import observer_command
+        from wj_h17_observer import argument_parser
+        command=observer_command(Path('/run'),Path('/run/intent'),Path('/run/compat'))
+        args=argument_parser().parse_args(command[3:])
+        self.assertEqual((args.root,args.intent,args.compat,args.behavior),(Path('/run'),Path('/run/intent'),Path('/run/compat'),'PASS'))
+
     def test_exact_small_commands_cannot_admit_CP0_or_replacement_work(self):
         import sys
         import run_wj_h17

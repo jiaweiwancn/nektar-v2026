@@ -108,5 +108,9 @@ def daemon(root,intent_path,compat,behavior='PASS'):
     previous.load_cache=loader;previous.verify=pinned;previous.atomic=durable
     previous.daemon(root,intent_path,compat,behavior)
 
+def argument_parser():
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--intent',type=Path,required=True);p.add_argument('--compat',type=Path,required=True);p.add_argument('--behavior',default='PASS')
+    return p
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--intent',type=Path,required=True);p.add_argument('--compat',type=Path,required=True);p.add_argument('--behavior',default='PASS');a=p.parse_args();daemon(a.root,a.intent,a.compat,a.behavior)
+    a=argument_parser().parse_args();daemon(a.root,a.intent,a.compat,a.behavior)

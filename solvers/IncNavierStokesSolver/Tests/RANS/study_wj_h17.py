@@ -67,9 +67,10 @@ def setup(root):
 
 def expected(root,scope):
     out=root/'inputs'/scope;out.mkdir();records={}
-    count=4 if scope=='target'else 2
-    for n in range(1,count+1):
-        directory=OLD/('science/target'if scope=='target'else'science/small/A')/'monitor';ready=directory/f'step-{n}.ready.json';r=load(ready)
+    steps=(1,2,3,4)if scope=='target'else(2,)if scope=='small-restart'else(1,2)
+    path='science/target'if scope=='target'else'science/small/B'if scope=='small-restart'else'science/small/A'
+    for n in steps:
+        directory=OLD/path/'monitor';ready=directory/f'step-{n}.ready.json';r=load(ready)
         v={k:r[k]for k in ('checkpoint','callback','report','structure')}
         v.update(ready=identity(ready),commit=identity(directory/f'step-{n}.qualification-commit.json'),result=identity(directory/f'step-{n}.ready.result.json'),inventory=identity(directory/f'step-{n}.ready.inventory.json'))
         for p in v.values():verify(p)
@@ -84,6 +85,7 @@ def completed_request(v):
 
 def inputs(root):
     target=expected(root,'target');small=expected(root,'small')
+    expected(root,'small-restart')
     v=next(v for v in load(H14/'publication-v2/state-bindings.json')['states']if v['case']=='cp0')
     zero=cp_request(v);requests=[zero]+[completed_request(load(verify(target[str(n)])))for n in range(1,5)]+[zero]
     intents=[]
@@ -127,6 +129,10 @@ def runtime_qualify(root,governor_only=False):
     dependencies={v['actual']['path']:v['actual']for v in load(root/'science/runtime-dependencies-v1.json')['libraries']}
     samples=[];seen=set();libraries={}
     for p in sorted((root/'operations').glob('*/native-exec-samples.json')):
+        if p.parent.name=='native-reuse-readonly-fixture-v1':
+            # That fixture used the retained pre-batch reader. Its structural
+            # code is unchanged, but it cannot qualify the later ELF identity.
+            continue
         for v in load(p):
             assert v['status']=='PASS'
             for native in v['native']:verify(expected[native]);seen.add(Path(native).name)
@@ -138,6 +144,9 @@ def runtime_qualify(root,governor_only=False):
     required={'IncNavierStokesSolver.elf'}if governor_only else{'IncNavierStokesSolver.elf','RANSWallResolutionProbe.elf'}
     assert required<=seen,'missing actual governor/reader native-exec sample'
     atomic(root/'science'/('runtime-governor-qualified-v1.json'if governor_only else'runtime-qualified-v1.json'),dict(status='PASS',native_exec_samples=samples,libraries=list(libraries.values()),compiled_build=identity(root/'science/runtime-build-v1.json'),dependencies=identity(root/'science/runtime-dependencies-v1.json'),scope='actual H17 execution; native identity separate from historical cache'))
+
+def observer_command(root,intent,compat,behavior='PASS'):
+    return [sys.executable,'-B',str(HERE/'wj_h17_observer.py'),'--root',str(root),'--intent',str(intent),'--compat',str(compat),'--behavior',behavior]
 
 def coordinate(root,folder,original_cp0,compat,*,behavior='PASS',restart_callback=None,replay=None,deadline=None):
     frozen(root);xml=folder/'case.xml';tree=ET.parse(xml);steps=int(next(p.text.split('=')[1]for p in tree.findall('./CONDITIONS/PARAMETERS/P')if p.text.split('=')[0].strip()=='NumSteps'))
@@ -152,7 +161,7 @@ def coordinate(root,folder,original_cp0,compat,*,behavior='PASS',restart_callbac
     native=None;obs=None;error=None;code=None;began=time.monotonic()
     with(folder/'observer.log').open('x')as obslog,(folder/'native.log').open('x')as log:
         try:
-            obs=subprocess.Popen([sys.executable,'-B',str(HERE/'wj_h17_observer.py'),'--root',str(root),'--mode','daemon','--intent',str(ip),'--compat',str(compat),'--behavior',behavior],stdout=obslog,stderr=subprocess.STDOUT)
+            obs=subprocess.Popen(observer_command(root,ip,compat,behavior),stdout=obslog,stderr=subprocess.STDOUT)
             intent['observer_pid']=obs.pid;atomic(ip,intent)
             while not(directory/'observer-started.json').exists():
                 assert obs.poll()is None,'observer failed before native launch'
@@ -211,7 +220,7 @@ def small_case(root,name):
         assert load(root/'science/small/A/qualification.json')['status']=='PASS'
         c=load(root/'science/small/A/monitor/step-1.qualification-commit.json');restart=verify(c['checkpoint']).parent;side=verify(c['callback'])
     xml_case(parent/'case.xml',folder,restart,2 if name=='A'else 1)
-    expected_states=load(root/'inputs/small/manifest.json')['states']
+    expected_states=load(root/('inputs/small-restart/manifest.json'if name=='B'else'inputs/small/manifest.json'))['states']
     code,r=coordinate(root,folder,cp0,root/'science/small-cache-compatibility.json',restart_callback=side,replay=expected_states)
     checked_exit(code);assert r['implicit_callbacks']==(2 if name=='A'else 1)and r['native_completed']==r['independently_qualified']==r['implicit_callbacks']
     assert qualified_step(folder)==2
