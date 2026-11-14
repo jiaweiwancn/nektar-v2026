@@ -13,6 +13,17 @@ os.environ.update(THREADS)
 from wj_h15_observer import atomic,identity,verify
 from publish_wj_h15 import immutable_operation
 
+def native_closure(root):
+    build=load(root/'science/runtime-build-v1.json');natives={v['ELF']['path']:v['ELF']for v in build['executables']};deps={v['actual']['path']:v['actual']for v in load(root/'science/runtime-dependencies-v1.json')['libraries']};samples=[];libraries={}
+    for p in sorted((root/'operations').glob('*/native-exec-samples.json')):
+        for v in load(p):
+            assert v['status']=='PASS'and v['libc']==[str(root/'runtime/glibc/libc.so.6')]
+            for n in v['native']:verify(natives[n])
+            for f in v['files']:
+                if '.so'in Path(f).name or Path(f).name.startswith('ld-linux'):libraries[f]=identity(verify(deps[f]))
+            samples.append(dict(operation=p.parent.name,pid=v['pid'],native=v['native'],libc=v['libc']))
+    return dict(status='PASS',actual_native_exec_samples=samples,libraries=list(libraries.values()),compiled_build=identity(root/'science/runtime-build-v1.json'),scope='all actual H16 governor/reader executions, including target; pre-exec host mappings excluded')
+
 def publish(root,revision):
     out=root/'publication-v1';out.mkdir();book=load(root/'accounting.json')
     atomic(out/'accounting-publication-snapshot.json',book)
@@ -30,6 +41,7 @@ def publish(root,revision):
         if immutable_operation(book,label):copy(root/'operations'/label/'command.log','operations/'+label+'.log')
         copy(root/'operations'/label/'native-exec-samples.json','operations/'+label+'-native-maps.json')
     tests=load(root/'operations/focused-python-controls-v1/receipt.json');log=(root/'operations/focused-python-controls-v1/command.log').read_text();count=int(re.search(r'Ran (\d+) tests',log)[1])
+    atomic(out/'native-runtime-observed.json',native_closure(root))
     small=[]
     for n in 'ABCDE':
         p=root/f'science/small/{n}/qualification.json'
@@ -62,6 +74,11 @@ def publish(root,revision):
             copy(target/f'monitor/step-{step}.{suffix}',f'target/step-{step}.{suffix}')
         c=target/f'monitor/step-{step}.qualification-commit.json'
         if c.exists():commits.append(identity(c))
+    first=target/'monitor/step-1.ready.json'
+    if first.exists():
+        ready=load(first);assert ready['binding']['callback_history_sha256']=='40d7d7178d0ec1cada609e6267ce46b582ba869daf4725e5ed501759e87bed1a'
+        assert ready['binding']['state_sha256']=='b9c1c19b6c44513d1778143b695e9720d0463d0a9786a91ec6ae97cc6c469819'
+        atomic(out/'target/H14-replay-callback-binding.json',dict(status='PASS',ready=identity(first),genuine_callback=ready['callback'],state_sha256=ready['binding']['state_sha256'],callback_history_sha256=ready['binding']['callback_history_sha256'],scope='direct retained H14 callback/state comparison; native-history/reference/defect/time replay also recorded in independent step1 result'))
     atomic(out/'target/interface-history.json',interfaces);atomic(out/'target/inventory-growth.json',growth)
     gates=dict(repaired_build='PASS'if book['entries']['focused-build-v1']['status']=='PASS'else'FAIL',synthetic_protocol=book['entries']['repaired-native-protocol-fixture-v1']['status'],focused_python_methods=count,focused_python=tests['status'],retained_CP0_CP1_parity='PASS'if(root/'science/retained-parity/result.json').exists()else'NOT_RUN',small_actual_attempts=sum(v['actual_attempts']for v in small),small_governing_qualification='PASS'if len(small)==5 and all(v['status']=='PASS'for v in small)else'NOT_RUN_OR_FAILED',small_strict='PASS'if(root/'science/small/A/view/result.json').exists()else'NOT_RUN',target=outcome,qualified_commits=len(commits),fresh_CP0=0,source_builds=1,target_strict='PASS'if(target/'view/result.json').exists()else'NOT_RUN',strict_readbacks=len(book.get('strict_reservations',[])),historical_H15='OBSTRUCTED_PROTOCOL unchanged; final-v3 essential originals verified; full optional archive not transported',H11_temporal='UNRESOLVED unchanged',H12_audit='PASS unchanged')
     atomic(out/'component-gates.json',gates);atomic(out/'copied-evidence.json',copied)
