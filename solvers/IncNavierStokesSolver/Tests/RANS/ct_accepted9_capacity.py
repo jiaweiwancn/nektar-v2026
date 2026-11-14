@@ -31,7 +31,7 @@ def samples(c):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','ct8','output'):p.add_argument('--'+k,type=Path,required=True)
-    a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
+    a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');os.environ['NEKTAR_RANS_DETAILED_TIMING']='1'
     pre=sealed(a.ct8/'preflight-v6');old=sealed(a.ct8/'assessment-v3');inventory=n.read(a.ct8/'assessment-v3/domain.json');c=copy.deepcopy(pre['case']);radial=inventory['radial_grid'];xs=sorted(set(X[::4]+[X[-1]]))
     m=RequestManifest(a.output,dict(schema='CT9FlatCapacityV1',case=c,source=sha(Path(__file__)),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.runtime/'RANSPreservationProbe'),ct8_domain=sha(a.ct8/'assessment-v3/domain.json'),radial_grid=radial,layouts=[dict(name='intermediate-p3',x=xs,degree=3),dict(name='target-p3',x=X,degree=3),dict(name='target-p4',x=X,degree=4)],maximum_address_space_bytes=16*1024**3,physical_evolution=False,primary_prospective_layout='target-p4, contingent on static representation and all independent admissions'))
     result=dict(schema='CT9FlatCapacityV1',cases={},physical_evolution='not_admitted_pressure_uncertainty_failed',terrain_field_count='not admitted by affine global-height region classifier',status='incomplete')
@@ -39,7 +39,7 @@ def main():
         cc=copy.deepcopy(c);cc.update(x=x,knots=radial,Z=20.,degree=degree,pressure_degree=degree-2);folder=a.output/label;n.make(folder,a.runtime,cc,.001,0);enable(folder);row=dict(case=cc,configuration_sha256=sha(folder/'case.xml'))
         try:
             count,e=probe(a.runtime,folder,dict(operation='native_layout_inventory'),'count');require(e['exit_code']==0,'actual native count failed');row.update(native_count=count,count_execution=e);require(count['stored_slots']<=70000,'new backend count guard')
-            if label.startswith('target'):require(count['stored_slots']==(33267 if degree==3 else 60907),'target changed native count')
+            if label.startswith('target'):require(count['stored_slots']==(33267 if degree==3 else 60907) and count['elements']==930,'target changed native count/topology')
             if label=='intermediate-p3':
                 negative=folder/'dense-guard';negative.mkdir();root=ET.parse(folder/'case.xml').getroot();set_info(root,'RANSWallLinearBackend','ReplicatedDenseV1');write(root,negative/'case.xml')
                 packet,e=probe(a.runtime,negative,dict(operation='functions'),'negative');require(e['exit_code']!=0 and '3000' in packet.get('failure',''),'old dense guard was bypassed')

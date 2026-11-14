@@ -1,0 +1,63 @@
+# AcceptedSerialSparseV1 implementation and allocation audit
+
+The governing implementation is pinned by the private build receipt. Its model,
+reference, pressure/traction convention and one-sweep order are the CT8 central
+displaced Natural A95 definitions. The backend identity is separate from the
+immutable model descriptor. Checkpoints and preservation/replay signatures bind
+it; cross-backend histories are rejected rather than relabelled.
+
+The dependency audit finds Eigen sparse headers and the installed Nektar
+matrix-action/GMRES interfaces. The installed SDK remains MPI ON, PETSc OFF.
+`SparseMatrix.*`, `SparseUtils.*`, `NekLinSysIter*` and the MultiRegions sparse
+adapters were inspected. A narrow sorted-row/CSR adapter handles the combined
+regional pressure fields, native signed CG restrictions and roughness sampler
+links directly. It does not route the coupled patch through a single-field
+assembly map or convert a global dense matrix to sparse storage. Eigen supplies
+private header-only SparseLU and sparse LDLT; installed Nektar supplies GMRES.
+Header hashes, compiler flags, binaries and loaded libraries are in the sealed
+runtime/experiment receipts. No PETSc build or shared installation is changed.
+
+| Reachable phase | Implementation and bound |
+|---|---|
+| Native maps and rows | Existing signed field maps and generating-owner/side semantics; linear index vectors. |
+| Startup mass | Direct sparse accumulation, retaining the dense path's long-double per-entry mass summation; immutable CSR. No global long-double square array. |
+| General projection | Local native FwdTrans seed, then the existing three consistent-mass defect corrections with sparse positive LDLT. |
+| Radial/face projection | Existing local systems; radial KKT dimension capped at 2048. Degree is uniformly P3/P1 or P4/P2, so face transforms stay small. |
+| Frozen flow and scalars | Original element/interface/natural-face contribution order, direct sparse row insertion; epsilon dependent rows replaced explicitly. |
+| Predictor and scalars | SparseLU; original frozen matrices and right-hand sides; true residual recomputed. |
+| Consistent correction mass | Exact free-ID restriction of physical consistent mass; positive LDLT. No diagonal mass in a governing update. |
+| Pressure | Nektar flexible right-preconditioned GMRES, restart 80, maximum 1000 iterations; vector actions only. No dense Schur or array of mass-inverse-G columns. |
+| Preconditioner | Sparse LU of `D diag(M_free)^-1 G / alpha - C`. Its diagonal mass is confined to preconditioning. |
+| Required norms/audits | Sparse restricted consistent masses and original full constitutive/domain inventories. State/gradient validity is never inferred from a k/epsilon-only cache. |
+| Optional exports | Dense matrix exports and per-element global-vector localization limited to 1000-slot fixtures; aggregate vectors, CSR entries/actions and hashes above it. |
+| Native snapshots | Sparse flow, mass, G/D/C and k matrices plus actual stage/history vectors. Readers validate encoding, dimensions and hashes. |
+| Retained histories/records | IMEX1 and at most 64 steps per segment; at most 65 accepted state vectors and bounded attempted-stage records. Longer durations require genuine same-method restart segments. |
+| Legacy nonlinear/action/bound routes | Explicitly unsupported. The old dense backend and its 3000-slot limit remain unchanged. |
+
+The sparse route additionally caps stored slots at 70000, each CSR matrix at
+20 million nonzeros and reported factor fill at 30 million. Direct/factor
+storage and local dense work are accompanied by a 16 GiB process address-space
+ceiling in the qualification drivers. LDLT fill is the library's stored lower
+factor count; its diagonal and permutations add O(N) vectors. Actual peak RSS
+and factor/nonzero counts are measured rather than inferred from these caps.
+
+For each pressure vector the governing operation is
+`D[(alpha M_free)^-1(Gp)] - Cp`. Direct consistent-mass factor application makes
+this a fixed action apart from roundoff. Every direct solve recomputes its
+unpreconditioned residual. Pressure RHS normalization avoids the installed
+GMRES small-RHS magnitude floor; the returned **unscaled** action residual
+must satisfy `max|r| <= 2e-12 max|rhs| + 1e-25`. The internal Krylov tolerance is
+stricter. Frozen packets also verify the complete independently assembled
+native G action, consistent-mass correction residual and true continuity.
+
+Small-case complete-matrix/action comparisons use the independent dense oracle
+and the 2e-10 row limit. Fresh physical trajectories use the stricter 1e-8
+scaled field/traction equivalence budget. This qualifies numerical equivalence,
+not physical pressure uncertainty. The CT8 failed classification must remain
+failed under the new backend. Final gate outcomes and actual capacity metrics
+are supplied by the compact qualified evidence, not by this implementation note.
+
+This is a serial flat prototype, not a distributed backend or an inf-sup,
+positivity, realizability, long-time or terrain theorem. The intended terrain
+still needs mapped region-aware numbering, joined-map Cartesian gradients,
+cofactors/transmission and the outstanding temporal/spatial qualification.
