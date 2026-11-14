@@ -17,10 +17,10 @@ add_executable(RANSWallTimingChecks test_rans_wall_timing.cpp)
 add_executable(RANSWallMonitorChecks test_rans_wall_monitor.cpp)
 add_executable(WJImmutableRowsChecks test_wj_immutable_rows.cpp)
 target_include_directories(WJImmutableRowsChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
-add_test(NAME WJImmutableRowsChecks COMMAND WJImmutableRowsChecks)
 target_include_directories(RANSWallMonitorChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_include_directories(RANSWallTimingChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 enable_testing()
+add_test(NAME WJImmutableRowsChecks COMMAND WJImmutableRowsChecks)
 add_test(NAME RANSKBoundQPChecks COMMAND RANSKBoundQPChecks)
 add_test(NAME RANSReducedModelChecks COMMAND RANSReducedModelChecks)
 add_executable(WJMappedAlgebraChecks test_wj_mapped_algebra.cpp
@@ -821,6 +821,11 @@ if(Python3_Interpreter_FOUND)
     add_test(NAME WJH16RepairedMonitoring
         COMMAND ${Python3_EXECUTABLE} -B -m unittest -v test_wj_h16_repaired_monitor)
     set_tests_properties(WJH16RepairedMonitoring PROPERTIES
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROCESSORS 1 TIMEOUT 120
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1")
+    add_test(NAME WJH17ExactRowReuse
+        COMMAND ${Python3_EXECUTABLE} -B -m unittest -v test_wj_h17_exact_rows)
+    set_tests_properties(WJH17ExactRowReuse PROPERTIES
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROCESSORS 1 TIMEOUT 120
         ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;VECLIB_MAXIMUM_THREADS=1")
 endif()
