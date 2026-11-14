@@ -18,6 +18,16 @@ from wj7_command import owned_groups
 ROOT='wj-h17-exact-row-reuse-20261114'
 CAPS=dict(operation=1200,build=1200,qualification=1800,target=1800,target_readback=120,closure=300)
 
+def small_selection(root,argv,attempts):
+    """Exactly the two declared integration commands; no fresh CP0 or retry."""
+    import sys
+    for name,count in (('A',2),('B',1)):
+        expected=[sys.executable,'-B',str(Path(__file__).with_name('study_wj_h17.py')),'--root',str(root),'--mode','small','--case',name]
+        if list(map(str,argv))==expected:
+            assert attempts==count,'incorrect small additional-attempt reservation'
+            return name
+    raise AssertionError('undeclared small governing command')
+
 def reserve_strict(root,scope):
     assert scope in ('small','target')
     def reserve(b):
@@ -49,6 +59,9 @@ def execute(root,label,argv,seconds,phase='operation',workers=1,kind='passive',a
             frozen(root)
         if kind=='small':
             assert 1<=attempts<=2 and b['small_charged_attempts']+attempts<=3
+            name=small_selection(root,argv,attempts);cases=b.setdefault('small_cases',[])
+            assert name not in cases and (name=='A'or cases==['A']),'small reservation repeated or out of order'
+            cases.append(name)
             b['small_charged_attempts']+=attempts
         if kind=='audit':
             assert attempts==6 and b['full_audit_reserved']+6<=12
