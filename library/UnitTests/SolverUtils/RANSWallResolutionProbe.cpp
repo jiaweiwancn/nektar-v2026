@@ -190,10 +190,10 @@ int main(int argc,char **argv)
         std::string backend;serial->LoadSolverInfo("RANSWallLinearBackend",backend,"Dense");
         std::string retention;serial->LoadSolverInfo("RANSWallRetention",retention,"Off");
         if(retention=="BoundedV1")RANSWallMonitor::Factors().Configure(std::string(argv[3])+".factors",RANSWallR3::HashFile(argv[1]));
-        if(backend=="MappedBlockV1")Require(operation=="open_checks" || operation=="initializer_checks" || operation=="mapped_backend_checks" || operation=="complete_audit_batch" || operation=="immutable_row_checks",
+        if(backend=="MappedBlockV1")Require(operation=="open_checks" || operation=="initializer_checks" || operation=="mapped_backend_checks" || operation=="complete_audit_batch" || operation=="immutable_row_checks" || operation=="checkpoint_policy_checks",
             "MappedBlockV1 does not support legacy dense matrix observers");
         RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
-        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.OpenBoundary() && (operation=="open_checks" || operation=="initializer_checks" || operation=="mapped_backend_checks" || operation=="complete_audit_batch" || operation=="immutable_row_checks"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
+        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.OpenBoundary() && (operation=="open_checks" || operation=="initializer_checks" || operation=="mapped_backend_checks" || operation=="complete_audit_batch" || operation=="immutable_row_checks" || operation=="checkpoint_policy_checks"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
         Require(patch.InnerStressName()==packet.get<std::string>("inner_stress_model"),"packet law differs from session");
         for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
@@ -221,6 +221,21 @@ int main(int argc,char **argv)
             patch.LoadOpenBoundaryData(serial,data);
             const auto result=operation=="complete_audit_batch"?CompleteAuditBatch(patch,serial,us,packet,data,argv[3]):ImmutableRowChecks(patch,serial,us,packet,data);
             std::ofstream out(argv[3]);out<<result<<'\n';Require(out.good(),"immutable audit output failed");world->Finalise();return 0;
+        }
+        if(operation=="checkpoint_policy_checks")
+        {
+            RANSWallEvolutionData data(2);patch.LoadOpenBoundaryData(serial,data);
+            auto imported=ImportOpenState(patch,serial,us,packet,data);
+            const auto before=patch.CompleteWJCalls();bool bound=false,domain=false;
+            try{RANSWallMonitor::StopOnBound("{\"bound_activations\":1}");}catch(const std::exception &){bound=true;}
+            RANSWallMonitor::StopOnBound("{\"bound_activations\":0}");
+            auto bad=imported.cp.coupledState;for(int i=patch.offset[patch.K()];i<patch.offset[patch.K()+1];++i)bad[i]=-1.;
+            const auto scalar=patch.ScalarDomain(bad,imported.cp.integration.time,data,true);domain=!scalar.admissible;
+            Require(bound && domain && patch.CompleteWJCalls()==before,"off-cadence native guards were lost or called complete audit");
+            std::ofstream out(argv[3]);out<<J::Object({{"status",J::Quote("PASS")},{"stop_on_bound",J::Boolean(bound)},
+                {"scalar_domain_rejected",J::Boolean(domain)},{"domain_failure",J::Quote(scalar.failure)},
+                {"full_audit_calls",J::Number(patch.CompleteWJCalls()-before)},{"initialization_work",J::Numbers(patch.InitializationWork())},
+                {"governing_solves","0"},{"import_role",J::Quote(packet.get<std::string>("import_role","QualifiedV1"))}})<<'\n';return 0;
         }
         if(operation=="open_checks")
         {

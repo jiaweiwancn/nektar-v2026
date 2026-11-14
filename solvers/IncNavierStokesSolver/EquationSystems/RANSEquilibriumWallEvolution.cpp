@@ -247,6 +247,10 @@ void RANSEquilibriumWallEvolution::ConfigureMonitoring()
     namespace M=RANSWallMonitor;
     std::string mode;m_session->LoadSolverInfo("RANSWallRetention",mode,"Off");
     Require(mode=="Off" || mode=="BoundedV1","unknown wall retention mode");m_bounded=mode=="BoundedV1";
+    std::string policy;m_session->LoadSolverInfo("RANSWallMonitoringPolicy",policy,"Off");
+    Require(policy=="Off" || policy=="CheckpointAuditV1","unknown wall monitoring policy");
+    m_checkpointAudit=policy=="CheckpointAuditV1";
+    Require(!m_checkpointAudit || m_bounded,"checkpoint audits require BoundedV1");
     if(!m_bounded)return;
     Require(m_session->GetComm()->GetSize()==1,"bounded monitoring is serial");
     std::string backend;m_session->LoadSolverInfo("RANSWallLinearBackend",backend,"Dense");
@@ -256,6 +260,7 @@ void RANSEquilibriumWallEvolution::ConfigureMonitoring()
     m_monitorDirectory=m_monitor.get<std::string>("directory");
     Require(m_monitor.get<std::string>("nonce").size()>=16 && m_monitor.get<double>("ack_timeout_seconds")>0 &&
         m_monitor.get<double>("ack_timeout_seconds")<=120 && m_monitor.get<std::size_t>("maximum_absolute_step")<=4,"invalid bounded monitoring limits");
+    if(m_checkpointAudit)m_schedule=M::CheckpointSchedule::From(m_monitor,m_timestep);
     Require(!std::filesystem::exists(m_monitorDirectory+"/factors"),"monitor factor output cannot be reused");
     M::Factors().Configure(m_monitorDirectory+"/factors",m_monitor.get<std::string>("scope_sha256"));
     m_session->LoadSolverInfo("RANSWallMonitorFault",m_monitorFault,"Off");
@@ -278,7 +283,7 @@ void RANSEquilibriumWallEvolution::InitialiseMonitoring()
     {
         M::CheckPin(*p);auto side=M::Read(p->get<std::string>("path"));
         Require(side.get<std::string>("state_sha256")==RANSWallR3::Hash(m_state) && side.get<std::string>("time_bits")==M::Bits(m_time),"restart callback state/time differs");
-        for(const auto &v:side.get_child("callback_history"))m_lastHistory.push_back(v.second.get_value<double>());
+        m_lastHistory.clear();for(const auto &v:side.get_child("callback_history"))m_lastHistory.push_back(v.second.get_value<double>());
         m_stageAlpha=side.get<double>("alpha_mass");m_stageTime=side.get<double>("time");
         Require(m_lastHistory.size()==m_state.size() && RANSWallR3::Hash(m_lastHistory)==side.get<std::string>("callback_history_sha256") &&
             m_stageAlpha==1/m_timestep && m_stageTime==m_time,"restart genuine callback binding differs");
@@ -302,7 +307,27 @@ void RANSEquilibriumWallEvolution::InitialiseMonitoring()
         {"fields",J::List(fields)},{"offsets",J::Numbers(m_patch->offset)},
         {"geometry_signature",J::Quote(m_patch->Mapping().Signature())},{"physical_signature_sha256",J::Quote(RANSWallR3::Hash(m_signature))},
         {"original_qh0_state_sha256",J::Quote(RANSWallR3::Hash(m_qh0))},{"intent",RANSWallR3::Pin(m_monitorIntentPath)}}));
-    M::Atomic(m_monitorDirectory+"/startup.json",MonitoringPacket("startup_reaudit_not_completed"));TrimMonitoring();
+    M::Atomic(m_monitorDirectory+"/startup.json",MonitoringPacket("startup_reaudit_not_completed"));
+    if(m_checkpointAudit)
+    {
+        const auto binding=J::Object({{"state_sha256",J::Quote(RANSWallR3::Hash(m_state))},{"time_bits",J::Quote(M::Bits(m_time))},
+            {"absolute_step",J::Number(m_integrator->Steps())},{"callback_history_sha256",J::Quote(RANSWallR3::Hash(m_lastHistory))},
+            {"alpha_bits",J::Quote(M::Bits(m_stageAlpha))},{"configuration_sha256",J::Quote(RANSWallR3::HashFile(m_monitorIntentPath))}});
+        M::Atomic(m_monitorDirectory+"/startup.ready.json",J::Object({{"schema",J::Quote("WJCheckpointStartupReadyV1")},{"binding",binding},
+            {"report",RANSWallR3::Pin(m_monitorDirectory+"/startup.json")},{"structure",RANSWallR3::Pin(m_monitorDirectory+"/structure.json")}}));
+        const auto begin=std::chrono::steady_clock::now();const auto result=m_monitorDirectory+"/startup.verified.json";
+        while(!std::filesystem::exists(result))
+        {Require(::kill(m_monitor.get<int>("observer_pid"),0)==0,"startup observer exited");
+         Require(std::chrono::duration<double>(std::chrono::steady_clock::now()-begin).count()<m_monitor.get<double>("ack_timeout_seconds"),"startup verifier timeout");
+         std::this_thread::sleep_for(std::chrono::milliseconds(25));}
+        const auto verified=M::Read(result);M::SameObject(verified.get_child("binding"),M::Read(m_monitorDirectory+"/startup.ready.json").get_child("binding"));
+        M::CheckPin(verified.get_child("result"));
+        Require(verified.get<std::string>("status")=="PASS" && M::Read(verified.get<std::string>("result.path")).get<std::string>("status")=="PASS","startup independent audit failed");
+        M::Atomic(m_monitorDirectory+"/startup.verification-commit.json",J::Object({{"schema",J::Quote("WJStartupVerificationCommitV1")},
+            {"binding",binding},{"result",RANSWallR3::Pin(result)},{"checkpoint",RANSWallR3::Pin(m_restart+"/State.bin")}}));
+        m_qualifiedCheckpoint=m_restart;
+    }
+    TrimMonitoring();
 }
 std::string RANSEquilibriumWallEvolution::MonitoringPacket(const std::string &phase) const
 {
@@ -312,9 +337,11 @@ std::string RANSEquilibriumWallEvolution::MonitoringPacket(const std::string &ph
     {std::vector<std::string> values;for(auto i=rows.size()-std::min(rows.size(),maximum);i<rows.size();++i)values.push_back(RANSWallSolveJson::Numbers(rows[i]));return RANSWallSolveJson::List(values);};
     const auto explicitCount=std::min<std::size_t>(2,m_explicitAudits.size());
     std::vector<std::pair<std::string,std::string>> hardAudit;
-    if(!m_stateAudits.empty())for(const auto &v:m_stateAudits.back())hardAudit.push_back({v.first,J::Numbers(v.second)});
+    if((!m_checkpointAudit || m_fullAuditCurrent) && !m_stateAudits.empty())for(const auto &v:m_stateAudits.back())hardAudit.push_back({v.first,J::Numbers(v.second)});
     return J::Object({{"schema",J::Quote(phase=="completed_stage"?"WJCompletedStepV1":"WJMonitoringStartupV1")},
-        {"retention_mode",J::Quote("BoundedV1")},{"signature",J::Quote(m_signature)},{"dt",J::Number(m_timestep)},
+        {"retention_mode",J::Quote("BoundedV1")},{"monitoring_policy",J::Quote(m_checkpointAudit?"CheckpointAuditV1":"Off")},
+        {"native_full_audit_status",J::Quote(m_fullAuditCurrent?"PASS":"NOT_SCHEDULED")},{"online_check_status",J::Quote("PASS")},
+        {"run_configuration_sha256",J::Quote(RANSWallR3::HashFile(m_monitorIntentPath))},{"signature",J::Quote(m_signature)},{"dt",J::Number(m_timestep)},
         {"steps",J::Number(snapshot.steps)},{"time",J::Number(m_time)},{"state",J::Numbers(m_state)},
         {"checkpoint",J::Quote(m_lastCheckpoint)},{"fixed_reference",J::Numbers(m_patch->Reference())},{"fixed_defect",J::Numbers(m_patch->Defect())},
         {"original_qh0_state_sha256",J::Quote(RANSWallR3::Hash(m_qh0))},{"native_history",J::List(h)},{"native_history_times",J::Numbers(snapshot.times)},
@@ -335,8 +362,8 @@ void RANSEquilibriumWallEvolution::CompleteMonitoring(double nativeSeconds)
     RANSWallTiming::Scope publish("monitor.checkpoint_and_publish");Checkpoint();
     const int fd=::open((m_lastCheckpoint+"/State.bin").c_str(),O_RDONLY);Require(fd>=0,"cannot fsync completed checkpoint");
     const int synced=::fsync(fd);::close(fd);Require(synced==0,"completed checkpoint fsync failed");M::CheckpointDirectories(m_lastCheckpoint);
-    Require(!m_stateAudits.empty() && RANSWallR3::Hash(m_state)==RANSWallR3::Hash(m_acceptedStates.back()),"completed state differs from native audited candidate");
-    m_wjAuditPackets.back()=m_patch->WJAuditPacket(m_stateAudits.back(),m_state,m_lastHistory,m_stageAlpha,m_stageTime,"completed_stage");
+    Require(!m_acceptedStates.empty() && RANSWallR3::Hash(m_state)==RANSWallR3::Hash(m_acceptedStates.back()),"completed state differs from online candidate");
+    m_wjAuditPackets.back()=m_patch->WJAuditPacket(m_fullAuditCurrent?m_stateAudits.back():RANSWallEvolutionPatch::Diagnostic{},m_state,m_lastHistory,m_stageAlpha,m_stageTime,"completed_stage");
     const auto step=m_integrator->Steps();const auto stem="step-"+std::to_string(step),prefix=m_monitorDirectory+"/"+stem;
     M::Atomic(prefix+".callback.json",J::Object({{"schema",J::Quote("WJCompletedCallbackV1")},{"step",J::Number(step)},
         {"state_sha256",J::Quote(RANSWallR3::Hash(m_state))},{"callback_history",J::Numbers(m_lastHistory)},
@@ -352,6 +379,16 @@ void RANSEquilibriumWallEvolution::CompleteMonitoring(double nativeSeconds)
         {"structure_sha256",J::Quote(RANSWallR3::HashFile(m_monitorDirectory+"/structure.json"))},
         {"source_sha256",J::Quote(m_monitor.get<std::string>("source_sha256"))},{"observer_sha256",J::Quote(m_monitor.get<std::string>("observer_sha256"))},
         {"inventory_rule_sha256",J::Quote(m_monitor.get<std::string>("inventory_rule_sha256"))}});
+    if(m_checkpointAudit)
+    {
+        m_completionPath=prefix+".completion.json";
+        M::Atomic(m_completionPath,J::Object({{"schema",J::Quote("WJNativeCompletionV1")},{"binding",binding},
+            {"checkpoint",RANSWallR3::Pin(m_lastCheckpoint+"/State.bin")},{"callback",RANSWallR3::Pin(prefix+".callback.json")},
+            {"report",RANSWallR3::Pin(prefix+".report.json")},{"configuration",RANSWallR3::Pin(m_monitorIntentPath)}}));
+        M::Atomic(m_monitorDirectory+"/latest-durable-checkpoint.json",J::Object({{"status",J::Quote("NATIVE_COMPLETED_PENDING_VERIFICATION")},
+            {"absolute_step",J::Number(step)},{"completion",RANSWallR3::Pin(m_completionPath)}}),false);
+        if(!m_fullAuditCurrent){TrimMonitoring();return;}
+    }
     M::Atomic(prefix+".ready.json",J::Object({{"schema",J::Quote("WJCompletedReadyV1")},{"binding",binding},
         {"checkpoint",RANSWallR3::Pin(m_lastCheckpoint+"/State.bin")},{"callback",RANSWallR3::Pin(prefix+".callback.json")},
         {"report",RANSWallR3::Pin(prefix+".report.json")},{"structure",RANSWallR3::Pin(m_monitorDirectory+"/structure.json")},
@@ -369,6 +406,7 @@ void RANSEquilibriumWallEvolution::CompleteMonitoring(double nativeSeconds)
         {"prepared_cursor",RANSWallR3::Pin(ack.get<std::string>("qualified_cursor.path"))}});
     M::Atomic(prefix+".qualification-commit.json",qualified);
     M::Atomic(m_monitorDirectory+"/qualified-cursor.json",qualified,false);
+    if(m_checkpointAudit)M::Atomic(m_monitorDirectory+"/latest-fully-verified-checkpoint.json",qualified,false);
     ++m_independentQualified;m_qualifiedCheckpoint=m_lastCheckpoint;
     Require(next!="RESOURCE_LIMIT","RESOURCE_LIMIT prospective next-stage/readback budget");
     Require(next!="TERMINAL" || step==m_monitor.get<std::size_t>("maximum_absolute_step"),"premature terminal ACK");
@@ -425,7 +463,9 @@ void RANSEquilibriumWallEvolution::WriteBoundedReport() const
             {"resident_audits",J::Number(m_stateAudits.size())},{"resident_wj_packets",J::Number(m_wjAuditPackets.size())},
             {"resident_stage_records",J::Number(m_stageAudits.size())},{"resident_step_records",J::Number(m_stepAudits.size())},
             {"resident_explicit_records",J::Number(m_explicitAudits.size())},{"resident_pimple_records",J::Number(m_patch->PimpleRecords().size())},
-            {"factor_catalog",M::Factors().Summary()},{"evidence_directory",J::Quote(m_monitorDirectory)}}),false);
+            {"monitoring_policy",J::Quote(m_checkpointAudit?"CheckpointAuditV1":"Off")},
+            {"full_audit_calls",J::Number(m_scientificCalls)},{"physical_samples_calls",J::Number(m_physicalSampleCalls)},
+            {"last_completion",J::Quote(m_completionPath)},{"factor_catalog",M::Factors().Summary()},{"evidence_directory",J::Quote(m_monitorDirectory)}}),false);
     }
     catch(const std::exception &e){if(m_failure.empty())throw;std::cerr<<"bounded failure report: "<<e.what()<<std::endl;}
 }
@@ -523,8 +563,14 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             Require(domain.admissible,"initial R2 scalar inventory is outside its evaluation domain: "+domain.failure);
         }
         if(m_patch->OpenBoundary())m_patch->ValidateOutlet(m_state,"startup");
-        if(m_diagnostics)RecordAudit(m_state,m_state,0,m_time);
-        if(m_patch->PimpleSingleSweep())m_physicalSamples=m_patch->PhysicalSamples(m_state,m_time,m_data);
+        if(m_checkpointAudit && m_integrator->Steps()>0)
+        {
+            const auto cp=RANSWallTimeIntegration::ReadCheckpoint(m_restart,m_signature,m_order,m_timestep,m_patch->Size(),m_patch->DifferentialSize());
+            const auto cb=RANSWallMonitor::PendingCompletion(m_monitor.get_child("restart_completion"),cp);
+            m_lastHistory=RANSWallMonitor::Doubles(cb,"callback_history");m_stageTime=cb.get<double>("time");m_stageAlpha=cb.get<double>("alpha_mass");
+        }
+        if(m_diagnostics)RecordAudit(m_state,m_checkpointAudit && m_stageAlpha>0?m_lastHistory:m_state,m_checkpointAudit?m_stageAlpha:0,m_time);
+        if(m_patch->PimpleSingleSweep()){m_physicalSamples=m_patch->PhysicalSamples(m_state,m_time,m_data);++m_physicalSampleCalls;}
         if(m_bounded)InitialiseMonitoring();
         UpdateFields();
     }
@@ -571,8 +617,16 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
     if(m_patch->PimpleSingleSweep() && m_pimpleRejectStep>0 && m_integrator->Steps()+1==m_pimpleRejectStep)
     {m_rejectedState=candidate;throw std::runtime_error("deliberate PIMPLE rejection after scheduled solves before commit");}
     RANSWallEvolutionPatch::Diagnostic samples;
-    if(m_patch->PimpleSingleSweep())samples=m_patch->PhysicalSamples(candidate,time,m_implicitData);
-    if(m_diagnostics)RecordAudit(candidate,fullHistory,1/lambda,time);
+    m_fullAuditCurrent=ScientificDue(m_integrator->Steps()+1);
+    if(m_checkpointAudit)CheckOnlineBound(candidate,fullHistory,1/lambda,time);
+    if(m_patch->PimpleSingleSweep() && m_fullAuditCurrent){samples=m_patch->PhysicalSamples(candidate,time,m_implicitData);++m_physicalSampleCalls;}
+    if(m_diagnostics && m_fullAuditCurrent)RecordAudit(candidate,fullHistory,1/lambda,time);
+    if(!m_checkpointAudit)CheckOnlineBound(candidate,fullHistory,1/lambda,time);
+    if(m_checkpointAudit && !m_fullAuditCurrent)
+    {
+        m_acceptedStates.push_back(candidate);m_auditTimes.push_back(time);
+        m_wjAuditPackets.push_back(m_patch->WJAuditPacket({},candidate,fullHistory,1/lambda,time,"implicit_provisional_online_only"));
+    }
     if(m_patch->PimpleSingleSweep())m_physicalSamples=std::move(samples);
     m_state=std::move(candidate);
     Vector record{time,lambda,1/lambda,static_cast<double>(iterations),Maximum(norms),m_patch->AnchorEnergyWork(m_state)};
@@ -580,9 +634,17 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
     m_lastHistory=std::move(fullHistory);m_stageTime=time;m_stageAlpha=1/lambda;
     return Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize());
 }
+bool RANSEquilibriumWallEvolution::ScientificDue(std::size_t step) const
+{return !m_checkpointAudit || m_schedule.Scientific(step);}
+void RANSEquilibriumWallEvolution::CheckOnlineBound(const Vector &state,const Vector &history,double alpha,double time)
+{
+    if(!m_wjStopOnBound || alpha<=0)return;
+    try{Require(!m_patch->PimpleRecords().empty(),"missing online attempt");RANSWallMonitor::StopOnBound(m_patch->PimpleRecords().back());}
+    catch(const std::exception &e){m_rejectedState=state;m_rangeEvents.push_back({time,alpha,state,history,{}, {e.what()},true});throw;}
+}
 void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector &history,double alpha,double time)
 {
-    RANSWallTiming::Scope timing("native.acceptance_audit");
+    RANSWallTiming::Scope timing("native.acceptance_audit");++m_scientificCalls;m_fullAuditCurrent=true;
     RANSWallEvolutionPatch::Diagnostic audit;
     try{audit=(m_r2RangeGuard || m_patch->AcceptedAWF() || m_patch->WJ())?m_patch->CompleteRestrictedAudit(state,history,alpha,time,alpha?m_implicitData:m_data):
         m_patch->Audit(state,history,alpha,time,alpha?m_implicitData:m_data,m_ustar,m_physicalRangeGuard);}
@@ -604,13 +666,6 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
         if(audit.at("wj_hard_admissible")[0]!=1)
             for(const auto &[name,values]:audit)if(name.find("wj_condition_")==0 && values[0]!=1)
                 reasons.push_back("WJ_"+name.substr(13)+"_exit");
-        if(alpha>0 && m_wjStopOnBound)
-        {
-            Require(!m_patch->PimpleRecords().empty(),"WJ baseline missing completed attempt record");
-            boost::property_tree::ptree attempt;std::istringstream input(m_patch->PimpleRecords().back());
-            boost::property_tree::read_json(input,attempt);
-            if(attempt.get<int>("bound_activations")>0)reasons.push_back("WJ_baseline_material_mass_projection_exit");
-        }
         if(alpha>0 && m_pimpleHardAuditRejectStep>0 && m_integrator->Steps()+1==m_pimpleHardAuditRejectStep)
             reasons.push_back("deliberate_PIMPLE_WJ_hard_audit_rejection");
         if(!reasons.empty())
@@ -745,6 +800,7 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             const auto wjPackets=m_wjAuditPackets.size();
             const auto stages=m_stageAudits.size(),audits=m_stateAudits.size(),states=m_acceptedStates.size(),times=m_auditTimes.size();
             const auto explicits=m_explicitAudits.size();
+            if(m_checkpointAudit)m_patch->SelectSubstepEvidence(false); // no selected rich steps in H18 pilot; bound events still captured
             Vector diff;
             try{RANSWallTiming::Scope advanceTiming("native.advance");diff=m_integrator->Advance();}
             catch(...)
@@ -771,7 +827,18 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
                 // End native-only compute before checkpoint/publication and
                 // rendezvous; native.step keeps its historical inclusive span.
                 const double nativeSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-nativeBegin).count();
-                CompleteMonitoring(nativeSeconds);TrimMonitoring();
+                if(m_checkpointAudit)RANSWallMonitor::Atomic(m_monitorDirectory+"/latest-native-completed.json",RANSWallSolveJson::Object({
+                    {"absolute_step",RANSWallSolveJson::Number(m_integrator->Steps())},{"time",RANSWallSolveJson::Number(m_time)},
+                    {"state_sha256",RANSWallSolveJson::Quote(RANSWallR3::Hash(m_state))}}),false);
+                if(!m_checkpointAudit || m_schedule.Recovery(m_integrator->Steps()))CompleteMonitoring(nativeSeconds);
+                if(m_checkpointAudit)RANSWallMonitor::Append(m_monitorDirectory+"/telemetry.jsonl",RANSWallSolveJson::Object({
+                    {"absolute_step",RANSWallSolveJson::Number(m_integrator->Steps())},{"time",RANSWallSolveJson::Number(m_time)},
+                    {"dt",RANSWallSolveJson::Number(m_timestep)},{"online_status",RANSWallSolveJson::Quote("PASS")},
+                    {"native_full_audit",RANSWallSolveJson::Quote(m_fullAuditCurrent?"PASS":"NOT_SCHEDULED")},
+                    {"independent_audit",RANSWallSolveJson::Quote(m_fullAuditCurrent?"PASS":"NOT_SCHEDULED")},
+                    {"native_compute_seconds",RANSWallSolveJson::Number(nativeSeconds)},
+                    {"pimple",m_patch->PimpleRecords().back()}}));
+                TrimMonitoring();
             }
             else if(m_checksteps>0 && m_integrator->Steps()%m_checksteps==0 && m_checkpointBase!="None")Checkpoint();
         }

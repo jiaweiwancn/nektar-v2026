@@ -90,7 +90,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         put("bound_active_set_iterations",J::Number(boundIterations));put("bound_mass_factor_applications",J::Number(boundMass));
         put("bound_kkt_solves",J::Number(boundKKT));
         put("seconds",J::Number(std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count()));
-        if(RANSWallMonitor::Factors().Enabled())m_pimpleRecords.clear();
+        if(m_boundedRecords)m_pimpleRecords.clear();
         m_pimpleRecords.push_back(J::Object(record));recorded=true;
         if(RANSWallMonitor::Factors().Enabled())
             RANSWallMonitor::Atomic(RANSWallMonitor::Factors().Directory()+"/attempt-"+J::Number(time)+"-"+RANSWallR3::Hash(history)+".json",
@@ -353,7 +353,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                     put("k_added_storage_residual",J::Number(Maximum(physicalStorage)));
                     put("bound_residual_accounting_mass_applications","1");
                 }
-                if(m_pimpleSnapshots)
+                if(m_pimpleSnapshots || (m_checkpointEvidence && (bounded.activated || !bounded.success)))
                 {
                     RANSWallTiming::Scope snapshotTiming("io.attempt_snapshot");
                     std::filesystem::create_directories(m_pimpleSnapshotDirectory);
@@ -411,6 +411,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         const auto norms=Norms(Residual(s,history,alpha,time,data),target,m_robustUstar);
         put("refreshed_original_block_norms",J::Numbers(norms));
         m_lastFeasibleState=s;
+        put("substep_evidence_retention",J::Quote(m_checkpointEvidence?(m_pimpleSnapshots?"SELECTED":"EVENT_ONLY; late failure operator unavailable unless captured at k"):"LEGACY"));
         finalTiming.Stop();publish(true,"");return s;
     }
     catch(const std::exception &error){m_lastFeasibleState=s;if(!recorded)publish(false,error.what());throw;}

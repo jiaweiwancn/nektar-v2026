@@ -401,7 +401,12 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(m_kBoundTrace!="Full" || m_kBoundTraceFile!="None","Full k-bound trace requires an explicit file");
     std::string snapshots;session->LoadSolverInfo("RANSWallPimpleSnapshots",snapshots,"Off");
     Require(snapshots=="Off" || snapshots=="On","invalid PIMPLE snapshot selector");
-    m_pimpleSnapshots=snapshots=="On" || PimpleKBoundEnabled();
+    std::string monitoring,retention;session->LoadSolverInfo("RANSWallMonitoringPolicy",monitoring,"Off");
+    session->LoadSolverInfo("RANSWallRetention",retention,"Off");
+    Require(monitoring=="Off" || monitoring=="CheckpointAuditV1","unknown wall monitoring policy");
+    m_checkpointEvidence=monitoring=="CheckpointAuditV1";m_boundedRecords=retention=="BoundedV1";
+    Require(!m_checkpointEvidence || (m_boundedRecords && WJ() && PimpleSingleSweep()),"checkpoint audit requires bounded WJ single sweep");
+    m_pimpleSnapshots=snapshots=="On" || (!m_checkpointEvidence && PimpleKBoundEnabled());
     session->LoadSolverInfo("RANSWallPimpleSnapshotDirectory",m_pimpleSnapshotDirectory,"pimple-states");
     std::string arithmetic;session->LoadSolverInfo("RANSWallPimpleArithmetic",arithmetic,"Off");
     Require(arithmetic=="Off" || arithmetic=="On","invalid PIMPLE arithmetic observation switch");

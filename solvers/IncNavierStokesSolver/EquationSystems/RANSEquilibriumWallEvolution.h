@@ -49,6 +49,12 @@ private:
     void WriteBoundedReport() const;
     std::string MonitoringPacket(const std::string &phase) const;
     void TrimMonitoring();
+    bool ScientificDue(std::size_t step) const;
+    void CheckOnlineBound(const Vector &,const Vector &,double,double);
+    bool m_checkpointAudit=false,m_fullAuditCurrent=false;
+    RANSWallMonitor::CheckpointSchedule m_schedule;
+    std::size_t m_scientificCalls=0,m_physicalSampleCalls=0;
+    std::string m_completionPath;
     bool m_bounded=false;
     RANSWallMonitor::Tree m_monitor;
     std::string m_monitorDirectory,m_monitorIntentPath,m_monitorFault,m_qualifiedCheckpoint;

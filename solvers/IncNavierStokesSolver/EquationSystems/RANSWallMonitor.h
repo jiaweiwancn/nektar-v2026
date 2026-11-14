@@ -105,6 +105,73 @@ inline std::string Wait(const std::string &directory,const std::string &stem,con
     }
 }
 
+// Execution-only, absolute-step schedules. dt is pinned by the run intent;
+// restart never changes the origin or silently changes a time interpretation.
+struct CheckpointSchedule
+{
+    std::size_t recovery=1,scientific=1,terminalStride=1,terminalStart=0,finalStep=0;
+    bool Scientific(std::size_t step)const
+    {return step==finalStep || step%(terminalStart && step>=terminalStart?terminalStride:scientific)==0;}
+    bool Recovery(std::size_t step)const{return Scientific(step) || step%recovery==0;}
+    static CheckpointSchedule From(const Tree &t,double dt)
+    {
+        CheckpointSchedule s;
+        s.recovery=t.get<std::size_t>("recovery_stride");s.scientific=t.get<std::size_t>("scientific_stride");
+        s.terminalStride=t.get<std::size_t>("terminal_stride",s.scientific);s.terminalStart=t.get<std::size_t>("terminal_start",0);
+        s.finalStep=t.get<std::size_t>("maximum_absolute_step");
+        D::Check(s.recovery && s.scientific && s.terminalStride && s.finalStep &&
+            t.get<std::string>("dt_bits")==Bits(dt),"invalid checkpoint schedule/timestep identity");return s;
+    }
+};
+inline void StopOnBound(const std::string &record)
+{
+    D::Check(!record.empty(),"WJ baseline missing completed attempt record");
+    Tree t;std::istringstream in(record);boost::property_tree::read_json(in,t);
+    D::Check(t.get<int>("bound_activations")==0,"WJ_baseline_material_mass_projection_exit");
+}
+inline std::vector<double> Doubles(const Tree &t,const std::string &key)
+{std::vector<double> v;for(const auto &x:t.get_child(key))v.push_back(x.second.get_value<double>());return v;}
+// Shared by strict pending import and governor restart. No verification PASS
+// is required here. This is integrity/producer validation, not scientific audit.
+template<class Checkpoint> Tree PendingCompletion(const Tree &pin,const Checkpoint &cp)
+{
+    CheckPin(pin);const auto c=Read(pin.get<std::string>("path"));
+    D::Check(c.get<std::string>("schema")=="WJNativeCompletionV1","wrong pending completion schema");
+    for(const auto key:{"checkpoint","callback","report","configuration"})CheckPin(c.get_child(key));
+    const auto &b=c.get_child("binding");const auto r=Read(c.get<std::string>("report.path"));
+    const auto cb=Read(c.get<std::string>("callback.path"));
+    const auto hash=D::Hash(cp.coupledState),ref=D::Hash(cp.fixedReference),def=D::Hash(cp.fixedDefect);
+    D::Check(r.get<std::string>("schema")=="WJCompletedStepV1" && r.get<std::string>("failure").empty() &&
+        r.get<std::string>("signature")==cp.signature && r.get<std::size_t>("steps")==cp.integration.steps &&
+        Bits(r.get<double>("time"))==Bits(cp.integration.time) && Bits(r.get<double>("dt"))==Bits(cp.integration.dt) &&
+        D::Hash(Doubles(r,"state"))==hash && D::Hash(Doubles(r,"fixed_reference"))==ref && D::Hash(Doubles(r,"fixed_defect"))==def &&
+        r.get<std::string>("run_configuration_sha256")==c.get<std::string>("configuration.sha256"),
+        "pending completed producer/state/reference/labels differ");
+    D::Check(b.get<std::string>("checkpoint_sha256")==c.get<std::string>("checkpoint.sha256") &&
+        b.get<std::string>("report_sha256")==c.get<std::string>("report.sha256") &&
+        b.get<std::string>("callback_sidecar_sha256")==c.get<std::string>("callback.sha256") &&
+        b.get<std::string>("state_sha256")==hash && b.get<std::string>("fixed_reference_sha256")==ref &&
+        b.get<std::string>("fixed_defect_sha256")==def && b.get<std::string>("physical_signature_sha256")==D::Hash(cp.signature) &&
+        b.get<std::string>("original_qh0_sha256")==r.get<std::string>("original_qh0_state_sha256") &&
+        b.get<std::string>("time_bits")==Bits(cp.integration.time) && b.get<std::size_t>("absolute_step")==cp.integration.steps,
+        "pending completion binding differs");
+    D::Check(cb.get<std::string>("schema")=="WJCompletedCallbackV1" && cp.integration.steps>0 &&
+        cb.get<std::size_t>("step")==cp.integration.steps && cb.get<std::string>("state_sha256")==hash &&
+        cb.get<std::string>("time_bits")==Bits(cp.integration.time) && Bits(cb.get<double>("time"))==Bits(cp.integration.time) &&
+        cb.get<double>("alpha_mass")==1/cp.integration.dt && cb.get<std::string>("alpha_bits")==Bits(1/cp.integration.dt) &&
+        b.get<std::string>("alpha_bits")==cb.get<std::string>("alpha_bits") &&
+        D::Hash(Doubles(cb,"callback_history"))==cb.get<std::string>("callback_history_sha256") &&
+        cb.get<std::string>("callback_history_sha256")==b.get<std::string>("callback_history_sha256") &&
+        D::Hash(Doubles(r,"last_stage_history"))==cb.get<std::string>("callback_history_sha256") &&
+        Bits(r.get<double>("last_stage_time"))==Bits(cp.integration.time) && r.get<double>("last_stage_alpha")==1/cp.integration.dt,
+        "pending genuine completed callback differs");
+    std::size_t i=0;for(const auto &v:r.get_child("native_history"))
+    {std::vector<double> h;for(const auto &x:v.second)h.push_back(x.second.get_value<double>());
+     D::Check(i<cp.integration.history.size() && D::Hash(h)==D::Hash(cp.integration.history[i++]),"pending GLM history differs");}
+    D::Check(i==cp.integration.history.size() && Doubles(r,"native_history_times")==cp.integration.times,"pending GLM labels differ");
+    return cb;
+}
+
 /** Execution-only bounded catalog. Eviction cannot suppress a call/definition. */
 class FactorCatalog
 {

@@ -267,6 +267,8 @@ public:
         const RANSWallEvolutionData &,bool condensed,bool enforce) const;
     const std::string &TemporalCouplingName() const { return m_temporalCoupling; }
     Vector InitializationWork() const { return {double(m_liftCalls),double(m_liftIterations)}; }
+    void SelectSubstepEvidence(bool due){if(m_checkpointEvidence)m_pimpleSnapshots=due;}
+
     const std::vector<std::string> &PimpleRecords() const { return m_pimpleRecords; }
     Diagnostic PhysicalSamples(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     bool PimpleKBoundEnabled() const { return m_pimpleKBound!="Off"; }
@@ -666,7 +668,7 @@ private:
     std::string m_pimpleKBound="Off",m_pimpleSnapshotDirectory="pimple-states";
     std::string m_pimpleKInventory="LegacyV1";
     double m_pimpleKFloorRelative=1e-8,m_pimpleBudgetTime=-1.;
-    bool m_pimpleSnapshots=false,m_pimpleArithmetic=false;
+    bool m_pimpleSnapshots=false,m_pimpleArithmetic=false,m_checkpointEvidence=false,m_boundedRecords=false;
     double m_pimpleArithmeticTime=-1;
     int m_kBoundMaxAdd=2000,m_kBoundMaxTotal=2000,m_kBoundMaxSeparations=2000;
     double m_kBoundMaxSeconds=900.;

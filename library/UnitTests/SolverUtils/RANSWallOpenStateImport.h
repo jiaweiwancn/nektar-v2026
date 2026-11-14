@@ -27,7 +27,19 @@ OpenImportedState ImportOpenState(RANSWallEvolutionPatch &patch,
             double dt;serial->LoadParameter("TimeStep",dt);
             const auto cp=RANSWallTimeIntegration::ReadCheckpoint(cpPath,signature,1,dt,patch.Size(),patch.DifferentialSize());
             const auto &state=cp.coupledState;const double time=cp.integration.time;
-            if(native.get<std::string>("retention_mode","")=="BoundedV1")
+            const auto importRole=packet.get<std::string>("import_role","QualifiedV1");
+            Require(importRole=="QualifiedV1" || importRole=="PendingNativeV1","unknown strict checkpoint import role");
+            if(importRole=="PendingNativeV1")
+            {
+                Require(native.get<std::string>("monitoring_policy","")=="CheckpointAuditV1","pending role requires explicit native completion protocol");
+                const auto &completion=packet.get_child("native_completion");
+                const auto callback=RANSWallMonitor::PendingCompletion(completion,cp);
+                const auto manifest=RANSWallMonitor::Read(completion.get<std::string>("path"));
+                Require(manifest.get<std::string>("checkpoint.sha256")==checkpointHash && manifest.get<std::string>("report.sha256")==reportHash,
+                    "pending selected producer/checkpoint differs");
+                (void)callback;
+            }
+            if(native.get<std::string>("retention_mode","")=="BoundedV1" && importRole=="QualifiedV1")
             {
                 Require(native.get<std::string>("schema")=="WJCompletedStepV1","bounded strict read requires a genuine completed producer");
                 const auto &side=packet.get_child("completed_sidecar"),&cursor=packet.get_child("qualified_cursor");

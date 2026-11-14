@@ -18,6 +18,14 @@ int main(int argc,char **argv)
         }
         std::filesystem::create_directories(root+"/durable/CP");M::Atomic(root+"/durable/CP/State.bin","synthetic checkpoint");
         M::CheckpointDirectories(root+"/durable/CP");
+        M::Tree schedule; schedule.put("recovery_stride",10);schedule.put("scientific_stride",100);
+        schedule.put("terminal_stride",50);schedule.put("terminal_start",180000);schedule.put("maximum_absolute_step",202010);schedule.put("dt_bits",M::Bits(.0025));
+        const auto cadence=M::CheckpointSchedule::From(schedule,.0025);
+        D::Check(!cadence.Scientific(99) && cadence.Scientific(100) && cadence.Recovery(110) &&
+            !cadence.Scientific(180025) && cadence.Scientific(180050) && cadence.Scientific(202010),"absolute/terminal/final cadence differs");
+        bool boundStop=false;try{M::StopOnBound("{\"bound_activations\":1}");}catch(const std::exception &){boundStop=true;}
+        D::Check(boundStop && !cadence.Scientific(1),"off-cadence StopOnBound disabled");
+        M::StopOnBound("{\"bound_activations\":0}");
         M::FactorCatalog c;c.Configure(root+"/catalog","fixed-mesh-signs-source");
         for(int i=0;i<1000;++i)c.Record("changed-numerical-zero-pattern-"+std::to_string(i),"{}");
         for(int i=0;i<100;++i)c.Record("changed-numerical-zero-pattern-999","{}");
