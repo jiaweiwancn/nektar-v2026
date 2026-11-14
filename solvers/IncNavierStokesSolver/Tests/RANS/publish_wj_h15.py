@@ -19,6 +19,9 @@ def table(path,records):
     with path.open('x',newline='')as f:
         w=csv.DictWriter(f,list(records[0]));w.writeheader();w.writerows(records)
 
+def immutable_operation(book,label):
+    return label in book['entries']and book['entries'][label]['status']!='RESERVED'
+
 def objects(root,build,source_commit):
     records=[];dependencies={}
     for v in load(build/'compile_commands.json'):
@@ -84,7 +87,7 @@ def main(root,source,version='v1'):
     copy(root/'science/target/execution-diff.json','controls/target-execution-diff.json')
     copy(root/'science/target/case.xml','controls/target-case.xml')
     copy(root/'science/target/intent.json','controls/target-monitor-intent.json')
-    atomic(out/'component-gates.json',dict(implementation_build='PASS',bounded_retention_small_controls='PASS',retained_CP0_CP1_observer_parity='PASS',small_native_attempts=10,
+    atomic(out/'component-gates.json',dict(implementation_build='PASS',bounded_retention_small_controls='PASS',retained_CP0_CP1_observer_parity='PASS',small_native_attempts=10,focused_python_distinct_methods=26,
         small_strict_view='PASS',target_native_attempts=1,target_reserved_maximum_attempts=4,target_native_completed=1,target_replay_bitwise='PASS',target_native_hard_admission='PASS',target_independent_physical_quality='PASS',
         target_protocol='OBSTRUCTED',target_independently_qualified=0,target_new_scientific_progress=0,target_stages_2_to_4='NOT_RUN',terminal_strict_original_qualified_CP0='PASS',completed_replay_strict_eligibility='NOT_QUALIFIED',
         repaired_protocol_synthetic_regression='PASS',repaired_native_build='PASS',repaired_governor_runtime_execution='NOT_RUN',post_repair_packet_fields_runtime_qualification='NOT_RUN',warm_multistep_route='NOT_QUALIFIED',
@@ -113,8 +116,9 @@ def main(root,source,version='v1'):
     for v in calls:assert max(0,v['resident_definitions'])<=16 and v['resident_key_bytes']<=32*1024**2
     atomic(out/'retention-and-factor-calls.json',dict(summary=summary,streamed_factor_calls=calls,complete_pattern_definitions=len(list((root/'science/target/monitor/factors').glob('factor-*.json'))),
         stream_roles='implicit attempt remains PROVISIONAL_NOT_TIME_COMMIT; ready packet is completed; prepared PASS is not native qualification commit',post_repair_added_packet_fields='compiled, not retrospectively inserted into original packets'))
-    logs=[];timing=[]
+    logs=[];timing=[];pending=[];book=load(root/'accounting.json')
     for folder in sorted((root/'operations').iterdir()):
+        if not immutable_operation(book,folder.name):pending.append(folder.name);continue
         dest=out/'operations'/folder.name;dest.mkdir()
         for name in ('request.json','receipt.json','receipt-recovered.json','native-exec-samples.json'):
             if(folder/name).exists():copy(folder/name,'operations/'+folder.name+'/'+name)
@@ -129,6 +133,7 @@ def main(root,source,version='v1'):
         with p.open('rb')as f,gzip.open(out/('target-'+name+'.gz'),'wb')as g:shutil.copyfileobj(f,g)
         logs.append(dict(raw=identity(p),compressed=identity(out/('target-'+name+'.gz'))))
     atomic(out/'compressed-log-bindings.json',logs);atomic(out/'native-timing.json',timing)
+    atomic(out/'unfinished-publication-operations.json',dict(operations=pending,role='active log/receipt excluded; completed versions are sealed separately at closure'))
     pid=load(root/'science/target/native-launch.json')['pid'];rows=[v for v in timing if v['pid']==pid]
     table(out/'target-native-disjoint-and-inclusive-timing.csv',[{k:v.get(k)for k in ('pid','step','time','name','calls','wall_seconds','exclusive_wall_seconds','process_cpu_seconds','clock_scope')}for v in rows])
     oldrate=live['native_compute_seconds']+live['measured_independent_seconds']

@@ -37,6 +37,16 @@ def tensor_fixture():
     r['offsets'].append(len(state));return r,state,c
 
 class PersistentMonitoring(unittest.TestCase):
+    def test_only_closed_operation_logs_can_be_sealed(self):
+        from publish_wj_h15 import immutable_operation
+        book={'entries':{'completed':{'status':'PASS'},'failure':{'status':'FAIL'},'active':{'status':'RESERVED'}}}
+        with tempfile.TemporaryDirectory()as d:
+            root=Path(d)
+            for name in book['entries']:(root/name).write_text(name)
+            selected={name:identity(root/name)for name in book['entries']if immutable_operation(book,name)}
+            (root/'active').write_text('appended timing and publisher output')
+            self.assertEqual(set(selected),{'completed','failure'})
+            for pin in selected.values():verify(pin)
     def test_reference_and_drift_scales_do_not_use_the_observed_error(self):
         from types import SimpleNamespace
         c=SimpleNamespace(K=.01,A=.002,H=.15,u_tau=.051)

@@ -15,7 +15,7 @@ from wj_h15_observer import verify,identity,atomic,vector_hash
 from wj3_measure import checkpoint_payload
 
 def verify_all(root):
-    out=root/'closure-v1';out.mkdir();pub=root/'publication-v2'
+    out=root/'closure-v2';out.mkdir();pub=root/'publication-v3'
     seal=load(pub/'seal.json');verify(seal['manifest']);m=load(pub/'manifest.json')
     for p in m['artifacts']:verify(p)
     heavy=load(pub/'remote-heavy-manifest.json')
@@ -39,6 +39,7 @@ def verify_all(root):
     assert t['initialization_work']==[0,0]and t['initializer_calls']==0
     assert load(root/'science/final-qualified-cp0-view/result.json')['status']=='PASS'
     assert 'Ran 25 tests'in (root/'operations/post-stop-passive-methods-v5/command.log').read_text()
+    assert 'Ran 1 test'in (root/'operations/publication-snapshot-regression-v1/command.log').read_text()
     science=size(root/'science');entire=size(root)
     source_build=sum(size(p)for p in root.iterdir()if p.name.startswith(('source','build','runtime')))
     # Stronger than the science-only output limit for this small failed prefix.
@@ -52,7 +53,7 @@ def verify_all(root):
     print('H15 compact/heavy/lineage verification PASS',flush=True)
 
 def finalize(root):
-    out=root/'closure-v1';assert load(out/'verification.json')['status']=='PASS'
+    out=root/'closure-v2';assert load(out/'verification.json')['status']=='PASS'
     def close(b):
         assert not b['closed']
         assert all(v['status']!='RESERVED'for v in b['entries'].values())
@@ -63,11 +64,19 @@ def finalize(root):
             final_outcome='OBSTRUCTED_PROTOCOL',target_actual_attempts=1,target_actual_completed=1,target_independently_qualified=0,target_new_scientific_progress=0,target_unlaunched=3,
             small_verification_attempts=10,fresh_CP0s=0,new_strict_readbacks=2,unknown_duration_charged_seconds=sum(v['seconds']for v in b['entries'].values()if v.get('unknown_duration_charged')))
     update_journal(root/'accounting.json',close);atomic(out/'accounting-final.json',load(root/'accounting.json'))
-    atomic(out/'seal.json',dict(accounting=identity(out/'accounting-final.json'),verification=identity(out/'verification.json'),publication=identity(root/'publication-v2/manifest.json'),historical_first_partial=identity(root/'publication-v1-partial-status.json')))
-    archive=root/'h15-compact-final-v2.tar.gz'
+    logs=[]
+    for label in ('compact-publication-v3','closure-verification-v1','closure-verification-v2'):
+        folder=root/'operations'/label;dest=out/label;dest.mkdir()
+        import shutil
+        for name in ('request.json','receipt.json'):shutil.copyfile(folder/name,dest/name)
+        with(folder/'command.log').open('rb')as f,gzip.open(dest/'command.log.gz','wb')as g:shutil.copyfileobj(f,g)
+        logs.append(dict(raw=identity(folder/'command.log'),compressed=identity(dest/'command.log.gz')))
+    atomic(out/'final-log-bindings.json',logs)
+    atomic(out/'seal.json',dict(accounting=identity(out/'accounting-final.json'),verification=identity(out/'verification.json'),publication=identity(root/'publication-v3/manifest.json'),historical_first_partial=identity(root/'publication-v1-partial-status.json'),final_logs=identity(out/'final-log-bindings.json')))
+    archive=root/'h15-compact-final-v3.tar.gz'
     with tarfile.open(archive,'x:gz')as t:
-        for name in ('publication-v1','publication-v1-partial-status.json','publication-v2','closure-v1'):t.add(root/name,arcname=name)
-    atomic(root/'compact-transport-v2.json',dict(archive=identity(archive),publication=identity(root/'publication-v2/manifest.json'),closure=identity(out/'seal.json')))
+        for name in ('publication-v1','publication-v1-partial-status.json','publication-v2','publication-v3','closure-v1','closure-v2'):t.add(root/name,arcname=name)
+    atomic(root/'compact-transport-v3.json',dict(archive=identity(archive),publication=identity(root/'publication-v3/manifest.json'),closure=identity(out/'seal.json')))
     print(json.dumps(dict(total_charged_seconds=load(root/'accounting.json')['total_charged_seconds'],transport=identity(archive))),flush=True)
 
 if __name__=='__main__':
