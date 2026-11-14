@@ -60,7 +60,7 @@ def collect(rt,folder,ini,r,c,weights,count,zero):
     return row
 
 
-def comparison(result,initials,natives,c,weights,count):
+def comparison(result,initials,natives,c,weights,count,classifier=pair):
     target=result['target'];keys=list(result['members']);result['same_actual_initial']=all(x['actual_initial_sha256']==result['members'][keys[0]]['actual_initial_sha256'] for x in result['members'].values());result.update(temporal={},traction_temporal={},common_times=[])
     if all(abs(natives[k]['time']-target)<1e-13 for k in keys):
         end=[n.observations(initials[k],natives[k]['state'],count) for k in keys];d=n.norms(*end,weights,initials[keys[0]]['observation']['grid_regions'][:count],c)
@@ -72,7 +72,7 @@ def comparison(result,initials,natives,c,weights,count):
     left={round(t,12):s for t,s in zip(natives[keys[0]]['audit_times'],natives[keys[0]]['accepted_states'],strict=True)};right={round(t,12):s for t,s in zip(natives[keys[1]]['audit_times'],natives[keys[1]]['accepted_states'],strict=True)}
     for t in sorted(left.keys()&right.keys()):
         d=n.norms(*(n.observations(initials[k],s,count) for k,s in zip(keys,(left[t],right[t]),strict=True)),weights,initials[keys[0]]['observation']['grid_regions'][:count],c);result['common_times'].append(dict(time=t,fields=d))
-    result['qualification']=pair(result);return result
+    result['qualification']=classifier(result);return result
 
 
 def advance(a):
