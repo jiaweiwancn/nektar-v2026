@@ -36,6 +36,9 @@ def capacity(result):
     if result.get('schema')!='CT9FlatCapacityV1' or set(rows)!=set(expected):reasons.append('missing_or_foreign_capacity')
     for name,count in expected.items():
         row=rows.get(name,{});q=row.get('sparse_backend',{})
+        for identity in (row.get('native_signature',''),q.get('identity','')):
+            if any(k not in identity for k in ('A95:OriginalHighRe-v1','SamePhysicalWallDisplacedAcceptedV1','CT8PhysicalBelow25mmEqualIds012V1','EigenLU-LDLT-IR3-F40M')):reasons.append(name+':foreign_operator_or_physics')
+        if not row.get('history_sha256') or not row.get('zero_state_sha256') or not row.get('native_report_sha256'):reasons.append(name+':missing_state_history_identity')
         if row.get('status')!='static_capacity_pass' or row.get('zero_time')!=0. or row.get('startup_physical_failure'):reasons.append(name+':incomplete_startup')
         if row.get('native_count',{}).get('stored_slots')!=count or q.get('stored_slots')!=count:reasons.append(name+':native_count')
         for phase in ('startup_execution','frozen_execution'):

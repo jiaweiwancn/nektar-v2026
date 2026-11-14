@@ -7,11 +7,12 @@ from ct_accepted9_gate import backend_controls,backend_trajectory,capacity
 def capacity_fixture():
     result=dict(schema='CT9FlatCapacityV1',status='pass',cases={})
     for name,count in [('intermediate-p3',8864),('target-p3',33267),('target-p4',60907)]:
-        q=dict(stored_slots=count,pressure_C_nnz=0,pressure_iterations=2,masses=[dict(rows=3,nnz=7) for _ in range(6)],scalars=[dict(block=b,rhs_maximum=1.,maximum_true_residual=0.) for b in (2,3)])
+        identity='A95:OriginalHighRe-v1:SamePhysicalWallDisplacedAcceptedV1:CT8PhysicalBelow25mmEqualIds012V1:EigenLU-LDLT-IR3-F40M'
+        q=dict(identity=identity,stored_slots=count,pressure_C_nnz=0,pressure_iterations=2,masses=[dict(rows=3,nnz=7) for _ in range(6)],scalars=[dict(block=b,rhs_maximum=1.,maximum_true_residual=0.) for b in (2,3)])
         q.update(dict.fromkeys(('flow_rows','flow_nnz','velocity_rows','pressure_rows','predictor_factor_nnz','consistent_mass_factor_nnz','pressure_preconditioner_factor_nnz'),1))
         q.update(dict.fromkeys(('predictor_rhs_maximum','pressure_rhs_maximum','consistent_mass_correction_rhs_maximum'),1.))
         q.update(dict.fromkeys(('predictor_residual','true_pressure_residual','consistent_mass_correction_true_residual','full_native_G_action_defect','true_continuity','splitting_identity'),0.))
-        result['cases'][name]=dict(status='static_capacity_pass',zero_time=0.,startup_physical_failure='',native_count=dict(stored_slots=count),sparse_backend=q,reference_agreement=dict(status='pass'),startup_execution=dict(exit_code=0),frozen_execution=dict(exit_code=0))
+        result['cases'][name]=dict(status='static_capacity_pass',zero_time=0.,startup_physical_failure='',native_signature=identity,history_sha256='history',zero_state_sha256='state',native_report_sha256='native',native_count=dict(stored_slots=count),sparse_backend=q,reference_agreement=dict(status='pass'),startup_execution=dict(exit_code=0),frozen_execution=dict(exit_code=0))
     return result
 
 def trajectory_fixture():
@@ -47,7 +48,7 @@ def main():
     for mutate in [lambda q:q['equivalence'].pop('0.001'),lambda q:q['equivalence']['0.001']['common_times'].pop(),lambda q:q['equivalence']['0.002']['common_times'][1]['fields']['Pi'].__setitem__('weighted_RMS',1e-6),lambda q:q['equivalence']['0.001']['common_times'][1]['fields']['U'].__setitem__('weighted_RMS',float('nan')),lambda q:q['equivalence']['0.002'].__setitem__('sparse_report','foreign'),lambda q:q['temporal']['Pi']['difference'].__setitem__('weighted_RMS',0.)]:
         bad=copy.deepcopy(good);mutate(bad);assert backend_trajectory(bad)['status']=='fail'
     good=capacity_fixture();assert capacity(good)['status']=='pass'
-    for mutate in [lambda q:q['cases'].pop('target-p4'),lambda q:q['cases']['target-p3']['sparse_backend'].__setitem__('true_pressure_residual',1e-6),lambda q:q['cases']['intermediate-p3']['sparse_backend']['scalars'].pop(),lambda q:q['cases']['target-p4']['sparse_backend'].__setitem__('pressure_rhs_maximum',float('nan')),lambda q:q['cases']['target-p3']['frozen_execution'].__setitem__('exit_code',1)]:
+    for mutate in [lambda q:q['cases'].pop('target-p4'),lambda q:q['cases']['target-p3']['sparse_backend'].__setitem__('true_pressure_residual',1e-6),lambda q:q['cases']['intermediate-p3']['sparse_backend']['scalars'].pop(),lambda q:q['cases']['target-p4']['sparse_backend'].__setitem__('pressure_rhs_maximum',float('nan')),lambda q:q['cases']['target-p3']['frozen_execution'].__setitem__('exit_code',1),lambda q:q['cases']['target-p3'].__setitem__('native_signature','old'),lambda q:q['cases']['target-p4'].__setitem__('history_sha256','')]:
         bad=copy.deepcopy(good);mutate(bad);assert capacity(bad)['status']=='fail'
     code=subprocess.run([sys.executable,'-B',str(Path(__file__).resolve()),'--failed-required']).returncode;assert code==1
     print('CT9 required-scope primitives and process-exit negative controls pass');return 0

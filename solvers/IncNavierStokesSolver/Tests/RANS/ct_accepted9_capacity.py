@@ -15,6 +15,7 @@ from ct_accepted9_gate import capacity as capacity_gate
 from ct_accepted9_pressure_run import sealed
 from ct_accepted7_domain import X
 from ct_accepted_open import run,probe,require
+from ct_accepted_pilot import artifact_hash
 from ct_accepted_feasibility import write_json
 from run_cls_epawf_picard import set_info,write
 from rans_request_manifest import RequestManifest,sha,runtime_identity
@@ -51,7 +52,7 @@ def main():
                 require(e['exit_code']!=0 and '64 steps' in packet.get('failure',''),'unbounded diagnostic retention accepted')
                 row['bounded_segment_negative']=dict(status='pass',reason=packet['failure'],execution=e)
             os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'initial-timing.jsonl');e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');os.environ.pop('NEKTAR_RANS_TIMING_FILE',None);row['startup_execution']=e
-            require((folder/'case.evolution.json').exists(),'fresh zero-step report unavailable');native=n.read(folder/'case.evolution.json');row.update(zero_time=native['time'],zero_state_sha256=exact_vector_hash(native['state']),history=native['checkpoint'],native_report_sha256=sha(folder/'case.evolution.json'),initialization=native['initialization_receipt'],startup_physical_failure=native['failure'],initial_raw_spatial_norms=native.get('raw_reference_norms'))
+            require((folder/'case.evolution.json').exists(),'fresh zero-step report unavailable');native=n.read(folder/'case.evolution.json');row.update(zero_time=native['time'],zero_state_sha256=exact_vector_hash(native['state']),history=native['checkpoint'],history_sha256=artifact_hash(native['checkpoint']),native_signature=native['signature'],native_report_sha256=sha(folder/'case.evolution.json'),initialization=native['initialization_receipt'],startup_physical_failure=native['failure'],initial_raw_spatial_norms=native.get('raw_reference_norms'))
             require(e['exit_code']==0 and not native['failure'] and native['time']==0.,'zero-step startup/domain failed:'+str(native['failure']))
             g,s=samples(cc);req=dict(operation='functions',grid=g,grid_sides=s,export_test_basis=True,export_constitutive=True,export_neutral_composite_reference=True,export_sparse_backend=True,sparse_alpha=500.)
             os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'frozen-timing.jsonl');q,e=probe(a.runtime,folder,req,'frozen');os.environ.pop('NEKTAR_RANS_TIMING_FILE',None);row['frozen_execution']=e;require(e['exit_code']==0,'frozen native sparse operation failed:'+str(q.get('failure')))
