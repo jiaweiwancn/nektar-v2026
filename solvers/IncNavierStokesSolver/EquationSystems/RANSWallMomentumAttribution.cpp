@@ -48,7 +48,8 @@ std::string RANSWallEvolutionPatch::MomentumAttributionPacket(const Vector &stat
     auto add=[&](int version,const std::string &key,const std::string &element,int block,
         const RANSWallGlobalPoint &q,double value,const RANSVector &flux,double weight)
     {
-        auto &terms=version?analytic:actual;auto [at,inserted]=terms.try_emplace(key,Vector(nm));(void)inserted;
+        auto &terms=version?analytic:actual;auto at=terms.find(key);
+        if(at==terms.end())at=terms.emplace(key,Vector(nm)).first;
         for(int j=0;j<q.ids.size();++j)
         {
             long double v=q.phi[j]*value;
