@@ -159,6 +159,16 @@ def preflight(a):
         out['status']='pass' if mat['status']==dom['status']==ref['status']=='pass' else 'fail';result['initial'][str(dt)]=out;hashes.append(out['state_sha256'])
         write_json(a.output/'progress.json',result)
     result['same_space_actual_initial_equal']=len(set(hashes))==1
+    # One declared read-only degree contrast on the identical physical grid.
+    # Different native coefficients are expected; compare physical values.
+    cc=copy.deepcopy(c);cc.update(degree=3,pressure_degree=1);dest=a.output/'physical-p3';make(dest,a.runtime,cc,.002,0)
+    pp,pe=probe(a.runtime,dest,request(cc),'projection');require(pe['exit_code']==0,'P3 represented reference domain failed')
+    pm=physical_metrics(pp,pp['observation']['state'],cc,weights,n);fine=read(a.output/'initial-0.002/initial.json')
+    delta=norms(observations(pp,pp['observation']['state'],n),observations(fine,fine['observation']['state'],n),weights,pp['observation']['grid_regions'][:n],c)
+    result['projection_contrast']=dict(coarse_P3=pm,fine_P4=result['initial']['0.002']['metrics'],physical_difference=delta,
+        coarse_unanchored_spatial_audit=pp['observation'].get('audit_alpha_zero'),fine_unanchored_spatial_audit=fine['observation'].get('audit_alpha_zero'),
+        continuous_inputs_identical=True,grid_and_sides_identical=pp['observation']['grid']==fine['observation']['grid'] and pp['observation']['grid_sides']==fine['observation']['grid_sides'],
+        scope='static reference representations, not evolved spatial convergence or a measured degree order')
     result['status']='pass' if result['same_space_actual_initial_equal'] and all(r['status']=='pass' for r in result['initial'].values()) else 'failed_initial_accuracy_or_domain'
     result['flow_through_estimate']=dict(mean_speed=col(c).t0*col(c).J0,time=(c['x'][-1]-c['x'][0])/(col(c).t0*col(c).J0),definition='interface velocity scale; full-height logarithm has no single uniform transit')
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return result
