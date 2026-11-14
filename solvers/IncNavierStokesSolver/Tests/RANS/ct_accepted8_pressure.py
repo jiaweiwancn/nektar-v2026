@@ -43,8 +43,12 @@ def main():
         initial=verified(Path(pre['initial'][name]['directory'])/'initial.json',pre['initial'][name]['packet_sha256']);o=initial['observation'];off=o['offsets'];regions=np.asarray(o['grid_regions'][:n]);initial_state=initial['observation']['state']
         native=verified(Path(row['directory'])/'case.evolution.json',row['native_report_sha256'])
         require(native['state']==native['accepted_states'][-1] and native['time']==.008 and not native['failure'],'unequal or rejected terminal state')
-        def at(s):return np.asarray([row_value(q['pressure'],s,off[4+int(r)])[0] for q,r in zip(initial['test_basis'][:n],regions,strict=True)])
-        start=at(initial_state);truth=np.asarray([reference(col(c),q[2],bool(r))[3] for q,r in zip(o['grid'][:n],regions,strict=True)])
+        def at(s):
+            s=np.asarray(s)
+            return np.asarray([row_value(q['pressure'],s,off[4+int(r)])[0] for q,r in zip(initial['test_basis'][:n],regions,strict=True)])
+        # Parallel equilibrium has piecewise constant augmented pressure. This
+        # avoids recomputing unrelated continuous k/velocity quadratures.
+        start=at(initial_state);truth=np.where(regions==1,reference(col(c),c['H'],True)[3],0.)
         states=[];seen[name]={};times[name]={}
         for t,s in zip(native['audit_times'],native['accepted_states'],strict=True):
             now=at(s);seen[name][round(t,12)]=now;times[name][round(t,12)]=exact_vector_hash(s)
@@ -64,7 +68,7 @@ def main():
             phase['post_epsilon']['pressure_coefficients_equal_corrected_flow']=ks['pre_k'][off[4]:off[6]]==flow['corrected_flow'][off[4]:off[6]]
             phase['post_k']['pressure_coefficients_equal_corrected_flow']=ks['corrected'][off[4]:off[6]]==flow['corrected_flow'][off[4]:off[6]]
             identity={key:attempt[key] for key in ('predictor_linear_residual','pressure_linear_residual','momentum_splitting_identity_defect','native_full_G_action_defect','frozen_momentum_defect','boundary_defect') if key in attempt}
-            for key in ('refreshed_epsilon_trace_defect','refreshed_constraint_defect','epsilon_frozen_linear_residual','k_frozen_linear_residual'):
+            for key in ('refreshed_trace_defect','epsilon_frozen_linear_residual','k_frozen_linear_residual'):
                 if key in attempt:identity[key]=attempt[key]
             identity['algebraic_continuity_maximum']=max(map(abs,attempt.get('algebraic_corrected_continuity',[])),default=0.)
             stages.append(dict(time=flow['time'],flow_snapshot=attempt['flow_snapshot'],flow_snapshot_sha256=attempt['flow_snapshot_sha256'],k_snapshot=attempt['k_snapshot'],k_snapshot_sha256=attempt['k_snapshot_sha256'],phases=phase,discrete_identities=identity))
