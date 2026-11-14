@@ -47,6 +47,8 @@ def target_pair(q):
                 x=v.get('traction',{}).get(k)
                 if not finite(x) or not 0<=x<=.001:reasons.append(name+':traction:'+k)
         if physical_budgets(r.get('budgets',{}))['status']!='pass':reasons.append(name+':budget_coverage_or_accuracy')
+        binding=r.get('budgets',{}).get('budget_binding',{})
+        if not binding or binding.get('state_sha256')!=r.get('state_sha256') or binding.get('configuration_sha256')!=r.get('configuration_sha256') or binding.get('native_report_sha256')!=r.get('native_report_sha256') or binding.get('dt')!=r.get('dt') or binding.get('time')!=r.get('time'):reasons.append(name+':budget_state_configuration_identity')
         cap=r.get('budgets',{}).get('captured_k_matrix',{});x,s=cap.get('maximum_defect'),cap.get('scale')
         if not finite(x) or x<0 or not finite(s) or s<=0 or x/s>2e-10:reasons.append(name+':captured_scalar_operator')
         b=r.get('initialization_receipt',{})
@@ -67,14 +69,15 @@ def target_pair(q):
 
 def bounded_budgets(rt,folder,ini,r,c):
     """Same existing physical integration; omit redundant exported volume rows."""
-    result=dict(budgets={});attempt=next(x for x in reversed(r['pimple_attempts']) if x['scheduled_complete']);path=Path(attempt['k_snapshot']);require(sha(path)==attempt['k_snapshot_sha256'],'changed actual target scalar stage');snap=n.read(path)
+    binding=dict(model=c['model'],policy=c['wall_policy'],dt=r['dt'],time=r['time'],state_sha256=exact_vector_hash(r['state']),configuration_sha256=sha(folder/'case.xml'),native_report_sha256=sha(folder/'case.evolution.json'),actual_k_stage_sha256=r['pimple_attempts'][-1]['k_snapshot_sha256'])
+    result=dict(budgets={},budget_binding=binding);attempt=next(x for x in reversed(r['pimple_attempts']) if x['scheduled_complete']);path=Path(attempt['k_snapshot']);require(sha(path)==attempt['k_snapshot_sha256'],'changed actual target scalar stage');snap=n.read(path)
     for label,orders,face in n.CONTROLS:
         dest=folder/label;dest.mkdir();root=ET.parse(folder/'case.xml').getroot()
         for k,v in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),orders,strict=True):set_parameter(root,k,v)
         write(root,dest/'case.xml');req=replay(ini,r['state'],r['time'],[],export_physical_scalar_budget=True,export_frozen_scalar_reconciliation=True,previous_state=r['accepted_states'][-2],stage_history=snap['history'],actual_flow_stage=snap['post_flow'],actual_pre_k_stage=snap['pre_k'],physical_face_order=face)
         try:
             q,e=probe(rt,dest,req,'budget');require(e['exit_code']==0,'native target physical budget failed:'+str(q.get('failure')));require(q['observation']['state']==r['state'] and q['observation']['identity']==ini['observation']['identity'],'target budget state/identity mismatch')
-            b=budget_classification(q,c);b.update(execution=e,packet_sha256=sha(dest/'budget.json'),state_sha256=exact_vector_hash(r['state']));result['budgets'][label]=b
+            b=budget_classification(q,c);b.update(execution=e,packet_sha256=sha(dest/'budget.json'),state_sha256=exact_vector_hash(r['state']),binding=binding,control_configuration_sha256=sha(dest/'case.xml'));result['budgets'][label]=b
             if label=='native':result['captured_k_matrix']=captured_k_matrix(q,snap)
         except Exception as err:result['budgets'][label]=dict(status='failed_required_control',reason=repr(err),directory=str(dest))
         write_json(folder/'budget-progress.json',result)
@@ -94,11 +97,11 @@ def main():
         name=str(dt);zero=a.output/('zero-'+name);n.make(zero,a.runtime,c,dt,0);enable(zero);e=run([a.runtime/'IncNavierStokesSolver','case.xml'],zero,'solver.log');z=n.read(zero/'case.evolution.json');require(e['exit_code']==0 and not z['failure'] and z['time']==0. and exact_vector_hash(z['state'])==pre['actual_initial_sha256'],'fresh target zero-step state differs from admitted actual representation')
         require(z['state']==ini['observation']['state'],'initial target coefficient mismatch');require(first is None or first==z['state'],'timestep target initial coefficients differ');first=z['state'];initials[name]=ini
         folder=a.output/name;n.make(folder,a.runtime,c,dt,round(.002/dt),Path(z['checkpoint']),zero/'case.xml');os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'timing.jsonl');e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');os.environ.pop('NEKTAR_RANS_TIMING_FILE',None);r=n.read(folder/'case.evolution.json');require(r['accepted_states'][0]==z['state'],'target did not consume native history')
-        row=dict(dt=dt,time=r['time'],directory=str(folder),failure=r['failure'],signature=r['signature'],execution=e,actual_initial_sha256=exact_vector_hash(z['state']),native_report_sha256=sha(folder/'case.evolution.json'),history_sha256=artifact_hash(r['checkpoint']),initialization_receipt=r['initialization_receipt'])
+        row=dict(dt=dt,time=r['time'],directory=str(folder),failure=r['failure'],signature=r['signature'],execution=e,actual_initial_sha256=exact_vector_hash(z['state']),state_sha256=exact_vector_hash(r['state']),configuration_sha256=sha(folder/'case.xml'),native_report_sha256=sha(folder/'case.evolution.json'),history_sha256=artifact_hash(r['checkpoint']),initialization_receipt=r['initialization_receipt'])
         row['accepted_metrics']=[dict(time=t,**n.physical_metrics(ini,s,c,weights,count)) for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)];row['traction_history']=[dict(time=t,profile=profiles(ini,s,c)) for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)];row['actual_initial_traction_profile']=profiles(ini,z['state'],c)
         fixed=inventory(ini['test_basis'],ini['observation']['grid'],r['state'],ini['observation']['offsets'],'A95',ini['observation']['grid_sides']);row['domain']=dict(status='pass' if not r['failure'] and fixed['domain_failure_count']==0 and fixed['minima']['covariance']['value']>=-1e-10*c['K0'] else 'fail',fixed=fixed,native_scope='mandatory production accepted-state and stage checks retained in native report',native_audited_extrema=audited_extrema(r))
         row['budgets']=bounded_budgets(a.runtime,folder,ini,r,c) if r['steps'] else dict(gate=dict(status='missing'))
-        req=replay(ini,r['state'],r['time'],[],export_constitutive=True);q,pe=probe(a.runtime,folder,req,'constitutive');row['constitutive']=constitutive_comparison(q,c) if pe['exit_code']==0 else dict(status='fail',failure=q.get('failure'))
+        grid,sides,_,_=n.inventory(c);req=replay(ini,r['state'],r['time'],grid,grid_sides=sides,export_constitutive=True);q,pe=probe(a.runtime,folder,req,'constitutive');row['constitutive']=constitutive_comparison(q,c) if pe['exit_code']==0 else dict(status='fail',failure=q.get('failure'))
         row['corrections']=sum(x.get('bound_calls',0) for x in r['pimple_attempts']);row['extra_solves']=sum(x.get('additional_governing_equation_solves',0) for x in r['pimple_attempts']);row['actual_stage_checks']=[{k:x.get(k) for k in ('time','pressure_krylov_iterations','frozen_momentum_defect','corrected_continuity_gauge','bound_calls','additional_governing_equation_solves')} for x in r['pimple_attempts']];out['members'][name]=row;reports[name]=r;write_json(a.output/'progress.json',out);print('CT10 target',name,r['time'],r['failure'],flush=True)
     # Reuse the common arithmetic, with this separately versioned target gate.
     comparison(out,initials,reports,c,weights,count,classifier=target_pair)
