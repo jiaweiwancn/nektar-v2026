@@ -57,6 +57,22 @@ def compact_pair(q):
         out['members'][name]['actual_stage_checks']=[{k:q.get(k) for k in keys} for q in native['pimple_attempts']]
     return out
 
+def failure_witnesses(root):
+    """Preserve first attempts without copying large native state packets."""
+    out={}
+    for label in ('build-v1','build-v2','build-v6','controls-v1','pressure-finer-v1','capacity-v1','linear-recheck-intermediate-v1','linear-recheck-p4-v1'):
+        folder=root/label
+        if not folder.exists():continue
+        paths=[p for p in (folder/'request-manifest.json',folder/'completed-artifacts.json',folder/'results.json',folder/'progress.json',folder/'0.log',folder/'1.log') if p.exists()]
+        row=dict(path=str(folder),artifacts={p.name:dict(sha256=sha(p),bytes=p.stat().st_size) for p in paths})
+        if (folder/'results.json').exists():
+            q=n.read(folder/'results.json');row.update(status=q.get('status'),failure=q.get('failure'),qualification=q.get('qualification'))
+            if label=='capacity-v1':
+                row['cases']={name:{k:compact(r[k]) for k in ('status','failure','native_count','zero_state_sha256','native_report_sha256','history','startup_execution','frozen_execution') if k in r} for name,r in q['cases'].items()}
+            if label=='controls-v1':row['checks']={name:{k:r[k] for k in ('status','failure') if k in r} for name,r in q['checks'].items()}
+        out[label]=row
+    return out
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','ct8','output'):p.add_argument('--'+k,type=Path,required=True)
@@ -70,6 +86,12 @@ def main():
         else:sources[label]=dict(status='missing_or_incomplete',path=str(path))
     m=RequestManifest(a.output,dict(schema='CT9FinalEvidenceV1',source=sha(Path(__file__)),sources=sources,contract=sha(Path(__file__).resolve().parents[4]/'docs/plans/cao-tamura-accepted-9-evidence/contract.json')))
     pressure=bodies.get('pressure-comparison-v2');diagnosis=bodies.get('pressure-diagnosis-v1');controls=bodies.get(a.controls);equivalence=bodies.get(a.equivalence);capacity=bodies.get(a.capacity);build=bodies.get(a.build)
+    binding={};expected=build['runtime']['IncNavierStokesSolver'] if build else None
+    for label in (a.controls,a.equivalence,a.capacity):
+        request=a.root/label/'request-manifest.json'
+        actual=n.read(request)['request'].get('runtime') if request.exists() else None
+        binding[label]=dict(status='pass' if expected and actual==expected else 'fail',runtime=actual)
+    write_json(a.output/'runtime-binding.json',compact(binding))
     if pressure:
         write_json(a.output/'pressure-pair.json',compact(compact_pair(pressure)));write_json(a.output/'pressure-vectors.json',pressure_vectors(a.root,a.ct8))
     if diagnosis:write_json(a.output/'pressure-diagnosis.json',compact(diagnosis))
@@ -86,6 +108,7 @@ def main():
                 if key in row:row[key]={k:v for k,v in row[key].items() if k not in ('effective_initial','live_fixed_boundary')}
         write_json(a.output/'capacity.json',compact(cap))
     if build:write_json(a.output/'runtime.json',compact(build))
+    write_json(a.output/'retained-attempts.json',failure_witnesses(a.root))
     profiles={str(p.relative_to(a.root)):timing(p) for p in list((a.root/a.equivalence).glob('*/timing.jsonl'))+list((a.root/a.capacity).glob('*/*-timing.jsonl'))}
     write_json(a.output/'cost.json',profiles)
     resources={}
@@ -95,9 +118,10 @@ def main():
     write_json(a.output/'resources.json',compact(resources));write_json(a.output/'loaded-libraries.json',LIBRARIES)
     decision=dict(schema='CT9RequiredScopeV1',physical_reference='CT8 central mathematical feasibility retained; eight failed extraction corners unchanged',pressure_reconstruction='pass' if diagnosis and diagnosis['status']=='pass' else 'incomplete',pressure_uncertainty=pair(pressure) if pressure else dict(status='incomplete'),backend_operator='pass' if controls and backend_controls(controls)['status']=='pass' else 'failed_or_incomplete',backend_trajectory='pass' if equivalence and backend_trajectory(equivalence)['status']=='pass' else 'failed_or_incomplete',capacity=capacity_gate(capacity) if capacity else dict(status='incomplete'),resources='pass' if resource_pass else 'failed_or_incomplete',target_preservation='not_admitted',terrain_readiness='unsupported mapped field numbering/operators and historical curved temporal/degree gates remain open',sources=sources)
     decision['physical_continuation_admitted']=False
+    decision['runtime_binding']='pass' if all(q['status']=='pass' for q in binding.values()) else 'fail'
     decision['resource_closure']='listed numerical experiment controls are closed; final collector receipt must be bound after this process exits in the publication scope'
     # A completed investigation may have an explicit failed physical gate.
     # Its completion cannot become permission to evolve the target domain.
-    decision['investigation_completion']='complete' if decision['pressure_reconstruction']==decision['backend_operator']==decision['backend_trajectory']==decision['resources']=='pass' and decision['capacity']['status']=='pass' and pressure else 'incomplete'
+    decision['investigation_completion']='complete' if decision['pressure_reconstruction']==decision['backend_operator']==decision['backend_trajectory']==decision['resources']==decision['runtime_binding']=='pass' and decision['capacity']['status']=='pass' and pressure else 'incomplete'
     write_json(a.output/'decision.json',decision);files=[f.name for f in a.output.iterdir() if f.suffix=='.json' and f.name not in ('request-manifest.json','completed-artifacts.json')];m.seal(a.output,files);print(decision,flush=True);return 0 if decision['investigation_completion']=='complete' else 1
 if __name__=='__main__':raise SystemExit(main())
