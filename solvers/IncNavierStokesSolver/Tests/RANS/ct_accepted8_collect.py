@@ -78,6 +78,11 @@ def main():
     for root in ('controls-v1','assessment-v1'):
         f=a.root/root/'results.json'
         if f.exists():q=read(f);failures[root]=dict(path=str(f),sha256=sha(f),status=q.get('status'),failure=q.get('failure'),scope='retained independent diagnostic preparation')
+    f=a.root/'completion-jobs-v1/results.json'
+    if f.exists():
+        for i,row in enumerate(read(f)['jobs']):
+            if row['exit_code']!=0:
+                log=f.parent/(str(i)+'.log');failures['completion-job-'+str(i)]=dict(execution=row,log=str(log),log_sha256=sha(log),log_tail=log.read_text()[-3000:],scope='independent diagnostic execution failure, not a new physical trajectory or a relabelled qualification')
     write_json(a.output/'failed-preparations.json',failures)
     write_json(a.output/'decision.json',dict(schema='CT-Accepted-8-DecisionV1',scopes=scopes,
         physical_applicability='conditional central flat idealization; not experimental calibration/validation, developed precursor or terrain admission',
