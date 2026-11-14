@@ -233,6 +233,21 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_wallParameters=CalibratedAWFParameters(parameters.model);
         m_options.formulation=NewModels()?AWFProfileFormulation::AcceptedBudgetAWF:AWFProfileFormulation::CLSCalibratedBudgetAWF;
     }
+    std::string displacedPolicy;
+    session->LoadSolverInfo("RANSWallDisplacementPolicy",displacedPolicy,"UnshiftedV1");
+    Require(displacedPolicy=="UnshiftedV1" || displacedPolicy=="SamePhysicalWallDisplacedAcceptedV1",
+        "unknown Accepted displacement policy");
+    if(displacedPolicy=="SamePhysicalWallDisplacedAcceptedV1")
+    {
+        session->LoadParameter("RANSOpenDisplacement",m_options.aerodynamicDisplacement);
+        Require(AcceptedAWF() && parameters.model.Model()==RANSModel::A95 &&
+            parameters.model.KappaPolicy()==RANSKappaPolicy::Natural && !Mapped() && m_dimension==2 &&
+            m_comm->GetSize()==1 && RichardsNorrisTop() &&
+            std::isfinite(m_options.aerodynamicDisplacement) && m_options.aerodynamicDisplacement>=0 &&
+            m_options.aerodynamicDisplacement<parameters.geometry.height,
+            "SamePhysicalWallDisplacedAcceptedV1 native scope is Natural A95 serial flat2D Richards-Norris one-sweep with 0<=d<H");
+        m_options.displacementPolicy=AWFDisplacementPolicy::SamePhysicalWallDisplacedAcceptedV1;
+    }
     session->LoadSolverInfo("RANSWallKSampling",m_kSampling,"Point");
     std::string comparison;session->LoadSolverInfo("RANSWallComparison",comparison,"Off");
     Require(comparison=="Off" || comparison=="HeightV1" || comparison=="AcceptedAWFV1","unknown comparison family");
@@ -1755,6 +1770,7 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(fields[0]->Elements().front().Directional(m_dimension))
         text<<":layout=UniformDirectionalModifiedA2DV1";
     if(OpenBoundary())text<<":boundary="<<m_openBoundaryIdentity;
+    if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();
     if(NewModels())text<<":resolved="<<m_parameters.model.Signature();

@@ -91,7 +91,7 @@ def constitutive_comparison(packet,construction):
 
 
 def budget_classification(packet,construction):
-    b=packet['physical_scalar_budget'];c=construction;K=c['K0'];eH=c['reference_column']['counterfactual']['epsilon_amplitude']/c['H']
+    b=packet['physical_scalar_budget'];c=construction;K=c['K0'];eH=c['reference_column']['counterfactual']['epsilon_amplitude']/(c['H']-c.get('displacement',0.))
     equations={};total_k={k:sum(b['equations'][r][k] for r in ('inner_k','outer_k')) for k in b['equations']['inner_k']}
     interfaces={0:0.,1:0.};current_interfaces={0:0.,1:0.}
     for f in b['physical_faces']:

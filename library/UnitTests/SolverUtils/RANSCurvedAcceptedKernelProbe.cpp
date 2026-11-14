@@ -15,6 +15,9 @@ int main(int argc,char **argv)
         const double nu=p.get<double>("nu",1.5e-5),H=p.get<double>("H",.5),hr=p.get<double>("hr",.05),K=p.get<double>("K");
         const auto m=RANSResolvedModel::Resolve(ParseRANSModel(p.get<std::string>("model")),RANSKappaPolicy::Natural,.41,RANSWallFormulation::AcceptedBudgetAWF,nu);
         AWFProfileOptions o;o.formulation=AWFProfileFormulation::AcceptedBudgetAWF;o.quadratureOrder=p.get<int>("order",64);
+        if(p.get<std::string>("displacement_policy","UnshiftedV1")=="SamePhysicalWallDisplacedAcceptedV1")
+            o.displacementPolicy=AWFDisplacementPolicy::SamePhysicalWallDisplacedAcceptedV1;
+        o.aerodynamicDisplacement=p.get<double>("displacement",0.);
         if(p.get<bool>("verification",true))o.curvedCapability=AWFCurvedCapability::AcceptedVerificationV1;
         const AWFProfileGeometry g{nu,H,hr,p.get<double>("sample",H),p.get<double>("tail",H)};
         const AWFNormalMetric metric{p.get<double>("gamma",0),0};

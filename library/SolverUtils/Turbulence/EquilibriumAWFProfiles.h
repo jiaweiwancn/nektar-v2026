@@ -55,9 +55,15 @@ SOLVER_UTILS_EXPORT AWFParameters CalibratedAWFParameters(const RANSNeutralRefer
 
 enum class AWFCurvedCapability { FlatQualifiedV1, AcceptedVerificationV1 };
 
+// Physical sink policy, independent of closure and numerical geometry version.
+// The displaced policy retains the original physical wall and resistance.
+enum class AWFDisplacementPolicy { UnshiftedV1, SamePhysicalWallDisplacedAcceptedV1 };
+
 struct AWFProfileOptions
 {
     AWFCurvedCapability curvedCapability = AWFCurvedCapability::FlatQualifiedV1;
+    AWFDisplacementPolicy displacementPolicy = AWFDisplacementPolicy::UnshiftedV1;
+    double aerodynamicDisplacement = 0;
     double requestedWeight = 1, minimumReynolds = 100;
     int quadratureOrder = 16;
     AWFFailurePolicy failurePolicy = AWFFailurePolicy::RequirePreservation;

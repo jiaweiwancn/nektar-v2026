@@ -121,6 +121,17 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
       m_original(LegacyGeometry(geometry), k, wall)
 {
     metric.Validate(geometry.height);
+    Finite(options.aerodynamicDisplacement);
+    if(options.displacementPolicy==AWFDisplacementPolicy::SamePhysicalWallDisplacedAcceptedV1)
+    {
+        if(model.Model()!=RANSModel::A95 || !model.NewModel() ||
+           model.KappaPolicy()!=RANSKappaPolicy::Natural ||
+           options.formulation!=AWFProfileFormulation::AcceptedBudgetAWF ||
+           !(options.aerodynamicDisplacement>=0 && options.aerodynamicDisplacement<geometry.height))
+            throw std::invalid_argument("SamePhysicalWallDisplacedAcceptedV1 requires Natural A95 Accepted and 0<=d<H");
+    }
+    else if(options.displacementPolicy!=AWFDisplacementPolicy::UnshiftedV1 || options.aerodynamicDisplacement!=0)
+        throw std::invalid_argument("UnshiftedV1 cannot use aerodynamic displacement");
     if(model.NewModel())
     {
         if((metric.kappa1!=0 || metric.kappa2!=0) &&
@@ -194,7 +205,25 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
         ref.margin = Cast((static_cast<long double>(ref.productionBudget)-ref.minimumBudget)/ref.minimumBudget);
         if (ref.productionBudget < ref.minimumBudget)
             throw std::domain_error("CLSCalibratedBudgetAWF cutoff_budget_inadmissible; no cutoff clipping");
-        if (metric.kappa1 == 0 && metric.kappa2 == 0)
+        if(options.aerodynamicDisplacement>0)
+        {
+            // I(c) is strictly decreasing for positive J. The lower endpoint
+            // is the first REPRESENTABLE c>d, not a denominator floor. An
+            // unrepresentable cutoff is rejected, never clipped to that end.
+            const double d=options.aerodynamicDisplacement;
+            double low=std::nextafter(d,geometry.height),high=geometry.height;
+            if(BudgetDifference(low)<0)
+                throw std::range_error("displaced Accepted cutoff_unrepresentable above displacement");
+            for(int it=0;it<192;++it)
+            {
+                const double mid=low+(high-low)/2;
+                if(mid==low || mid==high)break;
+                ++ref.cutoffIterations;
+                if(BudgetDifference(mid)>0)low=mid;else high=mid;
+            }
+            ref.cutoff=low+(high-low)/2;
+        }
+        else if (metric.kappa1 == 0 && metric.kappa2 == 0)
         {
             const long double lambda = static_cast<long double>(ref.productionBudget)/ref.numerator;
             ref.cutoff = Cast(static_cast<long double>(geometry.height)*std::exp(1-lambda));
@@ -227,7 +256,7 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
             }
             ref.cutoff = std::exp(low+(high-low)/2);
         }
-        if (!(ref.cutoff > 0 && ref.cutoff <= geometry.height))
+        if (!(ref.cutoff > options.aerodynamicDisplacement && ref.cutoff <= geometry.height))
             throw std::range_error("CLSCalibratedBudgetAWF cutoff_unrepresentable");
         Corrected(0, ref.cutoff); // Reject an unrepresentable plateau, never floor it.
         ref.weight = 1; // Internal solved-cutoff flag; not a physical chi.
@@ -432,7 +461,9 @@ double EquilibriumAWFProfiles::Integrate(const std::function<double(double)> &f,
 double EquilibriumAWFProfiles::Corrected(double r, double cutoff) const
 {
     CheckHeight(r); Positive(cutoff);
-    return Cast(static_cast<long double>(m_reference.numerator)/std::max(r, cutoff));
+    const long double denominator=static_cast<long double>(std::max(r,cutoff))-m_options.aerodynamicDisplacement;
+    if(!(denominator>0))throw std::domain_error("Accepted cutoff must lie above aerodynamic displacement");
+    return Cast(static_cast<long double>(m_reference.numerator)/denominator);
 }
 double EquilibriumAWFProfiles::CorrectedIntegral(double upper, double cutoff) const
 {
@@ -440,6 +471,17 @@ double EquilibriumAWFProfiles::CorrectedIntegral(double upper, double cutoff) co
     const long double r = upper, c = cutoff;
     const long double s = static_cast<long double>(m_metric.kappa1)+m_metric.kappa2;
     const long double p = static_cast<long double>(m_metric.kappa1)*m_metric.kappa2;
+    const long double d=m_options.aerodynamicDisplacement;
+    if(d>0)
+    {
+        if(!(c>d))throw std::domain_error("Accepted cutoff must lie above aerodynamic displacement");
+        const long double a=std::min(r,c);
+        long double integral=(a+s*a*a/2+p*a*a*a/3)/(c-d);
+        if(r>c)
+            integral+=(1+s*d+p*d*d)*std::log1p((r-c)/(c-d))+
+                      (s+p*d)*(r-c)+p*(r*r-c*c)/2;
+        return Cast(static_cast<long double>(m_reference.numerator)*integral);
+    }
     const long double integral = r <= c ? (r+s*r*r/2+p*r*r*r/3)/c :
         1+std::log(r/c)+s*(r-c/2)+p*(r*r/2-c*c/6);
     return Cast(static_cast<long double>(m_reference.numerator)*integral);

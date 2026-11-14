@@ -216,7 +216,7 @@ def independent_operator(packet,model='A95',column=None):
             T=(c.nu+nt)*(G+G.T)-np.eye(3)*pi;visc=c.nu+nt
             P=nt*np.sum((G+G.T)*G)
             if column is not None:P-=2*k*np.trace(G)/3
-            rates={2:0.};sources={2:P-c.A/max(point['coordinate'][2],c.cutoff)};diffusion={2:c.nu+nt}
+            rates={2:0.};sources={2:P-c.A/(max(point['coordinate'][2],c.cutoff)-getattr(c,'disp',0.))};diffusion={2:c.nu+nt}
         adv=d.T@u
         for a,axis in enumerate((0,2)):
             ii=ids+off[a];r[ii]+=w*(d.T@T[axis,[0,2]]-adv*u[a])

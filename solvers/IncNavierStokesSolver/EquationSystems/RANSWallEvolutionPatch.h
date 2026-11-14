@@ -119,6 +119,8 @@ public:
         const RANSWallEvolutionData &data) const;
     bool UniformEPFlat() const { return m_uniformEP; }
     bool AcceptedAWF() const { return m_formulation=="CLSCalibratedBudgetAWF" || m_formulation=="AcceptedBudgetAWF"; }
+    bool DisplacedAccepted() const { return m_options.displacementPolicy==SolverUtils::AWFDisplacementPolicy::SamePhysicalWallDisplacedAcceptedV1; }
+    double AerodynamicDisplacement() const { return m_options.aerodynamicDisplacement; }
     bool NewModels() const { return m_parameters.model.NewModel(); }
     bool OpenBoundary() const { return m_boundaryPolicy=="AcceptedOpenFlatV1" || m_boundaryPolicy=="AcceptedManufacturedOpenV1" || RichardsNorrisTop(); }
     bool RichardsNorrisTop() const { return m_boundaryPolicy=="AcceptedRichardsNorrisFlatV1"; }

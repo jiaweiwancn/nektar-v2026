@@ -17,8 +17,8 @@ namespace J=RANSWallSolveJson;
 bool RANSUsesNeutralComposite(const LibUtilities::SessionReaderSharedPtr &s)
 {
     std::string mode;s->LoadSolverInfo("RANSOpenReference",mode,"Functions");
-    Require(mode=="Functions" || mode=="NeutralCompositeV1","unknown open reference provider version");
-    return mode=="NeutralCompositeV1";
+    Require(mode=="Functions" || mode=="NeutralCompositeV1" || mode=="DisplacedNeutralCompositeV1","unknown open reference provider version");
+    return mode!="Functions";
 }
 namespace
 {
@@ -30,14 +30,17 @@ class NeutralComposite
 public:
     const RANSWallEvolutionPatch &patch;
     double us,H,Hh,K,A,UH,PiOuter,PiInner=0.,displacement=0.;
+    std::string version;
     std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> profile;
     SolverUtils::RANSTensor Q{};
     mutable std::map<std::pair<double,bool>,std::array<double,9>> cache;
     NeutralComposite(const LibUtilities::SessionReaderSharedPtr &s,const RANSWallEvolutionPatch &p):patch(p)
     {
         const auto &m=p.Parameters().model;const auto &g=p.Parameters().geometry;
+        s->LoadSolverInfo("RANSOpenReference",version,"Functions");
         s->LoadParameter("RANSOpenDisplacement",displacement,0.);
-        Require(displacement==0.,
+        Require(p.DisplacedAccepted()?(version=="DisplacedNeutralCompositeV1" && displacement==p.AerodynamicDisplacement()):
+            (version=="NeutralCompositeV1" && displacement==0.),
             "original Accepted/NeutralCompositeV1 cannot silently use aerodynamic displacement; a separately qualified displaced wall policy is required");
         s->LoadParameter("RANSOpenPressureLevel",PiInner,0.);
         Require(std::isfinite(PiInner) && (p.RichardsNorrisTop() || PiInner==0.),
@@ -59,13 +62,18 @@ public:
             "BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!s->DefinesFunction(name),"NeutralCompositeV1 forbids a competing physical function "+name);
         SolverUtils::AWFProfileOptions o;o.formulation=SolverUtils::AWFProfileFormulation::AcceptedBudgetAWF;o.quadratureOrder=96;
+        if(p.DisplacedAccepted())
+        {
+            o.displacementPolicy=SolverUtils::AWFDisplacementPolicy::SamePhysicalWallDisplacedAcceptedV1;
+            o.aerodynamicDisplacement=displacement;
+        }
         profile=std::make_shared<SolverUtils::EquilibriumAWFProfiles>(g,K,m,SolverUtils::AWFNormalMetric{},o,SolverUtils::CalibratedAWFParameters(m));
         UH=profile->Reference().matchingVelocity;
         double B;s->LoadParameter("RANSOpenMeanIntercept",B);
-        Require(std::abs(UH-(B+us/m.Kappa()*std::log(H/Hh)))<=2e-10*std::max(1.,std::abs(UH)),
+        Require(std::abs(UH-(B+us/m.Kappa()*std::log((H-displacement)/Hh)))<=2e-10*std::max(1.,std::abs(UH)),
             "NeutralCompositeV1 mean-fit and finite-nu wall mismatch");
-        SolverUtils::RANSTensor G{};G[0][2]=us/(m.Kappa()*H);
-        const auto law=SolverUtils::EvaluateRANSClosure(m.Model(),K,A/H,G,H,m.Parameters(),0);
+        SolverUtils::RANSTensor G{};G[0][2]=us/(m.Kappa()*(H-displacement));
+        const auto law=SolverUtils::EvaluateRANSClosure(m.Model(),K,A/(H-displacement),G,H,m.Parameters(),0);
         Q=law.quadraticStress;
         PiOuter=PiInner==0.?-Q[2][2]:PiInner-Q[2][2];
     }
@@ -82,13 +90,14 @@ public:
         if(endpoint)std::cerr<<std::setprecision(17)<<"NeutralCompositeV1: outer-field endpoint analytic continuation at original z="<<z<<", H="<<H<<", delta="<<H-z<<"; no coordinate change\n";
         std::array<double,9> v{}; // U,k,epsilon,Pi,U',k',epsilon',Q0,Dk
         const double kap=patch.Parameters().model.Kappa();
-        if(outer)v={UH+us/kap*std::log(z/H),K,A/z,PiOuter,us/(kap*z),0,-A/(z*z),0,kap*us*z};
+        const double zeta=z-displacement;
+        if(outer)v={UH+us/kap*std::log(zeta/(H-displacement)),K,A/zeta,PiOuter,us/(kap*zeta),0,-A/(zeta*zeta),0,kap*us*zeta};
         else
         {
             const double cutoff=profile->Reference().cutoff;
             v={profile->Original().Velocity(z,{UH,0},{0,0})[0],profile->ReferenceK(z),profile->Dissipation(z),PiInner,
                 us*us/profile->Original().TotalViscosity(z),profile->ReferenceKGradient(z),
-                z<cutoff?0.:-A/(z*z),profile->ReferenceKFlux(z),profile->ReferenceKDiffusivity(z)};
+                z<cutoff?0.:-A/(zeta*zeta),profile->ReferenceKFlux(z),profile->ReferenceKDiffusivity(z)};
         }
         cache.emplace(key,v);return v;
     }
@@ -105,8 +114,8 @@ public:
             {profile->Reference().cutoff,profile->Original().ViscosityInterceptHeight(),profile->Geometry().roughness});
         // Only an outer epsilon representation. H value is dependent; no
         // independent inner equation or two-sided epsilon-flux condition.
-        const auto e=patch.fields[patch.Epsilon()]->RadialProject([&](double z){return A/z;},
-            {{H,0,A/H},{Z,0,A/Z},{Z,-1,-A/(Z*Z)}});
+        const auto e=patch.fields[patch.Epsilon()]->RadialProject([&](double z){return A/(z-displacement);},
+            {{H,0,A/(H-displacement)},{Z,0,A/(Z-displacement)},{Z,-1,-A/((Z-displacement)*(Z-displacement))}});
         std::copy(u.begin(),u.end(),state.begin()+patch.offset[0]);
         std::copy(k.begin(),k.end(),state.begin()+patch.offset[patch.K()]);
         std::copy(e.begin(),e.end(),state.begin()+patch.offset[patch.Epsilon()]);
@@ -144,7 +153,17 @@ std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSh
     {
         std::string projection;s->LoadSolverInfo("RANSOpenReferenceProjection",projection,"FunctionsL2V1");
         Require(projection=="FunctionsL2V1" || projection=="ConstrainedRadialV1","unknown neutral reference projection");
-        out<<":reference=NeutralCompositeV1:projection="<<projection<<":coordinate=physical-z-unshifted";
+        std::string reference;s->LoadSolverInfo("RANSOpenReference",reference,"NeutralCompositeV1");
+        std::string sink;s->LoadSolverInfo("RANSWallDisplacementPolicy",sink,"UnshiftedV1");
+        out<<":reference="<<reference<<":projection="<<projection<<":coordinate="<<
+            (reference=="DisplacedNeutralCompositeV1"?"physical-floor-z;aerodynamic-zeta=z-d":"physical-z-unshifted");
+        if(reference=="DisplacedNeutralCompositeV1")
+        {
+            std::string fit;s->LoadSolverInfo("RANSOpenFitPolicy",fit,"Unspecified");
+            Require(sink=="SamePhysicalWallDisplacedAcceptedV1" && fit!="Unspecified",
+                "displaced reference requires explicit wall and fitting identity");
+            out<<":wall_sink="<<sink<<":fit="<<fit;
+        }
         if(driven)
         {
             double level;s->LoadParameter("RANSOpenPressureLevel",level,0.);
@@ -285,7 +304,8 @@ std::string RANSAcceptedCompositeReferencePacket(const LibUtilities::SessionRead
         rows.push_back(J::Object({{"coordinate",J::Numbers(grid[i])},{"side",J::Number(sides[i])},
             {"region",J::Number(outer?1:0)},{"values_U_k_epsilon_Pi_gradients_Q0_D",J::Numbers(v)}}));
     }
-    return J::Object({{"provider",J::Quote("NeutralCompositeV1")},{"identity",J::Quote(patch.OpenBoundaryIdentity())},
+    return J::Object({{"provider",J::Quote(ref.version)},{"identity",J::Quote(patch.OpenBoundaryIdentity())},
+        {"displacement",J::Number(ref.displacement)},
         {"K",J::Number(ref.K)},{"A",J::Number(ref.A)},{"UH",J::Number(ref.UH)},
         {"cutoff",J::Number(ref.profile->Reference().cutoff)},{"Q",J::Rows(ref.Q)},{"samples",J::List(rows)}});
 }

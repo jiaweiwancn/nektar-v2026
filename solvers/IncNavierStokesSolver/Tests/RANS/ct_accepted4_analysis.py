@@ -17,9 +17,9 @@ from validate_a93_a95_e94e95 import oracle
 from rans_request_manifest import RequestManifest,sha,runtime_identity
 
 
-def weak(packet,c,wrong_pressure=False,constant_inner_k=False):
-    o=packet['observation'];off=o['offsets'];r=np.zeros(len(o['state']));col=Column(c['model'],c['K0'],c['H'],c['roughness_input'],c['nu'],order=96)
-    at=lru_cache(None)(lambda z,outer:reference(col,z,outer));p=parameters(c['model'])
+def weak(packet,c,wrong_pressure=False,constant_inner_k=False,column=None,reference_function=None):
+    o=packet['observation'];off=o['offsets'];r=np.zeros(len(o['state']));col=column if column is not None else Column(c['model'],c['K0'],c['H'],c['roughness_input'],c['nu'],order=96)
+    at=lru_cache(None)(lambda z,outer:(reference_function or reference)(col,z,outer));p=parameters(c['model'])
     def add(q,b,load):r[np.array(q['ids'],int)+off[b]]+=load
     for q in o['volume']:
         z=q['coordinate'][2];region=bool(q['region']);v=at(z,region);u=np.array([v[0],0,0]);G=np.zeros((3,3));G[0,2]=v[4]
@@ -47,7 +47,7 @@ def weak(packet,c,wrong_pressure=False,constant_inner_k=False):
         add(f['velocity_k_row'],2,-w*np.array(f['velocity_k_row']['phi'])*f['k_diffusive_datum'])
         add(f['epsilon_row'],3,-w*np.array(f['epsilon_row']['phi'])*f['epsilon_diffusive_datum'])
     fixed={int(i) for i,_ in packet['resolution']['constraints']};out={}
-    scales=[c['ustar']**2*c['Z']]*2+[c['K0']*c['ustar']*c['Z'],col.A/c['H']*c['ustar']*c['Z'],c['ustar']*c['Z'],c['ustar']*c['Z']]
+    scales=[c['ustar']**2*c['Z']]*2+[c['K0']*c['ustar']*c['Z'],col.A/(c['H']-c.get('displacement',0.))*c['ustar']*c['Z'],c['ustar']*c['Z'],c['ustar']*c['Z']]
     for b,name in enumerate(('momentum_x','momentum_z','k_shared_once','outer_epsilon','inner_continuity','outer_continuity')):
         ids=[i for i in range(off[b],off[b+1]) if i not in fixed]
         maximum=float(np.max(abs(r[ids]))) if ids else 0.

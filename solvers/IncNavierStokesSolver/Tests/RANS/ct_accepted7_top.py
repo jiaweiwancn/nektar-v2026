@@ -47,14 +47,14 @@ def request(c):
         export_open_verification=True,export_mixed_space=True)
 
 
-def classify(packet,c):
+def classify(packet,c,column=None,reference_function=None):
     require(packet['status']=='pass','RN actual initialized state rejected')
     receipt=packet['initialization_receipt']
     require(receipt['open_explicit_implicit_agreement'] and receipt['explicit_boundary_sha256']==receipt['implicit_boundary_sha256'],
         'RN explicit/implicit live essential boundary mismatch')
     o=packet['observation'];s=np.asarray(o['state']);off=o['offsets'];frozen=packet['open_frozen_systems'];top=packet['open_boundary']['top_faces']
     require(bool(top),'no consumed RN top rows')
-    col=Column(c['model'],c['K0'],c['H'],c['roughness_input'],c['nu'],order=96)
+    col=column if column is not None else Column(c['model'],c['K0'],c['H'],c['roughness_input'],c['nu'],order=96)
     r,A,loads=independent_operator(packet,c['model'],column=col)
     # Tangential roughness convection and grad(K_H) vanish for these radial
     # control states. Check that premise rather than suppressing actual data.
@@ -95,7 +95,7 @@ def classify(packet,c):
         require(face['epsilon_diffusive_datum']<0 and face['k_diffusive_datum']==0 and not face['independent_normal_traction'],'RN flux/normal-traction contract')
     free_top={str(b):sorted(mode_ids[b]-external) for b in mode_ids}
     require(all(free_top[str(b)] for b in (0,2,3)) and not free_top['1'],'top essential/free modes wrong')
-    q=weak(packet,c);maximum=max(v['scaled_free_maximum'] for v in q['equations'].values())
+    q=weak(packet,c,column=column,reference_function=reference_function);maximum=max(v['scaled_free_maximum'] for v in q['equations'].values())
     require(maximum<=2e-10,'continuous RN reference balance on native tests:'+str(q))
     # Deleting either physical datum leaves a resolved load in actual free
     # top modes. All trace modes, including zero integral odd modes, are kept.
@@ -104,7 +104,7 @@ def classify(packet,c):
     require(eps_signal>1e-8 and shear_signal>1e-8,'nondiscriminating top negative controls')
     omitted=copy.deepcopy(packet)
     for omitted_face in omitted['open_boundary']['top_faces']:omitted_face['epsilon_diffusive_datum']=0.
-    zero_flux_balance=weak(omitted,c)
+    zero_flux_balance=weak(omitted,c,column=column,reference_function=reference_function)
     require(zero_flux_balance['equations']['outer_epsilon']['status']=='fail',
         'zero epsilon top flux did not break the continuous reference identity')
     mixed=packet['mixed_space'];rows=np.asarray(mixed['rows'],int);nv=int(mixed['velocity_size']);mat=np.asarray(mixed['matrix'])
@@ -120,7 +120,7 @@ def classify(packet,c):
         require(max(field['defects_value_dx_dz_dxz_dzz_mass_polynomial_faces'])<=2e-10,'native all-mode basis/face checks')
     return dict(status='pass',actual_stored_slots=len(s),defects=defects,continuous_native_test_maximum=maximum,
         top_trace_mode_ids={str(b):sorted(v) for b,v in mode_ids.items()},free_top_mode_ids=free_top,
-        top_physical_length=length,prescribed_epsilon_outward_conservative_flux=col.um**4/(parameters(c['model'])['sigma_epsilon']*c['Z']),
+        top_physical_length=length,prescribed_epsilon_outward_conservative_flux=col.um**4/(parameters(c['model'])['sigma_epsilon']*(c['Z']-c.get('displacement',0.))),
         zero_epsilon_flux_negative_signal=eps_signal,reversed_shear_negative_signal=shear_signal,
         zero_epsilon_flux_continuous_negative=zero_flux_balance['equations']['outer_epsilon'],
         initialization_receipt=receipt,
