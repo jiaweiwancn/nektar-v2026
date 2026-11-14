@@ -65,7 +65,7 @@ def freeze(root):
     verify(load(root/'inputs/essential-index.json')['legacy_producer'])
     assert load(root/'science/retained-parity/result.json')['status']=='PASS'
     files=[identity(HERE/n)for n in ('run_wj_h16.py','study_wj_h16.py','wj_h16_observer.py')]
-    for name in ('runtime-build-v1.json','runtime-dependencies-v1.json','target-cache-compatibility.json','small-cache-compatibility.json'):files.append(identity(root/'science'/name))
+    for name in ('runtime-build-v1.json','runtime-dependencies-v1.json','compiled-source-objects.json','target-cache-compatibility.json','small-cache-compatibility.json'):files.append(identity(root/'science'/name))
     for v in load(root/'science/runtime-build-v1.json')['executables']:files.extend((v['ELF'],v['wrapper']))
     for v in load(root/'science/target-cache-compatibility.json')['active_sources']:files.append(v['active'])
     atomic(root/'execution-config.json',dict(schema='WJH16FrozenExecutionV1',status='FROZEN_BEFORE_GOVERNING_QUALIFICATION',files=files,native_work_before_freeze=0))
@@ -187,7 +187,7 @@ def admission(root):
     assert load(root/'science/small/A/view/result.json')['status']=='PASS'and load(root/'science/retained-parity/result.json')['status']=='PASS'
     assert load(root/'science/runtime-qualified-v1.json')['status']=='PASS'
     book=load(root/'accounting.json');assert book['small_charged_attempts']==6
-    baseline=6266638336;memory=1.25*baseline;forecast=1.25*(85+4*85+4*12+120+45)
+    baseline=6266638336;memory=1.25*baseline;forecast=1.25*(165+4*90+4*15+120+60+30)
     assert memory<8*1024**3 and forecast<1800
     v=next(v for v in load(H14/'publication-v2/state-bindings.json')['states']if v['case']=='cp0');cp=checkpoint_payload(verify(v['checkpoint']).parent,include_reference=True);assert vector_hash(cp['state'])=='631caa32a59ff43253f1fcac4effd955eb68b8529d9c28f29e615cf14ca0f077'
     folder=root/'science/target';xml_case(verify(v['xml']),folder,verify(v['checkpoint']).parent,4)
