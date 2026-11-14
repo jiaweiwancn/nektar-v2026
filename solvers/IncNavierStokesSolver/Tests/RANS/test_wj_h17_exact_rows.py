@@ -11,6 +11,15 @@ from study_wj_h17 import protected,CAP_BYTES,CAP_ENTRIES,POLICIES
 from run_wj_h17 import halt,reserve_strict,small_selection
 
 class ExactRows(unittest.TestCase):
+    def test_runtime_and_native_CLI_roles_dispatch_to_existing_functions(self):
+        import study_wj_h17 as study
+        from unittest.mock import patch
+        root=Path('/no-execution')
+        for mode,function,args in (('runtime','runtime_qualify',(root,)),('small','small_case',(root,'A')),('target','target',(root,)),('target-strict','strict',(root,'target'))):
+            with patch.object(study,function)as action:
+                study.dispatch(root,mode,'A');action.assert_called_once_with(*args)
+        with self.assertRaises(AssertionError):study.dispatch(root,'fresh-cp0')
+
     def test_coordinator_command_matches_observer_parser(self):
         from study_wj_h17 import observer_command
         from wj_h17_observer import argument_parser

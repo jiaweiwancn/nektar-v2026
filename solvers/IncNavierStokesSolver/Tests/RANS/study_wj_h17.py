@@ -254,8 +254,13 @@ def target(root):
     if error:raise RuntimeError(error)
     checked_exit(code);assert n==4 and r['time']==.01
 
+def dispatch(root,mode,case=None):
+    if mode=='small':return small_case(root,case)
+    if mode.endswith('-strict'):return strict(root,mode.split('-')[0])
+    if mode=='runtime':return runtime_qualify(root)
+    assert mode in ('setup','freeze','compare','admission','target')
+    return globals()[mode](root)
+
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('setup','freeze','compare','small','small-strict','target-strict','runtime','admission','target'),required=True);p.add_argument('--case',choices=('A','B'));a=p.parse_args()
-    if a.mode=='small':small_case(a.root,a.case)
-    elif a.mode.endswith('-strict'):strict(a.root,a.mode.split('-')[0])
-    else:globals()[a.mode](a.root)
+    dispatch(a.root,a.mode,a.case)
