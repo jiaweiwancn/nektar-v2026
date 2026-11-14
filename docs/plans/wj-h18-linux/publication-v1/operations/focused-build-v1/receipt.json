@@ -1,0 +1,64 @@
+{
+  "argv": [
+    "bash",
+    "/home/jay/build/wj-h18-checkpoint-audits-20261114/source/h18_build.sh"
+  ],
+  "phase": "build",
+  "kind": "passive",
+  "reserved_seconds": 480.0,
+  "maximum_attempts": 0,
+  "workers": 8,
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 205145,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/lib/ubuntu-release-upgrader/check-new-release -q"
+      },
+      {
+        "pid": 205166,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h18-checkpoint-audits-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h18.py --root /home/jay/build/wj-h18-checkpoint-audits-20261114 --label focused-build-v1 --seconds 480 --phase build --workers 8 -- bash /home/jay/build/wj-h18-checkpoint-audits-20261114/source/h18_build.sh"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h18-checkpoint-audits-20261114/source/h18_build.sh": {
+      "sha256": "3c4a7376aef98954f18a3e2ca440f18e4c4f01e6d3069013d159c799f89d252c",
+      "bytes": 852
+    }
+  },
+  "driver": "20abfd2142a7e5040e24faab5af82786d2a08b9beeea94404d6f93eee0a2e71c",
+  "status": "PASS",
+  "seconds": 119.99992922900128,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 8002641920,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "0be0ae176ebe89e57fe00dae82d0d070e8c1bd2b3bbdd44de3f5bbce6fe2618b"
+}

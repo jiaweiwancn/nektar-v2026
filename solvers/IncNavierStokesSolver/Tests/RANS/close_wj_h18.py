@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Seal H18 accounting and essential transport without admitting another solve."""
-import argparse,json,tarfile,os
+import argparse,json,tarfile,os,shutil,re
 from pathlib import Path
 from run_wj_h4 import load
 from run_wj_h7 import update_journal
@@ -21,6 +21,31 @@ def close(root):
         assert book['target_cases']==['A','B']and book['strict_reservations']==['target']
         assert gates['successful_small_attempts']==5 and gates['deliberate_small_failed_attempts']==1
     old=load(root/'inputs/selected-bootstrap.json')['H16_ledger_unchanged'];verify(old)
+    supplement=root/'publication-supplement-v1';supplement.mkdir()
+    for name in ('post-science-code-bindings-v1.json','post-science-code-bindings-v2.json','readback-selection-compatibility-v1.json','pending-restored-native-map-parity-v1.json','target-B-measured-admission-v1.json'):
+        p=root/'science'/name
+        if p.exists():shutil.copyfile(p,supplement/name)
+    for label in ('passive-readback-selection-v1','compact-publication-v1'):
+        p=root/'operations'/label/'receipt.json'
+        if p.exists():shutil.copyfile(p,supplement/(label+'-receipt.json'))
+    runs=[load(root/f'science/target/{n}/case.evolution.json')for n in ('A','B')if(root/f'science/target/{n}/case.evolution.json').exists()]
+    initial_log=(root/'operations/focused-python-v1/command.log').read_text();post_log=(root/'operations/passive-readback-selection-v1/command.log').read_text()
+    initial_count=int(re.search(r'Ran (\d+) tests',initial_log).group(1));post_count=int(re.search(r'Ran (\d+) tests',post_log).group(1))
+    starts=sum((root/f'science/target/{n}/monitor/startup.verification-commit.json').exists()for n in ('A','B'))
+    atomic(supplement/'execution-counts.json',dict(focused_python_methods=initial_count+post_count,initial_methods=initial_count,post_science_selector_methods=post_count,native_protocol_unit_invocations=1,native_guard_pending_import_component_invocations=1,
+        successful_small_governing_attempts=gates['successful_small_attempts'],expected_failed_small_attempts=gates['deliberate_small_failed_attempts'],target_attempts=book.get('target_charged_attempts',0),target_blocks=len(runs),target_completed=sum(r['native_completed']for r in runs),
+        target_completed_scientific_native_commits=sum(r['independently_qualified']for r in runs),target_startup_verification_commits=starts,target_full_native_audits=sum(r['full_audit_calls']for r in runs),target_physical_samples=sum(r['physical_samples_calls']for r in runs),target_independent_assessments=len(gates['full_audited_states']),
+        skipped_target_completed_full_audits=sum(r['native_completed']-r['independently_qualified']for r in runs),final_strict_readbacks=len(book.get('strict_reservations',[])),new_scientific_timesteps=0,fresh_CP0=0,initialization_projection_lift_calls=0,new_kernel_requests=0,
+        scope='actual H18 execution, not CTest registration; intermediate H16 qualification remains historical'))
+    atomic(supplement/'retention-and-limits.json',dict(native_resident_limits=dict(pimple=1,accepted=1,WJ=1,stage=1,step=1,explicit=2),
+        independent_scope='fixed sealed common support plus complete current checkpoint witnesses; monotone schedule, no historical ready/seen union',
+        recovery_rotation='owned/protected/eligible deletion API tested on synthetic files; H18 deliberately retains every short-run recovery',
+        late_substep_evidence='captured at available k-bound events/selected steps; discarded operators are not reconstructed',
+        native_ACK_validation='existing final-name stale/duplicate checks preserved; no claim of unrestricted duration/namespace cost',
+        observation_limits='no new averages; sparse checkpoint samples cannot recover unsaved extrema, exact integrated budgets or nonlinear stress averages',
+        accounting='publication snapshot OPEN; final closure is separate; original mutable accounting path in copy records describes its bytes at copy time only'))
+    atomic(supplement/'manifest.json',dict(files=[identity(p)for p in sorted(supplement.iterdir())if p.is_file()]))
+
     phase={k:sum(v.get('seconds',v['reserved_seconds'])for v in book['entries'].values()if v['phase']==k)for k in ('build','qualification','target','target_readback','operation','closure')}
     assert phase['build']<=1200 and phase['qualification']+phase['target']+phase['target_readback']<=3000 and phase['closure']<=300
     total=60+300+sum(v.get('seconds',v['reserved_seconds'])for v in book['entries'].values()if v['phase']!='closure')
@@ -51,8 +76,8 @@ def close(root):
     update_journal(root/'accounting.json',seal)
     atomic(closure/'accounting-final.json',load(root/'accounting.json'))
     atomic(closure/'manifest.json',dict(files=[identity(p)for p in sorted(closure.iterdir())if p.is_file()],scope='final closed accounting; publication-time snapshot retains its original OPEN identity'))
-    atomic(root/'authoritative-index-v1.json',dict(publication=identity(pub/'manifest.json'),closure=identity(closure/'manifest.json'),accounting=identity(closure/'accounting-final.json'),verification=identity(closure/'verification.json')))
-    selected=[root/'authoritative-index-v1.json',*closure.glob('*.json')]
+    atomic(root/'authoritative-index-v1.json',dict(publication=identity(pub/'manifest.json'),supplement=identity(supplement/'manifest.json'),closure=identity(closure/'manifest.json'),accounting=identity(closure/'accounting-final.json'),verification=identity(closure/'verification.json')))
+    selected=[root/'authoritative-index-v1.json',*closure.glob('*.json'),*supplement.glob('*.json')]
     essentials={'component-gates.json','target-timeline.csv','disjoint-inclusive-timing.csv','checkpoint-storage.csv','conditional-cost-storage.json','compression-measurements.json','state-history-bindings.json','all-signed-Q1-moments.csv','compiled-source-summary.json','checkpoint-cost.png','checkpoint-storage.png','heavy-manifest.json','manifest.json','reused-context.json','final-strict-result.json.gz','audited-state-summaries.json.gz','signed-native-stage-data.json.gz'}
     for p in pub.rglob('*'):
         if p.is_file()and(p.name in essentials or p.parent.name=='controls'or p.parent.name=='small'or'operations'in p.parts and p.name in ('receipt.json','attempt-counts.json')):selected.append(p)

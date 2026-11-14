@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "forecast_with_25percent_headroom": 1200.0,
+  "closure_reserved": 300,
+  "strict_read_reserved": 120,
+  "cases": {
+    "A": {
+      "attempts": 4,
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/jay/build/wj-h18-checkpoint-audits-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h18.py",
+        "--root",
+        "/home/jay/build/wj-h18-checkpoint-audits-20261114",
+        "--mode",
+        "target",
+        "--case",
+        "A"
+      ],
+      "inputs": [
+        {
+          "path": "/home/jay/build/wj-h18-checkpoint-audits-20261114/execution-config.json",
+          "bytes": 5819,
+          "sha256": "bbb25c2482e76adfa2f8276095d7025eaff1a2b61b62d7103e3e87afddecd06f"
+        },
+        {
+          "path": "/home/jay/build/wj-h18-checkpoint-audits-20261114/science/component-checks.json",
+          "bytes": 401,
+          "sha256": "062252ddd6afd4f19c82bbdba0b037984adb974da8c3bd34cead84eb44fe1b2f"
+        }
+      ]
+    },
+    "B": {
+      "attempts": 2,
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/jay/build/wj-h18-checkpoint-audits-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h18.py",
+        "--root",
+        "/home/jay/build/wj-h18-checkpoint-audits-20261114",
+        "--mode",
+        "target",
+        "--case",
+        "B"
+      ],
+      "inputs": [
+        {
+          "path": "/home/jay/build/wj-h18-checkpoint-audits-20261114/execution-config.json",
+          "bytes": 5819,
+          "sha256": "bbb25c2482e76adfa2f8276095d7025eaff1a2b61b62d7103e3e87afddecd06f"
+        },
+        {
+          "path": "/home/jay/build/wj-h18-checkpoint-audits-20261114/science/component-checks.json",
+          "bytes": 401,
+          "sha256": "062252ddd6afd4f19c82bbdba0b037984adb974da8c3bd34cead84eb44fe1b2f"
+        }
+      ]
+    }
+  },
+  "remaining_total": 6349.892302812019,
+  "science_horizon_advance": 0
+}

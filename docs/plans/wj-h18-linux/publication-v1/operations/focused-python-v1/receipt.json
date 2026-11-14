@@ -1,0 +1,74 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "test_wj_h18_checkpoint_audits",
+    "test_wj_h16_repaired_monitor.RepairedMonitor.test_durable_cursor_does_not_follow_prepared_or_unpublished_step_commit",
+    "test_wj_h16_repaired_monitor.RepairedMonitor.test_child_nonzero_exit_cannot_be_reported_as_success",
+    "test_wj_h16_repaired_monitor.RepairedMonitor.test_native_history_and_signed_zero_are_not_reconstructed",
+    "test_wj_h15_monitoring.PersistentMonitoring.test_exterior_reactions_refresh_but_prescribed_traction_stays_fixed",
+    "test_wj_h15_monitoring.PersistentMonitoring.test_only_durable_native_commit_is_a_qualified_restart_cursor",
+    "test_wj_h15_monitoring.PersistentMonitoring.test_disk_monitor_tolerates_only_transient_names",
+    "test_wj_h17_exact_rows.ExactRows.test_halt_and_final_readback_are_monotone_separate_roles"
+  ],
+  "phase": "qualification",
+  "kind": "passive",
+  "reserved_seconds": 60.0,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 207059,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h18-checkpoint-audits-20261114/prepare.py"
+      },
+      {
+        "pid": 207071,
+        "parent": 207059,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h18-checkpoint-audits-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h18.py --root /home/jay/build/wj-h18-checkpoint-audits-20261114 --label focused-python-v1 --seconds 60 --phase qualification -- /usr/bin/python3 -B -m unittest test_wj_h18_checkpoint_audits test_wj_h16_repaired_monitor.RepairedMonitor.test_durable_cursor_does_not_follow_prepared_or_unpublished_step_commit test_wj_h16_repaired_monitor.RepairedMonitor.test_child_nonzero_exit_cannot_be_reported_as_success test_wj_h16_repaired_monitor.RepairedMonitor.test_native_history_and_signed_zero_are_not_reconstructed test_wj_h15_monitoring.PersistentMonitoring.test_exterior_reactions_refresh_but_prescribed_traction_stays_fixed test_wj_h15_monitoring.PersistentMonitoring.test_only_durable_native_commit_is_a_qualified_restart_cursor test_wj_h15_monitoring.PersistentMonitoring.test_disk_monitor_tolerates_only_transient_names test_wj_h17_exact_rows.ExactRows.test_halt_and_final_readback_are_monotone_separate_roles"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    }
+  },
+  "driver": "20abfd2142a7e5040e24faab5af82786d2a08b9beeea94404d6f93eee0a2e71c",
+  "status": "PASS",
+  "seconds": 1.2746687679900788,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 118493184,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "f6b7cc2c61d4dee7477de7543c21062e4fec1f8a850ec32496b20024689e0f0e"
+}

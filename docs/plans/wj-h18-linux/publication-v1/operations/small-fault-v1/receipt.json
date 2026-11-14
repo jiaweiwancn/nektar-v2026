@@ -1,0 +1,75 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h18-checkpoint-audits-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h18.py",
+    "--root",
+    "/home/jay/build/wj-h18-checkpoint-audits-20261114",
+    "--mode",
+    "small",
+    "--case",
+    "fault"
+  ],
+  "phase": "qualification",
+  "kind": "small",
+  "reserved_seconds": 120.0,
+  "maximum_attempts": 1,
+  "workers": 2,
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 207253,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h18-checkpoint-audits-20261114/small-remaining.py"
+      },
+      {
+        "pid": 207339,
+        "parent": 207253,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h18-checkpoint-audits-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h18.py --root /home/jay/build/wj-h18-checkpoint-audits-20261114 --label small-fault-v1 --seconds 120 --phase qualification --kind small --attempts 1 --workers 2 -- /usr/bin/python3 -B /home/jay/build/wj-h18-checkpoint-audits-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h18.py --root /home/jay/build/wj-h18-checkpoint-audits-20261114 --mode small --case fault"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h18-checkpoint-audits-20261114/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h18.py": {
+      "sha256": "8e2113e38d09710ac0fd907aded4419385a541160973c46701b64fad3596095e",
+      "bytes": 16060
+    }
+  },
+  "driver": "20abfd2142a7e5040e24faab5af82786d2a08b9beeea94404d6f93eee0a2e71c",
+  "status": "PASS",
+  "seconds": 15.326507580000907,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 998838272,
+  "reserved_attempts": 1,
+  "charged_attempts": 1,
+  "unknown_attempts": false,
+  "log_sha256": "a5cc4c88199751337f5d28e3e4b015162cab2371396b92893778a8190fd72614"
+}
