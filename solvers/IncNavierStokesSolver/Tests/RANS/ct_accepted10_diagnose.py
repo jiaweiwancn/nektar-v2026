@@ -104,7 +104,11 @@ def tensors_and_loads(packet,initial,c):
         fp=np.array([gp[0]-2*gk[0]/3,0.,0.]);fi=np.array([2*U*gu[0],0.,0.]);check('rough_pressure',fp,q['pressure_force']);check('rough_inertia',fi,q['inertial_force']);check('endpoint_K',K,q['K']);samplers.append((K,fp,fi))
     for point in p['volume_points']:
         r=point['region'];q=point['velocity_k'];z=q['coordinate'][2];weight=point['weight'];reg='outer/' if r else 'inner/'
-        partition=max(partition,abs(sum(q['phi'])-1));gradconst=max(gradconst,float(max(abs(np.sum(q['derivative'],axis=1)))));volume[r]+=weight
+        # Modified_A is hierarchical: constants have four signed vertex
+        # coefficients, not ones in every modal slot. Tensor x is stride one.
+        m=c['degree']+1;require(len(q['ids'])==m*m,'not the qualified isotropic tensor row')
+        constant=np.array([math.copysign(1.,q['phi'][j]) if j%m<2 and j//m<2 else 0. for j in range(m*m)])
+        partition=max(partition,abs(np.dot(q['phi'],constant)-1));gradconst=max(gradconst,float(max(abs(np.asarray(q['derivative'])@constant))));volume[r]+=weight
         for version,record in enumerate(point['actual_analytic']):
             if version:
                 value=ref(z,r);u=np.array([value[0],0.,0.]);G=np.zeros((3,3));G[0,2]=value[4];k,ep,pi=value[1:4];nt=0. if r else float(truth.D(z)-c['nu']);fp=fi=np.zeros(3)
@@ -140,7 +144,7 @@ def tensors_and_loads(packet,initial,c):
     comparisons={}
     for version,name in enumerate(('actual','analytic')):
         err={key:float(max(abs(v-np.asarray(p[name][key])))) for key,v in loads[version].items()};comparisons[name]=dict(maximum_defect=max(err.values()),components=err)
-    require(max(defects.values())<2e-9 and max(x['maximum_defect'] for x in comparisons.values())<2e-10,'independent tensor/load disagreement')
+    require(max(defects.values())<2e-9 and max(x['maximum_defect'] for x in comparisons.values())<2e-10 and partition<2e-12 and gradconst<2e-10,'independent tensor/load/constant disagreement')
     return dict(status='pass',primitive_defects=defects,load_reconstruction=comparisons,partition_defect=partition,constant_gradient_defect=gradconst,integrated_volume=volume,expected_volume=[(c['x'][-1]-c['x'][0])*c['H'],(c['x'][-1]-c['x'][0])*(c['Z']-c['H'])],scope='independent profile quadrature and spectral-tensor formulas; native test rows, owners, coordinates and weights unchanged')
 
 
@@ -148,6 +152,10 @@ def attribution(p,images,c):
     actual={k:np.asarray(v) for k,v in p['actual'].items()};analytic={k:np.asarray(v) for k,v in p['analytic'].items()};delta={k:actual[k]-analytic[k] for k in actual}
     total={name:sum(vals.values(),np.zeros(p['momentum_size'])) for name,vals in [('actual',actual),('analytic',analytic),('delta',delta)]}
     error=float(max(abs(total['actual']-np.asarray(p['native_raw']))));require(error<=2e-10,'native signed sum failed')
+    free=np.asarray(p['free_rows'],int);negative={}
+    for name,terms in [('omit_augmented_pressure',[k for k in actual if 'augmented_pressure' in k]),('reverse_natural_traction',[k for k in actual if 'natural_traction' in k]),('omit_nonlinear_normal',[k for k in actual if 'nonlinear_normal' in k])]:
+        removed=sum((actual[k] for k in terms),np.zeros(p['momentum_size']));signal=float(max(abs(removed[free])))*(2 if name.startswith('reverse') else 1)
+        require(signal>2e-10,'nondiscriminating signed-load negative:'+name);negative[name]=dict(status='pass',intended_failure='signed_native_free_row_reconstruction',maximum_wrong_row_defect=signal,limit=2e-10)
     frozen_error=float(max(abs(total['actual'][images.rows[:images.nv]]-np.asarray(images.s['frozen_flow_residual'][:images.nv]))))
     require(frozen_error<=2e-10,'initial original momentum differs from actual frozen momentum load')
     full={name:images.image(v,name) for name,v in total.items()};den=images.inner(full['delta'],full['delta']);require(den>0,'no resolved representation pressure image')
@@ -181,7 +189,7 @@ def attribution(p,images,c):
     knots=sorted(set(c['knots']+[(rows[k]['lower']+rows[k]['upper'])/2 for k in selected]))
     selection=dict(schema='CT10SingleRadialContrastV1',status='selected_before_evolution',rule='contract80percent_absolute_signed_alignment,smallest_contiguous_band;uniform_if_more_than_one_third',uniform=uniform,diagnosed_band=[rows[i]['lower'],rows[j]['upper']],selected_bands=[[rows[k]['lower'],rows[k]['upper']] for k in selected],knots=knots,old_knots=c['knots'],degree=4,pressure_degree=2,continuous_physical_inputs_unchanged=True,signal_captured=float(signal[i:j+1].sum()/signal.sum()))
     names=list(vectors);cg=[[images.inner(vectors[x],vectors[y])/den for y in names] for x in names]
-    return dict(schema='CT10PressureAttributionV1',status='pass',native_reconstruction=error,frozen_momentum_agreement=frozen_error,component_images=table,component_Gram_order=names,component_normalized_Gram=cg,total_images={k:images.measure(v) for k,v in full.items()},axis_images=axes,bands=rows,band_normalized_Gram=gram,signed_component_sum_error=sumerr,signed_band_sum_error=banderr,tighter_repeat_difference=unc,pressure_solves=images.receipts,selection=selection),dict(total={k:v.tolist() for k,v in full.items()},components={k:v.tolist() for k,v in vectors.items()},bands=[v.tolist() for v in band_vectors])
+    return dict(schema='CT10PressureAttributionV1',status='pass',native_reconstruction=error,frozen_momentum_agreement=frozen_error,negative_controls=negative,component_images=table,component_Gram_order=names,component_normalized_Gram=cg,total_images={k:images.measure(v) for k,v in full.items()},axis_images=axes,bands=rows,band_normalized_Gram=gram,signed_component_sum_error=sumerr,signed_band_sum_error=banderr,tighter_repeat_difference=unc,pressure_solves=images.receipts,selection=selection),dict(total={k:v.tolist() for k,v in full.items()},components={k:v.tolist() for k,v in vectors.items()},bands=[v.tolist() for v in band_vectors])
 
 
 def main():
