@@ -44,6 +44,10 @@ def analysis(root):
     observed=float(np.mean([v['native_compute_seconds']+v['independent_seconds']for v in warm]))if warm else None
     atomic(out/'summary.json',dict(status='PASS'if qualified==end==4 and all(v['quality']=='PASS'for v in timeline)else'OBSTRUCTED_OR_INCOMPLETE',native_completed=end,qualified=qualified,new_scientific_progress=max(0,qualified-1),final_union_owner_rows=rows.point_count,quadrature_rows=len(rows.rows)-rows.point_count,final_required_points=len(inventory['points']),cache=stats,reference_identity=manifest['reference_identity'],clocks=dict(horizon=505.02466521278404,terminal_window=[447.8483832973273,505.02466521278404],dt=.0025,required_steps=202010),costs=dict(warm_samples=len(warm),native_mean_seconds=native,observed_native_plus_assessment_mean_seconds=observed,native_only_conditional_days=None if native is None else native*202010/86400,observed_loop_lower_bound_days=None if observed is None else observed*202010/86400,additional_costs='checkpoint/ready/wait/native commit, startup, strict read, future witness growth not added to inclusive nested timers; no duration admission'),scope='finite four-stage support, not unrestricted duration-bounded monitoring; application/experimental drift budgets unresolved'))
     figures(out,timeline,steps)
+    failed=next((v for v in timeline if v['quality']!='PASS'),None)
+    if failed:
+        from run_wj_h16 import halt
+        halt(root,'coverage_halt',dict(reason='retrospective final-union qualification failed',earliest_affected_step=failed['step'],earliest_affected_time=failed['time'],classification=failed['quality'],native_and_live_decisions_preserved=True))
     assert all(v['quality']=='PASS'for v in timeline),'final union retrospectively failed; preserve native/live decisions'
 
 def figures(out,timeline,steps):
