@@ -6,7 +6,7 @@ Run with ct_accepted3_command.py. No state, boundary, checkpoint or governing
 operator is changed. Local loads have sparse native support; Schur actions use
 consistent mass solves without materializing M^-1 G or a dense Schur matrix.
 """
-import argparse,copy,math,os,resource,shutil
+import argparse,copy,inspect,math,os,resource,shutil
 from pathlib import Path
 from functools import lru_cache
 from rans_qualification import THREADS,exact_vector_hash
@@ -77,7 +77,8 @@ class PressureImages:
         load=np.asarray(global_load)[self.rows[:self.nv]];rhs=-(self.D@self.lu.solve(load));mag=float(np.linalg.norm(rhs))
         if mag==0:return np.zeros(self.W.shape[0])
         ticks=[]
-        x,info=gmres(self.W,rhs/mag,M=self.P,rtol=rtol,atol=0.,restart=80,maxiter=1000,callback=lambda v:ticks.append(v),callback_type='pr_norm')
+        tolerance={'rtol' if 'rtol' in inspect.signature(gmres).parameters else 'tol':rtol}
+        x,info=gmres(self.W,rhs/mag,M=self.P,**tolerance,atol=0.,restart=80,maxiter=1000,callback=lambda v:ticks.append(v),callback_type='pr_norm')
         x*=mag;defect=self.W@x-rhs
         rel=float(np.linalg.norm(defect))/mag
         require(info==0 and rel<2e-10,'diagnostic true Schur residual:'+label+':'+str(rel))
@@ -186,16 +187,22 @@ def attribution(p,images,c):
 def main():
     a=argparse.ArgumentParser(description=__doc__)
     for key in ('ct8','ct9','runtime','contract','output'):a.add_argument('--'+key,type=Path,required=True)
+    a.add_argument('--capture',type=Path,help='reuse unchanged native point export from a preserved diagnostic attempt')
     a=a.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     pre=sealed(a.ct8/'preflight-v6');base=sealed(a.ct9/'equivalence-v2');c=pre['case'];member=base['members']['0.001'];folder=Path(member['directory']);native=n.read(folder/'case.evolution.json');require(sha(folder/'case.evolution.json')==member['native_report_sha256'],'changed baseline')
     initial_path=a.ct9/'equivalence-v2/zero-0.001/initial.json';initial=n.read(initial_path);attempt=next(x for x in native['pimple_attempts'] if x['scheduled_complete']);sp=Path(attempt['flow_snapshot']);require(sha(sp)==attempt['flow_snapshot_sha256'],'changed snapshot');snap=n.read(sp)
     require(snap['input']==initial['observation']['state'],'initial frozen snapshot differs from actual projected state')
-    m=RequestManifest(a.output,dict(schema='CT10SignedDiagnosisV1',contract=sha(a.contract),case=c,source=sha(Path(__file__)),diagnostic_runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),governing_runtime=runtime_identity(a.ct9/'build-v8/runtime/IncNavierStokesSolver'),baseline_report=sha(folder/'case.evolution.json'),initial=sha(initial_path),snapshot=sha(sp),state=exact_vector_hash(snap['input'])))
+    m=RequestManifest(a.output,dict(schema='CT10SignedDiagnosisV1',contract=sha(a.contract),case=c,source=sha(Path(__file__)),diagnostic_runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),governing_runtime=runtime_identity(a.ct9/'build-v8/runtime/IncNavierStokesSolver'),baseline_report=sha(folder/'case.evolution.json'),initial=sha(initial_path),snapshot=sha(sp),state=exact_vector_hash(snap['input']),reused_native_capture=dict(path=str(a.capture),sha256=sha(a.capture/'initial/loads.json')) if a.capture else None))
     dest=a.output/'initial';dest.mkdir();shutil.copy2(folder/'case.xml',dest/'case.xml')
     req=replay(initial,snap['input'],0.,[],export_ct10_momentum=True,ct10_export_points=True)
-    packet,e=probe(a.runtime,dest,req,'loads');require(e['exit_code']==0,'native CT10 load export failed:'+str(packet.get('failure')));require(packet['observation']['state']==snap['input'],'diagnostic changed coefficients')
+    if a.capture:
+        old=n.read(a.capture/'request-manifest.json')['request'];require(old['diagnostic_runtime']==runtime_identity(a.runtime/'RANSPreservationProbe') and old['initial']==sha(initial_path) and old['snapshot']==sha(sp) and old['contract']==sha(a.contract),'foreign native diagnostic capture')
+        require(n.read(a.capture/'initial/loads-request.json')==req and sha(a.capture/'initial/case.xml')==sha(folder/'case.xml'),'changed capture request or physical configuration')
+        packet=n.read(a.capture/'initial/loads.json');e=n.read(a.capture/'initial/loads-execution.json');packet_path=a.capture/'initial/loads.json'
+    else:packet,e=probe(a.runtime,dest,req,'loads');packet_path=dest/'loads.json'
+    require(e['exit_code']==0,'native CT10 load export failed:'+str(packet.get('failure')));require(packet['observation']['state']==snap['input'],'diagnostic changed coefficients')
     p=packet['ct10_momentum'];independent=tensors_and_loads(packet,initial,c);write_json(a.output/'independent.json',independent)
     result,vectors=attribution(p,PressureImages(snap,initial,c,pre['weights'],pre['global_count']),c)
-    result.update(independent=independent,execution=e,packet_sha256=sha(dest/'loads.json'),baseline_native_report_sha256=sha(folder/'case.evolution.json'),snapshot_sha256=sha(sp),initial_sha256=sha(initial_path),actual_initial_sha256=exact_vector_hash(snap['input']),native_counts=dict(stored=len(snap['input']),free_velocity=snap['velocity_size'],free_pressure=len(snap['rows'])-snap['velocity_size']),native_point_count=len(p['volume_points']),local_sparse_entries=sum(len(t['ids']) for q in p['local_sparse'] for t in q['terms'].values()))
+    result.update(independent=independent,execution=e,packet_path=str(packet_path),packet_sha256=sha(packet_path),baseline_native_report_sha256=sha(folder/'case.evolution.json'),snapshot_sha256=sha(sp),initial_sha256=sha(initial_path),actual_initial_sha256=exact_vector_hash(snap['input']),native_counts=dict(stored=len(snap['input']),free_velocity=snap['velocity_size'],free_pressure=len(snap['rows'])-snap['velocity_size']),native_point_count=len(p['volume_points']),local_sparse_entries=sum(len(t['ids']) for q in p['local_sparse'] for t in q['terms'].values()))
     write_json(a.output/'pressure-vectors.json',vectors);write_json(a.output/'selection.json',result['selection']);write_json(a.output/'results.json',result);m.seal(a.output,['results.json','selection.json','independent.json','pressure-vectors.json']);print('CT10 diagnosis complete',result['selection'],flush=True);return 0
 if __name__=='__main__':raise SystemExit(main())
