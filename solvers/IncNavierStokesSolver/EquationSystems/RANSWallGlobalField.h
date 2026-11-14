@@ -64,9 +64,13 @@ public:
     const std::vector<Element> &Elements() const { return m_elements; }
     int Dimension() const { return m_dimension; }
     int Size() const;
+    const void *CoefficientMapIdentity() const;
     RANSWallGlobalPoint Point(const Coordinate &coordinate, int side=0) const;
     int LocateElement(const Coordinate &coordinate,int side=0) const;
     RANSWallGlobalPoint ElementPoint(int element, const Coordinate &coordinate) const;
+    // Same cold-factory validation, also executed on every persistent hit.
+    // ElementPoint's legacy body remains unchanged for policy-off comparison.
+    void ValidateElementPoint(int element,const Coordinate &coordinate) const;
     /** d/dz of each Cartesian basis-gradient row on the same native element.
      * Used by the opt-in R3 action when a normalization-ray point moves.
      * Contracting with a field uses the same constant-centering as Gradient.

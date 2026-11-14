@@ -569,15 +569,18 @@ std::string RANSWallEvolutionPatch::CompareOuterOperators(const Vector &s,double
 }
 
 std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,const Vector &history,
-    double time,const RANSWallEvolutionData &data)
+    double time,const RANSWallEvolutionData &data,bool structural)
 {
     namespace J=RANSWallSolveJson;
     Require(!m_evaluation,"reuse verification needs an independent scope");
     const bool saved=m_evaluationReuse;const auto stateHash=RANSWallR3::Hash(state),historyHash=RANSWallR3::Hash(history);
     struct Restore {bool &value;bool old;~Restore(){value=old;}} restore{m_evaluationReuse,saved};
+    Restore restoreRows{m_immutableRowReuse,m_immutableRowReuse};
     const auto drive=[&](bool enabled)
     {
-        m_evaluationReuse=enabled;RANSWallEvolutionData input=data;
+        m_evaluationReuse=structural?true:enabled;
+        if(structural)m_immutableRowReuse=enabled;
+        RANSWallEvolutionData input=data;
         EvaluationScope scope(*this,input,time);std::vector<std::string> values;
         const auto domain=[&](const Vector &s,double t,bool retain,bool only,const std::vector<RANSWallCoordinate> &anchors=std::vector<RANSWallCoordinate>{})
         {values.push_back(ScalarDomainJSON(ScalarDomain(s,t,input,retain,only,anchors),retain));};
@@ -595,6 +598,31 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
             Require(found,"reuse verification needs a free field coefficient");domain(test,time,true,false);
         }
         domain(flow,time,true,false);
+        if(structural)
+        {
+            // Keep owner and side validation after the same factory access;
+            // warm the valid request before each adverse descriptor.
+            const double H=m_parameters.geometry.height;
+            for(const auto &el:fields[0]->Elements())if(Same(el.lower[2],H) || Same(el.upper[2],H))
+            {
+                ScalarObservation p;p.block=K();p.geometry=el.geometry;
+                p.coordinate={(el.lower[0]+el.upper[0])/2,0,H};p.side=Same(el.upper[2],H)?-1:1;
+                const auto record=[&](const ScalarObservation &q)
+                {
+                    try{const auto row=ResolveObservation(q).velocity;return J::Object({{"geometry",J::Number(row->geometry)},
+                        {"element",J::Number(row->element)},{"value",J::Number(row->Value(state,offset[0]))},
+                        {"gradient",J::Numbers(row->Gradient(state,offset[0]))},{"constant",J::Numbers(row->constant)}});}
+                    catch(const std::exception &e){return J::Object({{"failure",J::Quote(e.what())}});}
+                };
+                values.push_back(record(p));values.push_back(record(p));
+                auto q=p;q.side=-p.side;const auto wrong=record(q);
+                Require(wrong.find("radial side disagrees")!=std::string::npos,"warmed wrong-side fixture did not fail");values.push_back(wrong);
+                q=p;q.coordinate[0]=el.upper[0]+1.;values.push_back(record(q));
+                q=p;q.geometry=-1;values.push_back(record(q));
+                q=p;q.coordinate[2]=std::nextafter(H,(el.lower[2]+el.upper[2])/2);values.push_back(record(q));
+                q=p;q.coordinate[1]=-0.;values.push_back(record(q));
+            }
+        }
 
         domain(state,std::nextafter(time,1e300),true,false);domain(state,time,true,false);
         ++input.generation;domain(state,time,true,false);
@@ -658,7 +686,9 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
     return J::Object({{"passed","true"},{"audit_revision",J::Quote(AuditRevision())},{"compared_queries",J::Number(off.size())},
         {"state_sha256",J::Quote(stateHash)},{"history_sha256",J::Quote(historyHash)},
         {"checks",J::Quote("exact state bytes including signed zero; time; data generation; external data; flags; ordered additional anchors; foreign data; history; alpha; residual options; coverage tripwire")},
-        {"reuse",EvaluationReuseJSON()},{"governing_solves","0"},{"physical_commits","0"}});
+        {"reuse",EvaluationReuseJSON()},{"immutable_rows",ImmutableRowsJSON()},
+        {"comparison_mode",J::Quote(structural?"only structural policy Off/PatchExactV1; ExactStepV1 in both":"legacy dynamic reuse comparison")},
+        {"governing_solves","0"},{"physical_commits","0"}});
 }
 
 }
@@ -669,6 +699,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
     double alpha,double time,const RANSWallEvolutionData &data,bool rangesOnly) const
 {
     Require(WJ(),"WJ audit requires WJ model ownership");
+    if(!rangesOnly)++m_completeWJCalls;
     RANSWallTiming::Scope totalTiming("audit.WJ.total");RANSWallTiming::Accumulator buckets;
     const auto domain=ScalarDomain(state,time,data,true);
     Diagnostic audit;
@@ -692,11 +723,28 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
     {
         if(p.block!=K() && !p.dependentTrace)continue;
         RANSWallTiming::Accumulator::Part rowsTiming(buckets,"audit.WJ.owned_rows_gradients");
-        const auto provenance=ResolveObservation(p);const auto &row=*provenance.velocity;
-        const double k=GeometryPoint(K(),row.geometry,p.coordinate).Value(state,offset[K()]);
-        RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=row.Gradient(state,offset[a]);
+        RANSWallTiming::Accumulator::Part provenanceTiming(buckets,"audit.WJ.velocity_accessor_validation");
+        const auto provenance=ResolveObservation(p);const auto &row=*provenance.velocity;provenanceTiming.Stop();
+        const auto valueAt=[&](int block)
+        {
+            RANSWallTiming::Accumulator::Part access(buckets,"audit.WJ.scalar_row_accessor");
+            if(m_immutableRowReuse)
+            {
+                const auto r=GeometryRow(block,row.geometry,p.coordinate);access.Stop();
+                RANSWallTiming::Accumulator::Part contraction(buckets,"audit.WJ.current_state_contractions");
+                return r->Value(state,offset[block]);
+            }
+            const auto r=GeometryPoint(block,row.geometry,p.coordinate);access.Stop();
+            RANSWallTiming::Accumulator::Part contraction(buckets,"audit.WJ.current_state_contractions");
+            return r.Value(state,offset[block]);
+        };
+        const double k=valueAt(K());
+        RANSTensor g{};
+        {RANSWallTiming::Accumulator::Part contraction(buckets,"audit.WJ.current_state_contractions");
+            for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=row.Gradient(state,offset[a]);}
         const bool inner=provenance.inner;
-        const double epsilon=inner?0:p.dependentTrace?p.value:GeometryPoint(Epsilon(),row.geometry,p.coordinate).Value(state,offset[Epsilon()]);
+        const double epsilon=inner?0:p.dependentTrace?p.value:valueAt(Epsilon());
+        CommitAuditObservation(p,row,k,epsilon,g,state);
         if(!seen.emplace(row.geometry,p.coordinate,epsilon).second)continue;
         const bool atH=std::abs(p.coordinate[2]-m_parameters.geometry.height)<1e-12;
         rowsTiming.Stop();

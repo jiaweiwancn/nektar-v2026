@@ -132,7 +132,7 @@ RANSWallGlobalPoint RANSWallEvolutionPatch::Transform(RANSWallGlobalPoint q) con
     q.weight*=g.determinant;return q;
 }
 RANSWallGlobalPoint RANSWallEvolutionPatch::Point(int block,const RANSWallCoordinate &p,int side) const
-{return m_evaluation?*EvaluationRow(block,fields[block]->LocateElement(p,side),p):Transform(fields[block]->Point(p,side));}
+{return (m_evaluation || m_immutableRowReuse)?*EvaluationRow(block,fields[block]->LocateElement(p,side),p):Transform(fields[block]->Point(p,side));}
 std::vector<RANSWallGlobalPoint> RANSWallEvolutionPatch::Quadrature(int block,int order) const
 {
     if(!order && Mapped())order=std::max(m_parameters.normalOrder,m_parameters.tangentialOrder);
@@ -375,6 +375,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     std::string reuse;session->LoadSolverInfo("RANSWallEvaluationReuse",reuse,"Off");
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
+    ConfigureImmutableRows(session);
     Require(!m_evaluationReuse || (m_dimension==2 && (!Mapped() || OpenBoundary()) && PimpleSingleSweep()),
         "ExactStepV1 is restricted to the serial flat2D one-sweep pilot");
     session->LoadSolverInfo("RANSWallPimpleKInventory",m_pimpleKInventory,"LegacyV1");

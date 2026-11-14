@@ -324,6 +324,7 @@ std::string RANSEquilibriumWallEvolution::MonitoringPacket(const std::string &ph
         {"step_audits",tail(m_stepAudits,1)},{"explicit_audits",tail(m_explicitAudits,2)},
         {"first_retained_explicit_call",J::Number(explicitCount?m_explicitTotal-explicitCount+1:0)},
         {"actual_explicit_calls",J::Number(m_explicitTotal)},{"native_hard_audit",J::Object(hardAudit)},
+        {"immutable_row_reuse",m_patch->ImmutableRowsJSON()},
         {"pimple_attempts",J::List(m_patch->PimpleRecords())},{"implicit_callback_count",J::Number(m_implicitCallbacks)},
         {"initialization_lift_calls_iterations",J::Numbers(m_patch->InitializationWork())},{"initial_velocity_calls",J::Number(m_patch->InitialVelocityCalls())},
         {"failure",J::Quote("")},{"native_completed_in_process",J::Number(m_nativeCompleted)}});

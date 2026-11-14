@@ -962,6 +962,16 @@ RANSWallGlobalPoint RANSWallEvolutionPatch::GeometryPoint(int block,int geometry
     return *EvaluationRow(block,e,coordinate);
 }
 
+std::shared_ptr<const RANSWallGlobalPoint> RANSWallEvolutionPatch::GeometryRow(int block,int geometry,
+    const RANSWallCoordinate &coordinate) const
+{
+    const int e=GeometryElement(block,geometry);const auto &element=fields[block]->Elements()[e];
+    for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
+        Require(coordinate[a]>=element.lower[a]-1e-11 && coordinate[a]<=element.upper[a]+1e-11,
+            "observation coordinate is outside its recorded native element");
+    return EvaluationRow(block,e,coordinate);
+}
+
 RANSWallEvolutionPatch::ObservationProvenance RANSWallEvolutionPatch::ResolveObservation(
     const ScalarObservation &p) const
 {

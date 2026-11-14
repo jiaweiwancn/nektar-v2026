@@ -2,6 +2,8 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallImmutableRows.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <cstring>
 #include <cmath>
 #include <list>
@@ -36,6 +38,106 @@ Key DomainKey(bool only,bool coverage,const std::vector<RANSWallCoordinate> &anc
     for(const auto &p:anchors)for(double x:p)k.push_back(Bit(x));
     return k;
 }
+}
+
+struct RANSWallEvolutionPatch::ImmutableRowStore
+{
+    RANSWallImmutableRows<RANSWallGlobalPoint> rows;
+    std::vector<const RANSWallGlobalField*> fields;
+    std::vector<const void*> coefficientMaps;
+    explicit ImmutableRowStore(const RANSWallEvolutionPatch &p,std::size_t entries,std::uint64_t bytes):rows(entries,bytes)
+    {for(const auto &f:p.fields){fields.push_back(f.get());coefficientMaps.push_back(f->CoefficientMapIdentity());}}
+};
+
+struct RANSWallEvolutionPatch::AuditCommitment
+{
+    struct Stream
+    {
+        RANSWallR3::Sha256 chunk,root;
+        std::uint64_t count=0,bytes=0,chunkCount=0;RowKey first{},last{};
+        std::vector<std::string> chunks;
+        void Raw(const void *p,std::size_t n){chunk.Update(p,n);bytes+=n;}
+        void Integer(std::uint64_t v){std::array<unsigned char,8>b{};for(int i=0;i<8;++i)b[i]=v>>(8*i);Raw(b.data(),b.size());}
+        void Number(double v){Integer(Bit(v));}
+        void Text(const std::string &s){Integer(s.size());Raw(s.data(),s.size());}
+        template<class T>void Values(const std::vector<T> &v){Integer(v.size());for(auto x:v)if constexpr(std::is_integral_v<T>)Integer(x);else Number(x);}
+        static std::string Identity(const RowKey &k){std::ostringstream s;s<<std::hex;for(auto x:k)s<<x<<':';return s.str();}
+        void Begin(const RowKey &key){if(!chunkCount)first=key;last=key;}
+        void End(){++count;if(++chunkCount==4096)Flush();}
+        void Flush()
+        {
+            if(!chunkCount)return;Require(chunks.size()<16384,"bounded audit commitment chunk limit");
+            const auto hash=chunk.Finish();const auto ordinal=chunks.size();
+            // Root commits to the ordered, framed SHA256 chunk commitments;
+            // the byte stream is hashed once, not retained or rounded to JSON.
+            std::array<std::uint64_t,2>header{ordinal,chunkCount};root.Update(header.data(),sizeof header);root.Update(hash.data(),hash.size());
+            chunks.push_back(J::Object({{"count",J::Number(chunkCount)},{"sha256",J::Quote(hash)},
+                {"first_key_hex",J::Quote(Identity(first))},{"last_key_hex",J::Quote(Identity(last))}}));chunk={};chunkCount=0;
+        }
+        std::string JSON(){Flush();return J::Object({{"count",J::Number(count)},{"bytes",J::Number(bytes)},
+            {"root_sha256",J::Quote(root.Finish())},{"chunks",J::List(chunks)}});}
+    };
+    Stream rows,observations;double seconds=0;
+};
+
+void RANSWallEvolutionPatch::CommitAuditRow(const RowKey &key,const RANSWallGlobalPoint &r) const
+{
+    if(!m_auditCommitment)return;const auto began=std::chrono::steady_clock::now();auto &s=m_auditCommitment->rows;
+    s.Begin(key);for(auto v:key)s.Integer(v);s.Values(r.ids);s.Values(r.phi);s.Values(r.constant);
+    for(const auto &v:r.derivative)s.Values(v);s.Number(r.weight);s.Integer(r.columnAverage);s.End();
+    m_auditCommitment->seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-began).count();
+}
+void RANSWallEvolutionPatch::CommitAuditObservation(const ScalarObservation &p,const RANSWallGlobalPoint &r,
+    double k,double epsilon,const RANSTensor &g,const Vector &state) const
+{
+    if(!m_auditCommitment)return;const auto began=std::chrono::steady_clock::now();auto &s=m_auditCommitment->observations;
+    const RowKey key{Bits(p.block),Bits(r.geometry),Bits(r.element),Bits(p.side+1),Bit(p.coordinate[0]),Bit(p.coordinate[1]),Bit(p.coordinate[2])};
+    s.Begin(key);for(auto v:key)s.Integer(v);s.Text(p.inventory);s.Integer(p.dependentTrace);s.Integer(p.strict);
+    s.Number(p.value);s.Number(p.scale);s.Number(p.weight);s.Number(k);s.Number(epsilon);
+    for(const auto &row:g)for(double v:row)s.Number(v);
+    for(int a=0;a<m_dimension;++a)s.Number(r.Value(state,offset[a]));s.End();
+    m_auditCommitment->seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-began).count();
+}
+
+std::string RANSWallEvolutionPatch::CompleteAuditCommitment(const Vector &state,const Vector &history,
+    double alpha,double time,const RANSWallEvolutionData &data) const
+{
+    Require(!m_auditCommitment && !m_evaluation,"complete audit batch requires fresh dynamic scope");
+    const std::uint64_t one=1;Require(*reinterpret_cast<const unsigned char*>(&one)==1,"audit commitment requires qualified little-endian host");
+    m_auditCommitment=std::make_shared<AuditCommitment>();
+    struct Reset{std::shared_ptr<AuditCommitment> &p;~Reset(){p.reset();}}reset{m_auditCommitment};
+    const auto began=std::chrono::steady_clock::now();const auto before=m_completeWJCalls;
+    const auto audit=WJCompleteAudit(state,history,alpha,time,data,false);
+    const double elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-began).count();
+    Require(m_completeWJCalls==before+1,"complete audit call accounting differs");
+    AuditCommitment::Stream payload;std::vector<std::pair<std::string,std::string>> values;
+    for(const auto &[name,v]:audit){payload.Text(name);payload.Values(v);values.push_back({name,J::Numbers(v)});}
+    return J::Object({{"schema",J::Quote("WJExactCompleteAuditV1")},{"audit",J::Object(values)},
+        {"audit_numerical_sha256",J::Quote(payload.chunk.Finish())},{"ordered_rows",m_auditCommitment->rows.JSON()},
+        {"ordered_observations",m_auditCommitment->observations.JSON()},
+        {"full_audit_calls",J::Number(m_completeWJCalls-before)},
+        {"wall_seconds_including_commitment",J::Number(elapsed)},{"commitment_wall_seconds",J::Number(m_auditCommitment->seconds)},
+        {"canonical",J::Quote("little-endian u64 lengths/IDs and IEEE binary64; framed ordered4096-record SHA256 chunks; root commits chunk ordinal/count/hash; rows include actual request multiplicity, coefficients, derivatives; observations before seen")},
+        {"localization",J::Quote("first differing4096-record chunk and its bounded first/last identities; no million-visit stream")}});
+}
+
+void RANSWallEvolutionPatch::ConfigureImmutableRows(const LibUtilities::SessionReaderSharedPtr &session)
+{
+    std::string mode;session->LoadSolverInfo("RANSWallImmutableRowReuse",mode,"Off");
+    Require(mode=="Off" || mode=="PatchExactV1","unknown immutable row reuse policy");
+    m_immutableRowReuse=mode=="PatchExactV1";
+    if(!m_immutableRowReuse)return;
+    Require(m_evaluationReuse,"PatchExactV1 requires ExactStepV1 dynamic reuse unchanged");
+    const auto read=[&](const std::string &name,std::uint64_t fallback)
+    {
+        std::string text;session->LoadSolverInfo(name,text,std::to_string(fallback));
+        Require(!text.empty() && text.find_first_not_of("0123456789")==std::string::npos,"invalid immutable row resource control");
+        return std::stoull(text);
+    };
+    m_immutableRowEntries=read("RANSWallImmutableRowEntries",m_immutableRowEntries);
+    m_immutableRowBytes=read("RANSWallImmutableRowBytes",m_immutableRowBytes);
+    Require(m_immutableRowEntries>0 && m_immutableRowEntries<=524288 && m_immutableRowBytes>=1024 &&
+        m_immutableRowBytes<=512ULL*1024*1024,"invalid immutable row cache limits");
 }
 
 struct RANSWallEvolutionPatch::EvaluationCache
@@ -129,10 +231,22 @@ std::shared_ptr<const RANSWallGlobalPoint> RANSWallEvolutionPatch::EvaluationRow
     // A patch owns an immutable field/mesh/map generation. Both geometry and
     // native element, actual radial side and all coordinate bits enter the key.
     const RowKey key{Bits(block),Bits(el.geometry),Bits(element),Bits(side+1),Bit(coordinate[0]),Bit(coordinate[1]),Bit(coordinate[2])};
+    if(m_immutableRowReuse)
+    {
+        fields.at(block)->ValidateElementPoint(element,coordinate);
+        if(!m_immutableRows)m_immutableRows=std::make_shared<ImmutableRowStore>(*this,m_immutableRowEntries,m_immutableRowBytes);
+        Require(m_immutableRows->fields.size()==fields.size(),"immutable row field generation changed");
+        for(int b=0;b<fields.size();++b)Require(m_immutableRows->fields[b]==fields[b].get() &&
+            m_immutableRows->coefficientMaps[b]==fields[b]->CoefficientMapIdentity(),"immutable row field/map generation changed");
+        // No additional scoped owning map; evicted shared rows stay charged
+        // until the last consumer releases them. Every hit validates above.
+        auto row=m_immutableRows->rows.Get(key,[&](){return Transform(fields[block]->ElementPoint(element,coordinate));});
+        CommitAuditRow(key,*row);return row;
+    }
     if(m_evaluation)
     {
         const auto it=m_evaluation->rows.find(key);
-        if(it!=m_evaluation->rows.end()){++m_evaluationWork.rowHits;return it->second;}
+        if(it!=m_evaluation->rows.end()){++m_evaluationWork.rowHits;CommitAuditRow(key,*it->second);return it->second;}
     }
     ++m_evaluationWork.rowConstructs;
     auto row=std::make_shared<const RANSWallGlobalPoint>(Transform(fields[block]->ElementPoint(element,coordinate)));
@@ -143,7 +257,7 @@ std::shared_ptr<const RANSWallGlobalPoint> RANSWallEvolutionPatch::EvaluationRow
         m_evaluation->rows.emplace(key,row);
         m_evaluationWork.peakRows=std::max<std::uint64_t>(m_evaluationWork.peakRows,m_evaluation->rows.size());
     }
-    return row;
+    CommitAuditRow(key,*row);return row;
 }
 
 std::shared_ptr<const RANSWallEvolutionPatch::ScalarDomainResult> RANSWallEvolutionPatch::CachedDomain(
@@ -289,6 +403,30 @@ void RANSWallEvolutionPatch::StoreConstraints(const Vector &s,double time,const 
 {
     if(!m_evaluation || m_assertKCoverage)return;
     PrepareEvaluation(data,time);m_evaluation->Find(s,m_evaluationWork).constraints[{}]=std::make_shared<const std::map<int,double>>(value);
+}
+
+std::string RANSWallEvolutionPatch::ImmutableRowsJSON() const
+{
+    using C=RANSWallImmutableRows<RANSWallGlobalPoint>;
+    const auto s=m_immutableRows?m_immutableRows->rows.Stats():std::make_shared<const C::Statistics>();
+    std::vector<std::uint64_t> gaps(s->requestGapHistogram.begin(),s->requestGapHistogram.end());
+    return J::Object({{"policy",J::Quote(m_immutableRowReuse?"PatchExactV1":"Off")},
+        {"entry_limit",J::Number(m_immutableRowEntries)},{"byte_limit",J::Number(m_immutableRowBytes)},
+        {"requests",J::Number(s->requests)},{"hits",J::Number(s->hits)},{"misses",J::Number(s->misses)},
+        {"constructs",J::Number(s->constructs)},{"evictions",J::Number(s->evictions)},{"bypasses",J::Number(s->bypasses)},
+        {"oversized_bypasses",J::Number(s->oversized)},{"retained_budget_bypasses",J::Number(s->retainedBypasses)},
+        {"resident_entries",J::Number(s->residentEntries)},
+        {"resident_bytes",J::Number(m_immutableRows?m_immutableRows->rows.ResidentBytes():0)},
+        {"live_bytes",J::Number(m_immutableRows?m_immutableRows->rows.LiveBytes():0)},
+        {"retained_after_eviction_bytes",J::Number(m_immutableRows?m_immutableRows->rows.RetainedBytes():0)},
+        {"peak_live_bytes",J::Number(s->peakLiveBytes)},{"peak_resident_entries",J::Number(s->peakEntries)},
+        {"minimum_constructed_row_bytes",J::Number(s->constructs?s->minimumRowBytes:0)},{"maximum_constructed_row_bytes",J::Number(s->maximumRowBytes)},
+        {"maximum_request_gap",J::Number(s->maximumRequestGap)},{"request_gap_power2_histogram",J::Numbers(gaps)},
+        {"reuse_distance_scope",J::Quote("requests since previous resident access/construction, not exact LRU stack distance; no unbounded key trace; histogram final bin is capped")},
+        {"distinct_keys",J::Quote("not counted exactly: peak residency lower bound; misses upper bound, including reconstruction")},
+        {"full_WJ_audit_calls",J::Number(m_completeWJCalls)},
+        {"accounting",J::Quote("conservative capacities/allocation overhead; all catalog-created shared rows live through eviction; bypass/caller-value copies are transient RSS")},
+        {"scoped_row_owners",J::Number(m_evaluation?m_evaluation->rows.size():0)}});
 }
 
 std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const

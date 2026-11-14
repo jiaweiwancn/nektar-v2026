@@ -88,6 +88,9 @@ struct RANSWallGlobalField::BasisData
     }
 };
 
+const void *RANSWallGlobalField::CoefficientMapIdentity() const
+{return m_field->GetLocalToGlobalMap().get();}
+
 double RANSWallGlobalPoint::Value(const Vector &state,int offset) const
 {
     Require(offset>=0 && !ids.empty() && constant.size()==ids.size() &&
@@ -187,6 +190,17 @@ RANSWallGlobalField::RANSWallGlobalField(
 int RANSWallGlobalField::Size() const
 {
     return m_field->GetLocalToGlobalMap()->GetNumGlobalCoeffs();
+}
+void RANSWallGlobalField::ValidateElementPoint(int e,const Coordinate &coordinate) const
+{
+    const auto &element=m_elements.at(e);
+    Require(std::all_of(coordinate.begin(),coordinate.end(),[](double x){return std::isfinite(x);}),"nonfinite physical sample");
+    if(m_dimension==2)Require(Equal(coordinate[1],0),"2D sample has nonzero physical span coordinate");
+    for(int d=0;d<m_dimension;++d)
+    {
+        const int a=m_axes[d];Require(coordinate[a]>=element.lower[a]-1e-11 && coordinate[a]<=element.upper[a]+1e-11,
+            "sample outside its native element");
+    }
 }
 RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &coordinate) const
 {

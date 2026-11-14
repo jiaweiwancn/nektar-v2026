@@ -51,6 +51,8 @@ struct RANSWallEvolutionData
 class RANSWallEvolutionPatch
 {
     struct EvaluationCache;
+    struct ImmutableRowStore;
+    struct AuditCommitment;
 public:
     using Vector=RANSWallAlgebra::Vector;
     using WallMatrix=RANSWallAlgebra::DenseMatrix;
@@ -67,7 +69,10 @@ public:
         EvaluationScope(const EvaluationScope&)=delete;
     };
     std::string EvaluationReuseJSON() const;
-    std::string EvaluationReuseChecks(const Vector &,const Vector &,double,const RANSWallEvolutionData &);
+    std::string EvaluationReuseChecks(const Vector &,const Vector &,double,const RANSWallEvolutionData &,bool structural=false);
+    std::string ImmutableRowsJSON() const;
+    std::string CompleteAuditCommitment(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &) const;
+    std::uint64_t CompleteWJCalls()const{return m_completeWJCalls;}
     RANSWallEvolutionPatch(const LibUtilities::SessionReaderSharedPtr &serialSession,
         const SpatialDomains::MeshGraphSharedPtr &graph,
         const LibUtilities::CommSharedPtr &collective,const RANSWallPatchParameters &parameters,
@@ -199,6 +204,7 @@ public:
     };
     ObservationProvenance ResolveObservation(const ScalarObservation &point) const;
     RANSWallGlobalPoint GeometryPoint(int block,int geometry,const RANSWallCoordinate &coordinate) const;
+    std::shared_ptr<const RANSWallGlobalPoint> GeometryRow(int block,int geometry,const RANSWallCoordinate &coordinate) const;
     std::string InterfaceProvenanceChecks() const;
     struct ScalarDomainResult
     {
@@ -537,6 +543,15 @@ private:
     bool m_heightComparison=false,m_acceptedComparison=false;
     mutable std::map<RANSWallCoordinate,RANSWallGlobalPoint> m_kSamplingRows;
     bool m_evaluationReuse=false;
+    bool m_immutableRowReuse=false;
+    std::size_t m_immutableRowEntries=196608;
+    std::uint64_t m_immutableRowBytes=256ULL*1024*1024;
+    mutable std::shared_ptr<ImmutableRowStore> m_immutableRows;
+    mutable std::shared_ptr<AuditCommitment> m_auditCommitment;
+    mutable std::uint64_t m_completeWJCalls=0;
+    void ConfigureImmutableRows(const LibUtilities::SessionReaderSharedPtr &);
+    void CommitAuditRow(const std::array<std::uint64_t,7> &,const RANSWallGlobalPoint &) const;
+    void CommitAuditObservation(const ScalarObservation &,const RANSWallGlobalPoint &,double,double,const SolverUtils::RANSTensor &,const Vector &) const;
     mutable std::shared_ptr<EvaluationCache> m_evaluation;
     mutable std::map<std::pair<int,bool>,RANSWallSharedInventory<ScalarLocation>> m_reconstructionCatalog;
     mutable std::map<std::tuple<int,int,double,int,int>,std::vector<FacePoint>> m_surfaceCatalog;

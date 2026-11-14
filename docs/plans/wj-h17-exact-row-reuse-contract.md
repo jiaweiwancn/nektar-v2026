@@ -34,8 +34,10 @@ Key remains block, geometry, native element, actual radial side and all three
 IEEE coordinate bit patterns. Preserve signed zero/ULP distinctions, owners,
 validation/failure order and WJ traversal/seen placement. Preserve all contractions,
 constant centering, long-double sums and map derivative multiplication order.
-Ancillaries, gated by the policy: shared validated scalar-row access in WJ audit;
-immutable composite-horizontal region lookup. No principal-search change.
+The ancillary shared validated scalar-row accessor is gated by the policy.
+The optional mapping lookup is NOT implemented: retain the original transform
+scan on every construction in both modes, preserving that failure/arithmetic path.
+No principal-search change.
 
 Working limits:196608 entries,256 MiB accounted live cache bytes, no preallocation
 or automatic increase (hard package allowance512 MiB/524288 entries). Account
