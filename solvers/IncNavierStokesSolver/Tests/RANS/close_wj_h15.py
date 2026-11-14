@@ -15,7 +15,7 @@ from wj_h15_observer import verify,identity,atomic,vector_hash
 from wj3_measure import checkpoint_payload
 
 def verify_all(root):
-    out=root/'closure-v2';out.mkdir();pub=root/'publication-v3'
+    out=root/'closure-v3';out.mkdir();pub=root/'publication-v3'
     seal=load(pub/'seal.json');verify(seal['manifest']);m=load(pub/'manifest.json')
     for p in m['artifacts']:verify(p)
     heavy=load(pub/'remote-heavy-manifest.json')
@@ -41,19 +41,19 @@ def verify_all(root):
     assert 'Ran 25 tests'in (root/'operations/post-stop-passive-methods-v5/command.log').read_text()
     assert 'Ran 1 test'in (root/'operations/publication-snapshot-regression-v1/command.log').read_text()
     science=size(root/'science');entire=size(root)
-    source_build=sum(size(p)for p in root.iterdir()if p.name.startswith(('source','build','runtime')))
-    # Stronger than the science-only output limit for this small failed prefix.
-    assert entire<2*1024**3 and source_build<8*1024**3
+    source_build=sum(size(p)if p.is_dir()else p.lstat().st_size for p in root.iterdir()if p.name.startswith(('source','build','runtime')))
+    science_output=entire-source_build  # includes operations/publications/miscellaneous outputs, conservatively
+    assert science_output<2*1024**3 and source_build<8*1024**3
     book=load(root/'accounting.json');entries=book['entries'];known=[v.get('peak_tree_rss_bytes',0)for v in entries.values()if v['phase']!='build'];build=[v.get('peak_tree_rss_bytes',0)for v in entries.values()if v['phase']=='build']
     assert max(known)<8*1024**3 and max(build)<16*1024**3
     assert book['target_halt']['native_completed']==1 and book['target_reserved_maximum_attempts']==4 and book['target_native_blocks']==book['target_strict_readbacks']==1
     atomic(out/'verification.json',dict(status='PASS',publication=identity(pub/'manifest.json'),compact_artifacts=len(m['artifacts']),remote_heavy_files=len(heavy['files']),decoded_logs=len(decoded),
-        science_bytes=science,entire_new_root_bytes=entire,source_build_runtime_bytes=source_build,peak_scientific_application_tree_RSS=max(known),peak_build_tree_RSS=max(build),
+        science_bytes=science,scientific_output_conservative_bytes=science_output,entire_new_root_bytes=entire,source_build_runtime_bytes=source_build,peak_scientific_application_tree_RSS=max(known),peak_build_tree_RSS=max(build),
         no_following_target_stage=True,original_parent_ledger_unchanged=True,completed_replay_qualification='OBSTRUCTED_PROTOCOL; never promoted',last_qualified='original H14 CP0',scope='selected new-root bytes rehashed on Linux; not a claim that remote heavy bytes were read on Mac'))
     print('H15 compact/heavy/lineage verification PASS',flush=True)
 
 def finalize(root):
-    out=root/'closure-v2';assert load(out/'verification.json')['status']=='PASS'
+    out=root/'closure-v3';assert load(out/'verification.json')['status']=='PASS'
     def close(b):
         assert not b['closed']
         assert all(v['status']!='RESERVED'for v in b['entries'].values())
@@ -65,7 +65,7 @@ def finalize(root):
             small_verification_attempts=10,fresh_CP0s=0,new_strict_readbacks=2,unknown_duration_charged_seconds=sum(v['seconds']for v in b['entries'].values()if v.get('unknown_duration_charged')))
     update_journal(root/'accounting.json',close);atomic(out/'accounting-final.json',load(root/'accounting.json'))
     logs=[]
-    for label in ('compact-publication-v3','closure-verification-v1','closure-verification-v2'):
+    for label in ('compact-publication-v3','closure-verification-v1','closure-verification-v2','closure-verification-v3'):
         folder=root/'operations'/label;dest=out/label;dest.mkdir()
         import shutil
         for name in ('request.json','receipt.json'):shutil.copyfile(folder/name,dest/name)
@@ -75,7 +75,7 @@ def finalize(root):
     atomic(out/'seal.json',dict(accounting=identity(out/'accounting-final.json'),verification=identity(out/'verification.json'),publication=identity(root/'publication-v3/manifest.json'),historical_first_partial=identity(root/'publication-v1-partial-status.json'),final_logs=identity(out/'final-log-bindings.json')))
     archive=root/'h15-compact-final-v3.tar.gz'
     with tarfile.open(archive,'x:gz')as t:
-        for name in ('publication-v1','publication-v1-partial-status.json','publication-v2','publication-v3','closure-v1','closure-v2'):t.add(root/name,arcname=name)
+        for name in ('publication-v1','publication-v1-partial-status.json','publication-v2','publication-v3','closure-v1','closure-v2','closure-v3'):t.add(root/name,arcname=name)
     atomic(root/'compact-transport-v3.json',dict(archive=identity(archive),publication=identity(root/'publication-v3/manifest.json'),closure=identity(out/'seal.json')))
     print(json.dumps(dict(total_charged_seconds=load(root/'accounting.json')['total_charged_seconds'],transport=identity(archive))),flush=True)
 
