@@ -5,6 +5,60 @@ from ct_accepted_budget_gate import physical_budgets
 
 FIELDS={'U','w','k','outer_epsilon','Pi'}
 def finite(x):return isinstance(x,(int,float)) and not isinstance(x,bool) and math.isfinite(x)
+
+def backend_trajectory(result):
+    """Recompute equivalence and common-time coverage, independently of labels."""
+    reasons=[];members=result.get('members',{});comparisons=result.get('equivalence',{})
+    if result.get('schema')!='CT9PhysicalPairV1' or result.get('required_dt')!=[.002,.001] or result.get('target')!=.008:reasons.append('foreign_equivalence_request')
+    if set(members)!={'0.002','0.001'} or set(comparisons)!={'0.002','0.001'}:reasons.append('missing_backend_member')
+    for name in ('0.002','0.001'):
+        member=members.get(name,{});q=comparisons.get(name,{});rows=q.get('common_times',[])
+        expected=[round(i*float(name),12) for i in range(round(.008/float(name))+1)]
+        times=[round(r.get('time',-1),12) for r in rows if finite(r.get('time'))]
+        if times!=expected:reasons.append(name+':missing_equal_time_coverage')
+        if not q.get('dense_report') or q.get('sparse_report')!=member.get('native_report_sha256'):reasons.append(name+':report_identity')
+        for row in rows:
+            if set(row.get('fields',{}))!=FIELDS:reasons.append(name+':missing_equivalence_field')
+            for f,v in row.get('fields',{}).items():
+                x,s=v.get('weighted_RMS'),v.get('scale')
+                if not finite(x) or x<0 or not finite(s) or s<=0 or x/s>1e-8:reasons.append(name+':equivalence:'+f)
+            for f in ('ground','interface'):
+                x=row.get('traction',{}).get('profiles',{}).get(f,{}).get('normalized_weighted_RMS')
+                if not finite(x) or not 0<=x<=1e-8:reasons.append(name+':traction_equivalence:'+f)
+    # The physical pressure failure is expected; every other physical primitive
+    # must still pass. A foreign failure cannot masquerade as equivalence.
+    if pair(result)['reasons']!=['temporal:Pi']:reasons.append('different_physical_classification')
+    return dict(status='pass' if not reasons else 'fail',reasons=sorted(set(reasons)))
+
+def capacity(result):
+    """Static capacity is evidence of actual actions, never physical admission."""
+    reasons=[];rows=result.get('cases',{});expected={'intermediate-p3':8864,'target-p3':33267,'target-p4':60907}
+    if result.get('schema')!='CT9FlatCapacityV1' or set(rows)!=set(expected):reasons.append('missing_or_foreign_capacity')
+    for name,count in expected.items():
+        row=rows.get(name,{});q=row.get('sparse_backend',{})
+        if row.get('status')!='static_capacity_pass' or row.get('zero_time')!=0. or row.get('startup_physical_failure'):reasons.append(name+':incomplete_startup')
+        if row.get('native_count',{}).get('stored_slots')!=count or q.get('stored_slots')!=count:reasons.append(name+':native_count')
+        for phase in ('startup_execution','frozen_execution'):
+            if row.get(phase,{}).get('exit_code')!=0:reasons.append(name+':'+phase)
+        if row.get('reference_agreement',{}).get('status')!='pass':reasons.append(name+':reference_binding')
+        for key in ('flow_rows','flow_nnz','velocity_rows','pressure_rows','predictor_factor_nnz','consistent_mass_factor_nnz','pressure_preconditioner_factor_nnz'):
+            x=q.get(key)
+            if not finite(x) or x<=0:reasons.append(name+':missing_allocation:'+key)
+        if q.get('pressure_C_nnz')!=0 or not finite(q.get('pressure_iterations')) or not 0<=q['pressure_iterations']<=1000:reasons.append(name+':pressure_system')
+        masses=q.get('masses',[])
+        if len(masses)!=6 or any(not finite(m.get('rows')) or m['rows']<=0 or not finite(m.get('nnz')) or m['nnz']<=0 for m in masses):reasons.append(name+':mass_coverage')
+        for error,rhs in [('predictor_residual','predictor_rhs_maximum'),('true_pressure_residual','pressure_rhs_maximum'),('consistent_mass_correction_true_residual','consistent_mass_correction_rhs_maximum')]:
+            x,s=q.get(error),q.get(rhs)
+            if not finite(x) or x<0 or not finite(s) or s<0 or x>2e-12*s+1e-25:reasons.append(name+':true_residual:'+error)
+        scalars=q.get('scalars',[])
+        if len(scalars)!=2 or {s.get('block') for s in scalars}!={2,3}:reasons.append(name+':scalar_coverage')
+        for s in scalars:
+            x,b=s.get('maximum_true_residual'),s.get('rhs_maximum')
+            if not finite(x) or x<0 or not finite(b) or b<0 or x>2e-12*b+1e-25:reasons.append(name+':scalar_true_residual')
+        for key in ('full_native_G_action_defect','true_continuity','splitting_identity'):
+            x=q.get(key)
+            if not finite(x) or not 0<=x<=1e-10:reasons.append(name+':native_action:'+key)
+    return dict(status='pass' if not reasons else 'fail',reasons=sorted(set(reasons)),scope='zero-step projection, complete frozen actions and resource capacity only; not target preservation')
 def backend_controls(result):
     """Required primitive scope; a pass label cannot replace its evidence."""
     reasons=[];rows=result.get('checks',{});operators={'d0-p3','d0-p4','displaced-p3','displaced-p4'}

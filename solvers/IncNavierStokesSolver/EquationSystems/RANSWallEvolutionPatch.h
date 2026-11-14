@@ -455,6 +455,7 @@ private:
     {
         SparseMatrix a,m,g,d,c;
         Vector predictor,dz,bGz,Gz,du,defect,identity,constraints,predictorDefect,pressureDefect;
+        double predictorRhsMaximum=0.,pressureRhsMaximum=0.;
         int massApplications=0,iterations=0;
         std::size_t predictorFill=0,massFill=0,preconditionerFill=0;
     };

@@ -30,11 +30,13 @@ RANSWallEvolutionPatch::SparseFlowResult RANSWallEvolutionPatch::SparseFlowCorre
     r.m.Finalize();SparseFactor momentum(r.a),mass(r.m,true);
     r.predictorFill=momentum.FactorNonZeros();r.massFill=mass.FactorNonZeros();
     Vector rhs(nv);for(int i=0;i<nv;++i)rhs[i]=-flow.residual[i];
+    r.predictorRhsMaximum=Maximum(rhs);
     r.predictor=momentum.Apply(rhs);r.predictorDefect=r.a.Apply(r.predictor);
     if(event)event("momentum_complete");
     for(int i=0;i<nv;++i)r.predictorDefect[i]-=rhs[i];
     auto pressureRhs=r.d.Apply(r.predictor);
     for(int i=0;i<np;++i)pressureRhs[i]+=flow.residual[nv+i];
+    r.pressureRhsMaximum=Maximum(pressureRhs);
     // Local sparse product with DIAGONAL mass appears ONLY in the pressure
     // preconditioner. The governing action below always uses consistent M.
     SparseMatrix approximate(np,np);
@@ -89,7 +91,8 @@ std::string RANSWallEvolutionPatch::SparseBackendPacket(const Vector &state,doub
         auto rhs=block.residual;for(auto &x:rhs)x=-x;const auto delta=factor.Apply(rhs);
         auto error=block.Apply(delta);for(int i=0;i<error.size();++i)error[i]-=rhs[i];
         scalars.push_back(J::Object({{"block",J::Number(b)},{"rows",J::Number(block.rows.size())},{"nnz",J::Number(block.csr.NonZeros())},
-            {"factor_nnz",J::Number(factor.FactorNonZeros())},{"maximum_true_residual",J::Number(Maximum(error))},{"diagnostic_increment",J::Numbers(delta)}}));
+            {"factor_nnz",J::Number(factor.FactorNonZeros())},{"rhs_maximum",J::Number(Maximum(rhs))},
+            {"maximum_true_residual",J::Number(Maximum(error))},{"diagnostic_increment",J::Numbers(delta)}}));
     }
     // Bounded aggregate reference errors on the actual native mass rows.
     // No per-volume dense packets or changed physical/reference coefficients.
@@ -130,7 +133,10 @@ std::string RANSWallEvolutionPatch::SparseBackendPacket(const Vector &state,doub
         {"predictor_factor_nnz",J::Number(r.predictorFill)},{"consistent_mass_factor_nnz",J::Number(r.massFill)},
         {"pressure_preconditioner_factor_nnz",J::Number(r.preconditionerFill)},{"pressure_iterations",J::Number(r.iterations)},
         {"mass_applications",J::Number(r.massApplications)},{"predictor_residual",J::Number(Maximum(r.predictorDefect))},
+        {"predictor_rhs_maximum",J::Number(r.predictorRhsMaximum)},
+        {"pressure_rhs_maximum",J::Number(r.pressureRhsMaximum)},
         {"full_native_G_action_defect",J::Number(Maximum(actionDefect))},
+        {"consistent_mass_correction_rhs_maximum",J::Number(Maximum(r.Gz))},
         {"consistent_mass_correction_true_residual",J::Number(Maximum(massDefect))},
         {"true_pressure_residual",J::Number(Maximum(r.pressureDefect))},{"true_continuity",J::Number(Maximum(r.constraints))},
         {"splitting_identity",J::Number(Maximum(r.identity))},{"predictor",J::Numbers(r.predictor)},
