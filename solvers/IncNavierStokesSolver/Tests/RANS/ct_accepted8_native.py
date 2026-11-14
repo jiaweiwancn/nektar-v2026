@@ -212,6 +212,7 @@ def advance(a):
         require(':resolved=A95:OriginalHighRe-v1' in native['signature'] and POLICY in native['signature'],'foreign history descriptor')
         row['accepted_metrics']=[dict(time=t,**physical_metrics(ini,s,c,pre['weights'],pre['global_count'])) for t,s in zip(native['audit_times'],native['accepted_states'],strict=True)]
         row['traction_history']=[dict(time=t,profile=traction_profiles(ini,s,c)) for t,s in zip(native['audit_times'],native['accepted_states'],strict=True)]
+        row['actual_initial_traction_profile']=traction_profiles(ini,ini['observation']['state'],c)
         row['first_accuracy_crossing']=next((v for v in row['accepted_metrics'] if v['status']!='pass'),None)
         row['domain']=domain(ini,native,c);row['budgets']=budgets(a.runtime,folder,ini,native,c) if native['steps'] else dict(gate=dict(status='missing'))
         g,sides,_,_=inventory(c);req=replay(ini,native['state'],native['time'],g,export_constitutive=True);req['grid_sides']=sides
@@ -236,7 +237,7 @@ def advance(a):
     result.update(temporal=temporal,status='complete',traction_temporal={})
     if all(abs(t-target)<1e-13 for t in times):
         rows=list(result['members'].values());end=[r['traction_history'][-1]['profile'] for r in rows]
-        spread=traction_difference(*end,c);drifts=[traction_difference(r['traction_history'][0]['profile'],r['traction_history'][-1]['profile'],c) for r in rows]
+        spread=traction_difference(*end,c);drifts=[traction_difference(r['actual_initial_traction_profile'],r['traction_history'][-1]['profile'],c) for r in rows]
         for name in ('ground','interface','signed_mean'):
             delta=abs(spread['signed_mean_difference']) if name=='signed_mean' else spread['profiles'][name]['normalized_weighted_RMS']
             drift=max(abs(q['signed_mean_difference']) if name=='signed_mean' else q['profiles'][name]['normalized_weighted_RMS'] for q in drifts)

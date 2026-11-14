@@ -15,6 +15,7 @@ def pair(result):
         if not finite(row.get('time')) or abs(row['time']-target)>1e-13 or row.get('failure'):reasons.append(name+':incomplete_or_rejected')
         if ':resolved=A95:OriginalHighRe-v1' not in row.get('signature','') or 'SamePhysicalWallDisplacedAcceptedV1' not in row.get('signature','') or 'CT8PhysicalBelow25mmEqualIds012V1' not in row.get('signature',''):reasons.append(name+':foreign_identity')
         metrics=row.get('accepted_metrics',[])
+        if any(q.get('status')!='pass' for q in metrics):reasons.append(name+':accepted_state_accuracy_crossing')
         if not metrics or abs(metrics[-1].get('time',-1)-target)>1e-13:reasons.append(name+':missing_endpoint_metrics');continue
         metric=metrics[-1];fields=metric.get('drift',{})
         if set(fields)!=FIELDS:reasons.append(name+':missing_field')
