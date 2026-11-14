@@ -352,7 +352,6 @@ void RANSEquilibriumWallEvolution::CompleteMonitoring(double nativeSeconds)
     const auto next=M::Wait(m_monitorDirectory,stem,RANSWallR3::HashFile(prefix+".ready.json"),binding,
         m_monitor.get<double>("ack_timeout_seconds"),m_monitor.get<int>("observer_pid"));
     waiting.Stop();RANSWallTiming::Scope commitTiming("monitor.qualification_commit");
-    ++m_independentQualified;m_qualifiedCheckpoint=m_lastCheckpoint;
     const auto ack=M::Read(prefix+".ack.consumed.json");
     const auto qualified=J::Object({{"schema",J::Quote("WJQualificationCommitV1")},{"binding",binding},
         {"ready_sha256",J::Quote(RANSWallR3::HashFile(prefix+".ready.json"))},{"inventory_sha256",J::Quote(ack.get<std::string>("inventory.sha256"))},
@@ -361,6 +360,7 @@ void RANSEquilibriumWallEvolution::CompleteMonitoring(double nativeSeconds)
         {"prepared_cursor",RANSWallR3::Pin(ack.get<std::string>("qualified_cursor.path"))}});
     M::Atomic(prefix+".qualification-commit.json",qualified);
     M::Atomic(m_monitorDirectory+"/qualified-cursor.json",qualified,false);
+    ++m_independentQualified;m_qualifiedCheckpoint=m_lastCheckpoint;
     Require(next!="RESOURCE_LIMIT","RESOURCE_LIMIT prospective next-stage/readback budget");
     Require(next!="TERMINAL" || step==m_monitor.get<std::size_t>("maximum_absolute_step"),"premature terminal ACK");
 }
