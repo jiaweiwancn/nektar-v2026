@@ -874,7 +874,8 @@ int main(int argc,char **argv)
         }
         if(request.get<bool>("export_resolution",false))
         {
-            const auto r=patch.ResidualResolution(state,state,0.,time,data,false,true);
+            const bool localize=request.get<bool>("resolution_localize",!patch.SerialSparse() || patch.Size()<=1000);
+            const auto r=patch.ResidualResolution(state,state,0.,time,data,false,localize);
             std::vector<std::pair<std::string,std::string>> local;
             for(const auto &[key,terms]:r.elementTerms)local.push_back({key,Maps(terms)});
             std::vector<std::string> masses;
@@ -937,6 +938,7 @@ int main(int argc,char **argv)
                     {"test",Row(q)}}));
             }
             resolution=J::Object({{"schema",J::Quote("ModelAwareSpatialResolutionV1")},
+                {"localization",J::Quote(localize?"complete small-fixture element loads":"aggregate loads only; no per-element global vectors")},
                 {"mass_storage",J::Quote(patch.SerialSparse() && patch.Size()>1000?"CSR; optional dense mass export omitted above1000 slots":"dense small-fixture verification")},
                 {"terms",Maps(r.terms)},{"native",Maps(r.native)},{"norms",Maps(r.norms)},
                 {"constraints",J::Constraints(r.constraints)},{"effective_state",J::Numbers(r.effectiveState)},
