@@ -44,6 +44,11 @@ def main():
                 negative=folder/'dense-guard';negative.mkdir();root=ET.parse(folder/'case.xml').getroot();set_info(root,'RANSWallLinearBackend','ReplicatedDenseV1');write(root,negative/'case.xml')
                 packet,e=probe(a.runtime,negative,dict(operation='functions'),'negative');require(e['exit_code']!=0 and '3000' in packet.get('failure',''),'old dense guard was bypassed')
                 row['unchanged_dense_guard_negative']=dict(status='pass',reason=packet['failure'],execution=e,packet_sha256=sha(negative/'negative.json'))
+                negative=folder/'segment-guard';negative.mkdir();root=ET.parse(folder/'case.xml').getroot()
+                from run_cls_epawf_picard import set_parameter
+                set_parameter(root,'NumSteps',65);write(root,negative/'case.xml');packet,e=probe(a.runtime,negative,dict(operation='functions'),'negative')
+                require(e['exit_code']!=0 and '64 steps' in packet.get('failure',''),'unbounded diagnostic retention accepted')
+                row['bounded_segment_negative']=dict(status='pass',reason=packet['failure'],execution=e)
             os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'initial-timing.jsonl');e=run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log');os.environ.pop('NEKTAR_RANS_TIMING_FILE',None);row['startup_execution']=e
             require((folder/'case.evolution.json').exists(),'fresh zero-step report unavailable');native=n.read(folder/'case.evolution.json');row.update(zero_time=native['time'],zero_state_sha256=exact_vector_hash(native['state']),history=native['checkpoint'],native_report_sha256=sha(folder/'case.evolution.json'),initialization=native['initialization_receipt'],startup_physical_failure=native['failure'],initial_raw_spatial_norms=native.get('raw_reference_norms'))
             require(e['exit_code']==0 and not native['failure'] and native['time']==0.,'zero-step startup/domain failed:'+str(native['failure']))

@@ -114,5 +114,13 @@ def main():
             dest,q,e=evolve(name,0,restart,modify,sparse=name!='backend_history');message=q.get('failure','')+(dest/'solver.log').read_text()[-4000:];require(e['exit_code']!=0 and word.lower() in message.lower(),'wrong negative outcome:'+name+message);negative.append(dict(name=name,status='pass',reason=message[-2000:],execution=e))
         return dict(status='pass',uninterrupted_state=exact_vector_hash(full['state']),continued_state=exact_vector_hash(continued['state']),dense_sparse_state_maximum=defect,rebuilt_dense_CT8_history_bitwise_equal=True,legacy_native_report_sha256=sha(a.ct8/'controls-v2/full/case.evolution.json'),negative=negative,rollback_failure=rejected['failure'],native_reports={str(f):sha(f/'case.evolution.json') for f in (first,end,failed,dense)})
     check('restart_rollback_backend_identity',histories)
-    result['status']='pass' if len(result['checks'])==5 and all(q['status']=='pass' for q in result['checks'].values()) else 'fail';write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return 0 if result['status']=='pass' else 1
+    def pressure_level():
+        full=n.read(a.output/'full/case.evolution.json');dest,shifted,e=evolve('pressure-level',modify=lambda r:set_parameter(r,'RANSOpenPressureLevel',.125));require(e['exit_code']==0 and not shifted['failure'],'shifted sparse pressure control rejected')
+        packet=n.read(a.output/'displaced-p3-sparse/operator.json');off=packet['observation']['offsets'];expected=np.zeros(len(full['state']))
+        for q in packet['observation']['pressure_mass']:
+            row=q['pressure'];expected[np.asarray(row['ids'],int)+off[4+q['region']]]=.125*np.asarray(row['constant'])
+        error=maximum(np.asarray(shifted['state'])-full['state']-expected);require(error<2e-10,'absolute sparse pressure-level error')
+        return dict(status='pass',shift=.125,maximum_coefficient_defect=error,native_report_sha256=sha(dest/'case.evolution.json'),execution=e)
+    check('absolute_pressure_level',pressure_level)
+    result['schema']='CT9BackendControlsV2';result['status']='pass' if len(result['checks'])==6 and all(q['status']=='pass' for q in result['checks'].values()) else 'fail';write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return 0 if result['status']=='pass' else 1
 if __name__=='__main__':raise SystemExit(main())

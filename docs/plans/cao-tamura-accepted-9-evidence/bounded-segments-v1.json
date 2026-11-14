@@ -1,0 +1,11 @@
+{
+  "schema": "CT9BoundedRetentionAmendmentV1",
+  "parent": "contract.json",
+  "scope": "prospective sparse runtime qualification; CT8 and existing dense/sparse verification artifacts remain unchanged",
+  "finding": "native accepted-state vectors and pressure-constraint records are retained per step; unbounded requested segment length would grow storage as field size times steps",
+  "restriction": "AcceptedSerialSparseV1 admits IMEX1 only and at most 64 requested steps per segment",
+  "continuation": "genuine same-backend, same-timestep/method native restart; no checkpoint metadata edits or history relabelling",
+  "memory_argument": "at most 65 accepted state vectors, 64 step/attempt records plus bounded rejected candidate/history; factor, row and matrix nonzero caps remain in force; retained dense arrays scale linearly with field size under the fixed segment bound",
+  "unchanged": "physical model, reference, boundary data, free masks, consistent mass, pressure action, one-sweep equations/order, original dense limit and physical acceptance tolerances",
+  "tests": "fresh native operator/history/pressure-offset controls, explicit 65-step rejection before mass assembly, segmented/uninterrupted equivalence and fresh short backend trajectories"
+}

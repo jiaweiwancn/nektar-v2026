@@ -347,6 +347,12 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
                 "AcceptedSerialSparseV1 requires admitted A95 displaced flat/RN one-sweep; only explicit bounded d0 verification is additional");
             Require(session->DefinesParameter("FlexibleGMRES") && session->GetParameter("FlexibleGMRES")==1,
                 "serial sparse policy requires explicit FlexibleGMRES=1");
+            const auto scheme=session->GetTimeIntScheme();
+            Require(scheme.method=="IMEX" && scheme.variant.empty() && scheme.order==1,
+                "AcceptedSerialSparseV1 currently qualifies IMEX1 one-sweep only");
+            int segmentSteps;session->LoadParameter("NumSteps",segmentSteps,0);
+            Require(segmentSteps>=0 && segmentSteps<=64,
+                "AcceptedSerialSparseV1 bounds retained states/audits to64 steps per unchanged-method segment; use genuine restart continuation");
         }
         std::string top,backflow,coordinates;
         session->LoadSolverInfo("RANSOpenTop",top,"Missing");
