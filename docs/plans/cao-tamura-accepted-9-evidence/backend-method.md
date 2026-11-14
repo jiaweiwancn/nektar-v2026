@@ -35,7 +35,10 @@ runtime/experiment receipts. No PETSc build or shared installation is changed.
 | Legacy nonlinear/action/bound routes | Explicitly unsupported. The old dense backend and its 3000-slot limit remain unchanged. |
 
 The sparse route additionally caps stored slots at 70000, each CSR matrix at
-20 million nonzeros and reported factor fill at 30 million. Direct/factor
+20 million nonzeros. The original 30-million factor cap is retained in the
+failed capacity evidence. The prospective measured-fill amendment permits
+40 million reported entries, after the unchanged P4 momentum block measured
+38165601. Direct/factor
 storage and local dense work are accompanied by a 16 GiB process address-space
 ceiling in the qualification drivers. LDLT fill is the library's stored lower
 factor count; its diagonal and permutations add O(N) vectors. Actual peak RSS

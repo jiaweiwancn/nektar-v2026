@@ -1,0 +1,12 @@
+{
+  "schema": "CT9MeasuredFactorFillAmendmentV1",
+  "parent": "contract.json",
+  "witness": "linear-recheck-p4-v1: unchanged target P4 momentum block, 29636 rows, 2081794 matrix nonzeros, 38165601 LU factor entries, mass=false",
+  "earlier_observation": "capacity-v1 target P4 reached the same 30M cap, with frozen peak RSS 3623560 KiB; its failure remains unchanged",
+  "prospective_factor_max_nonzeros": 40000000,
+  "reason": "bounded target-specific fill headroom of approximately 4.8 percent over the measured factor, rather than replacing the backend or changing the dense guard",
+  "unchanged": "16 GiB process address-space ceiling; 70000 sparse stored slots; 3000 old dense slots; 20M matrix nonzeros; all physics, solve accuracy, iteration, worker and physical qualification limits",
+  "identity": "EigenLU-LDLT-IR3-F40M; fresh component-bound histories and requalification",
+  "required_fresh_checks": ["small dense/sparse operator and pressure controls", "same-backend restart and rejection of old-component histories", "physical pair equivalence including failed dense temporal:Pi", "the same intermediate and both full target meshes"],
+  "stopping": "retain any remaining true-residual, factor-fill, process-memory or work-limit failure; this resource amendment supplies no physical continuation admission"
+}

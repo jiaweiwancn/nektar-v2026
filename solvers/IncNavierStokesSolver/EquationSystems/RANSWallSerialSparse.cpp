@@ -114,7 +114,7 @@ SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass):m_impl(std::
         Require(m_impl->lu.info()==Eigen::Success,"singular sparse stage/preconditioner");
         m_impl->nonzeros=m_impl->lu.nnzL()+m_impl->lu.nnzU();
     }
-    Require(m_impl->nonzeros<=30000000,"sparse factor exceeds declared30M fill budget: rows="+
+    Require(m_impl->nonzeros<=40000000,"sparse factor exceeds declared40M fill budget: rows="+
         std::to_string(m.Rows())+", matrix_nnz="+std::to_string(m.NonZeros())+", factor_nnz="+
         std::to_string(m_impl->nonzeros)+", mass="+std::to_string(positiveMass));
 #else
