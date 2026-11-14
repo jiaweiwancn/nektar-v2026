@@ -76,6 +76,11 @@ std::string RANSWallEvolutionPatch::SparseBackendPacket(const Vector &state,doub
     const auto flow=AssemblePicardBlock(0,state,state,alpha,time,data,external);
     const int nv=std::lower_bound(flow.rows.begin(),flow.rows.end(),DifferentialSize())-flow.rows.begin();
     const auto r=SparseFlowCorrection(flow,nv,alpha);
+    Vector pressureDirection(Size());for(int j=0;j<r.dz.size();++j)pressureDirection[flow.rows[nv+j]]=r.dz[j];
+    const auto nativeG=AffinePressureAction(pressureDirection,external);Vector actionDefect(nv);
+    for(int i=0;i<nv;++i)actionDefect[i]=nativeG[flow.rows[i]]-r.Gz[i];
+    Require(Maximum(actionDefect)<1e-10,"sparse capacity omitted complete native pressure action");
+    auto massDefect=r.m.Apply(r.bGz);for(int i=0;i<nv;++i)massDefect[i]=alpha*massDefect[i]-r.Gz[i];
     std::vector<std::string> masses,scalars;
     for(int b=0;b<Gauge();++b)masses.push_back(J::Object({{"rows",J::Number(size[b])},{"nnz",J::Number(m_sparseMass[b].NonZeros())}}));
     for(int b:{Epsilon(),K()})
@@ -125,6 +130,8 @@ std::string RANSWallEvolutionPatch::SparseBackendPacket(const Vector &state,doub
         {"predictor_factor_nnz",J::Number(r.predictorFill)},{"consistent_mass_factor_nnz",J::Number(r.massFill)},
         {"pressure_preconditioner_factor_nnz",J::Number(r.preconditionerFill)},{"pressure_iterations",J::Number(r.iterations)},
         {"mass_applications",J::Number(r.massApplications)},{"predictor_residual",J::Number(Maximum(r.predictorDefect))},
+        {"full_native_G_action_defect",J::Number(Maximum(actionDefect))},
+        {"consistent_mass_correction_true_residual",J::Number(Maximum(massDefect))},
         {"true_pressure_residual",J::Number(Maximum(r.pressureDefect))},{"true_continuity",J::Number(Maximum(r.constraints))},
         {"splitting_identity",J::Number(Maximum(r.identity))},{"predictor",J::Numbers(r.predictor)},
         {"pressure_increment",J::Numbers(r.dz)},{"consistent_mass_correction",J::Numbers(r.bGz)},{"scalars",J::List(scalars)},
