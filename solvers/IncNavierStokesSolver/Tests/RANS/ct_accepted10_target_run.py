@@ -88,12 +88,17 @@ def bounded_budgets(rt,folder,ini,r,c):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    for k in ('ct9','runtime','probe','preflight','strip','contract','output'):p.add_argument('--'+k,type=Path,required=True)
+    for k in ('ct9','runtime','probe','preflight','strip','contract','audit-capacity','output'):p.add_argument('--'+k,type=Path,required=True)
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');n.reference=lru_cache(None)(n.reference)
     pre=sealed(a.preflight);strip=sealed(a.strip);require(strip_pair(strip)['status']=='pass' and strip['target']==.02,'complete strip continuation gate failed');require(pre['static_admission']['status']=='pass','target static gate failed');require(sha(a.runtime/'IncNavierStokesSolver')==RUNTIME_SHA,'foreign target governing runtime')
     c=pre['mesh'];scale=pre['mesh_scale_preflight'];require(scale['minimum_dx']>=.125 and abs(scale['minimum_dz']-.0029296875)<1e-15,'target mesh scales do not support the predeclared strip-informed timestep choice')
+    cap=sealed(a.audit_capacity);cap_request=n.read(a.audit_capacity/'request-manifest.json')['request'];require(cap_request['case']==c and cap_request['actual_initial_sha256']==pre['actual_initial_sha256'],'foreign required-audit capacity fixture')
+    require(set(cap.get('controls',{}))=={'native','q48f16','q64f16','q64f32'},'required audit capacity coverage incomplete')
+    for label,q in cap['controls'].items():
+        require(q.get('execution',{}).get('exit_code')==0 and q.get('status')=='pass' and set(q.get('equation_names',[]))=={'inner_k','outer_k','outer_epsilon','whole_k'},'required audit capacity failed:'+label)
+        require(set(q.get('frozen_load_reconstruction',{}))=={'k','outer_epsilon'} and all(0<=r['maximum_defect']/r['normalization']<=2e-10 for r in q['frozen_load_reconstruction'].values()),'required audit reconstruction missing/failed:'+label)
     gov_identity=runtime_identity(a.runtime/'IncNavierStokesSolver');os.environ['LD_LIBRARY_PATH']=str(a.probe/'lib');probe_identity=runtime_identity(a.probe/'RANSPreservationProbe');os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
-    m=RequestManifest(a.output,dict(schema='CT10TargetSteppingV1',case=c,preflight=sha(a.preflight/'results.json'),strip=sha(a.strip/'results.json'),contract=sha(a.contract),source=sha(Path(__file__)),runtime=gov_identity,probe=probe_identity,target=.002,dt=[.001,.0005],steps=[2,4],flow_through=40.621637857609905,scope='bounded actual target stepping and cost; no automatic .01transit admission'))
+    m=RequestManifest(a.output,dict(schema='CT10TargetSteppingV1',case=c,preflight=sha(a.preflight/'results.json'),audit_capacity=sha(a.audit_capacity/'results.json'),strip=sha(a.strip/'results.json'),contract=sha(a.contract),source=sha(Path(__file__)),runtime=gov_identity,probe=probe_identity,target=.002,dt=[.001,.0005],steps=[2,4],flow_through=40.621637857609905,scope='bounded actual target stepping and cost; no automatic .01transit admission'))
     out=dict(schema='CT10TargetPhysicalPairV1',required_dt=[.001,.0005],target=.002,case=c,members={});initials={};reports={};ini=n.read(a.preflight/'target/readiness.json');weights=n.inventory(c)[2];count=len(weights);first=None
     for dt in (.001,.0005):
         name=str(dt);zero=a.output/('zero-'+name);n.make(zero,a.runtime,c,dt,0);enable(zero);e=run([a.runtime/'IncNavierStokesSolver','case.xml'],zero,'solver.log');z=n.read(zero/'case.evolution.json');require(e['exit_code']==0 and not z['failure'] and z['time']==0. and exact_vector_hash(z['state'])==pre['actual_initial_sha256'],'fresh target zero-step state differs from admitted actual representation')

@@ -51,6 +51,7 @@ def main():
     p.add_argument('--target',type=Path);a=p.parse_args();root=a.root
     labels=['controls-v1','static-v1','baseline-attribution-v3','candidate-attribution-v1','baseline-T008-v1','candidate-T008-v1','candidate-T020-v2','common-space-v2','target-preflight-v1','build-v2','build-v3']
     bodies={name:sealed(root/name) for name in labels};sources={name:dict(path=str(root/name),sha256=sha(root/name/'results.json'),request=sha(root/name/'request-manifest.json'),seal=sha(root/name/'completed-artifacts.json')) for name in labels}
+    auditcap=sealed(root/'target-audit-capacity-v1');sources['required-audit-capacity']=dict(path=str(root/'target-audit-capacity-v1'),sha256=sha(root/'target-audit-capacity-v1/results.json'),request=sha(root/'target-audit-capacity-v1/request-manifest.json'),seal=sha(root/'target-audit-capacity-v1/completed-artifacts.json'))
     target=sealed(a.target) if a.target else None
     if a.target:sources['target-stepping']=dict(path=str(a.target),sha256=sha(a.target/'results.json'),request=sha(a.target/'request-manifest.json'),seal=sha(a.target/'completed-artifacts.json'))
     m=RequestManifest(a.output,dict(schema='CT10FinalEvidenceV1',sources=sources,source=sha(Path(__file__)),scope='primitive decisions; a successful collector does not admit a physical trajectory'))
@@ -66,6 +67,7 @@ def main():
         write_json(a.output/(label+'.json'),compact(out));write_json(a.output/(label+'-tractions.json'),member_profiles(q))
     for label in ('controls-v1','common-space-v2','target-preflight-v1'):
         write_json(a.output/(label+'.json'),compact(bodies[label]))
+    write_json(a.output/'target-audit-capacity.json',compact(auditcap))
     profiles={}
     for q in [bodies[k] for k in ('baseline-T008-v1','candidate-T008-v1','candidate-T020-v2')]+([target] if target else []):
         for row in q['members'].values():
@@ -82,6 +84,8 @@ def main():
     pressure_reduction=bodies['candidate-attribution-v1']['total_images']['actual']['whole']['weighted_RMS']/bodies['baseline-attribution-v3']['total_images']['actual']['whole']['weighted_RMS']
     decision=dict(schema='CT10RequiredScopeV1',diagnostic={k:v for k,v in dg.items()},observational_controls=bodies['controls-v1']['status'],static_contrast=pre['status'],single_contrast=dict(knots=pre['selection']['knots'],native_slots=pre['initial']['candidate-0.001']['native_count']['stored_slots'],selection_signal=pre['selection']['signal_captured']),baseline_physical_uncertainty=decisions['baseline-T008-v1'],baseline_backend_transfer=bodies['baseline-T008-v1']['dense_fine_transfer']['status'],candidate_T008=decisions['candidate-T008-v1'],candidate_T020=decisions['candidate-T020-v2'],initial_momentum_pressure_image_ratio=pressure_reduction,target_static=bodies['target-preflight-v1']['static_admission'],target_pair=target_pair(target) if target else dict(status='unattempted'),actual_target_horizon=target['target'] if target else 0.,first_01_transit='not_started',resources='pass' if resource_ok else 'fail',source_artifacts=sources,terrain='not_admitted; mapped numbering,joined gradients/cofactors,transmission,curved temporal/spatial qualification and physical-interface/approach-flow admission remain',physical_applicability='central reference feasibility retained; no experimental validation; eight extraction failures and all historical qualifications unchanged')
     if target:decision['first_stage_resource_plan']=target['first_stage_resource_plan']
+    decision['target_required_audit_capacity']=dict(status=auditcap['status'],first_failure=auditcap.get('first_failure'),scope=auditcap['physical_budget_qualification'])
+    if not target:decision['target_blocker']='required physical observer capacity failed' if auditcap['status']!='pass' else 'target paired stepping still required'
     decision['investigation_completion']='complete' if all(v['status']=='pass' for v in dg.values()) and decision['observational_controls']==decision['static_contrast']==decision['baseline_backend_transfer']==decision['resources']=='pass' else 'incomplete'
     decision['target_continuation_admitted']=bool(target and target_pair(target)['status']=='pass' and target['first_stage_resource_plan']['resource_admitted'])
     require(not decision['target_continuation_admitted'],'target is admitted and affordable: execute its prospectively declared first stage before final collection')
