@@ -23,6 +23,7 @@ from ct_accepted2_audit import values
 from ct_accepted_open import run,probe,row_value
 from ct_accepted6_audit import captured_k_matrix
 from ct_accepted8_gate import pair as pair_gate
+from ct_accepted4_reference import resistance
 from compare_cls_epawf_pimple import same_history
 from run_cls_epawf_picard import set_info,set_parameter,write
 from rans_request_manifest import RequestManifest,runtime_identity,sha
@@ -189,14 +190,20 @@ def preflight(a):
         continuous_inputs_identical=True,grid_and_sides_identical=pp['observation']['grid']==fine['observation']['grid'] and pp['observation']['grid_sides']==fine['observation']['grid_sides'],
         scope='static reference representations, not evolved spatial convergence or a measured degree order')
     result['status']='pass' if result['same_space_actual_initial_equal'] and all(r['status']=='pass' for r in result['initial'].values()) else 'failed_initial_accuracy_or_domain'
-    result['flow_through_estimate']=dict(mean_speed=col(c).t0*col(c).J0,time=(c['x'][-1]-c['x'][0])/(col(c).t0*col(c).J0),definition='interface velocity scale; full-height logarithm has no single uniform transit')
+    d=c['displacement'];H=c['H'];Z=c['Z'];zeta=Z-d;zetaH=H-d;cc=col(c);UH=cc.t0*cc.J0
+    inner=cc.integrate(lambda r:np.array([cc.t0*resistance('A95',cc.K,float(z),cc.hr,cc.nu) for z in r]))
+    outer=UH*(Z-H)+cc.um/cc.p['kappa']*(zeta*math.log(zeta/zetaH)-zeta+zetaH);bulk=(inner+outer)/Z
+    result['flow_through_estimate']=dict(interface_speed=UH,interface_time=(c['x'][-1]-c['x'][0])/UH,bulk_speed=bulk,bulk_time=(c['x'][-1]-c['x'][0])/bulk,
+        fraction_at_T008=.008*bulk/(c['x'][-1]-c['x'][0]),fraction_at_T002=.02*bulk/(c['x'][-1]-c['x'][0]),definition='reference volume-average speed with independent split inner integration and analytic full-height logarithmic tail; not developed precursor')
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return result
 
 def advance(a):
     pre=read(a.preflight/'results.json');require(pre['status']=='pass','preflight not admitted');c=pre['case'];parent=read(a.parent/'results.json') if a.parent else None
+    controls=read(a.controls/'results.json');require(controls['status']=='pass' and all(q['status']=='pass' for q in controls['checks'].values()),'compatibility controls not admitted')
+    require(read(a.controls/'request-manifest.json')['request']['runtime']==runtime_identity(a.runtime/'IncNavierStokesSolver'),'foreign compatibility runtime')
     if parent:require(parent['qualification']['status']=='pass' and parent['target']==.008,'parent failed/incompatible')
     start=.008 if parent else 0.;target=a.target;require(target in (.008,.02) and target>start,'wrong milestone')
-    m=RequestManifest(a.output,dict(schema='CT8BoundedPairV1',case=c,start=start,target=target,dt=[.002,.001],preflight=sha(a.preflight/'results.json'),parent=sha(a.parent/'results.json') if parent else None,contract=sha(a.contract),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),source=sha(Path(__file__))))
+    m=RequestManifest(a.output,dict(schema='CT8BoundedPairV1',case=c,start=start,target=target,dt=[.002,.001],preflight=sha(a.preflight/'results.json'),compatibility=sha(a.controls/'results.json'),parent=sha(a.parent/'results.json') if parent else None,contract=sha(a.contract),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),source=sha(Path(__file__))))
     result=dict(schema='CT8BoundedPairV1',case=c,target=target,members={},status='incomplete');packets=[]
     for dt in (.002,.001):
         name=str(dt);zero=Path(pre['initial'][name]['directory']);ini=read(zero/'initial.json');source=Path(parent['members'][name]['directory']) if parent else zero;old=read(source/'case.evolution.json')
@@ -234,6 +241,7 @@ def main():
     for name in ('runtime','reference','contract','output'):p.add_argument('--'+name,type=Path,required=True)
     p.add_argument('--preflight',type=Path);p.add_argument('--parent',type=Path);p.add_argument('--target',type=float)
     p.add_argument('--basis-proof',type=Path)
+    p.add_argument('--controls',type=Path)
     a=p.parse_args();os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     try:r=preflight(a) if a.mode=='preflight' else advance(a)
     except Exception as error:
