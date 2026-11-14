@@ -171,7 +171,7 @@ std::string RANSWallEvolutionPatch::MomentumAttributionPacket(const Vector &stat
                 k=q.Value(s,offset[K()]);ep=outer?GeometryPoint(Epsilon(),q.geometry,q.coordinate).Value(s,offset[Epsilon()]):0.;
                 pi=GeometryPoint(InnerPressure()+outer,q.geometry,q.coordinate).Value(s,offset[InnerPressure()+outer]);
             }
-            const double nt=outer?0.:(version?ref:Profile(SampledK(s,q.coordinate),q.coordinate))->Original().EddyViscosity(H);
+            const double nt=outer?0.:(version?ref:Profile(SampleK(s,q.coordinate),q.coordinate))->Original().EddyViscosity(H);
             stressParts(outer,k,ep,pi,G,nt,q.coordinate,mol,lin,nl);double un=0;for(int b=0;b<3;++b)un+=u[b]*face.area[b];
             for(int a:{0,2})for(int b=0;b<3;++b)traction[a]+=(mol[a][b]+lin[a][b]+nl[a][b]-(a==b?pi:0))*face.area[b];
             for(int a:{0,2})flux[a]=u[a]*un-traction[a];
