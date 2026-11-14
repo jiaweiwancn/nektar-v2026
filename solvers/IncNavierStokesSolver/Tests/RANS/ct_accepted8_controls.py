@@ -21,7 +21,7 @@ from rans_request_manifest import RequestManifest,runtime_identity,sha
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','reference','output'):p.add_argument('--'+k,type=Path,required=True)
-    a=p.parse_args();os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');c=read(a.reference)['case'];c.update(Z=.5,knots=sorted(set([0.,c['H']/4,c['H']/2,c['roughness_input'],col(c).cutoff,c['H'],.3,.5])),degree=3,pressure_degree=1)
+    a=p.parse_args();os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');c=read(a.reference)['case'];c.update(Z=.5,knots=[0.,c['H']/4,c['H'],.5],degree=3,pressure_degree=1)
     m=RequestManifest(a.output,dict(schema='CT8DisplacedCompatibilityV1',case=c,reference=sha(a.reference),source=sha(Path(__file__)),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver')));result=dict(checks={},status='fail')
     def evolve(label,steps=2,restart=None,change=None):
         folder=a.output/label;make(folder,a.runtime,c,1e-6,steps,restart)
