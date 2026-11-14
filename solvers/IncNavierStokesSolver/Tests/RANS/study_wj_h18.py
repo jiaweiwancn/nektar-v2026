@@ -164,8 +164,11 @@ def target(root,name):
 
 def strict(root):
     reserve_strict(root,'target')
-    folder=next((root/f'science/target/{name}'for name in ('B','A')if(root/f'science/target/{name}/monitor/qualified-cursor.json').exists()),None)
-    if folder is not None:cmd=strict_request(root,folder)
+    from wj_h18_readback import selection
+    selected=selection(root)
+    if selected is not None:
+        folder,request=selected;out=folder/'view';out.mkdir();atomic(out/'request.json',request)
+        cmd=[str(root/'runtime/RANSWallResolutionProbe'),str(folder/'case.xml'),str(out/'request.json'),str(out/'native.json')]
     else:
         v=next(v for v in load(H14/'publication-v2/state-bindings.json')['states']if v['case']=='cp0')
         folder=root/'science/target/final-original-CP0';out=folder/'view';out.mkdir(parents=True)

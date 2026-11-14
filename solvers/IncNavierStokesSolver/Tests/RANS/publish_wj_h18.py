@@ -66,7 +66,7 @@ def publish(root):
             timeline.append(row)
             bindings.append(dict(run=name,step=n,time=r['time'],contained_state_sha256=vector_hash(cp['state']),checkpoint_file=c['checkpoint'],callback=c['callback'],producer=c['report'],completion=identity(p),reference_sha256=vector_hash(cp['fixed_reference']),defect_sha256=vector_hash(cp['fixed_defect']),native_history_sha256=[vector_hash(h)for h in cp['native_history']],native_history_times=cp['native_history_times'],callback_history_sha256=c['binding']['callback_history_sha256'],original_qh0_sha256=c['binding']['original_qh0_sha256'],physical_signature_sha256=c['binding']['physical_signature_sha256'],alpha_bits=c['binding']['alpha_bits']))
             payload=[Path(c[k]['path'])for k in ('checkpoint','callback','report')]+[p]
-            b=sum(q.stat().st_size for q in payload);storage.append(dict(run=name,step=n,role='scientific+recovery'if full else'recovery',native_recovery_bytes=b,native_recovery_files=len(payload),independent_result_bytes=result_path.stat().st_size if result_path.exists()else 0,inventory_bytes=(directory/f'step-{n}.ready.inventory.json').stat().st_size if result else 0))
+            b=sum(q.stat().st_size for q in payload);storage.append(dict(run=name,step=n,role='scientific+recovery'if full else'recovery',native_recovery_bytes=b,native_recovery_files=len(payload),independent_result_bytes=result_path.stat().st_size if result_path.exists()else 0,inventory_bytes=(directory/f'step-{n}.ready.inventory.json').stat().st_size if result else 0,factor_archive_bytes=size(directory/'factors')if full else 0))
             heavy.extend(identity(q)for q in payload)
             copy(p,f'target-{name}/step-{n}.completion.json');copy(commit,f'target-{name}/step-{n}.qualification-commit.json')
             signed.append(dict(run=name,step=n,stage_audits=r['stage_audits'],native_hard_audit=r['native_hard_audit'],pimple=attempt))
@@ -121,18 +121,19 @@ def publish(root):
         first_terminal=math.ceil(WINDOW[0]/.0025);fulls=[s for s in range(1,N+1)if s==N or s%(50 if s>=first_terminal else 100)==0]
         forecast=(N*core+math.ceil(N/10)*recovery+len(fulls)*scientific)/86400
         rec=statistics.mean(v['native_recovery_bytes']for v in storage if v['role']=='recovery')
-        sci=statistics.mean(v['native_recovery_bytes']+v['independent_result_bytes']+v['inventory_bytes']for v in storage if v['role']=='scientific+recovery')
+        sci=statistics.mean(v['native_recovery_bytes']+v['independent_result_bytes']+v['inventory_bytes']+v['factor_archive_bytes']for v in storage if v['role']=='scientific+recovery')
         telemetry=sum((root/f'science/target/{n}/monitor/telemetry.jsonl').stat().st_size for n in ('A','B'))/6
+        log_bytes=(root/'operations/target-A-v1/timing.jsonl').stat().st_size/4+(root/'science/target/A/native.log').stat().st_size/4
         estimate=dict(horizon=HORIZON,window=WINDOW,steps=N,metadata_dt=.0025,ceiling_step_time=N*.0025,proposal_recovery_stride=10,proposal_full_stride=100,proposal_terminal_stride=50,
             proposed_scientific_checkpoints=len(fulls),proposed_recovery_checkpoints=math.ceil(N/10),measured_nondue_native_compute_seconds=core,measured_recovery_publication_seconds=recovery,
             measured_full_audit_plus_inclusive_wait_commit_seconds=scientific,independent_not_added_to_wait=True,conditional_duration_days=forecast,H16_every_step_inclusive_days=211.896222547,
-            measured_recovery_bytes=rec,measured_scientific_package_bytes=sci,measured_telemetry_bytes_per_step=telemetry,
-            archive_estimate_uncompressed_bytes=len(fulls)*sci+(3+10)*rec+N*telemetry,storage_scope='scientific archives plus newest3 recoveries and conservative10 pending-recovery segment; immutable configuration/source and startup/terminal extras separate; not an admitted archive',
+            measured_recovery_bytes=rec,measured_scientific_package_bytes=sci,measured_telemetry_bytes_per_step=telemetry,measured_full_block_timing_and_console_bytes_per_step=log_bytes,
+            archive_estimate_uncompressed_bytes=len(fulls)*sci+(3+10)*rec+N*(telemetry+log_bytes),storage_scope='scientific archives plus newest3 recoveries and conservative10 pending-recovery segment; includes measured timing/console logs and conservative whole factor catalog per science checkpoint; immutable configuration/source and startup/terminal extras separate; not an admitted archive',
             limitations='one short replay; CPU not hidden in observer; no established speedup statistics, scientifically accepted cadence, application tolerance or long-run affordability; checkpoint compression measured separately')
         atomic(out/'conditional-cost-storage.json',estimate)
         # Actual lossless compression benchmark on one recovery and one science
         # package; original checkpoint/report/callback files stay unchanged.
-        compressed=[];dest=out/'compression-measurements';dest.mkdir()
+        compressed=[];dest=root/'science/compression-measurements';dest.mkdir()
         for name,n in (('recovery',2),('scientific',4)):
             c=load(root/f'science/target/A/monitor/step-{n}.completion.json')
             payload={role:c[role]for role in ('checkpoint','callback','report')}
@@ -145,7 +146,7 @@ def publish(root):
                 compressed.append(dict(package=name,role=role,original=pin,compressed=identity(q),seconds=time.monotonic()-t,ratio=q.stat().st_size/p.stat().st_size))
         atomic(out/'compression-measurements.json',compressed)
         # Avoid copying optional large gzip checkpoint aliases into Git transport.
-        heavy.extend(identity(p)for p in dest.iterdir());shutil.move(str(dest),str(root/'science/compression-measurements'))
+        heavy.extend(identity(p)for p in dest.iterdir())
         import matplotlib;matplotlib.use('Agg')
         import matplotlib.pyplot as plt
         fig,ax=plt.subplots(figsize=(7,3.8),layout='constrained');x=list(range(len(timeline)));base=[r['native_compute_seconds']-r['native_full_audit_seconds']-r['physical_samples_seconds']for r in timeline]

@@ -31,6 +31,20 @@ def close(root):
     peaks={kind:max([v.get('peak_tree_rss_bytes',0)for v in book['entries'].values()if(v['phase']=='build')==(kind=='build')]+[0])for kind in ('build','science')}
     assert src<=8*1024**3 and output<=2*1024**3 and peaks['build']<=16*1024**3 and peaks['science']<=8*1024**3
     closure=root/'closure-v1';closure.mkdir()
+    expected={v['ELF']['path']:v['ELF']for v in load(root/'science/runtime-build-v1.json')['executables']}
+    deps={v['actual']['path']:v['actual']for v in load(root/'science/runtime-dependencies-v1.json')['libraries']}
+    samples=[];used={}
+    for path in sorted((root/'operations').glob('*/native-exec-samples.json')):
+        for record in load(path):
+            assert record['status']=='PASS'
+            for native in record['native']:verify(expected[native])
+            for f in record['files']:
+                if '.so'not in Path(f).name and not Path(f).name.startswith('ld-linux'):continue
+                assert f in deps,f
+                if f not in used:used[f]=identity(verify(deps[f]))
+            samples.append(dict(operation=path.parent.name,pid=record['pid'],native=record['native'],libc=record['libc']))
+    atomic(closure/'runtime-final-identity.json',dict(status='PASS',actual_native_exec_samples=samples,libraries=list(used.values()),new_ELFs=list(expected.values()),pretarget_qualification=identity(root/'science/runtime-qualified-v1.json')))
+
     atomic(closure/'verification.json',dict(status='PASS',scientific_scope=gates['scope_result'],phase_seconds=phase,total_charged_seconds=total,ceiling=7200,setup_fully_charged=60,closure_fully_charged=300,
         source_build_runtime_bytes=src,new_output_bytes=output,aggregate_peak_RSS=peaks,H16_ledger_unchanged=old,publication=identity(pub/'manifest.json'),new_scientific_steps=0))
     def seal(b):b.update(closed=True,total_charged_seconds=total,closure_fully_charged_seconds=300,final_verification=identity(closure/'verification.json'))
