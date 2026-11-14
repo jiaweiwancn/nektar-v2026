@@ -36,6 +36,17 @@ inline void Append(const std::string &path,const std::string &text)
     try{D::WriteAll(fd,text.data(),text.size());D::WriteAll(fd,"\n",1);D::Check(::fsync(fd)==0,"monitor stream fsync failed");::close(fd);}
     catch(...){::close(fd);throw;}
 }
+// State.bin has already been closed/fsynced by the caller. D::SyncDirectory
+// syncs its argument's parent: persist the checkpoint contents first, then
+// the newly created checkpoint directory entry in its containing parent.
+template<class Sync> inline void CheckpointDirectories(const std::string &checkpoint,Sync sync)
+{
+    auto directory=std::filesystem::path(checkpoint);
+    if(directory.filename().empty())directory=directory.parent_path();
+    sync(directory/"State.bin");sync(directory);
+}
+inline void CheckpointDirectories(const std::string &checkpoint)
+{CheckpointDirectories(checkpoint,[](const std::filesystem::path &p){D::SyncDirectory(p);});}
 inline void SameObject(const Tree &a,const Tree &b)
 {
     D::Check(a.size()==b.size(),"monitor binding shape differs");std::set<std::string> seen;

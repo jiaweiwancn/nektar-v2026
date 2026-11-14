@@ -10,6 +10,14 @@ int main(int argc,char **argv)
     {
         D::Check(argc==2,"monitor checks require an isolated output path");const std::string root=argv[1];
         D::Check(!std::filesystem::exists(root),"fixture output exists");std::filesystem::create_directories(root);
+        for(const auto &suffix:{std::string("/CP"),std::string("/CP/")})
+        {
+            std::vector<std::string> order;bool ready=false;
+            try{M::CheckpointDirectories(root+suffix,[&](const auto &p){order.push_back(p.string());if(order.size()==2)throw std::runtime_error("injected parent sync failure");});ready=true;}catch(const std::exception&){}
+            D::Check(!ready && order==std::vector<std::string>{root+"/CP/State.bin",root+"/CP"},"checkpoint sync ordering/failure could publish ready");
+        }
+        std::filesystem::create_directories(root+"/durable/CP");M::Atomic(root+"/durable/CP/State.bin","synthetic checkpoint");
+        M::CheckpointDirectories(root+"/durable/CP");
         M::FactorCatalog c;c.Configure(root+"/catalog","fixed-mesh-signs-source");
         for(int i=0;i<1000;++i)c.Record("changed-numerical-zero-pattern-"+std::to_string(i),"{}");
         for(int i=0;i<100;++i)c.Record("changed-numerical-zero-pattern-999","{}");
@@ -29,7 +37,7 @@ int main(int argc,char **argv)
             M::Atomic(dir+"/cursor.json",J::Object({{"binding",binding},{"ready_sha256",J::Quote(readyHash)},{"inventory_sha256",J::Quote(inventoryHash)}}));
             std::string actual=binding;
             if(fault=="binding")actual.replace(actual.find("\"nonce\":\"nonce\""),15,"\"nonce\":\"stale\"");
-            if(fault!="timeout" && fault!="temporary-only")M::Atomic(dir+"/step-1.ack.json",J::Object({{"schema",J::Quote("WJObserverAckV1")},{"status",J::Quote(fault=="FAIL"?"FAIL":"PASS")},
+            if(fault!="timeout" && fault!="temporary-only")M::Atomic(dir+"/step-1.ack.json",J::Object({{"schema",J::Quote(fault=="malformed"?"wrong-schema":"WJObserverAckV1")},{"status",J::Quote(fault=="FAIL"?"FAIL":"PASS")},
                 {"ready_sha256",J::Quote(readyHash)},{"binding",actual},{"result",D::Pin(dir+"/result.json")},{"qualified_cursor",D::Pin(dir+"/cursor.json")},
                 {"inventory",D::Pin(dir+"/inventory.json")},{"continuation",J::Quote("TERMINAL")}}));
             if(fault=="duplicate")M::Atomic(dir+"/step-0.ack.json","{}");
@@ -38,7 +46,7 @@ int main(int argc,char **argv)
             bool success=false;try{success=M::Wait(dir,"step-1",readyHash,binding,.06,getpid())=="TERMINAL";}catch(const std::exception&){}
             D::Check(success==pass,"incorrect protocol decision: "+name);
         };
-        check("pass","",true);check("atomic-dual-name","publishing",true);check("failed","FAIL",false);check("stale","binding",false);check("duplicate","duplicate",false);check("timeout","timeout",false);check("temporary-only","temporary-only",false);
+        check("pass","",true);check("atomic-dual-name","publishing",true);check("failed","FAIL",false);check("stale","binding",false);check("malformed","malformed",false);check("duplicate","duplicate",false);check("timeout","timeout",false);check("temporary-only","temporary-only",false);
         bool overwritten=false;try{M::Atomic(root+"/pass/inventory.json","replacement");overwritten=true;}catch(const std::exception&){}
         D::Check(!overwritten,"immutable output overwritten");std::cout<<"bounded catalog and protocol checks PASS "<<summary<<'\n';return 0;
     }

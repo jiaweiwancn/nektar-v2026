@@ -333,7 +333,7 @@ void RANSEquilibriumWallEvolution::CompleteMonitoring(double nativeSeconds)
     namespace M=RANSWallMonitor;namespace J=RANSWallSolveJson;
     RANSWallTiming::Scope publish("monitor.checkpoint_and_publish");Checkpoint();
     const int fd=::open((m_lastCheckpoint+"/State.bin").c_str(),O_RDONLY);Require(fd>=0,"cannot fsync completed checkpoint");
-    const int synced=::fsync(fd);::close(fd);Require(synced==0,"completed checkpoint fsync failed");RANSWallR3::SyncDirectory(m_lastCheckpoint+"/State.bin");
+    const int synced=::fsync(fd);::close(fd);Require(synced==0,"completed checkpoint fsync failed");M::CheckpointDirectories(m_lastCheckpoint);
     Require(!m_stateAudits.empty() && RANSWallR3::Hash(m_state)==RANSWallR3::Hash(m_acceptedStates.back()),"completed state differs from native audited candidate");
     m_wjAuditPackets.back()=m_patch->WJAuditPacket(m_stateAudits.back(),m_state,m_lastHistory,m_stageAlpha,m_stageTime,"completed_stage");
     const auto step=m_integrator->Steps();const auto stem="step-"+std::to_string(step),prefix=m_monitorDirectory+"/"+stem;
