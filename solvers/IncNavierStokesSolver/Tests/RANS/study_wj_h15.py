@@ -74,6 +74,8 @@ def xml_case(original,folder,cp,steps,retention=True,fault='Off',hard=False):
     return path
 
 def run_observed(root,folder,cache_manifest,original_cp0,*,behavior='PASS',restart_callback=None,replay=None,deadline=None):
+    for v in load(root/'science/runtime-build-v1.json')['executables']:
+        verify(v['ELF']);verify(v['wrapper'])
     xml=folder/'case.xml';cp0=checkpoint_payload(original_cp0,include_reference=True)
     additional=int(next(p.text.split('=')[1]for p in ET.parse(xml).findall('./CONDITIONS/PARAMETERS/P')if p.text.split('=')[0].strip()=='NumSteps'));maximum=cp0['steps']+additional
     # For restarted small fixtures the original qh0 remains CP0, not CP1.
@@ -128,6 +130,11 @@ def small(root):
             assert r['steps']==2 and r['independently_qualified']==(2 if name=='pass'else 1)
             for k in ('state','fixed_reference','fixed_defect'):assert vector_hash(end[k])==vector_hash(legacy[k]),k
             assert all(vector_hash(a)==vector_hash(b)for a,b in zip(end['native_history'],legacy['native_history']))and end['native_history_times']==legacy['native_history_times']
+            if name=='pass':
+                for step in (1,2):
+                    stage=load(out/f'pass/monitor/step-{step}.report.json')
+                    assert vector_hash(stage['state'])==vector_hash(legacy['accepted_states'][step])
+                    assert stage['wj_audit_packets'][0]['stage_history_sha256']==legacy['wj_audit_packets'][step]['stage_history_sha256']
         elif name in ('observer-fail','timeout','stale'):
             assert r['native_completed']==1 and r['independently_qualified']==0 and r['steps']==1
             assert Path(r['last_qualified_checkpoint'])==cp and Path(r['last_completed_checkpoint'])!=cp
@@ -136,6 +143,9 @@ def small(root):
             assert r['steps']==0 and r['native_completed']==0 and r['aborted_advances']==1
             aborted=load(out/name/'monitor/first-aborted.json');assert aborted['status']=='ABORTED_NOT_COMPLETED'
             assert not(out/name/'monitor/step-1.ready.json').exists()
+            original=checkpoint_payload(cp,include_reference=True)
+            assert r['state_sha256']==vector_hash(original['state'])and r['native_history_sha256']==[vector_hash(v)for v in original['native_history']]
+            assert r['native_history_times']==original['native_history_times']
         assert r['resident_accepted_states']<=2 and r['resident_wj_packets']<=2 and r['resident_pimple_records']<=1 and r['factor_catalog']['resident_definitions']<=16
         records.append(dict(case=name,native_exit=code,summary=identity(out/name/'case.evolution.json'),status='PASS',native_completed=r['native_completed'],independently_qualified=r['independently_qualified'],failure=r['failure']))
     atomic(out/'qualification.json',dict(status='PASS',small_attempts=10,records=records,legacy_final=identity(out/'legacy/case.evolution.json')))
