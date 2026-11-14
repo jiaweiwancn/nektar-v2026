@@ -18,8 +18,8 @@ inline std::string RANSTensorValidation(RANSWallEvolutionPatch &patch)
     namespace J=RANSWallSolveJson;
     using Vector=RANSWallAlgebra::Vector;
     using Matrix=RANSWallAlgebra::DenseMatrix;
-    RANSWallAlgebra::Require(patch.Dimension()==2 && (!patch.Mapped() || patch.CurvedManufactured()) && patch.Size()<500,
-        "tensor validation requires a small serial affine 2D fixture");
+    RANSWallAlgebra::Require(patch.Dimension()==2 && (!patch.Mapped() || patch.CurvedManufactured()) && patch.Size()<=1000,
+        "tensor validation requires a bounded at-most1000-slot serial 2D verification fixture");
     std::vector<std::string> fields;
     for(int b=0;b<patch.Gauge();++b)
     {

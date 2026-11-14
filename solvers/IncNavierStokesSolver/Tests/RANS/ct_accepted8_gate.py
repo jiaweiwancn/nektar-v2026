@@ -9,6 +9,7 @@ def finite(x):return isinstance(x,(int,float)) and not isinstance(x,bool) and ma
 def pair(result):
     reasons=[];target=result.get('target');members=result.get('members',{})
     if not finite(target) or target not in (.008,.02):reasons.append('wrong_horizon')
+    if not finite(target):return dict(status='fail',reasons=reasons)
     if set(members)!={'0.002','0.001'}:reasons.append('missing_timestep_member')
     for name,row in members.items():
         if not finite(row.get('time')) or abs(row['time']-target)>1e-13 or row.get('failure'):reasons.append(name+':incomplete_or_rejected')

@@ -17,19 +17,12 @@ from rans_request_manifest import RequestManifest,sha,runtime_identity
 
 def read(p):return json.loads(Path(p).read_text())
 
-def observation_audit(data,case):
+def observation_audit(data,case,audit_path):
     H=case['H'];records=list(csv.DictReader((data/'profiles.csv').open()));out=[]
     # Reuse the sealed V2 complete closest-point audit, including envelopes
     # and all Fig7 ratios; frozen source roles and uncertainty remain unchanged.
-    audit_path=Path(__file__).resolve().parents[4]/'docs/plans/cao-tamura-accepted-5-evidence/qualified-v1/observation-audit.json'
-    # Repository evidence index records the actual export name; caller may
-    # locate it without inventing or altering observation coordinates.
-    candidates=list((Path(__file__).resolve().parents[4]/'docs/plans/cao-tamura-accepted-5-evidence').rglob('*observation*.json'))
-    base=None
-    for path in candidates:
-        q=read(path)
-        if isinstance(q,dict) and q.get('schema')=='CT5ObservationAuditV1':base=q;audit_path=path;break
-    require(base is not None,'missing corrected CT5 observation audit')
+    base=read(audit_path);require(base.get('schema')=='CT5ObservationAuditV1' and base['status']=='pass' and len(base['height_audit'])==796,'missing corrected full CT5 observation audit')
+    seal=read(audit_path.parent/'completed-artifacts.json');require(seal['files']['results.json']==sha(audit_path),'changed sealed CT5 observation audit')
     for q in base['height_audit']:
         r=copy.deepcopy(q);d=r['nominal'].get('distance');vals=[]
         def scan(x):
@@ -114,8 +107,12 @@ def domain(rt,dest,case):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','reference','old','ct7','data','output'):p.add_argument('--'+k,type=Path,required=True)
+    p.add_argument('--observation-audit',type=Path,required=True)
     a=p.parse_args();m=RequestManifest(a.output,dict(schema='CT8IndependentAssessmentV1',source=sha(Path(__file__)),runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),reference=sha(a.reference)))
-    c=read(a.reference)['case'];results=dict(observations=observation_audit(a.data,c),temporal=temporal(a.old,a.ct7),domain=domain(a.runtime,a.output/'domain',c))
-    for name,r in results.items():write_json(a.output/(name+'.json'),r)
-    write_json(a.output/'results.json',dict(status='pass',scope='read-only diagnostics and geometry/count inventory only',files={name:sha(a.output/(name+'.json')) for name in results}));m.seal(a.output,['results.json',*(name+'.json' for name in results)]);return 0
+    c=read(a.reference)['case'];results={};failed=[]
+    for name,action in [('observations',lambda:observation_audit(a.data,c,a.observation_audit)),('temporal',lambda:temporal(a.old,a.ct7)),('domain',lambda:domain(a.runtime,a.output/'domain',c))]:
+        try:r=action()
+        except Exception as error:r=dict(status='failed_diagnostic',failure=repr(error));failed.append(name)
+        results[name]=r;write_json(a.output/(name+'.json'),r)
+    write_json(a.output/'results.json',dict(status='pass' if not failed else 'failed_diagnostic',failed=failed,scope='read-only diagnostics and geometry/count inventory only',files={name:sha(a.output/(name+'.json')) for name in results}));m.seal(a.output,['results.json',*(name+'.json' for name in results)]);return 0 if not failed else 1
 if __name__=='__main__':raise SystemExit(main())

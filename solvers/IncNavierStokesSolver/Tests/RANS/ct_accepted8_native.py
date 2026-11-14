@@ -104,7 +104,19 @@ def physical_metrics(p,state,c,weights,n):
     reasons=[name for name,v in drift.items() if v['scaled']>(1e-4 if name=='w' else 1e-3)]
     if abs(net)/(c['ustar']*c['Z'])>1e-8:reasons.append('mass')
     if tr['status']!='pass':reasons.append('traction')
-    return dict(status='pass' if not reasons else 'fail',reasons=reasons,drift=drift,absolute_reference_error=error,traction=tr,
+    stress=[];par=parameters('A95');trace={tuple(q):i for i,(q,side) in enumerate(zip(g,p['observation']['grid_sides'],strict=True)) if q[2]==c['H'] and side==1}
+    for i,q in enumerate(g):
+        if q[2]!=.175:continue
+        row=p['test_basis'][i]['velocity_k'];end=p['test_basis'][trace[(q[0],0.,c['H'])]]['velocity_k'];K=row_value(end,s,off[2])[0];k=row_value(row,s,off[2])[0]
+        rough=c['roughness_input']*math.sqrt(K)/(70*c['nu']);B=10.7 if rough==0 else 10.7*(1-rough**max(.5-.4*rough**.7,1-.79*rough**(-.28)))
+        nt=par['alpha']*math.sqrt(K)*max(0.,q[2]-c['nu']*B/math.sqrt(K));G=np.zeros((3,3))
+        for b,axis in enumerate((0,2)):G[axis]=row_value(row,s,off[b])[1]
+        R=2*k/3*np.eye(3)-nt*(G+G.T);pi=row_value(p['test_basis'][i]['pressure'],s,off[4])[0]
+        stress.append(dict(coordinate=q,geometry=row['geometry'],side=0,current_endpoint_K=float(K),local_k=float(k),R=R.tolist(),
+            RMS_over_utau=[math.sqrt(x)/c['ustar'] if x>=0 else None for x in np.diag(R)],Pi=float(pi),mechanical_pressure=float(pi-2*k/3),
+            raw_gradient=G.tolist(),signed_production=float(-np.sum(R*G)),isotropic_divergence_work=float(-2*k*np.trace(G)/3),
+            scope='actual transported flat-strip stress at7mm; not outer equilibrium substitution or a hill observation prediction'))
+    return dict(status='pass' if not reasons else 'fail',reasons=reasons,drift=drift,absolute_reference_error=error,traction=tr,actual_inner_stresses_7mm=stress,
         mass=dict(outward_net=net,physical_scale=c['ustar']*c['Z'],scaled=abs(net)/(c['ustar']*c['Z'])),
         scope='weighted physical RMS; true L2 separate; absolute pressure, fixed reference and actual initial baseline')
 
@@ -145,8 +157,8 @@ def preflight(a):
     q=copy.deepcopy(c);q.update(Z=.5,knots=sorted(set([0.,c['H']/4,c['H']/2,col(c).cutoff,c['roughness_input'],c['H'],.3,.5])))
     for degree in (3,4):
         cc=copy.deepcopy(q);cc.update(degree=degree,pressure_degree=degree-2);folder=a.output/('operator-p'+str(degree));make(folder,a.runtime,cc,.002,0)
-        packet,e=probe(a.runtime,folder,request(cc,True,tensor=False),'operator');require(e['exit_code']==0,'native displaced operator rejected:'+str(packet.get('failure')))
-        binding(packet,cc);out=operator_classify(packet,cc,column=col(cc),reference_function=reference,tensor_proof=proof['tensor_validation'])
+        packet,e=probe(a.runtime,folder,request(cc,True),'operator');require(e['exit_code']==0,'native displaced operator rejected:'+str(packet.get('failure')))
+        binding(packet,cc);out=operator_classify(packet,cc,column=col(cc),reference_function=reference)
         out['continuous_provider']=oracle_agreement(packet,cc)
         require(out['continuous_provider']['status']=='pass','continuous provider mismatch')
         for name,kwargs in [('pressure',dict(wrong_pressure=True)),('constant_inner_k',dict(constant_inner_k=True))]:

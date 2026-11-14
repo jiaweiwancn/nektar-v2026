@@ -390,8 +390,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FrozenScalarWeakLoad(
 std::string RANSWallEvolutionPatch::MixedSpaceRankPacket(const Vector &state,double time,
     const RANSWallEvolutionData &data) const
 {
-    Require(NewModels() && PimpleSingleSweep() && (!Mapped() || CurvedManufactured()) && m_dimension==2 && Size()<500,
-            "mixed rank packet is restricted to a small canonical new-model one-sweep fixture");
+    Require(NewModels() && PimpleSingleSweep() && (!Mapped() || CurvedManufactured()) && m_dimension==2 && Size()<=1000,
+            "mixed rank packet is restricted to an at-most1000-slot canonical new-model one-sweep verification fixture");
     const auto external=ExternalConstraints(time,data);
     const auto block=AssemblePicardBlock(0,state,state,1.,time,data,external);
     Vector constant(block.rows.size());int velocity=0;
