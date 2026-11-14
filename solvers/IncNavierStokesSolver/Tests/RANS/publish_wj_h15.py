@@ -49,8 +49,9 @@ def native_closure(root):
         libraries.append(dict(actual=actual,qualified=p))
     return dict(status='PASS',actual_native_exec_maps=samples,libraries=libraries,governor_and_reader=load(root/'science/runtime-build-v1.json')['executables'],scope='original H15 runtime actually executed; no execution of repaired governor/reader')
 
-def main(root,source):
-    out=root/'publication-v1';out.mkdir();(out/'controls').mkdir();(out/'operations').mkdir();(out/'analysis').mkdir()
+def main(root,source,version='v1'):
+    assert version.startswith('v')and version[1:].isdigit()
+    out=root/('publication-'+version);out.mkdir();(out/'controls').mkdir();(out/'operations').mkdir();(out/'analysis').mkdir()
     def copy(p,name):
         p=Path(p);dest=out/name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,dest);assert identity(p)['sha256']==identity(dest)['sha256']
     # Save snapshots before hashing; publication snapshot remains OPEN and is
@@ -141,7 +142,7 @@ def main(root,source):
     artifacts=[identity(p)for p in sorted(out.rglob('*'))if p.is_file()]
     atomic(out/'manifest.json',dict(source_revision=source,artifacts=artifacts,heavy_data_copied=False))
     atomic(out/'seal.json',dict(manifest=identity(out/'manifest.json'),accounting_snapshot=identity(out/'accounting-at-publication.json'),status='OBSTRUCTED_PROTOCOL; partial scientific pilot preserved'))
-    print('publication-v1 sealed',len(artifacts),'compact artifacts',flush=True)
+    print('publication-'+version,'sealed',len(artifacts),'compact artifacts',flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--source',required=True);a=p.parse_args();main(a.root,a.source)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--source',required=True);p.add_argument('--version',default='v1');a=p.parse_args();main(a.root,a.source,a.version)
