@@ -18,7 +18,10 @@ def compact(value):
     if not isinstance(value,dict):return value
     result={}
     for key,x in value.items():
-        if key=='actual_mapped_files':
+        if key in ('effective_initial','live_fixed_boundary') and isinstance(x,list):
+            result[key+'_entry_count']=len(x);result[key+'_canonical_sha256']=hashlib.sha256(canonical(x)).hexdigest()
+            result[key+'_archive_scope']='complete array retained in the sealed native source; compact receipt is not a replay/checkpoint input'
+        elif key=='actual_mapped_files':
             digest=hashlib.sha256(canonical(x)).hexdigest();LIBRARIES[digest]=x;result['actual_mapped_files_catalog_sha256']=digest
         elif key=='interface_rows':
             result['interface_row_count']=len(x);result['interface_rows_sha256']=hashlib.sha256(canonical(x)).hexdigest()
