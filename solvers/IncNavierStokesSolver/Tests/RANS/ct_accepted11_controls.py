@@ -44,7 +44,9 @@ def main():
     fault('stale_equivalence','stale_equivalence_receipt',lambda v:v[3].update(equivalence='stale'))
     fault('failed_shared_resources','closed_resource_failure',lambda v:v[4]['capacity']['resource'].update(project_status='fail'))
     q=fixture();q['schema']='CT11TargetPhysicalPairV1'
-    for r in q['members'].values():r['actual_stage_checks']=[dict(predictor_factor_nonzeros=100,mass_factor_nonzeros=100,pressure_preconditioner_factor_nonzeros=100)]
+    for r in q['members'].values():
+        r['actual_stage_checks']=[dict(predictor_factor_nonzeros=100,mass_factor_nonzeros=100,pressure_preconditioner_factor_nonzeros=100)]
+        for b in r['budgets']['budgets'].values():b['volume_observer']=dict(policy='NativeOwnerVolumeStreamV1',materialized_global_volume_rows=False)
     require(target_pair(q)['status']=='pass','target synthetic positive failed');neg={}
     def bad(name,word,fn):
         z=copy.deepcopy(q);fn(z);z['qualification']=dict(status='pass');r=target_pair(z);require(r['status']=='fail' and any(word in s for s in r['reasons']),'target mutation reason:'+name);neg[name]=r
@@ -54,6 +56,7 @@ def main():
     bad('foreign_budget_identity','budget_state_configuration_identity',lambda z:z['members']['0.001'].update(state_sha256='foreign'))
     bad('wrong_model','foreign_physics',lambda z:z['members']['0.001'].update(signature='A93'))
     bad('pass_label_pressure_failure','temporal:Pi',lambda z:z['temporal']['Pi'].update(difference=dict(weighted_RMS=2e-7,scale=1.)))
+    bad('stale_observer_policy','observer_policy',lambda z:z['members']['0.001']['budgets']['budgets']['native']['volume_observer'].update(policy='stale'))
     out['target_negatives']=dict(scope='schema fixtures only',results=neg)
     f=a.ct9/'controls-v4/d0-p3-sparse';initial=n.read(f/'operator.json');dest=a.output/'unsupported-policy';dest.mkdir();shutil.copy2(f/'case.xml',dest/'case.xml');state=initial['observation']['state'];req=replay(initial,state,.002,[],export_physical_scalar_budget=True,previous_state=state,physical_budget_volume_policy='UnsupportedObserverV0');r,x=probe(a.runtime,dest,req,'negative');require(x['exit_code']!=0 and 'unsupported physical scalar observer policy' in r.get('failure',''),'wrong native policy rejection')
     out['native_negative']=dict(status='pass',reason=r['failure'],execution=x,request_sha256=sha(dest/'negative-request.json'));out['status']='pass';write_json(a.output/'results.json',out);m.seal(a.output,['results.json']);print('CT11 admission negatives pass',len(out['negative'])+len(neg)+1,flush=True);return 0

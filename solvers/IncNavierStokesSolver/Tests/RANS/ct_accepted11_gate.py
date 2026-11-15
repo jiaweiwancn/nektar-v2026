@@ -39,6 +39,10 @@ def capacity(q):
         e=r.get('execution',{})
         if r.get('actual_initial_sha256')!=q.get('actual_initial_sha256'):reasons.append(name+':foreign_control_state')
         if not finite_numbers(r.get('equations',{})) or set(r.get('equations',{}))!=EQUATIONS:reasons.append(name+':missing_or_nonfinite_primitives')
+        for equation,v in r.get('equations',{}).items():
+            keys=('physical_scale','storage_backward_difference','stage_source','stage_physical_boundary_flux','frozen_stage_physical_defect')
+            if any(not finite(v.get(k)) for k in keys) or v.get('physical_scale',0)<=0:reasons.append(name+':invalid_equation_scale_or_primitive:'+equation)
+            elif abs(v['storage_backward_difference']-v['stage_source']-v['stage_physical_boundary_flux']-v['frozen_stage_physical_defect'])>2e-10*max(1.,v['physical_scale']):reasons.append(name+':inconsistent_equation:'+equation)
         if e.get('exit_code')!=0 or e.get('control_wall_limit_reached') is not False:reasons.append(name+':execution')
         for k in ('peak_RSS_KiB','peak_virtual_KiB','process_cpu_seconds','wall_seconds'):
             if not finite(e.get(k)) or e[k]<=0:reasons.append(name+':resource_primitive')

@@ -1,0 +1,17 @@
+{
+  "schema": "CT11ProspectiveCampaignAccountingV1",
+  "declared_before_target_trajectories": true,
+  "scope": "resource accounting only; no physical or solver criterion change",
+  "limits": {
+    "CPU_seconds": 24000,
+    "active_wall_seconds": 28800,
+    "storage_GiB": 24,
+    "pair_steps": 2048,
+    "segment_steps": 32,
+    "headroom": 0.25
+  },
+  "measurements": "actual accepted-step exclusive CPU, native nonstep startup/output CPU, four physical controls plus constitutive audit CPU, controller CPU, native versus fixed audit output bytes; record zero-step startup separately",
+  "CPU": "1.25*(max accepted-step CPU*remaining pair steps + max native nonstep CPU*remaining segments + 4*(observed pair audit CPU + observed controller CPU))",
+  "storage": "1.25*(max native bytes per accepted step*remaining pair steps + 4*observed pair audit bytes)",
+  "interpretation": "conservative measured finite campaign estimate; audits are fixed per milestone, not governing solves or per-step work. Resource admission is separate from physical-pair qualification. Do not claim active-wall admission from CPU alone; report suspensions and measured wall/CPU ratio and close outer receipts before continuation."
+}
