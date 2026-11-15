@@ -16,21 +16,26 @@ def main():
     for k in ('exports','runtime','contract','output'):p.add_argument('--'+k,type=Path,required=True)
     p.add_argument('--reuse-progress',type=Path)
     p.add_argument('--work-amendment',type=Path,required=True)
+    p.add_argument('--independent-natural-completion',action='store_true')
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     identity=runtime_identity(a.runtime/'CT13SparseOrderingProbe');data=sealed(a.exports)
+    cpu_limit=900 if a.independent_natural_completion else 300
+    wall_limit=1000 if a.independent_natural_completion else 900
+    if a.independent_natural_completion:
+        require(__import__('json').loads(a.work_amendment.read_text())['schema']=='CT13IndependentNaturalCompletionV2','missing independent work contract')
     reused={};work_limited={}
     if a.reuse_progress:
         request=__import__('json').loads((a.reuse_progress/'request-manifest.json').read_text())['request']
         require(request['exports']==sha(a.exports/'results.json') and request['runtime']==identity,'foreign partial ordering assessment')
         reused=__import__('json').loads((a.reuse_progress/'progress.json').read_text())['results']
         closure=a.reuse_progress.parent/('resources-'+a.reuse_progress.name)/'execution.json'
-        if closure.exists() and __import__('json').loads(closure.read_text())['exit_code']==124:
+        if not a.independent_natural_completion and closure.exists() and __import__('json').loads(closure.read_text())['exit_code']==124:
             witness=a.reuse_progress/'live-work-witness.json'
             for row in __import__('json').loads(witness.read_text())['owned_active_native']:
                 if row['ordering']=='Natural' and row['command'][1]==data['systems']['original-initial']['A']['file']:
                     require(not (a.reuse_progress/'original-initial-Natural.json').exists(),'completed Natural result cannot be relabelled')
                     work_limited['Natural']=dict(status='unresolved_work_limited',reason='original1800-second family bound expired during first Natural control; no positive fill/residual claim or repeat',closed_execution_sha256=sha(closure),last_native_witness_sha256=sha(witness),last_native_CPU_lower_bound=row['CPU'])
-    m=RequestManifest(a.output,dict(schema='CT13FixedOrderingAssessmentV2',source=sha(Path(__file__)),exports=sha(a.exports/'results.json'),contract=sha(a.contract),runtime=identity,orderings=['COLAMD','AMD','Natural'],work_amendment=sha(a.work_amendment),reused_progress=sha(a.reuse_progress/'progress.json') if a.reuse_progress else None,per_factor_CPU_soft=300,per_factor_CPU_hard=305,per_factor_wall=900))
+    m=RequestManifest(a.output,dict(schema='CT13FixedOrderingAssessmentV3',source=sha(Path(__file__)),exports=sha(a.exports/'results.json'),contract=sha(a.contract),runtime=identity,orderings=['COLAMD','AMD','Natural'],work_amendment=sha(a.work_amendment),reused_progress=sha(a.reuse_progress/'progress.json') if a.reuse_progress else None,per_factor_CPU_soft=cpu_limit,per_factor_CPU_hard=cpu_limit+5,per_factor_wall=wall_limit))
     require(shutil.which('prlimit') is not None,'native CPU-bound launcher unavailable')
     results={};fill={k:[] for k in ('COLAMD','AMD','Natural')};ineligible=set(work_limited)
     for label,s in data['systems'].items():
@@ -42,11 +47,12 @@ def main():
                 fill[ordering].append(None);continue
             out=a.output/(label+'-'+ordering+'.json')
             prior=reused.get(label,{}).get(ordering)
+            if prior and not prior.get('result_sha256'):prior=None
             if prior:
                 src=a.reuse_progress/out.name
                 require(src.is_file() and sha(src)==prior['result_sha256'] and prior['matrix_sha256']==s['A']['sha256'] and sha(rhs)==sha(a.reuse_progress/rhs.name),'changed completed ordering primitive')
                 shutil.copy2(src,out);e=prior['execution']
-            else:e=run(['prlimit','--cpu=300:305','--','timeout','-k','10s','900',a.runtime/'CT13SparseOrderingProbe',s['A']['file'],rhs,ordering,out],a.output,label+'-'+ordering+'.log')
+            else:e=run(['prlimit','--cpu='+str(cpu_limit)+':'+str(cpu_limit+5),'--','timeout','-k','10s',str(wall_limit),a.runtime/'CT13SparseOrderingProbe',s['A']['file'],rhs,ordering,out],a.output,label+'-'+ordering+'.log')
             row=__import__('json').loads(out.read_text()) if out.is_file() else dict(status='native_work_or_resource_failure',failure='no factor result; bounded native exit; inspect log and signal')
             compact={k:v for k,v in row.items() if k not in ('solution','tiny_solution')};compact.update(execution=e,result_sha256=sha(out) if out.exists() else None,matrix_sha256=s['A']['sha256'])
             if prior:compact['reused_completed_output']=str(a.reuse_progress/out.name)
