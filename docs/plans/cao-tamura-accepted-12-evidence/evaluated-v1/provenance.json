@@ -1,0 +1,69 @@
+{
+  "source_revision": "e74b4c0a2f267a161ce71511edd2d8fad65a63be",
+  "unchanged_CPP": {
+    "library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp": "0e7ef3ab8d6782c2793862c53fe8898bb60473fb8f06929b3ab96cc9d382a1d3",
+    "library/SolverUtils/Turbulence/RANSModels.cpp": "7ce8af638c7b8f8701460ec0002e3aad3e34482444393f0df337662ab65d344f",
+    "library/UnitTests/SolverUtils/RANSPreservationProbe.cpp": "52234331d486b3d3f25927d6c9a53efac3d58ba5575f14f54f61b082fd2739d0",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp": "3a1804c0e0b8ef6877b4acf30c31dc82be2c5cb128c5689180aa0b5c98d3d299",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp": "6fd177c0bb16e0381c591a40028358cb78c12cd6dfcb45ab3cb7f988236e7dcc",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionOpenBoundary.cpp": "c5bf789f27ad17e7ab965399e529941a91515615454799207929e246ef7711d1",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp": "561682e452c112eb8fe848950452aa767371be03856ba654cefe1a30011b0aed",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSparse.cpp": "b8d207c7606d9c40acec5dda8bfc161bddf182d6e05bc3d3d2e128dcf7313306",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallSerialSparse.cpp": "f41c583a4b6d98f2f324bb6a1eb7575c87363553d4f702b7cf5ef2690d67552f",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallMomentumAttribution.cpp": "857176c7e354bd4ee374ffdbd3dedac14b1a6f7f7b3fcf56d8f2db005aa98f8b"
+  },
+  "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "python_sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+  "numpy": "1.21.5",
+  "scipy": "1.8.0",
+  "platform": {
+    "system": "Linux",
+    "node": "jay-Super-Server",
+    "release": "6.8.0-149-generic",
+    "version": "#149~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Oct 28 20:58:45 UTC ",
+    "machine": "x86_64",
+    "processor": "x86_64"
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "governing": "pinned CT9 build-v8,unchanged",
+  "probe": "pinned CT11 build-v2,unchanged",
+  "inputs": {
+    "pressure": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/pressure-v5",
+      "request_sha256": "9eefc9337fcf243951107db9cb2ba433026f666aace5ddbd12127462fb60f56a",
+      "result_sha256": "798f5b6cb6808cb1aa1a9fe51c47a05ce218d4e40d8c4dd787facb90f93ef2d9",
+      "seal_sha256": "0e7daa5e50149253ebca29e9ccc4d73373e40ee1471f9c2c56188a2543dd03be"
+    },
+    "axes": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/axes-v3",
+      "request_sha256": "54120d55528712123c70f6ead0ae059a3ec2f46a93e98f402709e0e89112c01a",
+      "result_sha256": "98dda09c0adc0f858cf82f9630eba2048003276fcdcb4adb747f3d11930bcbeb",
+      "seal_sha256": "32231b1d11999cd312a8c163059156c8919b311398806f0adeb939d464c73472"
+    },
+    "profile": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v3",
+      "request_sha256": "96ca514f252032b255950fcfa89dfb3a5291623d5e913f3874c0bd6bc7fcbab2",
+      "result_sha256": "acbb36dbbad5d0ef1d42e221df036c30235a8625783767226740d2a36140d094",
+      "seal_sha256": "8432c80fecefe17f3fd3337a2434c4c57d186d07706f752d48811368315bc13e"
+    },
+    "static": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/static-v1",
+      "request_sha256": "84e1d81e0c56e58a9e383012f7cf7a94218c6b467bface086791cf8e27d0c0c0",
+      "result_sha256": "83e3712522554804167596f04c1e76aaab5a0bffb0639966f21e3199a1509d10",
+      "seal_sha256": "85313274ecbd794c1185b33f42a3da23a7ba3c67caa81c161cf5d91bebf1c828"
+    },
+    "face": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/face-v1",
+      "request_sha256": "0537233c3ac09f0e560b8b93dd86c0700b1048d401515e818d8669dbb36e0465",
+      "result_sha256": "67cd805bfb27114bb25884263ba2e20bd197f94d8a53027f3811e325ba5d791b",
+      "seal_sha256": "9ddb0bb28430db83ed4f76b71e7813938d8e17560e4d26b4a4c720a4227bb5aa"
+    }
+  }
+}

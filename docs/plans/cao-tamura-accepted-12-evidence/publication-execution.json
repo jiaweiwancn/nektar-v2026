@@ -1,0 +1,42 @@
+{
+  "command": [
+    "timeout",
+    "-k",
+    "10s",
+    "120",
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/publication-driver.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115",
+    "--self-control",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/resources-publication-v1",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/publication-v1"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 250115,
+  "guard_pid": 250116,
+  "owned_family_pid": 250119,
+  "wall_seconds": 4.558043351978995,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 2.21571,
+  "resource": {
+    "maximum_aggregate": 6,
+    "maximum_project": 6,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}

@@ -1,0 +1,2213 @@
+{
+  "schema": "CT12TargetProfileRetentionV1",
+  "status": "pass",
+  "members": {
+    "1": {
+      "time": 0.001,
+      "execution": {
+        "exit_code": 0,
+        "scope": "reuse of the completed original native step; wrapper failed later hashing its checkpoint directory",
+        "original_closed_family": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/resources-profile-v1/execution.json",
+        "limitation": "first-run temporary run() RSS/library-map object was lost before receipt; detailed native times and exact state/stage evidence survive; second step is measured normally"
+      },
+      "accepted_state_sha256": "751fbe6ce03a5cb2fbaca15ef4ad9b59305a30cebb991f21d9eaeb676d3f62e7",
+      "history_sha256": "0c59a37a903e5e2f1c5492ae1a83736ccb05fc7261dc3aac99dc488c6f04d173",
+      "configuration_sha256": "43962176097caceab5d5ae0042ae820876aa322c2ff31d3bd6cbe5f77ae1a51f",
+      "native_report_sha256": "06286c2f61970e8bbf34ca883862b544d16c56847b8147e5c75b4531d549e05c",
+      "timing_sha256": "2f7ee5ce110ca035192a9e260a85e4adadd103ac6f0fa1b567bc20ebaa6821fa",
+      "initialization_exclusive_CPU": 158.69625900264157,
+      "accepted_exclusive_CPU": 359.1161309688517,
+      "categories": {
+        "matching.constraints": {
+          "calls": 18,
+          "CPU": 0.0393019999999998,
+          "wall": 0.03922656
+        },
+        "domain.compute": {
+          "calls": 5,
+          "CPU": 72.70304799458566,
+          "wall": 72.65210414584824
+        },
+        "domain.scalar": {
+          "calls": 5,
+          "CPU": 0.33153999999999684,
+          "wall": 0.3316844260000025
+        },
+        "pimple.check.input": {
+          "calls": 1,
+          "CPU": 0.025110000000140076,
+          "wall": 0.02509987000001246
+        },
+        "constitutive.refresh": {
+          "calls": 15,
+          "CPU": 0.9409700000086826,
+          "wall": 0.9387122909974546
+        },
+        "flow.assembly": {
+          "calls": 1,
+          "CPU": 24.100828999999845,
+          "wall": 24.103333912000032
+        },
+        "sparse.factorize": {
+          "calls": 8,
+          "CPU": 2.501602,
+          "wall": 2.5024598499999997
+        },
+        "sparse.solve_validate": {
+          "calls": 336,
+          "CPU": 1.4046469999999995,
+          "wall": 1.405171157999998
+        },
+        "sparse.pressure_gmres": {
+          "calls": 1,
+          "CPU": 0.34209400000000034,
+          "wall": 0.34451057400000185
+        },
+        "sparse.flow_linear_operation": {
+          "calls": 1,
+          "CPU": 0.6951799999999997,
+          "wall": 0.6955605959999995
+        },
+        "io.flow_attempt_snapshot": {
+          "calls": 1,
+          "CPU": 0.826054,
+          "wall": 1.324274225
+        },
+        "residual": {
+          "calls": 9,
+          "CPU": 8.071762999998853,
+          "wall": 8.069983408001088
+        },
+        "pimple.check.flow": {
+          "calls": 1,
+          "CPU": 0.02458300000012059,
+          "wall": 0.024580560000011076
+        },
+        "flow.correction_validate": {
+          "calls": 1,
+          "CPU": 0.19359099999999785,
+          "wall": 0.19386531499999649
+        },
+        "flow.total": {
+          "calls": 1,
+          "CPU": 0.00016800000000216642,
+          "wall": 0.0005388940000017328
+        },
+        "epsilon.assembly": {
+          "calls": 1,
+          "CPU": 2.2458459999998435,
+          "wall": 2.2446178070000107
+        },
+        "epsilon.solve_validate": {
+          "calls": 1,
+          "CPU": 0.005183000000000021,
+          "wall": 0.0051898449999999985
+        },
+        "pimple.check.epsilon": {
+          "calls": 1,
+          "CPU": 0.024076000000157194,
+          "wall": 0.024080141000005995
+        },
+        "epsilon.total": {
+          "calls": 1,
+          "CPU": 0.005516000000000076,
+          "wall": 0.005518576000000053
+        },
+        "k.assembly": {
+          "calls": 1,
+          "CPU": 4.727127999999861,
+          "wall": 4.727840804000022
+        },
+        "k.solve_validate": {
+          "calls": 1,
+          "CPU": 0.007645000000000013,
+          "wall": 0.00765093499999997
+        },
+        "io.attempt_snapshot": {
+          "calls": 1,
+          "CPU": 0.378643,
+          "wall": 0.521319006
+        },
+        "pimple.check.k": {
+          "calls": 1,
+          "CPU": 0.03579100000013824,
+          "wall": 0.035847046000021976
+        },
+        "k.total": {
+          "calls": 1,
+          "CPU": 0.0020990000000082887,
+          "wall": 0.00210661000000556
+        },
+        "residual.mass_dual_norms": {
+          "calls": 4,
+          "CPU": 0.005803000000000003,
+          "wall": 0.005804794000000004
+        },
+        "pimple.final_refresh_diagnostics": {
+          "calls": 1,
+          "CPU": 0.00028100000000108594,
+          "wall": 0.000281526999999393
+        },
+        "pimple.sweep": {
+          "calls": 1,
+          "CPU": 0.005369000000030155,
+          "wall": 0.0071539219999863235
+        },
+        "native.physical_samples": {
+          "calls": 1,
+          "CPU": 1.0004100000116782,
+          "wall": 1.002095568000425
+        },
+        "audit.physical": {
+          "calls": 1,
+          "CPU": 6.3107109999953135,
+          "wall": 6.301032416975982
+        },
+        "audit.complete": {
+          "calls": 1,
+          "CPU": 11.028011006458755,
+          "wall": 11.014955839506328
+        },
+        "native.acceptance_audit": {
+          "calls": 1,
+          "CPU": 0.0013289999999983593,
+          "wall": 0.0013308799999975918
+        },
+        "native.implicit": {
+          "calls": 1,
+          "CPU": 0.0016400000000089676,
+          "wall": 0.0018820360000404435
+        },
+        "native.explicit": {
+          "calls": 1,
+          "CPU": 0.12076200000000001,
+          "wall": 0.120767502
+        },
+        "native.advance": {
+          "calls": 1,
+          "CPU": 0.0039439999999899555,
+          "wall": 0.003944513000021743
+        },
+        "io.checkpoint": {
+          "calls": 1,
+          "CPU": 0.010999,
+          "wall": 0.051302181
+        },
+        "native.step": {
+          "calls": 1,
+          "CPU": 0.012215999999966698,
+          "wall": 0.012336166000011417
+        },
+        "assembly.open_faces": {
+          "calls": 12,
+          "CPU": 0.1804939999999778,
+          "wall": 0.17984530399998805
+        },
+        "constitutive.outer_law": {
+          "calls": 3979792,
+          "CPU": 5.947901000245364,
+          "wall": 5.966433802103228
+        },
+        "geometry.basis_lookup_evaluate": {
+          "calls": 69210480,
+          "CPU": 50.94318896505362,
+          "wall": 51.1720431506556
+        },
+        "geometry.element_row": {
+          "calls": 34605240,
+          "CPU": 88.6603900118695,
+          "wall": 88.1727083179592
+        },
+        "geometry.evaluation_row": {
+          "calls": 25933455,
+          "CPU": 35.41609099679161,
+          "wall": 35.5264275607807
+        },
+        "geometry.locate": {
+          "calls": 11380984,
+          "CPU": 22.353904997292698,
+          "wall": 22.347534922959163
+        },
+        "geometry.owner_catalog": {
+          "calls": 21907215,
+          "CPU": 17.480277996539908,
+          "wall": 17.83845147808051
+        }
+      },
+      "stage_equivalence": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step1/pimple-states/flow-t0.001-60c53b83087a.json": {
+          "sha256": "557930c83bc6583ea7ecd89d7e97b9fb7472c6f33f9b82823aa461255544a594",
+          "legacy_sha256": "8e45c637ea5d7814bae5e6f3c13ebab6e663c71e796e6de9716585afcb800436",
+          "all_values_and_matrix_hashes_equal": true
+        },
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step1/pimple-states/k-t0.001-60c53b83087a.json": {
+          "sha256": "c2c0eed250aac4407a52e8f272c20af54778ef3e1e232f945fec27e29656f0e7",
+          "legacy_sha256": "6c2ee656d1f7cca466d1669bee52d5a30784b85424c6d30f686ed9cc7c929259",
+          "all_values_and_matrix_hashes_equal": true
+        }
+      },
+      "legacy_exclusive_CPU": 143.85623899999996
+    },
+    "2": {
+      "time": 0.002,
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+          "case.xml"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 531.0496833710058,
+        "process_cpu_seconds": 528.163975,
+        "peak_RSS_KiB": 3762260,
+        "actual_mapped_files": {
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver": "5830a2cd8a4b0b5b12095555171eb28bc0f63e1daa97652d63da244c3fd808c7",
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+          "/usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0": "458dd70122be79952cd517f469e3714ee6a972c0d96cd67954b1e37fb4830b27",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_ess_singleton.so": "9e36ea68ba070279c6c964e08c5af596f774c5944c3aad1743e85b573af3ec1a",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_orte.so": "9a9fe6e13bb9b5db1acf7aa10485c9286cb03a9e1b66c1b244142c81f2aac054",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_slurm.so": "de18ee69766665d6c1063e714806e6449caa48a63f730749dca0ce311d8a2b48",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_flux.so": "3d6050004330107889696420382517358e08664a9be3f90cd1f71acdbdceedc1",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_ompi.so": "982d5490f7e0465af0228c7c27b416f51095b766f5d37c22d1c1ab6439780ff0",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_jsm.so": "452bf398f565aa69bfe2155a97f8fa5af0659ddff5fcb8b30ee36603bb66615b",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_shmem_mmap.so": "47b116b3a5eff9c50f16dbbe3fd912efd10bcdfb18791edb2a19adffb2ed3317",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_reachable_netlink.so": "5a606b631dfea7dbed5c0ccd81f84bc26f25080872068d0a9e382fbcf90fdda8",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+          "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0": "883ecfef9c8d3a2f17a1b8a3116e9e32d272f1c43e2088bf7837b98d2c50f5e2",
+          "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": "7cc817ff1841b59516d684f357bc0c3fc2cc52c3fa9b4ffb8ce8bdc215f02915",
+          "/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a",
+          "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0": "dcadda7f0f82c54ca157b6ca0a5fdc8e1128db4d778109c8e197e2f84c2ac9ba",
+          "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf",
+          "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3": "9386cfdeb2f894869cdd0190b4f110a65ec0c257ac50ddefaefd6cbaeaab3c35",
+          "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f",
+          "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25": "344870a9ff3cfee1df28f518e9e93073df8d0522a288f016f06fdacbfa49eed8",
+          "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1": "3160dcc37106767e1afb341ee3cb3cd25bb79246691ffd137131f37a23597288",
+          "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1": "c62a2a983e0d9c1de76ab2f4cf21a4d81da007af9e0351b8c04740459d231d3f",
+          "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358",
+          "/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1": "4dc20a901c6951e678e216e959da2534bcef7053e6efdf1492509baf142282b0",
+          "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4": "47d56894948545036bd49aed718393bf6edb93fce222874dad30b59f085ad9ee",
+          "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5",
+          "/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.15": "3d6d7558e2764fa0a2ee3ee9bf1754bff872bed23148d673bdb648f737ec39ff",
+          "/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.15": "f7c5ddb238bc12a13c4d4b4f8e6ea8af61f8bd144651728936d31b65bec7bbdc",
+          "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2": "e367a86cae4e1e81d9bba594a9daea3b90eb50fadb62bb45e38a322184484867",
+          "/usr/lib/x86_64-linux-gnu/libnettle.so.8.4": "2d3bda6cfa2d477cd91b8178843d19e081b911a124f04b4be06b6e32c9fabc73",
+          "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7": "e7162733430abba6f51e4a5186b9c61a6c706a63d4461182d5f66ce55f35507e",
+          "/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a",
+          "/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0": "1dc53d91b473c3ebcc65b196c83baa7b1a6c4009f590bcf5c640cf35ba343d6f",
+          "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5",
+          "/usr/lib/x86_64-linux-gnu/pmix2/lib/libpmix.so.2.5.2": "651d3664e655fa125fe81101a00fea58dd0f3f5adf3aac84d7f59c93c995203a",
+          "/usr/lib/x86_64-linux-gnu/librtmp.so.1": "2401c4fc99c7b93e79648071224a6eb230dcb800184ccacc8e1854e33fc61445",
+          "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2",
+          "/etc/ld.so.cache": "024c9b98c7f5b36ab0487adc7a5c75814323a7385bd54f8010c7eccce04e4a73",
+          "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pmix_ext3x.so": "a44d4cc1c9f9fde978a0d519b8305f609138283cc20694be4d1eb3105aab5722",
+          "/usr/lib/x86_64-linux-gnu/libicudata.so.70.1": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8",
+          "/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a",
+          "/usr/local/cuda-12.5/targets/x86_64-linux/lib/libOpenCL.so.1.0.0": "1552ec44b469da72e585a29ac7fd2aa98d7f99b9362b7fb8f3dcb2d6b603d3fb",
+          "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.240046/pmix_dstor_ds21_240046/smdataseg-3940352001-0": "16e72511154b7eba598aba3a707df006200c20ad89a3400fad1c7ac1e2259cef",
+          "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225",
+          "/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98",
+          "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.240046/pmix_dstor_ds21_240046/smseg-3940352001-0": "8b3a2ed339840e5cb41d38d5109e510024f4f2eaa4e2c4b3bb870b48402ae4f5",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_xml_libxml.so": "d1f058e867eb4b7c619ebb268b75f68c4393bcce8b339901e856d1a44c125506",
+          "/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06",
+          "/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d",
+          "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d",
+          "/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465",
+          "/usr/lib/x86_64-linux-gnu/libpthread.so.0": "fbed9505adacada2abb37c6b43be2df6de81e742712c6025694ba48de62c7e78",
+          "/usr/lib/x86_64-linux-gnu/libdl.so.2": "9cb9b7e3171939e7409e26773f44f3f22e200ec2e6936a5d7484a4f9b81d92f2",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_opencl.so": "bc26e4d7970e376af2643d5be346adcb14cc4de4a2b297ff9927386e2f82d678",
+          "/usr/lib/x86_64-linux-gnu/libpciaccess.so.0.11.1": "f1ca739f568225439e4a7957e09dd483359bf715f01d13396c436c74076cca53",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_pci.so": "e7b1dd3d2f88011fed33735e83b67ea82495b5fd60676f8b7a64f3df27abd0e6",
+          "/usr/lib/x86_64-linux-gnu/libresolv.so.2": "7b2ceed6a3b0f20c5fd5c7d9a327ea6b3d0b97c3f47156a77ee859938dedd019",
+          "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46",
+          "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064",
+          "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_state_app.so": "9da7b32c694270f7f811f6962adfb6c36bdb91f6adc62c6fa121ea91427ef7bd",
+          "/usr/lib/x86_64-linux-gnu/libXNVCtrl.so.0.0.0": "331363807c5e2d1d0166d08d8e99740dc083c7d84590d8e29c7d783aa2da1284",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_errmgr_default_app.so": "6231acb4ce2eb2281bb7051b4950c0c3f0c6a8e10e6f122acfe3c15f16b0855a",
+          "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_gl.so": "f3758a7666bd979a2eacdd92b6264e2f160cd58e0bbbc88f82492121d07e2df5",
+          "/usr/lib/x86_64-linux-gnu/pmix2/lib/pmix/mca_pcompress_zlib.so": "1132fb7e3ae88daab3bf16d3fc67637ef641eab0480735ea047233b89f19ef4a",
+          "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.240046/pmix_dstor_ds21_240046/initial-pmix_shared-segment-0": "432291c7dd52313b3b9ff228e51c89af2c968e52d8f1c9a29ae12462764556d7",
+          "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.240046/pmix_dstor_ds21_240046/smlockseg-3940352001": "a2df0db3b28431f048fc4dd6c6f67596babc8847df30e18ff874f39efd2a5f83",
+          "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.240046/pmix_dstor_ds12_240046/initial-pmix_shared-segment-0": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+          "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.240046/pmix_dstor_ds12_240046/dstore_sm.lock": "e20ed79c05591f80d16c43795665a54df6c037c063714e6ac243d082e3b1dba6",
+          "/usr/lib/x86_64-linux-gnu/libcuda.so.555.42.02": "7916043d99f754caedfe4f343869da51c31cba661ed1867d68ba1976951f808e",
+          "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.555.42.02": "71cc9fa5f8377db1fd177d9fc6cb45ca97586f81c2f30797194905e4ea825604",
+          "/usr/lib/x86_64-linux-gnu/libpsm2.so.2.2": "bc6e727a5385af004c2eac85e70681905790798529cb9ec90b789c9915a68f19",
+          "/usr/lib/libpsm1/libpsm_infinipath.so.1.16": "bb44c7e69c8c93eb7c0392485636170443ef29181abfeb53bf7c7e1e1c388208",
+          "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17",
+          "/usr/lib/x86_64-linux-gnu/libinfinipath.so.4.0": "ba9d11f98daf1ed203b1c1d3c0d62c5709f13e06cc8bfa186154dde69d868b0f",
+          "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": "3582bce922d99959ee3eb6b7d686c0b99e14c2135616ad4d9d608b2118a7e78c",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm2.so": "abdf7c98aadd279811dfd3821bc44a4e2da5f2880bd03fee268fc323e64cac69",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_cm.so": "78bbef9dbecc1e11d7c36425d176b653e32eada4d33e578a27b4ed99b7bed392",
+          "/usr/lib/x86_64-linux-gnu/libmca_common_monitoring.so.50.20.0": "04d8c353ddc54d1da3e0950d7578de424ec28a7d55370810c4ad3011c32324ab",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_ob1.so": "0ad5a81720593262e7c09ba98d3153527b18011ef68dba40984806c897beb880",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm.so": "77fcec2b00102887a50f55c23575761655359a610890258166d6686d6b79a000",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_monitoring.so": "3904969c7ac96b24f637e36e0eac9d6daa2002fd590a39aa66ffaa28ca725a9b",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_tcp.so": "c8c2cff0d5c056f4acf9400bc28614a15881404ccd7954c419636c2aa33b6887",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_sm.so": "b23fd800bdfe2daff3fe74cb99dc1de9c19f437352bce579cef7d9585037d0df",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_self.so": "052b8eb02b650de08fbdd0fe1724a7da86c29cbaf4a0ce8a5e89717cde49aee2",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_bml_r2.so": "4a40fd9fea463b44580aac7303d4176806a39295a61a2a344a48055d96ff457f",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mpool_hugepage.so": "286f789d85c8c499ad670678ee957e3e84f122c6c3e7647b0ac81ac1874cfa08",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_op_avx.so": "8240052b353a7ebfa9f894163c2a491fd1f47a742cca9490c4d4a7de76259e7b",
+          "/usr/lib/x86_64-linux-gnu/librt.so.1": "37bf90d672ac5b85c5f0b7d443f2463af7662de8cb130535dcc4b12520e02419",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_rcache_grdma.so": "81066b828f2f070e0a9f8d9bd403c5c977f71a8957cc956cf37efb09862665b0",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_bucket.so": "840f38ddad79015cd9b462034f6050d496040c34ae65d28cd63b648ada9a60e9",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_basic.so": "73dd820c7ce28b37ecc288e106008c7e25eb444910ceecc9c39e751c34494590",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_sm.so": "1e808a24af4ba80f1727cb5df31f25c2bac49632db11a7ee57a23d7d1ad11e7f",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_rdma.so": "7ae12dfa0db4604fd69ea793e112a067817fbb24e6a9b89fe1b81bedb4147cd0",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_adapt.so": "b9f1c8a26f7b8ad1529f085f26885c229f375246d3bab7e9d8350eb3d10b0d75",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_han.so": "362a195703a4d7b8d3851d43a8a89520adf778ff1e8fd6b00b751f8e31476c76",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_tuned.so": "54b234d1dff42ef92f4437be095d557d990153b960702f2edb98c78649ac5b3a",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sync.so": "c14550b0cdb5407c5ea840dae1727db0bc608aac2f30d6a3e72a9841f7868b25",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_inter.so": "6b5e029e8acf72559f6dd8acc6e828dd72af8eb3d69fe98e0b0a94e96e8bec46",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_libnbc.so": "7c471ad91a2538e0e315af2697fde25747b4b4d42f3be4a0a588976b2f2fa726",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_basic.so": "4f7a2151e1b566de99307a8faac82456088a5debab1bad6db2a0bd71802cb2a3",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sm.so": "756d7c20c69ced45843f3200f4582deaae403243f123749236801a8ffc4dd248",
+          "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_self.so": "61826f87d8596e8b88146cf9a14043582d378fe277d99ab081b74f714bd528e9",
+          "/usr/lib/x86_64-linux-gnu/libmca_common_sm.so.40.30.0": "738da2e4239bca8526a41eac96cd6034cc2cf87182f60cbb15d4decd38a01ba1"
+        }
+      },
+      "accepted_state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+      "history_sha256": "62a22ce3281417e7cc3785a719af3d40585bc0ec983a4db13c4fd34a32e0950a",
+      "configuration_sha256": "93cfe182b2e5515b147c51a2d3ed6b890e7706c5dbe764f02606f38c0d87e119",
+      "native_report_sha256": "2efc151d980336372d797912481ff744dc32b8d96cc67cd8c7d5ccb31267a76a",
+      "timing_sha256": "7235f1a502e1573ab3c6d16304183d9ddf5876ead7e638cf9f7399177be62be9",
+      "initialization_exclusive_CPU": 163.6967170056217,
+      "accepted_exclusive_CPU": 364.1897029705605,
+      "categories": {
+        "matching.constraints": {
+          "calls": 18,
+          "CPU": 0.0365779999999998,
+          "wall": 0.036548231
+        },
+        "domain.compute": {
+          "calls": 5,
+          "CPU": 73.63197299681693,
+          "wall": 73.4988009855692
+        },
+        "domain.scalar": {
+          "calls": 5,
+          "CPU": 0.323473000000007,
+          "wall": 0.3235984569999957
+        },
+        "pimple.check.input": {
+          "calls": 1,
+          "CPU": 0.04071900000010231,
+          "wall": 0.040727806999939276
+        },
+        "constitutive.refresh": {
+          "calls": 15,
+          "CPU": 0.9736740000086112,
+          "wall": 0.9710483059971441
+        },
+        "flow.assembly": {
+          "calls": 1,
+          "CPU": 25.066356999999847,
+          "wall": 25.069948096000015
+        },
+        "sparse.factorize": {
+          "calls": 8,
+          "CPU": 2.5447629999999997,
+          "wall": 2.5456718460000003
+        },
+        "sparse.solve_validate": {
+          "calls": 336,
+          "CPU": 1.421463999999999,
+          "wall": 1.4225926300000005
+        },
+        "sparse.residual_refinement": {
+          "calls": 1,
+          "CPU": 0.001645,
+          "wall": 0.001645725
+        },
+        "sparse.pressure_gmres": {
+          "calls": 1,
+          "CPU": 0.347371000000001,
+          "wall": 0.34956921399999974
+        },
+        "sparse.flow_linear_operation": {
+          "calls": 1,
+          "CPU": 0.7825709999999999,
+          "wall": 0.7841306019999998
+        },
+        "io.flow_attempt_snapshot": {
+          "calls": 1,
+          "CPU": 0.92136,
+          "wall": 1.462252124
+        },
+        "residual": {
+          "calls": 9,
+          "CPU": 8.098282999998844,
+          "wall": 8.097407136000786
+        },
+        "pimple.check.flow": {
+          "calls": 1,
+          "CPU": 0.043257000000117785,
+          "wall": 0.04327680500000497
+        },
+        "flow.correction_validate": {
+          "calls": 1,
+          "CPU": 0.19233899999999693,
+          "wall": 0.19266542200000458
+        },
+        "flow.total": {
+          "calls": 1,
+          "CPU": 0.00021500000001140052,
+          "wall": 0.00047450699999274093
+        },
+        "epsilon.assembly": {
+          "calls": 1,
+          "CPU": 2.3168179999998566,
+          "wall": 2.3154427540000055
+        },
+        "epsilon.solve_validate": {
+          "calls": 1,
+          "CPU": 0.005460999999999994,
+          "wall": 0.00546508699999998
+        },
+        "pimple.check.epsilon": {
+          "calls": 1,
+          "CPU": 0.045918000000114034,
+          "wall": 0.04591203799998311
+        },
+        "epsilon.total": {
+          "calls": 1,
+          "CPU": 0.005621999999995353,
+          "wall": 0.005626075000002118
+        },
+        "k.assembly": {
+          "calls": 1,
+          "CPU": 4.844394999999862,
+          "wall": 4.843561117000016
+        },
+        "k.solve_validate": {
+          "calls": 1,
+          "CPU": 0.007893000000000039,
+          "wall": 0.007897405000000024
+        },
+        "io.attempt_snapshot": {
+          "calls": 1,
+          "CPU": 0.465874,
+          "wall": 0.627475382
+        },
+        "pimple.check.k": {
+          "calls": 1,
+          "CPU": 0.05120600000012132,
+          "wall": 0.05129805500000373
+        },
+        "k.total": {
+          "calls": 1,
+          "CPU": 0.0021429999999966753,
+          "wall": 0.002153053999997212
+        },
+        "residual.mass_dual_norms": {
+          "calls": 4,
+          "CPU": 0.0057880000000000015,
+          "wall": 0.005996846999999993
+        },
+        "pimple.final_refresh_diagnostics": {
+          "calls": 1,
+          "CPU": 0.0002749999999993591,
+          "wall": 0.0002764349999999638
+        },
+        "pimple.sweep": {
+          "calls": 1,
+          "CPU": 0.0048239999999850625,
+          "wall": 0.006342098000004626
+        },
+        "native.physical_samples": {
+          "calls": 1,
+          "CPU": 1.0224580000107761,
+          "wall": 1.0254091540014296
+        },
+        "audit.physical": {
+          "calls": 1,
+          "CPU": 6.460232999984703,
+          "wall": 6.448465513976002
+        },
+        "audit.complete": {
+          "calls": 1,
+          "CPU": 11.233129007088067,
+          "wall": 11.209399910036296
+        },
+        "native.acceptance_audit": {
+          "calls": 1,
+          "CPU": 0.0012120000000095388,
+          "wall": 0.0012129200000003948
+        },
+        "native.implicit": {
+          "calls": 1,
+          "CPU": 0.0017330000000015389,
+          "wall": 0.0017343700000083118
+        },
+        "native.explicit": {
+          "calls": 1,
+          "CPU": 0.12184200000000002,
+          "wall": 0.121990649
+        },
+        "native.advance": {
+          "calls": 1,
+          "CPU": 0.0035020000000258733,
+          "wall": 0.0035017719999359542
+        },
+        "io.checkpoint": {
+          "calls": 1,
+          "CPU": 0.010837,
+          "wall": 0.045310923
+        },
+        "native.step": {
+          "calls": 1,
+          "CPU": 0.011941000000035729,
+          "wall": 0.012162939000006645
+        },
+        "assembly.open_faces": {
+          "calls": 12,
+          "CPU": 0.19400499999997772,
+          "wall": 0.19409967599998496
+        },
+        "constitutive.outer_law": {
+          "calls": 3979792,
+          "CPU": 5.930638000242398,
+          "wall": 5.951694353071194
+        },
+        "geometry.basis_lookup_evaluate": {
+          "calls": 69210958,
+          "CPU": 52.16818496237091,
+          "wall": 52.4811429784944
+        },
+        "geometry.element_row": {
+          "calls": 34605479,
+          "CPU": 89.38992801308395,
+          "wall": 88.81500215353455
+        },
+        "geometry.evaluation_row": {
+          "calls": 25933455,
+          "CPU": 35.49373599697248,
+          "wall": 35.62500549643197
+        },
+        "geometry.locate": {
+          "calls": 11380984,
+          "CPU": 22.350307997291274,
+          "wall": 22.373309321025157
+        },
+        "geometry.owner_catalog": {
+          "calls": 21907215,
+          "CPU": 17.613756996691595,
+          "wall": 18.011821791938374
+        }
+      },
+      "stage_equivalence": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/pimple-states/flow-t0.002-751fbe6ce03a.json": {
+          "sha256": "548305162018171a53503ac6e50f8f1d0ec9067c65ae183211149265c72eab65",
+          "legacy_sha256": "bcf6b0ce65431cc03d09643c5644115724d7c4fe2b675dba9450aa909f8df80e",
+          "all_values_and_matrix_hashes_equal": true
+        },
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/pimple-states/k-t0.002-751fbe6ce03a.json": {
+          "sha256": "4c83db8866ed5b1bcc65e91d8cf74cf6f39ddd6939005ae20da33dbf6aef057a",
+          "legacy_sha256": "67d6cbd5f18116b79ecd3ee0367cbb6b22932efe236350af84821ec8d225f35f",
+          "all_values_and_matrix_hashes_equal": true
+        }
+      },
+      "legacy_exclusive_CPU": 137.99061099999994
+    }
+  },
+  "rollback": {
+    "status": "pass",
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 1,
+      "wall_seconds": 195.19844579600613,
+      "process_cpu_seconds": 193.55349399999997,
+      "peak_RSS_KiB": 3772700,
+      "actual_mapped_files": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver": "5830a2cd8a4b0b5b12095555171eb28bc0f63e1daa97652d63da244c3fd808c7",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0": "458dd70122be79952cd517f469e3714ee6a972c0d96cd67954b1e37fb4830b27",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_ess_singleton.so": "9e36ea68ba070279c6c964e08c5af596f774c5944c3aad1743e85b573af3ec1a",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_orte.so": "9a9fe6e13bb9b5db1acf7aa10485c9286cb03a9e1b66c1b244142c81f2aac054",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_ompi.so": "982d5490f7e0465af0228c7c27b416f51095b766f5d37c22d1c1ab6439780ff0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_slurm.so": "de18ee69766665d6c1063e714806e6449caa48a63f730749dca0ce311d8a2b48",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_flux.so": "3d6050004330107889696420382517358e08664a9be3f90cd1f71acdbdceedc1",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_shmem_mmap.so": "47b116b3a5eff9c50f16dbbe3fd912efd10bcdfb18791edb2a19adffb2ed3317",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_jsm.so": "452bf398f565aa69bfe2155a97f8fa5af0659ddff5fcb8b30ee36603bb66615b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_reachable_netlink.so": "5a606b631dfea7dbed5c0ccd81f84bc26f25080872068d0a9e382fbcf90fdda8",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3": "9386cfdeb2f894869cdd0190b4f110a65ec0c257ac50ddefaefd6cbaeaab3c35",
+        "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0": "883ecfef9c8d3a2f17a1b8a3116e9e32d272f1c43e2088bf7837b98d2c50f5e2",
+        "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": "7cc817ff1841b59516d684f357bc0c3fc2cc52c3fa9b4ffb8ce8bdc215f02915",
+        "/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a",
+        "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0": "dcadda7f0f82c54ca157b6ca0a5fdc8e1128db4d778109c8e197e2f84c2ac9ba",
+        "/usr/lib/x86_64-linux-gnu/libresolv.so.2": "7b2ceed6a3b0f20c5fd5c7d9a327ea6b3d0b97c3f47156a77ee859938dedd019",
+        "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f",
+        "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1": "c62a2a983e0d9c1de76ab2f4cf21a4d81da007af9e0351b8c04740459d231d3f",
+        "/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1": "4dc20a901c6951e678e216e959da2534bcef7053e6efdf1492509baf142282b0",
+        "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf",
+        "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25": "344870a9ff3cfee1df28f518e9e93073df8d0522a288f016f06fdacbfa49eed8",
+        "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4": "47d56894948545036bd49aed718393bf6edb93fce222874dad30b59f085ad9ee",
+        "/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.15": "f7c5ddb238bc12a13c4d4b4f8e6ea8af61f8bd144651728936d31b65bec7bbdc",
+        "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1": "3160dcc37106767e1afb341ee3cb3cd25bb79246691ffd137131f37a23597288",
+        "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358",
+        "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5",
+        "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2": "e367a86cae4e1e81d9bba594a9daea3b90eb50fadb62bb45e38a322184484867",
+        "/usr/lib/x86_64-linux-gnu/libnettle.so.8.4": "2d3bda6cfa2d477cd91b8178843d19e081b911a124f04b4be06b6e32c9fabc73",
+        "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7": "e7162733430abba6f51e4a5186b9c61a6c706a63d4461182d5f66ce55f35507e",
+        "/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0": "1dc53d91b473c3ebcc65b196c83baa7b1a6c4009f590bcf5c640cf35ba343d6f",
+        "/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.15": "3d6d7558e2764fa0a2ee3ee9bf1754bff872bed23148d673bdb648f737ec39ff",
+        "/usr/lib/x86_64-linux-gnu/pmix2/lib/libpmix.so.2.5.2": "651d3664e655fa125fe81101a00fea58dd0f3f5adf3aac84d7f59c93c995203a",
+        "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5",
+        "/usr/lib/x86_64-linux-gnu/librtmp.so.1": "2401c4fc99c7b93e79648071224a6eb230dcb800184ccacc8e1854e33fc61445",
+        "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2",
+        "/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a",
+        "/usr/lib/x86_64-linux-gnu/pmix2/lib/pmix/mca_pcompress_zlib.so": "1132fb7e3ae88daab3bf16d3fc67637ef641eab0480735ea047233b89f19ef4a",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pmix_ext3x.so": "a44d4cc1c9f9fde978a0d519b8305f609138283cc20694be4d1eb3105aab5722",
+        "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900",
+        "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5",
+        "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241024/pmix_dstor_ds21_241024/initial-pmix_shared-segment-0": "f38c87c5179477366f679ab01e8a8f6a9a06d1f7eb51903690ea360f8793187f",
+        "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241024/pmix_dstor_ds21_241024/smlockseg-4008902657": "a2df0db3b28431f048fc4dd6c6f67596babc8847df30e18ff874f39efd2a5f83",
+        "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241024/pmix_dstor_ds12_241024/initial-pmix_shared-segment-0": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+        "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241024/pmix_dstor_ds12_241024/dstore_sm.lock": "e20ed79c05591f80d16c43795665a54df6c037c063714e6ac243d082e3b1dba6",
+        "/usr/lib/x86_64-linux-gnu/libcuda.so.555.42.02": "7916043d99f754caedfe4f343869da51c31cba661ed1867d68ba1976951f808e",
+        "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.555.42.02": "71cc9fa5f8377db1fd177d9fc6cb45ca97586f81c2f30797194905e4ea825604",
+        "/usr/lib/x86_64-linux-gnu/libicudata.so.70.1": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8",
+        "/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a",
+        "/usr/local/cuda-12.5/targets/x86_64-linux/lib/libOpenCL.so.1.0.0": "1552ec44b469da72e585a29ac7fd2aa98d7f99b9362b7fb8f3dcb2d6b603d3fb",
+        "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225",
+        "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241024/pmix_dstor_ds21_241024/smdataseg-4008902657-0": "620eec105620a67a60ae4b7e61565bbe06e9a081d4bb331bb7420d9e17393709",
+        "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241024/pmix_dstor_ds21_241024/smseg-4008902657-0": "8b3a2ed339840e5cb41d38d5109e510024f4f2eaa4e2c4b3bb870b48402ae4f5",
+        "/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06",
+        "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d",
+        "/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98",
+        "/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d",
+        "/usr/lib/x86_64-linux-gnu/librt.so.1": "37bf90d672ac5b85c5f0b7d443f2463af7662de8cb130535dcc4b12520e02419",
+        "/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465",
+        "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_xml_libxml.so": "d1f058e867eb4b7c619ebb268b75f68c4393bcce8b339901e856d1a44c125506",
+        "/usr/lib/x86_64-linux-gnu/libpthread.so.0": "fbed9505adacada2abb37c6b43be2df6de81e742712c6025694ba48de62c7e78",
+        "/usr/lib/x86_64-linux-gnu/libpciaccess.so.0.11.1": "f1ca739f568225439e4a7957e09dd483359bf715f01d13396c436c74076cca53",
+        "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_pci.so": "e7b1dd3d2f88011fed33735e83b67ea82495b5fd60676f8b7a64f3df27abd0e6",
+        "/usr/lib/x86_64-linux-gnu/libdl.so.2": "9cb9b7e3171939e7409e26773f44f3f22e200ec2e6936a5d7484a4f9b81d92f2",
+        "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_opencl.so": "bc26e4d7970e376af2643d5be346adcb14cc4de4a2b297ff9927386e2f82d678",
+        "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_state_app.so": "9da7b32c694270f7f811f6962adfb6c36bdb91f6adc62c6fa121ea91427ef7bd",
+        "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064",
+        "/usr/lib/x86_64-linux-gnu/libXNVCtrl.so.0.0.0": "331363807c5e2d1d0166d08d8e99740dc083c7d84590d8e29c7d783aa2da1284",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_errmgr_default_app.so": "6231acb4ce2eb2281bb7051b4950c0c3f0c6a8e10e6f122acfe3c15f16b0855a",
+        "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_gl.so": "f3758a7666bd979a2eacdd92b6264e2f160cd58e0bbbc88f82492121d07e2df5",
+        "/usr/lib/x86_64-linux-gnu/libpsm2.so.2.2": "bc6e727a5385af004c2eac85e70681905790798529cb9ec90b789c9915a68f19",
+        "/etc/ld.so.cache": "024c9b98c7f5b36ab0487adc7a5c75814323a7385bd54f8010c7eccce04e4a73",
+        "/usr/lib/libpsm1/libpsm_infinipath.so.1.16": "bb44c7e69c8c93eb7c0392485636170443ef29181abfeb53bf7c7e1e1c388208",
+        "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17",
+        "/usr/lib/x86_64-linux-gnu/libinfinipath.so.4.0": "ba9d11f98daf1ed203b1c1d3c0d62c5709f13e06cc8bfa186154dde69d868b0f",
+        "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": "3582bce922d99959ee3eb6b7d686c0b99e14c2135616ad4d9d608b2118a7e78c",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm2.so": "abdf7c98aadd279811dfd3821bc44a4e2da5f2880bd03fee268fc323e64cac69",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_cm.so": "78bbef9dbecc1e11d7c36425d176b653e32eada4d33e578a27b4ed99b7bed392",
+        "/usr/lib/x86_64-linux-gnu/libmca_common_monitoring.so.50.20.0": "04d8c353ddc54d1da3e0950d7578de424ec28a7d55370810c4ad3011c32324ab",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_ob1.so": "0ad5a81720593262e7c09ba98d3153527b18011ef68dba40984806c897beb880",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm.so": "77fcec2b00102887a50f55c23575761655359a610890258166d6686d6b79a000",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_monitoring.so": "3904969c7ac96b24f637e36e0eac9d6daa2002fd590a39aa66ffaa28ca725a9b",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_op_avx.so": "8240052b353a7ebfa9f894163c2a491fd1f47a742cca9490c4d4a7de76259e7b",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_tcp.so": "c8c2cff0d5c056f4acf9400bc28614a15881404ccd7954c419636c2aa33b6887",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_sm.so": "b23fd800bdfe2daff3fe74cb99dc1de9c19f437352bce579cef7d9585037d0df",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_self.so": "052b8eb02b650de08fbdd0fe1724a7da86c29cbaf4a0ce8a5e89717cde49aee2",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_bml_r2.so": "4a40fd9fea463b44580aac7303d4176806a39295a61a2a344a48055d96ff457f",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mpool_hugepage.so": "286f789d85c8c499ad670678ee957e3e84f122c6c3e7647b0ac81ac1874cfa08",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_rcache_grdma.so": "81066b828f2f070e0a9f8d9bd403c5c977f71a8957cc956cf37efb09862665b0",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_bucket.so": "840f38ddad79015cd9b462034f6050d496040c34ae65d28cd63b648ada9a60e9",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_basic.so": "73dd820c7ce28b37ecc288e106008c7e25eb444910ceecc9c39e751c34494590",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_sm.so": "1e808a24af4ba80f1727cb5df31f25c2bac49632db11a7ee57a23d7d1ad11e7f",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_rdma.so": "7ae12dfa0db4604fd69ea793e112a067817fbb24e6a9b89fe1b81bedb4147cd0",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_adapt.so": "b9f1c8a26f7b8ad1529f085f26885c229f375246d3bab7e9d8350eb3d10b0d75",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_han.so": "362a195703a4d7b8d3851d43a8a89520adf778ff1e8fd6b00b751f8e31476c76",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sync.so": "c14550b0cdb5407c5ea840dae1727db0bc608aac2f30d6a3e72a9841f7868b25",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_tuned.so": "54b234d1dff42ef92f4437be095d557d990153b960702f2edb98c78649ac5b3a",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_inter.so": "6b5e029e8acf72559f6dd8acc6e828dd72af8eb3d69fe98e0b0a94e96e8bec46",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_self.so": "61826f87d8596e8b88146cf9a14043582d378fe277d99ab081b74f714bd528e9",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_libnbc.so": "7c471ad91a2538e0e315af2697fde25747b4b4d42f3be4a0a588976b2f2fa726",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_basic.so": "4f7a2151e1b566de99307a8faac82456088a5debab1bad6db2a0bd71802cb2a3",
+        "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sm.so": "756d7c20c69ced45843f3200f4582deaae403243f123749236801a8ffc4dd248",
+        "/usr/lib/x86_64-linux-gnu/libmca_common_sm.so.40.30.0": "738da2e4239bca8526a41eac96cd6034cc2cf87182f60cbb15d4decd38a01ba1"
+      }
+    },
+    "failure": "accepted AWF hard audit exit; candidate/history retained: deliberate_PIMPLE_hard_audit_rejection",
+    "time": 0.001,
+    "last_accepted_state_sha256": "751fbe6ce03a5cb2fbaca15ef4ad9b59305a30cebb991f21d9eaeb676d3f62e7",
+    "rejected_state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+    "history_sha256": "0c59a37a903e5e2f1c5492ae1a83736ccb05fc7261dc3aac99dc488c6f04d173",
+    "history_path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step1/checkpoint.1",
+    "history_binding": "inherited prior accepted checkpoint; no new rejected checkpoint",
+    "native_report_sha256": "79338f38232a9d4c7d4ca709ebaf4b12da223fad314bec03e6f55996e1678cc2",
+    "stage_equivalence": {
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/rollback/pimple-states/flow-t0.002-751fbe6ce03a.json": {
+        "sha256": "b9af56cb815f9322f168ae982ec0b3db4e4fb5fb85940d9cdd9a6b53be2eba3a",
+        "legacy_sha256": "bcf6b0ce65431cc03d09643c5644115724d7c4fe2b675dba9450aa909f8df80e",
+        "all_values_and_matrix_hashes_equal": true
+      },
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/rollback/pimple-states/k-t0.002-751fbe6ce03a.json": {
+        "sha256": "702ba26b739effab1c1db83b60f37c231c468b7590b5862eedfcf567320ff124",
+        "legacy_sha256": "67d6cbd5f18116b79ecd3ee0367cbb6b22932efe236350af84821ec8d225f35f",
+        "all_values_and_matrix_hashes_equal": true
+      }
+    }
+  },
+  "budgets": {
+    "budgets": {
+      "native": {
+        "reconstruction_status": "pass",
+        "accuracy_status": "pass",
+        "equations": {
+          "inner_k": {
+            "storage_backward_difference": 7.452191224316065e-06,
+            "stage_source": -1.0069422185728358e-06,
+            "instantaneous_source": -6.343282416835288e-07,
+            "stage_physical_boundary_flux": 6.98137364039352e-06,
+            "instantaneous_physical_boundary_flux": 6.98136552234299e-06,
+            "volume": 10.31249999999959,
+            "frozen_stage_physical_defect": 1.4777598024953814e-06,
+            "instantaneous_physical_defect": 1.1051539436566042e-06,
+            "frozen_operator_splitting": -3.726058588387764e-07,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 6.372615287641432e-08,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_k": {
+            "storage_backward_difference": -7.510836611119122e-06,
+            "stage_source": 9.484141914950679e-07,
+            "instantaneous_source": 9.397678983192154e-07,
+            "stage_physical_boundary_flux": -3.3984638896469146e-06,
+            "instantaneous_physical_boundary_flux": -3.398452136175071e-06,
+            "volume": 1089.6875000000105,
+            "frozen_stage_physical_defect": -5.060786912967275e-06,
+            "instantaneous_physical_defect": -5.052152373263265e-06,
+            "frozen_operator_splitting": 8.634539704008727e-09,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 2.1823876921413105e-07,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "storage_backward_difference": -6.1681027752017055e-06,
+            "stage_source": -0.012806081106283153,
+            "instantaneous_source": -0.012806082126640065,
+            "stage_physical_boundary_flux": 0.01278664648021829,
+            "instantaneous_physical_boundary_flux": 0.012786617420894729,
+            "volume": 1089.6875000000105,
+            "frozen_stage_physical_defect": 1.3266523289661228e-05,
+            "instantaneous_physical_defect": 1.329660297013334e-05,
+            "frozen_operator_splitting": 3.0079680472111514e-08,
+            "physical_scale": 11.151925336598463,
+            "scaled_frozen_defect": 1.1896172982904631e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "whole_k": {
+            "storage_backward_difference": -5.8645386803056536e-08,
+            "stage_source": -5.852802707776787e-08,
+            "instantaneous_source": 3.054396566356866e-07,
+            "stage_physical_boundary_flux": 3.0020071149576694e-06,
+            "instantaneous_physical_boundary_flux": 3.0020037458811804e-06,
+            "volume": 1100.00000000001,
+            "frozen_stage_physical_defect": -3.002124474682958e-06,
+            "instantaneous_physical_defect": -3.3660887893199236e-06,
+            "frozen_operator_splitting": -3.6396431463696556e-07,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 1.2946207015823138e-07,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          }
+        },
+        "reconstruction": {
+          "k": {
+            "maximum_defect": 5.295951078066351e-15,
+            "normalization": 1.0,
+            "scaled_defect": 5.295951078066351e-15,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "maximum_defect": 1.2484514562532189e-17,
+            "normalization": 1.0,
+            "scaled_defect": 1.2484514562532189e-17,
+            "status": "pass"
+          }
+        },
+        "interface_frozen_k_fluxes": {
+          "0": 3.979404771023814e-06,
+          "1": -3.398502135234878e-06
+        },
+        "interface_current_k_fluxes": {
+          "0": 3.97940002204977e-06,
+          "1": -3.3984903817630313e-06
+        },
+        "face_order": 16,
+        "actual_quadrature": {
+          "wall_normal": 32,
+          "wall_tangential": 8,
+          "outer_volume": 12,
+          "mass_override": 12,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 64,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 126976,
+          "outer_volume_points": 102672
+        },
+        "physical_volume": 1100.0,
+        "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching",
+        "volume_observer": {
+          "policy": "NativeOwnerVolumeStreamV1",
+          "inner_points": 126976,
+          "outer_points": 102672,
+          "physical_weights": [
+            10.31249999999959,
+            1089.6875000000105
+          ],
+          "native_rows_provenance_fnv1a64": "4061382046133989388",
+          "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+          "materialized_global_volume_rows": false
+        },
+        "actual_coefficient_stages": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        },
+        "effective_input_receipt": {
+          "raw_initial_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "effective_initial_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "fixed_reference_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+          "explicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+          "implicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0,
+          "open_traction_load_sha256": "edbc293adfad335e15ac1f961e4d6cbc8650953c6f6e4d2d3cc36ccdb87852a8",
+          "open_diffusive_load_sha256": "bd021e14f467542a004b6b1d62b06cd3ec4347aba52fc98652e2ad1a2fa92554",
+          "open_advective_load_sha256": "ced8bd17cee5152336bb1577ec021c840c136a9719a000a4b2132b16aace5804",
+          "open_explicit_implicit_agreement": true
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/native/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/native/budget-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/native/budget.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 101.21592000999954,
+          "process_cpu_seconds": 100.380317,
+          "peak_RSS_KiB": 3855496,
+          "actual_mapped_files": {
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe": "20236b14eb4a90dea0f2a9a38b92e41135a83e9241c978fb265e185098f586e8",
+            "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+            "/usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0": "458dd70122be79952cd517f469e3714ee6a972c0d96cd67954b1e37fb4830b27",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_ess_singleton.so": "9e36ea68ba070279c6c964e08c5af596f774c5944c3aad1743e85b573af3ec1a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_orte.so": "9a9fe6e13bb9b5db1acf7aa10485c9286cb03a9e1b66c1b244142c81f2aac054",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_ompi.so": "982d5490f7e0465af0228c7c27b416f51095b766f5d37c22d1c1ab6439780ff0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_slurm.so": "de18ee69766665d6c1063e714806e6449caa48a63f730749dca0ce311d8a2b48",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_flux.so": "3d6050004330107889696420382517358e08664a9be3f90cd1f71acdbdceedc1",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_reachable_netlink.so": "5a606b631dfea7dbed5c0ccd81f84bc26f25080872068d0a9e382fbcf90fdda8",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_shmem_mmap.so": "47b116b3a5eff9c50f16dbbe3fd912efd10bcdfb18791edb2a19adffb2ed3317",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_jsm.so": "452bf398f565aa69bfe2155a97f8fa5af0659ddff5fcb8b30ee36603bb66615b",
+            "/usr/lib/x86_64-linux-gnu/libicudata.so.70.1": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8",
+            "/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a",
+            "/usr/local/cuda-12.5/targets/x86_64-linux/lib/libOpenCL.so.1.0.0": "1552ec44b469da72e585a29ac7fd2aa98d7f99b9362b7fb8f3dcb2d6b603d3fb",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241792/pmix_dstor_ds21_241792/smdataseg-4092788737-0": "55caa365fd400355655cc098170ab6b303df4a433e9e09a84c56ae192f57b3da",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241792/pmix_dstor_ds21_241792/smseg-4092788737-0": "8b3a2ed339840e5cb41d38d5109e510024f4f2eaa4e2c4b3bb870b48402ae4f5",
+            "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225",
+            "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": "7cc817ff1841b59516d684f357bc0c3fc2cc52c3fa9b4ffb8ce8bdc215f02915",
+            "/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98",
+            "/usr/lib/x86_64-linux-gnu/libpthread.so.0": "fbed9505adacada2abb37c6b43be2df6de81e742712c6025694ba48de62c7e78",
+            "/usr/lib/x86_64-linux-gnu/libdl.so.2": "9cb9b7e3171939e7409e26773f44f3f22e200ec2e6936a5d7484a4f9b81d92f2",
+            "/usr/lib/x86_64-linux-gnu/libpciaccess.so.0.11.1": "f1ca739f568225439e4a7957e09dd483359bf715f01d13396c436c74076cca53",
+            "/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06",
+            "/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d",
+            "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d",
+            "/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465",
+            "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0": "883ecfef9c8d3a2f17a1b8a3116e9e32d272f1c43e2088bf7837b98d2c50f5e2",
+            "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0": "dcadda7f0f82c54ca157b6ca0a5fdc8e1128db4d778109c8e197e2f84c2ac9ba",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_xml_libxml.so": "d1f058e867eb4b7c619ebb268b75f68c4393bcce8b339901e856d1a44c125506",
+            "/usr/lib/x86_64-linux-gnu/libresolv.so.2": "7b2ceed6a3b0f20c5fd5c7d9a327ea6b3d0b97c3f47156a77ee859938dedd019",
+            "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f",
+            "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3": "9386cfdeb2f894869cdd0190b4f110a65ec0c257ac50ddefaefd6cbaeaab3c35",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_opencl.so": "bc26e4d7970e376af2643d5be346adcb14cc4de4a2b297ff9927386e2f82d678",
+            "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25": "344870a9ff3cfee1df28f518e9e93073df8d0522a288f016f06fdacbfa49eed8",
+            "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1": "c62a2a983e0d9c1de76ab2f4cf21a4d81da007af9e0351b8c04740459d231d3f",
+            "/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1": "4dc20a901c6951e678e216e959da2534bcef7053e6efdf1492509baf142282b0",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_pci.so": "e7b1dd3d2f88011fed33735e83b67ea82495b5fd60676f8b7a64f3df27abd0e6",
+            "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf",
+            "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1": "3160dcc37106767e1afb341ee3cb3cd25bb79246691ffd137131f37a23597288",
+            "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358",
+            "/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a",
+            "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46",
+            "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4": "47d56894948545036bd49aed718393bf6edb93fce222874dad30b59f085ad9ee",
+            "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5",
+            "/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.15": "3d6d7558e2764fa0a2ee3ee9bf1754bff872bed23148d673bdb648f737ec39ff",
+            "/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.15": "f7c5ddb238bc12a13c4d4b4f8e6ea8af61f8bd144651728936d31b65bec7bbdc",
+            "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2": "e367a86cae4e1e81d9bba594a9daea3b90eb50fadb62bb45e38a322184484867",
+            "/usr/lib/x86_64-linux-gnu/libnettle.so.8.4": "2d3bda6cfa2d477cd91b8178843d19e081b911a124f04b4be06b6e32c9fabc73",
+            "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7": "e7162733430abba6f51e4a5186b9c61a6c706a63d4461182d5f66ce55f35507e",
+            "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/libpmix.so.2.5.2": "651d3664e655fa125fe81101a00fea58dd0f3f5adf3aac84d7f59c93c995203a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_state_app.so": "9da7b32c694270f7f811f6962adfb6c36bdb91f6adc62c6fa121ea91427ef7bd",
+            "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900",
+            "/usr/lib/x86_64-linux-gnu/librtmp.so.1": "2401c4fc99c7b93e79648071224a6eb230dcb800184ccacc8e1854e33fc61445",
+            "/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a",
+            "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2",
+            "/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0": "1dc53d91b473c3ebcc65b196c83baa7b1a6c4009f590bcf5c640cf35ba343d6f",
+            "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064",
+            "/usr/lib/x86_64-linux-gnu/libXNVCtrl.so.0.0.0": "331363807c5e2d1d0166d08d8e99740dc083c7d84590d8e29c7d783aa2da1284",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_errmgr_default_app.so": "6231acb4ce2eb2281bb7051b4950c0c3f0c6a8e10e6f122acfe3c15f16b0855a",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_gl.so": "f3758a7666bd979a2eacdd92b6264e2f160cd58e0bbbc88f82492121d07e2df5",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/pmix/mca_pcompress_zlib.so": "1132fb7e3ae88daab3bf16d3fc67637ef641eab0480735ea047233b89f19ef4a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pmix_ext3x.so": "a44d4cc1c9f9fde978a0d519b8305f609138283cc20694be4d1eb3105aab5722",
+            "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241792/pmix_dstor_ds21_241792/initial-pmix_shared-segment-0": "c4cee12d6bf932eb06e351d19dac9535683eb6c29d46fa43f8b67aeb73f80f2c",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241792/pmix_dstor_ds21_241792/smlockseg-4092788737": "a2df0db3b28431f048fc4dd6c6f67596babc8847df30e18ff874f39efd2a5f83",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241792/pmix_dstor_ds12_241792/initial-pmix_shared-segment-0": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241792/pmix_dstor_ds12_241792/dstore_sm.lock": "e20ed79c05591f80d16c43795665a54df6c037c063714e6ac243d082e3b1dba6",
+            "/usr/lib/x86_64-linux-gnu/libcuda.so.555.42.02": "7916043d99f754caedfe4f343869da51c31cba661ed1867d68ba1976951f808e",
+            "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.555.42.02": "71cc9fa5f8377db1fd177d9fc6cb45ca97586f81c2f30797194905e4ea825604",
+            "/usr/lib/libpsm1/libpsm_infinipath.so.1.16": "bb44c7e69c8c93eb7c0392485636170443ef29181abfeb53bf7c7e1e1c388208",
+            "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17",
+            "/usr/lib/x86_64-linux-gnu/libinfinipath.so.4.0": "ba9d11f98daf1ed203b1c1d3c0d62c5709f13e06cc8bfa186154dde69d868b0f",
+            "/etc/ld.so.cache": "024c9b98c7f5b36ab0487adc7a5c75814323a7385bd54f8010c7eccce04e4a73",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm.so": "77fcec2b00102887a50f55c23575761655359a610890258166d6686d6b79a000",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_cm.so": "78bbef9dbecc1e11d7c36425d176b653e32eada4d33e578a27b4ed99b7bed392",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_monitoring.so.50.20.0": "04d8c353ddc54d1da3e0950d7578de424ec28a7d55370810c4ad3011c32324ab",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_ob1.so": "0ad5a81720593262e7c09ba98d3153527b18011ef68dba40984806c897beb880",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_monitoring.so": "3904969c7ac96b24f637e36e0eac9d6daa2002fd590a39aa66ffaa28ca725a9b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_sm.so": "b23fd800bdfe2daff3fe74cb99dc1de9c19f437352bce579cef7d9585037d0df",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_tcp.so": "c8c2cff0d5c056f4acf9400bc28614a15881404ccd7954c419636c2aa33b6887",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_self.so": "052b8eb02b650de08fbdd0fe1724a7da86c29cbaf4a0ce8a5e89717cde49aee2",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_bml_r2.so": "4a40fd9fea463b44580aac7303d4176806a39295a61a2a344a48055d96ff457f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mpool_hugepage.so": "286f789d85c8c499ad670678ee957e3e84f122c6c3e7647b0ac81ac1874cfa08",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_rcache_grdma.so": "81066b828f2f070e0a9f8d9bd403c5c977f71a8957cc956cf37efb09862665b0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_bucket.so": "840f38ddad79015cd9b462034f6050d496040c34ae65d28cd63b648ada9a60e9",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_op_avx.so": "8240052b353a7ebfa9f894163c2a491fd1f47a742cca9490c4d4a7de76259e7b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_basic.so": "73dd820c7ce28b37ecc288e106008c7e25eb444910ceecc9c39e751c34494590",
+            "/usr/lib/x86_64-linux-gnu/librt.so.1": "37bf90d672ac5b85c5f0b7d443f2463af7662de8cb130535dcc4b12520e02419",
+            "/usr/lib/x86_64-linux-gnu/libpsm2.so.2.2": "bc6e727a5385af004c2eac85e70681905790798529cb9ec90b789c9915a68f19",
+            "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": "3582bce922d99959ee3eb6b7d686c0b99e14c2135616ad4d9d608b2118a7e78c",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm2.so": "abdf7c98aadd279811dfd3821bc44a4e2da5f2880bd03fee268fc323e64cac69",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_sm.so": "1e808a24af4ba80f1727cb5df31f25c2bac49632db11a7ee57a23d7d1ad11e7f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_rdma.so": "7ae12dfa0db4604fd69ea793e112a067817fbb24e6a9b89fe1b81bedb4147cd0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_han.so": "362a195703a4d7b8d3851d43a8a89520adf778ff1e8fd6b00b751f8e31476c76",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_tuned.so": "54b234d1dff42ef92f4437be095d557d990153b960702f2edb98c78649ac5b3a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_adapt.so": "b9f1c8a26f7b8ad1529f085f26885c229f375246d3bab7e9d8350eb3d10b0d75",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sync.so": "c14550b0cdb5407c5ea840dae1727db0bc608aac2f30d6a3e72a9841f7868b25",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_inter.so": "6b5e029e8acf72559f6dd8acc6e828dd72af8eb3d69fe98e0b0a94e96e8bec46",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_self.so": "61826f87d8596e8b88146cf9a14043582d378fe277d99ab081b74f714bd528e9",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_libnbc.so": "7c471ad91a2538e0e315af2697fde25747b4b4d42f3be4a0a588976b2f2fa726",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_basic.so": "4f7a2151e1b566de99307a8faac82456088a5debab1bad6db2a0bd71802cb2a3",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sm.so": "756d7c20c69ced45843f3200f4582deaae403243f123749236801a8ffc4dd248",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_sm.so.40.30.0": "738da2e4239bca8526a41eac96cd6034cc2cf87182f60cbb15d4decd38a01ba1"
+          }
+        },
+        "packet_sha256": "d61dbad0ecd3dea2e3dabcca9876d8cf8b8ad57ff949fb8f0e0d7371c40a2955",
+        "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+        "binding": {
+          "model": "A95",
+          "policy": "SamePhysicalWallDisplacedAcceptedV1",
+          "dt": 0.001,
+          "time": 0.002,
+          "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "configuration_sha256": "93cfe182b2e5515b147c51a2d3ed6b890e7706c5dbe764f02606f38c0d87e119",
+          "native_report_sha256": "2efc151d980336372d797912481ff744dc32b8d96cc67cd8c7d5ccb31267a76a",
+          "actual_k_stage_sha256": "4c83db8866ed5b1bcc65e91d8cf74cf6f39ddd6939005ae20da33dbf6aef057a"
+        },
+        "control_configuration_sha256": "93cfe182b2e5515b147c51a2d3ed6b890e7706c5dbe764f02606f38c0d87e119"
+      },
+      "q48f16": {
+        "reconstruction_status": "pass",
+        "accuracy_status": "pass",
+        "equations": {
+          "inner_k": {
+            "storage_backward_difference": 7.452191224626089e-06,
+            "stage_source": -1.0069422185785028e-06,
+            "instantaneous_source": -6.34328241700081e-07,
+            "stage_physical_boundary_flux": 6.98137364039352e-06,
+            "instantaneous_physical_boundary_flux": 6.98136552234299e-06,
+            "volume": 10.312499999999433,
+            "frozen_stage_physical_defect": 1.4777598028110723e-06,
+            "instantaneous_physical_defect": 1.1051539439831811e-06,
+            "frozen_operator_splitting": -3.726058588278912e-07,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 6.3726152890028e-08,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_k": {
+            "storage_backward_difference": -7.510836585196467e-06,
+            "stage_source": 9.484141915230524e-07,
+            "instantaneous_source": 9.397678983473352e-07,
+            "stage_physical_boundary_flux": -3.3984638896469146e-06,
+            "instantaneous_physical_boundary_flux": -3.398452136175071e-06,
+            "volume": 1089.6875000000357,
+            "frozen_stage_physical_defect": -5.060786887072605e-06,
+            "instantaneous_physical_defect": -5.052152347368731e-06,
+            "frozen_operator_splitting": 8.634539703873202e-09,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 2.1823876809746266e-07,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "storage_backward_difference": -6.168102775388971e-06,
+            "stage_source": -0.012806081106282783,
+            "instantaneous_source": -0.012806082126640294,
+            "stage_physical_boundary_flux": 0.01278664648021829,
+            "instantaneous_physical_boundary_flux": 0.012786617420894729,
+            "volume": 1089.6875000000357,
+            "frozen_stage_physical_defect": 1.3266523289104382e-05,
+            "instantaneous_physical_defect": 1.3296602970174973e-05,
+            "frozen_operator_splitting": 3.007968107059111e-08,
+            "physical_scale": 11.151925336598463,
+            "scaled_frozen_defect": 1.1896172982405303e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "whole_k": {
+            "storage_backward_difference": -5.864536057037755e-08,
+            "stage_source": -5.8528027055450454e-08,
+            "instantaneous_source": 3.0543965664725423e-07,
+            "stage_physical_boundary_flux": 3.0020071149576694e-06,
+            "instantaneous_physical_boundary_flux": 3.0020037458811804e-06,
+            "volume": 1100.0000000000352,
+            "frozen_stage_physical_defect": -3.0021244484725963e-06,
+            "instantaneous_physical_defect": -3.366088763098812e-06,
+            "frozen_operator_splitting": -3.6396431462621587e-07,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 1.2946206902794924e-07,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          }
+        },
+        "reconstruction": {
+          "k": {
+            "maximum_defect": 2.912636888675503e-15,
+            "normalization": 1.0,
+            "scaled_defect": 2.912636888675503e-15,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "maximum_defect": 1.0208851361892654e-17,
+            "normalization": 1.0,
+            "scaled_defect": 1.0208851361892654e-17,
+            "status": "pass"
+          }
+        },
+        "interface_frozen_k_fluxes": {
+          "0": 3.979404771023814e-06,
+          "1": -3.398502135234878e-06
+        },
+        "interface_current_k_fluxes": {
+          "0": 3.97940002204977e-06,
+          "1": -3.3984903817630313e-06
+        },
+        "face_order": 16,
+        "actual_quadrature": {
+          "wall_normal": 48,
+          "wall_tangential": 12,
+          "outer_volume": 16,
+          "mass_override": 16,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 16,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 285696,
+          "outer_volume_points": 182528
+        },
+        "physical_volume": 1100.0,
+        "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching",
+        "volume_observer": {
+          "policy": "NativeOwnerVolumeStreamV1",
+          "inner_points": 285696,
+          "outer_points": 182528,
+          "physical_weights": [
+            10.312499999999433,
+            1089.6875000000357
+          ],
+          "native_rows_provenance_fnv1a64": "7101644005454987783",
+          "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+          "materialized_global_volume_rows": false
+        },
+        "actual_coefficient_stages": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        },
+        "effective_input_receipt": {
+          "raw_initial_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "effective_initial_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "fixed_reference_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+          "explicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+          "implicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0,
+          "open_traction_load_sha256": "2890833e3709d0ce4e85a984782e50ccc64df2348873e969c46199797c91b6b4",
+          "open_diffusive_load_sha256": "5dc11698e399be626468c796d212599caf78119bbc7aa361cad6f14d8cc21b83",
+          "open_advective_load_sha256": "5857e89f7cdb60271a0b46e4478aec454c5fb0123f98ae9f77f0500f261e520a",
+          "open_explicit_implicit_agreement": true
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/q48f16/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/q48f16/budget-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/q48f16/budget.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 173.0921956129896,
+          "process_cpu_seconds": 172.29588400000003,
+          "peak_RSS_KiB": 6020040,
+          "actual_mapped_files": {
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe": "20236b14eb4a90dea0f2a9a38b92e41135a83e9241c978fb265e185098f586e8",
+            "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_ess_singleton.so": "9e36ea68ba070279c6c964e08c5af596f774c5944c3aad1743e85b573af3ec1a",
+            "/usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0": "458dd70122be79952cd517f469e3714ee6a972c0d96cd67954b1e37fb4830b27",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_orte.so": "9a9fe6e13bb9b5db1acf7aa10485c9286cb03a9e1b66c1b244142c81f2aac054",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_slurm.so": "de18ee69766665d6c1063e714806e6449caa48a63f730749dca0ce311d8a2b48",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_flux.so": "3d6050004330107889696420382517358e08664a9be3f90cd1f71acdbdceedc1",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_ompi.so": "982d5490f7e0465af0228c7c27b416f51095b766f5d37c22d1c1ab6439780ff0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_jsm.so": "452bf398f565aa69bfe2155a97f8fa5af0659ddff5fcb8b30ee36603bb66615b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_shmem_mmap.so": "47b116b3a5eff9c50f16dbbe3fd912efd10bcdfb18791edb2a19adffb2ed3317",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_reachable_netlink.so": "5a606b631dfea7dbed5c0ccd81f84bc26f25080872068d0a9e382fbcf90fdda8",
+            "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0": "883ecfef9c8d3a2f17a1b8a3116e9e32d272f1c43e2088bf7837b98d2c50f5e2",
+            "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": "7cc817ff1841b59516d684f357bc0c3fc2cc52c3fa9b4ffb8ce8bdc215f02915",
+            "/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a",
+            "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0": "dcadda7f0f82c54ca157b6ca0a5fdc8e1128db4d778109c8e197e2f84c2ac9ba",
+            "/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1": "4dc20a901c6951e678e216e959da2534bcef7053e6efdf1492509baf142282b0",
+            "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4": "47d56894948545036bd49aed718393bf6edb93fce222874dad30b59f085ad9ee",
+            "/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.15": "f7c5ddb238bc12a13c4d4b4f8e6ea8af61f8bd144651728936d31b65bec7bbdc",
+            "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5",
+            "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2": "e367a86cae4e1e81d9bba594a9daea3b90eb50fadb62bb45e38a322184484867",
+            "/usr/lib/x86_64-linux-gnu/libnettle.so.8.4": "2d3bda6cfa2d477cd91b8178843d19e081b911a124f04b4be06b6e32c9fabc73",
+            "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7": "e7162733430abba6f51e4a5186b9c61a6c706a63d4461182d5f66ce55f35507e",
+            "/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0": "1dc53d91b473c3ebcc65b196c83baa7b1a6c4009f590bcf5c640cf35ba343d6f",
+            "/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.15": "3d6d7558e2764fa0a2ee3ee9bf1754bff872bed23148d673bdb648f737ec39ff",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/libpmix.so.2.5.2": "651d3664e655fa125fe81101a00fea58dd0f3f5adf3aac84d7f59c93c995203a",
+            "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5",
+            "/usr/lib/x86_64-linux-gnu/librtmp.so.1": "2401c4fc99c7b93e79648071224a6eb230dcb800184ccacc8e1854e33fc61445",
+            "/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a",
+            "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2",
+            "/etc/ld.so.cache": "024c9b98c7f5b36ab0487adc7a5c75814323a7385bd54f8010c7eccce04e4a73",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pmix_ext3x.so": "a44d4cc1c9f9fde978a0d519b8305f609138283cc20694be4d1eb3105aab5722",
+            "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.555.42.02": "71cc9fa5f8377db1fd177d9fc6cb45ca97586f81c2f30797194905e4ea825604",
+            "/usr/lib/x86_64-linux-gnu/libicudata.so.70.1": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8",
+            "/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a",
+            "/usr/local/cuda-12.5/targets/x86_64-linux/lib/libOpenCL.so.1.0.0": "1552ec44b469da72e585a29ac7fd2aa98d7f99b9362b7fb8f3dcb2d6b603d3fb",
+            "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241990/pmix_dstor_ds21_241990/smdataseg-4063559681-0": "8875080f7bbef662684bcc6fcc90973d74d0acd41de27b73b1cb3d2bb6ae43c0",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241990/pmix_dstor_ds21_241990/smseg-4063559681-0": "8b3a2ed339840e5cb41d38d5109e510024f4f2eaa4e2c4b3bb870b48402ae4f5",
+            "/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_xml_libxml.so": "d1f058e867eb4b7c619ebb268b75f68c4393bcce8b339901e856d1a44c125506",
+            "/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06",
+            "/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d",
+            "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d",
+            "/usr/lib/x86_64-linux-gnu/librt.so.1": "37bf90d672ac5b85c5f0b7d443f2463af7662de8cb130535dcc4b12520e02419",
+            "/usr/lib/x86_64-linux-gnu/libpthread.so.0": "fbed9505adacada2abb37c6b43be2df6de81e742712c6025694ba48de62c7e78",
+            "/usr/lib/x86_64-linux-gnu/libdl.so.2": "9cb9b7e3171939e7409e26773f44f3f22e200ec2e6936a5d7484a4f9b81d92f2",
+            "/usr/lib/x86_64-linux-gnu/libpciaccess.so.0.11.1": "f1ca739f568225439e4a7957e09dd483359bf715f01d13396c436c74076cca53",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_pci.so": "e7b1dd3d2f88011fed33735e83b67ea82495b5fd60676f8b7a64f3df27abd0e6",
+            "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46",
+            "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3": "9386cfdeb2f894869cdd0190b4f110a65ec0c257ac50ddefaefd6cbaeaab3c35",
+            "/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465",
+            "/usr/lib/x86_64-linux-gnu/libresolv.so.2": "7b2ceed6a3b0f20c5fd5c7d9a327ea6b3d0b97c3f47156a77ee859938dedd019",
+            "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900",
+            "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf",
+            "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f",
+            "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25": "344870a9ff3cfee1df28f518e9e93073df8d0522a288f016f06fdacbfa49eed8",
+            "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1": "3160dcc37106767e1afb341ee3cb3cd25bb79246691ffd137131f37a23597288",
+            "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1": "c62a2a983e0d9c1de76ab2f4cf21a4d81da007af9e0351b8c04740459d231d3f",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_opencl.so": "bc26e4d7970e376af2643d5be346adcb14cc4de4a2b297ff9927386e2f82d678",
+            "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_state_app.so": "9da7b32c694270f7f811f6962adfb6c36bdb91f6adc62c6fa121ea91427ef7bd",
+            "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5",
+            "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064",
+            "/usr/lib/x86_64-linux-gnu/libXNVCtrl.so.0.0.0": "331363807c5e2d1d0166d08d8e99740dc083c7d84590d8e29c7d783aa2da1284",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_errmgr_default_app.so": "6231acb4ce2eb2281bb7051b4950c0c3f0c6a8e10e6f122acfe3c15f16b0855a",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_gl.so": "f3758a7666bd979a2eacdd92b6264e2f160cd58e0bbbc88f82492121d07e2df5",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/pmix/mca_pcompress_zlib.so": "1132fb7e3ae88daab3bf16d3fc67637ef641eab0480735ea047233b89f19ef4a",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241990/pmix_dstor_ds21_241990/initial-pmix_shared-segment-0": "68bdf8af85dc617023c4e9aa8c14877c5804de6e2460b14c64ad619d3c39b498",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241990/pmix_dstor_ds21_241990/smlockseg-4063559681": "a2df0db3b28431f048fc4dd6c6f67596babc8847df30e18ff874f39efd2a5f83",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241990/pmix_dstor_ds12_241990/initial-pmix_shared-segment-0": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.241990/pmix_dstor_ds12_241990/dstore_sm.lock": "e20ed79c05591f80d16c43795665a54df6c037c063714e6ac243d082e3b1dba6",
+            "/usr/lib/x86_64-linux-gnu/libcuda.so.555.42.02": "7916043d99f754caedfe4f343869da51c31cba661ed1867d68ba1976951f808e",
+            "/usr/lib/x86_64-linux-gnu/libpsm2.so.2.2": "bc6e727a5385af004c2eac85e70681905790798529cb9ec90b789c9915a68f19",
+            "/usr/lib/libpsm1/libpsm_infinipath.so.1.16": "bb44c7e69c8c93eb7c0392485636170443ef29181abfeb53bf7c7e1e1c388208",
+            "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17",
+            "/usr/lib/x86_64-linux-gnu/libinfinipath.so.4.0": "ba9d11f98daf1ed203b1c1d3c0d62c5709f13e06cc8bfa186154dde69d868b0f",
+            "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": "3582bce922d99959ee3eb6b7d686c0b99e14c2135616ad4d9d608b2118a7e78c",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm2.so": "abdf7c98aadd279811dfd3821bc44a4e2da5f2880bd03fee268fc323e64cac69",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_ob1.so": "0ad5a81720593262e7c09ba98d3153527b18011ef68dba40984806c897beb880",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm.so": "77fcec2b00102887a50f55c23575761655359a610890258166d6686d6b79a000",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_cm.so": "78bbef9dbecc1e11d7c36425d176b653e32eada4d33e578a27b4ed99b7bed392",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_monitoring.so.50.20.0": "04d8c353ddc54d1da3e0950d7578de424ec28a7d55370810c4ad3011c32324ab",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_monitoring.so": "3904969c7ac96b24f637e36e0eac9d6daa2002fd590a39aa66ffaa28ca725a9b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_sm.so": "b23fd800bdfe2daff3fe74cb99dc1de9c19f437352bce579cef7d9585037d0df",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_tcp.so": "c8c2cff0d5c056f4acf9400bc28614a15881404ccd7954c419636c2aa33b6887",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_self.so": "052b8eb02b650de08fbdd0fe1724a7da86c29cbaf4a0ce8a5e89717cde49aee2",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_bml_r2.so": "4a40fd9fea463b44580aac7303d4176806a39295a61a2a344a48055d96ff457f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mpool_hugepage.so": "286f789d85c8c499ad670678ee957e3e84f122c6c3e7647b0ac81ac1874cfa08",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_rcache_grdma.so": "81066b828f2f070e0a9f8d9bd403c5c977f71a8957cc956cf37efb09862665b0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_bucket.so": "840f38ddad79015cd9b462034f6050d496040c34ae65d28cd63b648ada9a60e9",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_basic.so": "73dd820c7ce28b37ecc288e106008c7e25eb444910ceecc9c39e751c34494590",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_op_avx.so": "8240052b353a7ebfa9f894163c2a491fd1f47a742cca9490c4d4a7de76259e7b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_sm.so": "1e808a24af4ba80f1727cb5df31f25c2bac49632db11a7ee57a23d7d1ad11e7f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_rdma.so": "7ae12dfa0db4604fd69ea793e112a067817fbb24e6a9b89fe1b81bedb4147cd0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_adapt.so": "b9f1c8a26f7b8ad1529f085f26885c229f375246d3bab7e9d8350eb3d10b0d75",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_han.so": "362a195703a4d7b8d3851d43a8a89520adf778ff1e8fd6b00b751f8e31476c76",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sync.so": "c14550b0cdb5407c5ea840dae1727db0bc608aac2f30d6a3e72a9841f7868b25",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_libnbc.so": "7c471ad91a2538e0e315af2697fde25747b4b4d42f3be4a0a588976b2f2fa726",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_tuned.so": "54b234d1dff42ef92f4437be095d557d990153b960702f2edb98c78649ac5b3a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_inter.so": "6b5e029e8acf72559f6dd8acc6e828dd72af8eb3d69fe98e0b0a94e96e8bec46",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_basic.so": "4f7a2151e1b566de99307a8faac82456088a5debab1bad6db2a0bd71802cb2a3",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_self.so": "61826f87d8596e8b88146cf9a14043582d378fe277d99ab081b74f714bd528e9",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_sm.so.40.30.0": "738da2e4239bca8526a41eac96cd6034cc2cf87182f60cbb15d4decd38a01ba1",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sm.so": "756d7c20c69ced45843f3200f4582deaae403243f123749236801a8ffc4dd248"
+          }
+        },
+        "packet_sha256": "72db6c5347652c7a8905b4315d8389b69b93898bc94d19be82663ec0814fa737",
+        "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+        "binding": {
+          "model": "A95",
+          "policy": "SamePhysicalWallDisplacedAcceptedV1",
+          "dt": 0.001,
+          "time": 0.002,
+          "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "configuration_sha256": "93cfe182b2e5515b147c51a2d3ed6b890e7706c5dbe764f02606f38c0d87e119",
+          "native_report_sha256": "2efc151d980336372d797912481ff744dc32b8d96cc67cd8c7d5ccb31267a76a",
+          "actual_k_stage_sha256": "4c83db8866ed5b1bcc65e91d8cf74cf6f39ddd6939005ae20da33dbf6aef057a"
+        },
+        "control_configuration_sha256": "4999de26cbdac590971f94460c4c9f9b4857a40802e1f2ea38409f1f3d2572eb"
+      },
+      "q64f16": {
+        "reconstruction_status": "pass",
+        "accuracy_status": "pass",
+        "equations": {
+          "inner_k": {
+            "storage_backward_difference": 7.452191224220227e-06,
+            "stage_source": -1.0069422185665336e-06,
+            "instantaneous_source": -6.343282416914496e-07,
+            "stage_physical_boundary_flux": 6.98137364039352e-06,
+            "instantaneous_physical_boundary_flux": 6.98136552234299e-06,
+            "volume": 10.312499999999968,
+            "frozen_stage_physical_defect": 1.4777598023932394e-06,
+            "instantaneous_physical_defect": 1.1051539435686873e-06,
+            "frozen_operator_splitting": -3.7260585882455387e-07,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 6.37261528720096e-08,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_k": {
+            "storage_backward_difference": -7.510836586324277e-06,
+            "stage_source": 9.484141915111737e-07,
+            "instantaneous_source": 9.39767898335708e-07,
+            "stage_physical_boundary_flux": -3.3984638896469146e-06,
+            "instantaneous_physical_boundary_flux": -3.398452136175071e-06,
+            "volume": 1089.6874999999993,
+            "frozen_stage_physical_defect": -5.060786888188536e-06,
+            "instantaneous_physical_defect": -5.052152348484914e-06,
+            "frozen_operator_splitting": 8.634539703622057e-09,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 2.1823876814558546e-07,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "storage_backward_difference": -6.1681027755620655e-06,
+            "stage_source": -0.01280608110628348,
+            "instantaneous_source": -0.012806082126640521,
+            "stage_physical_boundary_flux": 0.01278664648021829,
+            "instantaneous_physical_boundary_flux": 0.012786617420894729,
+            "volume": 1089.6874999999993,
+            "frozen_stage_physical_defect": 1.3266523289630003e-05,
+            "instantaneous_physical_defect": 1.3296602970230484e-05,
+            "frozen_operator_splitting": 3.007968060048105e-08,
+            "physical_scale": 11.151925336598463,
+            "scaled_frozen_defect": 1.1896172982876633e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "whole_k": {
+            "storage_backward_difference": -5.864536210405013e-08,
+            "stage_source": -5.852802705535993e-08,
+            "instantaneous_source": 3.054396566442584e-07,
+            "stage_physical_boundary_flux": 3.0020071149576694e-06,
+            "instantaneous_physical_boundary_flux": 3.0020037458811804e-06,
+            "volume": 1099.9999999999993,
+            "frozen_stage_physical_defect": -3.0021244500063595e-06,
+            "instantaneous_physical_defect": -3.366088764629489e-06,
+            "frozen_operator_splitting": -3.639643146231293e-07,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 1.2946206909409044e-07,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          }
+        },
+        "reconstruction": {
+          "k": {
+            "maximum_defect": 1.959350986798168e-15,
+            "normalization": 1.0,
+            "scaled_defect": 1.959350986798168e-15,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "maximum_defect": 7.543599327630444e-18,
+            "normalization": 1.0,
+            "scaled_defect": 7.543599327630444e-18,
+            "status": "pass"
+          }
+        },
+        "interface_frozen_k_fluxes": {
+          "0": 3.979404771023814e-06,
+          "1": -3.398502135234878e-06
+        },
+        "interface_current_k_fluxes": {
+          "0": 3.97940002204977e-06,
+          "1": -3.3984903817630313e-06
+        },
+        "face_order": 16,
+        "actual_quadrature": {
+          "wall_normal": 64,
+          "wall_tangential": 16,
+          "outer_volume": 20,
+          "mass_override": 20,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 20,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 507904,
+          "outer_volume_points": 285200
+        },
+        "physical_volume": 1100.0,
+        "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching",
+        "volume_observer": {
+          "policy": "NativeOwnerVolumeStreamV1",
+          "inner_points": 507904,
+          "outer_points": 285200,
+          "physical_weights": [
+            10.312499999999968,
+            1089.6874999999993
+          ],
+          "native_rows_provenance_fnv1a64": "7561274935706014017",
+          "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+          "materialized_global_volume_rows": false
+        },
+        "actual_coefficient_stages": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        },
+        "effective_input_receipt": {
+          "raw_initial_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "effective_initial_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "fixed_reference_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+          "explicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+          "implicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0,
+          "open_traction_load_sha256": "f470b4d5f348692af7ab0cda3d5c08a111399f7b6fe2bb09b2e6a631e832dbd3",
+          "open_diffusive_load_sha256": "b71f6b2c38550581df14c2c0febcb8117b12abc53f36e38b3f342922a1b1927b",
+          "open_advective_load_sha256": "e0d85fdbd2a76d3d276ff4a6e04727324907bb9f517e0997ed5dfe239efa5fa6",
+          "open_explicit_implicit_agreement": true
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/q64f16/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/q64f16/budget-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/q64f16/budget.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 277.41477724100696,
+          "process_cpu_seconds": 276.434107,
+          "peak_RSS_KiB": 9044112,
+          "actual_mapped_files": {
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe": "20236b14eb4a90dea0f2a9a38b92e41135a83e9241c978fb265e185098f586e8",
+            "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+            "/usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0": "458dd70122be79952cd517f469e3714ee6a972c0d96cd67954b1e37fb4830b27",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_ess_singleton.so": "9e36ea68ba070279c6c964e08c5af596f774c5944c3aad1743e85b573af3ec1a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_orte.so": "9a9fe6e13bb9b5db1acf7aa10485c9286cb03a9e1b66c1b244142c81f2aac054",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_slurm.so": "de18ee69766665d6c1063e714806e6449caa48a63f730749dca0ce311d8a2b48",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_flux.so": "3d6050004330107889696420382517358e08664a9be3f90cd1f71acdbdceedc1",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_ompi.so": "982d5490f7e0465af0228c7c27b416f51095b766f5d37c22d1c1ab6439780ff0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_reachable_netlink.so": "5a606b631dfea7dbed5c0ccd81f84bc26f25080872068d0a9e382fbcf90fdda8",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_shmem_mmap.so": "47b116b3a5eff9c50f16dbbe3fd912efd10bcdfb18791edb2a19adffb2ed3317",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_jsm.so": "452bf398f565aa69bfe2155a97f8fa5af0659ddff5fcb8b30ee36603bb66615b",
+            "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0": "883ecfef9c8d3a2f17a1b8a3116e9e32d272f1c43e2088bf7837b98d2c50f5e2",
+            "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": "7cc817ff1841b59516d684f357bc0c3fc2cc52c3fa9b4ffb8ce8bdc215f02915",
+            "/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a",
+            "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0": "dcadda7f0f82c54ca157b6ca0a5fdc8e1128db4d778109c8e197e2f84c2ac9ba",
+            "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3": "9386cfdeb2f894869cdd0190b4f110a65ec0c257ac50ddefaefd6cbaeaab3c35",
+            "/usr/lib/x86_64-linux-gnu/libresolv.so.2": "7b2ceed6a3b0f20c5fd5c7d9a327ea6b3d0b97c3f47156a77ee859938dedd019",
+            "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900",
+            "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf",
+            "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f",
+            "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25": "344870a9ff3cfee1df28f518e9e93073df8d0522a288f016f06fdacbfa49eed8",
+            "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1": "c62a2a983e0d9c1de76ab2f4cf21a4d81da007af9e0351b8c04740459d231d3f",
+            "/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1": "4dc20a901c6951e678e216e959da2534bcef7053e6efdf1492509baf142282b0",
+            "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4": "47d56894948545036bd49aed718393bf6edb93fce222874dad30b59f085ad9ee",
+            "/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.15": "f7c5ddb238bc12a13c4d4b4f8e6ea8af61f8bd144651728936d31b65bec7bbdc",
+            "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1": "3160dcc37106767e1afb341ee3cb3cd25bb79246691ffd137131f37a23597288",
+            "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358",
+            "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2": "e367a86cae4e1e81d9bba594a9daea3b90eb50fadb62bb45e38a322184484867",
+            "/usr/lib/x86_64-linux-gnu/libnettle.so.8.4": "2d3bda6cfa2d477cd91b8178843d19e081b911a124f04b4be06b6e32c9fabc73",
+            "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7": "e7162733430abba6f51e4a5186b9c61a6c706a63d4461182d5f66ce55f35507e",
+            "/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0": "1dc53d91b473c3ebcc65b196c83baa7b1a6c4009f590bcf5c640cf35ba343d6f",
+            "/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.15": "3d6d7558e2764fa0a2ee3ee9bf1754bff872bed23148d673bdb648f737ec39ff",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/libpmix.so.2.5.2": "651d3664e655fa125fe81101a00fea58dd0f3f5adf3aac84d7f59c93c995203a",
+            "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5",
+            "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5",
+            "/usr/lib/x86_64-linux-gnu/librtmp.so.1": "2401c4fc99c7b93e79648071224a6eb230dcb800184ccacc8e1854e33fc61445",
+            "/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a",
+            "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/pmix/mca_pcompress_zlib.so": "1132fb7e3ae88daab3bf16d3fc67637ef641eab0480735ea047233b89f19ef4a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pmix_ext3x.so": "a44d4cc1c9f9fde978a0d519b8305f609138283cc20694be4d1eb3105aab5722",
+            "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242319/pmix_dstor_ds21_242319/initial-pmix_shared-segment-0": "bf4ada6454bcefbdf0d03c8bedaa52724f06098b4875fa8d0ba27db81d648904",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242319/pmix_dstor_ds21_242319/smlockseg-4059824129": "a2df0db3b28431f048fc4dd6c6f67596babc8847df30e18ff874f39efd2a5f83",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242319/pmix_dstor_ds12_242319/initial-pmix_shared-segment-0": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242319/pmix_dstor_ds12_242319/dstore_sm.lock": "e20ed79c05591f80d16c43795665a54df6c037c063714e6ac243d082e3b1dba6",
+            "/usr/lib/x86_64-linux-gnu/libcuda.so.555.42.02": "7916043d99f754caedfe4f343869da51c31cba661ed1867d68ba1976951f808e",
+            "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.555.42.02": "71cc9fa5f8377db1fd177d9fc6cb45ca97586f81c2f30797194905e4ea825604",
+            "/usr/lib/x86_64-linux-gnu/libicudata.so.70.1": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8",
+            "/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a",
+            "/usr/local/cuda-12.5/targets/x86_64-linux/lib/libOpenCL.so.1.0.0": "1552ec44b469da72e585a29ac7fd2aa98d7f99b9362b7fb8f3dcb2d6b603d3fb",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242319/pmix_dstor_ds21_242319/smdataseg-4059824129-0": "9edec9d63872e8384c54d748a8f517004cb368127f73173b74bf10f03f043d6a",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242319/pmix_dstor_ds21_242319/smseg-4059824129-0": "8b3a2ed339840e5cb41d38d5109e510024f4f2eaa4e2c4b3bb870b48402ae4f5",
+            "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225",
+            "/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98",
+            "/usr/lib/x86_64-linux-gnu/librt.so.1": "37bf90d672ac5b85c5f0b7d443f2463af7662de8cb130535dcc4b12520e02419",
+            "/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06",
+            "/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d",
+            "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d",
+            "/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465",
+            "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_xml_libxml.so": "d1f058e867eb4b7c619ebb268b75f68c4393bcce8b339901e856d1a44c125506",
+            "/usr/lib/x86_64-linux-gnu/libpthread.so.0": "fbed9505adacada2abb37c6b43be2df6de81e742712c6025694ba48de62c7e78",
+            "/usr/lib/x86_64-linux-gnu/libdl.so.2": "9cb9b7e3171939e7409e26773f44f3f22e200ec2e6936a5d7484a4f9b81d92f2",
+            "/usr/lib/x86_64-linux-gnu/libpciaccess.so.0.11.1": "f1ca739f568225439e4a7957e09dd483359bf715f01d13396c436c74076cca53",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_pci.so": "e7b1dd3d2f88011fed33735e83b67ea82495b5fd60676f8b7a64f3df27abd0e6",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_opencl.so": "bc26e4d7970e376af2643d5be346adcb14cc4de4a2b297ff9927386e2f82d678",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_state_app.so": "9da7b32c694270f7f811f6962adfb6c36bdb91f6adc62c6fa121ea91427ef7bd",
+            "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064",
+            "/usr/lib/x86_64-linux-gnu/libXNVCtrl.so.0.0.0": "331363807c5e2d1d0166d08d8e99740dc083c7d84590d8e29c7d783aa2da1284",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_errmgr_default_app.so": "6231acb4ce2eb2281bb7051b4950c0c3f0c6a8e10e6f122acfe3c15f16b0855a",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_gl.so": "f3758a7666bd979a2eacdd92b6264e2f160cd58e0bbbc88f82492121d07e2df5",
+            "/usr/lib/x86_64-linux-gnu/libpsm2.so.2.2": "bc6e727a5385af004c2eac85e70681905790798529cb9ec90b789c9915a68f19",
+            "/etc/ld.so.cache": "024c9b98c7f5b36ab0487adc7a5c75814323a7385bd54f8010c7eccce04e4a73",
+            "/usr/lib/libpsm1/libpsm_infinipath.so.1.16": "bb44c7e69c8c93eb7c0392485636170443ef29181abfeb53bf7c7e1e1c388208",
+            "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17",
+            "/usr/lib/x86_64-linux-gnu/libinfinipath.so.4.0": "ba9d11f98daf1ed203b1c1d3c0d62c5709f13e06cc8bfa186154dde69d868b0f",
+            "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": "3582bce922d99959ee3eb6b7d686c0b99e14c2135616ad4d9d608b2118a7e78c",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm2.so": "abdf7c98aadd279811dfd3821bc44a4e2da5f2880bd03fee268fc323e64cac69",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm.so": "77fcec2b00102887a50f55c23575761655359a610890258166d6686d6b79a000",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_cm.so": "78bbef9dbecc1e11d7c36425d176b653e32eada4d33e578a27b4ed99b7bed392",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_monitoring.so.50.20.0": "04d8c353ddc54d1da3e0950d7578de424ec28a7d55370810c4ad3011c32324ab",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_ob1.so": "0ad5a81720593262e7c09ba98d3153527b18011ef68dba40984806c897beb880",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_monitoring.so": "3904969c7ac96b24f637e36e0eac9d6daa2002fd590a39aa66ffaa28ca725a9b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_sm.so": "b23fd800bdfe2daff3fe74cb99dc1de9c19f437352bce579cef7d9585037d0df",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_tcp.so": "c8c2cff0d5c056f4acf9400bc28614a15881404ccd7954c419636c2aa33b6887",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_self.so": "052b8eb02b650de08fbdd0fe1724a7da86c29cbaf4a0ce8a5e89717cde49aee2",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_bml_r2.so": "4a40fd9fea463b44580aac7303d4176806a39295a61a2a344a48055d96ff457f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mpool_hugepage.so": "286f789d85c8c499ad670678ee957e3e84f122c6c3e7647b0ac81ac1874cfa08",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_op_avx.so": "8240052b353a7ebfa9f894163c2a491fd1f47a742cca9490c4d4a7de76259e7b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_rcache_grdma.so": "81066b828f2f070e0a9f8d9bd403c5c977f71a8957cc956cf37efb09862665b0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_bucket.so": "840f38ddad79015cd9b462034f6050d496040c34ae65d28cd63b648ada9a60e9",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_basic.so": "73dd820c7ce28b37ecc288e106008c7e25eb444910ceecc9c39e751c34494590",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_sm.so": "1e808a24af4ba80f1727cb5df31f25c2bac49632db11a7ee57a23d7d1ad11e7f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_rdma.so": "7ae12dfa0db4604fd69ea793e112a067817fbb24e6a9b89fe1b81bedb4147cd0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_adapt.so": "b9f1c8a26f7b8ad1529f085f26885c229f375246d3bab7e9d8350eb3d10b0d75",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_han.so": "362a195703a4d7b8d3851d43a8a89520adf778ff1e8fd6b00b751f8e31476c76",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_libnbc.so": "7c471ad91a2538e0e315af2697fde25747b4b4d42f3be4a0a588976b2f2fa726",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sync.so": "c14550b0cdb5407c5ea840dae1727db0bc608aac2f30d6a3e72a9841f7868b25",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_tuned.so": "54b234d1dff42ef92f4437be095d557d990153b960702f2edb98c78649ac5b3a",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_sm.so.40.30.0": "738da2e4239bca8526a41eac96cd6034cc2cf87182f60cbb15d4decd38a01ba1",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_inter.so": "6b5e029e8acf72559f6dd8acc6e828dd72af8eb3d69fe98e0b0a94e96e8bec46",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_self.so": "61826f87d8596e8b88146cf9a14043582d378fe277d99ab081b74f714bd528e9",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_basic.so": "4f7a2151e1b566de99307a8faac82456088a5debab1bad6db2a0bd71802cb2a3",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sm.so": "756d7c20c69ced45843f3200f4582deaae403243f123749236801a8ffc4dd248"
+          }
+        },
+        "packet_sha256": "16667f9c2a08be5033a266d05f5bee9736206589d8ca28f9c893383635be1005",
+        "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+        "binding": {
+          "model": "A95",
+          "policy": "SamePhysicalWallDisplacedAcceptedV1",
+          "dt": 0.001,
+          "time": 0.002,
+          "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "configuration_sha256": "93cfe182b2e5515b147c51a2d3ed6b890e7706c5dbe764f02606f38c0d87e119",
+          "native_report_sha256": "2efc151d980336372d797912481ff744dc32b8d96cc67cd8c7d5ccb31267a76a",
+          "actual_k_stage_sha256": "4c83db8866ed5b1bcc65e91d8cf74cf6f39ddd6939005ae20da33dbf6aef057a"
+        },
+        "control_configuration_sha256": "969b401b45518bbd6f6c433f34e968f275c6b47b77769919a06736725b32c003"
+      },
+      "q64f32": {
+        "reconstruction_status": "pass",
+        "accuracy_status": "pass",
+        "equations": {
+          "inner_k": {
+            "storage_backward_difference": 7.452191224220227e-06,
+            "stage_source": -1.0069422185665336e-06,
+            "instantaneous_source": -6.343282416914496e-07,
+            "stage_physical_boundary_flux": 6.981373640392011e-06,
+            "instantaneous_physical_boundary_flux": 6.981365522342016e-06,
+            "volume": 10.312499999999968,
+            "frozen_stage_physical_defect": 1.4777598023947488e-06,
+            "instantaneous_physical_defect": 1.1051539435696613e-06,
+            "frozen_operator_splitting": -3.726058588250892e-07,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 6.372615287207469e-08,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_k": {
+            "storage_backward_difference": -7.510836586324277e-06,
+            "stage_source": 9.484141915111737e-07,
+            "instantaneous_source": 9.39767898335708e-07,
+            "stage_physical_boundary_flux": -3.3984638902613844e-06,
+            "instantaneous_physical_boundary_flux": -3.398452136789536e-06,
+            "volume": 1089.6874999999993,
+            "frozen_stage_physical_defect": -5.060786887574066e-06,
+            "instantaneous_physical_defect": -5.052152347870449e-06,
+            "frozen_operator_splitting": 8.634539703617398e-09,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 2.1823876811908738e-07,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "storage_backward_difference": -6.1681027755620655e-06,
+            "stage_source": -0.01280608110628348,
+            "instantaneous_source": -0.012806082126640521,
+            "stage_physical_boundary_flux": 0.012786646480218208,
+            "instantaneous_physical_boundary_flux": 0.012786617420894784,
+            "volume": 1089.6874999999993,
+            "frozen_stage_physical_defect": 1.3266523289711535e-05,
+            "instantaneous_physical_defect": 1.3296602970174973e-05,
+            "frozen_operator_splitting": 3.00796804634379e-08,
+            "physical_scale": 11.151925336598463,
+            "scaled_frozen_defect": 1.1896172982949742e-06,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          },
+          "whole_k": {
+            "storage_backward_difference": -5.864536210405013e-08,
+            "stage_source": -5.852802705535993e-08,
+            "instantaneous_source": 3.054396566442584e-07,
+            "stage_physical_boundary_flux": 3.00200711434149e-06,
+            "instantaneous_physical_boundary_flux": 3.0020037452655407e-06,
+            "volume": 1099.9999999999993,
+            "frozen_stage_physical_defect": -3.00212444939018e-06,
+            "instantaneous_physical_defect": -3.366088764013849e-06,
+            "frozen_operator_splitting": -3.6396431462366926e-07,
+            "physical_scale": 23.189220371755958,
+            "scaled_frozen_defect": 1.2946206906751862e-07,
+            "accuracy_limit": 0.02,
+            "status": "pass"
+          }
+        },
+        "reconstruction": {
+          "k": {
+            "maximum_defect": 1.9593509867979777e-15,
+            "normalization": 1.0,
+            "scaled_defect": 1.9593509867979777e-15,
+            "status": "pass"
+          },
+          "outer_epsilon": {
+            "maximum_defect": 7.543599327630444e-18,
+            "normalization": 1.0,
+            "scaled_defect": 7.543599327630444e-18,
+            "status": "pass"
+          }
+        },
+        "interface_frozen_k_fluxes": {
+          "0": 3.9794047710240185e-06,
+          "1": -3.3985021352348818e-06
+        },
+        "interface_current_k_fluxes": {
+          "0": 3.97940002204997e-06,
+          "1": -3.398490381763031e-06
+        },
+        "face_order": 32,
+        "actual_quadrature": {
+          "wall_normal": 64,
+          "wall_tangential": 16,
+          "outer_volume": 20,
+          "mass_override": 20,
+          "mass_default": "max(8,p+3) per native field",
+          "interface": 20,
+          "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+          "inner_volume_points": 507904,
+          "outer_volume_points": 285200
+        },
+        "physical_volume": 1100.0,
+        "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching",
+        "volume_observer": {
+          "policy": "NativeOwnerVolumeStreamV1",
+          "inner_points": 507904,
+          "outer_points": 285200,
+          "physical_weights": [
+            10.312499999999968,
+            1089.6874999999993
+          ],
+          "native_rows_provenance_fnv1a64": "7561274935706014017",
+          "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+          "materialized_global_volume_rows": false
+        },
+        "actual_coefficient_stages": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        },
+        "effective_input_receipt": {
+          "raw_initial_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "effective_initial_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "fixed_reference_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+          "explicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+          "implicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+          "raw_effective_max_difference": 0,
+          "source_target_boundary_max_difference": 0,
+          "open_traction_load_sha256": "f470b4d5f348692af7ab0cda3d5c08a111399f7b6fe2bb09b2e6a631e832dbd3",
+          "open_diffusive_load_sha256": "b71f6b2c38550581df14c2c0febcb8117b12abc53f36e38b3f342922a1b1927b",
+          "open_advective_load_sha256": "e0d85fdbd2a76d3d276ff4a6e04727324907bb9f517e0997ed5dfe239efa5fa6",
+          "open_explicit_implicit_agreement": true
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/q64f32/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/q64f32/budget-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1/step2/q64f32/budget.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 281.02966172402375,
+          "process_cpu_seconds": 280.100185,
+          "peak_RSS_KiB": 9044104,
+          "actual_mapped_files": {
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe": "20236b14eb4a90dea0f2a9a38b92e41135a83e9241c978fb265e185098f586e8",
+            "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+            "/usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0": "458dd70122be79952cd517f469e3714ee6a972c0d96cd67954b1e37fb4830b27",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_ess_singleton.so": "9e36ea68ba070279c6c964e08c5af596f774c5944c3aad1743e85b573af3ec1a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_orte.so": "9a9fe6e13bb9b5db1acf7aa10485c9286cb03a9e1b66c1b244142c81f2aac054",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_slurm.so": "de18ee69766665d6c1063e714806e6449caa48a63f730749dca0ce311d8a2b48",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_flux.so": "3d6050004330107889696420382517358e08664a9be3f90cd1f71acdbdceedc1",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_ompi.so": "982d5490f7e0465af0228c7c27b416f51095b766f5d37c22d1c1ab6439780ff0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_reachable_netlink.so": "5a606b631dfea7dbed5c0ccd81f84bc26f25080872068d0a9e382fbcf90fdda8",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_shmem_mmap.so": "47b116b3a5eff9c50f16dbbe3fd912efd10bcdfb18791edb2a19adffb2ed3317",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_schizo_jsm.so": "452bf398f565aa69bfe2155a97f8fa5af0659ddff5fcb8b30ee36603bb66615b",
+            "/usr/lib/x86_64-linux-gnu/libicudata.so.70.1": "c1404396288e178c8db2f30203cb8150e4d2c14cacee9a2883e0092f45399cc8",
+            "/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1": "4683f3623dc47a92e862dc3c8770caff81c9f4c7e116bb672fc439737b06d88a",
+            "/usr/local/cuda-12.5/targets/x86_64-linux/lib/libOpenCL.so.1.0.0": "1552ec44b469da72e585a29ac7fd2aa98d7f99b9362b7fb8f3dcb2d6b603d3fb",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242833/pmix_dstor_ds21_242833/smdataseg-4158783489-0": "54352cb3384152138be60afa64a1f13bf80d6c1c38a1f2b7baabcf2223c0954a",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242833/pmix_dstor_ds21_242833/smseg-4158783489-0": "8b3a2ed339840e5cb41d38d5109e510024f4f2eaa4e2c4b3bb870b48402ae4f5",
+            "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13": "8c2a993fe42a16e94f9054f1b9cbeccea50b6ed377359e9d3da04cbb2470f225",
+            "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": "7cc817ff1841b59516d684f357bc0c3fc2cc52c3fa9b4ffb8ce8bdc215f02915",
+            "/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0": "e23ed094eaf0a74a822a6d9d14eee628ab9f7ec08aecbf20ffd803f019ff6e98",
+            "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0": "883ecfef9c8d3a2f17a1b8a3116e9e32d272f1c43e2088bf7837b98d2c50f5e2",
+            "/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0": "9c28d59500f186fc28bf7e77e9b1a71129f66731c52ac1e974b9acd1a760911a",
+            "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0": "dcadda7f0f82c54ca157b6ca0a5fdc8e1128db4d778109c8e197e2f84c2ac9ba",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_xml_libxml.so": "d1f058e867eb4b7c619ebb268b75f68c4393bcce8b339901e856d1a44c125506",
+            "/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5": "bb376813876bb214535bbbdac70f2c0c4b00baecb81557dab78a79518248df06",
+            "/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5": "e4ad21c203d8e8b9b7f49071311339af6b438026e1ad236403e3b379b022f23d",
+            "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": "aabc489094abd96c876d1c989a2da8a8aa6d28f5a676c4a84dd6d0a0c34aec5d",
+            "/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0": "d61399986f565c00c090a1f222019db7b40f42eaf2d93834136d6234c16ec465",
+            "/usr/lib/x86_64-linux-gnu/libpthread.so.0": "fbed9505adacada2abb37c6b43be2df6de81e742712c6025694ba48de62c7e78",
+            "/usr/lib/x86_64-linux-gnu/libdl.so.2": "9cb9b7e3171939e7409e26773f44f3f22e200ec2e6936a5d7484a4f9b81d92f2",
+            "/usr/lib/x86_64-linux-gnu/libpciaccess.so.0.11.1": "f1ca739f568225439e4a7957e09dd483359bf715f01d13396c436c74076cca53",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_pci.so": "e7b1dd3d2f88011fed33735e83b67ea82495b5fd60676f8b7a64f3df27abd0e6",
+            "/usr/lib/x86_64-linux-gnu/libresolv.so.2": "7b2ceed6a3b0f20c5fd5c7d9a327ea6b3d0b97c3f47156a77ee859938dedd019",
+            "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0": "247da4d5d34a91cadcdd6282be4c4644fcb8af001334d2b8a82ecda435418cbf",
+            "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9": "617035f98d836e37ccaefdd5fe56b45ef4f5e10460c5b4f68c2d488e5a62766f",
+            "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1": "c62a2a983e0d9c1de76ab2f4cf21a4d81da007af9e0351b8c04740459d231d3f",
+            "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": "1dc3ff1269a5ede69ef9a8ec2436d73fccbcd10531055b359292e0bde4e29b46",
+            "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3": "9386cfdeb2f894869cdd0190b4f110a65ec0c257ac50ddefaefd6cbaeaab3c35",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_opencl.so": "bc26e4d7970e376af2643d5be346adcb14cc4de4a2b297ff9927386e2f82d678",
+            "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25": "344870a9ff3cfee1df28f518e9e93073df8d0522a288f016f06fdacbfa49eed8",
+            "/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1": "4dc20a901c6951e678e216e959da2534bcef7053e6efdf1492509baf142282b0",
+            "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4": "47d56894948545036bd49aed718393bf6edb93fce222874dad30b59f085ad9ee",
+            "/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.15": "f7c5ddb238bc12a13c4d4b4f8e6ea8af61f8bd144651728936d31b65bec7bbdc",
+            "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2": "e367a86cae4e1e81d9bba594a9daea3b90eb50fadb62bb45e38a322184484867",
+            "/usr/lib/x86_64-linux-gnu/libnettle.so.8.4": "2d3bda6cfa2d477cd91b8178843d19e081b911a124f04b4be06b6e32c9fabc73",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_state_app.so": "9da7b32c694270f7f811f6962adfb6c36bdb91f6adc62c6fa121ea91427ef7bd",
+            "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9": "ad20d5fb89df5297073b46373c65bfbb01f33a00b4949894055d29a7fcf00900",
+            "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1": "3160dcc37106767e1afb341ee3cb3cd25bb79246691ffd137131f37a23597288",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/libpmix.so.2.5.2": "651d3664e655fa125fe81101a00fea58dd0f3f5adf3aac84d7f59c93c995203a",
+            "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2": "f198a1272ca6a071b313646ae65fc1942628df8caebe07e4c377b15b68903358",
+            "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9": "b877956d7814d95fb37473002f46a43fe7f09bebb48a41312c329c65631622b5",
+            "/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.15": "3d6d7558e2764fa0a2ee3ee9bf1754bff872bed23148d673bdb648f737ec39ff",
+            "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7": "e7162733430abba6f51e4a5186b9c61a6c706a63d4461182d5f66ce55f35507e",
+            "/usr/lib/x86_64-linux-gnu/librtmp.so.1": "2401c4fc99c7b93e79648071224a6eb230dcb800184ccacc8e1854e33fc61445",
+            "/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7": "1420c60a18189fb2e7bb4b8da1409564b0c1c46c59df5bbb0c23339bb961403a",
+            "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1": "3b9cae3346ad67fbe962fa1ed73f358e125604a3ad7bb11626fa712ccefe6ee2",
+            "/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0": "1dc53d91b473c3ebcc65b196c83baa7b1a6c4009f590bcf5c640cf35ba343d6f",
+            "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": "98343a8324ea62ed75a13c923ed5dea96b7a8ad41aeba9f18126c4cbf7178064",
+            "/usr/lib/x86_64-linux-gnu/libXNVCtrl.so.0.0.0": "331363807c5e2d1d0166d08d8e99740dc083c7d84590d8e29c7d783aa2da1284",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_errmgr_default_app.so": "6231acb4ce2eb2281bb7051b4950c0c3f0c6a8e10e6f122acfe3c15f16b0855a",
+            "/usr/lib/x86_64-linux-gnu/hwloc/hwloc_gl.so": "f3758a7666bd979a2eacdd92b6264e2f160cd58e0bbbc88f82492121d07e2df5",
+            "/usr/lib/x86_64-linux-gnu/pmix2/lib/pmix/mca_pcompress_zlib.so": "1132fb7e3ae88daab3bf16d3fc67637ef641eab0480735ea047233b89f19ef4a",
+            "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1": "f196091d8ec9790b4cd203ecdb0eab3b242d35ae8625ead7962d0a944a8fdfa5",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pmix_ext3x.so": "a44d4cc1c9f9fde978a0d519b8305f609138283cc20694be4d1eb3105aab5722",
+            "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2": "95ca960ec3417da3d9505c8d2c6f0e9b7caf79ab900f6099a6bd938cf91069c5",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242833/pmix_dstor_ds21_242833/initial-pmix_shared-segment-0": "a557fef2c6c3b1fab7859914192aae68f0657e65834b9c69ef3c6ebb26bbd67d",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242833/pmix_dstor_ds21_242833/smlockseg-4158783489": "a2df0db3b28431f048fc4dd6c6f67596babc8847df30e18ff874f39efd2a5f83",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242833/pmix_dstor_ds12_242833/initial-pmix_shared-segment-0": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+            "/tmp/nektar-ct12-ipc/ompi.jay-Super-Server.1000/pid.242833/pmix_dstor_ds12_242833/dstore_sm.lock": "e20ed79c05591f80d16c43795665a54df6c037c063714e6ac243d082e3b1dba6",
+            "/usr/lib/x86_64-linux-gnu/libcuda.so.555.42.02": "7916043d99f754caedfe4f343869da51c31cba661ed1867d68ba1976951f808e",
+            "/usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.555.42.02": "71cc9fa5f8377db1fd177d9fc6cb45ca97586f81c2f30797194905e4ea825604",
+            "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0": "4472cf91dbc01395761fb45d0f4b25f6241406fe54cbf540c13755a3706a7b17",
+            "/usr/lib/x86_64-linux-gnu/libinfinipath.so.4.0": "ba9d11f98daf1ed203b1c1d3c0d62c5709f13e06cc8bfa186154dde69d868b0f",
+            "/usr/lib/libpsm1/libpsm_infinipath.so.1.16": "bb44c7e69c8c93eb7c0392485636170443ef29181abfeb53bf7c7e1e1c388208",
+            "/etc/ld.so.cache": "024c9b98c7f5b36ab0487adc7a5c75814323a7385bd54f8010c7eccce04e4a73",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm.so": "77fcec2b00102887a50f55c23575761655359a610890258166d6686d6b79a000",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_cm.so": "78bbef9dbecc1e11d7c36425d176b653e32eada4d33e578a27b4ed99b7bed392",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_monitoring.so.50.20.0": "04d8c353ddc54d1da3e0950d7578de424ec28a7d55370810c4ad3011c32324ab",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_ob1.so": "0ad5a81720593262e7c09ba98d3153527b18011ef68dba40984806c897beb880",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_pml_monitoring.so": "3904969c7ac96b24f637e36e0eac9d6daa2002fd590a39aa66ffaa28ca725a9b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_op_avx.so": "8240052b353a7ebfa9f894163c2a491fd1f47a742cca9490c4d4a7de76259e7b",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_sm.so": "b23fd800bdfe2daff3fe74cb99dc1de9c19f437352bce579cef7d9585037d0df",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_tcp.so": "c8c2cff0d5c056f4acf9400bc28614a15881404ccd7954c419636c2aa33b6887",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_bml_r2.so": "4a40fd9fea463b44580aac7303d4176806a39295a61a2a344a48055d96ff457f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mpool_hugepage.so": "286f789d85c8c499ad670678ee957e3e84f122c6c3e7647b0ac81ac1874cfa08",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_btl_self.so": "052b8eb02b650de08fbdd0fe1724a7da86c29cbaf4a0ce8a5e89717cde49aee2",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_rcache_grdma.so": "81066b828f2f070e0a9f8d9bd403c5c977f71a8957cc956cf37efb09862665b0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_bucket.so": "840f38ddad79015cd9b462034f6050d496040c34ae65d28cd63b648ada9a60e9",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_allocator_basic.so": "73dd820c7ce28b37ecc288e106008c7e25eb444910ceecc9c39e751c34494590",
+            "/usr/lib/x86_64-linux-gnu/librt.so.1": "37bf90d672ac5b85c5f0b7d443f2463af7662de8cb130535dcc4b12520e02419",
+            "/usr/lib/x86_64-linux-gnu/libpsm2.so.2.2": "bc6e727a5385af004c2eac85e70681905790798529cb9ec90b789c9915a68f19",
+            "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": "3582bce922d99959ee3eb6b7d686c0b99e14c2135616ad4d9d608b2118a7e78c",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_mtl_psm2.so": "abdf7c98aadd279811dfd3821bc44a4e2da5f2880bd03fee268fc323e64cac69",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_sm.so": "1e808a24af4ba80f1727cb5df31f25c2bac49632db11a7ee57a23d7d1ad11e7f",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_osc_rdma.so": "7ae12dfa0db4604fd69ea793e112a067817fbb24e6a9b89fe1b81bedb4147cd0",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_adapt.so": "b9f1c8a26f7b8ad1529f085f26885c229f375246d3bab7e9d8350eb3d10b0d75",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_han.so": "362a195703a4d7b8d3851d43a8a89520adf778ff1e8fd6b00b751f8e31476c76",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sync.so": "c14550b0cdb5407c5ea840dae1727db0bc608aac2f30d6a3e72a9841f7868b25",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_tuned.so": "54b234d1dff42ef92f4437be095d557d990153b960702f2edb98c78649ac5b3a",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_libnbc.so": "7c471ad91a2538e0e315af2697fde25747b4b4d42f3be4a0a588976b2f2fa726",
+            "/usr/lib/x86_64-linux-gnu/libmca_common_sm.so.40.30.0": "738da2e4239bca8526a41eac96cd6034cc2cf87182f60cbb15d4decd38a01ba1",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_inter.so": "6b5e029e8acf72559f6dd8acc6e828dd72af8eb3d69fe98e0b0a94e96e8bec46",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_self.so": "61826f87d8596e8b88146cf9a14043582d378fe277d99ab081b74f714bd528e9",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_basic.so": "4f7a2151e1b566de99307a8faac82456088a5debab1bad6db2a0bd71802cb2a3",
+            "/usr/lib/x86_64-linux-gnu/openmpi/lib/openmpi3/mca_coll_sm.so": "756d7c20c69ced45843f3200f4582deaae403243f123749236801a8ffc4dd248"
+          }
+        },
+        "packet_sha256": "b5e25d04cb17df80ed14254f8d2042e6ec864233b39f0952b7db8d3b7eecaf23",
+        "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+        "binding": {
+          "model": "A95",
+          "policy": "SamePhysicalWallDisplacedAcceptedV1",
+          "dt": 0.001,
+          "time": 0.002,
+          "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+          "configuration_sha256": "93cfe182b2e5515b147c51a2d3ed6b890e7706c5dbe764f02606f38c0d87e119",
+          "native_report_sha256": "2efc151d980336372d797912481ff744dc32b8d96cc67cd8c7d5ccb31267a76a",
+          "actual_k_stage_sha256": "4c83db8866ed5b1bcc65e91d8cf74cf6f39ddd6939005ae20da33dbf6aef057a"
+        },
+        "control_configuration_sha256": "969b401b45518bbd6f6c433f34e968f275c6b47b77769919a06736725b32c003"
+      }
+    },
+    "budget_binding": {
+      "model": "A95",
+      "policy": "SamePhysicalWallDisplacedAcceptedV1",
+      "dt": 0.001,
+      "time": 0.002,
+      "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+      "configuration_sha256": "93cfe182b2e5515b147c51a2d3ed6b890e7706c5dbe764f02606f38c0d87e119",
+      "native_report_sha256": "2efc151d980336372d797912481ff744dc32b8d96cc67cd8c7d5ccb31267a76a",
+      "actual_k_stage_sha256": "4c83db8866ed5b1bcc65e91d8cf74cf6f39ddd6939005ae20da33dbf6aef057a"
+    },
+    "captured_k_matrix": {
+      "status": "pass",
+      "maximum_defect": 1.0677725864304796e-14,
+      "scale": 1.0,
+      "scaled_defect": 1.0677725864304796e-14,
+      "captured_rows": 15004,
+      "matrix_sha256": "5ad1068a4cfcefd8cfef609316820426575410d6e91c42ea0cd1087e74601d4b",
+      "scope": "actual captured PIMPLE free-row residual plus its frozen matrix times actual raw increment; not a second reassembly using guessed frozen coefficients"
+    },
+    "gate": {
+      "status": "pass",
+      "reasons": [],
+      "controls": {
+        "native": {
+          "status": "pass",
+          "reasons": []
+        },
+        "q48f16": {
+          "status": "pass",
+          "reasons": []
+        },
+        "q64f16": {
+          "status": "pass",
+          "reasons": []
+        },
+        "q64f32": {
+          "status": "pass",
+          "reasons": []
+        }
+      },
+      "scaled_signed_defect_spreads": {
+        "inner_k": 1.8018402491348697e-17,
+        "outer_k": 1.1166683894883901e-15,
+        "outer_epsilon": 5.444388971771741e-17,
+        "whole_k": 1.1302821412446777e-15
+      },
+      "uncertainty_limit": 0.02,
+      "required_controls": [
+        "native",
+        "q48f16",
+        "q64f16",
+        "q64f32"
+      ],
+      "required_equations": [
+        "inner_k",
+        "outer_epsilon",
+        "outer_k",
+        "whole_k"
+      ],
+      "required_reconstruction": [
+        "k",
+        "outer_epsilon"
+      ]
+    }
+  },
+  "retention": {
+    "schema": "CT12RetentionQualificationV1",
+    "status": "pass",
+    "policy": "LosslessSegmentCASV1",
+    "index_sha256": "852d143d9795e5dd28f55d21959d69dc9043b46dba1eca146b3d84aba0401607",
+    "required_evidence_sha256": "6fd069ce0175159122b1cedee94f64f936e2d8caa5099f306f3be3b24e1fcdf1",
+    "original_payload_files": 47,
+    "unique_blobs": 33,
+    "raw_segment_bytes": 555786201,
+    "eligible_raw_bytes": 381131928,
+    "compressed_unique_bytes": 91977023,
+    "measured_retained_bytes": 266659550,
+    "peak_raw_plus_archive_bytes": 647791478,
+    "compression_validation_prune_CPU": 10.422820661999992,
+    "compression_validation_prune_wall": 11.93301770297694,
+    "restore_CPU": 2.953128578000019,
+    "negative_controls": {
+      "missing_blob": {
+        "status": "pass",
+        "reason": "missing/changed retained blob:rollback/pimple-states/flow-t0.002-751fbe6ce03a.C.csr"
+      },
+      "changed_plaintext_hash": {
+        "status": "pass",
+        "reason": "lossy retained payload:rollback/pimple-states/flow-t0.002-751fbe6ce03a.C.csr"
+      },
+      "foreign_native_binding": {
+        "status": "pass",
+        "reason": "foreign retention/native identity"
+      }
+    },
+    "all_restored_bytes_equal": true,
+    "final_storage_scope": "demonstration restored new payloads after measuring bounded-retention state; no historic archive touched",
+    "accepted_only_categories": {
+      "1": {
+        "native": {
+          "raw_bytes": 156470434,
+          "eligible_bytes": 78777573,
+          "unique_compressed_bytes": 24790175,
+          "retained_bytes": 102483036
+        },
+        "audit": {
+          "raw_bytes": 0,
+          "eligible_bytes": 0,
+          "unique_compressed_bytes": 0,
+          "retained_bytes": 0
+        }
+      },
+      "2": {
+        "native": {
+          "raw_bytes": 165520974,
+          "eligible_bytes": 84550143,
+          "unique_compressed_bytes": 32268528,
+          "retained_bytes": 113239359
+        },
+        "audit": {
+          "raw_bytes": 133836332,
+          "eligible_bytes": 133255033,
+          "unique_compressed_bytes": 29344200,
+          "retained_bytes": 29925499
+        }
+      }
+    },
+    "forecast_scope": "Accepted-only categories exclude the intentionally duplicate rollback payload; failure dedup cannot be counted as ordinary evolution savings."
+  },
+  "recovery": {
+    "root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1",
+    "request_sha256": "882b6e438f8377f404fdc865b69fdfe52254e0fa235236d8544b985339dd6d19",
+    "step1_report_sha256": "06286c2f61970e8bbf34ca883862b544d16c56847b8147e5c75b4531d549e05c",
+    "configuration_sha256": "43962176097caceab5d5ae0042ae820876aa322c2ff31d3bd6cbe5f77ae1a51f",
+    "timing_sha256": "2f7ee5ce110ca035192a9e260a85e4adadd103ac6f0fa1b567bc20ebaa6821fa",
+    "history_sha256": "0c59a37a903e5e2f1c5492ae1a83736ccb05fc7261dc3aac99dc488c6f04d173",
+    "failed_family_sha256": "90c1f61585ed7f89abeeb5c9dd7713c9ef3f5c4336a5e52e50d378b31af3f87e",
+    "failure_log_sha256": "23ebc054210a7a33e3cb08c66cb7ade2e9e186fd92e1635664688dc6da8b2a06",
+    "completed_reports": {
+      "step1": {
+        "case.xml": "43962176097caceab5d5ae0042ae820876aa322c2ff31d3bd6cbe5f77ae1a51f",
+        "case.evolution.json": "06286c2f61970e8bbf34ca883862b544d16c56847b8147e5c75b4531d549e05c",
+        "solver.log": "005012ebafe8f2bb36dd172acbcbe86ee4581f0a6b187d9b049cee987ad22dbe"
+      },
+      "step2": {
+        "case.xml": "93cfe182b2e5515b147c51a2d3ed6b890e7706c5dbe764f02606f38c0d87e119",
+        "case.evolution.json": "2efc151d980336372d797912481ff744dc32b8d96cc67cd8c7d5ccb31267a76a",
+        "solver.log": "f8652dd56cc86eee714789addd1ef712936368327686d17f8b344865cafa59ce"
+      },
+      "rollback": {
+        "case.xml": "b65ad8f6c3aad607002b17adb477e09e2e839ef2ea96a306a2ae9ac390146723",
+        "case.evolution.json": "79338f38232a9d4c7d4ca709ebaf4b12da223fad314bec03e6f55996e1678cc2",
+        "solver.log": "13885523917fb6dca74506cf710454ef8a094206706104c10ba7ed6aa93aae79"
+      }
+    },
+    "previous_controller_failure": {
+      "execution_sha256": "6630a2af6184b5cd202609fd262c7db4b5f4d57dcad92eb7c3bc8f14cb46a527",
+      "log_sha256": "c24601f3374d88c3356ff46dae76cf420a63a89ba03c6b0bf135f81c5ac63150"
+    }
+  },
+  "work_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/profile-v1",
+  "scope": "two accepted target steps replayed exactly with genuine restart,one zero-acceptance rejection; physical pressure gate unchanged; output policy external only"
+}

@@ -1,5 +1,23 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-12: all six retained actual-target pressure corrections, absolute
+> telescopes and signed load images reconstruct with consistent mass and tight
+> action/pressure bounds. The leading initial target image is represented inner
+> linear/molecular shear, distinct from CT10's strip ranking. Two accepted replay
+> steps and one deliberate rejection preserve CT11 states, stages, CSR bytes and
+> genuine histories; complete scalar audits and limited lossless retention pass.
+> The one prospectively selected first-inner-slab static contrast has62,533 slots
+> but requires40,497,972 predictor factor entries, above the unchanged40M cap.
+> The independent evolved q64 aggregate diagnostic also remains blocked at16GiB.
+> CT11's absolute-pressure uncertainty failure is unchanged, and the .407 CPU,
+> wall-time and output forecasts remain no-go. Actual physical scope remains
+> T=.002. No longer target or terrain trajectory was run. Fresh closed resources
+> pass at14 project/18 aggregate workers. See [CT-Accepted-12](cao-tamura-accepted-12.md).
+> Next: native no-solve CSR export and a bounded guard-preserving factor-ordering
+> assessment for that exact selected contrast; this alone cannot close pressure
+> uncertainty or the roughly10.8-fold campaign throughput gap. Historical curved,
+> physical-interface and experimental-applicability gates remain independent.
+
 > CT-Accepted-11: the opt-in native-owner physical-scalar observer passes24
 > old/new fixture/control comparisons with zero primitive difference and all-row
 > reconstruction below2e-10. All four60,907-slot target capacity controls pass

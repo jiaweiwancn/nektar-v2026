@@ -1,0 +1,83 @@
+{
+  "missing_step": {
+    "status": "fail",
+    "reasons": [
+      "missing_time:0.001"
+    ],
+    "scope": "read-only reconstruction and signed attribution; no physical uncertainty reclassification"
+  },
+  "missing_component": {
+    "status": "fail",
+    "reasons": [
+      "component_coverage:0.001"
+    ],
+    "scope": "read-only reconstruction and signed attribution; no physical uncertainty reclassification"
+  },
+  "bad_row_pass_label": {
+    "status": "fail",
+    "reasons": [
+      "block_reconstruction:0.001"
+    ],
+    "scope": "read-only reconstruction and signed attribution; no physical uncertainty reclassification"
+  },
+  "bad_pressure_pass_label": {
+    "status": "fail",
+    "reasons": [
+      "reconstruction:0.001"
+    ],
+    "scope": "read-only reconstruction and signed attribution; no physical uncertainty reclassification"
+  },
+  "wrong_gauge": {
+    "status": "fail",
+    "reasons": [
+      "pressure_level:0.001"
+    ],
+    "scope": "read-only reconstruction and signed attribution; no physical uncertainty reclassification"
+  },
+  "bad_native_action": {
+    "status": "fail",
+    "reasons": [
+      "native_action:0.001"
+    ],
+    "scope": "read-only reconstruction and signed attribution; no physical uncertainty reclassification"
+  },
+  "nonfinite_common_pressure": {
+    "status": "fail",
+    "reasons": [
+      "nonfinite"
+    ],
+    "scope": "read-only reconstruction and signed attribution; no physical uncertainty reclassification"
+  },
+  "missing_common_time": {
+    "status": "fail",
+    "reasons": [
+      "common_time"
+    ],
+    "scope": "read-only reconstruction and signed attribution; no physical uncertainty reclassification"
+  },
+  "invalid_quadrature_pass_label": {
+    "status": "fail",
+    "reasons": [
+      "quadrature"
+    ],
+    "scope": "read-only reconstruction and signed attribution; no physical uncertainty reclassification"
+  },
+  "omit_nonlinear_normal": {
+    "status": "pass",
+    "expected": "wrong signed free-row residual",
+    "maximum_wrong_row_defect": 0.028574573085848154,
+    "limit": 2e-10
+  },
+  "reverse_natural_traction": {
+    "status": "pass",
+    "expected": "wrong signed free-row residual",
+    "maximum_wrong_row_defect": 0.07988942056823715,
+    "limit": 2e-10
+  },
+  "omit_augmented_pressure": {
+    "status": "pass",
+    "expected": "wrong signed free-row residual",
+    "maximum_wrong_row_defect": 0.028574495872829613,
+    "limit": 2e-10
+  }
+}
