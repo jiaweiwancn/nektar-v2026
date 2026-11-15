@@ -38,7 +38,7 @@ RANSWallEvolutionPatch::SparseFlowResult RANSWallEvolutionPatch::SparseFlowCorre
     const int n=flow.rows.size(),np=n-nv;auto r=SparseFlowBlocks(flow,nv);
     if(event)event("momentum_attempt");
     std::vector<int> groups;
-    if(PredictorOrdering()==SparsePredictorOrdering::ScotchVectorND0V1)
+    if(PredictorOrdering()==SparsePredictorOrdering::ScotchVectorNDKeepV1)
     {groups.resize(nv);for(int i=0;i<nv;++i)groups[i]=flow.rows[i]%size[0];}
     SparseFactor momentum(r.a,false,PredictorOrdering(),groups),mass(r.m,true);
     r.predictorFill=momentum.FactorNonZeros();r.massFill=mass.FactorNonZeros();

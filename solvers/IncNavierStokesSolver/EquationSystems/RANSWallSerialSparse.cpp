@@ -176,11 +176,11 @@ SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass,SparsePredict
     RANSWallTiming::Scope timing("sparse.factorize");
     Require(m.Rows()>0 && m.Rows()==m.Columns(),"sparse factor shape");m.Finalize();
     Require(!positiveMass || ordering==SparsePredictorOrdering::COLAMD,"predictor ordering cannot change mass LDLT");
-    Require((ordering==SparsePredictorOrdering::ScotchVectorND0V1)==!groups.empty(),"explicit vector grouping required only for ScotchVectorND0V1");
+    Require((ordering==SparsePredictorOrdering::ScotchVectorND0V1 || ordering==SparsePredictorOrdering::ScotchVectorNDKeepV1)==!groups.empty(),"explicit vector grouping required only for ScotchVectorND0V1");
 #ifdef NEKTAR_RANS_HAVE_EIGEN_SPARSE
     using Row=Eigen::SparseMatrix<double,Eigen::RowMajor,int>;
     Eigen::Map<const Row> map(m.Rows(),m.Columns(),m.NonZeros(),m.Pointers().data(),m.Indices().data(),m.Values().data());
-    if(ordering==SparsePredictorOrdering::ScotchND0V1 || ordering==SparsePredictorOrdering::ScotchVectorND0V1)
+    if(ordering==SparsePredictorOrdering::ScotchND0V1 || ordering==SparsePredictorOrdering::ScotchVectorND0V1 || ordering==SparsePredictorOrdering::ScotchVectorNDKeepV1)
     {
         m_impl->oldToNew=SparseScotchPermutation(m,groups);
         std::vector<Eigen::Triplet<double,int>> entries;entries.reserve(m.NonZeros());
@@ -210,7 +210,14 @@ SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass,SparsePredict
         };
         if(ordering==SparsePredictorOrdering::COLAMD)factor(m_impl->lu);
         else if(ordering==SparsePredictorOrdering::AMD)factor(m_impl->amd);
-        else factor(m_impl->natural);
+        else
+        {
+            // Retain the supplied ND order. In installed Eigen this flag
+            // disables column-etree postordering and selects heap-relaxed
+            // supernodes only; generic LU arithmetic and pivot threshold stay.
+            m_impl->natural.isSymmetric(ordering==SparsePredictorOrdering::ScotchVectorNDKeepV1);
+            factor(m_impl->natural);
+        }
     }
     Require(m_impl->nonzeros<=40000000,"sparse factor exceeds declared40M fill budget: rows="+
         std::to_string(m.Rows())+", matrix_nnz="+std::to_string(m.NonZeros())+", factor_nnz="+
@@ -218,7 +225,8 @@ SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass,SparsePredict
     SparseReceipt("{\"event\":\"factor\",\"id\":"+std::to_string(m_impl->id)+
         ",\"rows\":"+std::to_string(m.Rows())+",\"matrix_nnz\":"+std::to_string(m.NonZeros())+
         ",\"factor_nnz\":"+std::to_string(m_impl->nonzeros)+",\"mass\":"+(positiveMass?"true":"false")+
-        ",\"ordering\":\""+(positiveMass?std::string("LDLT"):ordering==SparsePredictorOrdering::ScotchVectorND0V1?
+        ",\"ordering\":\""+(positiveMass?std::string("LDLT"):ordering==SparsePredictorOrdering::ScotchVectorNDKeepV1?std::string("ScotchVectorNDKeepV1"):
+            ordering==SparsePredictorOrdering::ScotchVectorND0V1?
             std::string("ScotchVectorND0V1"):ordering==SparsePredictorOrdering::ScotchND0V1?
             std::string("ScotchND0V1"):ordering==SparsePredictorOrdering::COLAMD?std::string("COLAMD"):
             ordering==SparsePredictorOrdering::AMD?std::string("AMD"):std::string("Natural"))+"\"}");

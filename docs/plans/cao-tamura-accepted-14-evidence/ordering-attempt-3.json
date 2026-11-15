@@ -1,0 +1,11 @@
+{
+  "schema": "CT14ProspectiveOrderingAttemptV3",
+  "policy": "ScotchVectorNDKeepV1",
+  "preserved_attempt2": {"directory": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-14-20261115/capacity-v2", "result_sha256": "e33ccc2470fe64ea9b85f1f625200e204ae5d694897042df0b51ef51aaf99987", "original_factor_entries": 40119892, "CPU_seconds": 3.527842, "peak_address_space_KiB": 1118900},
+  "diagnosis": "Vector grouping reduced fill742,295 entries but still exceeds40M. Installed Eigen SparseLU.h analyzePattern lines545-568 postorders the column elimination tree after NaturalOrdering; the supplied ND order is therefore not retained. m_symmetricmode is used only there and at lines668-671 to choose heap-relaxed supernodes. Generic numerical LU/pivot threshold is unchanged by this analysis flag.",
+  "causal_change": "Keep the exact same quotient graph,Scotch strategy,seed and expansion. For this separately named policy only,set Eigen SparseLU isSymmetric(true) before analyzePattern to retain external ordering and use its non-postordered etree supernode routine. This is NOT a symmetric-matrix solve or LDLT substitution; use complete nonsymmetric matrix and generic pivoted LU. Canonical coefficient roundtrip and residual/refinement remain mandatory.",
+  "fixed": "Every physical input,matrix coefficient,zero handling,mask,canonical field ID,scaling,pivot threshold,consistent mass,G/D/C,scalar/preconditioner algorithm and acceptance bound",
+  "controls": "Same four canonical systems plus actual/tiny/cancelling RHS and independently manufactured nonsymmetric48-row grouped solve; operator/update/restart/rollback/incompatible-history qualification required before admission",
+  "limits": {"per_factor_CPU_soft": 600, "per_factor_CPU_hard": 605, "per_factor_wall": 900, "factor_entries": 40000000, "AS_bytes": 17179869184},
+  "no_sweep": "One code-supported analysis correction; earlier failed policies remain reproducible and are not rerun. All cumulative CT14 resources stay charged to original allocation."
+}

@@ -27,7 +27,7 @@ int main()
         }
         vector.Finalize();const auto vp=SparseScotchPermutation(vector,groups);
         Require(vp==SparseScotchPermutation(vector,groups) && vp!=groups,"vector permutation control has no rearrangement");
-        const auto vx=SparseFactor(vector,false,SparsePredictorOrdering::ScotchVectorND0V1,groups).Apply(vector.Apply(known));
+        const auto vx=SparseFactor(vector,false,SparsePredictorOrdering::ScotchVectorNDKeepV1,groups).Apply(vector.Apply(known));
         for(int i=0;i<48;++i)Require(std::abs(vx[i]-known[i])<2e-13,"vector ND solve differs from independent manufactured values");
         bool bad=false;try{m.Entry(0,0)=0.;}catch(const std::exception&){bad=true;}Require(bad,"finalized matrix must be immutable");
         bad=false;try{SparseMatrix invalid(-1,2);}catch(const std::exception&){bad=true;}Require(bad,"invalid sparse shape accepted");
