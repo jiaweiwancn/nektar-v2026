@@ -1,0 +1,13 @@
+{
+  "schema": "CT12ReadOnlySolveWorkAmendmentV1",
+  "before_new_diagnostic_data": true,
+  "retained_attempt": "pressure-v1; interrupted only the owned read-only process; no native trajectory or history generated",
+  "observed_phase": "traceback at solve(rc,continuity), after total pressure and tighter reconstruction had completed",
+  "issue": "relative-only normalization forced tiny continuity noise to a unit RHS with zero unscaled absolute tolerance; scipy maxiter counted restart cycles, unlike native total-iteration bound",
+  "correction": "read-only GMRES restart80,max12cycles (<=960iterations); unscaled absolute algebraic tolerance1e-25, tighter1e-27; retain relative2e-12 and2e-14 and explicit true residual; progress/cost saved per solve",
+  "pressure_gate": "unchanged maximum scaled reconstruction,component-sum and tighter-repeat difference<1e-8; continuity and storage images now also have explicit tighter-repeat checks",
+  "all_row_gate": "unchanged2e-10 scaled reconstruction/action tolerance; no physical or historical threshold changed",
+  "governing": "pinned CT9 runtime,states,operators,consistent mass,physical inputs and method remain unchanged",
+  "scope": "diagnostic numerical work control only; not radicand,coefficient,field or constitutive flooring; not a new governing solver component",
+  "budget": "all failed/partial diagnostic work remains charged to the original finite CT12 package; no new time-step or mesh trajectory"
+}

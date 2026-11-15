@@ -20,6 +20,7 @@ from ct_accepted_open import probe,require
 from ct_accepted_feasibility import write_json
 from rans_request_manifest import RequestManifest,sha,runtime_identity
 from run_cls_epawf_picard import set_parameter,write
+PROGRESS=None
 
 
 def maximum(v):
@@ -56,13 +57,22 @@ class Frozen:
     def solve(self,rhs,label,rtol=2e-12,operator=None):
         rhs=np.asarray(rhs);mag=float(np.linalg.norm(rhs))
         if mag==0:return np.zeros(self.S.shape[0])
-        op=self.S if operator is None else operator;ticks=[]
+        op=self.S if operator is None else operator;ticks=[];started=time.process_time()
+        absolute=1e-27 if rtol<2e-12 else 1e-25
+        if PROGRESS:write_json(PROGRESS,dict(label=label,rhs_norm=mag,rhs_maximum=maximum(rhs),relative_tolerance=rtol,absolute_tolerance=absolute,phase='begin'))
+        print('CT12 diagnostic solve',label,'rhs',mag,flush=True)
         kw={'rtol' if 'rtol' in inspect.signature(gmres).parameters else 'tol':rtol}
-        p,info=gmres(op,rhs/mag,M=self.P,atol=0.,restart=80,maxiter=1000,
+        # scipy counts restart cycles; 12x80 stays below the native component's
+        # 1000-iteration work ceiling. Tiny continuity noise also needs the
+        # explicit UNSCALED absolute tolerance, not relative-only normalization.
+        p,info=gmres(op,rhs/mag,M=self.P,atol=absolute/mag,restart=80,maxiter=12,
                      callback=lambda x:ticks.append(float(x)),callback_type='pr_norm',**kw)
         p*=mag;res=op@p-rhs;relative=float(np.linalg.norm(res))/mag
-        self.receipts.append(dict(label=label,iterations=len(ticks),relative_residual=relative,maximum_true_residual=maximum(res)))
-        require(info==0 and relative<=2e-10,'true pressure residual:'+label+':'+str(relative))
+        receipt=dict(label=label,iterations=len(ticks),relative_residual=relative,maximum_true_residual=maximum(res),
+            absolute_tolerance=absolute,rhs_maximum=maximum(rhs),CPU=time.process_time()-started,info=int(info))
+        self.receipts.append(receipt)
+        if PROGRESS:write_json(PROGRESS,dict(receipt,phase='end'))
+        require(info==0 and maximum(res)<=2e-10*maximum(rhs)+absolute,'true pressure residual:'+label+':'+str(receipt))
         return p
 
     def image(self,load,label,rtol=2e-12):
@@ -78,6 +88,7 @@ class Frozen:
 
 
 def main():
+    global PROGRESS
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('ct10','ct11','runtime','contract','output'):p.add_argument('--'+k,type=Path,required=True)
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0))
@@ -94,6 +105,7 @@ def main():
     manifest=RequestManifest(a.output,dict(schema='CT12TargetPressureV1',contract=sha(a.contract),source=sha(Path(__file__)),
         target=sha(a.ct11/'target-v1/results.json'),preflight=sha(a.ct10/'target-preflight-v1/results.json'),
         initial=sha(initial_path),runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),scope='read-only captured target operators/states; extra diagnostic solves only'))
+    PROGRESS=a.output/'last-solve.json'
     initial_mom=initial['ct10_momentum'];actual0={k:np.asarray(v) for k,v in initial_mom['actual'].items()}
     analytic0={k:np.asarray(v) for k,v in initial_mom['analytic'].items()};nm=initial_mom['momentum_size']
     cache={exact_vector_hash(init):(initial_mom,dict(path=str(initial_path),sha256=sha(initial_path),reused=True))}
@@ -139,6 +151,9 @@ def main():
             native=np.asarray(s['pressure_increment']);error=fr.measure(dpi-native);unc=fr.measure(tight-dpi)
             require(error['maximum_scaled_value']<1e-8 and unc['maximum_scaled_value']<1e-8,'pressure reconstruction/repeat uncertainty')
             continuity=fr.solve(fr.rc,'continuity');st=fr.image(storage_global,'storage-lifting')
+            continuity_unc=fr.measure(fr.solve(fr.rc,'continuity-tighter',2e-14)-continuity)
+            storage_unc=fr.measure(fr.image(storage_global,'storage-lifting-tighter',2e-14)-st)
+            require(max(continuity_unc['maximum_scaled_value'],storage_unc['maximum_scaled_value'])<1e-8,'small-RHS image uncertainty')
             signed={};per_component={}
             for key,v in actual.items():
                 pa=fr.image(analytic0[key],'continuous/'+key)
@@ -167,6 +182,7 @@ def main():
                 initial_weak_continuity_maximum=maximum(fr.rc),native_increment=fr.measure(native),
                 reconstructed_increment=fr.measure(dpi),reconstruction=error,tighter_repeat=unc,signed_sum_error=sum_error,
                 continuity=fr.measure(continuity),storage_and_lifting=fr.measure(st),
+                continuity_tighter=continuity_unc,storage_lifting_tighter=storage_unc,
                 backward_velocity_storage_maximum=maximum(storage_expected),storage_lift_reconstruction=maximum(storage-storage_expected),
                 small_step_momentum_image=fr.measure(mass_limit),finite_alpha_remainder=fr.measure(dpi-continuity-mass_limit),
                 telescope=telescope,absolute_pressure_change=fr.measure(absolute),stage_pressure=stage_pressure,

@@ -86,11 +86,33 @@ def main():
     budget=bounded_budgets(a.probe,a.output/'step2',initial,reports[2],c)
     require(budget['gate']['status']=='pass','actual replay physical-budget audit failed');result['budgets']=budget
     audit_receipt=a.output/'independent-audit.json';write_json(audit_receipt,budget);required[str(audit_receipt.relative_to(a.output))]=sha(audit_receipt)
+    controls={'native','q48f16','q64f16','q64f32'}
+    for name in controls:
+        directory=a.output/'step2'/name
+        required[str((directory/'case.xml').relative_to(a.output))]=sha(directory/'case.xml')
+        eligible.extend(f for f in directory.iterdir() if f.is_file() and f.name!='case.xml')
+    accepted_categories={}
+    for step in (1,2):
+        directory=a.output/('step'+str(step));sizes=dict(native=0,audit=0)
+        for f in directory.rglob('*'):
+            if f.is_file():sizes['audit' if f.relative_to(directory).parts[0] in controls else 'native']+=f.stat().st_size
+        accepted_categories[str(step)]=sizes
     binding=dict(model='A95',case=c,governing_sha256=sha(a.runtime/'IncNavierStokesSolver'),historical_report_sha256=old['native_report_sha256'],
         initial_sha256=old['actual_initial_sha256'],last_accepted_sha256=exact_vector_hash(reports[2]['state']),native_rejected_report_sha256=sha(dest/'case.evolution.json'))
     proof=dict(status='pass',binding=binding,required_files=required,
         prerequisite='every accepted state,exact stage fields/operators,history,rejection and independent final budget audited before pruning; required reports/histories remain uncompressed')
     result['retention']=retain(a.output,a.output.parent/'retention-v1',eligible,proof)
+    index=n.read(a.output.parent/'retention-v1/index.json');category={}
+    for step,sizes in accepted_categories.items():
+        category[step]={}
+        for lane in ('native','audit'):
+            subset={k:v for k,v in index['files'].items() if Path(k).parts[0]=='step'+step and (Path(k).parts[1] in controls)==(lane=='audit')}
+            blobs={v['blob'] for v in subset.values()}
+            compressed=sum((a.output.parent/'retention-v1'/f).stat().st_size for f in blobs)
+            category[step][lane]=dict(raw_bytes=sizes[lane],eligible_bytes=sum(v['bytes'] for v in subset.values()),unique_compressed_bytes=compressed,
+                retained_bytes=sizes[lane]-sum(v['bytes'] for v in subset.values())+compressed)
+    result['retention']['accepted_only_categories']=category
+    result['retention']['forecast_scope']='Accepted-only categories exclude the intentionally duplicate rollback payload; failure dedup cannot be counted as ordinary evolution savings.'
     result.update(status='pass',scope='two accepted target steps replayed exactly with genuine restart,one zero-acceptance rejection; physical pressure gate unchanged; output policy external only')
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json','independent-audit.json']);return 0
 if __name__=='__main__':raise SystemExit(main())
