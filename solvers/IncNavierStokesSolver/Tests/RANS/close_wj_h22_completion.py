@@ -22,7 +22,7 @@ def close(root):
     for p in original['absent']:assert not Path(p).exists()
     parent=load(verify(book['parent_accounting']));assert parent['closed']and parent['total_charged_seconds']==book['carry']['total']
     assert parent['target_halt']and parent['integrity_halt']
-    counts=load(root/'science/phase-analysis-v1/counts.json');assert counts['attempts']==7 and counts['total_roles']==70
+    counts=load(root/'science/phase-analysis-v2/counts.json');assert counts['attempts']==7 and counts['total_roles']==70
     assert load(root/'science/whole-field-scatter-v1/result.json')['status']=='PASS'
     pub=root/'publication-v1'
     for v in load(pub/'manifest.json')['files']:verify(v)
@@ -45,7 +45,7 @@ def close(root):
         new_vector_packets=4,aggregate_vector_packets=7,new_phase_owner_roles=32,new_predecessor_roles=8,
         aggregate_phase_owner_roles=56,aggregate_predecessor_roles=14,new_CP0=0,new_spatial_or_history_productions=0,
         new_native_builds=0,aggregate_native_builds=1,new_scientific_steps=0,kernel_requests=0,saved_matrix_operations=0,
-        additional_Python_mass_solves=0,new_focused_Python_methods=19,new_whole_scatter_synthetic_checks=1,
+        additional_Python_mass_solves=0,new_focused_Python_methods=21,new_whole_scatter_synthetic_checks=1,
         original_M2_execution_qualification='NOT_COMMITTED_UNCHANGED',subsequent_M2_startup_verification='PASS')
     atomic(out/'execution-counts.json',execution)
     for p in sorted((root/'operations').glob('*/receipt.json')):

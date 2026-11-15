@@ -11,6 +11,7 @@ from wj_h12_phase import decompositions,identity as algebra_identity,cancellatio
 from wj_h22_replay import DT,END,PHASES,read_completed,recovery,phases,flow_vectors
 from wj3_measure import checkpoint_payload
 from wj_h9_local import same
+from wj_h22_linear_roundoff import dev_bound,propagated_identity
 
 NAMES=('U','G','devG','trace_G','grad_k','grad_epsilon','grad_pi','k','epsilon','pi','mechanical_pressure',
        'R','covariance','tau','B','d','nu_eff','nu_d','a','g','mhat','Praw','N','F_N','transverse')
@@ -46,12 +47,17 @@ def flow_local(structure,states,values,increments,owners):
         base=values['C'][j];tau=base['k']/base['epsilon']
         assert values['F'][j]['k']==base['k']and values['F'][j]['epsilon']==base['epsilon']
         Bp=tau*dev(p['G']);Bc=tau*dev(c['G']);Bg=tau*dev(G)
+        gradient_check=algebra_identity(G-p['G']-c['G'],[values['F'][j]['G'],base['G'],p['G'],c['G']],1.)
+        inherited=abs(tau)*dev_bound(gradient_check['bound'])
+        propagated_gradient_residual=tau*dev(np.asarray(gradient_check['residual']))
         r=dict(owner=owner,predictor_U=p['U'],pressure_U=c['U'],total_U=U,
              predictor_G=p['G'],pressure_G=c['G'],total_G=G,
              predictor_B=Bp,pressure_B=Bc,total_B=Bg,tau_C=tau,
              U_identity=algebra_identity(U-p['U']-c['U'],[values['F'][j]['U'],base['U'],p['U'],c['U']],1.),
-             G_identity=algebra_identity(G-p['G']-c['G'],[values['F'][j]['G'],base['G'],p['G'],c['G']],1.),
-             B_linear_identity=algebra_identity(Bg-Bp-Bc,[Bg,Bp,Bc],1.),
+             G_identity=gradient_check,
+             B_linear_identity=propagated_identity(Bg-Bp-Bc,[Bg,Bp,Bc],inherited,1.),
+             B_gradient_roundoff_transport_identity=algebra_identity(Bg-Bp-Bc-propagated_gradient_residual,
+                 [Bg,Bp,Bc,propagated_gradient_residual],1.),
              coefficient_to_gradient_identity=algebra_identity(G-total['G'],[values['F'][j]['G'],base['G'],total['G']],1.),
              scope='genuine linear increments, not predictor-only or pressure-only constitutive states')
         if 'B'in values['F'][j]and 'B'in base:
@@ -123,8 +129,9 @@ def run(root,levels=('C','M','F'),out_name='phase-analysis-v1',source_index=None
         for z in levels:
             selected=[next(v for v in f['owners']if v['owner']['owner']['geometry']==geo)for f in flows if f['level']==z]
             parts={name:sum(np.asarray(v[name])for v in selected)for name in ('predictor_U','pressure_U','total_U','predictor_G','pressure_G','total_G','predictor_B','pressure_B','total_B')}
-            checks={name:algebra_identity(parts['total_'+name]-parts['predictor_'+name]-parts['pressure_'+name],
-                    [parts['total_'+name],parts['predictor_'+name],parts['pressure_'+name]],1.)for name in ('U','G','B')}
+            checks={name:propagated_identity(parts['total_'+name]-parts['predictor_'+name]-parts['pressure_'+name],
+                    [parts['total_'+name],parts['predictor_'+name],parts['pressure_'+name]],
+                    sum(np.asarray(v[{'U':'U_identity','G':'G_identity','B':'B_linear_identity'}[name]]['bound'])for v in selected),1.)for name in ('U','G','B')}
             if windows[z,geo]['B']['status']=='PASS':
                 checks['actual_cumulative_flow_B']=algebra_identity(windows[z,geo]['B']['cumulative']['flow']-parts['total_B'],
                     [windows[z,geo]['B']['cumulative']['flow'],parts['total_B']],1.)

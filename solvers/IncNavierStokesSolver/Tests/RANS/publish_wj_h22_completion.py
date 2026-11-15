@@ -13,7 +13,7 @@ from wj_h22_replay import read_completed
 from run_wj_h22_completion import PARENT,usage
 
 def publish(root):
-    out=root/'publication-v1';out.mkdir();analysis=root/'science/phase-analysis-v1'
+    out=root/'publication-v1';out.mkdir();analysis=root/'science/phase-analysis-v2'
     counts=load(analysis/'counts.json');assert counts['attempts']==7 and counts['total_roles']==70
     assert counts['phase_owner_roles']==56 and counts['predecessor_owner_roles']==14
     copies=[]
@@ -88,6 +88,7 @@ def publish(root):
         copy(root/'source/solvers/IncNavierStokesSolver/Tests/RANS'/n,'source/'+n)
     copy(Path(__file__),'source/'+Path(__file__).name)
     copy(Path(__file__).with_name('check_wj_h22_completion_scatter.py'),'source/check_wj_h22_completion_scatter.py')
+    for p in sorted((root/'passive-analysis-v2').glob('*.py')):copy(p,'source/passive-analysis-v2/'+p.name)
     pairs=load(analysis/'cross-level-telescopes.json');transitions=load(analysis/'transition-decompositions.json');flows=load(analysis/'cumulative-flow-split.json')
     principal=[dict(geometry=r['geometry'],pair=r['pair'],**r['quantities']['mhat'])for r in pairs]
     fixed=[dict(geometry=r['geometry'],pair=r['pair'],**r['quantities']['a'])for r in pairs]
@@ -126,8 +127,16 @@ def publish(root):
         rows=list(identities(load(analysis/(name+'.json'))))
         algebra[name]=dict(identities=len(rows),maximum_error=max(v['maximum_error']for v in rows),
             maximum_bound_utilization=max(v['maximum_error']/v['maximum_bound']for v in rows),status='PASS')
+    composed=[]
+    for f in load(analysis/'genuine-flow-increments.json'):
+        for r in f['owners']:
+            b=r['B_linear_identity']
+            composed.append(dict(level=f['level'],step=f['step'],geometry=r['owner']['owner']['geometry'],
+                maximum_error=b['maximum_error'],maximum_bound=b['maximum_bound'],
+                frozen_direct_bound_exceeded_components=b['direct_bound_exceeded_count'],
+                status=b['status'],proof='signed residual equals tau_C dev(certified G residual) within unchanged primitive roundoff'))
     findings=dict(status='PASS_COMPLETE_FINITE_ATTRIBUTION',principal=principal,fixed_action=fixed,early_adjacent_difference_changes=lead,
-        algebra=algebra,undefined_roles=counts['undefined_phase_owner_roles'],
+        algebra=algebra,composed_roundoff=composed,undefined_roles=counts['undefined_phase_owner_roles'],
         interpretation='actual sequential increments and complete equal-window signed sums; not nonlinear percentages or unique counterfactual causation',
         later_time_stages='NOT_RUN; H21 .01/.02 remain endpoint-only evidence',H20_absolute_screens='REUSED_AFTER_EXACT_ENDPOINT_REPLAY; NOT_NEW_COMPARISONS',
         historical_H22_observer_failure='UNCHANGED',M2_status='NEW_STARTUP_VERIFICATION_PASS; ORIGINAL_EXECUTION_NOT_COMMITTED',
