@@ -152,7 +152,6 @@ std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSh
     if(RANSUsesNeutralComposite(s))
     {
         std::string projection;s->LoadSolverInfo("RANSOpenReferenceProjection",projection,"FunctionsL2V1");
-        Require(!storedReference || projection=="ConstrainedRadialV1","stored reference replay requires its declared ConstrainedRadialV1 policy");
         Require(projection=="FunctionsL2V1" || projection=="ConstrainedRadialV1","unknown neutral reference projection");
         std::string reference;s->LoadSolverInfo("RANSOpenReference",reference,"NeutralCompositeV1");
         std::string sink;s->LoadSolverInfo("RANSWallDisplacementPolicy",sink,"UnshiftedV1");
@@ -200,6 +199,7 @@ RANSWallEvolutionData LoadRANSAcceptedOpenData(const LibUtilities::SessionReader
         data.boundary[patch.K()]=[ref](const RANSWallCoordinate &p,double){return ref->At(p[2],p[2]>ref->H)[1];};
         data.boundary[patch.Epsilon()]=[ref](const RANSWallCoordinate &p,double){return ref->At(p[2],true)[2];};
         std::string projection;s->LoadSolverInfo("RANSOpenReferenceProjection",projection,"FunctionsL2V1");
+        Require(!storedReference || projection=="ConstrainedRadialV1","stored reference replay requires its declared ConstrainedRadialV1 policy");
         if(projection=="ConstrainedRadialV1")
         {
             if(storedReference)

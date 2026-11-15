@@ -1,0 +1,31 @@
+{
+  "schema": "CT13IndependentInitialShearImageV2",
+  "scope": "read-only comparison on the one already selected mesh; useful even if predictor ordering blocks all evolution. Does not admit static/physical continuation or claim spatial order.",
+  "meshes": [
+    "original60907",
+    "selected62533"
+  ],
+  "inputs": "actual stored initial coefficients and fixed reference; corrected no-factor nativeG/D/freeM and pressure physical masses/constants; same continuous physical input and native signed analytic-versus-represented loads",
+  "loads": [
+    "inner volume linear_shear plus molecular_shear represented-minus-continuous",
+    "total represented-minus-continuous momentum"
+  ],
+  "action": "Pi=-[D Mfree^-1 G]^-1 D Mfree^-1 r; actual C0/unused-gauge exclusion checked; no predictor factor needed, no dense Schur or M^-1G columns",
+  "norm": "exact native physical P2 pressure mass on the identical flat physical domain,whole/inner/outer signed mean,RMS and variation. Full fine modes retained. Magnitudes/alignments compared,not coefficient positions or a formal rate; not a common-test convergence certificate.",
+  "checks": {
+    "load_reconstruction": 2e-10,
+    "pressure_scaled_repeat": 1e-08,
+    "volume_constant_identity": 2e-10,
+    "governing_quadrature": "unchanged native32/8/12/12/64; no evolved spatial qualification from this static diagnostic"
+  },
+  "stopping": "one immutable comparison only; stop on domain/row/solve/memory failure; no extra mesh,time-step or physical solve",
+  "budget": {
+    "process_CPU_seconds": 1200,
+    "active_wall_seconds": 1800,
+    "output_GiB": 1
+  },
+  "interpretation": "report whether initial shear pressure image decreases beyond numerical uncertainty. Actual Pi time-step uncertainty and interface margin require the separately gated physical pair; no surrogate admission.",
+  "parent_contract": "initial-image-contract-v1.json",
+  "comparison": "information only: ratio<1 is an observed magnitude decrease; resolved reduction additionally requires baseline-selected RMS > max(1e-8,10 times the sum of both scaled physical repeat upper bounds). No admission or convergence order follows.",
+  "repeat_bound": "10 times maximum pressure coefficient difference/u_tau^2 bounds physical values for the9 Modified_A P2 local tensor functions (each<=1); exact native pressure masses include all fine modes."
+}
