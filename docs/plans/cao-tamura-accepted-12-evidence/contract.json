@@ -1,0 +1,51 @@
+{
+  "schema": "CT12TargetPressureAndFeasibilityV1",
+  "starting_revision": "b62e59365a82f60d987c51ba1db478ff7314fe0b",
+  "review": "fetched remote matches clean dedicated Mac worktree; no intervening changes; existing CT11 isolated Linux source is clean",
+  "physical_manifest": "docs/plans/cao-tamura-accepted-8-evidence/physical-reference-manifest.json",
+  "physical_manifest_sha256": "004bc0fc82054296a68d56de77751fc1f0a41570ee16b0a174ae8087f262d296",
+  "physical_definition": "exact central Original/Natural A95; physical floor0,H7.5mm,d3.5mm,fixed IDs012 fit,normalization,u_tau,z0,hs; actual evolving K; SamePhysicalWallDisplacedAcceptedV1; DisplacedNeutralCompositeV1; finite inner nu/high-Re outer; nonconstant inner k,dependent epsilon,full signed raw-gradient production and covariance; full-height inlet,RN top,absolute nonlinear outlet traction; IMEX1 single sweep,cacheOff",
+  "governing": {
+    "runtime": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime",
+    "sha256": "5830a2cd8a4b0b5b12095555171eb28bc0f63e1daa97652d63da244c3fd808c7",
+    "component": "CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000",
+    "initial_diagnostic_runtime": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime",
+    "probe_sha256": "20236b14eb4a90dea0f2a9a38b92e41135a83e9241c978fb265e185098f586e8",
+    "change": "none initially; prefer existing native aggregate/row exports and captured CSR matrices"
+  },
+  "diagnosis": {
+    "target": "actual unchanged 60907-slot,930-element P4/P2 target x[-25,30],roof20,H=.1875; no strip substitution",
+    "histories": "sealed CT11 dt.001/.0005, input/flow/pre-k/accepted fields, T=.001/.002 and all six retained pressure increments",
+    "operator": "S_alpha=D M_free^-1 G/alpha-C, with consistent direct mass actions, actual masks and C/gauge checked; no dense Schur or M^-1G columns",
+    "reconstruction": "reconstruct A,G,D,C,rm,rc, native predictor and pressure correction; telescope absolute Pi; separate momentum and continuity RHS, initial momentum, evolving changes, lifting, stage effects and finite-alpha remainder",
+    "attribution": "continuous and represented on identical actual native rows; signed pressure,molecular/linear/nonlinear normal/shear,advection,rough pressure/inertia,body,top/outlet; shared interface assembled once; one-sided fluxes and prescribed reactions distinct",
+    "bounds": {"all_row_scaled": 2e-10, "pressure_scaled": 1e-8, "ordinary_relative_solve": 2e-12, "tighter_repeat_relative": 2e-14},
+    "limits": "at most10 new aggregate native load evaluations plus2 held-state quadrature controls; original full-point/dense-export guards retained; component and radial-band vectors bounded; pressure vectors stay external",
+    "extra_solves": "read-only; one representative exact coupled Schur solve if within same16GiB/40M limits; never enters a governing history",
+    "negatives": "wrong sign/missing normal stress or natural term,diagonal governing mass substitution,missing rough-pressure coupling,foreign state/history/mask or runtime,broken signed sums"
+  },
+  "profile": {
+    "method": "pinned governing runtime,NEKTAR_RANS_DETAILED_TIMING=1; fresh replay of retained dt.001 zero history as two consecutive one-step native segments toT=.002; compare to sealed CT11 two-step state/history at both times",
+    "accepted_steps": 2,
+    "rollback_control": "one additional attempted step from the replayT=.001 history with deliberate hard-audit rejection; zero additional accepted states; necessary to qualify failure capture/unchanged history under retention",
+    "timers": "exclusive times/calls for startup,geometry location/row/basis,domain/constitutive,assembly,mass/pressure/factor/solve,physical audits andI/O; nested inclusive times never summed",
+    "optimization_rule": "at mostone immutable-data reuse change only after measured material opportunity and a supported finite-campaign benefit; otherwise no speculative optimization. New governing build/equivalence required if selected; ExactStepV1 remains guarded"
+  },
+  "retention": {
+    "candidate": "LosslessSegmentCASV1, external controller only: immutable required reports/history/milestone receipts; content-addressed lossless compressed snapshot/operator blobs; exact hash-verified restore before native use/audit; no historic pruning",
+    "demonstration": "bounded two-step replay and rejected attempt; verify every original byte/hash and actual stage provenance, restart/rollback; simulate missing/changed blob and refuse pruning; only new duplicate intermediate payloads eligible after complete evidence seal",
+    "coverage": "native accepted-state checks unchanged; independent full scalar controls at final replay endpoint; audit/milestone cadence retained; full rejected candidate,stages/history/operators retained",
+    "measure": "actual bytes,peak retention,compression/dedup CPU and restore CPU; no assumed savings or removal of validity checks"
+  },
+  "static_contrast": {
+    "conditional": "only after target attribution supports a specific radial representation hypothesis; separate selection manifest before native preflight; at mostone contrast,no evolved contrast",
+    "fixed": "physical functions,normalization,ConstrainedRadialV1,P4/P2,streamwise partition,roof,quadrature,pressure convention",
+    "admission": "actual counts,reference/boundary/domain/quadrature and predictor fill/memory; blocked at16GiB,70000slots or40Mfill; no cap increase"
+  },
+  "package_budget": {"process_CPU_seconds": 12000, "active_wall_seconds": 14400, "new_output_GiB": 12, "process_address_space_GiB": 16, "numerical_families": 1, "project_workers": 16, "aggregate_workers": 72, "library_threads": 1, "compiler_jobs": 2},
+  "future_campaign": {"endpoint": 0.407, "CPU_seconds": 24000, "active_wall_seconds": 28800, "output_GiB": 24, "headroom": 0.25, "maximum_segment_steps": 32, "pair_step_limit": 2048, "admission": "not authorized by diagnosis,profiling or retention success; historical CT11 pressure gate remains failed"},
+  "forbidden": "no new timestep halving,mesh search,long target continuation,terrain,A93/E94E95 displaced transfer,EP,MPI/3D,full variable-height evolution,calibration,pressure regauging,restoration,cancellation,clipping,trace repair or extra governing sweeps",
+  "decisions": ["scientific diagnosis","diagnostic reconstruction","performance opportunity","retention qualification","static representation","campaign feasibility","physical continuation","terrain readiness"],
+  "archive": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-12-20261115",
+  "historical": "all CT4–CT11 sealed artifacts and classifications immutable; numerical flat preservation is not developed-precursor or hill validation"
+}
