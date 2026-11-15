@@ -87,6 +87,7 @@ public:
     std::string SparseBackendPacket(const Vector&,double,const RANSWallEvolutionData&,double alpha) const;
     std::string PreFactorFrozenPacket(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData&,const std::string &prefix) const;
+    void BindFrozenExportReference(const Vector&,const RANSWallEvolutionData&,double time);
     // Read-only accuracy monitor. Cached rows/targets depend only on this
     // immutable space and the stored neutral reference, never on validity.
     Vector NeutralAccuracy(const Vector&,double,const RANSWallEvolutionData&) const;
@@ -94,7 +95,7 @@ public:
     std::string PreservationIdentity(bool legacyOperator=false) const;
     std::string PreservationPacket(const Vector &state,double time,const RANSWallEvolutionData &data,
         bool basis,const std::vector<RANSWallCoordinate> &grid={},const std::vector<int> &sides={},bool ct6Primitives=false,
-        bool facesOnly=false) const;
+        bool facesOnly=false,bool *nativeAdmissible=nullptr) const;
     // Read-only, borrowed native volume rows in the same order as the legacy
     // packet. The callback must not retain rows or change the patch/state.
     // No global row catalog or element-count times global-size array is made.
@@ -645,6 +646,8 @@ private:
     LibUtilities::CommSharedPtr m_comm;
     LibUtilities::SessionReaderSharedPtr m_sparseSession;
     std::string m_linearBackend="ReplicatedDenseV1";
+    bool m_exportReferenceOnly=false;
+    void SetReferenceCore(const Vector&,const RANSWallEvolutionData&,double,double,bool);
     RANSWallPatchParameters m_parameters;
     SolverUtils::RANSWallNormalMap m_mapping;
     int m_ownershipShift=0;
@@ -746,7 +749,7 @@ private:
 // It is deliberately restricted to the new canonical flat boundary policy.
 std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSharedPtr &);
 RANSWallEvolutionData LoadRANSAcceptedOpenData(const LibUtilities::SessionReaderSharedPtr &,
-    const RANSWallEvolutionPatch &);
+    const RANSWallEvolutionPatch &,const RANSWallAlgebra::Vector *storedReference=nullptr);
 std::vector<RANSWallEvolutionFunction> RANSAcceptedOpenInitialFunctions(
     const LibUtilities::SessionReaderSharedPtr &,const RANSWallEvolutionPatch &);
 }

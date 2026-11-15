@@ -84,7 +84,8 @@ std::string RANSWallEvolutionPatch::PreFactorFrozenPacket(const Vector &raw,cons
     double alpha,double time,const RANSWallEvolutionData &data,const std::string &prefix) const
 {
     Require(SerialSparse() && !Mapped() && PimpleSingleSweep() && alpha>0 &&
-        raw.size()==Size() && history.size()==Size(),"invalid pre-factor frozen request");
+        raw.size()==Size() && history.size()==Size() && m_exportReferenceOnly &&
+        SparseFactorizationCount()==0,"invalid pre-factor frozen request");
     const auto state=ExternalLift(raw,time,data);
     auto external=ExternalConstraints(time,data);
     for(int id:m_traceIds)external.erase(offset[Epsilon()]+id);
@@ -115,7 +116,14 @@ std::string RANSWallEvolutionPatch::PreFactorFrozenPacket(const Vector &raw,cons
         maps.push_back(J::Object({{"block",J::Number(b)},{"offset",J::Number(offset[b])},
             {"local_to_global",J::Numbers(ids)},{"signs",J::Numbers(signs)},{"owners",J::List(owners)}}));
     }
-    return J::Object({{"schema",J::Quote("PreFactorFrozenCSRExportV1")},{"read_only","true"},
+    Require(SparseFactorizationCount()==0,"frozen assembly unexpectedly factorized a global system");
+    std::vector<std::string> pressureMass;
+    for(int b:{InnerPressure(),OuterPressure()})pressureMass.push_back(J::Object({
+        {"block",J::Number(b)},{"mass",save(m_sparseMass[b],b==InnerPressure()?"pressure-inner-mass":"pressure-outer-mass")},
+        {"constant",J::Numbers(m_constants[b])},{"physical_volume",J::Number(m_volumes[b])}}));
+    return J::Object({{"schema",J::Quote("PreFactorFrozenCSRExportV2")},{"read_only","true"},
+        {"whole_command_sparse_factorizations",J::Number(SparseFactorizationCount())},
+        {"reference_mass_dual_norms",J::Quote("not evaluated: diagnostic capacity only; required separately for physical admission")},
         {"factorizations","0"},{"updates","0"},{"time",J::Number(time)},{"alpha",J::Number(alpha)},
         {"identity",J::Quote(PreservationIdentity())},{"descriptor",J::Quote(m_parameters.model.Signature())},
         {"stored_slots",J::Number(Size())},{"block_sizes",J::Numbers(size)},{"offsets",J::Numbers(offset)},
@@ -125,6 +133,7 @@ std::string RANSWallEvolutionPatch::PreFactorFrozenPacket(const Vector &raw,cons
         {"input_sha256",J::Quote(RANSWallR3::Hash(raw))},{"rows",J::Numbers(flow.rows)},
         {"velocity_size",J::Number(nv)},{"external_constraints",J::Constraints(external)},
         {"fixed_reference",J::Numbers(m_reference)},{"fixed_boundary",J::Constraints(data.fixedBoundary)},
+        {"pressure_physical_mass",J::List(pressureMass)},
         {"frozen_flow_residual",J::Numbers(flow.residual)},{"signed_field_maps",J::List(maps)},
         {"frozen_flow_matrix",save(flow.csr,"system")},{"free_velocity_mass",save(r.m,"mass")},
         {"A",save(r.a,"A")},{"G",save(r.g,"G")},{"D",save(r.d,"D")},{"C",save(r.c,"C")},

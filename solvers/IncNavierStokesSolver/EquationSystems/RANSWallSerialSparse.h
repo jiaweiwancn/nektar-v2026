@@ -51,6 +51,7 @@ private:
 // Only an explicit predictor caller may choose an alternative. All existing
 // call sites (including scalar, mass and pressure preconditioner) retain COLAMD.
 enum class SparsePredictorOrdering { COLAMD, AMD, Natural };
+std::size_t SparseFactorizationCount();
 class SparseFactor
 {
 public:

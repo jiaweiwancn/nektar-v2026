@@ -537,7 +537,7 @@ void RANSWallEvolutionPatch::VisitDiagnosticVolume(const Vector &state,double ti
 }
 
 std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,double time,
-    const RANSWallEvolutionData &data,bool basis,const std::vector<RANSWallCoordinate> &grid,const std::vector<int> &sides,bool ct6Primitives,bool facesOnly) const
+    const RANSWallEvolutionData &data,bool basis,const std::vector<RANSWallCoordinate> &grid,const std::vector<int> &sides,bool ct6Primitives,bool facesOnly,bool *nativeAdmissible) const
 {
     namespace J=RANSWallSolveJson;
     Require(NewModels() && Dimension()==2 && (!Mapped() || CurvedVerification()) && m_comm->GetSize()==1,
@@ -697,6 +697,14 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         observedSides.push_back(J::Number(side));provenance.push_back(J::Numbers(geometry));
     }
     const auto audit=CompleteRestrictedAudit(state,state,0,time,data);
+    // Per-call receipt from the SAME mandatory audit serialized below. This is
+    // not a validity cache and does not omit or re-evaluate any inventory.
+    if(nativeAdmissible)
+    {
+        const auto scalar=audit.find("accepted_awf_scalar_domain"),hard=audit.find("accepted_awf_hard_admissible");
+        Require(scalar!=audit.end() && !scalar->second.empty(),"missing native scalar audit receipt");
+        *nativeAdmissible=scalar->second.front()==1. && hard!=audit.end() && !hard->second.empty() && hard->second.front()==1.;
+    }
     std::vector<std::pair<std::string,std::string>> diagnostic;
     for(const auto &[key,v]:audit)diagnostic.push_back({key,J::Numbers(v)});
     std::vector<std::string> elements;

@@ -1168,6 +1168,7 @@ std::vector<int> RANSWallEvolutionPatch::CondensableVelocity(const std::map<int,
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vector &history,double alpha,double time,
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
+    Require(!m_exportReferenceOnly,"a no-factor diagnostic reference cannot enter governing evolution");
     Require(!StaticTransmissionOnly(),"CT6 static transmission does not enable variable-height evolution");
     Require(SerialSparse() || Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
     if(PimpleSingleSweep())
@@ -1710,13 +1711,26 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ExplicitBody(const Vector
     return result;
 }
 void RANSWallEvolutionPatch::SetReference(const Vector &ref,const RANSWallEvolutionData &data,double time,double eta)
+{ SetReferenceCore(ref,data,time,eta,false); }
+void RANSWallEvolutionPatch::BindFrozenExportReference(const Vector &ref,const RANSWallEvolutionData &data,double time)
+{
+    Require(SerialSparse() && OpenBoundary() && !Mapped() && PimpleSingleSweep() && !m_exportReferenceOnly &&
+        SparseFactorizationCount()==0,"no-factor export reference requires a fresh unanchored diagnostic patch");
+    SetReferenceCore(ref,data,time,0.,true);m_exportReferenceOnly=true;
+    Require(SparseFactorizationCount()==0,"reference binding unexpectedly factorized a global system");
+}
+void RANSWallEvolutionPatch::SetReferenceCore(const Vector &ref,const RANSWallEvolutionData &data,double time,double eta,bool exportOnly)
 {
     Require(!m_evaluation,"reference generation cannot change within an evaluation scope");
     Require(eta==0 || eta==1,"only fixed global eta=0 or eta=1 is supported");
     Require(!MatchingEnabled() || eta==0,"every upstream transition/terrain run requires eta=0");
-    const auto raw=Residual(ref,ref,0,time,data,false);const auto norms=Norms(raw,Constraints(ref,time,data));
-    for(int b=InnerPressure();b<norms.size();++b)
-        if(!((Mapped() || MatchingEnabled()) && eta==0 && b<Gauge()))Require(norms[b]<1e-9,"reference violates an algebraic constraint");
+    const auto raw=Residual(ref,ref,0,time,data,false);
+    if(!exportOnly)
+    {
+        const auto norms=Norms(raw,Constraints(ref,time,data));
+        for(int b=InnerPressure();b<norms.size();++b)
+            if(!((Mapped() || MatchingEnabled()) && eta==0 && b<Gauge()))Require(norms[b]<1e-9,"reference violates an algebraic constraint");
+    }
     m_reference=ref;m_referenceLoads=Residual(ref,ref,0,time,data,false,false);m_defect=m_referenceLoads;
     m_referenceConstraints=Constraints(ref,time,data);
     for(int i=DifferentialSize();i<Size();++i)m_defect[i]=0;

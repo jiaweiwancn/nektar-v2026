@@ -829,9 +829,22 @@ int main(int argc,char **argv)
         {std::ofstream out(argv[3]);out<<ZeroCurvatureCT6Comparison(patch,graph,files)<<'\n';return 0;}
         Require(patch.Dimension()==2 && (!patch.Mapped() || patch.CurvedVerification()) && (patch.AcceptedAWF() || patch.UniformEPFlat()),
             "neutral preservation probe supports accepted or EP plateau references, serial flat2D only");
-        RANSWallEvolutionData data(2);Vector state,reference;double time=request.get<double>("time",0.);
-        if(open)data=LoadRANSAcceptedOpenData(session,patch);
         const std::string operation=request.get<std::string>("operation","neutral");
+        const bool preFactor=request.get<bool>("export_pre_factor_frozen",false);
+        Vector storedReference;
+        if(preFactor)
+        {
+            Require(operation=="replay","no-factor export requires a validated stored reference replay");
+            for(const auto &item:request)if(item.first.rfind("export_",0)==0 && item.second.get_value<bool>())
+                Require(item.first=="export_pre_factor_frozen","pre-factor export is a dedicated no-solve request; incompatible export");
+            Require(!request.get_optional<std::string>("write_initial_history"),"pre-factor export cannot write a history");
+            Require(request.get_child_optional("actual_history").has_value(),"pre-factor export requires explicit actual history");
+            Require(Values(request,"actual_history").size()==std::size_t(patch.Size()),"invalid pre-factor frozen request: history shape");
+            storedReference=Values(request,"reference");
+            Require(RANSWallR3::Hash(storedReference)==request.get<std::string>("stored_reference_sha256"),"stored reference artifact hash differs");
+        }
+        RANSWallEvolutionData data(2);Vector state,reference;double time=request.get<double>("time",0.);
+        if(open)data=LoadRANSAcceptedOpenData(session,patch,preFactor?&storedReference:nullptr);
         const bool legacy=operation=="legacy_operator_replay";
         const std::string sourceOperator=legacy?"LegacyCoordinateToleranceV1":RANSWallNumericalOperatorIdentity();
         if(operation=="neutral")
@@ -874,7 +887,8 @@ int main(int argc,char **argv)
         // use the requested observation time. This is diagnostic-only; no
         // field or history is reset and no residual enters evolution.
         const double referenceTime=patch.CurvedManufactured()?0.:time;
-        patch.SetReference(reference,data,referenceTime,0.);
+        if(preFactor)patch.BindFrozenExportReference(reference,data,referenceTime);
+        else patch.SetReference(reference,data,referenceTime,0.);
         ProbePhase("after_set_reference");
         std::vector<RANSWallCoordinate> grid;
         if(auto points=request.get_child_optional("grid"))for(const auto &item:*points)
@@ -902,8 +916,11 @@ int main(int argc,char **argv)
             Require(file.good(),"pre-factor export write failed");return 0;
         }
         ProbePhase("before_preservation_observation");
+        const char *lifecycle=std::getenv("NEKTAR_RANS_PROBE_OBSERVER");
+        Require(!lifecycle || std::string(lifecycle)=="NativeAuditReceiptV1","unknown probe observer lifecycle");
+        const bool nativeReceipt=lifecycle!=nullptr;bool nativePhysical=false;
         const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid,sides,
-            request.get<bool>("export_ct6_primitives",false),request.get<bool>("export_faces_only",false));
+            request.get<bool>("export_ct6_primitives",false),request.get<bool>("export_faces_only",false),nativeReceipt?&nativePhysical:nullptr);
         ProbePhase("after_preservation_observation");
         std::string resolution="null",testBasis="null",constitutive="null",sparseBackend="null",ct10Momentum="null";
         if(request.get<bool>("export_ct10_momentum",false))
@@ -1064,13 +1081,18 @@ int main(int argc,char **argv)
         }
         Require(state==stateCopy,"read-only verification modified coefficients");
         const auto elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
-        ProbePhase("before_observation_tree_parse");
-        Tree observed;std::istringstream input(observation);boost::property_tree::read_json(input,observed);
-        ProbePhase("after_observation_tree_parse");
-        const auto &audit=observed.get_child("audit_alpha_zero");
-        bool physical=audit.get_child("accepted_awf_scalar_domain").front().second.get_value<double>()==1 &&
-            audit.get_child_optional("accepted_awf_hard_admissible") &&
-            audit.get_child("accepted_awf_hard_admissible").front().second.get_value<double>()==1;
+        bool physical=nativePhysical;
+        if(!nativeReceipt)
+        {
+            ProbePhase("before_observation_tree_parse");
+            Tree observed;std::istringstream input(observation);boost::property_tree::read_json(input,observed);
+            ProbePhase("after_observation_tree_parse");
+            const auto &audit=observed.get_child("audit_alpha_zero");
+            physical=audit.get_child("accepted_awf_scalar_domain").front().second.get_value<double>()==1 &&
+                audit.get_child_optional("accepted_awf_hard_admissible") &&
+                audit.get_child("accepted_awf_hard_admissible").front().second.get_value<double>()==1;
+        }
+        else ProbePhase("native_audit_receipt_without_duplicate_tree");
         std::string openPacket;
         if(open)
         {
@@ -1109,7 +1131,7 @@ int main(int argc,char **argv)
             {"initialization_receipt",receipt},{"reference",J::Numbers(reference)},{"fixed_boundary",J::Constraints(data.fixedBoundary)},
             {"elapsed_seconds",J::Number(elapsed)},{"observation",observation},
             {"resolution",resolution},{"test_basis",testBasis},{"native_constitutive",constitutive},{"physical_scalar_budget",physicalBudget},
-            {"sparse_backend",sparseBackend},
+            {"sparse_backend",sparseBackend},{"observer_lifecycle",J::Quote(nativeReceipt?"NativeAuditReceiptV1":"LegacyTreeV1")},
             {"ct10_momentum",ct10Momentum},
             {"tensor_validation",tensorValidation},{"mixed_space",mixedSpace}});
         if(open){output.pop_back();output+=",\"open_boundary\":"+openPacket+",\"open_frozen_systems\":"+openSystems+"}";}

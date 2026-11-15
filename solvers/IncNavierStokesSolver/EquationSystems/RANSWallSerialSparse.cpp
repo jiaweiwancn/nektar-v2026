@@ -10,6 +10,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <atomic>
 #ifdef NEKTAR_RANS_HAVE_EIGEN_SPARSE
 #include <Eigen/SparseLU>
 #include <Eigen/SparseCholesky>
@@ -17,6 +18,8 @@
 
 namespace Nektar::RANSWallAlgebra
 {
+namespace { std::atomic_size_t factorizationCount{0}; }
+std::size_t SparseFactorizationCount() { return factorizationCount.load(std::memory_order_relaxed); }
 double &SparseMatrix::Entry(int row,int column)
 {
     Require(!m_data && row>=0 && row<m_rows && column>=0 && column<m_columns,
@@ -98,6 +101,7 @@ struct SparseFactor::Impl
 };
 SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass,SparsePredictorOrdering ordering):m_impl(std::make_shared<Impl>(m,positiveMass,ordering))
 {
+    factorizationCount.fetch_add(1,std::memory_order_relaxed);
     RANSWallTiming::Scope timing("sparse.factorize");
     Require(m.Rows()>0 && m.Rows()==m.Columns(),"sparse factor shape");m.Finalize();
     Require(!positiveMass || ordering==SparsePredictorOrdering::COLAMD,"predictor ordering cannot change mass LDLT");

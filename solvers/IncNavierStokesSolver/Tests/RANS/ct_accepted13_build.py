@@ -20,7 +20,8 @@ def main():
         e=run(cmd,a.output,str(i)+'.log');executions.append(e);write_json(a.output/'progress.json',dict(executions=executions));require(e['exit_code']==0,'CT13 private build failed:'+str(i))
     rt.mkdir();shutil.copytree(old/'lib',rt/'lib',symlinks=True)
     for name in targets:shutil.copy2(build/name,rt/name)
+    shutil.copy2(old/'RANSNewModelsProbe',rt/'RANSNewModelsProbe')
     os.environ['LD_LIBRARY_PATH']=str(rt/'lib')
-    result=dict(schema='CT13DiagnosticBuildV1',status='pass',executions=executions,runtime={n:runtime_identity(rt/n) for n in targets},governing_unchanged=runtime_identity(old/'IncNavierStokesSolver'),compiler=subprocess.check_output(['c++','--version'],text=True),flags=(build/'CMakeFiles/RANSPreservationProbe.dir/flags.make').read_text(),Eigen_headers={str(f):sha(f) for f in (Path('/usr/include/eigen3/Eigen/SparseLU'),Path('/usr/include/eigen3/Eigen/src/OrderingMethods/Ordering.h'))})
+    result=dict(schema='CT13DiagnosticBuildV1',status='pass',executions=executions,runtime={n:runtime_identity(rt/n) for n in targets+['RANSNewModelsProbe']},governing_unchanged=runtime_identity(old/'IncNavierStokesSolver'),compiler=subprocess.check_output(['c++','--version'],text=True),flags=(build/'CMakeFiles/RANSPreservationProbe.dir/flags.make').read_text(),Eigen_headers={str(f):sha(f) for f in (Path('/usr/include/eigen3/Eigen/SparseLU'),Path('/usr/include/eigen3/Eigen/src/OrderingMethods/Ordering.h'))})
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return 0
 if __name__=='__main__':raise SystemExit(main())

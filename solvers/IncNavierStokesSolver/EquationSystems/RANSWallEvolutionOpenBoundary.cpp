@@ -152,6 +152,7 @@ std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSh
     if(RANSUsesNeutralComposite(s))
     {
         std::string projection;s->LoadSolverInfo("RANSOpenReferenceProjection",projection,"FunctionsL2V1");
+        Require(!storedReference || projection=="ConstrainedRadialV1","stored reference replay requires its declared ConstrainedRadialV1 policy");
         Require(projection=="FunctionsL2V1" || projection=="ConstrainedRadialV1","unknown neutral reference projection");
         std::string reference;s->LoadSolverInfo("RANSOpenReference",reference,"NeutralCompositeV1");
         std::string sink;s->LoadSolverInfo("RANSWallDisplacementPolicy",sink,"UnshiftedV1");
@@ -184,8 +185,10 @@ std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSh
 }
 
 RANSWallEvolutionData LoadRANSAcceptedOpenData(const LibUtilities::SessionReaderSharedPtr &s,
-    const RANSWallEvolutionPatch &patch)
+    const RANSWallEvolutionPatch &patch,const RANSWallAlgebra::Vector *storedReference)
 {
+    Require(!storedReference || (patch.SerialSparse() && !patch.Mapped() && RANSUsesNeutralComposite(s)),
+        "stored reference override is restricted to flat serial sparse composite diagnostics");
     Require(patch.OpenBoundary() && patch.Dimension()==2 && (!patch.Mapped() || patch.CurvedManufactured()),"open data loader requires qualified Accepted policy");
     if(patch.CurvedManufactured())return RANSWallManufactured(patch).Data();
     RANSWallEvolutionData data(2);data.openBoundaryIdentity=RANSAcceptedOpenBoundaryIdentity(s);
@@ -199,13 +202,20 @@ RANSWallEvolutionData LoadRANSAcceptedOpenData(const LibUtilities::SessionReader
         std::string projection;s->LoadSolverInfo("RANSOpenReferenceProjection",projection,"FunctionsL2V1");
         if(projection=="ConstrainedRadialV1")
         {
-            data.projectedReference=ref->Project();
+            if(storedReference)
+            {
+                Require(storedReference->size()==std::size_t(patch.Size()),"stored composite reference shape differs");
+                data.projectedReference=*storedReference;
+            }
+            else data.projectedReference=ref->Project();
             data.projectedReferenceBoundary=patch.FixedReferenceBoundary(data.projectedReference);
             // Apply the existing dependent-trace initialization once before
             // defining the immutable live corner rows. This records the same
             // numerical corner in initialization and replay, including ulps.
             // No such reference operation occurs after advancing k.
             data.projectedReference=patch.Lift(data.projectedReference,0.,data);
+            Require(!storedReference || data.projectedReference==*storedReference,
+                "stored reference differs from its installed continuous boundary/trace lift");
             data.projectedReferenceBoundary=patch.FixedReferenceBoundary(data.projectedReference);
         }
         for(int region=0;region<2;++region)
