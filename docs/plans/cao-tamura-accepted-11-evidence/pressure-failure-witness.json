@@ -1,0 +1,841 @@
+{
+  "schema": "CT11AbsolutePressurePairFailureWitnessV1",
+  "scope": "failed paired numerical admission; both endpoint states accepted, no native constitutive rejection",
+  "qualification": {
+    "status": "fail",
+    "reasons": [
+      "temporal:Pi"
+    ],
+    "scope": "actual unchanged target,pairedT=.002 stepping only"
+  },
+  "required_dt": [
+    0.001,
+    0.0005
+  ],
+  "required_time": 0.002,
+  "operator": "GeneratedVolumeOwnerV1",
+  "governing_executable": {
+    "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+    "sha256": "5830a2cd8a4b0b5b12095555171eb28bc0f63e1daa97652d63da244c3fd808c7"
+  },
+  "component": "CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000",
+  "source_collection_sha256": "497a42c473be8b98e3267c68347b1632b28331dfde951f33a4f4bd688a12f6bc",
+  "source_seal_sha256": "cdbffe42ef1ef406d8eecba1e9d143ee2ca5421fa9cc0d79c575870670439d12",
+  "same_actual_initial": true,
+  "members": {
+    "0.001": {
+      "dt": 0.001,
+      "time": 0.002,
+      "actual_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+      "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+      "configuration_sha256": "ef24b95162590da524ab3d36cfb2884f645cd5e997254041e57e96936581afe9",
+      "native_report_sha256": "433b1c0d9ae078a6db8a0641a4d23aaa0087c8a0d01220218368c05dd122c8d3",
+      "history_sha256": "62a22ce3281417e7cc3785a719af3d40585bc0ec983a4db13c4fd34a32e0950a",
+      "native_report_path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001/case.evolution.json",
+      "zero_step": {
+        "actual_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+        "history_sha256": "c92df881f691cb4374f874adf85a13ff3274611989b1acfb804b06926b4f3970",
+        "configuration_sha256": "0dd5259281c81f4b3ad6c01286c788d5b742ed8f2cc4fed63a51fa81f835fe95",
+        "native_report_sha256": "afdd181b54021c6b3f77703f343e4d3e2e7401f440e195baf6263fac75a97606"
+      },
+      "boundary_and_input": {
+        "raw_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+        "effective_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+        "fixed_reference_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+        "explicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+        "implicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+        "raw_effective_max_difference": 0,
+        "source_target_boundary_max_difference": 0,
+        "open_explicit_implicit_agreement": true
+      },
+      "last_accepted_metrics": {
+        "time": 0.002,
+        "status": "pass",
+        "reasons": [],
+        "drift": {
+          "U": {
+            "weighted_RMS": 1.2986645477824917e-07,
+            "true_L2": 4.307183033531097e-06,
+            "scale": 0.07426793792441279,
+            "scaled": 1.7486207158521424e-06
+          },
+          "w": {
+            "weighted_RMS": 1.7345152901209638e-09,
+            "true_L2": 5.752736410465678e-08,
+            "scale": 0.07426793792441279,
+            "scaled": 2.3354833035573044e-08
+          },
+          "k": {
+            "weighted_RMS": 2.566501628576429e-08,
+            "true_L2": 8.512122925824092e-07,
+            "scale": 0.021081109428869052,
+            "scaled": 1.2174414431252803e-06
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 1.1863639370229435e-09,
+            "true_L2": 3.916236592961465e-08,
+            "scale": 0.01013811394236224,
+            "scaled": 1.1702018183734418e-07
+          },
+          "Pi": {
+            "weighted_RMS": 3.150127601832851e-08,
+            "true_L2": 1.0447791297021638e-06,
+            "scale": 0.005515726603544432,
+            "scaled": 5.7111742989737095e-06
+          }
+        },
+        "absolute_reference_error": {
+          "U": {
+            "weighted_RMS": 6.865657730442542e-07,
+            "true_L2": 2.277081063088093e-05,
+            "scale": 0.07426793792441279,
+            "scaled": 9.244443729446426e-06
+          },
+          "w": {
+            "weighted_RMS": 1.7345152901209638e-09,
+            "true_L2": 5.752736410465678e-08,
+            "scale": 0.07426793792441279,
+            "scaled": 2.3354833035573044e-08
+          },
+          "k": {
+            "weighted_RMS": 2.2121310233497944e-07,
+            "true_L2": 7.336808591556187e-06,
+            "scale": 0.021081109428869052,
+            "scaled": 1.049342792329725e-05
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 6.103192432339075e-09,
+            "true_L2": 2.0146891515760504e-07,
+            "scale": 0.01013811394236224,
+            "scaled": 6.020047187314405e-07
+          },
+          "Pi": {
+            "weighted_RMS": 3.150127601835179e-08,
+            "true_L2": 1.044779129702936e-06,
+            "scale": 0.005515726603544432,
+            "scaled": 5.71117429897793e-06
+          }
+        },
+        "mass": {
+          "outward_net": 3.7279207498741584e-15,
+          "physical_scale": 1.4853587584882557,
+          "scaled": 2.5097780105786033e-15
+        },
+        "scope": "weighted physical RMS; true L2 separate; absolute pressure, fixed reference and actual initial baseline",
+        "traction": {
+          "status": "pass",
+          "mean_wall_shear": 0.005515238049611113,
+          "normalized_wall_traction_error": 8.857471887827358e-05,
+          "normalized_interface_traction_RMS": 0.0007652900115481297,
+          "normalized_outlet_reconstruction_RMS": 7.353432489878929e-05,
+          "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+        },
+        "complete_field_and_traction_body": "qualified-v1/target.json, bound by source_collection_sha256; lossless complete profiles in qualified-v1/traction-profiles.json"
+      },
+      "actual_stage_receipts": [
+        {
+          "time": 0.001,
+          "alpha": 1000,
+          "imposed_trace_defect": 9.69863153887335e-22,
+          "retained_trace_column_max": 25.858673878312395,
+          "trace_mass_column_max": 26.041666666666664,
+          "trace_physical_storage_contribution_max": 4.1430209824810484e-21,
+          "refreshed_trace_defect": 8.529670380255823e-08,
+          "epsilon_frozen_linear_residual": 1.6752475355730193e-21,
+          "k_frozen_linear_residual": 5.0266111463622386e-20,
+          "epsilon_same_state_source_storage_defect": 2.167345553786941e-19,
+          "k_same_state_source_storage_defect": 3.4911839349625277e-17,
+          "refreshed_original_block_norms": [
+            0.0002116750318340736,
+            3.343368247112797e-05,
+            3.1548822562898496e-07,
+            2.14423755128177e-06,
+            4.3323754509895766e-17,
+            1.2750247091846957e-16,
+            0,
+            1.5775253714748813e-05
+          ],
+          "corrected_continuity_gauge": [
+            1.4923882321551326e-18,
+            2.199320127494141e-16,
+            0
+          ],
+          "frozen_momentum_defect": 7.401494458833199e-08,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001/pimple-states/flow-t0.001-60c53b83087a.json",
+            "sha256": "8e45c637ea5d7814bae5e6f3c13ebab6e663c71e796e6de9716585afcb800436"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001/pimple-states/k-t0.001-60c53b83087a.json",
+            "sha256": "6c2ee656d1f7cca466d1669bee52d5a30784b85424c6d30f686ed9cc7c929259"
+          }
+        },
+        {
+          "time": 0.002,
+          "alpha": 1000,
+          "imposed_trace_defect": 6.409308809964834e-22,
+          "retained_trace_column_max": 25.858675209834168,
+          "trace_mass_column_max": 26.041666666666664,
+          "trace_physical_storage_contribution_max": 7.057378886022926e-07,
+          "refreshed_trace_defect": 1.1453853892579721e-07,
+          "epsilon_frozen_linear_residual": 1.104286117758292e-21,
+          "k_frozen_linear_residual": 5.802175688691957e-20,
+          "epsilon_same_state_source_storage_defect": 1.9145591585907357e-19,
+          "k_same_state_source_storage_defect": 3.8646089976714267e-17,
+          "refreshed_original_block_norms": [
+            0.00012005963038219265,
+            8.041523064340767e-05,
+            4.2400307875230987e-07,
+            7.501306051331093e-07,
+            3.851262751612041e-17,
+            1.260158090035377e-16,
+            0,
+            2.118340370870101e-05
+          ],
+          "corrected_continuity_gauge": [
+            1.3028161316173964e-18,
+            2.4550992261255653e-16,
+            0
+          ],
+          "frozen_momentum_defect": 3.299088692439456e-07,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001/pimple-states/flow-t0.002-751fbe6ce03a.json",
+            "sha256": "bcf6b0ce65431cc03d09643c5644115724d7c4fe2b675dba9450aa909f8df80e"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001/pimple-states/k-t0.002-751fbe6ce03a.json",
+            "sha256": "67d6cbd5f18116b79ecd3ee0367cbb6b22932efe236350af84821ec8d225f35f"
+          }
+        }
+      ],
+      "domain_status": "pass",
+      "constitutive_status": "pass",
+      "budget_classification": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 1.8018402491348697e-17,
+          "outer_k": 1.1166683894883901e-15,
+          "outer_epsilon": 5.444388971771741e-17,
+          "whole_k": 1.1302821412446777e-15
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      },
+      "corrections": 0,
+      "extra_governing_solves": 0,
+      "native_failure": ""
+    },
+    "0.0005": {
+      "dt": 0.0005,
+      "time": 0.002,
+      "actual_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+      "state_sha256": "adc2cf2beca7b4a7710ffb7d15eea8cf38a41152ff4cefdef0e7a5e9a82b756b",
+      "configuration_sha256": "7cee5e1448ebc3d503d02f59a1676bf8f21f4693a78634ce98695ee68ccdd7fc",
+      "native_report_sha256": "9a523a042ed9fd2ed092f2a90949bd706af170beb89f333798ffd3fe57bfb9ea",
+      "history_sha256": "4b7d94a6659bdd9f6654605788c948653e5f9a085177d621c7c7ce500c1c27fa",
+      "native_report_path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/case.evolution.json",
+      "zero_step": {
+        "actual_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+        "history_sha256": "9361f3f79e79a893f75e44ec15fe1c2251ff097c6d8b86a466764ff7e813bb21",
+        "configuration_sha256": "408c2a0c43f3b7a74a5ceebfa1ea3693f99f0863454682c6b50de0b37b12120a",
+        "native_report_sha256": "a66524b931fa06c615cd6f7e24ae7182a0bc5d8b51b22ed4c885af0537c92c45"
+      },
+      "boundary_and_input": {
+        "raw_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+        "effective_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+        "fixed_reference_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+        "explicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+        "implicit_boundary_sha256": "244b2880e450c76404dee8b7df55c34d282b9a487105997b7a928b2d76925a21",
+        "raw_effective_max_difference": 0,
+        "source_target_boundary_max_difference": 0,
+        "open_explicit_implicit_agreement": true
+      },
+      "last_accepted_metrics": {
+        "time": 0.002,
+        "status": "pass",
+        "reasons": [],
+        "drift": {
+          "U": {
+            "weighted_RMS": 1.361243109269252e-07,
+            "true_L2": 4.514732641902865e-06,
+            "scale": 0.07426793792441279,
+            "scaled": 1.832881250391893e-06
+          },
+          "w": {
+            "weighted_RMS": 1.9294719212914277e-09,
+            "true_L2": 6.399334406449813e-08,
+            "scale": 0.07426793792441279,
+            "scaled": 2.5979877390094958e-08
+          },
+          "k": {
+            "weighted_RMS": 2.6658742800819916e-08,
+            "true_L2": 8.841704725290788e-07,
+            "scale": 0.021081109428869052,
+            "scaled": 1.2645796887858614e-06
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 1.275799575373189e-09,
+            "true_L2": 4.211467346941578e-08,
+            "scale": 0.01013811394236224,
+            "scaled": 1.2584190537080513e-07
+          },
+          "Pi": {
+            "weighted_RMS": 1.3067183281454898e-08,
+            "true_L2": 4.333894401139094e-07,
+            "scale": 0.005515726603544432,
+            "scaled": 2.36907740732796e-06
+          }
+        },
+        "absolute_reference_error": {
+          "U": {
+            "weighted_RMS": 6.856047193143585e-07,
+            "true_L2": 2.2738936084626572e-05,
+            "scale": 0.07426793792441279,
+            "scaled": 9.231503371106682e-06
+          },
+          "w": {
+            "weighted_RMS": 1.9294719212914277e-09,
+            "true_L2": 6.399334406449813e-08,
+            "scale": 0.07426793792441279,
+            "scaled": 2.5979877390094958e-08
+          },
+          "k": {
+            "weighted_RMS": 2.213791530857701e-07,
+            "true_L2": 7.3423158719214826e-06,
+            "scale": 0.021081109428869052,
+            "scaled": 1.0501304679089012e-05
+          },
+          "outer_epsilon": {
+            "weighted_RMS": 6.039526355198239e-09,
+            "true_L2": 1.9936727152829076e-07,
+            "scale": 0.01013811394236224,
+            "scaled": 5.957248448315422e-07
+          },
+          "Pi": {
+            "weighted_RMS": 1.3067183281477326e-08,
+            "true_L2": 4.333894401146532e-07,
+            "scale": 0.005515726603544432,
+            "scaled": 2.3690774073320265e-06
+          }
+        },
+        "mass": {
+          "outward_net": 5.67549479635332e-14,
+          "physical_scale": 1.4853587584882557,
+          "scaled": 3.8209589191298353e-14
+        },
+        "scope": "weighted physical RMS; true L2 separate; absolute pressure, fixed reference and actual initial baseline",
+        "traction": {
+          "status": "pass",
+          "mean_wall_shear": 0.005515223527305904,
+          "normalized_wall_traction_error": 9.120760956573752e-05,
+          "normalized_interface_traction_RMS": 0.0008079975744052007,
+          "normalized_outlet_reconstruction_RMS": 7.318240510422807e-05,
+          "scope": "actual native one-sided gradients and current polynomial endpoint K; outlet datum imposed weakly, reconstructed outlet mismatch reported separately"
+        },
+        "complete_field_and_traction_body": "qualified-v1/target.json, bound by source_collection_sha256; lossless complete profiles in qualified-v1/traction-profiles.json"
+      },
+      "actual_stage_receipts": [
+        {
+          "time": 0.0005,
+          "alpha": 2000,
+          "imposed_trace_defect": 4.643235268140728e-22,
+          "retained_trace_column_max": 51.90033982799321,
+          "trace_mass_column_max": 52.08333333333333,
+          "trace_physical_storage_contribution_max": 1.3178521816415553e-20,
+          "refreshed_trace_defect": 3.3300701717561575e-08,
+          "epsilon_frozen_linear_residual": 2.401718908547716e-21,
+          "k_frozen_linear_residual": 6.246867986000465e-20,
+          "epsilon_same_state_source_storage_defect": 2.6424780976374e-19,
+          "k_same_state_source_storage_defect": 2.1634809659650932e-17,
+          "refreshed_original_block_norms": [
+            0.00019760267758200242,
+            1.4344941157007094e-05,
+            1.2311870657736735e-07,
+            1.7762935589746848e-06,
+            4.5949182900653806e-17,
+            1.321334548118766e-16,
+            0,
+            6.158819685338763e-06
+          ],
+          "corrected_continuity_gauge": [
+            1.5360695020184772e-18,
+            2.5982923800846e-16,
+            0
+          ],
+          "frozen_momentum_defect": 1.1728980387427034e-07,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/flow-t0.00050000000000000001-60c53b83087a.json",
+            "sha256": "5b9e2447752e81f2e1a0de7e7b136b1e4af4dbdb1fc7a2a1ecbcb009575b9ca3"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/k-t0.00050000000000000001-60c53b83087a.json",
+            "sha256": "9afcef2361373dd16b6395a3e8d7f3533b64f979e67975aaa4ef37e5a73e3e7e"
+          }
+        },
+        {
+          "time": 0.001,
+          "alpha": 2000,
+          "imposed_trace_defect": 3.9715726076992906e-22,
+          "retained_trace_column_max": 51.90034064688069,
+          "trace_mass_column_max": 52.08333333333333,
+          "trace_physical_storage_contribution_max": 5.508043469749428e-07,
+          "refreshed_trace_defect": 4.505754758504939e-08,
+          "epsilon_frozen_linear_residual": 1.717640541966362e-21,
+          "k_frozen_linear_residual": 3.3696029432960135e-20,
+          "epsilon_same_state_source_storage_defect": 3.24241565230986e-19,
+          "k_same_state_source_storage_defect": 2.7632014684448192e-17,
+          "refreshed_original_block_norms": [
+            0.0001125958366647175,
+            6.686555147131209e-05,
+            1.6665231794892494e-07,
+            6.267572437807433e-07,
+            4.303986091915819e-17,
+            1.1638682620181116e-16,
+            0,
+            8.33319710177597e-06
+          ],
+          "corrected_continuity_gauge": [
+            1.4444958444183558e-18,
+            1.7925292565030542e-16,
+            0
+          ],
+          "frozen_momentum_defect": 2.646856075314166e-07,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/flow-t0.001-2a1223bce1df.json",
+            "sha256": "43134345d10ae54d0cb03137b62e8f47b7cf7afd6f86dfee2d600dbe269d65bf"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/k-t0.001-2a1223bce1df.json",
+            "sha256": "3350354728a97b52fd384a91b3a588969ea503c4e950c5a29c8d146682299599"
+          }
+        },
+        {
+          "time": 0.0015,
+          "alpha": 2000,
+          "imposed_trace_defect": 3.193197371792526e-22,
+          "retained_trace_column_max": 51.90034137816055,
+          "trace_mass_column_max": 52.08333333333333,
+          "trace_physical_storage_contribution_max": 7.456341037767753e-07,
+          "refreshed_trace_defect": 5.396205392800395e-08,
+          "epsilon_frozen_linear_residual": 9.628382330117242e-22,
+          "k_frozen_linear_residual": 3.6422416731934915e-20,
+          "epsilon_same_state_source_storage_defect": 1.3565762045869654e-19,
+          "k_same_state_source_storage_defect": 3.08439636204365e-17,
+          "refreshed_original_block_norms": [
+            8.500937303622432e-05,
+            7.003218388245823e-05,
+            1.9966832423609918e-07,
+            3.8368781495828615e-07,
+            4.6558491766157446e-17,
+            1.3002237273632148e-16,
+            0,
+            9.980046751322278e-06
+          ],
+          "corrected_continuity_gauge": [
+            1.6404916894663968e-18,
+            2.9075119524171524e-16,
+            0
+          ],
+          "frozen_momentum_defect": 2.8744510595222266e-07,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/flow-t0.0015-45e2ba773309.json",
+            "sha256": "2a7057347d0d973771de7683e1b2af39b175825195b76a83b61620e697572a17"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/k-t0.0015-45e2ba773309.json",
+            "sha256": "23ae5f64ecbf2404150c38df4b3d68b257fcc8f681a188c0b1dcb03df6414a1d"
+          }
+        },
+        {
+          "time": 0.002,
+          "alpha": 2000,
+          "imposed_trace_defect": 1.9289943771254846e-22,
+          "retained_trace_column_max": 51.900342036384934,
+          "trace_mass_column_max": 52.08333333333333,
+          "trace_physical_storage_contribution_max": 8.932771839928497e-07,
+          "refreshed_trace_defect": 6.053069358097609e-08,
+          "epsilon_frozen_linear_residual": 1.104286117758292e-21,
+          "k_frozen_linear_residual": 2.837560373301906e-20,
+          "epsilon_same_state_source_storage_defect": 3.3956095017546807e-19,
+          "k_same_state_source_storage_defect": 3.832400569852082e-17,
+          "refreshed_original_block_norms": [
+            7.493806732892917e-05,
+            5.40818503337765e-05,
+            2.240671768956451e-07,
+            3.181581803051573e-07,
+            3.626362600375803e-17,
+            1.2557203529849347e-16,
+            0,
+            1.1194888034360079e-05
+          ],
+          "corrected_continuity_gauge": [
+            1.7543399838248868e-18,
+            3.0313310864675476e-16,
+            0
+          ],
+          "frozen_momentum_defect": 1.9904740053004147e-07,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/flow-t0.002-04134e30f8b1.json",
+            "sha256": "39fbba8591a04c8e08193e012d3ab97a4e058906b7f1d35d78cec839f82dc36f"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/k-t0.002-04134e30f8b1.json",
+            "sha256": "7803bfcffbfc15f25c513b903f4d7f81e4958281db7de05e92dfdf5a9e4bf03e"
+          }
+        }
+      ],
+      "domain_status": "pass",
+      "constitutive_status": "pass",
+      "budget_classification": {
+        "status": "pass",
+        "reasons": [],
+        "controls": {
+          "native": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q48f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f16": {
+            "status": "pass",
+            "reasons": []
+          },
+          "q64f32": {
+            "status": "pass",
+            "reasons": []
+          }
+        },
+        "scaled_signed_defect_spreads": {
+          "inner_k": 2.0315006596375624e-17,
+          "outer_k": 2.5525614210007382e-15,
+          "outer_epsilon": 1.0126532994309337e-16,
+          "whole_k": 2.556744122633839e-15
+        },
+        "uncertainty_limit": 0.02,
+        "required_controls": [
+          "native",
+          "q48f16",
+          "q64f16",
+          "q64f32"
+        ],
+        "required_equations": [
+          "inner_k",
+          "outer_epsilon",
+          "outer_k",
+          "whole_k"
+        ],
+        "required_reconstruction": [
+          "k",
+          "outer_epsilon"
+        ]
+      },
+      "corrections": 0,
+      "extra_governing_solves": 0,
+      "native_failure": ""
+    }
+  },
+  "pressure": {
+    "difference": {
+      "weighted_RMS": 2.1095525928874144e-08,
+      "true_L2": 6.996594426128911e-07,
+      "scale": 0.005515726603544432,
+      "scaled": 3.824614134304275e-06
+    },
+    "measured_drift": 5.7111742989737095e-06,
+    "limit": 5.71117429897371e-07,
+    "fraction_of_absolute_tolerance": 0.003824614134304275
+  },
+  "regional_pressure": [
+    {
+      "time": 0,
+      "pressure": {
+        "whole": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "signed_mean": 0.0,
+          "weighted_RMS": 0.0,
+          "spatial_variation_RMS": 0.0,
+          "scale": 0.005515726603544432
+        }
+      }
+    },
+    {
+      "time": 0.001,
+      "pressure": {
+        "whole": {
+          "signed_mean": 4.6171715272790855e-08,
+          "weighted_RMS": 5.35042418991989e-08,
+          "spatial_variation_RMS": 2.703472970044863e-08,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "signed_mean": 4.929860577124924e-08,
+          "weighted_RMS": 5.961862341550892e-08,
+          "spatial_variation_RMS": 3.3526522739037795e-08,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "signed_mean": 4.6142123249146145e-08,
+          "weighted_RMS": 5.3443035731316665e-08,
+          "spatial_variation_RMS": 2.6964097059597487e-08,
+          "scale": 0.005515726603544432
+        }
+      }
+    },
+    {
+      "time": 0.002,
+      "pressure": {
+        "whole": {
+          "signed_mean": 1.8115120691980075e-08,
+          "weighted_RMS": 2.1095525928874144e-08,
+          "spatial_variation_RMS": 1.081034766003373e-08,
+          "scale": 0.005515726603544432
+        },
+        "inner": {
+          "signed_mean": 1.870210999988057e-08,
+          "weighted_RMS": 2.3872654028862678e-08,
+          "spatial_variation_RMS": 1.4836936743618635e-08,
+          "scale": 0.005515726603544432
+        },
+        "outer": {
+          "signed_mean": 1.8109565588119816e-08,
+          "weighted_RMS": 2.1067495387116022e-08,
+          "spatial_variation_RMS": 1.0764896473990895e-08,
+          "scale": 0.005515726603544432
+        }
+      }
+    }
+  ],
+  "common_time_field_differences": [
+    {
+      "time": 0,
+      "fields": {
+        "U": {
+          "weighted_RMS": 0.0,
+          "true_L2": 0.0,
+          "scale": 0.07426793792441279,
+          "scaled": 0.0
+        },
+        "w": {
+          "weighted_RMS": 0.0,
+          "true_L2": 0.0,
+          "scale": 0.07426793792441279,
+          "scaled": 0.0
+        },
+        "k": {
+          "weighted_RMS": 0.0,
+          "true_L2": 0.0,
+          "scale": 0.021081109428869052,
+          "scaled": 0.0
+        },
+        "outer_epsilon": {
+          "weighted_RMS": 0.0,
+          "true_L2": 0.0,
+          "scale": 0.01013811394236224,
+          "scaled": 0.0
+        },
+        "Pi": {
+          "weighted_RMS": 0.0,
+          "true_L2": 0.0,
+          "scale": 0.005515726603544432,
+          "scaled": 0.0
+        }
+      }
+    },
+    {
+      "time": 0.001,
+      "fields": {
+        "U": {
+          "weighted_RMS": 5.532156249812733e-09,
+          "true_L2": 1.8348086562248469e-07,
+          "scale": 0.07426793792441279,
+          "scaled": 7.448915917718303e-08
+        },
+        "w": {
+          "weighted_RMS": 1.8143799622336798e-10,
+          "true_L2": 6.0176175618683165e-09,
+          "scale": 0.07426793792441279,
+          "scaled": 2.443019172122821e-09
+        },
+        "k": {
+          "weighted_RMS": 7.040622695887306e-10,
+          "true_L2": 2.3351103772718705e-08,
+          "scale": 0.021081109428869052,
+          "scaled": 3.339778069860822e-08
+        },
+        "outer_epsilon": {
+          "weighted_RMS": 1.2955235428690605e-10,
+          "true_L2": 4.276576982235743e-09,
+          "scale": 0.01013811394236224,
+          "scaled": 1.2778743168940909e-08
+        },
+        "Pi": {
+          "weighted_RMS": 5.35042418991989e-08,
+          "true_L2": 1.7745349507205517e-06,
+          "scale": 0.005515726603544432,
+          "scaled": 9.700307093686772e-06
+        }
+      }
+    },
+    {
+      "time": 0.002,
+      "fields": {
+        "U": {
+          "weighted_RMS": 6.686842173927847e-09,
+          "true_L2": 2.217774652324309e-07,
+          "scale": 0.07426793792441279,
+          "scaled": 9.0036728645051e-08
+        },
+        "w": {
+          "weighted_RMS": 2.948085375541689e-10,
+          "true_L2": 9.777693040605775e-09,
+          "scale": 0.07426793792441279,
+          "scaled": 3.969526363505801e-09
+        },
+        "k": {
+          "weighted_RMS": 1.045804812574793e-09,
+          "true_L2": 3.468542167258541e-08,
+          "scale": 0.021081109428869052,
+          "scaled": 4.960862311841326e-08
+        },
+        "outer_epsilon": {
+          "weighted_RMS": 1.567929163422791e-10,
+          "true_L2": 5.175799241147229e-09,
+          "scale": 0.01013811394236224,
+          "scaled": 1.5465688907590384e-08
+        },
+        "Pi": {
+          "weighted_RMS": 2.1095525928874144e-08,
+          "true_L2": 6.996594426128911e-07,
+          "scale": 0.005515726603544432,
+          "scaled": 3.824614134304275e-06
+        }
+      }
+    }
+  ],
+  "traction_temporal": {
+    "ground": {
+      "spread": 2.6377757835044914e-06,
+      "measured_drift": 9.13764689824327e-05,
+      "limit": 9.13764689824327e-06,
+      "fraction_of_absolute_tolerance": 0.0026377757835044915
+    },
+    "interface": {
+      "spread": 2.6466933035016318e-05,
+      "measured_drift": 0.0005055979859240903,
+      "limit": 5.0559798592409034e-05,
+      "fraction_of_absolute_tolerance": 0.026466933035016318
+    },
+    "signed_mean": {
+      "spread": 2.6328906827463712e-06,
+      "measured_drift": 9.120760956259247e-05,
+      "limit": 9.120760956259247e-06,
+      "fraction_of_absolute_tolerance": 0.0026328906827463713
+    }
+  },
+  "continuation_admitted": false,
+  "resource_plan": {
+    "complete_family_process_CPU": 4173.708081,
+    "measured_controller_and_children_CPU": 3840.214655758,
+    "measured_family_overhead_multiplier": 1.0868423916725491,
+    "total_CPU_spent_plus_remaining_with_headroom": 259971.47741570426,
+    "CPU_limit": 24000,
+    "total_wall_upper_estimate": 258860.83581524328,
+    "wall_limit": 28800,
+    "measured_current_storage_bytes": 1278475155,
+    "total_storage_spent_plus_remaining_with_headroom": 190787316462.5,
+    "storage_limit_bytes": 25769803776,
+    "resource_admitted": false,
+    "scope": "closed owned-family accounting includes monitor/helpers and spent work; future estimates retain25percent headroom and finite ceilings,not an accomplished horizon"
+  },
+  "history_scope": "Each dt has a fresh native zero-step history; completed endpoint history is located by checkpoint in its hash-bound native report. No signature or history was edited.",
+  "interpretation": "Absolute pressure mean and spatial variation are diagnostic only; neither is subtracted. The .002 pair is the first contracted admission. Earlier accepted-state comparisons are retained. No further timestep halving, mesh search or physical continuation was performed."
+}

@@ -1,0 +1,536 @@
+{
+  "schema": "CT11RetainedNativeReceiptsV1",
+  "members": {
+    "0.001": {
+      "dt": 0.001,
+      "time": 0.002,
+      "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+      "history_sha256": "62a22ce3281417e7cc3785a719af3d40585bc0ec983a4db13c4fd34a32e0950a",
+      "configuration_sha256": "ef24b95162590da524ab3d36cfb2884f645cd5e997254041e57e96936581afe9",
+      "raw_traction": [
+        {
+          "time": 0,
+          "profile": {
+            "schema": "CT11TractionProfileReferenceV1",
+            "profile_sha256": "b4bd0a21c26c5155dadabc3442d5b218e35de2a104a331b163644a2bd1489469",
+            "artifact": "traction-profiles.json",
+            "state_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+            "ground_points": 1984,
+            "interface_points": 3968,
+            "mean_wall_shear": 0.005515726603544432,
+            "normalized_wall_traction_error": 0.0,
+            "normalized_interface_traction_RMS": 1.808536369683471e-15,
+            "wall_spatial_standard_deviation": 1.1535194392646323e-18
+          }
+        },
+        {
+          "time": 0.001,
+          "profile": {
+            "schema": "CT11TractionProfileReferenceV1",
+            "profile_sha256": "fa9fa759c63be15c86466fc7b22428ca19f17032fc51480a8507c1c11795f430",
+            "artifact": "traction-profiles.json",
+            "state_sha256": "751fbe6ce03a5cb2fbaca15ef4ad9b59305a30cebb991f21d9eaeb676d3f62e7",
+            "ground_points": 1984,
+            "interface_points": 3968,
+            "mean_wall_shear": 0.005515327144165045,
+            "normalized_wall_traction_error": 7.242189617051572e-05,
+            "normalized_interface_traction_RMS": 0.0004231507208666846,
+            "wall_spatial_standard_deviation": 2.4318309981390116e-08
+          }
+        },
+        {
+          "time": 0.002,
+          "profile": {
+            "schema": "CT11TractionProfileReferenceV1",
+            "profile_sha256": "0aec3278beb66490d3b91ef0afb0e1db34b89c50c4b2de7b63fba74ed065e178",
+            "artifact": "traction-profiles.json",
+            "state_sha256": "cbabc8d45233dfd42c0929858d260ea86de336f292c353029f9a189a11bf0f81",
+            "ground_points": 1984,
+            "interface_points": 3968,
+            "mean_wall_shear": 0.005515238049611105,
+            "normalized_wall_traction_error": 8.85747188798461e-05,
+            "normalized_interface_traction_RMS": 0.0007652900115481297,
+            "wall_spatial_standard_deviation": 2.9742263149764882e-08
+          }
+        }
+      ],
+      "stages": [
+        {
+          "time": 0.001,
+          "alpha": 1000,
+          "imposed_trace_defect": 9.69863153887335e-22,
+          "retained_trace_column_max": 25.858673878312395,
+          "trace_mass_column_max": 26.041666666666664,
+          "trace_physical_storage_contribution_max": 4.1430209824810484e-21,
+          "refreshed_trace_defect": 8.529670380255823e-08,
+          "epsilon_frozen_linear_residual": 1.6752475355730193e-21,
+          "k_frozen_linear_residual": 5.0266111463622386e-20,
+          "epsilon_same_state_source_storage_defect": 2.167345553786941e-19,
+          "k_same_state_source_storage_defect": 3.4911839349625277e-17,
+          "refreshed_original_block_norms": [
+            0.0002116750318340736,
+            3.343368247112797e-05,
+            3.1548822562898496e-07,
+            2.14423755128177e-06,
+            4.3323754509895766e-17,
+            1.2750247091846957e-16,
+            0,
+            1.5775253714748813e-05
+          ],
+          "corrected_continuity_gauge": [
+            1.4923882321551326e-18,
+            2.199320127494141e-16,
+            0
+          ],
+          "frozen_momentum_defect": 7.401494458833199e-08,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001/pimple-states/flow-t0.001-60c53b83087a.json",
+            "sha256": "8e45c637ea5d7814bae5e6f3c13ebab6e663c71e796e6de9716585afcb800436"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001/pimple-states/k-t0.001-60c53b83087a.json",
+            "sha256": "6c2ee656d1f7cca466d1669bee52d5a30784b85424c6d30f686ed9cc7c929259"
+          }
+        },
+        {
+          "time": 0.002,
+          "alpha": 1000,
+          "imposed_trace_defect": 6.409308809964834e-22,
+          "retained_trace_column_max": 25.858675209834168,
+          "trace_mass_column_max": 26.041666666666664,
+          "trace_physical_storage_contribution_max": 7.057378886022926e-07,
+          "refreshed_trace_defect": 1.1453853892579721e-07,
+          "epsilon_frozen_linear_residual": 1.104286117758292e-21,
+          "k_frozen_linear_residual": 5.802175688691957e-20,
+          "epsilon_same_state_source_storage_defect": 1.9145591585907357e-19,
+          "k_same_state_source_storage_defect": 3.8646089976714267e-17,
+          "refreshed_original_block_norms": [
+            0.00012005963038219265,
+            8.041523064340767e-05,
+            4.2400307875230987e-07,
+            7.501306051331093e-07,
+            3.851262751612041e-17,
+            1.260158090035377e-16,
+            0,
+            2.118340370870101e-05
+          ],
+          "corrected_continuity_gauge": [
+            1.3028161316173964e-18,
+            2.4550992261255653e-16,
+            0
+          ],
+          "frozen_momentum_defect": 3.299088692439456e-07,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001/pimple-states/flow-t0.002-751fbe6ce03a.json",
+            "sha256": "bcf6b0ce65431cc03d09643c5644115724d7c4fe2b675dba9450aa909f8df80e"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001/pimple-states/k-t0.002-751fbe6ce03a.json",
+            "sha256": "67d6cbd5f18116b79ecd3ee0367cbb6b22932efe236350af84821ec8d225f35f"
+          }
+        }
+      ],
+      "effective_inputs": {
+        "native": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        },
+        "q48f16": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        },
+        "q64f16": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        },
+        "q64f32": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        }
+      }
+    },
+    "0.0005": {
+      "dt": 0.0005,
+      "time": 0.002,
+      "state_sha256": "adc2cf2beca7b4a7710ffb7d15eea8cf38a41152ff4cefdef0e7a5e9a82b756b",
+      "history_sha256": "4b7d94a6659bdd9f6654605788c948653e5f9a085177d621c7c7ce500c1c27fa",
+      "configuration_sha256": "7cee5e1448ebc3d503d02f59a1676bf8f21f4693a78634ce98695ee68ccdd7fc",
+      "raw_traction": [
+        {
+          "time": 0,
+          "profile": {
+            "schema": "CT11TractionProfileReferenceV1",
+            "profile_sha256": "b4bd0a21c26c5155dadabc3442d5b218e35de2a104a331b163644a2bd1489469",
+            "artifact": "traction-profiles.json",
+            "state_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+            "ground_points": 1984,
+            "interface_points": 3968,
+            "mean_wall_shear": 0.005515726603544432,
+            "normalized_wall_traction_error": 0.0,
+            "normalized_interface_traction_RMS": 1.808536369683471e-15,
+            "wall_spatial_standard_deviation": 1.1535194392646323e-18
+          }
+        },
+        {
+          "time": 0.0005,
+          "profile": {
+            "schema": "CT11TractionProfileReferenceV1",
+            "profile_sha256": "4f98863b54a5b0e59f5d2694282e053f7dd932eab876d4efedf286d9eff631ff",
+            "artifact": "traction-profiles.json",
+            "state_sha256": "2a1223bce1df616e974e84d93da1c774f6093b81d1a9b89a2483628bbd2d5501",
+            "ground_points": 1984,
+            "interface_points": 3968,
+            "mean_wall_shear": 0.005515396781338584,
+            "normalized_wall_traction_error": 5.979669217760588e-05,
+            "normalized_interface_traction_RMS": 0.0002387524182133393,
+            "wall_spatial_standard_deviation": 2.007893826704938e-08
+          }
+        },
+        {
+          "time": 0.001,
+          "profile": {
+            "schema": "CT11TractionProfileReferenceV1",
+            "profile_sha256": "da586d077e4a0115a71274864d4b10717fe5b158c11b1f1dde4784c773af9b3a",
+            "artifact": "traction-profiles.json",
+            "state_sha256": "45e2ba77330947862eb7be5e56996d1dfc4e3387ee82690db7ec53d16de731f2",
+            "ground_points": 1984,
+            "interface_points": 3968,
+            "mean_wall_shear": 0.0055152859021100455,
+            "normalized_wall_traction_error": 7.989907152088739e-05,
+            "normalized_interface_traction_RMS": 0.0004505737687940558,
+            "wall_spatial_standard_deviation": 2.682905603375905e-08
+          }
+        },
+        {
+          "time": 0.0015,
+          "profile": {
+            "schema": "CT11TractionProfileReferenceV1",
+            "profile_sha256": "d676404c03f6db74561760f499a491f501fc4382352b637910624b4782757d34",
+            "artifact": "traction-profiles.json",
+            "state_sha256": "04134e30f8b1944339450b0e0445ac5424bb8b9533531413a8b7c1bf6b69151f",
+            "ground_points": 1984,
+            "interface_points": 3968,
+            "mean_wall_shear": 0.005515243092886713,
+            "normalized_wall_traction_error": 8.766037413972555e-05,
+            "normalized_interface_traction_RMS": 0.0006394460409987614,
+            "wall_spatial_standard_deviation": 2.9435241818458677e-08
+          }
+        },
+        {
+          "time": 0.002,
+          "profile": {
+            "schema": "CT11TractionProfileReferenceV1",
+            "profile_sha256": "5e2aed6bcc1b905d8330f23672de0b8af9330c2f6a96f5196b0f652813fb2f48",
+            "artifact": "traction-profiles.json",
+            "state_sha256": "adc2cf2beca7b4a7710ffb7d15eea8cf38a41152ff4cefdef0e7a5e9a82b756b",
+            "ground_points": 1984,
+            "interface_points": 3968,
+            "mean_wall_shear": 0.005515223527305922,
+            "normalized_wall_traction_error": 9.120760956259247e-05,
+            "normalized_interface_traction_RMS": 0.0008079975744052007,
+            "wall_spatial_standard_deviation": 3.062646203774007e-08
+          }
+        }
+      ],
+      "stages": [
+        {
+          "time": 0.0005,
+          "alpha": 2000,
+          "imposed_trace_defect": 4.643235268140728e-22,
+          "retained_trace_column_max": 51.90033982799321,
+          "trace_mass_column_max": 52.08333333333333,
+          "trace_physical_storage_contribution_max": 1.3178521816415553e-20,
+          "refreshed_trace_defect": 3.3300701717561575e-08,
+          "epsilon_frozen_linear_residual": 2.401718908547716e-21,
+          "k_frozen_linear_residual": 6.246867986000465e-20,
+          "epsilon_same_state_source_storage_defect": 2.6424780976374e-19,
+          "k_same_state_source_storage_defect": 2.1634809659650932e-17,
+          "refreshed_original_block_norms": [
+            0.00019760267758200242,
+            1.4344941157007094e-05,
+            1.2311870657736735e-07,
+            1.7762935589746848e-06,
+            4.5949182900653806e-17,
+            1.321334548118766e-16,
+            0,
+            6.158819685338763e-06
+          ],
+          "corrected_continuity_gauge": [
+            1.5360695020184772e-18,
+            2.5982923800846e-16,
+            0
+          ],
+          "frozen_momentum_defect": 1.1728980387427034e-07,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/flow-t0.00050000000000000001-60c53b83087a.json",
+            "sha256": "5b9e2447752e81f2e1a0de7e7b136b1e4af4dbdb1fc7a2a1ecbcb009575b9ca3"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/k-t0.00050000000000000001-60c53b83087a.json",
+            "sha256": "9afcef2361373dd16b6395a3e8d7f3533b64f979e67975aaa4ef37e5a73e3e7e"
+          }
+        },
+        {
+          "time": 0.001,
+          "alpha": 2000,
+          "imposed_trace_defect": 3.9715726076992906e-22,
+          "retained_trace_column_max": 51.90034064688069,
+          "trace_mass_column_max": 52.08333333333333,
+          "trace_physical_storage_contribution_max": 5.508043469749428e-07,
+          "refreshed_trace_defect": 4.505754758504939e-08,
+          "epsilon_frozen_linear_residual": 1.717640541966362e-21,
+          "k_frozen_linear_residual": 3.3696029432960135e-20,
+          "epsilon_same_state_source_storage_defect": 3.24241565230986e-19,
+          "k_same_state_source_storage_defect": 2.7632014684448192e-17,
+          "refreshed_original_block_norms": [
+            0.0001125958366647175,
+            6.686555147131209e-05,
+            1.6665231794892494e-07,
+            6.267572437807433e-07,
+            4.303986091915819e-17,
+            1.1638682620181116e-16,
+            0,
+            8.33319710177597e-06
+          ],
+          "corrected_continuity_gauge": [
+            1.4444958444183558e-18,
+            1.7925292565030542e-16,
+            0
+          ],
+          "frozen_momentum_defect": 2.646856075314166e-07,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/flow-t0.001-2a1223bce1df.json",
+            "sha256": "43134345d10ae54d0cb03137b62e8f47b7cf7afd6f86dfee2d600dbe269d65bf"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/k-t0.001-2a1223bce1df.json",
+            "sha256": "3350354728a97b52fd384a91b3a588969ea503c4e950c5a29c8d146682299599"
+          }
+        },
+        {
+          "time": 0.0015,
+          "alpha": 2000,
+          "imposed_trace_defect": 3.193197371792526e-22,
+          "retained_trace_column_max": 51.90034137816055,
+          "trace_mass_column_max": 52.08333333333333,
+          "trace_physical_storage_contribution_max": 7.456341037767753e-07,
+          "refreshed_trace_defect": 5.396205392800395e-08,
+          "epsilon_frozen_linear_residual": 9.628382330117242e-22,
+          "k_frozen_linear_residual": 3.6422416731934915e-20,
+          "epsilon_same_state_source_storage_defect": 1.3565762045869654e-19,
+          "k_same_state_source_storage_defect": 3.08439636204365e-17,
+          "refreshed_original_block_norms": [
+            8.500937303622432e-05,
+            7.003218388245823e-05,
+            1.9966832423609918e-07,
+            3.8368781495828615e-07,
+            4.6558491766157446e-17,
+            1.3002237273632148e-16,
+            0,
+            9.980046751322278e-06
+          ],
+          "corrected_continuity_gauge": [
+            1.6404916894663968e-18,
+            2.9075119524171524e-16,
+            0
+          ],
+          "frozen_momentum_defect": 2.8744510595222266e-07,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/flow-t0.0015-45e2ba773309.json",
+            "sha256": "2a7057347d0d973771de7683e1b2af39b175825195b76a83b61620e697572a17"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/k-t0.0015-45e2ba773309.json",
+            "sha256": "23ae5f64ecbf2404150c38df4b3d68b257fcc8f681a188c0b1dcb03df6414a1d"
+          }
+        },
+        {
+          "time": 0.002,
+          "alpha": 2000,
+          "imposed_trace_defect": 1.9289943771254846e-22,
+          "retained_trace_column_max": 51.900342036384934,
+          "trace_mass_column_max": 52.08333333333333,
+          "trace_physical_storage_contribution_max": 8.932771839928497e-07,
+          "refreshed_trace_defect": 6.053069358097609e-08,
+          "epsilon_frozen_linear_residual": 1.104286117758292e-21,
+          "k_frozen_linear_residual": 2.837560373301906e-20,
+          "epsilon_same_state_source_storage_defect": 3.3956095017546807e-19,
+          "k_same_state_source_storage_defect": 3.832400569852082e-17,
+          "refreshed_original_block_norms": [
+            7.493806732892917e-05,
+            5.40818503337765e-05,
+            2.240671768956451e-07,
+            3.181581803051573e-07,
+            3.626362600375803e-17,
+            1.2557203529849347e-16,
+            0,
+            1.1194888034360079e-05
+          ],
+          "corrected_continuity_gauge": [
+            1.7543399838248868e-18,
+            3.0313310864675476e-16,
+            0
+          ],
+          "frozen_momentum_defect": 1.9904740053004147e-07,
+          "governing_solves_complete": true,
+          "scheduled_complete": true,
+          "failure": "",
+          "outer_sweeps": 1,
+          "bound_calls": 0,
+          "additional_governing_equation_solves": 0,
+          "additional_correction_or_restoration_solves": 0,
+          "flow_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/flow-t0.002-04134e30f8b1.json",
+            "sha256": "39fbba8591a04c8e08193e012d3ab97a4e058906b7f1d35d78cec839f82dc36f"
+          },
+          "k_snapshot": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/pimple-states/k-t0.002-04134e30f8b1.json",
+            "sha256": "7803bfcffbfc15f25c513b903f4d7f81e4958281db7de05e92dfdf5a9e4bf03e"
+          }
+        }
+      ],
+      "effective_inputs": {
+        "native": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        },
+        "q48f16": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        },
+        "q64f16": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        },
+        "q64f32": {
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "current_time_essential_lift_difference": 0,
+          "current_time_essential_lift_difference_by_block": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "actual_flow_stage_maximum_difference": 0,
+          "actual_pre_k_stage_maximum_difference": 0
+        }
+      }
+    }
+  },
+  "semantics": "raw accepted-state traction remains separate from refreshed dependent-epsilon trace lag; neither is repaired or substituted for the other"
+}

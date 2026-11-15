@@ -1,0 +1,520 @@
+{
+  "schema": "CT11AuditCapacityV1",
+  "status": "pass",
+  "actual_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+  "policy": "NativeOwnerVolumeStreamV1",
+  "controls": {
+    "native": {
+      "orders": [
+        32,
+        8,
+        12,
+        12,
+        64
+      ],
+      "face_order": 16,
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe",
+          "case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1/native/request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1/native/packet.json"
+        ],
+        "pid": 215272,
+        "exit_code": 0,
+        "wall_seconds": 101.25758625200251,
+        "process_cpu_seconds": 100.41882299999999,
+        "peak_RSS_KiB": 3691640,
+        "peak_virtual_KiB": 9309196,
+        "control_wall_limit_reached": false,
+        "actual_mapped_files_catalog_sha256": "368640ffbc4af231c9c57e8afe36ea95b82b53e85dd65a53e52e12c7dadc5de2"
+      },
+      "request_sha256": "0eac09a9e6b0ef0def357dba06edea218c187cc17d7d94afa1f803190cec719f",
+      "configuration_sha256": "b0c215645369b1a904478dd2808d0ef8ab74097202a9c304cc6b6b83f08e5362",
+      "packet_sha256": "60c130bea8205f5679639eccb4344da6a078859e42bc5d9ed65747dcf57a9924",
+      "actual_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+      "equations": {
+        "inner_k": {
+          "storage_backward_difference": 0,
+          "stage_source": 8.805341880061685e-08,
+          "instantaneous_source": 8.805341880061685e-08,
+          "stage_physical_boundary_flux": -4.0770245973436435e-15,
+          "instantaneous_physical_boundary_flux": -4.0770245973436435e-15,
+          "volume": 10.312500000000268,
+          "frozen_stage_physical_defect": -8.805341472359225e-08,
+          "instantaneous_physical_defect": -8.805341472359225e-08,
+          "frozen_operator_splitting": -8.828765590443468e-25,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 3.797170120942905e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "outer_k": {
+          "storage_backward_difference": 0,
+          "stage_source": -5.641728003986006e-08,
+          "instantaneous_source": -5.6417280041308524e-08,
+          "stage_physical_boundary_flux": -2.4700003427969606e-15,
+          "instantaneous_physical_boundary_flux": -2.4700003427969606e-15,
+          "volume": 1089.6875000000105,
+          "frozen_stage_physical_defect": 5.6417282509860404e-08,
+          "instantaneous_physical_defect": 5.641728251130887e-08,
+          "frozen_operator_splitting": 1.4484634506266301e-18,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 2.432909843686492e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "outer_epsilon": {
+          "storage_backward_difference": 0,
+          "stage_source": -0.012806754471156376,
+          "instantaneous_source": -0.012806754471156378,
+          "stage_physical_boundary_flux": 0.012789148929842549,
+          "instantaneous_physical_boundary_flux": 0.012789148929842549,
+          "volume": 1089.6875000000105,
+          "frozen_stage_physical_defect": 1.7605541313827494e-05,
+          "instantaneous_physical_defect": 1.760554131382923e-05,
+          "frozen_operator_splitting": 1.734723475976807e-18,
+          "physical_scale": 11.151925336598463,
+          "scaled_frozen_defect": 1.5786997117035487e-06,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "whole_k": {
+          "storage_backward_difference": 0,
+          "stage_source": 3.163613876075679e-08,
+          "instantaneous_source": 3.163613875930832e-08,
+          "stage_physical_boundary_flux": -4.841357499528039e-15,
+          "instantaneous_physical_boundary_flux": -4.841357499528039e-15,
+          "volume": 1100.0000000000107,
+          "frozen_stage_physical_defect": -3.163613391939929e-08,
+          "instantaneous_physical_defect": -3.1636133917950826e-08,
+          "frozen_operator_splitting": 1.4484686619762708e-18,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 1.3642603508107378e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        }
+      },
+      "volume_observer": {
+        "policy": "NativeOwnerVolumeStreamV1",
+        "inner_points": 126976,
+        "outer_points": 102672,
+        "physical_weights": [
+          10.312500000000268,
+          1089.6875000000105
+        ],
+        "native_rows_provenance_fnv1a64": "31904150087938135",
+        "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+        "materialized_global_volume_rows": false
+      },
+      "output_bytes": 22995615,
+      "frozen_load_reconstruction": {
+        "k": {
+          "maximum_defect": 1.1102230246251565e-16,
+          "normalization": 1.0,
+          "scaled_defect": 1.1102230246251565e-16,
+          "status": "pass"
+        },
+        "outer_epsilon": {
+          "maximum_defect": 1.2940545851677573e-18,
+          "normalization": 1.0,
+          "scaled_defect": 1.2940545851677573e-18,
+          "status": "pass"
+        }
+      },
+      "equation_names": [
+        "inner_k",
+        "outer_epsilon",
+        "outer_k",
+        "whole_k"
+      ],
+      "status": "pass"
+    },
+    "q48f16": {
+      "orders": [
+        48,
+        12,
+        16,
+        16,
+        16
+      ],
+      "face_order": 16,
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe",
+          "case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1/q48f16/request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1/q48f16/packet.json"
+        ],
+        "pid": 215509,
+        "exit_code": 0,
+        "wall_seconds": 163.8625743680168,
+        "process_cpu_seconds": 162.99626800000004,
+        "peak_RSS_KiB": 5976232,
+        "peak_virtual_KiB": 11480904,
+        "control_wall_limit_reached": false,
+        "actual_mapped_files_catalog_sha256": "546a5b76962672bdc6fa5929da5598d45ee7300c7fe217f5c80fc1938dadfd4e"
+      },
+      "request_sha256": "0eac09a9e6b0ef0def357dba06edea218c187cc17d7d94afa1f803190cec719f",
+      "configuration_sha256": "6389bde2b8dc0dae5131bce508e0514ae47ec9a773cca8b7fc07ed4dae721c2d",
+      "packet_sha256": "dd244ba95284fe1208efbbd5e0ea6d2df8a7cc519384318d3e0ad1b3abe039d3",
+      "actual_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+      "equations": {
+        "inner_k": {
+          "storage_backward_difference": 0,
+          "stage_source": 8.805341876616429e-08,
+          "instantaneous_source": 8.805341876616429e-08,
+          "stage_physical_boundary_flux": -4.0770245973436435e-15,
+          "instantaneous_physical_boundary_flux": -4.0770245973436435e-15,
+          "volume": 10.312499999999945,
+          "frozen_stage_physical_defect": -8.805341468913969e-08,
+          "instantaneous_physical_defect": -8.805341468913969e-08,
+          "frozen_operator_splitting": -8.828765590443468e-25,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 3.79717011945719e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "outer_k": {
+          "storage_backward_difference": 0,
+          "stage_source": -5.641728001443035e-08,
+          "instantaneous_source": -5.6417280015539856e-08,
+          "stage_physical_boundary_flux": -2.4700003427969606e-15,
+          "instantaneous_physical_boundary_flux": -2.4700003427969606e-15,
+          "volume": 1089.6875000000357,
+          "frozen_stage_physical_defect": 5.6417282484430695e-08,
+          "instantaneous_physical_defect": 5.64172824855402e-08,
+          "frozen_operator_splitting": 1.1095046879371007e-18,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 2.432909842589874e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "outer_epsilon": {
+          "storage_backward_difference": 0,
+          "stage_source": -0.012806754471156595,
+          "instantaneous_source": -0.012806754471156598,
+          "stage_physical_boundary_flux": 0.012789148929842549,
+          "instantaneous_physical_boundary_flux": 0.012789148929842549,
+          "volume": 1089.6875000000357,
+          "frozen_stage_physical_defect": 1.760554131404607e-05,
+          "instantaneous_physical_defect": 1.760554131404954e-05,
+          "frozen_operator_splitting": 3.469446951953614e-18,
+          "physical_scale": 11.151925336598463,
+          "scaled_frozen_defect": 1.5786997117231484e-06,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "whole_k": {
+          "storage_backward_difference": 0,
+          "stage_source": 3.1636138751733936e-08,
+          "instantaneous_source": 3.163613875062443e-08,
+          "stage_physical_boundary_flux": -4.841357499528039e-15,
+          "instantaneous_physical_boundary_flux": -4.841357499528039e-15,
+          "volume": 1100.0000000000357,
+          "frozen_stage_physical_defect": -3.163613391037644e-08,
+          "instantaneous_physical_defect": -3.163613390926693e-08,
+          "frozen_operator_splitting": 1.1095098992867413e-18,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 1.364260350421641e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        }
+      },
+      "volume_observer": {
+        "policy": "NativeOwnerVolumeStreamV1",
+        "inner_points": 285696,
+        "outer_points": 182528,
+        "physical_weights": [
+          10.312499999999945,
+          1089.6875000000357
+        ],
+        "native_rows_provenance_fnv1a64": "9247080340158599051",
+        "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+        "materialized_global_volume_rows": false
+      },
+      "output_bytes": 16574152,
+      "frozen_load_reconstruction": {
+        "k": {
+          "maximum_defect": 1.3877787807814457e-16,
+          "normalization": 1.0,
+          "scaled_defect": 1.3877787807814457e-16,
+          "status": "pass"
+        },
+        "outer_epsilon": {
+          "maximum_defect": 3.761429300475645e-18,
+          "normalization": 1.0,
+          "scaled_defect": 3.761429300475645e-18,
+          "status": "pass"
+        }
+      },
+      "equation_names": [
+        "inner_k",
+        "outer_epsilon",
+        "outer_k",
+        "whole_k"
+      ],
+      "status": "pass"
+    },
+    "q64f16": {
+      "orders": [
+        64,
+        16,
+        20,
+        20,
+        20
+      ],
+      "face_order": 16,
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe",
+          "case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1/q64f16/request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1/q64f16/packet.json"
+        ],
+        "pid": 215867,
+        "exit_code": 0,
+        "wall_seconds": 260.16713331098435,
+        "process_cpu_seconds": 259.22047799999996,
+        "peak_RSS_KiB": 9026700,
+        "peak_virtual_KiB": 15261656,
+        "control_wall_limit_reached": false,
+        "actual_mapped_files_catalog_sha256": "a4540e02760da7f6495989091fcc39308dc68fd8a081bd5fe395b9c98ed1f713"
+      },
+      "request_sha256": "0eac09a9e6b0ef0def357dba06edea218c187cc17d7d94afa1f803190cec719f",
+      "configuration_sha256": "4be61302afc3d846e4d7bdf559b09e6ea9cf536467ba8695fd59580ce27b45aa",
+      "packet_sha256": "96edb308112cdafd4a1a29e5b1d7e0192648edf80641cfac5621c1f7e19e9ae7",
+      "actual_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+      "equations": {
+        "inner_k": {
+          "storage_backward_difference": 0,
+          "stage_source": 8.805341877289232e-08,
+          "instantaneous_source": 8.805341877289232e-08,
+          "stage_physical_boundary_flux": -4.0770245973436435e-15,
+          "instantaneous_physical_boundary_flux": -4.0770245973436435e-15,
+          "volume": 10.31250000000085,
+          "frozen_stage_physical_defect": -8.805341469586772e-08,
+          "instantaneous_physical_defect": -8.805341469586772e-08,
+          "frozen_operator_splitting": -8.828765590443468e-25,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 3.797170119747327e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "outer_k": {
+          "storage_backward_difference": 0,
+          "stage_source": -5.641728002461038e-08,
+          "instantaneous_source": -5.641728002477478e-08,
+          "stage_physical_boundary_flux": -2.4700003427969606e-15,
+          "instantaneous_physical_boundary_flux": -2.4700003427969606e-15,
+          "volume": 1089.6874999999993,
+          "frozen_stage_physical_defect": 5.641728249461073e-08,
+          "instantaneous_physical_defect": 5.6417282494775124e-08,
+          "frozen_operator_splitting": 1.6439458981361293e-19,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 2.432909843028873e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "outer_epsilon": {
+          "storage_backward_difference": 0,
+          "stage_source": -0.012806754471155951,
+          "instantaneous_source": -0.01280675447115595,
+          "stage_physical_boundary_flux": 0.012789148929842549,
+          "instantaneous_physical_boundary_flux": 0.012789148929842549,
+          "volume": 1089.6874999999993,
+          "frozen_stage_physical_defect": 1.7605541313402487e-05,
+          "instantaneous_physical_defect": 1.7605541313400752e-05,
+          "frozen_operator_splitting": -1.734723475976807e-18,
+          "physical_scale": 11.151925336598463,
+          "scaled_frozen_defect": 1.5786997116654381e-06,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "whole_k": {
+          "storage_backward_difference": 0,
+          "stage_source": 3.163613874828194e-08,
+          "instantaneous_source": 3.163613874811754e-08,
+          "stage_physical_boundary_flux": -4.841357499528039e-15,
+          "instantaneous_physical_boundary_flux": -4.841357499528039e-15,
+          "volume": 1100.0000000000002,
+          "frozen_stage_physical_defect": -3.163613390692444e-08,
+          "instantaneous_physical_defect": -3.1636133906760045e-08,
+          "frozen_operator_splitting": 1.643998011632536e-19,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 1.3642603502727788e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        }
+      },
+      "volume_observer": {
+        "policy": "NativeOwnerVolumeStreamV1",
+        "inner_points": 507904,
+        "outer_points": 285200,
+        "physical_weights": [
+          10.31250000000085,
+          1089.6874999999993
+        ],
+        "native_rows_provenance_fnv1a64": "16538083180762623575",
+        "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+        "materialized_global_volume_rows": false
+      },
+      "output_bytes": 17700979,
+      "frozen_load_reconstruction": {
+        "k": {
+          "maximum_defect": 3.608224830031759e-16,
+          "normalization": 1.0,
+          "scaled_defect": 3.608224830031759e-16,
+          "status": "pass"
+        },
+        "outer_epsilon": {
+          "maximum_defect": 4.169590820391973e-18,
+          "normalization": 1.0,
+          "scaled_defect": 4.169590820391973e-18,
+          "status": "pass"
+        }
+      },
+      "equation_names": [
+        "inner_k",
+        "outer_epsilon",
+        "outer_k",
+        "whole_k"
+      ],
+      "status": "pass"
+    },
+    "q64f32": {
+      "orders": [
+        64,
+        16,
+        20,
+        20,
+        20
+      ],
+      "face_order": 32,
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe",
+          "case.xml",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1/q64f32/request.json",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1/q64f32/packet.json"
+        ],
+        "pid": 216353,
+        "exit_code": 0,
+        "wall_seconds": 262.52172148402315,
+        "process_cpu_seconds": 261.59493899999995,
+        "peak_RSS_KiB": 9026724,
+        "peak_virtual_KiB": 15261648,
+        "control_wall_limit_reached": false,
+        "actual_mapped_files_catalog_sha256": "1e8d5c845c99715884766b5dfa3eb6b7722c69eef6f2e766b85d4f8be8eb5a94"
+      },
+      "request_sha256": "7e41b41892a9992c8d220e46565fcb24cd395f21a90bf52c6a27b604a266f747",
+      "configuration_sha256": "4be61302afc3d846e4d7bdf559b09e6ea9cf536467ba8695fd59580ce27b45aa",
+      "packet_sha256": "bf353ed27b0109e72809f0bbc24ce21bc5262747974d369fa9f40baecaab7f1d",
+      "actual_initial_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+      "equations": {
+        "inner_k": {
+          "storage_backward_difference": 0,
+          "stage_source": 8.805341877289232e-08,
+          "instantaneous_source": 8.805341877289232e-08,
+          "stage_physical_boundary_flux": -4.0777181554331484e-15,
+          "instantaneous_physical_boundary_flux": -4.0777181554331484e-15,
+          "volume": 10.31250000000085,
+          "frozen_stage_physical_defect": -8.805341469517416e-08,
+          "instantaneous_physical_defect": -8.805341469517416e-08,
+          "frozen_operator_splitting": -3.95849534492908e-24,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 3.797170119717418e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "outer_k": {
+          "storage_backward_difference": 0,
+          "stage_source": -5.641728002461038e-08,
+          "instantaneous_source": -5.641728002477478e-08,
+          "stage_physical_boundary_flux": -7.028592218628376e-16,
+          "instantaneous_physical_boundary_flux": -7.028592218628376e-16,
+          "volume": 1089.6874999999993,
+          "frozen_stage_physical_defect": 5.6417280727469606e-08,
+          "instantaneous_physical_defect": 5.6417280727634e-08,
+          "frozen_operator_splitting": 1.6439458981430319e-19,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 2.432909766823589e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "outer_epsilon": {
+          "storage_backward_difference": 0,
+          "stage_source": -0.012806754471155951,
+          "instantaneous_source": -0.01280675447115595,
+          "stage_physical_boundary_flux": 0.012789148929842542,
+          "instantaneous_physical_boundary_flux": 0.012789148929842542,
+          "volume": 1089.6874999999993,
+          "frozen_stage_physical_defect": 1.7605541313409426e-05,
+          "instantaneous_physical_defect": 1.760554131340769e-05,
+          "frozen_operator_splitting": -1.734723475976807e-18,
+          "physical_scale": 11.151925336598463,
+          "scaled_frozen_defect": 1.5786997116660603e-06,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        },
+        "whole_k": {
+          "storage_backward_difference": 0,
+          "stage_source": 3.163613874828194e-08,
+          "instantaneous_source": 3.163613874811754e-08,
+          "stage_physical_boundary_flux": -3.0751115374165654e-15,
+          "instantaneous_physical_boundary_flux": -3.0751115374165654e-15,
+          "volume": 1100.0000000000002,
+          "frozen_stage_physical_defect": -3.16361356731704e-08,
+          "instantaneous_physical_defect": -3.1636135673006004e-08,
+          "frozen_operator_splitting": 1.6439699979866674e-19,
+          "physical_scale": 23.189220371755958,
+          "scaled_frozen_defect": 1.3642604264394603e-09,
+          "accuracy_limit": 0.02,
+          "status": "pass"
+        }
+      },
+      "volume_observer": {
+        "policy": "NativeOwnerVolumeStreamV1",
+        "inner_points": 507904,
+        "outer_points": 285200,
+        "physical_weights": [
+          10.31250000000085,
+          1089.6874999999993
+        ],
+        "native_rows_provenance_fnv1a64": "16538083180762623575",
+        "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+        "materialized_global_volume_rows": false
+      },
+      "output_bytes": 19538336,
+      "frozen_load_reconstruction": {
+        "k": {
+          "maximum_defect": 3.885780586188048e-16,
+          "normalization": 1.0,
+          "scaled_defect": 3.885780586188048e-16,
+          "status": "pass"
+        },
+        "outer_epsilon": {
+          "maximum_defect": 4.169590820391973e-18,
+          "normalization": 1.0,
+          "scaled_defect": 4.169590820391973e-18,
+          "status": "pass"
+        }
+      },
+      "equation_names": [
+        "inner_k",
+        "outer_epsilon",
+        "outer_k",
+        "whole_k"
+      ],
+      "status": "pass"
+    }
+  },
+  "physical_budget_qualification": "not_supplied_by_this_static_fixture",
+  "native_trajectory": "not_run",
+  "first_failure": null,
+  "qualification": {
+    "status": "pass",
+    "reasons": [],
+    "scope": "actual initialized target capacity/reconstruction only; no trajectory or finite-defect accuracy qualification"
+  }
+}

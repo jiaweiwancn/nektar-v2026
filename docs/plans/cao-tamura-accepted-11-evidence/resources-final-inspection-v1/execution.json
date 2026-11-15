@@ -1,0 +1,33 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "-c",
+    "import json,pathlib; r=pathlib.Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115\"); d=json.loads((r/'target-v1/0.001/case.evolution.json').read_text()); print('report keys',list(d)); print('attempt keys',list(d['pimple_attempts'][-1])); print('trace-like top',[(k,v) for k,v in d.items() if ('lag' in k.lower() or 'trace' in k.lower()) and not isinstance(v,(dict,list))]); print('trace-like attempt',[(k,v) for k,v in d['pimple_attempts'][-1].items() if ('lag' in k.lower() or 'trace' in k.lower()) and not isinstance(v,(dict,list))])"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 225769,
+  "guard_pid": 225770,
+  "owned_family_pid": 225773,
+  "wall_seconds": 1.7625554880069103,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 1.7217099999999999,
+  "resource": {
+    "maximum_aggregate": 4,
+    "maximum_project": 4,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}

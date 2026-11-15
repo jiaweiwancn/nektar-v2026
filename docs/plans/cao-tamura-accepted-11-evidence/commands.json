@@ -1,0 +1,776 @@
+{
+  "schema": "CT11CompletedOwnedCommandsV1",
+  "experiment_root": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115",
+  "records": {
+    "resources-build-v1": {
+      "execution": {
+        "command": [
+          "timeout",
+          "-k",
+          "30s",
+          "7200",
+          "python3",
+          "-B",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_build.py",
+          "--root",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115",
+          "--ct9",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114",
+          "--output",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/build-v1"
+        ],
+        "exit_code": 1,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 212739,
+        "guard_pid": 212740,
+        "owned_family_pid": 212743,
+        "wall_seconds": 57.42206956600421,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 87.174938,
+        "resource": {
+          "maximum_aggregate": 14,
+          "maximum_project": 14,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "b95fd6b8f5ecd9c72a84beef2c536414e0cccf4ea906a20e0199fe2e24ae7250",
+      "scope": "closed scientific/build family bound by qualified-v1; build-v1 and target-v1 nonzero exits retained"
+    },
+    "resources-build-v2": {
+      "execution": {
+        "command": [
+          "timeout",
+          "-k",
+          "30s",
+          "7200",
+          "python3",
+          "-B",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_build.py",
+          "--root",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115",
+          "--ct9",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114",
+          "--output",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/build-v2"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 213105,
+        "guard_pid": 213115,
+        "owned_family_pid": 213118,
+        "wall_seconds": 118.58070256200153,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 228.624013,
+        "resource": {
+          "maximum_aggregate": 14,
+          "maximum_project": 14,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "ec2cfffdb0e8ea4537b893a55a90c1d4ed945a0a0da143005807a4e2f5259c63",
+      "scope": "closed scientific/build family bound by qualified-v1; build-v1 and target-v1 nonzero exits retained"
+    },
+    "resources-capacity-v1": {
+      "execution": {
+        "command": [
+          "timeout",
+          "-k",
+          "30s",
+          "7200",
+          "python3",
+          "-B",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_capacity.py",
+          "--ct9",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114",
+          "--runtime",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime",
+          "--preflight",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-10-20261114/target-preflight-v1",
+          "--contract",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/docs/plans/cao-tamura-accepted-11-evidence/contract.json",
+          "--equivalence",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/equivalence-v1",
+          "--output",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 215244,
+        "guard_pid": 215254,
+        "owned_family_pid": 215257,
+        "wall_seconds": 792.0168922279845,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 1022.736464,
+        "resource": {
+          "maximum_aggregate": 12,
+          "maximum_project": 12,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "3fcbce59f864f0db1103a8286715d9aa54c994015ec323014da0f2ceb6d3b54d",
+      "scope": "closed scientific/build family bound by qualified-v1; build-v1 and target-v1 nonzero exits retained"
+    },
+    "resources-controls-v1": {
+      "execution": {
+        "command": [
+          "timeout",
+          "-k",
+          "30s",
+          "7200",
+          "python3",
+          "-B",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_controls.py",
+          "--ct9",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114",
+          "--runtime",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime",
+          "--equivalence",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/equivalence-v1",
+          "--capacity",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1",
+          "--preflight",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-10-20261114/target-preflight-v1",
+          "--observer-resources",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/resources-equivalence-v1",
+          "--capacity-resources",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/resources-capacity-v1",
+          "--output",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/controls-v1"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 217583,
+        "guard_pid": 217593,
+        "owned_family_pid": 217596,
+        "wall_seconds": 6.844441287015798,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 8.044609000000001,
+        "resource": {
+          "maximum_aggregate": 12,
+          "maximum_project": 12,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "e4e5edf1ce010848ecac1b871cc8e561caa9316954ff54d09bf06f3a31bb84b4",
+      "scope": "closed scientific/build family bound by qualified-v1; build-v1 and target-v1 nonzero exits retained"
+    },
+    "resources-equivalence-v1": {
+      "execution": {
+        "command": [
+          "timeout",
+          "-k",
+          "30s",
+          "7200",
+          "python3",
+          "-B",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_equivalence.py",
+          "--root",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115",
+          "--ct9",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114",
+          "--ct10",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-10-20261114",
+          "--runtime",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime",
+          "--old-runtime",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime",
+          "--contract",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/docs/plans/cao-tamura-accepted-11-evidence/contract.json",
+          "--output",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/equivalence-v1"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 213622,
+        "guard_pid": 213632,
+        "owned_family_pid": 213635,
+        "wall_seconds": 573.4100454990112,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 761.288045,
+        "resource": {
+          "maximum_aggregate": 12,
+          "maximum_project": 12,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "a4d0b7fd4a316ee93202f61a74133fa7eb7c37578967732240b3242db78beff9",
+      "scope": "closed scientific/build family bound by qualified-v1; build-v1 and target-v1 nonzero exits retained"
+    },
+    "resources-source-v1": {
+      "execution": {
+        "command": [
+          "bash",
+          "-c",
+          "set -e; git -c core.preloadIndex=false -c index.threads=1 -c pack.threads=1 -c gc.auto=0 clone --shared --no-checkout '/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-10-20261114/source' '/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source'; git -C '/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source' -c core.preloadIndex=false -c index.threads=1 -c pack.threads=1 -c gc.auto=0 fetch '/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source.bundle' HEAD; git -C '/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source' -c core.preloadIndex=false -c index.threads=1 -c core.filemode=false checkout --detach FETCH_HEAD; git -C '/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source' -c core.filemode=false status --porcelain"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 212644,
+        "guard_pid": 212645,
+        "owned_family_pid": 212648,
+        "wall_seconds": 13.52836485102307,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 7.424182,
+        "resource": {
+          "maximum_aggregate": 6,
+          "maximum_project": 6,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "a6a763d1da0d1e268c119bf810e88ed16e639340e0e45f780f8d0cd25379f482",
+      "scope": "closed scientific/build family bound by qualified-v1; build-v1 and target-v1 nonzero exits retained"
+    },
+    "resources-target-v1": {
+      "execution": {
+        "command": [
+          "timeout",
+          "-k",
+          "30s",
+          "7200",
+          "python3",
+          "-B",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_target.py",
+          "--ct9",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114",
+          "--runtime",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime",
+          "--probe",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime",
+          "--preflight",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-10-20261114/target-preflight-v1",
+          "--strip",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-10-20261114/candidate-T020-v2",
+          "--contract",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/docs/plans/cao-tamura-accepted-11-evidence/contract.json",
+          "--audit-capacity",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1",
+          "--equivalence",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/equivalence-v1",
+          "--observer-resources",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/resources-equivalence-v1",
+          "--capacity-resources",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/resources-capacity-v1",
+          "--verification",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/controls-v1",
+          "--verification-resources",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/resources-controls-v1",
+          "--output",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1"
+        ],
+        "exit_code": 1,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 217674,
+        "guard_pid": 217675,
+        "owned_family_pid": 217678,
+        "wall_seconds": 3063.0664805390115,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 4173.708081,
+        "resource": {
+          "maximum_aggregate": 20,
+          "maximum_project": 12,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "21d8dbe3e371dcf5597bd2b90e4223c6e16a51b0fb177407a3c6a822a4f68e02",
+      "scope": "closed scientific/build family bound by qualified-v1; build-v1 and target-v1 nonzero exits retained"
+    },
+    "publication-v1/collector-resource/execution.json": {
+      "execution": {
+        "command": [
+          "timeout",
+          "-k",
+          "30s",
+          "7200",
+          "python3",
+          "-B",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_collect.py",
+          "--root",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115",
+          "--ct9",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-9-20261114",
+          "--ct10",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-10-20261114",
+          "--runtime",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime",
+          "--equivalence",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/equivalence-v1",
+          "--capacity",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1",
+          "--controls",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/controls-v1",
+          "--target",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/target-v1",
+          "--self-control",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/resources-collect-v1",
+          "--output",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/qualified-v1"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 225167,
+        "guard_pid": 225177,
+        "owned_family_pid": 225180,
+        "wall_seconds": 10.77573028599727,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 10.565296,
+        "resource": {
+          "maximum_aggregate": 6,
+          "maximum_project": 6,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "d6b71bfc8a50893230acb1a7748aedce0e78a5c820f6b4adbb0d2db9577d183d",
+      "scope": "separately closed collection/publication/extraction/packaging; no new governing trajectory"
+    },
+    "resources-final-inspection-v1/execution.json": {
+      "execution": {
+        "command": [
+          "python3",
+          "-B",
+          "-c",
+          "import json,pathlib; r=pathlib.Path(\"/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115\"); d=json.loads((r/'target-v1/0.001/case.evolution.json').read_text()); print('report keys',list(d)); print('attempt keys',list(d['pimple_attempts'][-1])); print('trace-like top',[(k,v) for k,v in d.items() if ('lag' in k.lower() or 'trace' in k.lower()) and not isinstance(v,(dict,list))]); print('trace-like attempt',[(k,v) for k,v in d['pimple_attempts'][-1].items() if ('lag' in k.lower() or 'trace' in k.lower()) and not isinstance(v,(dict,list))])"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 225769,
+        "guard_pid": 225770,
+        "owned_family_pid": 225773,
+        "wall_seconds": 1.7625554880069103,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 1.7217099999999999,
+        "resource": {
+          "maximum_aggregate": 4,
+          "maximum_project": 4,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "cfa353446b4be2d90d6453037b8a3a17e8970ff2970a055664d3fc21a200a44c",
+      "scope": "separately closed collection/publication/extraction/packaging; no new governing trajectory"
+    },
+    "resources-native-package-v1/execution.json": {
+      "execution": {
+        "command": [
+          "python3",
+          "-B",
+          "-c",
+          "import pathlib,tarfile,hashlib; r=pathlib.Path(\"/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115\"); names=[\"native-receipts-v2\",\"resources-native-receipts-v2\",\"resources-native-receipts-v1\",\"resources-source-final-v2\",\"resources-source-final-v1\",\"resources-final-inspection-v1\"]; f=r/'native-receipts-package-v1.tar.gz'; assert not f.exists(); t=tarfile.open(f,'w:gz'); [(t.add(r/n,arcname=n)) for n in names]; t.close(); print(hashlib.sha256(f.read_bytes()).hexdigest())"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 226066,
+        "guard_pid": 226067,
+        "owned_family_pid": 226070,
+        "wall_seconds": 0.6401239180122502,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 0.260259,
+        "resource": {
+          "maximum_aggregate": 3,
+          "maximum_project": 3,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "1653393c4c1005d9787b5bc699757f7e173a62520233d57c1ac8b4a9f3dc7510",
+      "scope": "separately closed collection/publication/extraction/packaging; no new governing trajectory"
+    },
+    "resources-native-receipts-v1/execution.json": {
+      "execution": {
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_native_receipts.py",
+          "--qualified",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/qualified-v1",
+          "--output",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/native-receipts-v1"
+        ],
+        "exit_code": 2,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 225910,
+        "guard_pid": 225911,
+        "owned_family_pid": 225914,
+        "wall_seconds": 0.6534643069899175,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 0.22989099999999998,
+        "resource": {
+          "maximum_aggregate": 3,
+          "maximum_project": 3,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "4def2069413a699e99a1bf8f9d9e69eb1beda64089b3bd51ab862d4c768d111e",
+      "scope": "separately closed collection/publication/extraction/packaging; no new governing trajectory"
+    },
+    "resources-native-receipts-v2/execution.json": {
+      "execution": {
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_native_receipts.py",
+          "--qualified",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/qualified-v1",
+          "--output",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/native-receipts-v2"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 226015,
+        "guard_pid": 226016,
+        "owned_family_pid": 226019,
+        "wall_seconds": 4.00066092601628,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 4.17183,
+        "resource": {
+          "maximum_aggregate": 4,
+          "maximum_project": 4,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "c9946da88fc685d3c5b904cd3debbd9d3176167cd6912b8c8a69595a476a293d",
+      "scope": "separately closed collection/publication/extraction/packaging; no new governing trajectory"
+    },
+    "resources-publish-v1/execution.json": {
+      "execution": {
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_publish.py",
+          "--root",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115",
+          "--qualified",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/qualified-v1",
+          "--collector",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/resources-collect-v1",
+          "--output",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/publication-v1"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 225276,
+        "guard_pid": 225277,
+        "owned_family_pid": 225280,
+        "wall_seconds": 4.045518044003984,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 3.100291,
+        "resource": {
+          "maximum_aggregate": 5,
+          "maximum_project": 5,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "cd370ad7bece85d33f83fb0a58f7caec1c29d37a537385d7f6a5535d84efc23f",
+      "scope": "separately closed collection/publication/extraction/packaging; no new governing trajectory"
+    },
+    "resources-source-final-v1/execution.json": {
+      "execution": {
+        "command": [
+          "python3",
+          "-B",
+          "-c",
+          "import subprocess,pathlib; p=pathlib.Path(\"/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115\"); g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','pack.threads=1','-c','core.filemode=false']; assert not subprocess.check_output(g+['status','--porcelain'],cwd=p/'source',text=True); subprocess.run(g+['fetch',str(p/'tmp/native-receipts-f11e5efe.bundle'),'codex/a93-a95-e94e95-awf'],cwd=p/'source',check=True); subprocess.run(g+['merge','--ff-only','FETCH_HEAD'],cwd=p/'source',check=True)"
+        ],
+        "exit_code": 1,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 225862,
+        "guard_pid": 225863,
+        "owned_family_pid": 225866,
+        "wall_seconds": 1.7984074499981944,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 0.8830979999999999,
+        "resource": {
+          "maximum_aggregate": 5,
+          "maximum_project": 5,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "3118d81c086783c8bd0373e5f038e83e3da992d3596f04c30b0e2250eace844a",
+      "scope": "separately closed collection/publication/extraction/packaging; no new governing trajectory"
+    },
+    "resources-source-final-v2/execution.json": {
+      "execution": {
+        "command": [
+          "python3",
+          "-B",
+          "-c",
+          "import subprocess,pathlib; p=pathlib.Path(\"/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115\"); g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','pack.threads=1','-c','core.filemode=false']; assert not subprocess.check_output(g+['status','--porcelain'],cwd=p/'source',text=True); subprocess.run(g+['fetch',str(p/'tmp/native-receipts-f11e5efe.bundle'),'HEAD'],cwd=p/'source',check=True); subprocess.run(g+['merge','--ff-only','FETCH_HEAD'],cwd=p/'source',check=True)"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 225955,
+        "guard_pid": 225956,
+        "owned_family_pid": 225959,
+        "wall_seconds": 3.550799553981051,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 1.565598,
+        "resource": {
+          "maximum_aggregate": 6,
+          "maximum_project": 6,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "8c262ac0c4811ed49407614ab56029dc9c1b04f560842120822b6fcdcc71bf43",
+      "scope": "separately closed collection/publication/extraction/packaging; no new governing trajectory"
+    },
+    "resources-summary-v1/execution.json": {
+      "execution": {
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_summary.py",
+          "--qualified",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/qualified-v1",
+          "--output",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/summary-v1"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 225418,
+        "guard_pid": 225429,
+        "owned_family_pid": 225432,
+        "wall_seconds": 1.2041115209867712,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 0.8452710000000001,
+        "resource": {
+          "maximum_aggregate": 4,
+          "maximum_project": 4,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "edf5c1b1a2d0be2f1db9f1fc58de43e0ba11b78e385967db24fdc2b5d0ef3467",
+      "scope": "separately closed collection/publication/extraction/packaging; no new governing trajectory"
+    },
+    "supplement-resource-v1/execution.json": {
+      "execution": {
+        "command": [
+          "tar",
+          "-czf",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115/summary-package-v1.tar.gz",
+          "-C",
+          "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-11-20261115",
+          "summary-v1",
+          "resources-summary-v1",
+          "resources-publish-v1"
+        ],
+        "exit_code": 0,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "control_parent_pid": 225473,
+        "guard_pid": 225474,
+        "owned_family_pid": 225477,
+        "wall_seconds": 0.6429134560166858,
+        "allocation_wait_seconds": 0.0,
+        "process_cpu_seconds": 0.21986599999999998,
+        "resource": {
+          "maximum_aggregate": 3,
+          "maximum_project": 3,
+          "aggregate_limit": 72,
+          "project_limit": 16,
+          "aggregate_status": "pass",
+          "project_status": "pass",
+          "control_helpers_counted": 2
+        },
+        "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+      },
+      "execution_file_sha256": "4af275290cda76c7e7a49233e02821e128fa2537c34c5aa757d75df1036bbc36",
+      "scope": "separately closed collection/publication/extraction/packaging; no new governing trajectory"
+    }
+  },
+  "scope": "Exact closed commands. Use matching source/runtime identities and fresh destinations for reproduction; never overwrite sealed requests. Numerical library thread settings and actual PIDs/ownership are in each execution/resource record."
+}

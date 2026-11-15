@@ -1,0 +1,110 @@
+{
+  "schema": "CT11RequiredScopeV1",
+  "investigation_completion": "complete",
+  "observer_equivalence": {
+    "status": "pass",
+    "reasons": [],
+    "scope": "observer all-row/face/actual-stage equivalence,not physical admission"
+  },
+  "observer_capacity": {
+    "status": "pass",
+    "reasons": [],
+    "scope": "actual initialized target capacity/reconstruction only; no trajectory or finite-defect accuracy qualification"
+  },
+  "negative_controls": "pass",
+  "target_pair": {
+    "status": "fail",
+    "reasons": [
+      "temporal:Pi"
+    ],
+    "scope": "actual unchanged target,pairedT=.002 stepping only"
+  },
+  "actual_paired_horizon": 0.002,
+  "per_member_horizons": {
+    "0.001": 0.002,
+    "0.0005": 0.002
+  },
+  "resources": {
+    "status": "pass",
+    "maximum_project": 14,
+    "maximum_aggregate": 20
+  },
+  "first_01_transit": "not_started",
+  "terrain": "unattempted; mapped numbering,joined gradients/cofactors,transmission and curved temporal/spatial qualification remain separate",
+  "physical_applicability": "central reference retained; numerical flat preservation is not experimental calibration,developed precursor or hill validation",
+  "historical": "all CT4\u2013CT10 seals/failures unchanged",
+  "first_stage_resource_plan": {
+    "completed_driver_process_CPU": 3840.214655758,
+    "completed_elapsed_wall": 3054.514016180008,
+    "resource_status_scope": "prospective driver estimate; closed family CPU,monitor overhead and total spent+remaining budget must be recomputed before continuation",
+    "completed_horizon": 0.002,
+    "transit_fraction": 4.9234843927528334e-05,
+    "prospective_endpoint": 0.407,
+    "additional_pair_steps": 1215,
+    "segments_at_most32steps": 39,
+    "maximum_measured_exclusive_accepted_step_CPU": 143.85623899999996,
+    "maximum_measured_nonstep_native_CPU": 60.980818000000056,
+    "CPU_with_25percent_headroom": 235358.6603675399,
+    "CPU_limit": 24000,
+    "observed_pair_audit_CPU": 1787.3759740000003,
+    "observed_controller_CPU": 993.460527758,
+    "remaining_full_audit_milestones": 4,
+    "measured_output": [
+      {
+        "directory": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001",
+        "native_bytes": 246941932,
+        "audit_bytes": 198728329,
+        "bytes": 445670261,
+        "accepted_steps": 2
+      },
+      {
+        "directory": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005",
+        "native_bytes": 425597236,
+        "audit_bytes": 198734010,
+        "bytes": 624331246,
+        "accepted_steps": 4
+      }
+    ],
+    "storage_bytes_with_25percent_headroom": 189508841307.5,
+    "storage_limit_bytes": 25769803776,
+    "resource_admitted": false,
+    "physical_admitted": false,
+    "timing": [
+      {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001/timing.jsonl",
+        "sha256": "e43d858c0446230638697b0f312960fbcc3447e6aec41c933559f062f546aa61",
+        "exclusive_step_CPU": {
+          "1": 143.85623899999996,
+          "2": 137.99061099999994
+        }
+      },
+      {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/timing.jsonl",
+        "sha256": "58ca00641afa6f7e976440faab0c50ef5a223c278204393f8ff4e7ad0c656917",
+        "exclusive_step_CPU": {
+          "1": 134.32854699999996,
+          "2": 137.65622600000006,
+          "3": 138.868868,
+          "4": 139.34465999999995
+        }
+      }
+    ],
+    "scope": "exclusive accepted-step CPU separated from startup/output; raw output measured separately,immutable histories retained; no flow-through claim"
+  },
+  "closed_campaign_resource_admission": {
+    "complete_family_process_CPU": 4173.708081,
+    "measured_controller_and_children_CPU": 3840.214655758,
+    "measured_family_overhead_multiplier": 1.0868423916725491,
+    "total_CPU_spent_plus_remaining_with_headroom": 259971.47741570426,
+    "CPU_limit": 24000,
+    "total_wall_upper_estimate": 258860.83581524328,
+    "wall_limit": 28800,
+    "measured_current_storage_bytes": 1278475155,
+    "total_storage_spent_plus_remaining_with_headroom": 190787316462.5,
+    "storage_limit_bytes": 25769803776,
+    "resource_admitted": false,
+    "scope": "closed owned-family accounting includes monitor/helpers and spent work; future estimates retain25percent headroom and finite ceilings,not an accomplished horizon"
+  },
+  "continuation_admitted": false,
+  "next_gate": "target field/traction/budget/timestep primitives"
+}

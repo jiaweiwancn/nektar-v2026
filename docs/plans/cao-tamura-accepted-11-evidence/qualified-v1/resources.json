@@ -1,0 +1,386 @@
+{
+  "resources-build-v1": {
+    "execution": {
+      "command": [
+        "timeout",
+        "-k",
+        "30s",
+        "7200",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v1"
+      ],
+      "exit_code": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 212739,
+      "guard_pid": 212740,
+      "owned_family_pid": 212743,
+      "wall_seconds": 57.42206956600421,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 87.174938,
+      "resource": {
+        "maximum_aggregate": 14,
+        "maximum_project": 14,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    },
+    "sha256": "b95fd6b8f5ecd9c72a84beef2c536414e0cccf4ea906a20e0199fe2e24ae7250",
+    "highwater": {
+      "project-highwater.jsonl": "a02ea1271510740d2c909905ce21c38baeb8e6a505f657b964ccb7f21be0cf26",
+      "worker-bookings.jsonl": "af6bd003a1a0e9af83c96184c7a3b6226d19b0ecdd416139d9fd9782b791fa74",
+      "worker-guard-highwater.jsonl": "f7dc569b0c4bcc38e36410be3f50f548926db38075b257266ef05dcbddc816c9"
+    }
+  },
+  "resources-build-v2": {
+    "execution": {
+      "command": [
+        "timeout",
+        "-k",
+        "30s",
+        "7200",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 213105,
+      "guard_pid": 213115,
+      "owned_family_pid": 213118,
+      "wall_seconds": 118.58070256200153,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 228.624013,
+      "resource": {
+        "maximum_aggregate": 14,
+        "maximum_project": 14,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    },
+    "sha256": "ec2cfffdb0e8ea4537b893a55a90c1d4ed945a0a0da143005807a4e2f5259c63",
+    "highwater": {
+      "project-highwater.jsonl": "50b881b377bcdc100d7ad089200c8eacbb239b2c5d905831b570b57b86c99d5a",
+      "worker-bookings.jsonl": "3139c4d01b34598e3e9eeb6b936102345dfa70ed0d50c0990b82dd98e236f0c8",
+      "worker-guard-highwater.jsonl": "600f5e0ea2a2b1725ba44aee5182583bf96bf2d8dad33dfe33010ea49915b6d8"
+    }
+  },
+  "resources-capacity-v1": {
+    "execution": {
+      "command": [
+        "timeout",
+        "-k",
+        "30s",
+        "7200",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_capacity.py",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime",
+        "--preflight",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/target-preflight-v1",
+        "--contract",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source/docs/plans/cao-tamura-accepted-11-evidence/contract.json",
+        "--equivalence",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/equivalence-v1",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 215244,
+      "guard_pid": 215254,
+      "owned_family_pid": 215257,
+      "wall_seconds": 792.0168922279845,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 1022.736464,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    },
+    "sha256": "3fcbce59f864f0db1103a8286715d9aa54c994015ec323014da0f2ceb6d3b54d",
+    "highwater": {
+      "project-highwater.jsonl": "8be00ed3f6dbfac6be37ab63f7aecd898afa6af2da733405454007d7be6c5672",
+      "worker-bookings.jsonl": "7d1a5bdac019381cbdc5bccedc9cf3ab656c3913c52ee2222a561b9bf2c2490d",
+      "worker-guard-highwater.jsonl": "981af5b034c02d534fc030b596d2f32600fc78c009cc5b3b5469ffb39fcfe2e5"
+    }
+  },
+  "resources-controls-v1": {
+    "execution": {
+      "command": [
+        "timeout",
+        "-k",
+        "30s",
+        "7200",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_controls.py",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime",
+        "--equivalence",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/equivalence-v1",
+        "--capacity",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1",
+        "--preflight",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/target-preflight-v1",
+        "--observer-resources",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/resources-equivalence-v1",
+        "--capacity-resources",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/resources-capacity-v1",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/controls-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 217583,
+      "guard_pid": 217593,
+      "owned_family_pid": 217596,
+      "wall_seconds": 6.844441287015798,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 8.044609000000001,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    },
+    "sha256": "e4e5edf1ce010848ecac1b871cc8e561caa9316954ff54d09bf06f3a31bb84b4",
+    "highwater": {
+      "project-highwater.jsonl": "071972e49e0b3963e91f322084844fd2ab3bfb043f02eda2c3723116628e8860",
+      "worker-bookings.jsonl": "45806353f100631b24b73f1d2a65d5453e121357dc32e7b586177168ca287d4c",
+      "worker-guard-highwater.jsonl": "22ada598bfbe11b628be52572cd2ad44e556ae29288cdaf49d9a179b7c5f6c39"
+    }
+  },
+  "resources-equivalence-v1": {
+    "execution": {
+      "command": [
+        "timeout",
+        "-k",
+        "30s",
+        "7200",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_equivalence.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--ct10",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime",
+        "--old-runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime",
+        "--contract",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source/docs/plans/cao-tamura-accepted-11-evidence/contract.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/equivalence-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 213622,
+      "guard_pid": 213632,
+      "owned_family_pid": 213635,
+      "wall_seconds": 573.4100454990112,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 761.288045,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    },
+    "sha256": "a4d0b7fd4a316ee93202f61a74133fa7eb7c37578967732240b3242db78beff9",
+    "highwater": {
+      "project-highwater.jsonl": "75f592da6d9119f00b4b0b5c3b6dfe83c280fd8572871d34d5130228edc55602",
+      "worker-bookings.jsonl": "e22e330a4f74c1e83bcd25fa4af983534865105ab02d3c454a34f4ffc8255576",
+      "worker-guard-highwater.jsonl": "7172946b838059f89e6a8ea1517c0a761e7b44587cbe74ec217b96318dab4a21"
+    }
+  },
+  "resources-source-v1": {
+    "execution": {
+      "command": [
+        "bash",
+        "-c",
+        "set -e; git -c core.preloadIndex=false -c index.threads=1 -c pack.threads=1 -c gc.auto=0 clone --shared --no-checkout '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/source' '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source'; git -C '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source' -c core.preloadIndex=false -c index.threads=1 -c pack.threads=1 -c gc.auto=0 fetch '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source.bundle' HEAD; git -C '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source' -c core.preloadIndex=false -c index.threads=1 -c core.filemode=false checkout --detach FETCH_HEAD; git -C '/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source' -c core.filemode=false status --porcelain"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 212644,
+      "guard_pid": 212645,
+      "owned_family_pid": 212648,
+      "wall_seconds": 13.52836485102307,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 7.424182,
+      "resource": {
+        "maximum_aggregate": 6,
+        "maximum_project": 6,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    },
+    "sha256": "a6a763d1da0d1e268c119bf810e88ed16e639340e0e45f780f8d0cd25379f482",
+    "highwater": {
+      "project-highwater.jsonl": "7fd8f825d3f0de5e4dd0780f24711e2a04af28157fd6e8a78b3e625b2682817c",
+      "worker-bookings.jsonl": "667fe8049e1305d62bb5a9e1ad3276beda7f833f1b3a95e4dd7ef0b99bc2eb02",
+      "worker-guard-highwater.jsonl": "68c7d70bcc47c938e17ca60bfb0bb109e2400775807e229a10431a2304e2d362"
+    }
+  },
+  "resources-target-v1": {
+    "execution": {
+      "command": [
+        "timeout",
+        "-k",
+        "30s",
+        "7200",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted11_target.py",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime",
+        "--probe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime",
+        "--preflight",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/target-preflight-v1",
+        "--strip",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114/candidate-T020-v2",
+        "--contract",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/source/docs/plans/cao-tamura-accepted-11-evidence/contract.json",
+        "--audit-capacity",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/capacity-v1",
+        "--equivalence",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/equivalence-v1",
+        "--observer-resources",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/resources-equivalence-v1",
+        "--capacity-resources",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/resources-capacity-v1",
+        "--verification",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/controls-v1",
+        "--verification-resources",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/resources-controls-v1",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1"
+      ],
+      "exit_code": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 217674,
+      "guard_pid": 217675,
+      "owned_family_pid": 217678,
+      "wall_seconds": 3063.0664805390115,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 4173.708081,
+      "resource": {
+        "maximum_aggregate": 20,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    },
+    "sha256": "21d8dbe3e371dcf5597bd2b90e4223c6e16a51b0fb177407a3c6a822a4f68e02",
+    "highwater": {
+      "project-highwater.jsonl": "8ef977a0294b588c972e0e96d93eccf2339db47989731b7ebdc6299e0a9e7f1f",
+      "worker-bookings.jsonl": "3ed1e437917193246b5a690a5598c25ee20d5f3e571a42c2c0c91943c21f41d4",
+      "worker-guard-highwater.jsonl": "23ce72f8eac3367813932f61a701efd0c474831fd7f7bd35d5a266eae5f661c2"
+    }
+  }
+}

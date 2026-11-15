@@ -1,0 +1,867 @@
+{
+  "schema": "CT11NegativeControlsV1",
+  "status": "pass",
+  "positive": {
+    "status": "pass",
+    "reasons": [],
+    "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+  },
+  "negative": {
+    "missing_observer_control": {
+      "status": "pass",
+      "expected": "observer_equivalence",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "observer_equivalence"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "missing_fixture": {
+      "status": "pass",
+      "expected": "observer_equivalence",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "observer_equivalence"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "missing_equation": {
+      "status": "pass",
+      "expected": "observer_equivalence",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "observer_equivalence"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "nonfinite_primitive": {
+      "status": "pass",
+      "expected": "observer_equivalence",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "observer_equivalence"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "pass_label_bad_row": {
+      "status": "pass",
+      "expected": "observer_equivalence",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "observer_equivalence"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "wrong_owner_digest": {
+      "status": "pass",
+      "expected": "observer_equivalence",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "observer_equivalence"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "missing_capacity_control": {
+      "status": "pass",
+      "expected": "observer_capacity",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "observer_capacity"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "missing_reconstruction": {
+      "status": "pass",
+      "expected": "observer_capacity",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "observer_capacity"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "nonfinite_capacity_primitive": {
+      "status": "pass",
+      "expected": "observer_capacity",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "observer_capacity"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "pass_label_bad_reconstruction": {
+      "status": "pass",
+      "expected": "observer_capacity",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "observer_capacity"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "wrong_capacity_state": {
+      "status": "pass",
+      "expected": "foreign_capacity_input",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "foreign_capacity_input"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "foreign_control_state": {
+      "status": "pass",
+      "expected": "observer_capacity",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "observer_capacity"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "foreign_probe": {
+      "status": "pass",
+      "expected": "foreign_observer_runtime",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "foreign_observer_runtime"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "stale_equivalence": {
+      "status": "pass",
+      "expected": "stale_equivalence_receipt",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "stale_equivalence_receipt"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    },
+    "failed_shared_resources": {
+      "status": "pass",
+      "expected": "closed_resource_failure",
+      "observed": {
+        "status": "fail",
+        "reasons": [
+          "capacity:closed_resource_failure"
+        ],
+        "scope": "exact observer/runtime/target input and closed-resource prerequisite admission only"
+      }
+    }
+  },
+  "target_negatives": {
+    "scope": "schema fixtures only",
+    "results": {
+      "missing_dt": {
+        "status": "fail",
+        "reasons": [
+          "missing_member"
+        ],
+        "scope": "actual unchanged target,pairedT=.002 stepping only"
+      },
+      "wrong_horizon": {
+        "status": "fail",
+        "reasons": [
+          "foreign_target_request"
+        ],
+        "scope": "actual unchanged target,pairedT=.002 stepping only"
+      },
+      "incomplete_endpoint": {
+        "status": "fail",
+        "reasons": [
+          "0.001:accepted_coverage"
+        ],
+        "scope": "actual unchanged target,pairedT=.002 stepping only"
+      },
+      "foreign_budget_identity": {
+        "status": "fail",
+        "reasons": [
+          "0.001:budget_state_configuration_identity"
+        ],
+        "scope": "actual unchanged target,pairedT=.002 stepping only"
+      },
+      "wrong_model": {
+        "status": "fail",
+        "reasons": [
+          "0.001:foreign_physics_or_backend"
+        ],
+        "scope": "actual unchanged target,pairedT=.002 stepping only"
+      },
+      "pass_label_pressure_failure": {
+        "status": "fail",
+        "reasons": [
+          "temporal:Pi"
+        ],
+        "scope": "actual unchanged target,pairedT=.002 stepping only"
+      },
+      "stale_observer_policy": {
+        "status": "fail",
+        "reasons": [
+          "0.001:observer_policy"
+        ],
+        "scope": "actual unchanged target,pairedT=.002 stepping only"
+      }
+    }
+  },
+  "postchecks": {
+    "status": "pass",
+    "cases": {
+      "d0-p3": {
+        "native": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 6.661338147750939e-16,
+              "normalization": 1.0,
+              "scaled_defect": 6.661338147750939e-16
+            },
+            "outer_k": {
+              "maximum_defect": 3.9457508647776484e-16,
+              "normalization": 1.0,
+              "scaled_defect": 3.9457508647776484e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 1.3877787807814457e-16,
+              "normalization": 1.0,
+              "scaled_defect": 1.3877787807814457e-16
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "3ba770cc57d96e1f8b40b0f190d2cdbad8db67c4391ecffb6657a6b32d4d7bdb"
+        },
+        "q48f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 1.2212453270876722e-15,
+              "normalization": 1.0,
+              "scaled_defect": 1.2212453270876722e-15
+            },
+            "outer_k": {
+              "maximum_defect": 2.3475876053657877e-16,
+              "normalization": 1.0,
+              "scaled_defect": 2.3475876053657877e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 2.556134504707854e-16,
+              "normalization": 1.0,
+              "scaled_defect": 2.556134504707854e-16
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "e64e1451cade34496e63ffe8dcb2d8eba74ea1e86cad4badc8ff985ea6f86efb"
+        },
+        "q64f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 2.220446049250313e-15,
+              "normalization": 1.0,
+              "scaled_defect": 2.220446049250313e-15
+            },
+            "outer_k": {
+              "maximum_defect": 5.551115123125783e-16,
+              "normalization": 1.0,
+              "scaled_defect": 5.551115123125783e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 3.608224830031759e-16,
+              "normalization": 1.0,
+              "scaled_defect": 3.608224830031759e-16
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "a59dee0448c9fe0bde7f10da51ba2583872046ae4a4504f43e83cdfe39d0745b"
+        },
+        "q64f32": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 2.220446049250313e-15,
+              "normalization": 1.0,
+              "scaled_defect": 2.220446049250313e-15
+            },
+            "outer_k": {
+              "maximum_defect": 4.440892098500626e-16,
+              "normalization": 1.0,
+              "scaled_defect": 4.440892098500626e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 3.6135680560689855e-16,
+              "normalization": 1.0,
+              "scaled_defect": 3.6135680560689855e-16
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "1b9d755f492fc4a582e4102f26fe9a2d98c61b0ffd2106f363681643ef4e99f0"
+        }
+      },
+      "d0-p4": {
+        "native": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 1.1657341758564144e-15,
+              "normalization": 1.0,
+              "scaled_defect": 1.1657341758564144e-15
+            },
+            "outer_k": {
+              "maximum_defect": 6.642834904908272e-16,
+              "normalization": 1.0,
+              "scaled_defect": 6.642834904908272e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 1.4760435320088307e-16,
+              "normalization": 1.0,
+              "scaled_defect": 1.4760435320088307e-16
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "980fe2efff07a1d40d04a5c14e1de28f72f3cf30bdc55a3dcc4d962c1db80f2f"
+        },
+        "q48f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 2.220446049250313e-15,
+              "normalization": 1.0,
+              "scaled_defect": 2.220446049250313e-15
+            },
+            "outer_k": {
+              "maximum_defect": 3.3306690738754696e-16,
+              "normalization": 1.0,
+              "scaled_defect": 3.3306690738754696e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 8.979398344310312e-17,
+              "normalization": 1.0,
+              "scaled_defect": 8.979398344310312e-17
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "0ec730fe205f11b0cdde4fe6d4ce122385baa050407e9b21ad76149382e6dddb"
+        },
+        "q64f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 1.3661314580043283e-15,
+              "normalization": 1.0,
+              "scaled_defect": 1.3661314580043283e-15
+            },
+            "outer_k": {
+              "maximum_defect": 1.343649108789474e-15,
+              "normalization": 1.0,
+              "scaled_defect": 1.343649108789474e-15
+            },
+            "outer_epsilon": {
+              "maximum_defect": 2.633420625946475e-16,
+              "normalization": 1.0,
+              "scaled_defect": 2.633420625946475e-16
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "cca78a8e6dc53b3498273f736d8db41544c10f1c49a3b4ee598700789f783e18"
+        },
+        "q64f32": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 1.2523876386822846e-15,
+              "normalization": 1.0,
+              "scaled_defect": 1.2523876386822846e-15
+            },
+            "outer_k": {
+              "maximum_defect": 1.3514553644313697e-15,
+              "normalization": 1.0,
+              "scaled_defect": 1.3514553644313697e-15
+            },
+            "outer_epsilon": {
+              "maximum_defect": 2.249289066784282e-16,
+              "normalization": 1.0,
+              "scaled_defect": 2.249289066784282e-16
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "b903e127a080649ff6b4d77bc56270b0297f831b37f8d8d2e93e74f92b05f339"
+        }
+      },
+      "displaced-p3": {
+        "native": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 1.4094628242311558e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.4094628242311558e-18
+            },
+            "outer_k": {
+              "maximum_defect": 2.168404344971009e-18,
+              "normalization": 1.0,
+              "scaled_defect": 2.168404344971009e-18
+            },
+            "outer_epsilon": {
+              "maximum_defect": 2.168404344971009e-19,
+              "normalization": 1.0,
+              "scaled_defect": 2.168404344971009e-19
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "37840dc3526c4a1399c35271e86e177b17db2cb873a2f7e470e58faa5329bef3"
+        },
+        "q48f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 6.883733218404093e-19,
+              "normalization": 1.0,
+              "scaled_defect": 6.883733218404093e-19
+            },
+            "outer_k": {
+              "maximum_defect": 1.7863760761538455e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.7863760761538455e-18
+            },
+            "outer_epsilon": {
+              "maximum_defect": 1.0842021724855044e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.0842021724855044e-18
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "3452c894a13802ff96c97fcb6ca7e5aed7561262d302549541b8d141e9b2cb2b"
+        },
+        "q64f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 2.6020852139652106e-18,
+              "normalization": 1.0,
+              "scaled_defect": 2.6020852139652106e-18
+            },
+            "outer_k": {
+              "maximum_defect": 2.61063836886529e-18,
+              "normalization": 1.0,
+              "scaled_defect": 2.61063836886529e-18
+            },
+            "outer_epsilon": {
+              "maximum_defect": 7.047314121155779e-19,
+              "normalization": 1.0,
+              "scaled_defect": 7.047314121155779e-19
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "2063d2fa75f9e5e69f84b1c34709631e602f1799ceee83ccc98b65e9ab1094dc"
+        },
+        "q64f32": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 2.3852447794681098e-18,
+              "normalization": 1.0,
+              "scaled_defect": 2.3852447794681098e-18
+            },
+            "outer_k": {
+              "maximum_defect": 2.819692330595433e-18,
+              "normalization": 1.0,
+              "scaled_defect": 2.819692330595433e-18
+            },
+            "outer_epsilon": {
+              "maximum_defect": 6.505213034913027e-19,
+              "normalization": 1.0,
+              "scaled_defect": 6.505213034913027e-19
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "efa08e9c0e1f150731e8430be2bdee0852216359a9f0875da4e4f61ad2172528"
+        }
+      },
+      "displaced-p4": {
+        "native": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 1.1926223897340549e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.1926223897340549e-18
+            },
+            "outer_k": {
+              "maximum_defect": 2.168404344971009e-18,
+              "normalization": 1.0,
+              "scaled_defect": 2.168404344971009e-18
+            },
+            "outer_epsilon": {
+              "maximum_defect": 6.503141533008198e-19,
+              "normalization": 1.0,
+              "scaled_defect": 6.503141533008198e-19
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "dbc0e81b2ab24676d043f6dc450dc654876682809823bb925d1d65a75de4bd74"
+        },
+        "q48f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 7.227873369717911e-19,
+              "normalization": 1.0,
+              "scaled_defect": 7.227873369717911e-19
+            },
+            "outer_k": {
+              "maximum_defect": 5.637851296924623e-18,
+              "normalization": 1.0,
+              "scaled_defect": 5.637851296924623e-18
+            },
+            "outer_epsilon": {
+              "maximum_defect": 4.336808689942018e-19,
+              "normalization": 1.0,
+              "scaled_defect": 4.336808689942018e-19
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "9271507fdb532106d581ae89d32c6b11b117a30b45cba395398e1fe3b3dd499a"
+        },
+        "q64f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 1.4094628242311558e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.4094628242311558e-18
+            },
+            "outer_k": {
+              "maximum_defect": 3.0768157768786335e-18,
+              "normalization": 1.0,
+              "scaled_defect": 3.0768157768786335e-18
+            },
+            "outer_epsilon": {
+              "maximum_defect": 5.421010862427522e-19,
+              "normalization": 1.0,
+              "scaled_defect": 5.421010862427522e-19
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "e327e4df02cca6c0a5a83f24f9402190af61c59d0e2cbc458ea26d5d25a3db18"
+        },
+        "q64f32": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 1.5178830414797062e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.5178830414797062e-18
+            },
+            "outer_k": {
+              "maximum_defect": 3.0623996731630594e-18,
+              "normalization": 1.0,
+              "scaled_defect": 3.0623996731630594e-18
+            },
+            "outer_epsilon": {
+              "maximum_defect": 8.673617379884035e-19,
+              "normalization": 1.0,
+              "scaled_defect": 8.673617379884035e-19
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 0,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "d679a09b721529744073416379d6d605bfb866e5eaf0bf36b6a4c0cc5d17f47c"
+        }
+      },
+      "baseline-T008": {
+        "native": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 1.506156836623791e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.506156836623791e-18
+            },
+            "outer_k": {
+              "maximum_defect": 1.942890293094024e-16,
+              "normalization": 1.0,
+              "scaled_defect": 1.942890293094024e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 4.744997182784822e-19,
+              "normalization": 1.0,
+              "scaled_defect": 4.744997182784822e-19
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 1.7664344372519805e-08,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "7410919449fe445f8cf2b414d5644384465f6a7cfd359fea376ba38ef19b6edf"
+        },
+        "q48f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 2.8189256484623115e-18,
+              "normalization": 1.0,
+              "scaled_defect": 2.8189256484623115e-18
+            },
+            "outer_k": {
+              "maximum_defect": 1.3877787807814457e-16,
+              "normalization": 1.0,
+              "scaled_defect": 1.3877787807814457e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 8.673617379884035e-19,
+              "normalization": 1.0,
+              "scaled_defect": 8.673617379884035e-19
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 1.766434437292486e-08,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "db3a37eb8b0da40d6258a7062bb026277e3cdb1cf1fd2600103f8bb58d20d2dc"
+        },
+        "q64f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 2.710505431213761e-18,
+              "normalization": 1.0,
+              "scaled_defect": 2.710505431213761e-18
+            },
+            "outer_k": {
+              "maximum_defect": 2.0816681711721685e-16,
+              "normalization": 1.0,
+              "scaled_defect": 2.0816681711721685e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 1.1926223897340549e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.1926223897340549e-18
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 1.766434437225013e-08,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "da2e1b09f926582b8dd1702a87057e3d96fccd1b75deae75fdff8dbd76ef25b4"
+        },
+        "q64f32": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 2.6020852139652106e-18,
+              "normalization": 1.0,
+              "scaled_defect": 2.6020852139652106e-18
+            },
+            "outer_k": {
+              "maximum_defect": 1.8041124150158794e-16,
+              "normalization": 1.0,
+              "scaled_defect": 1.8041124150158794e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 1.4094628242311558e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.4094628242311558e-18
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 1.766434437225013e-08,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "56406aab86a5e8d3068fb6d4017bd9d1a8b406eb3a52e1bb6ddebf287becf806"
+        }
+      },
+      "candidate-T020": {
+        "native": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 1.8813462576664433e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.8813462576664433e-18
+            },
+            "outer_k": {
+              "maximum_defect": 1.3877787807814457e-16,
+              "normalization": 1.0,
+              "scaled_defect": 1.3877787807814457e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 5.421010862427522e-19,
+              "normalization": 1.0,
+              "scaled_defect": 5.421010862427522e-19
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 1.4039321428234925e-09,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "37fff4f89a763594a04898831921b8d811529f8fb8e36f76c6cb2a04c27ddfd2"
+        },
+        "q48f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 1.9373289616348894e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.9373289616348894e-18
+            },
+            "outer_k": {
+              "maximum_defect": 2.498001805406602e-16,
+              "normalization": 1.0,
+              "scaled_defect": 2.498001805406602e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 8.673617379884035e-19,
+              "normalization": 1.0,
+              "scaled_defect": 8.673617379884035e-19
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 1.4039321430005428e-09,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "270904e6388202f74a69fae170b5ba24a622a09666910b94f7e8f3a5e16c061c"
+        },
+        "q64f16": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 2.6628916513621733e-18,
+              "normalization": 1.0,
+              "scaled_defect": 2.6628916513621733e-18
+            },
+            "outer_k": {
+              "maximum_defect": 2.220446049250313e-16,
+              "normalization": 1.0,
+              "scaled_defect": 2.220446049250313e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 1.6263032587282567e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.6263032587282567e-18
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 1.4039321432269252e-09,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "5b79cd0dd786d32dbeb6c8608bc3fbce860537edf2ee7ac2fab98b24bf2ba4d7"
+        },
+        "q64f32": {
+          "advective_IBP": {
+            "inner_k": {
+              "maximum_defect": 2.4434576349936892e-18,
+              "normalization": 1.0,
+              "scaled_defect": 2.4434576349936892e-18
+            },
+            "outer_k": {
+              "maximum_defect": 2.220446049250313e-16,
+              "normalization": 1.0,
+              "scaled_defect": 2.220446049250313e-16
+            },
+            "outer_epsilon": {
+              "maximum_defect": 1.8431436932253575e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.8431436932253575e-18
+            }
+          },
+          "prescribed_epsilon_backward_storage_maximum": 1.4039321432269252e-09,
+          "coefficient_policy": "ActualFrozenStageBoundaryV2: current-time essential lift, dependent epsilon trace precedence, actual-stage snapshots",
+          "old_boundary_lift": 0,
+          "actual_flow_stage_difference": 0,
+          "actual_pre_k_stage_difference": 0,
+          "packet_sha256": "c6e589d11a69384fee94c6b3c5663a2efec7a5f410f545fd353d5a8b775d6b7a"
+        }
+      }
+    },
+    "actual_prescribed_epsilon_storage_signal": 1.766434437292486e-08,
+    "scope": "actual native weak conservative IBP and retained prescribed/dependent epsilon storage; no scalar*div(U) correction, physical flux replacement or extra native solve"
+  },
+  "native_negative": {
+    "status": "pass",
+    "reason": "unsupported physical scalar observer policy",
+    "execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/build-v2/runtime/RANSPreservationProbe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/controls-v1/unsupported-policy/case.xml",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/controls-v1/unsupported-policy/negative-request.json",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/controls-v1/unsupported-policy/negative.json"
+      ],
+      "exit_code": 1,
+      "wall_seconds": 4.457346226990921,
+      "process_cpu_seconds": 3.880309,
+      "peak_RSS_KiB": 128408,
+      "actual_mapped_files_catalog_sha256": "d93a35b04376742d60c3e7ed85a2631bf17446bedc6b541cb561f2aad055a73e"
+    },
+    "request_sha256": "99e1bd9bbf4001fee574571c83f394c3d02f1a56674da3b874767b221dcff7fd"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "schema": "CT11FinalScopeSupplementV1",
+  "qualified_decision_sha256": "4127429be818cbc1431b26544783c6a222cbe4bf30b4edba54535eba90c3c1c9",
+  "summary_sha256": "1788d70990ec4b5d8c0e7e8262e1ee63aaccc2a4ae861ed49120dc68792c932c",
+  "native_receipts_sha256": "5040f1007c38862cc8b42367a66bc887769c2495b3fc7674f6b453a43b44591b",
+  "observer_equivalence": {
+    "status": "pass",
+    "reasons": [],
+    "scope": "observer all-row/face/actual-stage equivalence,not physical admission"
+  },
+  "observer_capacity": {
+    "status": "pass",
+    "reasons": [],
+    "scope": "actual initialized target capacity/reconstruction only; no trajectory or finite-defect accuracy qualification"
+  },
+  "negative_controls": "pass",
+  "target_physical_pair": {
+    "status": "fail",
+    "reasons": [
+      "temporal:Pi"
+    ],
+    "scope": "actual unchanged target,pairedT=.002 stepping only"
+  },
+  "actual_paired_horizon": 0.002,
+  "per_member_horizons": {
+    "0.001": 0.002,
+    "0.0005": 0.002
+  },
+  "fresh_worker_compliance": {
+    "status": "pass",
+    "maximum_project": 14,
+    "maximum_aggregate": 20
+  },
+  "campaign_continuation_resources": {
+    "complete_family_process_CPU": 4173.708081,
+    "measured_controller_and_children_CPU": 3840.214655758,
+    "measured_family_overhead_multiplier": 1.0868423916725491,
+    "total_CPU_spent_plus_remaining_with_headroom": 259971.47741570426,
+    "CPU_limit": 24000,
+    "total_wall_upper_estimate": 258860.83581524328,
+    "wall_limit": 28800,
+    "measured_current_storage_bytes": 1278475155,
+    "total_storage_spent_plus_remaining_with_headroom": 190787316462.5,
+    "storage_limit_bytes": 25769803776,
+    "resource_admitted": false,
+    "scope": "closed owned-family accounting includes monitor/helpers and spent work; future estimates retain25percent headroom and finite ceilings,not an accomplished horizon"
+  },
+  "continuation_admitted": false,
+  "first_01_transit": "not_started",
+  "terrain_readiness": "not_admitted; no terrain evolution attempted",
+  "historical": "All CT4–CT10 artifacts and statuses unchanged; passed static reconstruction does not imply physical accuracy or preservation",
+  "scientific_next_gate": "read-only actual-target pressure load/image attribution, absolute mean and variation retained",
+  "independent_resource_next_gate": "bounded detailed accepted-step profile and qualified output retention before longer campaign",
+  "out_of_scope": [
+    "terrain evolution",
+    "A93/E94E95 displaced transfer",
+    "EP",
+    "MPI/3D",
+    "full variable-height evolution",
+    "new calibration",
+    "broad backend rewrite"
+  ]
+}

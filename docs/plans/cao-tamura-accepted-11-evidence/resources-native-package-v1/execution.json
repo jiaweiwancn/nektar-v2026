@@ -1,0 +1,33 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "-c",
+    "import pathlib,tarfile,hashlib; r=pathlib.Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115\"); names=[\"native-receipts-v2\",\"resources-native-receipts-v2\",\"resources-native-receipts-v1\",\"resources-source-final-v2\",\"resources-source-final-v1\",\"resources-final-inspection-v1\"]; f=r/'native-receipts-package-v1.tar.gz'; assert not f.exists(); t=tarfile.open(f,'w:gz'); [(t.add(r/n,arcname=n)) for n in names]; t.close(); print(hashlib.sha256(f.read_bytes()).hexdigest())"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 226066,
+  "guard_pid": 226067,
+  "owned_family_pid": 226070,
+  "wall_seconds": 0.6401239180122502,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 0.260259,
+  "resource": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}

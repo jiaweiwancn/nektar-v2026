@@ -1,0 +1,33 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "-c",
+    "import subprocess,pathlib; p=pathlib.Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115\"); g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','pack.threads=1','-c','core.filemode=false']; assert not subprocess.check_output(g+['status','--porcelain'],cwd=p/'source',text=True); subprocess.run(g+['fetch',str(p/'tmp/native-receipts-f11e5efe.bundle'),'codex/a93-a95-e94e95-awf'],cwd=p/'source',check=True); subprocess.run(g+['merge','--ff-only','FETCH_HEAD'],cwd=p/'source',check=True)"
+  ],
+  "exit_code": 1,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 225862,
+  "guard_pid": 225863,
+  "owned_family_pid": 225866,
+  "wall_seconds": 1.7984074499981944,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 0.8830979999999999,
+  "resource": {
+    "maximum_aggregate": 5,
+    "maximum_project": 5,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}

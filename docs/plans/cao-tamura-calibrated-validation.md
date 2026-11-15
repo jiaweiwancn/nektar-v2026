@@ -1,5 +1,20 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-11: the opt-in native-owner physical-scalar observer passes24
+> old/new fixture/control comparisons with zero primitive difference and all-row
+> reconstruction below2e-10. All four60,907-slot target capacity controls pass
+> under the unchanged16-GiB address-space bound; CT10's allocation failure is
+> preserved. Both fresh actual-target .001/.0005 members reachT=.002 with passing
+> domain, mass, field-drift, traction and complete physical-budget checks. Their
+> pair fails only absolute-pressure timestep uncertainty:3.82461e-6 exceeds
+>5.71117e-7. The .407 continuation is not admitted; measured CPU/output forecasts
+> independently exceed its finite ceilings. Fresh closed workers pass at14
+> project/20 aggregate. See [CT-Accepted-11](cao-tamura-accepted-11.md).
+> Next: read-only target pressure-load/image attribution from retained states,
+> followed by separately qualified bounded throughput/output work before longer
+> stepping. Actual paired scope isT=.002, not a flow-through, developed precursor
+> or hill validation. All historical, physical-interface and terrain gates remain.
+
 > CT-Accepted-10: signed native-load/pressure-image attribution identifies outer
 > nonlinear normal-stress representation as the main strip pressure driver;
 > large volume/outlet advection images cancel. One prospectively selected P4/P2

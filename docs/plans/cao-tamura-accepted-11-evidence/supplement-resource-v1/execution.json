@@ -1,0 +1,37 @@
+{
+  "command": [
+    "tar",
+    "-czf",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/summary-package-v1.tar.gz",
+    "-C",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115",
+    "summary-v1",
+    "resources-summary-v1",
+    "resources-publish-v1"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 225473,
+  "guard_pid": 225474,
+  "owned_family_pid": 225477,
+  "wall_seconds": 0.6429134560166858,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 0.21986599999999998,
+  "resource": {
+    "maximum_aggregate": 3,
+    "maximum_project": 3,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}

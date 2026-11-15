@@ -1,0 +1,504 @@
+{
+  "0.001": {
+    "native_execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 346.2590930259903,
+      "process_cpu_seconds": 342.82766799999996,
+      "peak_RSS_KiB": 3818064,
+      "actual_mapped_files_catalog_sha256": "fb2575b456781fbd733ebde8ec1d49a02d776684f70e0abfe8b544db32d6ad57"
+    },
+    "zero_step_execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 53.4187191449746,
+      "process_cpu_seconds": 52.591454,
+      "peak_RSS_KiB": 3563044,
+      "actual_mapped_files_catalog_sha256": "ef9f397561e80b5a7f96bf5d21d482eb75f1ec420b02a3e9a710d8aa3680cfc8"
+    },
+    "timing_path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.001/timing.jsonl",
+    "timing_sha256": "e43d858c0446230638697b0f312960fbcc3447e6aec41c933559f062f546aa61",
+    "exclusive_categories": {
+      "constitutive.refresh": {
+        "calls": 48,
+        "exclusive_process_cpu_seconds": 2.975755999999999,
+        "exclusive_wall_seconds": 2.9840284340000003
+      },
+      "matching.constraints": {
+        "calls": 64,
+        "exclusive_process_cpu_seconds": 0.14184400000000005,
+        "exclusive_wall_seconds": 0.142043526
+      },
+      "startup.object": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 7.276031,
+        "exclusive_wall_seconds": 7.306772276
+      },
+      "residual": {
+        "calls": 32,
+        "exclusive_process_cpu_seconds": 31.560603999999998,
+        "exclusive_wall_seconds": 31.572866348
+      },
+      "sparse.factorize": {
+        "calls": 25,
+        "exclusive_process_cpu_seconds": 5.2705850000000005,
+        "exclusive_wall_seconds": 5.2724773680000006
+      },
+      "sparse.solve_validate": {
+        "calls": 713,
+        "exclusive_process_cpu_seconds": 2.919022,
+        "exclusive_wall_seconds": 2.9199835230000004
+      },
+      "residual.mass_dual_norms": {
+        "calls": 14,
+        "exclusive_process_cpu_seconds": 0.25241900000000006,
+        "exclusive_wall_seconds": 0.2532439310000001
+      },
+      "native.explicit": {
+        "calls": 3,
+        "exclusive_process_cpu_seconds": 0.279652,
+        "exclusive_wall_seconds": 0.280101496
+      },
+      "domain.compute": {
+        "calls": 11,
+        "exclusive_process_cpu_seconds": 165.862092,
+        "exclusive_wall_seconds": 165.95208833799995
+      },
+      "domain.scalar": {
+        "calls": 11,
+        "exclusive_process_cpu_seconds": 0.6479860000000013,
+        "exclusive_wall_seconds": 0.6483383060000012
+      },
+      "audit.physical": {
+        "calls": 3,
+        "exclusive_process_cpu_seconds": 19.543001000000004,
+        "exclusive_wall_seconds": 19.556768617
+      },
+      "audit.complete": {
+        "calls": 3,
+        "exclusive_process_cpu_seconds": 30.410545000000003,
+        "exclusive_wall_seconds": 30.422218653999998
+      },
+      "native.acceptance_audit": {
+        "calls": 3,
+        "exclusive_process_cpu_seconds": 0.00230699999999473,
+        "exclusive_wall_seconds": 0.002313302000004569
+      },
+      "output.project_fields": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.009795,
+        "exclusive_wall_seconds": 0.009795113000000001
+      },
+      "startup.initialize": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 0.09356700000000018,
+        "exclusive_wall_seconds": 0.09414441199999857
+      },
+      "pimple.check.input": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.07262799999999814,
+        "exclusive_wall_seconds": 0.07263239900000151
+      },
+      "flow.assembly": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 49.027581,
+        "exclusive_wall_seconds": 49.047565977999994
+      },
+      "sparse.pressure_gmres": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.6905199999999994,
+        "exclusive_wall_seconds": 0.6957033430000006
+      },
+      "sparse.flow_linear_operation": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 1.5396430000000003,
+        "exclusive_wall_seconds": 1.5400886450000009
+      },
+      "io.flow_attempt_snapshot": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 1.7540339999999999,
+        "exclusive_wall_seconds": 2.725518898
+      },
+      "pimple.check.flow": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.07833000000000112,
+        "exclusive_wall_seconds": 0.07861681700000034
+      },
+      "flow.correction_validate": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.38458900000000185,
+        "exclusive_wall_seconds": 0.38461730700000274
+      },
+      "flow.total": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.00013400000000274304,
+        "exclusive_wall_seconds": 0.00014232800000968382
+      },
+      "epsilon.assembly": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 4.793595,
+        "exclusive_wall_seconds": 4.795176874
+      },
+      "epsilon.solve_validate": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.01158999999999999,
+        "exclusive_wall_seconds": 0.011597258999999999
+      },
+      "pimple.check.epsilon": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.07947600000000143,
+        "exclusive_wall_seconds": 0.0794839930000002
+      },
+      "epsilon.total": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.011897999999998632,
+        "exclusive_wall_seconds": 0.012389439999999752
+      },
+      "k.assembly": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 9.734269,
+        "exclusive_wall_seconds": 9.737035425999998
+      },
+      "k.solve_validate": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.016886999999999985,
+        "exclusive_wall_seconds": 0.016895380000000015
+      },
+      "io.attempt_snapshot": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.894199,
+        "exclusive_wall_seconds": 1.204296676
+      },
+      "pimple.check.k": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.09342200000000211,
+        "exclusive_wall_seconds": 0.09343009599999874
+      },
+      "k.total": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.004471999999996257,
+        "exclusive_wall_seconds": 0.004489393000000064
+      },
+      "pimple.final_refresh_diagnostics": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.0006220000000003445,
+        "exclusive_wall_seconds": 0.0009806809999997057
+      },
+      "pimple.sweep": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.012512000000029389,
+        "exclusive_wall_seconds": 0.01636380200000076
+      },
+      "native.physical_samples": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 2.105705,
+        "exclusive_wall_seconds": 2.106489755
+      },
+      "native.implicit": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.002935999999976957,
+        "exclusive_wall_seconds": 0.0029443579999792746
+      },
+      "native.advance": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.007176000000015392,
+        "exclusive_wall_seconds": 0.007177553999980546
+      },
+      "io.checkpoint": {
+        "calls": 3,
+        "exclusive_process_cpu_seconds": 0.031755,
+        "exclusive_wall_seconds": 0.126572093
+      },
+      "native.step": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.029450999999994565,
+        "exclusive_wall_seconds": 0.029665182999991657
+      },
+      "sparse.residual_refinement": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 0.001668,
+        "exclusive_wall_seconds": 0.001667959
+      },
+      "native.solve_block": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 0.686095000000023,
+        "exclusive_wall_seconds": 0.6862955259999808
+      },
+      "output.report": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 1.957561,
+        "exclusive_wall_seconds": 3.222336098
+      },
+      "output.fields_and_report": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 0.03505899999999995,
+        "exclusive_wall_seconds": 0.046987386000000075
+      },
+      "process": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 1.291797000000031,
+        "exclusive_wall_seconds": 1.8410002960000043
+      }
+    },
+    "accepted_steps": 2,
+    "native_failure": "",
+    "scope": "native attempted/accepted timings distinguished by report; exclusive categories only, no sum of nested inclusive timings; rejected attempts are not accepted-step cost evidence"
+  },
+  "0.0005": {
+    "native_execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 616.3222832850006,
+      "process_cpu_seconds": 611.1027499999998,
+      "peak_RSS_KiB": 3883764,
+      "actual_mapped_files_catalog_sha256": "1b883713b3666591bdcd2a9c1eed17c16db52437860176f4ff253d49cc18ab31"
+    },
+    "zero_step_execution": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 53.6376888770028,
+      "process_cpu_seconds": 52.813160999999994,
+      "peak_RSS_KiB": 3562816,
+      "actual_mapped_files_catalog_sha256": "64d15f45362a1a7f28f442c24822c7dd2edc384089c49611fb5575dcfab67286"
+    },
+    "timing_path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115/target-v1/0.0005/timing.jsonl",
+    "timing_sha256": "58ca00641afa6f7e976440faab0c50ef5a223c278204393f8ff4e7ad0c656917",
+    "exclusive_categories": {
+      "constitutive.refresh": {
+        "calls": 78,
+        "exclusive_process_cpu_seconds": 4.5316350000000005,
+        "exclusive_wall_seconds": 4.540051012
+      },
+      "matching.constraints": {
+        "calls": 100,
+        "exclusive_process_cpu_seconds": 0.21232899999999993,
+        "exclusive_wall_seconds": 0.212386284
+      },
+      "startup.object": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 7.175088,
+        "exclusive_wall_seconds": 7.210412989
+      },
+      "residual": {
+        "calls": 50,
+        "exclusive_process_cpu_seconds": 47.67045699999999,
+        "exclusive_wall_seconds": 47.697596237
+      },
+      "sparse.factorize": {
+        "calls": 41,
+        "exclusive_process_cpu_seconds": 10.299050999999999,
+        "exclusive_wall_seconds": 10.304410507000002
+      },
+      "sparse.solve_validate": {
+        "calls": 1387,
+        "exclusive_process_cpu_seconds": 5.702593999999994,
+        "exclusive_wall_seconds": 5.709708958000004
+      },
+      "residual.mass_dual_norms": {
+        "calls": 22,
+        "exclusive_process_cpu_seconds": 0.26197899999999996,
+        "exclusive_wall_seconds": 0.26346846599999996
+      },
+      "native.explicit": {
+        "calls": 5,
+        "exclusive_process_cpu_seconds": 0.430738,
+        "exclusive_wall_seconds": 0.430932749
+      },
+      "domain.compute": {
+        "calls": 21,
+        "exclusive_process_cpu_seconds": 302.58981,
+        "exclusive_wall_seconds": 302.787332589
+      },
+      "domain.scalar": {
+        "calls": 21,
+        "exclusive_process_cpu_seconds": 1.221905999999997,
+        "exclusive_wall_seconds": 1.2231789740000032
+      },
+      "audit.physical": {
+        "calls": 5,
+        "exclusive_process_cpu_seconds": 32.401348999999996,
+        "exclusive_wall_seconds": 32.427934455
+      },
+      "audit.complete": {
+        "calls": 5,
+        "exclusive_process_cpu_seconds": 51.09669199999999,
+        "exclusive_wall_seconds": 51.124096472999994
+      },
+      "native.acceptance_audit": {
+        "calls": 5,
+        "exclusive_process_cpu_seconds": 0.003530000000004918,
+        "exclusive_wall_seconds": 0.003541232000003447
+      },
+      "output.project_fields": {
+        "calls": 2,
+        "exclusive_process_cpu_seconds": 0.009134,
+        "exclusive_wall_seconds": 0.009133889
+      },
+      "startup.initialize": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 0.0939249999999987,
+        "exclusive_wall_seconds": 0.09456178100000301
+      },
+      "pimple.check.input": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.18732799999999905,
+        "exclusive_wall_seconds": 0.1877884089999995
+      },
+      "flow.assembly": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 98.929438,
+        "exclusive_wall_seconds": 98.986269188
+      },
+      "sparse.pressure_gmres": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 1.3797579999999996,
+        "exclusive_wall_seconds": 1.3897742370000021
+      },
+      "sparse.flow_linear_operation": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 3.202077999999999,
+        "exclusive_wall_seconds": 3.2044564140000014
+      },
+      "io.flow_attempt_snapshot": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 3.7328780000000004,
+        "exclusive_wall_seconds": 5.879178153
+      },
+      "pimple.check.flow": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.18598100000000173,
+        "exclusive_wall_seconds": 0.1859863329999989
+      },
+      "flow.correction_validate": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.8048729999999988,
+        "exclusive_wall_seconds": 0.8053025279999986
+      },
+      "flow.total": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.0003499999999903025,
+        "exclusive_wall_seconds": 0.0006471929999989356
+      },
+      "epsilon.assembly": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 9.074009,
+        "exclusive_wall_seconds": 9.078294714
+      },
+      "epsilon.solve_validate": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.020827000000000012,
+        "exclusive_wall_seconds": 0.02084766900000004
+      },
+      "pimple.check.epsilon": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.20002400000000087,
+        "exclusive_wall_seconds": 0.20010240500000087
+      },
+      "epsilon.total": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.028264000000000067,
+        "exclusive_wall_seconds": 0.02829273600000093
+      },
+      "k.assembly": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 19.120582,
+        "exclusive_wall_seconds": 19.13065679
+      },
+      "k.solve_validate": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.028978000000000004,
+        "exclusive_wall_seconds": 0.02899452099999994
+      },
+      "io.attempt_snapshot": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 1.800714,
+        "exclusive_wall_seconds": 2.4210563160000005
+      },
+      "pimple.check.k": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.2216090000000026,
+        "exclusive_wall_seconds": 0.22180859800000086
+      },
+      "k.total": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.008709999999997109,
+        "exclusive_wall_seconds": 0.008919943000002206
+      },
+      "pimple.final_refresh_diagnostics": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.001076000000000077,
+        "exclusive_wall_seconds": 0.0010953719999997613
+      },
+      "pimple.sweep": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.020188000000004536,
+        "exclusive_wall_seconds": 0.026733511000003318
+      },
+      "native.physical_samples": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 3.8955620000000004,
+        "exclusive_wall_seconds": 3.897958107
+      },
+      "native.implicit": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.00611900000001242,
+        "exclusive_wall_seconds": 0.006368175999966752
+      },
+      "native.advance": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.01264799999998445,
+        "exclusive_wall_seconds": 0.012653377000020782
+      },
+      "io.checkpoint": {
+        "calls": 5,
+        "exclusive_process_cpu_seconds": 0.056153,
+        "exclusive_wall_seconds": 0.229630398
+      },
+      "native.step": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.06070900000000279,
+        "exclusive_wall_seconds": 0.06132726900000307
+      },
+      "sparse.residual_refinement": {
+        "calls": 4,
+        "exclusive_process_cpu_seconds": 0.006628,
+        "exclusive_wall_seconds": 0.00662822
+      },
+      "native.solve_block": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 0.6761750000000575,
+        "exclusive_wall_seconds": 0.6762238919998254
+      },
+      "output.report": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 1.992093,
+        "exclusive_wall_seconds": 3.294366949
+      },
+      "output.fields_and_report": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 0.03539200000000009,
+        "exclusive_wall_seconds": 0.046924549999999954
+      },
+      "process": {
+        "calls": 1,
+        "exclusive_process_cpu_seconds": 1.470899000000145,
+        "exclusive_wall_seconds": 1.9731518309999956
+      }
+    },
+    "accepted_steps": 4,
+    "native_failure": "",
+    "scope": "native attempted/accepted timings distinguished by report; exclusive categories only, no sum of nested inclusive timings; rejected attempts are not accepted-step cost evidence"
+  }
+}
