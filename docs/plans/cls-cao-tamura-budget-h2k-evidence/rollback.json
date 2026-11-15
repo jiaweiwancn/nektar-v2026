@@ -1,0 +1,674 @@
+{
+  "version": "H2kRollbackClosureV1",
+  "native_integrity": {
+    "version": "H2kNativeRollbackIntegrityV1",
+    "passed": true,
+    "binary64_integer_negative_zero_preserved": true,
+    "checks": {
+      "state_history_time": true,
+      "parent_binary_hash_preexisting": true,
+      "physical_samples_signed_bits": true,
+      "accepted_diagnostics_signed_bits": true,
+      "reference_bits": true,
+      "defect_bits": true,
+      "active_stage_time_alpha": true,
+      "stage_history_bits": true
+    },
+    "state_sha256": "2b763674a62afd5e1e7763bc78a598e7d5e04f9c3f3795c3883bfe9834a9e53b",
+    "actual_parent": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse-h0/checkpoint",
+    "parent_checkpoint_sha256": "33c813f2cff3a2994085dde84fcdde6a24b4fc784b916701e4691a6b8a961616",
+    "reported_checkpoint": "",
+    "native_failure": "deliberate post-assignment explicit rejection",
+    "preliminary_diagnosis": "superseded by these signed-bit checks",
+    "new_governing_solves": 0
+  },
+  "requalified_progress": {
+    "version": "H2fV2StartupV1",
+    "status": "completed_bounded_pair_revalidated",
+    "certificate_sha256": "dc4347d2ad35708361decf7ef774c138d65f505d4fe3792c31e4b6a5f817efd5",
+    "seed_sha256": "2b763674a62afd5e1e7763bc78a598e7d5e04f9c3f3795c3883bfe9834a9e53b",
+    "base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+    "runtime": {
+      "sha256": "844871bb5c70224658c88cca3f8088d7738e6f50a08ae521c74c7d02f4aec0a0",
+      "library_path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a"
+      }
+    },
+    "results": {
+      "coarse-h0": {
+        "code": 0,
+        "failure": "",
+        "report_parse_error": null,
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse-h0/case.evolution.json",
+        "report_sha256": "aa3845e5d408ee574965c693fbe2697e8fcaab9b069f574f5183198f655eed90",
+        "seconds": 20.041389822989004,
+        "usage": "19.99 18.03 1.28 1071612\n",
+        "accepted_steps": 0
+      },
+      "coarse8": {
+        "code": 0,
+        "failure": "",
+        "report_parse_error": null,
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse8/case.evolution.json",
+        "report_sha256": "d5938bef8a91dc7d2997b24c7538c063b3a37a49e5d8eb99dca6b60b2f724831",
+        "seconds": 91.78391702199588,
+        "usage": "91.62 86.96 3.74 1740632\n",
+        "accepted_steps": 8
+      },
+      "fine-h0": {
+        "code": 0,
+        "failure": "",
+        "report_parse_error": null,
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/fine-h0/case.evolution.json",
+        "report_sha256": "973e4a7ac46efe2771555fa4c5d6131a1e895e1bf056b05980fcaeeccf87f44e",
+        "seconds": 20.087032613984775,
+        "usage": "20.01 18.08 1.25 1074984\n",
+        "accepted_steps": 0
+      },
+      "fine16": {
+        "code": 0,
+        "failure": "",
+        "report_parse_error": null,
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/fine16/case.evolution.json",
+        "report_sha256": "53a0a2cef2ea2791af55db5ab921334468f014f3dc9a6a8cf9dd9dd60938416e",
+        "seconds": 165.20955979498103,
+        "usage": "165.03 157.00 7.00 1721296\n",
+        "accepted_steps": 16
+      },
+      "coarse4": {
+        "code": 0,
+        "failure": "",
+        "report_parse_error": null,
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse4/case.evolution.json",
+        "report_sha256": "d2384d1ecb4d4ffd206ee755cb708ec1751081d6636ebe6b38e31bf7f51bb343",
+        "seconds": 56.161729914019816,
+        "usage": "56.02 52.39 2.74 1706140\n",
+        "accepted_steps": 4
+      },
+      "coarse4-restart": {
+        "code": 0,
+        "failure": "",
+        "report_parse_error": null,
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse4-restart/case.evolution.json",
+        "report_sha256": "405934a3671b8d225b6d198a53e6ae645b966b1f3a954dbbf44b3798417e8f43",
+        "seconds": 56.83394085901091,
+        "usage": "56.65 53.30 2.67 1717664\n",
+        "accepted_steps": 8
+      },
+      "original-rejection-revalidated": {
+        "code": 1,
+        "failure": "deliberate post-assignment explicit rejection",
+        "report_parse_error": null,
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/post-assignment-reject/case.evolution.json",
+        "report_sha256": "dd32a8d134269899f79ca5ebbc6a6844fd6307c0ba743cf7df479983802392a0",
+        "seconds": 28.81710915599251,
+        "usage": "Command exited with non-zero status 1\n28.76 26.37 1.81 1561164\n",
+        "accepted_steps": 0
+      },
+      "post-assignment-reject": {
+        "code": 1,
+        "failure": "deliberate post-assignment explicit rejection",
+        "report_parse_error": null,
+        "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot-requalified/post-assignment-reject/case.evolution.json",
+        "report_sha256": "647218914a53495484cade5724af0043838a8df040e45057001c11291a05c5b7",
+        "seconds": 30.420127425022656,
+        "usage": "Command exited with non-zero status 1\n30.37 27.98 1.70 1544620\n",
+        "accepted_steps": 0
+      }
+    },
+    "flat_fixture": false,
+    "ordinary_trajectories_reused": true,
+    "ordinary_accepted_step_executions_reused": 32,
+    "original_deliberate_rejection_revalidated": true,
+    "certified_native_sources_unchanged": true,
+    "validation_driver_sha256": "000504643ac8aef29460d6929cd8e421120c2ede96b01cf26d8a533372696bac",
+    "rollback_parent_before": {
+      "checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse-h0/checkpoint",
+      "sha256": "33c813f2cff3a2994085dde84fcdde6a24b4fc784b916701e4691a6b8a961616",
+      "state_sha256": "2b763674a62afd5e1e7763bc78a598e7d5e04f9c3f3795c3883bfe9834a9e53b"
+    },
+    "rollback_validation": {
+      "passed": true,
+      "parent_checkpoint_sha256_before": "33c813f2cff3a2994085dde84fcdde6a24b4fc784b916701e4691a6b8a961616",
+      "parent_checkpoint_sha256_after": "33c813f2cff3a2994085dde84fcdde6a24b4fc784b916701e4691a6b8a961616",
+      "reported_rejected_checkpoint": "",
+      "accepted_parent_used": true,
+      "driver_sha256": "000504643ac8aef29460d6929cd8e421120c2ede96b01cf26d8a533372696bac"
+    },
+    "new_ordinary_physical_steps": 0,
+    "new_deliberate_physical_attempts": 1,
+    "scope": "validation-only repair; original accepted trajectories retained, native and certificate closure unchanged; startup evidence only"
+  },
+  "focused_regression": {
+    "version": "H2iFocusedChecksV1",
+    "passed": true,
+    "tests": {
+      "known_feasible_zero_increment": true,
+      "known_fixed_inner_obstruction": {
+        "verified": true,
+        "primal": 0.33343333333333336,
+        "dual": 0.33343333333333336,
+        "lower_bound": 0.33343333333329545,
+        "gap": 3.7914116290949096e-14,
+        "primal_max_violation": 0.0,
+        "stationarity_inf": 0.0,
+        "stationarity_allowance": 0.0,
+        "arithmetic_allowance": 3.789845474481505e-14,
+        "dual_signs_checked": true,
+        "dual_nonzero_rows": 1,
+        "active_dual_rows": [
+          24
+        ],
+        "active_dual_multipliers": [
+          -1.0
+        ],
+        "native_data_rounding_allowance": 5.333733333333333e-09,
+        "limited_lower_bound": 0.3334333279995621
+      },
+      "buffer_obstruction_does_not_certify_actual_infeasibility": true,
+      "signed_joint_repair_with_true_mass_cap": {
+        "slack": 0.0,
+        "inner_min": 0.013333333333333334,
+        "outer_min": 0.013333333333333334,
+        "mass_squared": 0.014399999998079997,
+        "strong_divergence_squared": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity_max": 0.0,
+        "epsilon_ratio": [
+          0.549717905622127,
+          1.0
+        ],
+        "hard_violation": 0.0
+      },
+      "budget_is_inconclusive": true,
+      "full_S_no_deviatoric_projection_and_affine_Rayleigh": true,
+      "quadratic_tangent_is_necessary_not_sufficient": true,
+      "fresh_GL28_identity_margin_envelope_and_physical_caps_required": true,
+      "driver_failure_prefixes": [
+        {
+          "kind": "rejection",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        }
+      ],
+      "deliberate_rollback_distinct_and_successful_order": true
+    },
+    "seconds": 0.06679401197470725,
+    "scope": "math and synthetic driver control; no native governing solves"
+  }
+}

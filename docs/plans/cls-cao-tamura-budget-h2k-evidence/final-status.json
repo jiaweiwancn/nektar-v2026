@@ -1,0 +1,102 @@
+{
+  "version": "H2kFinalStatusV1",
+  "capture_Asia_Shanghai": "2026-11-16T01:05:14.999136+08:00",
+  "result": "qualified_seed_and_passing_bounded_hill_startup",
+  "numerical_goal_closure": true,
+  "physical_application_validation_complete": false,
+  "gates": {
+    "frozen_physics_and_protected_initial_data": "PASS",
+    "useful_native_control_and_old_span_preservation": "PASS",
+    "complete_native_and_seen_sided_inventory": "PASS",
+    "fresh_GL28_seed_audit": "PASS",
+    "strict_V2_real_hill_zero_import": "PASS",
+    "coarse8_fine16_same_endpoint": "PASS",
+    "bitwise_coarse4_plus_4_restart": "PASS",
+    "post_assignment_rejection_full_rollback": "PASS",
+    "one_sweep_counts_and_solved_epsilon": "PASS",
+    "strict_saved_history_budget_readbacks": "PASS"
+  },
+  "state_sha256": "2b763674a62afd5e1e7763bc78a598e7d5e04f9c3f3795c3883bfe9834a9e53b",
+  "cold_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "reference_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "defect_sha256": "e319468000760282822984d0fbdee636d7d5c11abf809a76147469f4ad6368a3",
+  "certificate_file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/fresh-epoch2/certificate.json",
+  "certificate_sha256": "dc4347d2ad35708361decf7ef774c138d65f505d4fe3792c31e4b6a5f817efd5",
+  "actual_frontiers": {
+    "coarse8": {
+      "time": 1.6e-05,
+      "steps": 8,
+      "dt": 2e-06,
+      "checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse8/checkpoint.8",
+      "checkpoint_sha256": "7670b6a56e45f9fa9594f82277e1e5a25e6692837e262c82974191ca2643a6eb"
+    },
+    "fine16": {
+      "time": 1.6000000000000003e-05,
+      "steps": 16,
+      "dt": 1e-06,
+      "checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/fine16/checkpoint.16",
+      "checkpoint_sha256": "26a4d842a808e6dc8e54689a2f70e483d2b13e5a7a7c5f3cf1a92e907f098c94"
+    }
+  },
+  "attempts": {
+    "primary_accepted_step_executions": 24,
+    "split_replay_accepted_step_executions": 8,
+    "total_ordinary_accepted_executions": 32,
+    "deliberate_rejected_attempts": 2,
+    "total_physical_attempts": 34,
+    "unexpected_numerical_rejections": 0,
+    "zero_step_imports_not_physical_attempts": true
+  },
+  "accepted_execution_equation_counts": {
+    "outer_sweeps": 32,
+    "momentum_predictor_solves": 32,
+    "pressure_system_solves": 32,
+    "epsilon_transport_solves": 32,
+    "k_transport_solves": 32,
+    "bound_calls": 32,
+    "bound_activations": 0,
+    "additional_governing_equation_solves": 0,
+    "additional_correction_or_restoration_solves": 0
+  },
+  "deliberate_rejected_attempt_equation_counts": {
+    "outer_sweeps": 2,
+    "momentum_predictor_solves": 2,
+    "pressure_system_solves": 2,
+    "epsilon_transport_solves": 2,
+    "k_transport_solves": 2,
+    "bound_calls": 2,
+    "bound_activations": 0,
+    "additional_governing_equation_solves": 0,
+    "additional_correction_or_restoration_solves": 0
+  },
+  "validation_only_repair": {
+    "original_ledger": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/progress.json",
+    "original_terminal_stop": "accepted checkpoint missing",
+    "repaired_ledger": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot-requalified/progress.json",
+    "reused_accepted_step_executions": 32,
+    "additional_ordinary_steps": 0,
+    "additional_deliberate_rejections": 1,
+    "certified_native_sources_and_runtime_unchanged": true
+  },
+  "aggregate_work": {
+    "construction_seconds": 24.56243501301855,
+    "attempts": 65,
+    "scans": 165,
+    "epochs": 2,
+    "rounds": 92,
+    "search_seconds": 610.255398652982,
+    "native_checks": 1,
+    "fresh_audits": 1
+  },
+  "elapsed_wall_seconds_at_collection": 9166.000114440918,
+  "H2k_jobs_left_running": [],
+  "long_continuation_launched": false,
+  "open_gates": [
+    "common flat spatial accuracy",
+    "independent CLS hill initialization/startup",
+    "temporal order and accumulated time error",
+    "developed flow",
+    "spatial/height/boundary sensitivity",
+    "held-out experimental validation"
+  ]
+}

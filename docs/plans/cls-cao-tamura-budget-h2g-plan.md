@@ -63,3 +63,22 @@ but misses spatial targets and is not adopted. Targeted upper-outer initializer
 support is the next gate; hill startup, common flat spatial accuracy, temporal
 convergence, developed flow and experimental validation remain separate open
 tasks. EP-AWF remains deferred.
+
+## H2k roadmap update, 16 November 2026
+
+[H2k](cls-cao-tamura-budget-h2k.md) closes the bounded calibrated-standard hill
+startup gate. Supported velocity space expands 44→78→95 without altering the
+native mesh or physical equations. Exact physical quadratics and affine PSD
+blocks produce a native/seen-qualified seed; one fresh GL28 and actual strict V2
+hill import pass. Coarse8/fine16 reach 1.6e-5 s, 4+4 restart is bitwise equal,
+and post-assignment rollback preserves the accepted parent. Positivity supply
+is zero. A validation-only parent-checkpoint repair is positively requalified;
+the successful native trajectories are retained unchanged.
+
+No continuation is running. The two-model comparison remains open: CLS still
+needs its own admissible hill seed; common flat spatial accuracy, accumulated
+temporal error/order, developed flow, spatial/height/boundary sensitivity and
+held-out experimental comparison are not closed. Recommend one checkpointed
+standard continuation to 5e-5 then conditionally 1e-4 s, with costs and per-step
+monitoring from H2k, as a separate bounded package. Do not infer a developed hill
+flow or an experimentally validated closure from the tiny startup interval.

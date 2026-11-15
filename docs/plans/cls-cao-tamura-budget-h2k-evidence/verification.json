@@ -1,0 +1,1055 @@
+{
+  "passed": true,
+  "artifact_index_sha256": "c92bf6306d672d7ba65b73050c390cab84d9b27dc457a8551ecc7fc2f5177827",
+  "verified_artifacts": 850,
+  "artifact_errors": [],
+  "focused_checks": {
+    "checkpoint1-verification.json": {
+      "sha256": "d1b4443843bc581bcd27670707729e4e02e2bb823cd6bd4422355409c6a27cca",
+      "passed": true,
+      "tests": {
+        "archived_counts_and_successor_rejections": true,
+        "all_44_original_responses_scalars_memberships_bits_preserved": true,
+        "old_quadratic_base_cross_direction_blocks_bitwise": true,
+        "native_meaningful_signed_responses_and_frozen_profile": true,
+        "independent_finite_quadratic_identity": true
+      },
+      "scope": null
+    },
+    "epoch2-verification.json": {
+      "sha256": "408573accd32d1cee063897dbbdc054aa02acc5381b96bfb9f62785835c4daf2",
+      "passed": true,
+      "tests": {
+        "archived_counts_and_successor_rejections": true,
+        "all_prior_responses_scalars_memberships_bits_preserved": true,
+        "old_quadratic_base_cross_direction_blocks_bitwise": true,
+        "native_meaningful_signed_responses_and_frozen_profile": true,
+        "independent_finite_quadratic_identity": true
+      },
+      "scope": null
+    },
+    "LP-equivalence-tests.json": {
+      "sha256": "0eec160a1320810d06a37c5c8bee4e0267f9ae67b05f08737955780095f740bd",
+      "passed": true,
+      "tests": {
+        "signed_variables_and_original_coordinate_primal_dual": true,
+        "known_feasible_problem": true,
+        "bounded_fallback_counts_both_LP_attempts": true
+      },
+      "scope": null
+    },
+    "exact-PSD-cap-tests.json": {
+      "sha256": "a7ddd64a5ecef52ba7959832fba024c44654b81d57012607a802736b881424c9",
+      "passed": true,
+      "tests": {
+        "signed_native_repair_true_quadratics_and_all_scalar_rows": true,
+        "numerical_status_alone_does_not_claim_obstruction": true,
+        "work_limit_remains_inconclusive": true,
+        "zero_relaxation_slack_does_not_stop_new_global_violations": true
+      },
+      "scope": null
+    },
+    "handoff-routing-tests.json": {
+      "sha256": "4358a666106351ce11722dae499f94d419370cc8e73293ba132d6c30ec1cacbe",
+      "passed": true,
+      "tests": {
+        "complete_synthetic_routing_prerequisites_delegate_once": true,
+        "failed_import_stops_before_native": true,
+        "changed_certificate_hash_stops_before_native": true,
+        "changed_import_state_stops_before_native": true,
+        "unknown_epoch_stops_before_native": true,
+        "changed_context_stops_before_native": true,
+        "changed_epoch_ledger_stops_before_native": true
+      },
+      "scope": "synthetic precondition routing only; real producer/import evidence remains separately required"
+    },
+    "affected-H2i-final.json": {
+      "sha256": "8ea9d47aa55cada3ce5014b39d8f66fd5e974cc1f4ebad81741fa9421a685eae",
+      "passed": true,
+      "tests": {
+        "known_feasible_zero_increment": true,
+        "known_fixed_inner_obstruction": {
+          "verified": true,
+          "primal": 0.33343333333333336,
+          "dual": 0.33343333333333336,
+          "lower_bound": 0.33343333333329545,
+          "gap": 3.7914116290949096e-14,
+          "primal_max_violation": 0.0,
+          "stationarity_inf": 0.0,
+          "stationarity_allowance": 0.0,
+          "arithmetic_allowance": 3.789845474481505e-14,
+          "dual_signs_checked": true,
+          "dual_nonzero_rows": 1,
+          "active_dual_rows": [
+            24
+          ],
+          "active_dual_multipliers": [
+            -1.0
+          ],
+          "native_data_rounding_allowance": 5.333733333333333e-09,
+          "limited_lower_bound": 0.3334333279995621
+        },
+        "buffer_obstruction_does_not_certify_actual_infeasibility": true,
+        "signed_joint_repair_with_true_mass_cap": {
+          "slack": 0.0,
+          "inner_min": 0.013333333333333334,
+          "outer_min": 0.013333333333333334,
+          "mass_squared": 0.014399999998079997,
+          "strong_divergence_squared": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "velocity_max": 0.0,
+          "epsilon_ratio": [
+            0.549717905622127,
+            1.0
+          ],
+          "hard_violation": 0.0
+        },
+        "budget_is_inconclusive": true,
+        "full_S_no_deviatoric_projection_and_affine_Rayleigh": true,
+        "quadratic_tangent_is_necessary_not_sufficient": true,
+        "fresh_GL28_identity_margin_envelope_and_physical_caps_required": true,
+        "driver_failure_prefixes": [
+          {
+            "kind": "rejection",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "rejection",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "rejection",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "rejection",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "rejection",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "rejection",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "epsilon",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "epsilon",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "epsilon",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "epsilon",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          }
+        ],
+        "deliberate_rollback_distinct_and_successful_order": true
+      },
+      "scope": "math and synthetic driver control; no native governing solves"
+    },
+    "rollback-validator-regression.json": {
+      "sha256": "8bfb65b7915c428d1f17045b662bf00a15f7a4787046f132b462947b52db7e83",
+      "passed": true,
+      "tests": {
+        "known_feasible_zero_increment": true,
+        "known_fixed_inner_obstruction": {
+          "verified": true,
+          "primal": 0.33343333333333336,
+          "dual": 0.33343333333333336,
+          "lower_bound": 0.33343333333329545,
+          "gap": 3.7914116290949096e-14,
+          "primal_max_violation": 0.0,
+          "stationarity_inf": 0.0,
+          "stationarity_allowance": 0.0,
+          "arithmetic_allowance": 3.789845474481505e-14,
+          "dual_signs_checked": true,
+          "dual_nonzero_rows": 1,
+          "active_dual_rows": [
+            24
+          ],
+          "active_dual_multipliers": [
+            -1.0
+          ],
+          "native_data_rounding_allowance": 5.333733333333333e-09,
+          "limited_lower_bound": 0.3334333279995621
+        },
+        "buffer_obstruction_does_not_certify_actual_infeasibility": true,
+        "signed_joint_repair_with_true_mass_cap": {
+          "slack": 0.0,
+          "inner_min": 0.013333333333333334,
+          "outer_min": 0.013333333333333334,
+          "mass_squared": 0.014399999998079997,
+          "strong_divergence_squared": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "velocity_max": 0.0,
+          "epsilon_ratio": [
+            0.549717905622127,
+            1.0
+          ],
+          "hard_violation": 0.0
+        },
+        "budget_is_inconclusive": true,
+        "full_S_no_deviatoric_projection_and_affine_Rayleigh": true,
+        "quadratic_tangent_is_necessary_not_sufficient": true,
+        "fresh_GL28_identity_margin_envelope_and_physical_caps_required": true,
+        "driver_failure_prefixes": [
+          {
+            "kind": "rejection",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "rejection",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "rejection",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "rejection",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "rejection",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "rejection",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "status",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "missing_report",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "invalid_report",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "steps",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "checkpoint",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "coarse-h0",
+            "calls": [
+              "coarse-h0"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "fine-h0",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "counts",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          },
+          {
+            "kind": "epsilon",
+            "stop": "coarse8",
+            "calls": [
+              "coarse-h0",
+              "coarse8"
+            ]
+          },
+          {
+            "kind": "epsilon",
+            "stop": "fine16",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16"
+            ]
+          },
+          {
+            "kind": "epsilon",
+            "stop": "coarse4",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4"
+            ]
+          },
+          {
+            "kind": "epsilon",
+            "stop": "coarse4-restart",
+            "calls": [
+              "coarse-h0",
+              "coarse8",
+              "fine-h0",
+              "fine16",
+              "coarse4",
+              "coarse4-restart"
+            ]
+          }
+        ],
+        "deliberate_rollback_distinct_and_successful_order": true
+      },
+      "scope": "math and synthetic driver control; no native governing solves"
+    }
+  }
+}

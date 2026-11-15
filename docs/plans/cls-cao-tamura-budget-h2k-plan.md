@@ -100,3 +100,20 @@ obstruction. The reserve state `2b763674a62afd5e1e7763bc78a598e7d5e04f9c3f3795c3
 passes the complete native/GL20/GL24 audit. It is frozen before fresh sampling;
 GL28, real hill import and the bounded physical sequence are still separate
 gates at this point. Anchor B need not be searched in this enlarged epoch.
+
+## Completed closure, 16 November
+
+The reserve seed passes fresh GL28 and real production V2 zero-step hill import.
+Checkpoint2 is `18953120`. The coarse8/fine16 pair reaches 1.6e-5 s with zero
+bound activation; uninterrupted and independent 4+4 histories are bitwise equal.
+Native deliberate post-assignment rollback passes. A Python validator initially
+expects a local checkpoint after a rejected attempt, although the accepted
+recovery object is the retained parent. `787e79e2` repairs this narrow contract,
+preserves the stopped ledger, revalidates all saved ordinary trajectories, and
+passes an additional focused native rollback. No physical runtime, certified
+source/hash, seed or fresh grid changes. Strict saved-history readbacks complete
+the actual production/storage/transport evidence without PDE solves or Lift.
+
+The final report and machine status distinguish successful bounded startup from
+the remaining spatial, temporal, developed-flow and experimental gates. No long
+continuation is launched. Checkpoint3 commits/pushes the completed evidence.

@@ -1,0 +1,161 @@
+{
+  "version": "H2kExecutedCommandsV1",
+  "timed_driver_commands": {
+    "pilot-revalidation.usage.txt": "python3 revalidate_cao_tamura_budget_h2k.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/IncNavierStokesSolver --certificate /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/fresh-epoch2/certificate.json --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot-requalified",
+    "post-startup-analysis.usage.txt": "python3 analyse_cao_tamura_budget_h2k.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115 --probe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe --comparison /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/post-startup",
+    "post-startup-final-analysis.usage.txt": "python3 analyse_cao_tamura_budget_h2k.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115 --probe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe --comparison /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/post-startup-final",
+    "post-startup-v2-analysis.usage.txt": "python3 analyse_cao_tamura_budget_h2k.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115 --probe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe --comparison /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/post-startup-v2"
+  },
+  "native_probe_commands": [
+    {
+      "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch1-context/native",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch1-context/case/case.xml",
+        "input.json",
+        "result.json"
+      ],
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch1-context/native/receipt.json",
+      "sha256": "5dd6fac95032d8dccc137608d1903b9325d6b3bbb9e0d9b3e2bff8f1899de6fc"
+    },
+    {
+      "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch2-context/native",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch2-context/case/case.xml",
+        "input.json",
+        "result.json"
+      ],
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch2-context/native/receipt.json",
+      "sha256": "dd6c4a61900850f0f84d65b68c9b82e07f653f3368c56c34502f0ea5264260a6"
+    },
+    {
+      "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/fresh-epoch2/native",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/fresh-epoch2/case/case.xml",
+        "input.json",
+        "result.json"
+      ],
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/fresh-epoch2/native/receipt.json",
+      "sha256": "e36486681f8d226520a0b471b9a71c7370584b5c949d52e106c8b9b16b74f861"
+    },
+    {
+      "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/patch1/native",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/patch1/case/case.xml",
+        "input.json",
+        "result.json"
+      ],
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/patch1/native/receipt.json",
+      "sha256": "e77082cded8c39ebb469e089eea82f6c9f4d7c3cfc4f95304d6db4c5347b8565"
+    },
+    {
+      "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/patch2/native",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/patch2/case/case.xml",
+        "input.json",
+        "result.json"
+      ],
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/patch2/native/receipt.json",
+      "sha256": "e45aa9b87fda7366bf69f60cac916af7d4dc281b27284df94840ebb636966582"
+    },
+    {
+      "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/post-startup-final/coarse-h0-readback",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse-h0/case.xml",
+        "input.json",
+        "result.json"
+      ],
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/post-startup-final/coarse-h0-readback/receipt.json",
+      "sha256": "3a4def240d1133f67d10bf2ea7d09f96f7ff63f106c1e560b4615c711aad1d18"
+    },
+    {
+      "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/post-startup-final/coarse8-readback",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse8/case.xml",
+        "input.json",
+        "result.json"
+      ],
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/post-startup-final/coarse8-readback/receipt.json",
+      "sha256": "3d04a2877e1acfc7299c5780ed10d1b79ffa9176c9dabedb5e9bd6e81371d3c9"
+    },
+    {
+      "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/post-startup-final/fine16-readback",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/fine16/case.xml",
+        "input.json",
+        "result.json"
+      ],
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/post-startup-final/fine16-readback/receipt.json",
+      "sha256": "51a366a9c81d60a763653f2f56682bde9da3d5e9589a61c43668977094f9b2f6"
+    },
+    {
+      "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/seen-reserve/native",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/seen-reserve/case/case.xml",
+        "input.json",
+        "result.json"
+      ],
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/seen-reserve/native/receipt.json",
+      "sha256": "7371eafce105f7ab18f83f49dda040a1974fc93f642b152fa0e353b9e32cbd8e"
+    }
+  ],
+  "production_invocations": [
+    {
+      "xml": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse-h0/case.xml",
+      "executable": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/IncNavierStokesSolver",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse-h0/case.evolution.json"
+    },
+    {
+      "xml": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse8/case.xml",
+      "executable": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/IncNavierStokesSolver",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse8/case.evolution.json"
+    },
+    {
+      "xml": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/fine-h0/case.xml",
+      "executable": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/IncNavierStokesSolver",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/fine-h0/case.evolution.json"
+    },
+    {
+      "xml": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/fine16/case.xml",
+      "executable": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/IncNavierStokesSolver",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/fine16/case.evolution.json"
+    },
+    {
+      "xml": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse4/case.xml",
+      "executable": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/IncNavierStokesSolver",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse4/case.evolution.json"
+    },
+    {
+      "xml": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse4-restart/case.xml",
+      "executable": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/IncNavierStokesSolver",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/coarse4-restart/case.evolution.json"
+    },
+    {
+      "xml": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/post-assignment-reject/case.xml",
+      "executable": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/IncNavierStokesSolver",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot/post-assignment-reject/case.evolution.json"
+    },
+    {
+      "xml": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot-requalified/post-assignment-reject/case.xml",
+      "executable": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/runtime-v2/IncNavierStokesSolver",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/pilot-requalified/post-assignment-reject/case.evolution.json"
+    }
+  ],
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OMP_THREAD_LIMIT": "1"
+  },
+  "rebuild_workers": 4,
+  "native_ranks": 1,
+  "note": "Output directories are immutable; use unused roots for reproduction. Exact input packets, XML, logs and runtime closures are indexed."
+}
