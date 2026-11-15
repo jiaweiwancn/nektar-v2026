@@ -8,6 +8,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 get_filename_component(RANS_SOURCE_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../.." ABSOLUTE)
 option(RANS_ENABLE_SERIAL_SPARSE "Build the explicitly guarded CT9 serial sparse adapter" OFF)
 if(RANS_ENABLE_SERIAL_SPARSE)
+    find_path(RANS_SCOTCH_INCLUDE_DIR scotch.h HINTS ${SCOTCH_INCLUDE_DIRS} PATH_SUFFIXES scotch REQUIRED)
+    find_library(RANS_SCOTCH_LIBRARY NAMES scotch REQUIRED)
+    include_directories(SYSTEM ${RANS_SCOTCH_INCLUDE_DIR})
+    add_definitions(-DNEKTAR_RANS_HAVE_SCOTCH_ORDERING)
     add_executable(CT13SparseOrderingProbe test_ct_accepted13_ordering.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp)
     target_include_directories(CT13SparseOrderingProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
@@ -47,6 +51,9 @@ target_sources(RANSKernels PRIVATE
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSparse.cpp)
 target_sources(RANSKernels PRIVATE
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallMomentumAttribution.cpp)
+if(RANS_ENABLE_SERIAL_SPARSE)
+    target_link_libraries(RANSKernels PUBLIC ${RANS_SCOTCH_LIBRARY})
+endif()
 if(RANS_ENABLE_SERIAL_SPARSE)
     add_executable(CT9SparseAlgebraChecks test_ct_accepted9_sparse.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp)

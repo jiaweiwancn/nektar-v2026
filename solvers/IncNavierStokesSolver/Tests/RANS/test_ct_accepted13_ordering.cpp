@@ -26,18 +26,25 @@ int main(int argc,char **argv)
         {Require(ids[j]<cols && val[j]!=0.,"invalid/explicit-zero CSR entry");matrix.Entry(i,ids[j])=val[j];}
         matrix.Finalize();Require(matrix.NonZeros()==nnz,"CSR canonical entries changed");
         Vector rhs(rows);std::ifstream r(argv[2]);for(auto &v:rhs)r>>v;Require(!r.fail(),"truncated RHS");
-        const std::string name=argv[3];Require(name=="COLAMD" || name=="AMD" || name=="Natural","unknown predictor ordering");
-        const auto ordering=name=="AMD"?SparsePredictorOrdering::AMD:name=="Natural"?SparsePredictorOrdering::Natural:SparsePredictorOrdering::COLAMD;
+        const std::string name=argv[3];Require(name=="COLAMD" || name=="AMD" || name=="Natural" || name=="ScotchND0V1","unknown predictor ordering");
+        const auto ordering=name=="ScotchND0V1"?SparsePredictorOrdering::ScotchND0V1:name=="AMD"?SparsePredictorOrdering::AMD:name=="Natural"?SparsePredictorOrdering::Natural:SparsePredictorOrdering::COLAMD;
+        std::vector<int> permutation;
+        if(name=="ScotchND0V1")permutation=SparseScotchPermutation(matrix);
         const SparseFactor factor(matrix,false,ordering);const auto x=factor.Apply(rhs);
         auto residual=matrix.Apply(x);for(int i=0;i<rows;++i)residual[i]-=rhs[i];
         // Tiny signed-cancellation right-hand side uses the same factor and
         // unchanged native absolute/relative true-residual criterion.
         auto tiny=rhs;for(auto &v:tiny)v*=1e-12;
         const auto tx=factor.Apply(tiny);auto tr=matrix.Apply(tx);for(int i=0;i<rows;++i)tr[i]-=tiny[i];
+        Vector cancelling(rows);for(int i=0;i<rows;++i)cancelling[i]=(i%2?1.:-1.)*1e-14/(1+i%7);
+        const auto crhs=matrix.Apply(cancelling),cx=factor.Apply(crhs);auto cres=matrix.Apply(cx);
+        for(int i=0;i<rows;++i)cres[i]-=crhs[i];
         std::ofstream out(argv[4]);out<<J::Object({{"status",J::Quote("pass")},{"ordering",J::Quote(name)},
             {"rows",J::Number(rows)},{"nnz",J::Number(nnz)},{"factor_nnz",J::Number(factor.FactorNonZeros())},
             {"rhs_maximum",J::Number(Maximum(rhs))},{"true_residual",J::Number(Maximum(residual))},
             {"tiny_rhs_maximum",J::Number(Maximum(tiny))},{"tiny_true_residual",J::Number(Maximum(tr))},
+            {"cancelling_rhs_maximum",J::Number(Maximum(crhs))},{"cancelling_true_residual",J::Number(Maximum(cres))},
+            {"old_to_new",J::Numbers(permutation)},
             {"solution",J::Numbers(x)},{"tiny_solution",J::Numbers(tx)}})<<'\n';return 0;
     }
     catch(const std::exception &e)

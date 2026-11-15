@@ -1,0 +1,12 @@
+{
+  "schema": "CT14ProspectiveOrderingAttemptV1",
+  "policy": "ScotchND0V1",
+  "installed_support": {"NEKTAR_USE_SCOTCH": true, "header": "/usr/include/scotch/scotch.h", "serial_library": "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so", "Nektar_runtime": "MPI-linked Nektar5.9.0 loads libptscotch6.1; CT14 explicitly links serial libscotch; actual loaded maps retained"},
+  "graph": "undirected structural union A+A^T of canonical nonzero coefficients; no diagonal edges; sorted unique adjacency; SCOTCH_graphCheck required",
+  "strategy": {"builder": "SCOTCH_stratGraphOrderBuild", "flags": "SCOTCH_STRATQUALITY|SCOTCH_STRATSAFETY =9", "level": 0, "balance": 0.1, "resolved_string": "SCOTCH_stratSave written to each immutable factor log before ordering", "seed": "SCOTCH_randomSeed(0),SCOTCH_randomReset() on every call"},
+  "permutation": "SCOTCH permtab is old_to_new; peritab is new_to_old; validate bijection and inverse. Permute BOTH matrix indices internally, use Eigen NaturalOrdering with original pivot defaults, permute each RHS and map solution back before original-system residual/refinement.",
+  "scope": "first read-only capacity control; default production call sites remain COLAMD; no governing component or histories enabled by this attempt",
+  "work": {"per_factor_CPU_soft": 600, "per_factor_CPU_hard": 605, "per_factor_wall_seconds": 900, "process_AS_bytes": 17179869184, "matrix_nnz_cap": 20000000, "factor_entry_cap": 40000000},
+  "control_order": ["original-initial", "original-evolved", "candidate-alpha1000", "candidate-alpha2000"],
+  "early_failure": "preserve witness,stop fixed policy after first failed system,diagnose and prospectively contract a causal subsequent attempt within total CT14 allocation"
+}
