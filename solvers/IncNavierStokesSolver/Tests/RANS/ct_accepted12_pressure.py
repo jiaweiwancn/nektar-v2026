@@ -231,9 +231,11 @@ def main():
                 # without a global coupled factor or a dense Schur matrix.
                 exactop=LinearOperator(fr.S.shape,matvec=lambda p:fr.mul('D',fr.direct('A',fr.mul('G',p)))-fr.mul('C',p))
                 exactpi=fr.solve(rhs,'exact-frozen-coupled',operator=exactop)
+                exact_repeat=fr.measure(fr.solve(rhs,'exact-frozen-coupled-tighter',rtol=2e-14,operator=exactop)-exactpi)
+                require(exact_repeat['maximum_scaled_value']<1e-8,'exact coupled pressure repeat uncertainty')
                 exactu=pred-fr.direct('A',fr.mul('G',exactpi));res=fr.F@np.r_[exactu,exactpi]+np.r_[fr.rm,fr.rc]
                 require(maximum(res)<2e-10,'exact coupled diagnostic all-row residual')
-                row['exact_coupled']=dict(pressure=fr.measure(exactpi),split_difference=fr.measure(dpi-exactpi),maximum_residual=maximum(res))
+                row['exact_coupled']=dict(pressure=fr.measure(exactpi),split_difference=fr.measure(dpi-exactpi),maximum_residual=maximum(res),tighter_repeat=exact_repeat)
                 # Stream one radial band vector at a time from local sparse supports.
                 bounds={str(e['geometry']):(e['lower'][2],e['upper'][2]) for e in mom['elements']}
                 static=fr.mass_image(np.asarray(mom['total_actual'])-np.asarray(mom['total_analytic']),'initial-representation-total')
