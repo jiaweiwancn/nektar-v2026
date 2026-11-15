@@ -517,7 +517,8 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
         number(w);number(lo);number(hi);for(double x:v.coordinate)number(x);
         for(double x:v.rawLocalCoordinate)number(x);
         bits(v.ids.size());for(int id:v.ids)bits(id);
-        for(double x:v.phi)number(x);for(double x:v.constant)number(x);
+        for(double x:v.phi){number(x);}
+        for(double x:v.constant){number(x);}
         for(const auto &d:v.derivative)for(double x:d)number(x);
         const auto c=coefficients(v,region==1);
         sum[region][0]+=w*(v.Value(state,patch.offset[patch.K()])-v.Value(previous,patch.offset[patch.K()]))/dt;
@@ -706,7 +707,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
             {"inner_points",J::Number(volumeCounts[0])},{"outer_points",J::Number(volumeCounts[1])},
             {"physical_weights",J::Numbers(Vector{volumeWeights[0],volumeWeights[1]})},
             {"native_rows_provenance_fnv1a64",J::Quote(std::to_string(provenance))},
-            {"digest_definition",J::Quote("ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash")},
+            {"digest_definition",J::Quote("ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash")},
             {"materialized_global_volume_rows",streamVolume?"false":"true"}})},
         {"reconciliation",reconciliation},
         {"scope",J::Quote("independently integrated storage, frozen one-sweep scalar source and physical gradient/advective face flux; no prescribed-row reaction used. Dependent epsilon boundary storage is retained, with no inner epsilon equation. Finite discretization defects are observations, not forced balances.")}});
