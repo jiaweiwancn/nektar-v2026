@@ -1,0 +1,3569 @@
+{
+  "diagnostic_states": {
+    "A": {
+      "state_sha256": "4138e71d73e747cb129a38fc691cec38a2039673a86609593a5e1e26c2adef84",
+      "anchor_k_sha256": "911aee8ec71b125c57bcb07d70e7e2e99b27857f3b12b1ba786f9e7403c9c958",
+      "passed": false,
+      "gates": {
+        "native": false,
+        "native_margin": false,
+        "budget": true,
+        "continuity": true,
+        "fixed_k": true,
+        "native_GL16": true,
+        "GL20_margin": false,
+        "GL20_scalar": true,
+        "GL20_velocity": true,
+        "GL20_divergence": true,
+        "GL24_margin": false,
+        "GL24_scalar": true,
+        "GL24_velocity": true,
+        "GL24_divergence": true
+      },
+      "native_covariance": [
+        1.9050060581895026e-06,
+        -0.0015517556328626695
+      ],
+      "native_inner_point": [
+        0.23549580558569316,
+        0,
+        0.0065,
+        0.01838575534504143,
+        0.01838575534504143,
+        0.0002129398143720893,
+        0.01732898182484872,
+        0.01225717023002762,
+        1.9050060581895026e-06
+      ],
+      "native_outer_point": [
+        0,
+        0,
+        0.2,
+        0.010016645288489454,
+        0.007649184149497645,
+        -0.0015517556328626695
+      ],
+      "native_inner_provenance": [
+        35,
+        35,
+        -1,
+        2
+      ],
+      "native_outer_provenance": [
+        62,
+        62,
+        0,
+        2
+      ],
+      "native_GL16": {
+        "order": 16,
+        "regional_L2": [
+          0.018697956879055448,
+          0.057336317151014726
+        ],
+        "L2": 0.06030809942199109
+      },
+      "strong_continuity": [
+        0.018697956879055448,
+        0.057336317151014726,
+        6.501141527860949e-17,
+        -7.247111574466021e-17,
+        4.1557722369999184e-16
+      ],
+      "scalar_budget": [
+        1,
+        0.5013585737330771,
+        0.018385324422631463,
+        0.009217856076795271,
+        0.0009331229478594129,
+        0.01838575534504143,
+        0.1430512592910451,
+        2.9772430482801835,
+        3.1675203927182606e-16
+      ],
+      "coupled_norms": [
+        1.2434560138591744,
+        2.4797404746684526,
+        2.376702332956265,
+        0.0879416817354432,
+        3.5455425974418166e-14,
+        2.802051502874361e-16,
+        0,
+        0
+      ],
+      "seen": {
+        "GL20": {
+          "minimum_covariance": -0.0015401281282993954,
+          "inner_minimum_covariance": 3.909130827966893e-05,
+          "outer_minimum_covariance": -0.0015401281282993954,
+          "witness": {
+            "coordinate": [
+              -0.13861070744291776,
+              0,
+              0.19965642995925476
+            ],
+            "physical": [
+              -0.13861070744291776,
+              0,
+              0.19965642995925476
+            ],
+            "geometry": 60,
+            "element": 60,
+            "inner": false,
+            "k": 0.017951221362304693,
+            "epsilon": 0.005063602632028812,
+            "gradient": [
+              [
+                0.21102037180259595,
+                0,
+                0.9086900188373873
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                1.4381998832085308,
+                0,
+                -0.24309514924093964
+              ]
+            ],
+            "tensor": [
+              [
+                0.00955021027014579,
+                0,
+                -0.013441991411795704
+              ],
+              [
+                0,
+                0.011967480908203128,
+                0
+              ],
+              [
+                -0.013441991411795704,
+                0,
+                0.014752173028184795
+              ]
+            ],
+            "eigenvalues": [
+              -0.0015401281282993954,
+              0.011967480908203128,
+              0.02584251142662998
+            ]
+          },
+          "count": 31200,
+          "inner_covariance_witness": {
+            "observation": {
+              "coordinate": [
+                0.25657347782114515,
+                0,
+                0.006485388911330463
+              ],
+              "physical": [
+                0.25657347782114515,
+                0,
+                0.006485388911330463
+              ],
+              "geometry": 35,
+              "element": 35,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": true,
+              "epsilon_semantics": "dependent inner dissipation",
+              "gradient": [
+                [
+                  -0.2353841728274736,
+                  0,
+                  57.44225041335867
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0.05033655838391219,
+                  0,
+                  0.24795303867967738
+                ]
+              ],
+              "k": 0.018385753823361942,
+              "epsilon": 0.14337354291387283
+            },
+            "tensor": [
+              [
+                0.012357189483889457,
+                0,
+                -0.012214975854052325
+              ],
+              [
+                0,
+                0.012257169215574628,
+                0
+              ],
+              [
+                -0.012214975854052325,
+                0,
+                0.012151808140697279
+              ]
+            ],
+            "eigenvalues": [
+              3.909130827966893e-05,
+              0.012257169215574628,
+              0.024469906316307067
+            ],
+            "critical_eigenvector": [
+              0.704128308151927,
+              0,
+              0.7100727608203999
+            ],
+            "eigenvector_residual": 1.734723475976807e-18
+          },
+          "outer_covariance_witness": {
+            "observation": {
+              "coordinate": [
+                -0.13861070744291776,
+                0,
+                0.19965642995925476
+              ],
+              "physical": [
+                -0.13861070744291776,
+                0,
+                0.19965642995925476
+              ],
+              "geometry": 60,
+              "element": 60,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  0.21102037180259595,
+                  0,
+                  0.9086900188373873
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  1.4381998832085308,
+                  0,
+                  -0.24309514924093964
+                ]
+              ],
+              "k": 0.017951221362304693,
+              "epsilon": 0.005063602632028812
+            },
+            "tensor": [
+              [
+                0.00955021027014579,
+                0,
+                -0.013441991411795704
+              ],
+              [
+                0,
+                0.011967480908203128,
+                0
+              ],
+              [
+                -0.013441991411795704,
+                0,
+                0.014752173028184795
+              ]
+            ],
+            "eigenvalues": [
+              -0.0015401281282993954,
+              0.011967480908203128,
+              0.02584251142662998
+            ],
+            "critical_eigenvector": [
+              0.7713536870195974,
+              0,
+              0.6364067013484953
+            ],
+            "eigenvector_residual": 1.734723475976807e-18
+          },
+          "minimum_k_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                -0.05219413929371686,
+                0,
+                0.13861070744291776
+              ],
+              "physical": [
+                -0.05564636276551127,
+                0,
+                0.15330541599315564
+              ],
+              "geometry": 61,
+              "element": 61,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  3.240956619583808,
+                  0,
+                  1.4305232752482555
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -4.731642875159338,
+                  0,
+                  -2.822016096288777
+                ]
+              ],
+              "k": 0.009211263427874865,
+              "epsilon": 0.013211805247623136
+            },
+            "k_over_cold": 0.5010000000005005,
+            "epsilon_over_cold": 1.970867144146574,
+            "cold_k": 0.018385755345041242,
+            "cold_epsilon": 0.006703549392896353
+          },
+          "maximum_k_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                0.07691316302833744,
+                0,
+                0.7272107361453031
+              ],
+              "physical": [
+                0.0794138380528358,
+                0,
+                0.7276266151142206
+              ],
+              "geometry": 76,
+              "element": 76,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  -0.008306978965453892,
+                  0,
+                  0.2086499504473477
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -0.08397241631424163,
+                  0,
+                  0.009068440426857418
+                ]
+              ],
+              "k": 0.0367251425360612,
+              "epsilon": 0.0011024943632681795
+            },
+            "k_over_cold": 1.9974780392127893,
+            "epsilon_over_cold": 0.8637774053700481,
+            "cold_k": 0.01838575534504232,
+            "cold_epsilon": 0.0012763639757350025
+          },
+          "minimum_epsilon_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                0.25657347782114515,
+                0,
+                0.798625719837019
+              ],
+              "physical": [
+                0.25657347782114515,
+                0,
+                0.798625719837019
+              ],
+              "geometry": 77,
+              "element": 77,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  -0.0006394596247476507,
+                  0,
+                  0.22720409717403242
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0.0001957424319097581,
+                  0,
+                  -0.0024611050831457276
+                ]
+              ],
+              "k": 0.022170311469517503,
+              "epsilon": 0.0009363359637763841
+            },
+            "k_over_cold": 1.205841753762742,
+            "epsilon_over_cold": 0.8042117924238384,
+            "cold_k": 0.01838575534504146,
+            "cold_epsilon": 0.0011642902685551682
+          },
+          "maximum_epsilon_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                -0.05402207570444453,
+                0,
+                0.16138929255708226
+              ],
+              "physical": [
+                -0.05746035973112162,
+                0,
+                0.1746651127851484
+              ],
+              "geometry": 61,
+              "element": 61,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  1.8120223362704166,
+                  0,
+                  0.62579464122471
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -4.39733668010074,
+                  0,
+                  -1.968761053544834
+                ]
+              ],
+              "k": 0.009593255883367562,
+              "epsilon": 0.01150635715344445
+            },
+            "k_over_cold": 0.5217765440327632,
+            "epsilon_over_cold": 1.9982596145634388,
+            "cold_k": 0.018385755345041315,
+            "cold_epsilon": 0.005758189311131252
+          },
+          "quadrature_order": 20,
+          "state_sha256": "4138e71d73e747cb129a38fc691cec38a2039673a86609593a5e1e26c2adef84",
+          "cold_base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+          "model_specification": {
+            "version": "CanonicalWallModelV1",
+            "name": "StandardKEpsilon",
+            "calibration": "StandardNeutralCalibratedV1",
+            "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+            "coefficients": {
+              "Cmu": 0.09,
+              "Cepsilon1": 1.44,
+              "Cepsilon2": 1.92,
+              "sigmaK": 1,
+              "sigmaEpsilon": 1.3478315512167742,
+              "yapCoefficient": 0,
+              "yapLength": 2.5
+            },
+            "q": 3.3333333333333335,
+            "kappa": 0.4405539051866587,
+            "K0": 0.01838575534504143,
+            "quadratic_active": false,
+            "cubic_active": false,
+            "Yap_active": false,
+            "variant": "Original",
+            "beta": 1,
+            "gamma0": 0,
+            "Gamma": 0,
+            "physical_regularization_active": false
+          },
+          "minimum_k": 0.009211263427874865,
+          "minimum_epsilon": 0.0009363359637763841,
+          "invalid_scalar_count": 0,
+          "scalar_positive_finite": true,
+          "invalid_scalar_witness": null,
+          "outer_k_over_cold": [
+            0.5010000000005005,
+            1.9974780392127893
+          ],
+          "outer_epsilon_over_cold": [
+            0.8042117924238384,
+            1.9982596145634388
+          ],
+          "scalar_envelopes_passed": true,
+          "scalar_envelope_witness": null,
+          "integrals_complete": true,
+          "strong_divergence_RMS": 0.07562181284819673,
+          "maximum_absolute_divergence": 12.566856690429518,
+          "TKE_integral": 0.011930420869461958,
+          "base_TKE_integral": 0.011702006264258385,
+          "outer_TKE_integral": 0.011823940973166889,
+          "base_outer_TKE_integral": 0.011595526367963327,
+          "outer_time_scale": [
+            0.12888839808654393,
+            37.61515202339851
+          ],
+          "outer_length_scale": [
+            0.017476503576683663,
+            7.196918134342922
+          ],
+          "outer_time_scale_ratio": [
+            0.2534105790103149,
+            2.382004689455273
+          ],
+          "outer_length_scale_ratio": [
+            0.17976577819564515,
+            3.3611323585396415
+          ],
+          "strong_divergence_L2": 0.060308099421990974,
+          "volume": 0.6360000000000028,
+          "kinetic_energy": 0.5637492356506446,
+          "base_kinetic_energy": 0.5643662520535043,
+          "velocity_change_L2": 0.050599151559950616,
+          "maximum_sampled_velocity_increment": 0.46535281298557085,
+          "scope": "independent panelwise physical tensor sampling; complements complete inventory; no domain-wide covariance theorem",
+          "inner_covariance_witness_independent": {
+            "tensor_error": 0.0,
+            "eigenvalue_error": 1.734723475976807e-18,
+            "isotropic": [
+              [
+                0.012257169215574628,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.012257169215574628,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.012257169215574628
+              ]
+            ],
+            "linear": [
+              [
+                0.00010002026831482905,
+                -0.0,
+                -0.012214975854052325
+              ],
+              [
+                -0.0,
+                -0.0,
+                -0.0
+              ],
+              [
+                -0.012214975854052325,
+                -0.0,
+                -0.00010536107487734992
+              ]
+            ],
+            "nonlinear_zero": true,
+            "regularization_zero": true,
+            "eigenvalues": [
+              3.909130827967067e-05,
+              0.012257169215574628,
+              0.024469906316307067
+            ],
+            "Rayleigh": 3.909130827966876e-05,
+            "eigenvector_residual": 2.3479362168306604e-18,
+            "production": 0.7021661707180382,
+            "anisotropic_work": 0.7023202294336365,
+            "isotropic_work": -0.00015405871559831964,
+            "eddy_viscosity": 0.00021246175372237024
+          },
+          "outer_covariance_witness_independent": {
+            "tensor_error": 1.734723475976807e-18,
+            "eigenvalue_error": 0.0,
+            "isotropic": [
+              [
+                0.011967480908203128,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.011967480908203128,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.011967480908203128
+              ]
+            ],
+            "linear": [
+              [
+                -0.002417270638057339,
+                -0.0,
+                -0.013441991411795706
+              ],
+              [
+                -0.0,
+                -0.0,
+                -0.0
+              ],
+              [
+                -0.013441991411795706,
+                -0.0,
+                0.002784692119981666
+              ]
+            ],
+            "nonlinear_zero": true,
+            "regularization_zero": true,
+            "eigenvalues": [
+              -0.0015401281282993954,
+              0.011967480908203126,
+              0.02584251142662998
+            ],
+            "Rayleigh": -0.0015401281282993945,
+            "eigenvector_residual": 1.939479807224432e-18,
+            "production": 0.03311776668964691,
+            "anisotropic_work": 0.03273391240301867,
+            "isotropic_work": 0.0003838542866282423,
+            "eddy_viscosity": 0.0057275764832758255
+          }
+        },
+        "GL24": {
+          "minimum_covariance": -0.0015597586263204075,
+          "inner_minimum_covariance": 1.0407040813278576e-06,
+          "outer_minimum_covariance": -0.0015597586263204075,
+          "witness": {
+            "coordinate": [
+              -0.1404440566263192,
+              0,
+              0.1997593609998511
+            ],
+            "physical": [
+              -0.1404440566263192,
+              0,
+              0.1997593609998511
+            ],
+            "geometry": 60,
+            "element": 60,
+            "inner": false,
+            "k": 0.017999556997277715,
+            "epsilon": 0.005016335726815978,
+            "gradient": [
+              [
+                0.19134506249293717,
+                0,
+                0.9053672852723902
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                1.4277089386493524,
+                0,
+                -0.22932016320983875
+              ]
+            ],
+            "tensor": [
+              [
+                0.009775233382850003,
+                0,
+                -0.013561523331773196
+              ],
+              [
+                0,
+                0.01199970466485181,
+                0
+              ],
+              [
+                -0.013561523331773196,
+                0,
+                0.014665653348336041
+              ]
+            ],
+            "eigenvalues": [
+              -0.0015597586263204075,
+              0.01199970466485181,
+              0.02600064535750645
+            ]
+          },
+          "count": 44928,
+          "inner_covariance_witness": {
+            "observation": {
+              "coordinate": [
+                0.24155162309348874,
+                0,
+                0.0064897662853230795
+              ],
+              "physical": [
+                0.24155162309348874,
+                0,
+                0.0064897662853230795
+              ],
+              "geometry": 35,
+              "element": 35,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": true,
+              "epsilon_semantics": "dependent inner dissipation",
+              "gradient": [
+                [
+                  -0.02461247256549014,
+                  0,
+                  57.5827650375999
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0.055031214777056296,
+                  0,
+                  0.03420908718578976
+                ]
+              ],
+              "k": 0.018385754593257954,
+              "epsilon": 0.14327683687079085
+            },
+            "tensor": [
+              [
+                0.012267635197173601,
+                0,
+                -0.012254082355427241
+              ],
+              [
+                0,
+                0.012257169728838635,
+                0
+              ],
+              [
+                -0.012254082355427241,
+                0,
+                0.012242623684439466
+              ]
+            ],
+            "eigenvalues": [
+              1.0407040813278576e-06,
+              0.012257169728838635,
+              0.02450921817753174
+            ],
+            "critical_eigenvector": [
+              0.7067458746107113,
+              0,
+              0.7074675036499845
+            ],
+            "eigenvector_residual": 1.734723475976807e-18
+          },
+          "outer_covariance_witness": {
+            "observation": {
+              "coordinate": [
+                -0.1404440566263192,
+                0,
+                0.1997593609998511
+              ],
+              "physical": [
+                -0.1404440566263192,
+                0,
+                0.1997593609998511
+              ],
+              "geometry": 60,
+              "element": 60,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  0.19134506249293717,
+                  0,
+                  0.9053672852723902
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  1.4277089386493524,
+                  0,
+                  -0.22932016320983875
+                ]
+              ],
+              "k": 0.017999556997277715,
+              "epsilon": 0.005016335726815978
+            },
+            "tensor": [
+              [
+                0.009775233382850003,
+                0,
+                -0.013561523331773196
+              ],
+              [
+                0,
+                0.01199970466485181,
+                0
+              ],
+              [
+                -0.013561523331773196,
+                0,
+                0.014665653348336041
+              ]
+            ],
+            "eigenvalues": [
+              -0.0015597586263204075,
+              0.01199970466485181,
+              0.02600064535750645
+            ],
+            "critical_eigenvector": [
+              0.7672821178360111,
+              0,
+              0.6413097158542709
+            ],
+            "eigenvector_residual": 5.204170427930421e-18
+          },
+          "minimum_k_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                -0.051543136199931686,
+                0,
+                0.1404440566263192
+              ],
+              "physical": [
+                -0.054998339133672296,
+                0,
+                0.15543587821129254
+              ],
+              "geometry": 61,
+              "element": 61,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  3.229623205913197,
+                  0,
+                  1.2764305267859621
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -5.112518134820521,
+                  0,
+                  -2.7826792792662016
+                ]
+              ],
+              "k": 0.00921398198074084,
+              "epsilon": 0.01305687300918165
+            },
+            "k_over_cold": 0.5011478619085351,
+            "epsilon_over_cold": 1.973822761605986,
+            "cold_k": 0.018385755345041242,
+            "cold_epsilon": 0.006615017955592945
+          },
+          "maximum_k_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                0.07660142232156514,
+                0,
+                0.7296187303873951
+              ],
+              "physical": [
+                0.07912547539207372,
+                0,
+                0.7300315705411985
+              ],
+              "geometry": 76,
+              "element": 76,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  -0.007312456025794134,
+                  0,
+                  0.20800077605617137
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -0.08164517473281356,
+                  0,
+                  0.008362739115684907
+                ]
+              ],
+              "k": 0.03672742762197101,
+              "epsilon": 0.0010982336834019749
+            },
+            "k_over_cold": 1.997602324882154,
+            "epsilon_over_cold": 0.8632205893948641,
+            "cold_k": 0.01838575534504231,
+            "cold_epsilon": 0.0012722514927173596
+          },
+          "minimum_epsilon_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                0.24155162309348874,
+                0,
+                0.7990374439994044
+              ],
+              "physical": [
+                0.24155162309348874,
+                0,
+                0.7990374439994044
+              ],
+              "geometry": 77,
+              "element": 77,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  -0.001976081988694355,
+                  0,
+                  0.22681602439316367
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0.00015242747218120625,
+                  0,
+                  -0.00023197279579799894
+                ]
+              ],
+              "k": 0.022421118593814012,
+              "epsilon": 0.000934356729050766
+            },
+            "k_over_cold": 1.2194831364304475,
+            "epsilon_over_cold": 0.8029251179266874,
+            "cold_k": 0.01838575534504145,
+            "cold_epsilon": 0.001163690994576756
+          },
+          "maximum_epsilon_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                -0.05449995035065243,
+                0,
+                0.15955594337368084
+              ],
+              "physical": [
+                -0.05793322872826675,
+                0,
+                0.172632220707731
+              ],
+              "geometry": 61,
+              "element": 61,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  1.9099746871726466,
+                  0,
+                  0.7145058650101265
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -4.2096778539341,
+                  0,
+                  -2.0649994649839507
+                ]
+              ],
+              "k": 0.009557218285902766,
+              "epsilon": 0.0116375303751438
+            },
+            "k_over_cold": 0.51981646152386,
+            "epsilon_over_cold": 1.9984315727441497,
+            "cold_k": 0.018385755345041305,
+            "cold_epsilon": 0.005823331923826496
+          },
+          "quadrature_order": 24,
+          "state_sha256": "4138e71d73e747cb129a38fc691cec38a2039673a86609593a5e1e26c2adef84",
+          "cold_base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+          "model_specification": {
+            "version": "CanonicalWallModelV1",
+            "name": "StandardKEpsilon",
+            "calibration": "StandardNeutralCalibratedV1",
+            "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+            "coefficients": {
+              "Cmu": 0.09,
+              "Cepsilon1": 1.44,
+              "Cepsilon2": 1.92,
+              "sigmaK": 1,
+              "sigmaEpsilon": 1.3478315512167742,
+              "yapCoefficient": 0,
+              "yapLength": 2.5
+            },
+            "q": 3.3333333333333335,
+            "kappa": 0.4405539051866587,
+            "K0": 0.01838575534504143,
+            "quadratic_active": false,
+            "cubic_active": false,
+            "Yap_active": false,
+            "variant": "Original",
+            "beta": 1,
+            "gamma0": 0,
+            "Gamma": 0,
+            "physical_regularization_active": false
+          },
+          "minimum_k": 0.00921398198074084,
+          "minimum_epsilon": 0.000934356729050766,
+          "invalid_scalar_count": 0,
+          "scalar_positive_finite": true,
+          "invalid_scalar_witness": null,
+          "outer_k_over_cold": [
+            0.5011478619085351,
+            1.997602324882154
+          ],
+          "outer_epsilon_over_cold": [
+            0.8029251179266874,
+            1.9984315727441497
+          ],
+          "scalar_envelopes_passed": true,
+          "scalar_envelope_witness": null,
+          "integrals_complete": true,
+          "strong_divergence_RMS": 0.07562181284819736,
+          "maximum_absolute_divergence": 12.623508666966131,
+          "TKE_integral": 0.011930420869461984,
+          "base_TKE_integral": 0.011702006264258364,
+          "outer_TKE_integral": 0.011823940973166906,
+          "base_outer_TKE_integral": 0.011595526367963281,
+          "outer_time_scale": [
+            0.1287796815235621,
+            37.65387671802285
+          ],
+          "outer_length_scale": [
+            0.017461762541708177,
+            7.2042717674323224
+          ],
+          "outer_time_scale_ratio": [
+            0.25243301512896643,
+            2.3832296484617324
+          ],
+          "outer_length_scale_ratio": [
+            0.17881280248308595,
+            3.3628348982348273
+          ],
+          "strong_divergence_L2": 0.06030809942199128,
+          "volume": 0.6359999999999986,
+          "kinetic_energy": 0.5637492356506455,
+          "base_kinetic_energy": 0.5643662520535037,
+          "velocity_change_L2": 0.0505991515599508,
+          "maximum_sampled_velocity_increment": 0.46769859728360985,
+          "scope": "independent panelwise physical tensor sampling; complements complete inventory; no domain-wide covariance theorem",
+          "inner_covariance_witness_independent": {
+            "tensor_error": 0.0,
+            "eigenvalue_error": 8.673617379884035e-19,
+            "isotropic": [
+              [
+                0.012257169728838635,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.012257169728838635,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.012257169728838635
+              ]
+            ],
+            "linear": [
+              [
+                1.0465468334965072e-05,
+                -0.0,
+                -0.012254082355427241
+              ],
+              [
+                -0.0,
+                -0.0,
+                -0.0
+              ],
+              [
+                -0.012254082355427241,
+                -0.0,
+                -1.4546044399168738e-05
+              ]
+            ],
+            "nonlinear_zero": true,
+            "regularization_zero": true,
+            "eigenvalues": [
+              1.040704081328725e-06,
+              0.012257169728838635,
+              0.02450921817753174
+            ],
+            "Rayleigh": 1.0407040813279622e-06,
+            "eigenvector_residual": 2.3034822751865545e-18,
+            "production": 0.7061814299156929,
+            "anisotropic_work": 0.706299057249916,
+            "isotropic_work": -0.00011762733422326677,
+            "eddy_viscosity": 0.00021260497715371772
+          },
+          "outer_covariance_witness_independent": {
+            "tensor_error": 0.0,
+            "eigenvalue_error": 4.336808689942018e-18,
+            "isotropic": [
+              [
+                0.01199970466485181,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.01199970466485181,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.01199970466485181
+              ]
+            ],
+            "linear": [
+              [
+                -0.0022244712820018078,
+                -0.0,
+                -0.013561523331773196
+              ],
+              [
+                -0.0,
+                -0.0,
+                -0.0
+              ],
+              [
+                -0.013561523331773196,
+                -0.0,
+                0.002665948683484231
+              ]
+            ],
+            "nonlinear_zero": true,
+            "regularization_zero": true,
+            "eigenvalues": [
+              -0.0015597586263204118,
+              0.011999704664851805,
+              0.02600064535750645
+            ],
+            "Rayleigh": -0.001559758626320409,
+            "eigenvector_residual": 4.9447226916282755e-18,
+            "production": 0.033132755022414875,
+            "anisotropic_work": 0.032677065029194055,
+            "isotropic_work": 0.00045568999322082157,
+            "eddy_viscosity": 0.005812721930266469
+          }
+        }
+      },
+      "native_budget": {
+        "rate_columns": "Pk,Ek,P_epsilon,D_epsilon,Yap,p_A0,prescribed_k,prescribed_epsilon",
+        "inner_rates": [
+          0.004535826463625487,
+          0.0023262033179076375,
+          0,
+          0,
+          0,
+          0.0023262033179076366,
+          0,
+          0
+        ],
+        "outer_rates": [
+          0.006434064404264846,
+          0.004268584330486479,
+          0.017391550805473763,
+          0.013898063336494248,
+          0,
+          0,
+          0,
+          0
+        ],
+        "regional_weak_balances": [
+          {
+            "region": 0,
+            "block": 2,
+            "physical_storage_rate": 0,
+            "source_rate": 0.002209623145717849,
+            "explicit_open_outward_flux": 6.518871219567822e-05,
+            "unmasked_constant_test_residual": -0.0021444344335221563,
+            "free_interior_row_projection": -0.0016752384821213434,
+            "constrained_row_reaction_projection": 6.368362156102821e-05,
+            "free_interface_row_projection": -0.0005328795729618412,
+            "exact_weak_balance_error": -1.474514954580286e-17,
+            "row_partition_error": 0
+          },
+          {
+            "region": 1,
+            "block": 2,
+            "physical_storage_rate": 0,
+            "source_rate": 0.002165480073778367,
+            "explicit_open_outward_flux": 0.01849618559286521,
+            "unmasked_constant_test_residual": 0.0163307055190869,
+            "free_interior_row_projection": -0.002107297811089051,
+            "constrained_row_reaction_projection": 0.018753857053335196,
+            "free_interface_row_projection": -0.00031585372315923996,
+            "exact_weak_balance_error": -5.551115123125783e-17,
+            "row_partition_error": 6.938893903907228e-18
+          },
+          {
+            "region": 1,
+            "block": 3,
+            "physical_storage_rate": 0,
+            "source_rate": 0.003493487468979515,
+            "explicit_open_outward_flux": 0.004834942010182043,
+            "unmasked_constant_test_residual": 0.001341454541202728,
+            "free_interior_row_projection": -0.003479787514560042,
+            "constrained_row_reaction_projection": 0.004821242055762771,
+            "free_interface_row_projection": 0,
+            "exact_weak_balance_error": -2.0014372104082412e-16,
+            "row_partition_error": 1.0842021724855044e-18
+          }
+        ],
+        "independent_source_integration": [
+          {
+            "Gauss_order": 8,
+            "tangential_Gauss_order": 8,
+            "inner": [
+              0.004535826463539125,
+              0.002326203317277797,
+              0,
+              0,
+              0,
+              0.0023262033194534045,
+              0,
+              0
+            ],
+            "outer": [
+              0.006434063774795774,
+              0.004268584330459606,
+              0.01739155080702428,
+              0.01389806062564048,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "Gauss_order": 16,
+            "tangential_Gauss_order": 16,
+            "inner": [
+              0.004535826463625475,
+              0.0023262033179076336,
+              0,
+              0,
+              0,
+              0.0023262033179076488,
+              0,
+              0
+            ],
+            "outer": [
+              0.006434064404264845,
+              0.0042685843304864825,
+              0.017391550805473766,
+              0.013898063336494258,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "Gauss_order": 32,
+            "tangential_Gauss_order": 32,
+            "inner": [
+              0.0045358264636254746,
+              0.002326203317907639,
+              0,
+              0,
+              0,
+              0.002326203317907638,
+              0,
+              0
+            ],
+            "outer": [
+              0.006434064404264862,
+              0.004268584330486498,
+              0.017391550805473544,
+              0.013898063336493453,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "physical_face_columns": "region,block,axis,side,outward_advection,outward_diffusion",
+        "physical_faces": [
+          [
+            0,
+            2,
+            0,
+            -1,
+            -6.439905010748227e-05,
+            -3.2277904028494792e-21
+          ],
+          [
+            0,
+            2,
+            0,
+            1,
+            6.51887121956782e-05,
+            -6.467906524970135e-22
+          ],
+          [
+            0,
+            2,
+            2,
+            -1,
+            0,
+            -3.2938427104582353e-15
+          ],
+          [
+            0,
+            2,
+            2,
+            1,
+            -7.760119679232768e-07,
+            -3.9858098323072366e-16
+          ],
+          [
+            1,
+            2,
+            0,
+            -1,
+            -0.019247406260597545,
+            0.0001199693072576929
+          ],
+          [
+            1,
+            2,
+            0,
+            1,
+            0.018496185592865207,
+            -0.0002861606245806769
+          ],
+          [
+            1,
+            2,
+            2,
+            -1,
+            7.760119679234413e-07,
+            1.727627152618507e-10
+          ],
+          [
+            1,
+            2,
+            2,
+            1,
+            -1.971085035349993e-20,
+            -2.612079091815878e-05
+          ],
+          [
+            1,
+            3,
+            0,
+            -1,
+            -0.004812738774379198,
+            -3.6866000399943835e-07
+          ],
+          [
+            1,
+            3,
+            0,
+            1,
+            0.00483494201018204,
+            -6.689212842508369e-06
+          ],
+          [
+            1,
+            3,
+            2,
+            -1,
+            6.037798673651451e-06,
+            0.002851035921858653
+          ],
+          [
+            1,
+            3,
+            2,
+            1,
+            -9.866379158662342e-22,
+            -5.485436697140606e-05
+          ]
+        ],
+        "weak_components": [
+          {
+            "block": 2,
+            "term": "inner_momentum_stress",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "outer_momentum_stress",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "conservative_advection",
+            "constant_test_projection": 2.7755575615628914e-17,
+            "free_mass_dual_norm": 0.19954543946151795,
+            "signed_projection_on_total_residual": 0.04054606685984242
+          },
+          {
+            "block": 2,
+            "term": "k_diffusion",
+            "constant_test_projection": 1.6276585114438635e-17,
+            "free_mass_dual_norm": 0.3797549449185301,
+            "signed_projection_on_total_residual": 0.34533795375631254
+          },
+          {
+            "block": 2,
+            "term": "epsilon_diffusion",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "inner_k_production",
+            "constant_test_projection": -0.004535826463625471,
+            "free_mass_dual_norm": 0.07802488046910305,
+            "signed_projection_on_total_residual": 0.007482979009220241
+          },
+          {
+            "block": 2,
+            "term": "inner_k_destruction",
+            "constant_test_projection": 0.0023262033179076397,
+            "free_mass_dual_norm": 0.03973412601909673,
+            "signed_projection_on_total_residual": -0.0029598293805607966
+          },
+          {
+            "block": 2,
+            "term": "outer_k_production",
+            "constant_test_projection": -0.006434064404264829,
+            "free_mass_dual_norm": 0.024519334810762763,
+            "signed_projection_on_total_residual": 0.0012813170283389392
+          },
+          {
+            "block": 2,
+            "term": "outer_k_destruction",
+            "constant_test_projection": 0.0042685843304864825,
+            "free_mass_dual_norm": 0.010882906320609282,
+            "signed_projection_on_total_residual": -0.00021718137834220077
+          },
+          {
+            "block": 2,
+            "term": "epsilon_production",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "epsilon_destruction",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "epsilon_yap",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "prescribed_scalar_source",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "roughness_force",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "prescribed_body",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "continuity",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "gauge",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "external_advection",
+            "constant_test_projection": 0.01856137430506089,
+            "free_mass_dual_norm": 0.11775486250353873,
+            "signed_projection_on_total_residual": 0.006702637394770425
+          },
+          {
+            "block": 2,
+            "term": "external_traction",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "external_diffusion",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "time_mass",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "inner_momentum_stress",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "outer_momentum_stress",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "conservative_advection",
+            "constant_test_projection": 4.662069341687669e-18,
+            "free_mass_dual_norm": 0.05983863467304023,
+            "signed_projection_on_total_residual": 0.003530283427038664
+          },
+          {
+            "block": 3,
+            "term": "k_diffusion",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "epsilon_diffusion",
+            "constant_test_projection": 1.1146953585866592e-18,
+            "free_mass_dual_norm": 0.023666780643186915,
+            "signed_projection_on_total_residual": 0.013263803798915235
+          },
+          {
+            "block": 3,
+            "term": "inner_k_production",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "inner_k_destruction",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "outer_k_production",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "outer_k_destruction",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "epsilon_production",
+            "constant_test_projection": -0.01739155080547362,
+            "free_mass_dual_norm": 0.15677512031025617,
+            "signed_projection_on_total_residual": 0.14641934338967502
+          },
+          {
+            "block": 3,
+            "term": "epsilon_destruction",
+            "constant_test_projection": 0.0138980633364943,
+            "free_mass_dual_norm": 0.08258936183661686,
+            "signed_projection_on_total_residual": -0.04904223608294279
+          },
+          {
+            "block": 3,
+            "term": "epsilon_yap",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "prescribed_scalar_source",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "roughness_force",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "prescribed_body",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "continuity",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "gauge",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "external_advection",
+            "constant_test_projection": 0.004834942010182043,
+            "free_mass_dual_norm": 0.054589157332661,
+            "signed_projection_on_total_residual": -2.0395341288312454e-05
+          },
+          {
+            "block": 3,
+            "term": "external_traction",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "external_diffusion",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "time_mass",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          }
+        ],
+        "native_component_sum_max_error": 7.912507454799211e-16,
+        "ideal_seed_ratio": 1,
+        "independent_analytical_P_over_E": 0.9999999999999988,
+        "native_inner_P_over_E": 1.9498839283340679,
+        "history_alpha": 0,
+        "ground_reaction": {
+          "lifting": "global-x Q2(s) times max(0,1-r/lifting_height), zero side corners",
+          "lifting_height": 0.0002,
+          "weighted_surface_measure": 0.5468634999105996,
+          "weighted_sampled_global_x_traction": 0.006504332651623087,
+          "full_spatial_lifting_work": -0.003464653703452601,
+          "free_row_lifting_work": -5.384060327829906e-05,
+          "prescribed_row_reaction": -0.003410813100174302,
+          "inferred_ground_traction": 0.006237046540374146,
+          "signed_volume_components": {
+            "inner_momentum_stress": -0.003475608746968166,
+            "outer_momentum_stress": -7.975959234194588e-24,
+            "conservative_advection": -5.0493541348778864e-08,
+            "k_diffusion": 0,
+            "epsilon_diffusion": 0,
+            "inner_k_production": 0,
+            "inner_k_destruction": 0,
+            "outer_k_production": 0,
+            "outer_k_destruction": 0,
+            "epsilon_production": 0,
+            "epsilon_destruction": 0,
+            "epsilon_yap": 0,
+            "prescribed_scalar_source": 0,
+            "roughness_force": 1.1005537056913542e-05,
+            "prescribed_body": 0,
+            "continuity": 0,
+            "gauge": 0,
+            "external_advection": 2.3340011963178245e-23,
+            "external_traction": 0,
+            "external_diffusion": 0
+          },
+          "lifting_representation_error": 3.885780586188048e-16,
+          "scope": "spatial weak contraction; free/unsteady residual and other loads remain explicit; not an exact physical stress estimator"
+        },
+        "physical_time": 0,
+        "governing_solves": 0,
+        "physical_commits": 0,
+        "scope": "Native physical quadrature and saved callback history. Exact weak row partition is separate from gradient-based face flux estimates; interface CG row projections are not unique conservative control-volume fluxes. Source and diffusion are separate; net destruction counted once. No Lift or epsilon substitution."
+      },
+      "reference_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+      "defect_sha256": "e319468000760282822984d0fbdee636d7d5c11abf809a76147469f4ad6368a3",
+      "output": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2j-20261115/native-A/native/result.json",
+        "sha256": "721ccee5782a252f4467abc57ee8dc9ebcddbd97e406f4d4de5ae334830517fe"
+      },
+      "new_velocity_coefficients": [
+        -0.0002194828071880161,
+        4.220066528523186e-08,
+        0.0002194831718260264
+      ]
+    },
+    "B": {
+      "state_sha256": "47c078a12f7ba94187fdfb9c8e35aaf230bb5ff688204031bb298a1eb56028c9",
+      "anchor_k_sha256": "bd9c30e5b0aa2eb03c60d4c42922a5de7698dfb67a399402f18179d951c3fb89",
+      "passed": false,
+      "gates": {
+        "native": false,
+        "native_margin": false,
+        "budget": true,
+        "continuity": true,
+        "fixed_k": true,
+        "native_GL16": true,
+        "GL20_margin": false,
+        "GL20_scalar": true,
+        "GL20_velocity": true,
+        "GL20_divergence": true,
+        "GL24_margin": false,
+        "GL24_scalar": true,
+        "GL24_velocity": true,
+        "GL24_divergence": true
+      },
+      "native_covariance": [
+        7.897611019956619e-06,
+        -0.015467402807624675
+      ],
+      "native_inner_point": [
+        0.23549580558569316,
+        0,
+        0.0065,
+        0.01838575534504143,
+        0.01838575534504143,
+        0.0002129398143720893,
+        0.017320506648439506,
+        0.01225717023002762,
+        7.897611019956619e-06
+      ],
+      "native_outer_point": [
+        0,
+        0,
+        0.2,
+        0.018385755345041447,
+        0.007649235976432824,
+        -0.015467402807624675
+      ],
+      "native_inner_provenance": [
+        35,
+        35,
+        -1,
+        2
+      ],
+      "native_outer_provenance": [
+        62,
+        62,
+        0,
+        2
+      ],
+      "native_GL16": {
+        "order": 16,
+        "regional_L2": [
+          0.018699067804425765,
+          0.05733595485503175
+        ],
+        "L2": 0.060308099421990995
+      },
+      "strong_continuity": [
+        0.018699067804425765,
+        0.05733595485503175,
+        6.367871440163295e-17,
+        -3.311769452716511e-17,
+        -1.058936683799752e-15
+      ],
+      "scalar_budget": [
+        1,
+        0.8027986751438236,
+        0.018385324422631463,
+        0.018385755345040937,
+        0.0009330860616716161,
+        0.01838575534504143,
+        0.1430512592910451,
+        2.9772430482801835,
+        3.1675203927182606e-16
+      ],
+      "coupled_norms": [
+        1.2415636597559359,
+        2.4675180515671937,
+        0.29714371765070446,
+        0.0894153478166118,
+        3.5444844625865415e-14,
+        2.973160472542478e-16,
+        0,
+        0
+      ],
+      "seen": {
+        "GL20": {
+          "minimum_covariance": -0.014902074639181839,
+          "inner_minimum_covariance": 4.607086663918278e-05,
+          "outer_minimum_covariance": -0.014902074639181839,
+          "witness": {
+            "coordinate": [
+              0.00017178502037262788,
+              0,
+              0.19965642995925476
+            ],
+            "physical": [
+              0.0001938256391799848,
+              0,
+              0.22991924724506768
+            ],
+            "geometry": 63,
+            "element": 63,
+            "inner": false,
+            "k": 0.018385755345041447,
+            "epsilon": 0.007666340064936817,
+            "gradient": [
+              [
+                -0.38835266340408564,
+                0,
+                4.7658994954423894
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                2.0245266704937923,
+                0,
+                0.3965598411652035
+              ]
+            ],
+            "tensor": [
+              [
+                0.015339461432764207,
+                0,
+                -0.026947247703460908
+              ],
+              [
+                0,
+                0.012257170230027632,
+                0
+              ],
+              [
+                -0.026947247703460908,
+                0,
+                0.009109740007538622
+              ]
+            ],
+            "eigenvalues": [
+              -0.014902074639181839,
+              0.012257170230027632,
+              0.03935127607948467
+            ]
+          },
+          "count": 31200,
+          "inner_covariance_witness": {
+            "observation": {
+              "coordinate": [
+                0.25657347782114515,
+                0,
+                0.006485388911330463
+              ],
+              "physical": [
+                0.25657347782114515,
+                0,
+                0.006485388911330463
+              ],
+              "geometry": 35,
+              "element": 35,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": true,
+              "epsilon_semantics": "dependent inner dissipation",
+              "gradient": [
+                [
+                  -0.23557763920385477,
+                  0,
+                  57.40938964604277
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0.050322004364715685,
+                  0,
+                  0.24816634790973807
+                ]
+              ],
+              "k": 0.018385753823361942,
+              "epsilon": 0.14337354291387283
+            },
+            "tensor": [
+              [
+                0.012357271692300682,
+                0,
+                -0.012207991105627283
+              ],
+              [
+                0,
+                0.012257169215574628,
+                0
+              ],
+              [
+                -0.012207991105627283,
+                0,
+                0.01215171750059107
+              ]
+            ],
+            "eigenvalues": [
+              4.607086663918278e-05,
+              0.012257169215574628,
+              0.02446291832625257
+            ],
+            "critical_eigenvector": [
+              0.7041240872980917,
+              0,
+              0.71007694631401
+            ],
+            "eigenvector_residual": 3.469446951953614e-18
+          },
+          "outer_covariance_witness": {
+            "observation": {
+              "coordinate": [
+                0.00017178502037262788,
+                0,
+                0.19965642995925476
+              ],
+              "physical": [
+                0.0001938256391799848,
+                0,
+                0.22991924724506768
+              ],
+              "geometry": 63,
+              "element": 63,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  -0.38835266340408564,
+                  0,
+                  4.7658994954423894
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  2.0245266704937923,
+                  0,
+                  0.3965598411652035
+                ]
+              ],
+              "k": 0.018385755345041447,
+              "epsilon": 0.007666340064936817
+            },
+            "tensor": [
+              [
+                0.015339461432764207,
+                0,
+                -0.026947247703460908
+              ],
+              [
+                0,
+                0.012257170230027632,
+                0
+              ],
+              [
+                -0.026947247703460908,
+                0,
+                0.009109740007538622
+              ]
+            ],
+            "eigenvalues": [
+              -0.014902074639181839,
+              0.012257170230027632,
+              0.03935127607948467
+            ],
+            "critical_eigenvector": [
+              0.6652719434675518,
+              0,
+              0.7466011259266265
+            ],
+            "eigenvector_residual": 3.469446951953614e-18
+          },
+          "minimum_k_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                -0.19965642995925476,
+                0,
+                0.006518896352240989
+              ],
+              "physical": [
+                -0.19965642995925476,
+                0,
+                0.006518896352240989
+              ],
+              "geometry": 36,
+              "element": 36,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  0.037520538521394906,
+                  0,
+                  25.86892880027754
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -0.008018068914837553,
+                  0,
+                  0.0016013592640078797
+                ]
+              ],
+              "k": 0.01838575534504146,
+              "epsilon": 0.14264838646997408
+            },
+            "k_over_cold": 1,
+            "epsilon_over_cold": 1.0000000001079687,
+            "cold_k": 0.01838575534504146,
+            "cold_epsilon": 0.1426483864545725
+          },
+          "maximum_k_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                -0.19965642995925476,
+                0,
+                0.006518896352240989
+              ],
+              "physical": [
+                -0.19965642995925476,
+                0,
+                0.006518896352240989
+              ],
+              "geometry": 36,
+              "element": 36,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  0.037520538521394906,
+                  0,
+                  25.86892880027754
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -0.008018068914837553,
+                  0,
+                  0.0016013592640078797
+                ]
+              ],
+              "k": 0.01838575534504146,
+              "epsilon": 0.14264838646997408
+            },
+            "k_over_cold": 1,
+            "epsilon_over_cold": 1.0000000001079687,
+            "cold_k": 0.01838575534504146,
+            "cold_epsilon": 0.1426483864545725
+          },
+          "minimum_epsilon_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                0.25657347782114515,
+                0,
+                0.798625719837019
+              ],
+              "physical": [
+                0.25657347782114515,
+                0,
+                0.798625719837019
+              ],
+              "geometry": 77,
+              "element": 77,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  -0.0007712818572207202,
+                  0,
+                  0.22737191103824145
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0.0001943613561490345,
+                  0,
+                  -0.0023127597114894734
+                ]
+              ],
+              "k": 0.01838575534504146,
+              "epsilon": 0.0009363000627912935
+            },
+            "k_over_cold": 1,
+            "epsilon_over_cold": 0.8041809573425359,
+            "cold_k": 0.01838575534504146,
+            "cold_epsilon": 0.0011642902685551682
+          },
+          "maximum_epsilon_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                -0.05402207570444453,
+                0,
+                0.16138929255708226
+              ],
+              "physical": [
+                -0.05746035973112162,
+                0,
+                0.1746651127851484
+              ],
+              "geometry": 61,
+              "element": 61,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  1.8119969415771144,
+                  0,
+                  0.6254717518549521
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -4.3967689688181615,
+                  0,
+                  -1.9688228861339947
+                ]
+              ],
+              "k": 0.018385755345041315,
+              "epsilon": 0.011506357929107654
+            },
+            "k_over_cold": 1,
+            "epsilon_over_cold": 1.9982597492695353,
+            "cold_k": 0.018385755345041315,
+            "cold_epsilon": 0.005758189311131252
+          },
+          "quadrature_order": 20,
+          "state_sha256": "47c078a12f7ba94187fdfb9c8e35aaf230bb5ff688204031bb298a1eb56028c9",
+          "cold_base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+          "model_specification": {
+            "version": "CanonicalWallModelV1",
+            "name": "StandardKEpsilon",
+            "calibration": "StandardNeutralCalibratedV1",
+            "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+            "coefficients": {
+              "Cmu": 0.09,
+              "Cepsilon1": 1.44,
+              "Cepsilon2": 1.92,
+              "sigmaK": 1,
+              "sigmaEpsilon": 1.3478315512167742,
+              "yapCoefficient": 0,
+              "yapLength": 2.5
+            },
+            "q": 3.3333333333333335,
+            "kappa": 0.4405539051866587,
+            "K0": 0.01838575534504143,
+            "quadratic_active": false,
+            "cubic_active": false,
+            "Yap_active": false,
+            "variant": "Original",
+            "beta": 1,
+            "gamma0": 0,
+            "Gamma": 0,
+            "physical_regularization_active": false
+          },
+          "minimum_k": 0.018385363619232604,
+          "minimum_epsilon": 0.0009363000627912935,
+          "invalid_scalar_count": 0,
+          "scalar_positive_finite": true,
+          "invalid_scalar_witness": null,
+          "outer_k_over_cold": [
+            1,
+            1
+          ],
+          "outer_epsilon_over_cold": [
+            0.8041809573425359,
+            1.9982597492695353
+          ],
+          "scalar_envelopes_passed": true,
+          "scalar_envelope_witness": null,
+          "integrals_complete": true,
+          "strong_divergence_RMS": 0.07562181284819676,
+          "maximum_absolute_divergence": 12.565493827842829,
+          "TKE_integral": 0.011702006264258385,
+          "base_TKE_integral": 0.011702006264258385,
+          "outer_TKE_integral": 0.011595526367963327,
+          "base_outer_TKE_integral": 0.011595526367963327,
+          "outer_time_scale": [
+            0.12888840651550018,
+            19.636605908398565
+          ],
+          "outer_length_scale": [
+            0.017476505291005112,
+            2.662607571412863
+          ],
+          "outer_time_scale_ratio": [
+            0.5004354415713725,
+            1.2435012180648493
+          ],
+          "outer_length_scale_ratio": [
+            0.5004354415713725,
+            1.2435012180648493
+          ],
+          "strong_divergence_L2": 0.060308099421990995,
+          "volume": 0.6360000000000028,
+          "kinetic_energy": 0.5637501332081603,
+          "base_kinetic_energy": 0.5643662520535043,
+          "velocity_change_L2": 0.05059254487959872,
+          "maximum_sampled_velocity_increment": 0.4652489329831304,
+          "scope": "independent panelwise physical tensor sampling; complements complete inventory; no domain-wide covariance theorem",
+          "inner_covariance_witness_independent": {
+            "tensor_error": 0.0,
+            "eigenvalue_error": 1.734723475976807e-18,
+            "isotropic": [
+              [
+                0.012257169215574628,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.012257169215574628,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.012257169215574628
+              ]
+            ],
+            "linear": [
+              [
+                0.00010010247672605357,
+                -0.0,
+                -0.012207991105627283
+              ],
+              [
+                -0.0,
+                -0.0,
+                -0.0
+              ],
+              [
+                -0.012207991105627283,
+                -0.0,
+                -0.00010545171498355765
+              ]
+            ],
+            "nonlinear_zero": true,
+            "regularization_zero": true,
+            "eigenvalues": [
+              4.6070866639181043e-05,
+              0.012257169215574628,
+              0.024462918326252574
+            ],
+            "Rayleigh": 4.6070866639182114e-05,
+            "eigenvector_residual": 2.9245289100869077e-18,
+            "production": 0.7013630982994032,
+            "anisotropic_work": 0.7015174002322169,
+            "isotropic_work": -0.00015430193281358888,
+            "eddy_viscosity": 0.00021246175372237024
+          },
+          "outer_covariance_witness_independent": {
+            "tensor_error": 3.469446951953614e-18,
+            "eigenvalue_error": 1.734723475976807e-18,
+            "isotropic": [
+              [
+                0.012257170230027632,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.012257170230027632,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.012257170230027632
+              ]
+            ],
+            "linear": [
+              [
+                0.003082291202736576,
+                -0.0,
+                -0.02694724770346091
+              ],
+              [
+                -0.0,
+                -0.0,
+                -0.0
+              ],
+              [
+                -0.02694724770346091,
+                -0.0,
+                -0.003147430222489009
+              ]
+            ],
+            "nonlinear_zero": true,
+            "regularization_zero": true,
+            "eigenvalues": [
+              -0.01490207463918184,
+              0.012257170230027632,
+              0.03935127607948467
+            ],
+            "Rayleigh": -0.014902074639181839,
+            "eigenvector_residual": 2.4532694666933987e-18,
+            "production": 0.1853278595576971,
+            "anisotropic_work": 0.1854284563326232,
+            "isotropic_work": -0.0001005967749261186,
+            "eddy_viscosity": 0.003968417746538556
+          }
+        },
+        "GL24": {
+          "minimum_covariance": -0.015066864747551803,
+          "inner_minimum_covariance": 7.311218101922236e-06,
+          "outer_minimum_covariance": -0.015066864747551803,
+          "witness": {
+            "coordinate": [
+              0.00012031950007446724,
+              0,
+              0.1997593609998511
+            ],
+            "physical": [
+              0.0001357569960508591,
+              0,
+              0.2300171162538123
+            ],
+            "geometry": 63,
+            "element": 63,
+            "inner": false,
+            "k": 0.018385755345041447,
+            "epsilon": 0.0076612075751999326,
+            "gradient": [
+              [
+                -0.3883054095952153,
+                0,
+                4.799518970703031
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                2.0237586144378543,
+                0,
+                0.40036293987143123
+              ]
+            ],
+            "tensor": [
+              [
+                0.015341151061964833,
+                0,
+                -0.027095756025517576
+              ],
+              [
+                0,
+                0.012257170230027632,
+                0
+              ],
+              [
+                -0.027095756025517576,
+                0,
+                0.009077426652237581
+              ]
+            ],
+            "eigenvalues": [
+              -0.015066864747551803,
+              0.012257170230027632,
+              0.039485442461754214
+            ]
+          },
+          "count": 44928,
+          "inner_covariance_witness": {
+            "observation": {
+              "coordinate": [
+                0.24155162309348874,
+                0,
+                0.0064897662853230795
+              ],
+              "physical": [
+                0.24155162309348874,
+                0,
+                0.0064897662853230795
+              ],
+              "geometry": 35,
+              "element": 35,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": true,
+              "epsilon_semantics": "dependent inner dissipation",
+              "gradient": [
+                [
+                  -0.024886773572790916,
+                  0,
+                  57.55328017338256
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0.05501489313881633,
+                  0,
+                  0.03449025775896764
+                ]
+              ],
+              "k": 0.018385754593257954,
+              "epsilon": 0.14327683687079085
+            },
+            "tensor": [
+              [
+                0.01226775183269238,
+                0,
+                -0.012247810256482408
+              ],
+              [
+                0,
+                0.012257169728838635,
+                0
+              ],
+              [
+                -0.012247810256482408,
+                0,
+                0.012242504127912893
+              ]
+            ],
+            "eigenvalues": [
+              7.311218101922236e-06,
+              0.012257169728838635,
+              0.024502944742503356
+            ],
+            "critical_eigenvector": [
+              0.7067422789610844,
+              0,
+              0.7074710956137309
+            ],
+            "eigenvector_residual": 1.734723475976807e-18
+          },
+          "outer_covariance_witness": {
+            "observation": {
+              "coordinate": [
+                0.00012031950007446724,
+                0,
+                0.1997593609998511
+              ],
+              "physical": [
+                0.0001357569960508591,
+                0,
+                0.2300171162538123
+              ],
+              "geometry": 63,
+              "element": 63,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  -0.3883054095952153,
+                  0,
+                  4.799518970703031
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  2.0237586144378543,
+                  0,
+                  0.40036293987143123
+                ]
+              ],
+              "k": 0.018385755345041447,
+              "epsilon": 0.0076612075751999326
+            },
+            "tensor": [
+              [
+                0.015341151061964833,
+                0,
+                -0.027095756025517576
+              ],
+              [
+                0,
+                0.012257170230027632,
+                0
+              ],
+              [
+                -0.027095756025517576,
+                0,
+                0.009077426652237581
+              ]
+            ],
+            "eigenvalues": [
+              -0.015066864747551803,
+              0.012257170230027632,
+              0.039485442461754214
+            ],
+            "critical_eigenvector": [
+              0.6652741831905806,
+              0,
+              0.7465991301763656
+            ],
+            "eigenvector_residual": 0
+          },
+          "minimum_k_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                -0.1997593609998511,
+                0,
+                0.006513235145008191
+              ],
+              "physical": [
+                -0.1997593609998511,
+                0,
+                0.006513235145008191
+              ],
+              "geometry": 36,
+              "element": 36,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  0.037130364407343096,
+                  0,
+                  25.88875706046723
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -0.007953487979281951,
+                  0,
+                  0.001145519861275657
+                ]
+              ],
+              "k": 0.01838575534504145,
+              "epsilon": 0.1427688927824159
+            },
+            "k_over_cold": 1,
+            "epsilon_over_cold": 1.0000000000529237,
+            "cold_k": 0.01838575534504145,
+            "cold_epsilon": 0.14276889277486005
+          },
+          "maximum_k_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                -0.1997593609998511,
+                0,
+                0.006513235145008191
+              ],
+              "physical": [
+                -0.1997593609998511,
+                0,
+                0.006513235145008191
+              ],
+              "geometry": 36,
+              "element": 36,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  0.037130364407343096,
+                  0,
+                  25.88875706046723
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -0.007953487979281951,
+                  0,
+                  0.001145519861275657
+                ]
+              ],
+              "k": 0.01838575534504145,
+              "epsilon": 0.1427688927824159
+            },
+            "k_over_cold": 1,
+            "epsilon_over_cold": 1.0000000000529237,
+            "cold_k": 0.01838575534504145,
+            "cold_epsilon": 0.14276889277486005
+          },
+          "minimum_epsilon_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                0.24155162309348874,
+                0,
+                0.7990374439994044
+              ],
+              "physical": [
+                0.24155162309348874,
+                0,
+                0.7990374439994044
+              ],
+              "geometry": 77,
+              "element": 77,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  -0.0020791931022626736,
+                  0,
+                  0.22697455529742583
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0.0001514655435324995,
+                  0,
+                  -9.852447089118334e-05
+                ]
+              ],
+              "k": 0.01838575534504145,
+              "epsilon": 0.0009343202065859249
+            },
+            "k_over_cold": 1,
+            "epsilon_over_cold": 0.8028937329069431,
+            "cold_k": 0.01838575534504145,
+            "cold_epsilon": 0.001163690994576756
+          },
+          "maximum_epsilon_ratio_witness": {
+            "observation": {
+              "coordinate": [
+                -0.05449995035065243,
+                0,
+                0.15955594337368084
+              ],
+              "physical": [
+                -0.05793322872826675,
+                0,
+                0.172632220707731
+              ],
+              "geometry": 61,
+              "element": 61,
+              "radial_side": 0,
+              "tangential_side": 0,
+              "inner": false,
+              "epsilon_semantics": "actual retained outer coefficients",
+              "gradient": [
+                [
+                  1.9099548565306965,
+                  0,
+                  0.7141845361393174
+                ],
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  -4.209106552156242,
+                  0,
+                  -2.0650651418152046
+                ]
+              ],
+              "k": 0.018385755345041305,
+              "epsilon": 0.011637531392932441
+            },
+            "k_over_cold": 1,
+            "epsilon_over_cold": 1.9984317475218636,
+            "cold_k": 0.018385755345041305,
+            "cold_epsilon": 0.005823331923826496
+          },
+          "quadrature_order": 24,
+          "state_sha256": "47c078a12f7ba94187fdfb9c8e35aaf230bb5ff688204031bb298a1eb56028c9",
+          "cold_base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+          "model_specification": {
+            "version": "CanonicalWallModelV1",
+            "name": "StandardKEpsilon",
+            "calibration": "StandardNeutralCalibratedV1",
+            "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+            "coefficients": {
+              "Cmu": 0.09,
+              "Cepsilon1": 1.44,
+              "Cepsilon2": 1.92,
+              "sigmaK": 1,
+              "sigmaEpsilon": 1.3478315512167742,
+              "yapCoefficient": 0,
+              "yapLength": 2.5
+            },
+            "q": 3.3333333333333335,
+            "kappa": 0.4405539051866587,
+            "K0": 0.01838575534504143,
+            "quadratic_active": false,
+            "cubic_active": false,
+            "Yap_active": false,
+            "variant": "Original",
+            "beta": 1,
+            "gamma0": 0,
+            "Gamma": 0,
+            "physical_regularization_active": false
+          },
+          "minimum_k": 0.018385333742329917,
+          "minimum_epsilon": 0.0009343202065859249,
+          "invalid_scalar_count": 0,
+          "scalar_positive_finite": true,
+          "invalid_scalar_witness": null,
+          "outer_k_over_cold": [
+            1,
+            1
+          ],
+          "outer_epsilon_over_cold": [
+            0.8028937329069431,
+            1.9984317475218636
+          ],
+          "scalar_envelopes_passed": true,
+          "scalar_envelope_witness": null,
+          "integrals_complete": true,
+          "strong_divergence_RMS": 0.07562181284819716,
+          "maximum_absolute_divergence": 12.622172289806144,
+          "TKE_integral": 0.011702006264258364,
+          "base_TKE_integral": 0.011702006264258364,
+          "outer_TKE_integral": 0.011595526367963281,
+          "base_outer_TKE_integral": 0.011595526367963281,
+          "outer_time_scale": [
+            0.12877968570888204,
+            19.678216542296948
+          ],
+          "outer_length_scale": [
+            0.017461763392928525,
+            2.6682497271594285
+          ],
+          "outer_time_scale_ratio": [
+            0.5003923707877641,
+            1.245494838251405
+          ],
+          "outer_length_scale_ratio": [
+            0.5003923707877642,
+            1.2454948382514053
+          ],
+          "strong_divergence_L2": 0.06030809942199111,
+          "volume": 0.6359999999999986,
+          "kinetic_energy": 0.5637501332081585,
+          "base_kinetic_energy": 0.5643662520535037,
+          "velocity_change_L2": 0.05059254487959879,
+          "maximum_sampled_velocity_increment": 0.46759634994622545,
+          "scope": "independent panelwise physical tensor sampling; complements complete inventory; no domain-wide covariance theorem",
+          "inner_covariance_witness_independent": {
+            "tensor_error": 0.0,
+            "eigenvalue_error": 2.6020852139652106e-18,
+            "isotropic": [
+              [
+                0.012257169728838635,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.012257169728838635,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.012257169728838635
+              ]
+            ],
+            "linear": [
+              [
+                1.0582103853745917e-05,
+                -0.0,
+                -0.012247810256482408
+              ],
+              [
+                -0.0,
+                -0.0,
+                -0.0
+              ],
+              [
+                -0.012247810256482408,
+                -0.0,
+                -1.4665600925742302e-05
+              ]
+            ],
+            "nonlinear_zero": true,
+            "regularization_zero": true,
+            "eigenvalues": [
+              7.311218101919634e-06,
+              0.01225716972883863,
+              0.02450294474250335
+            ],
+            "Rayleigh": 7.311218101921632e-06,
+            "eigenvector_residual": 2.0688734220536185e-18,
+            "production": 0.7054585248133258,
+            "anisotropic_work": 0.705576236348984,
+            "isotropic_work": -0.00011771153565818588,
+            "eddy_viscosity": 0.00021260497715371772
+          },
+          "outer_covariance_witness_independent": {
+            "tensor_error": 3.469446951953614e-18,
+            "eigenvalue_error": 1.734723475976807e-18,
+            "isotropic": [
+              [
+                0.012257170230027632,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.012257170230027632,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.012257170230027632
+              ]
+            ],
+            "linear": [
+              [
+                0.0030839808319372023,
+                -0.0,
+                -0.02709575602551758
+              ],
+              [
+                -0.0,
+                -0.0,
+                -0.0
+              ],
+              [
+                -0.02709575602551758,
+                -0.0,
+                -0.00317974357779005
+              ]
+            ],
+            "nonlinear_zero": true,
+            "regularization_zero": true,
+            "eigenvalues": [
+              -0.015066864747551804,
+              0.012257170230027634,
+              0.03948544246175422
+            ],
+            "Rayleigh": -0.015066864747551804,
+            "eigenvector_residual": 1.734723475976807e-18,
+            "production": 0.1872046514671814,
+            "anisotropic_work": 0.18735244266833065,
+            "isotropic_work": -0.00014779120114929035,
+            "eddy_viscosity": 0.003971076317417345
+          }
+        }
+      },
+      "native_budget": {
+        "rate_columns": "Pk,Ek,P_epsilon,D_epsilon,Yap,p_A0,prescribed_k,prescribed_epsilon",
+        "inner_rates": [
+          0.004535353401468609,
+          0.0023262033179076375,
+          0,
+          0,
+          0,
+          0.0023262033179076366,
+          0,
+          0
+        ],
+        "outer_rates": [
+          0.008691824900111474,
+          0.004268581316947337,
+          0.019164708190498158,
+          0.012720223401771528,
+          0,
+          0,
+          0,
+          0
+        ],
+        "regional_weak_balances": [
+          {
+            "region": 0,
+            "block": 2,
+            "physical_storage_rate": 0,
+            "source_rate": 0.0022091500835609715,
+            "explicit_open_outward_flux": 6.518591037295801e-05,
+            "unmasked_constant_test_residual": -0.002143964173188016,
+            "free_interior_row_projection": -0.0016749880883494034,
+            "constrained_row_reaction_projection": 6.368462339959644e-05,
+            "free_interface_row_projection": -0.0005326607082382089,
+            "exact_weak_balance_error": 2.6020852139652106e-18,
+            "row_partition_error": 0
+          },
+          {
+            "region": 1,
+            "block": 2,
+            "physical_storage_rate": 0,
+            "source_rate": 0.004423243583164137,
+            "explicit_open_outward_flux": 0.019246632998655897,
+            "unmasked_constant_test_residual": 0.014823389415491852,
+            "free_interior_row_projection": -0.0038546925058670595,
+            "constrained_row_reaction_projection": 0.018997132649389178,
+            "free_interface_row_projection": -0.00031905072803025916,
+            "exact_weak_balance_error": -9.194034422677078e-17,
+            "row_partition_error": 6.938893903907228e-18
+          },
+          {
+            "region": 1,
+            "block": 3,
+            "physical_storage_rate": 0,
+            "source_rate": 0.0064444847887266295,
+            "explicit_open_outward_flux": 0.0048349466012377875,
+            "unmasked_constant_test_residual": -0.001609538187488881,
+            "free_interior_row_projection": -0.0064239023307021735,
+            "constrained_row_reaction_projection": 0.0048143641432132935,
+            "free_interface_row_projection": 0,
+            "exact_weak_balance_error": 3.903127820947816e-17,
+            "row_partition_error": 8.673617379884035e-19
+          }
+        ],
+        "independent_source_integration": [
+          {
+            "Gauss_order": 8,
+            "tangential_Gauss_order": 8,
+            "inner": [
+              0.004535353401382269,
+              0.002326203317277797,
+              0,
+              0,
+              0,
+              0.0023262033194534045,
+              0,
+              0
+            ],
+            "outer": [
+              0.00869182466185598,
+              0.004268581316920464,
+              0.01916470819094455,
+              0.012720223401699966,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "Gauss_order": 16,
+            "tangential_Gauss_order": 16,
+            "inner": [
+              0.004535353401468612,
+              0.0023262033179076336,
+              0,
+              0,
+              0,
+              0.0023262033179076488,
+              0,
+              0
+            ],
+            "outer": [
+              0.00869182490011148,
+              0.00426858131694734,
+              0.019164708190498148,
+              0.012720223401771534,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "Gauss_order": 32,
+            "tangential_Gauss_order": 32,
+            "inner": [
+              0.004535353401468615,
+              0.002326203317907639,
+              0,
+              0,
+              0,
+              0.002326203317907638,
+              0,
+              0
+            ],
+            "outer": [
+              0.008691824900111545,
+              0.004268581316947353,
+              0.019164708190498012,
+              0.012720223401771443,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "physical_face_columns": "region,block,axis,side,outward_advection,outward_diffusion",
+        "physical_faces": [
+          [
+            0,
+            2,
+            0,
+            -1,
+            -6.439905010748227e-05,
+            -3.2277904028494792e-21
+          ],
+          [
+            0,
+            2,
+            0,
+            1,
+            6.518591037295801e-05,
+            -6.467906524970135e-22
+          ],
+          [
+            0,
+            2,
+            2,
+            -1,
+            0,
+            -3.2938427104582353e-15
+          ],
+          [
+            0,
+            2,
+            2,
+            1,
+            -7.732619416509914e-07,
+            -3.9858098323072366e-16
+          ],
+          [
+            1,
+            2,
+            0,
+            -1,
+            -0.019247406260597545,
+            -1.528611554781151e-29
+          ],
+          [
+            1,
+            2,
+            0,
+            1,
+            0.019246632998655904,
+            -3.0701601107248826e-30
+          ],
+          [
+            1,
+            2,
+            2,
+            -1,
+            7.732619416509795e-07,
+            -2.99507554977051e-16
+          ],
+          [
+            1,
+            2,
+            2,
+            1,
+            -1.7452644281757968e-20,
+            -5.525114881002885e-16
+          ],
+          [
+            1,
+            3,
+            0,
+            -1,
+            -0.004812738774379198,
+            -3.697060829213569e-07
+          ],
+          [
+            1,
+            3,
+            0,
+            1,
+            0.004834946601237787,
+            -6.828914401953688e-06
+          ],
+          [
+            1,
+            3,
+            2,
+            -1,
+            6.016401961143461e-06,
+            0.0028510359207108717
+          ],
+          [
+            1,
+            3,
+            2,
+            1,
+            -9.86306723404945e-22,
+            -3.289836645002818e-05
+          ]
+        ],
+        "weak_components": [
+          {
+            "block": 2,
+            "term": "inner_momentum_stress",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "outer_momentum_stress",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "conservative_advection",
+            "constant_test_projection": 2.862293735361732e-17,
+            "free_mass_dual_norm": 0.1227800249123939,
+            "signed_projection_on_total_residual": -0.0007802131956761638
+          },
+          {
+            "block": 2,
+            "term": "k_diffusion",
+            "constant_test_projection": 7.652583856167722e-20,
+            "free_mass_dual_norm": 0.01448684806952672,
+            "signed_projection_on_total_residual": 0.0001877606901724713
+          },
+          {
+            "block": 2,
+            "term": "epsilon_diffusion",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "inner_k_production",
+            "constant_test_projection": -0.004535353401468614,
+            "free_mass_dual_norm": 0.07801932327632265,
+            "signed_projection_on_total_residual": 0.05983911990529047
+          },
+          {
+            "block": 2,
+            "term": "inner_k_destruction",
+            "constant_test_projection": 0.0023262033179076397,
+            "free_mass_dual_norm": 0.03973412601909673,
+            "signed_projection_on_total_residual": -0.023671116919930273
+          },
+          {
+            "block": 2,
+            "term": "outer_k_production",
+            "constant_test_projection": -0.008691824900111413,
+            "free_mass_dual_norm": 0.0318517393164222,
+            "signed_projection_on_total_residual": 0.015886253337261753
+          },
+          {
+            "block": 2,
+            "term": "outer_k_destruction",
+            "constant_test_projection": 0.004268581316947336,
+            "free_mass_dual_norm": 0.010882906518013843,
+            "signed_projection_on_total_residual": -0.00247571199847894
+          },
+          {
+            "block": 2,
+            "term": "epsilon_production",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "epsilon_destruction",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "epsilon_yap",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "prescribed_scalar_source",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "roughness_force",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "prescribed_body",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "continuity",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "gauge",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "external_advection",
+            "constant_test_projection": 0.019311818909028854,
+            "free_mass_dual_norm": 0.12277496390079401,
+            "signed_projection_on_total_residual": 0.0007950204982493751
+          },
+          {
+            "block": 2,
+            "term": "external_traction",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "external_diffusion",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 2,
+            "term": "time_mass",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "inner_momentum_stress",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "outer_momentum_stress",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "conservative_advection",
+            "constant_test_projection": 1.2468324983583301e-18,
+            "free_mass_dual_norm": 0.059838180973511824,
+            "signed_projection_on_total_residual": 0.003281530169447113
+          },
+          {
+            "block": 3,
+            "term": "k_diffusion",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "epsilon_diffusion",
+            "constant_test_projection": -4.980553729855286e-19,
+            "free_mass_dual_norm": 0.02341467201802542,
+            "signed_projection_on_total_residual": 0.012901417481846292
+          },
+          {
+            "block": 3,
+            "term": "inner_k_production",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "inner_k_destruction",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "outer_k_production",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "outer_k_destruction",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "epsilon_production",
+            "constant_test_projection": -0.019164708190498123,
+            "free_mass_dual_norm": 0.15867303376435696,
+            "signed_projection_on_total_residual": 0.148857151529554
+          },
+          {
+            "block": 3,
+            "term": "epsilon_destruction",
+            "constant_test_projection": 0.012720223401771464,
+            "free_mass_dual_norm": 0.08193090874689339,
+            "signed_projection_on_total_residual": -0.048954691731655404
+          },
+          {
+            "block": 3,
+            "term": "epsilon_yap",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "prescribed_scalar_source",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "roughness_force",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "prescribed_body",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "continuity",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "gauge",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "external_advection",
+            "constant_test_projection": 0.0048349466012377875,
+            "free_mass_dual_norm": 0.0545892707892678,
+            "signed_projection_on_total_residual": -2.1747853182985043e-05
+          },
+          {
+            "block": 3,
+            "term": "external_traction",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "external_diffusion",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          },
+          {
+            "block": 3,
+            "term": "time_mass",
+            "constant_test_projection": 0,
+            "free_mass_dual_norm": 0,
+            "signed_projection_on_total_residual": 0
+          }
+        ],
+        "native_component_sum_max_error": 6.661338147750939e-16,
+        "ideal_seed_ratio": 1,
+        "independent_analytical_P_over_E": 0.9999999999999988,
+        "native_inner_P_over_E": 1.9496805659911307,
+        "history_alpha": 0,
+        "ground_reaction": {
+          "lifting": "global-x Q2(s) times max(0,1-r/lifting_height), zero side corners",
+          "lifting_height": 0.0002,
+          "weighted_surface_measure": 0.5468634999105996,
+          "weighted_sampled_global_x_traction": 0.006503846551611889,
+          "full_spatial_lifting_work": -0.003464621232883639,
+          "free_row_lifting_work": -5.38634521471058e-05,
+          "prescribed_row_reaction": -0.0034107577807365335,
+          "inferred_ground_traction": 0.00623694538270358,
+          "signed_volume_components": {
+            "inner_momentum_stress": -0.003475577647482321,
+            "outer_momentum_stress": -7.978757543853866e-24,
+            "conservative_advection": -5.0490149929252174e-08,
+            "k_diffusion": 0,
+            "epsilon_diffusion": 0,
+            "inner_k_production": 0,
+            "inner_k_destruction": 0,
+            "outer_k_production": 0,
+            "outer_k_destruction": 0,
+            "epsilon_production": 0,
+            "epsilon_destruction": 0,
+            "epsilon_yap": 0,
+            "prescribed_scalar_source": 0,
+            "roughness_force": 1.1006904748611045e-05,
+            "prescribed_body": 0,
+            "continuity": 0,
+            "gauge": 0,
+            "external_advection": 2.3340439093000743e-23,
+            "external_traction": 0,
+            "external_diffusion": 0
+          },
+          "lifting_representation_error": 3.885780586188048e-16,
+          "scope": "spatial weak contraction; free/unsteady residual and other loads remain explicit; not an exact physical stress estimator"
+        },
+        "physical_time": 0,
+        "governing_solves": 0,
+        "physical_commits": 0,
+        "scope": "Native physical quadrature and saved callback history. Exact weak row partition is separate from gradient-based face flux estimates; interface CG row projections are not unique conservative control-volume fluxes. Source and diffusion are separate; net destruction counted once. No Lift or epsilon substitution."
+      },
+      "reference_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+      "defect_sha256": "e319468000760282822984d0fbdee636d7d5c11abf809a76147469f4ad6368a3",
+      "output": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2j-20261115/native-B/native/result.json",
+        "sha256": "50312f96625d2495564ef4f113f5731f7c2c016ea46fffa8993e63883e07005a"
+      },
+      "new_velocity_coefficients": [
+        -0.0001039538282769504,
+        1.738944676824949e-07,
+        0.00010477104566911365
+      ]
+    }
+  },
+  "repeatable_checks": [
+    {
+      "state_sha256": "4138e71d73e747cb129a38fc691cec38a2039673a86609593a5e1e26c2adef84",
+      "started": "2026-11-15T21:02:38.711463+08:00",
+      "kind": "seen_native_only",
+      "orders": [
+        20,
+        24
+      ],
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2j-20261115/native-A/receipt.json",
+      "passed": false
+    },
+    {
+      "state_sha256": "47c078a12f7ba94187fdfb9c8e35aaf230bb5ff688204031bb298a1eb56028c9",
+      "started": "2026-11-15T21:03:13.665336+08:00",
+      "kind": "seen_native_only",
+      "orders": [
+        20,
+        24
+      ],
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2j-20261115/native-B/receipt.json",
+      "passed": false
+    }
+  ],
+  "fresh_hill_GL28": 0,
+  "physical_hill_attempts": 0,
+  "physical_hill_accepted_steps": 0
+}

@@ -1,0 +1,528 @@
+{
+  "version": "H2jContinuingTwoModelComparisonV1",
+  "capture_Asia_Shanghai": "2026-11-15T21:58:24.440449+08:00",
+  "reviewed_parent": "fc1f800d7d2069f678b9c59812e4e710e75cf264",
+  "implementation_revision": "d303dd40f099e449253292a2cc5754f205e1465a",
+  "status": "ongoing; no qualified hill seed; distinct later spatial/temporal/development/experimental gates remain open",
+  "unchanged_calibration_manifest": {
+    "path": "docs/plans/cls-cao-tamura-budget-h2g-evidence/comparison-manifest.json",
+    "sha256": "c6fbdf039cd12c4ee64d07ddb96a2d89ee578e86cca279c4058dfde7b6d1f195",
+    "Linux": {
+      "path": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json",
+      "sha256": "c6fbdf039cd12c4ee64d07ddb96a2d89ee578e86cca279c4058dfde7b6d1f195",
+      "bytes": 29767
+    }
+  },
+  "common": {
+    "u_tau": 0.07426793792419734,
+    "nu": 3.8095238095238094e-06,
+    "H": 0.0065,
+    "z0_eff": 0.00012222264395414748,
+    "kappa": 0.4405539051866587,
+    "U_H": 0.6698827910508315,
+    "common_mesh": {
+      "x": [
+        -0.2,
+        -0.1,
+        -0.05,
+        0.0,
+        0.05,
+        0.1,
+        0.6
+      ],
+      "z": [
+        0.0,
+        1.5570612247636407e-05,
+        5e-05,
+        0.0002,
+        0.0008312858196541338,
+        0.0022472751006336437,
+        0.0065,
+        0.012,
+        0.025,
+        0.05,
+        0.1,
+        0.2,
+        0.4,
+        0.8
+      ],
+      "degree": 3,
+      "regional_pressure_degree": 1,
+      "points": [
+        16,
+        16
+      ]
+    },
+    "fit_sha256": "515d7fe9b53815d2d61f0cf271d7d6406e300615ef25548dd40dda592f4ac301"
+  },
+  "models": {
+    "model_manifest_CLS": {
+      "version": "DeployedCLSV1",
+      "model": "CLSHighRe",
+      "coefficients": {
+        "Cmu": 0.09,
+        "Cepsilon1": 1.44,
+        "Cepsilon2": 1.92,
+        "sigmaK": 1.0,
+        "sigmaEpsilon": 1.3,
+        "YapCoefficient": 0.83
+      },
+      "q": 3.1906750816242875,
+      "kappa": 0.4405539051866587,
+      "K0": 0.017598891430879275,
+      "wall": {
+        "cMu": 0.09822789532821126,
+        "cLength": 2.5108624752197968,
+        "h_s": 0.0022472751006336117,
+        "cutoff_policy": "native local physical budget root; never prescribed flat cutoff"
+      },
+      "common_fit": [
+        {
+          "minimum_z": 0.01,
+          "maximum_z": 0.051,
+          "count": 7,
+          "z0_eff": 0.00012222264395414748,
+          "RMSE_over_Uinf": 0.025492132680959182,
+          "points_z_U_weight_residual_residualOverUinf": [
+            [
+              0.010240861264000001,
+              0.6604307961257675,
+              0.008741966671,
+              0.08608502950131958,
+              0.05911482972703994
+            ],
+            [
+              0.015311355771999999,
+              0.7727261413540958,
+              0.01722563776,
+              0.0415934998924542,
+              0.028562372321152472
+            ],
+            [
+              0.020232034932,
+              0.8309780168725506,
+              0.02576336926,
+              0.030319825836663927,
+              0.02082070892082833
+            ],
+            [
+              0.030254565304000003,
+              0.9230604512883066,
+              0.0345573947,
+              0.0060700035876286584,
+              0.004168288384215392
+            ],
+            [
+              0.04027593432,
+              1.00217848281961,
+              0.02591954899,
+              -0.02481651922160566,
+              -0.01704157292738739
+            ],
+            [
+              0.04528836084,
+              1.031976509229635,
+              0.01722763942,
+              -0.034840966801291784,
+              -0.02392538902425821
+            ],
+            [
+              0.05026826936,
+              1.0619504093978342,
+              0.02575736255,
+              -0.04722808085042174,
+              -0.0324316547718063
+            ]
+          ]
+        },
+        {
+          "minimum_z": 0.015,
+          "maximum_z": 0.051,
+          "count": 6,
+          "z0_eff": 0.00011855327239057815,
+          "RMSE_over_Uinf": 0.021623833604682913,
+          "points_z_U_weight_residual_residualOverUinf": [
+            [
+              0.015311355771999999,
+              0.7727261413540958,
+              0.01722563776,
+              0.04673209711562798,
+              0.03209106135853152
+            ],
+            [
+              0.020232034932,
+              0.8309780168725506,
+              0.02576336926,
+              0.03545842305983771,
+              0.02434939795820738
+            ],
+            [
+              0.030254565304000003,
+              0.9230604512883066,
+              0.0345573947,
+              0.011208600810802216,
+              0.007696977421594287
+            ],
+            [
+              0.04027593432,
+              1.00217848281961,
+              0.02591954899,
+              -0.01967792199843199,
+              -0.01351288389000842
+            ],
+            [
+              0.04528836084,
+              1.031976509229635,
+              0.01722763942,
+              -0.029702369578118226,
+              -0.02039669998687931
+            ],
+            [
+              0.05026826936,
+              1.0619504093978342,
+              0.02575736255,
+              -0.04208948362724807,
+              -0.028902965734427327
+            ]
+          ]
+        }
+      ],
+      "coordinates": "unshifted physical incoming height",
+      "H": 0.0065,
+      "u_tau": 0.07426793792419734,
+      "nu": 3.8095238095238094e-06,
+      "z0_eff": 0.00012222264395414748,
+      "outer_epsilon": "u_tau^3/(kappa*z)",
+      "upper_boundary": "declared compatibility fixture or RoughFlatOpenV1 facility slip roof; no constant tail",
+      "physical_terms": {
+        "quadratic": true,
+        "cubic_beta": 0.4,
+        "Gamma": 1,
+        "gamma0": 0,
+        "Yap": true
+      }
+    },
+    "model_manifest_standard": {
+      "version": "StandardNeutralCalibratedV1",
+      "model": "StandardKEpsilon",
+      "coefficients": {
+        "Cmu": 0.09,
+        "Cepsilon1": 1.44,
+        "Cepsilon2": 1.92,
+        "sigmaK": 1.0,
+        "sigmaEpsilon": 1.3478315512167742,
+        "YapCoefficient": 0
+      },
+      "q": 3.3333333333333335,
+      "kappa": 0.4405539051866587,
+      "K0": 0.01838575534504143,
+      "wall": {
+        "cMu": 0.09,
+        "cLength": 2.6811256851969465,
+        "h_s": 0.0022035111852050995,
+        "cutoff_policy": "native local physical budget root; never prescribed flat cutoff"
+      },
+      "common_fit": [
+        {
+          "minimum_z": 0.01,
+          "maximum_z": 0.051,
+          "count": 7,
+          "z0_eff": 0.00012222264395414748,
+          "RMSE_over_Uinf": 0.025492132680959182,
+          "points_z_U_weight_residual_residualOverUinf": [
+            [
+              0.010240861264000001,
+              0.6604307961257675,
+              0.008741966671,
+              0.08608502950131958,
+              0.05911482972703994
+            ],
+            [
+              0.015311355771999999,
+              0.7727261413540958,
+              0.01722563776,
+              0.0415934998924542,
+              0.028562372321152472
+            ],
+            [
+              0.020232034932,
+              0.8309780168725506,
+              0.02576336926,
+              0.030319825836663927,
+              0.02082070892082833
+            ],
+            [
+              0.030254565304000003,
+              0.9230604512883066,
+              0.0345573947,
+              0.0060700035876286584,
+              0.004168288384215392
+            ],
+            [
+              0.04027593432,
+              1.00217848281961,
+              0.02591954899,
+              -0.02481651922160566,
+              -0.01704157292738739
+            ],
+            [
+              0.04528836084,
+              1.031976509229635,
+              0.01722763942,
+              -0.034840966801291784,
+              -0.02392538902425821
+            ],
+            [
+              0.05026826936,
+              1.0619504093978342,
+              0.02575736255,
+              -0.04722808085042174,
+              -0.0324316547718063
+            ]
+          ]
+        },
+        {
+          "minimum_z": 0.015,
+          "maximum_z": 0.051,
+          "count": 6,
+          "z0_eff": 0.00011855327239057815,
+          "RMSE_over_Uinf": 0.021623833604682913,
+          "points_z_U_weight_residual_residualOverUinf": [
+            [
+              0.015311355771999999,
+              0.7727261413540958,
+              0.01722563776,
+              0.04673209711562798,
+              0.03209106135853152
+            ],
+            [
+              0.020232034932,
+              0.8309780168725506,
+              0.02576336926,
+              0.03545842305983771,
+              0.02434939795820738
+            ],
+            [
+              0.030254565304000003,
+              0.9230604512883066,
+              0.0345573947,
+              0.011208600810802216,
+              0.007696977421594287
+            ],
+            [
+              0.04027593432,
+              1.00217848281961,
+              0.02591954899,
+              -0.01967792199843199,
+              -0.01351288389000842
+            ],
+            [
+              0.04528836084,
+              1.031976509229635,
+              0.01722763942,
+              -0.029702369578118226,
+              -0.02039669998687931
+            ],
+            [
+              0.05026826936,
+              1.0619504093978342,
+              0.02575736255,
+              -0.04208948362724807,
+              -0.028902965734427327
+            ]
+          ]
+        }
+      ],
+      "coordinates": "unshifted physical incoming height",
+      "H": 0.0065,
+      "u_tau": 0.07426793792419734,
+      "nu": 3.8095238095238094e-06,
+      "z0_eff": 0.00012222264395414748,
+      "outer_epsilon": "u_tau^3/(kappa*z)",
+      "upper_boundary": "declared compatibility fixture or RoughFlatOpenV1 facility slip roof; no constant tail",
+      "physical_terms": {
+        "quadratic": false,
+        "cubic_beta": 0,
+        "Gamma": 0,
+        "gamma0": 0,
+        "Yap": false
+      }
+    }
+  },
+  "CLS": {
+    "status": "deployed baseline unchanged; retained H2f/H2g blocked candidates, no new CLS search or hill steps",
+    "retained_evidence": "docs/plans/cls-cao-tamura-budget-h2i-evidence/comparison-manifest.json"
+  },
+  "standard_cold_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "standard_B_sha256": "c83da50b65d2e9980325d365779a9d53394fbf10e6431d1b87f79728366ae13d",
+  "anchors": {
+    "retention": {
+      "maximum_retention": 0.9972828525348357,
+      "theta": 0.9972828525338356,
+      "inward_guard": 1e-12,
+      "limiting": [
+        0.9972828525348357,
+        "k",
+        211972,
+        0.4996404493151861
+      ],
+      "scalar_band": [
+        0.501,
+        1.999
+      ]
+    },
+    "anchors": {
+      "A": {
+        "state_sha256": "7d79b6cef109b2a2cc1826f63ca419d564217f15da3979c43b9048f25c551ce4",
+        "k_sha256": "911aee8ec71b125c57bcb07d70e7e2e99b27857f3b12b1ba786f9e7403c9c958",
+        "theta": 0.9972828525338356,
+        "epsilon_theta": 0.9972828525338356,
+        "scalar_coefficients": "same archived scalar space, coefficient-level cold/B retraction"
+      },
+      "B": {
+        "state_sha256": "b167936b3f2adb7188daf48cb07cc7dec7694921036f73dc1df892749e00ff99",
+        "k_sha256": "bd9c30e5b0aa2eb03c60d4c42922a5de7698dfb67a399402f18179d951c3fb89",
+        "theta": 0,
+        "epsilon_theta": 0.9972828525338356,
+        "scalar_coefficients": "same archived scalar space, coefficient-level cold/B retraction"
+      }
+    },
+    "B_hash": "c83da50b65d2e9980325d365779a9d53394fbf10e6431d1b87f79728366ae13d",
+    "cold_hash": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c"
+  },
+  "standard_diagnostic_states": {
+    "A": {
+      "state_sha256": "4138e71d73e747cb129a38fc691cec38a2039673a86609593a5e1e26c2adef84",
+      "anchor_k_sha256": "911aee8ec71b125c57bcb07d70e7e2e99b27857f3b12b1ba786f9e7403c9c958",
+      "passed": false,
+      "native_covariance": [
+        1.9050060581895026e-06,
+        -0.0015517556328626695
+      ],
+      "native_inner_point": [
+        0.23549580558569316,
+        0,
+        0.0065,
+        0.01838575534504143,
+        0.01838575534504143,
+        0.0002129398143720893,
+        0.01732898182484872,
+        0.01225717023002762,
+        1.9050060581895026e-06
+      ],
+      "native_outer_point": [
+        0,
+        0,
+        0.2,
+        0.010016645288489454,
+        0.007649184149497645,
+        -0.0015517556328626695
+      ],
+      "native_GL16": {
+        "order": 16,
+        "regional_L2": [
+          0.018697956879055448,
+          0.057336317151014726
+        ],
+        "L2": 0.06030809942199109
+      },
+      "gates": {
+        "native": false,
+        "native_margin": false,
+        "budget": true,
+        "continuity": true,
+        "fixed_k": true,
+        "native_GL16": true,
+        "GL20_margin": false,
+        "GL20_scalar": true,
+        "GL20_velocity": true,
+        "GL20_divergence": true,
+        "GL24_margin": false,
+        "GL24_scalar": true,
+        "GL24_velocity": true,
+        "GL24_divergence": true
+      }
+    },
+    "B": {
+      "state_sha256": "47c078a12f7ba94187fdfb9c8e35aaf230bb5ff688204031bb298a1eb56028c9",
+      "anchor_k_sha256": "bd9c30e5b0aa2eb03c60d4c42922a5de7698dfb67a399402f18179d951c3fb89",
+      "passed": false,
+      "native_covariance": [
+        7.897611019956619e-06,
+        -0.015467402807624675
+      ],
+      "native_inner_point": [
+        0.23549580558569316,
+        0,
+        0.0065,
+        0.01838575534504143,
+        0.01838575534504143,
+        0.0002129398143720893,
+        0.017320506648439506,
+        0.01225717023002762,
+        7.897611019956619e-06
+      ],
+      "native_outer_point": [
+        0,
+        0,
+        0.2,
+        0.018385755345041447,
+        0.007649235976432824,
+        -0.015467402807624675
+      ],
+      "native_GL16": {
+        "order": 16,
+        "regional_L2": [
+          0.018699067804425765,
+          0.05733595485503175
+        ],
+        "L2": 0.060308099421990995
+      },
+      "gates": {
+        "native": false,
+        "native_margin": false,
+        "budget": true,
+        "continuity": true,
+        "fixed_k": true,
+        "native_GL16": true,
+        "GL20_margin": false,
+        "GL20_scalar": true,
+        "GL20_velocity": true,
+        "GL20_divergence": true,
+        "GL24_margin": false,
+        "GL24_scalar": true,
+        "GL24_velocity": true,
+        "GL24_divergence": true
+      }
+    }
+  },
+  "enrichment": {
+    "original_velocity_columns": 41,
+    "new_velocity_columns": 3,
+    "total_velocity_columns": 44,
+    "k_shapes": 8,
+    "epsilon_shapes": 8,
+    "full_Gram": true,
+    "local_finite_control": true,
+    "classification": "verified_both_anchors_obstruction"
+  },
+  "positive_flat_V2_import": {
+    "state_sha256": "365235f40cbec0edb0bc0c1238f0a911f8be8d970dc882083d41e274d2b27411",
+    "base_sha256": "84fa937c3410c7e3b0cc0b85e748c9bf1f06de40b40a1334aff6693d08628470",
+    "passed": true,
+    "hill_GL28_consumed": false
+  },
+  "physical_hill_attempts": 0,
+  "physical_hill_accepted_steps": 0,
+  "normal_stress_qualification": "standard neutral stresses are isotropic, not a fit to experimental unequal RMS",
+  "hill_observations": "held out; no model or roughness recalibration",
+  "performance": "historical CLS/standard optimizer runs are not matched benchmarks",
+  "next_stages": [
+    "bounded upper-outer divergence-controlled initializer support with finite local control",
+    "common flat spatial qualification",
+    "bounded developed-flow continuation after qualified startup",
+    "temporal/spatial sensitivity",
+    "held-out experimental comparison"
+  ],
+  "EP_AWF": "deferred"
+}

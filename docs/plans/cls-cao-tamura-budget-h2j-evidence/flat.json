@@ -1,0 +1,6087 @@
+{
+  "models": {
+    "cls": {
+      "base_sha256": "b6206d2731bbaa3a7d951d635b4074e6e2be0c216c878f49c31f48e87972f922",
+      "state_sha256": "ce775120d2063d44292564832b475e20ef8af27b0e849af6720266697006ba5d",
+      "setup": [
+        {
+          "block": 0,
+          "free_rows": 646,
+          "fixed_rows": 114,
+          "setup_linear_residual_max": 2.7191398733198346e-17
+        },
+        {
+          "block": 2,
+          "free_rows": 646,
+          "fixed_rows": 114,
+          "setup_linear_residual_max": 2.7108005424880607e-18
+        },
+        {
+          "joint_velocity_KKT": true,
+          "free_rows": 1292,
+          "independent_rows": 104,
+          "weak_max": 3.468526346002056e-17,
+          "stationarity_max": 5.963633952951171e-20
+        }
+      ],
+      "scalar_domain": {
+        "admissible": true,
+        "scope": "declared finite scalar evaluation sets only",
+        "phase": "complete",
+        "failure": "",
+        "minimum_dimensionless_margin": 0.9952475688591296,
+        "limiting_functional_kind": "Point",
+        "limiting_inventory": "reconstruction_native",
+        "limiting_point": [
+          -0.1949600266546736,
+          0,
+          0.4
+        ],
+        "minimum_inner_k": 0.017598462904347165,
+        "minimum_outer_k": 0.01759889143087592,
+        "minimum_outer_epsilon": 0.001162291481739741,
+        "minimum_sampled_K": 0.01759889143087927,
+        "minimum_projected_trace_epsilon": 0.1430512592910451,
+        "minimum_b": null,
+        "minimum_lambda": null,
+        "normalization_applicable": false,
+        "minimum_budget_ratio": 3.056583773528824,
+        "maximum_budget_relative_defect": 0,
+        "cutoff_range": [
+          0.0008312858196541346,
+          0.0008312858196541346
+        ],
+        "inventory_counts": {
+          "actual_lifted_outer_epsilon": 40339,
+          "budget_awf_reporting_volume": 33792,
+          "constitutive_budget_awf_ray": 83552,
+          "constitutive_budget_reporting_source_ray": 114688,
+          "constitutive_matching_K": 373,
+          "interface_inner": 48,
+          "interface_outer": 96,
+          "mass_volume": 7680,
+          "matching_trace_nodes": 96,
+          "physical_matching_transfer": 722,
+          "physical_sampled_K": 734,
+          "prescribed_source_inner": 26112,
+          "projected_dependent_trace": 607,
+          "reconstruction_dense": 12888,
+          "reconstruction_native": 30720,
+          "source_volume_outer": 21504,
+          "trace_budget_awf_ray": 9632,
+          "volume_normalization_ray": 21504
+        },
+        "profile_branch_pattern": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "fields_changed": "joint free U/W and retained H2i k H1; native continuity/essential and k interface traces fixed; epsilon/pressure unchanged",
+      "baseline_audit": {
+        "admissible": [
+          1
+        ],
+        "accepted_awf_covariance": [
+          0.006313810502582694,
+          0.005844287634695647
+        ],
+        "accepted_awf_hard_admissible": [
+          1
+        ],
+        "strong_continuity": [
+          3.174479504974937e-15,
+          2.3725045810444114e-14,
+          -5.424670545323333e-19,
+          -4.4374506328542236e-17,
+          1.2836953722228372e-16
+        ],
+        "coupled_norms": [
+          0.1342977314154306,
+          0.004721204609822981,
+          0.047614930316132766,
+          0.001789776898368124,
+          1.3536838226788089e-17,
+          9.05536526509751e-18,
+          1.5356688395594293e-18,
+          0
+        ],
+        "interface": [
+          0.8000000000000002,
+          -0.0020649365945565007,
+          7.169799213186893e-15,
+          2.889418507316297e-14,
+          7.17134684968812e-15,
+          8.058379538710857e-16,
+          0,
+          -5.735839354397589e-15
+        ],
+        "maximum_abs_Ux_W": [
+          1.1027070537387903e-12,
+          0
+        ]
+      },
+      "scalar_H1_audit": {
+        "admissible": [
+          1
+        ],
+        "accepted_awf_covariance": [
+          0.005889891470088216,
+          0.005816031745130054
+        ],
+        "accepted_awf_hard_admissible": [
+          1
+        ],
+        "strong_continuity": [
+          0.0002966571367168537,
+          0.000430732279402083,
+          -5.470476263058193e-19,
+          -4.4413669663466806e-17,
+          1.2836953722228372e-16
+        ],
+        "coupled_norms": [
+          0.01617681636194342,
+          0.0011250820427413045,
+          0.005036920857969016,
+          0.0029290891088814336,
+          7.812283217915196e-05,
+          2.2250635127828076e-05,
+          1.5356688395594293e-18,
+          0
+        ],
+        "interface": [
+          0.8000000000000002,
+          -0.0020649365945565007,
+          2.9859751940793068e-05,
+          0.000407889954167818,
+          3.639994244246034e-05,
+          1.1636362416748725e-05,
+          0,
+          2.3312615619801064e-05
+        ],
+        "maximum_abs_Ux_W": [
+          0.08283020364658734,
+          0
+        ]
+      },
+      "joint_audit": {
+        "admissible": [
+          1
+        ],
+        "accepted_awf_covariance": [
+          0.005889664228685443,
+          0.005840996900243809
+        ],
+        "accepted_awf_hard_admissible": [
+          1
+        ],
+        "strong_continuity": [
+          0.00029661067260566474,
+          0.0003367865461653555,
+          -1.3864953273430084e-19,
+          -4.480853260067512e-17,
+          1.2836927446085648e-16
+        ],
+        "coupled_norms": [
+          0.016068680947073914,
+          0.0021110902076895035,
+          0.005037041031202087,
+          0.0029292366889426377,
+          1.1081597004604946e-17,
+          5.347381739619699e-17,
+          1.5356688395594293e-18,
+          0
+        ],
+        "interface": [
+          0.8000000000000002,
+          -0.0020649365945565007,
+          2.9826959835355712e-05,
+          0.0004078897374631709,
+          3.7131877407470607e-05,
+          1.1636362416748725e-05,
+          4.07821548684569e-19,
+          2.3283053558264246e-05
+        ],
+        "maximum_abs_Ux_W": [
+          0.08258482762304535,
+          6.589574316792589e-05
+        ]
+      },
+      "baseline": {
+        "selected_spatial_norms": [
+          0.13429773141543055,
+          0.0047212046098229835,
+          0.047614930316132974,
+          0.0017897768983681254,
+          1.3536838226788089e-17,
+          9.05536526509751e-18,
+          1.5356688395594293e-18,
+          7.76590435922716
+        ],
+        "analytical_free_load_norms": [
+          1.8289334267654035e-13,
+          5.747769532866791e-15,
+          9.899641676256092e-15,
+          6.734597270778507e-16,
+          0,
+          0,
+          1.5356688395594293e-18,
+          7.765804129119454
+        ],
+        "radial_errors": [
+          {
+            "bounds": [
+              0,
+              1.5570612247636407e-05
+            ],
+            "dimensional_errors": [
+              1.2690040306782136e-08,
+              0.007510253551096681,
+              1.5034037455495009e-09,
+              0.0007273311234746482,
+              0,
+              3.393779693527548e-08,
+              1.002269163700348e-09,
+              1.3080859419155555e-05
+            ]
+          },
+          {
+            "bounds": [
+              1.5570612247636407e-05,
+              5e-05
+            ],
+            "dimensional_errors": [
+              9.957177069656338e-08,
+              0.02827329391519854,
+              1.2902751006165607e-08,
+              0.0037333843575243714,
+              0,
+              1.5512979247398685e-07,
+              8.601834004111073e-09,
+              9.469676328199672e-05
+            ]
+          },
+          {
+            "bounds": [
+              5e-05,
+              0.0002
+            ],
+            "dimensional_errors": [
+              2.105636105600198e-06,
+              0.15226139061430471,
+              1.2783727817999083e-07,
+              0.008718025612175178,
+              0,
+              1.5483040624372992e-06,
+              8.522485211999225e-08,
+              0.0010788997910944236
+            ]
+          },
+          {
+            "bounds": [
+              0.0002,
+              0.0008312858196541338
+            ],
+            "dimensional_errors": [
+              5.789767189088223e-06,
+              0.17338945367526004,
+              3.941875261860219e-07,
+              0.008889568885558346,
+              0,
+              3.001883992967991e-06,
+              2.627916841240165e-07,
+              0.0013696124741653575
+            ]
+          },
+          {
+            "bounds": [
+              0.0008312858196541338,
+              0.0022472751006336437
+            ],
+            "dimensional_errors": [
+              8.635154840818972e-06,
+              0.08512376457210444,
+              5.248599366906402e-07,
+              0.006522559833054857,
+              0,
+              5.870070151580136e-06,
+              3.499066244604271e-07,
+              0.0009093351944873607
+            ]
+          },
+          {
+            "bounds": [
+              0.0022472751006336437,
+              0.0065
+            ],
+            "dimensional_errors": [
+              2.290282246888604e-05,
+              0.07717403937079766,
+              7.501633654499953e-07,
+              0.0028615772423809735,
+              0,
+              7.203423466381307e-06,
+              5.001089103000044e-07,
+              0.0007932036763306358
+            ]
+          },
+          {
+            "bounds": [
+              0.0065,
+              0.012
+            ],
+            "dimensional_errors": [
+              5.668931949010798e-06,
+              0.011239995544892207,
+              3.510706513783019e-17,
+              4.615231271306581e-14,
+              6.112701799656563e-06,
+              4.780192548272796e-06,
+              2.282395627322518e-06,
+              0.00013591265827602445
+            ]
+          },
+          {
+            "bounds": [
+              0.012,
+              0.025
+            ],
+            "dimensional_errors": [
+              5.682215138414989e-06,
+              0.008683532078804469,
+              1.110063205083393e-17,
+              6.413130162096542e-15,
+              7.325153563414852e-06,
+              5.781487446658673e-06,
+              2.7350475357982305e-06,
+              0.00010433472508947396
+            ]
+          },
+          {
+            "bounds": [
+              0.025,
+              0.05
+            ],
+            "dimensional_errors": [
+              6.34498885841756e-06,
+              0.00496318613734114,
+              1.078457645002739e-17,
+              2.8013678856789718e-15,
+              4.046313739682438e-06,
+              7.0249743023228685e-06,
+              3.2999569113325496e-06,
+              5.956304969256653e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.05,
+              0.1
+            ],
+            "dimensional_errors": [
+              9.021393238053562e-06,
+              0.0034951627433646012,
+              9.32307036650244e-18,
+              1.015149512323136e-15,
+              2.795538801974766e-06,
+              1.0037890442938116e-05,
+              4.7495615557701704e-06,
+              4.201376147320805e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.1,
+              0.2
+            ],
+            "dimensional_errors": [
+              1.2611072878395791e-05,
+              0.0024362716025425,
+              1.7897242518854822e-17,
+              1.794169584315942e-15,
+              1.986904569623459e-06,
+              1.3550203603273229e-05,
+              6.387972262221979e-06,
+              2.9260522358099075e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.2,
+              0.4
+            ],
+            "dimensional_errors": [
+              2.2918118982370197e-05,
+              0.0019746601426168763,
+              6.396439231940455e-17,
+              2.904874371421425e-15,
+              1.4167153626137511e-06,
+              2.564990595739532e-05,
+              1.2491613365552833e-05,
+              2.3840728894120942e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.4,
+              0.8
+            ],
+            "dimensional_errors": [
+              5.234977068274637e-05,
+              0.0017349530721857214,
+              2.8990903120378536e-16,
+              5.642248744953057e-15,
+              1.9302434221065643e-06,
+              3.026453639931754e-05,
+              1.366434987064112e-05,
+              2.0734891276395425e-05
+            ]
+          }
+        ],
+        "one_sided_derivative_jumps": [
+          {
+            "z": 1.5570612247636407e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -14.258296251789488,
+              -1.3628191378338563,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 5,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005545215422338837,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": -6.9920253916801425e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005479839737070324,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": -7.433661227475319e-07,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 5e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              19.264606442411605,
+              3.3403329437410405,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.00542808186569762,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 2.1250443751237726e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005538113479125727,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 2.1718176559893183e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0002,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -81.72382575698981,
+              -4.243472463485871,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.006017295571070891,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.0001058423273302018,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005149433599078691,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00015090566529979584,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0008312858196541338,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -20.564526596995023,
+              0.6119803547952829,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005979232208895794,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00020498466097177903,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005336086749407719,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00018584527623437394,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0022472751006336437,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -14.559668937312082,
+              0.7594568515220718,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.0061834694760186885,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.0001027294054273831,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005053576497796097,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 4.3792284845007794e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0065,
+            "raw_derivative_jumps_U_k_epsilon": [
+              0.4876713829830095,
+              3.747805384776509e-12,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005515726603499757,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 4.670182492462847e-16,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005515726603527747,
+                  0,
+                  0.0025601987309143304
+                ],
+                "physical_k_diffusive_flux_plus_z": -3.3882294211859893e-16,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0034957742793374482
+              }
+            ]
+          },
+          {
+            "z": 0.012,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.9439547715857657,
+              -1.8067051078982976e-12,
+              1.2506100935326652
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.00579141922357669,
+                  0,
+                  0.0026991658834240023
+                ],
+                "physical_k_diffusive_flux_plus_z": -6.197833148580579e-16,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0021123852746858353
+              },
+              {
+                "radial_side": 1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005359016296394674,
+                  0,
+                  0.002495630176763736
+                ],
+                "physical_k_diffusive_flux_plus_z": 6.866472169861435e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0018473411411534775
+              }
+            ]
+          },
+          {
+            "z": 0.025,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.3368411543533796,
+              -5.3368231824260465e-14,
+              0.3205692401250717
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.0057129103334858915,
+                  0,
+                  0.0026621478381642395
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.3021441313829575e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0010491019148368837
+              },
+              {
+                "radial_side": 1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005389662471086104,
+                  0,
+                  0.002510099232365056
+                ],
+                "physical_k_diffusive_flux_plus_z": 3.081227077583912e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0008880080637302406
+              }
+            ]
+          },
+          {
+            "z": 0.05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.15791825658742376,
+              -3.784068752141044e-14,
+              0.06847149183316775
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005695561476392556,
+                  0,
+                  0.0026526741916890386
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.906460491854825e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0005128992460357449
+              },
+              {
+                "radial_side": 1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005391764428856367,
+                  0,
+                  0.0025098923046963095
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.1921921669243985e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0004454242844909698
+              }
+            ]
+          },
+          {
+            "z": 0.1,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.08073519985194566,
+              -2.746621730886383e-14,
+              0.01766284446135409
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005699260864402588,
+                  0,
+                  0.002654672367882544
+                ],
+                "physical_k_diffusive_flux_plus_z": -3.1366991083649405e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0002574823411307034
+              },
+              {
+                "radial_side": 1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005388687217516928,
+                  0,
+                  0.002508690509618841
+                ],
+                "physical_k_diffusive_flux_plus_z": 5.873470815383416e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00022260695430397797
+              }
+            ]
+          },
+          {
+            "z": 0.2,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.03638440502245344,
+              1.7858863085114556e-14,
+              0.0042727517709190005
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005686095068983453,
+                  0,
+                  0.0026479903379402134
+                ],
+                "physical_k_diffusive_flux_plus_z": 7.660668159051448e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00012860607664089458
+              },
+              {
+                "radial_side": 1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005406249628749045,
+                  0,
+                  0.0025164559750023626
+                ],
+                "physical_k_diffusive_flux_plus_z": -3.918089172632698e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00011142437156201015
+              }
+            ]
+          },
+          {
+            "z": 0.4,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.029208659339475807,
+              -4.654826272831435e-14,
+              0.0014040833998527468
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005763198884814232,
+                  0,
+                  0.002689533980921567
+                ],
+                "physical_k_diffusive_flux_plus_z": -2.7305847264433416e-16,
+                "physical_epsilon_diffusive_flux_plus_z": 6.520741382786462e-05
+              },
+              {
+                "radial_side": 1,
+                "geometry": 77,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005314121528699822,
+                  0,
+                  0.0024781784632270116
+                ],
+                "physical_k_diffusive_flux_plus_z": 3.3608454388445414e-16,
+                "physical_epsilon_diffusive_flux_plus_z": 5.452479954052064e-05
+              }
+            ]
+          }
+        ],
+        "radial_global_free_sum_error": 8.051895196599379e-17,
+        "global_components": {
+          "conservative_advection": [
+            1.483685728860167e-13,
+            0,
+            9.017941866771145e-15,
+            5.418050590950635e-16,
+            0,
+            0,
+            0,
+            7.747785506642397
+          ],
+          "continuity": [
+            0,
+            0,
+            0,
+            0,
+            1.3536838226788089e-17,
+            9.05536526509751e-18,
+            0,
+            0
+          ],
+          "epsilon_destruction": [
+            0,
+            0,
+            0,
+            0.06370880928301566,
+            0,
+            0,
+            0,
+            0.009068791310901094
+          ],
+          "epsilon_diffusion": [
+            0,
+            0,
+            0,
+            0.015937797536363187,
+            0,
+            0,
+            0,
+            0.005033999261078362
+          ],
+          "epsilon_production": [
+            0,
+            0,
+            0,
+            0.04774779789964178,
+            0,
+            0,
+            0,
+            0.006797060265539117
+          ],
+          "epsilon_yap": [
+            0,
+            0,
+            0,
+            0.00011977736818492149,
+            0,
+            0,
+            0,
+            1.719531577920801e-05
+          ],
+          "external_advection": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_diffusion": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_traction": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "gauge": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1.5356688395594293e-18,
+            0
+          ],
+          "inner_k_destruction": [
+            0,
+            0,
+            0.23928755880573796,
+            0,
+            0,
+            0,
+            0,
+            0.013730179120136035
+          ],
+          "inner_k_production": [
+            0,
+            0,
+            0.262934878113335,
+            0,
+            0,
+            0,
+            0,
+            0.012433830709870078
+          ],
+          "inner_momentum_stress": [
+            0.3008950141200635,
+            0.13119406170016343,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.020438881146262296
+          ],
+          "k_diffusion": [
+            0,
+            0,
+            0.0872437277570243,
+            0,
+            0,
+            0,
+            0,
+            0.002213817827399395
+          ],
+          "outer_k_destruction": [
+            0,
+            0,
+            0.061583276857383386,
+            0,
+            0,
+            0,
+            0,
+            0.009362112602703695
+          ],
+          "outer_k_production": [
+            0,
+            0,
+            0.0615715841323093,
+            0,
+            0,
+            0,
+            0,
+            0.009362274740931015
+          ],
+          "outer_momentum_stress": [
+            0.28666690443736564,
+            0.13299321627583352,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.023450257835903952
+          ],
+          "prescribed_body": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "prescribed_scalar_source": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "roughness_force": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "errors": [
+          6.517604594109067e-05,
+          0.2599164092456848,
+          1.0050462400833363e-06,
+          0.01484008038926015,
+          1.1175482179685279e-05,
+          0.005522618844471731
+        ],
+        "signed_components": {
+          "conservative_advection": [
+            2.4095038147944165e-16,
+            0.0,
+            -7.689143953527063e-17,
+            -4.118249540365901e-15
+          ],
+          "continuity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inner_k_destruction": [
+            0.0,
+            0.0,
+            -0.036742276692391766,
+            0.0
+          ],
+          "inner_k_production": [
+            0.0,
+            0.0,
+            0.09151536005330996,
+            0.0
+          ],
+          "inner_momentum_stress": [
+            0.7317573391247806,
+            -10.162148750700446,
+            0.0,
+            0.0
+          ],
+          "k_diffusion": [
+            0.0,
+            0.0,
+            0.9453631626562328,
+            0.0
+          ],
+          "prescribed_scalar_source": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "roughness_force": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "epsilon_destruction": [
+            0.0,
+            0.0,
+            0.0,
+            -0.19115671430694645
+          ],
+          "epsilon_diffusion": [
+            0.0,
+            0.0,
+            0.0,
+            0.9742496536273575
+          ],
+          "epsilon_production": [
+            0.0,
+            0.0,
+            0.0,
+            0.21673800313678065
+          ],
+          "epsilon_yap": [
+            0.0,
+            0.0,
+            0.0,
+            0.0001690575428476408
+          ],
+          "outer_k_destruction": [
+            0.0,
+            0.0,
+            0.010771936947930045,
+            0.0
+          ],
+          "outer_k_production": [
+            0.0,
+            0.0,
+            -0.010908182965088796,
+            0.0
+          ],
+          "outer_momentum_stress": [
+            0.26824266087522153,
+            11.162148750700448,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "scalar_H1": {
+        "selected_spatial_norms": [
+          0.016176816361944076,
+          0.0011250820427413026,
+          0.005036920857969035,
+          0.002929089108881382,
+          7.812283217915196e-05,
+          2.2250635127828076e-05,
+          1.5356688395594293e-18,
+          7.765848664831746
+        ],
+        "analytical_free_load_norms": [
+          1.8289334267654035e-13,
+          5.747769532866791e-15,
+          9.899641676256092e-15,
+          6.734597270778507e-16,
+          0,
+          0,
+          1.5356688395594293e-18,
+          7.765804129119454
+        ],
+        "radial_errors": [
+          {
+            "bounds": [
+              0,
+              1.5570612247636407e-05
+            ],
+            "dimensional_errors": [
+              2.7681885485977126e-09,
+              0.0016385567423373363,
+              3.4438329226095053e-10,
+              0.00015967959854780708,
+              0,
+              7.402298366138438e-09,
+              2.295888615073651e-10,
+              2.847961849149568e-06
+            ]
+          },
+          {
+            "bounds": [
+              1.5570612247636407e-05,
+              5e-05
+            ],
+            "dimensional_errors": [
+              2.2015661476106554e-08,
+              0.006245523861109036,
+              2.8374459503435044e-09,
+              0.0008191484797591069,
+              0,
+              3.420112397864658e-08,
+              1.891630633562458e-09,
+              2.0873952520597924e-05
+            ]
+          },
+          {
+            "bounds": [
+              5e-05,
+              0.0002
+            ],
+            "dimensional_errors": [
+              6.929361968165234e-07,
+              0.04695168929155871,
+              2.7912657133051177e-08,
+              0.0019078164075825386,
+              0,
+              4.287035419988721e-07,
+              1.860843808870073e-08,
+              0.00029593909463168346
+            ]
+          },
+          {
+            "bounds": [
+              0.0002,
+              0.0008312858196541338
+            ],
+            "dimensional_errors": [
+              9.495923202367158e-06,
+              0.15141995800636893,
+              4.395957782797635e-07,
+              0.007033077948749453,
+              0,
+              2.9365175688771085e-06,
+              2.930638521865143e-07,
+              0.0012708354583833023
+            ]
+          },
+          {
+            "bounds": [
+              0.0008312858196541338,
+              0.0022472751006336437
+            ],
+            "dimensional_errors": [
+              7.4330918838362065e-06,
+              0.05281000204793656,
+              7.993440281113298e-07,
+              0.0057053298930828675,
+              0,
+              2.8605824030748764e-06,
+              5.328960187408875e-07,
+              0.0005361357313828896
+            ]
+          },
+          {
+            "bounds": [
+              0.0022472751006336437,
+              0.0065
+            ],
+            "dimensional_errors": [
+              2.0616491632282076e-05,
+              0.049265456399556276,
+              7.471313332997419e-07,
+              0.0018327921665841987,
+              0,
+              6.584012114447995e-06,
+              4.980875555331652e-07,
+              0.0005229091512576994
+            ]
+          },
+          {
+            "bounds": [
+              0.0065,
+              0.012
+            ],
+            "dimensional_errors": [
+              3.2382760922085417e-06,
+              0.0057934757232758136,
+              8.294631253658874e-18,
+              1.009433543938137e-14,
+              6.112701799656563e-06,
+              2.1446369816300057e-06,
+              1.0883672043293161e-06,
+              7.029707554304993e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.012,
+              0.025
+            ],
+            "dimensional_errors": [
+              9.115924060312968e-06,
+              0.007247431701304036,
+              6.915850267614412e-18,
+              1.740052088302659e-15,
+              7.325153563414852e-06,
+              5.023244269522072e-06,
+              2.401227939278862e-06,
+              8.70634974270572e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.025,
+              0.05
+            ],
+            "dimensional_errors": [
+              9.182971223777777e-06,
+              0.004200995879504672,
+              1.1810880992967539e-17,
+              2.190458407354598e-15,
+              4.046313739682438e-06,
+              5.976843182384799e-06,
+              2.829573086785338e-06,
+              5.040076595241563e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.05,
+              0.1
+            ],
+            "dimensional_errors": [
+              1.0916003312641912e-05,
+              0.003093618628818135,
+              1.9874948463398118e-17,
+              2.930704352322509e-15,
+              2.795538801974766e-06,
+              9.010400258092615e-06,
+              4.287707189782504e-06,
+              3.7178248633118755e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.1,
+              0.2
+            ],
+            "dimensional_errors": [
+              1.3390762352627478e-05,
+              0.002318329770343229,
+              3.298584916873761e-17,
+              2.3680848972914973e-15,
+              1.986904569623459e-06,
+              1.3489279409919895e-05,
+              6.366930317203171e-06,
+              2.785181181857191e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.2,
+              0.4
+            ],
+            "dimensional_errors": [
+              1.871143120780201e-05,
+              0.0017527453625718712,
+              8.853389411559711e-17,
+              3.781031544090266e-15,
+              1.4167153626137511e-06,
+              2.1052332824752504e-05,
+              1.0460172349907864e-05,
+              2.1143373043562933e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.4,
+              0.8
+            ],
+            "dimensional_errors": [
+              3.159819786068654e-05,
+              0.001231749328861596,
+              1.3050125222640321e-16,
+              2.9131456909635293e-15,
+              1.9302434221065643e-06,
+              2.542735223589876e-05,
+              1.6756682322213023e-05,
+              1.5085371972937512e-05
+            ]
+          }
+        ],
+        "one_sided_derivative_jumps": [
+          {
+            "z": 1.5570612247636407e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -2.3526414324367124,
+              -0.09543784598287164,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 5,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005519715014499887,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.70867545723075e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005508927923032535,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.271083582893176e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 5e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -6.797144965566304,
+              0.5214028520162215,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.0055077737118388054,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.0674321468584813e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005468951178427509,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 7.696279990039068e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0002,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -37.35533647578711,
+              -1.5629052568201498,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005641165326329481,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.0001276972349879755,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005244472248417182,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00014429442712450368,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0008312858196541338,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -18.55689688111491,
+              0.12333275595030369,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005931439936280453,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00019296203149042184,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005351082109175333,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00018910486018032811,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0022472751006336437,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -7.045007787683431,
+              0.47743493016821337,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005807431085305525,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 8.860141750417875e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005260708157394189,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 5.155041191621462e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0065,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -1.1622364583907476,
+              0.04832516925882997,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005824366165792513,
+                  0,
+                  0.002560198730907161
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.0474448454323078e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005458260425013859,
+                  0,
+                  0.0025333431956078324
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.224680261318994e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0035204839428903704
+              }
+            ]
+          },
+          {
+            "z": 0.012,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.4810456175564415,
+              -2.173072908059494e-13,
+              1.2506100935326652
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005626413709233496,
+                  0,
+                  0.0026211004479384306
+                ],
+                "physical_k_diffusive_flux_plus_z": -7.629559565366742e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.002159847430872477
+              },
+              {
+                "radial_side": 1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005402890308494222,
+                  0,
+                  0.0025161292624989364
+                ],
+                "physical_k_diffusive_flux_plus_z": 8.139731100714724e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.001837761898013495
+              }
+            ]
+          },
+          {
+            "z": 0.025,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.2664373004329592,
+              -6.309413561714312e-15,
+              0.3205692401250717
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005673875733247001,
+                  0,
+                  0.002643723686751545
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.6697687029088974e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00105460912428825
+              },
+              {
+                "radial_side": 1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005417851693056711,
+                  0,
+                  0.002523312102926176
+                ],
+                "physical_k_diffusive_flux_plus_z": 3.504233151343797e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0008850215663767889
+              }
+            ]
+          },
+          {
+            "z": 0.05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.1295689906679245,
+              1.3163780280070337e-14,
+              0.06847149183316775
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005661130474645207,
+                  0,
+                  0.002636459144552584
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.1144383433137167e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0005152591159518965
+              },
+              {
+                "radial_side": 1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005411426667351091,
+                  0,
+                  0.0025191316115275343
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.0332059061937777e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0004443832859761494
+              }
+            ]
+          },
+          {
+            "z": 0.1,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.0725204263533894,
+              1.557957478153037e-14,
+              0.01766284446135409
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005681062542251538,
+                  0,
+                  0.002646125938250348
+                ],
+                "physical_k_diffusive_flux_plus_z": 3.168790738450264e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0002581120022160332
+              },
+              {
+                "radial_side": 1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005401915912098479,
+                  0,
+                  0.002514925953097935
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.8914124395768127e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0002222583090913442
+              }
+            ]
+          },
+          {
+            "z": 0.2,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.038050314336601665,
+              -1.3735961541551764e-16,
+              0.0042727517709190005
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005691501814926216,
+                  0,
+                  0.0026505392853764104
+                ],
+                "physical_k_diffusive_flux_plus_z": 2.654021953788433e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00012851311797678282
+              },
+              {
+                "radial_side": 1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005398776143384061,
+                  0,
+                  0.0025129601594129428
+                ],
+                "physical_k_diffusive_flux_plus_z": 3.6667601295549984e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0001115238003252819
+              }
+            ]
+          },
+          {
+            "z": 0.4,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.022548715919674833,
+              4.618088599351659e-15,
+              0.0014040833998527468
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005716810257509947,
+                  0,
+                  0.002667965101409717
+                ],
+                "physical_k_diffusive_flux_plus_z": 5.221478362880844e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 6.562751343870849e-05
+              },
+              {
+                "radial_side": 1,
+                "geometry": 77,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005370442193578393,
+                  0,
+                  0.0025048963894313235
+                ],
+                "physical_k_diffusive_flux_plus_z": -7.053439851512059e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 5.416987059344401e-05
+              }
+            ]
+          }
+        ],
+        "radial_global_free_sum_error": 6.37470643356482e-17,
+        "global_components": {
+          "conservative_advection": [
+            0.0010992066851006985,
+            0,
+            2.9665575391369135e-05,
+            3.2563613605884176e-06,
+            0,
+            0,
+            0,
+            7.747716112859258
+          ],
+          "continuity": [
+            0,
+            0,
+            0,
+            0,
+            7.812283217915196e-05,
+            2.2250635127828076e-05,
+            0,
+            0
+          ],
+          "epsilon_destruction": [
+            0,
+            0,
+            0,
+            0.06370880928301699,
+            0,
+            0,
+            0,
+            0.009068791310901126
+          ],
+          "epsilon_diffusion": [
+            0,
+            0,
+            0,
+            0.016443569184655133,
+            0,
+            0,
+            0,
+            0.0050426717670466505
+          ],
+          "epsilon_production": [
+            0,
+            0,
+            0,
+            0.04787054623545036,
+            0,
+            0,
+            0,
+            0.00680006927162904
+          ],
+          "epsilon_yap": [
+            0,
+            0,
+            0,
+            0.00011977736818406443,
+            0,
+            0,
+            0,
+            1.7195315779191235e-05
+          ],
+          "external_advection": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_diffusion": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_traction": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "gauge": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1.5356688395594293e-18,
+            0
+          ],
+          "inner_k_destruction": [
+            0,
+            0,
+            0.23928755880573796,
+            0,
+            0,
+            0,
+            0,
+            0.013730179120136035
+          ],
+          "inner_k_production": [
+            0,
+            0,
+            0.26284568072930486,
+            0,
+            0,
+            0,
+            0,
+            0.012419624567625796
+          ],
+          "inner_momentum_stress": [
+            0.2855787716492361,
+            0.1311940698394515,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.02042369266540654
+          ],
+          "k_diffusion": [
+            0,
+            0,
+            0.07469251362444558,
+            0,
+            0,
+            0,
+            0,
+            0.002144190039955389
+          ],
+          "outer_k_destruction": [
+            0,
+            0,
+            0.061583276857383386,
+            0,
+            0,
+            0,
+            0,
+            0.009362112602703695
+          ],
+          "outer_k_production": [
+            0,
+            0,
+            0.061595028880138306,
+            0,
+            0,
+            0,
+            0,
+            0.009362494471818045
+          ],
+          "outer_momentum_stress": [
+            0.2829320231080697,
+            0.13124230913017085,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.023503739224614704
+          ],
+          "prescribed_body": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "prescribed_scalar_source": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "roughness_force": [
+            4.315216750043752e-06,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            7.882579015657871e-08
+          ]
+        },
+        "errors": [
+          4.894785661477844e-05,
+          0.17468088104454738,
+          1.1794862605746981e-06,
+          0.009471555679987755,
+          1.1175482179685279e-05,
+          0.0055156365811015184
+        ],
+        "signed_components": {
+          "conservative_advection": [
+            0.00856346085458746,
+            0.0,
+            5.1214734705580826e-05,
+            3.1728691138157798e-06
+          ],
+          "continuity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inner_k_destruction": [
+            0.0,
+            0.0,
+            0.4027472695931942,
+            0.0
+          ],
+          "inner_k_production": [
+            0.0,
+            0.0,
+            1.1660690616042668,
+            0.0
+          ],
+          "inner_momentum_stress": [
+            3.368566141173204,
+            -4.5006512636084945,
+            0.0,
+            0.0
+          ],
+          "k_diffusion": [
+            0.0,
+            0.0,
+            -0.5669435691904962,
+            0.0
+          ],
+          "prescribed_scalar_source": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "roughness_force": [
+            -6.65157094541899e-07,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "epsilon_destruction": [
+            0.0,
+            0.0,
+            0.0,
+            -3.5488838929759283
+          ],
+          "epsilon_diffusion": [
+            0.0,
+            0.0,
+            0.0,
+            1.8539918708228
+          ],
+          "epsilon_production": [
+            0.0,
+            0.0,
+            0.0,
+            2.6885030534741157
+          ],
+          "epsilon_yap": [
+            0.0,
+            0.0,
+            0.0,
+            0.0063857958099145596
+          ],
+          "outer_k_destruction": [
+            0.0,
+            0.0,
+            -0.6368875698326544,
+            0.0
+          ],
+          "outer_k_production": [
+            0.0,
+            0.0,
+            0.6349635930909742,
+            0.0
+          ],
+          "outer_momentum_stress": [
+            -2.37712893687073,
+            5.500651263608489,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "projected": {
+        "selected_spatial_norms": [
+          0.016068680947073612,
+          0.0021110902076895296,
+          0.005037041031202056,
+          0.0029292366889425766,
+          1.1081597004604946e-17,
+          5.347381739619699e-17,
+          1.5356688395594293e-18,
+          7.7659330599290195
+        ],
+        "analytical_free_load_norms": [
+          1.8289334267654035e-13,
+          5.747769532866791e-15,
+          9.899641676256092e-15,
+          6.734597270778507e-16,
+          0,
+          0,
+          1.5356688395594293e-18,
+          7.765804129119454
+        ],
+        "radial_errors": [
+          {
+            "bounds": [
+              0,
+              1.5570612247636407e-05
+            ],
+            "dimensional_errors": [
+              2.7686543835466697e-09,
+              0.0016385664699504106,
+              3.4438329226095053e-10,
+              0.00015967959854780708,
+              0,
+              7.402338767022604e-09,
+              2.2957549077736513e-10,
+              2.8479723044150974e-06
+            ]
+          },
+          {
+            "bounds": [
+              1.5570612247636407e-05,
+              5e-05
+            ],
+            "dimensional_errors": [
+              2.2017540820074163e-08,
+              0.006245529471944729,
+              2.8374459503435044e-09,
+              0.0008191484797591069,
+              0,
+              3.420115128989086e-08,
+              1.8916298274247182e-09,
+              2.0873981681787433e-05
+            ]
+          },
+          {
+            "bounds": [
+              5e-05,
+              0.0002
+            ],
+            "dimensional_errors": [
+              6.929408779180088e-07,
+              0.046951692475212345,
+              2.7912657133051177e-08,
+              0.0019078164075825386,
+              0,
+              4.287035542289731e-07,
+              1.8608431573077477e-08,
+              0.00029593957200128813
+            ]
+          },
+          {
+            "bounds": [
+              0.0002,
+              0.0008312858196541338
+            ],
+            "dimensional_errors": [
+              9.495978925973772e-06,
+              0.1514199617543834,
+              4.395957782797635e-07,
+              0.007033077948749453,
+              0,
+              2.936516925872163e-06,
+              2.9306387479109693e-07,
+              0.001270843698565628
+            ]
+          },
+          {
+            "bounds": [
+              0.0008312858196541338,
+              0.0022472751006336437
+            ],
+            "dimensional_errors": [
+              7.433684376160149e-06,
+              0.05281002095147446,
+              7.993440281113298e-07,
+              0.0057053298930828675,
+              0,
+              2.8605794757324196e-06,
+              5.32897708112124e-07,
+              0.000536141995399955
+            ]
+          },
+          {
+            "bounds": [
+              0.0022472751006336437,
+              0.0065
+            ],
+            "dimensional_errors": [
+              2.0619438276985098e-05,
+              0.049265460598060244,
+              7.471313332997419e-07,
+              0.0018327921665841987,
+              0,
+              6.583965092537854e-06,
+              4.98797875540962e-07,
+              0.0005229190783862256
+            ]
+          },
+          {
+            "bounds": [
+              0.0065,
+              0.012
+            ],
+            "dimensional_errors": [
+              3.2875124066155594e-06,
+              0.005793567591681828,
+              8.294631253658874e-18,
+              1.009433543938137e-14,
+              6.112701799656563e-06,
+              2.145161836731901e-06,
+              1.0885951715061742e-06,
+              7.030514322544932e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.012,
+              0.025
+            ],
+            "dimensional_errors": [
+              9.154412347495273e-06,
+              0.007247339159944153,
+              6.915850267614412e-18,
+              1.740052088302659e-15,
+              7.325153563414852e-06,
+              5.023624260466454e-06,
+              2.401554491459481e-06,
+              8.70594822604546e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.025,
+              0.05
+            ],
+            "dimensional_errors": [
+              9.265135432114481e-06,
+              0.004200873071792554,
+              1.1810880992967539e-17,
+              2.190458407354598e-15,
+              4.046313739682438e-06,
+              5.977024917021044e-06,
+              2.8300585921892597e-06,
+              5.0397565437119705e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.05,
+              0.1
+            ],
+            "dimensional_errors": [
+              1.0987598050909366e-05,
+              0.0030938076871526096,
+              1.9874948463398118e-17,
+              2.930704352322509e-15,
+              2.795538801974766e-06,
+              9.012011251809103e-06,
+              4.293943484854635e-06,
+              3.7181509252941305e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.1,
+              0.2
+            ],
+            "dimensional_errors": [
+              1.3488829805245134e-05,
+              0.0023162408969862737,
+              3.298584916873761e-17,
+              2.3680848972914973e-15,
+              1.986904569623459e-06,
+              1.3456786160042125e-05,
+              6.369497351160508e-06,
+              2.7825558186637054e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.2,
+              0.4
+            ],
+            "dimensional_errors": [
+              1.9405138451940337e-05,
+              0.0017678816708622193,
+              8.853389411559711e-17,
+              3.781031544090266e-15,
+              1.4167153626137511e-06,
+              2.1389733337979193e-05,
+              1.2279301683503825e-05,
+              2.1275107060287592e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.4,
+              0.8
+            ],
+            "dimensional_errors": [
+              3.6794020974229515e-05,
+              0.0012620196637732652,
+              1.3050125222640321e-16,
+              2.9131456909635293e-15,
+              1.9302434221065643e-06,
+              3.122208160035373e-05,
+              1.5939070664399023e-05,
+              1.6906916771976985e-05
+            ]
+          }
+        ],
+        "one_sided_derivative_jumps": [
+          {
+            "z": 1.5570612247636407e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -2.3526414324405778,
+              -0.09543784598287164,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 5,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005519719097370463,
+                  0,
+                  0.002560198693203239
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.70867545723075e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005508932005903094,
+                  0,
+                  0.002560198693203267
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.271083582893176e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 5e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -6.797144965656116,
+              0.5214028520162215,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005507778770915281,
+                  0,
+                  0.0025601988520989553
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.0674321468584813e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005468956237503471,
+                  0,
+                  0.0025601988520971212
+                ],
+                "physical_k_diffusive_flux_plus_z": 7.696279990039068e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0002,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -37.35533648224106,
+              -1.5629052568201498,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005641174518067008,
+                  0,
+                  0.0025601981740357473
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.0001276972349879755,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005244481440086171,
+                  0,
+                  0.0025601981741707205
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00014429442712450368,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0008312858196541338,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -18.556896949021393,
+              0.12333275595030369,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005931464493357964,
+                  0,
+                  0.002560202260905367
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00019296203149042184,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005351106664129103,
+                  0,
+                  0.002560202255583087
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00018910486018032811,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0022472751006336437,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -7.045009003688904,
+              0.47743493016821337,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005807480207344144,
+                  0,
+                  0.0025601716190071177
+                ],
+                "physical_k_diffusive_flux_plus_z": 8.860141750417875e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005260757185065549,
+                  0,
+                  0.0025601720888550608
+                ],
+                "physical_k_diffusive_flux_plus_z": 5.155041191621462e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0065,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -1.1622387280455655,
+              0.04832516925882997,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005824433177218369,
+                  0,
+                  0.002560505340974313
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.0474448454323078e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.0054583319690201405,
+                  0,
+                  0.002533552819263006
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.224637398067711e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0035204482243558193
+              }
+            ]
+          },
+          {
+            "z": 0.012,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.481050903185805,
+              -2.173072908059494e-13,
+              1.2506100935326652
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005626449116312198,
+                  0,
+                  0.0026210289557443145
+                ],
+                "physical_k_diffusive_flux_plus_z": -7.629495487601916e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.002159829291136553
+              },
+              {
+                "radial_side": 1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005402926239101789,
+                  0,
+                  0.0025160556628356767
+                ],
+                "physical_k_diffusive_flux_plus_z": 8.13966756369443e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.001837747552832608
+              }
+            ]
+          },
+          {
+            "z": 0.025,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.26644248555553585,
+              -6.309413561714312e-15,
+              0.3205692401250717
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.0056738497282257565,
+                  0,
+                  0.0026435860119270373
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.6697640589926839e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.001054606191237461
+              },
+              {
+                "radial_side": 1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005417821078694398,
+                  0,
+                  0.0025231771638397713
+                ],
+                "physical_k_diffusive_flux_plus_z": 3.504225947402418e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0008850197469648925
+              }
+            ]
+          },
+          {
+            "z": 0.05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.12956691408626364,
+              1.3163780280070337e-14,
+              0.06847149183316775
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005661069555203407,
+                  0,
+                  0.0026361745408791173
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.1144380163166701e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0005152589647652382
+              },
+              {
+                "radial_side": 1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.00541136906804009,
+                  0,
+                  0.0025188304038096087
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.033205103670911e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00044438294080995707
+              }
+            ]
+          },
+          {
+            "z": 0.1,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.07254445909493934,
+              1.557957478153037e-14,
+              0.01766284446135409
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005681086475138646,
+                  0,
+                  0.0026451292298579725
+                ],
+                "physical_k_diffusive_flux_plus_z": 3.168778464439735e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00025811100244366115
+              },
+              {
+                "radial_side": 1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005401846439951934,
+                  0,
+                  0.0025147663528233936
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.891427037459977e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0002222600244765032
+              }
+            ]
+          },
+          {
+            "z": 0.2,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.03786370516872206,
+              -1.3735961541551764e-16,
+              0.0042727517709190005
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005691047063522696,
+                  0,
+                  0.0026518270543741864
+                ],
+                "physical_k_diffusive_flux_plus_z": 2.654180906470634e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00012852081478756893
+              },
+              {
+                "radial_side": 1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005399776147483537,
+                  0,
+                  0.002511544701742724
+                ],
+                "physical_k_diffusive_flux_plus_z": 3.66631990710544e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00011151041104460121
+              }
+            ]
+          },
+          {
+            "z": 0.4,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.023123430523871447,
+              4.618088599351659e-15,
+              0.0014040833998527468
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005723974353505605,
+                  0,
+                  0.0026600782482199548
+                ],
+                "physical_k_diffusive_flux_plus_z": 5.217487261093515e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 6.55773502343476e-05
+              },
+              {
+                "radial_side": 1,
+                "geometry": 77,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005368936642921144,
+                  0,
+                  0.002503625223980151
+                ],
+                "physical_k_diffusive_flux_plus_z": -7.056018043687287e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 5.418967090923846e-05
+              }
+            ]
+          }
+        ],
+        "radial_global_free_sum_error": 8.336159453697922e-17,
+        "global_components": {
+          "conservative_advection": [
+            0.0008296491888124514,
+            0.0003344732818790853,
+            2.535422513662421e-05,
+            3.971919806125708e-06,
+            0,
+            0,
+            0,
+            7.747851109797029
+          ],
+          "continuity": [
+            0,
+            0,
+            0,
+            0,
+            1.1081597004604946e-17,
+            5.347381739619699e-17,
+            0,
+            0
+          ],
+          "epsilon_destruction": [
+            0,
+            0,
+            0,
+            0.06370880928301699,
+            0,
+            0,
+            0,
+            0.009068791310901126
+          ],
+          "epsilon_diffusion": [
+            0,
+            0,
+            0,
+            0.01644331948399728,
+            0,
+            0,
+            0,
+            0.005042616336841956
+          ],
+          "epsilon_production": [
+            0,
+            0,
+            0,
+            0.047871425055288824,
+            0,
+            0,
+            0,
+            0.006800214323949577
+          ],
+          "epsilon_yap": [
+            0,
+            0,
+            0,
+            0.00011977736818406443,
+            0,
+            0,
+            0,
+            1.7195315779191235e-05
+          ],
+          "external_advection": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_diffusion": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_traction": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "gauge": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1.5356688395594293e-18,
+            0
+          ],
+          "inner_k_destruction": [
+            0,
+            0,
+            0.23928755880573796,
+            0,
+            0,
+            0,
+            0,
+            0.013730179120136035
+          ],
+          "inner_k_production": [
+            0,
+            0,
+            0.2628480652664505,
+            0,
+            0,
+            0,
+            0,
+            0.012419912448862667
+          ],
+          "inner_momentum_stress": [
+            0.28558282344742986,
+            0.13119408143699893,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.020423708564298627
+          ],
+          "k_diffusion": [
+            0,
+            0,
+            0.07469251362444558,
+            0,
+            0,
+            0,
+            0,
+            0.002144190039955389
+          ],
+          "outer_k_destruction": [
+            0,
+            0,
+            0.061583276857383386,
+            0,
+            0,
+            0,
+            0,
+            0.009362112602703695
+          ],
+          "outer_k_production": [
+            0,
+            0,
+            0.06159581117888943,
+            0,
+            0,
+            0,
+            0,
+            0.00936252557745717
+          ],
+          "outer_momentum_stress": [
+            0.2829328560682198,
+            0.13125310331070722,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.023433424625734355
+          ],
+          "prescribed_body": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "prescribed_scalar_source": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "roughness_force": [
+            6.9193188332748164e-06,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2.1657911057200913e-07
+          ]
+        },
+        "errors": [
+          5.2768969381488065e-05,
+          0.17468123283660847,
+          1.1794862605746981e-06,
+          0.009471555679987755,
+          1.1175482179685279e-05,
+          0.005515640765412121
+        ],
+        "signed_components": {
+          "conservative_advection": [
+            0.004006967864155099,
+            0.10583154963030772,
+            3.6817798709348365e-05,
+            4.1008020137636385e-06
+          ],
+          "continuity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inner_k_destruction": [
+            0.0,
+            0.0,
+            0.377497768840493,
+            0.0
+          ],
+          "inner_k_production": [
+            0.0,
+            0.0,
+            1.1908745007798642,
+            0.0
+          ],
+          "inner_momentum_stress": [
+            3.4144470487905183,
+            -1.338592571417809,
+            0.0,
+            0.0
+          ],
+          "k_diffusion": [
+            0.0,
+            0.0,
+            -0.5665285191411649,
+            0.0
+          ],
+          "prescribed_scalar_source": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "roughness_force": [
+            -8.612063908838026e-07,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "epsilon_destruction": [
+            0.0,
+            0.0,
+            0.0,
+            -3.5532827421214512
+          ],
+          "epsilon_diffusion": [
+            0.0,
+            0.0,
+            0.0,
+            1.8550011465626377
+          ],
+          "epsilon_production": [
+            0.0,
+            0.0,
+            0.0,
+            2.691883459091697
+          ],
+          "epsilon_yap": [
+            0.0,
+            0.0,
+            0.0,
+            0.006394035665122571
+          ],
+          "outer_k_destruction": [
+            0.0,
+            0.0,
+            -0.6387536237609541,
+            0.0
+          ],
+          "outer_k_production": [
+            0.0,
+            0.0,
+            0.6368730554830431,
+            0.0
+          ],
+          "outer_momentum_stress": [
+            -2.418453155448323,
+            2.232761021787507,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "preserved_k_epsilon_pressure_bits": true
+    },
+    "standard": {
+      "base_sha256": "84fa937c3410c7e3b0cc0b85e748c9bf1f06de40b40a1334aff6693d08628470",
+      "state_sha256": "4647db0c4ffcacd2621a041242ae33b6facdf600e73bcff56101ab07b3fdb8d1",
+      "setup": [
+        {
+          "block": 0,
+          "free_rows": 646,
+          "fixed_rows": 114,
+          "setup_linear_residual_max": 2.7628467733981565e-17
+        },
+        {
+          "block": 2,
+          "free_rows": 646,
+          "fixed_rows": 114,
+          "setup_linear_residual_max": 2.939034656285593e-18
+        },
+        {
+          "joint_velocity_KKT": true,
+          "free_rows": 1292,
+          "independent_rows": 104,
+          "weak_max": 3.472454461294948e-17,
+          "stationarity_max": 6.488073768022991e-20
+        }
+      ],
+      "scalar_domain": {
+        "admissible": true,
+        "scope": "declared finite scalar evaluation sets only",
+        "phase": "complete",
+        "failure": "",
+        "minimum_dimensionless_margin": 0.9952475688591296,
+        "limiting_functional_kind": "Point",
+        "limiting_inventory": "reconstruction_native",
+        "limiting_point": [
+          -0.1949600266546736,
+          0,
+          0.4
+        ],
+        "minimum_inner_k": 0.018385326818509348,
+        "minimum_outer_k": 0.01838575534503884,
+        "minimum_outer_epsilon": 0.001162291481739741,
+        "minimum_sampled_K": 0.01838575534504143,
+        "minimum_projected_trace_epsilon": 0.1430512592910451,
+        "minimum_b": null,
+        "minimum_lambda": null,
+        "normalization_applicable": false,
+        "minimum_budget_ratio": 3.0565837735288244,
+        "maximum_budget_relative_defect": 0,
+        "cutoff_range": [
+          0.0008312858196541342,
+          0.0008312858196541342
+        ],
+        "inventory_counts": {
+          "actual_lifted_outer_epsilon": 40339,
+          "budget_awf_reporting_volume": 33792,
+          "constitutive_budget_awf_ray": 89520,
+          "constitutive_budget_reporting_source_ray": 122880,
+          "constitutive_matching_K": 373,
+          "interface_inner": 48,
+          "interface_outer": 96,
+          "mass_volume": 7680,
+          "matching_trace_nodes": 96,
+          "physical_matching_transfer": 722,
+          "physical_sampled_K": 734,
+          "prescribed_source_inner": 27648,
+          "projected_dependent_trace": 607,
+          "reconstruction_dense": 12888,
+          "reconstruction_native": 30720,
+          "source_volume_outer": 21504,
+          "trace_budget_awf_ray": 10320,
+          "volume_normalization_ray": 23040
+        },
+        "profile_branch_pattern": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "fields_changed": "joint free U/W and retained H2i k H1; native continuity/essential and k interface traces fixed; epsilon/pressure unchanged",
+      "baseline_audit": {
+        "admissible": [
+          1
+        ],
+        "accepted_awf_covariance": [
+          0.006838386445357465,
+          0.006484275651198177
+        ],
+        "accepted_awf_hard_admissible": [
+          1
+        ],
+        "strong_continuity": [
+          3.1744797687447814e-15,
+          2.3725045810444114e-14,
+          -5.424722919309917e-19,
+          -4.4374506328542236e-17,
+          1.2836953722228372e-16
+        ],
+        "coupled_norms": [
+          0.13411830897142824,
+          5.032453826385325e-16,
+          0.0455783203229011,
+          0.002891006054908672,
+          1.3506019085084835e-17,
+          9.05536526509751e-18,
+          0,
+          0
+        ],
+        "interface": [
+          0.8000000000000002,
+          0,
+          0,
+          2.5567865372955483e-14,
+          0,
+          8.41053666640233e-16,
+          0,
+          0
+        ],
+        "maximum_abs_Ux_W": [
+          1.1027070545858232e-12,
+          0
+        ]
+      },
+      "scalar_H1_audit": {
+        "admissible": [
+          1
+        ],
+        "accepted_awf_covariance": [
+          0.006414467412863086,
+          0.0064828078070292144
+        ],
+        "accepted_awf_hard_admissible": [
+          1
+        ],
+        "strong_continuity": [
+          0.0002966571367159318,
+          0.00043073227940209274,
+          -5.465959856913654e-19,
+          -4.442057827594285e-17,
+          1.2836953722228372e-16
+        ],
+        "coupled_norms": [
+          0.016143712986740447,
+          8.583151886398906e-05,
+          0.004818586103340472,
+          0.0028273687928338648,
+          7.812283217980447e-05,
+          2.2250635127827706e-05,
+          0,
+          0
+        ],
+        "interface": [
+          0.8000000000000002,
+          0,
+          0,
+          0.00039627282574566307,
+          0,
+          1.1636362416737647e-05,
+          0,
+          0
+        ],
+        "maximum_abs_Ux_W": [
+          0.08283020364603648,
+          0
+        ]
+      },
+      "joint_audit": {
+        "admissible": [
+          1
+        ],
+        "accepted_awf_covariance": [
+          0.0064142401714602304,
+          0.006483105314534314
+        ],
+        "accepted_awf_hard_admissible": [
+          1
+        ],
+        "strong_continuity": [
+          0.0002966106726046808,
+          0.000336786546165364,
+          -1.250903881333316e-19,
+          -4.4836061171460884e-17,
+          1.2836927443821104e-16
+        ],
+        "coupled_norms": [
+          0.016055424647667918,
+          0.000715987207353471,
+          0.004818612436002199,
+          0.0028275634846712844,
+          1.4685576399329807e-17,
+          5.333506568579633e-17,
+          0,
+          0
+        ],
+        "interface": [
+          0.8000000000000002,
+          0,
+          8.169338510735603e-07,
+          0.0003962756815526671,
+          3.3297442041616693e-06,
+          1.1636362416737647e-05,
+          4.2105809284664257e-19,
+          6.063906159359019e-11
+        ],
+        "maximum_abs_Ux_W": [
+          0.08258482762247188,
+          6.589574316792397e-05
+        ]
+      },
+      "baseline": {
+        "selected_spatial_norms": [
+          0.134118308971428,
+          5.032542427390619e-16,
+          0.04557832032290103,
+          0.0028910060549085155,
+          1.3506019085084835e-17,
+          9.05536526509751e-18,
+          0,
+          7.747798059032876
+        ],
+        "analytical_free_load_norms": [
+          1.8482853895118279e-13,
+          4.3659574187325737e-16,
+          9.078532511022047e-15,
+          5.625709024570792e-16,
+          0,
+          0,
+          0,
+          7.747710084906139
+        ],
+        "radial_errors": [
+          {
+            "bounds": [
+              0,
+              1.5570612247636407e-05
+            ],
+            "dimensional_errors": [
+              1.2690040299007113e-08,
+              0.0075102535473141625,
+              1.5034037449506455e-09,
+              0.00072733112309483,
+              0,
+              3.3937796918116743e-08,
+              1.0022691632995534e-09,
+              1.3080859412440618e-05
+            ]
+          },
+          {
+            "bounds": [
+              1.5570612247636407e-05,
+              5e-05
+            ],
+            "dimensional_errors": [
+              9.957177068072701e-08,
+              0.028273293909227924,
+              1.2902751005844145e-08,
+              0.0037333843573984287,
+              0,
+              1.5512979244242365e-07,
+              8.601834003895185e-09,
+              9.469676326378513e-05
+            ]
+          },
+          {
+            "bounds": [
+              5e-05,
+              0.0002
+            ],
+            "dimensional_errors": [
+              2.1056361056127434e-06,
+              0.15226139061333413,
+              1.2783727818219532e-07,
+              0.00871802561224846,
+              0,
+              1.548304062430225e-06,
+              8.522485212146265e-08,
+              0.0010788997910893775
+            ]
+          },
+          {
+            "bounds": [
+              0.0002,
+              0.0008312858196541338
+            ],
+            "dimensional_errors": [
+              5.789767189089618e-06,
+              0.17338945367545663,
+              3.941875261857208e-07,
+              0.008889568885615642,
+              0,
+              3.001883992961922e-06,
+              2.627916841238154e-07,
+              0.0013696124741655131
+            ]
+          },
+          {
+            "bounds": [
+              0.0008312858196541338,
+              0.0022472751006336437
+            ],
+            "dimensional_errors": [
+              8.635154840753203e-06,
+              0.08512376457168373,
+              5.248599366901204e-07,
+              0.0065225598330527984,
+              0,
+              5.870070151548364e-06,
+              3.499066244600752e-07,
+              0.0009093351944826164
+            ]
+          },
+          {
+            "bounds": [
+              0.0022472751006336437,
+              0.0065
+            ],
+            "dimensional_errors": [
+              2.2902822468906744e-05,
+              0.07717403937060116,
+              7.501633654491227e-07,
+              0.0028615772423752814,
+              0,
+              7.203423466370687e-06,
+              5.001089102994182e-07,
+              0.0007932036763287335
+            ]
+          },
+          {
+            "bounds": [
+              0.0065,
+              0.012
+            ],
+            "dimensional_errors": [
+              5.668931949010798e-06,
+              0.011239995544892207,
+              3.664974497494998e-17,
+              4.61919510460254e-14,
+              6.112701799656563e-06,
+              4.1766173162744544e-06,
+              2.442839361757955e-17,
+              0.00012555607316639065
+            ]
+          },
+          {
+            "bounds": [
+              0.012,
+              0.025
+            ],
+            "dimensional_errors": [
+              5.682215138414989e-06,
+              0.008683532078804469,
+              9.602999548564072e-18,
+              8.419900975261045e-15,
+              7.325153563414852e-06,
+              4.950146207983267e-06,
+              6.393831543363596e-18,
+              9.429180748897964e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.025,
+              0.05
+            ],
+            "dimensional_errors": [
+              6.34498885841756e-06,
+              0.00496318613734114,
+              5.523022641109315e-18,
+              2.5971557372820158e-15,
+              4.046313739682438e-06,
+              5.980996328314742e-06,
+              3.669289198570501e-18,
+              5.348297490427939e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.05,
+              0.1
+            ],
+            "dimensional_errors": [
+              9.021393238053562e-06,
+              0.0034951627433646012,
+              3.327947832619612e-17,
+              5.881015285456875e-15,
+              2.795538801974766e-06,
+              8.611213439475425e-06,
+              2.218272361914445e-17,
+              3.798522798951905e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.1,
+              0.2
+            ],
+            "dimensional_errors": [
+              1.2611072878395791e-05,
+              0.0024362716025425,
+              4.483766810024728e-17,
+              3.965083601271098e-15,
+              1.986904569623459e-06,
+              1.1562046053384671e-05,
+              2.9911430332619765e-17,
+              2.63629980616303e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.2,
+              0.4
+            ],
+            "dimensional_errors": [
+              2.2918118982370197e-05,
+              0.0019746601426168763,
+              6.822280176886351e-17,
+              3.123178842608109e-15,
+              1.4167153626137511e-06,
+              2.282751042830768e-05,
+              4.550589640661265e-17,
+              2.2008884121881212e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.4,
+              0.8
+            ],
+            "dimensional_errors": [
+              5.234977068274637e-05,
+              0.0017349530721857214,
+              3.029386763931115e-16,
+              5.898850464462706e-15,
+              1.9302434221065643e-06,
+              2.440389650807071e-05,
+              2.0200613148803164e-16,
+              1.8381171580421596e-05
+            ]
+          }
+        ],
+        "one_sided_derivative_jumps": [
+          {
+            "z": 1.5570612247636407e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -14.25829624571611,
+              -1.362819137401704,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 5,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005545215422324551,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -6.992025390294622e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005479839737083886,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -7.433661233435223e-07,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 5e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              19.26460643834639,
+              3.3403329436661444,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005428081865715707,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 2.1250443750902368e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005538113479120594,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 2.1718176560818617e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0002,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -81.72382575678603,
+              -4.243472463521281,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.006017295571067848,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00010584232732995613,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005149433599077815,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00015090566529992605,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0008312858196541338,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -20.564526596918654,
+              0.611980354801446,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.0059792322088937306,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00020498466097194914,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005336086749408045,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00018584527623435136,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0022472751006336437,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -14.559668937257925,
+              0.7594568515207852,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.006183469476015598,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00010272940542731268,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005053576497797209,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 4.3792284845037236e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0065,
+            "raw_derivative_jumps_U_k_epsilon": [
+              0.4876713829830095,
+              3.911625846666312e-12,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005515726603499757,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 4.869832224243195e-16,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.0055157266035253255,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -3.540736830233733e-16,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00337171700650923
+              }
+            ]
+          },
+          {
+            "z": 0.012,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.9439547715857657,
+              -1.8040228919538477e-12,
+              1.2506100935326652
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005772894578829274,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -6.169831349293908e-16,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0021178171880913035
+              },
+              {
+                "radial_side": 1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.00540101533993758,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 9.372746286331139e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0017522753777706654
+              }
+            ]
+          },
+          {
+            "z": 0.025,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.3368411543533796,
+              1.8807878180263162e-13,
+              0.3205692401250717
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005702953794565048,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.1640130556054357e-16,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0010406299427316796
+              },
+              {
+                "radial_side": 1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.00542647244988606,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -3.79749451627412e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0008454087709311708
+              }
+            ]
+          },
+          {
+            "z": 0.05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.15791825658742376,
+              -3.9760604460755654e-14,
+              0.06847149183316775
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.0056852260143502135,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -7.027085752710256e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0005073908098834413
+              },
+              {
+                "radial_side": 1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005426107384305948,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -5.0300577599178044e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0004240341181711683
+              }
+            ]
+          },
+          {
+            "z": 0.1,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.08073519985194566,
+              -1.248666202868159e-13,
+              0.01766284446135409
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005688959391162412,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -2.7596421843156183e-16,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00025486120403538787
+              },
+              {
+                "radial_side": 1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005423987727980444,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.33846076383875e-16,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00021185198733052933
+              }
+            ]
+          },
+          {
+            "z": 0.2,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.03638440502245344,
+              1.2183986108745069e-14,
+              0.0042727517709190005
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005676486760069977,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 3.202436459247797e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00012705662214004842
+              },
+              {
+                "radial_side": 1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005437701280675028,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.7937337739130864e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00010625176775104175
+              }
+            ]
+          },
+          {
+            "z": 0.4,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.029208659339475807,
+              -4.951815182734178e-14,
+              0.0014040833998527468
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005754592856711631,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -3.0678122131989076e-16,
+                "physical_epsilon_diffusive_flux_plus_z": 6.519207636082242e-05
+              },
+              {
+                "radial_side": 1,
+                "geometry": 77,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005370495860745807,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 3.44387774203165e-16,
+                "physical_epsilon_diffusive_flux_plus_z": 5.149314866919065e-05
+              }
+            ]
+          }
+        ],
+        "radial_global_free_sum_error": 8.141871271421467e-17,
+        "global_components": {
+          "conservative_advection": [
+            1.4836557935256695e-13,
+            0,
+            9.373399936521141e-15,
+            5.418050590950635e-16,
+            0,
+            0,
+            0,
+            7.747785506642397
+          ],
+          "continuity": [
+            0,
+            0,
+            0,
+            0,
+            1.3506019085084835e-17,
+            9.05536526509751e-18,
+            0,
+            0
+          ],
+          "epsilon_destruction": [
+            0,
+            0,
+            0,
+            0.06098223307778156,
+            0,
+            0,
+            0,
+            0.00868066993684289
+          ],
+          "epsilon_diffusion": [
+            0,
+            0,
+            0,
+            0.015842118320065896,
+            0,
+            0,
+            0,
+            0.004863760661123212
+          ],
+          "epsilon_production": [
+            0,
+            0,
+            0,
+            0.045707498202673044,
+            0,
+            0,
+            0,
+            0.006507132736512873
+          ],
+          "epsilon_yap": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_advection": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_diffusion": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_traction": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "gauge": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "inner_k_destruction": [
+            0,
+            0,
+            0.22904665536725244,
+            0,
+            0,
+            0,
+            0,
+            0.013142562115456828
+          ],
+          "inner_k_production": [
+            0,
+            0,
+            0.2516819291058387,
+            0,
+            0,
+            0,
+            0,
+            0.011901694144535195
+          ],
+          "inner_momentum_stress": [
+            0.3008950141151621,
+            5.2735147359324234e-17,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.020438881146253057
+          ],
+          "k_diffusion": [
+            0,
+            0,
+            0.0835099164534414,
+            0,
+            0,
+            0,
+            0,
+            0.002119072013142478
+          ],
+          "outer_k_destruction": [
+            0,
+            0,
+            0.05894766807408685,
+            0,
+            0,
+            0,
+            0,
+            0.008961437817842217
+          ],
+          "outer_k_production": [
+            0,
+            0,
+            0.05893792026937054,
+            0,
+            0,
+            0,
+            0,
+            0.008961964063131928
+          ],
+          "outer_momentum_stress": [
+            0.2858956829144851,
+            5.006675839798721e-16,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.02229021135924345
+          ],
+          "prescribed_body": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "prescribed_scalar_source": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "roughness_force": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "errors": [
+          6.51760459410897e-05,
+          0.2599164092442918,
+          1.0050462400825621e-06,
+          0.014840080389285162,
+          1.1175482179685279e-05,
+          0.005522618844469882
+        ],
+        "signed_components": {
+          "conservative_advection": [
+            2.416250831572539e-16,
+            0.0,
+            7.675192958052199e-17,
+            -3.9538663743206854e-15
+          ],
+          "continuity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inner_k_destruction": [
+            0.0,
+            0.0,
+            -0.03663004903072424,
+            0.0
+          ],
+          "inner_k_production": [
+            0.0,
+            0.0,
+            0.0914071898718885,
+            0.0
+          ],
+          "inner_momentum_stress": [
+            0.7446521187264817,
+            0.00896362992323047,
+            0.0,
+            0.0
+          ],
+          "k_diffusion": [
+            0.0,
+            0.0,
+            0.9453356022442324,
+            0.0
+          ],
+          "prescribed_scalar_source": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "roughness_force": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "epsilon_destruction": [
+            0.0,
+            0.0,
+            0.0,
+            -2.384072911848339
+          ],
+          "epsilon_diffusion": [
+            0.0,
+            0.0,
+            0.0,
+            1.5548165194481516
+          ],
+          "epsilon_production": [
+            0.0,
+            0.0,
+            0.0,
+            1.8292563924002117
+          ],
+          "epsilon_yap": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "outer_k_destruction": [
+            0.0,
+            0.0,
+            0.01072780632528415,
+            0.0
+          ],
+          "outer_k_production": [
+            0.0,
+            0.0,
+            -0.010840549410680933,
+            0.0
+          ],
+          "outer_momentum_stress": [
+            0.255347881273531,
+            0.9878891858606378,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "scalar_H1": {
+        "selected_spatial_norms": [
+          0.016143712986738955,
+          8.583151886398895e-05,
+          0.004818586103340435,
+          0.0028273687928337416,
+          7.812283217980447e-05,
+          2.2250635127827706e-05,
+          0,
+          7.747737212705749
+        ],
+        "analytical_free_load_norms": [
+          1.8482853895118279e-13,
+          4.3659574187325737e-16,
+          9.078532511022047e-15,
+          5.625709024570792e-16,
+          0,
+          0,
+          0,
+          7.747710084906139
+        ],
+        "radial_errors": [
+          {
+            "bounds": [
+              0,
+              1.5570612247636407e-05
+            ],
+            "dimensional_errors": [
+              2.768188546912774e-09,
+              0.0016385567415177266,
+              3.443832926519492e-10,
+              0.00015967959846602,
+              0,
+              7.402298362419344e-09,
+              2.2958886176830426e-10,
+              2.847961886435747e-06
+            ]
+          },
+          {
+            "bounds": [
+              1.5570612247636407e-05,
+              5e-05
+            ],
+            "dimensional_errors": [
+              2.2015661472719447e-08,
+              0.006245523859831255,
+              2.837445950411932e-09,
+              0.0008191484797319715,
+              0,
+              3.420112397187849e-08,
+              1.8916306336079043e-09,
+              2.0873953159664167e-05
+            ]
+          },
+          {
+            "bounds": [
+              5e-05,
+              0.0002
+            ],
+            "dimensional_errors": [
+              6.929361968183218e-07,
+              0.04695168929141017,
+              2.7912657133588964e-08,
+              0.0019078164075983692,
+              0,
+              4.2870354199766643e-07,
+              1.8608438089059242e-08,
+              0.00029593911362845175
+            ]
+          },
+          {
+            "bounds": [
+              0.0002,
+              0.0008312858196541338
+            ],
+            "dimensional_errors": [
+              9.495923202367285e-06,
+              0.1514199580063805,
+              4.395957782797751e-07,
+              0.007033077948752968,
+              0,
+              2.9365175688768345e-06,
+              2.930638521865231e-07,
+              0.0012708354915738078
+            ]
+          },
+          {
+            "bounds": [
+              0.0008312858196541338,
+              0.0022472751006336437
+            ],
+            "dimensional_errors": [
+              7.433091883832547e-06,
+              0.05281000204790457,
+              7.993440281113049e-07,
+              0.005705329893082739,
+              0,
+              2.860582403071796e-06,
+              5.328960187408661e-07,
+              0.0005361359071720722
+            ]
+          },
+          {
+            "bounds": [
+              0.0022472751006336437,
+              0.0065
+            ],
+            "dimensional_errors": [
+              2.061649163228266e-05,
+              0.04926545639954174,
+              7.471313332995644e-07,
+              0.0018327921665837808,
+              0,
+              6.584012114447453e-06,
+              4.980875555330371e-07,
+              0.0005229099923888208
+            ]
+          },
+          {
+            "bounds": [
+              0.0065,
+              0.012
+            ],
+            "dimensional_errors": [
+              3.238276092208568e-06,
+              0.0057934757232758,
+              8.237687986382595e-18,
+              1.0067827955752637e-14,
+              6.112701799656563e-06,
+              1.9654293000458586e-06,
+              5.491504548637097e-18,
+              6.621630139973605e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.012,
+              0.025
+            ],
+            "dimensional_errors": [
+              9.115924060312897e-06,
+              0.007247431701304014,
+              4.9413874612191485e-18,
+              1.9512023604145395e-15,
+              7.325153563414852e-06,
+              4.331524614903545e-06,
+              3.2948430072546162e-18,
+              7.838380176681865e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.025,
+              0.05
+            ],
+            "dimensional_errors": [
+              9.182971223779019e-06,
+              0.004200995879504672,
+              7.609020474669678e-18,
+              1.2779077331213632e-15,
+              4.046313739682438e-06,
+              5.107705979562917e-06,
+              5.07282978364506e-18,
+              4.510077247217696e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.05,
+              0.1
+            ],
+            "dimensional_errors": [
+              1.0916003312642356e-05,
+              0.0030936186288181245,
+              1.2776282500839835e-17,
+              1.9530706280759796e-15,
+              2.795538801974766e-06,
+              7.75491368496193e-06,
+              8.51735948662775e-18,
+              3.354151579173844e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.1,
+              0.2
+            ],
+            "dimensional_errors": [
+              1.339076235262704e-05,
+              0.002318329770343232,
+              2.3214081764659246e-17,
+              1.5974518320611577e-15,
+              1.986904569623459e-06,
+              1.1534523827454512e-05,
+              1.5477483334498232e-17,
+              2.509702376537654e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.2,
+              0.4
+            ],
+            "dimensional_errors": [
+              1.871143120780174e-05,
+              0.0017527453625718725,
+              5.965846564400493e-17,
+              2.954887985496254e-15,
+              1.4167153626137511e-06,
+              1.872976036172051e-05,
+              3.977161193134628e-17,
+              1.9416234405833707e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.4,
+              0.8
+            ],
+            "dimensional_errors": [
+              3.159819786068648e-05,
+              0.001231749328861596,
+              1.0535957445578254e-16,
+              2.2840857119423724e-15,
+              1.9302434221065643e-06,
+              1.7279505820628724e-05,
+              7.023255441251531e-17,
+              1.3465414375158732e-05
+            ]
+          }
+        ],
+        "one_sided_derivative_jumps": [
+          {
+            "z": 1.5570612247636407e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -2.352641431699112,
+              -0.09543784593044091,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 5,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005519715014498139,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.708675457063602e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.00550892792303417,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.271083582966431e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 5e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -6.797144966060159,
+              0.5214028520072396,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005507773711840991,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.067432146854252e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.0054689511784268745,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 7.696279990048096e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0002,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -37.3553364757625,
+              -1.562905256824406,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005641165326329104,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00012769723498794275,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005244472248417067,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.0001442944271245161,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0008312858196541338,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -18.556896881105672,
+              0.1233327559510542,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005931439936280193,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00019296203149043613,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005351082109175363,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00018910486018031895,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0022472751006336437,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -7.045007787677008,
+              0.4774349301680597,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005807431085305147,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 8.860141750415789e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.00526070815739431,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 5.155041191620569e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0065,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -1.1622364583907014,
+              0.04832516925871846,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005824366165792506,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.0474448454297597e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.00546767066892292,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.3235478576571723e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00337171700650923
+              }
+            ]
+          },
+          {
+            "z": 0.012,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.481045617556477,
+              -2.1521043080118868e-13,
+              1.2506100935326652
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005626532683654349,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -7.377976687511546e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0021178171880912268
+              },
+              {
+                "radial_side": 1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005437020554986831,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.1004264751155716e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0017522753777706017
+              }
+            ]
+          },
+          {
+            "z": 0.025,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.2664373004329148,
+              2.0875056537143038e-14,
+              0.3205692401250717
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005668401813225306,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.248486894411894e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0010406299427316913
+              },
+              {
+                "radial_side": 1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.00544970839603362,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.649509165701865e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0008454087709311804
+              }
+            ]
+          },
+          {
+            "z": 0.05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.12956899066794625,
+              1.5016327397422344e-14,
+              0.06847149183316775
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005654861355594872,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.0594522668525323e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0005073908098834312
+              },
+              {
+                "radial_side": 1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005442259341846643,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.4044871582652608e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00042403411817115987
+              }
+            ]
+          },
+          {
+            "z": 0.1,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.07252042635338585,
+              2.156439060138044e-15,
+              0.01766284446135409
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005672829580414664,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.0478361793581555e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0002548612040353721
+              },
+              {
+                "radial_side": 1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005434818675372509,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -8.125235447126679e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00021185198733051621
+              }
+            ]
+          },
+          {
+            "z": 0.2,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.038050314336601554,
+              -3.4486767529555207e-15,
+              0.0042727517709190005
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005681263321323233,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.3626286647687604e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00012705662214004847
+              },
+              {
+                "radial_side": 1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005431544725007398,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 9.00686981658645e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00010625176775104179
+              }
+            ]
+          },
+          {
+            "z": 0.4,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.022548715919674833,
+              5.70495719629971e-15,
+              0.0014040833998527468
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005712499655699004,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": 6.412267659258065e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 6.519207636081678e-05
+              },
+              {
+                "radial_side": 1,
+                "geometry": 77,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005415981628391678,
+                  0,
+                  0
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.0898121032685049e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 5.14931486691862e-05
+              }
+            ]
+          }
+        ],
+        "radial_global_free_sum_error": 6.399291564858876e-17,
+        "global_components": {
+          "conservative_advection": [
+            0.001099206685100315,
+            0,
+            2.953853741562412e-05,
+            3.256361360595878e-06,
+            0,
+            0,
+            0,
+            7.747716112859258
+          ],
+          "continuity": [
+            0,
+            0,
+            0,
+            0,
+            7.812283217980447e-05,
+            2.2250635127827706e-05,
+            0,
+            0
+          ],
+          "epsilon_destruction": [
+            0,
+            0,
+            0,
+            0.06098223307778296,
+            0,
+            0,
+            0,
+            0.008680669936842926
+          ],
+          "epsilon_diffusion": [
+            0,
+            0,
+            0,
+            0.015842118320064248,
+            0,
+            0,
+            0,
+            0.004863760661123051
+          ],
+          "epsilon_production": [
+            0,
+            0,
+            0,
+            0.04581368348288594,
+            0,
+            0,
+            0,
+            0.006509360590461425
+          ],
+          "epsilon_yap": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_advection": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_diffusion": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_traction": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "gauge": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "inner_k_destruction": [
+            0,
+            0,
+            0.22904665536725244,
+            0,
+            0,
+            0,
+            0,
+            0.013142562115456828
+          ],
+          "inner_k_production": [
+            0,
+            0,
+            0.251596549310368,
+            0,
+            0,
+            0,
+            0,
+            0.0118880936528135
+          ],
+          "inner_momentum_stress": [
+            0.2855787716492351,
+            4.9780890736277395e-05,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.020423692665406536
+          ],
+          "k_diffusion": [
+            0,
+            0,
+            0.07149586260162018,
+            0,
+            0,
+            0,
+            0,
+            0.002052424119225908
+          ],
+          "outer_k_destruction": [
+            0,
+            0,
+            0.05894766807408685,
+            0,
+            0,
+            0,
+            0,
+            0.008961437817842217
+          ],
+          "outer_k_production": [
+            0,
+            0,
+            0.05895681892699895,
+            0,
+            0,
+            0,
+            0,
+            0.008962089783916261
+          ],
+          "outer_momentum_stress": [
+            0.28273714683393036,
+            7.382112753257373e-05,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.022282044456789836
+          ],
+          "prescribed_body": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "prescribed_scalar_source": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "roughness_force": [
+            4.290836284255204e-06,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            7.877371093498482e-08
+          ]
+        },
+        "errors": [
+          4.894785661477822e-05,
+          0.1746808810444508,
+          1.1794862605745876e-06,
+          0.009471555679989653,
+          1.1175482179685279e-05,
+          0.005515636581101419
+        ],
+        "signed_components": {
+          "conservative_advection": [
+            0.00798119900909045,
+            0.0,
+            6.102632089983604e-05,
+            3.751827700121366e-06
+          ],
+          "continuity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inner_k_destruction": [
+            0.0,
+            0.0,
+            0.4038383911472021,
+            0.0
+          ],
+          "inner_k_production": [
+            0.0,
+            0.0,
+            1.1667128536525917,
+            0.0
+          ],
+          "inner_momentum_stress": [
+            3.592449212135109,
+            0.29833027217692365,
+            0.0,
+            0.0
+          ],
+          "k_diffusion": [
+            0.0,
+            0.0,
+            -0.5676343606581238,
+            0.0
+          ],
+          "prescribed_scalar_source": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "roughness_force": [
+            -6.165122150426487e-07,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "epsilon_destruction": [
+            0.0,
+            0.0,
+            0.0,
+            -3.300136307704668
+          ],
+          "epsilon_diffusion": [
+            0.0,
+            0.0,
+            0.0,
+            1.802454292785668
+          ],
+          "epsilon_production": [
+            0.0,
+            0.0,
+            0.0,
+            2.4976782630913297
+          ],
+          "epsilon_yap": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "outer_k_destruction": [
+            0.0,
+            0.0,
+            -0.6327694923155751,
+            0.0
+          ],
+          "outer_k_production": [
+            0.0,
+            0.0,
+            0.6297915818530112,
+            0.0
+          ],
+          "outer_momentum_stress": [
+            -2.60042979463202,
+            0.7016697278230231,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "projected": {
+        "selected_spatial_norms": [
+          0.01605542464766621,
+          0.0007159872073534474,
+          0.004818612436002215,
+          0.002827563484671313,
+          1.4685576399329807e-17,
+          5.333506568579633e-17,
+          0,
+          7.747821979882161
+        ],
+        "analytical_free_load_norms": [
+          1.8482853895118279e-13,
+          4.3659574187325737e-16,
+          9.078532511022047e-15,
+          5.625709024570792e-16,
+          0,
+          0,
+          0,
+          7.747710084906139
+        ],
+        "radial_errors": [
+          {
+            "bounds": [
+              0,
+              1.5570612247636407e-05
+            ],
+            "dimensional_errors": [
+              2.7686543818619828e-09,
+              0.0016385664691308116,
+              3.443832926519492e-10,
+              0.00015967959846602,
+              0,
+              7.402338763303569e-09,
+              2.295754910372573e-10,
+              2.8479723360997014e-06
+            ]
+          },
+          {
+            "bounds": [
+              1.5570612247636407e-05,
+              5e-05
+            ],
+            "dimensional_errors": [
+              2.2017540816687904e-08,
+              0.0062455294706668905,
+              2.837445950411932e-09,
+              0.0008191484797319715,
+              0,
+              3.420115128312254e-08,
+              1.891629827469836e-09,
+              2.0873982463867037e-05
+            ]
+          },
+          {
+            "bounds": [
+              5e-05,
+              0.0002
+            ],
+            "dimensional_errors": [
+              6.929408779198075e-07,
+              0.04695169247506387,
+              2.7912657133588964e-08,
+              0.0019078164075983692,
+              0,
+              4.2870355422776657e-07,
+              1.860843157343578e-08,
+              0.0002959395903443693
+            ]
+          },
+          {
+            "bounds": [
+              0.0002,
+              0.0008312858196541338
+            ],
+            "dimensional_errors": [
+              9.495978925973818e-06,
+              0.1514199617543948,
+              4.395957782797751e-07,
+              0.007033077948752968,
+              0,
+              2.936516925871884e-06,
+              2.9306387479110524e-07,
+              0.0012708437315262216
+            ]
+          },
+          {
+            "bounds": [
+              0.0008312858196541338,
+              0.0022472751006336437
+            ],
+            "dimensional_errors": [
+              7.4336843761564865e-06,
+              0.052810020951442445,
+              7.993440281113049e-07,
+              0.005705329893082739,
+              0,
+              2.860579475729344e-06,
+              5.328977081121025e-07,
+              0.0005361421672746615
+            ]
+          },
+          {
+            "bounds": [
+              0.0022472751006336437,
+              0.0065
+            ],
+            "dimensional_errors": [
+              2.061943827698574e-05,
+              0.04926546059804571,
+              7.471313332995644e-07,
+              0.0018327921665837808,
+              0,
+              6.583965092537286e-06,
+              4.987978755408479e-07,
+              0.0005229199247464848
+            ]
+          },
+          {
+            "bounds": [
+              0.0065,
+              0.012
+            ],
+            "dimensional_errors": [
+              3.287512406615838e-06,
+              0.005793567591681823,
+              8.237687986382595e-18,
+              1.0067827955752637e-14,
+              6.112701799656563e-06,
+              1.965565461338889e-06,
+              8.159021834305394e-09,
+              6.621835807040171e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.012,
+              0.025
+            ],
+            "dimensional_errors": [
+              9.154412347495378e-06,
+              0.007247339159944151,
+              4.9413874612191485e-18,
+              1.9512023604145395e-15,
+              7.325153563414852e-06,
+              4.331714105301174e-06,
+              1.2669694972429482e-08,
+              7.838183687727005e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.025,
+              0.05
+            ],
+            "dimensional_errors": [
+              9.265135432114467e-06,
+              0.004200873071792553,
+              7.609020474669678e-18,
+              1.2779077331213632e-15,
+              4.046313739682438e-06,
+              5.107685716627378e-06,
+              1.7919155235487405e-08,
+              4.5098681590161645e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.05,
+              0.1
+            ],
+            "dimensional_errors": [
+              1.0987598050909303e-05,
+              0.0030938076871526088,
+              1.2776282500839835e-17,
+              1.9530706280759796e-15,
+              2.795538801974766e-06,
+              7.755521349684694e-06,
+              6.940377635459697e-08,
+              3.354358719139571e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.1,
+              0.2
+            ],
+            "dimensional_errors": [
+              1.3488829805245405e-05,
+              0.0023162408969862754,
+              2.3214081764659246e-17,
+              1.5974518320611577e-15,
+              1.986904569623459e-06,
+              1.151071789167918e-05,
+              1.6141658090222043e-07,
+              2.507440741075941e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.2,
+              0.4
+            ],
+            "dimensional_errors": [
+              1.9405138451940333e-05,
+              0.0017678816708622184,
+              5.965846564400493e-17,
+              2.954887985496254e-15,
+              1.4167153626137511e-06,
+              1.9071705865488812e-05,
+              2.0995808021642624e-06,
+              1.9633683556033238e-05
+            ]
+          },
+          {
+            "bounds": [
+              0.4,
+              0.8
+            ],
+            "dimensional_errors": [
+              3.6794020974229834e-05,
+              0.0012620196637732656,
+              1.0535957445578254e-16,
+              2.2840857119423724e-15,
+              1.9302434221065643e-06,
+              1.7526530185014836e-05,
+              3.9337828352727955e-06,
+              1.3592240063260379e-05
+            ]
+          }
+        ],
+        "one_sided_derivative_jumps": [
+          {
+            "z": 1.5570612247636407e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -2.3526414317034323,
+              -0.09543784593044091,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 5,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005519719097368718,
+                  0,
+                  -3.77039220423955e-11
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.708675457063602e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.00550893200590473,
+                  0,
+                  -3.770389389448124e-11
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.271083582966431e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 5e-05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -6.797144966149972,
+              0.5214028520072396,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 11,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005507778770917467,
+                  0,
+                  1.211917946100095e-10
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.067432146854252e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.0054689562375028365,
+                  0,
+                  1.2118996035036651e-10
+                ],
+                "physical_k_diffusive_flux_plus_z": 7.696279990048096e-06,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0002,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -37.3553364822165,
+              -1.562905256824406,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 17,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005641174518066628,
+                  0,
+                  -5.568714137704247e-10
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00012769723498794275,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005244481440086054,
+                  0,
+                  -5.567364403392631e-10
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.0001442944271245161,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0008312858196541338,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -18.556896949012128,
+              0.1233327559510542,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 23,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005931464493357703,
+                  0,
+                  3.529998206185639e-09
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00019296203149043613,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005351106664129132,
+                  0,
+                  3.5246759261101817e-09
+                ],
+                "physical_k_diffusive_flux_plus_z": 0.00018910486018031895,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0022472751006336437,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -7.0450090036823525,
+              0.4774349301680597,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 29,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005807480207343759,
+                  0,
+                  -2.7111900043457286e-08
+                ],
+                "physical_k_diffusive_flux_plus_z": 8.860141750415789e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.005260757185065673,
+                  0,
+                  -2.6642052100436794e-08
+                ],
+                "physical_k_diffusive_flux_plus_z": 5.155041191620569e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              }
+            ]
+          },
+          {
+            "z": 0.0065,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -1.162238728045537,
+              0.04832516925871846,
+              0
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 35,
+                "inner": true,
+                "selected_mean_traction_on_plus_z": [
+                  0.00582443317721836,
+                  0,
+                  3.0661006715456974e-07
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.0474448454297597e-05,
+                "physical_epsilon_diffusive_flux_plus_z": null
+              },
+              {
+                "radial_side": 1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.00546773593760464,
+                  0,
+                  6.23988599644798e-08
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.3235478576571723e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00337171700650923
+              }
+            ]
+          },
+          {
+            "z": 0.012,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.4810509031857926,
+              -2.1521043080118868e-13,
+              1.2506100935326652
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 41,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005626578344585379,
+                  0,
+                  -3.349942988978283e-08
+                ],
+                "physical_k_diffusive_flux_plus_z": -7.377976687511546e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0021178171880912268
+              },
+              {
+                "radial_side": 1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005437064133597958,
+                  0,
+                  -3.383016086017099e-08
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.1004264751155716e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0017522753777706017
+              }
+            ]
+          },
+          {
+            "z": 0.025,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.26644248555553673,
+              2.0875056537143038e-14,
+              0.3205692401250717
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 47,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005668403723278323,
+                  0,
+                  -4.785362866729925e-08
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.248486894411894e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0010406299427316913
+              },
+              {
+                "radial_side": 1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005449706050105276,
+                  0,
+                  -4.541142898523143e-08
+                ],
+                "physical_k_diffusive_flux_plus_z": -4.649509165701865e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0008454087709311804
+              }
+            ]
+          },
+          {
+            "z": 0.05,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.12956691408626364,
+              1.5016327397422344e-14,
+              0.06847149183316775
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 53,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005654841989518222,
+                  0,
+                  -9.519041066323453e-08
+                ],
+                "physical_k_diffusive_flux_plus_z": 1.0594522668525323e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0005073908098834312
+              },
+              {
+                "radial_side": 1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.00544224338310878,
+                  0,
+                  -1.0029982420479977e-07
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.4044871582652608e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00042403411817115987
+              }
+            ]
+          },
+          {
+            "z": 0.1,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.07254445909493934,
+              2.156439060138044e-15,
+              0.01766284446135409
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 59,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005672855185224424,
+                  0,
+                  -3.620892289803862e-07
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.0478361793581555e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.0002548612040353721
+              },
+              {
+                "radial_side": 1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005434765405100373,
+                  0,
+                  -4.0691588662836176e-08
+                ],
+                "physical_k_diffusive_flux_plus_z": -8.125235447126679e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00021185198733051621
+              }
+            ]
+          },
+          {
+            "z": 0.2,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.03786370516872195,
+              -3.4486767529555207e-15,
+              0.0042727517709190005
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 65,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005680867814756068,
+                  0,
+                  5.567644734225802e-07
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.3626286647687604e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00012705662214004847
+              },
+              {
+                "radial_side": 1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005432373906863312,
+                  0,
+                  -6.624045078736096e-07
+                ],
+                "physical_k_diffusive_flux_plus_z": 9.00686981658645e-18,
+                "physical_epsilon_diffusive_flux_plus_z": 0.00010625176775104179
+              }
+            ]
+          },
+          {
+            "z": 0.4,
+            "raw_derivative_jumps_U_k_epsilon": [
+              -0.023123430523871447,
+              5.70495719629971e-15,
+              0.0014040833998527468
+            ],
+            "one_sided_physical_fluxes": [
+              {
+                "radial_side": -1,
+                "geometry": 71,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005717523935646368,
+                  0,
+                  -3.6848605044614152e-06
+                ],
+                "physical_k_diffusive_flux_plus_z": 6.412267659258065e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 6.519207636081678e-05
+              },
+              {
+                "radial_side": 1,
+                "geometry": 77,
+                "inner": false,
+                "selected_mean_traction_on_plus_z": [
+                  0.005413448349792997,
+                  0,
+                  2.3169189245116073e-07
+                ],
+                "physical_k_diffusive_flux_plus_z": -1.0898121032685049e-17,
+                "physical_epsilon_diffusive_flux_plus_z": 5.14931486691862e-05
+              }
+            ]
+          }
+        ],
+        "radial_global_free_sum_error": 8.561978437435919e-17,
+        "global_components": {
+          "conservative_advection": [
+            0.0008296491888119195,
+            0.00033447328187908036,
+            2.5147249865795407e-05,
+            3.971919806136643e-06,
+            0,
+            0,
+            0,
+            7.747851109797029
+          ],
+          "continuity": [
+            0,
+            0,
+            0,
+            0,
+            1.4685576399329807e-17,
+            5.333506568579633e-17,
+            0,
+            0
+          ],
+          "epsilon_destruction": [
+            0,
+            0,
+            0,
+            0.06098223307778296,
+            0,
+            0,
+            0,
+            0.008680669936842926
+          ],
+          "epsilon_diffusion": [
+            0,
+            0,
+            0,
+            0.015842118320064248,
+            0,
+            0,
+            0,
+            0.004863760661123051
+          ],
+          "epsilon_production": [
+            0,
+            0,
+            0,
+            0.04581466026054287,
+            0,
+            0,
+            0,
+            0.0065094961646791375
+          ],
+          "epsilon_yap": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_advection": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_diffusion": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "external_traction": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "gauge": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "inner_k_destruction": [
+            0,
+            0,
+            0.22904665536725244,
+            0,
+            0,
+            0,
+            0,
+            0.013142562115456828
+          ],
+          "inner_k_production": [
+            0,
+            0,
+            0.2515988319163117,
+            0,
+            0,
+            0,
+            0,
+            0.01188837154996239
+          ],
+          "inner_momentum_stress": [
+            0.28558282344742886,
+            5.5394507623043804e-05,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.020423708564298607
+          ],
+          "k_diffusion": [
+            0,
+            0,
+            0.07149586260162018,
+            0,
+            0,
+            0,
+            0,
+            0.002052424119225908
+          ],
+          "outer_k_destruction": [
+            0,
+            0,
+            0.05894766807408685,
+            0,
+            0,
+            0,
+            0,
+            0.008961437817842217
+          ],
+          "outer_k_production": [
+            0,
+            0,
+            0.05895790905183854,
+            0,
+            0,
+            0,
+            0,
+            0.008962120731255107
+          ],
+          "outer_momentum_stress": [
+            0.282738922546934,
+            0.0004629876802914398,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.02230185441573955
+          ],
+          "prescribed_body": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "prescribed_scalar_source": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "roughness_force": [
+            6.880225497828817e-06,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2.1643601943503873e-07
+          ]
+        },
+        "errors": [
+          5.276896938148813e-05,
+          0.17468123283651094,
+          1.1794862605745876e-06,
+          0.009471555679989653,
+          1.1175482179685279e-05,
+          0.005515640765412019
+        ],
+        "signed_components": {
+          "conservative_advection": [
+            0.0037882911510469654,
+            0.3976253510817434,
+            4.268844077146262e-05,
+            4.697635315633638e-06
+          ],
+          "continuity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inner_k_destruction": [
+            0.0,
+            0.0,
+            0.3785701885717394,
+            0.0
+          ],
+          "inner_k_production": [
+            0.0,
+            0.0,
+            1.191593986028757,
+            0.0
+          ],
+          "inner_momentum_stress": [
+            3.6322764348885066,
+            0.005364480627136934,
+            0.0,
+            0.0
+          ],
+          "k_diffusion": [
+            0.0,
+            0.0,
+            -0.5672394318452728,
+            0.0
+          ],
+          "prescribed_scalar_source": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "roughness_force": [
+            -8.496872475710111e-07,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "epsilon_destruction": [
+            0.0,
+            0.0,
+            0.0,
+            -3.3072131084795857
+          ],
+          "epsilon_diffusion": [
+            0.0,
+            0.0,
+            0.0,
+            1.8041453516069113
+          ],
+          "epsilon_production": [
+            0.0,
+            0.0,
+            0.0,
+            2.50306305923737
+          ],
+          "epsilon_yap": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "outer_k_destruction": [
+            0.0,
+            0.0,
+            -0.6355386911233702,
+            0.0
+          ],
+          "outer_k_production": [
+            0.0,
+            0.0,
+            0.6325712599273732,
+            0.0
+          ],
+          "outer_momentum_stress": [
+            -2.636063876352374,
+            0.5970101682911134,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "preserved_k_epsilon_pressure_bits": true
+    }
+  },
+  "adopted": false,
+  "physical_steps": 0,
+  "weak_continuity_enforced_in_KKT": true
+}

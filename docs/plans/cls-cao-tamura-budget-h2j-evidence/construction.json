@@ -1,0 +1,468 @@
+{
+  "frozen": {
+    "version": "H2jFrozenAugmentedBasisV1",
+    "context": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2j-20261115/prepare/level1/context.json",
+    "context_sha256": "9f3e57107864ddd27bb9377bcef05f19f17dbf5ee4147ab0a5a782afab78e82e",
+    "basis_file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2j-20261115/prepare/level1/basis.f64",
+    "basis_sha256": "cb1b2bfdde850a9ec6198e725b59a3bd4a6e31edf0d10327844cfabdc618ee1c",
+    "velocity_count": 44,
+    "added_count": 3,
+    "selected_level": 1,
+    "attempts": 3,
+    "numerical_seconds": 0.6128759650164284,
+    "total_setup_seconds": 84.5164545289881,
+    "finite_control": {
+      "useful": true,
+      "trials": [
+        {
+          "sign": 1.0,
+          "amplitude": 1.642873111531215e-06,
+          "Rayleigh_gain": 7.35430213801664e-06,
+          "predicted_gain": 7.354302138016572e-06,
+          "covariance_before": -7.28061011892444e-05,
+          "covariance_after": -6.54518008579557e-05,
+          "mass_L2": 0.05060128277045437,
+          "divergence_L2": [
+            0.060308074152884784,
+            0.06030807415288491,
+            0.06030807415288464
+          ],
+          "sampled_cap": 0.46771495783120787,
+          "hard_violation": 0.0
+        },
+        {
+          "sign": -1.0,
+          "amplitude": 1.642873111531215e-06,
+          "Rayleigh_gain": -7.3543021380161885e-06,
+          "predicted_gain": -7.354302138016572e-06,
+          "covariance_before": -7.28061011892444e-05,
+          "covariance_after": -8.016040513183532e-05,
+          "mass_L2": 0.050601340378518433,
+          "divergence_L2": [
+            0.060308074152884784,
+            0.06030807415288491,
+            0.06030807415288464
+          ],
+          "sampled_cap": 0.46771495783120787,
+          "hard_violation": 0.0
+        }
+      ],
+      "old_response_bits_unchanged": true,
+      "construction_scans": 3,
+      "aggregate_numerical_seconds": 0.6128759650164284
+    },
+    "source_context_sha256": "23557c5ba8dfe4e6cdc3513bd0e3bb65185eadfe3020a642779ad64b0e42f650",
+    "scalar_basis_unchanged": true
+  },
+  "primary_patch": {
+    "level": 1,
+    "patch": {
+      "version": "TargetedNativePatchV1",
+      "level": 1,
+      "geometries": [
+        35,
+        41
+      ],
+      "coefficient_rows": [
+        48,
+        262,
+        263,
+        264,
+        265,
+        288,
+        289,
+        588,
+        589,
+        590,
+        591,
+        612,
+        613,
+        614,
+        615,
+        808,
+        1022,
+        1023,
+        1024,
+        1025,
+        1048,
+        1049,
+        1348,
+        1349,
+        1350,
+        1351,
+        1372,
+        1373,
+        1374,
+        1375
+      ],
+      "coefficient_count": 30,
+      "full_Q_rows": 105,
+      "support_contract": "complete native coefficient support contained in patch; physical essential and artificial patch-boundary rows fixed; both velocity components",
+      "witnesses": [
+        {
+          "chart": [
+            0.23549580558569316,
+            0,
+            0.0065
+          ],
+          "physical": [
+            0.23549580558569316,
+            0,
+            0.0065
+          ],
+          "geometry": 35,
+          "inner": true,
+          "gradient": [
+            [
+              0.06567491544926479,
+              0,
+              57.487280011350975
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0.057058505247150046,
+              0,
+              -0.05711382575910784
+            ]
+          ],
+          "k": 0.01838575534504143,
+          "epsilon": 0.1430512592910451,
+          "nu": 0.0002129398143720893,
+          "tensor": [
+            [
+              0.012229200621418282,
+              0,
+              -0.012253480761889073
+            ],
+            [
+              0,
+              0.01225717023002762,
+              0
+            ],
+            [
+              -0.012253480761889073,
+              0,
+              0.012281493844938068
+            ]
+          ],
+          "eigenvalues": [
+            1.838575357258898e-06,
+            0.01225717023002762,
+            0.02450885589099909
+          ],
+          "eigenvector": [
+            0.7078607935602663,
+            0,
+            0.7063519639246642
+          ]
+        },
+        {
+          "chart": [
+            0.23549580558569316,
+            0,
+            0.0065
+          ],
+          "physical": [
+            0.23549580558569316,
+            0,
+            0.0065
+          ],
+          "geometry": 41,
+          "inner": false,
+          "gradient": [
+            [
+              0.06567491544927534,
+              0,
+              57.92565906673285
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0.05705850524714968,
+              0,
+              -0.07252823373930424
+            ]
+          ],
+          "k": 0.01838575534504143,
+          "epsilon": 0.1430512592910451,
+          "nu": 0.00021267369553732568,
+          "tensor": [
+            [
+              0.012229235576082222,
+              0,
+              -0.012331398823330017
+            ],
+            [
+              0,
+              0.01225717023002762,
+              0
+            ],
+            [
+              -0.012331398823330017,
+              0,
+              0.012288019925027885
+            ]
+          ],
+          "eigenvalues": [
+            -7.280610118924353e-05,
+            0.01225717023002762,
+            0.024590061602299353
+          ],
+          "eigenvector": [
+            0.7079489799313768,
+            0,
+            0.7062635781449608
+          ]
+        },
+        {
+          "chart": [
+            0.24155162309348874,
+            0,
+            0.0064897662853230795
+          ],
+          "physical": [
+            0.24155162309348874,
+            0,
+            0.0064897662853230795
+          ],
+          "geometry": 35,
+          "inner": true,
+          "gradient": [
+            [
+              -0.024593342944535402,
+              0,
+              57.583210337552835
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0.055032692583849886,
+              0,
+              0.03418163851006869
+            ]
+          ],
+          "k": 0.018385754593257954,
+          "epsilon": 0.14327683687079085,
+          "nu": 0.00021260497715371772,
+          "tensor": [
+            [
+              0.012267627063068349,
+              0,
+              -0.01225417734260264
+            ],
+            [
+              0,
+              0.012257169728838635,
+              0
+            ],
+            [
+              -0.01225417734260264,
+              0,
+              0.012242635355889616
+            ]
+          ],
+          "eigenvalues": [
+            9.474957299183268e-07,
+            0.012257169728838635,
+            0.024509314923228047
+          ],
+          "eigenvector": [
+            0.7067461632659557,
+            0,
+            0.7074672152890557
+          ]
+        }
+      ],
+      "files": {
+        "mass": {
+          "file": "mass.f64",
+          "shape": [
+            30,
+            30
+          ],
+          "dtype": "<f8",
+          "sha256": "ac8b352773a3eac32a56eb30b530a6820ddb770f968a11105aac242c98e32e5f"
+        },
+        "Q": {
+          "file": "Q.f64",
+          "shape": [
+            105,
+            30
+          ],
+          "dtype": "<f8",
+          "sha256": "adc524cc49b90807d4d3c412daec747e35b889e8b148fcd9234f26be10e48e3d"
+        },
+        "divergence_action_GL16": {
+          "file": "divergence_action_GL16.f64",
+          "shape": [
+            512,
+            30
+          ],
+          "dtype": "<f8",
+          "sha256": "ec3e94c4fd60f7421c3c795e8ea06ef321fd96065a28320716001ccec3fecf84"
+        },
+        "base_divergence_GL16": {
+          "file": "base_divergence_GL16.f64",
+          "shape": [
+            1,
+            512
+          ],
+          "dtype": "<f8",
+          "sha256": "46a5bb19675403331fdb457cfe740b8d92e312cc3994f318ff3d73a2fc266eb4"
+        },
+        "divergence_action_GL20": {
+          "file": "divergence_action_GL20.f64",
+          "shape": [
+            800,
+            30
+          ],
+          "dtype": "<f8",
+          "sha256": "719217cf6a9ef2f66c7a5312dada6b098311840d2575f1a02883755348bbb195"
+        },
+        "base_divergence_GL20": {
+          "file": "base_divergence_GL20.f64",
+          "shape": [
+            1,
+            800
+          ],
+          "dtype": "<f8",
+          "sha256": "ac1c61fda221242d4e7e868833f5ec14e018c3598c5e0143585a5ed28962360a"
+        },
+        "divergence_action_GL24": {
+          "file": "divergence_action_GL24.f64",
+          "shape": [
+            1152,
+            30
+          ],
+          "dtype": "<f8",
+          "sha256": "75444b6c336d8c52793f13533a2b4c6b43dd53c6b42dccf76aedda8a1fce8200"
+        },
+        "base_divergence_GL24": {
+          "file": "base_divergence_GL24.f64",
+          "shape": [
+            1,
+            1152
+          ],
+          "dtype": "<f8",
+          "sha256": "1b5751565693d15a1d346413e86d51c7a7f17a01b5eb2702008c72097f4d1c46"
+        },
+        "Rayleigh_gradients": {
+          "file": "Rayleigh_gradients.f64",
+          "shape": [
+            3,
+            30
+          ],
+          "dtype": "<f8",
+          "sha256": "89a9be868467bd2a26ba47563c68a88b4e5a02d893635f319a07ef387ac6b6aa"
+        }
+      },
+      "state_sha256": "7d79b6cef109b2a2cc1826f63ca419d564217f15da3979c43b9048f25c551ce4",
+      "geometry_identity": "CompositeHillV1:native-outer=[Hw,Z]:eta=(zHat-Hw)/(Z-Hw):CosineNormalVerticalV1:physical-nearest-wall-distance:foot-side-explicit:0.040000000000000001:0.10000000000000001:0.0064999999999999997:0.80000000000000004:-0.20000000000000001:0.59999999999999998",
+      "seconds": 0.258080426,
+      "governing_solves": 0
+    },
+    "rank": 26,
+    "nullity": 4,
+    "singular_values": [
+      22.61795431572884,
+      17.3102541259015,
+      17.265112327326307,
+      16.85763072697674,
+      14.857351140108666,
+      13.24284044140895,
+      12.85810552734787,
+      11.4606162282707,
+      11.123390400150129,
+      9.97291118813301,
+      7.586804066270816,
+      7.421051541180147,
+      6.130852384210737,
+      4.538299156040597,
+      4.476654321159977,
+      2.900695077337971,
+      2.5533767178066107,
+      2.4732940645039907,
+      2.1365449953482574,
+      1.7020838338687996,
+      0.3426836849673193,
+      0.16910717885773904,
+      0.12951619328809402,
+      0.08779661695536808,
+      0.031255242326027735,
+      0.02123215280920117,
+      8.97615580622002e-15,
+      3.4634624264108474e-15,
+      1.9813491198887536e-15,
+      5.569720587056943e-16
+    ],
+    "attempts": 3,
+    "numerical_seconds": 0.028772566001862288,
+    "responses": [
+      {
+        "target": 0,
+        "mass_norm": 1.0,
+        "Rayleigh_derivative": 6.105347605928035,
+        "rank_ok": true,
+        "Gram_min_max": [
+          0.9643787689306856,
+          1.0356212310690567
+        ],
+        "Q_max": 2.142730437526552e-14,
+        "strong_direction_norms": {
+          "16": 5.454915198164088e-13,
+          "20": 5.451684934986029e-13,
+          "24": 5.45678961870079e-13
+        },
+        "added_index": 41
+      },
+      {
+        "target": 1,
+        "mass_norm": 1.0,
+        "Rayleigh_derivative": 4.476488224438774,
+        "rank_ok": true,
+        "Gram_min_max": [
+          0.40001439033775044,
+          1.5973174667704653
+        ],
+        "Q_max": 1.912828092760441e-14,
+        "strong_direction_norms": {
+          "16": 3.4102301943495964e-13,
+          "20": 3.4110314507876764e-13,
+          "24": 3.398436471059142e-13
+        },
+        "added_index": 42
+      },
+      {
+        "target": 2,
+        "mass_norm": 1.0,
+        "Rayleigh_derivative": 6.492245994704387,
+        "rank_ok": true,
+        "Gram_min_max": [
+          1.341000418363927e-05,
+          2.4823591602115433
+        ],
+        "Q_max": 2.2315482794965646e-14,
+        "strong_direction_norms": {
+          "16": 5.459748279659736e-13,
+          "20": 5.451663525267282e-13,
+          "24": 5.456627764029584e-13
+        },
+        "added_index": 43
+      }
+    ],
+    "old_columns_unchanged": true,
+    "conditioning": "qualified raw mass-normalized responses retained; full Gram used, no subtraction"
+  },
+  "complete_response_bits_preserved": true,
+  "physical_identities_preserved": true
+}

@@ -50,3 +50,16 @@ derivative/residual measures but does not pass the spatial target and is not
 adopted. The dedicated two-model comparison remains open for admissible hill
 initialization, common flat spatial accuracy, developed flow, temporal/spatial
 sensitivity and held-out validation. No completed H2f–H2h campaign was repeated.
+
+## H2j roadmap update, 15 November 2026
+
+[H2j](cls-cao-tamura-budget-h2j.md) positively qualifies the repaired complete V2
+producer through a real standard-flat import. Three supported native modes give
+finite matching-plane covariance improvement without added strong divergence.
+A new 44-column actual-limit certificate remains obstructed at outer roof and
+transition constraints unaffected by those modes. No hill GL28, certificate or
+physical hill step ran. Joint U/W flat KKT projection restores weak continuity
+but misses spatial targets and is not adopted. Targeted upper-outer initializer
+support is the next gate; hill startup, common flat spatial accuracy, temporal
+convergence, developed flow and experimental validation remain separate open
+tasks. EP-AWF remains deferred.
