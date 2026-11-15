@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """V2 exact-runtime startup successor: changed affine fixture or bounded hill pair."""
-import argparse,os,subprocess,time
+import argparse,os,subprocess,time,math
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from cao_tamura_h2d_state import load
@@ -28,26 +28,55 @@ class StartupRun:
         if reject:set_parameter(tree,'RANSWallPimplePostAssignRejectStep',1)
         write(tree,xml);env=dict(os.environ,**THREADS);env['LD_LIBRARY_PATH']=self.cert['runtime']['library_path'];env['NEKTAR_RANS_TIMING_FILE']=str(xml.parent/'timing.jsonl');started=time.monotonic()
         with (xml.parent/'solver.log').open('w') as log:p=subprocess.run(['/usr/bin/time','-f','%e %U %S %M','-o',str(xml.parent/'usage.txt'),str(self.solver),str(xml)],cwd=xml.parent,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=1800)
-        report=xml.with_suffix('.evolution.json');d=load(report) if report.exists() else {};self.out['results'][name]=dict(code=p.returncode,failure=d.get('failure'),report=str(report),report_sha256=sha(report) if report.exists() else None,seconds=time.monotonic()-started,usage=(xml.parent/'usage.txt').read_text(),accepted_steps=d.get('steps'));self.save();return d
+        report=xml.with_suffix('.evolution.json');parse_error=None
+        try:d=load(report) if report.exists() else {}
+        except (ValueError,OSError) as error:d={};parse_error=str(error)
+        self.out['results'][name]=dict(code=p.returncode,failure=d.get('failure'),report_parse_error=parse_error,report=str(report),report_sha256=sha(report) if report.exists() else None,seconds=time.monotonic()-started,usage=(xml.parent/'usage.txt').read_text(),accepted_steps=d.get('steps'));self.save();return d
+    def checkpoint_steps(self,path):
+        from diagnose_cls_accepted_covariance import checkpoint
+        return checkpoint(path)['steps']
+    def validate_checkpoint(self,d,expected,dt):
+        from diagnose_cls_accepted_covariance import checkpoint
+        cp=Path(d['checkpoint']);require((cp/'State.bin').is_file(),'accepted checkpoint missing')
+        c=checkpoint(cp);require(c['steps']==expected and c['dt']==dt and c['order']==1,'checkpoint step/dt/order differs')
+        require(state_hash(c['coupled'])==state_hash(d['state']),'checkpoint differs from reported accepted state')
+        require(math.isfinite(c['time']) and abs(c['time']-d['time'])<1e-12,'checkpoint physical time differs')
+        for name in ('reference','defect'):require(state_hash(c[name])==state_hash(d['fixed_'+name]),'checkpoint changed '+name)
+    def validate_result(self,name,d,expected,dt,deliberate=False):
+        record=self.out['results'][name];require(record['code']==(1 if deliberate else 0),'unexpected native process status '+name)
+        require(Path(record['report']).is_file() and not record.get('report_parse_error') and isinstance(d,dict) and 'failure' in d,'missing or invalid native report '+name)
+        require(d.get('failure')==('deliberate post-assignment explicit rejection' if deliberate else None),'unexpected native rejection '+name+': '+str(d.get('failure')))
+        require(d.get('steps')==expected and 'state' in d and 'checkpoint' in d,'unexpected accepted-step count/report '+name)
+        self.validate_checkpoint(d,expected,dt)
+        if not deliberate:self.accepted(d)
+    def checked_native(self,name,dt,steps=0,checkpoint=None):
+        expected=(self.checkpoint_steps(checkpoint) if checkpoint else 0)+steps
+        d=self.native(name,dt,steps,checkpoint);self.validate_result(name,d,expected,dt);require(len(d.get('pimple_attempts',[]))==steps and d.get('implicit_callback_count')==steps,'missing/extra native callback or attempt '+name);return d
     def accepted(self,d):
         require(d and not d.get('failure'),'native rejection is terminal; inspect preserved attempt')
         for v in d.get('pimple_attempts',[]):
-            for key in ('momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls'):require(v[key]==1,'one-sweep solve count changed')
+            require(v.get('scheduled_complete') is True,'incomplete governing attempt accepted')
+            for key in ('outer_sweeps','momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls'):require(v[key]==1,'one-sweep solve count changed')
             require(v['solved_epsilon_retained_bitwise'],'solved epsilon overwritten')
     def rollback(self,parent,dt):
-        cp=Path(parent['checkpoint']);h=sha(cp/'State.bin');bad=self.native('post-assignment-reject',dt,1,cp,True);require(bad.get('failure')=='deliberate post-assignment explicit rejection','did not reach deliberate post-assignment rejection');require(same_history(parent,bad) and sha(cp/'State.bin')==h,'rollback changed parent state/history/bytes')
+        cp=Path(parent['checkpoint']);h=sha(cp/'State.bin');bad=self.native('post-assignment-reject',dt,1,cp,True);self.validate_result('post-assignment-reject',bad,parent['steps'],dt,True);require(bad.get('failure')=='deliberate post-assignment explicit rejection','did not reach deliberate post-assignment rejection');require(same_history(parent,bad) and sha(cp/'State.bin')==h,'rollback changed parent state/history/bytes')
         for k in ('fixed_reference','fixed_defect'):require(state_hash(parent[k])==state_hash(bad[k]),'rollback changed '+k)
         require(parent['physical_samples']==bad['physical_samples'],'rollback changed physical samples')
     def pair(self):
         try:
-            coarse=self.native('coarse-h0',2e-6);fine=self.native('fine-h0',1e-6);self.accepted(coarse);self.accepted(fine)
-            for d in (coarse,fine):require(state_hash(d['state'])==self.cert['state_sha256'] and d['initialization_lift_calls_iterations']==[0,0],'seed import changed or used Lift')
-            q=self.native('coarse8',2e-6,8,Path(coarse['checkpoint']));f=self.native('fine16',1e-6,16,Path(fine['checkpoint']))
-            if not q.get('failure'):
-                self.accepted(q);first=self.native('coarse4',2e-6,4,Path(coarse['checkpoint']));self.accepted(first);second=self.native('coarse4-restart',2e-6,4,Path(first['checkpoint']));self.accepted(second);require(same_history(q,second),'curved 4+4 restart differs');self.rollback(coarse,2e-6)
-            if not f.get('failure'):self.accepted(f)
-            self.out.update(status='completed_bounded_pair' if not q.get('failure') and not f.get('failure') else 'terminal_numerical_rejection',interpretation='startup/adjacent timestep evidence only; no temporal order/developed-flow/experimental claim')
-        except Exception as e:self.out.update(status='terminal_stop',failure=str(e));raise
+            coarse=self.checked_native('coarse-h0',2e-6)
+            require(state_hash(coarse['state'])==self.cert['state_sha256'] and coarse['initialization_lift_calls_iterations']==[0,0],'coarse seed import changed or used Lift')
+            q=self.checked_native('coarse8',2e-6,8,Path(coarse['checkpoint']))
+            fine=self.checked_native('fine-h0',1e-6)
+            require(state_hash(fine['state'])==self.cert['state_sha256'] and fine['initialization_lift_calls_iterations']==[0,0],'fine seed import changed or used Lift')
+            f=self.checked_native('fine16',1e-6,16,Path(fine['checkpoint']))
+            first=self.checked_native('coarse4',2e-6,4,Path(coarse['checkpoint']))
+            second=self.checked_native('coarse4-restart',2e-6,4,Path(first['checkpoint']))
+            require(same_history(q,second),'curved 4+4 restart differs')
+            self.rollback(coarse,2e-6)
+            self.out.update(status='completed_bounded_pair',interpretation='startup/adjacent timestep evidence only; no temporal order/developed-flow/experimental claim')
+        except Exception as e:
+            self.out.update(status='terminal_stop',failure=str(e));raise
         finally:self.save()
 
 def main():

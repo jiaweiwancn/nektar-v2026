@@ -1,0 +1,103 @@
+{
+  "version": "H2iPredeclaredV1",
+  "parent": "409f7d98b21ddee999dfe67b1600810b7091b769",
+  "B_sha256": "c83da50b65d2e9980325d365779a9d53394fbf10e6431d1b87f79728366ae13d",
+  "cold_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "physics": "H2g manifests and exact 2804-slot mesh unchanged; no fit or equation changes",
+  "directions": {
+    "velocity": 41,
+    "epsilon": 8,
+    "k": "fixed anchor, saved original scalar space only"
+  },
+  "anchors": {
+    "A": "largest theta in [0,1] with cold+theta*(B-cold) in seen [.501,1.999]; one inward floating-point guard",
+    "B": "exact cold outer k, conditional on verified actual-limit obstruction of A; no adaptive anchors",
+    "epsilon_origin": "same retracted epsilon; eight saved directions free"
+  },
+  "seen_sets": [
+    "complete native scalar/covariance inventory with sided membership",
+    "GL20",
+    "GL24"
+  ],
+  "fresh_set": "one terminal GL28, only after seen/native qualification; never used to tune",
+  "limits": {
+    "velocity_L2": 0.12,
+    "sampled_component_increment": 0.5,
+    "strong_divergence_L2": 0.06030809942199109,
+    "scalar_ratios": [
+      0.5,
+      2.0
+    ],
+    "delta_over_K0": 0.0001
+  },
+  "construction": {
+    "delta_multiplier": 2,
+    "scalar_band": [
+      0.501,
+      1.999
+    ],
+    "theta_rounding_guard": 1e-12
+  },
+  "phase_I": "minimize transformed-tensor slack alone; inner and outer A+tI PSD; actual scalars and velocity/quadratic caps hard",
+  "unbuffered_obstruction": "same fixed-k anchor; rebuild original delta, epsilon bounds and covariance cuts; checked primal/dual lower bound and native rounding allowance required",
+  "coefficient_bounds": "derived from consistent-mass ellipsoid and independent scalar response rows; no arbitrary trust boxes",
+  "conditioning": {
+    "reuse": "H2g saved transforms; no regeneration of basis shapes",
+    "rank_relative_threshold": 1e-10,
+    "mass_orthogonality_tolerance": 1e-08,
+    "native_affine_relative_tolerance": 1e-10
+  },
+  "numerical_checks": {
+    "LP_primal_dual": 1e-10,
+    "dual_stationarity": 1e-08,
+    "certified_gap": 1e-07,
+    "minimum_certified_lower_bound": 1e-07,
+    "native_acceptance": "unchanged; delta qualification allowance 1e-12; existing independent divergence allowance 1e-8",
+    "full_scan_numerical_tolerance": 1e-09
+  },
+  "aggregate_budget": {
+    "LP_rounds": 40,
+    "complete_scans": 120,
+    "optimizer_seconds": 600,
+    "repeatable_native_checks": 3,
+    "fresh_GL28_audits": 1
+  },
+  "termination": "stop at qualified candidate, checked limited obstruction after allowed anchors, or aggregate time/scan/round/numerical limit; latter inconclusive; no automatic extension",
+  "flat_diagnostic": {
+    "cases": 2,
+    "physical_steps": 0,
+    "fields_changed": [
+      "free U",
+      "free k excluding interface trace"
+    ],
+    "objective": "L2 error squared + H_A^2 physical gradient error squared",
+    "H1_length": 0.0065,
+    "assembly_quadrature": 16,
+    "compatible_traces": "retained native L2 values; W, epsilon and pressure fixed",
+    "adoption": "diagnostic only"
+  },
+  "pilot": {
+    "dt": [
+      2e-06,
+      1e-06
+    ],
+    "steps": [
+      8,
+      16
+    ],
+    "split": [
+      4,
+      4
+    ],
+    "rollback": "deliberate post-assignment failure separate from unexpected rejection",
+    "long_continuation": false
+  },
+  "resources": {
+    "build_workers": 4,
+    "native_ranks": 1,
+    "library_threads": 1,
+    "aggregate_cap": 72
+  },
+  "physical_segment_safeguard": "A segment from a true hard-feasible state to an LP trial may be clipped by exact sampled caps and four physical quadratic forms. This is not a new objective, trust box, or final native projection. Every retained trial receives a full true scan.",
+  "terminal_selection": "Qualified candidate if available; otherwise latest permitted anchor best true non-covariance-hard diagnostic. No selection using fresh GL28."
+}

@@ -604,3 +604,7 @@ target_link_libraries(RANSCaoTamuraBudgetH2gChecks RANSKernels ${NEKTAR++_LIBRAR
 add_executable(RANSH2gConstitutiveProbe h2g_constitutive_probe.cpp)
 target_include_directories(RANSH2gConstitutiveProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_link_libraries(RANSH2gConstitutiveProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+
+# H2i diagnostic methods intentionally excluded from the production solver.
+target_sources(RANSWallResolutionProbe PRIVATE
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionJointInitializer.cpp)
