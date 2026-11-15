@@ -177,7 +177,7 @@ def measure_forecast(root,level):
         inclusive_wait_samples=waits,selected_forecasts=costs,rule='conservative max(prior, observed maximum); governing C all-audited is not an ordinary sample',
         timings_source=identity(root/f'operations/governor-{level}-v1/timing.jsonl')))
 
-def target(root,level):
+def target(root,level,prelaunch=None):
     frozen(root);inputs=load(root/'inputs/selected.json');folder=root/'science'/level;directory=folder/'monitor';directory.mkdir();ip=folder/'intent.json'
     costs=forecast_costs(root)[level]
     intent=dict(schema='WJMonitorIntentV1',policy='CheckpointAuditV1',h23_role='ContinuationFrom02V1',level=level,directory=str(directory),nonce=uuid.uuid4().hex,
@@ -195,6 +195,7 @@ def target(root,level):
             obs=subprocess.Popen([sys.executable,'-B',str(HERE/'wj_h23_observer.py'),'--root',str(root),'--intent',str(ip)],stdout=ol,stderr=subprocess.STDOUT)
             intent['observer_pid']=obs.pid;atomic(ip,intent)
             while not(directory/'observer-started.json').exists():assert obs.poll()is None and time.monotonic()-start<30;time.sleep(.025)
+            if prelaunch is not None:prelaunch()
             native=subprocess.Popen([str(executable(root,'IncNavierStokesSolver')),str(folder/'case.xml')],stdout=nl,stderr=subprocess.STDOUT)
             atomic(folder/'native-launch.json',dict(pid=native.pid,xml=identity(folder/'case.xml'),intent=identity(ip),additional=ADDITIONAL[level],restored=START[level]))
             while native.poll()is None:assert obs.poll()is None,'observer exited before native final evaluation';time.sleep(.025)
