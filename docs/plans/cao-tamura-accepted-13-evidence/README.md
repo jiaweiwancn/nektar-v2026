@@ -14,7 +14,7 @@ equivalence, observer capacity, static admission, short evolution and campaign
 affordability. Its named amendments preserve earlier attempts and bound startup,
 work and numerical uncertainty explicitly. They do not change physical gates.
 
-Read the complete bodies under `evaluated-v1/`, then the additive publication
+Read the complete bodies under `evaluated-v2/`, then the additive publication
 and closed-accounting supplements. Passing diagnostics never authorize the
 blocked physical pair.
 
@@ -35,7 +35,7 @@ blocked physical pair.
 | memory-v1 | Exact legacy q48 pass and q64 allocation-phase failure |
 | memory-v2 | Small and retained target old/new observer checks, exact q64 retry and pressure-image bounds |
 | initial-image-v1 | One initial-state pressure-image contrast using all native pressure modes |
-| evaluated-v1 | Compact complete primitives, classifications, bindings and closed pre-collection resources |
+| evaluated-v2 | Compact complete primitives, classifications, bindings and closed pre-collection resources |
 | publication-v1 | Additive publication provenance, accounting, selected external hashes and transfer archive |
 
 Each successful driver directory has immutable `request-manifest.json` and

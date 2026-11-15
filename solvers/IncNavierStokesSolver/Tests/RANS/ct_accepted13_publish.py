@@ -17,7 +17,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for key in ('root','ct9','ct11','ct12','self-control','output'):
         p.add_argument('--'+key,type=Path,required=True)
-    a=p.parse_args();a.output.mkdir(exist_ok=False);ev=a.root/'evaluated-v1'
+    a=p.parse_args();a.output.mkdir(exist_ok=False);ev=a.root/'evaluated-v2'
     completion=json.loads((ev/'completed-artifacts.json').read_text())
     require(all(sha(ev/name)==digest for name,digest in completion['files'].items()),'changed evaluated artifact')
     families={};roots=set();cpu=wall=0.;aggregate=0
@@ -116,7 +116,7 @@ def main():
     shutil.copy2(Path(__file__),a.output/'publication-driver.py')
     archive=a.output/'ct13-compact-v1.tar.gz'
     with tarfile.open(archive,'w:gz',compresslevel=6) as tar:
-        tar.add(ev,arcname='evaluated-v1')
+        tar.add(ev,arcname='evaluated-v2')
         for f in sorted(a.output.iterdir()):
             if f!=archive:tar.add(f,arcname=f.name)
     write_json(a.output/'transfer-sha256.json',dict(file=archive.name,bytes=archive.stat().st_size,sha256=sha(archive)))

@@ -1,0 +1,8 @@
+{
+  "schema": "CT13ActualNativeHistoryBindingV2",
+  "failed_collector_revision": "b14ab6d4",
+  "failure": "resources-collect-v1 rejects actual_history_differs_from_state=false before creating an evaluated artifact directory",
+  "finding": "The actual first IMEX1 native attempt has identical history and input values. Their equality is legitimate; the native snapshot, not vector inequality, defines the history. The last evolved attempt retains its separate actual history.",
+  "correction": "Recompute complete history and effective-input equality against the SHA-bound native flow snapshot, and verify the exported equality observation. Never replace a supplied evolved history by state. A forged value must fail the native-source binding.",
+  "scope": "Collector-only logic correction, no changed export/native/operator/physical data or threshold; exports-v2, old requests, first collector failure and all earlier seals remain unchanged. New evaluated-v2 destination."
+}
