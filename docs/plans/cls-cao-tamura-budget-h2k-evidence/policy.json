@@ -1,0 +1,20 @@
+{
+  "version": "H2kAcceptancePolicyV1",
+  "created_Asia_Shanghai": "2026-11-15",
+  "reviewed_head": "f1ce51dfcb044da89466b4401a69241de2241ebe",
+  "goal_closure": ["qualified exact standard hill seed", "complete native and seen-sided checks", "independent fresh hill sampling", "strict V2 zero-step production hill import", "coarse8/fine16 through 1.6e-5 s", "coarse4+4 restart equivalence", "post-assignment rejection rollback"],
+  "obstruction_does_not_close_physical_goal": true,
+  "physics": "unchanged full-precision H2g/H2j specifications, fit, 2804 slots, native one-sweep IMEX1; no source/closure/boundary/calibration change",
+  "cold_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "B_sha256": "c83da50b65d2e9980325d365779a9d53394fbf10e6431d1b87f79728366ae13d",
+  "anchors": "exact saved H2i/H2j A/B and theta, fixed k and original eight epsilon directions",
+  "original_velocity_count": 44,
+  "limits": {"delta_over_K0": 0.0001, "scalar_ratios": [0.5, 2], "velocity_L2": 0.12, "sampled_component_increment": 0.5, "native_GL16_divergence_L2": 0.06030809942199109, "native_GL16_arithmetic_tolerance": 1e-12, "GL20_GL24_integration_allowance": 1e-8, "cutoff_relative_budget_error": 1e-10, "algebraic_continuity_error": 1e-9},
+  "buffered_construction": {"delta_multiplier": 2, "epsilon_ratios": [0.501, 1.999]},
+  "aggregate_budget": {"frozen_epochs": 4, "maximum_velocity_count": 128, "constrained_response_attempts": 96, "construction_numerical_seconds": 2400, "LP_rounds": 240, "complete_separation_scans_including_replay": 720, "optimizer_replay_seconds": 3600, "repeatable_native_candidate_checks": 8, "fresh_hill_audits": 1, "total_wall_seconds_including_build_and_export": 28800, "run_storage_GiB": 64, "per_process_memory_GiB": 16},
+  "adaptation": "verified actual-limit cuts, absent response, deficient support/rank or failed finite physical control select a new support/conditioning epoch; preserve all epochs and old columns; never rerun unchanged span to spend budget",
+  "fresh_lifecycle": "GL20/24 are seen; exactly one fresh GL28 candidate unless a separately versioned/tested new-epoch lifecycle is declared before further optimization; otherwise stop after fresh failure",
+  "resources": {"build_workers": 4, "native_ranks": 1, "library_threads": 1, "aggregate_workers": 72},
+  "startup": {"coarse_dt": 2e-6, "coarse_steps": 8, "fine_dt": 1e-6, "fine_steps": 16, "split": [4,4], "rollback": "post-assignment, complete parent preservation", "fail_fast": true},
+  "termination": "successful closure; declared aggregate budget; verified limited obstruction after useful available adaptations; numerical/resource failure; fresh gate failure without qualified new lifecycle. Every non-success leaves physical startup goal open."
+}
