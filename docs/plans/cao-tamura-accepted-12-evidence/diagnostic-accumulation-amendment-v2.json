@@ -1,0 +1,10 @@
+{
+  "schema": "CT12NativeActionAccumulationAmendmentV2",
+  "before_fresh_data": true,
+  "retained_failure": "pressure-v2 continuity tighter repeat: RHS L2 1.4120250466559138e-16,max1.8019556400880995e-17; true residual max1.4406907393409051e-27; scipyinfo12 at788inneriterations; closed CPU48.005496seconds",
+  "issue": "diagnostic used ordinary float64 sparse accumulation/direct solves while native CSR uses extended accumulation and up to3direct residual refinements; total-RHS agreement does not certify relative accuracy of tiny continuity noise",
+  "correction": "read-only M,G,D,C,A actions use native-order extended sparse accumulation rounded to binary64; mass/momentum inverses independently check the original system and allow at most3residual refinements,as native",
+  "unchanged": "original governing runtime,CSR coefficients,free masks,consistent mass,physical/history data,work caps,all-row2e-10 and pressure/tighter-repeat1e-8 gates",
+  "scope": "diagnostic arithmetic only; no new governing component,physical floor,projection,model regularization or qualifying trajectory",
+  "budget": "original finite CT12 budget includes both retained diagnostic failures"
+}

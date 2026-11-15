@@ -45,14 +45,32 @@ class Frozen:
         self.G=self.images.G;self.D=self.images.D;self.C=self.images.C
         self.F=matrix(s['frozen_flow_matrix']);nv=self.nv
         self.A=self.F[:nv,:nv].tocsr();self.al=factor(self.A)
+        # Match the native CSR extended accumulation and three-step direct
+        # residual refinement. This matters for the tiny continuity RHS, whose
+        # relative accuracy cannot be inferred from a large-RHS total solve.
+        self.extended={key:m.astype(np.longdouble) for key,m in
+                       (('M',self.M),('G',self.G),('D',self.D),('C',self.C),('A',self.A))}
         self.alpha=s['alpha'];self.rc=np.asarray(s['frozen_flow_residual'][nv:])
         self.rm=np.asarray(s['frozen_flow_residual'][:nv]);self.receipts=[]
-        self.S=LinearOperator(self.C.shape,matvec=lambda p:self.D@self.ml.solve(self.G@p)/self.alpha-self.C@p)
+        self.S=LinearOperator(self.C.shape,matvec=lambda p:self.mul('D',self.direct('M',self.mul('G',p)))/self.alpha-self.mul('C',p))
         pc=(self.D@diags(1/self.M.diagonal())@self.G/self.alpha-self.C).tocsc()
         self.pl=factor(pc);self.P=LinearOperator(self.S.shape,matvec=self.pl.solve)
         self.blocks=dict(G=smx(self.F[:nv,nv:]-self.G),D=smx(self.F[nv:,:nv]-self.D),C=smx(self.F[nv:,nv:]-self.C))
         require(max(self.blocks.values())<=2e-10 and not np.any(self.C.data),'captured full blocks/C disagree')
         require(len(initial['observation']['state'])-1 not in self.rows,'unused gauge entered solve')
+
+    def mul(self,key,v):
+        return np.asarray(self.extended[key]@np.asarray(v,dtype=np.longdouble),dtype=np.float64)
+
+    def direct(self,key,rhs):
+        lu=self.ml if key=='M' else self.al;rhs=np.asarray(rhs);x=lu.solve(rhs)
+        bound=2e-12*maximum(rhs)+1e-25
+        for attempt in range(4):
+            residual=self.mul(key,x)-rhs
+            if maximum(residual)<=bound:return x
+            require(attempt<3,'diagnostic direct solve true residual:'+key)
+            x-=lu.solve(residual)
+        raise ValueError('unreachable diagnostic refinement')
 
     def solve(self,rhs,label,rtol=2e-12,operator=None):
         rhs=np.asarray(rhs);mag=float(np.linalg.norm(rhs))
@@ -77,11 +95,11 @@ class Frozen:
 
     def image(self,load,label,rtol=2e-12):
         v=np.asarray(load)[self.rows[:self.nv]]
-        return self.solve(-self.D@self.al.solve(v),label,rtol)
+        return self.solve(-self.mul('D',self.direct('A',v)),label,rtol)
 
     def mass_image(self,load,label,rtol=2e-12):
         v=np.asarray(load)[self.rows[:self.nv]]
-        return self.solve(-self.D@self.ml.solve(v)/self.alpha,label,rtol)
+        return self.solve(-self.mul('D',self.direct('M',v))/self.alpha,label,rtol)
 
     def measure(self,p):return self.images.measure(p)
     def inner(self,a,b):return self.images.inner(a,b)
@@ -146,7 +164,7 @@ def main():
             storage_global=np.zeros(nm);storage_global[fr.rows[:nv]]=storage
             free_difference=state[fr.rows[:nv]]-np.asarray(s['history'])[fr.rows[:nv]]
             storage_expected=s['alpha']*(fr.M@free_difference)
-            pred=-fr.al.solve(fr.rm);rhs=fr.D@pred+fr.rc
+            pred=-fr.direct('A',fr.rm);rhs=fr.mul('D',pred)+fr.rc
             dpi=fr.solve(rhs,'total');tight=fr.solve(rhs,'total-tighter',2e-14)
             native=np.asarray(s['pressure_increment']);error=fr.measure(dpi-native);unc=fr.measure(tight-dpi)
             require(error['maximum_scaled_value']<1e-8 and unc['maximum_scaled_value']<1e-8,'pressure reconstruction/repeat uncertainty')
@@ -207,9 +225,9 @@ def main():
             if dt=='0.001' and i==0:
                 # Exact frozen coupled correction through an A-inverse action,
                 # without a global coupled factor or a dense Schur matrix.
-                exactop=LinearOperator(fr.S.shape,matvec=lambda p:fr.D@fr.al.solve(fr.G@p)-fr.C@p)
+                exactop=LinearOperator(fr.S.shape,matvec=lambda p:fr.mul('D',fr.direct('A',fr.mul('G',p)))-fr.mul('C',p))
                 exactpi=fr.solve(rhs,'exact-frozen-coupled',operator=exactop)
-                exactu=pred-fr.al.solve(fr.G@exactpi);res=fr.F@np.r_[exactu,exactpi]+np.r_[fr.rm,fr.rc]
+                exactu=pred-fr.direct('A',fr.mul('G',exactpi));res=fr.F@np.r_[exactu,exactpi]+np.r_[fr.rm,fr.rc]
                 require(maximum(res)<2e-10,'exact coupled diagnostic all-row residual')
                 row['exact_coupled']=dict(pressure=fr.measure(exactpi),split_difference=fr.measure(dpi-exactpi),maximum_residual=maximum(res))
                 # Stream one radial band vector at a time from local sparse supports.
