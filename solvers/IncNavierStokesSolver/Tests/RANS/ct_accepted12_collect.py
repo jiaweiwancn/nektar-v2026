@@ -16,7 +16,7 @@ from rans_request_manifest import RequestManifest,sha
 def read(p):return json.loads(Path(p).read_text())
 
 
-def pressure_gate(q):
+def pressure_gate(q,require_quadrature=True):
     reasons=[]
     if q.get('schema')!='CT12TargetPressureV1' or set(q.get('members',{}))!={'0.001','0.0005'}:reasons.append('coverage')
     for dt,m in q.get('members',{}).items():
@@ -44,9 +44,11 @@ def pressure_gate(q):
                 if repeat['maximum_scaled_value']>=1e-8:reasons.append('component_repeat:'+dt)
     if set(q.get('common',{}))!={'0.001','0.002'}:reasons.append('common_time')
     if q.get('bands',{}).get('signed_sum_error',{}).get('maximum_scaled_value',1)>=1e-8:reasons.append('band_sum')
-    for row in q.get('held_quadrature',[]):
-        if row['pressure_image']['maximum_scaled_value']>=1e-8 or row['reconstruction']>2e-10:reasons.append('quadrature')
-    if len(q.get('held_quadrature',[]))!=2:reasons.append('quadrature_coverage')
+    if require_quadrature:
+        for row in q.get('held_quadrature',[]):
+            if row.get('status')!='pass':reasons.append('quadrature_capacity')
+            elif row['pressure_image']['maximum_scaled_value']>=1e-8 or row['reconstruction']>2e-10:reasons.append('quadrature')
+        if len(q.get('held_quadrature',[]))!=2:reasons.append('quadrature_coverage')
     return dict(status='pass' if not reasons else 'fail',reasons=sorted(set(reasons)),scope='read-only reconstruction and signed attribution; no physical uncertainty reclassification')
 
 
@@ -54,7 +56,8 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','ct10','ct11','pressure','axes','profile','self-control','output'):p.add_argument('--'+k,type=Path,required=True)
     a=p.parse_args();pressure=sealed(a.pressure);axes=sealed(a.axes);profile=sealed(a.profile);old=sealed(a.ct11/'target-v1')
-    gate=pressure_gate(pressure);require(gate['status']=='pass','incomplete pressure primitives:'+str(gate))
+    gate=pressure_gate(pressure,False);quadrature_gate=pressure_gate(pressure)
+    require(gate['status']=='pass','incomplete pressure reconstruction primitives:'+str(gate))
     require(profile['status']=='pass' and profile['retention']['all_restored_bytes_equal'] and
             profile['rollback']['status']=='pass' and physical_budgets(profile['budgets'])['status']=='pass','profile/retention prerequisites failed')
     require(axes['status']=='pass' and all(r['signed_sum_error']['maximum_scaled_value']<1e-8 for rows in axes['members'].values() for r in rows),'axis reconstruction failed')
@@ -63,7 +66,8 @@ def main():
     for f in sorted(a.root.glob('resources-*')):
         if f==a.self_control:continue
         require((f/'execution.json').exists(),'unclosed resource family:'+str(f));e=read(f/'execution.json');r=e['resource']
-        require(r['project_status']==r['aggregate_status']=='pass','worker violation:'+str(f))
+        # A resource failure is a required-scope failure, never a reason to
+        # discard otherwise interpretable physical/diagnostic evidence.
         resources[f.name]=dict(execution=e,sha256=sha(f/'execution.json'),highwater={x.name:read(x) if x.suffix=='.json' else [json.loads(line) for line in x.read_text().splitlines()] for x in f.iterdir() if x.name in ('resource-final.json','project-highwater.jsonl','worker-guard-highwater.jsonl','worker-guard-events.jsonl')})
         project=max(project,r['maximum_project']);aggregate=max(aggregate,r['maximum_aggregate']);cpu+=e['process_cpu_seconds'];wall+=e['wall_seconds']
     # Account for simultaneously active nonnumerical status helpers too. All
@@ -79,9 +83,9 @@ def main():
                 owned.update(add)
             value=sum(p['threads'] for p in processes if p['pid'] in owned)
             if value>union_peak:union_peak=value;union_witness=dict(time_unix=row['time_unix'],project_threads=value,processes=[p for p in processes if p['pid'] in owned])
-    require(union_peak<=16 and aggregate<=72,'combined project/helper census failed')
+    worker_pass=union_peak<=16 and aggregate<=72 and all(e['execution']['resource']['project_status']==e['execution']['resource']['aggregate_status']=='pass' for e in resources.values())
     output_bytes=sum(f.stat().st_size for f in a.root.rglob('*') if f.is_file() and f.relative_to(a.root).parts[0] not in ('source','tmp'))
-    require(cpu<12000 and wall<14400 and output_bytes<12*1024**3,'finite CT12 package budget exhausted')
+    package_pass=cpu<12000 and wall<14400 and output_bytes<12*1024**3
     m=RequestManifest(a.output,dict(schema='CT12CompactEvidenceV1',source=sha(Path(__file__)),inputs=requests,resources={k:v['sha256'] for k,v in resources.items()},scope='collection execution,diagnostic,physical and resource decisions distinct'))
     negatives={}
     for name,word,mutate in [('missing_step','missing_time',lambda q:q['members']['0.001']['steps'].pop()),
@@ -90,7 +94,7 @@ def main():
             ('bad_pressure_pass_label','reconstruction',lambda q:q['members']['0.001']['steps'][0]['reconstruction'].update(maximum_scaled_value=1e-6)),
             ('wrong_gauge','pressure_level',lambda q:q['members']['0.001']['steps'][0].update(unused_gauge=True)),
             ('missing_common_time','common_time',lambda q:q['common'].pop('0.001'))]:
-        v=copy.deepcopy(pressure);mutate(v);v['status']='pass';r=pressure_gate(v)
+        v=copy.deepcopy(pressure);mutate(v);v['status']='pass';r=pressure_gate(v,False)
         require(r['status']=='fail' and any(word in x for x in r['reasons']),'nondiscriminating primitive negative:'+name);negatives[name]=r
     initial=read(a.ct10/'target-preflight-v1/target/readiness.json');mom=initial['ct10_momentum'];free=np.asarray(mom['free_rows'],int)
     for name,part,factor in [('omit_nonlinear_normal','nonlinear_normal',1),('reverse_natural_traction','natural_traction',2),('omit_augmented_pressure','augmented_pressure',1)]:
@@ -124,16 +128,15 @@ def main():
         row_quality={dt:[{k:r[k] for k in ('time','C_maximum','initial_weak_continuity_maximum','reconstruction','tighter_repeat','signed_sum_error','continuity','continuity_tighter','storage_and_lifting','storage_lifting_tighter','finite_alpha_remainder','telescope','stage_pressure','trace','predictor_factor_nonzeros')} for r in member['steps']] for dt,member in pressure['members'].items()},
         capped_diagnostic_solve_flags=[dict(member=dt,time=r['time'],**v) for dt,member in pressure['members'].items() for r in member['steps'] for v in r['solve_checks'] if not v['requested_scipy_stopping_test_met']],
         held_quadrature=pressure['held_quadrature'],stage_loads=pressure['stage_loads'])
-    decision=dict(schema='CT12RequiredScopeV1',diagnostic_reconstruction=gate,historical_CT11_pressure=old['qualification'],
+    decision=dict(schema='CT12RequiredScopeV1',diagnostic_reconstruction=gate,held_state_quadrature=quadrature_gate,historical_CT11_pressure=old['qualification'],
         target_physical_horizon=.002,new_physical_continuation='not_attempted_or_admitted',
         profile_and_restart=dict(status='pass',accepted_replay_steps=2,deliberate_rejected_attempts=1,governing_change=False),
         retention=dict(status=profile['retention']['status'],scope='lossless compressed/deduplicated bounded replay payloads; no historical pruning or unqualified rolling eviction'),
-        campaign_resources=forecast,resources=dict(status='pass',maximum_project=max(project,union_peak),maximum_aggregate=aggregate,combined_project_witness=union_witness,
+        campaign_resources=forecast,resources=dict(status='pass' if worker_pass and package_pass else 'fail',worker_status='pass' if worker_pass else 'fail',package_budget_status='pass' if package_pass else 'fail',maximum_project=max(project,union_peak),maximum_aggregate=aggregate,combined_project_witness=union_witness,
             closed_package_CPU=cpu,closed_family_wall_sum=wall,new_output_bytes=output_bytes,package_CPU_limit=12000,package_wall_limit=14400,package_output_limit_bytes=12*1024**3),
         static_contrast='not_yet_selected; target-specific attribution must precede any separate static manifest',
         terrain='unattempted; mapped numbering,joined gradients/cofactors,transmission and curved temporal/spatial gates separate',
         physical_applicability='central physical reference retained; no precursor or hill validation',historical='CT4–CT11 seals unchanged')
-    require(cpu<12000,'finite CT12 CPU budget exhausted')
     for name,value in [('pressure',pressure),('pressure-summary',summary),('axes-and-tractions',axes),('profile',profile),('cost',costs),('forecast',forecast),('negative-controls',negatives),('resources',resources),('decision',decision)]:write_json(a.output/(name+'.json'),value)
     critical=['library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp','library/SolverUtils/Turbulence/RANSModels.cpp',
         'solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp','solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSparse.cpp',

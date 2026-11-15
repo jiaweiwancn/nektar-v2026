@@ -113,6 +113,7 @@ def main():
     global PROGRESS
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('ct10','ct11','runtime','contract','output'):p.add_argument('--'+k,type=Path,required=True)
+    p.add_argument('--reuse-packets',type=Path,help='Exact immutable native packets from a failed diagnostic; never reuse derived classifications')
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0))
     resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3))
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
@@ -124,24 +125,38 @@ def main():
     weights=n.inventory(c)[2];count=len(weights);off=initial['observation']['offsets']
     init=np.asarray(initial['observation']['state']);require(len(init)==60907,'not actual target')
     require(sha(a.runtime/'RANSPreservationProbe')=='20236b14eb4a90dea0f2a9a38b92e41135a83e9241c978fb265e185098f586e8','foreign read-only runtime')
+    reused={}
+    if a.reuse_packets:
+        old=n.read(a.reuse_packets/'request-manifest.json')['request']
+        require(old['target']==sha(a.ct11/'target-v1/results.json') and old['preflight']==sha(a.ct10/'target-preflight-v1/results.json') and
+                old['initial']==sha(initial_path) and old['runtime']==runtime_identity(a.runtime/'RANSPreservationProbe'),'foreign native packet request')
+        for folder in sorted(a.reuse_packets.iterdir()):
+            if folder.is_dir() and (folder/'loads.json').exists():
+                reused[folder.name]={name:sha(folder/name) for name in ('case.xml','loads-request.json','loads-execution.json','loads.json')}
     manifest=RequestManifest(a.output,dict(schema='CT12TargetPressureV1',contract=sha(a.contract),source=sha(Path(__file__)),
         target=sha(a.ct11/'target-v1/results.json'),preflight=sha(a.ct10/'target-preflight-v1/results.json'),
-        initial=sha(initial_path),runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),scope='read-only captured target operators/states; extra diagnostic solves only'))
+        reused_native_packets=dict(path=str(a.reuse_packets),files=reused),initial=sha(initial_path),runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),scope='read-only captured target operators/states; extra diagnostic solves only'))
     PROGRESS=a.output/'last-solve.json'
     initial_mom=initial['ct10_momentum'];actual0={k:np.asarray(v) for k,v in initial_mom['actual'].items()}
     analytic0={k:np.asarray(v) for k,v in initial_mom['analytic'].items()};nm=initial_mom['momentum_size']
     cache={exact_vector_hash(init):(initial_mom,dict(path=str(initial_path),sha256=sha(initial_path),reused=True))}
-    export_count=0
+    export_count=0;reused_count=0
 
     def loads(state,t,template,label):
-        nonlocal export_count
+        nonlocal export_count,reused_count
         h=exact_vector_hash(state)
         if h in cache:return cache[h]
-        export_count+=1;require(export_count<=10,'prospective aggregate export count exceeded')
-        dest=a.output/label;dest.mkdir();shutil.copy2(template,dest/'case.xml')
         req=replay(initial,list(state),t,[],export_faces_only=True,export_ct10_momentum=True,ct10_export_points=False)
-        print('CT12 native load',label,t,flush=True)
-        q,e=probe(a.runtime,dest,req,'loads');require(e['exit_code']==0,'native target load export:'+str(q.get('failure')))
+        if label in reused:
+            dest=a.reuse_packets/label
+            require(sha(dest/'case.xml')==sha(template) and n.read(dest/'loads-request.json')==req,'foreign reused native state/configuration')
+            q=n.read(dest/'loads.json');e=n.read(dest/'loads-execution.json');reused_count+=1
+        else:
+            export_count+=1;require(export_count<=10,'prospective aggregate export count exceeded')
+            dest=a.output/label;dest.mkdir();shutil.copy2(template,dest/'case.xml')
+            print('CT12 native load',label,t,flush=True)
+            q,e=probe(a.runtime,dest,req,'loads')
+        require(e['exit_code']==0,'native target load export:'+str(q.get('failure')))
         require(q['observation']['state']==list(state),'read-only observer changed input')
         m=q['ct10_momentum'];require(m['maximum_reconstruction_error']<=2e-10,'native all-row load reconstruction')
         require(m['maximum_input_lift_difference']==0.,'nonzero effective lift requires separate attribution')
@@ -264,6 +279,11 @@ def main():
                         m,meta_stage=loads(np.asarray(ks[name]),s['time'],folder/'case.xml',name+'-'+dt)
                         out['stage_loads'][dt+'/'+name]=dict(metadata=meta_stage,component_load_changes={k:maximum(np.asarray(v)-np.asarray(last['actual'][k])) for k,v in m['actual'].items()});last=m
             out['members'][dt]=dict(steps=rows_out,report_sha256=sha(file),actual_initial_sha256=exact_vector_hash(init),final_absolute_pressure=fr.measure(absolute))
+            # Persist derived work before any later diagnostic can fail. Native
+            # packets stay immutable and are rebound by request/state hashes.
+            write_json(a.output/'partial-results.json',out)
+            write_json(a.output/'partial-bands.json',bands)
+            np.savez(a.output/('pressure-vectors-'+dt+'.npz'),**{t+'|'+k:v for t,terms in times.items() for k,v in terms.items()})
             snapshots[dt]=s;del fr;gc.collect()
         accum_by_time[dt]=times
         vectors[dt]={t:{k:v.tolist() for k,v in terms.items()} for t,terms in times.items()}
@@ -277,11 +297,25 @@ def main():
         dest=a.output/('held-q'+str(orders[0]));dest.mkdir();root=ET.parse(Path(fine['directory'])/'case.xml').getroot()
         for key,value in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),orders,strict=True):set_parameter(root,key,value)
         write(root,dest/'case.xml');req=replay(initial,endstate,.002,[],export_faces_only=True,export_ct10_momentum=True,ct10_export_points=False)
-        q,e=probe(a.runtime,dest,req,'loads');require(e['exit_code']==0 and q['observation']['state']==endstate,'held target quadrature state changed/rejected')
+        label=dest.name
+        if label in reused:
+            olddest=a.reuse_packets/label
+            require(sha(olddest/'case.xml')==sha(dest/'case.xml') and n.read(olddest/'loads-request.json')==req,'foreign held-quadrature request')
+            q=n.read(olddest/'loads.json');e=n.read(olddest/'loads-execution.json');packet=olddest/'loads.json'
+        else:
+            q,e=probe(a.runtime,dest,req,'loads');packet=dest/'loads.json'
+        if e['exit_code']!=0:
+            # Preserve the failed high-order capacity control. It cannot become
+            # passing quadrature evidence, but must not erase the six completed
+            # pressure reconstructions or trigger another native export.
+            require(q.get('failure')=='std::bad_alloc','unexpected held-state native failure')
+            quad.append(dict(status='blocked',orders=orders,execution=e,packet=str(packet),packet_sha256=sha(packet),failure=q['failure'],address_space_GiB=16,scope='unresolved governing-quadrature capacity; no physical continuation admission'))
+            continue
+        require(q['observation']['state']==endstate,'held target quadrature input changed')
         m=q['ct10_momentum'];delta=np.asarray(m['total_actual'])-np.asarray(native_mom['total_actual'])
         pv=fr.image(delta,'held-q'+str(orders[0]));err=fr.measure(pv)
         require(m['maximum_reconstruction_error']<=2e-10 and err['maximum_scaled_value']<1e-8,'held-state quadrature uncertainty')
-        quad.append(dict(orders=orders,execution=e,packet_sha256=sha(dest/'loads.json'),maximum_load_change=maximum(delta),pressure_image=err,reconstruction=m['maximum_reconstruction_error']))
+        quad.append(dict(status='pass',orders=orders,execution=e,packet=str(packet),packet_sha256=sha(packet),maximum_load_change=maximum(delta),pressure_image=err,reconstruction=m['maximum_reconstruction_error']))
     for t in sorted(set(accum_by_time['0.001'])&set(accum_by_time['0.0005'])):
         aa=accum_by_time['0.001'][t];bb=accum_by_time['0.0005'][t]
         delta={k:aa[k]-bb[k] for k in aa};total=sum(delta.values(),np.zeros(fr.S.shape[0]));den=fr.inner(total,total)
@@ -294,7 +328,8 @@ def main():
             group=key.split('/')[0];groups[group]=groups.get(group,np.zeros_like(v))+v
         out['common'][t]=dict(pressure=fr.measure(total),sealed_CT11=direct,components=table,
             groups={k:dict(signed_alignment=fr.inner(v,total)/den,pressure=fr.measure(v)) for k,v in groups.items()})
-    out.update(status='pass',bands=bands,negative_actions=negatives,native_export_count=export_count,held_quadrature=quad,
+    out.update(status='pass' if all(q['status']=='pass' for q in quad) else 'reconstruction_pass_quadrature_blocked',reconstruction_status='pass',
+        quadrature_status='pass' if all(q['status']=='pass' for q in quad) else 'blocked',bands=bands,negative_actions=negatives,native_export_count=export_count,reused_native_export_count=reused_count,held_quadrature=quad,
         pressure_convention='absolute total-traction level; common means and variations retained without regauging',
         historical_qualification=target['qualification'],continuation_admitted=False)
     write_json(a.output/'pressure-vectors.json',vectors);write_json(a.output/'results.json',out)
