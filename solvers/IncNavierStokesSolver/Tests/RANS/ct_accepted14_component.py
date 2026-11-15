@@ -18,8 +18,8 @@ from ct_accepted_feasibility import write_json
 from run_cls_epawf_picard import set_info,set_parameter,write
 from rans_request_manifest import RequestManifest,runtime_identity,sha
 
-COMPONENT='CT14-ScotchVectorNDKeepV1'
-def ordering(folder,value='ScotchVectorNDKeepV1'):
+COMPONENT='CT14-VectorCOLAMDV1'
+def ordering(folder,value='VectorCOLAMDV1'):
     root=ET.parse(folder/'case.xml').getroot();set_info(root,'RANSWallPredictorOrdering',value);write(root,folder/'case.xml')
 
 def main():
@@ -33,10 +33,10 @@ def main():
         src=a.ct9/'controls-v4'/(label+'-sparse');old=n.read(src/'operator.json');c=n.read(src/'construction.json');req=n.read(src/'operator-request.json')
         require(sha(src/'operator.json')==controls['checks'][label]['artifacts'][1]['sha256'],'old complete operator witness changed')
         packets=[];executions=[];artifacts=[]
-        for policy in ('COLAMD','ScotchVectorNDKeepV1'):
+        for policy in ('COLAMD','VectorCOLAMDV1'):
             dest=a.output/(label+'-'+policy);dest.mkdir();shutil.copy2(src/'case.xml',dest/'case.xml');ordering(dest,policy)
             q,e=probe(a.runtime,dest,req,'operator');require(e['exit_code']==0,'component small operation:'+str(q.get('failure')))
-            require((COMPONENT in q['observation']['identity'])==(policy=='ScotchVectorNDKeepV1'),'component identity')
+            require((COMPONENT in q['observation']['identity'])==(policy=='VectorCOLAMDV1'),'component identity')
             packets.append(q);executions.append(e);artifacts.append(dict(file=str(dest/'operator.json'),sha256=sha(dest/'operator.json')))
         unchanged={key:equal_primitives(old[key],packets[0][key]) for key in ('open_frozen_systems','open_boundary','test_basis')}
         require(max(unchanged.values())<=2e-10,'rebuilt canonical operators differ from qualified original')
@@ -45,7 +45,7 @@ def main():
         write_json(a.output/'progress.json',result);print('CT14 small component',label,'pass',flush=True)
     # Genuine same-component histories use new checkpoints created by this runtime.
     c=n.read(a.ct9/'controls-v4/one/construction.json');template=a.ct9/'controls-v4/one/case.xml'
-    def evolve(label,steps=2,parent=None,policy='ScotchVectorNDKeepV1',reject=0,foreign_fit=False):
+    def evolve(label,steps=2,parent=None,policy='VectorCOLAMDV1',reject=0,foreign_fit=False):
         dest=a.output/label;n.make(dest,a.runtime,c,1e-6,steps,parent,template);enable(dest);ordering(dest,policy)
         root=ET.parse(dest/'case.xml').getroot();set_parameter(root,'RANSWallPimpleHardAuditRejectStep',reject)
         if foreign_fit:set_info(root,'RANSOpenFitPolicy','ForeignFitV1')
@@ -60,7 +60,7 @@ def main():
     require(maximum(np.asarray(fr['state'])-dr['state'])<=1e-8,'small component complete state update')
     negatives={}
     previous=n.read(a.ct9/'controls-v4/one/case.evolution.json')
-    for label,parent,policy,foreign in [('old-component',Path(previous['checkpoint']),'ScotchVectorNDKeepV1',False),('new-to-old',Path(orr['checkpoint']),'COLAMD',False),('foreign-fit',Path(orr['checkpoint']),'ScotchVectorNDKeepV1',True),('unknown-order',None,'UnknownOrderingV1',False)]:
+    for label,parent,policy,foreign in [('old-component',Path(previous['checkpoint']),'VectorCOLAMDV1',False),('new-to-old',Path(orr['checkpoint']),'COLAMD',False),('foreign-fit',Path(orr['checkpoint']),'VectorCOLAMDV1',True),('unknown-order',None,'UnknownOrderingV1',False)]:
         dest,q,e=evolve(label,0,parent,policy,foreign_fit=foreign);message=q.get('failure','')+(dest/'solver.log').read_text()[-3000:]
         require(e['exit_code']!=0 and ('ordering' if label=='unknown-order' else 'signature') in message.lower(),'incompatible history/policy rejection:'+label)
         negatives[label]=dict(status='pass',failure=message,execution=e)

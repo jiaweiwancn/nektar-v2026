@@ -154,6 +154,30 @@ std::vector<int> SparseScotchPermutation(const SparseMatrix &matrix,const std::v
 #endif
 }
 
+std::vector<int> SparseVectorCOLAMDPermutation(const SparseMatrix &matrix,const std::vector<int> &groups)
+{
+#ifdef NEKTAR_RANS_HAVE_EIGEN_SPARSE
+    const int n=matrix.Rows();Require(n>0 && matrix.Columns()==n && groups.size()==n,"vector COLAMD group shape");
+    auto labels=groups;std::sort(labels.begin(),labels.end());labels.erase(std::unique(labels.begin(),labels.end()),labels.end());
+    std::vector<int> node(n);const int ng=labels.size();std::vector<std::vector<int>> members(ng);
+    for(int i=0;i<n;++i){node[i]=std::lower_bound(labels.begin(),labels.end(),groups[i])-labels.begin();members[node[i]].push_back(i);}
+    using Matrix=Eigen::SparseMatrix<double,Eigen::ColMajor,int>;
+    std::vector<Eigen::Triplet<double,int>> entries;entries.reserve(matrix.NonZeros());
+    for(int i=0;i<n;++i)matrix.Each(i,[&](int j,double){entries.emplace_back(node[i],node[j],1.);});
+    Matrix quotient(ng,ng);quotient.setFromTriplets(entries.begin(),entries.end(),[](double,double){return 1.;});quotient.makeCompressed();
+    Eigen::PermutationMatrix<Eigen::Dynamic,Eigen::Dynamic,int> perm;
+    Eigen::COLAMDOrdering<int>{}(quotient,perm);
+    // Eigen Ordering.h stores old_to_new in indices(), unlike a list of
+    // original columns in their new order. Expand each native vector group.
+    std::vector<int> inverse(ng,-1),result(n);int next=0;
+    for(int i=0;i<ng;++i){const int j=perm.indices()[i];Require(j>=0 && j<ng && inverse[j]<0,"invalid vector COLAMD permutation");inverse[j]=i;}
+    for(int j=0;j<ng;++j)for(int i:members[inverse[j]])result[i]=next++;
+    Require(next==n,"vector COLAMD expansion coverage");return result;
+#else
+    Require(false,"vector COLAMD needs explicitly enabled Eigen");return {};
+#endif
+}
+
 struct SparseFactor::Impl
 {
     SparseMatrix matrix;bool mass;SparsePredictorOrdering ordering;
@@ -176,13 +200,13 @@ SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass,SparsePredict
     RANSWallTiming::Scope timing("sparse.factorize");
     Require(m.Rows()>0 && m.Rows()==m.Columns(),"sparse factor shape");m.Finalize();
     Require(!positiveMass || ordering==SparsePredictorOrdering::COLAMD,"predictor ordering cannot change mass LDLT");
-    Require((ordering==SparsePredictorOrdering::ScotchVectorND0V1 || ordering==SparsePredictorOrdering::ScotchVectorNDKeepV1)==!groups.empty(),"explicit vector grouping required only for ScotchVectorND0V1");
+    Require((ordering==SparsePredictorOrdering::ScotchVectorND0V1 || ordering==SparsePredictorOrdering::ScotchVectorNDKeepV1 || ordering==SparsePredictorOrdering::VectorCOLAMDV1)==!groups.empty(),"explicit native grouping required only for vector orderings");
 #ifdef NEKTAR_RANS_HAVE_EIGEN_SPARSE
     using Row=Eigen::SparseMatrix<double,Eigen::RowMajor,int>;
     Eigen::Map<const Row> map(m.Rows(),m.Columns(),m.NonZeros(),m.Pointers().data(),m.Indices().data(),m.Values().data());
-    if(ordering==SparsePredictorOrdering::ScotchND0V1 || ordering==SparsePredictorOrdering::ScotchVectorND0V1 || ordering==SparsePredictorOrdering::ScotchVectorNDKeepV1)
+    if(ordering==SparsePredictorOrdering::ScotchND0V1 || ordering==SparsePredictorOrdering::ScotchVectorND0V1 || ordering==SparsePredictorOrdering::ScotchVectorNDKeepV1 || ordering==SparsePredictorOrdering::VectorCOLAMDV1)
     {
-        m_impl->oldToNew=SparseScotchPermutation(m,groups);
+        m_impl->oldToNew=ordering==SparsePredictorOrdering::VectorCOLAMDV1?SparseVectorCOLAMDPermutation(m,groups):SparseScotchPermutation(m,groups);
         std::vector<Eigen::Triplet<double,int>> entries;entries.reserve(m.NonZeros());
         for(int i=0;i<m.Rows();++i)m.Each(i,[&](int j,double v)
         {entries.emplace_back(m_impl->oldToNew[i],m_impl->oldToNew[j],v);});
@@ -225,7 +249,7 @@ SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass,SparsePredict
     SparseReceipt("{\"event\":\"factor\",\"id\":"+std::to_string(m_impl->id)+
         ",\"rows\":"+std::to_string(m.Rows())+",\"matrix_nnz\":"+std::to_string(m.NonZeros())+
         ",\"factor_nnz\":"+std::to_string(m_impl->nonzeros)+",\"mass\":"+(positiveMass?"true":"false")+
-        ",\"ordering\":\""+(positiveMass?std::string("LDLT"):ordering==SparsePredictorOrdering::ScotchVectorNDKeepV1?std::string("ScotchVectorNDKeepV1"):
+        ",\"ordering\":\""+(positiveMass?std::string("LDLT"):ordering==SparsePredictorOrdering::VectorCOLAMDV1?std::string("VectorCOLAMDV1"):ordering==SparsePredictorOrdering::ScotchVectorNDKeepV1?std::string("ScotchVectorNDKeepV1"):
             ordering==SparsePredictorOrdering::ScotchVectorND0V1?
             std::string("ScotchVectorND0V1"):ordering==SparsePredictorOrdering::ScotchND0V1?
             std::string("ScotchND0V1"):ordering==SparsePredictorOrdering::COLAMD?std::string("COLAMD"):

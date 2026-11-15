@@ -69,7 +69,7 @@ public:
     using SparseMatrix=RANSWallAlgebra::SparseMatrix;
     bool SerialSparse() const { return m_linearBackend=="AcceptedSerialSparseV1"; }
     RANSWallAlgebra::SparsePredictorOrdering PredictorOrdering() const
-    { return m_predictorOrdering=="ScotchVectorNDKeepV1"?RANSWallAlgebra::SparsePredictorOrdering::ScotchVectorNDKeepV1:RANSWallAlgebra::SparsePredictorOrdering::COLAMD; }
+    { return m_predictorOrdering=="VectorCOLAMDV1"?RANSWallAlgebra::SparsePredictorOrdering::VectorCOLAMDV1:RANSWallAlgebra::SparsePredictorOrdering::COLAMD; }
     using Diagnostic=std::map<std::string,Vector>;
     class EvaluationScope
     {
