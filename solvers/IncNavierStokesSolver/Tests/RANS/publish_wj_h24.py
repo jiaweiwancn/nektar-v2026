@@ -94,10 +94,12 @@ def publish(root):
         reference_production='current-K counterfactual Budget profile, used only in the inner region; not imposed on actual evolving production',
         cutoff='rc is effective height above d0; physical z_cut=d0+rc',viscosities='nu_eff is model turbulent viscosity; AWF stress/diffusion retains positive molecular nu; outer nu_d=Cd*k^2/epsilon',
         boundary_scalar_sign='stored normal diffusion derivative n dot D grad f; outward Fick flux has the opposite sign; these one-sided traces are not integrated weak loads'))
-    timeline=[];bindings=[];moments=[];audits=[];timing=[];strict=[];storage=[]
+    timeline=[];bindings=[];moments=[];audits=[];timing=[];strict=[];storage=[];all_scopes=[]
     for z in ('M','C','F'):
         folder=root/'science'/z;directory=folder/'monitor';op=root/f'operations/governor-{z}-v1/timing.jsonl'
         scopes=[json.loads(s)for s in op.read_text().splitlines()]if op.exists()else[]
+        all_scopes.extend(dict(level=z,**s)for s in scopes)
+        if op.exists():heavy.append(identity(op))
         def duration(step,name):return sum(s['wall_seconds']for s in scopes if s['step']==step and s['name']==name)
         for s in scopes:
             if s['name']in ('native.step','native.advance','native.acceptance_audit','native.physical_samples','monitor.checkpoint_and_publish','monitor.independent_wait','monitor.qualification_commit','startup.object','startup.initialize'):
@@ -135,6 +137,9 @@ def publish(root):
             strict.append(dict(level=z,status=v['status'],selected_absolute_step=v['selected_absolute_step'],physical_time=DT[z]*v['selected_absolute_step'],physical_mass_dual_norms=v['physical_mass_dual_norms'],source=identity(sp)))
             heavy.extend((identity(sp),identity(folder/'final-strict/native.json')))
     table(out/'all-step-timeline.csv',timeline);table(out/'all-signed-Q1-moments.csv',moments);table(out/'disjoint-inclusive-timings.csv',timing);table(out/'checkpoint-storage.csv',storage)
+    timing_path=out/'all-timing-scopes.json';atomic(timing_path,dict(records=all_scopes,scope='raw completed scopes, including nested timers; do not add inclusive parents and children; CPU zero means unmeasured'))
+    with timing_path.open('rb')as f,gzip.open(str(timing_path)+'.gz','wb')as g:shutil.copyfileobj(f,g)
+    timing_path.unlink()
     atomic(out/'state-history-bindings.json',bindings);atomic(out/'audit-role-status.json',audits);atomic(out/'terminal-strict-residuals.json',strict)
     pairs=[];fields=[];ratios=[];errors=[];principals=[];probes=[];replays=[];maxima=[];profiles=[];boundary=[];signed=[];initial=[];physical_extrema=[];native_packets=[]
     for t in TIMES:
