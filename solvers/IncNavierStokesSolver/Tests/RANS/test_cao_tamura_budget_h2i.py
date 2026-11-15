@@ -17,14 +17,15 @@ class FakeRun(startup.StartupRun):
   self.root=root;root.mkdir();self.calls=[];self.fail=fail;self.kind=kind;self.cert={'state_sha256':state_hash([1.])};self.out={'results':{}};self.cps={}
  def save(self):pass
  def checkpoint_steps(self,path):return self.cps[str(path)]
- def validate_checkpoint(self,d,expected,dt):
-  assert self.cps[d['checkpoint']]==expected
+ def validate_checkpoint(self,d,expected,dt,accepted_checkpoint=None):
+  assert self.cps[str(accepted_checkpoint) if accepted_checkpoint is not None else d['checkpoint']]==expected
   if d.get('bad_checkpoint'):raise ValueError('injected checkpoint failure')
  def native(self,name,dt,steps=0,checkpoint=None,reject=False):
-  self.calls.append(name);count=(self.checkpoint_steps(checkpoint) if checkpoint else 0)+(0 if reject else steps);cp=self.root/(name+'-cp');cp.mkdir();(cp/'State.bin').write_bytes(b'unchanged fake parent');self.cps[str(cp)]=count
+  self.calls.append(name);count=(self.checkpoint_steps(checkpoint) if checkpoint else 0)+(0 if reject else steps);cp=self.root/(name+'-cp')
+  if not reject:cp.mkdir();(cp/'State.bin').write_bytes(b'unchanged fake parent');self.cps[str(cp)]=count
   attempts=[dict.fromkeys(('outer_sweeps','momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls'),1) for _ in range(steps)]
   for v in attempts:v.update(scheduled_complete=True,solved_epsilon_retained_bitwise=True)
-  d=dict(failure='deliberate post-assignment explicit rejection' if reject else None,state=[1.],fixed_reference=[1.],fixed_defect=[0.],physical_samples={},steps=count,checkpoint=str(cp),initialization_lift_calls_iterations=[0,0],pimple_attempts=attempts,implicit_callback_count=steps)
+  d=dict(failure='deliberate post-assignment explicit rejection' if reject else None,state=[1.],fixed_reference=[1.],fixed_defect=[0.],physical_samples={},steps=count,checkpoint='' if reject else str(cp),initialization_lift_calls_iterations=[0,0],pimple_attempts=attempts,implicit_callback_count=steps)
   report=self.root/(name+'.json');report.write_text('{}');r=dict(code=1 if reject else 0,report=str(report),report_parse_error=None)
   if name==self.fail:
    if self.kind=='rejection':d['failure']='injected numerical rejection'
@@ -76,7 +77,7 @@ def main():
      except (ValueError,AssertionError):
       assert f.calls==NAMES[:NAMES.index(stop)+1],(kind,stop,f.calls)
      driver.append(dict(kind=kind,stop=stop,calls=f.calls))
-   f=FakeRun(root/'success');f.pair();assert f.calls==NAMES and f.out['status']=='completed_bounded_pair'
+   f=FakeRun(root/'success');f.pair();assert f.calls==NAMES and f.out['status']=='completed_bounded_pair' and f.out['rollback_validation']['accepted_parent_used']
    f=FakeRun(root/'rollback-unexpected','post-assignment-reject');
    try:f.pair();raise AssertionError('unexpected rollback rejection accepted')
    except ValueError:assert f.calls==NAMES

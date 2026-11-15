@@ -35,20 +35,24 @@ class StartupRun:
     def checkpoint_steps(self,path):
         from diagnose_cls_accepted_covariance import checkpoint
         return checkpoint(path)['steps']
-    def validate_checkpoint(self,d,expected,dt):
+    def validate_checkpoint(self,d,expected,dt,accepted_checkpoint=None):
         from diagnose_cls_accepted_covariance import checkpoint
-        cp=Path(d['checkpoint']);require((cp/'State.bin').is_file(),'accepted checkpoint missing')
+        path=accepted_checkpoint if accepted_checkpoint is not None else d.get('checkpoint')
+        require(path,'accepted checkpoint location missing');cp=Path(path);require((cp/'State.bin').is_file(),'accepted checkpoint missing')
         c=checkpoint(cp);require(c['steps']==expected and c['dt']==dt and c['order']==1,'checkpoint step/dt/order differs')
         require(state_hash(c['coupled'])==state_hash(d['state']),'checkpoint differs from reported accepted state')
         require(math.isfinite(c['time']) and abs(c['time']-d['time'])<1e-12,'checkpoint physical time differs')
         for name in ('reference','defect'):require(state_hash(c[name])==state_hash(d['fixed_'+name]),'checkpoint changed '+name)
-    def validate_result(self,name,d,expected,dt,deliberate=False):
+        require(c['signature']==d['signature'],'checkpoint/report physical signature differs')
+        require([state_hash(v) for v in c['history']]==[state_hash(v) for v in d['native_history']] and state_hash(c['history_times'])==state_hash(d['native_history_times']),'checkpoint/report native history differs')
+    def validate_result(self,name,d,expected,dt,deliberate=False,accepted_checkpoint=None):
         record=self.out['results'][name];require(record['code']==(1 if deliberate else 0),'unexpected native process status '+name)
         require(Path(record['report']).is_file() and not record.get('report_parse_error') and isinstance(d,dict) and 'failure' in d,'missing or invalid native report '+name)
         success=d.get('failure')=='deliberate post-assignment explicit rejection' if deliberate else d.get('failure') in (None,'')
         require(success,'unexpected native rejection '+name+': '+str(d.get('failure')))
         require(d.get('steps')==expected and 'state' in d and 'checkpoint' in d,'unexpected accepted-step count/report '+name)
-        self.validate_checkpoint(d,expected,dt)
+        require(not deliberate or accepted_checkpoint is not None,'deliberate rollback requires the retained accepted parent')
+        self.validate_checkpoint(d,expected,dt,accepted_checkpoint)
         if not deliberate:self.accepted(d)
     def checked_native(self,name,dt,steps=0,checkpoint=None):
         expected=(self.checkpoint_steps(checkpoint) if checkpoint else 0)+steps
@@ -60,9 +64,18 @@ class StartupRun:
             for key in ('outer_sweeps','momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls'):require(v[key]==1,'one-sweep solve count changed')
             require(v['solved_epsilon_retained_bitwise'],'solved epsilon overwritten')
     def rollback(self,parent,dt):
-        cp=Path(parent['checkpoint']);h=sha(cp/'State.bin');bad=self.native('post-assignment-reject',dt,1,cp,True);self.validate_result('post-assignment-reject',bad,parent['steps'],dt,True);require(bad.get('failure')=='deliberate post-assignment explicit rejection','did not reach deliberate post-assignment rejection');require(same_history(parent,bad) and sha(cp/'State.bin')==h,'rollback changed parent state/history/bytes')
+        cp=Path(parent['checkpoint']);self.validate_checkpoint(parent,parent['steps'],dt);h=sha(cp/'State.bin');self.out['rollback_parent_before']=dict(checkpoint=str(cp),sha256=h,state_sha256=state_hash(parent['state']));self.save()
+        bad=self.native('post-assignment-reject',dt,1,cp,True)
+        # A rejection before any commit correctly has no local checkpoint. Its
+        # recovery object is the explicit immutable accepted restart parent.
+        self.validate_result('post-assignment-reject',bad,parent['steps'],dt,True,cp);require(bad.get('failure')=='deliberate post-assignment explicit rejection','did not reach deliberate post-assignment rejection');require(same_history(parent,bad) and sha(cp/'State.bin')==h,'rollback changed parent state/history/bytes')
         for k in ('fixed_reference','fixed_defect'):require(state_hash(parent[k])==state_hash(bad[k]),'rollback changed '+k)
-        require(parent['physical_samples']==bad['physical_samples'],'rollback changed physical samples')
+        for key,value in parent['physical_samples'].items():require(state_hash(value)==state_hash(bad['physical_samples'][key]),'rollback changed physical sample bits '+key)
+        if parent.get('state_audits'):
+            a,b=parent['state_audits'][-1],bad['state_audits'][-1];require(a.keys()==b.keys() and all(state_hash(a[k])==state_hash(b[k]) for k in a),'rollback changed accepted diagnostic bits')
+        for key in ('last_stage_time','last_stage_alpha','last_stage_history'):
+            if key in parent:require(state_hash(parent[key])==state_hash(bad[key]) if isinstance(parent[key],list) else parent[key]==bad[key],'rollback changed active '+key)
+        self.out['rollback_validation']=dict(passed=True,parent_checkpoint_sha256_before=h,parent_checkpoint_sha256_after=sha(cp/'State.bin'),reported_rejected_checkpoint=bad.get('checkpoint'),accepted_parent_used=True,driver_sha256=sha(Path(__file__)));self.save()
     def pair(self):
         try:
             coarse=self.checked_native('coarse-h0',2e-6)
