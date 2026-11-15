@@ -15,7 +15,7 @@ def close(root):
     verify(b['carryforward_accounting']);old=load(b['carryforward_accounting']['path']);assert old['closed']and old['total_charged_seconds']==b['carryforward_seconds']
     assert b['target_reserved_attempts']<=22 and b['bootstrap_reserved']<=1 and len(b['strict_reservations'])<=3
     used=usage(b);assert used['total']<=7200 and used['native']<=3600
-    pub=root/'publication-v1'
+    pub=root/'publication-v2'
     for pin in load(pub/'manifest.json')['files']:verify(pin)
     closure=root/'closure-v1';closure.mkdir();counts=[]
     for level in b.get('target_levels',[]):
@@ -29,7 +29,7 @@ def close(root):
     assert output+prior_verification['new_output_bytes']<=2*1024**3 and sources+prior_verification['source_build_runtime_bytes']<=8*1024**3 and peak<=8*1024**3
     atomic(closure/'execution-counts.json',dict(new_branches=counts,new_governing_attempts=sum(c['attempted']for c in counts),new_completed=sum(c['completed']for c in counts),new_CP0=b['bootstrap_reserved'],new_final_strict_reads=len(b['strict_reservations']),
         historical_configuration_launches=1,historical_unknown_charged_attempt_capacity=4,historical_strict_reads=1,aggregate_reserved_attempt_capacity=4+b['target_reserved_attempts'],
-        native_builds=0,spatial_initializations=0,target_native_history_initializations=b['bootstrap_reserved'],maximum_physical_horizon=.02,new_focused_distinct_methods=29,new_focused_method_executions=56,old_focused_method_executions=50))
+        native_builds=0,spatial_initializations=0,target_native_history_initializations=b['bootstrap_reserved'],maximum_physical_horizon=.02,new_focused_distinct_methods=30,new_focused_method_executions=57,old_focused_method_executions=50))
     atomic(closure/'verification.json',dict(status='CLOSED',aggregate_total_charged_seconds=used['total'],aggregate_native_category_seconds=used['native'],ceiling=7200,native_ceiling=3600,
         carryforward_seconds=b['carryforward_seconds'],new_setup_fully_charged=60,new_closure_fully_charged=300,old_closed_accounting=b['carryforward_accounting'],
         new_output_bytes_at_snapshot=output,old_output_bytes=prior_verification['new_output_bytes'],new_source_build_runtime_bytes=sources,old_source_build_runtime_bytes=prior_verification['source_build_runtime_bytes'],aggregate_peak_science_RSS_bytes=peak,

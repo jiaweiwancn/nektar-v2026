@@ -21,8 +21,13 @@ def table(path,records):
     with Path(path).open('x',newline='')as f:
         w=csv.DictWriter(f,list(records[0]),lineterminator='\n');w.writeheader();w.writerows(records)
 
+def saved_arrays(path):
+    # Immutable saved payload, not a state-evaluation cache. NpzFile indexing
+    # decompresses a whole array on EVERY access; load each array exactly once.
+    with np.load(path,allow_pickle=False)as z:return {key:z[key]for key in z.files}
+
 def publish(root):
-    out=root/'publication-v1';out.mkdir();book=load(root/'accounting.json');inputs=load(root/'inputs/selected.json');copied=[];heavy=[]
+    out=root/'publication-v2';out.mkdir();book=load(root/'accounting.json');inputs=load(root/'inputs/selected.json');copied=[];heavy=[]
     def copy(path,name,compressed=False):
         p=Path(path)
         if not p.exists():return
@@ -37,6 +42,14 @@ def publish(root):
         copy(root/'science'/n,'controls/'+n+'.gz',True)
     copy(root/'science/target-cache-compatibility-v2-final.json','controls/target-cache-compatibility-v2.json.gz',True)
     copy(verify(inputs['compiled']),'controls/reused-compiled-source-summary.json.gz',True)
+    atomic(out/'field-conventions.json',dict(velocity='Cartesian x,y,z; the second simulated velocity is U_z; G_ij=dU_i/dx_j in physical coordinates',
+        pressure='stored regional reduced pi, no regauging; mechanical_pressure follows the existing pi-2k/3 convention',
+        epsilon='transported outer field only; zero inner array entries are placeholders, not a physical inner epsilon PDE',
+        inner_auxiliary_epsilon='destruction=A(current represented K)/max(r,rc), the Budget cutoff auxiliary; separate from transported outer epsilon',
+        production='-R:G, actual raw full-stress work in both regions',turbulent_production='Budget/Boussinesq split meaningful in the inner AWF only; its outer extension is not the actual outer WJ work',
+        reference_production='current-K counterfactual Budget profile, used only in the inner region; not imposed on actual evolving production',
+        cutoff='rc is effective height above d0; physical z_cut=d0+rc',viscosities='nu_eff is model turbulent viscosity; AWF stress/diffusion retains positive molecular nu; outer nu_d=Cd*k^2/epsilon',
+        boundary_scalar_sign='stored normal diffusion derivative n dot D grad f; outward Fick flux has the opposite sign; these one-sided traces are not integrated weak loads'))
     timeline=[];bindings=[];moments=[];audits=[];timing=[];strict=[];storage=[]
     for z in ('M','C','F'):
         folder=root/'science'/z;directory=folder/'monitor';op=root/f'operations/target-{z}-v1/timing.jsonl'
@@ -83,7 +96,7 @@ def publish(root):
     for t in TIMES:
         n=absolute_step('F',t);path=root/f'science/F/monitor/step-{n}.result.json'
         if not path.exists():pairs.append(dict(time=t,C_step=absolute_step('C',t),M_step=absolute_step('M',t),F_step=n,status='NOT_RUN',reason='required triplet not produced'));continue
-        v=load(path);comparison=v['comparison'];diag=comparison['contraction'];inv=load(verify(v['inventory']));arrays=np.load(verify(v['signed_arrays']));owned=inv['owned'];count=len(owned)
+        v=load(path);comparison=v['comparison'];diag=comparison['contraction'];inv=load(verify(v['inventory']));arrays=saved_arrays(verify(v['signed_arrays']));owned=inv['owned'];count=len(owned)
         pairs.append(dict(time=t,C_step=absolute_step('C',t),M_step=absolute_step('M',t),F_step=n,status=comparison['status'],reason='one common support for all three actual states'))
         for pair,record in comparison['pairs'].items():
             for region,values in record['temporal'].items():
@@ -152,7 +165,7 @@ def publish(root):
                         delta_total_traction=(sign*(arrays[a+'_T'][i,:,axis]-arrays[b+'_T'][i,:,axis])).tolist(),
                         delta_k_diffusive_flux=float(sign*(arrays[a+'_nu_d'][i]*arrays[a+'_grad_k'][i,axis]-arrays[b+'_nu_d'][i]*arrays[b+'_grad_k'][i,axis])),
                         delta_outer_epsilon_flux=float(sign*(arrays[a+'_nu_d'][i]*arrays[a+'_grad_epsilon'][i,axis]-arrays[b+'_nu_d'][i]*arrays[b+'_grad_epsilon'][i,axis])/1.3)if outer[i]else None))
-        arrays.close()
+        del arrays
     for name,data in (('time-pairs.csv',pairs),('all-pair-regional-sensitivity.csv',fields),('contraction.csv',ratios),('reference-drift.csv',errors),('representation.csv',initial),('fetch-stations.csv',profiles)):table(out/name,data)
     atomic(out/'same-owner-principal-screens.json',principals);atomic(out/'fixed-probe-triplets.json',probes);atomic(out/'native-independent-replays.json',dict(status='PASS',records=replays,kernel_process_requests=0,method='independent implicit-root complex tangent against saved compiled native action'))
     atomic(out/'physical-extrema-and-divergence.json',physical_extrema)
