@@ -116,7 +116,7 @@ def admission(root):
     assert spent+forecast<=5400
     native=sum(v.get('seconds',v['reserved_seconds'])for v in b['entries'].values()if v['phase']in ('qualification','target','target_readback'))
     assert native+forecast<=1800
-    for name in ('focused-python-v1','native-protocol-components-v1'):
+    for name in ('focused-python-v2','native-protocol-components-v1'):
         assert load(root/f'operations/{name}/receipt.json')['status']=='PASS'
     atomic(root/'target-admission.json',dict(status='PASS',forecast_with_25percent_headroom=forecast,closure_reserved=300,strict_reserved=120,
         command=[sys.executable,'-B',str(HERE/'study_wj_h19.py'),'--root',str(root),'--mode','target'],inputs=[identity(root/'execution-config.json'),identity(root/'science/coarse-cp0/qualification.json'),identity(root/'science/component/qualification.json')]))
