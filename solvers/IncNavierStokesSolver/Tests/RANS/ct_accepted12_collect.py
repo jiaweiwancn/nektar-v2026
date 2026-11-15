@@ -44,6 +44,9 @@ def pressure_gate(q,require_quadrature=True):
             for repeat in step.get('component_tighter_repeats',{}).values():
                 if repeat['maximum_scaled_value']>=1e-8:reasons.append('component_repeat:'+dt)
     if set(q.get('common',{}))!={'0.001','0.002'}:reasons.append('common_time')
+    for t,row in q.get('common',{}).items():
+        if row.get('maximum_regional_reconstruction_scaled',1)>=1e-8:reasons.append('regional_pressure:'+t)
+        if set(row.get('mechanisms',{}))!={'small_step_spatial','finite_alpha','continuity','storage_lifting'} or row.get('mechanism_signed_sum_error',{}).get('maximum_scaled_value',1)>=1e-8:reasons.append('mechanism_sum:'+t)
     if q.get('bands',{}).get('signed_sum_error',{}).get('maximum_scaled_value',1)>=1e-8:reasons.append('band_sum')
     if require_quadrature:
         for row in q.get('held_quadrature',[]):
@@ -121,7 +124,7 @@ def main():
     olddecision=read(a.ct11/'qualified-v1/decision.json');plan=olddecision['closed_campaign_resource_admission']
     native_per=max(v['native']['retained_bytes'] for v in profile['retention']['accepted_only_categories'].values())
     audit_pair=2*max(v['audit']['retained_bytes'] for v in profile['retention']['accepted_only_categories'].values())
-    output_future=1.25*(1215*native_per+4*audit_pair)+plan['measured_current_storage_bytes']
+    output_future=1.25*(1215*native_per+4*audit_pair)+plan['measured_current_storage_bytes']+output_bytes
     forecast=dict(horizon=.407,additional_pair_steps=1215,segments=39,CPU_limit=24000,active_wall_limit=28800,output_limit_bytes=24*1024**3,
         retained_CT11_closed_CPU_forecast=plan['total_CPU_spent_plus_remaining_with_headroom'],
         conservative_investigation_plus_campaign_CPU=cpu+plan['total_CPU_spent_plus_remaining_with_headroom'],
@@ -145,12 +148,14 @@ def main():
         terrain='unattempted; mapped numbering,joined gradients/cofactors,transmission and curved temporal/spatial gates separate',
         physical_applicability='central physical reference retained; no precursor or hill validation',historical='CT4–CT11 seals unchanged')
     failures={}
-    for name in ('pressure-v1','pressure-v2','pressure-v3','pressure-v4','profile-v1'):
+    for name in ('pressure-v1','pressure-v2','pressure-v3','pressure-v4','profile-v1','profile-v2'):
         f=a.root/(name+'-family.log');r=a.root/('resources-'+name)/'execution.json'
         if f.exists() and r.exists():failures[name]=dict(log=str(f),log_sha256=sha(f),witness=f.read_text()[-4500:],execution=read(r),execution_sha256=sha(r),
             scope='preserved diagnostic/controller failure, not a new physical trajectory or a relabelled historical result')
     for name,value in [('failed-attempts',failures),('pressure',pressure),('pressure-summary',summary),('axes-and-tractions',axes),('profile',profile),('cost',costs),('forecast',forecast),('negative-controls',negatives),('resources',resources),('decision',decision)]:write_json(a.output/(name+'.json'),value)
-    critical=['library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp','library/SolverUtils/Turbulence/RANSModels.cpp',
+    critical=['library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp','library/SolverUtils/Turbulence/RANSModels.cpp','library/UnitTests/SolverUtils/RANSPreservationProbe.cpp',
+        'solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp','solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp',
+        'solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionOpenBoundary.cpp',
         'solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp','solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSparse.cpp',
         'solvers/IncNavierStokesSolver/EquationSystems/RANSWallSerialSparse.cpp','solvers/IncNavierStokesSolver/EquationSystems/RANSWallMomentumAttribution.cpp']
     identities={}

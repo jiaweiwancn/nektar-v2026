@@ -282,15 +282,15 @@ def main():
                 bounds={str(e['geometry']):(e['lower'][2],e['upper'][2]) for e in mom['elements']}
                 static=fr.mass_image(np.asarray(mom['total_actual'])-np.asarray(mom['total_analytic']),'initial-representation-total')
                 den=fr.inner(static,static);require(den>0,'unresolved initial representation signal')
-                bandrows=[];bandvectors=[]
+                bandrows=[];band_sum=np.zeros_like(static)
                 for band in sorted(set(bounds.values())):
                     load=np.zeros(nm)
                     for loc in mom['local_sparse']:
                         if bounds[loc['geometry']]!=band:continue
                         for term in loc['terms'].values():np.add.at(load,np.asarray(term['ids'],int),np.asarray(term['values'])*(-1 if loc['analytic'] else 1))
-                    pv=fr.mass_image(load,'band/'+str(band));bandvectors.append(pv)
+                    pv=fr.mass_image(load,'band/'+str(band));band_sum+=pv
                     bandrows.append(dict(lower=band[0],upper=band[1],signed_alignment=fr.inner(pv,static)/den,image=fr.measure(pv),maximum_load=maximum(load)))
-                berr=fr.measure(sum(bandvectors,np.zeros_like(static))-static);require(berr['maximum_scaled_value']<1e-8,'radial-band signed sum')
+                berr=fr.measure(band_sum-static);require(berr['maximum_scaled_value']<1e-8,'radial-band signed sum')
                 bands=dict(rows=bandrows,signed_sum_error=berr,total_image=fr.measure(static))
             for key,v in signed.items():accum[key]=accum.get(key,np.zeros_like(v))+v
             if round(s['time'],12) in (.001,.002):times[str(round(s['time'],12))]={k:v.copy() for k,v in accum.items()}
@@ -368,7 +368,11 @@ def main():
         groups={}
         for key,v in delta.items():
             group=key.split('/')[0];groups[group]=groups.get(group,np.zeros_like(v))+v
-        out['common'][t]=dict(pressure=fr.measure(total),sealed_CT11=direct,components=table,
+        regional=next(x['pressure'] for x in target['regional_temporal_pressure'] if abs(x['time']-float(t))<1e-13)
+        measured=fr.measure(total)
+        regional_error=max(abs(measured[region][key]-regional[region][key])/c['ustar']**2 for region in ('whole','inner','outer') for key in ('weighted_RMS','signed_mean','spatial_variation_RMS'))
+        require(regional_error<1e-8,'signed regional pressure differs from sealed accepted fields')
+        out['common'][t]=dict(pressure=measured,sealed_regional=regional,maximum_regional_reconstruction_scaled=regional_error,sealed_CT11=direct,components=table,
             groups={k:dict(signed_alignment=fr.inner(v,total)/den,pressure=fr.measure(v)) for k,v in groups.items()})
         md={k:mechanism_by_time['0.001'][t][k]-mechanism_by_time['0.0005'][t][k] for k in mechanism_by_time['0.001'][t]}
         merror=fr.measure(sum(md.values(),np.zeros_like(total))-total)
