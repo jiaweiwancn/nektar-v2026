@@ -8,7 +8,8 @@ reachable; the active experiment mount is `/media/jay/新加卷1`, `/dev/sda2`,
 [contract](cao-tamura-accepted-12-evidence/contract.json).
 
 The initial tasks are read-only reconstruction of the actual target's six
-retained finite-step pressure corrections, target-specific signed attribution,+and two consecutive accepted replay steps with detailed timing. The pinned CT9
+retained finite-step pressure corrections, target-specific signed attribution,
+and two consecutive accepted replay steps with detailed timing. The pinned CT9
 governing runtime and CT11 read-only probe are reused. No longer physical target
 trajectory is authorized. The unchanged CT11 paired absolute-pressure failure
 and separate CPU/output deficit remain the starting findings.
