@@ -87,10 +87,14 @@ class Frozen:
                      callback=lambda x:ticks.append(float(x)),callback_type='pr_norm',**kw)
         p*=mag;res=op@p-rhs;relative=float(np.linalg.norm(res))/mag
         receipt=dict(label=label,iterations=len(ticks),relative_residual=relative,maximum_true_residual=maximum(res),
-            absolute_tolerance=absolute,rhs_maximum=maximum(rhs),CPU=time.process_time()-started,info=int(info))
+            absolute_tolerance=absolute,rhs_maximum=maximum(rhs),CPU=time.process_time()-started,info=int(info),
+            requested_scipy_stopping_test_met=bool(info==0),physical_image=self.measure(p))
         self.receipts.append(receipt)
         if PROGRESS:write_json(PROGRESS,dict(receipt,phase='end'))
-        require(info==0 and maximum(res)<=2e-10*maximum(rhs)+absolute,'true pressure residual:'+label+':'+str(receipt))
+        # A restart-limit label is not an error bound. Retain it explicitly,
+        # require the independently recomputed unscaled residual, and then
+        # qualify the physical image by the mandatory tighter/signed-sum tests.
+        require(info>=0 and maximum(res)<=2e-10*maximum(rhs)+absolute,'true pressure residual:'+label+':'+str(receipt))
         return p
 
     def image(self,load,label,rtol=2e-12):

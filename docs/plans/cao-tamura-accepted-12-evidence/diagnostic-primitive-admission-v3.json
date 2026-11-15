@@ -1,0 +1,10 @@
+{
+  "schema": "CT12ReadOnlyPrimitiveAdmissionV3",
+  "before_fresh_data": true,
+  "retained_failure": "pressure-v3 continuity-tighter reached scipy restart limit at776inneriterations; true row defect1.1112242660280281e-27,relative1.91479581878032e-11; enclosing info12 caused rejection although the declared true-row bound4.603911280176199e-27 was satisfied",
+  "prospective_rule": "retain requested-stopping flag/info for every diagnostic solve; a nonnegative library iteration flag cannot substitute for error primitives. Require the existing unscaled true-row bound AND all unchanged physical1e-8 reconstruction,tighter-repeat and signed-sum tests before diagnostic qualification",
+  "unchanged_bounds": "2e-10*max(rhs)+absolute algebraic row bound, absolute1e-25/1e-27; physical image1e-8 on u_tau^2 scale; all-row reconstruction2e-10; <=960diagnostic Arnoldi iterations; no new mesh/timestep trajectory",
+  "not_claimed": "do not label an info12 solve as meeting its requested relative stopping test; do not zero its contribution or assume it is negligible before measuring its physical image and tighter-repeat difference",
+  "historical": "pressure-v1/v2/v3 failed/interrupted receipts remain unchanged; CT11 pressure uncertainty failure remains unchanged",
+  "scope": "only prospective read-only diagnostic admission; no governing solve,coupling,physical criterion,field or coefficient change"
+}
