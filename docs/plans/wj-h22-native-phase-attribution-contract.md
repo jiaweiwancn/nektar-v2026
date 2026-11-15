@@ -110,6 +110,10 @@ Field/action replay uses scaled2e-11 accuracy; comparison floor4e-11 classifies
 resolution without zeroing signed values. Scales: U/G/B/a/g/mhat1, k/R K,
 epsilon u_tau^3/(kappa H), pi u_tau^2, d/nu_eff .001. Signed cancellation uses
 S=sum absolute signed branch/stage contributions; no ratio when S<=field floor.
+Additional supporting derivatives, covariance eigenvalues, nu_d and root quantities
+retain the H21 helper's fixed default scale1; these are reconstruction scales,
+not new physical/application budgets. All three concrete session XMLs are checked
+and sealed before C's native reservation, preserving each own TimeStep/Functions.
 Norm ratios are not percentages of nonlinear margin change or temporal order.
 
 ## Admission, resources and exit
