@@ -102,9 +102,10 @@ public:
     struct InitializerWitness { RANSWallCoordinate chart;int geometry;SolverUtils::RANSVector eigenvector; };
     std::string InitializerNativeData(const Vector&,const Vector&,const WallMatrix&,const std::vector<InitializerWitness>&,const RANSWallEvolutionData&,const std::string&) const;
     std::string ValidateOuterInitializer(const Vector&,const Vector&,const RANSWallEvolutionData&,bool) const;
+    std::string JointPatchOperators(const Vector&,const RANSWallEvolutionData&,const std::string&,int) const;
     std::string JointInitializerAlgebra(const Vector&,const Vector&,const WallMatrix&,const std::string&) const;
     std::string JointInitializerAccessibility(const Vector&,const WallMatrix&,const std::vector<InitializerWitness>&,const RANSWallEvolutionData&) const;
-    std::string FlatEnergyProjectionDiagnostic(const Vector&,const RANSWallEvolutionData&) const;
+    std::string FlatEnergyProjectionDiagnostic(const Vector&,const RANSWallEvolutionData&,bool coupled=false) const;
     std::string FlatSpatialDiagnostic(const Vector&,const RANSWallEvolutionData&) const;
     const std::string &CompositeSeedInfo() const { return m_compositeSeedInfo; }
     std::string CompositeChecks(const Vector&,double,const RANSWallEvolutionData&) const;

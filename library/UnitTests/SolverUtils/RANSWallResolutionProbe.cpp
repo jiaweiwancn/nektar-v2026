@@ -136,6 +136,11 @@ std::string ExtraSeedAudit(const RANSWallEvolutionPatch &patch,const Vector &s,c
         {"minimum_k",J::Number(minK)},{"minimum_epsilon",J::Number(minE)},{"invalid_scalar_count",J::Number(invalidScalars)},{"scalar_positive_finite",J::Boolean(invalidScalars==0)},{"invalid_scalar_witness",scalarWitness},{"outer_k_over_cold",J::Numbers(Vector{krmin,krmax})},{"outer_epsilon_over_cold",J::Numbers(Vector{ermin,ermax})},{"scalar_envelopes_passed",J::Boolean(base && invalidScalars==0 && krmin>=.5-1e-12 && krmax<=2+1e-12 && ermin>=.5-1e-12 && ermax<=2+1e-12)},{"scalar_envelope_witness",envelopeWitness},{"integrals_complete",J::Boolean(invalidScalars==0)},{"strong_divergence_RMS",J::Number(std::sqrt(strong/volume))},{"maximum_absolute_divergence",J::Number(maxDivergence)},{"TKE_integral",J::Number(tke)},{"base_TKE_integral",J::Number(baseTke)},{"outer_TKE_integral",J::Number(outerTke)},{"base_outer_TKE_integral",J::Number(baseOuterTke)},{"outer_time_scale",J::Numbers(Vector{tmin,tmax})},{"outer_length_scale",J::Numbers(Vector{lmin,lmax})},{"outer_time_scale_ratio",J::Numbers(Vector{trmin,trmax})},{"outer_length_scale_ratio",J::Numbers(Vector{lrmin,lrmax})},{"strong_divergence_L2",J::Number(std::sqrt(strong))},{"volume",J::Number(volume)},{"kinetic_energy",J::Number(energy)},{"base_kinetic_energy",base?J::Number(baseEnergy):"null"},{"velocity_change_L2",base?J::Number(std::sqrt(deltaNorm)):"null"},{"maximum_sampled_velocity_increment",base?J::Number(maximumIncrement):"null"},
         {"scope",J::Quote("independent panelwise physical tensor sampling; complements complete inventory; no domain-wide covariance theorem")}});
 }
+std::string NativeStrongGL16(const RANSWallEvolutionPatch &p,const Vector &s)
+{
+    Vector square(2);for(const auto &q:p.Quadrature(0,16)){double d=q.Gradient(s,p.offset[0])[0]+q.Gradient(s,p.offset[1])[2];square[p.fields[0]->Elements()[q.element].upper[2]<=p.Parameters().geometry.height?0:1]+=q.weight*d*d;}
+    return J::Object({{"order","16"},{"regional_L2",J::Numbers(Vector{std::sqrt(square[0]),std::sqrt(square[1])})},{"L2",J::Number(std::sqrt(square[0]+square[1]))}});
+}
 std::string Wide(const std::map<std::string,std::vector<long double>> &values)
 {
     std::vector<std::pair<std::string,std::string>> r;
@@ -287,13 +292,13 @@ int main(int argc,char **argv)
         {std::ofstream readback(std::string(argv[3])+".model.json");readback<<patch.ModelMetadata()<<std::endl;Require(readback.good(),"native model readback output");}
         const auto operation=packet.get<std::string>("operation","");
         if(auto expected=packet.get_optional<std::string>("expected_model"))Require(*expected==(p.model.Model()==SolverUtils::RANSModel::CLSHighRe?"CLSHighRe":"StandardKEpsilon"),"probe/model-manifest mismatch");
-        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.Composite() && (operation=="h2b_operators" || operation=="h2e_contract_checks" || operation=="h2h_scalar_context" || operation=="h2h_candidate" || operation=="h2i_context" || operation=="h2i_candidate" || operation=="h2i_fresh" || operation=="h2i_accessibility" || operation=="h2i_flat" || operation=="h2g_frozen" || operation=="h2f_context" || operation=="h2f_native" || operation=="h2e_context" || operation=="h2e_candidate" || operation=="h2d_setup" || operation=="h2d_candidate" || operation=="h2d_flat" || operation=="h2c_seed" || operation=="h2b_checkpoint" || operation=="h2c_checkpoint"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
+        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.Composite() && (operation=="h2b_operators" || operation=="h2e_contract_checks" || operation=="h2h_scalar_context" || operation=="h2h_candidate" || operation=="h2i_context" || operation=="h2i_candidate" || operation=="h2i_fresh" || operation=="h2i_accessibility" || (operation=="h2i_flat" || operation=="h2j_flat" || operation=="h2j_patch" || operation=="h2j_context") || operation=="h2g_frozen" || operation=="h2f_context" || operation=="h2f_native" || operation=="h2e_context" || operation=="h2e_candidate" || operation=="h2d_setup" || operation=="h2d_candidate" || operation=="h2d_flat" || operation=="h2c_seed" || operation=="h2b_checkpoint" || operation=="h2c_checkpoint"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
         Require(patch.InnerStressName()==packet.get<std::string>("inner_stress_model"),"packet law differs from session");
         for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
-        if(operation=="h2b_operators" || operation=="h2c_seed" || operation=="h2e_contract_checks" || operation=="h2h_scalar_context" || operation=="h2h_candidate" || operation=="h2i_context" || operation=="h2i_candidate" || operation=="h2i_fresh" || operation=="h2i_accessibility" || operation=="h2i_flat" || operation=="h2g_frozen" || operation=="h2f_context" || operation=="h2f_native" || operation=="h2e_context" || operation=="h2e_candidate" || operation=="h2d_setup" || operation=="h2d_candidate" || operation=="h2d_flat")
+        if(operation=="h2b_operators" || operation=="h2c_seed" || operation=="h2e_contract_checks" || operation=="h2h_scalar_context" || operation=="h2h_candidate" || operation=="h2i_context" || operation=="h2i_candidate" || operation=="h2i_fresh" || operation=="h2i_accessibility" || (operation=="h2i_flat" || operation=="h2j_flat" || operation=="h2j_patch" || operation=="h2j_context") || operation=="h2g_frozen" || operation=="h2f_context" || operation=="h2f_native" || operation=="h2e_context" || operation=="h2e_candidate" || operation=="h2d_setup" || operation=="h2d_candidate" || operation=="h2d_flat")
         {
             Require(patch.PrescribedInflow() && !packet.get_optional<std::string>("native_checkpoint") && RANSWallR3::HashFile(argv[1])==packet.get<std::string>("xml_sha256"),"H2b operator fixture XML/initialization contract differs");
             auto state=patch.FiniteInflowSeed();const auto baseState=state;
@@ -341,15 +346,16 @@ int main(int argc,char **argv)
                 data.fixedBoundary=patch.FixedReferenceBoundary(baseState);patch.SetReference(baseState,data,0,0);
                 std::ofstream out(argv[3]);out<<patch.FrozenConstitutiveData(state,data,packet.get<std::string>("context_directory"))<<std::endl;Require(out.good(),"frozen output");world->Finalise();return 0;
             }
-            if(operation=="h2i_context" || operation=="h2i_accessibility" || operation=="h2i_flat")
+            if(operation=="h2i_context" || operation=="h2i_accessibility" || (operation=="h2i_flat" || operation=="h2j_flat" || operation=="h2j_patch" || operation=="h2j_context"))
             {
                 data.fixedBoundary=patch.FixedReferenceBoundary(baseState);patch.SetReference(baseState,data,0,0);
                 std::string result;
-                if(operation=="h2i_flat")result=patch.FlatEnergyProjectionDiagnostic(baseState,data);
+                if(operation=="h2i_flat" || operation=="h2j_flat")result=patch.FlatEnergyProjectionDiagnostic(baseState,data,operation=="h2j_flat");
                 else
                 {
                     Require(RANSWallR3::Hash(baseState)==packet.get<std::string>("base_sha256"),"H2i cold identity");const auto supplied=Read(packet,"state");Require(RANSWallR3::Hash(supplied)==packet.get<std::string>("state_sha256"),"H2i state identity");
-                    if(operation=="h2i_context")result=RANSH2i::Export(patch,supplied,baseState,data,packet);
+                    if(operation=="h2i_context" || operation=="h2j_context")result=RANSH2i::Export(patch,supplied,baseState,data,packet);
+                    else if(operation=="h2j_patch"){patch.ValidateOuterInitializer(supplied,baseState,data,true);result=patch.JointPatchOperators(supplied,data,packet.get<std::string>("context_directory"),packet.get<int>("patch_level"));}
                     else
                     {patch.ValidateOuterInitializer(supplied,baseState,data,true);const auto all=RANSH2i::ReadBasis(packet,57,patch.Size());RANSWallEvolutionPatch::WallMatrix Z(all.begin(),all.begin()+41);std::vector<RANSWallEvolutionPatch::InitializerWitness> ws;for(const auto &entry:packet.get_child("witnesses")){const auto c=Read(entry.second,"chart"),v=Read(entry.second,"eigenvector");ws.push_back({{c[0],c[1],c[2]},entry.second.get<int>("geometry"),{v[0],v[1],v[2]}});}result=patch.JointInitializerAccessibility(supplied,Z,ws,data);}
                 }
@@ -421,7 +427,7 @@ int main(int argc,char **argv)
             }
             const auto extra=(operation=="h2d_candidate" || scalarCandidate)?ExtraSeedAudit(patch,state,data,&baseState,scalarCandidate?20:12):"null";
             const auto seenSampling=operation=="h2i_candidate"?J::Object({{"GL20",extra},{"GL24",ExtraSeedAudit(patch,state,data,&baseState,24)}}):"null";
-            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"checks",checks},{"audit",Maps(audit)},{"feasibility",operation=="h2d_setup"?patch.CompositeFeasibilityData(state,data):"null"},
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"checks",checks},{"audit",Maps(audit)},{"native_divergence_GL16",NativeStrongGL16(patch,state)},{"feasibility",operation=="h2d_setup"?patch.CompositeFeasibilityData(state,data):"null"},
                 {"state",J::Numbers(state)},{"state_sha256",J::Quote(hash)},{"outer_initializer_contract",outerContract},{"H2h_fixed_B_contract",h2hContract},{"fixed_reference",scalarCandidate?J::Numbers(patch.Reference()):"null"},{"fixed_defect",scalarCandidate?J::Numbers(patch.Defect()):"null"},{"reference_sha256",J::Quote(RANSWallR3::Hash(patch.Reference()))},{"defect_sha256",J::Quote(RANSWallR3::Hash(patch.Defect()))},{"extra_sampling",extra},{"seen_sampling",seenSampling},{"anchor_k_sha256",jointCandidate?J::Quote(packet.get<std::string>("anchor_k_sha256")):"null"},{"fresh_sampling",operation=="h2h_candidate"?ExtraSeedAudit(patch,state,data,&baseState,24):"null"},{"seed_setup",patch.CompositeSeedInfo()},{"signed_derivative_checks",patch.Composite() && patch.AnalyticalNeutralInflow() && patch.Mapping().amplitude!=0?patch.CompositeSeedDerivativeChecks():"null"},
                 {"scalar_inventory",patch.ScalarDomainJSON(domain)},
                 {"seed_target_witnesses",patch.Composite() && patch.Mapping().amplitude!=0?MappedSeedWitnesses(patch,state,audit):"[]"},
@@ -820,7 +826,7 @@ int main(int argc,char **argv)
                 }
                 std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"native_replay_context",replayContext},
                     {"state_sha256",J::Quote(before)},{"reference_sha256",J::Quote(referenceHash)},{"physical_samples",Maps(patch.PhysicalSamples(state,time,data))},
-                    {"audit",Maps(audit)},{"native_turbulence_budget",turbulence},{"developing_boundary",boundaryStatus},
+                    {"audit",Maps(audit)},{"native_divergence_GL16",NativeStrongGL16(patch,state)},{"native_turbulence_budget",turbulence},{"developing_boundary",boundaryStatus},
                     {"selected_spatial_block_norms",J::Numbers(patch.Norms(native,components.constraints,us))},
                     {"analytical_free_test_loads",analytical},
                     {"patch_signature",J::Quote(patch.Signature())},{"inventory_identity",J::Quote(patch.PimpleKBoundSignature())},{"geometry_identity",J::Quote(patch.GeometrySignature())},{"provider",patch.FiniteInflowChecks(state)},
@@ -1023,7 +1029,7 @@ int main(int argc,char **argv)
             std::string failure;try{audit=patch.CompleteRestrictedAudit(state,history,alpha,time,data);}
             catch(const std::exception &e){failure=e.what();}
             std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote("audit_witness")},
-                {"failure",J::Quote(failure)},{"audit",Maps(audit)},{"context",patch.ConstitutiveFailureContext().empty()?"null":patch.ConstitutiveFailureContext()},
+                {"failure",J::Quote(failure)},{"audit",Maps(audit)},{"native_divergence_GL16",NativeStrongGL16(patch,state)},{"context",patch.ConstitutiveFailureContext().empty()?"null":patch.ConstitutiveFailureContext()},
                 {"governing_solves","0"}})<<'\n';Require(out.good(),"audit witness write failed");world->Finalise();return 0;
         }
         if(packet.get<std::string>("operation","")=="source_balance")

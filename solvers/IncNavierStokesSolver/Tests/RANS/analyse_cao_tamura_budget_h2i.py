@@ -73,7 +73,7 @@ def tensor_check(w, nt=None):
     return dict(tensor_error=float(np.max(abs(independent-R))),eigenvalue_error=abs(float(ev[0])-w['eigenvalues'][0]),
                 isotropic=iso.tolist(),linear=linear.tolist(),nonlinear_zero=True,regularization_zero=True,
                 eigenvalues=ev.tolist(),Rayleigh=float(v@independent@v),eigenvector_residual=float(np.linalg.norm(independent@v-ev[0]*v)),
-                production=float(np.sum((nt*(G+G.T))*G)),eddy_viscosity=nt)
+                production=float(-np.sum(independent*G)),anisotropic_work=float(np.sum((nt*(G+G.T))*G)),isotropic_work=float(-np.sum(iso*G)),eddy_viscosity=nt)
 
 
 def main():

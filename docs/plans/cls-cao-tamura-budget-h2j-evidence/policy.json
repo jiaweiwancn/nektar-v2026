@@ -1,0 +1,42 @@
+{
+  "version": "H2jPredeclaredV1",
+  "parent": "fc1f800d7d2069f678b9c59812e4e710e75cf264",
+  "physics": "exact H2g manifests, H2i anchors, common 2804-slot mesh; no recalibration or equation changes",
+  "cold_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "B_sha256": "c83da50b65d2e9980325d365779a9d53394fbf10e6431d1b87f79728366ae13d",
+  "construction": {
+    "supports": ["full native coefficient-support closure in geometries 35/41", "one additional face-neighbour ring, only if first has inadequate control"],
+    "max_attempts": 12,
+    "max_added_directions": 6,
+    "numerical_seconds": 600,
+    "rank_relative_threshold": 1e-10,
+    "strong_divergence_method": "weighted physical GL16/20/24 action nullspace plus all Q rows; alternatively explicit finite compensator in the same allowance",
+    "conditioning": "retain raw mass-normalized qualified responses; full Gram rank check against unchanged old 41; no blind Gram-Schmidt subtraction",
+    "meaningful_finite_Rayleigh_gain_over_K0": 0.0001,
+    "finite_control": "positive and negative amplitudes, original physical caps; independent complete local stress and divergence quadratic checks"
+  },
+  "physical_limits": {
+    "velocity_L2": 0.12,
+    "component_increment": 0.5,
+    "strong_divergence_L2": 0.06030809942199109,
+    "native_GL16_arithmetic_tolerance": 1e-12,
+    "GL20_GL24_integration_allowance": 1e-8,
+    "scalar_ratios": [0.5, 2],
+    "delta_over_K0": 0.0001
+  },
+  "search": {
+    "anchors": "exact H2i A, then B only after checked actual-limit obstruction; no new scalar shapes",
+    "LP_rounds": 40,
+    "complete_scans_including_replay": 120,
+    "seconds": 600,
+    "buffered_delta_multiplier": 2,
+    "buffered_epsilon_band": [0.501, 1.999],
+    "repeatable_hill_native_checks": 3,
+    "fresh_hill_order": 28,
+    "fresh_hill_audits": 1
+  },
+  "handoff": "shared complete receipt, unchanged strict importer, actual case identities, separate flat and hill ledgers",
+  "flat": "one paired zero-step same-space joint U/W H1 KKT projection; native continuity/essential rows fixed; retained H2i k H1 projection; epsilon/pressure fixed; not adopted",
+  "resources": {"build_workers": 4, "native_ranks": 1, "library_threads": 1, "aggregate_workers": 72},
+  "exit": "qualified short startup, first evolution rejection, checked enlarged-space obstruction, no useful finite control, or bounded numerical/work-limit inconclusiveness; no automatic extension"
+}

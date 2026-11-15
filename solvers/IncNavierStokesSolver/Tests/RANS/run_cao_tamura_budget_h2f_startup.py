@@ -45,7 +45,8 @@ class StartupRun:
     def validate_result(self,name,d,expected,dt,deliberate=False):
         record=self.out['results'][name];require(record['code']==(1 if deliberate else 0),'unexpected native process status '+name)
         require(Path(record['report']).is_file() and not record.get('report_parse_error') and isinstance(d,dict) and 'failure' in d,'missing or invalid native report '+name)
-        require(d.get('failure')==('deliberate post-assignment explicit rejection' if deliberate else None),'unexpected native rejection '+name+': '+str(d.get('failure')))
+        success=d.get('failure')=='deliberate post-assignment explicit rejection' if deliberate else d.get('failure') in (None,'')
+        require(success,'unexpected native rejection '+name+': '+str(d.get('failure')))
         require(d.get('steps')==expected and 'state' in d and 'checkpoint' in d,'unexpected accepted-step count/report '+name)
         self.validate_checkpoint(d,expected,dt)
         if not deliberate:self.accepted(d)
