@@ -1,0 +1,2703 @@
+{
+  "version": "H2kCheckpoint1NativeEvidenceV1",
+  "runtime": {
+    "path": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+    "sha256": "7b887eee09570f31a02b52e99d94f5f5071080e977e3135fb430d13974cb1748",
+    "libraries": {
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libc.so.6": "4ebb1967c395ca547dcfeaeeab7a2819724604a331aede44e8a749a7e1a4628e",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libm.so.6": "045fdb0436a8fb0d651f039e3444a9cbffc011d379c82b979cebf43571053eca",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+      "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a"
+    }
+  },
+  "context_sha256": "77070399706e8a5ac0121ab26d2691f58bc5ee084331ef15d9329f773ea4a7e0",
+  "basis_sha256": "6c4fce90b0632fe0753e20e8da167001a6ea9e711e5a364d73394388338fa91f",
+  "model": {
+    "version": "CanonicalWallModelV1",
+    "name": "StandardKEpsilon",
+    "calibration": "StandardNeutralCalibratedV1",
+    "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+    "coefficients": {
+      "Cmu": 0.09,
+      "Cepsilon1": 1.44,
+      "Cepsilon2": 1.92,
+      "sigmaK": 1,
+      "sigmaEpsilon": 1.3478315512167742,
+      "yapCoefficient": 0,
+      "yapLength": 2.5
+    },
+    "q": 3.3333333333333335,
+    "kappa": 0.4405539051866587,
+    "K0": 0.01838575534504143,
+    "quadratic_active": false,
+    "cubic_active": false,
+    "Yap_active": false,
+    "variant": "Original",
+    "beta": 1,
+    "gamma0": 0,
+    "Gamma": 0,
+    "physical_regularization_active": false
+  },
+  "geometry": "CompositeHillV1:native-outer=[Hw,Z]:eta=(zHat-Hw)/(Z-Hw):CosineNormalVerticalV1:physical-nearest-wall-distance:foot-side-explicit:0.040000000000000001:0.10000000000000001:0.0064999999999999997:0.80000000000000004:-0.20000000000000001:0.59999999999999998",
+  "inventory": ":k_bound=MassProjection:version=MassQR-AcceptedBudgetV2:metric=physical_consistent_Mff:constraints=both_tangential_foot_sides_exact_rows_shared_constitutive_reporting_ground:floor_relative=1e-08:K0=0.01838575534504143:floor=1.8385755345041429e-10:arithmetic_reserve=1.6721747074408476e-14",
+  "reference_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "defect_sha256": "e319468000760282822984d0fbdee636d7d5c11abf809a76147469f4ad6368a3",
+  "native_verification": {
+    "gradient_relative_error": 3.885780586188048e-15,
+    "scalar_relative_error": 1.5147048218379259e-15,
+    "native_tensor_error": 1.1275702593849246e-17,
+    "three_nonzero_trials_scalar_ratios": [
+      0.5046440448220344,
+      1.9911403353194492
+    ],
+    "protected_rows_and_profiles": true,
+    "meaningful_trial_mass_squared": [
+      0.002560492730360074,
+      0.002560492730361924,
+      0.0025604927303619594
+    ],
+    "meaningful_trial_divergence_squared": [
+      0.0036370638080298495,
+      0.0036370638082720355,
+      0.003637063808272049
+    ],
+    "meaningful_trial_sampled_caps": [
+      0.46771495783120787,
+      0.46771495783120787,
+      0.46771495783120787
+    ]
+  },
+  "finite_control": {
+    "passed": true,
+    "selected_direction": 44,
+    "target": {
+      "chart": [
+        0.05,
+        0,
+        0.8
+      ],
+      "physical": [
+        0.05345811728925916,
+        0,
+        0.8
+      ],
+      "geometry": 75,
+      "inner": false,
+      "gradient": [
+        [
+          0.02560768622778589,
+          0,
+          0.1834214222199242
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          -6.319519018326003e-14,
+          0,
+          -0.025796310659022447
+        ]
+      ],
+      "k": 0.032031244699739406,
+      "epsilon": 0.0009450089403098441,
+      "nu": 0.0977134219503115,
+      "tensor": [
+        [
+          0.016349733834065957,
+          0,
+          -0.01792273482409552
+        ],
+        [
+          0,
+          0.021354163133159604,
+          0
+        ],
+        [
+          -0.01792273482409552,
+          0,
+          0.026395454709532362
+        ]
+      ],
+      "eigenvalues": [
+        0.0027593315123635703,
+        0.021354163133159604,
+        0.03998585703123475
+      ],
+      "eigenvector": [
+        0.7968230168567035,
+        0,
+        0.6042127769315886
+      ]
+    },
+    "trials": [
+      {
+        "sign": 1.0,
+        "amplitude": 4.3215957745006675e-08,
+        "gain": 7.3543021380173286e-06,
+        "predicted": 7.354302138016583e-06,
+        "summary": {
+          "slack": 0.13943397718354877,
+          "inner_min": 9.47495729916592e-07,
+          "outer_min": -0.0015597734208075975,
+          "mass_squared": 0.0025604927303619165,
+          "strong_divergence_squared": [
+            0.0036370638082720386,
+            0.0036370638082720537,
+            0.0036370638082720216
+          ],
+          "velocity_max": 0.46771495783120787,
+          "epsilon_ratio": [
+            0.8028329558182034,
+            1.9984315766350735
+          ],
+          "hard_violation": 0.0
+        }
+      },
+      {
+        "sign": -1.0,
+        "amplitude": 4.3215957745006675e-08,
+        "gain": -7.3543021380173286e-06,
+        "predicted": -7.354302138016583e-06,
+        "summary": {
+          "slack": 0.1394341854825617,
+          "inner_min": 9.47495729916592e-07,
+          "outer_min": -0.0015597758993130175,
+          "mass_squared": 0.0025604927303619165,
+          "strong_divergence_squared": [
+            0.0036370638082720386,
+            0.0036370638082720537,
+            0.0036370638082720216
+          ],
+          "velocity_max": 0.46771495783120787,
+          "epsilon_ratio": [
+            0.8028329558182034,
+            1.9984315766350735
+          ],
+          "hard_violation": 0.0
+        }
+      }
+    ],
+    "base": {
+      "slack": 0.13943408133305546,
+      "inner_min": 9.47495729916592e-07,
+      "outer_min": -0.0015597746600602893,
+      "mass_squared": 0.002560492730360049,
+      "strong_divergence_squared": [
+        0.0036370638080298495,
+        0.0036370638080298646,
+        0.0036370638080298326
+      ],
+      "velocity_max": 0.46771495783120787,
+      "epsilon_ratio": [
+        0.8028329558182034,
+        1.9984315766350735
+      ],
+      "hard_violation": 0.0
+    },
+    "old_response_blocks_bitwise": true,
+    "old_memberships_bitwise": true,
+    "context_sha256": "77070399706e8a5ac0121ab26d2691f58bc5ee084331ef15d9329f773ea4a7e0"
+  },
+  "construction": {
+    "version": "H2kNativeConstructionV1",
+    "old_velocity_count": 44,
+    "new_velocity_count": 78,
+    "added_count": 34,
+    "patch_file": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/patch1/patch.json",
+    "patch_geometries": [
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77
+    ],
+    "patch_coefficients": 306,
+    "weak_constraint_rank": 28,
+    "weak_nullity": 278,
+    "strong_action_rank": 268,
+    "strong_nullity": 10,
+    "strong_null_old_orthogonal_rank": 0,
+    "directions": [
+      {
+        "target": 0,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 34.79830198319099,
+        "Gram_extremes": [
+          1.3410004184068614e-05,
+          2.4823591602115442
+        ],
+        "Q_max": 7.771561172376096e-15,
+        "divergence_norms": [
+          11.387628468416521,
+          11.38762846841652,
+          11.387628468416525
+        ],
+        "retained": true,
+        "index": 44,
+        "Rayleigh_derivatives": [
+          170.17561386491116,
+          0.8026708977681931,
+          0.4356042035058454,
+          2.7548074943850303,
+          1.9070360999135678,
+          0.0,
+          -0.9486105755846435,
+          0.21574866858081787,
+          0.0,
+          2.396890173765957,
+          6.258048253943521,
+          0.0,
+          0.026853006959929267,
+          -0.020748338844878284,
+          0.0,
+          0.028675285522975533,
+          -0.004269620160059234,
+          0.0,
+          2.6127468482294467,
+          0.0,
+          7.390184952337965,
+          0.21785587163417383,
+          0.0,
+          -0.04181499416610866
+        ]
+      },
+      {
+        "target": 1,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 46.80877144698853,
+        "Gram_extremes": [
+          1.341000418352632e-05,
+          2.4823591602115456
+        ],
+        "Q_max": 6.994405055138486e-15,
+        "divergence_norms": [
+          4.627324534607001,
+          4.627324534607001,
+          4.627324534607002
+        ],
+        "retained": true,
+        "index": 45,
+        "Rayleigh_derivatives": [
+          0.5967168851096447,
+          76.87703972590319,
+          6.674641763932797,
+          -5.972363531384152,
+          -0.657439106785807,
+          0.0,
+          -39.67874610867692,
+          -0.013894379063266016,
+          0.0,
+          -12.717914621034272,
+          1.4856521556931235,
+          0.0,
+          0.20059264626939485,
+          -0.2475699242816202,
+          0.0,
+          -0.15809382588491463,
+          -0.1258198330183692,
+          0.0,
+          0.9960310737266675,
+          0.0,
+          1.2549233020246229,
+          0.050202525948491436,
+          0.0,
+          0.05546027411039074
+        ]
+      },
+      {
+        "target": 2,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 11.749193736271035,
+        "Gram_extremes": [
+          1.3410004184295782e-05,
+          2.482359160211544
+        ],
+        "Q_max": 8.958112029944232e-15,
+        "divergence_norms": [
+          5.027573194126816,
+          5.027573194126815,
+          5.027573194126818
+        ],
+        "retained": true,
+        "index": 46,
+        "Rayleigh_derivatives": [
+          1.2901554744091364,
+          26.59176347173033,
+          20.658545859066358,
+          -15.839284612105715,
+          0.5356199275031753,
+          0.0,
+          -13.412404195032886,
+          0.0794416922014578,
+          0.0,
+          -27.848085744977176,
+          -1.0078806542920558,
+          0.0,
+          0.015820520747255484,
+          -0.18085360970843617,
+          0.0,
+          -0.14573934745521105,
+          -0.15365076236974,
+          0.0,
+          -0.768872681043483,
+          0.0,
+          1.5820855828625002,
+          0.20291165752565507,
+          0.0,
+          0.10124371920737972
+        ]
+      },
+      {
+        "target": 3,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 28.376105896853968,
+        "Gram_extremes": [
+          1.3410004183552808e-05,
+          2.482359160211544
+        ],
+        "Q_max": 6.21690706602324e-15,
+        "divergence_norms": [
+          3.837424263427387,
+          3.8374242634273874,
+          3.8374242634273887
+        ],
+        "retained": true,
+        "index": 47,
+        "Rayleigh_derivatives": [
+          3.378286768580055,
+          -9.851915571328776,
+          -6.558293242491713,
+          40.911952966291125,
+          1.4621913180028383,
+          0.0,
+          5.470654603447919,
+          0.24425603264964424,
+          0.0,
+          49.267286972891384,
+          0.7575544997550587,
+          0.0,
+          -0.009192314565772207,
+          0.00615513142554816,
+          0.0,
+          0.02101057416516859,
+          0.027039188005690273,
+          0.0,
+          -0.15052270742253077,
+          0.0,
+          -0.8114695708530069,
+          0.037046271217759184,
+          0.0,
+          0.029772567867168913
+        ]
+      },
+      {
+        "target": 4,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 48.24582863078251,
+        "Gram_extremes": [
+          1.3410004183795885e-05,
+          2.4823591602115447
+        ],
+        "Q_max": 5.6343818499726694e-15,
+        "divergence_norms": [
+          4.533786326732462,
+          4.5337863267324625,
+          4.533786326732464
+        ],
+        "retained": true,
+        "index": 48,
+        "Rayleigh_derivatives": [
+          1.3754892387794633,
+          -0.6378565310870092,
+          0.13043826742830555,
+          0.8599975761352339,
+          77.99693504435041,
+          0.0,
+          -0.6966977889906696,
+          0.05630567485915924,
+          0.0,
+          -36.14882759682193,
+          -0.7617410148176699,
+          0.0,
+          -0.013905149555875455,
+          -0.03135459141777838,
+          0.0,
+          -0.2228630365949864,
+          -0.028598489933004477,
+          0.0,
+          -0.39317316948282094,
+          0.0,
+          3.121472833929752,
+          0.28509874710271815,
+          0.0,
+          0.018460346993384148
+        ]
+      },
+      {
+        "target": 5,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 6,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 28.51533482069005,
+        "Gram_extremes": [
+          1.341000418407514e-05,
+          2.482359160211543
+        ],
+        "Q_max": 5.32972089808335e-15,
+        "divergence_norms": [
+          4.723220049955165,
+          4.723220049955165,
+          4.723220049955166
+        ],
+        "retained": true,
+        "index": 49,
+        "Rayleigh_derivatives": [
+          -1.1576240461918603,
+          -65.13384358217397,
+          -5.526322462897255,
+          5.443943594865818,
+          -1.1787609139592001,
+          0.0,
+          47.599628400094325,
+          -0.1340400146450138,
+          0.0,
+          20.79431965402042,
+          -3.724951864252493,
+          0.0,
+          -0.10534987289874759,
+          0.038982131886737874,
+          0.0,
+          0.2286407916764376,
+          0.06685427497629823,
+          0.0,
+          -0.7869503594933572,
+          0.0,
+          -0.3732565464589721,
+          -0.03367364738549806,
+          0.0,
+          0.15376212457595848
+        ]
+      },
+      {
+        "target": 7,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 1.9143901302753044,
+        "Gram_extremes": [
+          1.3410004184490586e-05,
+          2.482359160211543
+        ],
+        "Q_max": 7.993605777301127e-15,
+        "divergence_norms": [
+          5.436362936436119,
+          5.436362936436119,
+          5.436362936436122
+        ],
+        "retained": true,
+        "index": 50,
+        "Rayleigh_derivatives": [
+          3.9217123004425574,
+          -0.33973159581462664,
+          0.48755779590125414,
+          3.6204924684891617,
+          1.4189970462314851,
+          0.0,
+          -1.996560594690802,
+          3.6117291183708895,
+          0.0,
+          2.258666084972269,
+          -3.9977363105366104,
+          0.0,
+          0.009319930793301328,
+          0.010407717585618682,
+          0.0,
+          0.09838879615856282,
+          0.009982941790632981,
+          0.0,
+          2.610821235566958,
+          0.0,
+          1.2490901452385659,
+          5.470370615885574,
+          0.0,
+          -0.22610485086652582
+        ]
+      },
+      {
+        "target": 8,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 9,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 78.56799876206416,
+        "Gram_extremes": [
+          1.3410004184115018e-05,
+          2.5796365282355533
+        ],
+        "Q_max": 7.55389525035418e-15,
+        "divergence_norms": [
+          4.124849310342985,
+          4.124849310342985,
+          4.124849310342986
+        ],
+        "retained": true,
+        "index": 51,
+        "Rayleigh_derivatives": [
+          1.0615989894288163,
+          -7.57700295486905,
+          -4.164450663849749,
+          17.793679034987427,
+          -22.19771623204513,
+          0.0,
+          7.547054737878234,
+          0.05503472315430866,
+          0.0,
+          118.67157668592327,
+          0.48667098700633393,
+          0.0,
+          -0.0034950664101172507,
+          0.00794247931964736,
+          0.0,
+          0.20751759716625545,
+          0.03608464592496112,
+          0.0,
+          0.3532269190432206,
+          0.0,
+          0.3492300963073569,
+          -0.1489220620365191,
+          0.0,
+          0.07817801772383703
+        ]
+      },
+      {
+        "target": 10,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 50.219133989279655,
+        "Gram_extremes": [
+          1.3410004184438178e-05,
+          2.5796934443265354
+        ],
+        "Q_max": 4.135580766728708e-15,
+        "divergence_norms": [
+          5.237926216387326,
+          5.2379262163873275,
+          5.237926216387329
+        ],
+        "retained": true,
+        "index": 52,
+        "Rayleigh_derivatives": [
+          4.336384076487578,
+          1.384762075355788,
+          -0.23580225562720308,
+          0.42805291529472334,
+          -0.7318092436595333,
+          0.0,
+          -2.1150952069939684,
+          -0.15239663308348028,
+          0.0,
+          0.7613983449576839,
+          91.55330451792135,
+          0.0,
+          0.30965869537534985,
+          -0.18529678383955084,
+          0.0,
+          0.03182199691982255,
+          0.014549116835669396,
+          0.0,
+          -1.6080930161660691,
+          0.0,
+          -31.60052833122986,
+          -0.4398165975260165,
+          0.0,
+          0.24871011403523638
+        ]
+      },
+      {
+        "target": 11,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 12,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 2.8033634577730675,
+        "Gram_extremes": [
+          1.3410004184718773e-05,
+          2.5868399232261057
+        ],
+        "Q_max": 1.4654943925052066e-14,
+        "divergence_norms": [
+          7.265642571136711,
+          7.265642571136713,
+          7.2656425711367145
+        ],
+        "retained": true,
+        "index": 53,
+        "Rayleigh_derivatives": [
+          0.33332782545816486,
+          3.3493678128449282,
+          0.06630548127921865,
+          -0.09304611959332176,
+          -0.23930734371885537,
+          0.0,
+          -1.0716009337623746,
+          0.006364491723710564,
+          0.0,
+          -0.0979538962819726,
+          5.547190633052427,
+          0.0,
+          7.243013327256704,
+          -4.249139270540077,
+          0.0,
+          0.15937780378374805,
+          -0.21476115407455354,
+          0.0,
+          1.0865883875978737,
+          0.0,
+          -4.633925584429852,
+          0.12529011184072528,
+          0.0,
+          0.8695913896988398
+        ]
+      },
+      {
+        "target": 13,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 2.3867509348655105,
+        "Gram_extremes": [
+          1.3410004184010498e-05,
+          2.621887959998339
+        ],
+        "Q_max": 1.4654943925052066e-14,
+        "divergence_norms": [
+          5.815062125024608,
+          5.815062125024609,
+          5.815062125024611
+        ],
+        "retained": true,
+        "index": 54,
+        "Rayleigh_derivatives": [
+          -0.3025062021456164,
+          -4.855321866041124,
+          -0.8902831323236051,
+          0.07317841949446668,
+          -0.6338023051473279,
+          0.0,
+          0.4657329453763255,
+          0.008347930876889342,
+          0.0,
+          0.2614536339917297,
+          -3.8987913985861073,
+          0.0,
+          -4.99083569383488,
+          4.807986662888442,
+          0.0,
+          0.3237891213973352,
+          0.3202122279679982,
+          0.0,
+          -0.768656720977209,
+          0.0,
+          4.046624351719288,
+          -0.15849341730454336,
+          0.0,
+          -1.1256076343486
+        ]
+      },
+      {
+        "target": 14,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 15,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 4.7077900053648145,
+        "Gram_extremes": [
+          1.3410004183835008e-05,
+          2.6316970338172334
+        ],
+        "Q_max": 1.226796442210798e-14,
+        "divergence_norms": [
+          6.428742104010193,
+          6.428742104010194,
+          6.428742104010192
+        ],
+        "retained": true,
+        "index": 55,
+        "Rayleigh_derivatives": [
+          0.21195746708021734,
+          -1.5719005636602308,
+          -0.3637205198825173,
+          0.126640796803829,
+          -2.2839191763958677,
+          0.0,
+          1.3848894536271956,
+          0.04000912106975352,
+          0.0,
+          3.4632475744851106,
+          0.3394529333937789,
+          0.0,
+          0.09490523379299709,
+          0.16415430325348312,
+          0.0,
+          10.544798765680472,
+          0.1942517104469334,
+          0.0,
+          1.023900334159245,
+          0.0,
+          -0.7767069648841416,
+          0.014680748516635731,
+          0.0,
+          0.3128671838895907
+        ]
+      },
+      {
+        "target": 16,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 0.7279832170950253,
+        "Gram_extremes": [
+          1.3410004183415924e-05,
+          2.7858032477543033
+        ],
+        "Q_max": 1.7763568394002505e-14,
+        "divergence_norms": [
+          4.9163686847142225,
+          4.916368684714222,
+          4.916368684714221
+        ],
+        "retained": true,
+        "index": 56,
+        "Rayleigh_derivatives": [
+          -0.20409197381796396,
+          -8.090120306284934,
+          -2.4798271888899466,
+          1.0539622950047263,
+          -1.8953154578380822,
+          0.0,
+          2.618703275538258,
+          0.02625231569398423,
+          0.0,
+          3.8944557371461617,
+          1.0036550714888404,
+          0.0,
+          -0.8270157296815647,
+          1.0498412827533983,
+          0.0,
+          1.256205142498112,
+          1.2558587214695445,
+          0.0,
+          0.30615444645183776,
+          0.0,
+          -0.19182625249127006,
+          -0.06083500624298088,
+          0.0,
+          -0.10610416497026934
+        ]
+      },
+      {
+        "target": 17,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 18,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 17.442399818356762,
+        "Gram_extremes": [
+          1.3410004184768077e-05,
+          2.7864611587794306
+        ],
+        "Q_max": 1.2434497875801753e-14,
+        "divergence_norms": [
+          5.241140388381073,
+          5.241140388381069,
+          5.241140388381073
+        ],
+        "retained": true,
+        "index": 57,
+        "Rayleigh_derivatives": [
+          5.21253696607926,
+          2.6729688213604073,
+          -0.5179123390233711,
+          -0.24487732939177886,
+          -1.0875203845015893,
+          0.0,
+          -1.2865289880925133,
+          0.2865506155880304,
+          0.0,
+          1.5910845082743656,
+          -4.629927044848399,
+          0.0,
+          0.1746377913104977,
+          -0.10518003064304603,
+          0.0,
+          0.27635576582596394,
+          0.012777788674549052,
+          0.0,
+          31.816447381452278,
+          0.0,
+          -9.381543576848372,
+          -0.5467087638939587,
+          0.0,
+          0.978764784189606
+        ]
+      },
+      {
+        "target": 19,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 20,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 110.74236488089872,
+        "Gram_extremes": [
+          1.3410004184675334e-05,
+          2.7873512203763378
+        ],
+        "Q_max": 6.181356750291546e-15,
+        "divergence_norms": [
+          3.0330040370344613,
+          3.033004037034461,
+          3.0330040370344618
+        ],
+        "retained": true,
+        "index": 58,
+        "Rayleigh_derivatives": [
+          2.322199710649741,
+          0.5304331191694053,
+          0.16785112039465366,
+          -0.20792716951064566,
+          1.359895497837547,
+          0.0,
+          -0.09611078296675324,
+          0.021592873228248433,
+          0.0,
+          0.2477670564816138,
+          -14.330118090802886,
+          0.0,
+          -0.11730449917158055,
+          0.08721399858945353,
+          0.0,
+          -0.03301873939852512,
+          -0.001261001537776944,
+          0.0,
+          -1.4776335520441082,
+          0.0,
+          141.30431235717987,
+          2.4368119366578207,
+          0.0,
+          -0.4445414241833312
+        ]
+      },
+      {
+        "target": 21,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 5.33452545137216,
+        "Gram_extremes": [
+          1.3410004183270484e-05,
+          2.789143143292082
+        ],
+        "Q_max": 6.208948019107069e-15,
+        "divergence_norms": [
+          5.149372130633104,
+          5.149372130633103,
+          5.149372130633107
+        ],
+        "retained": true,
+        "index": 59,
+        "Rayleigh_derivatives": [
+          1.4211225495207462,
+          0.440511266579489,
+          0.44690917633611615,
+          0.1970613740137459,
+          2.578453401516804,
+          0.0,
+          -0.1800001403281951,
+          1.9631406038761354,
+          0.0,
+          -2.1933550589246122,
+          -4.140426143470129,
+          0.0,
+          0.06584160566039646,
+          -0.07091245798149615,
+          0.0,
+          0.012955956770270189,
+          -0.008301931251517148,
+          0.0,
+          -1.7875840936488974,
+          0.0,
+          50.58712702665545,
+          9.57803909298047,
+          0.0,
+          0.17964869784342044
+        ]
+      },
+      {
+        "target": 22,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 23,
+        "method": "weak_null_tangent_compensated_weight_0.01",
+        "unscaled_mass_norm": 3.4278793163407393,
+        "Gram_extremes": [
+          1.3410004184011844e-05,
+          2.8238221197391087
+        ],
+        "Q_max": 6.8833827526759706e-15,
+        "divergence_norms": [
+          7.543808293057463,
+          7.543808293057464,
+          7.5438082930574675
+        ],
+        "retained": true,
+        "index": 60,
+        "Rayleigh_derivatives": [
+          -0.4244871712610023,
+          0.7573275064980599,
+          0.3470169051394588,
+          0.2464583670121524,
+          0.2598209141325148,
+          0.0,
+          1.2790935912249872,
+          -0.126274251500873,
+          0.0,
+          1.7918630829465432,
+          3.6436541046484816,
+          0.0,
+          0.711162937812571,
+          -0.783733855730127,
+          0.0,
+          0.42968636448216163,
+          -0.02253348039238867,
+          0.0,
+          4.9803406475193945,
+          0.0,
+          -14.361523279686935,
+          0.27957243021455636,
+          0.0,
+          9.280199316549467
+        ]
+      },
+      {
+        "target": 0,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 21.750750094010456,
+        "Gram_extremes": [
+          1.3410004183696435e-05,
+          2.8238284094903574
+        ],
+        "Q_max": 8.25626402955084e-15,
+        "divergence_norms": [
+          0.25058971110323724,
+          0.25058971110323797,
+          0.25058971110323713
+        ],
+        "retained": true,
+        "index": 61,
+        "Rayleigh_derivatives": [
+          25.848278416922998,
+          0.285840629181337,
+          -0.13052952362528522,
+          2.0353374027090734,
+          -0.5789612812246123,
+          0.0,
+          -0.6314166719243541,
+          -1.142966676588336,
+          0.0,
+          1.7351581035218286,
+          8.839271124027285,
+          0.0,
+          0.030963814407833086,
+          -0.005476257071336484,
+          0.0,
+          -0.1136000695567245,
+          -0.012009464175238346,
+          0.0,
+          1.0795256321576723,
+          0.0,
+          -9.203000676562302,
+          -3.2784475273715374,
+          0.0,
+          0.15245348673738696
+        ]
+      },
+      {
+        "target": 1,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 25.903367822325656,
+        "Gram_extremes": [
+          1.3410004184914617e-05,
+          3.2688355624695116
+        ],
+        "Q_max": 9.43689570931383e-15,
+        "divergence_norms": [
+          0.271080263500897,
+          0.27108026350088216,
+          0.271080263500882
+        ],
+        "retained": true,
+        "index": 62,
+        "Rayleigh_derivatives": [
+          0.24001697905395813,
+          31.613856640128073,
+          7.7150086772832305,
+          -6.042675494539381,
+          -0.2956591634636716,
+          0.0,
+          -14.189982236284727,
+          0.054274423799764104,
+          0.0,
+          -20.520920011509716,
+          8.033363629716503,
+          0.0,
+          0.2476388187828317,
+          -0.23258730163593663,
+          0.0,
+          -0.33222331843825276,
+          -0.08713677308307122,
+          0.0,
+          1.7238669038165033,
+          0.0,
+          -2.8383067584849746,
+          0.09804027746992654,
+          0.0,
+          0.23513799121078266
+        ]
+      },
+      {
+        "target": 2,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 9.358771547829425,
+        "Gram_extremes": [
+          1.3410004183494677e-05,
+          3.8635537465056067
+        ],
+        "Q_max": 6.217248937900877e-15,
+        "divergence_norms": [
+          0.16860186363637447,
+          0.16860186363635493,
+          0.16860186363635468
+        ],
+        "retained": true,
+        "index": 63,
+        "Rayleigh_derivatives": [
+          -0.30336407227744466,
+          21.353732858929746,
+          10.156885388595475,
+          -11.259804896458395,
+          1.2970845086771394,
+          0.0,
+          -11.067010868195403,
+          0.02964684152225891,
+          0.0,
+          -35.66171472939674,
+          0.8160478857940259,
+          0.0,
+          -0.04492470173183821,
+          -0.003979106206721962,
+          0.0,
+          -0.3319846934393784,
+          -0.022039423389257892,
+          0.0,
+          0.13200410117518324,
+          0.0,
+          -1.8213038158823758,
+          0.21194083517820383,
+          0.0,
+          0.10292876703227108
+        ]
+      },
+      {
+        "target": 3,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 23.67112928894098,
+        "Gram_extremes": [
+          1.3410004183251216e-05,
+          4.214369076648209
+        ],
+        "Q_max": 7.991618352120179e-15,
+        "divergence_norms": [
+          0.12335369292248993,
+          0.12335369292247966,
+          0.12335369292247966
+        ],
+        "retained": true,
+        "index": 64,
+        "Rayleigh_derivatives": [
+          1.870215597360664,
+          -6.612512823337719,
+          -4.451749657263591,
+          24.751678483077818,
+          -9.390618688274742,
+          0.0,
+          6.685935352445082,
+          0.03981184977628249,
+          0.0,
+          52.66376160764779,
+          2.9936694032597746,
+          0.0,
+          -0.14069186624817157,
+          0.09569942865412606,
+          0.0,
+          -0.12447597458073317,
+          0.027228832398185517,
+          0.0,
+          0.4410531869788703,
+          0.0,
+          1.8419742066520268,
+          -0.27348016447430923,
+          0.0,
+          -0.0071802711012594195
+        ]
+      },
+      {
+        "target": 4,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 44.430006529860535,
+        "Gram_extremes": [
+          1.341000418428367e-05,
+          4.244594650841975
+        ],
+        "Q_max": 8.770761894538737e-15,
+        "divergence_norms": [
+          0.10350065447751633,
+          0.10350065447749152,
+          0.10350065447749052
+        ],
+        "retained": true,
+        "index": 65,
+        "Rayleigh_derivatives": [
+          -0.2834310216353706,
+          -0.17237377753014815,
+          0.27321890188738585,
+          -5.0030726176891775,
+          45.85786059988543,
+          0.0,
+          -0.01736536772240438,
+          -0.05696772052240806,
+          0.0,
+          -26.887595264268256,
+          -2.146760000261646,
+          0.0,
+          -0.08740427328330327,
+          0.050984777130819475,
+          0.0,
+          -0.4252043674897311,
+          0.010151729238557578,
+          0.0,
+          -0.2603508664165218,
+          0.0,
+          -0.7314027319564942,
+          0.07436049602970675,
+          0.0,
+          -0.048940680206169956
+        ]
+      },
+      {
+        "target": 5,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 6,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 14.723553736580419,
+        "Gram_extremes": [
+          1.3410004184084278e-05,
+          4.898143197530871
+        ],
+        "Q_max": 9.769962616701378e-15,
+        "divergence_norms": [
+          0.28009418225048455,
+          0.2800941822504719,
+          0.2800941822504719
+        ],
+        "retained": true,
+        "index": 66,
+        "Rayleigh_derivatives": [
+          -0.9327765892616546,
+          -24.964647518861817,
+          -7.0345534974657165,
+          10.74901093694693,
+          -0.052401982232286315,
+          0.0,
+          18.188863618921086,
+          -0.0897374227105403,
+          0.0,
+          40.22838654683797,
+          -9.006609747901901,
+          0.0,
+          0.031997615926819906,
+          -0.03415055302484578,
+          0.0,
+          0.7774551110776197,
+          0.019189380320594432,
+          0.0,
+          -1.1682985504110937,
+          0.0,
+          1.8534367432622108,
+          -0.03168257591332923,
+          0.0,
+          -0.03791731105849761
+        ]
+      },
+      {
+        "target": 7,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 1.4256332013480861,
+        "Gram_extremes": [
+          1.3410004183324579e-05,
+          4.900743884721677
+        ],
+        "Q_max": 7.013022068448457e-15,
+        "divergence_norms": [
+          0.1583803553292934,
+          0.15838035532929393,
+          0.15838035532929456
+        ],
+        "retained": true,
+        "index": 67,
+        "Rayleigh_derivatives": [
+          -17.438133823445234,
+          0.9861515302117769,
+          0.19462090014400096,
+          0.6610335971378138,
+          -1.7754049165020773,
+          0.0,
+          -0.9267838068105329,
+          1.5329163921339484,
+          0.0,
+          -1.5397203391376477,
+          -4.16970571471747,
+          0.0,
+          -0.023551743111790202,
+          0.01929825195375082,
+          0.0,
+          -0.032936455435565636,
+          0.010807107649828816,
+          0.0,
+          -3.276613195952697,
+          0.0,
+          10.29606070766614,
+          4.066202659687498,
+          0.0,
+          -0.10730428835335694
+        ]
+      },
+      {
+        "target": 8,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 9,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 75.30891066503703,
+        "Gram_extremes": [
+          1.3410004184378398e-05,
+          5.375977146529644
+        ],
+        "Q_max": 5.780169724581048e-15,
+        "divergence_norms": [
+          0.10412737723698132,
+          0.10412737723695265,
+          0.10412737723695273
+        ],
+        "retained": true,
+        "index": 68,
+        "Rayleigh_derivatives": [
+          0.501149066558229,
+          -7.058406958971476,
+          -4.431744374058974,
+          16.553296267972033,
+          -15.862877614538347,
+          0.0,
+          7.865003036530186,
+          -0.02914763229053985,
+          0.0,
+          77.75852367183961,
+          1.3078988401441345,
+          0.0,
+          0.034721887416226505,
+          -0.025027045271710627,
+          0.0,
+          -0.13897782704059644,
+          0.002501380492787933,
+          0.0,
+          0.5522952836683854,
+          0.0,
+          1.4345098063540114,
+          -0.24205033442226648,
+          0.0,
+          -0.04919849439464818
+        ]
+      },
+      {
+        "target": 10,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 18.848568109646106,
+        "Gram_extremes": [
+          1.3410004184422823e-05,
+          5.398300769528151
+        ],
+        "Q_max": 7.105427357601002e-15,
+        "divergence_norms": [
+          0.42996553514277874,
+          0.42996553514277797,
+          0.42996553514277813
+        ],
+        "retained": true,
+        "index": 69,
+        "Rayleigh_derivatives": [
+          10.200285566176657,
+          11.04015815634001,
+          0.4051875819323828,
+          3.7596243428509157,
+          -5.060361098775225,
+          0.0,
+          -7.035510699604675,
+          -0.31538050382245686,
+          0.0,
+          5.225672122059683,
+          29.30219290515352,
+          0.0,
+          0.13476121005264916,
+          -0.1271463491041445,
+          0.0,
+          -0.07873493116859318,
+          0.008889321620022848,
+          0.0,
+          -0.4912290433979174,
+          0.0,
+          -28.16931398936772,
+          -1.2216434512190248,
+          0.0,
+          0.40832121923259196
+        ]
+      },
+      {
+        "target": 11,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 12,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 1.4744172369180395,
+        "Gram_extremes": [
+          1.341000418400573e-05,
+          5.401638578174961
+        ],
+        "Q_max": 1.021405182655144e-14,
+        "divergence_norms": [
+          0.356299707531204,
+          0.35629970753120166,
+          0.3562997075312018
+        ],
+        "retained": true,
+        "index": 70,
+        "Rayleigh_derivatives": [
+          0.4567812775641815,
+          4.350654108891477,
+          -0.28515674521108236,
+          -2.2587468950269747,
+          -2.6338354812185076,
+          0.0,
+          0.31952869631786407,
+          -0.02277248670801857,
+          0.0,
+          1.7734922327793337,
+          1.7227524086228956,
+          0.0,
+          2.03594674852504,
+          -1.5282814840474814,
+          0.0,
+          0.45117969491436777,
+          -0.3078341860619651,
+          0.0,
+          1.2739559882600477,
+          0.0,
+          0.8580290623601239,
+          0.13218146176256856,
+          0.0,
+          1.1967681206956209
+        ]
+      },
+      {
+        "target": 13,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 1.095081142496599,
+        "Gram_extremes": [
+          1.3410004184206552e-05,
+          5.411628339754634
+        ],
+        "Q_max": 7.993605777301127e-15,
+        "divergence_norms": [
+          0.4278630163691318,
+          0.42786301636912916,
+          0.42786301636912905
+        ],
+        "retained": true,
+        "index": 71,
+        "Rayleigh_derivatives": [
+          -0.10877066035271532,
+          -5.501687675255184,
+          -0.03400619781322156,
+          2.06862620552946,
+          2.0685718098308308,
+          0.0,
+          -0.45916004128141663,
+          0.025123461308560247,
+          0.0,
+          -1.7211140283907476,
+          -2.188446616402011,
+          0.0,
+          -2.0576781715052563,
+          1.696500015128607,
+          0.0,
+          -0.540332973276574,
+          0.3843531095291377,
+          0.0,
+          -1.226091323698633,
+          0.0,
+          -0.5330151465520743,
+          -0.11977370602986909,
+          0.0,
+          -1.342399047768816
+        ]
+      },
+      {
+        "target": 14,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 15,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 1.9351713000674,
+        "Gram_extremes": [
+          1.3410004184150432e-05,
+          5.424978328130315
+        ],
+        "Q_max": 8.43769498715119e-15,
+        "divergence_norms": [
+          0.36610731279683095,
+          0.3661073127968235,
+          0.3661073127968236
+        ],
+        "retained": true,
+        "index": 72,
+        "Rayleigh_derivatives": [
+          -1.2768310089677835,
+          -4.446997956387617,
+          -1.6055265511467198,
+          -1.522597450450449,
+          -9.762356863930346,
+          0.0,
+          5.915188027711941,
+          -0.02426415914809893,
+          0.0,
+          -5.408445629932945,
+          -0.7668782152194302,
+          0.0,
+          0.34375619311117145,
+          -0.3057654119217708,
+          0.0,
+          2.7133108272879882,
+          0.0185812246948157,
+          0.0,
+          -0.20543411370399212,
+          0.0,
+          0.2982316405372325,
+          0.054119698590745086,
+          0.0,
+          0.09244152774337272
+        ]
+      },
+      {
+        "target": 16,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 0.3239945601436584,
+        "Gram_extremes": [
+          1.341000418307659e-05,
+          5.45274003526259
+        ],
+        "Q_max": 1.2434497875801753e-14,
+        "divergence_norms": [
+          0.4740718643041504,
+          0.4740718643041405,
+          0.47407186430414033
+        ],
+        "retained": true,
+        "index": 73,
+        "Rayleigh_derivatives": [
+          -0.806232221685298,
+          -6.966585744589424,
+          -0.6366215792465706,
+          1.9893457834556636,
+          1.3921264485381935,
+          0.0,
+          0.8720389385447732,
+          0.047553179501858556,
+          0.0,
+          0.5814179101868984,
+          0.517141349315434,
+          0.0,
+          -1.4008754648261645,
+          1.2990892258149733,
+          0.0,
+          0.11098289037188702,
+          0.5424421892306627,
+          0.0,
+          -0.40613049562631365,
+          0.0,
+          0.35527569970517314,
+          0.19266528027987506,
+          0.0,
+          -0.8767774866379132
+        ]
+      },
+      {
+        "target": 17,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 18,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 6.601628719773067,
+        "Gram_extremes": [
+          1.3410004183661134e-05,
+          5.459443289262036
+        ],
+        "Q_max": 1.2434497875801753e-14,
+        "divergence_norms": [
+          0.41584465724401554,
+          0.41584465724401404,
+          0.4158446572440143
+        ],
+        "retained": true,
+        "index": 74,
+        "Rayleigh_derivatives": [
+          3.556772615038442,
+          6.7640820745562324,
+          0.18713506601406626,
+          1.5814623111121011,
+          -1.7522025527268164,
+          0.0,
+          -2.6056458515798147,
+          -0.7075903172400855,
+          0.0,
+          6.300377973987819,
+          -1.4025272360727539,
+          0.0,
+          0.28452715956891295,
+          -0.2033845804656556,
+          0.0,
+          -0.060220018084935094,
+          -0.019932061749740132,
+          0.0,
+          10.026423890946292,
+          0.0,
+          15.344409099424084,
+          -2.1003296368824396,
+          0.0,
+          0.2860929122085693
+        ]
+      },
+      {
+        "target": 19,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 20,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 30.401492829532252,
+        "Gram_extremes": [
+          1.341000418330848e-05,
+          5.470766039434771
+        ],
+        "Q_max": 6.744604874597826e-15,
+        "divergence_norms": [
+          0.7189115790065834,
+          0.7189115790065825,
+          0.7189115790065829
+        ],
+        "retained": true,
+        "index": 75,
+        "Rayleigh_derivatives": [
+          -6.584287454347244,
+          -2.418358347397007,
+          -0.5606687285920078,
+          1.4341930456191265,
+          -1.0689023838072245,
+          0.0,
+          0.8976261672342767,
+          0.48281859283191153,
+          0.0,
+          3.553489016496304,
+          -17.46464347352159,
+          0.0,
+          0.04161285257977504,
+          -0.019199545197570618,
+          0.0,
+          0.018983584614604566,
+          0.003786241507979549,
+          0.0,
+          3.3320104498389544,
+          0.0,
+          77.53905535278811,
+          1.7659913804008491,
+          0.0,
+          -0.1294316985835442
+        ]
+      },
+      {
+        "target": 21,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 4.354026823728305,
+        "Gram_extremes": [
+          1.3410004184067527e-05,
+          5.470807863963947
+        ],
+        "Q_max": 9.99413539239408e-15,
+        "divergence_norms": [
+          0.13171778486535915,
+          0.13171778486535923,
+          0.13171778486536037
+        ],
+        "retained": true,
+        "index": 76,
+        "Rayleigh_derivatives": [
+          -16.377642065862172,
+          0.5832700328960663,
+          0.4555566463852244,
+          -1.4868039617838082,
+          0.7588004065933692,
+          0.0,
+          -0.10713762865010423,
+          1.3313913188289843,
+          0.0,
+          -4.1865950186866066,
+          -5.288490569354768,
+          0.0,
+          0.04476100711223209,
+          -0.030124280843985437,
+          0.0,
+          0.02405379932671732,
+          0.014336729024967292,
+          0.0,
+          -3.184545482418666,
+          0.0,
+          12.330832229990516,
+          4.580648366552084,
+          0.0,
+          0.0016025515079688413
+        ]
+      },
+      {
+        "target": 22,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 0.0,
+        "retained": false
+      },
+      {
+        "target": 23,
+        "method": "weak_null_tangent_compensated_weight_1.0",
+        "unscaled_mass_norm": 1.1829998352241655,
+        "Gram_extremes": [
+          1.3410004183623134e-05,
+          5.596480137908976
+        ],
+        "Q_max": 9.547918011776346e-15,
+        "divergence_norms": [
+          0.5761179594193809,
+          0.5761179594193786,
+          0.5761179594193795
+        ],
+        "retained": true,
+        "index": 77,
+        "Rayleigh_derivatives": [
+          2.803024643158221,
+          5.148661643035241,
+          0.8142746834552586,
+          -0.14367299175095471,
+          -1.8380685071895537,
+          0.0,
+          -0.47191685940565575,
+          -0.12931240695784574,
+          0.0,
+          -3.1319404355781497,
+          6.505723908119468,
+          0.0,
+          1.491577169504229,
+          -1.2426340555140167,
+          0.0,
+          0.1512174271685016,
+          -0.2401277901051307,
+          0.0,
+          1.5965168629137816,
+          0.0,
+          -3.3262192768236627,
+          0.0058981853118991595,
+          0.0,
+          2.360955015485148
+        ]
+      }
+    ],
+    "basis_file": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/construct2/basis.f64",
+    "basis_sha256": "6c4fce90b0632fe0753e20e8da167001a6ea9e711e5a364d73394388338fa91f",
+    "old_basis_sha256": "cb1b2bfdde850a9ec6198e725b59a3bd4a6e31edf0d10327844cfabdc618ee1c",
+    "old_columns_bits_preserved": true,
+    "scalar_basis_bits_preserved": true,
+    "numerical_seconds": 6.331533520016819
+  },
+  "focused": {
+    "version": "H2kFocusedVerificationV1",
+    "passed": true,
+    "tests": {
+      "archived_counts_and_successor_rejections": true,
+      "all_44_original_responses_scalars_memberships_bits_preserved": true,
+      "old_quadratic_base_cross_direction_blocks_bitwise": true,
+      "native_meaningful_signed_responses_and_frozen_profile": true,
+      "independent_finite_quadratic_identity": true
+    },
+    "new_direction_counts": {
+      "velocity": 78,
+      "k_anchor": 8,
+      "epsilon": 8
+    },
+    "seconds": 3.1199135890055913
+  },
+  "affected_h2i": {
+    "version": "H2iFocusedChecksV1",
+    "passed": true,
+    "tests": {
+      "known_feasible_zero_increment": true,
+      "known_fixed_inner_obstruction": {
+        "verified": true,
+        "primal": 0.33343333333333336,
+        "dual": 0.33343333333333336,
+        "lower_bound": 0.33343333333329545,
+        "gap": 3.7914116290949096e-14,
+        "primal_max_violation": 0.0,
+        "stationarity_inf": 0.0,
+        "stationarity_allowance": 0.0,
+        "arithmetic_allowance": 3.789845474481505e-14,
+        "dual_signs_checked": true,
+        "dual_nonzero_rows": 1,
+        "active_dual_rows": [
+          24
+        ],
+        "active_dual_multipliers": [
+          -1.0
+        ],
+        "native_data_rounding_allowance": 5.333733333333333e-09,
+        "limited_lower_bound": 0.3334333279995621
+      },
+      "buffer_obstruction_does_not_certify_actual_infeasibility": true,
+      "signed_joint_repair_with_true_mass_cap": {
+        "slack": 0.0,
+        "inner_min": 0.013333333333333334,
+        "outer_min": 0.013333333333333334,
+        "mass_squared": 0.014399999998079997,
+        "strong_divergence_squared": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity_max": 0.0,
+        "epsilon_ratio": [
+          0.549717905622127,
+          1.0
+        ],
+        "hard_violation": 0.0
+      },
+      "budget_is_inconclusive": true,
+      "full_S_no_deviatoric_projection_and_affine_Rayleigh": true,
+      "quadratic_tangent_is_necessary_not_sufficient": true,
+      "fresh_GL28_identity_margin_envelope_and_physical_caps_required": true,
+      "driver_failure_prefixes": [
+        {
+          "kind": "rejection",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        }
+      ],
+      "deliberate_rollback_distinct_and_successful_order": true
+    },
+    "seconds": 0.06827229101327248,
+    "scope": "math and synthetic driver control; no native governing solves"
+  },
+  "aggregate": {
+    "version": "H2kAggregateWorkV1",
+    "created": "2026-11-15T22:50:56.323343+08:00",
+    "totals": {
+      "construction_seconds": 8.580440008032602,
+      "attempts": 48,
+      "scans": 3
+    },
+    "events": [
+      {
+        "event": "first exact-null construction: no added directions, no optimization",
+        "time": "2026-11-15T22:50:56.323382+08:00",
+        "work": {
+          "construction_seconds": 1.74
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:58.378809+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:58.471018+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:58.573429+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:58.680508+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:58.792524+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:58.892836+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:58.969962+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:59.067922+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:59.169662+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:59.247810+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:59.342306+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:59.449170+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:59.539993+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:59.645945+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:59.754851+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:59.831018+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:50:59.917362+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:00.018600+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:00.114827+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:00.219722+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:00.306509+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:00.412238+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:00.511820+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:00.585381+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:00.678073+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:00.787534+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:00.888719+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:01.006462+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:01.129255+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:01.220842+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:01.293549+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:01.388896+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:01.497441+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:01.589627+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:01.680771+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:01.781980+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:01.872096+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:01.963964+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:02.075745+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:02.140345+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:02.238760+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:02.356687+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:02.438902+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:02.544428+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:02.630228+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:02.741968+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:02.848729+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "constrained response",
+        "time": "2026-11-15T22:51:02.926492+08:00",
+        "work": {
+          "attempts": 1
+        }
+      },
+      {
+        "event": "response construction complete",
+        "time": "2026-11-15T22:51:03.171110+08:00",
+        "work": {
+          "construction_seconds": 6.331533520016819
+        }
+      },
+      {
+        "event": "context finite control",
+        "time": "2026-11-15T22:53:50.098975+08:00",
+        "work": {
+          "scans": 3,
+          "construction_seconds": 0.5089064880157821
+        }
+      }
+    ]
+  },
+  "physical_hill_attempts": 0,
+  "fresh_GL28": 0
+}

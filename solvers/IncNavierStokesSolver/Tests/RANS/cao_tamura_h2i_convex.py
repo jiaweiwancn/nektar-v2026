@@ -12,17 +12,24 @@ from cao_tamura_h2d_state import load
 from cao_tamura_h2h_scalar import Budget,BudgetExhausted,lp
 from run_cls_epawf_picard import sha,require
 
+def validate_direction_counts(version,counts):
+ require(version in ('FixedKJointContextV1','FixedKJointContextV2','FixedKJointContextV3'),'wrong joint schema')
+ nv=counts['velocity'];require(type(nv) is int and counts['k_anchor']==8 and counts['epsilon']==8,'joint scalar/count contract')
+ require((version=='FixedKJointContextV1' and nv==41) or (version=='FixedKJointContextV2' and 41<=nv<=47) or (version=='FixedKJointContextV3' and 44<=nv<=128),'joint velocity count/schema mismatch')
+ return nv
+
 class Context:
  def __init__(self,path):
-  self.path=Path(path);self.doc=load(path);self.meta=self.doc['context'];self.root=Path(self.doc['array_directory']);require(self.meta['version'] in ('FixedKJointContextV1','FixedKJointContextV2'),'wrong H2i schema');r=self.doc['receipt'];require(sha(Path(r['output']))==r['output_sha256'],'joint native receipt mismatch');native=load(Path(r['output']));require(native['context']==self.meta,'joint context was changed after export')
+  self.path=Path(path);self.doc=load(path);self.meta=self.doc['context'];self.root=Path(self.doc['array_directory']);require(self.meta['version'] in ('FixedKJointContextV1','FixedKJointContextV2','FixedKJointContextV3'),'wrong H2i schema');r=self.doc['receipt'];require(sha(Path(r['output']))==r['output_sha256'],'joint native receipt mismatch');native=load(Path(r['output']));require(native['context']==self.meta,'joint context was changed after export')
   for n in ('geometry_identity','inventory_identity','reference_sha256','defect_sha256','patch_signature'):require(native[n]==self.doc[n],'joint identity mismatch '+n)
   spec=self.meta['model_specification'];require(spec['name']=='StandardKEpsilon' and spec['calibration']=='StandardNeutralCalibratedV1' and spec['coefficients']['Cmu']==.09 and not spec['physical_regularization_active'],'H2i requires calibrated standard with zero regularization')
-  counts=self.meta['direction_counts'];require(counts['k_anchor']==8 and counts['epsilon']==8 and 41<=counts['velocity']<=47 and (self.meta['version']!='FixedKJointContextV1' or counts['velocity']==41),'unexpected joint basis dimensions');self.arrays={}
+  counts=self.meta['direction_counts'];nv=validate_direction_counts(self.meta['version'],counts);self.arrays={}
   for name,entry in self.meta['files'].items():self.arrays[name]=self.read(entry)
   self.algebra={name:self.read(entry) for name,entry in self.meta['algebra']['files'].items()};self.blocks=self.meta['observation_blocks'];self.N=len(self.arrays['points'])
   occupied=[]
   for b in self.blocks.values():occupied+=list(range(b['offset'],b['offset']+b['width']))
   require(sorted(occupied)==list(range(self.arrays['points'].shape[1])),'incomplete/overlapping joint blocks')
+  for name,shape in (('velocity_basis',[nv,6]),('k_basis',[8]),('epsilon_basis',[8])):require(self.blocks[name]['shape']==shape and self.blocks[name]['width']==int(np.prod(shape)),'joint block/count mismatch '+name)
  def read(self,info):
   p=self.root/info['file'];require(sha(p)==info['sha256'],'joint array changed '+str(p));return np.memmap(p,dtype=info['dtype'],mode='r',shape=tuple(info['shape']))
  def block(self,name):

@@ -60,7 +60,7 @@ def replay(P, phase, initial):
                 stationarity_inf=float(np.max(abs(d))),dual_signs=True,
                 active_kinds=dict(collections.Counter(m['kind'] for m in proof['cut_metadata'])),
                 limiting_constraints=witness,verified=True,
-                scope='finite sampled transformed-tensor slack; fixed-k anchor, 41 velocity/8 epsilon directions and original physical caps; not global physical infeasibility')
+                scope=f'finite sampled transformed-tensor slack; fixed-k anchor, {P.nv} velocity/{P.ne} epsilon directions and original physical caps; not global physical infeasibility')
 
 
 def tensor_check(w, nt=None):
