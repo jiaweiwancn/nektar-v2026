@@ -43,3 +43,62 @@ must pass before advancing fresh physical histories. No horizon beyond .002,
 terrain, other-model displaced evolution, smooth production, EP, MPI/3D or
 variable-height production is authorized by this package. Lower fill does not
 establish long-run affordability or curved readiness.
+
+## Qualified capacity and component
+
+`CT14-VectorCOLAMDV1` qualifies the predictor backend with the unchanged
+matrix/zero/mask/scale/pivot/residual/refinement contract. The opt-in
+`RANSWallPredictorOrdering=VectorCOLAMDV1` orders the directed quotient of
+the two velocity components sharing each native FE ID, then expands groups
+in canonical within-group order. Both matrix indices are permuted internally;
+every original coefficient is checked exactly after permutation and all
+solutions return to canonical IDs. Scalar/preconditioner COLAMD and
+consistent-mass LDLT remain unchanged. Default component histories retain
+their old identity; the new component has its own fingerprint.
+
+| Frozen system | Matrix nnz | Factor entries | Margin to 40M | Process CPU s | VmPeak KiB |
+|---|---:|---:|---:|---:|---:|
+| Original initial, alpha1000 | 2,081,794 | 35,438,135 | 4,561,865 | 2.787 | 1,118,888 |
+| Original evolved, alpha2000 | 2,082,125 | 35,399,996 | 4,600,004 | 2.844 | 1,119,488 |
+| Selected initial, alpha1000 | 2,152,435 | 37,266,312 | 2,733,688 | 2.571 | 1,176,632 |
+| Selected initial, alpha2000 | 2,152,435 | 37,225,528 | 2,774,472 | 2.529 | 1,176,632 |
+
+CPU values cover the complete ordering probe, including CSR input, permutation
+checks, actual/tiny/cancelling RHS solves and output. They are not isolated LU
+timings. Actual RHS infinity residuals are at most 2.885e-19; tiny residuals
+at most 3.885e-31. Every case meets `2e-12*maxabs(rhs)+1e-25` with at most
+three reused-factor refinements. The independent nonsymmetric 48-row vector
+control and permutation inversion pass. Selected solutions are qualified
+against canonical matrices/RHS and independent controls, without requiring
+an old selected solve that violates its fill guard.
+
+All four P3/P1/P4/P2 zero/displaced small complete-operator controls pass.
+The largest independent action defect is **4.313e-15**, below 2e-10. Fresh
+original full-domain .001 two-step evolution agrees with the qualified CT11
+update at every common state: maximum scaled field difference **1.355e-14**,
+including absolute pressure, and physical traction difference **4.071e-14**,
+both below 1e-8. CT11's historical physical pressure failure stays unchanged.
+Genuine same-component restart and full rejected-step rollback reproduce
+all native histories bitwise. Old-component, new-to-old, stale-fit histories
+and unknown ordering reject. No old history is relabelled.
+
+The tested native source is `6477d9d9`. Governing executable SHA256 is
+`9ae7d3c63492c82a4c9f979616f673d8e4909a5c41ee8069fc1592f2fb23da06`;
+diagnostic probe SHA256 is
+`95d6a0258926ab250b69ea0940976f43a993bf4bdccc3001a5819f4f36835824`.
+These are private Linux runtimes; shared installations are preserved. Exact
+loaded libraries, input/runtime/source bindings, complete numerical bodies,
+history witnesses and closed resource receipts are in
+[capacity-component-v1](cao-tamura-accepted-14-evidence/capacity-component-v1/).
+
+Three rejected attempts remain archived: scalar Scotch ND gives 40,862,187
+entries; native-vector Scotch ND gives 40,119,892; retaining its external order
+gives exactly the same fill. The latter rules out Eigen postordering as the
+fill cause. The directed COLAMD quotient was then selected using the measured
+success of original-system COLAMD, rather than a seed/threshold sweep. Each
+attempt has a prospective amendment and an immutable failed witness. All
+attempts count toward the one CT14 allocation.
+
+Capacity/component qualification admits the prospectively recorded
+[static tests](cao-tamura-accepted-14-evidence/static-tests-v1.json).
+**Complete selected static admission and the physical pair remain pending.**
