@@ -47,6 +47,28 @@ def qualify_runtime(root):
         native_capsule=build['native_source_revision'],compiled_build=identity(root/'science/runtime-build-v1.json'),dependencies=identity(root/'science/runtime-dependencies-v1.json'),
         samples=samples,libraries=list(libraries.values())))
 
+def storage_categories(root):
+    categories={};files={}
+    for parent in ('science','operations'):
+        for p in (root/parent).rglob('*'):
+            if not p.is_file():continue
+            relative=p.relative_to(root);name=p.name
+            if 'factors'in relative.parts:kind='factor_metadata_streams'
+            elif name=='State.bin':kind='native_checkpoints'
+            elif name.endswith('.callback.json'):kind='genuine_callback_sidecars'
+            elif name.endswith('.completion.json'):kind='native_completion_manifests'
+            elif name.endswith('.report.json')or name=='case.evolution.json':kind='native_completed_and_final_reports'
+            elif name.endswith('.fields.npz'):kind='independent_fields_lossless_NPZ'
+            elif name.endswith('.inventory.json'):kind='scientific_inventories'
+            elif name=='native.json'and 'final-strict'in relative.parts:kind='strict_raw_native_packets'
+            elif name.endswith(('.log','.jsonl')):kind='console_telemetry_timing_logs'
+            elif name.endswith('.result.json'):kind='independent_scientific_results'
+            else:kind='configuration_cursors_receipts_other'
+            categories[kind]=categories.get(kind,0)+p.stat().st_size;files[kind]=files.get(kind,0)+1
+    return dict(file_bytes=categories,file_counts=files,total_file_bytes=sum(categories.values()),
+        fixed_runtime_new_copied_bytes=0,source_and_directory_metadata='separately measured; not included in this file-only partition',
+        scope='actual H24 science+operations, no duplicate category; factor streams and audit-heavy logs need long-namespace/cadence qualification')
+
 def publish(root):
     qualify_runtime(root)
     out=root/'publication-v1';out.mkdir();book=load(root/'accounting.json');inputs=load(root/'inputs/selected.json');copied=[];heavy=[]
@@ -259,6 +281,7 @@ def publish(root):
             role='physical-only'if z=='M'else'pair'if z=='C'else'triplet',mean_inclusive_observer_wait_seconds=statistics.mean(r['observer_wait_seconds']for r in audited),
             scope='assessment is inside observer wait; physical/comparison subscopes are inside assessment; do not add nested scopes')
     atomic(out/'conditional-cost.json',cost);atomic(out/'observer-cost-roles.json',timing_by_role)
+    atomic(out/'actual-storage-categories.json',storage_categories(root))
     atomic(out/'heavy-manifest.json',dict(files=heavy))
     atomic(out/'actual-storage.json',dict(science_bytes=size(root/'science'),all_new_output_before_archive=sum(size(p)if p.is_dir()else p.stat().st_size for p in root.iterdir()if not p.name.startswith(('source','build','runtime'))),
         source_build_runtime_bytes=sum(size(p)if p.is_dir()else p.stat().st_size for p in root.iterdir()if p.name.startswith(('source','build','runtime'))),prior_output_bytes=0,pilot_combined_output_cap=2*1024**3))
