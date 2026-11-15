@@ -80,6 +80,8 @@ def main():
             value=sum(p['threads'] for p in processes if p['pid'] in owned)
             if value>union_peak:union_peak=value;union_witness=dict(time_unix=row['time_unix'],project_threads=value,processes=[p for p in processes if p['pid'] in owned])
     require(union_peak<=16 and aggregate<=72,'combined project/helper census failed')
+    output_bytes=sum(f.stat().st_size for f in a.root.rglob('*') if f.is_file() and f.relative_to(a.root).parts[0] not in ('source','tmp'))
+    require(cpu<12000 and wall<14400 and output_bytes<12*1024**3,'finite CT12 package budget exhausted')
     m=RequestManifest(a.output,dict(schema='CT12CompactEvidenceV1',source=sha(Path(__file__)),inputs=requests,resources={k:v['sha256'] for k,v in resources.items()},scope='collection execution,diagnostic,physical and resource decisions distinct'))
     negatives={}
     for name,word,mutate in [('missing_step','missing_time',lambda q:q['members']['0.001']['steps'].pop()),
@@ -127,7 +129,7 @@ def main():
         profile_and_restart=dict(status='pass',accepted_replay_steps=2,deliberate_rejected_attempts=1,governing_change=False),
         retention=dict(status=profile['retention']['status'],scope='lossless compressed/deduplicated bounded replay payloads; no historical pruning or unqualified rolling eviction'),
         campaign_resources=forecast,resources=dict(status='pass',maximum_project=max(project,union_peak),maximum_aggregate=aggregate,combined_project_witness=union_witness,
-            closed_package_CPU=cpu,closed_family_wall_sum=wall,package_CPU_limit=12000,package_wall_limit=14400),
+            closed_package_CPU=cpu,closed_family_wall_sum=wall,new_output_bytes=output_bytes,package_CPU_limit=12000,package_wall_limit=14400,package_output_limit_bytes=12*1024**3),
         static_contrast='not_yet_selected; target-specific attribution must precede any separate static manifest',
         terrain='unattempted; mapped numbering,joined gradients/cofactors,transmission and curved temporal/spatial gates separate',
         physical_applicability='central physical reference retained; no precursor or hill validation',historical='CT4–CT11 seals unchanged')

@@ -60,7 +60,12 @@ def main():
             pc=fr.solve(fr.rc,'axis/continuity');parts['continuity']=pc;accum['continuity']+=pc
             defect=fr.measure(sum(parts.values(),np.zeros_like(pc))-np.asarray(s['pressure_increment']))
             require(defect['maximum_scaled_value']<1e-8,'Cartesian-axis signed reconstruction')
-            checks.append(dict(time=row['time'],axes={k:fr.measure(v) for k,v in parts.items()},signed_sum_error=defect,solves=fr.receipts))
+            native_pi=np.asarray(s['pressure_increment']);native_b=np.asarray(s['subtracted_mass_velocity_correction'])
+            mass_defect=maximum(fr.alpha*fr.mul('M',native_b)-fr.mul('G',native_pi))
+            action_defect=maximum(fr.mul('G',native_pi)-np.asarray(s['full_pressure_action'])[fr.rows[:fr.nv]])
+            require(max(mass_defect,action_defect)<2e-10,'native complete pressure/mass action')
+            checks.append(dict(time=row['time'],axes={k:fr.measure(v) for k,v in parts.items()},signed_sum_error=defect,
+                independent_native_mass_action_defect=mass_defect,complete_native_G_action_defect=action_defect,solves=fr.receipts))
             if round(row['time'],12) in (.001,.002):states[str(round(row['time'],12))]={k:v.copy() for k,v in accum.items()}
         result['members'][dt]=checks;common[dt]=states
     for t in ('0.001','0.002'):
