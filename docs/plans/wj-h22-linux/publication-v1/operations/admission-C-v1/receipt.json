@@ -1,0 +1,65 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22.py",
+    "--root",
+    "/home/jay/build/wj-h22-early-phase-replay-20261115",
+    "--mode",
+    "admission",
+    "--level",
+    "C"
+  ],
+  "phase": "operation",
+  "kind": "passive",
+  "reserved_seconds": 30.0,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 250929,
+        "parent": 248139,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h22.py --root /home/jay/build/wj-h22-early-phase-replay-20261115 --label admission-C-v1 --seconds 30 --phase operation -- python3 -B /home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22.py --root /home/jay/build/wj-h22-early-phase-replay-20261115 --mode admission --level C"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22.py": {
+      "sha256": "5c621dd693336e68eb7b428f7533a4f5bed650e61b546d71787f27f665c5486f",
+      "bytes": 17179
+    }
+  },
+  "driver_sha256": "48354243fc5a8fe72002413391f2e972d2615b429452177dd5f54d402a543461",
+  "status": "PASS",
+  "seconds": 1.2743168529996183,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 118087680,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "1bb5a67990f53d6c65a735ff9469b308c487a4167c6a643daa6ad56ef3844e11"
+}

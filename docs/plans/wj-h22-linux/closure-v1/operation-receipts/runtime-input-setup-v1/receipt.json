@@ -1,0 +1,63 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22.py",
+    "--root",
+    "/home/jay/build/wj-h22-early-phase-replay-20261115",
+    "--mode",
+    "setup"
+  ],
+  "phase": "operation",
+  "kind": "passive",
+  "reserved_seconds": 180.0,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 250505,
+        "parent": 248139,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h22.py --root /home/jay/build/wj-h22-early-phase-replay-20261115 --label runtime-input-setup-v1 --seconds 180 --phase operation -- python3 -B /home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22.py --root /home/jay/build/wj-h22-early-phase-replay-20261115 --mode setup"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22.py": {
+      "sha256": "0bacbcbaceba1808db7de296fe154a150382feb08a50d2fa0bf0042f73386678",
+      "bytes": 16813
+    }
+  },
+  "driver_sha256": "48354243fc5a8fe72002413391f2e972d2615b429452177dd5f54d402a543461",
+  "status": "PASS",
+  "seconds": 4.592136725987075,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 259608576,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "7cba32eca1fc0041f78760dfb50d63597f6fb0a0d3f71cac59821188791cc7cd"
+}

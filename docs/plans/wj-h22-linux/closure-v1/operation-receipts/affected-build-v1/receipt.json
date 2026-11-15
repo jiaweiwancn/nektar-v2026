@@ -1,0 +1,61 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h22.py",
+    "--root",
+    "/home/jay/build/wj-h22-early-phase-replay-20261115"
+  ],
+  "phase": "build",
+  "kind": "passive",
+  "reserved_seconds": 900.0,
+  "maximum_attempts": 0,
+  "workers": 8,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 248845,
+        "parent": 248139,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h22.py --root /home/jay/build/wj-h22-early-phase-replay-20261115 --label affected-build-v1 --seconds 900 --phase build --workers 8 -- python3 -B /home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h22.py --root /home/jay/build/wj-h22-early-phase-replay-20261115"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h22.py": {
+      "sha256": "1fa10bd2dcb2a64c18d34453e783dfa88c763543fd6039c7dd12d7b36d5eb262",
+      "bytes": 4152
+    }
+  },
+  "driver_sha256": "48354243fc5a8fe72002413391f2e972d2615b429452177dd5f54d402a543461",
+  "status": "PASS",
+  "seconds": 135.61016353601008,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 8289333248,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "70be8a28e6fb52f5107253ca053e4c5a1f79d7d8475f2e9f6238cedc116432f5"
+}

@@ -1,0 +1,113 @@
+{
+  "status": "PASS_PASSIVE_CORRECTION_ONLY",
+  "original_failed_gate": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/science/M/monitor/first-replay-capture-failure.json",
+    "bytes": 1602,
+    "sha256": "fbecf4a551f42163eaf03e7ebd9ace46b5aed59178c4d673a7d9dca1f902e704"
+  },
+  "current": {
+    "checkpoint": {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/science/M/CP.1/State.bin",
+      "bytes": 1447065,
+      "sha256": "4d0a8697523a2937526df541cd46b07ff956cbf82d6cbd4cc3a4246ac446b564"
+    },
+    "callback": {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/science/M/monitor/step-2.callback.json",
+      "bytes": 565974,
+      "sha256": "6fd23abd8605841109b2d11e1bafa61be2c0b144cab64741514fed574cb8c908"
+    },
+    "report": {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/science/M/monitor/step-2.report.json",
+      "bytes": 4382108,
+      "sha256": "5adc42a6437009532504709da88faf9f712063237acf8e585f7fcd22cdca13ea"
+    },
+    "completion": {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/science/M/monitor/step-2.completion.json",
+      "bytes": 2103,
+      "sha256": "84bc540a1f57c135674ff2e38143cafc35c93b0cb36e7be9bc58d2fe63b9eb19"
+    }
+  },
+  "historical_producer": {
+    "checkpoint": {
+      "path": "/home/jay/build/wj-h18-checkpoint-audits-20261114/science/target/A/CP.1/State.bin",
+      "bytes": 1447065,
+      "sha256": "4d0a8697523a2937526df541cd46b07ff956cbf82d6cbd4cc3a4246ac446b564"
+    },
+    "report": {
+      "path": "/home/jay/build/wj-h18-checkpoint-audits-20261114/science/target/A/monitor/step-2.report.json",
+      "bytes": 4372664,
+      "sha256": "5d389db6389ccc89b316280721e9328a98c7843fcf2a20283241e8e9c9ce0a6f"
+    },
+    "callback": {
+      "path": "/home/jay/build/wj-h18-checkpoint-audits-20261114/science/target/A/monitor/step-2.callback.json",
+      "bytes": 565974,
+      "sha256": "6fd23abd8605841109b2d11e1bafa61be2c0b144cab64741514fed574cb8c908"
+    },
+    "completion": {
+      "path": "/home/jay/build/wj-h18-checkpoint-audits-20261114/science/target/A/monitor/step-2.completion.json",
+      "bytes": 2127,
+      "sha256": "b6d8aeec36b9323ffa8c9d20954c9394e18f2b7ce1defaca55fc52479b1d074f"
+    },
+    "historical_role": "native completed; full audit only when originally scheduled"
+  },
+  "separate_audit": {
+    "path": "/home/jay/build/wj-h18-checkpoint-audits-20261114/science/target/B/monitor/startup.json",
+    "bytes": 4115540,
+    "sha256": "1b9e80db8d24b62750d8a9e29dd88a786fcfccd743810eb4db4b01991fe30a82"
+  },
+  "separate_verification": {
+    "path": "/home/jay/build/wj-h18-checkpoint-audits-20261114/science/target/B/monitor/startup.verification-commit.json",
+    "bytes": 1014,
+    "sha256": "bce08b345cbe127dd25092d34d51150ad37f406fc93494f47d6f8e9ced3bbc67"
+  },
+  "exact_full_map": {
+    "status": "PASS",
+    "map_source_role": "separate startup/re-audit of bitwise identical physical state",
+    "producer_callback_role": "unchanged genuine producing completion",
+    "history_or_alpha_replaced": false,
+    "original_producer_full_audit_status": "NOT_SCHEDULED"
+  },
+  "prefixes": {
+    "C": {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/science/passive-role-fix-v1/C-retained-prefix.json",
+      "bytes": 1922876,
+      "sha256": "f8354c5f31064dd2bbdb7556c292889521aa6398e0d4c635604763ddf0b30e0d"
+    },
+    "M": {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/science/passive-role-fix-v1/M-retained-prefix.json",
+      "bytes": 3968149,
+      "sha256": "410823affc53958f441b8525e21ccbfe16e46ed043fc4e376d5776a95c1bfda2"
+    }
+  },
+  "qualified_cursor_unchanged": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/science/M/monitor/latest-fully-verified-checkpoint.json",
+    "bytes": 812,
+    "sha256": "08904c3682ebccc0964efd7b56b36ca2c2ef4f3e32eddcfca101733153228012"
+  },
+  "original_native_failure_unchanged": true,
+  "corrected_observer_native_qualification": "NOT_RUN",
+  "F": "NOT_RUN",
+  "native_work": 0,
+  "source": [
+    {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/passive-code-v3/repair_wj_h22_roles.py",
+      "bytes": 3326,
+      "sha256": "5cc03dee28a29930ab8e3ce60425f04161a4c9befc7c7dd89456398ff561c164"
+    },
+    {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/passive-code-v3/wj_h22_audit_roles.py",
+      "bytes": 1378,
+      "sha256": "dfb389a7143392209c135548b265f101658e48c0a67a0d8c6630758ec326ff5d"
+    },
+    {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/passive-code-v3/wj_h22_observer.py",
+      "bytes": 8257,
+      "sha256": "4f15f171e7e429c2fd1362f393787c6e9db02411f96d22b9f9b21b4add1d76e5"
+    },
+    {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/passive-code-v3/wj_h22_phase.py",
+      "bytes": 11258,
+      "sha256": "f39e5710b4d25d160f00c53ca279ef63967a7b2f0188ae42cffa0a044afca71f"
+    }
+  ]
+}

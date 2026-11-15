@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "seconds": 134.76732807402732,
+  "configure": [
+    "cmake",
+    "-S",
+    "/home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS",
+    "-B",
+    "/home/jay/build/wj-h22-early-phase-replay-20261115/build",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_COMPILER=/usr/bin/c++",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DCMAKE_CXX_FLAGS_RELEASE=-O3 -DNDEBUG",
+    "-DRANS_BUILD_SOLVER=ON",
+    "-DRANS_PREBUILT_SPATIAL_LIBRARY=/home/jay/build/wj-h14-mapped-backend-20261113/runtime/geometry/libSpatialDomains.so.5.9.0",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+  ],
+  "binaries": [
+    {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/build/IncNavierStokesSolver",
+      "bytes": 8244888,
+      "sha256": "1c1df27b32ca5b6925ee467431f5291e25996e010c6c0026bebd12130e4d2e1d"
+    },
+    {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/build/RANSWallResolutionProbe",
+      "bytes": 4927520,
+      "sha256": "8ca139e140637bfe14ae875b1b5815b50fbb131229ac7020b3d9168791daa739"
+    },
+    {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/build/WJFlowVectorChecks",
+      "bytes": 147856,
+      "sha256": "e3bd8fce048502201d00bfce21a2f5a6c240814b36b50f358507b2ba60e8d7c8"
+    }
+  ],
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "reused_objects": 63
+}

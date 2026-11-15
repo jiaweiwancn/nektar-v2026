@@ -1,0 +1,66 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_wj_h22_phase",
+    "test_wj_h18_checkpoint_audits.CheckpointAudits.test_absolute_cadence_restart_final_and_stride_one",
+    "test_wj_h18_checkpoint_audits.CheckpointAudits.test_physical_xml_time_functions_and_dt_are_not_execution_controls",
+    "test_wj_h18_checkpoint_audits.CheckpointAudits.test_signed_zero_is_part_of_physical_parity",
+    "test_wj_h18_checkpoint_audits.CheckpointAudits.test_pending_is_distinct_from_qualified_and_prepared_cannot_promote",
+    "test_wj_h20_three_level.ThreeLevel.test_wrong_integer_time_producer_and_alpha_rejected",
+    "test_wj_h20_three_level.ThreeLevel.test_ratio_floor_keeps_signed_data_and_no_false_zero_order",
+    "test_wj_h21_outlet.OutletDiagnosis.test_wrong_owner_snap_and_coordinate_bits_rejected",
+    "test_wj_h21_outlet.OutletDiagnosis.test_real_closure_tensor_normalization_and_gap_identities",
+    "test_wj_h21_outlet.OutletDiagnosis.test_floor_classifies_without_zeroing_signed_values"
+  ],
+  "phase": "operation",
+  "kind": "passive",
+  "reserved_seconds": 120.0,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 250641,
+        "parent": 248139,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h22-early-phase-replay-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h22.py --root /home/jay/build/wj-h22-early-phase-replay-20261115 --label focused-tests-v1 --seconds 120 --phase operation -- python3 -B -m unittest -v test_wj_h22_phase test_wj_h18_checkpoint_audits.CheckpointAudits.test_absolute_cadence_restart_final_and_stride_one test_wj_h18_checkpoint_audits.CheckpointAudits.test_physical_xml_time_functions_and_dt_are_not_execution_controls test_wj_h18_checkpoint_audits.CheckpointAudits.test_signed_zero_is_part_of_physical_parity test_wj_h18_checkpoint_audits.CheckpointAudits.test_pending_is_distinct_from_qualified_and_prepared_cannot_promote test_wj_h20_three_level.ThreeLevel.test_wrong_integer_time_producer_and_alpha_rejected test_wj_h20_three_level.ThreeLevel.test_ratio_floor_keeps_signed_data_and_no_false_zero_order test_wj_h21_outlet.OutletDiagnosis.test_wrong_owner_snap_and_coordinate_bits_rejected test_wj_h21_outlet.OutletDiagnosis.test_real_closure_tensor_normalization_and_gap_identities test_wj_h21_outlet.OutletDiagnosis.test_floor_classifies_without_zeroing_signed_values"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {},
+  "driver_sha256": "48354243fc5a8fe72002413391f2e972d2615b429452177dd5f54d402a543461",
+  "status": "PASS",
+  "seconds": 1.2852887609915342,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 119463936,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "1639699171159972dcb5693b445bc409ac73f9aaed85f788eea7cbeb08f97630"
+}
