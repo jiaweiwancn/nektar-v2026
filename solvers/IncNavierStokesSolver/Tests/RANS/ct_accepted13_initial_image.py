@@ -19,15 +19,21 @@ def maximum(v):return float(np.max(abs(np.asarray(v)),initial=0.))
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    for k in ('exports','runtime','contract','output'):p.add_argument('--'+k,type=Path,required=True)
+    for k in ('exports','runtime','contract','ct11','output'):p.add_argument('--'+k,type=Path,required=True)
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3))
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');os.environ['NEKTAR_RANS_PROBE_OBSERVER']='NativeAuditReceiptV1'
-    exported=sealed(a.exports);m=RequestManifest(a.output,dict(schema='CT13InitialShearImageV1',source=sha(Path(__file__)),contract=sha(a.contract),exports=sha(a.exports/'results.json'),runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),observer_policy='NativeAuditReceiptV1'))
+    exported=sealed(a.exports);target=sealed(a.ct11/'target-v1');baseline_member=target['members']['0.001']
+    baseline_report=Path(baseline_member['directory'])/'case.evolution.json'
+    require(sha(baseline_report)==baseline_member['native_report_sha256'],'changed baseline initial-state history')
+    initial=n.read(baseline_report)['accepted_states'][0]
+    require(exact_vector_hash(initial)==baseline_member['actual_initial_sha256'],'foreign baseline actual initialization')
+    m=RequestManifest(a.output,dict(schema='CT13InitialShearImageV1',source=sha(Path(__file__)),contract=sha(a.contract),exports=sha(a.exports/'results.json'),CT11=sha(a.ct11/'target-v1/results.json'),baseline_report_sha256=sha(baseline_report),runtime=runtime_identity(a.runtime/'RANSPreservationProbe'),observer_policy='NativeAuditReceiptV1'))
     out={};vectors={}
     for label,system in [('baseline','original-initial'),('selected','candidate-alpha1000')]:
         source=Path(exported['systems'][system]['packet']);require(sha(source)==exported['systems'][system]['packet_sha256'],'foreign no-factor packet')
         packet=n.read(source);f=packet['pre_factor_frozen'];nv=f['velocity_size'];rows=np.asarray(f['rows'],int)
         require(f['schema']=='PreFactorFrozenCSRExportV2' and f['whole_command_sparse_factorizations']==0,'unqualified export startup')
+        if label=='baseline':require(f['input']==initial and exact_vector_hash(f['input'])==baseline_member['actual_initial_sha256'],'first flow input differs from actual time-zero initialization')
         dest=a.output/label;dest.mkdir();shutil.copy2(source.parent/'case.xml',dest/'case.xml')
         req=dict(operation='replay',identity=f['identity'],descriptor=f['descriptor'],state=f['input'],reference=f['fixed_reference'],fixed_boundary=f['fixed_boundary'],time=0.,grid=[],export_faces_only=True,export_ct10_momentum=True,ct10_export_points=False)
         q,e=probe(a.runtime,dest,req,'loads');require(e['exit_code']==0,'initial native attribution failed:'+str(q.get('failure')))
@@ -63,6 +69,7 @@ def main():
             ticks=[];kw={'rtol' if 'rtol' in inspect.signature(gmres).parameters else 'tol':tol}
             x,info=gmres(W,rhs/mag,M=P,**kw,atol=1e-27/mag,restart=80,maxiter=12,callback=ticks.append,callback_type='pr_norm');x*=mag
             r=action(x)-rhs;checks.append(dict(relative_request=tol,info=int(info),iterations=len(ticks),true_residual_maximum=maximum(r),rhs_maximum=maximum(rhs)))
+            require(maximum(r)<=2e-10*maximum(rhs)+1e-25,'initial image unscaled true action residual')
             return x
         images={};measurements={}
         for kind in ('inner_shear','total_representation'):

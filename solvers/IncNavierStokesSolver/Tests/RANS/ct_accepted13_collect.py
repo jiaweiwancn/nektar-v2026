@@ -29,7 +29,7 @@ def main():
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));ex=sealed(a.exports);order=sealed(a.orderings);memory=sealed(a.memory);image=sealed(a.image)
     require(ex['schema']=='CT13PreFactorExportQualificationV2' and set(ex['controls'])==SYSTEMS,'missing/foreign no-factor controls')
     for name,r in ex['controls'].items():
-        require(r.get('whole_command_sparse_factorizations')==0,'startup factorization not excluded')
+        require(finite(r.get('whole_command_sparse_factorizations')) and r['whole_command_sparse_factorizations']==0,'startup factorization not excluded')
         require(r['execution']['exit_code']==0,'incomplete no-factor export')
         require(all(finite(v) and 0<=v<=2e-10 for v in r.get('defects',{}).values()),'invalid no-factor reconstruction primitive')
         if name.startswith('candidate'):require(r['slots']==62533 and r['exact_prototype_CSR_bytes'],'foreign selected mesh/coefficients')
@@ -57,6 +57,8 @@ def main():
     base=image['cases']['baseline']['measurements']['inner_shear']['pressure']['whole']['weighted_RMS'];fine=image['cases']['selected']['measurements']['inner_shear']['pressure']['whole']['weighted_RMS']
     require(finite(base) and finite(fine) and base>1e-8 and fine>=0,'initial shear signal unresolved/nonfinite')
     ratio=fine/base;require(abs(ratio-image['selected_to_baseline_shear_RMS_ratio'])<1e-12,'image ratio not supported by primitives')
+    uncertainty=max(1e-8,10*sum(r['measurements']['inner_shear']['repeat_physical_max_upper'] for r in image['cases'].values()))
+    require(image['resolved_initial_image_reduction']==(base-fine>uncertainty),'image resolution label differs from primitives')
     good=copy.deepcopy(order['results']['original-initial']['COLAMD']);fingerprint=ex['systems']['original-initial']['A']['sha256'];negatives={}
     for name,key,value,word in [('pass_bad_fill','factor_nnz',40000001,'factor_fill'),('pass_bad_residual','true_residual',1.,'true_residual'),('pass_foreign_matrix','matrix_sha256','0'*64,'matrix_identity'),('pass_nan_rhs','rhs_maximum',float('nan'),'true_residual')]:
         r=copy.deepcopy(good);r.update(status='pass');r[key]=value;why=factor_gate(r,fingerprint);require(word in why,'nondiscriminating primitive negative:'+name);negatives[name]=dict(status='pass',recomputed_rejection=why)
