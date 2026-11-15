@@ -1,0 +1,238 @@
+{
+  "schema": "CT13RequiredScopeV1",
+  "pre_factor_export": {
+    "status": "pass",
+    "whole_command_global_factors": 0,
+    "capacity_only": true
+  },
+  "ordering": {
+    "status": "no_qualified_policy",
+    "selected": null,
+    "recomputed_reasons": {
+      "COLAMD": {
+        "candidate-alpha1000": [
+          "factor_fill",
+          "native_completion",
+          "tiny_true_residual",
+          "true_residual"
+        ],
+        "candidate-alpha2000": [
+          "factor_fill",
+          "native_completion",
+          "tiny_true_residual",
+          "true_residual"
+        ],
+        "original-evolved": [],
+        "original-initial": []
+      },
+      "AMD": {
+        "candidate-alpha1000": [
+          "factor_fill",
+          "matrix_identity",
+          "native_completion",
+          "tiny_true_residual",
+          "true_residual"
+        ],
+        "candidate-alpha2000": [
+          "factor_fill",
+          "matrix_identity",
+          "native_completion",
+          "tiny_true_residual",
+          "true_residual"
+        ],
+        "original-evolved": [
+          "factor_fill",
+          "matrix_identity",
+          "native_completion",
+          "tiny_true_residual",
+          "true_residual"
+        ],
+        "original-initial": [
+          "factor_fill",
+          "native_completion",
+          "tiny_true_residual",
+          "true_residual"
+        ]
+      },
+      "Natural": {
+        "candidate-alpha1000": [
+          "factor_fill",
+          "matrix_identity",
+          "native_completion",
+          "tiny_true_residual",
+          "true_residual"
+        ],
+        "candidate-alpha2000": [
+          "factor_fill",
+          "matrix_identity",
+          "native_completion",
+          "tiny_true_residual",
+          "true_residual"
+        ],
+        "original-evolved": [
+          "factor_fill",
+          "matrix_identity",
+          "native_completion",
+          "tiny_true_residual",
+          "true_residual"
+        ],
+        "original-initial": [
+          "factor_fill",
+          "native_completion",
+          "tiny_true_residual",
+          "true_residual"
+        ]
+      }
+    }
+  },
+  "component_equivalence": {
+    "status": "not_attempted",
+    "reason": "no qualified ordering"
+  },
+  "diagnostic_memory": {
+    "status": "pass",
+    "policy": "NativeAuditReceiptV1",
+    "governing_change": false,
+    "held_native_domain": {
+      "48": "pass",
+      "64": "pass"
+    }
+  },
+  "initial_image": {
+    "status": "diagnostic_only",
+    "selected_to_baseline_shear_RMS_ratio": 0.03732871966387455,
+    "reduction": true,
+    "not_evolved_uncertainty": true,
+    "resolved_reduction": true,
+    "comparison_uncertainty_floor": 1e-08
+  },
+  "selected_static_admission": {
+    "status": "blocked",
+    "first_gate": "predictor_capacity_or_work",
+    "missing": "component equivalence,complete static flow/scalar/alpha/quadrature and new-component history admission"
+  },
+  "short_physical_pair": {
+    "status": "not_attempted_or_admitted",
+    "candidate_horizon": 0.0,
+    "original_target_horizon": 0.002
+  },
+  "historical_CT11": {
+    "status": "fail",
+    "reasons": [
+      "temporal:Pi"
+    ],
+    "scope": "actual unchanged target,pairedT=.002 stepping only"
+  },
+  "campaign": {
+    "status": "no_go_unchanged",
+    "governing_speedup": false,
+    "headroom": 0.25,
+    "existing_CPU_ceiling": 24000,
+    "existing_active_wall_ceiling": 28800,
+    "existing_output_ceiling_GiB": 24
+  },
+  "resources": {
+    "status": "pass",
+    "closed_CPU_before_collection": 6878.325916,
+    "active_wall_upper_before_collection": 5843.022549698129,
+    "output_bytes_before_collection": 2668377092,
+    "maximum_project": 16,
+    "maximum_aggregate": 19,
+    "witness": {
+      "time_unix": 1794745047.6391659,
+      "threads": 16,
+      "processes": [
+        {
+          "pid": 265341,
+          "parent": 265340,
+          "threads": 1,
+          "name": "python3",
+          "state": "Ss",
+          "owned": false
+        },
+        {
+          "pid": 265342,
+          "parent": 265341,
+          "threads": 1,
+          "name": "python3",
+          "state": "S",
+          "owned": false
+        },
+        {
+          "pid": 265345,
+          "parent": 265341,
+          "threads": 1,
+          "name": "python3",
+          "state": "S",
+          "owned": true
+        },
+        {
+          "pid": 265346,
+          "parent": 265345,
+          "threads": 1,
+          "name": "timeout",
+          "state": "S",
+          "owned": true
+        },
+        {
+          "pid": 265347,
+          "parent": 265346,
+          "threads": 1,
+          "name": "python3",
+          "state": "S",
+          "owned": true
+        },
+        {
+          "pid": 265366,
+          "parent": 265347,
+          "threads": 1,
+          "name": "python3",
+          "state": "S",
+          "owned": true
+        },
+        {
+          "pid": 266272,
+          "parent": 265366,
+          "threads": 3,
+          "name": "RANSPreservatio",
+          "state": "Rl",
+          "owned": true
+        },
+        {
+          "pid": 266273,
+          "parent": 266272,
+          "threads": 4,
+          "name": "orted",
+          "state": "Ssl",
+          "owned": true
+        },
+        {
+          "pid": 267345,
+          "parent": 267343,
+          "threads": 1,
+          "name": "python3",
+          "state": "Ss",
+          "owned": false
+        },
+        {
+          "pid": 267346,
+          "parent": 267345,
+          "threads": 1,
+          "name": "python3",
+          "state": "S",
+          "owned": false
+        },
+        {
+          "pid": 267349,
+          "parent": 267345,
+          "threads": 1,
+          "name": "python3",
+          "state": "S",
+          "owned": false
+        }
+      ]
+    }
+  },
+  "terrain": "unattempted/out_of_scope; mapped numbering,joined-map gradients/cofactors/transmission and historical curved gates remain",
+  "physical_applicability": "not precursor or hill validation"
+}

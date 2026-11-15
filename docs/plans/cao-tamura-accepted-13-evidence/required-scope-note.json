@@ -1,0 +1,16 @@
+{
+  "schema": "CT13EligibilityEvidenceInterpretationV1",
+  "decision": "evaluated-v2/decision.json",
+  "interpretation": "ordering.recomputed_reasons lists unsatisfied eligibility primitives. Missing factor/residual/matrix primitives on an unattempted or CPU-limited row are missing evidence, not measurements of excessive fill, bad accuracy or a foreign matrix. The complete raw row status and actual execution/factor values in orderings.json distinguish those cases.",
+  "observed": {
+    "COLAMD_original_initial": "pass;38314871 factor entries",
+    "COLAMD_original_evolved": "pass;38564836 factor entries",
+    "COLAMD_selected_alpha1000": "native40M guard;40497972 entries; no predictor solve",
+    "COLAMD_selected_alpha2000": "native40M guard;40473986 entries; no predictor solve",
+    "AMD_original_initial": "native40M guard;800414393 entries; no predictor solve",
+    "Natural_original_initial": "SIGXCPU at900.15 CPU seconds; no factor result, fill and solve accuracy unknown within declared budget"
+  },
+  "unattempted": "Later AMD/Natural systems after a required fixed-policy failure; any new governing component,component-update/restart/rollback qualification,complete selected static/scalar/pressure/quadrature admission and selected physical pair.",
+  "history": "Both retained IMEX1 frozen native histories happen to equal their input vectors. Complete equality to the SHA-bound native history is verified independently; inequality with state is not required, and history is never synthesized from state.",
+  "physical": "Selected candidateT=0; original targetT=.002 and historical temporal:Pi failure unchanged. Initial pressure-image reduction is diagnostic, not evolved uncertainty or convergence qualification. No .407 or terrain admission."
+}

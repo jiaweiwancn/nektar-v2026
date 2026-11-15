@@ -1,5 +1,18 @@
 # Calibrated validation against the Cao–Tamura steep-hill experiment
 
+> CT-Accepted-13: strict actual-history no-factor exports and the opt-in native
+> audit-receipt observer pass; the exact evolved q64 aggregate now fits16GiB.
+> The selected62533-slot initial shear-pressure image drops to.03732872 of the
+> original target,with all native pressure modes retained. No predictor policy
+> qualifies: COLAMD exceeds40M,AMD rejects and Natural is work-limited. The new
+> component/static admission and physical pair remain blocked; candidateT=0,
+> original targetT=.002 and its pressure failure remain unchanged. Closed fresh
+> resources pass at16 project/19 aggregate. The.407 CPU/wall/output no-go remains.
+> Next: one separately contracted deterministic predictor-capacity control,then
+> component/static equivalence before the same selected short causal pair. See
+> [CT-Accepted-13](cao-tamura-accepted-13.md). Terrain and physical applicability
+> remain unqualified.
+
 > CT-Accepted-12: all six retained actual-target pressure corrections, absolute
 > telescopes and signed load images reconstruct with consistent mass and tight
 > action/pressure bounds. The leading initial target image is represented inner

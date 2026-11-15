@@ -1,0 +1,44 @@
+{
+  "schema": "CT13FinalClosedAccountingV1",
+  "status": "pass",
+  "closed_family_count": 33,
+  "previous_closed_receipt_sha256": "a21b42b7d4988f7df1c2a670cfd9c1bc57e6d443269930b88a4a093cfc01b044",
+  "publication_execution_sha256": "9b426bb364d214f594dbf0a9a9fc5dc2b9d8922e688b8118e0342ba4f824d1d4",
+  "process_CPU_seconds": 6901.472108,
+  "active_wall_upper_seconds": 5871.917198494106,
+  "worker_highwater": {
+    "project": 16,
+    "aggregate": 19,
+    "scope": "combined owned numerical/diagnostic/helper census; publication family starts after all earlier families close and peaks6/6"
+  },
+  "output": {
+    "measured_before_packaging_bytes": 2671316593,
+    "publication_storage_reserve_bytes": 67108864,
+    "package_output_upper_bound_bytes": 2738425457,
+    "scope": "actual prepackaging apparent file sizes plus64MiB labelled reserve; not a claimed exact final disk-usage measurement"
+  },
+  "limits": {
+    "CPU_seconds": 24000,
+    "active_wall_seconds": 28800,
+    "output_bytes": 17179869184,
+    "project_workers": 16,
+    "aggregate_workers": 72
+  },
+  "campaign": {
+    "endpoint": 0.407,
+    "physical_admission": false,
+    "CPU_forecast_spent_plus_remaining": 276471.80238070426,
+    "active_wall_upper_spent_plus_remaining": 272383.1691553524,
+    "output_planning_upper_bytes": 179048389923.25,
+    "CPU_ceiling": 24000,
+    "active_wall_ceiling": 28800,
+    "output_ceiling_bytes": 25769803776,
+    "headroom": 0.25,
+    "CPU_admitted": false,
+    "wall_admitted": false,
+    "output_admitted": false,
+    "scope": "additive CT13 closed costs to sealed CT12 forecast with25percent future headroom; no governing speedup or qualified online eviction/32-step amortization; separate from finite CT13 budget",
+    "governing_speedup": false
+  },
+  "scope": "mechanical addition of closed authoritative Linux receipts; source/Git/transport are not native CPU benchmarks; no new numerical family after publication; no historical/evaluated seal mutation"
+}
