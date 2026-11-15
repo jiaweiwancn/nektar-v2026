@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Separate CT13 capacity, reconstruction, memory and physical admission."""
-import argparse,copy,json,math,os,subprocess,resource
+import argparse,copy,gc,json,math,os,subprocess,resource
 from pathlib import Path
 from rans_qualification import THREADS
 os.environ.update(THREADS)
@@ -31,6 +31,7 @@ def main():
     for name,r in ex['controls'].items():
         require(finite(r.get('whole_command_sparse_factorizations')) and r['whole_command_sparse_factorizations']==0,'startup factorization not excluded')
         require(r['execution']['exit_code']==0,'incomplete no-factor export')
+        if name.startswith('original'):require(set(r.get('defects',{}))=={'system','mass','G','D','C','residual'},'missing no-factor reconstruction primitive')
         require(all(finite(v) and 0<=v<=2e-10 for v in r.get('defects',{}).values()),'invalid no-factor reconstruction primitive')
         if name.startswith('candidate'):require(r['slots']==62533 and r['exact_prototype_CSR_bytes'],'foreign selected mesh/coefficients')
         else:require(r['actual_history_differs_from_state'],'evolved history substituted with state')
@@ -42,10 +43,19 @@ def main():
     selected=min(eligible,key=lambda label:max(order['results'][name][label]['factor_nnz'] for name in SYSTEMS)) if eligible else None
     require(order['selected']==selected,'ordering pass label/selection differs from complete primitives')
     require(memory['observer_policy']=='NativeAuditReceiptV1' and set(memory['controls'])=={'48','64'},'missing/foreign memory policy/control')
+    native_inventories={}
     for label,r in memory['controls'].items():
         require(r['execution']['exit_code']==0,'diagnostic capacity still blocked')
         if label=='48':require(r['mandatory_diagnostics_exact'] and r['all_observation_primitive_defect']<=2e-10 and max(r['all_row_defects'].values())<=2e-10,'supported observer equivalence failed')
         else:require(r['all_row_reconstruction']<=2e-10 and r['pressure_image']['maximum_scaled_value']<1e-8 and r['tighter_repeat']['maximum_scaled_value']<1e-8,'q64 action/pressure uncertainty failed')
+        path=a.memory/('q'+label)/'loads.json';require(sha(path)==r['packet_sha256'],'foreign held observer state/packet')
+        q=json.loads(path.read_text());audit=q['observation']['audit_alpha_zero']
+        for key in ('accepted_awf_scalar_domain','accepted_awf_hard_admissible'):
+            require(key in audit and len(audit[key])>0 and finite(audit[key][0]),'missing/nonfinite native observer domain flag')
+        physical=all(audit[key][0]==1 for key in ('accepted_awf_scalar_domain','accepted_awf_hard_admissible'))
+        require(q['physical_admissibility']==('pass' if physical else 'fail'),'observer domain label differs from actual audit')
+        native_inventories[label]=dict(status='pass' if physical else 'fail',packet_sha256=r['packet_sha256'],state_sha256=r['state_sha256'],resolved_descriptor=q['observation']['resolved_descriptor'],numerical_operator=q['numerical_operator'],actual_quadrature=q['observation']['actual_quadrature'],audit=audit)
+        del q;gc.collect()
     require(memory['controls']['48']['state_sha256']==memory['controls']['64']['state_sha256'],'foreign held state')
     require(set(memory['small_controls'])=={'d0','displaced','unknown_policy'},'missing small observer/operator controls')
     for k in ('d0','displaced'):require(max(memory['small_controls'][k]['defects'].values())<=2e-10,'small all-row/observation mismatch')
@@ -87,11 +97,14 @@ def main():
     m=RequestManifest(a.output,dict(schema='CT13CompactDecisionV1',source=sha(Path(__file__)),inputs={k:dict(path=str(v),result_sha256=sha(v/'results.json'),seal_sha256=sha(v/'completed-artifacts.json')) for k,v in [('exports',a.exports),('orderings',a.orderings),('memory',a.memory),('initial_image',a.image)]},resource_receipts={k:v['sha256'] for k,v in resources.items()}))
     decision=dict(schema='CT13RequiredScopeV1',pre_factor_export=dict(status='pass',whole_command_global_factors=0,capacity_only=True),ordering=dict(status='qualified_candidate' if selected else 'no_qualified_policy',selected=selected,recomputed_reasons=policy),component_equivalence=dict(status='not_attempted',reason='no qualified ordering' if not selected else 'separate component qualification required'),diagnostic_memory=dict(status='pass',policy='NativeAuditReceiptV1',governing_change=False),initial_image=dict(status='diagnostic_only',selected_to_baseline_shear_RMS_ratio=ratio,reduction=fine<base,not_evolved_uncertainty=True),selected_static_admission=dict(status='blocked',first_gate='predictor_capacity_or_work',missing='component equivalence,complete static flow/scalar/alpha/quadrature and new-component history admission'),short_physical_pair=dict(status='not_attempted_or_admitted',candidate_horizon=0.,original_target_horizon=.002),historical_CT11=old['qualification'],campaign=dict(status='no_go_unchanged',governing_speedup=False,headroom=.25,existing_CPU_ceiling=24000,existing_active_wall_ceiling=28800,existing_output_ceiling_GiB=24),resources=dict(status='pass',closed_CPU_before_collection=cpu,active_wall_upper_before_collection=wall,output_bytes_before_collection=output,maximum_project=peak,maximum_aggregate=aggregate,witness=witness),terrain='unattempted/out_of_scope; mapped numbering,joined-map gradients/cofactors/transmission and historical curved gates remain',physical_applicability='not precursor or hill validation')
     bodies=dict(exports=ex,orderings=order,memory=memory,initial_image=image)
+    decision['diagnostic_memory']['held_native_domain']={k:v['status'] for k,v in native_inventories.items()}
+    decision['initial_image'].update(resolved_reduction=image['resolved_initial_image_reduction'],comparison_uncertainty_floor=uncertainty)
     # Heavy RHS/solutions/CSR/states stay in the sealed archive; retain their
     # hashes and every decisive numerical/classification primitive here.
     for s in bodies['exports']['systems'].values():s.pop('rhs',None)
     for name,v in bodies.items():write_json(a.output/(name+'.json'),v)
     write_json(a.output/'decision.json',decision);write_json(a.output/'resources.json',resources);write_json(a.output/'negative-controls.json',negatives)
+    write_json(a.output/'native-observer-inventories.json',native_inventories)
     write_json(a.output/'source.json',dict(revision=subprocess.check_output(['git','-c','core.preloadIndex=false','rev-parse','HEAD'],cwd=a.root/'source',text=True).strip(),historical_root=str(a.ct12),previous_closed_accounting_sha256=sha(a.ct12/'publication-v1/prepublication-accounting.json'),physical_manifest_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-8-evidence/physical-reference-manifest.json'),governing='unchanged pinned CT9 build-v8'))
     files=[f.name for f in a.output.iterdir() if f.is_file() and f.name not in ('request-manifest.json','completed-artifacts.json')];m.seal(a.output,files);print(json.dumps(decision,indent=2),flush=True);return 0
 if __name__=='__main__':raise SystemExit(main())
