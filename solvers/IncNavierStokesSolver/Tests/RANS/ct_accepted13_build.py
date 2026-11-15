@@ -12,7 +12,7 @@ from rans_request_manifest import RequestManifest,runtime_identity,sha
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','ct9','output'):p.add_argument('--'+k,type=Path,required=True)
-    a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0))
+    a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3))
     source=a.root/'source';build=a.root/'build';old=a.ct9/'build-v8/runtime';rt=a.output/'runtime'
     m=RequestManifest(a.output,dict(schema='CT13DiagnosticBuildV1',source_revision=subprocess.check_output(['git','-c','core.preloadIndex=false','rev-parse','HEAD'],cwd=source,text=True).strip(),source_sha256=sha(Path(__file__)),governing=runtime_identity(old/'IncNavierStokesSolver'),jobs=2))
     targets=['RANSPreservationProbe','CT13SparseOrderingProbe','CT9SparseAlgebraChecks'];executions=[]

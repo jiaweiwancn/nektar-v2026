@@ -1064,7 +1064,9 @@ int main(int argc,char **argv)
         }
         Require(state==stateCopy,"read-only verification modified coefficients");
         const auto elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
+        ProbePhase("before_observation_tree_parse");
         Tree observed;std::istringstream input(observation);boost::property_tree::read_json(input,observed);
+        ProbePhase("after_observation_tree_parse");
         const auto &audit=observed.get_child("audit_alpha_zero");
         bool physical=audit.get_child("accepted_awf_scalar_domain").front().second.get_value<double>()==1 &&
             audit.get_child_optional("accepted_awf_hard_admissible") &&

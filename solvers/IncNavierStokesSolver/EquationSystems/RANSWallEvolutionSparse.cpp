@@ -118,6 +118,8 @@ std::string RANSWallEvolutionPatch::PreFactorFrozenPacket(const Vector &raw,cons
     return J::Object({{"schema",J::Quote("PreFactorFrozenCSRExportV1")},{"read_only","true"},
         {"factorizations","0"},{"updates","0"},{"time",J::Number(time)},{"alpha",J::Number(alpha)},
         {"identity",J::Quote(PreservationIdentity())},{"descriptor",J::Quote(m_parameters.model.Signature())},
+        {"stored_slots",J::Number(Size())},{"block_sizes",J::Numbers(size)},{"offsets",J::Numbers(offset)},
+        {"ownership",J::Quote("GeneratedVolumeOwnerV1; canonical signed native maps; traces keep declared sides")},
         {"input",J::Numbers(raw)},{"effective_input",J::Numbers(state)},{"lifting",J::Numbers(lift)},
         {"history",J::Numbers(history)},{"history_sha256",J::Quote(RANSWallR3::Hash(history))},
         {"input_sha256",J::Quote(RANSWallR3::Hash(raw))},{"rows",J::Numbers(flow.rows)},
