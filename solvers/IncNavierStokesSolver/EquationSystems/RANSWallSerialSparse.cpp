@@ -84,20 +84,23 @@ void SparseMatrix::Write(const std::string &file) const
 
 struct SparseFactor::Impl
 {
-    SparseMatrix matrix;bool mass;
+    SparseMatrix matrix;bool mass;SparsePredictorOrdering ordering;
 #ifdef NEKTAR_RANS_HAVE_EIGEN_SPARSE
     using Matrix=Eigen::SparseMatrix<double,Eigen::ColMajor,int>;
     Matrix coefficients;
     Eigen::SparseLU<Matrix,Eigen::COLAMDOrdering<int>> lu;
+    Eigen::SparseLU<Matrix,Eigen::AMDOrdering<int>> amd;
+    Eigen::SparseLU<Matrix,Eigen::NaturalOrdering<int>> natural;
     Eigen::SimplicialLDLT<Matrix> ldlt;
 #endif
     std::size_t nonzeros=0;
-    Impl(const SparseMatrix &m,bool positive):matrix(m),mass(positive){}
+    Impl(const SparseMatrix &m,bool positive,SparsePredictorOrdering order):matrix(m),mass(positive),ordering(order){}
 };
-SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass):m_impl(std::make_shared<Impl>(m,positiveMass))
+SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass,SparsePredictorOrdering ordering):m_impl(std::make_shared<Impl>(m,positiveMass,ordering))
 {
     RANSWallTiming::Scope timing("sparse.factorize");
     Require(m.Rows()>0 && m.Rows()==m.Columns(),"sparse factor shape");m.Finalize();
+    Require(!positiveMass || ordering==SparsePredictorOrdering::COLAMD,"predictor ordering cannot change mass LDLT");
 #ifdef NEKTAR_RANS_HAVE_EIGEN_SPARSE
     using Row=Eigen::SparseMatrix<double,Eigen::RowMajor,int>;
     Eigen::Map<const Row> map(m.Rows(),m.Columns(),m.NonZeros(),m.Pointers().data(),m.Indices().data(),m.Values().data());
@@ -110,9 +113,15 @@ SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass):m_impl(std::
     }
     else
     {
-        m_impl->lu.analyzePattern(m_impl->coefficients);m_impl->lu.factorize(m_impl->coefficients);
-        Require(m_impl->lu.info()==Eigen::Success,"singular sparse stage/preconditioner");
-        m_impl->nonzeros=m_impl->lu.nnzL()+m_impl->lu.nnzU();
+        const auto factor=[&](auto &lu)
+        {
+            lu.analyzePattern(m_impl->coefficients);lu.factorize(m_impl->coefficients);
+            Require(lu.info()==Eigen::Success,"singular sparse stage/preconditioner");
+            m_impl->nonzeros=lu.nnzL()+lu.nnzU();
+        };
+        if(ordering==SparsePredictorOrdering::COLAMD)factor(m_impl->lu);
+        else if(ordering==SparsePredictorOrdering::AMD)factor(m_impl->amd);
+        else factor(m_impl->natural);
     }
     Require(m_impl->nonzeros<=40000000,"sparse factor exceeds declared40M fill budget: rows="+
         std::to_string(m.Rows())+", matrix_nnz="+std::to_string(m.NonZeros())+", factor_nnz="+
@@ -129,7 +138,10 @@ Vector SparseFactor::Apply(const Vector &rhs) const
     const auto solve=[&](const Vector &r)
     {
         Eigen::Map<const Eigen::VectorXd> b(r.data(),r.size());Eigen::VectorXd x;
-        if(m_impl->mass)x=m_impl->ldlt.solve(b);else x=m_impl->lu.solve(b);
+        if(m_impl->mass)x=m_impl->ldlt.solve(b);
+        else if(m_impl->ordering==SparsePredictorOrdering::COLAMD)x=m_impl->lu.solve(b);
+        else if(m_impl->ordering==SparsePredictorOrdering::AMD)x=m_impl->amd.solve(b);
+        else x=m_impl->natural.solve(b);
         Require(x.allFinite(),"nonfinite sparse solution");return Vector(x.data(),x.data()+x.size());
     };
     Vector result=solve(rhs);const double bound=2e-12*Maximum(rhs)+1e-25;double initial=0.;

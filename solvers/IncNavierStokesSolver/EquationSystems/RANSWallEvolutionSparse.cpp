@@ -4,6 +4,8 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <filesystem>
 #include <numeric>
 
 namespace Nektar
@@ -11,11 +13,10 @@ namespace Nektar
 using namespace RANSWallAlgebra;
 namespace J=RANSWallSolveJson;
 
-RANSWallEvolutionPatch::SparseFlowResult RANSWallEvolutionPatch::SparseFlowCorrection(
-    const PicardBlock &flow,int nv,double alpha,const std::function<void(const std::string&)> &event) const
+RANSWallEvolutionPatch::SparseFlowResult RANSWallEvolutionPatch::SparseFlowBlocks(
+    const PicardBlock &flow,int nv) const
 {
-    RANSWallTiming::Scope timing("sparse.flow_linear_operation");
-    Require(SerialSparse() && flow.sparse && alpha>0,"invalid sparse flow operation");
+    Require(SerialSparse() && flow.sparse,"invalid sparse flow blocks");
     const int n=flow.rows.size(),np=n-nv;SparseFlowResult r;
     r.a=flow.csr.Block(0,nv,0,nv);r.g=flow.csr.Block(0,nv,nv,n);
     r.d=flow.csr.Block(nv,n,0,nv);r.c=flow.csr.Block(nv,n,nv,n);
@@ -26,8 +27,17 @@ RANSWallEvolutionPatch::SparseFlowResult RANSWallEvolutionPatch::SparseFlowCorre
         const int b=flow.rows[i]/size[0],local=flow.rows[i]-offset[b];
         m_sparseMass[b].Each(local,[&](int j,double v){const int k=index[offset[b]+j];if(k>=0)r.m.Entry(i,k)=v;});
     }
+    r.m.Finalize();return r;
+}
+
+RANSWallEvolutionPatch::SparseFlowResult RANSWallEvolutionPatch::SparseFlowCorrection(
+    const PicardBlock &flow,int nv,double alpha,const std::function<void(const std::string&)> &event) const
+{
+    RANSWallTiming::Scope timing("sparse.flow_linear_operation");
+    Require(alpha>0,"invalid sparse flow alpha");
+    const int n=flow.rows.size(),np=n-nv;auto r=SparseFlowBlocks(flow,nv);
     if(event)event("momentum_attempt");
-    r.m.Finalize();SparseFactor momentum(r.a),mass(r.m,true);
+    SparseFactor momentum(r.a),mass(r.m,true);
     r.predictorFill=momentum.FactorNonZeros();r.massFill=mass.FactorNonZeros();
     Vector rhs(nv);for(int i=0;i<nv;++i)rhs[i]=-flow.residual[i];
     r.predictorRhsMaximum=Maximum(rhs);
@@ -68,6 +78,55 @@ RANSWallEvolutionPatch::SparseFlowResult RANSWallEvolutionPatch::SparseFlowCorre
     for(int i=0;i<nv;++i)r.identity[i]=r.defect[i]-(r.Gz[i]-ab[i]);
     for(int i=0;i<np;++i)r.constraints[i]=r.defect[nv+i];
     return r;
+}
+
+std::string RANSWallEvolutionPatch::PreFactorFrozenPacket(const Vector &raw,const Vector &history,
+    double alpha,double time,const RANSWallEvolutionData &data,const std::string &prefix) const
+{
+    Require(SerialSparse() && !Mapped() && PimpleSingleSweep() && alpha>0 &&
+        raw.size()==Size() && history.size()==Size(),"invalid pre-factor frozen request");
+    const auto state=ExternalLift(raw,time,data);
+    auto external=ExternalConstraints(time,data);
+    for(int id:m_traceIds)external.erase(offset[Epsilon()]+id);
+    const auto flow=AssemblePicardBlock(0,state,history,alpha,time,data,external);
+    const int nv=std::lower_bound(flow.rows.begin(),flow.rows.end(),DifferentialSize())-flow.rows.begin();
+    const auto r=SparseFlowBlocks(flow,nv);
+    const auto base=std::filesystem::absolute(prefix);std::filesystem::create_directories(base.parent_path());
+    const auto save=[&](const SparseMatrix &matrix,const std::string &name)
+    {
+        const auto file=base.string()+"."+name+".csr";matrix.Write(file);
+        return J::Object({{"file",J::Quote(file)},{"sha256",J::Quote(RANSWallR3::HashFile(file))},
+            {"rows",J::Number(matrix.Rows())},{"columns",J::Number(matrix.Columns())},
+            {"nnz",J::Number(matrix.NonZeros())},{"encoding",J::Quote("RANSCSR1-native-little-endian")}});
+    };
+    Vector lift=state;for(int i=0;i<Size();++i)lift[i]-=raw[i];
+    std::vector<std::string> maps;
+    for(int b=0;b<Gauge();++b)
+    {
+        const auto f=fields[b]->Field();const auto map=f->GetLocalToGlobalMap();
+        std::vector<int> ids;Vector signs;std::vector<std::string> owners;
+        for(int e=0;e<f->GetExpSize();++e)
+        {
+            const int start=f->GetCoeff_Offset(e),count=f->GetExp(e)->GetNcoeffs();
+            for(int j=0;j<count;++j){ids.push_back(map->GetLocalToGlobalMap(start+j));signs.push_back(map->GetLocalToGlobalSign(start+j));}
+            owners.push_back(J::Object({{"geometry",J::Number(fields[b]->Elements()[e].geometry)},
+                {"local_start",J::Number(start)},{"coefficients",J::Number(count)}}));
+        }
+        maps.push_back(J::Object({{"block",J::Number(b)},{"offset",J::Number(offset[b])},
+            {"local_to_global",J::Numbers(ids)},{"signs",J::Numbers(signs)},{"owners",J::List(owners)}}));
+    }
+    return J::Object({{"schema",J::Quote("PreFactorFrozenCSRExportV1")},{"read_only","true"},
+        {"factorizations","0"},{"updates","0"},{"time",J::Number(time)},{"alpha",J::Number(alpha)},
+        {"identity",J::Quote(PreservationIdentity())},{"descriptor",J::Quote(m_parameters.model.Signature())},
+        {"input",J::Numbers(raw)},{"effective_input",J::Numbers(state)},{"lifting",J::Numbers(lift)},
+        {"history",J::Numbers(history)},{"history_sha256",J::Quote(RANSWallR3::Hash(history))},
+        {"input_sha256",J::Quote(RANSWallR3::Hash(raw))},{"rows",J::Numbers(flow.rows)},
+        {"velocity_size",J::Number(nv)},{"external_constraints",J::Constraints(external)},
+        {"fixed_reference",J::Numbers(m_reference)},{"fixed_boundary",J::Constraints(data.fixedBoundary)},
+        {"frozen_flow_residual",J::Numbers(flow.residual)},{"signed_field_maps",J::List(maps)},
+        {"frozen_flow_matrix",save(flow.csr,"system")},{"free_velocity_mass",save(r.m,"mass")},
+        {"A",save(r.a,"A")},{"G",save(r.g,"G")},{"D",save(r.d,"D")},{"C",save(r.c,"C")},
+        {"scope",J::Quote("actual native assembly/restriction and actual supplied history, before any factor or update; no solve, no history substitution")}});
 }
 
 std::string RANSWallEvolutionPatch::SparseBackendPacket(const Vector &state,double time,

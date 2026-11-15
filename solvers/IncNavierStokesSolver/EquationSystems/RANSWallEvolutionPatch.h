@@ -85,6 +85,8 @@ public:
     // at several orders; it includes physics, mesh, spaces and native maps.
     std::string InitializationReceipt(const Vector&,const Vector&,double,const RANSWallEvolutionData&,const RANSWallEvolutionData&,const std::map<int,double>&) const;
     std::string SparseBackendPacket(const Vector&,double,const RANSWallEvolutionData&,double alpha) const;
+    std::string PreFactorFrozenPacket(const Vector &state,const Vector &history,
+        double alpha,double time,const RANSWallEvolutionData&,const std::string &prefix) const;
     // Read-only accuracy monitor. Cached rows/targets depend only on this
     // immutable space and the stored neutral reference, never on validity.
     Vector NeutralAccuracy(const Vector&,double,const RANSWallEvolutionData&) const;
@@ -471,6 +473,7 @@ private:
         int massApplications=0,iterations=0;
         std::size_t predictorFill=0,massFill=0,preconditionerFill=0;
     };
+    SparseFlowResult SparseFlowBlocks(const PicardBlock &,int nv) const;
     SparseFlowResult SparseFlowCorrection(const PicardBlock &,int nv,double alpha,
         const std::function<void(const std::string&)> &event={}) const;
     struct NonKResponse

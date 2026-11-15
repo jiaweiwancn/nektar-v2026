@@ -23,6 +23,15 @@ using Tree=boost::property_tree::ptree;
 using Vector=RANSWallAlgebra::Vector;
 namespace
 {
+void ProbePhase(const std::string &name)
+{
+    if(!std::getenv("NEKTAR_RANS_PROBE_PHASES"))return;
+    std::cerr<<"RANS probe phase "<<name;
+    std::ifstream status("/proc/self/status");std::string line;
+    while(std::getline(status,line))if(line.rfind("VmRSS:",0)==0 || line.rfind("VmSize:",0)==0 || line.rfind("VmPeak:",0)==0)
+        std::cerr<<" | "<<line;
+    std::cerr<<'\n';
+}
 Vector Values(const Tree &p,const std::string &key)
 {Vector v;for(const auto &x:p.get_child(key))v.push_back(x.second.get_value<double>());return v;}
 void Require(bool ok,const std::string &message){if(!ok)throw std::runtime_error(message);}
@@ -806,7 +815,9 @@ int main(int argc,char **argv)
         const bool staticCT6=curved=="CT6StaticTransmissionV1";
         Require(referenceMode=="Neutral" || ((open || staticCT6) && referenceMode=="Functions"),"neutral verification requires the Neutral reference/boundary contract");
         double eta;session->LoadParameter("RANSWallEta",eta,0.);Require(eta==0,"unanchored verification requires eta zero");
+        ProbePhase("before_patch_constructor");
         RANSWallEvolutionPatch patch(session,graph,world->GetComm(),p,LoadRANSWallNormalMap(session,2,p.geometry.height));
+        ProbePhase("after_patch_constructor");
         if(staticCT6)
         {
             Require(request.get<std::string>("operation")=="ct6_static_transmission","static CT6 route cannot replay or evolve a history");
@@ -864,6 +875,7 @@ int main(int argc,char **argv)
         // field or history is reset and no residual enters evolution.
         const double referenceTime=patch.CurvedManufactured()?0.:time;
         patch.SetReference(reference,data,referenceTime,0.);
+        ProbePhase("after_set_reference");
         std::vector<RANSWallCoordinate> grid;
         if(auto points=request.get_child_optional("grid"))for(const auto &item:*points)
         {RANSWallCoordinate q{};int i=0;for(const auto &v:item.second){Require(i<3,"invalid verification coordinate");q[i++]=v.second.get_value<double>();}Require(i==3,"invalid verification coordinate");grid.push_back(q);}
@@ -872,11 +884,31 @@ int main(int argc,char **argv)
         const auto targetReference=open?reference:patch.NeutralReference(receiptUs,{receiptDx,receiptDy});
         const auto receipt=patch.InitializationReceipt(state,reference,time,data,data,patch.FixedReferenceBoundary(targetReference));
         const auto stateCopy=state;
+        if(request.get<bool>("export_pre_factor_frozen",false))
+        {
+            Require(request.get_child_optional("actual_history").has_value(),"pre-factor export requires explicit actual history");
+            const auto history=Values(request,"actual_history");
+            const auto kind=request.get<std::string>("frozen_request_kind");
+            Require(kind=="InitializedFrozenV1" || kind=="EvolvedStageV1","unknown pre-factor history role");
+            Require(kind!="InitializedFrozenV1" || (time==0. && history==state),"initialized frozen fixture differs from initial history");
+            Require(kind!="EvolvedStageV1" || time>0.,"evolved frozen fixture requires physical stage time");
+            const auto frozen=patch.PreFactorFrozenPacket(state,history,request.get<double>("sparse_alpha"),time,data,
+                request.get<std::string>("pre_factor_prefix"));
+            Require(state==stateCopy,"pre-factor export modified coefficients");
+            std::ofstream file(argv[3]);file<<J::Object({{"status",J::Quote("diagnostic_completed")},
+                {"frozen_request_kind",J::Quote(kind)},{"initialization_receipt",receipt},
+                {"reference",J::Numbers(reference)},{"fixed_boundary",J::Constraints(data.fixedBoundary)},
+                {"pre_factor_frozen",frozen}})<<'\n';
+            Require(file.good(),"pre-factor export write failed");return 0;
+        }
+        ProbePhase("before_preservation_observation");
         const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid,sides,
             request.get<bool>("export_ct6_primitives",false),request.get<bool>("export_faces_only",false));
+        ProbePhase("after_preservation_observation");
         std::string resolution="null",testBasis="null",constitutive="null",sparseBackend="null",ct10Momentum="null";
         if(request.get<bool>("export_ct10_momentum",false))
             ct10Momentum=patch.MomentumAttributionPacket(state,time,data,request.get<bool>("ct10_export_points",true));
+        ProbePhase("after_momentum_attribution");
         if(request.get<bool>("export_sparse_backend",false))
             sparseBackend=patch.SparseBackendPacket(state,time,data,request.get<double>("sparse_alpha",500.));
         if(request.get<bool>("export_constitutive",false))

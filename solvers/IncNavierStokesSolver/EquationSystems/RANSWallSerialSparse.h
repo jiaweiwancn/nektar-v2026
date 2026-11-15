@@ -48,10 +48,14 @@ private:
     mutable std::shared_ptr<const Data> m_data;
 };
 
+// Only an explicit predictor caller may choose an alternative. All existing
+// call sites (including scalar, mass and pressure preconditioner) retain COLAMD.
+enum class SparsePredictorOrdering { COLAMD, AMD, Natural };
 class SparseFactor
 {
 public:
-    explicit SparseFactor(const SparseMatrix &matrix,bool positiveMass=false);
+    explicit SparseFactor(const SparseMatrix &matrix,bool positiveMass=false,
+        SparsePredictorOrdering ordering=SparsePredictorOrdering::COLAMD);
     Vector Apply(const Vector &rhs) const;
     std::size_t FactorNonZeros() const;
 private:
