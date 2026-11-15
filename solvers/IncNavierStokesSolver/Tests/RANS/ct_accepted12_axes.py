@@ -140,6 +140,10 @@ def main():
     expected=target['members']['0.0005']['accepted_metrics'][-1]['traction']['normalized_wall_traction_error']
     require(abs(result['stage_tractions']['accepted']['ground']['error']-expected)<2e-10,'raw evolved ground traction disagreement')
     vm={k:int(v.split()[0]) for k,v in (line.split(':',1) for line in Path('/proc/self/status').read_text().splitlines() if line.startswith(('VmPeak:','VmHWM:')))}
-    result.update(status='pass',ground_product_decomposition=decomposition,continuation_admitted=False,diagnostic_memory=dict(maximum_self_RSS_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,**vm),factor_lifecycle='one Frozen factor set at a time; explicit del/gc after each step; fixed observation object retained')
+    mapped={}
+    for line in Path('/proc/self/maps').read_text().splitlines():
+        word=line.split()[-1];file=Path(word)
+        if word.startswith('/') and file.is_file() and word not in mapped:mapped[word]=sha(file)
+    result.update(diagnostic_actual_mapped_files=mapped,status='pass',ground_product_decomposition=decomposition,continuation_admitted=False,diagnostic_memory=dict(maximum_self_RSS_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,**vm),factor_lifecycle='one Frozen factor set at a time; explicit del/gc after each step; fixed observation object retained')
     write_json(a.output/'axis-vectors.json',vectors);write_json(a.output/'results.json',result);manifest.seal(a.output,['results.json','axis-vectors.json']);return 0
 if __name__=='__main__':raise SystemExit(main())

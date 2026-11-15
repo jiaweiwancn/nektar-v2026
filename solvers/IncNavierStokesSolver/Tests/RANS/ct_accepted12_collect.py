@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """CT12 compact primitive decisions; collection success is not admission."""
-import argparse,copy,hashlib,json,os,platform,subprocess,sys
+import argparse,copy,hashlib,json,os,platform,re,subprocess,sys
 from pathlib import Path
 from rans_qualification import THREADS
 os.environ.update(THREADS)
@@ -86,7 +86,14 @@ def static_gate(q):
     if not 0<=metrics.get('mass',{}).get('scaled',1)<=1e-8:reasons.append('mass')
     domain=q.get('physical_domain',{})
     if domain.get('domain_failure_count')!=0 or domain.get('minima',{}).get('covariance',{}).get('value',-1)<-1e-10*q['case']['K0'] or (domain.get('minimum_radicand') or {}).get('radicand',-1)<0:reasons.append('domain')
-    return dict(status='static_pass_only' if not reasons else 'blocked_or_failed',reasons=sorted(set(reasons)),scope='zero-time representation/capacity only; never evolved uncertainty or physical admission')
+    match=re.search(r'rows=(\d+), matrix_nnz=(\d+), factor_nnz=(\d+), mass=(\d+)',q.get('failure',''))
+    guard=None
+    if match:
+        rows,nnz,fill,mass=map(int,match.groups());guard=dict(rows=rows,matrix_nnz=nnz,factor_nnz=fill,mass=mass,limit=40000000)
+    blocked=guard is not None and guard['factor_nnz']>40000000
+    return dict(status='static_pass_only' if not reasons else ('blocked_capacity' if blocked else 'blocked_or_failed'),reasons=sorted(set(reasons)),
+        first_failed_gate='predictor_factor_fill' if blocked else None,guard=guard,
+        scope='zero-time representation/capacity only; missing later controls remain unattempted after first native guard; never evolved uncertainty or physical admission')
 
 
 def main():
