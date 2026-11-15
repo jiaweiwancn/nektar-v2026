@@ -38,6 +38,7 @@ def main():
         req=folder/(tag+'-request.json');packet=folder/(tag+'.json');write_json(req,request)
         e=native_run([a.runtime/'RANSPreservationProbe',folder/'case.xml',req,packet],folder,tag+'.log',600,900);r=n.read(packet) if packet.exists() else {};require(e['exit_code']==0 and not r.get('failure'),'changed-alpha control:'+str(r.get('failure')));return r,e
     for alpha in (4000.,8000.):
+        os.environ.pop('NEKTAR_RANS_SPARSE_RECEIPTS',None)
         dest=a.output/('canonical-'+str(int(alpha)));dest.mkdir();root=ET.parse(a.static/'target/case.xml').getroot();set_parameter(root,'TimeStep',1/alpha);write(root,dest/'case.xml')
         packet,e=execute(dest,replay(q,state,0.,[],stored_reference_sha256=q['initialization_receipt']['fixed_reference_sha256'],export_pre_factor_frozen=True,actual_history=state,sparse_alpha=alpha,frozen_request_kind='InitializedFrozenV1',pre_factor_prefix=str(dest/'frozen')),'prefactor');f=packet['pre_factor_frozen']
         require(f['whole_command_sparse_factorizations']==0 and f['input']==state and f['history']==state and f['rows']==prior['rows'],'changed-alpha canonical identity/history')
@@ -63,6 +64,7 @@ def main():
             if base is None:base=np.asarray(b['pressure_increment'])
             change=maximum(B@(np.asarray(b['pressure_increment'])-base))/s['case']['ustar']**2;require(change<1e-8,'changed-alpha governing quadrature uncertainty')
             row={k:v for k,v in b.items() if k not in ('predictor','pressure_increment','consistent_mass_correction','scalars','identity')};row.update(scalars=[{k:v for k,v in x.items() if k!='diagnostic_increment'} for x in b['scalars']],status='pass',pressure_change_scaled_maximum=change,execution=e,packet_sha256=sha(folder/'frozen.json'),numerical_receipts=numerical_receipts(folder/'sparse-receipts.jsonl'));out['controls'][str(int(alpha))+'-'+label]=row
+            os.environ.pop('NEKTAR_RANS_SPARSE_RECEIPTS',None)
             write_json(a.output/'progress.json',out);del packet;gc.collect();print('CT14 changed alpha',alpha,label,'pass',flush=True)
     out['status']='pass';write_json(a.output/'results.json',out);m.seal(a.output,['results.json']);print('CT14 changed timestep admission pass',flush=True)
 
