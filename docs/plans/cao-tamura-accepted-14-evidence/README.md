@@ -113,6 +113,11 @@ It qualifies alpha4000/8000 and the unchanged scientific classifier specialized
 only at its two request literals. Then bind its sealed result in a new
 admitted-pair contract and invoke `ct_accepted14_pair.py` with
 `--admission NEW/timestep`. No old native history, timestamp or metric is renamed.
+For this longer retry, insert `ct_accepted14_budget.py --root NEW --control
+NEW/resources-PAIR --` between the owned launcher and pair command. It counts
+live CPU over the outer launcher, worker monitor and entire owned family,
+adds all closed prior families, and stops with explicit CPU/wall/output
+publication reserves. Its watch is separate from scientific acceptance.
 
 The original failed ordering controls can be reproduced individually with their
 preserved utility/runtime, exact canonical A/RHS and recorded work allocation.

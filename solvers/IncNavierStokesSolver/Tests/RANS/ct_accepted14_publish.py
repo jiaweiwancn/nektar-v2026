@@ -62,6 +62,9 @@ def main():
         require(path.is_file(),'missing external artifact:'+str(path));r=dict(path=str(path),bytes=path.stat().st_size,sha256=sha(path))
         if body:r['body']=read(path)
         index[str(path.relative_to(a.root))]=r
+    for folder in sorted(a.root.glob('resources-*')):
+        watch=folder/'package-budget-watch.json'
+        if watch.exists():record(watch,True)
     for key in bodies:
         folder=getattr(a,key)
         for name in ('request-manifest.json','completed-artifacts.json'):record(folder/name,True)
