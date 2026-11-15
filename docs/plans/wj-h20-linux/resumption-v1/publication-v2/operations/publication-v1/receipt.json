@@ -1,0 +1,65 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h20-three-level-resume-20261115/publication-code-v1/publish_wj_h20_resumed.py",
+    "--root",
+    "/home/jay/build/wj-h20-three-level-resume-20261115"
+  ],
+  "phase": "operation",
+  "kind": "passive",
+  "reserved_seconds": 180,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 238317,
+        "parent": 229898,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h20-three-level-resume-20261115/publication-code-v1/publish_wj_h20_resumed.py": {
+      "sha256": "d30cefca2f8100c3dc4f5bce1d3ca70f7dce2b9a2fd353d16dcbe14f297c95e6",
+      "bytes": 26568
+    }
+  },
+  "driver": "3a96ae13d210b3c0c0e46547c02b2c2377243533c63b005a960ed7a83797f9ab",
+  "status": "RESOURCE_LIMIT",
+  "seconds": 180.36500823000097,
+  "exit": -15,
+  "reason": "RESOURCE_LIMIT RSS/time",
+  "peak_tree_rss_bytes": 462135296,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

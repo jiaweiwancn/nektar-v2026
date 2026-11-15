@@ -1,0 +1,12 @@
+{
+  "velocity": "Cartesian x,y,z; the second simulated velocity is U_z; G_ij=dU_i/dx_j in physical coordinates",
+  "pressure": "stored regional reduced pi, no regauging; mechanical_pressure follows the existing pi-2k/3 convention",
+  "epsilon": "transported outer field only; zero inner array entries are placeholders, not a physical inner epsilon PDE",
+  "inner_auxiliary_epsilon": "destruction=A(current represented K)/max(r,rc), the Budget cutoff auxiliary; separate from transported outer epsilon",
+  "production": "-R:G, actual raw full-stress work in both regions",
+  "turbulent_production": "Budget/Boussinesq split meaningful in the inner AWF only; its outer extension is not the actual outer WJ work",
+  "reference_production": "current-K counterfactual Budget profile, used only in the inner region; not imposed on actual evolving production",
+  "cutoff": "rc is effective height above d0; physical z_cut=d0+rc",
+  "viscosities": "nu_eff is model turbulent viscosity; AWF stress/diffusion retains positive molecular nu; outer nu_d=Cd*k^2/epsilon",
+  "boundary_scalar_sign": "stored normal diffusion derivative n dot D grad f; outward Fick flux has the opposite sign; these one-sided traces are not integrated weak loads"
+}
