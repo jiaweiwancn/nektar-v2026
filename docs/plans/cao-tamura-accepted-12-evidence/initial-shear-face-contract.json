@@ -1,0 +1,15 @@
+{
+  "schema": "CT12InitialShearFaceDiagnosticV1",
+  "purpose": "discriminate initial inner-shear volume forcing from its independent physical inlet/outlet traction representation; do not infer the momentum axis from unsigned shear norms",
+  "inputs": "unchanged actual target initial coefficients,first captured alpha1000 operator,native face rows and analytic reference utau\u00b2",
+  "tests": "map linear+molecular shear difference separately in normal and streamwise momentum; independently reconstruct normal shear load using actual face gradients and opposite physical orientations; all-row2e-10 and pressure-image/tighter1e-8; reverse outlet orientation as a discriminating pressure negative",
+  "limits": {
+    "new_native_processes": 0,
+    "new_trajectories": 0,
+    "linear_pressure_images": 5,
+    "CPU_seconds": 150,
+    "wall_seconds": 240,
+    "address_space_GiB": 16
+  },
+  "scope": "read-only initial-state diagnostic only; no nominal flux/reaction substitution, extra governing solve, history change or new physical admission"
+}

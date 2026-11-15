@@ -100,7 +100,8 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','ct10','ct11','pressure','axes','profile','self-control','output'):p.add_argument('--'+k,type=Path,required=True)
     p.add_argument('--static',type=Path)
-    a=p.parse_args();static=sealed(a.static) if a.static else None;pressure=sealed(a.pressure);axes=sealed(a.axes);profile=sealed(a.profile);old=sealed(a.ct11/'target-v1')
+    p.add_argument('--face',type=Path)
+    a=p.parse_args();static=sealed(a.static) if a.static else None;face=sealed(a.face) if a.face else None;pressure=sealed(a.pressure);axes=sealed(a.axes);profile=sealed(a.profile);old=sealed(a.ct11/'target-v1')
     for dt,member in pressure['members'].items():
         require(member['report_sha256']==old['members'][dt]['native_report_sha256'] and member['actual_initial_sha256']==old['members'][dt]['actual_initial_sha256'],'foreign pressure native history/initial binding')
     gate=pressure_gate(pressure,False);quadrature_gate=pressure_gate(pressure)
@@ -111,6 +112,8 @@ def main():
     for dt,rows in axes['members'].items():
         require([round(r['time'],12) for r in rows]==[round(r['time'],12) for r in pressure['members'][dt]['steps']],'axis time coverage')
         require(all(r['signed_sum_error']['maximum_scaled_value']<1e-8 and r['independent_native_mass_action_defect']<=2e-10 and r['complete_native_G_action_defect']<=2e-10 for r in rows),'axis native mass/G reconstruction')
+    require(axes.get('external_traction_policy')=='CurrentEndpointRadialD_V1' and set(axes.get('independent_external_traction',{}))=={'initial','input','post_flow','pre_k','accepted'},'stale/missing finite-height external-traction correction')
+    require(all(v['maximum_normalized_difference']<=2e-10 for v in axes['independent_external_traction'].values()),'independent physical external traction mismatch')
     for name in ('input','post_flow','pre_k','accepted'):
         require(set(axes['stage_tractions'][name]['external'])=={'outlet/0','outlet/1','top/1'},'physical face observation coverage')
     requests={label:dict(path=str(folder),request_sha256=sha(folder/'request-manifest.json'),result_sha256=sha(folder/'results.json'),seal_sha256=sha(folder/'completed-artifacts.json')) for label,folder in [('pressure',a.pressure),('axes',a.axes),('profile',a.profile)]}
@@ -118,6 +121,10 @@ def main():
         sr=read(a.static/'request-manifest.json')['request'];expected=copy.deepcopy(old['case']);expected['knots']=sorted(set(expected['knots']+[.00146484375]))
         require(sr['pressure']==sha(a.pressure/'results.json') and sr['target']==sha(a.ct11/'target-v1/results.json') and static['case']==expected,'foreign static reference/mesh binding')
         requests['static']=dict(path=str(a.static),request_sha256=sha(a.static/'request-manifest.json'),result_sha256=sha(a.static/'results.json'),seal_sha256=sha(a.static/'completed-artifacts.json'))
+    if face:
+        fr=read(a.face/'request-manifest.json')['request'];require(fr['pressure']==sha(a.pressure/'results.json') and fr['target']==sha(a.ct11/'target-v1/results.json'),'foreign face diagnostic')
+        require(face['status']=='pass' and finite_numbers(face) and max(face['native_stokes_defects'].values())<=2e-10 and face['face_image_error']['maximum_scaled_value']<1e-8 and face['tighter_repeat']['maximum_scaled_value']<1e-8 and face['negative_reversed_outlet']['pressure_defect']['maximum_scaled_value']>1e-8,'physical face/volume pressure reconstruction')
+        requests['face']=dict(path=str(a.face),request_sha256=sha(a.face/'request-manifest.json'),result_sha256=sha(a.face/'results.json'),seal_sha256=sha(a.face/'completed-artifacts.json'))
     resources={};project=aggregate=0;cpu=wall=0.
     for f in sorted(a.root.glob('resources-*')):
         if f==a.self_control:continue
@@ -215,7 +222,7 @@ def main():
         held_quadrature=pressure['held_quadrature'],stage_loads=pressure['stage_loads'])
     decision=dict(schema='CT12RequiredScopeV1',diagnostic_reconstruction=gate,held_state_quadrature=quadrature_gate,historical_CT11_pressure=old['qualification'],
         target_physical_horizon=.002,new_physical_continuation='not_attempted_or_admitted',
-        profile_and_restart=dict(status='pass',accepted_replay_steps=2,deliberate_rejected_attempts=1,governing_change=False),
+        initial_shear_face=dict(status='pass' if face else 'not_attempted'),profile_and_restart=dict(status='pass',accepted_replay_steps=2,deliberate_rejected_attempts=1,governing_change=False),
         retention=dict(status=profile['retention']['status'],scope='lossless compressed/deduplicated bounded replay payloads; no historical pruning or unqualified rolling eviction'),
         campaign_resources=forecast,resources=dict(status='pass' if worker_pass and package_pass else 'fail',worker_status='pass' if worker_pass else 'fail',package_budget_status='pass' if package_pass else 'fail',maximum_project=max(project,union_peak),maximum_aggregate=aggregate,combined_project_witness=union_witness,
             closed_package_CPU=cpu,closed_family_wall_sum=wall,new_output_bytes=output_bytes,package_CPU_limit=12000,package_wall_limit=14400,package_output_limit_bytes=12*1024**3),
@@ -228,6 +235,7 @@ def main():
         if f.exists() and r.exists():failures[name]=dict(log=str(f),log_sha256=sha(f),witness=f.read_text()[-4500:],execution=read(r),execution_sha256=sha(r),
             scope='preserved diagnostic/controller failure, not a new physical trajectory or a relabelled historical result')
     if static:write_json(a.output/'static-contrast.json',static)
+    if face:write_json(a.output/'initial-shear-face.json',face)
     for name,value in [('failed-attempts',failures),('pressure',pressure),('pressure-summary',summary),('axes-and-tractions',axes),('profile',profile),('cost',costs),('forecast',forecast),('negative-controls',negatives),('resources',resources),('decision',decision)]:write_json(a.output/(name+'.json'),value)
     critical=['library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp','library/SolverUtils/Turbulence/RANSModels.cpp','library/UnitTests/SolverUtils/RANSPreservationProbe.cpp',
         'solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp','solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp',

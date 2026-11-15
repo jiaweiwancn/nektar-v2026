@@ -1,0 +1,7 @@
+{
+  "schema": "CT12ExternalTractionDiagnosticCorrectionV1",
+  "observed": "axes-v2 completed the pressure/axis/ground/interface reconstruction but its new inner-outlet postprocessor reused ground D(K) at every finite height",
+  "correction": "use original D(r;K_H)=nu+alpha*sqrt(K_H)*max(0,r-nu*B/sqrt(K_H)) at each actual face coordinate; ground D(0) and native operators unchanged",
+  "verify": "new immutable axes-v3 request binds sealed parent; retain all valid axis/ground/interface/feedback primitives and vectors, recompute only external faces on exact retained states, require agreement with the existing independent ct_accepted4_run traction implementation within2e-10; wrong ground-D substitution must give resolved error",
+  "scope": "postprocessing correction only, no native process, governing/history change or reinterpretation of CT4\u2013CT11; parent inner external metrics explicitly invalidated and preserved"
+}

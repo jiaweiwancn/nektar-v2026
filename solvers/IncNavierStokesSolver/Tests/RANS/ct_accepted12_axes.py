@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Independent Cartesian-axis pressure images and retained-stage physical tractions."""
-import argparse,gc,json,os,resource
+import argparse,copy,gc,json,os,resource,shutil
 from pathlib import Path
 from rans_qualification import THREADS,exact_vector_hash
 os.environ.update(THREADS)
@@ -18,18 +18,23 @@ from rans_request_manifest import RequestManifest,sha
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('ct10','ct11','pressure','output'):p.add_argument('--'+k,type=Path,required=True)
+    p.add_argument('--repair-external',type=Path,help='Reuse sealed axis/ground/interface results; repair only the erroneous finite-height external diffusivity')
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));resource.setrlimit(resource.RLIMIT_CORE,(0,0))
     primary=sealed(a.pressure);target=sealed(a.ct11/'target-v1');ini=n.read(a.ct10/'target-preflight-v1/target/readiness.json');c=target['case'];weights=n.inventory(c)[2];off=ini['observation']['offsets'];nm=off[2]
-    manifest=RequestManifest(a.output,dict(schema='CT12AxisAndStageV1',source=sha(Path(__file__)),pressure=sha(a.pressure/'results.json'),target=sha(a.ct11/'target-v1/results.json'),scope='read-only retained target operators/rows; no native solve or trajectory'))
+    parent=sealed(a.repair_external) if a.repair_external else None
+    if parent:
+        request=n.read(a.repair_external/'request-manifest.json')['request']
+        require(request['pressure']==sha(a.pressure/'results.json') and request['target']==sha(a.ct11/'target-v1/results.json'),'foreign external-traction correction')
+    manifest=RequestManifest(a.output,dict(schema='CT12AxisAndStageV1',source=sha(Path(__file__)),corrected_parent=dict(path=str(a.repair_external),sha256=sha(a.repair_external/'results.json')) if parent else None,pressure=sha(a.pressure/'results.json'),target=sha(a.ct11/'target-v1/results.json'),scope='read-only retained target operators/rows; no native solve or trajectory'))
     result=dict(schema='CT12AxisAndStageV1',status='incomplete',members={},stage_tractions={});vectors={};common={};feedback_common={};cache={}
     coefficients=parameters('A95');alpha=coefficients['alpha'];norm=None
     ends={round(f['coordinate'][0],14):f['velocity_k'] for f in ini['observation']['faces'] if f['interface'] and f['region']==1}
     for point,side,row in zip(ini['observation']['grid'],ini['observation']['grid_sides'],ini['test_basis'],strict=True):
         if point[2]==c['H'] and side==1:ends[round(point[0],14)]=row['velocity_k']
-    def diffusion(K):
+    def diffusion(K,z=0.):
         require(K>0,'actual endpoint K invalid');rough=c['roughness_input']*np.sqrt(K)/(70*c['nu'])
         B=10.7*(1-rough**max(.5-.4*rough**.7,1-.79*rough**(-.28)))
-        return c['nu']+alpha*np.sqrt(K)*max(0.,-c['nu']*B/np.sqrt(K))
+        return c['nu']+alpha*np.sqrt(K)*max(0.,z-c['nu']*B/np.sqrt(K))
     reference_gradient=np.zeros((3,3));reference_gradient[0,2]=c['ustar']/(coefficients['kappa']*(c['H']-c['displacement']))
     refQ=np.asarray(oracle('A95',c['K0'],(c['K0']/coefficients['q'])**1.5/(coefficients['kappa']*(c['H']-c['displacement'])),reference_gradient)['Q'])
     def external(state):
@@ -45,7 +50,7 @@ def main():
                 ep=row_value(f['epsilon'],s,off[3])[0];law=oracle('A95',k,ep,G)
                 T=law['nut']*(G+G.T-2*np.eye(3)*np.trace(G)/3)-np.asarray(law['Q'])-pi*np.eye(3)
             else:
-                K=row_value(ends[round(f['coordinate'][0],14)],s,off[2])[0];T=diffusion(K)*(G+G.T)-pi*np.eye(3)
+                K=row_value(ends[round(f['coordinate'][0],14)],s,off[2])[0];T=diffusion(K,f['coordinate'][2])*(G+G.T)-pi*np.eye(3)
             normal=area/np.linalg.norm(area);tr=T@normal
             datum=np.array([refQ[2,2]-refQ[0,0] if region and kind=='outlet' else 0.,0.,c['ustar']**2]) if kind=='outlet' else np.array([c['ustar']**2,0.,0.])
             delta=tr-datum;mask=np.array([True,False,kind=='outlet']);measure=f['weight']*np.linalg.norm(area)
@@ -53,7 +58,7 @@ def main():
             lane['measure']+=measure;lane['sum']+=measure*delta;lane['traction_sum']+=measure*tr;lane['square']+=measure*float(delta[mask]@delta[mask]);lane['pressure']+=measure*pi;lane['count']+=1
             square=float(delta[mask]@delta[mask])
             if lane['witness'] is None or square>lane['witness']['square']:lane['witness']=dict(coordinate=f['coordinate'],geometry=q['geometry'],side='outward',square=square,represented_traction=tr.tolist(),prescribed_datum=datum.tolist() if kind=='outlet' else {'x':float(datum[0]),'z':'not prescribed; w is essential'},compared_signed_difference=delta[[0,2]].tolist() if kind=='outlet' else [float(delta[0])])
-        return {key:dict(compared_components=['x','z'] if key.startswith('outlet') else ['x'],signed_mean_difference=(v['sum']/v['measure'])[[0,2]].tolist() if key.startswith('outlet') else [float(v['sum'][0]/v['measure'])],represented_mean_traction=(v['traction_sum']/v['measure']).tolist(),normalized_RMS=float(np.sqrt(v['square']/v['measure']))/c['ustar']**2,
+        return {key:dict(measure=v['measure'],compared_components=['x','z'] if key.startswith('outlet') else ['x'],signed_mean_difference=(v['sum']/v['measure'])[[0,2]].tolist() if key.startswith('outlet') else [float(v['sum'][0]/v['measure'])],represented_mean_traction=(v['traction_sum']/v['measure']).tolist(),normalized_RMS=float(np.sqrt(v['square']/v['measure']))/c['ustar']**2,
             absolute_Pi_mean=v['pressure']/v['measure'],count=v['count'],witness=v['witness'],scope='physical constitutive traction minus prescribed datum; top compares tangential component only, no normal-traction condition; separate from the weak natural load') for key,v in lanes.items()}
     def ground(state):
         s=np.asarray(state);rows=[]
@@ -80,6 +85,33 @@ def main():
             f,g=fs;d=np.asarray(f['traction'])/f['area'][2]-np.asarray(g['traction'])/g['area'][2];w=f['weight'];measure+=w;total+=w*d*d;normal+=w*d[2]
             if worst is None or float(d@d)>worst['square']:worst=dict(coordinate=f['row']['coordinate'],square=float(d@d),jump=d.tolist(),owners=[f['row']['geometry'],g['row']['geometry']])
         return dict(full_jump_RMS=float(np.sqrt(total.sum()/measure))/c['ustar']**2,normal_jump_RMS=float(np.sqrt(total[2]/measure))/c['ustar']**2,signed_normal_jump=normal/measure/c['ustar']**2,witness=worst,count=len(pairs),scope='same +z traction on both sides; outward faces were opposite; no interface flux added to volume assembly')
+    def independently_verify(result,states):
+        proof={}
+        for name,state in states.items():
+            independent=n.traction(ini,state,c);ext=result['initial_tractions']['external'] if name=='initial' else result['stage_tractions'][name]['external']
+            m=sum(v['measure'] for k,v in ext.items() if k.startswith('outlet'))
+            combined=np.sqrt(sum(v['measure']*v['normalized_RMS']**2 for k,v in ext.items() if k.startswith('outlet'))/m)
+            err=abs(combined-independent['normalized_outlet_reconstruction_RMS'])
+            require(err<2e-10 and abs(m-c['Z'])<2e-10,'independent actual outlet traction/radial diffusivity mismatch')
+            proof[name]=dict(combined_normalized_outlet_RMS=float(combined),independent_normalized_outlet_RMS=independent['normalized_outlet_reconstruction_RMS'],maximum_normalized_difference=err,actual_outlet_measure=m)
+        result['external_traction_policy']='CurrentEndpointRadialD_V1';result['independent_external_traction']=proof
+    if parent:
+        result=copy.deepcopy(parent)
+        r=n.read(Path(target['members']['0.0005']['directory'])/'case.evolution.json');s0=n.read(r['pimple_attempts'][-1]['flow_snapshot']);k0=n.read(r['pimple_attempts'][-1]['k_snapshot'])
+        states={'initial':ini['observation']['state'],'input':s0['input'],'post_flow':k0['post_flow'],'pre_k':k0['pre_k'],'accepted':r['state']}
+        result['initial_tractions']['external']=external(states['initial'])
+        for name,state in states.items():
+            if name=='initial':continue
+            require(result['stage_tractions'][name]['state_sha256']==exact_vector_hash(state),'foreign retained-stage coefficient vector')
+            result['stage_tractions'][name]['external']=external(state)
+        independently_verify(result,states)
+        signal=abs(parent['initial_tractions']['external']['outlet/0']['normalized_RMS']-result['initial_tractions']['external']['outlet/0']['normalized_RMS'])
+        require(signal>1e-8,'ground-viscosity substitution control has no signal')
+        result['external_correction']=dict(parent_sha256=sha(a.repair_external/'results.json'),invalidated='parent inner finite-height external traction only; original axis,ground,interface and pressure-feedback primitives unchanged',negative_ground_D_substitution=dict(status='pass',normalized_RMS_defect=signal,limit=1e-8))
+        result['diagnostic_actual_mapped_files']={str(Path(line.split()[-1])):sha(Path(line.split()[-1])) for line in Path('/proc/self/maps').read_text().splitlines() if line.split()[-1].startswith('/') and Path(line.split()[-1]).is_file()}
+        result['external_repair_maximum_RSS_KiB']=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        shutil.copy2(a.repair_external/'axis-vectors.json',a.output/'axis-vectors.json');write_json(a.output/'results.json',result)
+        manifest.seal(a.output,['results.json','axis-vectors.json']);return 0
     for dt,member in primary['members'].items():
         accum={k:np.zeros(off[6]-off[4]) for k in ('streamwise','normal','continuity')};states={};checks=[];feedback=np.zeros(off[6]-off[4]);feedback_states={}
         for row in member['steps']:
@@ -139,6 +171,7 @@ def main():
         result['stage_tractions'].setdefault(label,{})['interface']=interface(packet['ct10_momentum'])
     expected=target['members']['0.0005']['accepted_metrics'][-1]['traction']['normalized_wall_traction_error']
     require(abs(result['stage_tractions']['accepted']['ground']['error']-expected)<2e-10,'raw evolved ground traction disagreement')
+    independently_verify(result,dict(initial=ini['observation']['state'],**states))
     vm={k:int(v.split()[0]) for k,v in (line.split(':',1) for line in Path('/proc/self/status').read_text().splitlines() if line.startswith(('VmPeak:','VmHWM:')))}
     mapped={}
     for line in Path('/proc/self/maps').read_text().splitlines():
