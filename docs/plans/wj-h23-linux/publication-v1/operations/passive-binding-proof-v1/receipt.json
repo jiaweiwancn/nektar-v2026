@@ -1,0 +1,63 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h23-flat-continuation-20261115/passive-repair-v1/qualify_wj_h23_bindings.py",
+    "--root",
+    "/home/jay/build/wj-h23-flat-continuation-20261115"
+  ],
+  "phase": "passive",
+  "kind": "passive",
+  "reserved_seconds": 60.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 270820,
+        "parent": 270469,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h23-flat-continuation-20261115/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h23.py --root /home/jay/build/wj-h23-flat-continuation-20261115 --label passive-binding-proof-v1 --seconds 60 --phase passive -- /usr/bin/python3 -B /home/jay/build/wj-h23-flat-continuation-20261115/passive-repair-v1/qualify_wj_h23_bindings.py --root /home/jay/build/wj-h23-flat-continuation-20261115"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h23-flat-continuation-20261115/passive-repair-v1/qualify_wj_h23_bindings.py": {
+      "sha256": "7843f5758875d9e6d0e61f5be5249075a508b9401c4f61ef53c054b0f26aa0b4",
+      "bytes": 2090
+    }
+  },
+  "driver_sha256": "22be98945668c5b74f72704a993351db23fd177aa5f99eeb19a253054acf777a",
+  "status": "PASS",
+  "seconds": 2.456156717991689,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 355737600,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "ae18fa503c3c358cd0e482be545056cf70897813c982a2346b9936ac1667e8bd"
+}

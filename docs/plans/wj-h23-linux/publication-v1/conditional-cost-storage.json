@@ -1,0 +1,60 @@
+{
+  "status": "NO_NEW_ORDINARY_ADVANCE_OR_AUDIT_MEASUREMENT",
+  "governing_samples": 0,
+  "conditional_H23_forecast": "NOT_EVALUABLE",
+  "actual_operation_usage": {
+    "total": 723.7115766559727,
+    "native": 40.64033030398423,
+    "passive": 323.0712463519885
+  },
+  "protected_read_seconds": 38.82556866898085,
+  "passive_triplet_preflight_seconds": 37.75953632700839,
+  "historical_capture_Off_priors": {
+    "H20_ordinary_M_seconds": 41.35,
+    "H20_ordinary_F_seconds": 41.86,
+    "H20_conditional_days": {
+      "C": 49.9,
+      "M": 98.2,
+      "F": 197.3
+    },
+    "H20_measured_encoding_GB": {
+      "C": 194,
+      "M": 274,
+      "F": 429
+    },
+    "scope": "historical conditional, not H23 measurements or duration admission"
+  },
+  "horizon": 505.02466521278404,
+  "terminal_window": [
+    447.8483832973273,
+    505.02466521278404
+  ],
+  "from_time": 0.04,
+  "hypothetical_remaining_from_04": {
+    "C": {
+      "remaining_physical_time": 504.984665212784,
+      "steps": 100997,
+      "ceiling_absolute_time": 505.02500000000003,
+      "recovery_stride": 5,
+      "regular_stride": 50,
+      "terminal_stride": 25
+    },
+    "M": {
+      "remaining_physical_time": 504.984665212784,
+      "steps": 201994,
+      "ceiling_absolute_time": 505.02500000000003,
+      "recovery_stride": 10,
+      "regular_stride": 100,
+      "terminal_stride": 50
+    },
+    "F": {
+      "remaining_physical_time": 504.984665212784,
+      "steps": 403988,
+      "ceiling_absolute_time": 505.02500000000003,
+      "recovery_stride": 20,
+      "regular_stride": 200,
+      "terminal_stride": 100
+    }
+  },
+  "limitations": "No H23 ordinary/warm/monitoring/retention sample; .04 was not reached; cadence/rotation/namespace/compression/production budgets unqualified"
+}

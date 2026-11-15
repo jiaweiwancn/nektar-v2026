@@ -1,0 +1,76 @@
+{
+  "schema": "WJMonitorIntentV1",
+  "policy": "CheckpointAuditV1",
+  "h23_role": "ContinuationFrom02V1",
+  "level": "M",
+  "directory": "/home/jay/build/wj-h23-flat-continuation-20261115/science/M/monitor",
+  "nonce": "c2de8033a1104d59b018afcea2ed1a8e",
+  "scope_sha256": "9c1e1987a0f1f2075cf21c1603f65ed6a9c6de4962788e97489092e8ed5c88ef",
+  "source_sha256": "c8bf6cea17044971e8745f1e5e08f9d12dcee061d9a883f5d98c609f3347ed42",
+  "observer_sha256": "3934b6a663e4f30a8462bc914b6d2b40a53ec9467725ab543d0c5dabd1f94979",
+  "inventory_rule_sha256": "d7820c095b5c43042c9a99e5f5ce2b624a8e7b5a94a0eb894bc90708b517f504",
+  "original_qh0_checkpoint": {
+    "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/CP/State.bin",
+    "bytes": 1447065,
+    "sha256": "d27ee0e2f9b9bf8639d47449c5e8e338212363417faca7bf014d1008f44f69a3"
+  },
+  "original_qh0_state_sha256": "631caa32a59ff43253f1fcac4effd955eb68b8529d9c28f29e615cf14ca0f077",
+  "spatial_lineage_anchor": {
+    "path": "/home/jay/build/wj-h14-mapped-backend-20261113/science/target/cp0/CP/State.bin",
+    "bytes": 1447065,
+    "sha256": "d27ee0e2f9b9bf8639d47449c5e8e338212363417faca7bf014d1008f44f69a3"
+  },
+  "restored_checkpoint": {
+    "path": "/home/jay/build/wj-h20-three-level-resume-20261115/science/M/CP.3/State.bin",
+    "bytes": 1447065,
+    "sha256": "6a1d061c8dee8c396ee588edd3afa86a353ceb58653c8bed2fedfdf291d3188c"
+  },
+  "restart_completion": {
+    "path": "/home/jay/build/wj-h20-three-level-resume-20261115/science/M/monitor/step-8.completion.json",
+    "bytes": 2103,
+    "sha256": "b3369feafee8c352c94dd9b708a9b76484720853155569bb896640f6c450c7d8"
+  },
+  "maximum_absolute_step": 16,
+  "restored_absolute_step": 8,
+  "recovery_stride": 1,
+  "scientific_stride": 2,
+  "dt_bits": "3f647ae147ae147b",
+  "ack_timeout_seconds": 120.0,
+  "substep_evidence_steps": [],
+  "flow_capture": "Off",
+  "snapshot_capture": "Off",
+  "preserve_qualification_artifacts": true,
+  "selected_inputs": {
+    "path": "/home/jay/build/wj-h23-flat-continuation-20261115/inputs/selected.json",
+    "bytes": 11189,
+    "sha256": "11721233098fef638f845fdbc30c59da87f13d4a50a09a75b04e5a725d343f67"
+  },
+  "common_support": {
+    "path": "/home/jay/build/wj-h18-checkpoint-audits-20261114/inputs/target/common-support.json",
+    "bytes": 17629650,
+    "sha256": "757ab2fe45d85b6a6711ced96e79e005dcc24673b57f8b99949d044f5a365b04"
+  },
+  "deadline_monotonic": 216371.734087626,
+  "operation_start_monotonic": 215321.734089656,
+  "ordinary_step_forecast_seconds": 45.0,
+  "audit_forecast_seconds": 50.0,
+  "observer_forecast_seconds": 15.0,
+  "prospective_forecasts": {
+    "M": {
+      "ordinary": 45.0,
+      "audit": 50.0,
+      "observer": 15.0
+    },
+    "C": {
+      "ordinary": 45.0,
+      "audit": 50.0,
+      "observer": 25.0
+    },
+    "F": {
+      "ordinary": 45.0,
+      "audit": 50.0,
+      "observer": 45.0
+    }
+  },
+  "observer_pid": 270637
+}

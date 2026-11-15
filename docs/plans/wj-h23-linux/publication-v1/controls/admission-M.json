@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "level": "M",
+  "used": {
+    "total": 499.41470801699325,
+    "native": 0,
+    "passive": 139.41470801699325
+  },
+  "remaining_estimate": 3100.0,
+  "headroom": 1.25,
+  "strict_protected": 360,
+  "closure_protected": 300,
+  "forecasts": {
+    "M": {
+      "ordinary": 45.0,
+      "audit": 50.0,
+      "observer": 15.0
+    },
+    "C": {
+      "ordinary": 45.0,
+      "audit": 50.0,
+      "observer": 25.0
+    },
+    "F": {
+      "ordinary": 45.0,
+      "audit": 50.0,
+      "observer": 45.0
+    }
+  },
+  "forecast_rule": "maximum of frozen conservative prior and measured preceding branches; no cap enlargement"
+}

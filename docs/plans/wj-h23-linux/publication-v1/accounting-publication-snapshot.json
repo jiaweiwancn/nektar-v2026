@@ -1,0 +1,191 @@
+{
+  "schema": "WJH23LedgerV1",
+  "closed": false,
+  "ceiling_seconds": 6000,
+  "native_ceiling": 4200,
+  "passive_ceiling": 900,
+  "setup_charged_seconds": 60,
+  "closure_reserve_seconds": 300,
+  "native_reservations": [
+    "M",
+    "strict_M"
+  ],
+  "reserved_attempts": 8,
+  "entries": {
+    "source-transfer-and-initial-inspection-v1": {
+      "status": "FULLY_CHARGED",
+      "phase": "passive",
+      "kind": "passive",
+      "seconds": 30,
+      "reserved_seconds": 30
+    },
+    "coordination-and-transport-v1": {
+      "status": "FULLY_CHARGED",
+      "phase": "passive",
+      "kind": "passive",
+      "seconds": 60,
+      "reserved_seconds": 60
+    },
+    "initial-transfer-refusal-v1": {
+      "status": "FAIL",
+      "phase": "passive",
+      "kind": "passive",
+      "seconds": 5,
+      "reserved_seconds": 5,
+      "reason": "bootstrap upload exec namespace selected argparse; no root/native operation occurred"
+    },
+    "runtime-input-setup-v1": {
+      "status": "RESOURCE_LIMIT",
+      "phase": "passive",
+      "kind": "passive",
+      "reserved_seconds": 120.0,
+      "reserved_attempts": 0,
+      "seconds": 0.013455710984999314,
+      "exit": -15,
+      "reason": "OPERATIONAL_MONITOR_ERROR FileNotFoundError(2, 'No such file or directory')",
+      "peak_tree_rss_bytes": 19431424,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "runtime-input-setup-v2": {
+      "status": "PASS",
+      "phase": "passive",
+      "kind": "passive",
+      "reserved_seconds": 120.0,
+      "reserved_attempts": 0,
+      "seconds": 3.0459577130095568,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 168382464,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "efd57fda47f37165e9b26769c5ee984802008b8a826c63c76881ed513701ecd3"
+    },
+    "focused-controls-v1": {
+      "status": "FAIL",
+      "phase": "passive",
+      "kind": "passive",
+      "reserved_seconds": 60.0,
+      "reserved_attempts": 0,
+      "seconds": 1.1895538110111374,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 118001664,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "1418f75cccf0db71ec8198dcb56857c710066b2f219229d83f1570698ce4b122"
+    },
+    "retained-triplet-preflight-v1": {
+      "status": "PASS",
+      "phase": "passive",
+      "kind": "passive",
+      "reserved_seconds": 180.0,
+      "reserved_attempts": 0,
+      "seconds": 37.75953632700839,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1076133888,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "84c6178261b2ac24abb50383db2f1bb9197f2c7622967056b2d149a5554ac828"
+    },
+    "focused-controls-v2": {
+      "status": "PASS",
+      "phase": "passive",
+      "kind": "passive",
+      "reserved_seconds": 60.0,
+      "reserved_attempts": 0,
+      "seconds": 1.2045346759841777,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 118370304,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "90355c84a5c6c8343ec4143c8b6efe56af4d4bcd5cc3e56f0e47c1e577aa3b63"
+    },
+    "freeze-admission-v1": {
+      "status": "PASS",
+      "phase": "passive",
+      "kind": "passive",
+      "reserved_seconds": 30.0,
+      "reserved_attempts": 0,
+      "seconds": 1.201669778994983,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 120037376,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "45c1630f08a0a98bdf6e2d134c4300f7e1b3a048f6d90bce8923d285b0352abe"
+    },
+    "governor-M-v1": {
+      "status": "FAIL",
+      "phase": "native",
+      "kind": "M",
+      "reserved_seconds": 1050.0,
+      "reserved_attempts": 8,
+      "seconds": 1.8147616350033786,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 298729472,
+      "charged_attempts": 8,
+      "unknown_attempts": true,
+      "log_sha256": "1166968bdf080c6345cb934c1c7dec8629f07d9f3ff7cc6706fc753eb57130ba"
+    },
+    "protected-strict-M8-v1": {
+      "status": "PASS",
+      "phase": "native",
+      "kind": "strict_M",
+      "reserved_seconds": 120.0,
+      "reserved_attempts": 0,
+      "seconds": 38.82556866898085,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 3923677184,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "514de5bfe34c8f6a227c58ab88320e07def6908577f4bdb4a601b63319001e48"
+    },
+    "passive-binding-regression-v1": {
+      "status": "PASS",
+      "phase": "passive",
+      "kind": "passive",
+      "reserved_seconds": 30.0,
+      "reserved_attempts": 0,
+      "seconds": 1.2003816170035861,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 118984704,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "efaba4aa5b2c827425b64d6ae22f2a364d3b1e2e4abcc9c1b21384ee6b571612"
+    },
+    "passive-binding-proof-v1": {
+      "status": "PASS",
+      "phase": "passive",
+      "kind": "passive",
+      "reserved_seconds": 60.0,
+      "reserved_attempts": 0,
+      "seconds": 2.456156717991689,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 355737600,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "ae18fa503c3c358cd0e482be545056cf70897813c982a2346b9936ac1667e8bd"
+    },
+    "stopped-publication-v1": {
+      "status": "RESERVED",
+      "phase": "passive",
+      "kind": "passive",
+      "reserved_seconds": 180.0,
+      "reserved_attempts": 0
+    }
+  },
+  "native_halt": {
+    "operation": "governor-M-v1",
+    "kind": "M",
+    "reason": "nonzero child",
+    "receipt": "e992140033984d5881bf4065b0c1b45c9f912ebc860d8ad70f1e9d996109b31e"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_wj_h23_continuation",
+    "test_wj_h20_three_level.ThreeLevel.test_direct_CF_exceedance_is_not_hidden_by_adjacent_PASS",
+    "test_wj_h20_three_level.ThreeLevel.test_three_common_directions_evaluate_all_three_actual_states",
+    "test_wj_h20_three_level.ThreeLevel.test_ratio_floor_keeps_signed_data_and_no_false_zero_order",
+    "test_wj_h22_phase.NativePhaseReplay.test_prepared_cursor_binds_actual_inventory_for_native_wait",
+    "test_wj_h18_checkpoint_audits.CheckpointAudits.test_absolute_cadence_restart_final_and_stride_one",
+    "test_wj_h18_checkpoint_audits.CheckpointAudits.test_pending_is_distinct_from_qualified_and_prepared_cannot_promote"
+  ],
+  "phase": "passive",
+  "kind": "passive",
+  "reserved_seconds": 60.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 270619,
+        "parent": 270469,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h23-flat-continuation-20261115/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h23.py --root /home/jay/build/wj-h23-flat-continuation-20261115 --label focused-controls-v2 --seconds 60 --phase passive -- /usr/bin/python3 -B -m unittest -v test_wj_h23_continuation test_wj_h20_three_level.ThreeLevel.test_direct_CF_exceedance_is_not_hidden_by_adjacent_PASS test_wj_h20_three_level.ThreeLevel.test_three_common_directions_evaluate_all_three_actual_states test_wj_h20_three_level.ThreeLevel.test_ratio_floor_keeps_signed_data_and_no_false_zero_order test_wj_h22_phase.NativePhaseReplay.test_prepared_cursor_binds_actual_inventory_for_native_wait test_wj_h18_checkpoint_audits.CheckpointAudits.test_absolute_cadence_restart_final_and_stride_one test_wj_h18_checkpoint_audits.CheckpointAudits.test_pending_is_distinct_from_qualified_and_prepared_cannot_promote"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    }
+  },
+  "driver_sha256": "22be98945668c5b74f72704a993351db23fd177aa5f99eeb19a253054acf777a",
+  "status": "PASS",
+  "seconds": 1.2045346759841777,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 118370304,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "90355c84a5c6c8343ec4143c8b6efe56af4d4bcd5cc3e56f0e47c1e577aa3b63"
+}

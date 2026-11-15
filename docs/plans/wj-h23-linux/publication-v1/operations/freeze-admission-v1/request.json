@@ -1,0 +1,57 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h23-flat-continuation-20261115/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h23.py",
+    "--root",
+    "/home/jay/build/wj-h23-flat-continuation-20261115",
+    "--mode",
+    "freeze"
+  ],
+  "phase": "passive",
+  "kind": "passive",
+  "reserved_seconds": 30.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 270626,
+        "parent": 270469,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h23-flat-continuation-20261115/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h23.py --root /home/jay/build/wj-h23-flat-continuation-20261115 --label freeze-admission-v1 --seconds 30 --phase passive -- /usr/bin/python3 -B /home/jay/build/wj-h23-flat-continuation-20261115/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h23.py --root /home/jay/build/wj-h23-flat-continuation-20261115 --mode freeze"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h23-flat-continuation-20261115/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h23.py": {
+      "sha256": "60e7889c1d87b27e7fa33ea8797b78105a2adec86bd5f19c394782a2d857537c",
+      "bytes": 20881
+    }
+  },
+  "driver_sha256": "22be98945668c5b74f72704a993351db23fd177aa5f99eeb19a253054acf777a"
+}

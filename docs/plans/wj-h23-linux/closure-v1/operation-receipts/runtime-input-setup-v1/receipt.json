@@ -1,0 +1,65 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h23-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h23.py",
+    "--root",
+    "/home/jay/build/wj-h23-flat-continuation-20261115",
+    "--mode",
+    "setup"
+  ],
+  "phase": "passive",
+  "kind": "passive",
+  "reserved_seconds": 120.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 270475,
+        "parent": 270469,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h23-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h23.py --root /home/jay/build/wj-h23-flat-continuation-20261115 --label runtime-input-setup-v1 --seconds 120 --phase passive -- /usr/bin/python3 -B /home/jay/build/wj-h23-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h23.py --root /home/jay/build/wj-h23-flat-continuation-20261115 --mode setup"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h23-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h23.py": {
+      "sha256": "a47c2b632b2fea6c9d84e5d38f6e43aac6c142e345e244c3b4227f4a4e1154cb",
+      "bytes": 19043
+    }
+  },
+  "driver_sha256": "281b9ccd5853f2871e554bd16264d9d1679cb193fbd00c2b4cdf32bf5396fc35",
+  "status": "RESOURCE_LIMIT",
+  "seconds": 0.013455710984999314,
+  "exit": -15,
+  "reason": "OPERATIONAL_MONITOR_ERROR FileNotFoundError(2, 'No such file or directory')",
+  "peak_tree_rss_bytes": 19431424,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}
