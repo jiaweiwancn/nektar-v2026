@@ -18,6 +18,17 @@ from cls_epawf_m3_cases import set_info,set_parameter,write
 from run_wj_h20 import frozen,reserve_strict
 HERE=Path(__file__).resolve().parent
 NATIVE='b2365e52b0d334d7b61c6be3a4a3bb9029491084'
+ACK_TIMEOUT=120.
+
+def validate_monitor_intent(intent):
+    # Match ConfigureMonitoring's execution limit before creating a governor.
+    # This preflight does not replace any native validation or admission guard.
+    assert intent['schema']=='WJMonitorIntentV1'and len(intent['nonce'])>=16
+    assert 0<intent['ack_timeout_seconds']<=120,'native bounded ACK timeout is (0,120] seconds'
+    level=intent['level']
+    assert intent['maximum_absolute_step']==END[level]and intent['restored_absolute_step']==START[level]
+    assert intent['recovery_stride']==1 and intent['scientific_stride']==STRIDE[level]
+    assert intent['dt_bits']==bits(DT[level])
 
 def executable(root,name):
     b=load(root/'science/runtime-build-v1.json')
@@ -133,10 +144,11 @@ def target(root,level):
         scope_sha256=hashlib.sha256((identity(xml)['sha256']+identity(root/'execution-config.json')['sha256']).encode()).hexdigest(),
         source_sha256=identity(root/'science/runtime-build-v1.json')['sha256'],observer_sha256=identity(HERE/'wj_h20_observer.py')['sha256'],inventory_rule_sha256=hashlib.sha256(RULE.encode()).hexdigest(),
         original_qh0_checkpoint=cp0['checkpoint'],original_qh0_state_sha256=inputs['original']['coupled_state_sha256'],spatial_lineage_anchor=inputs['original']['checkpoint'],restored_checkpoint=restored['checkpoint'],
-        maximum_absolute_step=END[level],restored_absolute_step=START[level],recovery_stride=1,scientific_stride=STRIDE[level],dt_bits=bits(DT[level]),ack_timeout_seconds=180.,strict_reserve_seconds=120,
+        maximum_absolute_step=END[level],restored_absolute_step=START[level],recovery_stride=1,scientific_stride=STRIDE[level],dt_bits=bits(DT[level]),ack_timeout_seconds=ACK_TIMEOUT,strict_reserve_seconds=120,
         ordinary_step_forecast_seconds=50,observer_forecast_seconds=44 if level=='F'else 32,deadline_monotonic=time.monotonic()+1750,
         substep_evidence_steps=[],preserve_qualification_artifacts=True,common_support=inputs['common_support'],selected_inputs=identity(root/'inputs/selected.json'))
     if START[level]:intent.update(restart_completion=restored['completion'],restart_callback=restored['callback'])
+    validate_monitor_intent(intent)
     obs=native=None;code=None;error=None;start=time.monotonic()
     with(folder/'observer.log').open('x')as ol,(folder/'native.log').open('x')as nl:
         try:
@@ -172,7 +184,9 @@ def target(root,level):
             same_cp(rr,checkpoint_payload(verify(load(directory/f'step-{step}.completion.json')['checkpoint']).parent,include_reference=True))
     assert error is None,error
     if code:
-        assert r and r['failure'].startswith('TEMPORAL_REVIEW_STOP')and load(root/'accounting.json').get('screen_halt'),'preserve original failure; no retry'
+        reason=r['failure']if r else next((s.strip()for s in (folder/'native.log').read_text().splitlines()if s.startswith('EP-AWF evolution ')),'native nonzero exit; retained native.log')
+        atomic(folder/'first-native-failure.json',dict(native_exit=code,reason=reason,producer=identity(report)if r else None,native_log=identity(folder/'native.log')))
+        if not(r and reason.startswith('TEMPORAL_REVIEW_STOP')and load(root/'accounting.json').get('screen_halt')):raise RuntimeError(reason)
     else:
         assert r and r['steps']==END[level]and r['implicit_callbacks']==r['native_completed']==ADDITIONAL[level]
         assert load(directory/'latest-fully-verified-checkpoint.json')['binding']['absolute_step']==END[level]

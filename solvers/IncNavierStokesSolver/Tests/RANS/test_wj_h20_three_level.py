@@ -8,6 +8,8 @@ from wj_h15_observer import vector_hash,atomic,identity
 from wj_h20_analysis import DT,ADDITIONAL,START,END,STRIDE,TIMES,absolute_step,selected,availability,ratio,continuation,all_pair_screens,shared_direction_actions,FLOOR
 from wj_h20_observer import resolve
 from run_wj_h20 import native_selection,reserve_strict
+from study_wj_h20 import validate_monitor_intent,ACK_TIMEOUT,admission
+from wj_h15_observer import bits
 
 class ThreeLevel(unittest.TestCase):
     def report(self,level,step):
@@ -92,5 +94,22 @@ class ThreeLevel(unittest.TestCase):
         at=source.index('const auto qualified=J::Object')
         self.assertLess(source.index('M::Atomic(prefix+".qualification-commit.json"',at),source.index('Require(next!="REVIEW_STOP"',at))
         self.assertIn('CheckpointAuditV1',source)
+
+    def test_native_monitor_timeout_preflight_rejects_failed_180s_intent(self):
+        source=(Path(__file__).parents[2]/'EquationSystems/RANSEquilibriumWallEvolution.cpp').read_text()
+        self.assertIn('get<double>("ack_timeout_seconds")<=120',source)
+        for level in DT:
+            intent=dict(schema='WJMonitorIntentV1',nonce='a'*32,level=level,maximum_absolute_step=END[level],restored_absolute_step=START[level],recovery_stride=1,scientific_stride=STRIDE[level],dt_bits=bits(DT[level]),ack_timeout_seconds=ACK_TIMEOUT)
+            validate_monitor_intent(intent)
+            for timeout in (0,180):
+                with self.assertRaisesRegex(AssertionError,'native bounded ACK timeout'):validate_monitor_intent(dict(intent,ack_timeout_seconds=timeout))
+            with self.assertRaises(AssertionError):validate_monitor_intent(dict(intent,maximum_absolute_step=END[level]+1))
+
+    def test_first_native_halt_keeps_later_branches_closed(self):
+        with tempfile.TemporaryDirectory()as t:
+            root=Path(t);atomic(root/'accounting.json',dict(target_halt={'operation':'original failed M launch'}))
+            with patch('study_wj_h20.frozen',lambda root:None):
+                for level in ('C','F'):
+                    with self.assertRaises(AssertionError):admission(root,level)
 
 if __name__=='__main__':unittest.main()
