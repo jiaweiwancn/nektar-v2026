@@ -1,5 +1,11 @@
 # CT14 evidence and reproduction
 
+CT14 short numerical qualification **PASS**. The first .001/.0005 pair remains
+failed only on absolute-pressure uncertainty. The fresh .00025/.000125 pair
+reaches T=.002 in8/16 accepted steps and passes every unchanged scientific
+criterion: DeltaPi2.2874413727322336e-7 <=3.144090599826331e-7. Source/runtime,
+state/stage/history and direct/iterative residual bindings are complete.
+
 Authoritative Linux archive:
 
 `/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-14-20261115`
@@ -24,6 +30,10 @@ archives and historical physical failures are preserved.
 | collect-static-v1 | Independent static verification plus regional initial absolute pressure |
 | pair-v1 | Fresh .001/.0005 histories to the commonT=.002; physical decision is separate from stepping |
 | collect-pair-v1 / publication-pair-v2 | Complete first-pair failure and independent reclassification: temporal:Pi only |
+| timestep-v1 | Alpha4000/8000 canonical,capacity,full action/quadrature and request-only classifier controls |
+| pair-v2 | Passing fresh .00025/.000125 pair;own independent native zero histories |
+| collect-final-v1 / publication-final-v1 | Independent physical/linear/resource verification and sealed compact closure views |
+| resources-pair-v2/live-memory-* | Direct owned-native address-space observations,with executable/request/source hashes |
 | resources-* | Closed owned-family CPU/wall/worker receipts, including failed attempts and controllers |
 
 Native source for the admitted component is `6477d9d9`. Governing executable
@@ -32,7 +42,8 @@ diagnostic probe SHA256 is
 `95d6a0258926ab250b69ea0940976f43a993bf4bdccc3001a5819f4f36835824`.
 Component controls use that source; the selected static controller uses
 `087fa720`; static collection uses `c0224508`; first physical-pair dispatch is
-`eca8f3ab`. Subsequent documentation/publication changes do not rebuild or
+`eca8f3ab`;changed-alpha admission uses `ae18441f`;retry dispatch is `b4867df7`;
+final collection/publication uses `05a5e4b0`. Subsequent documentation/publication changes do not rebuild or
 relabel those runtimes. Request manifests bind individual controller SHA256s,
 contracts, inputs, runtime/library bytes and predecessor seals.
 
@@ -50,7 +61,28 @@ The original CT8 physical manifest remains SHA256
 The frozen experimental dataset and completed digitization audit are unchanged.
 The original CT11 pressure failure and every rejected ordering remain failures.
 
+`closure-v1/` contains the current sealed compact publication. Its
+`completed-artifacts.json` verifies these publication files directly. Their
+`compact_publication` metadata binds the complete external passing pair
+`dfeb102cba472160f0f3e0718a85353710735d759130c438fc9275acad438a60`
+and independent collection
+`f2be1f0835ef654a21a2945d1417cd61208b14e77671bb40f85a884d82df4b03`.
+Transfer archive SHA256 is
+`8069504156913aefa91c500fd0adb9df10a725daf3388349afd525c501ffd07a`.
+Closed resource/publication supplementation is in
+`closed-publication-accounting.json`. No long flat or terrain evolution follows
+from this short numerical pass; the remaining gates are in the main report.
+
 ## Commands
+
+The dated package controllers bind CT14's allocation start at Unix1794751358.
+Native case XML replay with the pinned runtime does not depend on that clock.
+A new whole-package replication needs a separately declared allocation, fresh
+archive root and prospective update of the resource-clock constant in
+`ct_accepted14_budget.py`, `ct_accepted14_collect.py`, `ct_accepted14_publish.py`
+and the status inspector. Keep every scientific limit and source/runtime
+binding. That amendment cannot reset or extend this closed CT14 allocation;
+it does not authorize another run under this prompt.
 
 Use fresh destinations. Never rerun into a sealed directory. Preserve complete
 requests and their `completed-artifacts.json` before collecting results. Each

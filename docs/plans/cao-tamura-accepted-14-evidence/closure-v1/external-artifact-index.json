@@ -1,0 +1,1728 @@
+{
+  "schema": "CT14ExternalArtifactIndexV1",
+  "files": {
+    "resources-budget-negative-v1/package-budget-watch.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/resources-budget-negative-v1/package-budget-watch.json",
+      "bytes": 807,
+      "sha256": "e939960b17c9318c3a0f9f6b759d7c633992bd8f81f733808e3d4a1825f9ec1e",
+      "body": {
+        "schema": "CT14PackageBudgetWatchV1",
+        "status": "stopped_before_allocation",
+        "reason": "CPU allocation reserve",
+        "command": [
+          "python3",
+          "-B",
+          "-c",
+          "import time;time.sleep(10)"
+        ],
+        "exit_code": -15,
+        "closed_families_CPU": {
+          "resources-synthetic": 23760
+        },
+        "maximum_sampled_total_CPU": 23760.48,
+        "last_sample": {
+          "closed_CPU": 23760.0,
+          "live_owned_family_CPU": 0.48,
+          "total_CPU_sample": 23760.48,
+          "whole_elapsed_wall": 11855.625833749771,
+          "retained_bytes": 144
+        },
+        "reserves": {
+          "CPU": 240,
+          "wall": 240,
+          "output_bytes": 268435456
+        },
+        "scope": "live /proc own plus waited-child CPU over outer launcher/guard/owned family; original closed launcher receipts are the final accounting authority; no scientific acceptance supplied"
+      }
+    },
+    "resources-budget-positive-v1/package-budget-watch.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/resources-budget-positive-v1/package-budget-watch.json",
+      "bytes": 1649,
+      "sha256": "b9160d865f3b3c3c5f8835230d94c22079c684894f8883b1da7cf94c81f14e6b",
+      "body": {
+        "schema": "CT14PackageBudgetWatchV1",
+        "status": "completed",
+        "reason": null,
+        "command": [
+          "python3",
+          "-B",
+          "-c",
+          "print(sum(i*i for i in range(2000000)))"
+        ],
+        "exit_code": 0,
+        "closed_families_CPU": {
+          "resources-build-runtime-v1": 881.353654,
+          "resources-build-v1": 74.981426,
+          "resources-build-v2": 60.033495,
+          "resources-build-v3": 59.362284,
+          "resources-build-v4": 57.598458,
+          "resources-capacity-v1": 6.756433,
+          "resources-capacity-v2": 6.043354999999998,
+          "resources-capacity-v3": 6.105646999999998,
+          "resources-capacity-v4": 17.110668999999998,
+          "resources-collect-component-v1": 4.189622,
+          "resources-collect-pair-v1": 26.25322,
+          "resources-collect-static-v1": 15.965183000000001,
+          "resources-component-v1": 694.6395180000001,
+          "resources-pair-v1": 4518.304966000001,
+          "resources-publication-pair-v1": 5.004660999999997,
+          "resources-publication-pair-v2": 30.589351999999998,
+          "resources-receipt-tests-v1": 0.743895,
+          "resources-static-v1": 2409.6559709999997,
+          "resources-timestep-v1": 1785.6146110000004
+        },
+        "maximum_sampled_total_CPU": 10660.826420000001,
+        "last_sample": {
+          "closed_CPU": 10660.30642,
+          "live_owned_family_CPU": 0.52,
+          "total_CPU_sample": 10660.826420000001,
+          "whole_elapsed_wall": 11846.378310918808,
+          "retained_bytes": 6283678408
+        },
+        "reserves": {
+          "CPU": 240,
+          "wall": 240,
+          "output_bytes": 268435456
+        },
+        "scope": "live /proc own plus waited-child CPU over outer launcher/guard/owned family; original closed launcher receipts are the final accounting authority; no scientific acceptance supplied"
+      }
+    },
+    "resources-pair-v2/package-budget-watch.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/resources-pair-v2/package-budget-watch.json",
+      "bytes": 2615,
+      "sha256": "2eb6b9d33ecbaa56c6f5932dc9f634ba7ddf4bbd3816f65f790ec9aa5a153e98",
+      "body": {
+        "schema": "CT14PackageBudgetWatchV1",
+        "status": "completed",
+        "reason": null,
+        "command": [
+          "python3",
+          "-B",
+          "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted14_pair.py",
+          "--runtime",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime",
+          "--static",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/static-v1",
+          "--component",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/component-v1",
+          "--capacity",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/capacity-v4",
+          "--admission",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/timestep-v1",
+          "--contract",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/source/docs/plans/cao-tamura-accepted-14-evidence/short-pair-contract-v2.json",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2"
+        ],
+        "exit_code": 0,
+        "closed_families_CPU": {
+          "resources-budget-negative-v1": 0.8224689999999999,
+          "resources-budget-positive-v1": 4.956085,
+          "resources-build-runtime-v1": 881.353654,
+          "resources-build-v1": 74.981426,
+          "resources-build-v2": 60.033495,
+          "resources-build-v3": 59.362284,
+          "resources-build-v4": 57.598458,
+          "resources-capacity-v1": 6.756433,
+          "resources-capacity-v2": 6.043354999999998,
+          "resources-capacity-v3": 6.105646999999998,
+          "resources-capacity-v4": 17.110668999999998,
+          "resources-collect-component-v1": 4.189622,
+          "resources-collect-pair-v1": 26.25322,
+          "resources-collect-static-v1": 15.965183000000001,
+          "resources-component-v1": 694.6395180000001,
+          "resources-pair-v1": 4518.304966000001,
+          "resources-publication-pair-v1": 5.004660999999997,
+          "resources-publication-pair-v2": 30.589351999999998,
+          "resources-receipt-tests-v1": 0.743895,
+          "resources-static-v1": 2409.6559709999997,
+          "resources-timestep-v1": 1785.6146110000004
+        },
+        "maximum_sampled_total_CPU": 20280.864974000004,
+        "last_sample": {
+          "closed_CPU": 10666.084974000001,
+          "live_owned_family_CPU": 9614.78,
+          "total_CPU_sample": 20280.864974000004,
+          "whole_elapsed_wall": 18245.355198144913,
+          "retained_bytes": 9327399918
+        },
+        "reserves": {
+          "CPU": 240,
+          "wall": 240,
+          "output_bytes": 268435456
+        },
+        "scope": "live /proc own plus waited-child CPU over outer launcher/guard/owned family; original closed launcher receipts are the final accounting authority; no scientific acceptance supplied"
+      }
+    },
+    "resources-pair-v2/live-memory-observations.jsonl": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/resources-pair-v2/live-memory-observations.jsonl",
+      "bytes": 9993,
+      "sha256": "5506d7717a5e4c7c53786881c3d9d8e3a06e3bf789f588121eec42af571f9a26"
+    },
+    "resources-pair-v2/live-memory-summary.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/resources-pair-v2/live-memory-summary.json",
+      "bytes": 1260,
+      "sha256": "61d5a8f21f79e3a2b5e078d1e806e11a4f5d9ca13142a5884da811c24b144256",
+      "body": {
+        "schema": "CT14LiveNativeMemoryV1",
+        "maximum_observed_address_space_KiB": 16122596,
+        "witness": {
+          "time_unix": 1794765564.6336386,
+          "pid": 304495,
+          "process_start_ticks": 23100393,
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/q64f32/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/q64f32/budget-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/q64f32/budget.json"
+          ],
+          "executable_sha256": "95d6a0258926ab250b69ea0940976f43a993bf4bdccc3001a5819f4f36835824",
+          "VmPeak_KiB": 16122596,
+          "VmRSS_KiB": 9725080,
+          "OS_threads": 3,
+          "inspector_sha256": "3e3549c356344b5a88840c25cc74cfb6e6a3a5c127dc966befc9d7d7d2cd5c78"
+        },
+        "samples": 15,
+        "observations_sha256": "5506d7717a5e4c7c53786881c3d9d8e3a06e3bf789f588121eec42af571f9a26",
+        "scope": "actual /proc VmPeak observations of owned native processes; not a claim to sample their final peak; hard16GiB RLIMIT_AS remains enforced by the numerical controller"
+      }
+    },
+    "package-guard-controls-v1/results.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/package-guard-controls-v1/results.json",
+      "bytes": 6109,
+      "sha256": "ae983385d048097fe2de5bc1ca63fbc2bb6486ff596fde836a28a386b57b7c9b",
+      "body": {
+        "positive": {
+          "execution": {
+            "command": [
+              "python3",
+              "-B",
+              "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted14_budget.py",
+              "--root",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+              "--control",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/resources-budget-positive-v1",
+              "--",
+              "python3",
+              "-B",
+              "-c",
+              "print(sum(i*i for i in range(2000000)))"
+            ],
+            "exit_code": 0,
+            "threads": {
+              "OMP_NUM_THREADS": "1",
+              "OPENBLAS_NUM_THREADS": "1",
+              "MKL_NUM_THREADS": "1",
+              "BLIS_NUM_THREADS": "1",
+              "VECLIB_MAXIMUM_THREADS": "1",
+              "NUMEXPR_NUM_THREADS": "1"
+            },
+            "control_parent_pid": 299931,
+            "guard_pid": 299932,
+            "owned_family_pid": 299935,
+            "wall_seconds": 9.181766283989418,
+            "allocation_wait_seconds": 0.0,
+            "process_cpu_seconds": 4.956085,
+            "resource": {
+              "maximum_aggregate": 4,
+              "maximum_project": 4,
+              "aggregate_limit": 72,
+              "project_limit": 16,
+              "aggregate_status": "pass",
+              "project_status": "pass",
+              "control_helpers_counted": 2
+            },
+            "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+          },
+          "watch": {
+            "schema": "CT14PackageBudgetWatchV1",
+            "status": "completed",
+            "reason": null,
+            "command": [
+              "python3",
+              "-B",
+              "-c",
+              "print(sum(i*i for i in range(2000000)))"
+            ],
+            "exit_code": 0,
+            "closed_families_CPU": {
+              "resources-build-runtime-v1": 881.353654,
+              "resources-build-v1": 74.981426,
+              "resources-build-v2": 60.033495,
+              "resources-build-v3": 59.362284,
+              "resources-build-v4": 57.598458,
+              "resources-capacity-v1": 6.756433,
+              "resources-capacity-v2": 6.043354999999998,
+              "resources-capacity-v3": 6.105646999999998,
+              "resources-capacity-v4": 17.110668999999998,
+              "resources-collect-component-v1": 4.189622,
+              "resources-collect-pair-v1": 26.25322,
+              "resources-collect-static-v1": 15.965183000000001,
+              "resources-component-v1": 694.6395180000001,
+              "resources-pair-v1": 4518.304966000001,
+              "resources-publication-pair-v1": 5.004660999999997,
+              "resources-publication-pair-v2": 30.589351999999998,
+              "resources-receipt-tests-v1": 0.743895,
+              "resources-static-v1": 2409.6559709999997,
+              "resources-timestep-v1": 1785.6146110000004
+            },
+            "maximum_sampled_total_CPU": 10660.826420000001,
+            "last_sample": {
+              "closed_CPU": 10660.30642,
+              "live_owned_family_CPU": 0.52,
+              "total_CPU_sample": 10660.826420000001,
+              "whole_elapsed_wall": 11846.378310918808,
+              "retained_bytes": 6283678408
+            },
+            "reserves": {
+              "CPU": 240,
+              "wall": 240,
+              "output_bytes": 268435456
+            },
+            "scope": "live /proc own plus waited-child CPU over outer launcher/guard/owned family; original closed launcher receipts are the final accounting authority; no scientific acceptance supplied"
+          },
+          "execution_sha256": "874cefd74aa7e22a6d4fc21ffc874ceb03d08f90b97a84795a559d3f3126ccec",
+          "watch_sha256": "b9160d865f3b3c3c5f8835230d94c22079c684894f8883b1da7cf94c81f14e6b"
+        },
+        "negative": {
+          "execution": {
+            "command": [
+              "python3",
+              "-B",
+              "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted14_budget.py",
+              "--root",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/package-guard-controls-v1",
+              "--control",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/resources-budget-negative-v1",
+              "--",
+              "python3",
+              "-B",
+              "-c",
+              "import time;time.sleep(10)"
+            ],
+            "exit_code": 124,
+            "threads": {
+              "OMP_NUM_THREADS": "1",
+              "OPENBLAS_NUM_THREADS": "1",
+              "MKL_NUM_THREADS": "1",
+              "BLIS_NUM_THREADS": "1",
+              "VECLIB_MAXIMUM_THREADS": "1",
+              "NUMEXPR_NUM_THREADS": "1"
+            },
+            "control_parent_pid": 299954,
+            "guard_pid": 299955,
+            "owned_family_pid": 299958,
+            "wall_seconds": 2.9145105660136323,
+            "allocation_wait_seconds": 0.0,
+            "process_cpu_seconds": 0.8224689999999999,
+            "resource": {
+              "maximum_aggregate": 4,
+              "maximum_project": 4,
+              "aggregate_limit": 72,
+              "project_limit": 16,
+              "aggregate_status": "pass",
+              "project_status": "pass",
+              "control_helpers_counted": 2
+            },
+            "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+          },
+          "watch": {
+            "schema": "CT14PackageBudgetWatchV1",
+            "status": "stopped_before_allocation",
+            "reason": "CPU allocation reserve",
+            "command": [
+              "python3",
+              "-B",
+              "-c",
+              "import time;time.sleep(10)"
+            ],
+            "exit_code": -15,
+            "closed_families_CPU": {
+              "resources-synthetic": 23760
+            },
+            "maximum_sampled_total_CPU": 23760.48,
+            "last_sample": {
+              "closed_CPU": 23760.0,
+              "live_owned_family_CPU": 0.48,
+              "total_CPU_sample": 23760.48,
+              "whole_elapsed_wall": 11855.625833749771,
+              "retained_bytes": 144
+            },
+            "reserves": {
+              "CPU": 240,
+              "wall": 240,
+              "output_bytes": 268435456
+            },
+            "scope": "live /proc own plus waited-child CPU over outer launcher/guard/owned family; original closed launcher receipts are the final accounting authority; no scientific acceptance supplied"
+          },
+          "execution_sha256": "4abc9c6ebc7745d3701884e4405cb6d1bf6fcdefbfa23aba9d3e351517cf4c69",
+          "watch_sha256": "e939960b17c9318c3a0f9f6b759d7c633992bd8f81f733808e3d4a1825f9ec1e"
+        },
+        "schema": "CT14PackageGuardControlsV1",
+        "status": "pass",
+        "scope": "positive actual package ancestry/counting; negative explicitly synthetic spent-CPU counter,not scientific work or an actual allocation exhaustion"
+      }
+    },
+    "capacity-v4/request-manifest.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/capacity-v4/request-manifest.json",
+      "bytes": 7841,
+      "sha256": "147ce8ba7867391b2a7cd69e51cd0302d5cdbb069d0e29c71e4c4284b4024afe",
+      "body": {
+        "schema": "RANS-ImmutableRequestV1",
+        "request": {
+          "schema": "CT14ScotchCapacityV1",
+          "source": "70eff23ab810130a688907845bba492669d2fe5b6e41138928c420eacb5c5def",
+          "exports": "f245511cfc06ba8a8cefa132e372a328f880186504c9d98ec11cbe28fbc0ed37",
+          "old_ordering": "a7cfbb2ab05ff7c186236a71142e2aa3c68faa7bd189158397288f8772abb80b",
+          "contract": "27762ae7bc1e2c95748f3c3dfc912485079a44a56143532dd99cc792f6438660",
+          "runtime": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/CT13SparseOrderingProbe",
+            "sha256": "10730cd9b93bb6206f56730587320d8ff98c0d12aabea70e761aeb050e3fbe63",
+            "libraries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-v4/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+              "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+              "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+              "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+            }
+          },
+          "policy": "VectorCOLAMDV1",
+          "graph": "canonical A+A^T union; optional exact native-DOF vector quotient before ND",
+          "seed": 0,
+          "strategy": {
+            "builder": "Eigen::COLAMDOrdering<int>",
+            "knobs": "unchanged defaults",
+            "directed_quotient": true
+          },
+          "permutation": "old_to_new[old]=new; B[p[i],p[j]]=A[i,j]; x[i]=y[p[i]]"
+        },
+        "sha256": "861f504b0c1888fa175f3e77771d56a97c3b9c90864365cc8ea16984d4c42537"
+      }
+    },
+    "capacity-v4/completed-artifacts.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/capacity-v4/completed-artifacts.json",
+      "bytes": 196,
+      "sha256": "35cfd5d1ba6196233e97dcbf6ea500e9c23959e2c03e6a345c0541669bbcb0e4",
+      "body": {
+        "request_sha256": "861f504b0c1888fa175f3e77771d56a97c3b9c90864365cc8ea16984d4c42537",
+        "files": {
+          "results.json": "351b6ca047fb358f2e1f4101a36fc78a5ec7cc22a9d5b7c7f5a28a68a3637347"
+        }
+      }
+    },
+    "capacity-v4/results.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/capacity-v4/results.json",
+      "bytes": 43815,
+      "sha256": "351b6ca047fb358f2e1f4101a36fc78a5ec7cc22a9d5b7c7f5a28a68a3637347"
+    },
+    "component-v1/request-manifest.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/component-v1/request-manifest.json",
+      "bytes": 15750,
+      "sha256": "05bef4fc0be70ca3c5bfbe1fde52932f686eab32157e4e4411b790d7c2054213",
+      "body": {
+        "schema": "RANS-ImmutableRequestV1",
+        "request": {
+          "schema": "CT14ComponentQualificationV1",
+          "source": "acc3af6a5f0299d5f89a92917bbf219f62e77374ad4994538ca75cccb6de2e05",
+          "capacity": "351b6ca047fb358f2e1f4101a36fc78a5ec7cc22a9d5b7c7f5a28a68a3637347",
+          "contract": "27762ae7bc1e2c95748f3c3dfc912485079a44a56143532dd99cc792f6438660",
+          "old_controls": "2f6ce91f5fa14950b059f7a85e8b222202db9ce5714e8fec3958c24f39f2b11a",
+          "old_original_pair": "548c8c401838d3f6d108ffb3a6017d7301311ada4f6f097eec1629dc2571d612",
+          "runtime": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/IncNavierStokesSolver",
+            "sha256": "9ae7d3c63492c82a4c9f979616f673d8e4909a5c41ee8069fc1592f2fb23da06",
+            "libraries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+              "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+              "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+              "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+            }
+          },
+          "probe": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/RANSPreservationProbe",
+            "sha256": "95d6a0258926ab250b69ea0940976f43a993bf4bdccc3001a5819f4f36835824",
+            "libraries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+              "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+              "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+              "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+            }
+          },
+          "component": "CT14-VectorCOLAMDV1"
+        },
+        "sha256": "79dcacde46ac6df93564343420bb8fb6f1a61b5b678c39971ff044cf37970cf2"
+      }
+    },
+    "component-v1/completed-artifacts.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/component-v1/completed-artifacts.json",
+      "bytes": 196,
+      "sha256": "0ef66ea8014cc854810dc1205e598e746551a9efed2f4861cbfcd60cb831d9a2",
+      "body": {
+        "request_sha256": "79dcacde46ac6df93564343420bb8fb6f1a61b5b678c39971ff044cf37970cf2",
+        "files": {
+          "results.json": "13a9088e1fa4372a63a35a0f5afe7e2c4693847f05f5c76c6147d96c2d83e9c7"
+        }
+      }
+    },
+    "component-v1/results.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/component-v1/results.json",
+      "bytes": 423422,
+      "sha256": "13a9088e1fa4372a63a35a0f5afe7e2c4693847f05f5c76c6147d96c2d83e9c7"
+    },
+    "static-v1/request-manifest.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/static-v1/request-manifest.json",
+      "bytes": 20306,
+      "sha256": "5b1d6fdd3c1d3fcfb4d7a104e44a5092ccd5167514928c74641c47226782a82f",
+      "body": {
+        "schema": "RANS-ImmutableRequestV1",
+        "request": {
+          "schema": "CT14CompleteSelectedStaticV1",
+          "source": "bd651ae4e44e23d42091026f38abfcfd8ca3510b4c7c13beed573376487f2323",
+          "case": {
+            "model": "A95",
+            "policy": "Natural",
+            "provider": "DisplacedNeutralCompositeV1",
+            "wall_policy": "SamePhysicalWallDisplacedAcceptedV1",
+            "fit_policy": "CT8PhysicalBelow25mmEqualIds012V1",
+            "H": 0.1875,
+            "H_mm": 7.5,
+            "Z": 20.0,
+            "displacement": 0.0875,
+            "nu": 9.523809523809524e-05,
+            "ustar": 0.07426793792441279,
+            "B": 0.9919449895413243,
+            "K0": 0.021081109428869052,
+            "z0_m": 0.00018124943074282322,
+            "roughness_input": 0.1711243515027194,
+            "reference_column": {
+              "policy": "SamePhysicalWallDisplacedAcceptedCandidateV1",
+              "model": "A95",
+              "H": 0.1875,
+              "h_s": 0.1711243515027194,
+              "d": 0.0875,
+              "gamma": 0.0,
+              "J0": 103.10901692895743,
+              "J2": 119126.41711228852,
+              "P0": 0.0027917473575437965,
+              "A": 0.001013811394236224,
+              "minimum_required_budget": 0.00190089636419292,
+              "cutoff_margin": 0.4686478495786448,
+              "cutoff": 0.15314840882128453,
+              "original_roughness_interval": true,
+              "matching_velocity": 0.5687211477403636,
+              "metric_minimum": 1.0,
+              "reference_k": {
+                "minimum_over_K": 1.0,
+                "location": 0.1875,
+                "stationary_Q_roots": [
+                  0.1875
+                ],
+                "candidates": [
+                  0.0,
+                  0.1875,
+                  0.1875
+                ],
+                "values_over_K": [
+                  3.5544801988435704,
+                  1.0,
+                  1.0
+                ]
+              },
+              "epsilon_H": 0.01013811394236224,
+              "epsilon_plateau": 0.01544304595403272,
+              "budget_defect": 4.336808689942018e-19,
+              "Q_ground": 0.0,
+              "Q_H": 1.3010426069826053e-18,
+              "ground_k_gradient": 0.0,
+              "interface_k_gradient": 2.2075129152452323e-16,
+              "counterfactual_flat_mechanical_work_defect": -4.336808689942018e-19,
+              "flat_covariance_minimum_over_K": 0.40925154516634393,
+              "flat_covariance_location": 0.1875,
+              "outer_covariance_minimum": 0.006111572556576726,
+              "Q": [
+                [
+                  0.005714899174565924,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -0.005714899174565924
+                ]
+              ],
+              "Pi_outer": 0.005714899174565924,
+              "outer_shear": 0.00551572660354443,
+              "outer_normal_traction": 8.673617379884035e-19,
+              "status": "admissible_frozen_column",
+              "H_mm": 7.5,
+              "nu": 9.523809523809524e-05,
+              "hr": 0.1711243515027194,
+              "zv": -0.005725641386453387,
+              "counterfactual": {
+                "epsilon_amplitude": 0.001013811394236224,
+                "traction": 0.005515726603544431,
+                "u": 0.07426793792441279
+              },
+              "outer_equilibrium": {
+                "outlet_traction": [
+                  -0.011429798349131848,
+                  0.005515726603544431
+                ]
+              }
+            },
+            "x": [
+              -25.0,
+              -20.0,
+              -17.0,
+              -14.000000000000002,
+              -13.0,
+              -12.0,
+              -11.0,
+              -10.0,
+              -9.0,
+              -8.0,
+              -7.000000000000001,
+              -6.0,
+              -5.0,
+              -4.0,
+              -3.0,
+              -2.5,
+              -1.875,
+              -1.25,
+              -0.625,
+              0.0,
+              0.625,
+              1.25,
+              1.875,
+              2.5,
+              3.5000000000000004,
+              5.0,
+              7.5,
+              11.25,
+              15.0,
+              20.0,
+              25.0,
+              30.0
+            ],
+            "knots": [
+              0.0,
+              0.00146484375,
+              0.0029296875,
+              0.005859375,
+              0.01171875,
+              0.0234375,
+              0.046875,
+              0.09375,
+              0.1875,
+              0.234375,
+              0.29296875,
+              0.3,
+              0.3662109375,
+              0.457763671875,
+              0.57220458984375,
+              0.7152557373046875,
+              0.8940696716308594,
+              1.0,
+              1.1175870895385742,
+              1.3969838619232178,
+              1.7462298274040222,
+              2.1827872842550278,
+              2.7284841053187847,
+              3.410605131648481,
+              4.263256414560601,
+              5.329070518200751,
+              6.661338147750939,
+              8.326672684688674,
+              10.408340855860843,
+              13.010426069826053,
+              16.263032587282567,
+              20.0
+            ],
+            "degree": 4,
+            "pressure_degree": 2,
+            "coordinate": "physical floor r=z=0; zeta=z-d only in outer log/epsilon; fixed Hh40mm normalization",
+            "integration": {
+              "normal": 32,
+              "tangential": 8,
+              "mass": 12,
+              "volume": 12,
+              "face": 64
+            }
+          },
+          "contract": "27762ae7bc1e2c95748f3c3dfc912485079a44a56143532dd99cc792f6438660",
+          "component": "13a9088e1fa4372a63a35a0f5afe7e2c4693847f05f5c76c6147d96c2d83e9c7",
+          "capacity": "351b6ca047fb358f2e1f4101a36fc78a5ec7cc22a9d5b7c7f5a28a68a3637347",
+          "CT13_exports": "f245511cfc06ba8a8cefa132e372a328f880186504c9d98ec11cbe28fbc0ed37",
+          "runtime": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/IncNavierStokesSolver",
+            "sha256": "9ae7d3c63492c82a4c9f979616f673d8e4909a5c41ee8069fc1592f2fb23da06",
+            "libraries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+              "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+              "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+              "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+            }
+          },
+          "probe": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/RANSPreservationProbe",
+            "sha256": "95d6a0258926ab250b69ea0940976f43a993bf4bdccc3001a5819f4f36835824",
+            "libraries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+              "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+              "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+              "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+            }
+          },
+          "physical_advance": false
+        },
+        "sha256": "57e17a0dcb1098dcfcf84f41b64a28855d22fb0616d8e92cd09118d58c5d915d"
+      }
+    },
+    "static-v1/completed-artifacts.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/static-v1/completed-artifacts.json",
+      "bytes": 196,
+      "sha256": "fe9db38ce9fb326da05008265cf9af11e0ab5acbe3a12f8036eee51161aba699",
+      "body": {
+        "request_sha256": "57e17a0dcb1098dcfcf84f41b64a28855d22fb0616d8e92cd09118d58c5d915d",
+        "files": {
+          "results.json": "69b3ec6fecaf9273f65429365274ee524458e675d75359ec79d0f73960b8693e"
+        }
+      }
+    },
+    "static-v1/results.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/static-v1/results.json",
+      "bytes": 2152864,
+      "sha256": "69b3ec6fecaf9273f65429365274ee524458e675d75359ec79d0f73960b8693e"
+    },
+    "pair-v2/request-manifest.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/request-manifest.json",
+      "bytes": 20709,
+      "sha256": "8d4b11711f53d9def27fa77a20bcf2364ea280589de464372130c23a1d0f6087",
+      "body": {
+        "schema": "RANS-ImmutableRequestV1",
+        "request": {
+          "schema": "CT14FreshSelectedPairV2",
+          "source": "490b03487f9d894ad7283f7344a7c91071a78486b31c1eed65db61018e8aa912",
+          "contract": "6d455b5d8eb19a14a438ed4bd31dd487217b7055f0df72b97ed1a460d9997b8c",
+          "static": "69b3ec6fecaf9273f65429365274ee524458e675d75359ec79d0f73960b8693e",
+          "component": "13a9088e1fa4372a63a35a0f5afe7e2c4693847f05f5c76c6147d96c2d83e9c7",
+          "capacity": "351b6ca047fb358f2e1f4101a36fc78a5ec7cc22a9d5b7c7f5a28a68a3637347",
+          "runtime": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/IncNavierStokesSolver",
+            "sha256": "9ae7d3c63492c82a4c9f979616f673d8e4909a5c41ee8069fc1592f2fb23da06",
+            "libraries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+              "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+              "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+              "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+            }
+          },
+          "probe": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/RANSPreservationProbe",
+            "sha256": "95d6a0258926ab250b69ea0940976f43a993bf4bdccc3001a5819f4f36835824",
+            "libraries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+              "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+              "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+              "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+            }
+          },
+          "case": {
+            "model": "A95",
+            "policy": "Natural",
+            "provider": "DisplacedNeutralCompositeV1",
+            "wall_policy": "SamePhysicalWallDisplacedAcceptedV1",
+            "fit_policy": "CT8PhysicalBelow25mmEqualIds012V1",
+            "H": 0.1875,
+            "H_mm": 7.5,
+            "Z": 20.0,
+            "displacement": 0.0875,
+            "nu": 9.523809523809524e-05,
+            "ustar": 0.07426793792441279,
+            "B": 0.9919449895413243,
+            "K0": 0.021081109428869052,
+            "z0_m": 0.00018124943074282322,
+            "roughness_input": 0.1711243515027194,
+            "reference_column": {
+              "policy": "SamePhysicalWallDisplacedAcceptedCandidateV1",
+              "model": "A95",
+              "H": 0.1875,
+              "h_s": 0.1711243515027194,
+              "d": 0.0875,
+              "gamma": 0.0,
+              "J0": 103.10901692895743,
+              "J2": 119126.41711228852,
+              "P0": 0.0027917473575437965,
+              "A": 0.001013811394236224,
+              "minimum_required_budget": 0.00190089636419292,
+              "cutoff_margin": 0.4686478495786448,
+              "cutoff": 0.15314840882128453,
+              "original_roughness_interval": true,
+              "matching_velocity": 0.5687211477403636,
+              "metric_minimum": 1.0,
+              "reference_k": {
+                "minimum_over_K": 1.0,
+                "location": 0.1875,
+                "stationary_Q_roots": [
+                  0.1875
+                ],
+                "candidates": [
+                  0.0,
+                  0.1875,
+                  0.1875
+                ],
+                "values_over_K": [
+                  3.5544801988435704,
+                  1.0,
+                  1.0
+                ]
+              },
+              "epsilon_H": 0.01013811394236224,
+              "epsilon_plateau": 0.01544304595403272,
+              "budget_defect": 4.336808689942018e-19,
+              "Q_ground": 0.0,
+              "Q_H": 1.3010426069826053e-18,
+              "ground_k_gradient": 0.0,
+              "interface_k_gradient": 2.2075129152452323e-16,
+              "counterfactual_flat_mechanical_work_defect": -4.336808689942018e-19,
+              "flat_covariance_minimum_over_K": 0.40925154516634393,
+              "flat_covariance_location": 0.1875,
+              "outer_covariance_minimum": 0.006111572556576726,
+              "Q": [
+                [
+                  0.005714899174565924,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -0.005714899174565924
+                ]
+              ],
+              "Pi_outer": 0.005714899174565924,
+              "outer_shear": 0.00551572660354443,
+              "outer_normal_traction": 8.673617379884035e-19,
+              "status": "admissible_frozen_column",
+              "H_mm": 7.5,
+              "nu": 9.523809523809524e-05,
+              "hr": 0.1711243515027194,
+              "zv": -0.005725641386453387,
+              "counterfactual": {
+                "epsilon_amplitude": 0.001013811394236224,
+                "traction": 0.005515726603544431,
+                "u": 0.07426793792441279
+              },
+              "outer_equilibrium": {
+                "outlet_traction": [
+                  -0.011429798349131848,
+                  0.005515726603544431
+                ]
+              }
+            },
+            "x": [
+              -25.0,
+              -20.0,
+              -17.0,
+              -14.000000000000002,
+              -13.0,
+              -12.0,
+              -11.0,
+              -10.0,
+              -9.0,
+              -8.0,
+              -7.000000000000001,
+              -6.0,
+              -5.0,
+              -4.0,
+              -3.0,
+              -2.5,
+              -1.875,
+              -1.25,
+              -0.625,
+              0.0,
+              0.625,
+              1.25,
+              1.875,
+              2.5,
+              3.5000000000000004,
+              5.0,
+              7.5,
+              11.25,
+              15.0,
+              20.0,
+              25.0,
+              30.0
+            ],
+            "knots": [
+              0.0,
+              0.00146484375,
+              0.0029296875,
+              0.005859375,
+              0.01171875,
+              0.0234375,
+              0.046875,
+              0.09375,
+              0.1875,
+              0.234375,
+              0.29296875,
+              0.3,
+              0.3662109375,
+              0.457763671875,
+              0.57220458984375,
+              0.7152557373046875,
+              0.8940696716308594,
+              1.0,
+              1.1175870895385742,
+              1.3969838619232178,
+              1.7462298274040222,
+              2.1827872842550278,
+              2.7284841053187847,
+              3.410605131648481,
+              4.263256414560601,
+              5.329070518200751,
+              6.661338147750939,
+              8.326672684688674,
+              10.408340855860843,
+              13.010426069826053,
+              16.263032587282567,
+              20.0
+            ],
+            "degree": 4,
+            "pressure_degree": 2,
+            "coordinate": "physical floor r=z=0; zeta=z-d only in outer log/epsilon; fixed Hh40mm normalization",
+            "integration": {
+              "normal": 32,
+              "tangential": 8,
+              "mass": 12,
+              "volume": 12,
+              "face": 64
+            }
+          },
+          "dt": [
+            0.00025,
+            0.000125
+          ],
+          "T": 0.002,
+          "component_identity": "CT14-VectorCOLAMDV1",
+          "detailed_timing": false,
+          "physical_classifier_source": "c9efc156dc7024adbfdf2812f8e4aa5346d097e7fdb3078879f10d7085d69530",
+          "request_specialization_source": "6c0e5baa915af5fac4a839c75dd84e0e9a1b682fdd8504f96dcbd0467fab2d2c",
+          "timestep_admission": "ed814ff3b1e085ebd588e59f9bac15b269a70209aeb55e7275f776ec2a52548b"
+        },
+        "sha256": "4c1ff039807e04d3a0dc354caa136100c56a741634ab12cc321ba9874205dca1"
+      }
+    },
+    "pair-v2/completed-artifacts.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/completed-artifacts.json",
+      "bytes": 196,
+      "sha256": "d823c79fdfa32628133616403067382988c59751f3c6883f40972c9fb18ca2f9",
+      "body": {
+        "request_sha256": "4c1ff039807e04d3a0dc354caa136100c56a741634ab12cc321ba9874205dca1",
+        "files": {
+          "results.json": "dfeb102cba472160f0f3e0718a85353710735d759130c438fc9275acad438a60"
+        }
+      }
+    },
+    "pair-v2/results.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/results.json",
+      "bytes": 262938659,
+      "sha256": "dfeb102cba472160f0f3e0718a85353710735d759130c438fc9275acad438a60"
+    },
+    "collect-final-v1/request-manifest.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/collect-final-v1/request-manifest.json",
+      "bytes": 15773,
+      "sha256": "5403acf42731be07e5a7d9fdc2c386faf7b3367f35dd91345523bb796eb013ff",
+      "body": {
+        "schema": "RANS-ImmutableRequestV1",
+        "request": {
+          "schema": "CT14CheckpointEvidenceV1",
+          "source": "6b0a31dc780b7a8353cf822b61d14e508fc9e4451b25ba6982d1b220170bb8e0",
+          "capacity": "351b6ca047fb358f2e1f4101a36fc78a5ec7cc22a9d5b7c7f5a28a68a3637347",
+          "component": "13a9088e1fa4372a63a35a0f5afe7e2c4693847f05f5c76c6147d96c2d83e9c7",
+          "static": "69b3ec6fecaf9273f65429365274ee524458e675d75359ec79d0f73960b8693e",
+          "pair": "dfeb102cba472160f0f3e0718a85353710735d759130c438fc9275acad438a60",
+          "admission": "ed814ff3b1e085ebd588e59f9bac15b269a70209aeb55e7275f776ec2a52548b",
+          "runtime": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/IncNavierStokesSolver",
+            "sha256": "9ae7d3c63492c82a4c9f979616f673d8e4909a5c41ee8069fc1592f2fb23da06",
+            "libraries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+              "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+              "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+              "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+            }
+          },
+          "probe": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/RANSPreservationProbe",
+            "sha256": "95d6a0258926ab250b69ea0940976f43a993bf4bdccc3001a5819f4f36835824",
+            "libraries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+              "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+              "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+              "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+            }
+          }
+        },
+        "sha256": "f633a82bf81a96f0aa0d618adbdd2cf86074938d0913afd28d797ccbae81d028"
+      }
+    },
+    "collect-final-v1/completed-artifacts.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/collect-final-v1/completed-artifacts.json",
+      "bytes": 196,
+      "sha256": "2a3d66fba819713052aa67c789d58e281574416ce0e14eba142b08dbff7dab31",
+      "body": {
+        "request_sha256": "f633a82bf81a96f0aa0d618adbdd2cf86074938d0913afd28d797ccbae81d028",
+        "files": {
+          "results.json": "f2be1f0835ef654a21a2945d1417cd61208b14e77671bb40f85a884d82df4b03"
+        }
+      }
+    },
+    "collect-final-v1/results.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/collect-final-v1/results.json",
+      "bytes": 283283269,
+      "sha256": "f2be1f0835ef654a21a2945d1417cd61208b14e77671bb40f85a884d82df4b03"
+    },
+    "timestep-v1/request-manifest.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/timestep-v1/request-manifest.json",
+      "bytes": 15954,
+      "sha256": "61cdace1a1f392c3a15089345ceaa12769d1034194e2041a4dba912e2416c54d",
+      "body": {
+        "schema": "RANS-ImmutableRequestV1",
+        "request": {
+          "schema": "CT14ChangedTimestepAdmissionV1",
+          "source": "df78182bcd2db6ec6ac829a7c44dd576a4be7edb53dc6a52a3960395ec587f75",
+          "contract": "d0083afbe7d6992c7c884ba9bd4f49680a4427f798c3b959cdc7a12eea40d284",
+          "static": "69b3ec6fecaf9273f65429365274ee524458e675d75359ec79d0f73960b8693e",
+          "previous_pair": "dc11f77a2b60133d4a501f9ddf18929144c146dd0871ef444c927f2c08edbda3",
+          "runtime": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/IncNavierStokesSolver",
+            "sha256": "9ae7d3c63492c82a4c9f979616f673d8e4909a5c41ee8069fc1592f2fb23da06",
+            "libraries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+              "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+              "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+              "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+            }
+          },
+          "probe": {
+            "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/RANSPreservationProbe",
+            "sha256": "95d6a0258926ab250b69ea0940976f43a993bf4bdccc3001a5819f4f36835824",
+            "libraries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+              "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+              "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+              "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+            }
+          },
+          "dt": [
+            0.00025,
+            0.000125
+          ],
+          "alpha": [
+            4000.0,
+            8000.0
+          ],
+          "physical_advance": false,
+          "classifier_template_source": "c9efc156dc7024adbfdf2812f8e4aa5346d097e7fdb3078879f10d7085d69530",
+          "request_specialization_source": "6c0e5baa915af5fac4a839c75dd84e0e9a1b682fdd8504f96dcbd0467fab2d2c"
+        },
+        "sha256": "a2f21b51838faaeda2b35a645f3089ebf9914b5be02d229cfdbd8893a69334d6"
+      }
+    },
+    "timestep-v1/completed-artifacts.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/timestep-v1/completed-artifacts.json",
+      "bytes": 196,
+      "sha256": "67d5fee8662af8af3079c3de39a52cf1e139814d2e196f8aeaa55e3bddfabf6f",
+      "body": {
+        "request_sha256": "a2f21b51838faaeda2b35a645f3089ebf9914b5be02d229cfdbd8893a69334d6",
+        "files": {
+          "results.json": "ed814ff3b1e085ebd588e59f9bac15b269a70209aeb55e7275f776ec2a52548b"
+        }
+      }
+    },
+    "timestep-v1/results.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/timestep-v1/results.json",
+      "bytes": 245905,
+      "sha256": "ed814ff3b1e085ebd588e59f9bac15b269a70209aeb55e7275f776ec2a52548b"
+    },
+    "pair-v2/0.00025/case.xml": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/case.xml",
+      "bytes": 150141,
+      "sha256": "ea02d7b4321ac1ff5fb7de8e41a7378e2586a0fcb612e161a1ebeb798c2bdfa6"
+    },
+    "pair-v2/0.00025/case.evolution.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/case.evolution.json",
+      "bytes": 84325026,
+      "sha256": "955f8e50b839ed23774f983166c213c137bb1c8d4ca2ebe4f4537d76e32db094"
+    },
+    "pair-v2/0.00025/sparse-receipts.jsonl": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/sparse-receipts.jsonl",
+      "bytes": 400933,
+      "sha256": "ba075d77ede00b597821ffcc2ad56afd570cde24c9013a73140201cf79d883fd"
+    },
+    "pair-v2/0.00025/pimple-states/flow-t0.00025000000000000001-dd0af02695e5.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/flow-t0.00025000000000000001-dd0af02695e5.json",
+      "bytes": 9428227,
+      "sha256": "a2544b49d52b5064662493fd6a845f538d0dcee0a363afe794e3e7211876e488"
+    },
+    "pair-v2/0.00025/pimple-states/k-t0.00025000000000000001-dd0af02695e5.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/k-t0.00025000000000000001-dd0af02695e5.json",
+      "bytes": 7381884,
+      "sha256": "ee06ce1249f78f8f5a39eb8ca7fb486f9375c574a3795dc58f850188c399c709"
+    },
+    "pair-v2/0.00025/pimple-states/flow-t0.00050000000000000001-ede14bee7cab.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/flow-t0.00050000000000000001-ede14bee7cab.json",
+      "bytes": 12510484,
+      "sha256": "8664eb4c9d423b2b09a66105bd910bd11c0f207f54bb1f8f393bd6f9425c5c4a"
+    },
+    "pair-v2/0.00025/pimple-states/k-t0.00050000000000000001-ede14bee7cab.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/k-t0.00050000000000000001-ede14bee7cab.json",
+      "bytes": 10209282,
+      "sha256": "db4185431c833b312f6ac433a7082d151de89d24926ce32c8f745b96c98bcc97"
+    },
+    "pair-v2/0.00025/pimple-states/flow-t0.00075000000000000002-0d02e0b27c40.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/flow-t0.00075000000000000002-0d02e0b27c40.json",
+      "bytes": 12507098,
+      "sha256": "2d712d510884bd012cf03623aafc20196734c6dc232298ed169ae0d6f2c58f15"
+    },
+    "pair-v2/0.00025/pimple-states/k-t0.00075000000000000002-0d02e0b27c40.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/k-t0.00075000000000000002-0d02e0b27c40.json",
+      "bytes": 10208346,
+      "sha256": "e5b29acf3668240e006bd668a8333bcb934fa41313e381f0be1b5d04a0f69873"
+    },
+    "pair-v2/0.00025/pimple-states/flow-t0.001-0d05e24cfa0f.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/flow-t0.001-0d05e24cfa0f.json",
+      "bytes": 12506747,
+      "sha256": "0b194079010d3b4e3374ba7a614f542dc932dc73b2eb0711ed63b711380af70a"
+    },
+    "pair-v2/0.00025/pimple-states/k-t0.001-0d05e24cfa0f.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/k-t0.001-0d05e24cfa0f.json",
+      "bytes": 10206858,
+      "sha256": "50461a572b5908e09c65be8a529e24a147dd53353c2da11f8487d1f90a2f11e2"
+    },
+    "pair-v2/0.00025/pimple-states/flow-t0.00125-437bf945376a.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/flow-t0.00125-437bf945376a.json",
+      "bytes": 12505570,
+      "sha256": "03759b3d74bb501966cc9fd21dd3dd0fecc6bbd4528235f53b8a5472eba65302"
+    },
+    "pair-v2/0.00025/pimple-states/k-t0.00125-437bf945376a.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/k-t0.00125-437bf945376a.json",
+      "bytes": 10207246,
+      "sha256": "cc60408e9dba9930f4c8aa0808e6feaa24ce5acf697adcc5438b6ff3fddd6eda"
+    },
+    "pair-v2/0.00025/pimple-states/flow-t0.0015-e6f340143612.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/flow-t0.0015-e6f340143612.json",
+      "bytes": 12509470,
+      "sha256": "66d6ef8335f5547456453a2410fb8bb886c10c4a833c414536d01820bfb343f5"
+    },
+    "pair-v2/0.00025/pimple-states/k-t0.0015-e6f340143612.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/k-t0.0015-e6f340143612.json",
+      "bytes": 10210145,
+      "sha256": "7266665523c19763616a15847737c2969dd9da52e554f62553149b109ac2d5fc"
+    },
+    "pair-v2/0.00025/pimple-states/flow-t0.00175-169f4361afa5.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/flow-t0.00175-169f4361afa5.json",
+      "bytes": 12509850,
+      "sha256": "cd5ab7317a35cdcfc99287f266576b801036ecb51cdd903132d1c6d5ae2ce933"
+    },
+    "pair-v2/0.00025/pimple-states/k-t0.00175-169f4361afa5.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/k-t0.00175-169f4361afa5.json",
+      "bytes": 10210796,
+      "sha256": "0ff2200668f09594d198c15af9e7a4132042a884bcea1c687f3087ab452db3cd"
+    },
+    "pair-v2/0.00025/pimple-states/flow-t0.002-8ed37ec144a4.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/flow-t0.002-8ed37ec144a4.json",
+      "bytes": 12508795,
+      "sha256": "3344acfb72770266feb65da17ee4e8524bc9e69347b2cde36b991580c556d8e3"
+    },
+    "pair-v2/0.00025/pimple-states/k-t0.002-8ed37ec144a4.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.00025/pimple-states/k-t0.002-8ed37ec144a4.json",
+      "bytes": 10209208,
+      "sha256": "df74b1e2863ef63e0d917fe30ab04565e73f82a2f85f778e53c9ac8ab68295ee"
+    },
+    "pair-v2/zero-0.00025/case.xml": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/zero-0.00025/case.xml",
+      "bytes": 150060,
+      "sha256": "ee90989b00b16ddfa556b79d45639b256cba5440cfef61d579543d0340211400"
+    },
+    "pair-v2/zero-0.00025/case.evolution.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/zero-0.00025/case.evolution.json",
+      "bytes": 6676009,
+      "sha256": "0ccdfc4a08eca75a685c2c8bb2d117be2315548236b97a09acc6c12bc3ef1f46"
+    },
+    "pair-v2/zero-0.00025/sparse-receipts.jsonl": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/zero-0.00025/sparse-receipts.jsonl",
+      "bytes": 5661,
+      "sha256": "2d3964e3bbfee2d27f3102bba100132aaba9d2e450f21cafaabc472c9797c205"
+    },
+    "pair-v2/0.000125/case.xml": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/case.xml",
+      "bytes": 150146,
+      "sha256": "b6404b2dfbe7ba192af20115c847eb189ff39bfb286c61cb3b3c5c9f1fede45a"
+    },
+    "pair-v2/0.000125/case.evolution.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/case.evolution.json",
+      "bytes": 96775353,
+      "sha256": "b446a9f1368f0eae0a14699d3ad9c425ffa1cf4c8fe6e3e7d2a37338cd4a8546"
+    },
+    "pair-v2/0.000125/sparse-receipts.jsonl": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/sparse-receipts.jsonl",
+      "bytes": 794196,
+      "sha256": "abb762552437623d715772f9395d962bc11acdd90cd3de2167b707bb418b94db"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.000125-dd0af02695e5.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.000125-dd0af02695e5.json",
+      "bytes": 9427963,
+      "sha256": "89cd9abedaae4eca2514b8ca4fad5554d25ecf2c0b7cce1cfa9ff7118f5cf0e9"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.000125-dd0af02695e5.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.000125-dd0af02695e5.json",
+      "bytes": 7382056,
+      "sha256": "74c45344c9c9b92d7d48968d2b0af3f15adbe4edf18cfb44bbb2b93960f043d0"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.00025000000000000001-df054f9afe55.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.00025000000000000001-df054f9afe55.json",
+      "bytes": 12510205,
+      "sha256": "42eb8a6fa4f5db5f5b0916283adf5c1d52b2127fc0795bc29ce5914abf785cda"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.00025000000000000001-df054f9afe55.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.00025000000000000001-df054f9afe55.json",
+      "bytes": 10210833,
+      "sha256": "1db4a751b2910005559b0f8d8b24f6af8c0fb32a218654dd1a3d2a9ecf907eea"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.00037500000000000001-739eb8283a1e.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.00037500000000000001-739eb8283a1e.json",
+      "bytes": 12508401,
+      "sha256": "7671267d01a3d2f21c1c85fc22cb2fae91c7ab9acb57080f040af537292199ab"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.00037500000000000001-739eb8283a1e.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.00037500000000000001-739eb8283a1e.json",
+      "bytes": 10208291,
+      "sha256": "b9f1dbc1e5a60da1c5261d516775030c42169bece2ae4011c9dc840071bd3dca"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.00050000000000000001-2a8f0bd7d276.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.00050000000000000001-2a8f0bd7d276.json",
+      "bytes": 12508002,
+      "sha256": "8f9d2804cf893016e1325a6c04c5589c9ebd5f2da81fdf3e619fdc91f35eb54e"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.00050000000000000001-2a8f0bd7d276.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.00050000000000000001-2a8f0bd7d276.json",
+      "bytes": 10207917,
+      "sha256": "c7fac4fa1c4bcf078ba28316d38c196fcee4c7781307099a8c174ef0a27b2e43"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.00062500000000000001-f1be45992356.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.00062500000000000001-f1be45992356.json",
+      "bytes": 12510221,
+      "sha256": "2744fdcb9d699c4bf2c0d9ddf6dbbe7e72a3227fe37ba3d8b514837125af58df"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.00062500000000000001-f1be45992356.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.00062500000000000001-f1be45992356.json",
+      "bytes": 10209790,
+      "sha256": "5af3bbfeba975e0511852e511c66ea7a97b137a8ae5e79aa4fbce7e8cc557839"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.00075000000000000002-647f323e46df.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.00075000000000000002-647f323e46df.json",
+      "bytes": 12508412,
+      "sha256": "34526bb856b25e71ac4a846bfdab4efc8b23f69d2945cc36593a7c2f6aabb0b2"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.00075000000000000002-647f323e46df.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.00075000000000000002-647f323e46df.json",
+      "bytes": 10209762,
+      "sha256": "7f2d25bc121ec4199aafe6c51d598797d0eae25d9c8d3df54c9502f47fd20754"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.00087500000000000002-ae0cc1679178.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.00087500000000000002-ae0cc1679178.json",
+      "bytes": 12508459,
+      "sha256": "67c43909a4445e8a0dba9210ca00b03147fac03138a99ab69c47f340cf935980"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.00087500000000000002-ae0cc1679178.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.00087500000000000002-ae0cc1679178.json",
+      "bytes": 10208996,
+      "sha256": "ca758b32f3f81971869df8bf6cf98e01d5d21ecfdef8aecb7e21dfedaab02748"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.001-c8fd7a614f28.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.001-c8fd7a614f28.json",
+      "bytes": 12508815,
+      "sha256": "f9b7c5370f8d02430538aaca6c87d158a1097113059a2cc416ab75002bc00e3f"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.001-c8fd7a614f28.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.001-c8fd7a614f28.json",
+      "bytes": 10209425,
+      "sha256": "419f84bcb92895d0a2956d193d9539963c33ca0f3d54a825de9ed2be16812892"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.0011250000000000001-9e15ead6edfd.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.0011250000000000001-9e15ead6edfd.json",
+      "bytes": 12510342,
+      "sha256": "fe02b1eda9dfb91cf1de55681ea92834f98a61e2c93650c0f3490c6ce2364d69"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.0011250000000000001-9e15ead6edfd.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.0011250000000000001-9e15ead6edfd.json",
+      "bytes": 10210233,
+      "sha256": "f337f370c3b5fd4320ce2a5d8f380fb7860234bf2eb2ef325c0744076b221699"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.0012500000000000002-7e3ea0222d93.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.0012500000000000002-7e3ea0222d93.json",
+      "bytes": 12509390,
+      "sha256": "1a948cfa7b091acec0c038e15ab280c6b72301eacf7c542450cea82d12e816a5"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.0012500000000000002-7e3ea0222d93.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.0012500000000000002-7e3ea0222d93.json",
+      "bytes": 10209515,
+      "sha256": "af444e38f86f7237ee59efd40ddbeb579ac454b6ace79646e3802165ed59353b"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.0013750000000000004-3e5d5bf928ad.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.0013750000000000004-3e5d5bf928ad.json",
+      "bytes": 12508646,
+      "sha256": "712979186c9eff47964405a7cbbce4e9d3aac2c3a21d3854aaebd13f5d387cb8"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.0013750000000000004-3e5d5bf928ad.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.0013750000000000004-3e5d5bf928ad.json",
+      "bytes": 10208978,
+      "sha256": "b5fc5b7612892a32df697366265ce8bfd933715a57b422a48000617034086102"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.0015000000000000005-674fa76a7d9e.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.0015000000000000005-674fa76a7d9e.json",
+      "bytes": 12508292,
+      "sha256": "4b36a5c3dd81288ea7f51a3ffdbe9ca8202ae86a7b837c63cb91562c32f78fc9"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.0015000000000000005-674fa76a7d9e.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.0015000000000000005-674fa76a7d9e.json",
+      "bytes": 10209564,
+      "sha256": "29adcb2e50b7b90ab59d2c16276b4072b9fed46aa18be4f88e31df7f00562e2b"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.0016250000000000006-cda94d33b9d6.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.0016250000000000006-cda94d33b9d6.json",
+      "bytes": 12509856,
+      "sha256": "56c4ed6bb497bb10af7af5a4a5cac4c3df89fe0c0c4c8e3bd85212940d355f15"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.0016250000000000006-cda94d33b9d6.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.0016250000000000006-cda94d33b9d6.json",
+      "bytes": 10210193,
+      "sha256": "564df469bdb11dbc717b68f877ac93093989c25aa6e2abb36a003933ec59f847"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.0017500000000000007-5016f44e1b90.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.0017500000000000007-5016f44e1b90.json",
+      "bytes": 12508997,
+      "sha256": "16e95a172c5eaf17a6caba8501a8f8fa3a3d6a299c37f65dd8a7000a15793e51"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.0017500000000000007-5016f44e1b90.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.0017500000000000007-5016f44e1b90.json",
+      "bytes": 10209461,
+      "sha256": "a90d7d06a73f345a3af9a01e7d3193b4bac1e8420d34412a53ba8c773430a3cc"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.0018750000000000008-e75f5401015b.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.0018750000000000008-e75f5401015b.json",
+      "bytes": 12509694,
+      "sha256": "cf9965b62ed36364e02ad6533657535698a83566694ea83900f8c5db23cf0061"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.0018750000000000008-e75f5401015b.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.0018750000000000008-e75f5401015b.json",
+      "bytes": 10209968,
+      "sha256": "eabb48321a68b0ff55ba65849f699547995bc0e93e3dda8205bd9c504ea7946c"
+    },
+    "pair-v2/0.000125/pimple-states/flow-t0.0020000000000000009-9219fa5430f7.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/flow-t0.0020000000000000009-9219fa5430f7.json",
+      "bytes": 12510597,
+      "sha256": "238fd862c0b88cefeca0cc08954e67eb426e333b9cfa2d11aba589d6bba3fbe1"
+    },
+    "pair-v2/0.000125/pimple-states/k-t0.0020000000000000009-9219fa5430f7.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/0.000125/pimple-states/k-t0.0020000000000000009-9219fa5430f7.json",
+      "bytes": 10209798,
+      "sha256": "2ce8ed83e16dedf7c8c1dec786609b76d3d36eded839679d78fe50bc8949b3af"
+    },
+    "pair-v2/zero-0.000125/case.xml": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/zero-0.000125/case.xml",
+      "bytes": 150063,
+      "sha256": "7c75902b6719a09f348c43f542c54bc0d74701af269b0afbc6bbe97787d7f3ff"
+    },
+    "pair-v2/zero-0.000125/case.evolution.json": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/zero-0.000125/case.evolution.json",
+      "bytes": 6675968,
+      "sha256": "747135ee2e50b823fe3bb4d753fdfa0d25d2d93864d7fec972ffd72b81568fce"
+    },
+    "pair-v2/zero-0.000125/sparse-receipts.jsonl": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v2/zero-0.000125/sparse-receipts.jsonl",
+      "bytes": 5661,
+      "sha256": "2d3964e3bbfee2d27f3102bba100132aaba9d2e450f21cafaabc472c9797c205"
+    }
+  },
+  "scope": "complete input/runtime/state/history/matrix bindings remain in the unchanged request/result/completion bodies; large payloads remain external"
+}
