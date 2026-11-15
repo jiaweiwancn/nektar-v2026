@@ -1,0 +1,60 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "import sys,unittest;sys.path.insert(0,'/home/jay/build/wj-h20-three-level-20261115/source-correction-v1/solvers/IncNavierStokesSolver/Tests/RANS');suite=unittest.defaultTestLoader.loadTestsFromNames(['test_wj_h20_three_level','test_wj_h19_timestep','test_wj_h18_checkpoint_audits']);r=unittest.TextTestRunner(verbosity=2).run(suite);raise SystemExit(not r.wasSuccessful())"
+  ],
+  "phase": "operation",
+  "kind": "passive",
+  "reserved_seconds": 60,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 228417,
+        "parent": 226463,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    }
+  },
+  "driver": "81d69fd7c0cde1ae08905a694acb5d755121b65fb1f447fb9d9cf7df7ab8a3b5",
+  "status": "PASS",
+  "seconds": 1.2543274759955239,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 194420736,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "5a9e294dc0c7585240d34da2f37395ac2557bb7192181a64a6264f1664e020da"
+}

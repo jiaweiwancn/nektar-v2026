@@ -1,0 +1,40 @@
+{
+  "status": "OBSTRUCTED_CONFIGURATION",
+  "first_native_reason": "EP-AWF evolution initialisation: EP-AWF patch: invalid bounded monitoring limits",
+  "requested_timeout_seconds": 180,
+  "native_maximum_seconds": 120,
+  "native_source": {
+    "path": "/home/jay/build/wj-h20-three-level-20261115/source/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp",
+    "bytes": 109062,
+    "sha256": "81e0e2e4243faf546f2deffc47d1a62bc1fdb218605083ada6e2b68e04a38fd7"
+  },
+  "native_function": "ConfigureMonitoring in v_InitObject, before v_DoInitialise/restore and v_DoSolve/Advance",
+  "original_outcome": {
+    "path": "/home/jay/build/wj-h20-three-level-20261115/science/M/outcome.json",
+    "bytes": 92,
+    "sha256": "487a788acbdbf3a8c90fc41e22960f691deaa91915b4e1d285253b0d4d127569"
+  },
+  "original_log": {
+    "path": "/home/jay/build/wj-h20-three-level-20261115/science/M/native.log",
+    "bytes": 220,
+    "sha256": "6a1d4bf90f2fff715f0389ac6f65aa51b6b8cc7c8b31173982b72ce7f2c9993c"
+  },
+  "no_native_producer": true,
+  "no_new_checkpoint": true,
+  "no_startup_ready": true,
+  "actual_governing_attempts": 0,
+  "actual_count_basis": "explicit early configuration rejection; no integrator Advance reached",
+  "reservation": {
+    "maximum": 4,
+    "charged": 4,
+    "original_unknown_attempts": true,
+    "original_receipt_unchanged": true,
+    "meaning": "conservative reserved/unknown charge; never counted as accepted or observed governing attempts"
+  },
+  "post_stop_correction": {
+    "path": "/home/jay/build/wj-h20-three-level-20261115/source-correction-v1/manifest.json",
+    "bytes": 1668,
+    "sha256": "80e0a0a8f64e0661b777dc63c5ebade29661aaa014c72d119846ff7783e6eb3b"
+  },
+  "governing_requalification": "NOT_RUN; all target admission remains closed"
+}

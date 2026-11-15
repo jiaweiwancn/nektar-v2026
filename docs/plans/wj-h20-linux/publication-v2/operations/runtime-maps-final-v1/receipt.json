@@ -1,0 +1,60 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "from pathlib import Path;from study_wj_h16 import runtime_qualify;runtime_qualify(Path('/home/jay/build/wj-h20-three-level-20261115'))"
+  ],
+  "phase": "operation",
+  "kind": "passive",
+  "reserved_seconds": 30,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 228417,
+        "parent": 226463,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    }
+  },
+  "driver": "81d69fd7c0cde1ae08905a694acb5d755121b65fb1f447fb9d9cf7df7ab8a3b5",
+  "status": "PASS",
+  "seconds": 2.5310595179907978,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 196775936,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "6095cbfaa54f692cba9bea00e9812b4978c59b1998d491035e94fde3b45d07c9"
+}

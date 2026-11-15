@@ -1,0 +1,69 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h20-three-level-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h20.py",
+    "--root",
+    "/home/jay/build/wj-h20-three-level-20261115",
+    "--mode",
+    "admission",
+    "--level",
+    "M"
+  ],
+  "phase": "operation",
+  "kind": "passive",
+  "reserved_seconds": 30,
+  "maximum_attempts": 0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 228077,
+        "parent": 228076,
+        "threads": 1,
+        "args": "python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h20-three-level-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h20.py": {
+      "sha256": "606e67550f46f58219c11ca780112cba32df176fec3c630580b5fb54e634189a",
+      "bytes": 18601
+    }
+  },
+  "driver": "81d69fd7c0cde1ae08905a694acb5d755121b65fb1f447fb9d9cf7df7ab8a3b5",
+  "status": "PASS",
+  "seconds": 1.2436678749800194,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 127086592,
+  "reserved_attempts": 0,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "ba1773daa2dd8e4f66b8c4e830bfe335154b18b8d8a0d99ff551ad60a43f454d"
+}
