@@ -124,8 +124,13 @@ the CT13 capacity inputs at alpha1000/2000.
 
 Every native domain/cutoff/hard-admissibility flag passes. Physical gradients,
 signed loads, regional absolute pressure and scalar/consistent-mass/full-pressure
-actions remain in the [complete static body](cao-tamura-accepted-14-evidence/static-v1/static.json)
-and [independent collection](cao-tamura-accepted-14-evidence/static-v1/collected.json).
+actions remain in the [compact static view](cao-tamura-accepted-14-evidence/static-v1/static.json)
+and [independent collection view](cao-tamura-accepted-14-evidence/static-v1/collected.json).
+Their `compact_publication` records bind the unchanged complete external bodies.
+Large initialized-state vectors are represented by count/hash/archive references;
+the publication views cannot be used as checkpoint/replay inputs. The initial
+checkpoint copied those vectors inadvertently; this additive publication
+correction preserves that checkpoint and every native seal/history.
 Native, q48f16, q64f16 and q64f32 scalar controls all pass complete capacity and
 all-row source/physical-flux reconstruction. Their initialized frozen role is
 explicit; these are not evolved consecutive-state budget passes. The largest
