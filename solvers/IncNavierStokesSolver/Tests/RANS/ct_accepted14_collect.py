@@ -22,10 +22,10 @@ def read(p):return json.loads(Path(p).read_text())
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','capacity','component','runtime','output','self-control'):p.add_argument('--'+k,type=Path,required=True)
-    p.add_argument('--static',type=Path);p.add_argument('--pair',type=Path)
+    p.add_argument('--static',type=Path);p.add_argument('--pair',type=Path);p.add_argument('--admission',type=Path)
     a=p.parse_args();started=time.monotonic();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     cap=sealed(a.capacity);component=sealed(a.component);runtime=runtime_identity(a.runtime/'IncNavierStokesSolver');probe=runtime_identity(a.runtime/'RANSPreservationProbe');require(cap['status']==component['status']=='pass','unqualified capacity/component')
-    m=RequestManifest(a.output,dict(schema='CT14CheckpointEvidenceV1',source=sha(Path(__file__)),capacity=sha(a.capacity/'results.json'),component=sha(a.component/'results.json'),static=sha(a.static/'results.json') if a.static else None,pair=sha(a.pair/'results.json') if a.pair else None,runtime=runtime,probe=probe))
+    m=RequestManifest(a.output,dict(schema='CT14CheckpointEvidenceV1',source=sha(Path(__file__)),capacity=sha(a.capacity/'results.json'),component=sha(a.component/'results.json'),static=sha(a.static/'results.json') if a.static else None,pair=sha(a.pair/'results.json') if a.pair else None,admission=sha(a.admission/'results.json') if a.admission else None,runtime=runtime,probe=probe))
     require(set(cap['results'])=={'original-initial','original-evolved','candidate-alpha1000','candidate-alpha2000'},'capacity system coverage')
     fills={}
     for label,r in cap['results'].items():
@@ -54,8 +54,19 @@ def main():
         out['static']=s
     if a.pair:
         require(a.static is not None,'physical pair needs its admitted static receipt');pair=sealed(a.pair);pr=read(a.pair/'request-manifest.json')['request'];require(pr['static']==sha(a.static/'results.json') and pr['component']==sha(a.component/'results.json') and pr['capacity']==sha(a.capacity/'results.json') and pr['runtime']==runtime and pr['probe']==probe,'pair exact-runtime prerequisite binding')
+        require(pr['physical_classifier_source']==sha(Path(__file__).with_name('ct_accepted11_target.py')),'foreign scientific classifier template')
+        if pr['dt']!=[.001,.0005]:
+            require(a.admission is not None and sha(a.admission/'results.json')==pr['timestep_admission'],'missing changed-alpha admission')
+            ad=sealed(a.admission);ar=read(a.admission/'request-manifest.json')['request'];require(ad['status']=='pass' and ad['dt']==pr['dt'] and ar['static']==pr['static'] and ar['runtime']==runtime and ar['probe']==probe,'foreign changed-alpha admission')
+            require(set(ad['canonical'])=={'4000','8000'} and set(ad['controls'])=={alpha+'-'+label for alpha in ('4000','8000') for label in ('native','q48','q64')},'changed-alpha admission coverage')
+            for alpha,r in ad['canonical'].items():
+                require(sha(Path(r['A']['file']))==r['A']['sha256'] and r['mass_relation_scaled_defect']<=2e-10 and r['ordering']['factor_nnz']<=40000000,'changed-alpha canonical primitive')
+                for prefix in ('','tiny_','cancelling_'):require(r['ordering'][prefix+'true_residual']<=2e-12*r['ordering'][prefix+'rhs_maximum']+1e-25,'changed-alpha actual/tiny/cancelling residual')
+            for r in ad['controls'].values():require(r['execution']['exit_code']==0 and r['execution']['peak_address_space_KiB']<=16*1024**2 and r['predictor_factor_nnz']<=40000000 and r['pressure_change_scaled_maximum']<1e-8,'changed-alpha action/capacity/quadrature primitive')
+            out['timestep_admission']=ad
         for name,r in pair['members'].items():
             folder=Path(r['directory']);native=read(folder/'case.evolution.json');require(sha(folder/'case.evolution.json')==r['native_report_sha256'] and exact_vector_hash(native['state'])==r['state_sha256'] and exact_vector_hash(native['accepted_states'][0])==r['actual_initial_sha256'],'physical member actual state/report identity')
+            require(native['dt']==float(name) and native['steps']==round(native['time']/float(name)) and len(native['accepted_states'])==native['steps']+1,'actual native timestep/state coverage')
             require(numerical_receipts(folder/'sparse-receipts.jsonl')['status']=='pass','actual evolution linear receipts')
             require(physical_budgets(r['budgets'])['status']=='pass','actual consecutive-state budgets')
         require(pair['required_dt']==pr['dt'],'physical cohort differs from sealed request')

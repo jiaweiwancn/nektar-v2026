@@ -17,8 +17,13 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for key in ('root','capacity','component','static','pair','collection','runtime','self-control','output'):
         p.add_argument('--'+key,type=Path,required=True)
+    p.add_argument('--admission',type=Path)
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3))
     bodies={key:sealed(getattr(a,key)) for key in ('capacity','component','static','pair','collection')}
+    pair_request=read(a.pair/'request-manifest.json')['request']
+    if pair_request['dt']!=[.001,.0005]:
+        require(a.admission is not None and sha(a.admission/'results.json')==pair_request['timestep_admission'],'missing publication timestep admission')
+        bodies['admission']=sealed(a.admission);require(bodies['admission']['status']=='pass','unqualified publication timestep admission')
     require(bodies['collection']['closure'] in ('PASS','UNRESOLVED'),'physical collection incomplete')
     source=a.root/'source';git=['git','-c','index.threads=1','-c','core.preloadIndex=false','-c','core.filemode=false','-C',str(source)]
     revision=subprocess.check_output(git+['rev-parse','HEAD'],text=True).strip()
@@ -65,6 +70,8 @@ def main():
     for folder in sorted(a.root.glob('resources-*')):
         watch=folder/'package-budget-watch.json'
         if watch.exists():record(watch,True)
+    guard_controls=a.root/'package-guard-controls-v1/results.json'
+    if guard_controls.exists():record(guard_controls,True)
     for key in bodies:
         folder=getattr(a,key)
         for name in ('request-manifest.json','completed-artifacts.json'):record(folder/name,True)
@@ -81,7 +88,7 @@ def main():
     mount=subprocess.check_output(['findmnt','-T',str(a.root),'-n','-o','TARGET,SOURCE,FSTYPE,OPTIONS'],text=True).strip()
     require('/media/jay/新加卷1 ' in mount,'unexpected authoritative mount')
     write_json(a.output/'external-artifact-index.json',dict(schema='CT14ExternalArtifactIndexV1',files=index,scope='complete input/runtime/state/history/matrix bindings remain in the unchanged request/result/completion bodies; large payloads remain external'))
-    write_json(a.output/'provenance.json',dict(schema='CT14FinalPublicationProvenanceV1',source_revision=revision,source_clean=True,archive=str(a.root),mount=mount,runtime=runtime,physical_manifest_sha256=sha(manifest),component_identity='CT14-VectorCOLAMDV1',native_tested_source='6477d9d988e969686a418c8e333fadfb85bb3f9d',controller_scopes='component at6477d9d9,static at087fa720,pair ateca8f3ab; individual source hashes in immutable requests',closure=bodies['collection']['closure'],threads=THREADS,history='historical results,failed attempts and shared installations preserved'))
+    write_json(a.output/'provenance.json',dict(schema='CT14FinalPublicationProvenanceV1',source_revision=revision,source_clean=True,archive=str(a.root),mount=mount,runtime=runtime,physical_manifest_sha256=sha(manifest),component_identity='CT14-VectorCOLAMDV1',native_tested_source='6477d9d988e969686a418c8e333fadfb85bb3f9d',controller_scopes='component at6477d9d9,static at087fa720,first pair ateca8f3ab,changed-alpha admission atae18441f,retry atb4867df7; individual source hashes in immutable requests',closure=bodies['collection']['closure'],threads=THREADS,history='historical results,failed attempts and shared installations preserved'))
     files=[f.name for f in a.output.iterdir() if f.is_file() and f.name!='request-manifest.json'];request.seal(a.output,files)
     archive=a.output/'ct14-compact-v1.tar.gz'
     with tarfile.open(archive,'w:gz',compresslevel=6) as tar:

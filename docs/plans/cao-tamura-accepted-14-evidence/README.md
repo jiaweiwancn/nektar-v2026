@@ -118,6 +118,11 @@ NEW/resources-PAIR --` between the owned launcher and pair command. It counts
 live CPU over the outer launcher, worker monitor and entire owned family,
 adds all closed prior families, and stops with explicit CPU/wall/output
 publication reserves. Its watch is separate from scientific acceptance.
+For retry collection/publication, also supply `--admission NEW/timestep` to
+`ct_accepted14_collect.py` and `ct_accepted14_publish.py`; both verify the exact
+changed-alpha seal and retain its request/completion bindings. Final publication
+includes the package guard's real positive and explicitly synthetic stop
+controls. The latter's artificial spent-CPU counter is never scientific cost.
 
 The original failed ordering controls can be reproduced individually with their
 preserved utility/runtime, exact canonical A/RHS and recorded work allocation.
