@@ -1,0 +1,57 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h24-flat-continuation-20261115/publication-code-checkpoints/publish_wj_h24_checkpoint.py",
+    "--root",
+    "/home/jay/build/wj-h24-flat-continuation-20261115",
+    "--stage",
+    "B"
+  ],
+  "phase": "passive",
+  "kind": "passive",
+  "reserved_seconds": 60.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 279119,
+        "parent": 273304,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h24-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h24.py --root /home/jay/build/wj-h24-flat-continuation-20261115 --label checkpoint-B-publication-v1 --seconds 60 --phase passive -- /usr/bin/python3 -B /home/jay/build/wj-h24-flat-continuation-20261115/publication-code-checkpoints/publish_wj_h24_checkpoint.py --root /home/jay/build/wj-h24-flat-continuation-20261115 --stage B"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h24-flat-continuation-20261115/publication-code-checkpoints/publish_wj_h24_checkpoint.py": {
+      "sha256": "4a28046bef04330249d5406fc6b15be5a1716c94146281e6d3049158e16d4cc0",
+      "bytes": 4686
+    }
+  },
+  "driver_sha256": "3abb92a727fb6ff31a68e10a406afe5eeb0a1fad2d61b7403e4eae15e6e9ceab"
+}

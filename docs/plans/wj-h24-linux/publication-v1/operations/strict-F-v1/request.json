@@ -1,0 +1,63 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h24-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h24.py",
+    "--root",
+    "/home/jay/build/wj-h24-flat-continuation-20261115",
+    "--mode",
+    "strict_F"
+  ],
+  "phase": "native",
+  "kind": "strict_F",
+  "reserved_seconds": 120.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 285827,
+        "parent": 285826,
+        "threads": 1,
+        "args": "python3 run_cao_tamura_budget_h2k.py search --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115 --parent /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113 --previous /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2j-20261115 --retained-context /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch1-context/context.json --context /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch2-context/context.json --resume-frozen /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch2-search --initial-candidate /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch2-search/A-buffered/best-candidate.json --equilibrated --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch2-search-equilibrated"
+      },
+      {
+        "pid": 286527,
+        "parent": 273304,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h24-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h24.py --root /home/jay/build/wj-h24-flat-continuation-20261115 --label strict-F-v1 --seconds 120 --phase native --kind strict_F -- /usr/bin/python3 -B /home/jay/build/wj-h24-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h24.py --root /home/jay/build/wj-h24-flat-continuation-20261115 --mode strict_F"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h24-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h24.py": {
+      "sha256": "7eb0f0ee1519793772e272e55c7dc874999fa0db49bcf0260381790b821cf0c6",
+      "bytes": 5144
+    }
+  },
+  "driver_sha256": "3abb92a727fb6ff31a68e10a406afe5eeb0a1fad2d61b7403e4eae15e6e9ceab"
+}
