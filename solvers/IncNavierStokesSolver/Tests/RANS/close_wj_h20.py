@@ -12,18 +12,18 @@ def close(root):
     book=load(root/'accounting.json');assert not book['closed']and book['target_halt']
     assert not any(e['status']=='RESERVED'for e in book['entries'].values())
     assert book['target_levels']==['M']and book['bootstrap_reserved']==0 and book['strict_reservations']==['M']
-    pub=root/'publication-v1'
+    pub=root/'publication-v2'
     for v in load(pub/'manifest.json')['files']:verify(v)
     old=load(root/'inputs/selected.json')['H19_closed_accounting'];verify(old)
     phase={k:sum(e.get('seconds',e['reserved_seconds'])for e in book['entries'].values()if e['phase']==k)for k in ('operation','build','qualification','target','target_readback','closure')}
     total=60+300+sum(e.get('seconds',e['reserved_seconds'])for e in book['entries'].values()if e['phase']!='closure')
     assert total<=7200 and phase['build']<=900 and sum(phase[k]for k in ('qualification','target','target_readback'))<=3600
-    source=sum(size(root/n)for n in ('source','source-correction-v1','build','runtime'))
+    source=sum(size(root/n)for n in ('source','source-correction-v1','build','runtime')if(root/n).exists())
     output=sum(size(p)if p.is_dir()else p.stat().st_size for p in root.iterdir()if p.name not in ('source','source-correction-v1','build','runtime'))
     peak=max(e.get('peak_tree_rss_bytes',0)for e in book['entries'].values())
     assert source<=8*1024**3 and output<=2*1024**3 and peak<=8*1024**3
     closure=root/'closure-v1';closure.mkdir()
-    for label in ('publication-v1',):
+    for label in ('publication-v1','publication-v2'):
         for n in ('request.json','receipt.json','command.log'): 
             p=root/'operations'/label/n
             if p.exists():atomic(closure/(label+'-'+n+'.pin.json'),identity(p))

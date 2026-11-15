@@ -13,7 +13,7 @@ from run_wj_h15 import size
 from wj_h20_analysis import DT,ADDITIONAL,START,END,STRIDE,TIMES,absolute_step
 
 def publish(root):
-    out=root/'publication-v1';out.mkdir();book=load(root/'accounting.json');inputs=load(root/'inputs/selected.json');copied=[]
+    out=root/'publication-v2';out.mkdir();book=load(root/'accounting.json');inputs=load(root/'inputs/selected.json');copied=[]
     assert book['target_levels']==['M']and book['bootstrap_reserved']==0 and book['target_reserved_attempts']==4
     assert book['target_halt']and not(root/'science/M/case.evolution.json').exists()
     assert not(root/'science/C').exists()and not(root/'science/F').exists()and not(root/'science/F-cp0').exists()
@@ -107,7 +107,7 @@ def publish(root):
         H11_temporal_adequacy='UNRESOLVED unchanged',H19_provisional_screen='historical PASS unchanged',production_dt='NOT_SELECTED',duration='NOT_ADMITTED'))
     heavy=[identity(p)for p in (root/'science/M/final-strict/native.json',root/'science/M/final-strict/result.json',root/'operations/target-M-v1/command.log')]
     atomic(out/'heavy-manifest.json',dict(files=heavy,old_selected_heavy_inputs='in controls/inputs--selected.json; historical bytes unchanged'))
-    atomic(out/'actual-storage.json',dict(science_bytes=size(root/'science'),source_build_runtime_bytes=sum(size(root/n)for n in ('source','source-correction-v1','build','runtime')),pilot_output_cap=2*1024**3))
+    atomic(out/'actual-storage.json',dict(science_bytes=size(root/'science'),source_build_runtime_bytes=sum(size(root/n)for n in ('source','source-correction-v1','build','runtime')if(root/n).exists()),pilot_output_cap=2*1024**3))
     atomic(out/'copied-evidence.json',copied)
     atomic(out/'manifest.json',dict(files=[identity(p)for p in sorted(out.rglob('*'))if p.is_file()],scope='publication snapshot; active publication operation log excluded; final accounting separately sealed'))
     print(json.dumps(failure),flush=True)
