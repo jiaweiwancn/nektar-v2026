@@ -59,15 +59,18 @@ def flow_local(structure,states,values,increments,owners):
         records.append(r)
     return records
 
-def run(root):
+def run(root,levels=('C','M','F'),out_name='phase-analysis-v1'):
+    assert tuple(levels)in (('C','M','F'),('C','M'))
     inputs=load(root/'inputs/selected.json');structure=load(verify(inputs['sparse_structure']))
     manifest=load(verify(inputs['H21_endpoints']));files={Path(v['path']).name:v for v in manifest['files']}
     owners=load(verify(files['control--selected.json']))['owners']
     expected=load(verify(files['endpoint-values.json']))
-    out=root/'science/phase-analysis-v1';out.mkdir()
+    out=root/'science'/out_name;out.mkdir()
     cache={};buffers={};role_records=[];attempts=[];flows=[];transitions=[];windows={};endpoint_checks=[]
-    for z in DT:
+    for z in levels:
         predecessor=checkpoint_payload(verify(inputs['cp0'][z]['checkpoint']).parent,include_reference=True)
+        predecessor_binding=dict(role='original own-dt CP0',anchor=inputs['cp0'][z],step=0,time=0.,alpha=0.,
+            callback_history_sha256=None,completed_callback='NONE_INITIAL_ROLE',native_history_sha256=[vector_hash(h)for h in predecessor['native_history']])
         branch_rows=[[],[]]
         for n in range(1,END[z]+1):
             anchor=recovery(root/f'science/{z}/monitor',n);report,cp=read_completed(anchor,z,n)
@@ -83,9 +86,11 @@ def run(root):
                 values[phase]=cache[digest]
                 for j,owner in enumerate(owners):
                     role_records.append(dict(level=z,step=n,phase=phase,owner=owner,state_sha256=digest,values=values[phase][j],
-                        role='accepted predecessor'if phase=='P'else'accepted endpoint'if phase=='A'else'actual provisional phase',
+                        role='native accepted predecessor'if phase=='P'else'native completed endpoint'if phase=='A'else'actual provisional phase',
                         native_full_audit_status=report['native_full_audit_status']if phase=='A'else'NOT_AN_ACCEPTED_STATE'if phase!='P'else'predecessor own role',
-                        producing_callback_sha256=vector_hash(report['last_stage_history']),attempt_time=report['time'],alpha=report['last_stage_alpha']))
+                        predecessor_binding=predecessor_binding if phase=='P'else None,
+                        independent_qualification=('COMMITTED'if (root/f'science/{z}/monitor/step-{n}.qualification-commit.json').exists()else'NOT_SCHEDULED'if report['native_full_audit_status']=='NOT_SCHEDULED'else'NOT_COMMITTED')if phase=='A'else'NOT_A_QUALIFICATION_ROLE',
+                        attempt_callback_sha256=vector_hash(report['last_stage_history']),attempt_time=report['time'],alpha=report['last_stage_alpha']))
             for j,(geo,side)in enumerate(OWNERS):
                 row={p:values[p][j]for p in PHASES};branch_rows[j].append(row)
                 for tag,before,after in TRANSITIONS:
@@ -100,14 +105,18 @@ def run(root):
             attempts.append(dict(level=z,step=n,current=anchor,phase_snapshot=sp,binding=binding,vectors=vectors,
                  matrix=dict(path=packet['matrix_file'],sha256=packet['matrix_sha256']),matrix_operations=0))
             predecessor=cp
+            predecessor_binding=dict(role='genuine native completed predecessor',anchor=anchor,step=n,time=report['time'],alpha=report['last_stage_alpha'],
+                callback_history_sha256=vector_hash(report['last_stage_history']),completed_callback=anchor['callback'],
+                native_history_sha256=[vector_hash(h)for h in cp['native_history']])
         for j,(geo,side)in enumerate(OWNERS):
             windows[z,geo]={name:branch_window(branch_rows[j],name)for name in NAMES}
     paired=[];branch=[];flow_windows=[]
     for (z,geo),quantities in windows.items():branch.append(dict(level=z,geometry=geo,quantities=quantities))
     for geo,_ in OWNERS:
         for a,b in PAIRS:
+            if a not in levels or b not in levels:continue
             paired.append(dict(pair=a+'-'+b,geometry=geo,quantities={name:cross_window(windows[a,geo][name],windows[b,geo][name],name)for name in NAMES}))
-        for z in DT:
+        for z in levels:
             selected=[next(v for v in f['owners']if v['owner']['owner']['geometry']==geo)for f in flows if f['level']==z]
             parts={name:sum(np.asarray(v[name])for v in selected)for name in ('predictor_U','pressure_U','total_U','predictor_G','pressure_G','total_G','predictor_B','pressure_B','total_B')}
             checks={name:algebra_identity(parts['total_'+name]-parts['predictor_'+name]-parts['pressure_'+name],
@@ -116,13 +125,15 @@ def run(root):
                 checks['actual_cumulative_flow_B']=algebra_identity(windows[z,geo]['B']['cumulative']['flow']-parts['total_B'],
                     [windows[z,geo]['B']['cumulative']['flow'],parts['total_B']],1.)
             flow_windows.append(dict(level=z,geometry=geo,contributions=parts,checks=checks))
-    assert len(role_records)==70 and len(attempts)==7 and len(flows)==7
+    number=sum(END[z]for z in levels)
+    assert len(role_records)==10*number and len(attempts)==len(flows)==number
     write(out/'roles.json',role_records);write(out/'attempt-bindings.json',attempts);write(out/'transition-decompositions.json',transitions)
     write(out/'branch-telescopes.json',branch);write(out/'cross-level-telescopes.json',paired)
     write(out/'genuine-flow-increments.json',flows);write(out/'cumulative-flow-split.json',flow_windows);write(out/'endpoint-H21-replay.json',endpoint_checks)
-    write(out/'counts.json',dict(attempts=7,phase_owner_roles=56,predecessor_owner_roles=14,total_roles=70,
-          distinct_state_vectors=len(cache),distinct_constitutive_owner_evaluations=2*len(cache),predictor_pressure_packets=7,
-          endpoint_replay_owners=6,branch_windows=6,cross_level_windows=6,
+    write(out/'counts.json',dict(requested_attempts=7,attempts=number,phase_owner_roles=8*number,predecessor_owner_roles=2*number,total_roles=10*number,
+          distinct_state_vectors=len(cache),distinct_constitutive_owner_evaluations=2*len(cache),predictor_pressure_packets=number,
+          endpoint_replay_owners=2*len(levels),branch_windows=2*len(levels),cross_level_windows=len(paired),
           saved_matrix_operations=0,new_governing_solves=0,new_strict_reads=0,new_kernel_processes=0,
-          undefined_phase_owner_roles=sum(r['values']['constitutive_status']!='DEFINED'for r in role_records)))
-    print('H22 actual-phase/flow-vector/complete-window analysis PASS',flush=True)
+          undefined_phase_owner_roles=sum(r['values']['constitutive_status']!='DEFINED'for r in role_records),
+          coverage='COMPLETE'if number==7 else'PARTIAL_C_M_ONLY; F_NOT_RUN_AFTER_OBSERVER_HALT'))
+    print('H22 retained actual-phase/flow-vector/window identities PASS; coverage',number,'of seven attempts',flush=True)

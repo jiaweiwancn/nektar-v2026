@@ -54,6 +54,8 @@ def xml_case(original,folder,cp,z):
 
 def setup(root):
     inputs=load(root/'inputs/selected.json');old=load(verify(inputs['runtime_build']))
+    from wj_h22_audit_roles import select_auxiliary_audits
+    inputs=dict(inputs,auxiliary_audits=select_auxiliary_audits(inputs))
     assert old['native_source_revision']=='b2365e52b0d334d7b61c6be3a4a3bb9029491084'
     for v in old['executables']:verify(v['ELF']);verify(v['wrapper'])
     for v in load(verify(inputs['compiled']))['dependencies']:verify(v)
@@ -91,7 +93,13 @@ def setup(root):
         for k in ('state','fixed_reference','fixed_defect','eta'):equal(cp[k],base[k],'same original spatial '+k)
         initial.append(dict(level=z,anchor=anchor,dt=cp['dt'],native_history_hashes=[vector_hash(v)for v in cp['native_history']],native_history_times=cp['native_history_times'],
                             state_sha256=vector_hash(cp['state']),signature_sha256=hashlib.sha256(cp['signature'].encode()).hexdigest(),native_history_productions=0))
-        for n,a in inputs['oracles'][z].items():read_completed(a,z,int(n))
+        for n,a in inputs['oracles'][z].items():
+            old,_=read_completed(a,z,int(n))
+            if int(n)==END[z]and old['native_full_audit_status']!='PASS':
+                from wj_h22_audit_roles import native_full_map_parity
+                auxiliary=inputs['auxiliary_audits'][z][n]
+                audited=native_load(verify(auxiliary['audit_report']))
+                native_full_map_parity(audited,old,audited) # validate the separate physical-state bridge before native admission
     atomic(root/'science/initial-and-oracle-lineage.json',dict(status='PASS',initial=initial,completed_oracles=7,
           spatial_initializations=0,native_history_productions=0,CP0_productions=0))
 
@@ -110,7 +118,7 @@ def freeze(root):
     assert load(root/'science/vector-component/result.json')['status']=='PASS'
     assert load(root/'operations/focused-tests-v1/receipt.json')['status']=='PASS'
     assert load(root/'operations/prepared-session-test-v1/receipt.json')['status']=='PASS'
-    files=[identity(HERE/n)for n in ('run_wj_h22.py','study_wj_h22.py','wj_h22_observer.py','wj_h22_replay.py','wj_h22_phase.py','test_wj_h22_phase.py')]
+    files=[identity(HERE/n)for n in ('run_wj_h22.py','study_wj_h22.py','wj_h22_observer.py','wj_h22_replay.py','wj_h22_phase.py','wj_h22_audit_roles.py','test_wj_h22_phase.py')]
     files.extend(identity(root/'science'/n)for n in ('runtime-build-v1.json','runtime-dependencies-v1.json','compiled-source-objects.json',
          'target-cache-compatibility.json','initial-and-oracle-lineage.json','flow-vector-execution.json','vector-component/result.json'))
     files.extend([identity(root/'inputs/selected.json'),identity(root/'source-intent.json')])

@@ -12,6 +12,7 @@ from wj_h18_observer import check_current
 from wj_h22_replay import DT,END,read_completed,recovery,parity,phases,flow_vectors
 from wj3_measure import checkpoint_payload
 from study_wj_h16 import same_cp
+from wj_h22_audit_roles import native_full_map_parity,select_auxiliary_audits
 
 def prepared_cursor(binding,ready_pin,inventory_pin,proof_pin):
     return dict(role='PREPARED_NOT_NATIVE_COMMIT',binding=binding,ready_sha256=ready_pin['sha256'],
@@ -35,10 +36,14 @@ def prefix(root,directory,level,step,inputs,offsets):
         assert vector_hash(states['C'])==attempt['incoming_sha256']and vector_hash(packet['history'])==attempt['history_sha256']
         _,vectors=flow_vectors(attempt['flow_vectors'],states,r,offsets,identity(root/'science/flow-vector-execution.json'))
         matrix=identity(packet['matrix_file']);assert matrix['sha256']==packet['matrix_sha256']
-        if n==END[level]:equal(r['native_hard_audit'],old['native_hard_audit'],'terminal native full audit')
+        full_map=None
+        if n==END[level]:
+            auxiliary=inputs.get('auxiliary_audits',{}).get(level,{}).get(str(n))
+            audit=native_load(verify(auxiliary['audit_report']))if auxiliary else None
+            full_map=native_full_map_parity(r,old,audit)
         records.append(dict(step=n,exact=exact,current=anchor,historical=expected,phase_binding=binding,
              snapshot=snapshot,sparse_k_matrix=matrix,saved_k_matrix_operations=0,flow_vectors=vectors,
-             historical_full_audit=old['native_full_audit_status'],new_full_audit=r['native_full_audit_status']))
+             historical_full_audit=old['native_full_audit_status'],new_full_audit=r['native_full_audit_status'],full_map_comparison=full_map))
         predecessor=cp
     return records
 
@@ -48,6 +53,7 @@ def daemon(root,intent_path,compat):
     intent=load(intent_path);directory=Path(intent['directory']);level=intent['level']
     assert intent['observer_pid']==os.getpid()
     cache,m=load_compatible(compat);inputs=load(verify(intent['selected_inputs']))
+    inputs=dict(inputs,auxiliary_audits=select_auxiliary_audits(inputs))
     fixed=load(verify(inputs['common_support']))['points']
     atomic(directory/'observer-started.json',dict(pid=os.getpid(),nonce=intent['nonce'],setup_seconds=time.monotonic()-start,
         immutable_row_rebuilds=0,cache=m['cache'],fixed_points=len(fixed),role='exact H22 replay, not H20 sensitivity',compatibility=identity(compat)))
