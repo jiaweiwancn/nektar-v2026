@@ -290,12 +290,12 @@ family at a time. Recorded owned-family worker high water is 13 and aggregate
 high water 23, including launchers, monitors and MPI helpers, within 16/72.
 
 All 24 controlled families are closed at **20,350.164785 process-CPU seconds**.
-The explicit 120CPU-second source/Git/transport/inspection reserve gives
+The explicit 120 CPU-second source/Git/transport/inspection reserve gives
 **20,470.164785<24,000**. Conservative whole-package elapsed wall at final
-accounting is 19,746.15s, including source/Git/inspection; adding 600s for final
-Git delivery gives **20,346.15<28,800s**. Linux retained output is 9,896,845,837
-bytes; known Mac publication/transfer files add 52,922,285bytes. An additional
-256MiB Git/transfer reserve gives **10,218,203,578<17,179,869,184bytes**.
+accounting is 20,046.45s, including source/Git/inspection; adding 1800s for final
+Git delivery gives **21,846.45<28,800s**. Linux retained output is 9,896,853,512
+bytes; known Mac publication/transfer files add 52,948,738 bytes. An additional
+256MiB Git/transfer reserve gives **10,218,237,706<17,179,869,184 bytes**.
 All failed attempts, controllers, audits, builds and publishers remain charged.
 The live package guard completed without reaching its allocation stop.
 
