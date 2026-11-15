@@ -7,7 +7,7 @@ import numpy as np
 from wj_h15_observer import vector_hash,atomic,identity
 from wj_h20_analysis import DT,ADDITIONAL,START,END,STRIDE,TIMES,absolute_step,selected,availability,ratio,continuation,all_pair_screens,shared_direction_actions,FLOOR
 from wj_h20_observer import resolve
-from run_wj_h20 import native_selection,reserve_strict,usage
+from run_wj_h20 import native_selection,reserve_strict,usage,active_halts
 from study_wj_h20 import validate_monitor_intent,ACK_TIMEOUT,admission
 from wj_h15_observer import bits
 
@@ -120,5 +120,21 @@ class ThreeLevel(unittest.TestCase):
         book['entries']['unknown']=dict(phase='target',reserved_seconds=30)
         self.assertEqual(usage(book)['total']-before['total'],30)
         self.assertEqual(usage(book)['native']-before['native'],30)
+
+    def test_passive_resolution_preserves_first_halt_and_never_masks_later_failure(self):
+        with tempfile.TemporaryDirectory()as t:
+            root=Path(t);book=dict(target_halt=dict(operation='M postprocessor'))
+            self.assertEqual(active_halts(root,book),['target_halt'])
+            p=root/'native.json';atomic(p,dict(exit=0,steps=8));original=copy.deepcopy(book)
+            atomic(root/'passive-resolution-v1.json',dict(status='VERIFIED_NATIVE_PASS',original_halt=book['target_halt'],evidence=[identity(p)]))
+            self.assertEqual(active_halts(root,book),[]);self.assertEqual(book,original)
+            book['post_resolution_target_halt']=dict(operation='new failure')
+            self.assertEqual(active_halts(root,book),['post_resolution_target_halt'])
+            p.write_text('{}')
+            with self.assertRaises((AssertionError,ValueError)):active_halts(root,book)
+
+    def test_native_commit_absolute_step_string_is_not_a_different_step(self):
+        for serialized in ('8',8):self.assertEqual(int(serialized),END['M'])
+        self.assertNotEqual(int('4'),END['M'])
 
 if __name__=='__main__':unittest.main()

@@ -15,7 +15,7 @@ from study_wj_h16 import same_cp
 from study_wj_h17 import cp_request
 from wj3_measure import checkpoint_payload
 from cls_epawf_m3_cases import set_info,set_parameter,write
-from run_wj_h20 import frozen,reserve_strict,usage
+from run_wj_h20 import frozen,reserve_strict,usage,active_halts,configuration_path,cache_compatibility
 HERE=Path(__file__).resolve().parent
 NATIVE='b2365e52b0d334d7b61c6be3a4a3bb9029491084'
 ACK_TIMEOUT=120.
@@ -97,7 +97,7 @@ def bootstrap(root):
     assert source['steps']==fine['steps']==0 and bits(source['time'])==bits(fine['time'])==bits(0.)
     assert source['dt']==DT['M']and fine['dt']==DT['F']and fine['signature']!=source['signature']
     assert r['native_history_initializations']==1 and r['initialization_work']==[0,0]and r['initial_velocity_calls']==r['governing_solves']==0
-    cache,_=load_compatible(root/'science/target-cache-compatibility.json');fixed=load(verify(inputs['common_support']))['points']
+    cache,_=load_compatible(cache_compatibility(root));fixed=load(verify(inputs['common_support']))['points']
     result,inventory=evaluate(root,cache,fixed,inputs,r,'F',0,folder,'cp0')
     assert result['status']=='PASS'and result['continuation_verdict']=='PROCEED'
     atomic(folder/'lineage.json',dict(status='PASS',source=v,checkpoint=identity(Path(r['checkpoint'])/'State.bin'),report=identity(folder/'native.json'),xml=identity(xml),
@@ -117,7 +117,7 @@ def anchors(root,level):
 def preflight(root):
     """Retained-state evaluator controls, never a new target solution."""
     frozen(root);inputs=load(root/'inputs/selected.json');folder=root/'science/passive-preflight';folder.mkdir()
-    cache,_=load_compatible(root/'science/target-cache-compatibility.json');fixed=load(verify(inputs['common_support']))['points']
+    cache,_=load_compatible(cache_compatibility(root));fixed=load(verify(inputs['common_support']))['points']
     m,_=read_anchor(inputs['states']['M']['4'],'M',.01)
     result,_=evaluate(root,cache,fixed,inputs,m,'M',4,folder,'retained-M4')
     assert result['status']=='PASS'and result['comparison']['status']=='NOT_YET_AVAILABLE'
@@ -137,7 +137,7 @@ def preflight(root):
 
 def admission(root,level):
     frozen(root);b=load(root/'accounting.json')
-    assert not any(b.get(k)for k in ('runtime_halt','qualification_halt','target_halt','coverage_halt','screen_halt'))
+    assert not active_halts(root,b)
     assert load(root/'operations/focused-controls-v1/receipt.json')['status']=='PASS'
     previous={'M':None,'C':'M','F':'C'}[level]
     if previous:assert load(root/f'science/{previous}/qualification.json')['status']=='PASS'
@@ -155,7 +155,7 @@ def admission(root,level):
     if(root/'resumption.json').exists():assert load(root/'science/passive-preflight/result.json')['status']=='PASS'
     restored,cp0=anchors(root,level)
     if level!='F':read_anchor(restored,level,.01)
-    required=[identity(root/'execution-config.json'),restored['checkpoint'],restored['report'],cp0['checkpoint'],cp0['xml']]
+    required=[identity(configuration_path(root)),restored['checkpoint'],restored['report'],cp0['checkpoint'],cp0['xml']]
     if 'callback'in restored:required.extend((restored['callback'],restored['completion'],restored['qualified_commit']))
     atomic(root/f'admission-{level}.json',dict(status='PASS',level=level,remaining_estimate=estimate,forecast_with_25percent_headroom=headroom,closure_reserved=300,final_strict_reservations=120*len(remaining),
         command=[sys.executable,'-B',str(HERE/'study_wj_h20.py'),'--root',str(root),'--mode','target','--level',level],inputs=required))
@@ -165,7 +165,7 @@ def target(root,level):
     folder=root/'science'/level;xml=xml_case(verify(cp0['xml']),folder,verify(restored['checkpoint']).parent,level,ADDITIONAL[level])
     directory=folder/'monitor';directory.mkdir();ip=folder/'intent.json'
     intent=dict(schema='WJMonitorIntentV1',policy='CheckpointAuditV1',level=level,directory=str(directory),nonce=uuid.uuid4().hex,
-        scope_sha256=hashlib.sha256((identity(xml)['sha256']+identity(root/'execution-config.json')['sha256']).encode()).hexdigest(),
+        scope_sha256=hashlib.sha256((identity(xml)['sha256']+identity(configuration_path(root))['sha256']).encode()).hexdigest(),
         source_sha256=identity(root/'science/runtime-build-v1.json')['sha256'],observer_sha256=identity(HERE/'wj_h20_observer.py')['sha256'],inventory_rule_sha256=hashlib.sha256(RULE.encode()).hexdigest(),
         original_qh0_checkpoint=cp0['checkpoint'],original_qh0_state_sha256=inputs['original']['coupled_state_sha256'],spatial_lineage_anchor=inputs['original']['checkpoint'],restored_checkpoint=restored['checkpoint'],
         maximum_absolute_step=END[level],restored_absolute_step=START[level],recovery_stride=1,scientific_stride=STRIDE[level],dt_bits=bits(DT[level]),ack_timeout_seconds=ACK_TIMEOUT,strict_reserve_seconds=120,
@@ -176,7 +176,7 @@ def target(root,level):
     obs=native=None;code=None;error=None;start=time.monotonic()
     with(folder/'observer.log').open('x')as ol,(folder/'native.log').open('x')as nl:
         try:
-            obs=subprocess.Popen([sys.executable,'-B',str(HERE/'wj_h20_observer.py'),'--root',str(root),'--intent',str(ip),'--compat',str(root/'science/target-cache-compatibility.json')],stdout=ol,stderr=subprocess.STDOUT)
+            obs=subprocess.Popen([sys.executable,'-B',str(HERE/'wj_h20_observer.py'),'--root',str(root),'--intent',str(ip),'--compat',str(cache_compatibility(root))],stdout=ol,stderr=subprocess.STDOUT)
             intent['observer_pid']=obs.pid;atomic(ip,intent)
             while not(directory/'observer-started.json').exists():assert obs.poll()is None and time.monotonic()-start<30;time.sleep(.025)
             native=subprocess.Popen([str(executable(root,'IncNavierStokesSolver')),str(xml)],stdout=nl,stderr=subprocess.STDOUT)
@@ -213,7 +213,7 @@ def target(root,level):
         if not(r and reason.startswith('TEMPORAL_REVIEW_STOP')and load(root/'accounting.json').get('screen_halt')):raise RuntimeError(reason)
     else:
         assert r and r['steps']==END[level]and r['implicit_callbacks']==r['native_completed']==ADDITIONAL[level]
-        assert load(directory/'latest-fully-verified-checkpoint.json')['binding']['absolute_step']==END[level]
+        assert int(load(directory/'latest-fully-verified-checkpoint.json')['binding']['absolute_step'])==END[level]
     atomic(folder/'qualification.json',dict(status='PASS'if not code else'PROVISIONAL_SCREEN_STOP',native_exit=code,native_completed=r['native_completed'],independently_qualified=r['independently_qualified'],
         attempts=r['implicit_callbacks'],final_absolute_step=r['steps'],time=r['time'],full_audit_calls=r['full_audit_calls'],physical_samples_calls=r['physical_samples_calls'],producer=identity(report)))
 

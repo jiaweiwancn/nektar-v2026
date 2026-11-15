@@ -47,9 +47,32 @@ def reserve_strict(root,scope):
 def halt(root,key,record):
     update_journal(Path(root)/'accounting.json',lambda b:b.setdefault(key,record))
 
+def configuration_path(root):
+    from wj_h15_observer import verify
+    pointer=Path(root)/'active-execution-config.json'
+    return verify(load(pointer)['configuration'])if pointer.exists()else Path(root)/'execution-config.json'
+
+def active_halts(root,book):
+    names=[k for k in ('runtime_halt','qualification_halt','coverage_halt','screen_halt','post_resolution_target_halt')if book.get(k)]
+    if book.get('target_halt'):
+        path=Path(root)/'passive-resolution-v1.json'
+        if not path.exists():return names+['target_halt']
+        from wj_h15_observer import verify
+        resolution=load(path)
+        assert resolution['status']=='VERIFIED_NATIVE_PASS'and resolution['original_halt']==book['target_halt']
+        for pin in resolution['evidence']:verify(pin)
+        # The old failure/receipt is retained. Only its proven passive exception
+        # is resolved; a later native failure gets a separate monotone halt.
+    return names
+
+def cache_compatibility(root):
+    from wj_h15_observer import verify
+    cfg=load(configuration_path(root))
+    return verify(cfg['cache_compatibility'])if 'cache_compatibility'in cfg else Path(root)/'science/target-cache-compatibility.json'
+
 def frozen(root):
     from wj_h15_observer import verify
-    cfg=load(Path(root)/'execution-config.json')
+    cfg=load(configuration_path(root))
     for v in cfg['files']:verify(v)
     return cfg
 
@@ -67,7 +90,7 @@ def execute(root,label,argv,seconds,phase='operation',workers=1,kind='passive',a
         elif phase!='operation':assert charged({phase})+seconds<=CAPS[phase]
         if kind!='passive':
             selected=native_selection(root,argv,kind,attempts)
-            assert not any(b.get(k)for k in ('runtime_halt','qualification_halt','target_halt','coverage_halt','screen_halt')),'monotone scientific/execution halt'
+            assert not active_halts(root,b),'monotone scientific/execution halt'
             frozen(root)
         if kind=='bootstrap':
             assert not b['bootstrap_reserved'],'F CP0 slot consumed'
@@ -134,7 +157,9 @@ def execute(root,label,argv,seconds,phase='operation',workers=1,kind='passive',a
     def charge(b):
         if kind=='target':b['target_charged_attempts']=b.get('target_charged_attempts',0)+count
         if reason and reason.startswith('RUNTIME'):b.setdefault('runtime_halt',dict(operation=label,reason=reason))
-        if kind!='passive'and(code!=0 or reason):b.setdefault('qualification_halt'if kind=='bootstrap'else'target_halt',dict(operation=label,reason=reason or'nonzero coordinator/native result',native_log=entry['log_sha256']))
+        if kind!='passive'and(code!=0 or reason):
+            key='qualification_halt'if kind=='bootstrap'else'post_resolution_target_halt'if b.get('target_halt')and(Path(root)/'passive-resolution-v1.json').exists()else'target_halt'
+            b.setdefault(key,dict(operation=label,reason=reason or'nonzero coordinator/native result',native_log=entry['log_sha256']))
     update_journal(book,charge);save(folder/'native-exec-samples.json',maps);complete_operation(book,label,entry);save(folder/'receipt.json',dict(request,**entry))
     print(label,entry['status'],entry['seconds'],flush=True);return code==0 and not reason
 
