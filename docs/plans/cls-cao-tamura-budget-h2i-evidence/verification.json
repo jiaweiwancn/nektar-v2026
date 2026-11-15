@@ -1,0 +1,533 @@
+{
+  "capture_Asia_Shanghai": "2026-11-15T18:00:06.919770+08:00",
+  "reviewed_parent": "409f7d98b21ddee999dfe67b1600810b7091b769",
+  "implementation_revision": "4a33a92f8f1bac32584d4df166b6c9296e8cc4f0",
+  "root": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2i-20261115",
+  "focused": {
+    "version": "H2iFocusedChecksV1",
+    "passed": true,
+    "tests": {
+      "known_feasible_zero_increment": true,
+      "known_fixed_inner_obstruction": {
+        "verified": true,
+        "primal": 0.33343333333333336,
+        "dual": 0.33343333333333336,
+        "lower_bound": 0.33343333333329545,
+        "gap": 3.7914116290949096e-14,
+        "primal_max_violation": 0.0,
+        "stationarity_inf": 0.0,
+        "stationarity_allowance": 0.0,
+        "arithmetic_allowance": 3.789845474481505e-14,
+        "dual_signs_checked": true,
+        "dual_nonzero_rows": 1,
+        "active_dual_rows": [
+          24
+        ],
+        "active_dual_multipliers": [
+          -1.0
+        ],
+        "native_data_rounding_allowance": 5.333733333333333e-09,
+        "limited_lower_bound": 0.3334333279995621
+      },
+      "buffer_obstruction_does_not_certify_actual_infeasibility": true,
+      "signed_joint_repair_with_true_mass_cap": {
+        "slack": 0.0,
+        "inner_min": 0.013333333333333334,
+        "outer_min": 0.013333333333333334,
+        "mass_squared": 0.014399999998079997,
+        "strong_divergence_squared": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity_max": 0.0,
+        "epsilon_ratio": [
+          0.549717905622127,
+          1.0
+        ],
+        "hard_violation": 0.0
+      },
+      "budget_is_inconclusive": true,
+      "full_S_no_deviatoric_projection_and_affine_Rayleigh": true,
+      "quadratic_tangent_is_necessary_not_sufficient": true,
+      "fresh_GL28_identity_margin_envelope_and_physical_caps_required": true,
+      "driver_failure_prefixes": [
+        {
+          "kind": "rejection",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "rejection",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "status",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "missing_report",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "invalid_report",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "steps",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "checkpoint",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse-h0",
+          "calls": [
+            "coarse-h0"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "fine-h0",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "counts",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "coarse8",
+          "calls": [
+            "coarse-h0",
+            "coarse8"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "fine16",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "coarse4",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4"
+          ]
+        },
+        {
+          "kind": "epsilon",
+          "stop": "coarse4-restart",
+          "calls": [
+            "coarse-h0",
+            "coarse8",
+            "fine-h0",
+            "fine16",
+            "coarse4",
+            "coarse4-restart"
+          ]
+        }
+      ],
+      "deliberate_rollback_distinct_and_successful_order": true
+    },
+    "seconds": 0.06719674600753933,
+    "scope": "math and synthetic driver control; no native governing solves"
+  },
+  "native_affine": {
+    "gradient_relative_error": 1.504352198367087e-13,
+    "scalar_relative_error": 1.5147048218379259e-15,
+    "native_tensor_error": 1.1275702593849246e-17,
+    "three_nonzero_trials_scalar_ratios": [
+      0.5046440448220344,
+      1.9911403353194492
+    ],
+    "protected_rows_and_profiles": true
+  },
+  "dual_reconstruction_error": 0.0,
+  "independent_tensor_error": 3.469446951953614e-18,
+  "flat_baseline_hashes_match_H2g": true,
+  "solver_changed": false,
+  "completed_H2g_native_restart_import_rollback_evidence_reused": true,
+  "native_calibration_regression": {
+    "passed": true,
+    "artifact": {
+      "path": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2i-20261115/calibration-regression.json",
+      "sha256": "09ea36606d1e41ac67c54e34bdd799b77a96ff5a580cc8efd355d5fbcf263926",
+      "bytes": 3863
+    }
+  },
+  "H2h_LP_dual_regression": {
+    "passed": true,
+    "artifact": {
+      "path": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2i-20261115/h2h-math-regression.json",
+      "sha256": "9a553cc5031ed4c411f519972ccd217303bc6967dcde1e5ea326849c81ccf106",
+      "bytes": 11990
+    }
+  },
+  "source_hashes_Mac_Linux_identical": true
+}

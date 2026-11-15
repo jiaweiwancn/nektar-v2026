@@ -37,3 +37,16 @@ LP has a verified limited obstruction, and the exact fixed H-plus B tensor is
 negative with no permitted scalar response. Native and fresh GL24 qualification
 fail; no hill pilot was launched. See [H2h findings](cls-cao-tamura-budget-h2h.md).
 The overall two-model comparison remains open.
+
+## Continuing comparison: H2i completed, 15 November 2026
+
+[H2i](cls-cao-tamura-budget-h2i.md) adds fixed-k joint velocity/epsilon feasibility
+with complete native, GL20 and now-seen GL24 constraints. Both predeclared k
+anchors have independently replayed actual-limit sampled obstructions. Native
+qualification fails; no fresh GL28, certificate or hill step was launched.
+Native accessibility identifies missing retained-span response at the downstream
+matching interface. The paired same-space flat H1 diagnostic improves several
+derivative/residual measures but does not pass the spatial target and is not
+adopted. The dedicated two-model comparison remains open for admissible hill
+initialization, common flat spatial accuracy, developed flow, temporal/spatial
+sensitivity and held-out validation. No completed H2f–H2h campaign was repeated.

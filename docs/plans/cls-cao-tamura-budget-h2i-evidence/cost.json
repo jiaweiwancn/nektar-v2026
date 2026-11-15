@@ -1,0 +1,126 @@
+{
+  "capture_Asia_Shanghai": "2026-11-15T18:00:06.919770+08:00",
+  "reviewed_parent": "409f7d98b21ddee999dfe67b1600810b7091b769",
+  "implementation_revision": "4a33a92f8f1bac32584d4df166b6c9296e8cc4f0",
+  "root": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2i-20261115",
+  "measurements": {
+    "analysis-final-usage.txt": {
+      "wall_seconds": 2.31,
+      "user_seconds": 1.56,
+      "system_seconds": 0.43,
+      "peak_RSS_KiB": 1889968.0
+    },
+    "analysis-usage.txt": {
+      "wall_seconds": 2.62,
+      "user_seconds": 1.72,
+      "system_seconds": 0.6,
+      "peak_RSS_KiB": 1890332.0
+    },
+    "native-A-usage.txt": {
+      "wall_seconds": 34.06,
+      "user_seconds": 30.56,
+      "system_seconds": 2.11,
+      "peak_RSS_KiB": 1356500.0
+    },
+    "native-B-usage.txt": {
+      "wall_seconds": 34.14,
+      "user_seconds": 30.77,
+      "system_seconds": 2.03,
+      "peak_RSS_KiB": 1358876.0
+    },
+    "search-usage.txt": {
+      "wall_seconds": 20.72,
+      "user_seconds": 14.37,
+      "system_seconds": 2.42,
+      "peak_RSS_KiB": 2416808.0
+    },
+    "context-usage.txt": {
+      "wall_seconds": 80.5,
+      "user_seconds": 52.48,
+      "system_seconds": 6.42,
+      "peak_RSS_KiB": 1046540.0
+    },
+    "flat-usage.txt": {
+      "wall_seconds": 57.85,
+      "user_seconds": 52.69,
+      "system_seconds": 1.65,
+      "peak_RSS_KiB": 750300.0
+    }
+  },
+  "accessibility_seconds": {
+    "A": 7.683857148978859,
+    "B": 7.734570136002731
+  },
+  "LP_rounds": 12,
+  "complete_optimizer_scans": 25,
+  "independent_replay_scans": 12,
+  "accessibility_reduction_scans": 2,
+  "aggregate_complete_scans": 39,
+  "optimizer_seconds": 19.409176187007688,
+  "replay_seconds": 4.146288629999617,
+  "collection_seconds": 3.8212989459862,
+  "typed_context_IO_verification": {
+    "version": "H2iTypedContextHashIOV1",
+    "seconds": 0.45916595301241614,
+    "bytes_hashed": 648097280,
+    "checks": [
+      {
+        "array": "points",
+        "bytes": 600832440,
+        "sha256": "4041bf7fa9a0ec44cae1d6aa4394ebe2c8219a28c71d4da9bced0286655f928c"
+      },
+      {
+        "array": "members",
+        "bytes": 25295952,
+        "sha256": "53401d72d807365bbe024bab5351ae7bd0853671382881553687dbd32e337c14"
+      },
+      {
+        "array": "member_weights",
+        "bytes": 4215992,
+        "sha256": "638381aa29d6635a3ab373408f97e3d56aad6a8c7c52b780772f73f844db9dd4"
+      },
+      {
+        "array": "velocity_mass",
+        "bytes": 14112,
+        "sha256": "a749550f7fac375585a7988af06b5d0539a69d0b47000a121e1aaaffbec5dccb"
+      },
+      {
+        "array": "mass_free",
+        "bytes": 15367968,
+        "sha256": "6bac89a305713bb0246df9f76191326fa1aac59c28fae95becbc91475abb6b6b"
+      },
+      {
+        "array": "continuity_Q",
+        "bytes": 1164240,
+        "sha256": "22dbdb9de212ce445a5cfa7e0bf4f32ffa3fc109ba821917df9bdc60c6fad020"
+      },
+      {
+        "array": "continuity_D",
+        "bytes": 1164240,
+        "sha256": "ae3619bb647cf9253fe05de3aa40ec1451511304d460a0841051b7e63f1ff614"
+      },
+      {
+        "array": "divergence_GL16",
+        "bytes": 14112,
+        "sha256": "9f770a6dddb69625b66b021598d84a041b52cefe010283cf2714977fae0eb947"
+      },
+      {
+        "array": "divergence_GL20",
+        "bytes": 14112,
+        "sha256": "1c0ebcf2648c79ba8131fb8c3938562f15f2728bd9bc5e6475af21f1670fc6fc"
+      },
+      {
+        "array": "divergence_GL24",
+        "bytes": 14112,
+        "sha256": "bc89fc480dcc8d3f6a411b7734847c4d0121d576c0f478928dcd4386b02894f3"
+      }
+    ],
+    "scope": "separate Linux sequential typed-array read/hash verification, one thread; no tensor scan or optimizer work"
+  },
+  "final_collection_driver": {
+    "wall_seconds": 5.1,
+    "user_seconds": 3.05,
+    "system_seconds": 0.71,
+    "peak_RSS_KiB": 1878216.0
+  }
+}
