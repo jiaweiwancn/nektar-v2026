@@ -96,4 +96,37 @@ def compare(rows,coarse,fine,initial):
             G='max(||G_eq||_F,.051/19.9125)',epsilon='positive epsilon_eq(r), outer only'),
         coarse_interface=rows.interface_history(coarse),fine_interface=rows.interface_history(fine),
         scope='provisional numerical review; no application error bound, production timestep or temporal order')
+    # Signed component means and finite trace/profile diagnostics supplement the
+    # vector/tensor screens. They are not extra physical acceptance thresholds.
+    signed={}
+    for region,mask in (('full',np.ones(len(rows.rows),bool)),('inner',~rows.outer),('outer',rows.outer)):
+        signed[region]={}
+        for name in ('U','G','k','R','pi','production','K','rc','destruction'):
+            delta=coarse[name]-fine[name];w=rows.weights[mask];v=delta[mask]
+            signed[region][name]=dict(mean=(np.tensordot(w,v,axes=1)/np.sum(w)).tolist(),
+                minimum=np.min(v,axis=0).tolist(),maximum=np.max(v,axis=0).tolist())
+    result['signed_components']=signed
+    profiles=[];boundary=[];npnt=rows.point_count
+    xs=sorted({float(e[k][0])for e in rows.report['fields'][0]['mesh']for k in ('lower','upper')})
+    for x in xs:
+        ids=[i for i,(p,o)in enumerate(rows.rows[:npnt])if p[0]==x]
+        if not ids:continue
+        profiles.append(dict(x=x,owned_rows=ids,max_delta_U=float(np.max(np.linalg.norm(coarse['U'][ids]-fine['U'][ids],axis=1))),
+            max_delta_G=float(np.max(np.linalg.norm(coarse['G'][ids]-fine['G'][ids],axis=(1,2)))),
+            evidence='all signed physical-height/owner profile components in the hash-bound NPZ; no trace averaging'))
+    xmin,xmax=min(xs),max(xs)
+    for i,(p,o)in enumerate(rows.rows[:npnt]):
+        roles=[]
+        if p[0]==xmin:roles.append(('inlet',0,-1.))
+        if p[0]==xmax:roles.append(('outlet',0,1.))
+        if o['chart'][2]==0:roles.append(('ground',2,-1.))
+        if abs(p[2]-20)<1e-12:roles.append(('top',2,1.))
+        for role,axis,sign in roles:
+            boundary.append(dict(row=i,role=role,physical=p,owner=o,
+                delta_mass_flux=float(sign*(coarse['U'][i,axis]-fine['U'][i,axis])),
+                delta_total_traction=(sign*(coarse['T'][i,:,axis]-fine['T'][i,:,axis])).tolist(),
+                delta_represented_k_diffusive_flux=float(sign*(coarse['nu_d'][i]*coarse['grad_k'][i,axis]-fine['nu_d'][i]*fine['grad_k'][i,axis])),
+                delta_represented_epsilon_diffusive_flux=float(sign*(coarse['nu_d'][i]*coarse['grad_epsilon'][i,axis]-fine['nu_d'][i]*fine['grad_epsilon'][i,axis])/1.3)if rows.outer[i]else None))
+    result.update(station_profiles=profiles,exterior_trace_differences=boundary,
+        exterior_scope='represented one-sided flux/traction traces; prescribed data fixed. These are not independently integrated weak boundary loads.')
     return result,arrays

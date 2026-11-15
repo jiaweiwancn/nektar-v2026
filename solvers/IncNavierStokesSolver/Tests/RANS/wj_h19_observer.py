@@ -85,7 +85,11 @@ def daemon(root,intent_path,compat):
             side=native_load(verify(ready['callback']));equal(report['last_stage_history'],side['callback_history'],'coarse producing callback')
             fcp=checkpoint_payload(verify(anchor['checkpoint']).parent,include_reference=True);same_cp(fine,fcp)
             fside=native_load(verify(anchor['callback']));equal(fine['last_stage_history'],fside['callback_history'],'fine producing callback')
+            for r,s in ((report,side),(fine,fside)):
+                assert s['state_sha256']==vector_hash(r['state'])and s['callback_history_sha256']==vector_hash(r['last_stage_history'])
+                assert s['alpha_mass']==1/r['dt']and bits(s['time'])==bits(r['time'])
         comparison,physical,inventory=assess_pair(cache,fixed,report,fine,fine_audit,step,directory,stem)
+        comparison['pair']=dict(coarse_step=step,fine_step=2*step,coarse_time=report['time'],fine_time=fine['time'],coarse_time_bits=bits(report['time']),fine_time_bits=bits(fine['time']),coarse_dt=report['dt'],fine_dt=fine['dt'],coarse_alpha=200 if step else 0,fine_alpha=400 if step else 0,coarse_report=ready['report'],fine_report=selected['fine'][str(2*step)]['report']if step else selected['original']['producer'])
         temporal=directory/(stem+'.sensitivity.json');atomic(temporal,comparison)
         status=physical['summary']['status']
         if comparison['physical_fine_status']!='PASS':status='OBSTRUCTED'

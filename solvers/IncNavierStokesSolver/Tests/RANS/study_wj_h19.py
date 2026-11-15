@@ -52,9 +52,23 @@ def setup(root):
     from publish_wj_h15 import objects
     atomic(root/'science/compiled-source-objects.json',objects(root,root/'build',b['native_source_revision']))
     selected=load(root/'inputs/selected.json')
+    # Bind selected heavy bytes back to the published Mac/Git evidence, not
+    # freshly generated hashes alone. Only required files are read.
+    h14table=H14/'publication-v2/state-bindings.json'
+    assert identity(h14table)['sha256']=='c0f594a286e98db50fd9cddc89de95262ed62c15378e8cb6dab2405a623ca4aa'
+    heavy=OLD/'publication-v1/heavy-manifest.json'
+    assert identity(heavy)['sha256']=='7354fda2dbf51c02b6a4232207f3d86b5866820ce308b0b4afab8a9d3a12b9d1'
+    known={v['path']:v for v in load(heavy)['files']}
+    for anchor in selected['fine'].values():
+        for key in ('checkpoint','callback','report'):
+            assert anchor[key]==known[anchor[key]['path']];verify(anchor[key])
+    witness_proof=OLD/'publication-supplement-v1/pending-restored-native-map-parity-v1.json'
+    assert identity(witness_proof)['sha256']=='a21a972dc7eab313d11aa1f5fa18759ad9461088c4d2ccc362e11f9a5df1dd95'
+    verify(load(witness_proof)['current'])
     for n in (2,4):
         ready=load(OLD/'science/target/B/monitor'/('startup.ready.json'if n==2 else'step-4.ready.json'))
         selected['fine'][str(n)]['audit_report']=ready['report'];verify(ready['report'])
+        if n==2:assert ready['report']==load(witness_proof)['current']
     atomic(root/'inputs/anchors-v2.json',selected)
     files=[identity(HERE/n)for n in ('run_wj_h19.py','study_wj_h19.py','wj_h19_analysis.py','wj_h19_observer.py','test_wj_h19_timestep.py')]
     for n in ('runtime-build-v1.json','runtime-dependencies-v1.json','target-cache-compatibility.json','compiled-source-objects.json'):files.append(identity(root/'science'/n))
@@ -102,6 +116,8 @@ def admission(root):
     assert spent+forecast<=5400
     native=sum(v.get('seconds',v['reserved_seconds'])for v in b['entries'].values()if v['phase']in ('qualification','target','target_readback'))
     assert native+forecast<=1800
+    for name in ('focused-python-v1','native-protocol-components-v1'):
+        assert load(root/f'operations/{name}/receipt.json')['status']=='PASS'
     atomic(root/'target-admission.json',dict(status='PASS',forecast_with_25percent_headroom=forecast,closure_reserved=300,strict_reserved=120,
         command=[sys.executable,'-B',str(HERE/'study_wj_h19.py'),'--root',str(root),'--mode','target'],inputs=[identity(root/'execution-config.json'),identity(root/'science/coarse-cp0/qualification.json'),identity(root/'science/component/qualification.json')]))
 
