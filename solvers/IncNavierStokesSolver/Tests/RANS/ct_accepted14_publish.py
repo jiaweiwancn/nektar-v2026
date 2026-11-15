@@ -60,8 +60,8 @@ def main():
             if count>peak:peak=count;witness=dict(time_unix=row['time_unix'],threads=count,processes=[v for v in row['processes'] if v['pid'] in owned])
     require(peak<=16 and aggregate<=72,'combined worker allocation')
     output=sum(f.lstat().st_size for f in a.root.rglob('*') if f.is_file() or f.is_symlink());whole=time.time()-1794751358
-    require(cpu+120<=24000 and max(wall,whole)+240<=28800 and output+64*1024**2<=16*1024**3,'bounded publication allocation')
-    write_json(a.output/'prepublication-accounting.json',dict(schema='CT14PrepublicationAccountingV1',status='pass',families=families,all_previous_families_closed=True,closed_CPU_seconds=cpu,active_wall_upper_seconds=max(wall,whole),whole_elapsed_package_seconds=whole,retained_new_bytes=output,maximum_combined_project=peak,maximum_aggregate=aggregate,combined_project_witness=witness,CPU_reserve_seconds=120,wall_reserve_seconds=240,output_reserve_bytes=64*1024**2,scope='add this publication command closed receipt afterward; source/transport/inspection reserve remains explicit; no future exit attested'))
+    require(cpu+120<=24000 and max(wall,whole)+240<=28800 and output+256*1024**2<=16*1024**3,'bounded publication allocation')
+    write_json(a.output/'prepublication-accounting.json',dict(schema='CT14PrepublicationAccountingV1',status='pass',families=families,all_previous_families_closed=True,closed_CPU_seconds=cpu,active_wall_upper_seconds=max(wall,whole),whole_elapsed_package_seconds=whole,retained_new_bytes=output,maximum_combined_project=peak,maximum_aggregate=aggregate,combined_project_witness=witness,CPU_reserve_seconds=120,wall_reserve_seconds=240,output_reserve_bytes=256*1024**2,scope='add this publication command closed receipt afterward; source/transport/inspection reserve remains explicit; no future exit attested'))
     index={}
     def record(path,body=False):
         require(path.is_file(),'missing external artifact:'+str(path));r=dict(path=str(path),bytes=path.stat().st_size,sha256=sha(path))
