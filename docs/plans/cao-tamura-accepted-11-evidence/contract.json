@@ -1,0 +1,128 @@
+{
+  "schema": "CT11BoundedPhysicalScalarObserverV1",
+  "starting_revision": "8b2d56610ee12e8a2144a6becad2aa5150f263fb",
+  "remote_review": "fetched exact existing head over SSH443; no intervening commits; dedicated worktree clean; unrelated main CLS worktree unchanged",
+  "physical_manifest": {
+    "path": "docs/plans/cao-tamura-accepted-8-evidence/physical-reference-manifest.json",
+    "sha256": "004bc0fc82054296a68d56de77751fc1f0a41570ee16b0a174ae8087f262d296"
+  },
+  "governing": {
+    "runtime": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114/build-v8/runtime",
+    "sha256": "5830a2cd8a4b0b5b12095555171eb28bc0f63e1daa97652d63da244c3fd808c7",
+    "component": "CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000",
+    "change": "none; only read-only observer rebuilt"
+  },
+  "observer": {
+    "identity": "NativeOwnerVolumeStreamV1",
+    "legacy": "SerializedVolumeV1 remains default and oracle",
+    "scope": "original flat Accepted serial new-model diagnostics only; does not enable any new governing route",
+    "volume": "same native inner rays then outer points; owner,coordinate,weight,side/region,panel,rows retained; no serialized volume catalog; bounded global scalar row vectors and physical face records",
+    "checks": "same complete restricted audit of frozen pre-k state, and mandatory constitutive evaluations; no state-dependent validity cache; no new governing solve",
+    "input": "same actual consecutive/stage fields and current-time boundary lift; export any lift; raw accepted-state traction/epsilon lag separate",
+    "equivalence": "old and new on zero-displacement and displaced P3/P4 small fixtures, actual original and refined strip consecutive/stage states; four controls, equations and both all-row reconstructions; <=2e-10 max(1,old/new maximum); native row provenance rolling digest and counts",
+    "coverage": {
+      "controls": [
+        "native",
+        "q48f16",
+        "q64f16",
+        "q64f32"
+      ],
+      "equations": [
+        "inner_k",
+        "outer_k",
+        "outer_epsilon",
+        "whole_k"
+      ],
+      "reconstruction": [
+        "k",
+        "outer_epsilon"
+      ]
+    },
+    "negative": "missing control/equation/reconstruction/member,foreign/stale state/config/runtime/model,horizon,nonfinite,pass-labelled failing primitives,wrong observer identity must reject"
+  },
+  "capacity": {
+    "target": "unchanged 60907-slot P4/P2 flat target,930 elements,x[-25,30],roof20,H=.1875",
+    "state_sha256": "60c53b83087a2c70b2a67faaf8cf09ef705ec39a04f04a5973f20244173368ff",
+    "fixture": "exact CT10 static initialized frozen transport fixture; not actual consecutive history or physical budget accuracy",
+    "controls": "all four; first genuine required failure stops affected capacity branch",
+    "process_address_space_GiB": 16,
+    "control_wall_seconds": 1200,
+    "family_wall_seconds": 7200,
+    "gate": "all finite required equations and native all-row scaled reconstruction<=2e-10; unchanged memory ceiling"
+  },
+  "target": {
+    "prerequisites": [
+      "complete passing observer equivalence and negative controls",
+      "complete passing new capacity for exact target and probe",
+      "sealed CT10 refined strip T=.02 pass",
+      "exact target initial/operator/quadrature/domain/boundary preflights",
+      "unchanged pinned governing runtime and component",
+      "closed passing resource receipts"
+    ],
+    "dt": [
+      0.001,
+      0.0005
+    ],
+    "horizon": 0.002,
+    "steps": [
+      2,
+      4
+    ],
+    "initial": "fresh independently initialized native histories; bitwise same actual coefficients across dt and sealed target; never relabel old history",
+    "limits": {
+      "field_drift": 0.001,
+      "vertical_drift": 0.0001,
+      "traction": 0.001,
+      "mass": 1e-08,
+      "budget": 0.02,
+      "temporal": "delta<=max(1e-7,.1*measured drift); signed mean ground and full interface traction included"
+    },
+    "conditional_continuation": {
+      "endpoint": 0.407,
+      "transit": 40.621637857609905,
+      "early": [
+        0.008,
+        0.02,
+        0.1,
+        0.407
+      ],
+      "maximum_segment_steps": 32,
+      "maximum_pair_steps": 2048,
+      "maximum_CPU_seconds": 24000,
+      "maximum_active_wall_seconds": 28800,
+      "maximum_storage_GiB": 24,
+      "headroom_fraction": 0.25,
+      "gate": "each paired physical/resource milestone passes; estimate from measured accepted-step CPU, startup/output and audit costs, not strip extrapolation; evolved factor fill<=40M; no automatic continuation"
+    },
+    "failure": "preserve actual attempted and last accepted states; stop failed trajectory/cohort; no search or tolerance/input changes"
+  },
+  "resources": {
+    "project_workers": 16,
+    "aggregate_workers": 72,
+    "helpers": "included in owned launcher census",
+    "library_threads": 1,
+    "compiler_jobs": 2,
+    "numerical_families": 1,
+    "archive": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115",
+    "required": "closed passing guard receipt before qualification"
+  },
+  "unchanged": "Natural A95, displacement/wall/composite/RN identities, central fit IDs012,physical floor,H7.5mm,d3.5mm,hs,actual evolving K,finite inner nu/high-Re outer,nonconstant inner k,dependent epsilon,signed production,absolute traction,one-sweep cacheOff; zero corrections/extra governing solves",
+  "out_of_scope": [
+    "terrain evolution",
+    "A93/E94E95 displaced transfer",
+    "EP",
+    "MPI/3D",
+    "new calibration",
+    "broad backend rewrite",
+    "full variable-height evolution"
+  ],
+  "historical": "all CT4\u2013CT10 seals/failures unchanged; observer capacity pass cannot relabel physical budget accuracy,curved qualification or experimental validation",
+  "decisions": [
+    "observer equivalence",
+    "observer capacity",
+    "target physical pair",
+    "target resource plan",
+    "actual horizon",
+    "terrain readiness"
+  ]
+}
