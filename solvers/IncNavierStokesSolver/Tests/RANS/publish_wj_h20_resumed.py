@@ -109,6 +109,7 @@ def publish(root):
             for name,m in values.items():initial.append(dict(time=t,region=region,field=name,RMS=m['rms']['value'],maximum=m['maximum']['value'],support=v['inventory']['sha256']))
         for level in ('C','M','F'):
             anchor=resolve(root,inputs,level,t);report,audit=read_anchor(anchor,level,t)
+            pairs[-1].update({level+'_serialized_time':report['time'],level+'_time_bits':bits(report['time']),level+'_alpha':report['last_stage_alpha']})
             native_packets.append(dict(time=t,level=level,genuine_producer=anchor['report'],full_audit_source=anchor.get('audit_report',anchor['report']),
                 native_hard_audit=audit['native_hard_audit'],genuine_stage_audits=report['stage_audits'],frozen_pimple_attempts=report['pimple_attempts'],
                 scope='native physical/root/domain/linear facts; completed-stage under genuine callback; alpha0 spatial mass-dual norms only in final strict packets'))
