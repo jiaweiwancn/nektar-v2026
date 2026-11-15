@@ -30,12 +30,18 @@ def main():
         peak_project=max(peak_project,r['maximum_project']);peak_aggregate=max(peak_aggregate,r['maximum_aggregate']);resources[f.name]=dict(execution=q,sha256=sha(f/'execution.json'),highwater={str(p.name):sha(p) for p in f.iterdir() if p.suffix=='.jsonl'})
     revision=subprocess.check_output(['git','-c','core.preloadIndex=false','-c','index.threads=1','rev-parse','HEAD'],cwd=a.root/'source',text=True).strip()
     m=RequestManifest(a.output,dict(schema='CT11CompactEvidenceV1',controller_revision=revision,inputs=requests,resources={k:v['sha256'] for k,v in resources.items()},source=sha(Path(__file__)),scope='collection completion is separate from every numerical/resource/physical status'))
-    catalog={}
+    catalog={};traction_catalog={}
     def compact(v):
+        if isinstance(v,dict) and {'state_sha256','ground','interface','interface_jump','mean_wall_shear'}<=set(v):
+            import hashlib
+            digest=hashlib.sha256(json.dumps(v,sort_keys=True,separators=(',',':')).encode()).hexdigest();traction_catalog[digest]=v
+            return dict(schema='CT11TractionProfileReferenceV1',profile_sha256=digest,artifact='traction-profiles.json',state_sha256=v['state_sha256'],ground_points=len(v['ground']),interface_points=len(v['interface']),mean_wall_shear=v['mean_wall_shear'],normalized_wall_traction_error=v['normalized_wall_traction_error'],normalized_interface_traction_RMS=v['normalized_interface_traction_RMS'],wall_spatial_standard_deviation=v['wall_spatial_standard_deviation'])
         if isinstance(v,dict):
             out={}
             for k,x in v.items():
-                if k=='actual_mapped_files':
+                if k=='effective_initial' and isinstance(x,list):
+                    out['effective_initial_artifact']=dict(entries=len(x),native_sha256=v.get('effective_initial_sha256'),scope='full coefficient vector remains in the bound native receipt outside Git')
+                elif k=='actual_mapped_files':
                     # Map contents are cryptographically bound once and shared.
                     import hashlib
                     h=hashlib.sha256(json.dumps(x,sort_keys=True,separators=(',',':')).encode()).hexdigest();catalog[h]=x;out['actual_mapped_files_catalog_sha256']=h
@@ -71,6 +77,23 @@ def main():
         oldbytes=subprocess.check_output(['git','show','8b2d5661:'+name],cwd=a.root/'source');h=hashlib.sha256(oldbytes).hexdigest();require(h==sha(a.root/'source'/name),'governing source changed:'+name);unchanged[name]=h
     name='solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp';oldtext=subprocess.check_output(['git','show','8b2d5661:'+name],cwd=a.root/'source',text=True);newtext=(a.root/'source'/name).read_text();marker='std::string RANSWallEvolutionPatch::PreservationPacket(';require(oldtext[oldtext.index(marker):]==newtext[newtext.index(marker):],'existing diagnostic implementations changed')
     write_json(a.output/'source-scope.json',dict(starting_revision='8b2d56610ee12e8a2144a6becad2aa5150f263fb',controller_revision=revision,unchanged_governing_sources=unchanged,existing_PreservationPacket_and_later_diagnostics='byte-identical from starting head; new volume visitor inserted before them',changed_files=subprocess.check_output(['git','diff','--name-only','8b2d5661','HEAD'],cwd=a.root/'source',text=True).splitlines(),observer_storage='borrows existing governing quadrature rows; no second serialized/global observer volume catalog; intrinsic native row storage is unchanged'))
+    if traction_catalog:
+        import hashlib
+        packed={}
+        for digest,v in traction_catalog.items():
+            q=copy.deepcopy(v)
+            for name in ('ground','interface','interface_jump'):
+                rows=q[name]
+                if not rows:continue
+                columns=list(rows[0]);require(all(set(r)==set(columns) for r in rows),'heterogeneous accepted traction record')
+                q[name]=dict(schema='CT11ColumnarTractionRowsV1',columns=columns,rows=[[r[k] for k in columns] for r in rows])
+            restored=copy.deepcopy(q)
+            for name in ('ground','interface','interface_jump'):
+                if isinstance(restored[name],dict):
+                    table=restored[name];restored[name]=[dict(zip(table['columns'],r,strict=True)) for r in table['rows']]
+            require(hashlib.sha256(json.dumps(restored,sort_keys=True,separators=(',',':')).encode()).hexdigest()==digest,'lossy traction publication')
+            packed[digest]=q
+        write_json(a.output/'traction-profiles.json',dict(schema='CT11LosslessTractionCatalogV1',profiles=packed,hash_format='SHA256 of restored original profile,sorted-key compact JSON; reconstruct each columnar row with its columns; all physical values,gradients,sides,geometry and order retained'))
     write_json(a.output/'loaded-libraries.json',catalog)
     files=[str(p.relative_to(a.output)) for p in a.output.iterdir() if p.is_file() and p.name not in ('request-manifest.json','completed-artifacts.json')];m.seal(a.output,files);print(json.dumps(decision,indent=2),flush=True);return 0
 if __name__=='__main__':raise SystemExit(main())
