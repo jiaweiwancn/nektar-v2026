@@ -86,4 +86,3 @@ capacity/equivalence,physical uncertainty and affordability separately.
 No terrain,A93/E94E95 displaced transfer,EP,MPI/3D,new calibration or full
 variable-height evolution. Finish with a normal push and the exact remaining
 gate to meaningful-duration flat preservation and a future rough-hill pilot.
-

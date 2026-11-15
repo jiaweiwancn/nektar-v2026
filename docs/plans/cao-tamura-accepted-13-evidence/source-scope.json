@@ -26,5 +26,20 @@
     "sha256": "5830a2cd8a4b0b5b12095555171eb28bc0f63e1daa97652d63da244c3fd808c7"
   },
   "new_governing_component": null,
-  "scope": "final report/evidence commit is publication-only; actual native source/runtime/library inputs remain separately pinned"
+  "scope": "final report/evidence commit is publication-only; actual native source/runtime/library inputs remain separately pinned",
+  "publication_EOF_normalization": {
+    "files": {
+      "docs/plans/cao-tamura-accepted-13-evidence/publication-driver.py": {
+        "native_tested_bytes_sha256": "51767704d648418076ac266abe445d183833ecc37fce47959c5eb916d5ad0ee9",
+        "EOF_normalized_bytes_sha256": "7bbdfbe59800a1de2cb6aa13cdcfba9bc13058b2baeb94d3834faa68f1a95b4b",
+        "same_AST": true
+      },
+      "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted13_publish.py": {
+        "native_tested_bytes_sha256": "51767704d648418076ac266abe445d183833ecc37fce47959c5eb916d5ad0ee9",
+        "EOF_normalized_bytes_sha256": "7bbdfbe59800a1de2cb6aa13cdcfba9bc13058b2baeb94d3834faa68f1a95b4b",
+        "same_AST": true
+      }
+    },
+    "scope": "only final blank lines removed; actual native driver remains pinned at4208588d and in the unchanged external archive; no numerical or evaluated seal changed"
+  }
 }

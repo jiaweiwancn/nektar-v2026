@@ -124,4 +124,3 @@ def main():
         project=peak,aggregate=aggregate,transfer=json.loads((a.output/'transfer-sha256.json').read_text()))),flush=True)
 
 if __name__=='__main__':main()
-

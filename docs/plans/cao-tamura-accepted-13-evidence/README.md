@@ -111,4 +111,3 @@ The .407 campaign CPU/wall/output no-go is independent of factor capacity.
 There is no achieved governing speedup. Terrain numbering, joined-map gradients,
 cofactors, transmission, curved temporal/spatial qualification and physical
 roughness-sublayer/thin-layer/approach-flow questions remain open.
-
