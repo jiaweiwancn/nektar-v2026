@@ -19,7 +19,9 @@ RANSWallTimeIntegration::Checkpoint StepZeroIMEX1(
         {throw std::runtime_error("step-zero bootstrap attempted a governing implicit solve");},
         [&](const Vector &q,double t){++explicitCalls;return rhs(q,t);});
     native.Initialise(source.integration.state,0.);
-    auto coarse=source;coarse.signature=signature;coarse.integration=native.Capture();
+    RANSWallTimeIntegration::Checkpoint coarse;coarse.signature=signature;coarse.integration=native.Capture();
+    coarse.coupledState=source.coupledState;coarse.fixedReference=source.fixedReference;
+    coarse.fixedDefect=source.fixedDefect;coarse.eta=source.eta;
     Require(RANSWallR3::Hash(coarse.integration.state)==RANSWallR3::Hash(source.integration.state) &&
         coarse.integration.steps==0 && coarse.integration.time==0 && coarse.integration.dt==dt,
         "native step-zero history construction changed its physical primary state");
@@ -28,13 +30,13 @@ RANSWallTimeIntegration::Checkpoint StepZeroIMEX1(
 
 std::string StepZeroBootstrap(RANSWallEvolutionPatch &patch,
     const LibUtilities::SessionReaderSharedPtr &serial,double us,
-    const Tree &packet,RANSWallEvolutionData &data,const std::string &output,bool fixture)
+    const Tree &packet,RANSWallEvolutionData &data,bool fixture)
 {
     double dt;serial->LoadParameter("TimeStep",dt);
     Require(patch.WJ() && patch.OpenBoundary() && patch.InitialVelocityMode()=="FlatInletTraceV1",
         "step-zero helper requires the compatible unforced WJ open control");
     const auto coarseSignature=RANSWallPhysicsSignature(patch,serial,0.,false,us,{1.,0.},false);
-    const auto sourceDt=packet.get<double>("source_dt");
+    auto sourceDt=packet.get<double>("source_dt");
     RANSWallMonitor::CheckPin(packet.get_child("source_xml"));
     Require(sourceDt>0 && dt!=sourceDt,"bootstrap source dt must differ");
     // The signature still includes TIMESTEP. No generic validation is relaxed.
@@ -45,7 +47,7 @@ std::string StepZeroBootstrap(RANSWallEvolutionPatch &patch,
     try{imported=ImportOpenState(patch,serial,us,packet,data);}
     catch(...){serial->SetParameter("TimeStep",dt);throw;}
     serial->SetParameter("TimeStep",dt);
-    const auto &source=imported.cp;
+    const auto &source=imported.cp;Require(source.eta==0.,"step-zero bootstrap requires unchanged eta0");
     std::size_t explicitCalls=0;
     auto rhs=[&](const Vector &q,double t)
     {auto full=source.coupledState;std::copy(q.begin(),q.end(),full.begin());return patch.ExplicitBody(full,t,data);};

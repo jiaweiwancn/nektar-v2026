@@ -18,6 +18,14 @@ from wj7_command import owned_groups
 ROOT='wj-h19-target-timestep-20261115'
 CAPS=dict(operation=1200,build=1200,qualification=1800,target=1800,target_readback=120,closure=300)
 
+def native_selection(root,argv,kind,attempts):
+    import sys
+    assert kind in ('bootstrap','target','component')
+    assert attempts==(2 if kind=='target'else 0)
+    expected=[sys.executable,'-B',str(Path(__file__).with_name('study_wj_h19.py')),'--root',str(root),'--mode',kind]
+    assert list(map(str,argv))==expected,'undeclared native command or matrix change'
+
+
 def reserve_strict(root,scope):
     assert scope in ('small','target')
     def reserve(b):
@@ -45,6 +53,7 @@ def execute(root,label,argv,seconds,phase='operation',workers=1,kind='passive',a
         if phase in ('qualification','target','target_readback'):assert charged({'qualification','target','target_readback'})+seconds<=1800
         elif phase!='operation':assert charged({phase})+seconds<=CAPS[phase]
         if kind!='passive':
+            native_selection(root,argv,kind,attempts)
             assert not any(b.get(k)for k in ('runtime_halt','qualification_halt','target_halt','coverage_halt','screen_halt')),'monotone scientific/execution halt'
             frozen(root)
         if kind=='bootstrap':
@@ -104,7 +113,7 @@ def execute(root,label,argv,seconds,phase='operation',workers=1,kind='passive',a
         c=load(folder/'attempt-counts.json');assert 0<=c['actual_attempts']<=attempts
         from wj_h15_observer import verify
         r=load(verify(c['producer']));assert c['actual_attempts']==r['implicit_callbacks'];count=c['actual_attempts']
-    entry=dict(status=('OBSTRUCTED'if reason and reason.startswith(('OPERATIONAL','RUNTIME'))else'RESOURCE_LIMIT')if reason else'PASS'if code==0 else'FAIL',phase=phase,kind=kind,reserved_seconds=seconds,seconds=time.monotonic()-start,exit=code,reason=reason,peak_tree_rss_bytes=peak,reserved_attempts=attempts,charged_attempts=count,unknown_attempts=kind!='passive'and not(folder/'attempt-counts.json').exists(),log_sha256=sha(folder/'command.log'))
+    entry=dict(status=('OBSTRUCTED'if reason and reason.startswith(('OPERATIONAL','RUNTIME'))else'RESOURCE_LIMIT')if reason else'PASS'if code==0 else'FAIL',phase=phase,kind=kind,reserved_seconds=seconds,seconds=time.monotonic()-start,exit=code,reason=reason,peak_tree_rss_bytes=peak,reserved_attempts=attempts,charged_attempts=count,unknown_attempts=kind=='target'and not(folder/'attempt-counts.json').exists(),log_sha256=sha(folder/'command.log'))
     def charge(b):
         if kind=='target':b['target_charged_attempts']=b.get('target_charged_attempts',0)+count
         if reason and reason.startswith('RUNTIME'):b.setdefault('runtime_halt',dict(operation=label,reason=reason))

@@ -56,6 +56,8 @@ Start with H18's sealed H16 final union11456 points/17521 owners plus44800 physi
 Gauss8 rows. Add both current coarse/fine native witnesses using the established
 physical +/-1e-6 rule, including legitimate face/interface owners. Both fields
 are evaluated on the realized common union, including genuinely new witnesses.
+At every fixed matching-outer x, add each current state's physical cutoff and its
++/-1e-6 physical neighbors; evaluate all legitimate owners in both states.
 No state/closure/profile/reaction/history results persist across different states.
 Retain coordinates/owners, signed components, station/fetch/interface/exterior
 data, reference error, qh0 drift and coarse-minus-fine differences separately.

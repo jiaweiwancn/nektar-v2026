@@ -47,14 +47,14 @@ int main(int argc,char **argv)
             if(fault=="binding")actual.replace(actual.find("\"nonce\":\"nonce\""),15,"\"nonce\":\"stale\"");
             if(fault!="timeout" && fault!="temporary-only")M::Atomic(dir+"/step-1.ack.json",J::Object({{"schema",J::Quote(fault=="malformed"?"wrong-schema":"WJObserverAckV1")},{"status",J::Quote(fault=="FAIL"?"FAIL":"PASS")},
                 {"ready_sha256",J::Quote(readyHash)},{"binding",actual},{"result",D::Pin(dir+"/result.json")},{"qualified_cursor",D::Pin(dir+"/cursor.json")},
-                {"inventory",D::Pin(dir+"/inventory.json")},{"continuation",J::Quote("TERMINAL")}}));
+                {"inventory",D::Pin(dir+"/inventory.json")},{"continuation",J::Quote(fault=="review"?"REVIEW_STOP":fault=="unknown"?"INVALID":"TERMINAL")}}));
             if(fault=="duplicate")M::Atomic(dir+"/step-0.ack.json","{}");
             if(fault=="publishing")D::Check(::link((dir+"/step-1.ack.json").c_str(),(dir+"/step-1.ack.json.tmp-publishing").c_str())==0,"cannot represent atomic dual-name window");
             if(fault=="temporary-only")M::Atomic(dir+"/step-1.ack.json.tmp-publishing","unpublished/incomplete");
-            bool success=false;try{success=M::Wait(dir,"step-1",readyHash,binding,.06,getpid())=="TERMINAL";}catch(const std::exception&){}
+            bool success=false;try{success=M::Wait(dir,"step-1",readyHash,binding,.06,getpid())==(fault=="review"?"REVIEW_STOP":"TERMINAL");}catch(const std::exception&){}
             D::Check(success==pass,"incorrect protocol decision: "+name);
         };
-        check("pass","",true);check("atomic-dual-name","publishing",true);check("failed","FAIL",false);check("stale","binding",false);check("malformed","malformed",false);check("duplicate","duplicate",false);check("timeout","timeout",false);check("temporary-only","temporary-only",false);
+        check("review-stop","review",true);check("unknown-continuation","unknown",false);check("pass","",true);check("atomic-dual-name","publishing",true);check("failed","FAIL",false);check("stale","binding",false);check("malformed","malformed",false);check("duplicate","duplicate",false);check("timeout","timeout",false);check("temporary-only","temporary-only",false);
         bool overwritten=false;try{M::Atomic(root+"/pass/inventory.json","replacement");overwritten=true;}catch(const std::exception&){}
         D::Check(!overwritten,"immutable output overwritten");
         const auto partial=root+"/partial";std::filesystem::create_directories(partial);

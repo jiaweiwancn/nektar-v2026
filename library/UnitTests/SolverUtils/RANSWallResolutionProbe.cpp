@@ -203,7 +203,7 @@ int main(int argc,char **argv)
         if(operation=="step_zero_bootstrap" || operation=="step_zero_bootstrap_checks")
         {
             patch.LoadOpenBoundaryData(serial,data);
-            const auto text=StepZeroBootstrap(patch,serial,us,packet,data,argv[3],operation=="step_zero_bootstrap_checks");
+            const auto text=StepZeroBootstrap(patch,serial,us,packet,data,operation=="step_zero_bootstrap_checks");
             RANSWallMonitor::Atomic(argv[3],text);world->Finalise();return 0;
         }
         if(operation=="mapped_backend_checks")
