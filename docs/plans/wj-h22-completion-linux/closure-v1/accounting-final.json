@@ -1,0 +1,285 @@
+{
+  "schema": "WJH22LinkedCompletionLedgerV1",
+  "closed": true,
+  "parent_accounting": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/closure-v1/accounting-final.json",
+    "bytes": 12205,
+    "sha256": "524a9ba415f79c7e8f0686acee29edf634a19184acd82e44ef035d855086d7c0"
+  },
+  "parent_index": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/authoritative-index-v1.json",
+    "bytes": 877,
+    "sha256": "db4a3a78f2b56b7aeb05ca7a672572387d5351e23402a09ebec4f33b6b545fc1"
+  },
+  "carry": {
+    "total": 1169.9461947359669,
+    "native": 465.6705588850309,
+    "build": 135.61016353601008,
+    "analysis": 11.737643021973781
+  },
+  "setup_charged_seconds": 60.0,
+  "closure_reserve_seconds": 300.0,
+  "new_native_reservations": [
+    "verify_M2",
+    "strict_M2",
+    "F",
+    "strict_F"
+  ],
+  "new_attempt_capacity": 4,
+  "entries": {
+    "source-transfer-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 15.0,
+      "scope": "bounded source transport and extraction, no native work"
+    },
+    "focused-completion-tests-v1": {
+      "status": "PASS",
+      "phase": "analysis",
+      "kind": "passive",
+      "reserved_seconds": 120.0,
+      "reserved_attempts": 0,
+      "seconds": 1.1851942049979698,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 118083584,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "483677110d136be82d1f4bb9e51ad6997657393376a3c42fd8ee27bc936c229f"
+    },
+    "runtime-and-input-setup-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "kind": "passive",
+      "reserved_seconds": 120.0,
+      "reserved_attempts": 0,
+      "seconds": 2.406241491989931,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 130166784,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "03d997ddfa8fa4bdd21c3c70a7d4a0ef3f9fdd5a2ee01e0c23363bd0cac16b5c"
+    },
+    "retained-chain-preflight-v1": {
+      "status": "PASS",
+      "phase": "analysis",
+      "kind": "passive",
+      "reserved_seconds": 120.0,
+      "reserved_attempts": 0,
+      "seconds": 4.799773225007812,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 193716224,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "bd43e013eba43e7f2a3196a1001bc4bfc726716e777b26737b4865823166832c"
+    },
+    "freeze-completion-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "kind": "passive",
+      "reserved_seconds": 30.0,
+      "reserved_attempts": 0,
+      "seconds": 1.1900510029809084,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 125669376,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "6f833125375c86970f59df41c005d2fa1622e64c6d6d8e9a58bddaebf1374f35"
+    },
+    "M2-zero-advance-verification-v1": {
+      "status": "PASS",
+      "phase": "native",
+      "kind": "verify_M2",
+      "reserved_seconds": 180.0,
+      "reserved_attempts": 0,
+      "seconds": 115.68401122602518,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 5697380352,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "fa9674c58b4c8b7b9d862589cf37195a4b4869e75ab01c212ccab9ef28f90737"
+    },
+    "qualified-M2-strict-v1": {
+      "status": "PASS",
+      "phase": "native",
+      "kind": "strict_M2",
+      "reserved_seconds": 120.0,
+      "reserved_attempts": 0,
+      "seconds": 38.8132581319951,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 3921170432,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "724b69b64dc32832edf040e0740723c0c7527255f54d92bde8c5301e398aa783"
+    },
+    "F-admission-coordination": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 10.0,
+      "seconds": 5.0,
+      "scope": "new M2 commit/strict binding and prospective resource admission"
+    },
+    "missing-F-four-step-replay-v1": {
+      "status": "PASS",
+      "phase": "native",
+      "kind": "F",
+      "reserved_seconds": 600.0,
+      "reserved_attempts": 4,
+      "seconds": 313.5896303420013,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 6673739776,
+      "charged_attempts": 4,
+      "unknown_attempts": false,
+      "log_sha256": "80f12e219238adcd42f38160047927bb2c9ea28050cf8e39332ca41bd3cf51ec"
+    },
+    "qualified-F4-strict-v1": {
+      "status": "PASS",
+      "phase": "native",
+      "kind": "strict_F",
+      "reserved_seconds": 120.0,
+      "reserved_attempts": 0,
+      "seconds": 38.88497430700227,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 3917950976,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "f558b177a1c4b348d870d32c044180239e3ddc59434e47500d9eff5535dfcac7"
+    },
+    "passive-publication-source-transfer": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30.0,
+      "seconds": 10.0
+    },
+    "seven-attempt-attribution-v1": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "kind": "passive",
+      "reserved_seconds": 180.0,
+      "reserved_attempts": 0,
+      "seconds": 3.0376451410120353,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 194039808,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "c07d8c554fd8f0944313b861504f79251ab5ec3dbb6b740f476a8d0a6ca139e7"
+    },
+    "whole-field-scatter-v1": {
+      "status": "PASS",
+      "phase": "analysis",
+      "kind": "passive",
+      "reserved_seconds": 60.0,
+      "reserved_attempts": 0,
+      "seconds": 2.4174164380237926,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 169676800,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "84fa87b185864d8d4077c5664341efd93add99f65cb5841f55cde0d5a0877c90"
+    },
+    "passive-roundoff-source-transfer": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30.0,
+      "seconds": 10.0
+    },
+    "passive-source-script-rejection": {
+      "status": "SYNTAX_REJECTED_LOCALLY_BEFORE_TRANSFER",
+      "phase": "operation",
+      "reserved_seconds": 5.0,
+      "seconds": 5.0,
+      "reason": "ambiguous placeholder replacement caught by local AST parse; no Linux mutation or native work"
+    },
+    "primitive-roundoff-tests-v2": {
+      "status": "PASS",
+      "phase": "analysis",
+      "kind": "passive",
+      "reserved_seconds": 30.0,
+      "reserved_attempts": 0,
+      "seconds": 0.5654623900190927,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 20168704,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "097db8c880adca578800399b50381b82c050f8ff0d53040e681d24e86b00d79a"
+    },
+    "seven-attempt-attribution-v2": {
+      "status": "PASS",
+      "phase": "analysis",
+      "kind": "passive",
+      "reserved_seconds": 180.0,
+      "reserved_attempts": 0,
+      "seconds": 4.261860071012052,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 198782976,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "3af6e6fe9cf9c1542aca9fb524c73ad84e836d4f792ea0f90eab5f3fbff1ab5d"
+    },
+    "actual-native-runtime-closure-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "kind": "passive",
+      "reserved_seconds": 30.0,
+      "reserved_attempts": 0,
+      "seconds": 5.474609131983016,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 119476224,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "61522a891f0ee3cffd13e1ba866ccd89ee1d1c0def8096ebbc65ee9395ae82e3"
+    },
+    "completed-publication-v1": {
+      "status": "PASS",
+      "phase": "analysis",
+      "kind": "passive",
+      "reserved_seconds": 180.0,
+      "reserved_attempts": 0,
+      "seconds": 7.369964821002213,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 191287296,
+      "charged_attempts": 0,
+      "unknown_attempts": false,
+      "log_sha256": "7f35f2ae24c9a2f14451f2a031ffc237ef84ee9bf0a2f33abbf448cec10ff626"
+    },
+    "completion-coordination": {
+      "status": "UNKNOWN_FULL_RESERVATION",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 60.0,
+      "scope": "conservative bounded status inspections, network coordination and preclosure figure transport; final compact transport remains in charged closure300"
+    },
+    "closure": {
+      "status": "PASS",
+      "phase": "closure",
+      "reserved_seconds": 300.0,
+      "seconds": 300.0,
+      "fully_charged": true,
+      "scope": "selective verification, manifests/archive and bounded compact transport; active logs excluded"
+    }
+  },
+  "aggregate_total_charged_seconds": 2174.6262866610195,
+  "child_total_charged_seconds": 1004.6800919250527,
+  "aggregate_native_charged_seconds": 972.6424328920548,
+  "aggregate_analysis_charged_seconds": 35.37495931304875,
+  "closed_status": "PASS_FINITE_DIAGNOSIS",
+  "final_verification": {
+    "path": "/home/jay/build/wj-h22-completion-20261115/closure-v1/verification.json",
+    "bytes": 2788,
+    "sha256": "18d91bf1ddda943fe0af487339969b667d6e497394961a6e202226a2fcc809a2"
+  }
+}

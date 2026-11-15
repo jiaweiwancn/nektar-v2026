@@ -1,0 +1,105 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h22-completion-20261115/publication-code-v1/check_wj_h22_completion_scatter.py",
+    "--root",
+    "/home/jay/build/wj-h22-completion-20261115"
+  ],
+  "phase": "analysis",
+  "kind": "passive",
+  "reserved_seconds": 60.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 16,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 265341,
+        "parent": 265340,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/resources-memory-v2 -- timeout -k 30s 3000 python3 -B -c import subprocess;from pathlib import Path;r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115\");g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','pack.threads=1','-c','gc.auto=0','-c','core.filemode=false','-C',str(r/'source')];assert not subprocess.check_output(g+['status','--porcelain'],text=True).strip();subprocess.run(g+['fetch',str(r/'image-v9.bundle'),'HEAD'],check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],check=True);subprocess.run([\"python3\",\"-B\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted13_memory.py\",\"--ct12\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115\",\"--ct10\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114\",\"--ct11\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115\",\"--runtime\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/build-v6/runtime\",\"--contract\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/docs/plans/cao-tamura-accepted-13-evidence/observer-lifecycle-v2.json\",\"--observer-policy\",\"NativeAuditReceiptV1\",\"--output\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/memory-v2\"],check=True)"
+      },
+      {
+        "pid": 265342,
+        "parent": 265341,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/resources-memory-v2 --project-limit 16"
+      },
+      {
+        "pid": 265345,
+        "parent": 265341,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/resources-memory-v2 -- timeout -k 30s 3000 python3 -B -c import subprocess;from pathlib import Path;r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115\");g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','pack.threads=1','-c','gc.auto=0','-c','core.filemode=false','-C',str(r/'source')];assert not subprocess.check_output(g+['status','--porcelain'],text=True).strip();subprocess.run(g+['fetch',str(r/'image-v9.bundle'),'HEAD'],check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],check=True);subprocess.run([\"python3\",\"-B\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted13_memory.py\",\"--ct12\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115\",\"--ct10\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114\",\"--ct11\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115\",\"--runtime\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/build-v6/runtime\",\"--contract\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/docs/plans/cao-tamura-accepted-13-evidence/observer-lifecycle-v2.json\",\"--observer-policy\",\"NativeAuditReceiptV1\",\"--output\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/memory-v2\"],check=True)"
+      },
+      {
+        "pid": 265347,
+        "parent": 265346,
+        "threads": 1,
+        "args": "python3 -B -c import subprocess;from pathlib import Path;r=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115\");g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','pack.threads=1','-c','gc.auto=0','-c','core.filemode=false','-C',str(r/'source')];assert not subprocess.check_output(g+['status','--porcelain'],text=True).strip();subprocess.run(g+['fetch',str(r/'image-v9.bundle'),'HEAD'],check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],check=True);subprocess.run([\"python3\",\"-B\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted13_memory.py\",\"--ct12\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115\",\"--ct10\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114\",\"--ct11\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115\",\"--runtime\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/build-v6/runtime\",\"--contract\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/docs/plans/cao-tamura-accepted-13-evidence/observer-lifecycle-v2.json\",\"--observer-policy\",\"NativeAuditReceiptV1\",\"--output\",\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/memory-v2\"],check=True)"
+      },
+      {
+        "pid": 265366,
+        "parent": 265347,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted13_memory.py --ct12 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115 --ct10 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-10-20261114 --ct11 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/build-v6/runtime --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/docs/plans/cao-tamura-accepted-13-evidence/observer-lifecycle-v2.json --observer-policy NativeAuditReceiptV1 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/memory-v2"
+      },
+      {
+        "pid": 265488,
+        "parent": 265366,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/build-v6/runtime/RANSPreservationProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/memory-v2/q48/case.xml /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/memory-v2/q48/loads-request.json /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/memory-v2/q48/loads.json"
+      },
+      {
+        "pid": 265489,
+        "parent": 265488,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 265596,
+        "parent": 265594,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h22_completion.py --root /home/jay/build/wj-h22-completion-20261115 --label whole-field-scatter-v1 --seconds 60 --phase analysis -- /usr/bin/python3 -B /home/jay/build/wj-h22-completion-20261115/publication-code-v1/check_wj_h22_completion_scatter.py --root /home/jay/build/wj-h22-completion-20261115"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h22-completion-20261115/publication-code-v1/check_wj_h22_completion_scatter.py": {
+      "sha256": "e5e5cbe01f9ec3ed9aef616a5a55c4d8206720107fe79aebc7b9790dca58db70",
+      "bytes": 3802
+    }
+  },
+  "driver_sha256": "00c333cfea547eeaa3ea7db6ee5bda685817a16cc880a380e657de929db246ce",
+  "status": "PASS",
+  "seconds": 2.4174164380237926,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 169676800,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "84fa87b185864d8d4077c5664341efd93add99f65cb5841f55cde0d5a0877c90"
+}

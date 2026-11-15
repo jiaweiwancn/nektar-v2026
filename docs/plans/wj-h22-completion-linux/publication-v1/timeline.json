@@ -1,0 +1,141 @@
+[
+  {
+    "level": "C",
+    "step": 1,
+    "time": 0.005,
+    "alpha": 200,
+    "post_flow_state_sha256": "f4b7ea5ecd7a9d1d12ee7a9ddbcb590cb70b142fa09fe1ec44e266905378a45a",
+    "incoming_base_sha256": "631caa32a59ff43253f1fcac4effd955eb68b8529d9c28f29e615cf14ca0f077",
+    "completed_state_sha256": "dd4210b49fec1e8f3a6b2cbfe2b88564fabe11faea36c279b3c17cbdb1f67b97",
+    "native_full_audit": "PASS",
+    "native_completed": true,
+    "exact_replay": "PASS",
+    "qualification": {
+      "original_execution_qualification": "COMMITTED",
+      "subsequent_startup_verification": "NOT_APPLICABLE",
+      "original_commit": {
+        "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/science/C/monitor/step-1.qualification-commit.json",
+        "bytes": 2500,
+        "sha256": "356ae754980879eb0f1ffccc74ab50c2cc89034371ca3ef01440fd98bed21310"
+      }
+    },
+    "source_root": "retained stopped H22"
+  },
+  {
+    "level": "M",
+    "step": 1,
+    "time": 0.0025,
+    "alpha": 400,
+    "post_flow_state_sha256": "38357f931da9fecc5906d6e06bcb6eb02c6201112dfa08b162dada7704d70612",
+    "incoming_base_sha256": "631caa32a59ff43253f1fcac4effd955eb68b8529d9c28f29e615cf14ca0f077",
+    "completed_state_sha256": "b9c1c19b6c44513d1778143b695e9720d0463d0a9786a91ec6ae97cc6c469819",
+    "native_full_audit": "NOT_SCHEDULED",
+    "native_completed": true,
+    "exact_replay": "PASS",
+    "qualification": {
+      "original_execution_qualification": "NOT_SCHEDULED",
+      "subsequent_startup_verification": "NOT_APPLICABLE"
+    },
+    "source_root": "retained stopped H22"
+  },
+  {
+    "level": "M",
+    "step": 2,
+    "time": 0.005,
+    "alpha": 400,
+    "post_flow_state_sha256": "15c21430a19c851ead303e06c15a47d64369aa5f20595f97072bf7a6d718f520",
+    "incoming_base_sha256": "b9c1c19b6c44513d1778143b695e9720d0463d0a9786a91ec6ae97cc6c469819",
+    "completed_state_sha256": "6e0daed74de86008984548e9946f9d97bc4d707198f9ecab2a8b315f79224885",
+    "native_full_audit": "PASS",
+    "native_completed": true,
+    "exact_replay": "PASS",
+    "qualification": {
+      "original_execution_qualification": "NOT_COMMITTED",
+      "subsequent_startup_verification": "PASS",
+      "startup_commit": {
+        "path": "/home/jay/build/wj-h22-completion-20261115/science/M2/monitor/startup.verification-commit.json",
+        "bytes": 989,
+        "sha256": "57a0247e232ff3bb24e93d4c476ba1f4bd474fcd97b0ed3928dbbef7b664baff"
+      },
+      "strict_read": {
+        "path": "/home/jay/build/wj-h22-completion-20261115/science/M2/final-strict/result.json",
+        "bytes": 7669105,
+        "sha256": "02cbe52a64edf7f69927804d815fe1367fd1d70819e9a25089ba9058d357a900"
+      }
+    },
+    "source_root": "retained stopped H22"
+  },
+  {
+    "level": "F",
+    "step": 1,
+    "time": 0.00125,
+    "alpha": 800,
+    "post_flow_state_sha256": "9fde60d7d595182ca5000ee2127e20d1f8d6d1dcdd9de3898d4cecafd134d396",
+    "incoming_base_sha256": "631caa32a59ff43253f1fcac4effd955eb68b8529d9c28f29e615cf14ca0f077",
+    "completed_state_sha256": "f3d02e51b54c39a6cbf281ae3b03624e190a93113ce6b933f9aaf640c2ba1c2e",
+    "native_full_audit": "NOT_SCHEDULED",
+    "native_completed": true,
+    "exact_replay": "PASS",
+    "qualification": {
+      "original_execution_qualification": "NOT_SCHEDULED",
+      "subsequent_startup_verification": "NOT_APPLICABLE"
+    },
+    "source_root": "new linked completion"
+  },
+  {
+    "level": "F",
+    "step": 2,
+    "time": 0.0025,
+    "alpha": 800,
+    "post_flow_state_sha256": "0f0e3d5938672efe1ce7bfb61e6c9f701913fe1abf8f0e3a0c0e36f426b4b07a",
+    "incoming_base_sha256": "f3d02e51b54c39a6cbf281ae3b03624e190a93113ce6b933f9aaf640c2ba1c2e",
+    "completed_state_sha256": "17229f489f9597be77e06b726a807e12250c829a47a1f1863d6b5931433b000e",
+    "native_full_audit": "NOT_SCHEDULED",
+    "native_completed": true,
+    "exact_replay": "PASS",
+    "qualification": {
+      "original_execution_qualification": "NOT_SCHEDULED",
+      "subsequent_startup_verification": "NOT_APPLICABLE"
+    },
+    "source_root": "new linked completion"
+  },
+  {
+    "level": "F",
+    "step": 3,
+    "time": 0.00375,
+    "alpha": 800,
+    "post_flow_state_sha256": "155766a02d1115c0ee955433d309d8a4f471e39d77f799c7d4d26903349fdb45",
+    "incoming_base_sha256": "17229f489f9597be77e06b726a807e12250c829a47a1f1863d6b5931433b000e",
+    "completed_state_sha256": "a07835755993262e63a5029bb3c128e488229a7e18dec0379407c24b2552e8c4",
+    "native_full_audit": "NOT_SCHEDULED",
+    "native_completed": true,
+    "exact_replay": "PASS",
+    "qualification": {
+      "original_execution_qualification": "NOT_SCHEDULED",
+      "subsequent_startup_verification": "NOT_APPLICABLE"
+    },
+    "source_root": "new linked completion"
+  },
+  {
+    "level": "F",
+    "step": 4,
+    "time": 0.005,
+    "alpha": 800,
+    "post_flow_state_sha256": "5f4ec8207905ed892f433a3d87e35bc0c51504ee0839244bd73cb24e943d850f",
+    "incoming_base_sha256": "a07835755993262e63a5029bb3c128e488229a7e18dec0379407c24b2552e8c4",
+    "completed_state_sha256": "f2abb139ec06a7e277f3cd9532fd77f16dd9ff32a72da9dd1261772744b18d2d",
+    "native_full_audit": "PASS",
+    "native_completed": true,
+    "exact_replay": "PASS",
+    "qualification": {
+      "original_execution_qualification": "COMMITTED",
+      "subsequent_startup_verification": "NOT_APPLICABLE",
+      "original_commit": {
+        "path": "/home/jay/build/wj-h22-completion-20261115/science/F/monitor/step-4.qualification-commit.json",
+        "bytes": 2462,
+        "sha256": "58b0819e0183487773bbb6521bb0456be921fedcdfd9f635d6d6dd414490439e"
+      }
+    },
+    "source_root": "new linked completion"
+  }
+]

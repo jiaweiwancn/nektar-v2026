@@ -1,0 +1,95 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22_completion.py",
+    "--root",
+    "/home/jay/build/wj-h22-completion-20261115",
+    "--mode",
+    "preflight"
+  ],
+  "phase": "analysis",
+  "kind": "passive",
+  "reserved_seconds": 120.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 9,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 262294,
+        "parent": 262293,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/resources-build-v4 -- timeout -k 30s 3000 python3 -B -c import subprocess;from pathlib import Path;p=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115\");g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','pack.threads=1','-c','gc.auto=0','-c','core.filemode=false','-C',str(p/'source')];subprocess.run(g+['fetch',str(p/'diagnostics-v6.bundle'),'HEAD'],check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],check=True);subprocess.run(['python3','-B',str(p/'source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted13_build.py'),'--root',str(p),'--ct9',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114\",'--output',str(p/'build-v4')],check=True)"
+      },
+      {
+        "pid": 262295,
+        "parent": 262294,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/resources-build-v4 --project-limit 16"
+      },
+      {
+        "pid": 262298,
+        "parent": 262294,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/resources-build-v4 -- timeout -k 30s 3000 python3 -B -c import subprocess;from pathlib import Path;p=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115\");g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','pack.threads=1','-c','gc.auto=0','-c','core.filemode=false','-C',str(p/'source')];subprocess.run(g+['fetch',str(p/'diagnostics-v6.bundle'),'HEAD'],check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],check=True);subprocess.run(['python3','-B',str(p/'source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted13_build.py'),'--root',str(p),'--ct9',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114\",'--output',str(p/'build-v4')],check=True)"
+      },
+      {
+        "pid": 262300,
+        "parent": 262299,
+        "threads": 1,
+        "args": "python3 -B -c import subprocess;from pathlib import Path;p=Path(\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115\");g=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','pack.threads=1','-c','gc.auto=0','-c','core.filemode=false','-C',str(p/'source')];subprocess.run(g+['fetch',str(p/'diagnostics-v6.bundle'),'HEAD'],check=True);subprocess.run(g+['checkout','--detach','FETCH_HEAD'],check=True);subprocess.run(['python3','-B',str(p/'source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted13_build.py'),'--root',str(p),'--ct9',\"/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114\",'--output',str(p/'build-v4')],check=True)"
+      },
+      {
+        "pid": 262317,
+        "parent": 262300,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted13_build.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115 --ct9 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115/build-v4"
+      },
+      {
+        "pid": 262389,
+        "parent": 262377,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h22_completion.py --root /home/jay/build/wj-h22-completion-20261115 --label retained-chain-preflight-v1 --seconds 120 --phase analysis -- /usr/bin/python3 -B /home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22_completion.py --root /home/jay/build/wj-h22-completion-20261115 --mode preflight"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22_completion.py": {
+      "sha256": "e10edca9d23774986d386e6a3acf4205c9e15fee7adaf989896e33f465f3c061",
+      "bytes": 19779
+    }
+  },
+  "driver_sha256": "00c333cfea547eeaa3ea7db6ee5bda685817a16cc880a380e657de929db246ce",
+  "status": "PASS",
+  "seconds": 4.799773225007812,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 193716224,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "bd43e013eba43e7f2a3196a1001bc4bfc726716e777b26737b4865823166832c"
+}

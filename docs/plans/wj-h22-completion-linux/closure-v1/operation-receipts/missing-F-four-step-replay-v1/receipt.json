@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22_completion.py",
+    "--root",
+    "/home/jay/build/wj-h22-completion-20261115",
+    "--mode",
+    "F"
+  ],
+  "phase": "native",
+  "kind": "F",
+  "reserved_seconds": 600.0,
+  "workers": 2,
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 263228,
+        "parent": 263227,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 263229,
+        "parent": 263228,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h22_completion.py --root /home/jay/build/wj-h22-completion-20261115 --label missing-F-four-step-replay-v1 --seconds 600 --phase native --kind F -- /usr/bin/python3 -B /home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22_completion.py --root /home/jay/build/wj-h22-completion-20261115 --mode F"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22_completion.py": {
+      "sha256": "e10edca9d23774986d386e6a3acf4205c9e15fee7adaf989896e33f465f3c061",
+      "bytes": 19779
+    }
+  },
+  "driver_sha256": "00c333cfea547eeaa3ea7db6ee5bda685817a16cc880a380e657de929db246ce",
+  "status": "PASS",
+  "seconds": 313.5896303420013,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 6673739776,
+  "charged_attempts": 4,
+  "unknown_attempts": false,
+  "log_sha256": "80f12e219238adcd42f38160047927bb2c9ea28050cf8e39332ca41bd3cf51ec"
+}

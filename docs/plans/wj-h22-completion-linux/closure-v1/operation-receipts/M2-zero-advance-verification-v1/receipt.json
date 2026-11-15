@@ -1,0 +1,65 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22_completion.py",
+    "--root",
+    "/home/jay/build/wj-h22-completion-20261115",
+    "--mode",
+    "verify_M2"
+  ],
+  "phase": "native",
+  "kind": "verify_M2",
+  "reserved_seconds": 180.0,
+  "workers": 2,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 262577,
+        "parent": 262576,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h22_completion.py --root /home/jay/build/wj-h22-completion-20261115 --label M2-zero-advance-verification-v1 --seconds 180 --phase native --kind verify_M2 -- /usr/bin/python3 -B /home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22_completion.py --root /home/jay/build/wj-h22-completion-20261115 --mode verify_M2"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h22-completion-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h22_completion.py": {
+      "sha256": "e10edca9d23774986d386e6a3acf4205c9e15fee7adaf989896e33f465f3c061",
+      "bytes": 19779
+    }
+  },
+  "driver_sha256": "00c333cfea547eeaa3ea7db6ee5bda685817a16cc880a380e657de929db246ce",
+  "status": "PASS",
+  "seconds": 115.68401122602518,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 5697380352,
+  "charged_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "fa9674c58b4c8b7b9d862589cf37195a4b4869e75ab01c212ccab9ef28f90737"
+}
