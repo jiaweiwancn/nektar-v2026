@@ -1,0 +1,263 @@
+{
+  "schema": "WJH19LedgerV1",
+  "closed": false,
+  "ceiling_seconds": 5400,
+  "setup_charged_seconds": 60,
+  "closure_reserve_seconds": 300,
+  "starting_revision": "a8fc3f50eab7b50fcdec235a22f82a140ea7ee06",
+  "target_reserved_attempts": 2,
+  "bootstrap_reserved": 1,
+  "entries": {
+    "selected-bootstrap-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 120,
+      "seconds": 0.7668135610001627,
+      "native_work": 0
+    },
+    "source-sync-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60,
+      "seconds": 0.02720432900241576
+    },
+    "focused-build-v1": {
+      "status": "OBSTRUCTED",
+      "phase": "build",
+      "reserved_seconds": 1200,
+      "kind": "passive",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 0.05148366600042209,
+      "exit": -15,
+      "reason": "OPERATIONAL_MONITOR_ERROR FileNotFoundError(2, 'No such file or directory')",
+      "peak_tree_rss_bytes": 19705856,
+      "unknown_attempts": false,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build-directory-preparation-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30,
+      "seconds": 0.026302796992240474
+    },
+    "focused-build-v2": {
+      "status": "FAIL",
+      "phase": "build",
+      "reserved_seconds": 1190,
+      "kind": "passive",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 95.95594988300581,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 7645310976,
+      "unknown_attempts": false,
+      "log_sha256": "e47817e703a60b24b7af0dff53f476a5172edb163822a34a3ed91c0828abbb0b"
+    },
+    "source-sync-v2": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60,
+      "seconds": 0.043773119017714635
+    },
+    "focused-build-v3": {
+      "status": "PASS",
+      "phase": "build",
+      "reserved_seconds": 600,
+      "kind": "passive",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 86.84676194598433,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 7892180992,
+      "unknown_attempts": false,
+      "log_sha256": "efbd8be1311749c29b891db5c978e1fb78cd3d225df120141bb96ae55b76c74b"
+    },
+    "source-sync-v3": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60,
+      "seconds": 0.023248159006470814
+    },
+    "unmetered-network-coordination-v1": {
+      "status": "UNKNOWN_FULL_CHARGE",
+      "phase": "operation",
+      "reserved_seconds": 180,
+      "seconds": 180,
+      "reason": "conservative Linux network/receipt coordination not separately timed; not reclaimed"
+    },
+    "runtime-input-setup-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 180,
+      "kind": "passive",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 2.5865124959964305,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 198754304,
+      "unknown_attempts": false,
+      "log_sha256": "494d77f2e346999809839be3065a2bfbed9cfbcc83a9bb82a25d78e8f8f03aad"
+    },
+    "focused-python-v1": {
+      "status": "FAIL",
+      "phase": "qualification",
+      "reserved_seconds": 60,
+      "kind": "passive",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 1.3038219659938477,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 199634944,
+      "unknown_attempts": false,
+      "log_sha256": "8f3e7c374d16469320de817e2834a30d6c22b0151ca9a2acc2496a56d7b00641"
+    },
+    "prebootstrap-selector-source-fix-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30,
+      "seconds": 0.03660642501199618
+    },
+    "focused-python-v2": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 60,
+      "kind": "passive",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 1.3045659229974262,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 193155072,
+      "unknown_attempts": false,
+      "log_sha256": "e68193e19eb70fd42990dc6a5f0c571ac1c68e792ddd8c447022a8d8a925ef76"
+    },
+    "native-protocol-components-v1": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 120,
+      "kind": "passive",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 34.108248712000204,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 105005056,
+      "unknown_attempts": false,
+      "log_sha256": "7fe4c6c3f26e588e3535a1940f19f6eb45869a2eb3f986b6ab8626fcfcd451cc"
+    },
+    "native-bootstrap-component-v1": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 120,
+      "kind": "component",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 6.425853467982961,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 628310016,
+      "unknown_attempts": false,
+      "log_sha256": "092eb79c4b032edccadee6ae554ef9a00afd686144ea281de5ece6ccde5789c4"
+    },
+    "coarse-native-CP0-v1": {
+      "status": "PASS",
+      "phase": "qualification",
+      "reserved_seconds": 240.0,
+      "kind": "bootstrap",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 125.92157824599417,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 5692776448,
+      "unknown_attempts": false,
+      "log_sha256": "22aad56f37a506983f0d7ca5eb5d2429185ea6bed12e36f00363c6db833a0d16"
+    },
+    "coarse-cost-admission-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60,
+      "kind": "passive",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 1.2957119120110292,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 94810112,
+      "unknown_attempts": false,
+      "log_sha256": "85d4f57af881c471c2db0c9703d0d0f62012c4095af6903aeacbc23d8e80f412"
+    },
+    "coarse-target-v1": {
+      "status": "PASS",
+      "phase": "target",
+      "reserved_seconds": 750.0,
+      "kind": "target",
+      "reserved_attempts": 2,
+      "charged_attempts": 2,
+      "seconds": 314.76554819601006,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 6874308608,
+      "unknown_attempts": false,
+      "log_sha256": "7b9685fab1d858a75c9afa1628fe224df06b9f976d6055328cd420275155776f"
+    },
+    "protected-final-strict-v1": {
+      "status": "PASS",
+      "phase": "target_readback",
+      "reserved_seconds": 120.0,
+      "kind": "passive",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 38.18315699699451,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 3831226368,
+      "unknown_attempts": false,
+      "log_sha256": "c440ef0855f49abbe31be0774c87a10af16ba3f4ea29b08407e3c3f161f558e4"
+    },
+    "publication-source-sync-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30,
+      "seconds": 0.022896177018992603
+    },
+    "compact-publication-v1": {
+      "status": "FAIL",
+      "phase": "operation",
+      "reserved_seconds": 180,
+      "kind": "passive",
+      "reserved_attempts": 0,
+      "charged_attempts": 0,
+      "seconds": 0.6537351330043748,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 94908416,
+      "unknown_attempts": false,
+      "log_sha256": "3e2025d5036379f51f2541d4ec1672b6d70a58e50cf05d437974b98b82af85d6"
+    },
+    "publication-helper-sync-v1": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30,
+      "seconds": 0.022482772008515894
+    },
+    "compact-publication-v2": {
+      "status": "RESERVED",
+      "phase": "operation",
+      "reserved_seconds": 180,
+      "kind": "passive",
+      "reserved_attempts": 0,
+      "charged_attempts": 0
+    }
+  },
+  "target_blocks": 1,
+  "target_charged_attempts": 2,
+  "strict_reservations": [
+    "target"
+  ]
+}

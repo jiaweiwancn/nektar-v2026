@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "forecast_with_25percent_headroom": 625.0,
+  "closure_reserved": 300,
+  "strict_reserved": 120,
+  "command": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h19-target-timestep-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h19.py",
+    "--root",
+    "/home/jay/build/wj-h19-target-timestep-20261115",
+    "--mode",
+    "target"
+  ],
+  "inputs": [
+    {
+      "path": "/home/jay/build/wj-h19-target-timestep-20261115/execution-config.json",
+      "bytes": 4063,
+      "sha256": "8791a60c466b0778bf08304e6c94fcb06071c73180ab80241f222ac49bc475f0"
+    },
+    {
+      "path": "/home/jay/build/wj-h19-target-timestep-20261115/science/coarse-cp0/qualification.json",
+      "bytes": 1555962,
+      "sha256": "60df44db115251630d03ef152ef786fe8a947e77ef286ce3522bc009e4b30917"
+    },
+    {
+      "path": "/home/jay/build/wj-h19-target-timestep-20261115/science/component/qualification.json",
+      "bytes": 331,
+      "sha256": "645ab3d9463c5005f9915e351438a3e37bc2e9d86cb3e06bd3f3e58f5ce2ff31"
+    }
+  ]
+}

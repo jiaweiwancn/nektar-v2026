@@ -1,0 +1,54 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h19-target-timestep-20261115/operations/build-command-v2.py"
+  ],
+  "phase": "build",
+  "kind": "passive",
+  "reserved_seconds": 1190,
+  "maximum_attempts": 0,
+  "workers": 8,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 216851,
+        "parent": 215736,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B -"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h19-target-timestep-20261115/operations/build-command-v2.py": {
+      "sha256": "23f5ff0970f7cfee1b2a07c9093f61a7ee72832b2ec54a835885b2a41336c987",
+      "bytes": 772
+    }
+  },
+  "driver": "486501bda46a3928efbacf9812f57236be35b3828a06c949cbf43d81f72e9734"
+}
