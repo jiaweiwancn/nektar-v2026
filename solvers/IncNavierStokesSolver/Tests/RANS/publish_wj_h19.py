@@ -117,8 +117,16 @@ def publish(root):
     with q.open('rb')as f,gzip.open(str(q)+'.gz','wb')as g:shutil.copyfileobj(f,g)
     q.unlink()
     strict=root/'science/final-strict/result.json';copy(strict,'final-strict-result.json.gz',True)
-    # Reuse the existing fine terminal strict packet; no new fine native read.
-    copy(OLD/'science/target/B/view/result.json','reused-fine-terminal-strict.json.gz',True)
+    # Reuse the existing fine terminal strict packet under its recorded copy pin.
+    # No new fine native readback or fine history recombination is performed.
+    fstrict=OLD/'science/target/B/view/result.json'
+    originals=load(OLD/'publication-v1/copied-evidence.json')
+    oldpin=next(v['original']for v in originals if v['original']['path']==str(fstrict));verify(oldpin)
+    copy(fstrict,'reused-fine-terminal-strict.json.gz',True)
+    for role,path in (('coarse',strict),('fine',fstrict)):
+        v=load(path);keys=('schema','state_sha256','gauge_unknowns','mass_flux','boundary_flux_correction','alpha_mass','time','history_sha256','scope','interface')
+        atomic(out/(role+'-strict-compact.json'),dict(status=v['status'],source=identity(path),selected_absolute_step=v['selected_absolute_step'],physical_mass_dual_norms=v['physical_mass_dual_norms'],weak=v['weak'],
+            interface={k:v['interface'][k]for k in keys if k in v['interface']},scope='derived storage view, all signed projected weak terms and interface traces retained; larger exterior/station/load arrays stay in original'))
     copy(root/'science/coarse/monitor/startup.verification-commit.json','coarse/startup.verification-commit.json')
     copy(root/'science/coarse/monitor/latest-fully-verified-checkpoint.json','coarse/latest-fully-verified-checkpoint.json')
     ops=[]
@@ -165,6 +173,8 @@ def publish(root):
         ax.axhline(1,color='black',ls='--');ax.set(xlabel='Physical T',ylabel='Maximum same-owner budget utilization',title='Principal action and both minimizing directions');ax.legend(fontsize=8)
         fig.savefig(out/'principal-screen.png',dpi=160);plt.close(fig)
     atomic(out/'actual-storage.json',dict(science_bytes=size(root/'science'),source_build_runtime_bytes=sum(size(root/n)for n in ('source','build','runtime')),pilot_output_cap=2*1024**3,root=str(root),older_roots_unchanged=True))
+    compiled=load(root/'science/compiled-source-objects.json')
+    atomic(out/'compiled-source-summary.json',dict(native_source_commit=compiled['native_source_commit'],compiler=compiled['compiler'],objects=len(compiled['objects']),dependencies=compiled['local_dependencies'],full_record=identity(root/'science/compiled-source-objects.json'),executables=load(root/'science/runtime-build-v1.json')['executables']))
     atomic(out/'copied-evidence.json',copies)
     atomic(out/'manifest.json',dict(files=[identity(p)for p in sorted(out.rglob('*'))if p.is_file()],scope='publication snapshot; closed accounting sealed separately'))
     print(json.dumps(gates),flush=True)
