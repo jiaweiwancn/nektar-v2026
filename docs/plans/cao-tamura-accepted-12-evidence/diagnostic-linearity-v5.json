@@ -1,0 +1,9 @@
+{
+  "schema": "CT12DiagnosticLinearityV5",
+  "scope": "prospective read-only recovery algorithm, before recomputed pressure images",
+  "reason": "avoid repeated large analytic/current component solves and cancellation while retaining signed native rows and finite package cost",
+  "identity": "P(current)=P(sum analytic)+sum_j P(initial_j-analytic_j)+sum_j P(current_j-initial_j), for each actual fixed frozen operator P=-S_alpha^-1 D A^-1",
+  "preserved": "every physical/native signed row component and reaction, masks, natural terms, reference values and gradients, consistent mass, full G/D, absolute pressure and native increment; same2e-10 rows and1e-8 pressure/tighter/signed-sum gates",
+  "difference": "individual continuous equilibrium pressure images are not needed for the complete cancellation; their signed native loads are retained and the complete continuous image is computed directly; per-component reference departures and evolving changes remain separate",
+  "qualification": "diagnostic only; no reference load is removed from evolution, no extra governing solve; previous failed attempts and blocked q64 remain unchanged"
+}

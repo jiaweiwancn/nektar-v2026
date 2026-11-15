@@ -191,13 +191,25 @@ def main():
             continuity_unc=fr.measure(fr.solve(fr.rc,'continuity-tighter',2e-14)-continuity)
             storage_unc=fr.measure(fr.image(storage_global,'storage-lifting-tighter',2e-14)-st)
             require(max(continuity_unc['maximum_scaled_value'],storage_unc['maximum_scaled_value'])<1e-8,'small-RHS image uncertainty')
-            signed={};per_component={}
+            # Linearity lets us avoid subtracting large cancelling equilibrium
+            # pressure images. Keep the signed physical row terms in native
+            # packets, image the complete continuous load once, and attribute
+            # each representation/evolution departure separately. No load is
+            # subtracted from the governing trajectory.
+            continuous_load=sum(analytic0.values(),np.zeros(nm))
+            continuous=fr.image(continuous_load,'continuous/reference-total')
+            signed={'continuous/reference_total':continuous};per_component={}
             for key,v in actual.items():
-                pa=fr.image(analytic0[key],'continuous/'+key)
-                pr=fr.image(actual0[key]-analytic0[key],'representation/'+key)
-                pc=fr.image(v,'current/'+key)
-                signed['continuous/'+key]=pa;signed['representation/'+key]=pr;signed['evolution/'+key]=pc-pa-pr
-                per_component[key]=dict(current=fr.measure(pc),initial_representation=fr.measure(pr),evolution=fr.measure(pc-pa-pr))
+                representation=actual0[key]-analytic0[key];change=v-actual0[key]
+                pr=fr.image(representation,'representation/'+key)
+                pe=fr.image(change,'evolution/'+key)
+                signed['representation/'+key]=pr;signed['evolution/'+key]=pe
+                per_component[key]=dict(current_departure_from_continuous=fr.measure(pr+pe),
+                    initial_representation=fr.measure(pr),evolution=fr.measure(pe),
+                    signed_native_loads=dict(actual_maximum=maximum(v),continuous_maximum=maximum(analytic0[key]),
+                        representation_maximum=maximum(representation),evolving_change_maximum=maximum(change),
+                        actual_free_sum=float(np.sum(v[fr.rows[:nv]])),continuous_free_sum=float(np.sum(analytic0[key][fr.rows[:nv]])),
+                        representation_free_sum=float(np.sum(representation[fr.rows[:nv]])),change_free_sum=float(np.sum(change[fr.rows[:nv]]))))
             signed.update(continuity=continuity,storage_lifting=st)
             summed=sum(signed.values(),np.zeros_like(dpi));sum_error=fr.measure(summed-native)
             require(sum_error['maximum_scaled_value']<1e-8,'signed finite-step pressure sum')
@@ -214,7 +226,7 @@ def main():
                 accepted_to_pre_k=maximum(accepted[ids]-np.asarray(ks['pre_k'])[ids]))
             require(max(stage_pressure.values())<=2e-10,'unattributed pressure stage change')
             row=dict(time=s['time'],snapshot=dict(path=str(f),sha256=sha(f)),load=meta,
-                alpha=s['alpha'],C_maximum=smx(fr.C),unused_gauge=False,free_velocity=nv,free_pressure=len(ids),
+                alpha=s['alpha'],C_maximum=smx(fr.C),unused_gauge=False,continuous_total=fr.measure(continuous),free_velocity=nv,free_pressure=len(ids),
                 block_reconstruction=fr.blocks,predictor_reconstruction=maximum(pred-np.asarray(s['predictor_increment'])),
                 initial_weak_continuity_maximum=maximum(fr.rc),native_increment=fr.measure(native),
                 reconstructed_increment=fr.measure(dpi),reconstruction=error,tighter_repeat=unc,signed_sum_error=sum_error,
@@ -228,8 +240,8 @@ def main():
             if (dt=='0.001' and i==0) or (dt=='0.0005' and i==len(report['pimple_attempts'])-1):
                 repeats={}
                 for key in ('outer/volume/nonlinear_normal','outer/volume/advection','outer/outlet/natural_advection'):
-                    pv=signed['continuous/'+key]+signed['representation/'+key]+signed['evolution/'+key]
-                    q=fr.image(actual[key],'component-tighter/'+key,2e-14);err=fr.measure(q-pv)
+                    pv=signed['representation/'+key]+signed['evolution/'+key]
+                    q=fr.image(actual[key]-analytic0[key],'component-tighter/'+key,2e-14);err=fr.measure(q-pv)
                     require(err['maximum_scaled_value']<1e-8,'component pressure-image tighter repeat:'+key)
                     repeats[key]=err
                 row['component_tighter_repeats']=repeats
