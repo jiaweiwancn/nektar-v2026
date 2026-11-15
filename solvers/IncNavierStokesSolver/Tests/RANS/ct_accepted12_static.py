@@ -82,7 +82,7 @@ def main():
             dest=a.output/label;dest.mkdir();root=ET.parse(folder/'case.xml').getroot()
             if orders:
                 for k,v in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),orders,strict=True):set_parameter(root,k,v)
-            write(root,dest/'case.xml');req=replay(q,r['state'],0.,[],export_sparse_backend=True,sparse_alpha=alpha)
+            write(root,dest/'case.xml');req=replay(q,r['state'],0.,[],export_neutral_composite_reference=True,export_sparse_backend=True,sparse_alpha=alpha)
             packet,execution=probe(a.probe,dest,req,'frozen');out['controls'][label]=dict(execution=execution,packet_sha256=sha(dest/'frozen.json'),failure=packet.get('failure'))
             require(execution['exit_code']==0,'static '+label+':'+str(packet.get('failure')))
             n.binding(packet,c);row=record(packet,execution);row['packet_sha256']=sha(dest/'frozen.json');out['controls'][label]=row

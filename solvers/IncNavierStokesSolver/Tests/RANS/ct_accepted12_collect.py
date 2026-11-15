@@ -56,16 +56,52 @@ def pressure_gate(q,require_quadrature=True):
     return dict(status='pass' if not reasons else 'fail',reasons=sorted(set(reasons)),scope='read-only reconstruction and signed attribution; no physical uncertainty reclassification')
 
 
+def static_gate(q):
+    reasons=[]
+    if q.get('schema')!='CT12StaticInnerContrastV1' or q.get('physical_evolution') is not False:reasons.append('scope')
+    if q.get('count',{}).get('stored_slots')!=62533 or q.get('count',{}).get('elements')!=961:reasons.append('native_count')
+    initial=q.get('initial',{})
+    if initial.get('time')!=0. or initial.get('failure')!='':reasons.append('initial')
+    controls=q.get('controls',{})
+    if set(controls)!={'native','alpha2000','q48','q64'}:reasons.append('control_coverage')
+    for name,row in controls.items():
+        if not finite_numbers(row) or row.get('execution',{}).get('exit_code')!=0:reasons.append('execution:'+name);continue
+        if row.get('pressure_C_nnz')!=0 or row.get('state_sha256')!=initial.get('state_sha256') or row.get('input_unchanged') is not True:reasons.append('binding:'+name)
+        if row.get('predictor_factor_nnz',40000001)>40000000:reasons.append('fill:'+name)
+        for key in ('full_native_G_action_defect','consistent_mass_correction_true_residual','splitting_identity'):
+            if not 0<=row.get(key,1)<=2e-10:reasons.append('action:'+name)
+        if row.get('true_pressure_residual',1)>2e-10*max(1.,row.get('pressure_rhs_maximum',0.)):reasons.append('pressure:'+name)
+        if name.startswith('q') and row.get('pressure_change_scaled_maximum',1)>=1e-8:reasons.append('quadrature:'+name)
+    if q.get('all_row_load_reconstruction',1)>2e-10 or q.get('effective_lift',1)!=0.:reasons.append('native_load')
+    r=q.get('reference_agreement',{})
+    if len(r.get('maximum_scaled_defects',[]))!=9 or any(x>2e-9 or not np.isfinite(x) for x in r.get('maximum_scaled_defects',[])) or r.get('nonconstant_inner_k_signal',0.)<=1e-3:reasons.append('reference')
+    metrics=q.get('initial_metrics',{})
+    if set(metrics.get('absolute_reference_error',{}))!={'U','w','k','outer_epsilon','Pi'}:reasons.append('field_coverage')
+    for k,v in metrics.get('absolute_reference_error',{}).items():
+        if not 0<=v.get('scaled',1)<=(1e-4 if k=='w' else 1e-3):reasons.append('reference_field:'+k)
+    for k in ('normalized_wall_traction_error','normalized_interface_traction_RMS'):
+        if not 0<=metrics.get('traction',{}).get(k,1)<=1e-3:reasons.append(k)
+    if not 0<=metrics.get('mass',{}).get('scaled',1)<=1e-8:reasons.append('mass')
+    domain=q.get('physical_domain',{})
+    if domain.get('domain_failure_count')!=0 or domain.get('minima',{}).get('covariance',{}).get('value',-1)<-1e-10*q['case']['K0'] or (domain.get('minimum_radicand') or {}).get('radicand',-1)<0:reasons.append('domain')
+    return dict(status='static_pass_only' if not reasons else 'blocked_or_failed',reasons=sorted(set(reasons)),scope='zero-time representation/capacity only; never evolved uncertainty or physical admission')
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','ct10','ct11','pressure','axes','profile','self-control','output'):p.add_argument('--'+k,type=Path,required=True)
-    a=p.parse_args();pressure=sealed(a.pressure);axes=sealed(a.axes);profile=sealed(a.profile);old=sealed(a.ct11/'target-v1')
+    p.add_argument('--static',type=Path)
+    a=p.parse_args();static=sealed(a.static) if a.static else None;pressure=sealed(a.pressure);axes=sealed(a.axes);profile=sealed(a.profile);old=sealed(a.ct11/'target-v1')
     gate=pressure_gate(pressure,False);quadrature_gate=pressure_gate(pressure)
     require(gate['status']=='pass','incomplete pressure reconstruction primitives:'+str(gate))
     require(profile['status']=='pass' and profile['retention']['all_restored_bytes_equal'] and
             profile['rollback']['status']=='pass' and physical_budgets(profile['budgets'])['status']=='pass','profile/retention prerequisites failed')
     require(axes['status']=='pass' and all(r['signed_sum_error']['maximum_scaled_value']<1e-8 for rows in axes['members'].values() for r in rows),'axis reconstruction failed')
     requests={label:dict(path=str(folder),request_sha256=sha(folder/'request-manifest.json'),result_sha256=sha(folder/'results.json'),seal_sha256=sha(folder/'completed-artifacts.json')) for label,folder in [('pressure',a.pressure),('axes',a.axes),('profile',a.profile)]}
+    if static:
+        sr=read(a.static/'request-manifest.json')['request'];expected=copy.deepcopy(old['case']);expected['knots']=sorted(set(expected['knots']+[.00146484375]))
+        require(sr['pressure']==sha(a.pressure/'results.json') and sr['target']==sha(a.ct11/'target-v1/results.json') and static['case']==expected,'foreign static reference/mesh binding')
+        requests['static']=dict(path=str(a.static),request_sha256=sha(a.static/'request-manifest.json'),result_sha256=sha(a.static/'results.json'),seal_sha256=sha(a.static/'completed-artifacts.json'))
     resources={};project=aggregate=0;cpu=wall=0.
     for f in sorted(a.root.glob('resources-*')):
         if f==a.self_control:continue
@@ -163,7 +199,7 @@ def main():
         retention=dict(status=profile['retention']['status'],scope='lossless compressed/deduplicated bounded replay payloads; no historical pruning or unqualified rolling eviction'),
         campaign_resources=forecast,resources=dict(status='pass' if worker_pass and package_pass else 'fail',worker_status='pass' if worker_pass else 'fail',package_budget_status='pass' if package_pass else 'fail',maximum_project=max(project,union_peak),maximum_aggregate=aggregate,combined_project_witness=union_witness,
             closed_package_CPU=cpu,closed_family_wall_sum=wall,new_output_bytes=output_bytes,package_CPU_limit=12000,package_wall_limit=14400,package_output_limit_bytes=12*1024**3),
-        static_contrast='not_yet_selected; target-specific attribution must precede any separate static manifest',
+        static_contrast=static_gate(static) if static else dict(status='not_attempted',reason='separate conditional selection and finite preflight not completed'),
         terrain='unattempted; mapped numbering,joined gradients/cofactors,transmission and curved temporal/spatial gates separate',
         physical_applicability='central physical reference retained; no precursor or hill validation',historical='CT4–CT11 seals unchanged')
     failures={}
@@ -171,6 +207,7 @@ def main():
         f=a.root/(name+'-family.log');r=a.root/('resources-'+name)/'execution.json'
         if f.exists() and r.exists():failures[name]=dict(log=str(f),log_sha256=sha(f),witness=f.read_text()[-4500:],execution=read(r),execution_sha256=sha(r),
             scope='preserved diagnostic/controller failure, not a new physical trajectory or a relabelled historical result')
+    if static:write_json(a.output/'static-contrast.json',static)
     for name,value in [('failed-attempts',failures),('pressure',pressure),('pressure-summary',summary),('axes-and-tractions',axes),('profile',profile),('cost',costs),('forecast',forecast),('negative-controls',negatives),('resources',resources),('decision',decision)]:write_json(a.output/(name+'.json'),value)
     critical=['library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp','library/SolverUtils/Turbulence/RANSModels.cpp','library/UnitTests/SolverUtils/RANSPreservationProbe.cpp',
         'solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp','solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp',
