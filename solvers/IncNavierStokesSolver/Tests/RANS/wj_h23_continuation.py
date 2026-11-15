@@ -106,13 +106,13 @@ def deadline_ok(deadline,now,level,step,**costs):
     # A later strict reader is outside this governor's own operation deadline.
     return deadline-now>=1.25*local_forecast(level,step,**costs)
 
-def progress_forecast(book,level,step,elapsed,**costs):
+def progress_forecast(book,level,step,elapsed,future_costs=None,**costs):
     """Actual completed spend plus current elapsed plus future work, once each."""
     entries=[e for e in book['entries'].values()if e.get('kind')!=level]
     native=sum(e.get('seconds',e['reserved_seconds'])for e in entries if e['phase']=='native')+elapsed
     total=60+300+sum(e.get('seconds',e['reserved_seconds'])for e in entries)+elapsed
     later=ORDER[ORDER.index(level)+1:]
-    remaining=local_forecast(level,step,**costs)+120+sum(branch_forecast(z)for z in later)
+    remaining=local_forecast(level,step,**costs)+120+sum(branch_forecast(z,**(future_costs[z]if future_costs else{}))for z in later)
     return dict(status='PASS'if native+1.25*remaining<=4200 and total+1.25*remaining<=6000 else'RESOURCE_LIMIT',
         actual_native=native,actual_total_with_closure=total,remaining_estimate=remaining,headroom=1.25,
         protected_strict_seconds=120*(1+len(later)),closure_seconds=300,active_reservation_counted_as_spent=False)

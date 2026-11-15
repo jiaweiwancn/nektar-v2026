@@ -146,7 +146,7 @@ def daemon(root,intent_path):
             next_step='REVIEW_STOP'if verdict=='REVIEW_STOP'else'TERMINAL'if step==END[level]else'PROCEED'
             if next_step=='PROCEED':
                 costs=dict(ordinary=v['ordinary_step_forecast_seconds'],audit=v['audit_forecast_seconds'],observer=v['observer_forecast_seconds'])
-                now=time.monotonic();forecast=progress_forecast(load(root/'accounting.json'),level,step,now-v['operation_start_monotonic'],**costs)
+                now=time.monotonic();forecast=progress_forecast(load(root/'accounting.json'),level,step,now-v['operation_start_monotonic'],future_costs=v['prospective_forecasts'],**costs)
                 forecast['governor_deadline_ok']=deadline_ok(v['deadline_monotonic'],now,level,step,**costs)
                 atomic(directory/f'step-{step}.resource-admission.json',forecast)
                 if forecast['status']!='PASS'or not forecast['governor_deadline_ok']:next_step='RESOURCE_LIMIT'

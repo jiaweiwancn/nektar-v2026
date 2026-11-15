@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Only three unchanged nonzero restarts and their protected qualified reads."""
-import argparse,hashlib,os,subprocess,sys,time,uuid
+import argparse,hashlib,json,os,subprocess,sys,time,uuid
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from run_wj_h4 import THREADS,load
@@ -124,7 +124,7 @@ def preflight(root):
 
 def freeze(root):
     assert load(root/'science/preflight/result.json')['status']=='PASS'
-    assert load(root/'operations/focused-controls-v1/receipt.json')['status']=='PASS'
+    assert load(root/'operations/focused-controls-v2/receipt.json')['status']=='PASS'
     files=list(load(root/'source-manifest.json')['files'])
     files.extend(identity(root/'inputs'/n)for n in ('selected.json','historical-indices.json','historical-immutability.json'))
     files.extend(identity(root/'science'/n)for n in ('runtime-build-v1.json','runtime-dependencies-v1.json','compiled-source-objects.json','target-cache-compatibility.json','setup.json','preflight/result.json'))
@@ -142,14 +142,42 @@ def admission(root,level):
         assert load(root/f'science/{z}/qualification.json')['status']=='PASS'
         strict=load(root/f'science/{z}/final-strict/result.json')
         assert strict['status']=='PASS'and integer(strict['selected_absolute_step'])==END[z]
-    u=usage(b);remaining=ORDER[ORDER.index(level):];estimate=sum(branch_forecast(z)for z in remaining)
+    u=usage(b);remaining=ORDER[ORDER.index(level):];costs=forecast_costs(root)
+    estimate=sum(branch_forecast(z,**costs[z])for z in remaining)
     assert u['native']+1.25*estimate<=4200 and u['total']+1.25*estimate<=6000,'remaining measured-work headroom'
     path=root/f'admission-{level}.json'
     if not path.exists():atomic(path,dict(status='PASS',level=level,used=u,remaining_estimate=estimate,headroom=1.25,strict_protected=120*len(remaining),closure_protected=300,
-        forecasts='conservative frozen upper forecasts, compared to measured previous branch scopes in measured-forecast.json when available'))
+        forecasts=costs,forecast_rule='maximum of frozen conservative prior and measured preceding branches; no cap enlargement'))
+
+def forecast_costs(root):
+    costs={z:dict(ordinary=45.,audit=50.,observer=float(OBSERVER_FORECAST[z]))for z in ORDER}
+    for z in ORDER:
+        path=root/f'science/measured-forecast-{z}.json'
+        if path.exists():
+            v=load(path)
+            for level in ORDER:
+                for k in costs[level]:costs[level][k]=max(costs[level][k],v['selected_forecasts'][level][k])
+    return costs
+
+def measure_forecast(root,level):
+    d=root/f'science/{level}/monitor'
+    tele=[json.loads(s)for s in(d/'telemetry.jsonl').read_text().splitlines()]
+    scopes=[json.loads(s)for s in(root/f'operations/governor-{level}-v1/timing.jsonl').read_text().splitlines()]
+    ordinary=[float(t['native_compute_seconds'])for t in tele if integer(t['absolute_step'])%STRIDE[level]]
+    def times(name):return [s['wall_seconds']for s in scopes if s['name']==name and START[level]<s['step']<=END[level]]
+    audits=times('native.acceptance_audit');waits=times('monitor.independent_wait');costs=forecast_costs(root)
+    if ordinary:
+        for z in ORDER:costs[z]['ordinary']=max(costs[z]['ordinary'],max(ordinary))
+    if audits:
+        for z in ORDER:costs[z]['audit']=max(costs[z]['audit'],max(audits))
+    if waits:costs[level]['observer']=max(costs[level]['observer'],max(waits))
+    atomic(root/f'science/measured-forecast-{level}.json',dict(level=level,ordinary_samples=ordinary,native_audit_samples=audits,
+        inclusive_wait_samples=waits,selected_forecasts=costs,rule='conservative max(prior, observed maximum); governing C all-audited is not an ordinary sample',
+        timings_source=identity(root/f'operations/governor-{level}-v1/timing.jsonl')))
 
 def target(root,level):
     frozen(root);inputs=load(root/'inputs/selected.json');folder=root/'science'/level;directory=folder/'monitor';directory.mkdir();ip=folder/'intent.json'
+    costs=forecast_costs(root)[level]
     intent=dict(schema='WJMonitorIntentV1',policy='CheckpointAuditV1',h23_role='ContinuationFrom02V1',level=level,directory=str(directory),nonce=uuid.uuid4().hex,
         scope_sha256=hashlib.sha256((identity(folder/'case.xml')['sha256']+identity(root/'execution-config.json')['sha256']).encode()).hexdigest(),
         source_sha256=identity(root/'science/runtime-build-v1.json')['sha256'],observer_sha256=identity(HERE/'wj_h23_observer.py')['sha256'],inventory_rule_sha256=hashlib.sha256(RULE.encode()).hexdigest(),
@@ -158,7 +186,7 @@ def target(root,level):
         maximum_absolute_step=END[level],restored_absolute_step=START[level],recovery_stride=1,scientific_stride=STRIDE[level],dt_bits=bits(DT[level]),ack_timeout_seconds=120.,
         substep_evidence_steps=[],flow_capture='Off',snapshot_capture='Off',preserve_qualification_artifacts=True,selected_inputs=identity(root/'inputs/selected.json'),common_support=inputs['common_support'],
         deadline_monotonic=float(os.environ['WJ_H23_DEADLINE']),operation_start_monotonic=float(os.environ['WJ_H23_OPERATION_START']),
-        ordinary_step_forecast_seconds=45.,audit_forecast_seconds=50.,observer_forecast_seconds=OBSERVER_FORECAST[level])
+        ordinary_step_forecast_seconds=costs['ordinary'],audit_forecast_seconds=costs['audit'],observer_forecast_seconds=costs['observer'],prospective_forecasts=forecast_costs(root))
     validate_intent(intent,ADDITIONAL[level]);obs=native=None;code=None;error=None;start=time.monotonic()
     with(folder/'observer.log').open('x')as ol,(folder/'native.log').open('x')as nl:
         try:
@@ -212,6 +240,7 @@ def strict(root,level):
     assert r['callback_history_sha256']==vector_hash(old['last_stage_history'])
     atomic(out/'result.json',dict(status='PASS',selected_absolute_step=selection['step'],time=selection['time'],genuine_alpha=selection['alpha'],selection=selection,
         producer=identity(out/'native.json'),request=identity(out/'request.json'),physical_mass_dual_norms=r['physical_mass_dual_norms'],weak=r['weak_checks'],interface=r['open_boundary']))
+    if success:measure_forecast(root,level)
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('setup','preflight','freeze','admission',*ORDER,'strict_M','strict_C','strict_F','runtime'),required=True)
