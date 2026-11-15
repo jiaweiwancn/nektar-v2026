@@ -7,7 +7,7 @@ import numpy as np
 from wj_h15_observer import vector_hash,atomic,identity
 from wj_h20_analysis import DT,ADDITIONAL,START,END,STRIDE,TIMES,absolute_step,selected,availability,ratio,continuation,all_pair_screens,shared_direction_actions,FLOOR
 from wj_h20_observer import resolve
-from run_wj_h20 import native_selection,reserve_strict
+from run_wj_h20 import native_selection,reserve_strict,usage
 from study_wj_h20 import validate_monitor_intent,ACK_TIMEOUT,admission
 from wj_h15_observer import bits
 
@@ -111,5 +111,14 @@ class ThreeLevel(unittest.TestCase):
             with patch('study_wj_h20.frozen',lambda root:None):
                 for level in ('C','F'):
                     with self.assertRaises(AssertionError):admission(root,level)
+
+    def test_resumption_carries_all_prior_work_without_reclaiming_charges(self):
+        book=dict(carryforward_seconds=714.0562545959547,carryforward_native_seconds=42.09456458600471,entries={'failed':dict(phase='target',reserved_seconds=10,seconds=3.5)})
+        before=usage(book)
+        self.assertAlmostEqual(before['total'],714.0562545959547+60+300+3.5)
+        self.assertAlmostEqual(before['native'],42.09456458600471+3.5)
+        book['entries']['unknown']=dict(phase='target',reserved_seconds=30)
+        self.assertEqual(usage(book)['total']-before['total'],30)
+        self.assertEqual(usage(book)['native']-before['native'],30)
 
 if __name__=='__main__':unittest.main()

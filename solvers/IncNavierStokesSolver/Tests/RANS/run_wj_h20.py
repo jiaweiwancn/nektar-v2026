@@ -16,7 +16,12 @@ from wj6_resources import scientific_workers,tree_usage
 from wj7_command import owned_groups
 
 ROOT='wj-h20-three-level-20261115'
+RESUME_ROOT='wj-h20-three-level-resume-20261115'
 CAPS=dict(operation=1200,build=900,qualification=3600,target=1800,target_readback=120,closure=300)
+
+def usage(book):
+    return dict(total=book.get('carryforward_seconds',0)+book.get('setup_charged_seconds',60)+book.get('closure_reserve_seconds',300)+sum(v.get('seconds',v['reserved_seconds'])for v in book['entries'].values()if v['phase']!='closure'),
+        native=book.get('carryforward_native_seconds',0)+sum(v.get('seconds',v['reserved_seconds'])for v in book['entries'].values()if v['phase']in ('qualification','target','target_readback')))
 
 def native_selection(root,argv,kind,attempts):
     import sys
@@ -49,15 +54,16 @@ def frozen(root):
     return cfg
 
 def execute(root,label,argv,seconds,phase='operation',workers=1,kind='passive',attempts=0):
-    root=Path(root);assert root.name==ROOT and phase in CAPS and 0<seconds<=CAPS[phase]
+    root=Path(root);assert root.name in (ROOT,RESUME_ROOT) and phase in CAPS and 0<seconds<=CAPS[phase]
     assert kind in ('passive','bootstrap','target')and 1<=workers<=(8 if phase=='build'else 2 if kind=='target'else 1)
     book=root/'accounting.json';folder=root/'operations'/label;folder.mkdir(exist_ok=False)
     allocation=scientific_workers();assert allocation['workers']+workers+6<=72
     def reserve(b):
         assert not b['closed']and label not in b['entries']
         charged=lambda phases:sum(v.get('seconds',v['reserved_seconds'])for v in b['entries'].values()if v['phase']in phases)
-        assert 60+charged(set(CAPS)-{'closure'})+(0 if phase=='closure'else seconds)+300<=7200
-        if phase in ('qualification','target','target_readback'):assert charged({'qualification','target','target_readback'})+seconds<=3600
+        used=usage(b)
+        assert used['total']+(0 if phase=='closure'else seconds)<=7200
+        if phase in ('qualification','target','target_readback'):assert used['native']+seconds<=3600
         elif phase!='operation':assert charged({phase})+seconds<=CAPS[phase]
         if kind!='passive':
             selected=native_selection(root,argv,kind,attempts)

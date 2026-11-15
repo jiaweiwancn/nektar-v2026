@@ -15,7 +15,7 @@ from study_wj_h16 import same_cp
 from study_wj_h17 import cp_request
 from wj3_measure import checkpoint_payload
 from cls_epawf_m3_cases import set_info,set_parameter,write
-from run_wj_h20 import frozen,reserve_strict
+from run_wj_h20 import frozen,reserve_strict,usage
 HERE=Path(__file__).resolve().parent
 NATIVE='b2365e52b0d334d7b61c6be3a4a3bb9029491084'
 ACK_TIMEOUT=120.
@@ -78,6 +78,7 @@ def setup(root):
     files=[identity(HERE/n)for n in ('run_wj_h20.py','study_wj_h20.py','wj_h20_analysis.py','wj_h20_observer.py','test_wj_h20_three_level.py')]
     files.extend(identity(root/'science'/n)for n in ('runtime-build-v1.json','runtime-dependencies-v1.json','target-cache-compatibility.json','initial-spatial-lineage.json'))
     files.append(identity(root/'inputs/selected.json'))
+    if(root/'resumption.json').exists():files.append(identity(root/'resumption.json'))
     for v in b['executables']:files.extend((v['ELF'],v['wrapper']))
     for v in c['active_sources']:files.append(v['active'])
     atomic(root/'execution-config.json',dict(schema='WJH20FrozenExecutionV1',files=files,order=['M','C','F'],maximum_CP0=1,maximum_blocks=3,maximum_attempts=22,maximum_final_strict=3,
@@ -113,6 +114,27 @@ def anchors(root,level):
     cp0=dict(checkpoint=inputs['C_CP0'],report=inputs['C_CP0_report'],xml=inputs['C_CP0_xml'])if level=='C'else dict(checkpoint=inputs['original']['checkpoint'],report=inputs['original']['producer'],xml=inputs['original']['xml'])
     return v,cp0
 
+def preflight(root):
+    """Retained-state evaluator controls, never a new target solution."""
+    frozen(root);inputs=load(root/'inputs/selected.json');folder=root/'science/passive-preflight';folder.mkdir()
+    cache,_=load_compatible(root/'science/target-cache-compatibility.json');fixed=load(verify(inputs['common_support']))['points']
+    m,_=read_anchor(inputs['states']['M']['4'],'M',.01)
+    result,_=evaluate(root,cache,fixed,inputs,m,'M',4,folder,'retained-M4')
+    assert result['status']=='PASS'and result['comparison']['status']=='NOT_YET_AVAILABLE'
+    c,_=read_anchor(inputs['states']['C']['2'],'C',.01)
+    result,_=evaluate(root,cache,fixed,inputs,c,'C',2,folder,'retained-C2-M4')
+    assert result['status']=='PASS'and result['comparison']['status']=='PASS'
+    # Exercise full triplet serialization with actual immutable state aliases.
+    # It is an alias fixture, not F evidence or a temporal measurement.
+    import numpy as np
+    from wj_h20_analysis import triplet_diagnostics
+    arrays=np.load(verify(result['signed_arrays']));inv=load(verify(result['inventory']));rows,_,_=cache.view(inv['points'])
+    data={z:{k[2:]:arrays[k]for k in arrays.files if k.startswith(z+'_')}for z in ('C','M')};data['F']=data['M']
+    diagnostic,_=triplet_diagnostics(rows,data)
+    assert len(diagnostic['fixed_probes'])>=4
+    atomic(folder/'result.json',dict(status='PASS',retained_pair_result=identity(folder/'retained-C2-M4.result.json')if(folder/'retained-C2-M4.result.json').exists()else result['signed_arrays'],
+        retained_M_summary='PASS',retained_C_M_screen='PASS',triplet_alias_fixture='PASS, F=M only here; not scientific F evidence',new_native_work=0))
+
 def admission(root,level):
     frozen(root);b=load(root/'accounting.json')
     assert not any(b.get(k)for k in ('runtime_halt','qualification_halt','target_halt','coverage_halt','screen_halt'))
@@ -120,15 +142,17 @@ def admission(root,level):
     previous={'M':None,'C':'M','F':'C'}[level]
     if previous:assert load(root/f'science/{previous}/qualification.json')['status']=='PASS'
     if level=='F':assert load(root/'science/F-cp0/qualification.json')['status']=='PASS'
-    # H19 measured ordinary ~40.4s, full audit ~43.6s, two-state observer ~20.4s.
-    # Allow 90s startup, 50s online step, 44s native audit, 32s/44s observer.
+    # H19 startup.initialize already includes its native full audit. Budget
+    # 110s inclusive startup, then 50s online plus 44s audit and 32s/44s observer
+    # at NEW due steps; do not count the startup full audit a second time.
     observer=32 if level!='F'else 44
     remaining=['M','C','F'][['M','C','F'].index(level):]
-    estimate=sum(90+ADDITIONAL[z]*50+(ADDITIONAL[z]//STRIDE[z]+1)*(44+(44 if z=='F'else 32))+120+20 for z in remaining)+(140 if level!='F'else 0)
+    estimate=sum(110+ADDITIONAL[z]*50+(ADDITIONAL[z]//STRIDE[z])*(44+(44 if z=='F'else 32))+120+20 for z in remaining)+(140 if level!='F'else 0)
     headroom=1.25*estimate
-    used=sum(v.get('seconds',v['reserved_seconds'])for v in b['entries'].values());native=sum(v.get('seconds',v['reserved_seconds'])for v in b['entries'].values()if v['phase']in ('qualification','target','target_readback'))
-    assert 60+used+headroom+300<=7200,'global measured remaining admission'
-    assert native+headroom<=3600,'combined native/bootstrap/strict remaining admission'
+    used=usage(b)
+    assert used['total']+headroom<=7200,'global measured remaining admission'
+    assert used['native']+headroom<=3600,'combined native/bootstrap/strict remaining admission'
+    if(root/'resumption.json').exists():assert load(root/'science/passive-preflight/result.json')['status']=='PASS'
     restored,cp0=anchors(root,level)
     if level!='F':read_anchor(restored,level,.01)
     required=[identity(root/'execution-config.json'),restored['checkpoint'],restored['report'],cp0['checkpoint'],cp0['xml']]
@@ -213,6 +237,6 @@ def strict(root,level):
     atomic(out/'result.json',dict(status='PASS',selected_absolute_step=r['selected_absolute_step'],producer=identity(out/'native.json'),physical_mass_dual_norms=r['physical_mass_dual_norms'],weak=r['weak_checks'],interface=r['open_boundary']))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('setup','bootstrap','admission','target','strict'),required=True);p.add_argument('--level',choices=tuple(DT));a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('setup','preflight','bootstrap','admission','target','strict'),required=True);p.add_argument('--level',choices=tuple(DT));a=p.parse_args()
     if a.mode in ('admission','target','strict'):assert a.level;globals()[a.mode](a.root,a.level)
     else:globals()[a.mode](a.root)
