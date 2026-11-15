@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Fixed COLAMD/AMD/Natural assessment using the actual guarded native factor."""
-import argparse,os,re,resource,shutil
+import argparse,os,re,resource,shutil,subprocess,time
 from pathlib import Path
 from rans_qualification import THREADS
 os.environ.update(THREADS)
@@ -10,6 +10,32 @@ from ct_accepted9_pressure_run import sealed
 from ct_accepted_open import run,require
 from ct_accepted_feasibility import write_json
 from rans_request_manifest import RequestManifest,runtime_identity,sha
+
+def native_run(command,folder,log,cpu,wall):
+    """Bound the native process itself, observe its actual maps, always reap it."""
+    started=time.monotonic();before=resource.getrusage(resource.RUSAGE_CHILDREN);maps={};rss=vm=0;stop=None
+    def limits():
+        resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_CPU,(cpu,cpu+5))
+    with (folder/log).open('x') as f:
+        child=subprocess.Popen([str(x) for x in command],cwd=folder,stdout=f,stderr=subprocess.STDOUT,env=dict(os.environ,**THREADS),preexec_fn=limits)
+        try:
+            while child.poll() is None:
+                proc=Path('/proc')/str(child.pid)
+                try:
+                    for line in (proc/'maps').read_text().splitlines():
+                        word=line.split()[-1];p=Path(word)
+                        if word.startswith('/') and p.is_file() and word not in maps:maps[word]=sha(p)
+                    for line in (proc/'status').read_text().splitlines():
+                        if line.startswith('VmHWM:'):rss=max(rss,int(line.split()[1]))
+                        if line.startswith('VmPeak:'):vm=max(vm,int(line.split()[1]))
+                except (FileNotFoundError,ProcessLookupError):pass
+                if time.monotonic()-started>wall:stop='wall_work_limit';child.terminate();break
+                time.sleep(.05)
+        finally:
+            try:child.wait(timeout=10)
+            except subprocess.TimeoutExpired:child.kill();child.wait()
+    after=resource.getrusage(resource.RUSAGE_CHILDREN)
+    return dict(command=list(map(str,command)),exit_code=child.returncode,wall_seconds=time.monotonic()-started,process_cpu_seconds=after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,peak_RSS_KiB=rss,peak_address_space_KiB=vm,actual_mapped_files=maps,CPU_soft=cpu,CPU_hard=cpu+5,wall_limit=wall,stop_reason=stop)
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
@@ -36,7 +62,6 @@ def main():
                     require(not (a.reuse_progress/'original-initial-Natural.json').exists(),'completed Natural result cannot be relabelled')
                     work_limited['Natural']=dict(status='unresolved_work_limited',reason='original1800-second family bound expired during first Natural control; no positive fill/residual claim or repeat',closed_execution_sha256=sha(closure),last_native_witness_sha256=sha(witness),last_native_CPU_lower_bound=row['CPU'])
     m=RequestManifest(a.output,dict(schema='CT13FixedOrderingAssessmentV3',source=sha(Path(__file__)),exports=sha(a.exports/'results.json'),contract=sha(a.contract),runtime=identity,orderings=['COLAMD','AMD','Natural'],work_amendment=sha(a.work_amendment),reused_progress=sha(a.reuse_progress/'progress.json') if a.reuse_progress else None,per_factor_CPU_soft=cpu_limit,per_factor_CPU_hard=cpu_limit+5,per_factor_wall=wall_limit))
-    require(shutil.which('prlimit') is not None,'native CPU-bound launcher unavailable')
     results={};fill={k:[] for k in ('COLAMD','AMD','Natural')};ineligible=set(work_limited)
     for label,s in data['systems'].items():
         require(sha(Path(s['A']['file']))==s['A']['sha256'],'foreign canonical matrix')
@@ -52,7 +77,7 @@ def main():
                 src=a.reuse_progress/out.name
                 require(src.is_file() and sha(src)==prior['result_sha256'] and prior['matrix_sha256']==s['A']['sha256'] and sha(rhs)==sha(a.reuse_progress/rhs.name),'changed completed ordering primitive')
                 shutil.copy2(src,out);e=prior['execution']
-            else:e=run(['prlimit','--cpu='+str(cpu_limit)+':'+str(cpu_limit+5),'--','timeout','-k','10s',str(wall_limit),a.runtime/'CT13SparseOrderingProbe',s['A']['file'],rhs,ordering,out],a.output,label+'-'+ordering+'.log')
+            else:e=native_run([a.runtime/'CT13SparseOrderingProbe',s['A']['file'],rhs,ordering,out],a.output,label+'-'+ordering+'.log',cpu_limit,wall_limit)
             row=__import__('json').loads(out.read_text()) if out.is_file() else dict(status='native_work_or_resource_failure',failure='no factor result; bounded native exit; inspect log and signal')
             compact={k:v for k,v in row.items() if k not in ('solution','tiny_solution')};compact.update(execution=e,result_sha256=sha(out) if out.exists() else None,matrix_sha256=s['A']['sha256'])
             if prior:compact['reused_completed_output']=str(a.reuse_progress/out.name)
