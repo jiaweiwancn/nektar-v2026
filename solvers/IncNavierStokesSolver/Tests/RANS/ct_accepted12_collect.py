@@ -117,7 +117,24 @@ def main():
             q=categories.setdefault(key,dict(calls=0,CPU=0.,wall=0.))
             for k in q:q[k]+=v[k]
             if key.startswith('geometry.'):geometry+=v['CPU']
-    costs=dict(categories=categories,baseline_uninstrumented_accepted_CPU=baseline_accepted,detailed_accepted_CPU=replay_accepted,
+    legacy_categories={}
+    path=Path(old['members']['0.001']['directory'])/'timing.jsonl'
+    for line in path.read_text().splitlines():
+        row=json.loads(line)
+        if row['step']>0:legacy_categories[row['name']]=legacy_categories.get(row['name'],0.)+row['exclusive_process_cpu_seconds']
+    files=[];file_categories={}
+    for f in sorted(Path(profile['work_root']).rglob('*')):
+        if not f.is_file():continue
+        rel=f.relative_to(profile['work_root']);parts=rel.parts
+        kind='audit_packet' if any(k in parts for k in ('native','q48f16','q64f16','q64f32')) else ('native_report' if f.name=='case.evolution.json' else ('restart_history' if any(k.startswith('checkpoint.') for k in parts) else ('sparse_matrix' if f.suffix in ('.csr','.bin') else ('stage_snapshot' if 'pimple-states' in parts else ('timing' if f.name.endswith('.jsonl') else ('config' if f.suffix in ('.xml','.opt') else 'other'))))))
+        row=dict(path=str(f),bytes=f.stat().st_size,kind=kind);files.append(row);file_categories[kind]=file_categories.get(kind,0)+row['bytes']
+    operation_receipts={}
+    for name in ('step1','step2','rollback'):
+        file=Path(profile['work_root'])/name/'case.evolution.json';report=read(file)
+        operation_receipts[name]=dict(native_report_sha256=sha(file),time=report['time'],failure=report['failure'],attempts=[{k:v for k,v in attempt.items() if k in
+            ('time','alpha','scheduled_complete','failure','linear_backend','flow_matrix_nonzeros','predictor_factor_nonzeros','mass_factor_nonzeros','pressure_preconditioner_factor_nonzeros','pressure_krylov_iterations','outer_sweeps','momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','additional_governing_equation_solves','additional_correction_or_restoration_solves','bound_calls','bound_activations','imposed_trace_defect','refreshed_trace_defect','algebraic_corrected_continuity','native_full_G_action_defect','momentum_splitting_identity_defect','incoming_domain','post_flow_domain','post_epsilon_domain','post_k_domain')} for attempt in report['pimple_attempts']])
+    costs=dict(native_operation_receipts=operation_receipts,categories=categories,legacy_accepted_categories=legacy_categories,legacy_timing_sha256=sha(path),actual_output_file_categories=file_categories,output_files=files,
+        detailed_to_legacy_accepted_ratio=replay_accepted/baseline_accepted,baseline_uninstrumented_accepted_CPU=baseline_accepted,detailed_accepted_CPU=replay_accepted,
         detailed_minus_baseline_CPU=replay_accepted-baseline_accepted,geometry_exclusive_CPU=geometry,
         instrumentation_caution='detailed clocks can add substantial cost; do not equate instrumented category fractions with achieved optimization savings',
         governing_optimization='none; no unmeasured reuse or ExactStepV1 enabled')
@@ -130,7 +147,9 @@ def main():
         conservative_investigation_plus_campaign_CPU=cpu+plan['total_CPU_spent_plus_remaining_with_headroom'],
         retained_CT11_wall_forecast=plan['total_wall_upper_estimate'],conservative_investigation_plus_campaign_wall=wall+plan['total_wall_upper_estimate'],
         measured_new_investigation_CPU=cpu,measured_new_investigation_active_wall_upper=wall,measured_new_output_bytes=output_bytes,
-        measured_policy_output_forecast=output_future,CPU_admitted=False,wall_admitted=False,output_admitted=output_future<=24*1024**3,
+        measured_policy_output_forecast=output_future,output_forecast_scope='conservative measured one-step native-retention upper planning estimate; actual future32-step segment amortization/online eviction is not qualified; no assumed output savings',
+        optimistic_CT11_CPU_if_all_domain_work_vanished=plan['total_CPU_spent_plus_remaining_with_headroom']*(1-legacy_categories.get('domain.compute',0.)/baseline_accepted),
+        required_whole_campaign_speedup=plan['total_CPU_spent_plus_remaining_with_headroom']/24000,CPU_admitted=False,wall_admitted=False,output_admitted=output_future<=24*1024**3,
         scope='spent historical target plus remaining forecast,25percent headroom; actual accepted-only retention excludes rollback dedup; no achieved CPU optimization or future trajectory assumed')
     common=pressure['common']['0.002'];ranked=sorted(common['components'].items(),key=lambda x:abs(x[1]['signed_alignment']),reverse=True)
     summary=dict(schema='CT12PressurePrimitiveSummaryV1',common=pressure['common'],

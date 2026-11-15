@@ -1,0 +1,84 @@
+{
+  "schema": "CT12FirstInnerStaticContrastV1",
+  "scope": "one static target representation contrast only; no evolved contrast or physical continuation",
+  "pressure_receipt": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115/pressure-v5/results.json",
+    "sha256": "798f5b6cb6808cb1aa1a9fe51c47a05ce218d4e40d8c4dd787facb90f93ef2d9"
+  },
+  "selection": {
+    "interval": [
+      0.0,
+      0.0029296875
+    ],
+    "added_point": 0.00146484375,
+    "physical_interval_mm": [
+      0.0,
+      0.1171875
+    ],
+    "added_point_mm": 0.05859375,
+    "rule": "bisect the actual target radial band with largest absolute signed alignment in the initial represented-minus-continuous consistent-mass pressure image; no evolved candidate was examined",
+    "observed_signed_alignment": 1.0471836676206847,
+    "hypothesis": "resolve represented inner finite-viscosity and auxiliary linear shear at the first wall slab; do not import CT10 strip outer-normal-stress attribution"
+  },
+  "fixed": "all original target x nodes and radial nodes,roof20,H=.1875,d=.0875,continuous functions,central fit,surface hs,ConstrainedRadialV1,P4/P2,governing quadrature,physical error criteria,pressure level and qualified CSR component",
+  "native_count": {
+    "baseline": 60907,
+    "predicted_candidate": 62533,
+    "predicted_elements": 961,
+    "status": "prediction until actual native construction"
+  },
+  "physical_manifest_sha256": "004bc0fc82054296a68d56de77751fc1f0a41570ee16b0a174ae8087f262d296",
+  "sequence": [
+    "native count",
+    "fresh zero-step projection/history",
+    "native reference/domain/load/frozen-alpha1000",
+    "frozen-alpha2000",
+    "frozen-q48",
+    "frozen-q64"
+  ],
+  "controls": {
+    "alpha": [
+      1000.0,
+      2000.0
+    ],
+    "native_orders": [
+      32,
+      8,
+      12,
+      12,
+      64
+    ],
+    "q48": [
+      48,
+      12,
+      12,
+      16,
+      64
+    ],
+    "q64": [
+      64,
+      16,
+      12,
+      20,
+      64
+    ],
+    "meaning": "read-only frozen operators at identical newly projected coefficients; alpha changes are not checkpoint dt edits"
+  },
+  "limits": {
+    "stored_slots": 70000,
+    "factor_nonzeros": 40000000,
+    "process_address_space_GiB": 16,
+    "all_row": 2e-10,
+    "pressure_quadrature_scaled": 1e-08,
+    "reference_scaled": 2e-09,
+    "field_reference": 0.001,
+    "vertical_reference": 0.0001,
+    "ground_interface_traction": 0.001,
+    "prospective_process_CPU_seconds": 1400,
+    "active_wall_seconds": 1600,
+    "output_GiB": 2
+  },
+  "stopping": "stop this static contrast at its first native count,reference/domain,operator,fill,memory or quadrature failure; no second mesh or cap increase; preserve partial primitives and exact native rejection",
+  "geometry": "apply the same added logical radial node to the matched flat/terrain definition; actual new native count is flat only; terrain numbering/evolution remain unsupported",
+  "admission": "a static pass cannot overwrite CT11 pressure failure or admit any trajectory; the baseline evolved q64 allocation failure remains blocked"
+}

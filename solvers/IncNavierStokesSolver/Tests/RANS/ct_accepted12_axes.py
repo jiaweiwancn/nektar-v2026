@@ -21,7 +21,7 @@ def main():
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));resource.setrlimit(resource.RLIMIT_CORE,(0,0))
     primary=sealed(a.pressure);target=sealed(a.ct11/'target-v1');ini=n.read(a.ct10/'target-preflight-v1/target/readiness.json');c=target['case'];weights=n.inventory(c)[2];off=ini['observation']['offsets'];nm=off[2]
     manifest=RequestManifest(a.output,dict(schema='CT12AxisAndStageV1',source=sha(Path(__file__)),pressure=sha(a.pressure/'results.json'),target=sha(a.ct11/'target-v1/results.json'),scope='read-only retained target operators/rows; no native solve or trajectory'))
-    result=dict(schema='CT12AxisAndStageV1',status='incomplete',members={},stage_tractions={});vectors={};common={};cache={}
+    result=dict(schema='CT12AxisAndStageV1',status='incomplete',members={},stage_tractions={});vectors={};common={};feedback_common={};cache={}
     coefficients=parameters('A95');alpha=coefficients['alpha']
     ends={round(f['coordinate'][0],14):f['velocity_k'] for f in ini['observation']['faces'] if f['interface'] and f['region']==1}
     for point,side,row in zip(ini['observation']['grid'],ini['observation']['grid_sides'],ini['test_basis'],strict=True):
@@ -81,7 +81,7 @@ def main():
             if worst is None or float(d@d)>worst['square']:worst=dict(coordinate=f['row']['coordinate'],square=float(d@d),jump=d.tolist(),owners=[f['row']['geometry'],g['row']['geometry']])
         return dict(full_jump_RMS=float(np.sqrt(total.sum()/measure))/c['ustar']**2,normal_jump_RMS=float(np.sqrt(total[2]/measure))/c['ustar']**2,signed_normal_jump=normal/measure/c['ustar']**2,witness=worst,count=len(pairs),scope='same +z traction on both sides; outward faces were opposite; no interface flux added to volume assembly')
     for dt,member in primary['members'].items():
-        accum={k:np.zeros(off[6]-off[4]) for k in ('streamwise','normal','continuity')};states={};checks=[]
+        accum={k:np.zeros(off[6]-off[4]) for k in ('streamwise','normal','continuity')};states={};checks=[];feedback=np.zeros(off[6]-off[4]);feedback_states={}
         for row in member['steps']:
             s=n.read(row['snapshot']['path']);require(sha(Path(row['snapshot']['path']))==row['snapshot']['sha256'],'changed flow packet')
             fr=Frozen(s,ini,c,weights,len(weights));load=np.zeros(nm);load[fr.rows[:fr.nv]]=fr.rm
@@ -96,13 +96,23 @@ def main():
             mass_defect=maximum(fr.alpha*fr.mul('M',native_b)-fr.mul('G',native_pi))
             action_defect=maximum(fr.mul('G',native_pi)-np.asarray(s['full_pressure_action'])[fr.rows[:fr.nv]])
             require(max(mass_defect,action_defect)<2e-10,'native complete pressure/mass action')
-            checks.append(dict(time=row['time'],axes={k:fr.measure(v) for k,v in parts.items()},signed_sum_error=defect,
+            old_pi=np.asarray(s['input'])[fr.rows[fr.nv:]]-np.asarray(ini['observation']['state'])[fr.rows[fr.nv:]]
+            pi_rhs=-fr.mul('D',fr.direct('A',fr.mul('G',old_pi)))
+            pi_feedback=fr.solve(pi_rhs,'stored-pressure-feedback');feedback+=pi_feedback
+            repeat=None
+            if row['time']==.002:
+                repeat=fr.measure(fr.solve(pi_rhs,'stored-pressure-feedback-tighter',2e-14)-pi_feedback)
+                require(repeat['maximum_scaled_value']<1e-8,'stored-pressure feedback repeat')
+            checks.append(dict(time=row['time'],stored_pressure_feedback=fr.measure(pi_feedback),feedback_tighter_repeat=repeat,axes={k:fr.measure(v) for k,v in parts.items()},signed_sum_error=defect,
                 independent_native_mass_action_defect=mass_defect,complete_native_G_action_defect=action_defect,solves=fr.receipts))
-            if round(row['time'],12) in (.001,.002):states[str(round(row['time'],12))]={k:v.copy() for k,v in accum.items()}
-        result['members'][dt]=checks;common[dt]=states
+            if round(row['time'],12) in (.001,.002):
+                states[str(round(row['time'],12))]={k:v.copy() for k,v in accum.items()};feedback_states[str(round(row['time'],12))]=feedback.copy()
+        result['members'][dt]=checks;common[dt]=states;feedback_common[dt]=feedback_states
     for t in ('0.001','0.002'):
         delta={k:common['0.001'][t][k]-common['0.0005'][t][k] for k in accum};total=sum(delta.values(),np.zeros_like(pc));den=fr.inner(total,total)
         result.setdefault('common',{})[t]={k:dict(signed_alignment=fr.inner(v,total)/den,image=fr.measure(v)) for k,v in delta.items()};vectors[t]={k:v.tolist() for k,v in delta.items()}
+        fp=feedback_common['0.001'][t]-feedback_common['0.0005'][t]
+        result.setdefault('stored_pressure_feedback',{})[t]=dict(signed_alignment=fr.inner(fp,total)/den,image=fr.measure(fp),scope='G times actual stored pressure departure from unchanged initial Pi; contained in axis/component loads, not an extra independent contribution; no regauging')
     # Last fine step: actual input,corrected flow,pre-k and accepted fields.
     r=n.read(Path(target['members']['0.0005']['directory'])/'case.evolution.json');attempt=r['pimple_attempts'][-1];fs=n.read(attempt['flow_snapshot']);ks=n.read(attempt['k_snapshot'])
     result['initial_tractions']=dict(ground=ground(ini['observation']['state'])[0],external=external(ini['observation']['state']),state_sha256=exact_vector_hash(ini['observation']['state']))
