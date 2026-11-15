@@ -12,6 +12,20 @@ def put(path,value):
     path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(value));return identity(path)
 
 class H23Continuation(unittest.TestCase):
+    def test_restage_paths_fail_before_admission_until_explicit_rebinding(self):
+        with tempfile.TemporaryDirectory()as t:
+            root=Path(t);historical=put(root/'history.json',{})
+            old=dict(active=dict(path='source-v2/numerics.py',sha256='identical',bytes=1))
+            current=dict(active=dict(path='source-v3/numerics.py',sha256='identical',bytes=1))
+            pins={k:put(root/(k+'.json'),{})for k in ('active_adapter','new_native_identity','runtime_dependencies')}
+            c=dict(status='PASS',actual_imports_verified=True,historical_manifest=historical,active_sources=[old],**pins)
+            pin=put(root/'old-compatibility.json',c)
+            with patch('wj_h23_continuation.active_source_bindings',return_value=[current]):
+                with self.assertRaisesRegex(AssertionError,'rebind before source freeze'):active_execution_bindings(pin)
+                new_pin=put(root/'new-compatibility.json',dict(c,active_sources=[current]))
+                self.assertEqual(active_execution_bindings(new_pin)['status'],'PASS')
+            self.assertEqual(load(root/'old-compatibility.json')['active_sources'],[old])
+
     def report(self,z,n):
         state=[float(n),-0.];h=[2.,-0.];t=n*DT[z]
         return dict(steps=n,time=t,dt=DT[z],state=state,last_stage_history=h,accepted_states=[state],

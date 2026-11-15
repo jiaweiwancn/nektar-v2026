@@ -9,7 +9,7 @@ os.environ.update(THREADS)
 from wj_h15_observer import identity,verify,atomic,vector_hash,bits,RULE
 from wj_h17_observer import native_load,equal,compatibility,load_compatible
 from wj_h22_replay import recovery,parity,integer
-from wj_h23_continuation import DT,START,END,ADDITIONAL,STRIDE,ORDER,OBSERVER_FORECAST,branch_forecast,qualified,read_completed,validate_intent,strict_request
+from wj_h23_continuation import DT,START,END,ADDITIONAL,STRIDE,ORDER,OBSERVER_FORECAST,branch_forecast,qualified,read_completed,validate_intent,strict_request,active_execution_bindings
 from wj_h23_observer import evaluate
 from study_wj_h22 import executable,protected_case
 from study_wj_h16 import same_cp
@@ -123,19 +123,21 @@ def preflight(root):
     atomic(out/'result.json',result)
 
 def freeze(root):
+    bindings=active_execution_bindings(identity(root/'science/target-cache-compatibility.json'))
     assert load(root/'science/preflight/result.json')['status']=='PASS'
     assert load(root/'operations/focused-controls-v2/receipt.json')['status']=='PASS'
     files=list(load(root/'source-manifest.json')['files'])
     files.extend(identity(root/'inputs'/n)for n in ('selected.json','historical-indices.json','historical-immutability.json'))
     files.extend(identity(root/'science'/n)for n in ('runtime-build-v1.json','runtime-dependencies-v1.json','compiled-source-objects.json','target-cache-compatibility.json','setup.json','preflight/result.json'))
     files.extend(identity(root/f'science/{z}/{n}')for z in DT for n in ('case.xml','execution-diff.json'))
-    atomic(root/'execution-config.json',dict(schema='WJH23FrozenV1',files=files,order=list(ORDER),start=START,end=END,additional=ADDITIONAL,
+    atomic(root/'execution-config.json',dict(schema='WJH23FrozenV1',files=files,active_import_bindings=bindings,order=list(ORDER),start=START,end=END,additional=ADDITIONAL,
         DT=DT,strides=STRIDE,maximum_attempts=28,maximum_governors=3,maximum_strict=3,builds=0,captures='Off',
         forecasts=dict(startup=150,ordinary=45,native_audit=50,observer=OBSERVER_FORECAST,exit=30,strict=120),
         thresholds='unchanged H19/H20; contraction never stops',native_caps=dict(M=1050,C=900,F=1650,strict=120)))
 
 def admission(root,level):
     frozen(root);b=load(root/'accounting.json')
+    active_execution_bindings(identity(root/'science/target-cache-compatibility.json'))
     assert not any(b.get(k)for k in ('native_halt','integrity_halt','coverage_halt','screen_halt','runtime_halt','resource_halt'))
     earlier=ORDER[:ORDER.index(level)]
     for z in earlier:

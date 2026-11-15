@@ -10,6 +10,7 @@ from wj_h7_analysis import context
 from wj_h22_replay import integer,recovery,parity
 from wj3_measure import checkpoint_payload
 from study_wj_h16 import same_cp
+from wj_h16_observer import active_source_bindings
 
 DT=dict(C=.005,M=.0025,F=.00125)
 START=dict(C=4,M=8,F=16)
@@ -20,6 +21,20 @@ TIMES=(.025,.030,.035,.040)
 ORDER=('M','C','F')
 GOVERNOR_CAP=dict(M=1050,C=900,F=1650)
 OBSERVER_FORECAST=dict(M=15,C=25,F=45)
+
+def active_execution_bindings(compatibility_pin):
+    """Fail before governor reservation if the actual import paths were restaged.
+
+    Equal bytes at a different path still need a new compatibility record. This
+    reuses the strict observer binding operation without loading a heavy cache.
+    """
+    c=load(verify(compatibility_pin))
+    assert c['status']=='PASS'and c['actual_imports_verified']
+    historical=load(verify(c['historical_manifest']))
+    actual=active_source_bindings(historical)
+    assert actual==c['active_sources'],'active observer import paths differ from compatibility; rebind before source freeze'
+    for k in ('active_adapter','new_native_identity','runtime_dependencies'):verify(c[k])
+    return dict(status='PASS',compatibility=compatibility_pin,active_sources=actual,heavy_cache_loads=0)
 
 def absolute_step(level,t):
     assert level in DT
