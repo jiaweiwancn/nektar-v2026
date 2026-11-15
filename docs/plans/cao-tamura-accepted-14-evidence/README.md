@@ -23,6 +23,7 @@ archives and historical physical failures are preserved.
 | static-v1 | Complete62533-slot selected static admission, two canonical exports and four initialized frozen scalar controls |
 | collect-static-v1 | Independent static verification plus regional initial absolute pressure |
 | pair-v1 | Fresh .001/.0005 histories to the commonT=.002; physical decision is separate from stepping |
+| collect-pair-v1 / publication-pair-v2 | Complete first-pair failure and independent reclassification: temporal:Pi only |
 | resources-* | Closed owned-family CPU/wall/worker receipts, including failed attempts and controllers |
 
 Native source for the admitted component is `6477d9d9`. Governing executable
@@ -96,6 +97,22 @@ unchanged. The original contract is intentionally rejected for different new
 receipts; an old history must never be relabelled to match a new component.
 Keep actual first-pair .001/.0005 request identities. Publication compaction
 does not change these execution inputs or their seals.
+
+The first physical pair fails absolute-pressure uncertainty. `pair-v1/` in this
+evidence directory contains further compact publication views; its
+`external-publication-completion.json` binds the original external publisher
+bodies. `compact-view-index.json` binds the current views to those bodies and
+the complete physical result hashes. Raw per-face rows and long native identity
+strings remain outside Git; aggregate metrics and decisions are retained.
+
+The prospective `timestep-attempt-2.json` chooses fresh .00025/.000125 histories
+using the measured pressure spread and first-order planning estimate. Before
+execution, run `ct_accepted14_timestep.py --runtime RT --static NEW/static
+--previous-pair NEW/pair-v1 --contract TIMESTEP_CONTRACT --output NEW/timestep`.
+It qualifies alpha4000/8000 and the unchanged scientific classifier specialized
+only at its two request literals. Then bind its sealed result in a new
+admitted-pair contract and invoke `ct_accepted14_pair.py` with
+`--admission NEW/timestep`. No old native history, timestamp or metric is renamed.
 
 The original failed ordering controls can be reproduced individually with their
 preserved utility/runtime, exact canonical A/RHS and recorded work allocation.

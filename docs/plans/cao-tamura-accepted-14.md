@@ -1,6 +1,6 @@
 # CT14: short full-domain A95 flat-pilot qualification
 
-Status: **IN PROGRESS; no selected-mesh evolution admitted**.
+Status: **IN PROGRESS; first fresh pair fails absolute-pressure uncertainty; bounded temporal remedy pending**.
 
 Fetched `codex/a93-a95-e94e95-awf` on 2026-11-15: actual remote and clean
 dedicated Mac worktree both at `f121dd1e5dc14ed147714876ea182a913e6fcae5`.
@@ -15,7 +15,8 @@ precedes costly execution. The frozen CT8 physical manifest remains SHA256
 CT8/11/12/13 results, failures, component identities and histories are retained.
 The original target's failed pressure spread is 3.824614134304275e-6 against
 5.71117429897371e-7. The selected 62,533-slot, 961-element P4/P2 mesh remains
-at T=0. Its 96.27% initial shear-pressure-image reduction is diagnostic only.
+the chosen numerical space. Its 96.27% initial shear-pressure-image reduction
+is diagnostic only and does not decide the evolved pair.
 
 | Gate | Fixed criterion | Intended evidence |
 |---|---|---|
@@ -151,5 +152,44 @@ receipts are separate in the evidence; all fit the one CT14 allocation.
 The [short-pair contract](cao-tamura-accepted-14-evidence/short-pair-contract-v1.json)
 now binds these passing seals, exact runtime, actual initial coefficients and
 unchanged CT11 classifiers. It admits two fresh independent .001/.0005 native
-histories only to T=.002. **The physical pair remains unattempted until this
-checkpoint is pushed; CT14 is not yet PASS.**
+histories only to T=.002. That checkpoint was pushed before dispatch at
+`eca8f3ab`. Both native trajectories reached T=.002 without rejection. All
+physical, budget, admissibility and uncertainty checks pass except absolute
+pressure: **DeltaPi=9.147839144604025e-7 >2.519311058540182e-7**. Their own-initial
+pressure drifts are1.7107716728451436e-6 and2.519311058540182e-6. No mean is
+removed; the entire pressure content and intermediate common-time diagnostics
+remain archived. **CT14 is not yet PASS.**
+
+The complete first-pair results and independent collection are sealed as
+`dc11f77a2b60133d4a501f9ddf18929144c146dd0871ef444c927f2c08edbda3` and
+`68cf158ba29eb553a0415e4bc5943930d33b9c88d140406f923b42cf837e3673`.
+They retain every accepted state, actual-stage snapshot, factor/solve receipt,
+and all native/q48f16/q64f16/q64f32 physical budgets. Maximum normalized budget
+defect is1.18962e-6 against.02; every original-system solve meets its unchanged
+bound with at most one reused-factor refinement. Coarse/fine predictor maxima
+are37,266,316/37,225,532 entries. Clock-off native CPU is366.035/662.695 seconds.
+
+The [prospective temporal amendment](cao-tamura-accepted-14-evidence/timestep-attempt-2.json)
+retains the selected space, physics, runtime, single-sweep method, actual initial
+coefficients and horizon. Backend/update differences and governing quadrature
+uncertainty are far below the failed pressure spread; imposed epsilon traces
+are below6e-22, while the separately retained refreshed post-k lag decreases
+with timestep. This supports testing finite-step error. A first-order planning
+estimate predicts a .0005/.00025 pair still fails (spread4.574e-7 against an
+estimated2.947e-7 allowance). The smallest dyadic pair predicted to pass is
+**.00025/.000125**, with estimated2.287e-7 spread against3.164e-7. These are
+planning predictions, not measured convergence or a manufactured pass.
+
+New alpha4000/8000 canonical/capacity/action/quadrature gates must pass before
+fresh physical histories. CT11 source stays unchanged; exactly its two request
+literals (required dt list and member set) are specialized for the admitted
+new cohort. Every physical check, tolerance, scale, actual-dt coverage rule and
+T=.002 remains unchanged. Parity and discriminating controls are required.
+No historical trajectory is renamed, continued or relabelled.
+
+Closed CPU before first-pair publication is8,844.10 seconds; whole-package
+elapsed wall9,974.77 seconds and retained output4,972,625,710 bytes. Failed
+ordering, collector and publisher attempts remain charged. The first publisher
+rejected a dependency identity because its private library environment was
+missing; the corrected environment passed without changing native data or
+runtime. The source publisher now establishes that environment explicitly.

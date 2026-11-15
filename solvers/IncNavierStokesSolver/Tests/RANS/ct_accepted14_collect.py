@@ -10,6 +10,7 @@ import ct_accepted8_native as n
 from ct_accepted10_compare import regional_pressure
 from ct_accepted9_pressure_run import sealed
 from ct_accepted11_target import target_pair
+from ct_accepted14_gate import cohort_pair
 from ct_accepted_budget_gate import physical_budgets
 from ct_accepted14_pair import numerical_receipts
 from ct_accepted_open import require
@@ -57,7 +58,9 @@ def main():
             folder=Path(r['directory']);native=read(folder/'case.evolution.json');require(sha(folder/'case.evolution.json')==r['native_report_sha256'] and exact_vector_hash(native['state'])==r['state_sha256'] and exact_vector_hash(native['accepted_states'][0])==r['actual_initial_sha256'],'physical member actual state/report identity')
             require(numerical_receipts(folder/'sparse-receipts.jsonl')['status']=='pass','actual evolution linear receipts')
             require(physical_budgets(r['budgets'])['status']=='pass','actual consecutive-state budgets')
-        decision=target_pair(pair);require(decision==pair['qualification'],'physical pass label differs from unchanged classifier')
+        require(pair['required_dt']==pr['dt'],'physical cohort differs from sealed request')
+        if pair['required_dt']!=[.001,.0005]:require(pr.get('timestep_admission') and pr.get('request_specialization_source')==sha(Path(__file__).with_name('ct_accepted14_gate.py')),'missing request-only specialization/admission binding')
+        decision=cohort_pair(pair,pr['dt']);require(decision==pair['qualification'],'physical pass label differs from unchanged scientific classifier')
         out['pair']=pair;out['closure']='PASS' if decision['status']=='pass' else 'UNRESOLVED'
     resources={};cpu=wall=0.;project=aggregate=0
     for folder in sorted(a.root.glob('resources-*')):

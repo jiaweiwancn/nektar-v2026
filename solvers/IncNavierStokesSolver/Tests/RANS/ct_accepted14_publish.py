@@ -25,12 +25,13 @@ def main():
     require(not subprocess.check_output(git+['status','--porcelain'],text=True).strip(),'dirty publication source')
     manifest=source/'docs/plans/cao-tamura-accepted-8-evidence/physical-reference-manifest.json'
     require(sha(manifest)=='004bc0fc82054296a68d56de77751fc1f0a41570ee16b0a174ae8087f262d296','changed physical manifest')
+    os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     runtime={key:runtime_identity(a.runtime/name) for key,name in (('governing','IncNavierStokesSolver'),('probe','RANSPreservationProbe'))}
     require(runtime['governing']==bodies['collection']['runtime'] and runtime['probe']==bodies['collection']['probe'],'foreign publication runtime')
     request=RequestManifest(a.output,dict(schema='CT14PublicationV1',source=sha(Path(__file__)),source_revision=revision,inputs={key:sha(getattr(a,key)/'results.json') for key in bodies},runtime=runtime))
     for key in ('pair','collection'):
         original=getattr(a,key)/'results.json';body,omitted=compact(bodies[key])
-        body['compact_publication']=dict(schema='CT14CompactPublicationV1',complete_external_body=str(original),complete_body_sha256=sha(original),omitted_vectors=omitted,rule='only large numerical vectors replaced; no numerical primitive or classification changed; not a replay input')
+        body['compact_publication']=dict(schema='CT14CompactPublicationV1',complete_external_body=str(original),complete_body_sha256=sha(original),omitted_payloads=omitted,rule='aggregate primitives/classifications unchanged; large vectors,per-point rows and native identity strings retained externally; not a classifier/replay input')
         write_json(a.output/(key+'.json'),body)
     families={};roots=set();cpu=wall=0.;aggregate=0
     for folder in sorted(a.root.glob('resources-*')):

@@ -1,0 +1,70 @@
+{
+  "schema": "CT14TemporalRemedyContractV1",
+  "dt": [
+    0.00025,
+    0.000125
+  ],
+  "T": 0.002,
+  "static_sha256": "69b3ec6fecaf9273f65429365274ee524458e675d75359ec79d0f73960b8693e",
+  "previous_pair_sha256": "dc11f77a2b60133d4a501f9ddf18929144c146dd0871ef444c927f2c08edbda3",
+  "component_identity": "CT14-VectorCOLAMDV1",
+  "physical_manifest_sha256": "004bc0fc82054296a68d56de77751fc1f0a41570ee16b0a174ae8087f262d296",
+  "governing_sha256": "9ae7d3c63492c82a4c9f979616f673d8e4909a5c41ee8069fc1592f2fb23da06",
+  "probe_sha256": "95d6a0258926ab250b69ea0940976f43a993bf4bdccc3001a5819f4f36835824",
+  "failed_first_pair": {
+    "dt": [
+      0.001,
+      0.0005
+    ],
+    "own_initial_pressure_drifts": [
+      1.7107716728451436e-06,
+      2.519311058540182e-06
+    ],
+    "absolute_pressure_pair_difference": 9.147839144604025e-07,
+    "allowed": 2.519311058540182e-07,
+    "only_failed_criterion": "temporal:Pi"
+  },
+  "diagnosis": {
+    "action_equivalence_max": 4.3125225612783424e-15,
+    "original_update_max": 1.3541903104511208e-14,
+    "governing_quadrature_pressure_max": 2.4474709375960074e-10,
+    "all_evolved_true_residual_receipts": "pass; maximum1 reused-factor refinement",
+    "all_physical_scalar_controls": "pass; maximum scaled defect1.189617257349346e-6",
+    "stage_trace": "imposed<6e-22; refreshed lag reduces from1.1453858448505669e-7 to6.05307172499336e-8 with timestep",
+    "interpretation": "Evidence supports finite-step single-sweep error; first-order extrapolation is a prospective planning estimate,not a pressure pass or proof of convergence"
+  },
+  "prediction": {
+    "half_pair_spread": 4.5739195723020127e-07,
+    "half_pair_finer_drift": 2.9469721179265027e-06,
+    "half_pair_allowed": 2.946972117926503e-07,
+    "quarter_pair_spread": 2.2869597861510063e-07,
+    "quarter_pair_finer_drift": 3.163922951466589e-06,
+    "quarter_pair_allowed": 3.1639229514665894e-07,
+    "choice": "smallest dyadic cohort predicted to pass under a first-order estimate; no intermediate known-predicted failing cohort run"
+  },
+  "affected_admission": "Before fresh evolution: native factor-free canonical exports at alpha4000/8000; exact G/D/C/M,history/rows/input identity; independent A(alpha)-A(1000)=(alpha-1000)M; actual/tiny/cancelling RHS and inverse permutations; native/q48/q64 full flow/scalar/mass/pressure actions,fill,true residuals and quadrature uncertainty; classifier parity and discriminating controls",
+  "classifier": "Original CT11 source unchanged. AST specializes exactly its required-dt list and required-member set; actual times/dts/states/metrics never renamed. Every scientific check,tolerance,scale,absolute-pressure convention and T=.002 unchanged; old first pair still fails.",
+  "unchanged": "Same62533-slot/961-element P4/P2 space,physical configuration,actual initial coefficients,component/runtime,IMEX1 single sweep,no cache,no corrections or extra solves; static/component proofs reused only with exact bindings",
+  "fresh_histories": "Two new independent zero-step native histories before either advances; own actual dt/history identity; no continuation or relabelled first-pair history",
+  "resources": {
+    "global_CPU_seconds": 24000,
+    "global_active_wall_seconds": 28800,
+    "global_new_bytes": 17179869184,
+    "additional_admission_CPU_planning": 1200,
+    "additional_pair_CPU_planning": 9000,
+    "additional_wall_planning": 11000,
+    "additional_output_planning_bytes": 3221225472,
+    "per_native_trajectory_CPU_soft": 4000,
+    "per_native_trajectory_wall": 4800,
+    "per_admission_probe_CPU_soft": 600,
+    "per_admission_probe_wall": 900,
+    "AS_bytes": 17179869184,
+    "workers": "16 project/72 aggregate; compiler<=2,single numerical library threads,one numerical family",
+    "closed_CPU_before_publication": 8844.102456999999,
+    "whole_elapsed_wall_before_publication": 9974.768645048141,
+    "retained_bytes_before_publication": 4972625710,
+    "publication_correction": "first publisher failed runtime dependency identity because LD_LIBRARY_PATH was absent; failure charged,then matching explicit private library environment passed; native runtime/seals unchanged"
+  },
+  "forbidden": "No physical/model/calibration/time-coupling changes,residual subtraction,reference reset,alternate gauge,pressure-mean subtraction,clipping,trace repair,additional sweep or horizon extension",
+  "previous_pair_collector_sha256": "68cf158ba29eb553a0415e4bc5943930d33b9c88d140406f923b42cf837e3673"
+}
