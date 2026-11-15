@@ -364,7 +364,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     const RANSWallPatchParameters &parameters,const Vector &state,const Vector &previous,
     double dt,double time,const RANSWallEvolutionData &data,int faceOrder,
     bool reconcile=false,const Vector &stageHistory={},double diffusionIBPFraction=0.,
-    const Vector &actualFlowStage={},const Vector &actualPreKStage={})
+    const Vector &actualFlowStage={},const Vector &actualPreKStage={},bool streamVolume=false)
 {
     Require(dt>0 && previous.size()==state.size(),"invalid physical budget history");
     Require(!patch.Mapped() || diffusionIBPFraction==0,"Cartesian finite-difference IBP diagnostic is not a mapped derivative");
@@ -397,8 +397,15 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     };
     stageFlowDefect=stageDifference(actualFlowStage,flow);stagePreKDefect=stageDifference(actualPreKStage,preK);
     Require(std::max(stageFlowDefect,stagePreKDefect)<=2e-13,"physical budget coefficient states differ from actual PIMPLE snapshots");
-    Tree packet;std::istringstream input(patch.PreservationPacket(preK,time,data,true,{},{}));
-    boost::property_tree::read_json(input,packet);
+    // Keep the legacy serialized path as the bounded-fixture oracle. The
+    // opt-in visitor uses the same production-owned rows without allocating
+    // their complete JSON string and property-tree representation.
+    Tree packet;
+    if(!streamVolume)
+    {
+        std::istringstream input(patch.PreservationPacket(preK,time,data,true,{},{}));
+        boost::property_tree::read_json(input,packet);
+    }
     std::array<Vector,3> sum{Vector(7),Vector(7),Vector(7)};
     std::array<std::array<Vector,8>,3> loads;
     std::array<Vector,3> advectiveFaces,diffusiveFaces;
@@ -498,20 +505,39 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
             if(diffusionIBPFraction)loads[region][6][id]+=weight*test*divDiffusion;
         }
     };
-    for(const auto &item:packet.get_child("volume"))
+    std::uint64_t provenance=14695981039346656037ULL;
+    std::array<std::size_t,2> volumeCounts{};std::array<double,2> volumeWeights{};
+    auto bits=[&](std::uint64_t v)
+    {for(int b=0;b<8;++b){provenance^=(v>>(8*b))&255;provenance*=1099511628211ULL;}};
+    auto number=[&](double v){std::uint64_t u;static_assert(sizeof(u)==sizeof(v));std::memcpy(&u,&v,sizeof(u));bits(u);};
+    auto integrate=[&](const RANSWallGlobalPoint &v,double w,int region,int owner,double lo,double hi)
     {
-        const auto &q=item.second;const auto coordinate=Values(q,"coordinate");RANSWallCoordinate p{};std::copy_n(coordinate.begin(),3,p.begin());
-        const int region=q.get<int>("region"),geometry=q.get<int>("velocity_k.geometry");const auto v=patch.GeometryPoint(0,geometry,p);const auto c=coefficients(v,region==1);const double w=q.get<double>("weight");
+        ++volumeCounts.at(region);volumeWeights.at(region)+=w;
+        bits(region);bits(owner);bits(v.geometry);bits(v.element);bits(v.endpointRoundoffAxes);
+        number(w);number(lo);number(hi);for(double x:v.coordinate)number(x);
+        for(double x:v.rawLocalCoordinate)number(x);
+        bits(v.ids.size());for(int id:v.ids)bits(id);
+        for(double x:v.phi)number(x);for(double x:v.constant)number(x);
+        for(const auto &d:v.derivative)for(double x:d)number(x);
+        const auto c=coefficients(v,region==1);
         sum[region][0]+=w*(v.Value(state,patch.offset[patch.K()])-v.Value(previous,patch.offset[patch.K()]))/dt;
         sum[region][1]+=w*c[4];sum[region][2]+=w*c[5];sum[region][5]+=w;
         weak(region,v,v,c,w);
         if(region==1)
         {
-            const auto e=patch.GeometryPoint(patch.Epsilon(),geometry,p);
+            const auto e=patch.GeometryPoint(patch.Epsilon(),v.geometry,v.coordinate);
             sum[2][0]+=w*(e.Value(state,patch.offset[patch.Epsilon()])-e.Value(previous,patch.offset[patch.Epsilon()]))/dt;
             sum[2][1]+=w*c[6];sum[2][2]+=w*c[7];sum[2][5]+=w;
             weak(2,e,v,c,w);
         }
+    };
+    if(streamVolume)patch.VisitDiagnosticVolume(preK,time,data,integrate);
+    else for(const auto &item:packet.get_child("volume"))
+    {
+        const auto &q=item.second;const auto coordinate=Values(q,"coordinate");RANSWallCoordinate p{};std::copy_n(coordinate.begin(),3,p.begin());
+        const int geometry=q.get<int>("velocity_k.geometry");const auto panel=Values(q,"generating_radial_panel");
+        integrate(patch.GeometryPoint(0,geometry,p),q.get<double>("weight"),q.get<int>("region"),
+            q.get<int>("generating_geometry"),panel.at(0),panel.at(1));
     }
     std::string reconciliation="null";
     if(reconcile)
@@ -676,6 +702,12 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     return J::Object({{"schema",J::Quote("PhysicalFrozenStageScalarBudgetV1")},{"time",J::Number(time)},
         {"dt",J::Number(dt)},{"equations",J::Object(rows)},{"physical_faces",J::List(faces)},
         {"face_order",J::Number(faceOrder)},{"wall_local_reaction_rate","0"},
+        {"volume_observer",J::Object({{"policy",J::Quote(streamVolume?"NativeOwnerVolumeStreamV1":"SerializedVolumeV1")},
+            {"inner_points",J::Number(volumeCounts[0])},{"outer_points",J::Number(volumeCounts[1])},
+            {"physical_weights",J::Numbers(Vector{volumeWeights[0],volumeWeights[1]})},
+            {"native_rows_provenance_fnv1a64",J::Quote(std::to_string(provenance))},
+            {"digest_definition",J::Quote("ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash")},
+            {"materialized_global_volume_rows",streamVolume?"false":"true"}})},
         {"reconciliation",reconciliation},
         {"scope",J::Quote("independently integrated storage, frozen one-sweep scalar source and physical gradient/advective face flux; no prescribed-row reaction used. Dependent epsilon boundary storage is retained, with no inner epsilon equation. Finite discretization defects are observations, not forced balances.")}});
 }
@@ -991,9 +1023,11 @@ int main(int argc,char **argv)
             const bool actualStages=bool(request.get_child_optional("actual_flow_stage")) && bool(request.get_child_optional("actual_pre_k_stage"));
             Require(!patch.CurvedManufactured() || !reconciliation || actualStages,
                 "CT6 frozen scalar budget requires actual flow/pre-k snapshot coefficients");
+            const auto volumePolicy=request.get<std::string>("physical_budget_volume_policy","SerializedVolumeV1");
+            Require(volumePolicy=="SerializedVolumeV1" || volumePolicy=="NativeOwnerVolumeStreamV1","unsupported physical scalar observer policy");
             physicalBudget=PhysicalScalarBudget(patch,p,state,Values(request,"previous_state"),dt,time,data,request.get<int>("physical_face_order",16),
                 reconciliation,reconciliation?Values(request,"stage_history"):Vector{},request.get<double>("diffusion_IBP_element_step_fraction",0.),
-                actualStages?Values(request,"actual_flow_stage"):Vector{},actualStages?Values(request,"actual_pre_k_stage"):Vector{});
+                actualStages?Values(request,"actual_flow_stage"):Vector{},actualStages?Values(request,"actual_pre_k_stage"):Vector{},volumePolicy=="NativeOwnerVolumeStreamV1");
         }
         Require(state==stateCopy,"read-only verification modified coefficients");
         const auto elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();

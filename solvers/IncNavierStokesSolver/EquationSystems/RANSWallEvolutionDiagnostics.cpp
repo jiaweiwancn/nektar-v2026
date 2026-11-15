@@ -517,6 +517,25 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
     }
     return out.str();
 }
+void RANSWallEvolutionPatch::VisitDiagnosticVolume(const Vector &state,double time,
+    const RANSWallEvolutionData &data,const DiagnosticVolumeVisitor &visitor) const
+{
+    Require(NewModels() && AcceptedAWF() && Dimension()==2 && !Mapped() && m_comm->GetSize()==1,
+        "NativeOwnerVolumeStreamV1 requires serial flat new-model Accepted diagnostics");
+    Require(m_variantName=="Original" && !m_cappedDestruction && m_innerStress==RANSWallInnerStressModel::Linear,
+        "volume stream requires original outer, linear inner and prescribed uncapped sources");
+    EvaluationScope evaluation(*this,data,time);
+    // The serialized oracle also performs this complete frozen-state audit.
+    // Retain every validity inventory, then restore exactly the requested raw
+    // quadrature-generating state, independently of audit effective lifting.
+    (void)CompleteRestrictedAudit(state,state,0,time,data);
+    Refresh(state,time,&data);
+    for(const auto &ray:m_rays)for(const auto &q:ray.points)
+        visitor(q.v,q.weight,0,q.generatingGeometry,q.panelLower,q.panelUpper);
+    for(const auto &q:m_outer)
+        visitor(q.v,q.weight,1,q.generatingGeometry,q.panelLower,q.panelUpper);
+}
+
 std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,double time,
     const RANSWallEvolutionData &data,bool basis,const std::vector<RANSWallCoordinate> &grid,const std::vector<int> &sides,bool ct6Primitives,bool facesOnly) const
 {

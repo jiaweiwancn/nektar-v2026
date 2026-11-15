@@ -93,6 +93,13 @@ public:
     std::string PreservationPacket(const Vector &state,double time,const RANSWallEvolutionData &data,
         bool basis,const std::vector<RANSWallCoordinate> &grid={},const std::vector<int> &sides={},bool ct6Primitives=false,
         bool facesOnly=false) const;
+    // Read-only, borrowed native volume rows in the same order as the legacy
+    // packet. The callback must not retain rows or change the patch/state.
+    // No global row catalog or element-count times global-size array is made.
+    using DiagnosticVolumeVisitor=std::function<void(const RANSWallGlobalPoint &,
+        double,int,int,double,double)>;
+    void VisitDiagnosticVolume(const Vector &state,double time,const RANSWallEvolutionData &data,
+        const DiagnosticVolumeVisitor &visitor) const;
     std::string EvaluationReuseChecks(const Vector &,const Vector &,double,const RANSWallEvolutionData &);
     RANSWallEvolutionPatch(const LibUtilities::SessionReaderSharedPtr &serialSession,
         const SpatialDomains::MeshGraphSharedPtr &graph,
