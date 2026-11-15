@@ -65,6 +65,7 @@ Vector MapParameters(const RANSWallNormalMap &map)
 #include "RANSWallFlatInletChecks.h"
 #include "RANSWallOpenStateImport.h"
 #include "RANSWallCompleteAuditBatch.h"
+#include "RANSWallStepZeroBootstrap.h"
 
 Vector ConstructContact(const RANSWallEvolutionPatch &patch,const Vector &history)
 {
@@ -190,15 +191,21 @@ int main(int argc,char **argv)
         std::string backend;serial->LoadSolverInfo("RANSWallLinearBackend",backend,"Dense");
         std::string retention;serial->LoadSolverInfo("RANSWallRetention",retention,"Off");
         if(retention=="BoundedV1")RANSWallMonitor::Factors().Configure(std::string(argv[3])+".factors",RANSWallR3::HashFile(argv[1]));
-        if(backend=="MappedBlockV1")Require(operation=="open_checks" || operation=="initializer_checks" || operation=="mapped_backend_checks" || operation=="complete_audit_batch" || operation=="immutable_row_checks" || operation=="checkpoint_policy_checks",
+        if(backend=="MappedBlockV1")Require(operation=="open_checks" || operation=="initializer_checks" || operation=="mapped_backend_checks" || operation=="complete_audit_batch" || operation=="immutable_row_checks" || operation=="checkpoint_policy_checks" || operation=="step_zero_bootstrap" || operation=="step_zero_bootstrap_checks",
             "MappedBlockV1 does not support legacy dense matrix observers");
         RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
-        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.OpenBoundary() && (operation=="open_checks" || operation=="initializer_checks" || operation=="mapped_backend_checks" || operation=="complete_audit_batch" || operation=="immutable_row_checks" || operation=="checkpoint_policy_checks"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
+        Require(patch.Dimension()==2 && (!patch.Mapped() || (patch.OpenBoundary() && (operation=="open_checks" || operation=="initializer_checks" || operation=="mapped_backend_checks" || operation=="complete_audit_batch" || operation=="immutable_row_checks" || operation=="checkpoint_policy_checks" || operation=="step_zero_bootstrap" || operation=="step_zero_bootstrap_checks"))) && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
         Require(patch.InnerStressName()==packet.get<std::string>("inner_stress_model"),"packet law differs from session");
         for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
+        if(operation=="step_zero_bootstrap" || operation=="step_zero_bootstrap_checks")
+        {
+            patch.LoadOpenBoundaryData(serial,data);
+            const auto text=StepZeroBootstrap(patch,serial,us,packet,data,argv[3],operation=="step_zero_bootstrap_checks");
+            RANSWallMonitor::Atomic(argv[3],text);world->Finalise();return 0;
+        }
         if(operation=="mapped_backend_checks")
         {
             Require(patch.MappedBlock() && patch.Size()<=3000,"mapped parity accepts only small admitted fixtures");
