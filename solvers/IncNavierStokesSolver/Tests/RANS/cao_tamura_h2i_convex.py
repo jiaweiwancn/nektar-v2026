@@ -83,7 +83,7 @@ def convex_segment(P,origin,target,start_scan,end_scan):
 
 def summary(s):return {k:s[k] if not isinstance(s[k],np.ndarray) else s[k].tolist() for k in ('slack','inner_min','outer_min','mass_squared','strong_divergence_squared','velocity_max','epsilon_ratio','hard_violation')}
 
-def phase(problem,delta,band,budget,save,initial=None):
+def phase(problem,delta,band,budget,save,initial=None,lp_solver=None):
  P=problem;n=P.dim;x=np.zeros(n) if initial is None else np.array(initial);cuts=[];rhs=[];meta=[];rounds=[];best=None;best_summary=None;best_slack=float('inf');best_scan=None;terminated='inconclusive';
  try:initial_scan=P.scan(np.zeros(n),delta,budget)
  except BudgetExhausted as error:return dict(termination='budget_exhausted:'+str(error),best_coefficients=None,best_summary=None,budget=budget.report(),proof=None)
@@ -120,7 +120,7 @@ def phase(problem,delta,band,budget,save,initial=None):
   start=P.scan(x,delta,budget);valid=separate(start,x,True)
   if valid and start['slack']<=1e-9 and min(start['inner_min'],start['outer_min'])>=delta-1e-12:terminated='seen_feasible'
   while terminated!='seen_feasible':
-   budget.check();A=sparse.vstack((hard,sparse.csr_matrix(np.asarray(cuts))),format='csr');b=np.r_[hb,rhs];result,receipt=lp(c,A,b,bounds,budget);rounds.append(receipt)
+   budget.check();A=sparse.vstack((hard,sparse.csr_matrix(np.asarray(cuts))),format='csr');b=np.r_[hb,rhs];result,receipt=(lp_solver or lp)(c,A,b,bounds,budget);rounds.append(receipt)
    if result.status!=0:terminated='numerical_or_work_limit';break
    x=result.x[:n];terminal=x.copy();cert=receipt['certificate'];y=np.minimum(0,np.array(result.ineqlin.marginals));box=np.array([max(abs(l),abs(u)) for l,u in bounds]);row_error=2e-9*(1+abs(b)+abs(A)@box);round_allowance=float(abs(y)@row_error);cert['native_data_rounding_allowance']=round_allowance;cert['limited_lower_bound']=cert['lower_bound']-round_allowance
    save(dict(event='LP',round=budget.rounds,receipt=receipt,coefficients=x.tolist()))

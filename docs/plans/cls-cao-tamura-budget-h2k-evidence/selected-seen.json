@@ -1,0 +1,1728 @@
+{
+  "version": "H2kSelectedSeenEvidenceV1",
+  "selection": {
+    "version": "H2kFrozenSelectedStateV1",
+    "created_Asia_Shanghai": "2026-11-16T00:10:49.863844+08:00",
+    "state_sha256": "2b763674a62afd5e1e7763bc78a598e7d5e04f9c3f3795c3883bfe9834a9e53b",
+    "base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+    "anchor": "A",
+    "anchor_k_sha256": "911aee8ec71b125c57bcb07d70e7e2e99b27857f3b12b1ba786f9e7403c9c958",
+    "seed_file": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/selected/seed.json",
+    "seed_file_sha256": "7898e6b6a6decb1ec7228eb4443a155c93d39763150505d9a6dc508296e069e3",
+    "context_file": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/epoch2-context/context.json",
+    "context_sha256": "1c982c5d7977993970238dad2a8c68c19de3f2ff298fdd1361308f4acc618136",
+    "basis_sha256": "b0d851ffa8e1489439bb3f1da1dc00256dae0807b2a659f4279f870f0b9d8de4",
+    "seen_receipt_file": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/seen-reserve/receipt.json",
+    "seen_receipt_sha256": "dbdbc703efb757bff4f307483fbd6c587617123c6d4602f381c57625e8cfe549",
+    "model_specification": {
+      "version": "CanonicalWallModelV1",
+      "name": "StandardKEpsilon",
+      "calibration": "StandardNeutralCalibratedV1",
+      "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+      "coefficients": {
+        "Cmu": 0.09,
+        "Cepsilon1": 1.44,
+        "Cepsilon2": 1.92,
+        "sigmaK": 1,
+        "sigmaEpsilon": 1.3478315512167742,
+        "yapCoefficient": 0,
+        "yapLength": 2.5
+      },
+      "q": 3.3333333333333335,
+      "kappa": 0.4405539051866587,
+      "K0": 0.01838575534504143,
+      "quadratic_active": false,
+      "cubic_active": false,
+      "Yap_active": false,
+      "variant": "Original",
+      "beta": 1,
+      "gamma0": 0,
+      "Gamma": 0,
+      "physical_regularization_active": false
+    },
+    "probe_runtime": {
+      "path": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+      "sha256": "7b887eee09570f31a02b52e99d94f5f5071080e977e3135fb430d13974cb1748",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffe2f3db000)\n\tlibmpi_cxx.so.40 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libmpi_cxx.so.40 (0x00007a1c71140000)\n\tlibmpi.so.40 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libmpi.so.40 (0x00007a1c70ac9000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libMultiRegions.so.5.9.0 (0x00007a1c70600000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libLocalRegions.so.5.9.0 (0x00007a1c70200000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libSpatialDomains.so.5.9.0 (0x00007a1c6fe00000)\n\tlibStdRegions.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libStdRegions.so.5.9.0 (0x00007a1c6fa00000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libLibUtilities.so.5.9.0 (0x00007a1c6f400000)\n\tliblapack.so.3 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/liblapack.so.3 (0x00007a1c6ec00000)\n\tlibstdc++.so.6 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libstdc++.so.6 (0x00007a1c6e800000)\n\tlibm.so.6 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libm.so.6 (0x00007a1c71055000)\n\tlibgcc_s.so.1 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libgcc_s.so.1 (0x00007a1c71035000)\n\tlibc.so.6 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libc.so.6 (0x00007a1c6e400000)\n\tlibopen-pal.so.40 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopen-pal.so.40 (0x00007a1c70a16000)\n\tlibopen-rte.so.40 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopen-rte.so.40 (0x00007a1c70543000)\n\tlibhwloc.so.15 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libhwloc.so.15 (0x00007a1c704e7000)\n\tlibCollections.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libCollections.so.5.9.0 (0x00007a1c7008d000)\n\tlibptscotch-6.1.so => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libptscotch-6.1.so (0x00007a1c70414000)\n\tlibblas.so.3 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libblas.so.3 (0x00007a1c7002b000)\n\tlibz.so.1 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libz.so.1 (0x00007a1c709f8000)\n\tlibfftw3.so.3 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libfftw3.so.3 (0x00007a1c6e000000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libboost_iostreams.so.1.74.0 (0x00007a1c709de000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libboost_program_options.so.1.74.0 (0x00007a1c6fdbb000)\n\tlibopenblas.so.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopenblas.so.0 (0x00007a1c6bbb0000)\n\tlibgfortran.so.5 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libgfortran.so.5 (0x00007a1c6b800000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007a1c7115c000)\n\tlibevent_core-2.1.so.7 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libevent_core-2.1.so.7 (0x00007a1c6fd86000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libevent_pthreads-2.1.so.7 (0x00007a1c7040f000)\n\tlibudev.so.1 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libudev.so.1 (0x00007a1c6fd5c000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libMatrixFreeOps.so.5.9.0 (0x00007a1c68a00000)\n\tlibptscotcherr-6.1.so => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libptscotcherr-6.1.so (0x00007a1c70026000)\n\tlibbz2.so.1.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libbz2.so.1.0 (0x00007a1c70013000)\n\tliblzma.so.5 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/liblzma.so.5 (0x00007a1c6fd31000)\n\tlibzstd.so.1 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libzstd.so.1 (0x00007a1c6f931000)\n\tlibquadmath.so.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libquadmath.so.0 (0x00007a1c6fce9000)\n",
+      "libraries": {
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libc.so.6": "4ebb1967c395ca547dcfeaeeab7a2819724604a331aede44e8a749a7e1a4628e",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libm.so.6": "045fdb0436a8fb0d651f039e3444a9cbffc011d379c82b979cebf43571053eca",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a"
+      }
+    },
+    "fresh_order": 28,
+    "status": "seen qualified, frozen before one fresh audit; no physical attempts"
+  },
+  "native_receipt": {
+    "version": "H2iRepeatableSeenV1",
+    "passed": true,
+    "gates": {
+      "native": true,
+      "native_margin": true,
+      "budget": true,
+      "continuity": true,
+      "fixed_k": true,
+      "native_GL16": true,
+      "GL20_margin": true,
+      "GL20_scalar": true,
+      "GL20_velocity": true,
+      "GL20_divergence": true,
+      "GL24_margin": true,
+      "GL24_scalar": true,
+      "GL24_velocity": true,
+      "GL24_divergence": true
+    },
+    "state_sha256": "2b763674a62afd5e1e7763bc78a598e7d5e04f9c3f3795c3883bfe9834a9e53b",
+    "base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+    "anchor_k_sha256": "911aee8ec71b125c57bcb07d70e7e2e99b27857f3b12b1ba786f9e7403c9c958",
+    "basis_sha256": "b0d851ffa8e1489439bb3f1da1dc00256dae0807b2a659f4279f870f0b9d8de4",
+    "context_sha256": "1c982c5d7977993970238dad2a8c68c19de3f2ff298fdd1361308f4acc618136",
+    "model_specification": {
+      "version": "CanonicalWallModelV1",
+      "name": "StandardKEpsilon",
+      "calibration": "StandardNeutralCalibratedV1",
+      "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+      "coefficients": {
+        "Cmu": 0.09,
+        "Cepsilon1": 1.44,
+        "Cepsilon2": 1.92,
+        "sigmaK": 1,
+        "sigmaEpsilon": 1.3478315512167742,
+        "yapCoefficient": 0,
+        "yapLength": 2.5
+      },
+      "q": 3.3333333333333335,
+      "kappa": 0.4405539051866587,
+      "K0": 0.01838575534504143,
+      "quadratic_active": false,
+      "cubic_active": false,
+      "Yap_active": false,
+      "variant": "Original",
+      "beta": 1,
+      "gamma0": 0,
+      "Gamma": 0,
+      "physical_regularization_active": false
+    },
+    "output": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/seen-reserve/native/result.json",
+    "output_sha256": "a59029199e2155f1c34772f6cf1b00f0d8087c329b26747da19e37d99a570aa9",
+    "runtime": {
+      "path": "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/RANSWallResolutionProbe",
+      "sha256": "7b887eee09570f31a02b52e99d94f5f5071080e977e3135fb430d13974cb1748",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffe2f3db000)\n\tlibmpi_cxx.so.40 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libmpi_cxx.so.40 (0x00007a1c71140000)\n\tlibmpi.so.40 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libmpi.so.40 (0x00007a1c70ac9000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libMultiRegions.so.5.9.0 (0x00007a1c70600000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libLocalRegions.so.5.9.0 (0x00007a1c70200000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libSpatialDomains.so.5.9.0 (0x00007a1c6fe00000)\n\tlibStdRegions.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libStdRegions.so.5.9.0 (0x00007a1c6fa00000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libLibUtilities.so.5.9.0 (0x00007a1c6f400000)\n\tliblapack.so.3 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/liblapack.so.3 (0x00007a1c6ec00000)\n\tlibstdc++.so.6 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libstdc++.so.6 (0x00007a1c6e800000)\n\tlibm.so.6 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libm.so.6 (0x00007a1c71055000)\n\tlibgcc_s.so.1 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libgcc_s.so.1 (0x00007a1c71035000)\n\tlibc.so.6 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libc.so.6 (0x00007a1c6e400000)\n\tlibopen-pal.so.40 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopen-pal.so.40 (0x00007a1c70a16000)\n\tlibopen-rte.so.40 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopen-rte.so.40 (0x00007a1c70543000)\n\tlibhwloc.so.15 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libhwloc.so.15 (0x00007a1c704e7000)\n\tlibCollections.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libCollections.so.5.9.0 (0x00007a1c7008d000)\n\tlibptscotch-6.1.so => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libptscotch-6.1.so (0x00007a1c70414000)\n\tlibblas.so.3 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libblas.so.3 (0x00007a1c7002b000)\n\tlibz.so.1 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libz.so.1 (0x00007a1c709f8000)\n\tlibfftw3.so.3 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libfftw3.so.3 (0x00007a1c6e000000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libboost_iostreams.so.1.74.0 (0x00007a1c709de000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libboost_program_options.so.1.74.0 (0x00007a1c6fdbb000)\n\tlibopenblas.so.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopenblas.so.0 (0x00007a1c6bbb0000)\n\tlibgfortran.so.5 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libgfortran.so.5 (0x00007a1c6b800000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007a1c7115c000)\n\tlibevent_core-2.1.so.7 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libevent_core-2.1.so.7 (0x00007a1c6fd86000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libevent_pthreads-2.1.so.7 (0x00007a1c7040f000)\n\tlibudev.so.1 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libudev.so.1 (0x00007a1c6fd5c000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libMatrixFreeOps.so.5.9.0 (0x00007a1c68a00000)\n\tlibptscotcherr-6.1.so => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libptscotcherr-6.1.so (0x00007a1c70026000)\n\tlibbz2.so.1.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libbz2.so.1.0 (0x00007a1c70013000)\n\tliblzma.so.5 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/liblzma.so.5 (0x00007a1c6fd31000)\n\tlibzstd.so.1 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libzstd.so.1 (0x00007a1c6f931000)\n\tlibquadmath.so.0 => /media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libquadmath.so.0 (0x00007a1c6fce9000)\n",
+      "libraries": {
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libc.so.6": "4ebb1967c395ca547dcfeaeeab7a2819724604a331aede44e8a749a7e1a4628e",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libm.so.6": "045fdb0436a8fb0d651f039e3444a9cbffc011d379c82b979cebf43571053eca",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-h2k-20261115/probe-runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a"
+      }
+    },
+    "seconds": 32.42163137200987,
+    "seen_orders": [
+      20,
+      24
+    ],
+    "fresh_audits": 0
+  },
+  "native_covariance": [
+    0.001649349836182353,
+    3.6771510689927525e-05
+  ],
+  "native_GL16": {
+    "order": 16,
+    "regional_L2": [
+      0.027002289785490664,
+      0.05392534730177374
+    ],
+    "L2": 0.06030809842199081
+  },
+  "native_scalar_budget": [
+    1,
+    0.5013585737330771,
+    0.018385324422631463,
+    0.009217856076795271,
+    0.0008459204339385587,
+    0.01838575534504143,
+    0.1430512592910451,
+    2.9772430482801835,
+    3.1675203927182606e-16
+  ],
+  "coupled_norms": [
+    2.004846781289028,
+    2.20066238701549,
+    2.118433870660765,
+    0.07228638159061547,
+    1.365966132341159e-13,
+    6.643933284475225e-16,
+    0,
+    0
+  ],
+  "seen_sampling": {
+    "GL20": {
+      "minimum_covariance": 3.677151069013222e-05,
+      "inner_minimum_covariance": 0.00166700055593004,
+      "outer_minimum_covariance": 3.677151069013222e-05,
+      "witness": {
+        "coordinate": [
+          -0.08434265221788549,
+          0,
+          0.09982821497962738
+        ],
+        "physical": [
+          -0.08619182682448563,
+          0,
+          0.10168349943007049
+        ],
+        "geometry": 55,
+        "element": 55,
+        "inner": false,
+        "k": 0.012202730173536997,
+        "epsilon": 0.014750135488481784,
+        "gradient": [
+          [
+            0.400588761800722,
+            0,
+            4.330977860274148
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            4.522182767236744,
+            0,
+            -0.3743137683533305
+          ]
+        ],
+        "tensor": [
+          [
+            0.007407224026974702,
+            0,
+            -0.008043755483716462
+          ],
+          [
+            0,
+            0.008135153449024666,
+            0
+          ],
+          [
+            -0.008043755483716462,
+            0,
+            0.008815337296015184
+          ]
+        ],
+        "eigenvalues": [
+          3.677151069013222e-05,
+          0.008135153449024666,
+          0.016185789812299754
+        ]
+      },
+      "count": 31200,
+      "inner_covariance_witness": {
+        "observation": {
+          "coordinate": [
+            0.08777167504877069,
+            0,
+            0.006485388911330463
+          ],
+          "physical": [
+            0.08925821968259597,
+            0,
+            0.007770481293006559
+          ],
+          "geometry": 34,
+          "element": 34,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": true,
+          "epsilon_semantics": "dependent inner dissipation",
+          "gradient": [
+            [
+              5.840109015503458,
+              0,
+              34.69955244158338
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              13.369475332145727,
+              0,
+              -5.3491992397053085
+            ]
+          ],
+          "k": 0.018385753823361942,
+          "epsilon": 0.14337354291387283
+        },
+        "tensor": [
+          [
+            0.009775569608847248,
+            0,
+            -0.010212829940535809
+          ],
+          [
+            0,
+            0.012257169215574628,
+            0
+          ],
+          [
+            -0.010212829940535809,
+            0,
+            0.014530169718530946
+          ]
+        ],
+        "eigenvalues": [
+          0.00166700055593004,
+          0.012257169215574628,
+          0.022638738771448154
+        ],
+        "critical_eigenvector": [
+          0.7831713227096164,
+          0,
+          0.6218059820275693
+        ],
+        "eigenvector_residual": 8.673617379884035e-19
+      },
+      "outer_covariance_witness": {
+        "observation": {
+          "coordinate": [
+            -0.08434265221788549,
+            0,
+            0.09982821497962738
+          ],
+          "physical": [
+            -0.08619182682448563,
+            0,
+            0.10168349943007049
+          ],
+          "geometry": 55,
+          "element": 55,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": false,
+          "epsilon_semantics": "actual retained outer coefficients",
+          "gradient": [
+            [
+              0.400588761800722,
+              0,
+              4.330977860274148
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              4.522182767236744,
+              0,
+              -0.3743137683533305
+            ]
+          ],
+          "k": 0.012202730173536997,
+          "epsilon": 0.014750135488481784
+        },
+        "tensor": [
+          [
+            0.007407224026974702,
+            0,
+            -0.008043755483716462
+          ],
+          [
+            0,
+            0.008135153449024666,
+            0
+          ],
+          [
+            -0.008043755483716462,
+            0,
+            0.008815337296015184
+          ]
+        ],
+        "eigenvalues": [
+          3.677151069013222e-05,
+          0.008135153449024666,
+          0.016185789812299754
+        ],
+        "critical_eigenvector": [
+          0.7372906402361469,
+          0,
+          0.675575689186765
+        ],
+        "eigenvector_residual": 8.673617379884035e-19
+      },
+      "minimum_k_ratio_witness": {
+        "observation": {
+          "coordinate": [
+            -0.05219413929371686,
+            0,
+            0.13861070744291776
+          ],
+          "physical": [
+            -0.05564636276551127,
+            0,
+            0.15330541599315564
+          ],
+          "geometry": 61,
+          "element": 61,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": false,
+          "epsilon_semantics": "actual retained outer coefficients",
+          "gradient": [
+            [
+              2.6237709288884945,
+              0,
+              0.4024818573838765
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              -5.610682703549468,
+              0,
+              -2.3018869149584527
+            ]
+          ],
+          "k": 0.009211263427874865,
+          "epsilon": 0.013069381970446447
+        },
+        "k_over_cold": 0.5010000000005005,
+        "epsilon_over_cold": 1.9496211938552832,
+        "cold_k": 0.018385755345041242,
+        "cold_epsilon": 0.006703549392896353
+      },
+      "maximum_k_ratio_witness": {
+        "observation": {
+          "coordinate": [
+            0.07691316302833744,
+            0,
+            0.7272107361453031
+          ],
+          "physical": [
+            0.0794138380528358,
+            0,
+            0.7276266151142206
+          ],
+          "geometry": 76,
+          "element": 76,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": false,
+          "epsilon_semantics": "actual retained outer coefficients",
+          "gradient": [
+            [
+              -0.04319997597295785,
+              0,
+              0.22863425433781392
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              -0.2615260803903804,
+              0,
+              0.03882823123246185
+            ]
+          ],
+          "k": 0.0367251425360612,
+          "epsilon": 0.0011822904235462965
+        },
+        "k_over_cold": 1.9974780392127893,
+        "epsilon_over_cold": 0.9262956695917924,
+        "cold_k": 0.01838575534504232,
+        "cold_epsilon": 0.0012763639757350025
+      },
+      "minimum_epsilon_ratio_witness": {
+        "observation": {
+          "coordinate": [
+            0.03434265221788549,
+            0,
+            0.798625719837019
+          ],
+          "physical": [
+            0.03749181423225797,
+            0,
+            0.7986753083104243
+          ],
+          "geometry": 75,
+          "element": 75,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": false,
+          "epsilon_semantics": "actual retained outer coefficients",
+          "gradient": [
+            [
+              0.07838995924963059,
+              0,
+              0.08257820718659666
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              -0.0007867735647774991,
+              0,
+              -0.0946128433624796
+            ]
+          ],
+          "k": 0.023576896947013495,
+          "epsilon": 0.000848556901338261
+        },
+        "k_over_cold": 1.2823458435376198,
+        "epsilon_over_cold": 0.7288190275705747,
+        "cold_k": 0.01838575534504146,
+        "cold_epsilon": 0.0011642902685551682
+      },
+      "maximum_epsilon_ratio_witness": {
+        "observation": {
+          "coordinate": [
+            -0.05634170233849623,
+            0,
+            0.16868530443577098
+          ],
+          "physical": [
+            -0.059750363629815006,
+            0,
+            0.1806800682020328
+          ],
+          "geometry": 61,
+          "element": 61,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": false,
+          "epsilon_semantics": "actual retained outer coefficients",
+          "gradient": [
+            [
+              0.8648831921173962,
+              0,
+              0.05415928782082764
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              -2.9239446281704375,
+              0,
+              -1.024845460239308
+            ]
+          ],
+          "k": 0.00993903197399222,
+          "epsilon": 0.0110221130429434
+        },
+        "k_over_cold": 0.5405832824090513,
+        "epsilon_over_cold": 1.998989160579423,
+        "cold_k": 0.018385755345041364,
+        "cold_epsilon": 0.00551384332656839
+      },
+      "quadrature_order": 20,
+      "state_sha256": "2b763674a62afd5e1e7763bc78a598e7d5e04f9c3f3795c3883bfe9834a9e53b",
+      "cold_base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+      "model_specification": {
+        "version": "CanonicalWallModelV1",
+        "name": "StandardKEpsilon",
+        "calibration": "StandardNeutralCalibratedV1",
+        "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+        "coefficients": {
+          "Cmu": 0.09,
+          "Cepsilon1": 1.44,
+          "Cepsilon2": 1.92,
+          "sigmaK": 1,
+          "sigmaEpsilon": 1.3478315512167742,
+          "yapCoefficient": 0,
+          "yapLength": 2.5
+        },
+        "q": 3.3333333333333335,
+        "kappa": 0.4405539051866587,
+        "K0": 0.01838575534504143,
+        "quadratic_active": false,
+        "cubic_active": false,
+        "Yap_active": false,
+        "variant": "Original",
+        "beta": 1,
+        "gamma0": 0,
+        "Gamma": 0,
+        "physical_regularization_active": false
+      },
+      "minimum_k": 0.009211263427874865,
+      "minimum_epsilon": 0.000848556901338261,
+      "invalid_scalar_count": 0,
+      "scalar_positive_finite": true,
+      "invalid_scalar_witness": null,
+      "outer_k_over_cold": [
+        0.5010000000005005,
+        1.9974780392127893
+      ],
+      "outer_epsilon_over_cold": [
+        0.7288190275705747,
+        1.998989160579423
+      ],
+      "scalar_envelopes_passed": true,
+      "scalar_envelope_witness": null,
+      "integrals_complete": true,
+      "strong_divergence_RMS": 0.07562181159427168,
+      "maximum_absolute_divergence": 59.789923093474385,
+      "TKE_integral": 0.011930420869461958,
+      "base_TKE_integral": 0.011702006264258385,
+      "outer_TKE_integral": 0.011823940973166889,
+      "base_outer_TKE_integral": 0.011595526367963327,
+      "outer_time_scale": [
+        0.12888839554881515,
+        36.607669936982056
+      ],
+      "outer_length_scale": [
+        0.01747650323258267,
+        6.888031507315091
+      ],
+      "outer_time_scale_ratio": [
+        0.2533659193657499,
+        2.3182052117104175
+      ],
+      "outer_length_scale_ratio": [
+        0.17989946209769683,
+        3.216874939204943
+      ],
+      "strong_divergence_L2": 0.06030809842199066,
+      "volume": 0.6360000000000028,
+      "kinetic_energy": 0.5635977785045655,
+      "base_kinetic_energy": 0.5643662520535043,
+      "velocity_change_L2": 0.044922186491007716,
+      "maximum_sampled_velocity_increment": 0.37211065992154857,
+      "scope": "independent panelwise physical tensor sampling; complements complete inventory; no domain-wide covariance theorem"
+    },
+    "GL24": {
+      "minimum_covariance": 3.677151069008278e-05,
+      "inner_minimum_covariance": 0.001660342781672877,
+      "outer_minimum_covariance": 3.677151069008278e-05,
+      "witness": {
+        "coordinate": [
+          -0.032876066992404085,
+          0,
+          0.5871886214274789
+        ],
+        "physical": [
+          -0.035962633787480956,
+          0,
+          0.5950917917596329
+        ],
+        "geometry": 74,
+        "element": 74,
+        "inner": false,
+        "k": 0.020438666671678814,
+        "epsilon": 0.0018160991933232722,
+        "gradient": [
+          [
+            -0.02747395994663977,
+            0,
+            0.31606064797696254
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0.33401121052665733,
+            0,
+            0.031178257295041974
+          ]
+        ],
+        "tensor": [
+          [
+            0.014763298517161164,
+            0,
+            -0.01345765627527678
+          ],
+          [
+            0,
+            0.01362577778111921,
+            0
+          ],
+          [
+            -0.01345765627527678,
+            0,
+            0.01233488581448448
+          ]
+        ],
+        "eigenvalues": [
+          3.677151069008278e-05,
+          0.01362577778111921,
+          0.02706141282095556
+        ]
+      },
+      "count": 44928,
+      "inner_covariance_witness": {
+        "observation": {
+          "coordinate": [
+            0.08584483769065113,
+            0,
+            0.0064897662853230795
+          ],
+          "physical": [
+            0.08753820967416853,
+            0,
+            0.008210130333934357
+          ],
+          "geometry": 34,
+          "element": 34,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": true,
+          "epsilon_semantics": "dependent inner dissipation",
+          "gradient": [
+            [
+              6.631439049665184,
+              0,
+              34.720198976738516
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              13.07371327349399,
+              0,
+              -6.301441925044573
+            ]
+          ],
+          "k": 0.018385754593257954,
+          "epsilon": 0.14327683687079085
+        },
+        "tensor": [
+          [
+            0.009437415833537958,
+            0,
+            -0.010161223622047471
+          ],
+          [
+            0,
+            0.012257169728838635,
+            0
+          ],
+          [
+            -0.010161223622047471,
+            0,
+            0.014936605561857797
+          ]
+        ],
+        "eigenvalues": [
+          0.001660342781672877,
+          0.012257169728838635,
+          0.02271367861372288
+        ],
+        "critical_eigenvector": [
+          0.7941041412604964,
+          0,
+          0.6077817147898821
+        ],
+        "eigenvector_residual": 0
+      },
+      "outer_covariance_witness": {
+        "observation": {
+          "coordinate": [
+            -0.032876066992404085,
+            0,
+            0.5871886214274789
+          ],
+          "physical": [
+            -0.035962633787480956,
+            0,
+            0.5950917917596329
+          ],
+          "geometry": 74,
+          "element": 74,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": false,
+          "epsilon_semantics": "actual retained outer coefficients",
+          "gradient": [
+            [
+              -0.02747395994663977,
+              0,
+              0.31606064797696254
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0.33401121052665733,
+              0,
+              0.031178257295041974
+            ]
+          ],
+          "k": 0.020438666671678814,
+          "epsilon": 0.0018160991933232722
+        },
+        "tensor": [
+          [
+            0.014763298517161164,
+            0,
+            -0.01345765627527678
+          ],
+          [
+            0,
+            0.01362577778111921,
+            0
+          ],
+          [
+            -0.01345765627527678,
+            0,
+            0.01233488581448448
+          ]
+        ],
+        "eigenvalues": [
+          3.677151069008278e-05,
+          0.01362577778111921,
+          0.02706141282095556
+        ],
+        "critical_eigenvector": [
+          0.6745890593511725,
+          0,
+          0.7381934712551311
+        ],
+        "eigenvector_residual": 1.734723475976807e-18
+      },
+      "minimum_k_ratio_witness": {
+        "observation": {
+          "coordinate": [
+            -0.051543136199931686,
+            0,
+            0.1404440566263192
+          ],
+          "physical": [
+            -0.054998339133672296,
+            0,
+            0.15543587821129254
+          ],
+          "geometry": 61,
+          "element": 61,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": false,
+          "epsilon_semantics": "actual retained outer coefficients",
+          "gradient": [
+            [
+              2.5077756248927185,
+              0,
+              0.28379144386995975
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              -5.954302221166223,
+              0,
+              -2.1635381830324065
+            ]
+          ],
+          "k": 0.00921398198074084,
+          "epsilon": 0.012918476739273958
+        },
+        "k_over_cold": 0.5011478619085351,
+        "epsilon_over_cold": 1.9529012356423747,
+        "cold_k": 0.018385755345041242,
+        "cold_epsilon": 0.006615017955592945
+      },
+      "maximum_k_ratio_witness": {
+        "observation": {
+          "coordinate": [
+            0.07660142232156514,
+            0,
+            0.7296187303873951
+          ],
+          "physical": [
+            0.07912547539207372,
+            0,
+            0.7300315705411985
+          ],
+          "geometry": 76,
+          "element": 76,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": false,
+          "epsilon_semantics": "actual retained outer coefficients",
+          "gradient": [
+            [
+              -0.041439187207940334,
+              0,
+              0.22569635140537586
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              -0.25607816912310855,
+              0,
+              0.03823688327930683
+            ]
+          ],
+          "k": 0.03672742762197101,
+          "epsilon": 0.0011755343077349096
+        },
+        "k_over_cold": 1.997602324882154,
+        "epsilon_over_cold": 0.9239795075611388,
+        "cold_k": 0.01838575534504231,
+        "cold_epsilon": 0.0012722514927173596
+      },
+      "minimum_epsilon_ratio_witness": {
+        "observation": {
+          "coordinate": [
+            0.032876066992404085,
+            0,
+            0.7990374439994044
+          ],
+          "physical": [
+            0.035962633787480956,
+            0,
+            0.7990731904152115
+          ],
+          "geometry": 75,
+          "element": 75,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": false,
+          "epsilon_semantics": "actual retained outer coefficients",
+          "gradient": [
+            [
+              0.0766278126629482,
+              0,
+              0.08088002029090059
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              -0.0003982389910361069,
+              0,
+              -0.09586085857477314
+            ]
+          ],
+          "k": 0.022724037345546774,
+          "epsilon": 0.0008476217950251976
+        },
+        "k_over_cold": 1.2359588670190447,
+        "epsilon_over_cold": 0.7283907832710218,
+        "cold_k": 0.01838575534504145,
+        "cold_epsilon": 0.0011636909945767558
+      },
+      "maximum_epsilon_ratio_witness": {
+        "observation": {
+          "coordinate": [
+            -0.05649689521053614,
+            0,
+            0.17168967538130225
+          ],
+          "physical": [
+            -0.059903093385853715,
+            0,
+            0.1835529116229364
+          ],
+          "geometry": 61,
+          "element": 61,
+          "radial_side": 0,
+          "tangential_side": 0,
+          "inner": false,
+          "epsilon_semantics": "actual retained outer coefficients",
+          "gradient": [
+            [
+              0.764751984419749,
+              0,
+              0.02133252563924771
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              -2.6803264790733397,
+              0,
+              -0.9221555695679359
+            ]
+          ],
+          "k": 0.010067204753211382,
+          "epsilon": 0.010833340828404668
+        },
+        "k_over_cold": 0.5475545912736457,
+        "epsilon_over_cold": 1.9989999999999997,
+        "cold_k": 0.018385755345041385,
+        "cold_epsilon": 0.005419380104254462
+      },
+      "quadrature_order": 24,
+      "state_sha256": "2b763674a62afd5e1e7763bc78a598e7d5e04f9c3f3795c3883bfe9834a9e53b",
+      "cold_base_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+      "model_specification": {
+        "version": "CanonicalWallModelV1",
+        "name": "StandardKEpsilon",
+        "calibration": "StandardNeutralCalibratedV1",
+        "manifest_sha256": "6be44cfe3ba090c1403f325a9e66368ec1718cd886f71ddd8ff21a04fffe54b0",
+        "coefficients": {
+          "Cmu": 0.09,
+          "Cepsilon1": 1.44,
+          "Cepsilon2": 1.92,
+          "sigmaK": 1,
+          "sigmaEpsilon": 1.3478315512167742,
+          "yapCoefficient": 0,
+          "yapLength": 2.5
+        },
+        "q": 3.3333333333333335,
+        "kappa": 0.4405539051866587,
+        "K0": 0.01838575534504143,
+        "quadratic_active": false,
+        "cubic_active": false,
+        "Yap_active": false,
+        "variant": "Original",
+        "beta": 1,
+        "gamma0": 0,
+        "Gamma": 0,
+        "physical_regularization_active": false
+      },
+      "minimum_k": 0.00921398198074084,
+      "minimum_epsilon": 0.0008476217950251976,
+      "invalid_scalar_count": 0,
+      "scalar_positive_finite": true,
+      "invalid_scalar_witness": null,
+      "outer_k_over_cold": [
+        0.5011478619085351,
+        1.997602324882154
+      ],
+      "outer_epsilon_over_cold": [
+        0.7283907832710218,
+        1.9989999999999997
+      ],
+      "scalar_envelopes_passed": true,
+      "scalar_envelope_witness": null,
+      "integrals_complete": true,
+      "strong_divergence_RMS": 0.07562181159427188,
+      "maximum_absolute_divergence": 60.518011345984746,
+      "TKE_integral": 0.011930420869461984,
+      "base_TKE_integral": 0.011702006264258364,
+      "outer_TKE_integral": 0.011823940973166906,
+      "base_outer_TKE_integral": 0.011595526367963281,
+      "outer_time_scale": [
+        0.1287796797719414,
+        36.63722640599913
+      ],
+      "outer_length_scale": [
+        0.017461762304198783,
+        6.894246385818397
+      ],
+      "outer_time_scale_ratio": [
+        0.25331556015148493,
+        2.318882723870749
+      ],
+      "outer_length_scale_ratio": [
+        0.1795587990594702,
+        3.218120178095743
+      ],
+      "strong_divergence_L2": 0.06030809842199062,
+      "volume": 0.6359999999999986,
+      "kinetic_energy": 0.563597778504566,
+      "base_kinetic_energy": 0.5643662520535037,
+      "velocity_change_L2": 0.04492218649100793,
+      "maximum_sampled_velocity_increment": 0.3725852009082349,
+      "scope": "independent panelwise physical tensor sampling; complements complete inventory; no domain-wide covariance theorem"
+    }
+  },
+  "native_budget": {
+    "rate_columns": "Pk,Ek,P_epsilon,D_epsilon,Yap,p_A0,prescribed_k,prescribed_epsilon",
+    "inner_rates": [
+      0.0039760256896448805,
+      0.0023262033179076375,
+      0,
+      0,
+      0,
+      0.0023262033179076366,
+      0,
+      0
+    ],
+    "outer_rates": [
+      0.00555734306471448,
+      0.004375215505870241,
+      0.015629930921873696,
+      0.013741274685911777,
+      0,
+      0,
+      0,
+      0
+    ],
+    "regional_weak_balances": [
+      {
+        "region": 0,
+        "block": 2,
+        "physical_storage_rate": 0,
+        "source_rate": 0.001649822371737243,
+        "explicit_open_outward_flux": 6.501335885154393e-05,
+        "unmasked_constant_test_residual": -0.0015848090128856964,
+        "free_interior_row_projection": -0.0013180302202302036,
+        "constrained_row_reaction_projection": 6.234174350776036e-05,
+        "free_interface_row_projection": -0.00032912053616325303,
+        "exact_weak_balance_error": -2.6020852139652106e-18,
+        "row_partition_error": 0
+      },
+      {
+        "region": 1,
+        "block": 2,
+        "physical_storage_rate": 0,
+        "source_rate": 0.001182127558844239,
+        "explicit_open_outward_flux": 0.01849649665562622,
+        "unmasked_constant_test_residual": 0.017314369096781964,
+        "free_interior_row_projection": -0.001386356512869562,
+        "constrained_row_reaction_projection": 0.018968126165653014,
+        "free_interface_row_projection": -0.0002674005560014902,
+        "exact_weak_balance_error": 1.734723475976807e-17,
+        "row_partition_error": 0
+      },
+      {
+        "region": 1,
+        "block": 3,
+        "physical_storage_rate": 0,
+        "source_rate": 0.0018886562359619191,
+        "explicit_open_outward_flux": 0.004852825839088123,
+        "unmasked_constant_test_residual": 0.0029641696031262378,
+        "free_interior_row_projection": -0.0023193831295318834,
+        "constrained_row_reaction_projection": 0.00528355273265812,
+        "free_interface_row_projection": 0,
+        "exact_weak_balance_error": -3.426078865054194e-17,
+        "row_partition_error": -8.673617379884035e-19
+      }
+    ],
+    "independent_source_integration": [
+      {
+        "Gauss_order": 8,
+        "tangential_Gauss_order": 8,
+        "inner": [
+          0.0039760256895713855,
+          0.002326203317277797,
+          0,
+          0,
+          0,
+          0.0023262033194534045,
+          0,
+          0
+        ],
+        "outer": [
+          0.005557341437043055,
+          0.0043752155058368,
+          0.01562993092317469,
+          0.013741272315591363,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "Gauss_order": 16,
+        "tangential_Gauss_order": 16,
+        "inner": [
+          0.003976025689644859,
+          0.0023262033179076336,
+          0,
+          0,
+          0,
+          0.0023262033179076488,
+          0,
+          0
+        ],
+        "outer": [
+          0.005557343064714477,
+          0.004375215505870237,
+          0.015629930921873696,
+          0.013741274685911785,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "Gauss_order": 32,
+        "tangential_Gauss_order": 32,
+        "inner": [
+          0.003976025689644881,
+          0.002326203317907639,
+          0,
+          0,
+          0,
+          0.002326203317907638,
+          0,
+          0
+        ],
+        "outer": [
+          0.005557343064714655,
+          0.0043752155058702285,
+          0.01562993092187365,
+          0.013741274685910758,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "physical_face_columns": "region,block,axis,side,outward_advection,outward_diffusion",
+    "physical_faces": [
+      [
+        0,
+        2,
+        0,
+        -1,
+        -6.439905010748227e-05,
+        -3.2277904028494792e-21
+      ],
+      [
+        0,
+        2,
+        0,
+        1,
+        6.501335885154392e-05,
+        -6.467906524970135e-22
+      ],
+      [
+        0,
+        2,
+        2,
+        -1,
+        0,
+        -3.2938427104582353e-15
+      ],
+      [
+        0,
+        2,
+        2,
+        1,
+        -6.280884198921135e-07,
+        -3.9858098323072366e-16
+      ],
+      [
+        1,
+        2,
+        0,
+        -1,
+        -0.019247406260597545,
+        0.0001199693072576929
+      ],
+      [
+        1,
+        2,
+        0,
+        1,
+        0.01849649665562622,
+        -0.0002776857154844102
+      ],
+      [
+        1,
+        2,
+        2,
+        -1,
+        6.280884198921612e-07,
+        1.727627152618507e-10
+      ],
+      [
+        1,
+        2,
+        2,
+        1,
+        -9.124296883053672e-21,
+        -2.402455724289567e-05
+      ],
+      [
+        1,
+        3,
+        0,
+        -1,
+        -0.004812738774379198,
+        -1.00547516953836e-06
+      ],
+      [
+        1,
+        3,
+        0,
+        1,
+        0.004852825839088123,
+        -4.558014366056933e-06
+      ],
+      [
+        1,
+        3,
+        2,
+        -1,
+        4.886872349029177e-06,
+        0.0028511615556496804
+      ],
+      [
+        1,
+        3,
+        2,
+        1,
+        -6.236094591711027e-22,
+        -4.952924218749518e-05
+      ]
+    ],
+    "weak_components": [
+      {
+        "block": 2,
+        "term": "inner_momentum_stress",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "outer_momentum_stress",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "conservative_advection",
+        "constant_test_projection": -2.949029909160572e-17,
+        "free_mass_dual_norm": 0.1993357001257574,
+        "signed_projection_on_total_residual": 0.044623290659558675
+      },
+      {
+        "block": 2,
+        "term": "k_diffusion",
+        "constant_test_projection": 1.2088854223213374e-17,
+        "free_mass_dual_norm": 0.3367899360217591,
+        "signed_projection_on_total_residual": 0.29918583794525383
+      },
+      {
+        "block": 2,
+        "term": "epsilon_diffusion",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "inner_k_production",
+        "constant_test_projection": -0.00397602568964488,
+        "free_mass_dual_norm": 0.07144097610545976,
+        "signed_projection_on_total_residual": 0.006224330985638271
+      },
+      {
+        "block": 2,
+        "term": "inner_k_destruction",
+        "constant_test_projection": 0.0023262033179076397,
+        "free_mass_dual_norm": 0.03973412601909673,
+        "signed_projection_on_total_residual": -0.0026773313864861844
+      },
+      {
+        "block": 2,
+        "term": "outer_k_production",
+        "constant_test_projection": -0.005557343064714503,
+        "free_mass_dual_norm": 0.021249352153175027,
+        "signed_projection_on_total_residual": 0.0011665346433070503
+      },
+      {
+        "block": 2,
+        "term": "outer_k_destruction",
+        "constant_test_projection": 0.004375215505870238,
+        "free_mass_dual_norm": 0.010840921955379518,
+        "signed_projection_on_total_residual": -0.00020387522091812026
+      },
+      {
+        "block": 2,
+        "term": "epsilon_production",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "epsilon_destruction",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "epsilon_yap",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "prescribed_scalar_source",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "roughness_force",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "prescribed_body",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "continuity",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "gauge",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "external_advection",
+        "constant_test_projection": 0.018561510014477766,
+        "free_mass_dual_norm": 0.11775903605295919,
+        "signed_projection_on_total_residual": 0.0065868966837266
+      },
+      {
+        "block": 2,
+        "term": "external_traction",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "external_diffusion",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 2,
+        "term": "time_mass",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "inner_momentum_stress",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "outer_momentum_stress",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "conservative_advection",
+        "constant_test_projection": 7.914675859144182e-18,
+        "free_mass_dual_norm": 0.059500818730418834,
+        "signed_projection_on_total_residual": 0.005768063109486224
+      },
+      {
+        "block": 3,
+        "term": "k_diffusion",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "epsilon_diffusion",
+        "constant_test_projection": -5.759824041329242e-19,
+        "free_mass_dual_norm": 0.023725414570939275,
+        "signed_projection_on_total_residual": 0.013443613669106595
+      },
+      {
+        "block": 3,
+        "term": "inner_k_production",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "inner_k_destruction",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "outer_k_production",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "outer_k_destruction",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "epsilon_production",
+        "constant_test_projection": -0.015629930921873682,
+        "free_mass_dual_norm": 0.13721163475506656,
+        "signed_projection_on_total_residual": 0.1251016900775866
+      },
+      {
+        "block": 3,
+        "term": "epsilon_destruction",
+        "constant_test_projection": 0.013741274685911787,
+        "free_mass_dual_norm": 0.08238596375278376,
+        "signed_projection_on_total_residual": -0.04982791706159945
+      },
+      {
+        "block": 3,
+        "term": "epsilon_yap",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "prescribed_scalar_source",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "roughness_force",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "prescribed_body",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "continuity",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "gauge",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "external_advection",
+        "constant_test_projection": 0.004852825839088123,
+        "free_mass_dual_norm": 0.05430881109481674,
+        "signed_projection_on_total_residual": -0.0006556745800643187
+      },
+      {
+        "block": 3,
+        "term": "external_traction",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "external_diffusion",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      },
+      {
+        "block": 3,
+        "term": "time_mass",
+        "constant_test_projection": 0,
+        "free_mass_dual_norm": 0,
+        "signed_projection_on_total_residual": 0
+      }
+    ],
+    "native_component_sum_max_error": 6.661338147750939e-16,
+    "ideal_seed_ratio": 1,
+    "independent_analytical_P_over_E": 0.9999999999999988,
+    "native_inner_P_over_E": 1.709233951751568,
+    "history_alpha": 0,
+    "ground_reaction": {
+      "lifting": "global-x Q2(s) times max(0,1-r/lifting_height), zero side corners",
+      "lifting_height": 0.0002,
+      "weighted_surface_measure": 0.5468634999105996,
+      "weighted_sampled_global_x_traction": 0.0070264946090884736,
+      "full_spatial_lifting_work": -0.0034228056028512617,
+      "free_row_lifting_work": 9.721514480183491e-06,
+      "prescribed_row_reaction": -0.0034325271173314452,
+      "inferred_ground_traction": 0.006276753006723962,
+      "signed_volume_components": {
+        "inner_momentum_stress": -0.0034361025637525476,
+        "outer_momentum_stress": -5.919971645133027e-24,
+        "conservative_advection": -4.54298314811781e-08,
+        "k_diffusion": 0,
+        "epsilon_diffusion": 0,
+        "inner_k_production": 0,
+        "inner_k_destruction": 0,
+        "outer_k_production": 0,
+        "outer_k_destruction": 0,
+        "epsilon_production": 0,
+        "epsilon_destruction": 0,
+        "epsilon_yap": 0,
+        "prescribed_scalar_source": 0,
+        "roughness_force": 1.3342390732766861e-05,
+        "prescribed_body": 0,
+        "continuity": 0,
+        "gauge": 0,
+        "external_advection": 2.5521028976135283e-23,
+        "external_traction": 0,
+        "external_diffusion": 0
+      },
+      "lifting_representation_error": 3.885780586188048e-16,
+      "scope": "spatial weak contraction; free/unsteady residual and other loads remain explicit; not an exact physical stress estimator"
+    },
+    "physical_time": 0,
+    "governing_solves": 0,
+    "physical_commits": 0,
+    "scope": "Native physical quadrature and saved callback history. Exact weak row partition is separate from gradient-based face flux estimates; interface CG row projections are not unique conservative control-volume fluxes. Source and diffusion are separate; net destruction counted once. No Lift or epsilon substitution."
+  },
+  "native_witnesses": {
+    "accepted_awf_inner_minimum_physical_point": [
+      0.08808282008763059,
+      0,
+      0.008076458683816932
+    ],
+    "accepted_awf_inner_minimum_point": [
+      0.0864504194414307,
+      0,
+      0.0065,
+      0.01838575534504143,
+      0.01838575534504143,
+      0.0002129398143720893,
+      0.014887289557228447,
+      0.01225717023002762,
+      0.001649349836182353
+    ],
+    "accepted_awf_outer_minimum_physical_point": [
+      -0.07763912545203736,
+      0,
+      0.055007545972028206
+    ],
+    "accepted_awf_outer_minimum_point": [
+      -0.07500000000000001,
+      0,
+      0.05,
+      0.01520413914925106,
+      0.023569911563922734,
+      3.6771510689927525e-05
+    ],
+    "native_inner_minimum_geometry_element_side_block": [
+      34,
+      34,
+      -1,
+      2
+    ],
+    "native_outer_minimum_geometry_element_side_block": [
+      49,
+      49,
+      0,
+      2
+    ]
+  },
+  "reference_sha256": "038fc076cebbea41bcb7cc349147eacc2b938a9051827bbb386baf7c3cb3716c",
+  "defect_sha256": "e319468000760282822984d0fbdee636d7d5c11abf809a76147469f4ad6368a3",
+  "physical_attempts": 0
+}

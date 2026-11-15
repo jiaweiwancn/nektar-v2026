@@ -60,3 +60,43 @@ The accepted appendix matches the supplied checksum. The repository main note
 is the reviewed older version. The supplied newer-note hash is recorded; that
 file is absent from this attachment directory and no supplemental remedy is
 activated. The deployed runtime parameter interpretation remains unchanged.
+
+## Numerical adaptations before fresh qualification, 16 November
+
+The first 306-row upper-outer support gives ten exact strong-action-null modes,
+all represented by the retained span. Compensated weak-null responses instead
+add 34 useful independent modes. Native signed finite control and old-block
+bit preservation pass; checkpoint1 is `0272215d`. A 78-column actual-limit
+obstruction improves A's checked lower bound to about .0061985, with remaining
+transition constraints and an active divergence cap.
+
+The second support covers the full outer region, with 738 coefficient rows.
+It retains all 78 columns and adds sixteen covariance responses plus one
+explicit divergence-reducing response. Its full base/cross/square terms and
+signed finite combinations pass native verification, producing 95 columns.
+
+HiGHS first reports an unscaled numerical-status failure. Equivalent diagonal
+scaling fixes that status, but LP relaxations repeatedly attain zero slack while
+true physical quadratics remain violated. That refinement is intentionally
+stopped, with terminal fields and all 42 additional LP attempts charged.
+Candidate construction now uses exact physical quadratics and the exact affine
+PSD block at active points, with complete global separation. A stopping-rule
+defect that confused repeated zero relaxed objectives with global stagnation is
+fixed and covered by a missed-point-chain regression. No physical constraint is
+weakened, and SLSQP status alone cannot qualify a state or prove obstruction.
+
+Both LP algorithm attempts and SLSQP active-relaxation solves consume the same
+240 aggregate major-work allowance. Scalar min/max constraints per native
+geometry are equivalent to every declared scalar row; complete inventory and
+seen-grid checks remain mandatory. No new conic dependency or production solver
+change is introduced. Policy amendments record these numerical changes.
+
+The 95-column construction passes seen constraints in six work units/seven
+complete scans. An optional single reserve solve then seeks 20*delta and a
+1e-9 conservative divergence buffer, using three more work units/four scans.
+These stricter construction targets do not change acceptance delta, envelopes or
+native divergence tolerance. Their failure would not be an actual-limit
+obstruction. The reserve state `2b763674a62afd5e1e7763bc78a598e7d5e04f9c3f3795c3883bfe9834a9e53b`
+passes the complete native/GL20/GL24 audit. It is frozen before fresh sampling;
+GL28, real hill import and the bounded physical sequence are still separate
+gates at this point. Anchor B need not be searched in this enlarged epoch.

@@ -16,11 +16,11 @@ def main():
         except ValueError:continue
         raise AssertionError('invalid version/count accepted')
     tests['archived_counts_and_successor_rejections']=True
-    old=Context(a.previous);new=Context(a.context);nv=old.meta['direction_counts']['velocity'];assert nv==44
+    old=Context(a.previous);new=Context(a.context);nv=old.meta['direction_counts']['velocity'];assert nv>=44
     for key in old.blocks:
         x=new.block(key);x=x[:,:nv] if key=='velocity_basis' else x;assert old.block(key).tobytes()==x.tobytes(),key
     for key in ('members','member_weights'):assert old.arrays[key].tobytes()==new.arrays[key].tobytes(),key
-    tests['all_44_original_responses_scalars_memberships_bits_preserved']=True
+    tests['all_prior_responses_scalars_memberships_bits_preserved']=True
     for key in ('geometry_identity','inventory_identity','reference_sha256','defect_sha256','patch_signature'):assert old.doc[key]==new.doc[key],key
     for key in ('velocity_mass','divergence_GL16','divergence_GL20','divergence_GL24'):
         # Native sums over quadrature retain the same old sub-block arithmetic.
