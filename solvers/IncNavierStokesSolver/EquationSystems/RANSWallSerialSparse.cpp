@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <sstream>
 #include <atomic>
+#include <cstdlib>
 #ifdef NEKTAR_RANS_HAVE_SCOTCH_ORDERING
 #include <scotch.h>
 #endif
@@ -21,7 +22,16 @@
 
 namespace Nektar::RANSWallAlgebra
 {
-namespace { std::atomic_size_t factorizationCount{0}; }
+namespace {
+std::atomic_size_t factorizationCount{0};
+// Optional bounded audit output; no coefficient, solve or acceptance change.
+void SparseReceipt(const std::string &record)
+{
+    const char *path=std::getenv("NEKTAR_RANS_SPARSE_RECEIPTS");if(!path || !*path)return;
+    std::ofstream out(path,std::ios::app);out<<record<<'\n';out.close();
+    Require(out.good(),"could not save sparse numerical receipt");
+}
+}
 std::size_t SparseFactorizationCount() { return factorizationCount.load(std::memory_order_relaxed); }
 double &SparseMatrix::Entry(int row,int column)
 {
@@ -88,15 +98,20 @@ void SparseMatrix::Write(const std::string &file) const
     out.close();Require(out.good(),"could not save CSR snapshot");
 }
 
-std::vector<int> SparseScotchPermutation(const SparseMatrix &matrix)
+std::vector<int> SparseScotchPermutation(const SparseMatrix &matrix,const std::vector<int> &groups)
 {
 #ifdef NEKTAR_RANS_HAVE_SCOTCH_ORDERING
     Require(matrix.Rows()>0 && matrix.Rows()==matrix.Columns(),"Scotch graph shape");
-    const int n=matrix.Rows();std::vector<std::vector<SCOTCH_Num>> neighbors(n);
+    const int n=matrix.Rows();Require(groups.empty() || groups.size()==n,"Scotch vector grouping shape");
+    std::vector<int> labels=groups,node(n);if(labels.empty()){labels.resize(n);std::iota(labels.begin(),labels.end(),0);}
+    std::sort(labels.begin(),labels.end());labels.erase(std::unique(labels.begin(),labels.end()),labels.end());
+    const int ng=labels.size();
+    for(int i=0;i<n;++i)node[i]=groups.empty()?i:std::lower_bound(labels.begin(),labels.end(),groups[i])-labels.begin();
+    std::vector<std::vector<SCOTCH_Num>> neighbors(ng);
     for(int i=0;i<n;++i)matrix.Each(i,[&](int j,double)
-    {if(i!=j){neighbors[i].push_back(j);neighbors[j].push_back(i);}});
-    std::vector<SCOTCH_Num> pointers(n+1),edges;
-    for(int i=0;i<n;++i)
+    {if(node[i]!=node[j]){neighbors[node[i]].push_back(node[j]);neighbors[node[j]].push_back(node[i]);}});
+    std::vector<SCOTCH_Num> pointers(ng+1),edges;
+    for(int i=0;i<ng;++i)
     {
         auto &row=neighbors[i];std::sort(row.begin(),row.end());
         row.erase(std::unique(row.begin(),row.end()),row.end());
@@ -104,7 +119,7 @@ std::vector<int> SparseScotchPermutation(const SparseMatrix &matrix)
     }
     SCOTCH_Graph graph;Require(SCOTCH_graphInit(&graph)==0,"Scotch graph init");
     struct GraphExit { SCOTCH_Graph *g;~GraphExit(){SCOTCH_graphExit(g);} } graphExit{&graph};
-    Require(SCOTCH_graphBuild(&graph,0,n,pointers.data(),pointers.data()+1,
+    Require(SCOTCH_graphBuild(&graph,0,ng,pointers.data(),pointers.data()+1,
         nullptr,nullptr,edges.size(),edges.data(),nullptr)==0 && SCOTCH_graphCheck(&graph)==0,
         "invalid canonical union Scotch graph");
     SCOTCH_Strat strategy;Require(SCOTCH_stratInit(&strategy)==0,"Scotch strategy init");
@@ -113,22 +128,26 @@ std::vector<int> SparseScotchPermutation(const SparseMatrix &matrix)
     // imbalance .1. Its resolved strategy is recorded by the CT14 probe.
     Require(SCOTCH_stratGraphOrderBuild(&strategy,SCOTCH_STRATQUALITY|SCOTCH_STRATSAFETY,0,.1)==0,
         "Scotch ND0 strategy unavailable");
-    std::cerr<<"ScotchND0V1 version="<<SCOTCH_VERSION<<'.'<<SCOTCH_RELEASE<<'.'<<SCOTCH_PATCHLEVEL
-        <<" num_bytes="<<sizeof(SCOTCH_Num)<<" vertices="<<n<<" directed_edges="<<edges.size()
+    std::cerr<<(groups.empty()?"ScotchND0V1":"ScotchVectorND0V1")<<" version="<<SCOTCH_VERSION<<'.'<<SCOTCH_RELEASE<<'.'<<SCOTCH_PATCHLEVEL
+        <<" num_bytes="<<sizeof(SCOTCH_Num)<<" scalar_rows="<<n<<" graph_vertices="<<ng<<" directed_edges="<<edges.size()
         <<" seed=0 flags=QUALITY|SAFETY level=0 balance=0.1 strategy=";
     Require(SCOTCH_stratSave(&strategy,stderr)==0,"could not record Scotch strategy");
     std::cerr<<'\n';
     SCOTCH_randomSeed(0);SCOTCH_randomReset();
-    std::vector<SCOTCH_Num> forward(n),inverse(n);
+    std::vector<SCOTCH_Num> forward(ng),inverse(ng);
     Require(SCOTCH_graphOrder(&graph,&strategy,forward.data(),inverse.data(),nullptr,nullptr,nullptr)==0,
         "Scotch ND0 ordering failed");
-    std::vector<int> result(n);std::vector<bool> seen(n,false);
-    for(int i=0;i<n;++i)
+    std::vector<bool> seen(ng,false);std::vector<std::vector<int>> members(ng);
+    for(int i=0;i<n;++i)members[node[i]].push_back(i);
+    for(int i=0;i<ng;++i)
     {
-        Require(forward[i]>=0 && forward[i]<n && !seen[forward[i]],"invalid Scotch forward permutation");
-        seen[forward[i]]=true;result[i]=forward[i];
+        Require(forward[i]>=0 && forward[i]<ng && !seen[forward[i]],"invalid Scotch forward permutation");
+        seen[forward[i]]=true;
         Require(inverse[forward[i]]==i,"Scotch inverse permutation mismatch");
     }
+    std::vector<int> result(n);int next=0;
+    for(int j=0;j<ng;++j)for(int old:members[inverse[j]])result[old]=next++;
+    Require(next==n,"Scotch expanded permutation coverage");
     return result;
 #else
     Require(false,"ScotchND0V1 requires explicitly linked Scotch support");return {};
@@ -139,6 +158,7 @@ struct SparseFactor::Impl
 {
     SparseMatrix matrix;bool mass;SparsePredictorOrdering ordering;
     std::vector<int> oldToNew;
+    std::size_t id=0;
 #ifdef NEKTAR_RANS_HAVE_EIGEN_SPARSE
     using Matrix=Eigen::SparseMatrix<double,Eigen::ColMajor,int>;
     Matrix coefficients;
@@ -150,24 +170,28 @@ struct SparseFactor::Impl
     std::size_t nonzeros=0;
     Impl(const SparseMatrix &m,bool positive,SparsePredictorOrdering order):matrix(m),mass(positive),ordering(order){}
 };
-SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass,SparsePredictorOrdering ordering):m_impl(std::make_shared<Impl>(m,positiveMass,ordering))
+SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass,SparsePredictorOrdering ordering,const std::vector<int> &groups):m_impl(std::make_shared<Impl>(m,positiveMass,ordering))
 {
-    factorizationCount.fetch_add(1,std::memory_order_relaxed);
+    m_impl->id=1+factorizationCount.fetch_add(1,std::memory_order_relaxed);
     RANSWallTiming::Scope timing("sparse.factorize");
     Require(m.Rows()>0 && m.Rows()==m.Columns(),"sparse factor shape");m.Finalize();
     Require(!positiveMass || ordering==SparsePredictorOrdering::COLAMD,"predictor ordering cannot change mass LDLT");
+    Require((ordering==SparsePredictorOrdering::ScotchVectorND0V1)==!groups.empty(),"explicit vector grouping required only for ScotchVectorND0V1");
 #ifdef NEKTAR_RANS_HAVE_EIGEN_SPARSE
     using Row=Eigen::SparseMatrix<double,Eigen::RowMajor,int>;
     Eigen::Map<const Row> map(m.Rows(),m.Columns(),m.NonZeros(),m.Pointers().data(),m.Indices().data(),m.Values().data());
-    if(ordering==SparsePredictorOrdering::ScotchND0V1)
+    if(ordering==SparsePredictorOrdering::ScotchND0V1 || ordering==SparsePredictorOrdering::ScotchVectorND0V1)
     {
-        m_impl->oldToNew=SparseScotchPermutation(m);
+        m_impl->oldToNew=SparseScotchPermutation(m,groups);
         std::vector<Eigen::Triplet<double,int>> entries;entries.reserve(m.NonZeros());
         for(int i=0;i<m.Rows();++i)m.Each(i,[&](int j,double v)
         {entries.emplace_back(m_impl->oldToNew[i],m_impl->oldToNew[j],v);});
         m_impl->coefficients.resize(m.Rows(),m.Columns());
         m_impl->coefficients.setFromTriplets(entries.begin(),entries.end());
         Require(m_impl->coefficients.nonZeros()==m.NonZeros(),"Scotch changed canonical nonzeros");
+        for(int i=0;i<m.Rows();++i)m.Each(i,[&](int j,double v)
+        {Require(m_impl->coefficients.coeff(m_impl->oldToNew[i],m_impl->oldToNew[j])==v,
+            "Scotch permuted matrix differs from canonical coefficient");});
     }
     else m_impl->coefficients=map;
     if(positiveMass)
@@ -191,6 +215,13 @@ SparseFactor::SparseFactor(const SparseMatrix &m,bool positiveMass,SparsePredict
     Require(m_impl->nonzeros<=40000000,"sparse factor exceeds declared40M fill budget: rows="+
         std::to_string(m.Rows())+", matrix_nnz="+std::to_string(m.NonZeros())+", factor_nnz="+
         std::to_string(m_impl->nonzeros)+", mass="+std::to_string(positiveMass));
+    SparseReceipt("{\"event\":\"factor\",\"id\":"+std::to_string(m_impl->id)+
+        ",\"rows\":"+std::to_string(m.Rows())+",\"matrix_nnz\":"+std::to_string(m.NonZeros())+
+        ",\"factor_nnz\":"+std::to_string(m_impl->nonzeros)+",\"mass\":"+(positiveMass?"true":"false")+
+        ",\"ordering\":\""+(positiveMass?std::string("LDLT"):ordering==SparsePredictorOrdering::ScotchVectorND0V1?
+            std::string("ScotchVectorND0V1"):ordering==SparsePredictorOrdering::ScotchND0V1?
+            std::string("ScotchND0V1"):ordering==SparsePredictorOrdering::COLAMD?std::string("COLAMD"):
+            ordering==SparsePredictorOrdering::AMD?std::string("AMD"):std::string("Natural"))+"\"}");
 #else
     Require(false,"AcceptedSerialSparseV1 requires an explicitly Eigen-enabled isolated build");
 #endif
@@ -224,6 +255,12 @@ Vector SparseFactor::Apply(const Vector &rhs) const
         const double defect=Maximum(residual);if(refinement==0)initial=defect;
         if(defect<=bound)
         {
+            if(std::getenv("NEKTAR_RANS_SPARSE_RECEIPTS"))
+            {
+                std::ostringstream receipt;receipt<<std::setprecision(17)<<"{\"event\":\"solve\",\"id\":"<<m_impl->id
+                    <<",\"rhs_maximum\":"<<Maximum(rhs)<<",\"true_residual\":"<<defect<<",\"bound\":"<<bound
+                    <<",\"refinements\":"<<refinement<<'}';SparseReceipt(receipt.str());
+            }
             if(refinement)std::cerr<<std::setprecision(17)<<"RANS sparse refinement {\"rows\":"<<rhs.size()
                 <<",\"mass\":"<<(m_impl->mass?"true":"false")<<",\"steps\":"<<refinement
                 <<",\"initial_residual\":"<<initial<<",\"final_residual\":"<<defect<<",\"bound\":"<<bound<<"}\n";

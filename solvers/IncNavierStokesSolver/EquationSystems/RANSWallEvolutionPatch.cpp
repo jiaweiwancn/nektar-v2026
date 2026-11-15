@@ -227,6 +227,12 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     parameters.geometry.Validate();m_mapping.dimension=m_dimension;m_mapping.height=parameters.geometry.height;
     session->LoadSolverInfo("RANSWallLinearBackend",m_linearBackend,"ReplicatedDenseV1");
     Require(m_linearBackend=="ReplicatedDenseV1" || SerialSparse(),"unknown wall linear backend");
+    session->LoadSolverInfo("RANSWallPredictorOrdering",m_predictorOrdering,"COLAMD");
+    Require(m_predictorOrdering=="COLAMD" || (SerialSparse() && m_predictorOrdering=="ScotchVectorND0V1"),
+        "unknown/unsupported wall predictor ordering");
+#ifndef NEKTAR_RANS_HAVE_SCOTCH_ORDERING
+    Require(m_predictorOrdering=="COLAMD","ScotchVectorND0V1 requires explicitly linked Scotch support");
+#endif
 #ifndef NEKTAR_RANS_HAVE_EIGEN_SPARSE
     Require(!SerialSparse(),"AcceptedSerialSparseV1 needs the explicitly enabled Eigen sparse build");
 #endif
@@ -1843,6 +1849,7 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(OpenBoundary())text<<":boundary="<<m_openBoundaryIdentity;
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
+    if(m_predictorOrdering!="COLAMD")text<<":component=CT14-ScotchVectorND0V1:predictor_order="<<m_predictorOrdering;
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();
     if(NewModels())text<<":resolved="<<m_parameters.model.Signature();

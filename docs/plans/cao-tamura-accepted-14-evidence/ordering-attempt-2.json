@@ -1,0 +1,12 @@
+{
+  "schema": "CT14ProspectiveOrderingAttemptV2",
+  "policy": "ScotchVectorND0V1",
+  "cause": "First scalar-union ND produced 40,862,187 factor entries on original initial A, exceeding40M by862,187; four-second measured fill failure, not timeout. Scalar graph ordering can separate the two strongly coupled Cartesian velocity components. Assess one explicitly vector-grouped quotient graph instead of changing seeds/thresholds or rerunning the failed ordering.",
+  "preserved_failure": {"directory": "/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-14-20261115/capacity-v1", "result_sha256": "dacfc8d387b801921d095889b86752096dd7af427fec37bd8e356b3c8a52d912", "factor_entries": 40862187, "CPU_seconds": 4.124657, "peak_address_space_KiB": 1118872},
+  "graph": "Group free canonical velocity rows by flow.rows[i] modulo the common u/w native field block size. A group contains the actual available velocity components for exactly one shared FE ID,including one-component essential-boundary exceptions. Sort group labels; form sorted unique undirected quotient adjacency from every canonical A nonzero without self edges. No governing matrix entry is removed or changed.",
+  "strategy": "Same Scotch6.1.3 QUALITY|SAFETY flags9,level0,balance.1,seed0/reset. One fixed strategy; no sweep. Expand ordered quotient nodes into consecutive member rows in canonical within-group order.",
+  "permutation": "Forward/inverse validated on graph; expanded scalar bijection validated externally; B[p[i],p[j]]==A[i,j] checked for every nonzero; unchanged Natural Eigen LU defaults on internally permuted B; canonical RHS/solution mapping and original-system residual/refinement.",
+  "work": {"per_factor_CPU_soft": 600, "per_factor_CPU_hard": 605, "per_factor_wall_seconds": 900, "factor_entries": 40000000, "per_process_AS_bytes": 17179869184},
+  "tests": "Same four CT13 frozen matrices/actual RHS,tiny signed/cancelling RHS,independent nontrivial48-row vector control; stop after first policy failure. Only passing capacity may enable component qualification; no selected physical evolution.",
+  "total_allocation": "All attempt1/attempt2 builds,failures,controllers and audits count within original CT14 24,000CPU/28,800wall/16GiB allocation"
+}

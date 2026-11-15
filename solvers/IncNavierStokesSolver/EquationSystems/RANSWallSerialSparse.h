@@ -50,15 +50,15 @@ private:
 
 // Only an explicit predictor caller may choose an alternative. All existing
 // call sites (including scalar, mass and pressure preconditioner) retain COLAMD.
-enum class SparsePredictorOrdering { COLAMD, AMD, Natural, ScotchND0V1 };
+enum class SparsePredictorOrdering { COLAMD, AMD, Natural, ScotchND0V1, ScotchVectorND0V1 };
 // old_to_new[canonical_id] = factor_id. No field/operator numbering changes.
-std::vector<int> SparseScotchPermutation(const SparseMatrix &matrix);
+std::vector<int> SparseScotchPermutation(const SparseMatrix &matrix,const std::vector<int> &groups={});
 std::size_t SparseFactorizationCount();
 class SparseFactor
 {
 public:
     explicit SparseFactor(const SparseMatrix &matrix,bool positiveMass=false,
-        SparsePredictorOrdering ordering=SparsePredictorOrdering::COLAMD);
+        SparsePredictorOrdering ordering=SparsePredictorOrdering::COLAMD,const std::vector<int> &groups={});
     Vector Apply(const Vector &rhs) const;
     std::size_t FactorNonZeros() const;
 private:

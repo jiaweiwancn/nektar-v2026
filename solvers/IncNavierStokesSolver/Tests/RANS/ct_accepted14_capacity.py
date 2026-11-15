@@ -15,15 +15,22 @@ from rans_request_manifest import RequestManifest,runtime_identity,sha
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('ct13','runtime','contract','output'):p.add_argument('--'+k,type=Path,required=True)
+    p.add_argument('--policy',choices=['ScotchND0V1','ScotchVectorND0V1'],default='ScotchND0V1')
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     ex=sealed(a.ct13/'exports-v2');co=json.loads(a.contract.read_text());old=sealed(a.ct13/'orderings-v4')
-    m=RequestManifest(a.output,dict(schema='CT14ScotchCapacityV1',source=sha(Path(__file__)),exports=sha(a.ct13/'exports-v2/results.json'),old_ordering=sha(a.ct13/'orderings-v4/results.json'),contract=sha(a.contract),runtime=runtime_identity(a.runtime/'CT13SparseOrderingProbe'),policy='ScotchND0V1',graph='undirected sorted unique canonical A+A^T without diagonal',seed=0,strategy=dict(builder='SCOTCH_stratGraphOrderBuild',flags=9,level=0,balance=.1),permutation='old_to_new[old]=new; B[p[i],p[j]]=A[i,j]; x[i]=y[p[i]]'))
+    m=RequestManifest(a.output,dict(schema='CT14ScotchCapacityV1',source=sha(Path(__file__)),exports=sha(a.ct13/'exports-v2/results.json'),old_ordering=sha(a.ct13/'orderings-v4/results.json'),contract=sha(a.contract),runtime=runtime_identity(a.runtime/'CT13SparseOrderingProbe'),policy=a.policy,graph='canonical A+A^T union; optional exact native-DOF vector quotient before ND',seed=0,strategy=dict(builder='SCOTCH_stratGraphOrderBuild',flags=9,level=0,balance=.1),permutation='old_to_new[old]=new; B[p[i],p[j]]=A[i,j]; x[i]=y[p[i]]'))
     algebra=run([a.runtime/'CT9SparseAlgebraChecks'],a.output,'algebra.log');require(algebra['exit_code']==0,'independent small sparse/scotch controls')
     results={}
     for label,s in ex['systems'].items():
         require(sha(Path(s['A']['file']))==s['A']['sha256'],'changed frozen canonical matrix')
         rhs=a.output/(label+'.rhs');rhs.write_text('\n'.join(format(x,'.17g') for x in s['rhs'])+'\n')
-        out=a.output/(label+'.json');e=native_run([a.runtime/'CT13SparseOrderingProbe',s['A']['file'],rhs,'ScotchND0V1',out],a.output,label+'.log',co['first_attempt']['per_factor_CPU_soft'],co['first_attempt']['per_factor_wall_seconds'])
+        out=a.output/(label+'.json');command=[a.runtime/'CT13SparseOrderingProbe',s['A']['file'],rhs,a.policy,out]
+        if a.policy=='ScotchVectorND0V1':
+            require(sha(Path(s['packet']))==s['packet_sha256'],'changed canonical field map packet')
+            frozen=json.loads(Path(s['packet']).read_text())['pre_factor_frozen'];n0=frozen['block_sizes'][0]
+            require(frozen['block_sizes'][1]==n0,'velocity fields do not share native IDs')
+            groups=a.output/(label+'.groups');groups.write_text('\n'.join(str(i%n0) for i in frozen['rows'][:frozen['velocity_size']])+'\n');command.append(groups)
+        e=native_run(command,a.output,label+'.log',co['first_attempt']['per_factor_CPU_soft'],co['first_attempt']['per_factor_wall_seconds'])
         raw=json.loads(out.read_text()) if out.exists() else dict(status='unresolved_work_or_resource_limit')
         row={k:v for k,v in raw.items() if k not in ('solution','tiny_solution','old_to_new')};row.update(execution=e,matrix=s['A'],rhs_sha256=sha(rhs),result_sha256=sha(out) if out.exists() else None)
         if e['exit_code']==0:

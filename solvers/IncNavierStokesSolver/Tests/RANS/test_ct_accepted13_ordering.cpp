@@ -10,7 +10,7 @@ using namespace Nektar::RANSWallAlgebra;
 namespace J=Nektar::RANSWallSolveJson;
 int main(int argc,char **argv)
 {
-    if(argc!=5)return 1;
+    if(argc!=5 && argc!=6)return 1;
     try
     {
         std::ifstream in(argv[1],std::ios::binary);char tag[8];in.read(tag,8);
@@ -26,11 +26,13 @@ int main(int argc,char **argv)
         {Require(ids[j]<cols && val[j]!=0.,"invalid/explicit-zero CSR entry");matrix.Entry(i,ids[j])=val[j];}
         matrix.Finalize();Require(matrix.NonZeros()==nnz,"CSR canonical entries changed");
         Vector rhs(rows);std::ifstream r(argv[2]);for(auto &v:rhs)r>>v;Require(!r.fail(),"truncated RHS");
-        const std::string name=argv[3];Require(name=="COLAMD" || name=="AMD" || name=="Natural" || name=="ScotchND0V1","unknown predictor ordering");
-        const auto ordering=name=="ScotchND0V1"?SparsePredictorOrdering::ScotchND0V1:name=="AMD"?SparsePredictorOrdering::AMD:name=="Natural"?SparsePredictorOrdering::Natural:SparsePredictorOrdering::COLAMD;
+        const std::string name=argv[3];Require(name=="COLAMD" || name=="AMD" || name=="Natural" || name=="ScotchND0V1" || name=="ScotchVectorND0V1","unknown predictor ordering");
+        const auto ordering=name=="ScotchVectorND0V1"?SparsePredictorOrdering::ScotchVectorND0V1:name=="ScotchND0V1"?SparsePredictorOrdering::ScotchND0V1:name=="AMD"?SparsePredictorOrdering::AMD:name=="Natural"?SparsePredictorOrdering::Natural:SparsePredictorOrdering::COLAMD;
+        std::vector<int> groups;if(name=="ScotchVectorND0V1")
+        {Require(argc==6,"missing canonical vector groups");groups.resize(rows);std::ifstream g(argv[5]);for(auto &v:groups)g>>v;Require(!g.fail(),"truncated canonical vector groups");}
         std::vector<int> permutation;
-        if(name=="ScotchND0V1")permutation=SparseScotchPermutation(matrix);
-        const SparseFactor factor(matrix,false,ordering);const auto x=factor.Apply(rhs);
+        if(name=="ScotchND0V1" || name=="ScotchVectorND0V1")permutation=SparseScotchPermutation(matrix,groups);
+        const SparseFactor factor(matrix,false,ordering,groups);const auto x=factor.Apply(rhs);
         auto residual=matrix.Apply(x);for(int i=0;i<rows;++i)residual[i]-=rhs[i];
         // Tiny signed-cancellation right-hand side uses the same factor and
         // unchanged native absolute/relative true-residual criterion.

@@ -68,6 +68,8 @@ public:
     using WallMatrix=RANSWallAlgebra::DenseMatrix;
     using SparseMatrix=RANSWallAlgebra::SparseMatrix;
     bool SerialSparse() const { return m_linearBackend=="AcceptedSerialSparseV1"; }
+    RANSWallAlgebra::SparsePredictorOrdering PredictorOrdering() const
+    { return m_predictorOrdering=="ScotchVectorND0V1"?RANSWallAlgebra::SparsePredictorOrdering::ScotchVectorND0V1:RANSWallAlgebra::SparsePredictorOrdering::COLAMD; }
     using Diagnostic=std::map<std::string,Vector>;
     class EvaluationScope
     {
@@ -646,6 +648,7 @@ private:
     LibUtilities::CommSharedPtr m_comm;
     LibUtilities::SessionReaderSharedPtr m_sparseSession;
     std::string m_linearBackend="ReplicatedDenseV1";
+    std::string m_predictorOrdering="COLAMD";
     bool m_exportReferenceOnly=false;
     void SetReferenceCore(const Vector&,const RANSWallEvolutionData&,double,double,bool);
     RANSWallPatchParameters m_parameters;

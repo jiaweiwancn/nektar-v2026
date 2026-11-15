@@ -37,7 +37,10 @@ RANSWallEvolutionPatch::SparseFlowResult RANSWallEvolutionPatch::SparseFlowCorre
     Require(alpha>0,"invalid sparse flow alpha");
     const int n=flow.rows.size(),np=n-nv;auto r=SparseFlowBlocks(flow,nv);
     if(event)event("momentum_attempt");
-    SparseFactor momentum(r.a),mass(r.m,true);
+    std::vector<int> groups;
+    if(PredictorOrdering()==SparsePredictorOrdering::ScotchVectorND0V1)
+    {groups.resize(nv);for(int i=0;i<nv;++i)groups[i]=flow.rows[i]%size[0];}
+    SparseFactor momentum(r.a,false,PredictorOrdering(),groups),mass(r.m,true);
     r.predictorFill=momentum.FactorNonZeros();r.massFill=mass.FactorNonZeros();
     Vector rhs(nv);for(int i=0;i<nv;++i)rhs[i]=-flow.residual[i];
     r.predictorRhsMaximum=Maximum(rhs);
