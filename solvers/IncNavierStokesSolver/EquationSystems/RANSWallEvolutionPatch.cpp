@@ -5,6 +5,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <algorithm>
@@ -411,6 +412,17 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     std::string arithmetic;session->LoadSolverInfo("RANSWallPimpleArithmetic",arithmetic,"Off");
     Require(arithmetic=="Off" || arithmetic=="On","invalid PIMPLE arithmetic observation switch");
     m_pimpleArithmetic=arithmetic=="On";
+    std::string flowVectors;session->LoadSolverInfo("RANSWallPimpleFlowVectors",flowVectors,"Off");
+    Require(flowVectors=="Off" || flowVectors=="MappedIncrementV1","invalid passive flow-vector selector");
+    m_pimpleFlowVectors=flowVectors=="MappedIncrementV1";
+    if(m_pimpleFlowVectors)
+    {
+        Require(MappedBlock() && m_checkpointEvidence && !m_pimpleArithmetic && !m_pimpleVerify,
+            "mapped flow-vector capture requires checkpoint evidence without dense arithmetic/verification");
+        std::string path;session->LoadSolverInfo("RANSWallPimpleFlowVectorIdentity",path,"None");
+        Require(path!="None","mapped flow-vector capture requires a pinned execution identity");
+        m_pimpleFlowIdentity=RANSWallR3::Pin(path);
+    }
     std::string arithmeticTime;session->LoadSolverInfo("RANSWallPimpleArithmeticTime",arithmeticTime,"-1");
     std::size_t consumed=0;m_pimpleArithmeticTime=std::stod(arithmeticTime,&consumed);
     Require(consumed==arithmeticTime.size() && std::isfinite(m_pimpleArithmeticTime),"invalid passive arithmetic observation time");

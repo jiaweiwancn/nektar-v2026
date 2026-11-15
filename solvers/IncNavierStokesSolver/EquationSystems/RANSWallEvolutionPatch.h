@@ -669,6 +669,8 @@ private:
     std::string m_pimpleKInventory="LegacyV1";
     double m_pimpleKFloorRelative=1e-8,m_pimpleBudgetTime=-1.;
     bool m_pimpleSnapshots=false,m_pimpleArithmetic=false,m_checkpointEvidence=false,m_boundedRecords=false;
+    bool m_pimpleFlowVectors=false;
+    std::string m_pimpleFlowIdentity;
     double m_pimpleArithmeticTime=-1;
     int m_kBoundMaxAdd=2000,m_kBoundMaxTotal=2000,m_kBoundMaxSeparations=2000;
     double m_kBoundMaxSeconds=900.;

@@ -6,6 +6,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallFlowVectorCapture.h>
 #include <filesystem>
 #include <fstream>
 #include <algorithm>
@@ -269,6 +270,20 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         }
         check(s,"flow");correctionTiming.Stop();flowTiming.Stop();
         const auto flowState=s;
+        if(m_pimpleFlowVectors && m_pimpleSnapshots)
+        {
+            RANSWallTiming::Scope captureTiming("io.flow_vector_capture");
+            const auto stem=(std::filesystem::path(m_pimpleSnapshotDirectory)/
+                ("flow-t"+J::Number(time)+"-"+RANSWallR3::Hash(history).substr(0,12))).string();
+            put("flow_vectors",RANSWallFlowCapture::Write(stem,time,alpha,base,flowState,history,flow.rows,nv,
+                predictor,bGz,du,dz,m_pimpleFlowIdentity,J::Object({
+                    {"predictor_linear_residual",J::Number(Maximum(predictorDefect))},
+                    {"pressure_linear_residual",J::Number(Maximum(pressureDefect))},
+                    {"momentum_splitting_identity_defect",J::Number(Maximum(identity))},
+                    {"constraint_defect",J::Number(Maximum(constraints))},
+                    {"boundary_defect",J::Number(boundary)},
+                    {"native_full_G_action_defect",J::Number(Maximum(actionError))}})));
+        }
         auto budget=[&](const char *phase,const Vector &q)
         {
             if(m_pimpleBudgetTime<0 || std::abs(time-m_pimpleBudgetTime)>.25/alpha)return;
