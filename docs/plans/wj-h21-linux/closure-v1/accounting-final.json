@@ -1,0 +1,181 @@
+{
+  "schema": "WJH21PassiveResourceJournalV1",
+  "seconds_ceiling": 600,
+  "setup_seconds": 30.0,
+  "closure_reserve": 90.0,
+  "operation_ceiling": 480.0,
+  "science_ceiling": 180.0,
+  "rss_bytes": 2147483648,
+  "output_bytes": 268435456,
+  "source_bytes": 134217728,
+  "closed": true,
+  "entries": {
+    "source-transfer": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30.0,
+      "seconds": 5.0
+    },
+    "01-prepare": {
+      "status": "FAIL",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 0.8140534420090262,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 118243328,
+      "source_bytes": 31668,
+      "new_output_bytes": 27724,
+      "log_sha256": "b3d1fd28a34694b034a74d5b8aa4a0adcbaeb42829514ce3eff18f96b1e695cc"
+    },
+    "source-repair-structure": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30.0,
+      "seconds": 5.0
+    },
+    "02-prepare": {
+      "status": "FAIL",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 1.8271623609762173,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 236077056,
+      "source_bytes": 31668,
+      "new_output_bytes": 74597,
+      "log_sha256": "427fa7f9e5063e9ca8987bbef9b57469349be5eddcf224a41ecf1bc3c6b10700"
+    },
+    "metadata-difference-inspection": {
+      "status": "UNKNOWN_FULL_RESERVATION",
+      "phase": "operation",
+      "reserved_seconds": 30.0,
+      "seconds": 30.0,
+      "reason": "metadata inspection exited before receipt; conservative full charge retained"
+    },
+    "source-repair-dt-structure": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30.0,
+      "seconds": 5.0
+    },
+    "03-prepare": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 4.872888552985387,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 259031040,
+      "source_bytes": 31668,
+      "new_output_bytes": 2689944,
+      "log_sha256": "dcdf63a82147b3ff0ae18066ce5b7aa74a575894fec79e405e4a0249252f6552"
+    },
+    "04-tests": {
+      "status": "FAIL",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 0.8157896399789024,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 119836672,
+      "source_bytes": 31668,
+      "new_output_bytes": 2705395,
+      "log_sha256": "09edb87cd9f37d5feb8cc0736d10d9e0d6f64d59189779de445479a6348c1f29"
+    },
+    "test-fixture-correction": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30.0,
+      "seconds": 5.0
+    },
+    "05-tests": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 0.8168254599731881,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 119906304,
+      "source_bytes": 31668,
+      "new_output_bytes": 2729452,
+      "log_sha256": "016aae2cf7561c0aa0c69c88a953e4bb9dcb02e2879ea10674251daf34f0d6c5"
+    },
+    "06-sparse-science": {
+      "status": "PASS",
+      "phase": "science",
+      "reserved_seconds": 180.0,
+      "seconds": 3.6682374690135475,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 176185344,
+      "source_bytes": 31668,
+      "new_output_bytes": 3779494,
+      "log_sha256": "1d64abadf1ef52caa29a6ef5426e57149c011f0037e533f6777e67696d50afcd"
+    },
+    "07-publication": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 90.0,
+      "seconds": 1.6397003309975844,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 152334336,
+      "source_bytes": 31668,
+      "new_output_bytes": 7703044,
+      "log_sha256": "2dcab9e27b57d95d3894cf57f93343026a6c705f95626d03458212dba524d6d3"
+    },
+    "publication-source-transfer": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 30.0,
+      "seconds": 5.0
+    },
+    "08-summary": {
+      "status": "PASS",
+      "phase": "operation",
+      "reserved_seconds": 60.0,
+      "seconds": 1.0,
+      "peak_self_rss_bytes": 93323264,
+      "source": {
+        "path": "/home/jay/build/wj-h21-outlet-saved-state-20261115/publication-code/close_wj_h21.py",
+        "bytes": 8813,
+        "sha256": "3df7e75172f4b7cb2ff5d14e52e20e6eddf0c85584ead47378af420f06edc60d"
+      }
+    },
+    "closure": {
+      "status": "PASS",
+      "phase": "closure",
+      "reserved_seconds": 90.0,
+      "seconds": 90.0,
+      "fully_charged": true,
+      "actual_seconds_before_archive": 0.15237023698864505,
+      "transport": "reserved in fixed closure charge; Mac verification recorded separately"
+    }
+  },
+  "native_counts": {
+    "governing": 0,
+    "cp0": 0,
+    "strict_readback": 0,
+    "build": 0,
+    "kernel": 0,
+    "matrix_operations": 0,
+    "mass_solves": 0
+  },
+  "first_failure": {
+    "label": "01-prepare",
+    "status": "FAIL",
+    "seconds": 0.8140534420090262,
+    "phase": "operation",
+    "reserved_seconds": 60.0,
+    "exit": 1,
+    "reason": null,
+    "peak_tree_rss_bytes": 118243328,
+    "source_bytes": 31668,
+    "new_output_bytes": 27724,
+    "log_sha256": "b3d1fd28a34694b034a74d5b8aa4a0adcbaeb42829514ce3eff18f96b1e695cc"
+  },
+  "charged_seconds": 190.45465725593385,
+  "closed_status": "PASS_DIAGNOSIS_WITH_RETAINED_PASSIVE_FAILURES",
+  "source_and_output_snapshot_bytes": 7814876
+}
