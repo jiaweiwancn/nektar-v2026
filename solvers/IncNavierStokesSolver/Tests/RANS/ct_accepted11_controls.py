@@ -58,6 +58,17 @@ def main():
     bad('pass_label_pressure_failure','temporal:Pi',lambda z:z['temporal']['Pi'].update(difference=dict(weighted_RMS=2e-7,scale=1.)))
     bad('stale_observer_policy','observer_policy',lambda z:z['members']['0.001']['budgets']['budgets']['native']['volume_observer'].update(policy='stale'))
     out['target_negatives']=dict(scope='schema fixtures only',results=neg)
+    post={};trace_storage_signal=0.
+    for name,rows in e['checks'].items():
+        post[name]={}
+        for label,row in rows.items():
+            file=a.equivalence/name/label/'stream.json';require(sha(file)==row['packet_sha256'],'changed streamed audit packet');packet=n.read(file);rec=packet['physical_scalar_budget']['reconciliation'];regions={}
+            for region,v in rec['regions'].items():
+                maximum=max(abs(x) for x in v['advective_IBP_defect']);normal=max(1.,*(abs(x) for k in ('strong_conservative_advection','conservative_advection','all_element_advective_faces') for x in v[k]));require(maximum/normal<=2e-10,'conservative IBP failed:'+name+':'+label+':'+region);regions[region]=dict(maximum_defect=maximum,normalization=normal,scaled_defect=maximum/normal)
+            prescribed=rec['assembled']['outer_epsilon']['prescribed_or_dependent_rows'];storage=rec['regions']['outer_epsilon']['backward_storage'];signal=max((abs(storage[j]) for j in prescribed),default=0.)
+            if name.startswith(('baseline','candidate')):trace_storage_signal=max(trace_storage_signal,signal)
+            post[name][label]=dict(advective_IBP=regions,prescribed_epsilon_backward_storage_maximum=signal,coefficient_policy=rec['coefficient_policy'],old_boundary_lift=rec['current_time_essential_lift_difference'],actual_flow_stage_difference=rec['actual_flow_stage_maximum_difference'],actual_pre_k_stage_difference=rec['actual_pre_k_stage_maximum_difference'],packet_sha256=sha(file))
+    require(trace_storage_signal>0.,'actual strip dependent-boundary storage control has no signal');out['postchecks']=dict(status='pass',cases=post,actual_prescribed_epsilon_storage_signal=trace_storage_signal,scope='actual native weak conservative IBP and retained prescribed/dependent epsilon storage; no scalar*div(U) correction, physical flux replacement or extra native solve')
     f=a.ct9/'controls-v4/d0-p3-sparse';initial=n.read(f/'operator.json');dest=a.output/'unsupported-policy';dest.mkdir();shutil.copy2(f/'case.xml',dest/'case.xml');state=initial['observation']['state'];req=replay(initial,state,.002,[],export_physical_scalar_budget=True,previous_state=state,physical_budget_volume_policy='UnsupportedObserverV0');r,x=probe(a.runtime,dest,req,'negative');require(x['exit_code']!=0 and 'unsupported physical scalar observer policy' in r.get('failure',''),'wrong native policy rejection')
     out['native_negative']=dict(status='pass',reason=r['failure'],execution=x,request_sha256=sha(dest/'negative-request.json'));out['status']='pass';write_json(a.output/'results.json',out);m.seal(a.output,['results.json']);print('CT11 admission negatives pass',len(out['negative'])+len(neg)+1,flush=True);return 0
 if __name__=='__main__':raise SystemExit(main())

@@ -1,0 +1,20 @@
+{
+  "schema": "CT11ClosedCampaignAccountingV2",
+  "declared_before_target_trajectories": true,
+  "previous_prospective_accounting_sha256": "dc191e6e60cb6fe1d947a20eadbebc860083dcaec13a655ad3b0f2202ee91801",
+  "reason": "Include already spent work and the measured owned-family monitor/helper overhead before any continuation admission",
+  "limits": {
+    "CPU_seconds": 24000,
+    "active_wall_seconds": 28800,
+    "storage_GiB": 24,
+    "pair_steps": 2048,
+    "segment_steps": 32,
+    "headroom": 0.25
+  },
+  "forecast": "retain the v1 measured native/controller/audit future estimate with25percent headroom",
+  "closed_CPU": "actual completed owned-family CPU + forecast_remaining_CPU * max(1,closed_family_CPU/measured_driver_and_children_CPU)",
+  "closed_wall": "completed elapsed wall + adjusted remaining CPU * max(1,completed_elapsed_wall/closed_family_CPU); conservative when suspended intervals are included; report their receipts separately",
+  "closed_storage": "actual complete current target output bytes + prospective remaining storage with25percent headroom",
+  "admission": "all physical primitives,closed resource receipts and all three cumulative budgets must pass; driver-only provisional resource flags never authorize continuation",
+  "history": "v1 planning formula retained unchanged; no physical tolerance or capacity guard relaxed"
+}
