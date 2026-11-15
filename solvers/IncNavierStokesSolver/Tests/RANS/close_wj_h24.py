@@ -66,7 +66,7 @@ def close(root):
         verification=identity(out/'verification.json'),checkpoint_A=identity(root/'checkpoint-a-v1/manifest.json'),checkpoint_B=identity(root/'checkpoint-b-v1/manifest.json'),
         historical_H23=historical['accounting']))
     all_files=[root/'authoritative-index-v1.json',*[p for folder in (pub,out)for p in folder.rglob('*')if p.is_file()]]
-    essential=[p for p in all_files if not any(n in str(p.relative_to(root))for n in ('native-physical-frozen-stage-packets','compiled-source-objects','runtime-build-v1','exterior-trace-differences','field-component-extrema'))]
+    essential=[p for p in all_files if not any(n in str(p.relative_to(root))for n in ('native-physical-frozen-stage-packets','compiled-source-objects','runtime-build-v1','exterior-trace-differences','field-component-extrema','terminal-strict-compact.json'))]
     archives={}
     for name,files in (('essential',essential),('compact',all_files)):
         path=root/f'h24-{name}-v1.tar.gz'
