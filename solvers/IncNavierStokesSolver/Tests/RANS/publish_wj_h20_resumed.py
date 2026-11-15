@@ -79,7 +79,7 @@ def publish(root):
             heavy.extend((identity(sp),identity(folder/'final-strict/native.json')))
     table(out/'all-step-timeline.csv',timeline);table(out/'all-signed-Q1-moments.csv',moments);table(out/'disjoint-inclusive-timings.csv',timing);table(out/'checkpoint-storage.csv',storage)
     atomic(out/'state-history-bindings.json',bindings);atomic(out/'audit-role-status.json',audits);atomic(out/'terminal-strict-residuals.json',strict)
-    pairs=[];fields=[];ratios=[];errors=[];principals=[];probes=[];replays=[];maxima=[];profiles=[];boundary=[];signed=[];initial=[]
+    pairs=[];fields=[];ratios=[];errors=[];principals=[];probes=[];replays=[];maxima=[];profiles=[];boundary=[];signed=[];initial=[];physical_extrema=[];native_packets=[]
     for t in TIMES:
         n=absolute_step('F',t);path=root/f'science/F/monitor/step-{n}.result.json'
         if not path.exists():pairs.append(dict(time=t,C_step=absolute_step('C',t),M_step=absolute_step('M',t),F_step=n,status='NOT_RUN',reason='required triplet not produced'));continue
@@ -109,11 +109,25 @@ def publish(root):
             for name,m in values.items():initial.append(dict(time=t,region=region,field=name,RMS=m['rms']['value'],maximum=m['maximum']['value'],support=v['inventory']['sha256']))
         for level in ('C','M','F'):
             anchor=resolve(root,inputs,level,t);report,audit=read_anchor(anchor,level,t)
+            native_packets.append(dict(time=t,level=level,genuine_producer=anchor['report'],full_audit_source=anchor.get('audit_report',anchor['report']),
+                native_hard_audit=audit['native_hard_audit'],genuine_stage_audits=report['stage_audits'],frozen_pimple_attempts=report['pimple_attempts'],
+                scope='native physical/root/domain/linear facts; completed-stage under genuine callback; alpha0 spatial mass-dual norms only in final strict packets'))
             proxy={key:arrays[key]for key in ('physical','geometry')};proxy.update({'coarse_'+key:arrays[level+'_'+key]for key in ('k','epsilon','G')})
             replays.append(dict(time=t,level=level,producer=anchor['report'],native_audit_source=anchor.get('audit_report',anchor['report']),records=witness_replay(audit,proxy)))
             for component in ('U','G','k','R','pi','production','divergence','K','rc','destruction'):
                 data=arrays[level+'_'+component]
                 maxima.append(dict(time=t,level=level,quantity=component,minimum=np.min(data,axis=0).tolist(),maximum=np.max(data,axis=0).tolist()))
+            outer_ids=arrays['analysis_outer_ids'];weights=arrays['weights'];outer=np.zeros(len(weights),bool);outer[outer_ids]=True
+            def location(i):return dict(row=int(i),physical=arrays['physical'][i].tolist(),geometry=int(arrays['geometry'][i]),owner=owned[i]['owner']if i<count else dict(role='physical Gauss8 interior, unique element owner',geometry=int(arrays['geometry'][i])))
+            extrema={}
+            for name,values,ids in (
+                ('in_plane',arrays[level+'_margin'],outer_ids),('transverse',arrays[level+'_transverse'],outer_ids),
+                ('covariance',np.min(arrays[level+'_covariance'],axis=1),np.arange(len(weights))),('k',arrays[level+'_k'],np.arange(len(weights))),
+                ('outer_epsilon',arrays[level+'_epsilon'],outer_ids),('root_N',arrays[level+'_root'],outer_ids),('outer_nu_eff',arrays[level+'_nu_eff'],outer_ids),('nu_d',arrays[level+'_nu_d'],np.arange(len(weights)))):
+                i=int(ids[np.argmin(values[ids])]);extrema[name]=dict(value=float(values[i]),**location(i))
+            div=arrays[level+'_divergence'];i=int(np.argmax(abs(div)));divergence=dict(absolute_maximum=float(abs(div[i])),signed_at_maximum=float(div[i]),**location(i))
+            divergence['regions']={region:dict(RMS=math.sqrt(float(weights[mask]@div[mask]**2)/weights[mask].sum()),signed_mean=float(weights[mask]@div[mask]/weights[mask].sum()))for region,mask in (('full',np.ones(len(weights),bool)),('inner',~outer),('outer',outer))}
+            physical_extrema.append(dict(time=t,level=level,extrema=extrema,strong_divergence=divergence,scope='finite common inventory plus physical Gauss8; distinct from signed Q1 moments'))
         # Signed physical means/components, fetch station ranges and one-sided
         # boundary traces are derived from saved arrays, never new PDE work.
         weights=arrays['weights'];outer_ids=arrays['analysis_outer_ids'];outer=np.zeros(len(weights),bool);outer[outer_ids]=True
@@ -140,7 +154,8 @@ def publish(root):
         arrays.close()
     for name,data in (('time-pairs.csv',pairs),('all-pair-regional-sensitivity.csv',fields),('contraction.csv',ratios),('reference-drift.csv',errors),('representation.csv',initial),('fetch-stations.csv',profiles)):table(out/name,data)
     atomic(out/'same-owner-principal-screens.json',principals);atomic(out/'fixed-probe-triplets.json',probes);atomic(out/'native-independent-replays.json',dict(status='PASS',records=replays,kernel_process_requests=0,method='independent implicit-root complex tangent against saved compiled native action'))
-    for name,data in (('signed-component-means.json',signed),('exterior-trace-differences.json',boundary),('field-component-extrema.json',maxima)):
+    atomic(out/'physical-extrema-and-divergence.json',physical_extrema)
+    for name,data in (('signed-component-means.json',signed),('exterior-trace-differences.json',boundary),('field-component-extrema.json',maxima),('native-physical-frozen-stage-packets.json',native_packets)):
         p=out/name;atomic(p,data)
         with p.open('rb')as f,gzip.open(str(p)+'.gz','wb')as g:shutil.copyfileobj(f,g)
         p.unlink()
