@@ -5,6 +5,8 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallPhysicsSignature.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallManufactured.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <cstdlib>
 #include <cstring>
 #include <algorithm>
 #include <cmath>
