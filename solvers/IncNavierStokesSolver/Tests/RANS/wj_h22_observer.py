@@ -18,11 +18,12 @@ def prepared_cursor(binding,ready_pin,inventory_pin,proof_pin):
     return dict(role='PREPARED_NOT_NATIVE_COMMIT',binding=binding,ready_sha256=ready_pin['sha256'],
                 inventory_sha256=inventory_pin['sha256'],prefix_parity=proof_pin)
 
-def prefix(root,directory,level,step,inputs,offsets):
+def prefix(root,directory,level,step,inputs,offsets,descriptors=None):
     predecessor=checkpoint_payload(verify(inputs['cp0'][level]['checkpoint']).parent,include_reference=True)
     records=[]
     for n in range(1,step+1):
-        anchor=recovery(directory,n);r,cp=read_completed(anchor,level,n)
+        descriptor=descriptors[str(n)]if descriptors is not None else None
+        anchor=descriptor['anchor']if descriptor else recovery(directory,n);r,cp=read_completed(anchor,level,n)
         expected=inputs['oracles'][level][str(n)];old,oldcp=read_completed(expected,level,n)
         exact=parity(r,old,cp,oldcp)
         attempt=r['pimple_attempts'][0]
@@ -34,7 +35,8 @@ def prefix(root,directory,level,step,inputs,offsets):
         snapshot['bytes']=Path(snapshot['path']).stat().st_size
         packet=native_load(verify(snapshot));states,binding=phases(r,packet,predecessor,offsets)
         assert vector_hash(states['C'])==attempt['incoming_sha256']and vector_hash(packet['history'])==attempt['history_sha256']
-        _,vectors=flow_vectors(attempt['flow_vectors'],states,r,offsets,identity(root/'science/flow-vector-execution.json'))
+        execution=descriptor['execution_identity']if descriptor else identity(root/'science/flow-vector-execution.json')
+        _,vectors=flow_vectors(attempt['flow_vectors'],states,r,offsets,execution)
         matrix=identity(packet['matrix_file']);assert matrix['sha256']==packet['matrix_sha256']
         full_map=None
         if n==END[level]:

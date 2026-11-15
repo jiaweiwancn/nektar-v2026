@@ -59,9 +59,10 @@ def flow_local(structure,states,values,increments,owners):
         records.append(r)
     return records
 
-def run(root,levels=('C','M','F'),out_name='phase-analysis-v1'):
+def run(root,levels=('C','M','F'),out_name='phase-analysis-v1',source_index=None):
     assert tuple(levels)in (('C','M','F'),('C','M'))
     inputs=load(root/'inputs/selected.json');structure=load(verify(inputs['sparse_structure']))
+    sources=load(verify(source_index))if source_index else None
     manifest=load(verify(inputs['H21_endpoints']));files={Path(v['path']).name:v for v in manifest['files']}
     owners=load(verify(files['control--selected.json']))['owners']
     expected=load(verify(files['endpoint-values.json']))
@@ -73,10 +74,12 @@ def run(root,levels=('C','M','F'),out_name='phase-analysis-v1'):
             callback_history_sha256=None,completed_callback='NONE_INITIAL_ROLE',native_history_sha256=[vector_hash(h)for h in predecessor['native_history']])
         branch_rows=[[],[]]
         for n in range(1,END[z]+1):
-            anchor=recovery(root/f'science/{z}/monitor',n);report,cp=read_completed(anchor,z,n)
+            descriptor=sources['attempts'][z][str(n)]if sources else None
+            anchor=descriptor['anchor']if descriptor else recovery(root/f'science/{z}/monitor',n);report,cp=read_completed(anchor,z,n)
             a=report['pimple_attempts'][0];sp=dict(path=a['k_snapshot'],bytes=Path(a['k_snapshot']).stat().st_size,sha256=a['k_snapshot_sha256'])
             packet=native_load(verify(sp));states,binding=phases(report,packet,predecessor,structure['offsets'])
-            inc,vectors=flow_vectors(a['flow_vectors'],states,report,structure['offsets'],identity(root/'science/flow-vector-execution.json'))
+            execution=descriptor['execution_identity']if descriptor else identity(root/'science/flow-vector-execution.json')
+            inc,vectors=flow_vectors(a['flow_vectors'],states,report,structure['offsets'],execution)
             values={}
             for phase in PHASES:
                 state=states[phase];digest=vector_hash(state)
@@ -89,7 +92,8 @@ def run(root,levels=('C','M','F'),out_name='phase-analysis-v1'):
                         role='native accepted predecessor'if phase=='P'else'native completed endpoint'if phase=='A'else'actual provisional phase',
                         native_full_audit_status=report['native_full_audit_status']if phase=='A'else'NOT_AN_ACCEPTED_STATE'if phase!='P'else'predecessor own role',
                         predecessor_binding=predecessor_binding if phase=='P'else None,
-                        independent_qualification=('COMMITTED'if (root/f'science/{z}/monitor/step-{n}.qualification-commit.json').exists()else'NOT_SCHEDULED'if report['native_full_audit_status']=='NOT_SCHEDULED'else'NOT_COMMITTED')if phase=='A'else'NOT_A_QUALIFICATION_ROLE',
+                        independent_qualification=(descriptor['qualification']if descriptor else
+                            ('COMMITTED'if (root/f'science/{z}/monitor/step-{n}.qualification-commit.json').exists()else'NOT_SCHEDULED'if report['native_full_audit_status']=='NOT_SCHEDULED'else'NOT_COMMITTED'))if phase=='A'else'NOT_A_QUALIFICATION_ROLE',
                         attempt_callback_sha256=vector_hash(report['last_stage_history']),attempt_time=report['time'],alpha=report['last_stage_alpha']))
             for j,(geo,side)in enumerate(OWNERS):
                 row={p:values[p][j]for p in PHASES};branch_rows[j].append(row)
@@ -102,7 +106,7 @@ def run(root,levels=('C','M','F'),out_name='phase-analysis-v1'):
                     checks={name:comparison(row['A'][name],old[name],scale(name))for name in NAMES if name in row['A']and name in old}
                     endpoint_checks.append(dict(level=z,geometry=geo,status='PASS',checks=checks))
             flows.append(dict(level=z,step=n,time=report['time'],owners=flow_local(structure,states,values,inc,owners)))
-            attempts.append(dict(level=z,step=n,current=anchor,phase_snapshot=sp,binding=binding,vectors=vectors,
+            attempts.append(dict(level=z,step=n,current=anchor,phase_snapshot=sp,binding=binding,vectors=vectors,source_descriptor=descriptor,
                  matrix=dict(path=packet['matrix_file'],sha256=packet['matrix_sha256']),matrix_operations=0))
             predecessor=cp
             predecessor_binding=dict(role='genuine native completed predecessor',anchor=anchor,step=n,time=report['time'],alpha=report['last_stage_alpha'],
