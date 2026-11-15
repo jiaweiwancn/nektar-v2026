@@ -27,6 +27,7 @@ def pressure_gate(q,require_quadrature=True):
             if not finite_numbers(step):reasons.append('nonfinite:'+dt)
             if step.get('C_maximum')!=0 or step.get('unused_gauge') is not False:reasons.append('pressure_level:'+dt)
             if any(v>2e-10 for v in step.get('block_reconstruction',{}).values()):reasons.append('block_reconstruction:'+dt)
+            if set(step.get('action_reconstruction',{}))!={'predictor_increment','mass_velocity_correction','velocity_increment','frozen_defect','splitting_identity','predictor_residual','pressure_residual','corrected_free_state'} or any(v>2e-10 for v in step.get('action_reconstruction',{}).values()):reasons.append('native_action:'+dt)
             if step.get('predictor_factor_nonzeros',40000001)>40000000:reasons.append('fill:'+dt)
             expected_terms={region+'/volume/'+name for region in ('inner','outer') for name in
                 ('augmented_pressure','advection','molecular_normal','molecular_shear','linear_normal','linear_shear','nonlinear_normal','nonlinear_shear','rough_pressure','rough_inertia')}
@@ -69,7 +70,12 @@ def main():
         # A resource failure is a required-scope failure, never a reason to
         # discard otherwise interpretable physical/diagnostic evidence.
         resources[f.name]=dict(execution=e,sha256=sha(f/'execution.json'),highwater={x.name:read(x) if x.suffix=='.json' else [json.loads(line) for line in x.read_text().splitlines()] for x in f.iterdir() if x.name in ('resource-final.json','project-highwater.jsonl','worker-guard-highwater.jsonl','worker-guard-events.jsonl')})
-        project=max(project,r['maximum_project']);aggregate=max(aggregate,r['maximum_aggregate']);cpu+=e['process_cpu_seconds'];wall+=e['wall_seconds']
+        pause_events=resources[f.name]['highwater'].get('worker-guard-events.jsonl',[])
+        active_upper=max(0.,e['wall_seconds']-e['allocation_wait_seconds'])
+        resources[f.name]['wall_accounting']=dict(elapsed_seconds=e['wall_seconds'],allocation_wait_seconds=e['allocation_wait_seconds'],
+            active_wall_upper_bound_seconds=active_upper,guard_pause_resume_events=pause_events,
+            scope='no subtraction of partially resumed child intervals; conservative active-wall upper bound; process CPU is independently measured')
+        project=max(project,r['maximum_project']);aggregate=max(aggregate,r['maximum_aggregate']);cpu+=e['process_cpu_seconds'];wall+=active_upper
     # Account for simultaneously active nonnumerical status helpers too. All
     # CT12 controls are identified by their actual root/guard/family PIDs.
     roots={e['execution'][k] for e in resources.values() for k in ('control_parent_pid','guard_pid','owned_family_pid')}
@@ -119,13 +125,14 @@ def main():
     forecast=dict(horizon=.407,additional_pair_steps=1215,segments=39,CPU_limit=24000,active_wall_limit=28800,output_limit_bytes=24*1024**3,
         retained_CT11_closed_CPU_forecast=plan['total_CPU_spent_plus_remaining_with_headroom'],
         conservative_investigation_plus_campaign_CPU=cpu+plan['total_CPU_spent_plus_remaining_with_headroom'],
-        retained_CT11_wall_forecast=plan['total_wall_upper_estimate'],
+        retained_CT11_wall_forecast=plan['total_wall_upper_estimate'],conservative_investigation_plus_campaign_wall=wall+plan['total_wall_upper_estimate'],
+        measured_new_investigation_CPU=cpu,measured_new_investigation_active_wall_upper=wall,measured_new_output_bytes=output_bytes,
         measured_policy_output_forecast=output_future,CPU_admitted=False,wall_admitted=False,output_admitted=output_future<=24*1024**3,
         scope='spent historical target plus remaining forecast,25percent headroom; actual accepted-only retention excludes rollback dedup; no achieved CPU optimization or future trajectory assumed')
     common=pressure['common']['0.002'];ranked=sorted(common['components'].items(),key=lambda x:abs(x[1]['signed_alignment']),reverse=True)
     summary=dict(schema='CT12PressurePrimitiveSummaryV1',common=pressure['common'],
         top_signed_components=[dict(name=k,**v) for k,v in ranked[:20]],bands=pressure['bands'],
-        row_quality={dt:[{k:r[k] for k in ('time','C_maximum','initial_weak_continuity_maximum','reconstruction','tighter_repeat','signed_sum_error','continuity','continuity_tighter','storage_and_lifting','storage_lifting_tighter','finite_alpha_remainder','telescope','stage_pressure','trace','predictor_factor_nonzeros')} for r in member['steps']] for dt,member in pressure['members'].items()},
+        stage_chain=pressure.get('stage_chain'),row_quality={dt:[{k:r[k] for k in ('time','C_maximum','action_reconstruction','initial_weak_continuity_maximum','reconstruction','tighter_repeat','signed_sum_error','continuity','continuity_tighter','storage_and_lifting','storage_lifting_tighter','finite_alpha_remainder','telescope','stage_pressure','trace','predictor_factor_nonzeros')} for r in member['steps']] for dt,member in pressure['members'].items()},
         capped_diagnostic_solve_flags=[dict(member=dt,time=r['time'],**v) for dt,member in pressure['members'].items() for r in member['steps'] for v in r['solve_checks'] if not v['requested_scipy_stopping_test_met']],
         held_quadrature=pressure['held_quadrature'],stage_loads=pressure['stage_loads'])
     decision=dict(schema='CT12RequiredScopeV1',diagnostic_reconstruction=gate,held_state_quadrature=quadrature_gate,historical_CT11_pressure=old['qualification'],
@@ -137,7 +144,12 @@ def main():
         static_contrast='not_yet_selected; target-specific attribution must precede any separate static manifest',
         terrain='unattempted; mapped numbering,joined gradients/cofactors,transmission and curved temporal/spatial gates separate',
         physical_applicability='central physical reference retained; no precursor or hill validation',historical='CT4–CT11 seals unchanged')
-    for name,value in [('pressure',pressure),('pressure-summary',summary),('axes-and-tractions',axes),('profile',profile),('cost',costs),('forecast',forecast),('negative-controls',negatives),('resources',resources),('decision',decision)]:write_json(a.output/(name+'.json'),value)
+    failures={}
+    for name in ('pressure-v1','pressure-v2','pressure-v3','pressure-v4','profile-v1'):
+        f=a.root/(name+'-family.log');r=a.root/('resources-'+name)/'execution.json'
+        if f.exists() and r.exists():failures[name]=dict(log=str(f),log_sha256=sha(f),witness=f.read_text()[-4500:],execution=read(r),execution_sha256=sha(r),
+            scope='preserved diagnostic/controller failure, not a new physical trajectory or a relabelled historical result')
+    for name,value in [('failed-attempts',failures),('pressure',pressure),('pressure-summary',summary),('axes-and-tractions',axes),('profile',profile),('cost',costs),('forecast',forecast),('negative-controls',negatives),('resources',resources),('decision',decision)]:write_json(a.output/(name+'.json'),value)
     critical=['library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp','library/SolverUtils/Turbulence/RANSModels.cpp',
         'solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp','solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSparse.cpp',
         'solvers/IncNavierStokesSolver/EquationSystems/RANSWallSerialSparse.cpp','solvers/IncNavierStokesSolver/EquationSystems/RANSWallMomentumAttribution.cpp']

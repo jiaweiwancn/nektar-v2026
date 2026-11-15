@@ -186,6 +186,18 @@ def main():
             pred=-fr.direct('A',fr.rm);rhs=fr.mul('D',pred)+fr.rc
             dpi=fr.solve(rhs,'total');tight=fr.solve(rhs,'total-tighter',2e-14)
             native=np.asarray(s['pressure_increment']);error=fr.measure(dpi-native);unc=fr.measure(tight-dpi)
+            mass_correction=fr.direct('M',fr.mul('G',dpi))/fr.alpha
+            du=pred-mass_correction;frozen_defect=fr.F@np.r_[du,dpi]+np.r_[fr.rm,fr.rc]
+            identity=frozen_defect[:nv]-(fr.mul('G',dpi)-fr.mul('A',mass_correction))
+            row_actions=dict(predictor_increment=maximum(pred-np.asarray(s['predictor_increment'])),
+                mass_velocity_correction=maximum(mass_correction-np.asarray(s['subtracted_mass_velocity_correction'])),
+                velocity_increment=maximum(du-np.asarray(s['velocity_increment'])),
+                frozen_defect=maximum(frozen_defect-np.asarray(s['frozen_momentum_and_continuity_defect'])),
+                splitting_identity=maximum(identity-np.asarray(s['splitting_identity_defect'])),
+                predictor_residual=maximum(fr.mul('A',pred)+fr.rm-np.asarray(s['predictor_linear_residual'])),
+                pressure_residual=maximum(fr.S@dpi-rhs-np.asarray(s['pressure_linear_residual'])),
+                corrected_free_state=maximum(state[fr.rows]+np.r_[du,dpi]-np.asarray(s['corrected_flow'])[fr.rows]))
+            require(max(row_actions.values())<=2e-10,'all-row native frozen action reconstruction')
             require(error['maximum_scaled_value']<1e-8 and unc['maximum_scaled_value']<1e-8,'pressure reconstruction/repeat uncertainty')
             continuity=fr.solve(fr.rc,'continuity');st=fr.image(storage_global,'storage-lifting')
             continuity_unc=fr.measure(fr.solve(fr.rc,'continuity-tighter',2e-14)-continuity)
@@ -227,7 +239,7 @@ def main():
             require(max(stage_pressure.values())<=2e-10,'unattributed pressure stage change')
             row=dict(time=s['time'],snapshot=dict(path=str(f),sha256=sha(f)),load=meta,
                 alpha=s['alpha'],C_maximum=smx(fr.C),unused_gauge=False,continuous_total=fr.measure(continuous),free_velocity=nv,free_pressure=len(ids),
-                block_reconstruction=fr.blocks,predictor_reconstruction=maximum(pred-np.asarray(s['predictor_increment'])),
+                block_reconstruction=fr.blocks,action_reconstruction=row_actions,predictor_reconstruction=maximum(pred-np.asarray(s['predictor_increment'])),
                 initial_weak_continuity_maximum=maximum(fr.rc),native_increment=fr.measure(native),
                 reconstructed_increment=fr.measure(dpi),reconstruction=error,tighter_repeat=unc,signed_sum_error=sum_error,
                 continuity=fr.measure(continuity),storage_and_lifting=fr.measure(st),
@@ -290,6 +302,21 @@ def main():
                     for name in ('post_flow','pre_k'):
                         m,meta_stage=loads(np.asarray(ks[name]),s['time'],folder/'case.xml',name+'-'+dt)
                         out['stage_loads'][dt+'/'+name]=dict(metadata=meta_stage,component_load_changes={k:maximum(np.asarray(v)-np.asarray(last['actual'][k])) for k,v in m['actual'].items()});last=m
+                    # These fixed-operator images explain load changes after
+                    # flow without pretending pressure changed during scalars.
+                    previous=mom;chain=[];total_change=np.zeros(nm);summed_image=np.zeros_like(dpi)
+                    for name,stage in (('post_flow',ks['post_flow']),('pre_k',ks['pre_k']),('accepted',accepted)):
+                        now,_=cache[exact_vector_hash(stage)]
+                        change=sum((np.asarray(now['actual'][k])-np.asarray(previous['actual'][k]) for k in actual),np.zeros(nm))
+                        pv=fr.image(change,'stage-change/'+name);total_change+=change;summed_image+=pv
+                        chain.append(dict(stage=name,maximum_signed_load_change=maximum(change),free_signed_load_sum=float(np.sum(change[fr.rows[:nv]])),pressure_image=fr.measure(pv)))
+                        previous=now
+                    direct_change=sum((np.asarray(endmom['actual'][k])-actual[k] for k in actual),np.zeros(nm))
+                    direct_image=fr.image(direct_change,'stage-change/total')
+                    chain_error=fr.measure(summed_image-direct_image)
+                    require(maximum(total_change-direct_change)<=2e-10 and chain_error['maximum_scaled_value']<1e-8,'stage-load signed telescope')
+                    out['stage_chain']=dict(steps=chain,signed_sum_error=chain_error,load_sum_error=maximum(total_change-direct_change),
+                        scope='last fine frozen operator only; read-only pressure response to actual flow/epsilon/k load changes; native pressure is unchanged during scalar stages')
             out['members'][dt]=dict(steps=rows_out,report_sha256=sha(file),actual_initial_sha256=exact_vector_hash(init),final_absolute_pressure=fr.measure(absolute))
             # Persist derived work before any later diagnostic can fail. Native
             # packets stay immutable and are rebound by request/state hashes.

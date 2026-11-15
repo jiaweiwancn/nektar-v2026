@@ -47,7 +47,9 @@ Sum the captured increments from the unchanged initial absolute pressure and
 compare with every corresponding accepted state. Independently check that
 pressure is unchanged across corrected-flow, post-flow, pre-k and accepted
 scalar stages. Report imposed dependent-epsilon trace and refreshed post-k lag
-separately. A representative exact frozen coupled correction uses `D A⁻¹G−C`
+separately. The final fine-step flow/epsilon/k load changes are also mapped
+through that same frozen operator and telescoped; these read-only images do not
+imply that native pressure changes during scalar solves. A representative exact frozen coupled correction uses `D A⁻¹G−C`
 only as a read-only comparison. It never replaces the governing mass correction.
 
 For the initial representation's radial localization, stream each band's sparse
