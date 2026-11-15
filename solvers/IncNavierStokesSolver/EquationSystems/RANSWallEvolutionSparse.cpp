@@ -17,7 +17,7 @@ RANSWallEvolutionPatch::SparseFlowResult RANSWallEvolutionPatch::SparseFlowBlock
     const PicardBlock &flow,int nv) const
 {
     Require(SerialSparse() && flow.sparse,"invalid sparse flow blocks");
-    const int n=flow.rows.size(),np=n-nv;SparseFlowResult r;
+    const int n=flow.rows.size();SparseFlowResult r;
     r.a=flow.csr.Block(0,nv,0,nv);r.g=flow.csr.Block(0,nv,nv,n);
     r.d=flow.csr.Block(nv,n,0,nv);r.c=flow.csr.Block(nv,n,nv,n);
     r.m=SparseMatrix(nv,nv);std::vector<int> index(Size(),-1);
