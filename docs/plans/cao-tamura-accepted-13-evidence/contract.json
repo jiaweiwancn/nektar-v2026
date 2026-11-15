@@ -1,0 +1,135 @@
+{
+  "schema": "CT13GuardPreservingPredictorReadinessV1",
+  "starting_revision": "5799b240917e6ca7dcf4ac3d44f2b520f5629955",
+  "review": "fetched remote matches clean dedicated implementation worktree; no intervening changes",
+  "physical_manifest_sha256": "004bc0fc82054296a68d56de77751fc1f0a41570ee16b0a174ae8087f262d296",
+  "physical": "exact CT8 central Natural A95, physical floor0,H=.1875,d=.0875,IDs012 physical-z<=25mm fit,fixed measured normalization,utau,z0,hs; actual evolving K,nonconstant inner k,dependent epsilon,full signed production; displaced Accepted/composite,RN top,absolute outlet traction; IMEX1 one sweep,cacheOff",
+  "archive": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115",
+  "guards": {
+    "slots": 70000,
+    "matrix_nonzeros": 20000000,
+    "factor_entries": 40000000,
+    "address_space_GiB": 16,
+    "project_workers": 16,
+    "aggregate_workers": 72,
+    "compiler_jobs": 2,
+    "library_threads": 1,
+    "numerical_families": 1
+  },
+  "package_budget": {
+    "process_CPU_seconds": 24000,
+    "active_wall_seconds": 28800,
+    "new_output_GiB": 16,
+    "reason": "bounded build/export/order/memory/static work plus at most one candidate two/four-step pair; CT11 ordinary target about140 CPU s/accepted step plus startup and required audits; separate from failed .407 campaign"
+  },
+  "export": {
+    "policy": "PreFactorFrozenCSRExportV1",
+    "point": "actual assembly and free restriction, before any factor",
+    "inputs": "explicit raw state,actual history,alpha,time,reference,boundary/config/runtime; initialized frozen fixtures distinguished from evolved stage",
+    "outputs": "canonical flow,A,G,D,C,consistent free mass,free/global IDs,prescribed constraints,raw/effective/lifted state and residual; no update or solve",
+    "comparison": "retained original CT11 initial and evolved stage snapshots; exact canonical CSR bytes where shared assembly permits; all-row2e-10"
+  },
+  "ordering": {
+    "control": "COLAMD",
+    "alternatives": [
+      "AMD",
+      "Natural"
+    ],
+    "fixed": "canonical coefficients/zero handling,scaling,pivot policy,FE IDs,masks,mass/G/D/C,true residual and IR3; factor permutations internal only",
+    "systems": [
+      "original initial alpha1000",
+      "original evolved alpha2000",
+      "selected initial alpha1000",
+      "selected initial alpha2000"
+    ],
+    "selection": "one fixed alternative only if every assessed matrix fits40M and true residual2e-12*maxabs(rhs)+1e-25; choose smallest maximum fill across systems,tie by listed order; no per-step switching; report margins and observed variation",
+    "scope": "predictor only; scalar/preconditioner COLAMD and mass LDLT unchanged; no new component until evidence supports selection"
+  },
+  "equivalence": {
+    "operator": 2e-10,
+    "updates_scaled": 1e-08,
+    "roles": "predictor/scalars/consistent mass/full pressure,absolute pressure,traction,domain,budgets,tiny RHS and signed cancellation",
+    "history": "fresh component-specific histories; same-component restart/rollback and incompatible-component rejection; old target failure reproduced"
+  },
+  "diagnostic_memory": {
+    "failure": "exact CT12 evolved q64 aggregate under16GiB; full volume-basis and momentum-points already disabled",
+    "rule": "identify allocation phase before fix; probe-only streaming/lifecycle preserving owner/side/panel/coordinates/weights/gradients/checks; old/new equivalence before exact retry; four scalar controls remain separate"
+  },
+  "selected_mesh": {
+    "baseline_slots": 60907,
+    "candidate_slots": 62533,
+    "elements": 961,
+    "only_added_r": 0.00146484375,
+    "physical_added_mm": 0.05859375,
+    "domain": [
+      -25,
+      30,
+      20
+    ],
+    "H": 0.1875,
+    "degree": 4,
+    "pressure_degree": 2,
+    "fixed": "every original node,physical function,projection and quadrature; identical logical amendment in matched terrain definition; no admitted terrain numbering"
+  },
+  "static": {
+    "alpha": [
+      1000,
+      2000
+    ],
+    "governing_controls": {
+      "native": [
+        32,
+        8,
+        12,
+        12,
+        64
+      ],
+      "q48": [
+        48,
+        12,
+        12,
+        16,
+        64
+      ],
+      "q64": [
+        64,
+        16,
+        12,
+        20,
+        64
+      ]
+    },
+    "required": "inventory,fresh projection,reference/gradient/boundary/traction/domain/covariance/radicand/cutoff,flow/scalars/mass/pressure,fill/memory"
+  },
+  "conditional_pair": {
+    "admission": "separate prospective short-run contract committed only after all static/equivalence/diagnostic-capacity/resource prerequisites",
+    "dt": [
+      0.001,
+      0.0005
+    ],
+    "endpoint": 0.002,
+    "max_total_accepted_steps": 6,
+    "fresh": true,
+    "criteria": {
+      "field_drift": 0.001,
+      "vertical_drift": 0.0001,
+      "ground_interface_traction": 0.001,
+      "mass": 1e-08,
+      "physical_budget": 0.02,
+      "timestep": "delta<=max(1e-7,.1*drift),including raw signed traction spread"
+    },
+    "stopping": "first native failure immediately; paired endpoint fixedT=.002; no later continuation,halving or mesh search"
+  },
+  "long_campaign": "CT11 pressure failure and CT12 .407 CPU/wall/output no-go unchanged; component ordering is capacity,not measured throughput",
+  "outcomes": [
+    "export",
+    "ordering",
+    "component_equivalence",
+    "diagnostic_memory",
+    "selected_static",
+    "short_pair",
+    "campaign_affordability",
+    "terrain_readiness"
+  ],
+  "forbidden": "no coefficient/input/calibration retuning,pressure regauging,clipping,cancellation,restoration,trace repair,extra governing sweeps; no terrain,A93/E94E95 displaced transfer,EP,MPI/3D,general backend or variable-height expansion"
+}
