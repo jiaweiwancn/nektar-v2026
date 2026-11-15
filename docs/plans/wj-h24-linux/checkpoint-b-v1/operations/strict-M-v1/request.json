@@ -1,0 +1,57 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h24-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h24.py",
+    "--root",
+    "/home/jay/build/wj-h24-flat-continuation-20261115",
+    "--mode",
+    "strict_M"
+  ],
+  "phase": "native",
+  "kind": "strict_M",
+  "reserved_seconds": 120.0,
+  "workers": 1,
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 278880,
+        "parent": 273304,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h24-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h24.py --root /home/jay/build/wj-h24-flat-continuation-20261115 --label strict-M-v1 --seconds 120 --phase native --kind strict_M -- /usr/bin/python3 -B /home/jay/build/wj-h24-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h24.py --root /home/jay/build/wj-h24-flat-continuation-20261115 --mode strict_M"
+      }
+    ]
+  },
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h24-flat-continuation-20261115/source/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h24.py": {
+      "sha256": "7eb0f0ee1519793772e272e55c7dc874999fa0db49bcf0260381790b821cf0c6",
+      "bytes": 5144
+    }
+  },
+  "driver_sha256": "3abb92a727fb6ff31a68e10a406afe5eeb0a1fad2d61b7403e4eae15e6e9ceab"
+}

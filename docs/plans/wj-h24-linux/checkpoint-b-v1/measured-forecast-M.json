@@ -1,0 +1,44 @@
+{
+  "level": "M",
+  "ordinary_samples": [
+    40.633364625,
+    41.813575587,
+    41.98906149,
+    42.118142099
+  ],
+  "native_audit_samples": [
+    42.716217809,
+    42.387347996,
+    42.484262654,
+    42.869049947
+  ],
+  "inclusive_wait_samples": [
+    10.968116138,
+    10.775447503,
+    11.025516983,
+    11.105525003
+  ],
+  "selected_forecasts": {
+    "M": {
+      "ordinary": 45.0,
+      "audit": 50.0,
+      "observer": 15.0
+    },
+    "C": {
+      "ordinary": 45.0,
+      "audit": 50.0,
+      "observer": 25.0
+    },
+    "F": {
+      "ordinary": 45.0,
+      "audit": 50.0,
+      "observer": 45.0
+    }
+  },
+  "rule": "conservative max(prior, observed maximum); governing C all-audited is not an ordinary sample",
+  "timings_source": {
+    "path": "/home/jay/build/wj-h24-flat-continuation-20261115/operations/governor-M-v1/timing.jsonl",
+    "bytes": 2136624,
+    "sha256": "9649d4816d1083e4e2169cf411b7af571010bef4e65651b41f3f453529211789"
+  }
+}
