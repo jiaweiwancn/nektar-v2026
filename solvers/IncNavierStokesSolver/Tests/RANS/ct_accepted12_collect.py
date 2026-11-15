@@ -18,6 +18,7 @@ def read(p):return json.loads(Path(p).read_text())
 
 def pressure_gate(q,require_quadrature=True):
     reasons=[]
+    if not finite_numbers(q):reasons.append('nonfinite')
     if q.get('schema')!='CT12TargetPressureV1' or set(q.get('members',{}))!={'0.001','0.0005'}:reasons.append('coverage')
     for dt,m in q.get('members',{}).items():
         times=[round(v['time'],12) for v in m.get('steps',[])]
@@ -51,13 +52,14 @@ def pressure_gate(q,require_quadrature=True):
     if require_quadrature:
         for row in q.get('held_quadrature',[]):
             if row.get('status')!='pass':reasons.append('quadrature_capacity')
-            elif row['pressure_image']['maximum_scaled_value']>=1e-8 or row['reconstruction']>2e-10:reasons.append('quadrature')
+            elif row.get('pressure_image',{}).get('maximum_scaled_value',1)>=1e-8 or row.get('reconstruction',1)>2e-10:reasons.append('quadrature')
         if len(q.get('held_quadrature',[]))!=2:reasons.append('quadrature_coverage')
     return dict(status='pass' if not reasons else 'fail',reasons=sorted(set(reasons)),scope='read-only reconstruction and signed attribution; no physical uncertainty reclassification')
 
 
 def static_gate(q):
     reasons=[]
+    if not finite_numbers(q):reasons.append('nonfinite')
     if q.get('schema')!='CT12StaticInnerContrastV1' or q.get('physical_evolution') is not False:reasons.append('scope')
     if q.get('count',{}).get('stored_slots')!=62533 or q.get('count',{}).get('elements')!=961:reasons.append('native_count')
     initial=q.get('initial',{})
@@ -92,11 +94,18 @@ def main():
     for k in ('root','ct10','ct11','pressure','axes','profile','self-control','output'):p.add_argument('--'+k,type=Path,required=True)
     p.add_argument('--static',type=Path)
     a=p.parse_args();static=sealed(a.static) if a.static else None;pressure=sealed(a.pressure);axes=sealed(a.axes);profile=sealed(a.profile);old=sealed(a.ct11/'target-v1')
+    for dt,member in pressure['members'].items():
+        require(member['report_sha256']==old['members'][dt]['native_report_sha256'] and member['actual_initial_sha256']==old['members'][dt]['actual_initial_sha256'],'foreign pressure native history/initial binding')
     gate=pressure_gate(pressure,False);quadrature_gate=pressure_gate(pressure)
     require(gate['status']=='pass','incomplete pressure reconstruction primitives:'+str(gate))
     require(profile['status']=='pass' and profile['retention']['all_restored_bytes_equal'] and
             profile['rollback']['status']=='pass' and physical_budgets(profile['budgets'])['status']=='pass','profile/retention prerequisites failed')
-    require(axes['status']=='pass' and all(r['signed_sum_error']['maximum_scaled_value']<1e-8 for rows in axes['members'].values() for r in rows),'axis reconstruction failed')
+    require(axes['status']=='pass' and finite_numbers(axes) and set(axes['members'])=={'0.001','0.0005'},'axis reconstruction/schema failed')
+    for dt,rows in axes['members'].items():
+        require([round(r['time'],12) for r in rows]==[round(r['time'],12) for r in pressure['members'][dt]['steps']],'axis time coverage')
+        require(all(r['signed_sum_error']['maximum_scaled_value']<1e-8 and r['independent_native_mass_action_defect']<=2e-10 and r['complete_native_G_action_defect']<=2e-10 for r in rows),'axis native mass/G reconstruction')
+    for name in ('input','post_flow','pre_k','accepted'):
+        require(set(axes['stage_tractions'][name]['external'])=={'outlet/0','outlet/1','top/1'},'physical face observation coverage')
     requests={label:dict(path=str(folder),request_sha256=sha(folder/'request-manifest.json'),result_sha256=sha(folder/'results.json'),seal_sha256=sha(folder/'completed-artifacts.json')) for label,folder in [('pressure',a.pressure),('axes',a.axes),('profile',a.profile)]}
     if static:
         sr=read(a.static/'request-manifest.json')['request'];expected=copy.deepcopy(old['case']);expected['knots']=sorted(set(expected['knots']+[.00146484375]))
@@ -138,9 +147,13 @@ def main():
             ('bad_row_pass_label','block_reconstruction',lambda q:q['members']['0.001']['steps'][0]['block_reconstruction'].update(G=1e-7)),
             ('bad_pressure_pass_label','reconstruction',lambda q:q['members']['0.001']['steps'][0]['reconstruction'].update(maximum_scaled_value=1e-6)),
             ('wrong_gauge','pressure_level',lambda q:q['members']['0.001']['steps'][0].update(unused_gauge=True)),
+            ('bad_native_action','native_action',lambda q:q['members']['0.001']['steps'][0]['action_reconstruction'].update(velocity_increment=1e-7)),
+            ('nonfinite_common_pressure','nonfinite',lambda q:q['common']['0.002']['pressure']['whole'].update(weighted_RMS=float('nan'))),
             ('missing_common_time','common_time',lambda q:q['common'].pop('0.001'))]:
         v=copy.deepcopy(pressure);mutate(v);v['status']='pass';r=pressure_gate(v,False)
         require(r['status']=='fail' and any(word in x for x in r['reasons']),'nondiscriminating primitive negative:'+name);negatives[name]=r
+    v=copy.deepcopy(pressure);v['status']='pass';v['held_quadrature'][-1]['status']='pass';r=pressure_gate(v)
+    require(r['status']=='fail' and 'quadrature' in r['reasons'],'invalid pass-labelled quadrature accepted');negatives['invalid_quadrature_pass_label']=r
     initial=read(a.ct10/'target-preflight-v1/target/readiness.json');mom=initial['ct10_momentum'];free=np.asarray(mom['free_rows'],int)
     for name,part,factor in [('omit_nonlinear_normal','nonlinear_normal',1),('reverse_natural_traction','natural_traction',2),('omit_augmented_pressure','augmented_pressure',1)]:
         load=sum((np.asarray(v) for k,v in mom['actual'].items() if part in k),np.zeros(mom['momentum_size']))
@@ -203,7 +216,7 @@ def main():
         terrain='unattempted; mapped numbering,joined gradients/cofactors,transmission and curved temporal/spatial gates separate',
         physical_applicability='central physical reference retained; no precursor or hill validation',historical='CT4–CT11 seals unchanged')
     failures={}
-    for name in ('pressure-v1','pressure-v2','pressure-v3','pressure-v4','profile-v1','profile-v2'):
+    for name in ('pressure-v1','pressure-v2','pressure-v3','pressure-v4','profile-v1','profile-v2','axes-v1'):
         f=a.root/(name+'-family.log');r=a.root/('resources-'+name)/'execution.json'
         if f.exists() and r.exists():failures[name]=dict(log=str(f),log_sha256=sha(f),witness=f.read_text()[-4500:],execution=read(r),execution_sha256=sha(r),
             scope='preserved diagnostic/controller failure, not a new physical trajectory or a relabelled historical result')

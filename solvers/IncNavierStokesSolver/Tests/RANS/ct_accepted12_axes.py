@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Independent Cartesian-axis pressure images and retained-stage physical tractions."""
-import argparse,json,os,resource
+import argparse,gc,json,os,resource
 from pathlib import Path
 from rans_qualification import THREADS,exact_vector_hash
 os.environ.update(THREADS)
@@ -22,7 +22,7 @@ def main():
     primary=sealed(a.pressure);target=sealed(a.ct11/'target-v1');ini=n.read(a.ct10/'target-preflight-v1/target/readiness.json');c=target['case'];weights=n.inventory(c)[2];off=ini['observation']['offsets'];nm=off[2]
     manifest=RequestManifest(a.output,dict(schema='CT12AxisAndStageV1',source=sha(Path(__file__)),pressure=sha(a.pressure/'results.json'),target=sha(a.ct11/'target-v1/results.json'),scope='read-only retained target operators/rows; no native solve or trajectory'))
     result=dict(schema='CT12AxisAndStageV1',status='incomplete',members={},stage_tractions={});vectors={};common={};feedback_common={};cache={}
-    coefficients=parameters('A95');alpha=coefficients['alpha']
+    coefficients=parameters('A95');alpha=coefficients['alpha'];norm=None
     ends={round(f['coordinate'][0],14):f['velocity_k'] for f in ini['observation']['faces'] if f['interface'] and f['region']==1}
     for point,side,row in zip(ini['observation']['grid'],ini['observation']['grid_sides'],ini['test_basis'],strict=True):
         if point[2]==c['H'] and side==1:ends[round(point[0],14)]=row['velocity_k']
@@ -84,7 +84,9 @@ def main():
         accum={k:np.zeros(off[6]-off[4]) for k in ('streamwise','normal','continuity')};states={};checks=[];feedback=np.zeros(off[6]-off[4]);feedback_states={}
         for row in member['steps']:
             s=n.read(row['snapshot']['path']);require(sha(Path(row['snapshot']['path']))==row['snapshot']['sha256'],'changed flow packet')
-            fr=Frozen(s,ini,c,weights,len(weights));load=np.zeros(nm);load[fr.rows[:fr.nv]]=fr.rm
+            fr=Frozen(s,ini,c,weights,len(weights))
+            if norm is None:norm=fr.images
+            load=np.zeros(nm);load[fr.rows[:fr.nv]]=fr.rm
             parts={}
             for name,axis in [('streamwise',0),('normal',1)]:
                 v=load.copy();v[:off[1] if axis else 0]=0.;v[off[2] if axis else off[1]:]=0.
@@ -100,19 +102,25 @@ def main():
             pi_rhs=-fr.mul('D',fr.direct('A',fr.mul('G',old_pi)))
             pi_feedback=fr.solve(pi_rhs,'stored-pressure-feedback');feedback+=pi_feedback
             repeat=None
-            if row['time']==.002:
+            if round(row['time'],12)==.002:
                 repeat=fr.measure(fr.solve(pi_rhs,'stored-pressure-feedback-tighter',2e-14)-pi_feedback)
                 require(repeat['maximum_scaled_value']<1e-8,'stored-pressure feedback repeat')
             checks.append(dict(time=row['time'],stored_pressure_feedback=fr.measure(pi_feedback),feedback_tighter_repeat=repeat,axes={k:fr.measure(v) for k,v in parts.items()},signed_sum_error=defect,
                 independent_native_mass_action_defect=mass_defect,complete_native_G_action_defect=action_defect,solves=fr.receipts))
             if round(row['time'],12) in (.001,.002):
                 states[str(round(row['time'],12))]={k:v.copy() for k,v in accum.items()};feedback_states[str(round(row['time'],12))]=feedback.copy()
+            result['members'][dt]=checks
+            write_json(a.output/'progress.json',result)
+            # S/W LinearOperator closures form Python reference cycles. Release
+            # each complete factor set explicitly before constructing another.
+            # Keep only the fixed physical observation object for comparisons.
+            del fr;gc.collect()
         result['members'][dt]=checks;common[dt]=states;feedback_common[dt]=feedback_states
     for t in ('0.001','0.002'):
-        delta={k:common['0.001'][t][k]-common['0.0005'][t][k] for k in accum};total=sum(delta.values(),np.zeros_like(pc));den=fr.inner(total,total)
-        result.setdefault('common',{})[t]={k:dict(signed_alignment=fr.inner(v,total)/den,image=fr.measure(v)) for k,v in delta.items()};vectors[t]={k:v.tolist() for k,v in delta.items()}
+        delta={k:common['0.001'][t][k]-common['0.0005'][t][k] for k in accum};total=sum(delta.values(),np.zeros_like(pc));den=norm.inner(total,total)
+        result.setdefault('common',{})[t]={k:dict(signed_alignment=norm.inner(v,total)/den,image=norm.measure(v)) for k,v in delta.items()};vectors[t]={k:v.tolist() for k,v in delta.items()}
         fp=feedback_common['0.001'][t]-feedback_common['0.0005'][t]
-        result.setdefault('stored_pressure_feedback',{})[t]=dict(signed_alignment=fr.inner(fp,total)/den,image=fr.measure(fp),scope='G times actual stored pressure departure from unchanged initial Pi; contained in axis/component loads, not an extra independent contribution; no regauging')
+        result.setdefault('stored_pressure_feedback',{})[t]=dict(signed_alignment=norm.inner(fp,total)/den,image=norm.measure(fp),scope='G times actual stored pressure departure from unchanged initial Pi; contained in axis/component loads, not an extra independent contribution; no regauging')
     # Last fine step: actual input,corrected flow,pre-k and accepted fields.
     r=n.read(Path(target['members']['0.0005']['directory'])/'case.evolution.json');attempt=r['pimple_attempts'][-1];fs=n.read(attempt['flow_snapshot']);ks=n.read(attempt['k_snapshot'])
     result['initial_tractions']=dict(ground=ground(ini['observation']['state'])[0],external=external(ini['observation']['state']),state_sha256=exact_vector_hash(ini['observation']['state']))
@@ -131,6 +139,7 @@ def main():
         result['stage_tractions'].setdefault(label,{})['interface']=interface(packet['ct10_momentum'])
     expected=target['members']['0.0005']['accepted_metrics'][-1]['traction']['normalized_wall_traction_error']
     require(abs(result['stage_tractions']['accepted']['ground']['error']-expected)<2e-10,'raw evolved ground traction disagreement')
-    result.update(status='pass',ground_product_decomposition=decomposition,continuation_admitted=False)
+    vm={k:int(v.split()[0]) for k,v in (line.split(':',1) for line in Path('/proc/self/status').read_text().splitlines() if line.startswith(('VmPeak:','VmHWM:')))}
+    result.update(status='pass',ground_product_decomposition=decomposition,continuation_admitted=False,diagnostic_memory=dict(maximum_self_RSS_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,**vm),factor_lifecycle='one Frozen factor set at a time; explicit del/gc after each step; fixed observation object retained')
     write_json(a.output/'axis-vectors.json',vectors);write_json(a.output/'results.json',result);manifest.seal(a.output,['results.json','axis-vectors.json']);return 0
 if __name__=='__main__':raise SystemExit(main())

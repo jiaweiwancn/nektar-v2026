@@ -1,0 +1,7 @@
+{
+  "schema": "CT12DiagnosticFactorLifecycleV1",
+  "observed": "axes-v1 retained successive Frozen factor closures until the sixth construction; SuperLU allocation failed under the unchanged16GiB address-space limit after five reconstructed rows",
+  "correction": "explicitly release each Frozen object and collect its LinearOperator reference cycles after every row; retain only the single fixed physical observation object and scalar/vector results",
+  "verification": "fresh read-only axes-v2 request, same states and captured matrix hashes, all6 native pressure/action sums under unchanged2e-10/1e-8 bounds; record RSS/VmPeak; no new native trajectory/probe or governing source",
+  "preserve": "axes-v1 failure and partial log retained; no cap increase, solver cache policy or physical model change"
+}
