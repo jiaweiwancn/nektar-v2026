@@ -42,29 +42,38 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('ct10','ct11','runtime','probe','contract','output'):p.add_argument('--'+k,type=Path,required=True)
     p.add_argument('--recover',type=Path,help='Retain and bind the sole completed step1 from a wrapper failure; do not repeat it')
+    p.add_argument('--finish-only',action='store_true',help='Bind both completed steps and rejection, then finish only audits/retention')
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3))
     require(sha(a.runtime/'IncNavierStokesSolver')=='5830a2cd8a4b0b5b12095555171eb28bc0f63e1daa97652d63da244c3fd808c7','foreign governing runtime')
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');pair=sealed(a.ct11/'target-v1');c=pair['case'];old=pair['members']['0.001'];folder=Path(old['directory']);legacy=n.read(folder/'case.evolution.json')
     require(sha(folder/'case.evolution.json')==old['native_report_sha256'],'changed CT11 native report')
     zero=a.ct11/'target-v1/zero-0.001';z=n.read(zero/'case.evolution.json')
+    require(not a.finish_only or a.recover,'finish-only requires explicit existing-work binding')
     work=a.recover or a.output;recovery=None
     if a.recover:
         original=n.read(work/'request-manifest.json')['request']
         require(original['legacy_report']==sha(folder/'case.evolution.json') and original['runtime']==runtime_identity(a.runtime/'IncNavierStokesSolver') and
-                original['contract']==sha(a.contract) and not (work/'step2').exists(),'foreign or already advanced profiling recovery')
+                original['contract']==sha(a.contract) and (a.finish_only or not (work/'step2').exists()),'foreign or already advanced profiling recovery')
         recovery=dict(root=str(work),request_sha256=sha(work/'request-manifest.json'),step1_report_sha256=sha(work/'step1/case.evolution.json'),
             configuration_sha256=sha(work/'step1/case.xml'),timing_sha256=sha(work/'step1/timing.jsonl'),
             history_sha256=artifact_hash(n.read(work/'step1/case.evolution.json')['checkpoint']),
             failed_family_sha256=sha(work.parent/'resources-profile-v1/execution.json'),failure_log_sha256=sha(work.parent/'profile-v1-family.log'))
+        if a.finish_only:
+            require((work/'step2/case.evolution.json').exists() and (work/'rollback/case.evolution.json').exists(),'missing completed native replay/rejection')
+            recovery['completed_reports']={name:{f:sha(work/name/f) for f in ('case.xml','case.evolution.json','solver.log')} for name in ('step1','step2','rollback')}
+            recovery['previous_controller_failure']=dict(execution_sha256=sha(work.parent/'resources-profile-v2/execution.json'),log_sha256=sha(work.parent/'profile-v2-family.log'))
+    gov_identity=runtime_identity(a.runtime/'IncNavierStokesSolver')
+    os.environ['LD_LIBRARY_PATH']=str(a.probe/'lib');probe_identity=runtime_identity(a.probe/'RANSPreservationProbe')
+    os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
     m=RequestManifest(a.output,dict(schema='CT12TargetProfileRetentionV1',source=sha(Path(__file__)),contract=sha(a.contract),
-        recovered_step1=recovery,case=c,dt=.001,accepted_steps=2,deliberate_rejected_attempts=1,initial_history=artifact_hash(z['checkpoint']),
-        legacy_report=sha(folder/'case.evolution.json'),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.probe/'RANSPreservationProbe'),
+        recovered_native_work=recovery,finish_only=a.finish_only,case=c,dt=.001,accepted_steps=2,deliberate_rejected_attempts=1,initial_history=artifact_hash(z['checkpoint']),
+        legacy_report=sha(folder/'case.evolution.json'),runtime=gov_identity,probe=probe_identity,
         scope='replay only,not a new physical qualification or longer continuation; detailed timing and external byte-preserving retention'))
     result=dict(schema='CT12TargetProfileRetentionV1',status='incomplete',members={});eligible=[];required={};reports={};template=folder/'case.xml';parent=Path(z['checkpoint'])
     for step in (1,2):
         dest=work/('step'+str(step))
-        if step==1 and a.recover:
-            e=dict(exit_code=0,scope='reuse of the completed original native step; wrapper failed later hashing its checkpoint directory',
+        if a.recover and (step==1 or a.finish_only):
+            e=n.read(dest/'native-execution.json') if (dest/'native-execution.json').exists() else dict(exit_code=0,scope='reuse of the completed original native step; wrapper failed later hashing its checkpoint directory',
                 original_closed_family=str(work.parent/'resources-profile-v1/execution.json'),
                 limitation='first-run temporary run() RSS/library-map object was lost before receipt; detailed native times and exact state/stage evidence survive; second step is measured normally')
         else:
@@ -90,17 +99,24 @@ def main():
             legacy_exclusive_CPU=pair['first_stage_resource_plan']['timing'][0]['exclusive_step_CPU'][str(step)])
         parent=Path(r['checkpoint']);reports[step]=r;write_json(a.output/'progress.json',result);print('CT12 profile accepted',step,exclusive,flush=True)
     # The deliberate failure exercises retention/rollback, not constitutive admission.
-    dest=work/'rollback';n.make(dest,a.runtime,c,.001,1,Path(reports[1]['checkpoint']),work/'step1/case.xml');enable(dest)
-    root=ET.parse(dest/'case.xml').getroot();set_parameter(root,'RANSWallPimpleHardAuditRejectStep',2);write(root,dest/'case.xml');os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
-    e=run([a.runtime/'IncNavierStokesSolver','case.xml'],dest,'solver.log');write_json(dest/'native-execution.json',e);r=n.read(dest/'case.evolution.json')
+    dest=work/'rollback'
+    if a.finish_only:e=n.read(dest/'native-execution.json')
+    else:
+        n.make(dest,a.runtime,c,.001,1,Path(reports[1]['checkpoint']),work/'step1/case.xml');enable(dest)
+        root=ET.parse(dest/'case.xml').getroot();set_parameter(root,'RANSWallPimpleHardAuditRejectStep',2);write(root,dest/'case.xml');os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
+        e=run([a.runtime/'IncNavierStokesSolver','case.xml'],dest,'solver.log');write_json(dest/'native-execution.json',e)
+    r=n.read(dest/'case.evolution.json')
     require(e['exit_code']!=0 and 'deliberate_PIMPLE_hard_audit_rejection' in r['failure'] and same_history(reports[1],r),'rejected operation failed to retain prior native history')
     require(bool(r['rejected_state']) and r['pimple_attempts'],'missing actual rejected candidate/stage')
     checks,files=snapshots(r,[legacy['pimple_attempts'][1]]);eligible.extend(files);eligible.append(dest/'solver.log')
-    keep=[dest/'case.evolution.json',dest/'case.xml'];history=Path(r['checkpoint'])
+    keep=[dest/'case.evolution.json',dest/'case.xml']
+    # A rejected operation need not write a new checkpoint. Its real retained
+    # restart artifact is the immutable input checkpoint, never Path('').
+    history=Path(r['checkpoint']) if r['checkpoint'] else Path(reports[1]['checkpoint'])
     keep.extend([history] if history.is_file() else [f for f in history.rglob('*') if f.is_file()])
     for f in keep:required[str(f.relative_to(work))]=sha(f)
     result['rollback']=dict(status='pass',execution=e,failure=r['failure'],time=r['time'],last_accepted_state_sha256=exact_vector_hash(r['state']),
-        rejected_state_sha256=exact_vector_hash(r['rejected_state']),history_sha256=artifact_hash(r['checkpoint']),native_report_sha256=sha(dest/'case.evolution.json'),stage_equivalence=checks)
+        rejected_state_sha256=exact_vector_hash(r['rejected_state']),history_sha256=artifact_hash(history),history_path=str(history),history_binding='new checkpoint' if r['checkpoint'] else 'inherited prior accepted checkpoint; no new rejected checkpoint',native_report_sha256=sha(dest/'case.evolution.json'),stage_equivalence=checks)
     # Independent physical budgets consume these actual replay stage packets
     # before any payload becomes eligible for compressed retention.
     initial=n.read(a.ct10/'target-preflight-v1/target/readiness.json')

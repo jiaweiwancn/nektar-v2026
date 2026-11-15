@@ -166,11 +166,11 @@ def main():
         cache[h]=(m,meta);return cache[h]
 
     out=dict(schema='CT12TargetPressureV1',status='incomplete',members={},common={},stage_loads={},scope='diagnostic reconstruction is separate from unchanged CT11 pressure failure')
-    vectors={};totals={};accum_by_time={};snapshots={};bands=None;negatives={}
+    vectors={};totals={};accum_by_time={};mechanism_by_time={};snapshots={};bands=None;negatives={}
     for dt,member in target['members'].items():
         folder=Path(member['directory']);file=folder/'case.evolution.json'
         require(sha(file)==member['native_report_sha256'],'changed sealed native report')
-        report=n.read(file);accum={};tel=np.zeros(off[6]-off[4]);rows_out=[];times={}
+        report=n.read(file);accum={};tel=np.zeros(off[6]-off[4]);rows_out=[];times={};mechanisms={};mechanism_times={}
         for i,attempt in enumerate(report['pimple_attempts']):
             f=Path(attempt['flow_snapshot']);require(sha(f)==attempt['flow_snapshot_sha256'],'changed retained flow snapshot')
             s=n.read(f);state=np.asarray(s['input']);fr=Frozen(s,initial,c,weights,count)
@@ -226,6 +226,9 @@ def main():
             summed=sum(signed.values(),np.zeros_like(dpi));sum_error=fr.measure(summed-native)
             require(sum_error['maximum_scaled_value']<1e-8,'signed finite-step pressure sum')
             mass_limit=fr.mass_image(spatial,'current-small-step-image')
+            finite_alpha=dpi-continuity-st-mass_limit
+            for key,value in dict(small_step_spatial=mass_limit,finite_alpha=finite_alpha,continuity=continuity,storage_lifting=st).items():mechanisms[key]=mechanisms.get(key,np.zeros_like(value))+value
+            if round(s['time'],12) in (.001,.002):mechanism_times[str(round(s['time'],12))]={k:v.copy() for k,v in mechanisms.items()}
             tel+=native
             accepted=np.asarray(report['accepted_states'][i+1]);absolute=accepted[ids]-init[ids]
             telescope=fr.measure(tel-absolute)
@@ -245,7 +248,7 @@ def main():
                 continuity=fr.measure(continuity),storage_and_lifting=fr.measure(st),
                 continuity_tighter=continuity_unc,storage_lifting_tighter=storage_unc,
                 backward_velocity_storage_maximum=maximum(storage_expected),storage_lift_reconstruction=maximum(storage-storage_expected),
-                small_step_momentum_image=fr.measure(mass_limit),finite_alpha_remainder=fr.measure(dpi-continuity-mass_limit),
+                small_step_momentum_image=fr.measure(mass_limit),finite_alpha_remainder=fr.measure(finite_alpha),
                 telescope=telescope,absolute_pressure_change=fr.measure(absolute),stage_pressure=stage_pressure,
                 trace={k:attempt[k] for k in ('imposed_trace_defect','refreshed_trace_defect','trace_physical_storage_contribution_max')},
                 component_images=per_component,predictor_factor_nonzeros=fr.al.L.nnz+fr.al.U.nnz)
@@ -324,7 +327,7 @@ def main():
             write_json(a.output/'partial-bands.json',bands)
             np.savez(a.output/('pressure-vectors-'+dt+'.npz'),**{t+'|'+k:v for t,terms in times.items() for k,v in terms.items()})
             snapshots[dt]=s;del fr;gc.collect()
-        accum_by_time[dt]=times
+        accum_by_time[dt]=times;mechanism_by_time[dt]=mechanism_times
         vectors[dt]={t:{k:v.tolist() for k,v in terms.items()} for t,terms in times.items()}
     # Fixed physical pressure norm and actual free pressure space for signed pairing.
     fr=Frozen(snapshots['0.0005'],initial,c,weights,count)
@@ -367,6 +370,12 @@ def main():
             group=key.split('/')[0];groups[group]=groups.get(group,np.zeros_like(v))+v
         out['common'][t]=dict(pressure=fr.measure(total),sealed_CT11=direct,components=table,
             groups={k:dict(signed_alignment=fr.inner(v,total)/den,pressure=fr.measure(v)) for k,v in groups.items()})
+        md={k:mechanism_by_time['0.001'][t][k]-mechanism_by_time['0.0005'][t][k] for k in mechanism_by_time['0.001'][t]}
+        merror=fr.measure(sum(md.values(),np.zeros_like(total))-total)
+        require(merror['maximum_scaled_value']<1e-8,'finite-alpha mechanism signed sum')
+        out['common'][t]['mechanisms']={k:dict(signed_alignment=fr.inner(v,total)/den,pressure=fr.measure(v)) for k,v in md.items()}
+        out['common'][t]['mechanism_signed_sum_error']=merror
+        vectors.setdefault('_mechanisms',{})[t]={k:v.tolist() for k,v in md.items()}
     out.update(status='pass' if all(q['status']=='pass' for q in quad) else 'reconstruction_pass_quadrature_blocked',reconstruction_status='pass',
         quadrature_status='pass' if all(q['status']=='pass' for q in quad) else 'blocked',bands=bands,negative_actions=negatives,native_export_count=export_count,reused_native_export_count=reused_count,held_quadrature=quad,
         pressure_convention='absolute total-traction level; common means and variations retained without regauging',

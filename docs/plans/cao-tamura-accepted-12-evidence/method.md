@@ -63,3 +63,9 @@ native-increment, tighter-repeat and signed-sum uncertainty limit is 1e−8 on t
 u_tau² scale. Held-state governing-quadrature controls preserve coefficients and
 the pressure observation operator. Any failed capacity control is a blocked
 quadrature result, not a changed physical trajectory or permission to continue.
+
+A second signed telescope separates the consistent-mass small-step spatial
+image, finite-alpha remainder, continuity and backward-storage/lifting images
+at each common time. The finite-alpha remainder excludes the separately
+reported storage image. Its signed sum must reproduce the native paired
+pressure vector under the same 1e−8 physical error bound.
