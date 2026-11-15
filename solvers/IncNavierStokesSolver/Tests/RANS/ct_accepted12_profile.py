@@ -41,20 +41,37 @@ def snapshots(report,legacy):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('ct10','ct11','runtime','probe','contract','output'):p.add_argument('--'+k,type=Path,required=True)
+    p.add_argument('--recover',type=Path,help='Retain and bind the sole completed step1 from a wrapper failure; do not repeat it')
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3))
     require(sha(a.runtime/'IncNavierStokesSolver')=='5830a2cd8a4b0b5b12095555171eb28bc0f63e1daa97652d63da244c3fd808c7','foreign governing runtime')
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');pair=sealed(a.ct11/'target-v1');c=pair['case'];old=pair['members']['0.001'];folder=Path(old['directory']);legacy=n.read(folder/'case.evolution.json')
     require(sha(folder/'case.evolution.json')==old['native_report_sha256'],'changed CT11 native report')
     zero=a.ct11/'target-v1/zero-0.001';z=n.read(zero/'case.evolution.json')
+    work=a.recover or a.output;recovery=None
+    if a.recover:
+        original=n.read(work/'request-manifest.json')['request']
+        require(original['legacy_report']==sha(folder/'case.evolution.json') and original['runtime']==runtime_identity(a.runtime/'IncNavierStokesSolver') and
+                original['contract']==sha(a.contract) and not (work/'step2').exists(),'foreign or already advanced profiling recovery')
+        recovery=dict(root=str(work),request_sha256=sha(work/'request-manifest.json'),step1_report_sha256=sha(work/'step1/case.evolution.json'),
+            configuration_sha256=sha(work/'step1/case.xml'),timing_sha256=sha(work/'step1/timing.jsonl'),
+            history_sha256=artifact_hash(n.read(work/'step1/case.evolution.json')['checkpoint']),
+            failed_family_sha256=sha(work.parent/'resources-profile-v1/execution.json'),failure_log_sha256=sha(work.parent/'profile-v1-family.log'))
     m=RequestManifest(a.output,dict(schema='CT12TargetProfileRetentionV1',source=sha(Path(__file__)),contract=sha(a.contract),
-        case=c,dt=.001,accepted_steps=2,deliberate_rejected_attempts=1,initial_history=artifact_hash(z['checkpoint']),
+        recovered_step1=recovery,case=c,dt=.001,accepted_steps=2,deliberate_rejected_attempts=1,initial_history=artifact_hash(z['checkpoint']),
         legacy_report=sha(folder/'case.evolution.json'),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.probe/'RANSPreservationProbe'),
         scope='replay only,not a new physical qualification or longer continuation; detailed timing and external byte-preserving retention'))
     result=dict(schema='CT12TargetProfileRetentionV1',status='incomplete',members={});eligible=[];required={};reports={};template=folder/'case.xml';parent=Path(z['checkpoint'])
     for step in (1,2):
-        dest=a.output/('step'+str(step));n.make(dest,a.runtime,c,.001,1,parent,template);enable(dest)
-        os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');os.environ['NEKTAR_RANS_TIMING_FILE']=str(dest/'timing.jsonl');os.environ['NEKTAR_RANS_DETAILED_TIMING']='1'
-        e=run([a.runtime/'IncNavierStokesSolver','case.xml'],dest,'solver.log');os.environ.pop('NEKTAR_RANS_TIMING_FILE');os.environ.pop('NEKTAR_RANS_DETAILED_TIMING')
+        dest=work/('step'+str(step))
+        if step==1 and a.recover:
+            e=dict(exit_code=0,scope='reuse of the completed original native step; wrapper failed later hashing its checkpoint directory',
+                original_closed_family=str(work.parent/'resources-profile-v1/execution.json'),
+                limitation='first-run temporary run() RSS/library-map object was lost before receipt; detailed native times and exact state/stage evidence survive; second step is measured normally')
+        else:
+            n.make(dest,a.runtime,c,.001,1,parent,template);enable(dest)
+            os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');os.environ['NEKTAR_RANS_TIMING_FILE']=str(dest/'timing.jsonl');os.environ['NEKTAR_RANS_DETAILED_TIMING']='1'
+            e=run([a.runtime/'IncNavierStokesSolver','case.xml'],dest,'solver.log');write_json(dest/'native-execution.json',e)
+            os.environ.pop('NEKTAR_RANS_TIMING_FILE');os.environ.pop('NEKTAR_RANS_DETAILED_TIMING')
         r=n.read(dest/'case.evolution.json');require(e['exit_code']==0 and not r['failure'] and r['time']==legacy['audit_times'][step],'target profiling replay failed')
         require(exact_vector_hash(r['state'])==exact_vector_hash(legacy['accepted_states'][step]),'detailed timing changed accepted state')
         if step==2:require(same_history(legacy,r),'segmented profiling restart changed native history')
@@ -64,36 +81,41 @@ def main():
             t=json.loads(line)
             if t['step']<=0:initial_CPU+=t['exclusive_process_cpu_seconds'];continue
             v=costs[t['name']];v['calls']+=t.get('calls',1);v['CPU']+=t['exclusive_process_cpu_seconds'];v['wall']+=t['exclusive_wall_seconds'];exclusive+=t['exclusive_process_cpu_seconds']
-        for f in (dest/'case.evolution.json',dest/'case.xml',Path(r['checkpoint']),dest/'timing.jsonl'):required[str(f.relative_to(a.output))]=sha(f)
+        keep=[dest/'case.evolution.json',dest/'case.xml',dest/'timing.jsonl'];history=Path(r['checkpoint'])
+        keep.extend([history] if history.is_file() else [f for f in history.rglob('*') if f.is_file()])
+        for f in keep:required[str(f.relative_to(work))]=sha(f)
         result['members'][str(step)]=dict(time=r['time'],execution=e,accepted_state_sha256=exact_vector_hash(r['state']),history_sha256=artifact_hash(r['checkpoint']),configuration_sha256=sha(dest/'case.xml'),
             native_report_sha256=sha(dest/'case.evolution.json'),timing_sha256=sha(dest/'timing.jsonl'),initialization_exclusive_CPU=initial_CPU,
             accepted_exclusive_CPU=exclusive,categories=dict(costs),stage_equivalence=checks,
             legacy_exclusive_CPU=pair['first_stage_resource_plan']['timing'][0]['exclusive_step_CPU'][str(step)])
         parent=Path(r['checkpoint']);reports[step]=r;write_json(a.output/'progress.json',result);print('CT12 profile accepted',step,exclusive,flush=True)
     # The deliberate failure exercises retention/rollback, not constitutive admission.
-    dest=a.output/'rollback';n.make(dest,a.runtime,c,.001,1,Path(reports[1]['checkpoint']),a.output/'step1/case.xml');enable(dest)
+    dest=work/'rollback';n.make(dest,a.runtime,c,.001,1,Path(reports[1]['checkpoint']),work/'step1/case.xml');enable(dest)
     root=ET.parse(dest/'case.xml').getroot();set_parameter(root,'RANSWallPimpleHardAuditRejectStep',2);write(root,dest/'case.xml');os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib')
-    e=run([a.runtime/'IncNavierStokesSolver','case.xml'],dest,'solver.log');r=n.read(dest/'case.evolution.json')
+    e=run([a.runtime/'IncNavierStokesSolver','case.xml'],dest,'solver.log');write_json(dest/'native-execution.json',e);r=n.read(dest/'case.evolution.json')
     require(e['exit_code']!=0 and 'deliberate_PIMPLE_hard_audit_rejection' in r['failure'] and same_history(reports[1],r),'rejected operation failed to retain prior native history')
     require(bool(r['rejected_state']) and r['pimple_attempts'],'missing actual rejected candidate/stage')
     checks,files=snapshots(r,[legacy['pimple_attempts'][1]]);eligible.extend(files);eligible.append(dest/'solver.log')
-    for f in (dest/'case.evolution.json',dest/'case.xml',Path(r['checkpoint'])):required[str(f.relative_to(a.output))]=sha(f)
+    keep=[dest/'case.evolution.json',dest/'case.xml'];history=Path(r['checkpoint'])
+    keep.extend([history] if history.is_file() else [f for f in history.rglob('*') if f.is_file()])
+    for f in keep:required[str(f.relative_to(work))]=sha(f)
     result['rollback']=dict(status='pass',execution=e,failure=r['failure'],time=r['time'],last_accepted_state_sha256=exact_vector_hash(r['state']),
         rejected_state_sha256=exact_vector_hash(r['rejected_state']),history_sha256=artifact_hash(r['checkpoint']),native_report_sha256=sha(dest/'case.evolution.json'),stage_equivalence=checks)
     # Independent physical budgets consume these actual replay stage packets
     # before any payload becomes eligible for compressed retention.
     initial=n.read(a.ct10/'target-preflight-v1/target/readiness.json')
-    budget=bounded_budgets(a.probe,a.output/'step2',initial,reports[2],c)
+    budget=bounded_budgets(a.probe,work/'step2',initial,reports[2],c)
     require(budget['gate']['status']=='pass','actual replay physical-budget audit failed');result['budgets']=budget
-    audit_receipt=a.output/'independent-audit.json';write_json(audit_receipt,budget);required[str(audit_receipt.relative_to(a.output))]=sha(audit_receipt)
+    audit_receipt=work/'independent-audit.json';write_json(audit_receipt,budget);required[str(audit_receipt.relative_to(work))]=sha(audit_receipt)
+    if work!=a.output:write_json(a.output/'independent-audit.json',budget)
     controls={'native','q48f16','q64f16','q64f32'}
     for name in controls:
-        directory=a.output/'step2'/name
-        required[str((directory/'case.xml').relative_to(a.output))]=sha(directory/'case.xml')
+        directory=work/'step2'/name
+        required[str((directory/'case.xml').relative_to(work))]=sha(directory/'case.xml')
         eligible.extend(f for f in directory.iterdir() if f.is_file() and f.name!='case.xml')
     accepted_categories={}
     for step in (1,2):
-        directory=a.output/('step'+str(step));sizes=dict(native=0,audit=0)
+        directory=work/('step'+str(step));sizes=dict(native=0,audit=0)
         for f in directory.rglob('*'):
             if f.is_file():sizes['audit' if f.relative_to(directory).parts[0] in controls else 'native']+=f.stat().st_size
         accepted_categories[str(step)]=sizes
@@ -101,7 +123,7 @@ def main():
         initial_sha256=old['actual_initial_sha256'],last_accepted_sha256=exact_vector_hash(reports[2]['state']),native_rejected_report_sha256=sha(dest/'case.evolution.json'))
     proof=dict(status='pass',binding=binding,required_files=required,
         prerequisite='every accepted state,exact stage fields/operators,history,rejection and independent final budget audited before pruning; required reports/histories remain uncompressed')
-    result['retention']=retain(a.output,a.output.parent/'retention-v1',eligible,proof)
+    result['retention']=retain(work,a.output.parent/'retention-v1',eligible,proof)
     index=n.read(a.output.parent/'retention-v1/index.json');category={}
     for step,sizes in accepted_categories.items():
         category[step]={}
@@ -113,6 +135,6 @@ def main():
                 retained_bytes=sizes[lane]-sum(v['bytes'] for v in subset.values())+compressed)
     result['retention']['accepted_only_categories']=category
     result['retention']['forecast_scope']='Accepted-only categories exclude the intentionally duplicate rollback payload; failure dedup cannot be counted as ordinary evolution savings.'
-    result.update(status='pass',scope='two accepted target steps replayed exactly with genuine restart,one zero-acceptance rejection; physical pressure gate unchanged; output policy external only')
+    result.update(status='pass',recovery=recovery,work_root=str(work),scope='two accepted target steps replayed exactly with genuine restart,one zero-acceptance rejection; physical pressure gate unchanged; output policy external only')
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json','independent-audit.json']);return 0
 if __name__=='__main__':raise SystemExit(main())
