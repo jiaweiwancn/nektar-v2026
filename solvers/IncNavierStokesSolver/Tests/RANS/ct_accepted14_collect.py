@@ -5,6 +5,9 @@ import argparse,json,os,resource,time
 from pathlib import Path
 from rans_qualification import THREADS,exact_vector_hash
 os.environ.update(THREADS)
+import numpy as np
+import ct_accepted8_native as n
+from ct_accepted10_compare import regional_pressure
 from ct_accepted9_pressure_run import sealed
 from ct_accepted11_target import target_pair
 from ct_accepted_budget_gate import physical_budgets
@@ -41,6 +44,12 @@ def main():
             require(r['execution']['exit_code']==0 and r['predictor_factor_nnz']<=40000000 and r['pressure_C_nnz']==0,'static flow/capacity')
             if label in ('q48','q64'):require(r['pressure_change_scaled_maximum']<1e-8,'static governing quadrature')
         for r in s['physical_scalar_controls'].values():require(r['execution']['exit_code']==0 and r['execution']['peak_virtual_KiB']<=16*1024**2 and r['classification']['reconstruction_status']=='pass','static scalar capacity/reconstruction')
+        # Add the requested initial regional pressure diagnostics from the
+        # hash-bound native observation. This does not change its sealed body.
+        packet=a.static/'target/frozen.json';require(sha(packet)==s['native_packet_sha256'],'static native observation changed');q=read(packet)
+        weights=np.asarray(n.inventory(s['case'])[2]);count=len(weights);regions=np.asarray(q['observation']['grid_regions'][:count]);pi=np.asarray(q['observation']['grid_values'])[:count,4];col=n.col(s['case'])
+        truth=np.where(regions,n.reference(col,s['case']['H'],True)[3],n.reference(col,s['case']['H']/2,False)[3]);require(np.isfinite(pi).all(),'nonfinite initial regional pressure')
+        s['initial_regional_pressure_reference_error']=regional_pressure(pi,truth,weights,regions,s['case']['ustar']**2);del q
         out['static']=s
     if a.pair:
         require(a.static is not None,'physical pair needs its admitted static receipt');pair=sealed(a.pair);pr=read(a.pair/'request-manifest.json')['request'];require(pr['static']==sha(a.static/'results.json') and pr['component']==sha(a.component/'results.json') and pr['capacity']==sha(a.capacity/'results.json') and pr['runtime']==runtime and pr['probe']==probe,'pair exact-runtime prerequisite binding')
