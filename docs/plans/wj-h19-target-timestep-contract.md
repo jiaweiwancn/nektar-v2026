@@ -39,7 +39,9 @@ Audit coarse CP0 and every completed coarse step. Preserve native hard checks,
 quality>=.002068763923454, transverse/covariance/root/scalar/viscosity/cutoff
 checks and all255+525 signed Q1 moments<=2e-15. Strong divergence is separate.
 One U/P/k/epsilon solve and one bound call per successful attempt, zero bound
-activation/material correction. A failed or unresolved gate stops further work.
+activation/material correction. A failed or unresolved gate stops further work. A new execution-only REVIEW_STOP
+ACK commits the current physically verified checkpoint, then stops before the next
+advance with a distinct TEMPORAL_REVIEW_STOP reason; it is not a constitutive exit.
 
 H18 strict replay remains unchanged. H19 physical-time pairs are coarse1/fine2
 at.005 and coarse2/fine4 at.01, recorded within128*eps*max(1,abs(t)). Each has

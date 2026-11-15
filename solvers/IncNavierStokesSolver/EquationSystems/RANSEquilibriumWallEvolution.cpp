@@ -412,6 +412,7 @@ void RANSEquilibriumWallEvolution::CompleteMonitoring(double nativeSeconds)
     M::Atomic(m_monitorDirectory+"/qualified-cursor.json",qualified,false);
     if(m_checkpointAudit)M::Atomic(m_monitorDirectory+"/latest-fully-verified-checkpoint.json",qualified,false);
     ++m_independentQualified;m_qualifiedCheckpoint=m_lastCheckpoint;
+    Require(next!="REVIEW_STOP","TEMPORAL_REVIEW_STOP provisional sensitivity screen; current physical verification committed, no next advance");
     Require(next!="RESOURCE_LIMIT","RESOURCE_LIMIT prospective next-stage/readback budget");
     Require(next!="TERMINAL" || step==m_monitor.get<std::size_t>("maximum_absolute_step"),"premature terminal ACK");
 }

@@ -96,7 +96,7 @@ inline std::string Wait(const std::string &directory,const std::string &stem,con
             CheckPin(a.get_child("qualified_cursor"));const auto cursor=Read(a.get<std::string>("qualified_cursor.path"));
             SameObject(expected,cursor.get_child("binding"));D::Check(cursor.get<std::string>("ready_sha256")==readyHash,"qualified cursor ready differs");
             D::Check(cursor.get<std::string>("inventory_sha256")==a.get<std::string>("inventory.sha256"),"cursor actual inventory differs");
-            const auto next=a.get<std::string>("continuation");D::Check(next=="PROCEED" || next=="TERMINAL" || next=="RESOURCE_LIMIT","invalid continuation decision");
+            const auto next=a.get<std::string>("continuation");D::Check(next=="PROCEED" || next=="TERMINAL" || next=="RESOURCE_LIMIT" || next=="REVIEW_STOP","invalid continuation decision");
             D::Check(::rename(ack.c_str(),(directory+"/"+stem+".ack.consumed.json").c_str())==0,"cannot consume observer ACK");
             D::SyncDirectory(ack);return next;
         }
