@@ -70,6 +70,9 @@ def main():
     for folder in sorted(a.root.glob('resources-*')):
         watch=folder/'package-budget-watch.json'
         if watch.exists():record(watch,True)
+        for filename in ('live-memory-observations.jsonl','live-memory-summary.json'):
+            memory=folder/filename
+            if memory.exists():record(memory,filename.endswith('summary.json'))
     guard_controls=a.root/'package-guard-controls-v1/results.json'
     if guard_controls.exists():record(guard_controls,True)
     for key in bodies:
