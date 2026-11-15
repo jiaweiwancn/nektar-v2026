@@ -99,6 +99,52 @@ success of original-system COLAMD, rather than a seed/threshold sweep. Each
 attempt has a prospective amendment and an immutable failed witness. All
 attempts count toward the one CT14 allocation.
 
-Capacity/component qualification admits the prospectively recorded
-[static tests](cao-tamura-accepted-14-evidence/static-tests-v1.json).
-**Complete selected static admission and the physical pair remain pending.**
+## Complete selected static admission
+
+The prospectively recorded [static tests](cao-tamura-accepted-14-evidence/static-tests-v1.json)
+pass on the actual selected 62,533-slot space. Fresh initialization reproduces
+the stored CT12/13 coefficients exactly, SHA256
+`dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a`.
+Both new-component complete-command factor-free exports have zero sparse
+factorizations and exact canonical matrix/RHS/history/mask/lift equality to
+the CT13 capacity inputs at alpha1000/2000.
+
+| Selected static quantity | Measured | Criterion |
+|---|---:|---:|
+| U / k / outer-epsilon initial scaled reference RMS | 9.85149e-6 / 1.03679e-5 / 6.05198e-7 | each <=1e-3 |
+| w / absolute-Pi initial scaled reference RMS | 0 / 3.01921e-16 | <=1e-4 / <=1e-3 |
+| Physical ground / full-interface traction error | 1.41528e-15 / 2.16173e-15 | each <=1e-3 |
+| Reconstructed physical outlet traction mismatch | 8.44214e-5 | reported natural-face diagnostic |
+| All-mode signed momentum reconstruction | 9.74901e-15 | <=2e-10 |
+| q48 / q64 maximum scaled pressure-action change | 1.28385e-10 / 2.44748e-10 | each <1e-8 |
+| Minimum sampled inner k | .021081109428869045 | >0 |
+| Minimum full 3D covariance eigenvalue | .006110429044108287 | >=-1e-10 K0 |
+| Minimum sampled A95 radicand | .6916508330449576 | >=0 |
+| Maximum scalar-control VmPeak, KiB | 15,894,660 | <=16,777,216 |
+
+Every native domain/cutoff/hard-admissibility flag passes. Physical gradients,
+signed loads, regional absolute pressure and scalar/consistent-mass/full-pressure
+actions remain in the [complete static body](cao-tamura-accepted-14-evidence/static-v1/static.json)
+and [independent collection](cao-tamura-accepted-14-evidence/static-v1/collected.json).
+Native, q48f16, q64f16 and q64f32 scalar controls all pass complete capacity and
+all-row source/physical-flux reconstruction. Their initialized frozen role is
+explicit; these are not evolved consecutive-state budget passes. The largest
+address-space control leaves 882,556 KiB below the unchanged guard.
+
+The native regional initial pressure-reference differences are zero; independent
+Python basis accumulation resolves a roundoff-scale global difference listed
+above. No mean is subtracted. The alpha2000 frozen pressure response is a
+different numerical action, not a common-time physical pair or a pressure pass.
+Imposed dependent-epsilon trace and post-k lag remain separate observables.
+
+Closed owned-family CPU before the static collector is **4,278.57 seconds**.
+Retained new output before collection is **3,369,692,975 bytes**. The conservative
+whole-package elapsed-wall upper bound is 5,347.83 seconds, including source,
+transport and inspection. The collector/publication reserves and exact closed
+receipts are separate in the evidence; all fit the one CT14 allocation.
+
+The [short-pair contract](cao-tamura-accepted-14-evidence/short-pair-contract-v1.json)
+now binds these passing seals, exact runtime, actual initial coefficients and
+unchanged CT11 classifiers. It admits two fresh independent .001/.0005 native
+histories only to T=.002. **The physical pair remains unattempted until this
+checkpoint is pushed; CT14 is not yet PASS.**
