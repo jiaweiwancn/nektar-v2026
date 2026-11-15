@@ -13,12 +13,31 @@ from ct_accepted11_target import target_pair
 from ct_accepted14_gate import cohort_pair
 from ct_accepted_budget_gate import physical_budgets
 from ct_accepted14_pair import numerical_receipts
+from ct_accepted10_diagnose import matrix
 from ct_accepted_open import require
 from compare_cls_epawf_pimple import same_history
 from ct_accepted_feasibility import write_json
 from rans_request_manifest import RequestManifest,sha,runtime_identity
 
 def read(p):return json.loads(Path(p).read_text())
+
+def pressure_receipts(native):
+    """Recover each actual GMRES RHS from its sealed native flow snapshot.
+
+    Direct factor applications have their own receipts. This separately checks
+    the iterative pressure solve on D*predictor+native_continuity_residual,
+    using the stored original-system residual,without another solve.
+    """
+    rows=[]
+    for attempt in native['pimple_attempts']:
+        if not attempt.get('flow_snapshot'):
+            require(not attempt.get('scheduled_complete'),'completed flow lacks native snapshot');continue
+        path=Path(attempt['flow_snapshot']);require(sha(path)==attempt['flow_snapshot_sha256'],'changed native pressure snapshot');q=read(path);nv=q['velocity_size'];op=q['pressure_operator'];require(op['kind']=='consistent-mass Schur action','foreign governing pressure inverse')
+        D=matrix(op['D']).astype(np.longdouble);rhs=np.asarray(D@np.asarray(q['predictor_increment'],np.longdouble),float);rhs+=np.asarray(q['frozen_flow_residual'][nv:]);res=np.asarray(q['pressure_linear_residual']);scale=float(np.max(abs(rhs),initial=0.));error=float(np.max(abs(res),initial=0.));bound=2e-12*scale+1e-25
+        require(np.isfinite(rhs).all() and np.isfinite(res).all() and error<=bound,'actual iterative pressure original-system residual')
+        rows.append(dict(time=q['time'],alpha=q['alpha'],rhs_maximum=scale,true_residual=error,bound=bound,residual_bound_fraction=error/bound,snapshot=str(path),snapshot_sha256=sha(path),D_sha256=op['D']['sha256']))
+    require(len(rows)==native['steps'],'actual pressure solve coverage')
+    return dict(status='pass',count=len(rows),maximum_residual_bound_fraction=max((r['residual_bound_fraction'] for r in rows),default=0.),solves=rows,scope='read-only recovery from actual native snapshots; native GMRES also enforces this bound before acceptance; no pressure mean removal or extra solve')
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('root','capacity','component','runtime','output','self-control'):p.add_argument('--'+k,type=Path,required=True)
@@ -64,15 +83,17 @@ def main():
                 for prefix in ('','tiny_','cancelling_'):require(r['ordering'][prefix+'true_residual']<=2e-12*r['ordering'][prefix+'rhs_maximum']+1e-25,'changed-alpha actual/tiny/cancelling residual')
             for r in ad['controls'].values():require(r['execution']['exit_code']==0 and r['execution']['peak_address_space_KiB']<=16*1024**2 and r['predictor_factor_nnz']<=40000000 and r['pressure_change_scaled_maximum']<1e-8,'changed-alpha action/capacity/quadrature primitive')
             out['timestep_admission']=ad
+        pressure={}
         for name,r in pair['members'].items():
             folder=Path(r['directory']);native=read(folder/'case.evolution.json');require(sha(folder/'case.evolution.json')==r['native_report_sha256'] and exact_vector_hash(native['state'])==r['state_sha256'] and exact_vector_hash(native['accepted_states'][0])==r['actual_initial_sha256'],'physical member actual state/report identity')
             require(native['dt']==float(name) and native['steps']==round(native['time']/float(name)) and len(native['accepted_states'])==native['steps']+1,'actual native timestep/state coverage')
             require(numerical_receipts(folder/'sparse-receipts.jsonl')['status']=='pass','actual evolution linear receipts')
+            pressure[name]=pressure_receipts(native)
             require(physical_budgets(r['budgets'])['status']=='pass','actual consecutive-state budgets')
         require(pair['required_dt']==pr['dt'],'physical cohort differs from sealed request')
         if pair['required_dt']!=[.001,.0005]:require(pr.get('timestep_admission') and pr.get('request_specialization_source')==sha(Path(__file__).with_name('ct_accepted14_gate.py')),'missing request-only specialization/admission binding')
         decision=cohort_pair(pair,pr['dt']);require(decision==pair['qualification'],'physical pass label differs from unchanged scientific classifier')
-        out['pair']=pair;out['closure']='PASS' if decision['status']=='pass' else 'UNRESOLVED'
+        out['pair']=pair;out['iterative_pressure_receipts']=pressure;out['closure']='PASS' if decision['status']=='pass' else 'UNRESOLVED'
     resources={};cpu=wall=0.;project=aggregate=0
     for folder in sorted(a.root.glob('resources-*')):
         if folder==a.self_control:continue

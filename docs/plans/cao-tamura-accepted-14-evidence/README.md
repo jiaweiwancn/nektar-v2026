@@ -123,6 +123,10 @@ For retry collection/publication, also supply `--admission NEW/timestep` to
 changed-alpha seal and retain its request/completion bindings. Final publication
 includes the package guard's real positive and explicitly synthetic stop
 controls. The latter's artificial spent-CPU counter is never scientific cost.
+Final collection also recovers every iterative pressure RHS from its actual
+native D, predictor increment and continuity residual, then checks the stored
+unscaled pressure residual against the original bound. This reads the saved
+snapshots and performs no additional governing or pressure solve.
 
 The original failed ordering controls can be reproduced individually with their
 preserved utility/runtime, exact canonical A/RHS and recorded work allocation.
