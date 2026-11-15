@@ -9,6 +9,7 @@ from wj_h22_replay import DT,END,MATRIX,selected,phases,flow_vectors,integer,rea
 from wj_h22_phase import branch_window,cross_window
 from run_wj_h22 import command_level
 from study_wj_h22 import validate_intent,protected_case,xml_case
+from wj_h22_observer import prepared_cursor
 import test_wj_h20_three_level as h20_fixture
 
 def actual_fixture():
@@ -141,5 +142,14 @@ class NativePhaseReplay(unittest.TestCase):
         self.assertIn('predictor,bGz,du,dz',block)
         self.assertLess(sweep.index('const auto flowState=s;'),sweep.index('RANSWallFlowCapture::Write'))
         self.assertIn('MappedBlockV1 rejects legacy dense arithmetic/verification before allocation',(root/'RANSWallEvolutionPatch.cpp').read_text())
+
+    def test_prepared_cursor_binds_actual_inventory_for_native_wait(self):
+        binding=dict(state_sha256='actual-state',absolute_step='1')
+        p=prepared_cursor(binding,dict(sha256='actual-ready'),dict(sha256='actual-inventory'),dict(sha256='actual-prefix-proof'))
+        self.assertEqual(p['binding'],binding)
+        self.assertEqual(p['ready_sha256'],'actual-ready')
+        self.assertEqual(p['inventory_sha256'],'actual-inventory')
+        self.assertEqual(p['prefix_parity']['sha256'],'actual-prefix-proof')
+        self.assertEqual(p['role'],'PREPARED_NOT_NATIVE_COMMIT')
 
 if __name__=='__main__':unittest.main()

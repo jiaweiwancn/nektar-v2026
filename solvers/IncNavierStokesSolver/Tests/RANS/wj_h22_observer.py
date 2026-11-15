@@ -13,6 +13,10 @@ from wj_h22_replay import DT,END,read_completed,recovery,parity,phases,flow_vect
 from wj3_measure import checkpoint_payload
 from study_wj_h16 import same_cp
 
+def prepared_cursor(binding,ready_pin,inventory_pin,proof_pin):
+    return dict(role='PREPARED_NOT_NATIVE_COMMIT',binding=binding,ready_sha256=ready_pin['sha256'],
+                inventory_sha256=inventory_pin['sha256'],prefix_parity=proof_pin)
+
 def prefix(root,directory,level,step,inputs,offsets):
     predecessor=checkpoint_payload(verify(inputs['cp0'][level]['checkpoint']).parent,include_reference=True)
     records=[]
@@ -83,19 +87,22 @@ def daemon(root,intent_path,compat):
             scope='exact every-recovery parity and genuine selected phases/vectors before scientific ACK; nondue full audits remain NOT_SCHEDULED'))
         r,result,dest,inventory=evaluate(ready,f'step-{step}',step)
         status=result['status'];prepared=directory/f'step-{step}.prepared.json'
-        if status=='PASS':atomic(prepared,dict(role='PREPARED_NOT_NATIVE_COMMIT',binding=b,ready_sha256=identity(path)['sha256'],prefix_parity=identity(proof)))
+        if status=='PASS':atomic(prepared,prepared_cursor(b,identity(path),identity(inventory),identity(proof)))
         atomic(directory/f'step-{step}.ack.json',dict(schema='WJObserverAckV1',status=status,ready_sha256=identity(path)['sha256'],binding=b,
             result=identity(dest),inventory=identity(inventory),qualified_cursor=identity(prepared)if status=='PASS'else identity(dest),continuation='TERMINAL'))
         if status!='PASS':
             from run_wj_h22 import halt
             halt(root,'coverage_halt',dict(level=level,step=step,evidence=identity(dest)))
     except Exception as error:
-        failed=directory/'first-replay-capture-failure.json';atomic(failed,dict(status='FAIL',reason=repr(error),binding=b))
+        failed_inventory=directory/'first-replay-capture-failure.inventory.json'
+        atomic(failed_inventory,dict(status='FAIL_NOT_A_SCIENTIFIC_INVENTORY',reason=repr(error)))
+        failed=directory/'first-replay-capture-failure.json';atomic(failed,dict(status='FAIL',reason=repr(error),binding=b,
+            inventory_sha256=identity(failed_inventory)['sha256']))
         from run_wj_h22 import halt
         halt(root,'integrity_halt',dict(level=level,step=step,evidence=identity(failed),reason=repr(error)))
         # A completed state remains unqualified; native consumes a genuine FAIL.
         atomic(directory/f'step-{step}.ack.json',dict(schema='WJObserverAckV1',status='FAIL',ready_sha256=identity(path)['sha256'],binding=b,
-            result=identity(failed),inventory=identity(failed),qualified_cursor=identity(failed),continuation='TERMINAL'))
+            result=identity(failed),inventory=identity(failed_inventory),qualified_cursor=identity(failed),continuation='TERMINAL'))
     while not(directory/'observer-stop.json').exists():time.sleep(.025)
 
 if __name__=='__main__':
