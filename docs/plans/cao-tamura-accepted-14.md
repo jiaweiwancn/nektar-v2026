@@ -1,6 +1,6 @@
 # CT14: short full-domain A95 flat-pilot qualification
 
-Status: **IN PROGRESS; first fresh pair fails absolute-pressure uncertainty; bounded temporal remedy pending**.
+Status: **IN PROGRESS; first pair fails pressure; changed-timestep admission passes; fresh retry contracted**.
 
 Fetched `codex/a93-a95-e94e95-awf` on 2026-11-15: actual remote and clean
 dedicated Mac worktree both at `f121dd1e5dc14ed147714876ea182a913e6fcae5`.
@@ -193,3 +193,25 @@ ordering, collector and publisher attempts remain charged. The first publisher
 rejected a dependency identity because its private library environment was
 missing; the corrected environment passed without changing native data or
 runtime. The source publisher now establishes that environment explicitly.
+
+The [changed-timestep admission](cao-tamura-accepted-14-evidence/timestep-v1/results.json)
+now passes all six native/q48/q64 full action controls and both canonical
+alpha4000/8000 factor-free exports, exact G/D/C/M and initial/history identities,
+independent alpha-mass relations, inverse permutations and actual/tiny/cancelling
+RHS controls. The mass-relation scaled defects are1.56146e-16/1.33840e-16.
+Native fills are37,199,662/37,162,966; q64 maxima37,199,666/37,162,970.
+The largest q64 pressure-action change is1.95452e-9, below1e-8. Classifier
+same-cohort parity, ten physical/request negatives, the explicitly synthetic
+new-request positive, foreign-old-cohort rejection and actual-dt coverage
+negative all pass. No old history or physical metric is relabelled.
+
+The [fresh retry contract](cao-tamura-accepted-14-evidence/short-pair-contract-v2.json)
+binds its complete result SHA256
+`ed814ff3b1e085ebd588e59f9bac15b269a70209aeb55e7275f776ec2a52548b`,
+the unchanged static/component/runtime seals, actual initialized coefficients,
+and two new independent8/16-step histories. It must be pushed before dispatch.
+Closed CPU before this retry is10,660.31 seconds; conservative whole-package
+wall11,675.59 seconds; retained output6,283,290,649 bytes. The package guard
+counts live launcher, worker monitor and owned-family CPU plus every closed
+attempt, and stops before the global CPU/wall/output ceilings with explicit
+publication reserves. The physical retry remains an independent pending gate.

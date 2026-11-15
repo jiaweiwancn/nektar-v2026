@@ -5,7 +5,7 @@
 Run inside ct_accepted3_command.py. Include both outer launcher and worker
 monitor in live CPU; leave them alive to close their receipt after a stop.
 """
-import argparse,json,os,signal,subprocess,time
+import argparse,json,os,resource,signal,subprocess,time
 from pathlib import Path
 from rans_qualification import THREADS
 os.environ.update(THREADS)
@@ -32,6 +32,7 @@ def family(rows,root):
         owned.update(more)
 
 def main():
+    resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3))
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--control',type=Path,required=True);p.add_argument('command',nargs=argparse.REMAINDER);a=p.parse_args();cmd=a.command[1:] if a.command[:1]==['--'] else a.command
     rows=processes();parent=rows[os.getpid()]['parent'];outer=rows[parent]['parent'];require(outer in rows,'missing owned outer launcher')
     closed=0.;receipts={}

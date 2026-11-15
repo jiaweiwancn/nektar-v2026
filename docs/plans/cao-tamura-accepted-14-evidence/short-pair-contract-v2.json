@@ -1,0 +1,73 @@
+{
+  "schema": "CT14AdmittedShortPairContractV2",
+  "dt": [
+    0.00025,
+    0.000125
+  ],
+  "T": 0.002,
+  "static_sha256": "69b3ec6fecaf9273f65429365274ee524458e675d75359ec79d0f73960b8693e",
+  "component_sha256": "13a9088e1fa4372a63a35a0f5afe7e2c4693847f05f5c76c6147d96c2d83e9c7",
+  "capacity_sha256": "351b6ca047fb358f2e1f4101a36fc78a5ec7cc22a9d5b7c7f5a28a68a3637347",
+  "static_collector_sha256": "0000a93c061b9ad081d1b3d8482c6b5b23a3fb122e094cf43b9b56e182f8d3fb",
+  "physical_manifest_sha256": "004bc0fc82054296a68d56de77751fc1f0a41570ee16b0a174ae8087f262d296",
+  "component_identity": "CT14-VectorCOLAMDV1",
+  "governing_sha256": "9ae7d3c63492c82a4c9f979616f673d8e4909a5c41ee8069fc1592f2fb23da06",
+  "probe_sha256": "95d6a0258926ab250b69ea0940976f43a993bf4bdccc3001a5819f4f36835824",
+  "actual_initialized_state_sha256": "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+  "slots": 62533,
+  "elements": 961,
+  "initial_histories": "Two fresh independent native zero-step histories created before either advances; identical actual coefficients,own dt and component-specific identity; each member consumes only its own checkpoint",
+  "classifier": "CT11 target_pair scientific AST unchanged; exactly required-dt list and member-name set specialized for the prospectively admitted cohort. No native history/time/metric relabelled. Original source hash and parity/negative controls sealed in timestep admission.",
+  "limits": {
+    "U_k_epsilon_Pi_drift": 0.001,
+    "w_drift": 0.0001,
+    "ground_full_interface_traction": 0.001,
+    "normalized_net_mass": 1e-08,
+    "physical_scalar_budget": 0.02,
+    "field_and_traction_timestep": "delta<=max(1e-7,.1*max(own-initial endpoint drifts)); absolute Pi without gauge/mean subtraction,retiming,regional omission or reference-error substitution",
+    "all_row_reconstruction": 2e-10,
+    "true_residual": "2e-12*maxabs(rhs)+1e-25; IR<=3",
+    "slots": 70000,
+    "matrix_nonzeros": 20000000,
+    "factor_entries": 40000000,
+    "AS_bytes": 17179869184
+  },
+  "admissibility": "Mandatory native states/stages plus independent physical grid: local/endpoint k,outer epsilon,covariance,A95 radicand and cutoff. Imposed epsilon trace separate from refreshed post-k lag; no repair.",
+  "observations": "Initial representation,own-initial drift,absolute reference error and common-time differences separately; current-K physical ground/full-interface/outlet traction,mass,complete native/q48f16/q64f16/q64f32 actual consecutive-state/stage scalar budgets,absolute/regional pressure and every produced factor/solve receipt",
+  "quadrature": "Retain admitted native/q48/q64 governing action controls and all four complete physical-scalar controls; fixed physical field-difference quadrature exactly integrates polynomial P4/P2 differences on this affine mesh; physical tractions use the existing native64 face rule and unchanged classifier",
+  "performance": "Detailed timing off; retain total actual native CPU/wall/memory and mandatory solve/factor receipts; no assumed long-run throughput/output admission",
+  "resources": {
+    "additional_CPU_planning_seconds": 9000,
+    "additional_wall_planning_seconds": 11000,
+    "additional_output_planning_bytes": 6442450944,
+    "per_native_zero_CPU_soft": 300,
+    "per_native_zero_wall": 600,
+    "per_native_trajectory_CPU_soft": 4000,
+    "per_native_trajectory_wall": 4800,
+    "physical_scalar_probe_wall": 1200,
+    "retained_new_bytes": 6283290649,
+    "global_CPU_limit": 24000,
+    "global_active_wall_limit": 28800,
+    "global_new_output_bytes": 17179869184,
+    "workers": "<=16 project/72 aggregate,library threads1,one numerical family",
+    "package_budget_watch": "ct_accepted14_budget.py includes live launcher/monitor/whole family plus all closed attempts; stop at23760CPU,28560wholewall,15.75GiB retained output,leaving collection/publication reserves",
+    "closed_CPU_before_retry": 10660.30642,
+    "wall_upper_before_retry": 11675.592824459076
+  },
+  "failure": "Preserve failed histories and exact witnesses; diagnose signed residuals/stages/pressure images/refinement; prospectively record smallest justified numerical remedy and requalify affected gates before a fresh attempt. Never extend T=.002 or weaken physical/uncertainty/resource criteria.",
+  "forbidden": "No model/calibration change,residual subtraction,reference reset,pressure renormalization/regauging,clipping,trace repair,additional governing sweep,source/turbulence retuning,meaningful preservation,terrain,other-model displaced,smooth production,EP,MPI/3D or variable-height production",
+  "previous_pair_sha256": "dc11f77a2b60133d4a501f9ddf18929144c146dd0871ef444c927f2c08edbda3",
+  "timestep_attempt_contract_sha256": "d0083afbe7d6992c7c884ba9bd4f49680a4427f798c3b959cdc7a12eea40d284",
+  "timestep_admission_sha256": "ed814ff3b1e085ebd588e59f9bac15b269a70209aeb55e7275f776ec2a52548b",
+  "request_specialization_sha256": "6c0e5baa915af5fac4a839c75dd84e0e9a1b682fdd8504f96dcbd0467fab2d2c",
+  "fresh_history": "Two fresh independent native zero-step histories for actual dt=.00025/.000125,each consumes its own checkpoint; identical actual initialized state; no continuation/relabel of pair-v1",
+  "alpha": [
+    4000,
+    8000
+  ],
+  "steps": [
+    8,
+    16
+  ],
+  "affected_gates": "All six native/q48/q64 full flow/scalar/consistent-mass/pressure controls and both canonical factor-free mass relations,actual/tiny/cancelling RHS/permutation controls,plus classifier parity/negative controls pass; exact sealed result is bound above"
+}

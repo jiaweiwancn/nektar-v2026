@@ -1,0 +1,42 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted14_timestep.py",
+    "--runtime",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/build-runtime-v1/runtime",
+    "--static",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/static-v1",
+    "--previous-pair",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v1",
+    "--contract",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/source/docs/plans/cao-tamura-accepted-14-evidence/timestep-attempt-2.json",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/timestep-v1"
+  ],
+  "exit_code": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "control_parent_pid": 296001,
+  "guard_pid": 296098,
+  "owned_family_pid": 296101,
+  "wall_seconds": 1299.585914566007,
+  "allocation_wait_seconds": 0.0,
+  "process_cpu_seconds": 1785.6146110000004,
+  "resource": {
+    "maximum_aggregate": 19,
+    "maximum_project": 11,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "pass",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+}
