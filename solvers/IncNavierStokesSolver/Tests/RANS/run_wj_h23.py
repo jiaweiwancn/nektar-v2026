@@ -31,7 +31,7 @@ def command_kind(root,argv):
     base=[sys.executable,'-B',str(Path(__file__).with_name('study_wj_h23.py')),'--root',str(root),'--mode']
     for k in NATIVE:
         if list(map(str,argv))==base+[k]:return k
-    raise AssertionError('outside one zero-advance verification, four F advances, two strict reads')
+    raise AssertionError('outside the fixed H23 M/C/F governor and three strict-read matrix')
 
 def reserve_native(b,kind):
     order=list(NATIVE);used=b['native_reservations']
@@ -96,7 +96,9 @@ def execute(root,label,argv,seconds,phase='passive',kind='passive'):
             try:
                 rss,_=tree_usage(os.getpid());peak=max(peak,rss);groups|=owned_groups(child.pid);mappings(child.pid)
                 if rss>8*1024**3 or time.monotonic()-start>seconds:reason='RESOURCE_LIMIT RSS/time'
-                if size(root/'source')>8*1024**3 or size(root/'science')+size(root/'publication-v1')>2*1024**3:reason='RESOURCE_LIMIT new storage'
+                source_bytes=sum(size(p)for p in root.iterdir()if p.is_dir()and p.name.startswith('source'))
+                output_bytes=sum(size(root/n)for n in ('science','publication-v1')if(root/n).exists())
+                if source_bytes>8*1024**3 or output_bytes>2*1024**3:reason='RESOURCE_LIMIT new storage'
                 if scientific_workers()['workers']>72:reason='RESOURCE_LIMIT workers'
             except Exception as e:reason='OPERATIONAL_MONITOR_ERROR '+repr(e);groups.add(child.pid)
             if reason:
@@ -114,7 +116,7 @@ def execute(root,label,argv,seconds,phase='passive',kind='passive'):
     count={'M':8,'C':4,'F':16}.get(kind,0);unknown=kind in ('M','C','F')
     if(folder/'attempt-counts.json').exists():
         c=load(folder/'attempt-counts.json');count=c['actual_attempts'];assert 0<=count<={'M':8,'C':4,'F':16}.get(kind,0);unknown=False
-    entry=dict(status='RESOURCE_LIMIT'if reason else'PASS'if code==0 else'FAIL',phase=phase,kind=kind,
+    entry=dict(status=('OBSTRUCTED'if reason.startswith(('OPERATIONAL','RUNTIME'))else'RESOURCE_LIMIT')if reason else'PASS'if code==0 else'FAIL',phase=phase,kind=kind,
         seconds=time.monotonic()-start,reserved_seconds=seconds,exit=code,reason=reason,peak_tree_rss_bytes=peak,
         charged_attempts=count,unknown_attempts=unknown,log_sha256=sha(folder/'command.log'))
     save(folder/'native-exec-samples.json',maps);complete_operation(journal,label,entry);save(folder/'receipt.json',dict(request,**entry))
