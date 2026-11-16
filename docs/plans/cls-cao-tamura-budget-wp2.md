@@ -1,8 +1,8 @@
 # WP2: neutral open approach-flow qualification
 
-2026-11-16, Asia/Shanghai. Checkpoint 1 is complete for both deployed regularized
-CLS and calibrated standard k–epsilon. WP2 remains **OPEN**: the common spatial
-and physical-transit preservation gates have not yet passed.
+2026-11-16, Asia/Shanghai. Checkpoints 1 and 2 pass for both deployed regularized
+CLS and calibrated standard k–epsilon. WP2 remains **OPEN**: timestep/cost and
+physical-transit preservation qualification are next.
 
 The physical calibration, full-height analytical inlet, local transported-K
 cutoff budget and one-sweep equations are unchanged. The new
@@ -40,10 +40,41 @@ progress is:
 | 8002, energy | .001272 / .0004486 / .0001386 / .00006463 | .001056 / .00001863 / .0001302 / .0001034 |
 | 9882, upper refinement | .001236 / .0004280 / .0001343 / .00006288 | .001026 / .000003697 / .0001265 / .0001025 |
 
-U still exceeds .001. Further refinement must follow localized signed residual
-and derivative evidence. The 9882-slot zero-step audit took 67–74 s with peak RSS
-3.72 GiB. The default 3000-slot evolution guard is unchanged at this checkpoint;
-larger zero-step diagnostics do not qualify affordable larger evolution.
+The upper-only refinement was ineffective. Signed panel contractions against
+the full inverse free-row mass located large cancellation around the matching
+plane, with shared CG rows and cross terms retained. Splitting the last inner
+and first two outer panels gives the selected **8650-slot** common case:
+
+| Case | CLS U / W / k / epsilon | Standard U / W / k / epsilon |
+|---|---|---|
+| Selected | .000469076 / .000166622 / .000126918 / .000036735 | .000412545 / .000018553 / .000120549 / .000029991 |
+| 11014-slot confirmation | .000329744 / .000137559 / .000072366 / .000033939 | .000277433 / .000018548 / .000067656 / .000026954 |
+
+Both cases use the complete six-column topology, cubic fields and regional P1
+pressures. Increasing source/face quadrature from GL16 to GL24 changes the
+selected block norms by at most 2.2e-11. Independent GL28 plus the frozen
+physical stations and exact native side limits pass both models' full physical
+budgets. Independent covariance minima (inner, outer) are
+(.00631381050,.00609524100) for CLS and (.00683838645,.00671295638) for standard,
+far above each model's unchanged 1e-4 K0 target. Independent NumPy eigenvalue
+replays agree within 1e-12. No stationary PDE correction or artificial supply
+is used.
+
+Selected versus confirmation physical differences, integrated on the union of
+their interfaces, use at most 8.41% of the allowed quarter-budget limits.
+Absolute regional pressure offsets are retained. One-ulp ReferenceK integration
+roundoff between native panel partitions is recorded explicitly, without
+changing normalization or a physical tolerance.
+
+The historical default evolution limit remains 3000. The explicit opt-in
+`WP2MeasuredDenseV1` permits at most 12000 only for this serial affine one-sweep
+problem, following measured 5339–9882-slot audit peaks below 3.73 GiB. Physical
+consistent masses, pressure inverse and all acceptance inventories are
+unchanged. Actual larger first/continued-step RSS and cost must still pass
+checkpoint 3 before longer evolution is adopted. The policy and exact free rows,
+case/runtime identities and physical gates are in
+[checkpoint2.json](cls-cao-tamura-budget-wp2-evidence/checkpoint2.json) and
+[numerical-adaptation.json](cls-cao-tamura-budget-wp2-evidence/numerical-adaptation.json).
 
 The exact composite inlet flux is 1.050195996901104 m²/s per unit span, U_bulk is
 1.31274499612638 m/s and T_req is 1.1942387693600194 s. No WP2 run has approached

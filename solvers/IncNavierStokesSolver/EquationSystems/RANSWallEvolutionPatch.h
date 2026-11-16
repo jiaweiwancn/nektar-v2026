@@ -197,7 +197,11 @@ public:
     double EquilibriumReferenceValue(int,const RANSWallCoordinate&) const;
     Vector EquilibriumReferencePressures() const;
     std::string EquilibriumBoundaryChecks(const Vector&,const RANSWallEvolutionData&) const;
-    std::string EquilibriumSpatialChecks(const Vector&,const RANSWallEvolutionData&,int) const;
+    std::string EquilibriumSpatialChecks(const Vector&,const RANSWallEvolutionData&,int,bool monitoring=false) const;
+    std::string ResourcePolicyJSON() const;
+    const Vector &EquilibriumReferenceSample(bool,double) const;
+    std::string EquilibriumCommonSamples(const Vector&,const RANSWallEvolutionData&) const;
+    Vector EquilibriumOuterKPerturbation(const Vector&,const RANSWallEvolutionData&,std::string&) const;
     struct ExternalFluxTerms { Vector advection,traction,diffusion; };
     ExternalFluxTerms DevelopingFlux(const Vector&,int region=-1,bool analytical=false) const;
     void AddDevelopingMatrix(int,const Vector&,const std::vector<int>&,WallMatrix&) const;
@@ -638,6 +642,12 @@ private:
     std::string m_formulation="EPAWF";
     std::string m_boundaryPolicy="CompatibilityV1";
     bool m_neutralEnergyProjection=false;
+    std::string m_resourcePolicy="Dense3000V1";
+    int m_denseSizeLimit=3000;
+    Vector m_equilibriumReportingZ;
+    // Immutable analytical values only. This object owns the model, geometry,
+    // frame, calibration and boundary generation. No candidate values enter.
+    mutable std::map<std::pair<int,double>,Vector> m_equilibriumReferences;
     double m_outletTotalPressure=0.;
     Vector m_backflowSeed;
     bool m_finiteReferenceReuse=false;

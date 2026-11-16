@@ -1,0 +1,28 @@
+{
+  "version": "WP2TimestepAndDurationPolicyV1",
+  "Asia_Shanghai": "2026-11-16",
+  "prerequisite": "checkpoint2 committed/pushed for both models",
+  "frozen_solver": "runtime-v7; exact executable/library hashes in checkpoint2",
+  "trial_dt_seconds": [
+    0.02,
+    0.01,
+    0.005,
+    0.0025
+  ],
+  "trial_common_endpoint": 0.04,
+  "selection": "largest qualified dt with half-step partner whose common physical differences are <= quarter budgets, unforced residual and every physical/native gate passing; native stability alone is insufficient",
+  "Treq": 1.1942387693600194,
+  "preservation_endpoint_seconds": 1.2,
+  "observation_times": [
+    0.3,
+    0.6,
+    0.9,
+    1.2
+  ],
+  "final_window_seconds": 0.3,
+  "confirmation_mesh_slots": 11014,
+  "perturbation": "predeclared 4% constrained outer-k bump; actual >2% native pointwise departure, fixed reference and interface preserved",
+  "recovery": "initial endpoint1.2; extend same checkpoint only if needed, to at most 4*Treq with a final window >=Treq/4; no new fitting or runtime repair",
+  "cost_gate": "forecast both-model selected dt/halfdt, confirmation, recovery and replays using measured cold/continued/report wall time and process RSS; same 12h aggregate epoch and 6000-attempt budget",
+  "production_scope": "same one-sweep equations, hard inventories, actual transported K and retained solved epsilon; setup projections accounted separately"
+}

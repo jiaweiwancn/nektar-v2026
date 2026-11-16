@@ -150,10 +150,32 @@ std::string RANSWallEvolutionPatch::DevelopingChecks(const Vector &s,double time
     {const double d=q.Gradient(s,offset[0])[0]+q.Gradient(s,offset[1])[2];strong[q.coordinate[2]<m_parameters.geometry.height?0:1]+=q.weight*d*d;}
     const auto r=Residual(s,s,0,time,data,false,true);Vector weak;
     for(int b=InnerPressure();b<=Gauge();++b)weak.push_back(Maximum(Vector(r.begin()+offset[b],r.begin()+offset[b]+size[b])));
+    Vector work(5);
+    if(EquilibriumOpen())
+    {
+        const double tau=m_robustUstar*m_robustUstar;
+        const auto pressure=EquilibriumReferencePressures();
+        for(const auto &f:SurfaceView(0,2,upper[2],1,m_parameters.tangentialOrder))
+        {work[0]+=f.weight*tau*f.test.Value(s,offset[0]);
+         work[1]+=f.weight*tau*tau/(m_parameters.model.Parameters().sigmaEpsilon*upper[2]);}
+        for(const auto &f:SurfaceView(0,0,upper[0],1,m_parameters.normalOrder))
+        {
+            const double u=f.test.Value(s,offset[0]),w=f.test.Value(s,offset[1]);
+            const bool inner=fields[0]->Elements()[f.test.element].upper[2]<=m_parameters.geometry.height;
+            // pi_outer-pi_inner=(2/3-rzz)*K0. Obtain rxx-rzz
+            // directly from pi_inner=Pout+(rzz-rxx)K0.
+            const double tx=-m_outletTotalPressure+(inner?m_outletTotalPressure-pressure[0]:0.);
+            work[2]+=f.weight*(tx*u+tau*w);
+            work[3]+=f.weight*std::min(u,0.)*((u-EquilibriumReferenceValue(0,f.test.coordinate))*u+w*w);
+            work[4]+=f.weight*.5*u*(u*u+w*w);
+        }
+    }
     return J::Object({{"definition",BoundaryPolicyJSON()},{"face_columns",J::Quote("axis,side,physical_area,outward_volume_flux")},
         {"faces",J::List(rows)},{"net_volume_flux",J::Number(net)},{"minimum_outlet_un",J::Number(minimum)},
         {"strong_divergence_inner_outer_L2",J::Numbers(Vector{std::sqrt(strong[0]),std::sqrt(strong[1])})},
-        {"weak_regional_continuity_unused_gauge",J::Numbers(weak)},{"top_net_flux_adjustment",J::Number(m_boundaryCorrection)}});
+        {"weak_regional_continuity_unused_gauge",J::Numbers(weak)},{"top_net_flux_adjustment",J::Number(m_boundaryCorrection)},
+        {"equilibrium_boundary_work",J::Numbers(work)},
+        {"equilibrium_work_columns",J::Quote("roof prescribed traction work,roof outward epsilon diffusion,outlet reference traction work,outlet backflow traction work,outlet outward kinetic advection; separate terms, not a closed kinetic balance")}});
 }
 
 std::string RANSWallEvolutionPatch::DevelopingBoundaryFixture(const Vector &s,

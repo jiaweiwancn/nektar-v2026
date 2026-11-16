@@ -215,6 +215,10 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         std::string reference;session->LoadSolverInfo("RANSWallReference",reference,"Neutral");
         Require(!Mapped() && reference=="AnalyticalNeutralInflowV1" && AcceptedAWF(),
             "NeutralEquilibriumOpenV1 requires the affine analytical-neutral accepted-AWF problem");
+        std::string reporting;session->LoadSolverInfo("RANSWallReportingZ",reporting,"");
+        std::istringstream values(reporting);std::string value;
+        while(std::getline(values,value,','))m_equilibriumReportingZ.push_back(std::stod(value));
+        Require(std::is_sorted(m_equilibriumReportingZ.begin(),m_equilibriumReportingZ.end()),"WP2 reporting partition is not sorted");
     }
     Require(!OpenBoundary() || (AcceptedAWF() && m_dimension==2 && (!Mapped() || Composite()) && m_comm->GetSize()==1),
         "RoughFlatOpenV1 requires the serial affine accepted-budget pilot");
@@ -249,6 +253,14 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     session->LoadSolverInfo("RANSWallTemporalCoupling",m_temporalCoupling,"ConvergedStage");
     Require(m_temporalCoupling=="ConvergedStage" || PimpleSingleSweep(),"unknown temporal coupling mode");
     Require(!AcceptedAWF() || PimpleSingleSweep(),"accepted wall formulation currently supports only the one-sweep temporal path");
+    session->LoadSolverInfo("RANSWallResourcePolicy",m_resourcePolicy,"Dense3000V1");
+    Require(m_resourcePolicy=="Dense3000V1" || m_resourcePolicy=="WP2MeasuredDenseV1","unknown dense resource policy");
+    if(m_resourcePolicy=="WP2MeasuredDenseV1")
+    {
+        session->LoadParameter("RANSWallDenseSizeLimit",m_denseSizeLimit,3000);
+        Require(EquilibriumOpen() && !Mapped() && PimpleSingleSweep() && m_comm->GetSize()==1 &&
+            m_denseSizeLimit>=3000 && m_denseSizeLimit<=12000,"bounded WP2 dense policy requires the measured affine serial one-sweep case and limit <=12000");
+    }
     Require(!ColumnAverageK() || PimpleSingleSweep(),"ColumnAverage K is supported only by the PIMPLE pilot");
     if(PimpleSingleSweep())
     {
@@ -997,7 +1009,7 @@ std::vector<int> RANSWallEvolutionPatch::CondensableVelocity(const std::map<int,
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vector &history,double alpha,double time,
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
-    Require(Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
+    Require(Size()<=m_denseSizeLimit,"replicated dense evolution solve exceeds its explicit resource policy; larger meshes permit reference audits only");
     if(PimpleSingleSweep())
     {
         Require(!condensed && m_eta==0.,"PimpleSingleSweep requires uncondensed eta-zero physical equations");
@@ -1669,6 +1681,7 @@ std::string RANSWallEvolutionPatch::Signature() const
     }
     if(PrescribedInflow())text<<":regularized-reference="<<m_finiteInflowIdentity;
     if(OpenBoundary())text<<":boundary="<<BoundaryPolicyJSON();
+    if(m_resourcePolicy!="Dense3000V1")text<<":numerical-resource-policy="<<m_resourcePolicy<<":"<<m_denseSizeLimit;
     if(m_uniformEP)text<<":wall_policy=UniformEPFlat-v1:chi=1:full_EP_trace:require_intrinsic_admissibility";
     if(m_transitionEnabled)
     {

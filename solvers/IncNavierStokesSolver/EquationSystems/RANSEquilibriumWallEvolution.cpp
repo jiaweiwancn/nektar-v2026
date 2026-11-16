@@ -398,6 +398,13 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             }
             // Perturb the state after freezing the neutral reference/defect.
             // This never changes the reference, wall model or boundary data.
+            std::string wp2Perturbation;m_serialSession->LoadSolverInfo("RANSWallWP2InitialPerturbation",wp2Perturbation,"Off");
+            Require(wp2Perturbation=="Off" || wp2Perturbation=="OuterKBumpV1","unknown WP2 setup perturbation");
+            if(wp2Perturbation!="Off")
+            {
+                Require(startupFile.empty() && m_patch->EquilibriumOpen() && m_eta==0 && m_order==1,"WP2 recovery setup requires a fresh unanchored neutral experiment");
+                m_state=m_patch->EquilibriumOuterKPerturbation(m_state,m_data,m_ivpIdentity);
+            }
             if(startupFile.empty() && (m_serialSession->DefinesFunction("InitialPerturbationInner") || m_serialSession->DefinesFunction("InitialPerturbationOuter")))
             {
                 const auto perturbation=m_patch->Project(Functions("InitialPerturbation",false),m_time);
@@ -1063,6 +1070,19 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     if(m_patch->OpenBoundary())out<<",\"developing_boundary\":"<<m_patch->DevelopingChecks(m_state,m_time,m_data);
     out<<",\"attempt_packet_status\":"<<m_patch->AttemptPacketStatus()<<",\"rollback_receipt\":"<<m_rollbackReceipt;
     out<<",\"model_specification\":"<<m_patch->ModelMetadata();
+    if(m_patch->EquilibriumOpen())
+    {
+        out<<",\"resource_policy\":"<<m_patch->ResourcePolicyJSON();
+        out<<",\"wp2_common_samples\":"<<m_patch->EquilibriumCommonSamples(m_state,m_data);
+        out<<",\"wp2_per_state_monitoring\":[";
+        for(int j=0;j<m_acceptedStates.size();++j)
+        {if(j)out<<',';out<<RANSWallSolveJson::Object({{"time",RANSWallSolveJson::Number(m_auditTimes[j])},
+            {"physical_checks",m_patch->EquilibriumSpatialChecks(m_acceptedStates[j],m_data,16,true)}});}
+        out<<']';
+        out<<",\"wp2_final_turbulence_budget\":"<<m_patch->FiniteTurbulenceBudget(m_state,
+            m_lastHistory.size()==m_state.size()?m_lastHistory:m_state,
+            m_lastHistory.size()==m_state.size()?m_stageAlpha:0.,m_time,m_data);
+    }
     out<<",\"wall_formulation\":"<<m_patch->FormulationMetadata()<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())
        <<",\"audit_revision\":"<<Quoted(m_patch->AuditRevision())
        <<",\"evaluation_reuse\":"<<m_patch->EvaluationReuseJSON()
@@ -1078,7 +1098,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"pimple_attempts\":"<<RANSWallSolveJson::List(m_patch->PimpleRecords());
     out<<",\"physical_samples\":{";int sampleCount=0;
     for(const auto &[name,values]:m_physicalSamples){if(sampleCount++)out<<',';out<<Quoted(name)<<':';Write(out,values);}out<<'}';
-    if(m_patch->HeightComparisonEnabled() && !m_acceptedStates.empty())
+    if(m_patch->HeightComparisonEnabled() && !m_patch->EquilibriumOpen() && !m_acceptedStates.empty())
     {
         const auto comparison=[&](const Vector &s,double t)
         {

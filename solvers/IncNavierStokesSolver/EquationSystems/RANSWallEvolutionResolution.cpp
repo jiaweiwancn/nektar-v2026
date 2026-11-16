@@ -3,6 +3,7 @@
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <algorithm>
 #include <cmath>
@@ -13,6 +14,7 @@ namespace Nektar
 {
 using namespace SolverUtils;
 using namespace RANSWallAlgebra;
+namespace J=RANSWallSolveJson;
 namespace
 {
 using Wide=std::vector<long double>;
@@ -113,7 +115,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
         {
             Add(buckets,name,Size(),offset[block],q,value,flux,weight);
             if(panelDiagnostics && std::find(RANSWallResolutionSpatialTerms().begin(),RANSWallResolutionSpatialTerms().end(),name)!=RANSWallResolutionSpatialTerms().end())
-            {const auto &el=fields[block]->Elements().at(q.element);const std::string key="radial:"+std::to_string(el.lower[2])+":"+std::to_string(el.upper[2])+":"+name;
+            {const auto &el=fields[block]->Elements().at(q.element);const std::string key="radial:"+J::Number(el.lower[2])+":"+J::Number(el.upper[2])+":"+name;
              Add(buckets,key,Size(),offset[block],q,value,flux,weight);}
         };
     auto evaluate=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile,

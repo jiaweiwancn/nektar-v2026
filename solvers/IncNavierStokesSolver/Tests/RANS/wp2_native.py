@@ -21,18 +21,25 @@ class Run:
             solver=str(solver),solver_sha256=sha(solver),results={},case_definition=dict(level=level,order=order,projection=projection))
         self.save()
     def save(self):atomic(self.output/'progress.json',self.result)
-    def native(self,label,steps=0,dt=2e-6,parent=None,reject=False,pout=0.,mismatch=False):
+    def native(self,label,steps=0,dt=2e-6,parent=None,reject=False,pout=0.,mismatch=False,perturb=False):
         charge(self.root,label,physical_attempts=steps)
         xml=case(self.output/label,self.h1,self.pre,self.model,self.level,self.order,steps,dt,parent,pout,self.projection)
         if reject:
-            t=ET.parse(xml).getroot();set_parameter(t,'RANSWallPimplePostAssignRejectStep',1);write(t,xml)
+            t=ET.parse(xml).getroot();set_parameter(t,'RANSWallPimplePostAssignRejectStep',(checkpoint(parent)['steps'] if parent else 0)+1);write(t,xml)
+        if perturb:
+            require(parent is None,'recovery perturbation is fresh setup, not restart-time repair')
+            from run_cls_epawf_picard import set_info
+            t=ET.parse(xml).getroot();set_info(t,'RANSWallWP2InitialPerturbation','OuterKBumpV1');write(t,xml)
         env=dict(os.environ,**THREADS,LD_LIBRARY_PATH=str(self.solver.parent/'lib'),NEKTAR_RANS_TIMING_FILE=str(xml.parent/'timing.jsonl'))
         started=time.monotonic()
+        remaining=43200-(time.time()-load(self.root/'origin.json')['started_epoch'])
+        require(remaining>0,'WP2 aggregate wall envelope exhausted')
         with (xml.parent/'solver.log').open('w') as log:
-            p=subprocess.run(['/usr/bin/time','-f','%e %U %S %M','-o',str(xml.parent/'usage.txt'),str(self.solver),str(xml)],cwd=xml.parent,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=1800)
+            p=subprocess.run(['/usr/bin/time','-f','%e %U %S %M','-o',str(xml.parent/'usage.txt'),str(self.solver),str(xml)],cwd=xml.parent,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=min(1800,remaining))
         report=xml.with_suffix('.evolution.json');d=load(report) if report.exists() else {}
         self.result['results'][label]=dict(code=p.returncode,seconds=time.monotonic()-started,xml_sha256=sha(xml),
             report=str(report),report_sha256=sha(report) if report.exists() else None,failure=d.get('failure'),usage=(xml.parent/'usage.txt').read_text());self.save()
+        require(int(self.result['results'][label]['usage'].split()[-1])<=24*1024*1024,'WP2 per-process 24GiB RSS envelope exceeded')
         if mismatch:
             require(p.returncode!=0 and 'signature' in (xml.parent/'solver.log').read_text().lower(),'incompatible boundary restart was not rejected')
             return d

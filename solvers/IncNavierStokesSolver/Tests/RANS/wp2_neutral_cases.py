@@ -26,11 +26,21 @@ def radial_mesh(pre, level):
         # The measured level2 U residual has reached an outer-panel floor;
         # further submicron inner splitting is not a useful next experiment.
         z=sorted(set(z+[(lo+hi)/2 for lo,hi in zip(z,z[1:]) if lo>=.05]))
+    if level>=4:
+        # Signed globally assembled mass-dual projections locate the remaining
+        # U defect around H. Retain level2, without the ineffective high-outer
+        # splits, and bisect the last inner / first two outer panels.
+        z=sorted(set(z+[(lo+hi)/2 for lo,hi in zip(z,z[1:]) if lo>=.005 and hi<=.012]))
+    if level==5:
+        # A predeclared finer confirmation of the same interface allocation,
+        # plus the largest remaining inner derivative-error panels.
+        z=sorted(set(z+[(lo+hi)/2 for lo,hi in zip(z,z[1:])
+                        if (lo>=.005 and hi<=.012) or (lo>=.0002 and hi<=.0015)]))
     return z
 
 
 def case(folder,h1,pre,model,level=0,order=16,steps=0,dt=.001,restart=None,pout=0.,projection='RadialL2V1'):
-    require(model in ('CLS','standard') and 0<=level<=3 and order in (16,24,32),'WP2 declared case space')
+    require(model in ('CLS','standard') and 0<=level<=5 and order in (16,24,32),'WP2 declared case space')
     mesh=dict(pre['common_mesh']);mesh.update(z=radial_mesh(pre,level),degree=3,regional_pressure_degree=1,points=[order,order])
     xml=historical_case(folder,h1,pre,flat=True,model=model,shared_mesh=mesh)
     t=ET.parse(xml).getroot();tensor_mesh(t,mesh['z'],3,2,.8,1.,points=[order,order],xknots=mesh['x'])
@@ -40,6 +50,13 @@ def case(folder,h1,pre,model,level=0,order=16,steps=0,dt=.001,restart=None,pout=
     require(projection in ('RadialL2V1','RadialEnergyV1'),'unknown representation policy')
     for k,v in dict(RANSWallBoundaryPolicy='NeutralEquilibriumOpenV1',RANSWallGeometry='LegacyV1',RANSWallMap='Flat',RANSWallNeutralProjection=projection,
                     RANSWallModelManifestFile=str(mf),RANSWallModelManifestSHA256=sha(mf)).items():set_info(t,k,v)
+    set_info(t,'RANSWallReportingZ',','.join(format(x,'.17g') for x in radial_mesh(pre,5)))
+    if level>0:
+        # Explicit numerical policy, supported by measured 5339/8002/9882-slot
+        # full-inventory diagnostics (peak 3.72GiB). First-step cost must still
+        # qualify affordable evolution; default historical cases keep 3000.
+        set_info(t,'RANSWallResourcePolicy','WP2MeasuredDenseV1')
+        set_parameter(t,'RANSWallDenseSizeLimit',12000)
     for k,v in dict(NumSteps=steps,TimeStep=dt,RANSWallEta=0,RANSWallOutletTotalPressure=pout,
                     RANSWallNormalOrder=order,RANSWallTangentialOrder=order).items():set_parameter(t,k,v)
     if restart:set_info(t,'RANSWallRestart',str(restart))

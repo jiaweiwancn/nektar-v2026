@@ -311,7 +311,8 @@ int main(int argc,char **argv)
                 {"model_specification",patch.ModelMetadata()},{"patch_signature",J::Quote(patch.Signature())},
                 {"geometry_identity",J::Quote(patch.GeometrySignature())},{"inventory_identity",J::Quote(patch.PimpleKBoundSignature())},
                 {"boundary",packet.get<bool>("boundary_checks",true)?patch.EquilibriumBoundaryChecks(state,data):"null"},
-                {"spatial",patch.EquilibriumSpatialChecks(state,data,packet.get<int>("order",24))},
+                {"spatial",packet.get<bool>("samples_only",false)?"null":patch.EquilibriumSpatialChecks(state,data,packet.get<int>("order",24))},
+                {"common_samples",packet.get<bool>("common_samples",false)?patch.EquilibriumCommonSamples(state,data):"null"},
                 {"initialization_work",J::Numbers(patch.InitializationWork())},{"governing_solves","0"},{"physical_steps","0"}})<<std::endl;
             Require(out.good(),"WP2 diagnostic write");world->Finalise();return 0;
         }

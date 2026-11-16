@@ -1,0 +1,17 @@
+{
+  "version": "WP2NumericalAdaptationV1",
+  "Asia_Shanghai": "2026-11-16",
+  "physics": "unchanged frozen H2g calibrations and analytical inlet; eta=0",
+  "projection": "RadialEnergyV1, constrained L2 + H_A^2 full radial derivative error for U, k and transported outer epsilon; model-correct constant regional pi; no stationary PDE solve",
+  "selection": "six-column 8650-slot cubic/P1 mesh from level2 plus last inner and first two outer bisections; signed global mass-dual projections located matching-plane error; ineffective high-outer-only refinement retained as evidence",
+  "confirmation": "11014 slots; further interface and largest inner derivative-error splits; same six columns, polynomial degrees, physical problem and source-quadrature policy",
+  "resource_policy": "WP2MeasuredDenseV1, explicit limit 12000 only for affine neutral-equilibrium serial one-sweep mode; historical default remains 3000",
+  "measured_before_policy": {"5339_to_9882_slot_zero_step_audits_peak_RSS_GiB_upper_bound": 3.73, "9882_slot_full_audit_seconds_range": [67,74]},
+  "runtime_adoption": "larger evolution still requires actual first/continued-step RSS/cost and timestep qualification, process cap 24 GiB; no matrix, physical-mass, pressure or acceptance approximation",
+  "reference_cache": "immutable object-owned region/physical-height evaluations only; includes model/reference/geometry/frame/calibration generation; actual candidate constitutive values remain fresh",
+  "reference_roundoff": "common analytical inner ReferenceK integral differs by at most one ulp across observed native partitions, 3.469446951953614e-18; recorded, fixed normalization retained, physical gates unchanged",
+  "monitoring": "every accepted state, all native panels and declared physical stations, both matching sides, full velocity gradients and complete transported outer epsilon; existing complete native hard inventory retained",
+  "fresh": "epoch0 GL28 predeclared before adaptation; exact frozen candidate/runtime ledger; a missing parent directory failed before any native invocation and was repaired without changing state or recharging its reserved work",
+  "spatial_case_budget": 32,
+  "production_slot_default": 3000
+}
