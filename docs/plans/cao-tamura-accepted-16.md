@@ -74,7 +74,7 @@ not include independent Python audits or the complete retention/controller path.
 | V15 HashedBasis | 31.406938 / 84.155183 / 133.453709 | 52.748245 |
 | V16 CurrentSampler | 30.849522 / 87.151439 / 137.786030 | 56.301917 |
 | V17 ExactTensorIndex | 31.906881 / 95.315014 / 158.114100 | 63.408133 |
-| V18 CentredGradientScratch | PROSPECTIVE; not executed | PENDING |
+| V18 CentredGradientScratch | 29.874935 / 80.769678 / 128.386055 | 50.894743 |
 
 V5 streams scalar FE values with the original double basis products and centred
 long-double sum, with bounded 128-entry scratch and a per-call constitutive
@@ -122,9 +122,17 @@ value/owner hits are 4,875,096/6,530,075 with peak 3,473, but timing worsens.
 The [prospective V17 amendment](cao-tamura-accepted-16-evidence/attempt-13-amendment-v1.json)
 therefore omits V16 before the first V17 run. V17 adds only exact original
 integer tensor packing triplets to the V15 base. V18 is an orthogonal V15-based
-one-call centred coefficient-difference scratch hypothesis, without V17 or V16.
+one-call centred coefficient-difference scratch policy, without V17 or V16.
 Its [contract](cao-tamura-accepted-16-evidence/attempt-14-contract.json) freezes
 old-order three-axis reductions and cold binary64 checks before execution.
+The build, all four operators, 44 dependency/geometry queries, continuation,
+rollback, tiny-cache and foreign-history controls pass. The scratch is at most
+128 doubles within one gradient call; every Cartesian derivative/reduction
+remains present, and unsupported/manual rows retain the original contraction.
+The small shadow verifier compares all three gradient outputs bitwise with the
+original arithmetic. Its selected 0/1/2 accepted coefficients also agree bitwise.
+Its step envelope is 3.51% below V15 and 3.16 times faster than CT15 V4, which
+is useful local evidence and remains insufficient for resource admission.
 
 Completed small suites retain four d0/displaced P3/P4 operators and Off updates.
 V8 and later include 44 ordered current-flow/K/epsilon/time/data/alpha/mask/space/
@@ -206,11 +214,13 @@ The native and Python runtime identities are separate. V15 uses native source
 and probe `8c14585f96e048c19732f748fdfa6bcfab378a653c369124819a4c6887a1fabc`.
 V16 uses source `239a5426d8f620427b29dc211671557cc1ab7eb4` and
 `build-sampler-v1/runtime`; V17 is built from
-`3186446ccbc9a1f6a3ac69ef7306dcf30d54f6e0`; V18 is being tested at
+`3186446ccbc9a1f6a3ac69ef7306dcf30d54f6e0`; V18 uses tested source
 `77bb66047e522a5e86d01cf3657d36fb365f0baf` (scratch implementation introduced at
 `895f5417ee22e3f93ed82daf7e9dabfaa97cff12`). Publication/controller commits do not
-imply a rebuilt native runtime. Full governing/probe/library hashes are in build
-receipts. V10 source `5b4e3cf40520cfb361eb0f8eb13b5bd6a561b88b` and its prior
+imply a rebuilt native runtime. V18's governing/probe SHA256 values are respectively
+`8bec1b345971f9082098a4a54723a9f77bcd393a9377d7cd3973e0304fbdd8c6` and
+`72c57e91b01e39a6b1aaa111b0661aea1ab1f88699cccefd3eef8b27e7bb8d26`.
+Full governing/probe/library hashes are in build receipts. V10 source `5b4e3cf40520cfb361eb0f8eb13b5bd6a561b88b` and its prior
 published runtime bindings remain valid only for that experiment.
 
 The passing full exact-BLAS audit uses source
@@ -260,22 +270,24 @@ for fresh starts, nonnegative native startup and step envelopes, and 25% headroo
 need 1,620+3,240=4,860 additional steps and are invalid until that exact component
 has its own fresh qualification. No CT16 candidate has such a start.
 
-For the current best measured V15, fresh-entry native-only CPU is
-**328,113.1299625 seconds with headroom**, 13.6714 times the entire production
-CPU ceiling. With startup held fixed, its 52.748245 CPU/step envelope must fall
-below **2.934464498 CPU/step**, an additional **17.98-fold** improvement even if
+For the best measured V18, fresh-entry native-only CPU is
+**316500.674671250 seconds with headroom**, 13.1875 times the entire production
+CPU ceiling. With startup held fixed, its 50.894743 CPU/step envelope must fall
+below **2.983084577 CPU/step**, an additional **17.06-fold** improvement even if
 every other cost were zero. The zero-startup/zero-other allowance is
-3.931203931 CPU/step. The improved 3.168236 CPU warm audit already exceeds the
-2.934464 allowance before native evolution, audit setup and all remaining work.
-These are conditional short-workload extrapolations, **not mathematical lower
-bounds for every future state, implementation or segmentation policy**.
+3.931203931 CPU/step; even eliminating all startup would still require a
+12.95-fold reduction of this measured envelope. The improved 3.168236 CPU warm
+audit already exceeds the 2.983085 allowance before native evolution, audit setup
+and all remaining work. These are conditional short-workload extrapolations,
+**not mathematical lower bounds for every future state, implementation or
+segmentation policy**.
 
-| Horizon | Requested T; rounded member endpoints | Fresh member steps | V15 native-only CPU / wall with headroom (s) | All-native-files retained extrapolation (bytes) | Admission |
+| Horizon | Requested T; rounded member endpoints | Fresh member steps | V18 native-only CPU / wall with headroom (s) | All-native-files retained extrapolation (bytes) | Admission |
 |---|---|---:|---:|---:|---|
-| Entry | .407; .40700/.407000 | 1628 / 3256 | 328113.130 / 340442.297 | 923639884054 | UNADMITTED |
-| 0.1 transit | 4.06216378576; 4.06225/4.062250 | 16249 / 32498 | 3274057.108 / 3397080.045 | 9218541418609 | UNADMITTED |
-| 1 transit | 40.6216378576; 40.62175/40.621750 | 162487 / 324974 | 32739035.454 / 33969203.840 | 92183408306194 | UNADMITTED |
-| 3 transits | 121.8649135728; 121.86500/121.865000 | 487460 / 974920 | 98216712.263 / 101907201.933 | 276549594729499 | UNADMITTED |
+| Entry | 0.407; 0.40700/0.407000 | 1628 / 3256 | 316500.675 / 332509.267 | 923640725446 | UNADMITTED |
+| 0.1 transit | 4.06216378576; 4.06225/4.062250 | 16249 / 32498 | 3158193.985 / 3317941.979 | 9218549802568 | UNADMITTED |
+| 1 transit | 40.6216378576; 40.62175/40.621750 | 162487 / 324974 | 31580471.034 / 33177884.190 | 92183492128520 | UNADMITTED |
+| 3 transits | 121.8649135728; 121.86500/121.865000 | 487460 / 974920 | 94741035.528 / 99533257.453 | 276549846192711 | UNADMITTED |
 
 The all-retained extrapolation includes current wide native reports and is not
 a minimal archive lower bound or a qualified retention forecast. The 24-GiB
