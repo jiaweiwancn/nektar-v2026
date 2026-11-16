@@ -32,7 +32,7 @@ production will have separate ledgers.
 | Gate | Requirement | Current status |
 |---|---|---|
 | G1 | Exact problem/time map; affected actions <=2e-10; state/absolute Pi/traction <=1e-8; current-state/dependency/history controls | UNATTEMPTED |
-| G2 | Fresh .00025/.000125 pair to T=.002; every unchanged scientific/uncertainty criterion | UNATTEMPTED |
+| G2 | Fresh .00025/.000125 pair to T=.002; every unchanged scientific/uncertainty criterion | PASS; shared-worker resource audit failed separately |
 | G3 | Matched timing-off startup/step/workflow measurements; frozen held-out restart workload validates model | UNATTEMPTED |
 | G4 | Two actual retirement/recovery cycles, replay/audit, interruption, continuation and full rollback | UNATTEMPTED |
 | G5 | Complete T=.407 forecast with 25% headroom <=24000 CPU s/28800 active-wall s/24 GiB output; later horizons explicit | UNATTEMPTED |
@@ -52,6 +52,32 @@ changed-alpha admission1445.504679; exact static oracle comparison60.100567.
 All three worker audits pass. Closed engineering cost including the120-second
 exception reserve is12808.697313 CPU seconds. Full G1 stage/accepted-state
 comparison, G2 fresh physical pair, G3/G4 and production admission remain open.
+
+The subsequent [fresh pair](cao-tamura-accepted-15-evidence/fresh-pair-v1.json)
+passes every unchanged scientific and uncertainty criterion at T=.002 in8/16
+steps. Both own zero-step initializations have actual state SHA256
+`dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a`.
+Absolute-pressure spread is2.2874413727322336e-7 against3.144090599826331e-7;
+fine full-interface traction RMS is.0008446814743676038 against.001. All four
+actual consecutive-stage scalar controls and current constitutive checks pass
+for both members. Native commands used1230.834028/2351.821703 CPU seconds;
+the whole guarded family used7578.573622763 CPU seconds and6682.806283379
+elapsed wall seconds. The latter includes worker pauses and is not a clean
+matched speedup. The compact file binds the263005549-byte raw result, request,
+actual reports, histories, configurations, mapped runtime files and full receipts.
+
+The unrelated HIT job caused the pair's aggregate worker audit to fail at101;
+own project highwater remains12<=16. This resource failure is retained separately
+from the scientific PASS. Full selected-trajectory equivalence is currently
+queued **before spawn**, with no numerical child, while the HIT job keeps the
+host above72 workers. The user explicitly chose to wait for that job. No
+unrelated process is stopped, and the original CT15 allocation clock is not reset.
+Closed engineering expenditure including the120-second exception reserve is now
+20389.906691353 CPU seconds, before the current queue/closure helpers. A complete
+G3 heldout cannot fit the remaining pool. G4-only recovery remains conditional on
+worker admission and a prelaunch remaining-CPU/wall/storage check; it cannot
+supply G3. Unmeasured whole-workflow forecast fields are published as null, with
+the measured native-only and partial-scope extrapolations named separately.
 
 No T=.407 or meaningful-duration preservation run is authorized in CT15.
 

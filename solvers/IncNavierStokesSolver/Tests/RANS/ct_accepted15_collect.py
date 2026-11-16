@@ -17,6 +17,20 @@ def write(path,value):
     with path.open('x') as f:json.dump(value,f,indent=2,allow_nan=False);f.write('\n')
 def count(T,dt):return int((Decimal(str(T))/Decimal(str(dt))).to_integral_value(rounding=ROUND_CEILING))
 def envelope(v):return max(v)+max(v)-min(v) if v else 0.
+def compact(value):
+    """Keep decisions and witnesses; bind large external payloads by hash."""
+    if isinstance(value,str) and len(value)>4096:
+        return dict(external_string_characters=len(value),UTF8_sha256=hashlib.sha256(value.encode()).hexdigest())
+    if isinstance(value,list) and len(value)>32:
+        payload=json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
+        return dict(external_array_entries=len(value),canonical_JSON_sha256=hashlib.sha256(payload).hexdigest())
+    if isinstance(value,dict):return {k:compact(v) for k,v in value.items()}
+    if isinstance(value,list):return [compact(v) for v in value]
+    return value
+def max_address_space(value):
+    if isinstance(value,dict):return max([v*1024 for k,v in value.items() if k in ('peak_address_space_KiB','peak_virtual_KiB')]+[max_address_space(v) for v in value.values() if isinstance(v,(dict,list))]+[0])
+    if isinstance(value,list):return max([max_address_space(v) for v in value]+[0])
+    return 0
 def logical_size(root):
     total=0
     for folder,dirs,files in os.walk(root):
@@ -62,7 +76,8 @@ def forecast(root,q):
     segments=q['segments'];complete=segments is not None and (q.get('retention') or {}).get('status')=='pass' and q['pair'] is not None and q['pair'].get('qualification',{}).get('status')=='pass'
     validated=complete and segments.get('cost_model_validation',{}).get('status')=='pass'
     phase_CPU=phase_wall=retention_CPU=retention_wall=milestone_CPU=milestone_wall=0.
-    durable_per_segment=0;transient_per_step=0;measured_AS=0;milestone_bytes=0
+    durable_per_segment=0;transient_per_step=0;milestone_bytes=0
+    measured_AS=max(max_address_space(q.get('pair')),max_address_space(q.get('static')),max_address_space(q.get('timestep')))
     if complete:
         audits=[read(root/'segments-v1'/('audit-replay-'+str(i)+'.json')) for i in (2,4)]
         phase_CPU=envelope([u['CPU'] for a in audits for u in a['phase_usage']['per_state']])
@@ -84,11 +99,7 @@ def forecast(root,q):
         retention_wall=envelope([max(0.,x['cycle_usage']['wall']-x['execution']['whole_segment_wall']-x['audit_usage']['wall']) for x in segments['cycles']])
         durable_per_segment=envelope([x['durable_owned_bytes'] for x in segments['cycles']])
         transient_per_step=envelope([x['retired_bytes']/4 for x in segments['cycles']])
-        def memory(value):
-            if isinstance(value,dict):return max([v*1024 for k,v in value.items() if k in ('peak_address_space_KiB','peak_virtual_KiB')]+[memory(v) for v in value.values() if isinstance(v,(dict,list))]+[0])
-            if isinstance(value,list):return max([memory(v) for v in value]+[0])
-            return 0
-        measured_AS=max([x['peak_address_space_bytes'] for x in segments['cycles']]+[segments.get('held_out',{}).get('peak_address_space_bytes',0),memory(q['pair'])])
+        measured_AS=max([x['peak_address_space_bytes'] for x in segments['cycles']]+[segments.get('held_out',{}).get('peak_address_space_bytes',0),measured_AS])
         milestone_bytes=sum(logical_size(root/'segments-v1/held-out-6-to8'/('actions-'+label)) for label in ('native','q48','q64')) if held else sum(logical_size(root/'timestep-v1'/k) for k in ('4000-native','4000-q48','4000-q64','8000-native','8000-q48','8000-q64'))
     # Selected short commands may become faster or slower later. These are
     # conditional extrapolations, never mathematical lower bounds on later PDEs.
@@ -141,6 +152,16 @@ def forecast(root,q):
             row['other_fitted_checks_and_startups_CPU']=fixed
             row['optimistic_remaining_native_CPU_per_step_with_other_fitted_checks_fixed']=(24000/1.25-fixed)/(2*N)
             row['necessary_throughput_scope']='holding measured independent/retention/parse/startup costs fixed, and optimistically giving remaining native observers/monitors zero cost; replay doubles actual native step work. Negative allowance requires improvements beyond native evolution.'
+        else:
+            # A missing recovery experiment cannot turn unknown archive/audit
+            # costs into zero-cost whole-workflow forecasts. Preserve the
+            # measured partial extrapolation under an explicitly named scope.
+            row['partial_observed_scope_CPU_with_headroom']=row['CPU_with_headroom']
+            row['partial_observed_scope_wall_with_headroom']=row['active_wall_with_headroom']
+            row['partial_observed_scope']='native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors'
+            row['required_total_cost_reduction']=None
+            for key in ('CPU_before_headroom','CPU_with_headroom','active_wall_with_headroom','finite_retained_output_with_headroom','peak_new_live_output_with_headroom'):
+                row[key]=None
     return dict(status=('complete_conditional_forecast' if validated else 'complete_unvalidated_conditional_forecast') if complete else 'incomplete_native_replay_extrapolation',whole_workflow_component_coverage=complete,heldout_model_validated=bool(validated),headroom=1.25,headroom_applied='once to complete future CPU/wall/output/AS totals; not sunk research',measurements=measured,horizons=rows,unmeasured_additional_costs=[] if complete else ['complete heldout external-monitor validation','per-state independent audits','all full milestones/actions','retention and finite durable growth'],validity='short-history bounds are conditional extrapolations; all proposed campaigns require live spent-plus-remaining guards and segment fill/iteration reforecasting. No long-time physical qualification.',necessary_zero_overhead_CPU_per_step=24000/(1.25*4884),strict_necessary_bound_scope='arithmetic budget bound only; observed short native timing is not a proven lower bound on all future states')
 
 def main():
@@ -171,6 +192,7 @@ def main():
     result=dict(schema='CT15CompactPublicationV1',status='UNRESOLVED',gates=g,physical_T0_407='UNATTEMPTED',full_transit_scientific_and_operational_readiness='UNQUALIFIED',external_root=str(a.root),historical_ledger=historical_ledger(a.root,a.ct14),CT14_baseline_verification_sha256=digest(a.root/'baseline-v1/results.json'),engineering_ledger=dict(closed_CPU=CPU,publication_transport_CPU_reserve=240,total_CPU_upper_bound_before_current_collector=CPU+240,elapsed_wall_including_connection_outage=time.time()-START,logical_retained_bytes=logical_size(a.root),peak_sampled_live_bytes=peak,sampled_cumulative_process_wchar_lower_bound=sampled_writes,write_accounting_scope='sum of per-family /proc wchar highwaters; includes pipe writes and may miss short-lived processes; not exact physical disk bytes',exception_reserves=exception,unclosed_families=unclosed,failed_worker_audits=worker_failures,resource_receipts=resources),future_ledger=future,artifact_inventory=inventory)
     # The historical body contains stage paths/hashes but no numerical arrays.
     write(a.output/'results.json',result);write(a.output/'forecast.json',future);write(a.output/'artifact-inventory.json',inventory)
+    write(a.output/'scientific-evidence.json',dict(schema='CT15CompactScientificEvidenceV1',scope='large arrays and signatures are external hash-bound payloads; this publication does not replace raw Linux evidence',gates=g,evidence={k:compact(v) for k,v in q.items()}))
     write(a.output/'seal.json',dict(files={f.name:digest(f) for f in a.output.iterdir() if f.is_file()}))
     print(json.dumps(dict(status=result['status'],gates=g,closed_CPU=CPU,forecast_status=future['status']),indent=2))
 if __name__=='__main__':main()
