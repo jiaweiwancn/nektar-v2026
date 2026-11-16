@@ -1,0 +1,1689 @@
+{
+  "version": "WP2Checkpoint3V1",
+  "capture_Asia_Shanghai": "2026-11-16T17:41:01.270329+08:00",
+  "short_timestep_and_cost_passed_both": true,
+  "full_duration": false,
+  "dt": 0.02,
+  "half_dt": 0.01,
+  "Treq": 1.1942387693600194,
+  "endpoint": 1.2,
+  "models": {
+    "CLS": {
+      "short": {
+        "quarter": {
+          "passed": true,
+          "gates": {
+            "0_U": {
+              "value": 5.425112665465006e-08,
+              "limit": 0.00025,
+              "passed": true
+            },
+            "0_W": {
+              "value": 2.4234562960569102e-08,
+              "limit": 0.00025,
+              "passed": true
+            },
+            "0_k": {
+              "value": 1.2364925177228682e-07,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_pi": {
+              "value": 3.4825373148276903e-06,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_mechanical_pressure": {
+              "value": 3.3959207972736555e-06,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_nut": {
+              "value": 1.7301171851715162e-07,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_total_shear": {
+              "value": 2.8551728619847346e-07,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_total_normal_stress": {
+              "value": 3.5131195759394843e-06,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_full_velocity_gradient": {
+              "value": 5.038128364105929e-07,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_U": {
+              "value": 3.237323799443019e-07,
+              "limit": 0.00025,
+              "passed": true
+            },
+            "1_W": {
+              "value": 1.0457140179035736e-06,
+              "limit": 0.00025,
+              "passed": true
+            },
+            "1_k": {
+              "value": 4.2428077019146097e-07,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_epsilon": {
+              "value": 1.1803021743333303e-06,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_pi": {
+              "value": 1.7955765080898432e-05,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_mechanical_pressure": {
+              "value": 1.7973242602802863e-05,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_nut": {
+              "value": 6.425123205447167e-05,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_total_shear": {
+              "value": 8.221076773817916e-05,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_total_normal_stress": {
+              "value": 3.59805171293478e-05,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_full_velocity_gradient": {
+              "value": 1.6917359058397734e-05,
+              "limit": 0.0025,
+              "passed": true
+            }
+          },
+          "reference_integration_roundoff": 0.0,
+          "pressure": "absolute; original relative regional offset retained"
+        },
+        "timing": [
+          {
+            "dt": 0.02,
+            "driver_wall": 122.55,
+            "user_cpu": 113.06,
+            "system_cpu": 8.06,
+            "peak_RSS_KiB": 4109152,
+            "steps": [
+              {
+                "step": 1,
+                "wall_seconds": 30.819997958,
+                "process_cpu_seconds": 30.338955
+              },
+              {
+                "step": 2,
+                "wall_seconds": 27.818154891,
+                "process_cpu_seconds": 27.801188
+              }
+            ],
+            "exclusive_cpu_top": [
+              [
+                "output.report",
+                27.34049400000001
+              ],
+              [
+                "domain.compute",
+                18.002357000000003
+              ],
+              [
+                "audit.constitutive_observations",
+                13.122608
+              ],
+              [
+                "residual",
+                9.581551
+              ],
+              [
+                "dense.triangular_solve",
+                9.447500999999995
+              ],
+              [
+                "audit.physical",
+                5.42516
+              ],
+              [
+                "dense.factorization",
+                5.275447
+              ],
+              [
+                "startup.object",
+                4.64283
+              ],
+              [
+                "constitutive.refresh",
+                3.1465530000000004
+              ],
+              [
+                "flow.assembly",
+                2.834664
+              ],
+              [
+                "output.wp2_per_state_monitoring",
+                2.623932
+              ],
+              [
+                "boundary.assembly",
+                2.5301289999999996
+              ],
+              [
+                "output.fields_and_report",
+                2.3016139999999936
+              ],
+              [
+                "k.bound",
+                2.1319340000000007
+              ],
+              [
+                "pressure.build",
+                1.8064629999999964
+              ],
+              [
+                "native.implicit",
+                1.6662730000000074
+              ],
+              [
+                "domain.scalar",
+                1.2258079999999996
+              ],
+              [
+                "process",
+                1.1667180000000172
+              ],
+              [
+                "startup.initialize",
+                0.988683
+              ],
+              [
+                "output.project_fields",
+                0.6750860000000001
+              ]
+            ]
+          },
+          {
+            "dt": 0.01,
+            "driver_wall": 179.95,
+            "user_cpu": 170.16,
+            "system_cpu": 8.09,
+            "peak_RSS_KiB": 4167984,
+            "steps": [
+              {
+                "step": 1,
+                "wall_seconds": 29.393356383,
+                "process_cpu_seconds": 28.883779
+              },
+              {
+                "step": 2,
+                "wall_seconds": 27.028751074,
+                "process_cpu_seconds": 27.002866
+              },
+              {
+                "step": 3,
+                "wall_seconds": 27.528675169,
+                "process_cpu_seconds": 27.514219
+              },
+              {
+                "step": 4,
+                "wall_seconds": 26.602610964,
+                "process_cpu_seconds": 26.587071
+              }
+            ],
+            "exclusive_cpu_top": [
+              [
+                "domain.compute",
+                30.077230999999998
+              ],
+              [
+                "output.report",
+                27.594345000000004
+              ],
+              [
+                "audit.constitutive_observations",
+                22.55929
+              ],
+              [
+                "dense.triangular_solve",
+                19.24063500000001
+              ],
+              [
+                "residual",
+                13.832055000000004
+              ],
+              [
+                "audit.physical",
+                8.678044
+              ],
+              [
+                "dense.factorization",
+                8.310642
+              ],
+              [
+                "flow.assembly",
+                5.2365960000000005
+              ],
+              [
+                "constitutive.refresh",
+                5.197685
+              ],
+              [
+                "startup.object",
+                4.850593
+              ],
+              [
+                "output.wp2_per_state_monitoring",
+                4.563124999999999
+              ],
+              [
+                "boundary.assembly",
+                3.889390000000001
+              ],
+              [
+                "pressure.build",
+                3.604363000000002
+              ],
+              [
+                "native.implicit",
+                3.1883459999999992
+              ],
+              [
+                "k.bound",
+                3.1102819999999998
+              ],
+              [
+                "output.fields_and_report",
+                2.2822559999999967
+              ],
+              [
+                "domain.scalar",
+                1.7416070000000001
+              ],
+              [
+                "k.assembly",
+                1.192526
+              ],
+              [
+                "process",
+                1.033820999999989
+              ],
+              [
+                "startup.initialize",
+                0.9880749999999985
+              ]
+            ]
+          }
+        ]
+      },
+      "early_mesh_difference": {
+        "passed": true,
+        "gates": {
+          "0_U": {
+            "value": 1.786718807652285e-06,
+            "limit": 0.00025,
+            "passed": true
+          },
+          "0_W": {
+            "value": 3.607036353388744e-08,
+            "limit": 0.00025,
+            "passed": true
+          },
+          "0_k": {
+            "value": 4.020507742817254e-06,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_pi": {
+            "value": 1.3106012467772244e-06,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_mechanical_pressure": {
+            "value": 9.387621863500656e-06,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_nut": {
+            "value": 5.196253069761603e-07,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_total_shear": {
+            "value": 0.00018073980572450856,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_total_normal_stress": {
+            "value": 1.58085861681249e-06,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_full_velocity_gradient": {
+            "value": 0.00021023451723188472,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_U": {
+            "value": 3.448147604441508e-08,
+            "limit": 0.00025,
+            "passed": true
+          },
+          "1_W": {
+            "value": 7.434238646616282e-09,
+            "limit": 0.00025,
+            "passed": true
+          },
+          "1_k": {
+            "value": 6.553375993648387e-08,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_epsilon": {
+            "value": 3.874578606421719e-06,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_pi": {
+            "value": 4.854594912795976e-07,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_mechanical_pressure": {
+            "value": 4.866320775676112e-07,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_nut": {
+            "value": 9.073079612394638e-08,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_total_shear": {
+            "value": 7.145224102450903e-06,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_total_normal_stress": {
+            "value": 3.4002675941504994e-06,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_full_velocity_gradient": {
+            "value": 5.343432110005258e-05,
+            "limit": 0.0025,
+            "passed": true
+          }
+        },
+        "reference_integration_roundoff": 1.968932680557182e-16,
+        "pressure": "absolute; original relative regional offset retained"
+      },
+      "early_homogeneity": {
+        "inlet_to_station": {
+          "0": {
+            "U": {
+              "relative_L2": 3.368709495007223e-07,
+              "pointwise_scaled_max": 1.9602674560183923e-06,
+              "budget": 0.001,
+              "passed": true
+            },
+            "W": {
+              "relative_L2": 3.751482756364565e-08,
+              "pointwise_scaled_max": 3.2125789292190307e-07,
+              "budget": 0.001,
+              "passed": true
+            },
+            "k": {
+              "relative_L2": 1.3755964526400997e-06,
+              "pointwise_scaled_max": 3.75350720868094e-06,
+              "budget": 0.01,
+              "passed": true
+            },
+            "pi": {
+              "relative_L2": 1.596410294496266e-05,
+              "pointwise_scaled_max": 3.8546243322711616e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "mechanical_pressure": {
+              "relative_L2": 1.709106879939535e-05,
+              "pointwise_scaled_max": 4.3489690219792084e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "nut": {
+              "relative_L2": 5.676825543732581e-07,
+              "pointwise_scaled_max": 5.973535952596489e-06,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_shear": {
+              "relative_L2": 2.2167001288274378e-05,
+              "pointwise_scaled_max": 0.00011575149508684364,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_normal_stress": {
+              "relative_L2": 1.5977764596408637e-05,
+              "pointwise_scaled_max": 3.855283594273009e-05,
+              "budget": 0.01,
+              "passed": true
+            }
+          },
+          "1": {
+            "U": {
+              "relative_L2": 1.6981383174016377e-06,
+              "pointwise_scaled_max": 4.653088499743081e-06,
+              "budget": 0.001,
+              "passed": true
+            },
+            "W": {
+              "relative_L2": 3.2555668096054553e-06,
+              "pointwise_scaled_max": 1.225491899142338e-05,
+              "budget": 0.001,
+              "passed": true
+            },
+            "k": {
+              "relative_L2": 2.532228372343763e-06,
+              "pointwise_scaled_max": 1.0885878763643189e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "epsilon": {
+              "relative_L2": 1.587914873463901e-05,
+              "pointwise_scaled_max": 0.0001482487678052803,
+              "budget": 0.01,
+              "passed": true
+            },
+            "pi": {
+              "relative_L2": 3.281108805285426e-05,
+              "pointwise_scaled_max": 9.887903768165077e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "mechanical_pressure": {
+              "relative_L2": 3.313448052035948e-05,
+              "pointwise_scaled_max": 9.951051823140541e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "nut": {
+              "relative_L2": 0.00033326237034247676,
+              "pointwise_scaled_max": 0.0009998867554416018,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_shear": {
+              "relative_L2": 0.00042436526932331604,
+              "pointwise_scaled_max": 0.001451698127857177,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_normal_stress": {
+              "relative_L2": 0.0003734741537165282,
+              "pointwise_scaled_max": 0.0018252444948717523,
+              "budget": 0.01,
+              "passed": true
+            }
+          }
+        },
+        "horizontal_variation": {
+          "0": {
+            "U": {
+              "relative_L2": 3.755128225434394e-08,
+              "pointwise_scaled_max": 1.4084894842830461e-06,
+              "budget": 0.001,
+              "passed": true
+            },
+            "W": {
+              "relative_L2": 2.963176465325839e-08,
+              "pointwise_scaled_max": 2.752052000759674e-07,
+              "budget": 0.001,
+              "passed": true
+            },
+            "k": {
+              "relative_L2": 1.425286550951248e-07,
+              "pointwise_scaled_max": 2.995638029815198e-06,
+              "budget": 0.01,
+              "passed": true
+            },
+            "pi": {
+              "relative_L2": 1.2185600537313884e-05,
+              "pointwise_scaled_max": 2.7861288792945033e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "mechanical_pressure": {
+              "relative_L2": 1.2110524781817025e-05,
+              "pointwise_scaled_max": 3.344501374396777e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "nut": {
+              "relative_L2": 5.680485566171454e-08,
+              "pointwise_scaled_max": 4.929947106159921e-06,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_shear": {
+              "relative_L2": 1.9858341932027775e-06,
+              "pointwise_scaled_max": 8.491940438400028e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_normal_stress": {
+              "relative_L2": 1.2175244116703588e-05,
+              "pointwise_scaled_max": 3.076037951098173e-05,
+              "budget": 0.01,
+              "passed": true
+            }
+          },
+          "1": {
+            "U": {
+              "relative_L2": 2.547128908443987e-07,
+              "pointwise_scaled_max": 3.9909279929946285e-06,
+              "budget": 0.001,
+              "passed": true
+            },
+            "W": {
+              "relative_L2": 1.3444253462283656e-06,
+              "pointwise_scaled_max": 1.0566041263076972e-05,
+              "budget": 0.001,
+              "passed": true
+            },
+            "k": {
+              "relative_L2": 3.418842024306087e-07,
+              "pointwise_scaled_max": 9.273352385486213e-06,
+              "budget": 0.01,
+              "passed": true
+            },
+            "epsilon": {
+              "relative_L2": 1.7926365904369826e-06,
+              "pointwise_scaled_max": 0.00013427962749913081,
+              "budget": 0.01,
+              "passed": true
+            },
+            "pi": {
+              "relative_L2": 1.9985102412626003e-05,
+              "pointwise_scaled_max": 0.0001038891761766298,
+              "budget": 0.01,
+              "passed": true
+            },
+            "mechanical_pressure": {
+              "relative_L2": 2.0008563376892086e-05,
+              "pointwise_scaled_max": 0.00010235717406349498,
+              "budget": 0.01,
+              "passed": true
+            },
+            "nut": {
+              "relative_L2": 4.993461342019725e-05,
+              "pointwise_scaled_max": 0.0008611044007332141,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_shear": {
+              "relative_L2": 6.9899269299194e-05,
+              "pointwise_scaled_max": 0.0018467089313099674,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_normal_stress": {
+              "relative_L2": 7.93149660995976e-05,
+              "pointwise_scaled_max": 0.0018039389957568558,
+              "budget": 0.01,
+              "passed": true
+            }
+          }
+        },
+        "cold_x_range": 2.220446049250313e-16,
+        "passed": true,
+        "scope": "common physical panels at all streamwise Gauss sections; actual declared-station maxima are also included in every-state native monitoring; cold radial injection supplies the unchanged native inlet trace"
+      },
+      "runtime_equivalence": {
+        "passed": true,
+        "model": "CLS",
+        "bitwise_governing_stages_state_history_audits": true,
+        "reference_defect_preserved": true,
+        "parent_unchanged": true,
+        "prefix_physical_essential_absolute_errors": [
+          0.0,
+          0.0
+        ],
+        "new_successor_progress": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-equivalence-CLS/new/progress.json",
+        "new_progress_sha256": "58701c39ef029ce21250658d365e8322267d87103ce9b80db090cd82ae044ee4"
+      },
+      "recovery_seed": {
+        "mode": "WP2OuterKBumpV1",
+        "immutable_base_sha256": "ebb8ba217720bc1bcd7bcc2a6144fdc01935fbbfbcb8579bf62507cf814df943",
+        "seed_sha256": "2356c51b8897329ad0c4517c6766a8be31b066c52010b3da0a52d9da00fdbb91",
+        "reference_defect_boundary": "retained unchanged; perturbation is applied after freezing data and before fresh histories; no Lift",
+        "frozen_rows_sha256": "8dd4f7c4208cc45ced23578c65ffbed1f1858d2989496602c9702425ebc0b258",
+        "amplitude_relative_K0": 0.04,
+        "support_z": [
+          0.012,
+          0.05
+        ],
+        "support_x": [
+          -0.2,
+          0.6
+        ],
+        "actual_increment_L2": 4.6023824680206336e-05,
+        "initial_TKE_increment": 5.354382218088014e-06,
+        "maximum_actual_relative_k_departure": 0.04049220322457698,
+        "endpoint_K_change": 0,
+        "setup_scalar_mass_projections": 1,
+        "governing_solves": 0,
+        "velocity_pressure_epsilon_changes": 0
+      },
+      "recovery_seed_native_report": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-seed-CLS/h0/case.evolution.json",
+        "sha256": "a2b0af3009519a3302ddc6d0de600259a9cf2dd118ef31fd108d1b3214bdb941"
+      },
+      "governing": {
+        "momentum_predictor_solves": [
+          1,
+          1
+        ],
+        "pressure_system_solves": [
+          1,
+          1
+        ],
+        "epsilon_transport_solves": [
+          1,
+          1
+        ],
+        "k_transport_solves": [
+          1,
+          1
+        ],
+        "bound_calls": [
+          1,
+          1
+        ],
+        "bound_activations": [
+          0,
+          0
+        ],
+        "additional_governing_equation_solves": [
+          0,
+          0
+        ],
+        "additional_correction_or_restoration_solves": [
+          0,
+          0
+        ]
+      },
+      "defects": {
+        "momentum_splitting_identity_max": 5.1227295335409004e-21,
+        "frozen_momentum_defect_max": 5.8498881655115245e-08,
+        "refreshed_epsilon_trace_max": 5.915035707071415e-07,
+        "refreshed_full_stage_norms": [
+          8.925027218319841e-05,
+          3.645340962184428e-05,
+          1.0039611619724824e-07,
+          1.3899020850813265e-07,
+          8.202971056748156e-17,
+          4.62628808220943e-17,
+          0,
+          9.62973149838856e-07
+        ],
+        "meaning": "frozen physical momentum correction defect is separate from its algebraic identity; post-k dependent epsilon refresh is a diagnostic, not a second imposed solve or a physical essential datum"
+      },
+      "confirmation_usage": "178.96 168.18 8.76 5766708\n"
+    },
+    "standard": {
+      "short": {
+        "quarter": {
+          "passed": true,
+          "gates": {
+            "0_U": {
+              "value": 2.3109537259025022e-08,
+              "limit": 0.00025,
+              "passed": true
+            },
+            "0_W": {
+              "value": 1.2784970936443029e-08,
+              "limit": 0.00025,
+              "passed": true
+            },
+            "0_k": {
+              "value": 1.3273069940020715e-07,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_pi": {
+              "value": 1.702620595145812e-06,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_mechanical_pressure": {
+              "value": 1.8534987992687317e-06,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_nut": {
+              "value": 1.6011779861537857e-08,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_total_shear": {
+              "value": 2.956520366174507e-07,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_total_normal_stress": {
+              "value": 1.7027247277089685e-06,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "0_full_velocity_gradient": {
+              "value": 8.459505739002e-08,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_U": {
+              "value": 1.3421693923211726e-07,
+              "limit": 0.00025,
+              "passed": true
+            },
+            "1_W": {
+              "value": 1.4742367935973684e-07,
+              "limit": 0.00025,
+              "passed": true
+            },
+            "1_k": {
+              "value": 1.6990726198489847e-07,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_epsilon": {
+              "value": 8.645013235479526e-07,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_pi": {
+              "value": 3.7680700850298183e-06,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_mechanical_pressure": {
+              "value": 3.7798813031492096e-06,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_nut": {
+              "value": 3.821648319155087e-06,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_total_shear": {
+              "value": 2.564718581011019e-05,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_total_normal_stress": {
+              "value": 4.477063792847831e-06,
+              "limit": 0.0025,
+              "passed": true
+            },
+            "1_full_velocity_gradient": {
+              "value": 6.051152004970076e-06,
+              "limit": 0.0025,
+              "passed": true
+            }
+          },
+          "reference_integration_roundoff": 0.0,
+          "pressure": "absolute; original relative regional offset retained"
+        },
+        "timing": [
+          {
+            "dt": 0.02,
+            "driver_wall": 119.79,
+            "user_cpu": 112.64,
+            "system_cpu": 5.67,
+            "peak_RSS_KiB": 4149432,
+            "steps": [
+              {
+                "step": 1,
+                "wall_seconds": 29.167448668,
+                "process_cpu_seconds": 28.652895
+              },
+              {
+                "step": 2,
+                "wall_seconds": 26.007009888,
+                "process_cpu_seconds": 25.981184
+              }
+            ],
+            "exclusive_cpu_top": [
+              [
+                "output.report",
+                28.442189
+              ],
+              [
+                "domain.compute",
+                17.650729999999996
+              ],
+              [
+                "audit.constitutive_observations",
+                12.907568000000001
+              ],
+              [
+                "dense.triangular_solve",
+                9.50739699999999
+              ],
+              [
+                "residual",
+                8.449999000000002
+              ],
+              [
+                "dense.factorization",
+                5.181738
+              ],
+              [
+                "startup.object",
+                4.919962
+              ],
+              [
+                "audit.physical",
+                4.460881
+              ],
+              [
+                "constitutive.refresh",
+                3.1397310000000007
+              ],
+              [
+                "flow.assembly",
+                2.5853960000000002
+              ],
+              [
+                "output.wp2_per_state_monitoring",
+                2.529006
+              ],
+              [
+                "boundary.assembly",
+                2.5208550000000005
+              ],
+              [
+                "output.fields_and_report",
+                2.2331730000000007
+              ],
+              [
+                "k.bound",
+                2.048061
+              ],
+              [
+                "pressure.build",
+                1.7590140000000059
+              ],
+              [
+                "native.implicit",
+                1.5518279999999969
+              ],
+              [
+                "domain.scalar",
+                1.1892060000000004
+              ],
+              [
+                "startup.initialize",
+                1.0145739999999996
+              ],
+              [
+                "process",
+                0.9700140000000061
+              ],
+              [
+                "output.project_fields",
+                0.660323
+              ]
+            ]
+          },
+          {
+            "dt": 0.01,
+            "driver_wall": 177.68,
+            "user_cpu": 168.96,
+            "system_cpu": 7.28,
+            "peak_RSS_KiB": 4208308,
+            "steps": [
+              {
+                "step": 1,
+                "wall_seconds": 29.19619306,
+                "process_cpu_seconds": 28.717769
+              },
+              {
+                "step": 2,
+                "wall_seconds": 26.505811989,
+                "process_cpu_seconds": 26.48817
+              },
+              {
+                "step": 3,
+                "wall_seconds": 26.472950638,
+                "process_cpu_seconds": 26.458178
+              },
+              {
+                "step": 4,
+                "wall_seconds": 25.899640445,
+                "process_cpu_seconds": 25.884869
+              }
+            ],
+            "exclusive_cpu_top": [
+              [
+                "domain.compute",
+                30.394538999999995
+              ],
+              [
+                "output.report",
+                28.577986000000003
+              ],
+              [
+                "audit.constitutive_observations",
+                22.450243
+              ],
+              [
+                "dense.triangular_solve",
+                18.991351999999928
+              ],
+              [
+                "residual",
+                12.866699999999998
+              ],
+              [
+                "dense.factorization",
+                8.351258000000003
+              ],
+              [
+                "audit.physical",
+                7.310154
+              ],
+              [
+                "constitutive.refresh",
+                5.351104
+              ],
+              [
+                "flow.assembly",
+                5.156801
+              ],
+              [
+                "startup.object",
+                4.904829
+              ],
+              [
+                "output.wp2_per_state_monitoring",
+                4.29554
+              ],
+              [
+                "boundary.assembly",
+                3.9055050000000002
+              ],
+              [
+                "pressure.build",
+                3.561043999999999
+              ],
+              [
+                "native.implicit",
+                3.1129479999999923
+              ],
+              [
+                "k.bound",
+                3.1066290000000003
+              ],
+              [
+                "output.fields_and_report",
+                2.3131249999999994
+              ],
+              [
+                "domain.scalar",
+                1.769198
+              ],
+              [
+                "k.assembly",
+                1.134639
+              ],
+              [
+                "process",
+                1.0536519999999712
+              ],
+              [
+                "startup.initialize",
+                0.998349000000001
+              ]
+            ]
+          }
+        ]
+      },
+      "early_mesh_difference": {
+        "passed": true,
+        "gates": {
+          "0_U": {
+            "value": 1.7999189894414235e-06,
+            "limit": 0.00025,
+            "passed": true
+          },
+          "0_W": {
+            "value": 4.1012232407256e-08,
+            "limit": 0.00025,
+            "passed": true
+          },
+          "0_k": {
+            "value": 3.877964775198973e-06,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_pi": {
+            "value": 5.209571064684939e-07,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_mechanical_pressure": {
+            "value": 9.428684100788455e-06,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_nut": {
+            "value": 2.800853920280031e-07,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_total_shear": {
+            "value": 0.00018073861872823808,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_total_normal_stress": {
+            "value": 5.392666229995096e-07,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "0_full_velocity_gradient": {
+            "value": 0.00021023454783636368,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_U": {
+            "value": 3.307744871367158e-08,
+            "limit": 0.00025,
+            "passed": true
+          },
+          "1_W": {
+            "value": 5.9979913323964955e-09,
+            "limit": 0.00025,
+            "passed": true
+          },
+          "1_k": {
+            "value": 4.9360234541781254e-08,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_epsilon": {
+            "value": 3.8059595583547388e-06,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_pi": {
+            "value": 2.763336823325714e-07,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_mechanical_pressure": {
+            "value": 3.168868535930609e-07,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_nut": {
+            "value": 7.4499925538527184e-09,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_total_shear": {
+            "value": 5.962078198731681e-06,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_total_normal_stress": {
+            "value": 2.773050248488595e-07,
+            "limit": 0.0025,
+            "passed": true
+          },
+          "1_full_velocity_gradient": {
+            "value": 5.294596045305798e-05,
+            "limit": 0.0025,
+            "passed": true
+          }
+        },
+        "reference_integration_roundoff": 2.820926935784242e-16,
+        "pressure": "absolute; original relative regional offset retained"
+      },
+      "early_homogeneity": {
+        "inlet_to_station": {
+          "0": {
+            "U": {
+              "relative_L2": 3.8191018395684445e-07,
+              "pointwise_scaled_max": 2.103687943552912e-06,
+              "budget": 0.001,
+              "passed": true
+            },
+            "W": {
+              "relative_L2": 4.082776591226811e-08,
+              "pointwise_scaled_max": 3.7858771244867416e-07,
+              "budget": 0.001,
+              "passed": true
+            },
+            "k": {
+              "relative_L2": 1.3677133575445356e-06,
+              "pointwise_scaled_max": 3.825607275904911e-06,
+              "budget": 0.01,
+              "passed": true
+            },
+            "pi": {
+              "relative_L2": 8.48664612858615e-06,
+              "pointwise_scaled_max": 2.2700268665414283e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "mechanical_pressure": {
+              "relative_L2": 1.0433025940458183e-05,
+              "pointwise_scaled_max": 2.874972826781745e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "nut": {
+              "relative_L2": 3.031005634317921e-07,
+              "pointwise_scaled_max": 3.345175958773652e-06,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_shear": {
+              "relative_L2": 2.2101685659255292e-05,
+              "pointwise_scaled_max": 0.00011596977075995375,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_normal_stress": {
+              "relative_L2": 8.468013768966147e-06,
+              "pointwise_scaled_max": 2.2704766953685874e-05,
+              "budget": 0.01,
+              "passed": true
+            }
+          },
+          "1": {
+            "U": {
+              "relative_L2": 1.95557395532043e-06,
+              "pointwise_scaled_max": 5.17656875455872e-06,
+              "budget": 0.001,
+              "passed": true
+            },
+            "W": {
+              "relative_L2": 1.8185243811618228e-06,
+              "pointwise_scaled_max": 1.7407647324814233e-05,
+              "budget": 0.001,
+              "passed": true
+            },
+            "k": {
+              "relative_L2": 2.628115722227776e-06,
+              "pointwise_scaled_max": 1.0046772680124912e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "epsilon": {
+              "relative_L2": 1.5435362129674345e-05,
+              "pointwise_scaled_max": 0.00015899497349038295,
+              "budget": 0.01,
+              "passed": true
+            },
+            "pi": {
+              "relative_L2": 1.0155060155110478e-05,
+              "pointwise_scaled_max": 8.61358227463145e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "mechanical_pressure": {
+              "relative_L2": 1.1681936599287912e-05,
+              "pointwise_scaled_max": 8.68099076122789e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "nut": {
+              "relative_L2": 5.759186327072096e-05,
+              "pointwise_scaled_max": 0.00015678839898395676,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_shear": {
+              "relative_L2": 0.00041247249417212124,
+              "pointwise_scaled_max": 0.0014814773415503218,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_normal_stress": {
+              "relative_L2": 3.6129339599580423e-05,
+              "pointwise_scaled_max": 0.000551421734705082,
+              "budget": 0.01,
+              "passed": true
+            }
+          }
+        },
+        "horizontal_variation": {
+          "0": {
+            "U": {
+              "relative_L2": 4.654821306612899e-08,
+              "pointwise_scaled_max": 1.4225358918727844e-06,
+              "budget": 0.001,
+              "passed": true
+            },
+            "W": {
+              "relative_L2": 4.048391898158417e-08,
+              "pointwise_scaled_max": 3.6667917143544943e-07,
+              "budget": 0.001,
+              "passed": true
+            },
+            "k": {
+              "relative_L2": 1.5302656137844062e-07,
+              "pointwise_scaled_max": 3.1144304036941533e-06,
+              "budget": 0.01,
+              "passed": true
+            },
+            "pi": {
+              "relative_L2": 5.157880096363315e-06,
+              "pointwise_scaled_max": 1.5959554408770822e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "mechanical_pressure": {
+              "relative_L2": 5.040004547693975e-06,
+              "pointwise_scaled_max": 1.9974801004041374e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "nut": {
+              "relative_L2": 3.1657432048098345e-08,
+              "pointwise_scaled_max": 2.5680336653631017e-06,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_shear": {
+              "relative_L2": 1.9821388810419654e-06,
+              "pointwise_scaled_max": 8.510229338464271e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_normal_stress": {
+              "relative_L2": 5.136836050637806e-06,
+              "pointwise_scaled_max": 1.598797515406482e-05,
+              "budget": 0.01,
+              "passed": true
+            }
+          },
+          "1": {
+            "U": {
+              "relative_L2": 3.0111951711873267e-07,
+              "pointwise_scaled_max": 4.585064928885073e-06,
+              "budget": 0.001,
+              "passed": true
+            },
+            "W": {
+              "relative_L2": 1.809338947672598e-06,
+              "pointwise_scaled_max": 1.725090023871849e-05,
+              "budget": 0.001,
+              "passed": true
+            },
+            "k": {
+              "relative_L2": 4.122091571868946e-07,
+              "pointwise_scaled_max": 8.651819658792871e-06,
+              "budget": 0.01,
+              "passed": true
+            },
+            "epsilon": {
+              "relative_L2": 1.7489184822347275e-06,
+              "pointwise_scaled_max": 0.00014336589145509207,
+              "budget": 0.01,
+              "passed": true
+            },
+            "pi": {
+              "relative_L2": 8.632211028757186e-06,
+              "pointwise_scaled_max": 7.866974701210386e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "mechanical_pressure": {
+              "relative_L2": 8.678400217020544e-06,
+              "pointwise_scaled_max": 7.775042606577517e-05,
+              "budget": 0.01,
+              "passed": true
+            },
+            "nut": {
+              "relative_L2": 8.045907486315653e-06,
+              "pointwise_scaled_max": 0.0001419882575416654,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_shear": {
+              "relative_L2": 6.105962997981963e-05,
+              "pointwise_scaled_max": 0.0011961298955730402,
+              "budget": 0.01,
+              "passed": true
+            },
+            "total_normal_stress": {
+              "relative_L2": 3.557731604583022e-05,
+              "pointwise_scaled_max": 0.0005395238227306053,
+              "budget": 0.01,
+              "passed": true
+            }
+          }
+        },
+        "cold_x_range": 2.220446049250313e-16,
+        "passed": true,
+        "scope": "common physical panels at all streamwise Gauss sections; actual declared-station maxima are also included in every-state native monitoring; cold radial injection supplies the unchanged native inlet trace"
+      },
+      "runtime_equivalence": {
+        "passed": true,
+        "model": "standard",
+        "bitwise_governing_stages_state_history_audits": true,
+        "reference_defect_preserved": true,
+        "parent_unchanged": true,
+        "prefix_physical_essential_absolute_errors": [
+          0.0,
+          0.0
+        ],
+        "new_successor_progress": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-equivalence-standard/new/progress.json",
+        "new_progress_sha256": "10d52c91495335d061d808c69b5980c0355b693ab12574872e2802babc0e9dc0"
+      },
+      "recovery_seed": {
+        "mode": "WP2OuterKBumpV1",
+        "immutable_base_sha256": "a1b87e794a37b36fe5c0032aaef9c553e48b4c947b2e1ec5e8a0b8b75179eeb5",
+        "seed_sha256": "0f2bc1f991d814e8a2b4fcfe471ee47efc07927c48f25b162d5c161ea89927f0",
+        "reference_defect_boundary": "retained unchanged; perturbation is applied after freezing data and before fresh histories; no Lift",
+        "frozen_rows_sha256": "01c7dd575a434e5670434bad79edb44354310b2714bd5ee43aad465571fa30b3",
+        "amplitude_relative_K0": 0.04,
+        "support_z": [
+          0.012,
+          0.05
+        ],
+        "support_x": [
+          -0.2,
+          0.6
+        ],
+        "actual_increment_L2": 4.80815955900852e-05,
+        "initial_TKE_increment": 5.593781964747755e-06,
+        "maximum_actual_relative_k_departure": 0.04049220322457701,
+        "endpoint_K_change": 0,
+        "setup_scalar_mass_projections": 1,
+        "governing_solves": 0,
+        "velocity_pressure_epsilon_changes": 0
+      },
+      "recovery_seed_native_report": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-seed-standard/h0/case.evolution.json",
+        "sha256": "a40dbe9d884d1259fdf1954d58841813484ec6cca7bb4a31e52f47d007c5fbfb"
+      },
+      "governing": {
+        "momentum_predictor_solves": [
+          1,
+          1
+        ],
+        "pressure_system_solves": [
+          1,
+          1
+        ],
+        "epsilon_transport_solves": [
+          1,
+          1
+        ],
+        "k_transport_solves": [
+          1,
+          1
+        ],
+        "bound_calls": [
+          1,
+          1
+        ],
+        "bound_activations": [
+          0,
+          0
+        ],
+        "additional_governing_equation_solves": [
+          0,
+          0
+        ],
+        "additional_correction_or_restoration_solves": [
+          0,
+          0
+        ]
+      },
+      "defects": {
+        "momentum_splitting_identity_max": 5.61634956408192e-21,
+        "frozen_momentum_defect_max": 5.128638390115876e-09,
+        "refreshed_epsilon_trace_max": 2.3538186628979668e-07,
+        "refreshed_full_stage_norms": [
+          1.0979108453892837e-05,
+          1.9212068301229544e-06,
+          1.0043375819399473e-07,
+          1.1457784185785424e-07,
+          6.427792641454388e-17,
+          3.408861005231168e-17,
+          0,
+          3.270961806693016e-07
+        ],
+        "meaning": "frozen physical momentum correction defect is separate from its algebraic identity; post-k dependent epsilon refresh is a diagnostic, not a second imposed solve or a physical essential datum"
+      },
+      "confirmation_usage": "180.39 168.90 9.76 5801164\n"
+    }
+  },
+  "runtime": {
+    "original": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/build/IncNavierStokesSolver",
+      "sha256": "8f64823373d97b86880cc9b624b19886f9921a2e9a0d56a9def1f0528af485df",
+      "ldd": "\tlinux-vdso.so.1 (0x00007fffec383000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libSpatialDomains.so.5.9.0 (0x00007fde54c00000)\n\tlibSolverUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0 (0x00007fde54600000)\n\tlibFieldUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0 (0x00007fde54200000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libmpi_cxx.so.40 (0x00007fde558cc000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libmpi.so.40 (0x00007fde55793000)\n\tlibGlobalMapping.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0 (0x00007fde556fe000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libMultiRegions.so.5.9.0 (0x00007fde53e00000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libLocalRegions.so.5.9.0 (0x00007fde53a00000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libStdRegions.so.5.9.0 (0x00007fde53600000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libLibUtilities.so.5.9.0 (0x00007fde53000000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/liblapack.so.3 (0x00007fde52800000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libblas.so.3 (0x00007fde54f9e000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libstdc++.so.6 (0x00007fde52400000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libm.so.6 (0x00007fde54eb7000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libgcc_s.so.1 (0x00007fde54e97000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libc.so.6 (0x00007fde52000000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libptscotch-6.1.so (0x00007fde54b2d000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libz.so.1 (0x00007fde54e7b000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libboost_program_options.so.1.74.0 (0x00007fde54e36000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopen-pal.so.40 (0x00007fde54a7a000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopen-rte.so.40 (0x00007fde53d43000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libhwloc.so.15 (0x00007fde53ce7000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libCollections.so.5.9.0 (0x00007fde5348d000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libfftw3.so.3 (0x00007fde51c00000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libboost_iostreams.so.1.74.0 (0x00007fde54e1c000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopenblas.so.0 (0x00007fde4f7b0000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libgfortran.so.5 (0x00007fde4f400000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fde558e8000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libptscotcherr-6.1.so (0x00007fde54e17000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libbz2.so.1.0 (0x00007fde54a67000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/liblzma.so.5 (0x00007fde545d5000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libevent_core-2.1.so.7 (0x00007fde53cb2000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libevent_pthreads-2.1.so.7 (0x00007fde54e10000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libudev.so.1 (0x00007fde53c88000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libMatrixFreeOps.so.5.9.0 (0x00007fde4c600000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libzstd.so.1 (0x00007fde53931000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libquadmath.so.0 (0x00007fde53c40000)\n",
+      "libraries": {
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libc.so.6": "4ebb1967c395ca547dcfeaeeab7a2819724604a331aede44e8a749a7e1a4628e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libm.so.6": "045fdb0436a8fb0d651f039e3444a9cbffc011d379c82b979cebf43571053eca",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a"
+      }
+    },
+    "frozen": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver",
+      "sha256": "8f64823373d97b86880cc9b624b19886f9921a2e9a0d56a9def1f0528af485df",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffea43b2000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libSpatialDomains.so.5.9.0 (0x0000790df0200000)\n\tlibSolverUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libSolverUtils.so.5.9.0 (0x0000790defc00000)\n\tlibFieldUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libFieldUtils.so.5.9.0 (0x0000790def800000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libmpi_cxx.so.40 (0x0000790df0d18000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libmpi.so.40 (0x0000790df04c9000)\n\tlibGlobalMapping.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libGlobalMapping.so.5.9.0 (0x0000790df0434000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libMultiRegions.so.5.9.0 (0x0000790def400000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libLocalRegions.so.5.9.0 (0x0000790def000000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libStdRegions.so.5.9.0 (0x0000790deec00000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libLibUtilities.so.5.9.0 (0x0000790dee600000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/liblapack.so.3 (0x0000790dede00000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libblas.so.3 (0x0000790df019e000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libstdc++.so.6 (0x0000790deda00000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libm.so.6 (0x0000790df00b7000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libgcc_s.so.1 (0x0000790df0414000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libc.so.6 (0x0000790ded600000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libptscotch-6.1.so (0x0000790def32d000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libz.so.1 (0x0000790df009b000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libboost_program_options.so.1.74.0 (0x0000790df0056000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libopen-pal.so.40 (0x0000790def27a000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libopen-rte.so.40 (0x0000790deef43000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libhwloc.so.15 (0x0000790def21e000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libCollections.so.5.9.0 (0x0000790deea8d000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libfftw3.so.3 (0x0000790ded200000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libboost_iostreams.so.1.74.0 (0x0000790defbe8000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libopenblas.so.0 (0x0000790deadb0000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libgfortran.so.5 (0x0000790deaa00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000790df0d34000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libptscotcherr-6.1.so (0x0000790df0d09000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libbz2.so.1.0 (0x0000790defbd5000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/liblzma.so.5 (0x0000790deef18000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libevent_core-2.1.so.7 (0x0000790deeee3000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libevent_pthreads-2.1.so.7 (0x0000790df0d02000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libudev.so.1 (0x0000790deeeb9000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libMatrixFreeOps.so.5.9.0 (0x0000790de7c00000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libzstd.so.1 (0x0000790dee531000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libquadmath.so.0 (0x0000790dee4e9000)\n",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libc.so.6": "4ebb1967c395ca547dcfeaeeab7a2819724604a331aede44e8a749a7e1a4628e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libm.so.6": "045fdb0436a8fb0d651f039e3444a9cbffc011d379c82b979cebf43571053eca",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a"
+      }
+    }
+  },
+  "probe": {
+    "original": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/build/RANSWallResolutionProbe",
+      "sha256": "68305422cdf3f99c5876d54fa533ca07cf60cbadbb32de39b97a3c2689d905ea",
+      "ldd": "\tlinux-vdso.so.1 (0x00007fff6ec44000)\n\tlibmpi_cxx.so.40 => /lib/x86_64-linux-gnu/libmpi_cxx.so.40 (0x00007260699fe000)\n\tlibmpi.so.40 => /lib/x86_64-linux-gnu/libmpi.so.40 (0x00007260698c7000)\n\tlibMultiRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0 (0x0000726069000000)\n\tlibLocalRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0 (0x0000726068c00000)\n\tlibSpatialDomains.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0 (0x0000726068800000)\n\tlibStdRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0 (0x0000726068400000)\n\tlibLibUtilities.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0 (0x0000726067e00000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x0000726067600000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x0000726067200000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x0000726068f19000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007260698a5000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000726066e00000)\n\tlibopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x0000726068e66000)\n\tlibopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x0000726068b43000)\n\tlibhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x0000726068ae7000)\n\tlibCollections.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0 (0x000072606828d000)\n\tlibptscotch-6.1.so => /lib/x86_64-linux-gnu/libptscotch-6.1.so (0x0000726068a14000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x000072606879e000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x0000726069885000)\n\tlibfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x0000726066a00000)\n\tlibboost_iostreams.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0 (0x000072606986d000)\n\tlibboost_program_options.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0 (0x0000726068e21000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x00007260645b0000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x0000726064200000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000726069a3c000)\n\tlibevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x0000726068769000)\n\tlibevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x0000726069866000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x000072606873f000)\n\tlibMatrixFreeOps.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0 (0x0000726061400000)\n\tlibptscotcherr-6.1.so => /lib/x86_64-linux-gnu/libptscotcherr-6.1.so (0x000072606985f000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x00007260693ed000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x0000726068714000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x0000726067d31000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007260686cc000)\n",
+      "libraries": {
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+        "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/usr/lib/x86_64-linux-gnu/libc.so.6": "4ebb1967c395ca547dcfeaeeab7a2819724604a331aede44e8a749a7e1a4628e",
+        "/usr/lib/x86_64-linux-gnu/libevent_core-2.1.so.7.0.1": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/usr/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7.0.1": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/usr/lib/x86_64-linux-gnu/libfftw3.so.3.5.8": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/usr/lib/x86_64-linux-gnu/libhwloc.so.15.5.2": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/usr/lib/x86_64-linux-gnu/libm.so.6": "045fdb0436a8fb0d651f039e3444a9cbffc011d379c82b979cebf43571053eca",
+        "/usr/lib/x86_64-linux-gnu/libmpi.so.40.30.2": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/usr/lib/x86_64-linux-gnu/libmpi_cxx.so.40.30.1": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/usr/lib/x86_64-linux-gnu/libopen-pal.so.40.30.2": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/usr/lib/x86_64-linux-gnu/libopen-rte.so.40.30.2": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/usr/lib/x86_64-linux-gnu/libptscotch-6.1.3.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/usr/lib/x86_64-linux-gnu/libptscotcherr-6.1.3.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.2": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+      }
+    },
+    "frozen": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/RANSWallResolutionProbe",
+      "sha256": "68305422cdf3f99c5876d54fa533ca07cf60cbadbb32de39b97a3c2689d905ea",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffcbf189000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libmpi_cxx.so.40 (0x000074f10dfc4000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libmpi.so.40 (0x000074f10de8d000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libMultiRegions.so.5.9.0 (0x000074f10d600000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libLocalRegions.so.5.9.0 (0x000074f10d200000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libSpatialDomains.so.5.9.0 (0x000074f10ce00000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libStdRegions.so.5.9.0 (0x000074f10ca00000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libLibUtilities.so.5.9.0 (0x000074f10c400000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/liblapack.so.3 (0x000074f10bc00000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libstdc++.so.6 (0x000074f10b800000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libm.so.6 (0x000074f10d519000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libgcc_s.so.1 (0x000074f10de69000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libc.so.6 (0x000074f10b400000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopen-pal.so.40 (0x000074f10d466000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopen-rte.so.40 (0x000074f10d143000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libhwloc.so.15 (0x000074f10d0e7000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libCollections.so.5.9.0 (0x000074f10c88d000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libptscotch-6.1.so (0x000074f10d014000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libblas.so.3 (0x000074f10cd9e000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libz.so.1 (0x000074f10d9e4000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libfftw3.so.3 (0x000074f10b000000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libboost_iostreams.so.1.74.0 (0x000074f10d44e000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libboost_program_options.so.1.74.0 (0x000074f10cd59000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopenblas.so.0 (0x000074f108bb0000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libgfortran.so.5 (0x000074f108800000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000074f10dfe0000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libevent_core-2.1.so.7 (0x000074f10d419000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libevent_pthreads-2.1.so.7 (0x000074f10de5e000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libudev.so.1 (0x000074f10cd2f000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libMatrixFreeOps.so.5.9.0 (0x000074f105a00000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libptscotcherr-6.1.so (0x000074f10d9df000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libbz2.so.1.0 (0x000074f10cd1c000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/liblzma.so.5 (0x000074f10ccf1000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libzstd.so.1 (0x000074f10c331000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libquadmath.so.0 (0x000074f10c2e9000)\n",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libc.so.6": "4ebb1967c395ca547dcfeaeeab7a2819724604a331aede44e8a749a7e1a4628e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libm.so.6": "045fdb0436a8fb0d651f039e3444a9cbffc011d379c82b979cebf43571053eca",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a"
+      }
+    }
+  },
+  "aggregate": {
+    "spatial_cases": 30,
+    "boundary_calls": 7,
+    "physical_attempts": 50,
+    "timestep_trials": 6
+  },
+  "forecast": {
+    "remaining_primary_accepted_step_executions": 702,
+    "selected_continued_step_seconds": 27.5,
+    "confirmation_continued_step_seconds": 40.0,
+    "predicted_wall_with_two_native_cases_hours": 4.5,
+    "allowance": "includes setup/reporting/checkpoints, restart/rollback replay and 25% headroom; recovery extension only as needed within 4*Treq and the same aggregate budget",
+    "process_peak_RSS_measured_GiB": 5.532421112060547,
+    "aggregate_wall_envelope_hours": 12,
+    "original_started_epoch": 1794809747,
+    "storage_cap_GiB": 96,
+    "process_RSS_cap_GiB": 24
+  },
+  "source_sha256": {
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEquilibrium.cpp": "478aacfcf61cdbbf72f0131baf90c40abc529b72ac7764e5340aa06ba5d669ec",
+    "solvers/IncNavierStokesSolver/Tests/RANS/run_cao_tamura_budget_wp2.py": "fc1637854b784f29fa025d250aae4d233bb16bb44f385781cfede2f8be70a79a",
+    "solvers/IncNavierStokesSolver/Tests/RANS/run_wp2_preservation.py": "c665dd89db13df855df64bea557f76a0fd1fb99524631d7274431c0b12202697",
+    "solvers/IncNavierStokesSolver/Tests/RANS/test_wp2_protocol.py": "d7efc813ec2001daecb7ac496b38a984d7b42f43d3eb85c7b56cff2174594a35",
+    "solvers/IncNavierStokesSolver/Tests/RANS/verify_wp2_runtime.py": "40c82040487fc40a4c947cf6d7bfdd4e79555b377732efca6fa456539c509655",
+    "solvers/IncNavierStokesSolver/Tests/RANS/wp2_native.py": "a0a00b8488b893286ab20fc75ddace5b9531c77858a2f7a100543449b8eae81d",
+    "solvers/IncNavierStokesSolver/Tests/RANS/wp2_neutral_cases.py": "07c56dfc29ad2315229bb7c404710d212a43f2157e5c18f43eac0cd34b6536dd",
+    "solvers/IncNavierStokesSolver/Tests/RANS/wp2_qualification.py": "ed4eb2777ff9f77b295cd9493114da3f68c9a2d3aa24d2f16316b637859ffcb0"
+  },
+  "protocol_tests": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/wp2-protocol-tested-continuation.txt",
+    "sha256": "c5482fc158fe87c8ab6b9c2e80b5a883e75b29d226d06ef73ad9ada708841100",
+    "count": 5,
+    "passed": true
+  },
+  "essential_and_trace_semantics": "physical essential coefficients checked directly before free-row masking and exactly on all retained prefixes; post-k dependent epsilon refresh mismatch is reported separately and never removed by Lift/reset"
+}

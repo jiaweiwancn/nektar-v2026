@@ -11,7 +11,8 @@ def physical_gates(s, us, K0, complete=False):
         gates[name]=dict(value=float(value),limit=bound,passed=math.isfinite(value) and value<=bound)
     n=s['unanchored_free_block_norms']
     limit('four_unforced_block_norms',max(n[:4]),1e-3)
-    limit('weak_continuity_unused_gauge_essential',max(n[4:]),1e-9)
+    limit('weak_continuity_unused_gauge',max(n[4:7]),1e-9)
+    if 'physical_essential_max_scaled' in s:limit('physical_prescribed_boundary_data',s['physical_essential_max_scaled'],1e-9)
     limit('strong_divergence_RMS_over_ustar_H',s['strong_divergence_RMS_over_ustar_H'],1e-3)
     limit('wall_shear',s['wall_shear_RMS_relative_error'],1e-2)
     for region,v in enumerate(s['regional_errors_inner_outer']):
@@ -70,6 +71,14 @@ def verify_report(d,us,K0,allow_recovery=False):
         # Recovery may start outside the reference-error budget, by design.
         results.append(dict(time=row['time'],**checks))
     if not allow_recovery:require(all(x['passed'] for x in results),'WP2 physical preservation budget failed')
+    # New native reporting exports the immutable physical essential map. Use
+    # it to check all retained coefficient vectors (including older-runtime
+    # prefixes), separately from the expected post-k dependent trace lag.
+    table=next((x['physical_checks'] for x in d['wp2_per_state_monitoring'] if 'physical_essential_rows' in x['physical_checks']),None)
+    if table:
+        ids=[int(i) for i in table['physical_essential_rows']];values=table['physical_essential_values']
+        for state in d['accepted_states']:
+            require(all(state[i]==v for i,v in zip(ids,values)),'physical essential coefficient changed')
     for a in d['state_audits']:
         require(a['accepted_awf_hard_admissible']==[1] and min(a['accepted_awf_covariance'][:2])>=1e-4*K0,'native hard or positive covariance margin failed')
         require(max(abs(a['interface'][i]) for i in [2,3])/(us*us)<=1e-2 and abs(a['interface'][5])/(us*K0)<=1e-2,'native interface budget failed')
@@ -104,3 +113,33 @@ def quarter_budget_differences(a,b,us,K0,H):
         gates[str(region)+'_full_velocity_gradient']=dict(value=value,limit=.0025,passed=value<=.0025)
     return dict(passed=all(x['passed'] for x in gates.values()),gates=gates,reference_integration_roundoff=reference_roundoff,
                 pressure='absolute; original relative regional offset retained')
+
+
+def homogeneity(samples,cold,us,K0):
+    require(samples['weights']==cold['weights'] and samples['regions']==cold['regions'],'homogeneity changed sampling partition')
+    nz=(len(samples['physical_z_partition'])-1)*int(samples['order']);v=np.asarray(samples['values']);c=np.asarray(cold['values']);w=np.asarray(samples['weights']);ref=np.asarray(samples['reference_values'])
+    require(len(v)%nz==0,'common tensor sample shape')
+    shape=(len(v)//nz,nz,len(v[0]));cv=c.reshape(shape);vv=v.reshape(shape);ww=w.reshape(shape[:2]);weights_x=ww[:,0]/sum(ww[:,0])
+    # Radial injection is exactly constant in x; retain and check its roundoff.
+    cold_x_range=float(np.max(np.ptp(cv[:,:,:4],axis=0)))
+    require(cold_x_range<=1e-12,'cold reference is not the prescribed homogeneous native inlet')
+    inlet=np.sum(cv*weights_x[:,None,None],axis=0);mean=np.sum(vv*weights_x[:,None,None],axis=0)
+    out={}
+    for label,d in [('inlet_to_station',vv-inlet[None,:,:]),('horizontal_variation',vv-mean[None,:,:])]:
+        d=d.reshape(v.shape);r=np.asarray(samples['regions']);metrics={}
+        for region in [0,1]:
+            selected=r==region;measure=sum(w[selected]);row={}
+            for i,name in enumerate(samples['columns'].split(',')):
+                if name=='epsilon' and region==0:continue
+                if i>=10 or name=='production':continue
+                if name=='U':scale=np.maximum(abs(ref[selected,i]),us);norm=math.sqrt(float(np.dot(w[selected],ref[selected,i]**2)));budget=1e-3
+                elif name=='W':scale=np.full(sum(selected),us);norm=us*math.sqrt(measure);budget=1e-3
+                elif name in ['pi','mechanical_pressure','total_shear','total_normal_stress']:scale=np.full(sum(selected),us*us);norm=us*us*math.sqrt(measure);budget=1e-2
+                else:scale=abs(ref[selected,i]);norm=math.sqrt(float(np.dot(w[selected],scale**2)));budget=1e-2
+                value=math.sqrt(float(np.dot(w[selected],d[selected,i]**2)))/norm
+                row[name]=dict(relative_L2=value,pointwise_scaled_max=float(max(abs(d[selected,i])/scale)),budget=budget,passed=value<=budget)
+            metrics[str(region)]=row
+        out[label]=metrics
+    out['cold_x_range']=cold_x_range;out['passed']=all(v['passed'] for key in ['inlet_to_station','horizontal_variation'] for row in out[key].values() for v in row.values())
+    out['scope']='common physical panels at all streamwise Gauss sections; actual declared-station maxima are also included in every-state native monitoring; cold radial injection supplies the unchanged native inlet trace'
+    return out

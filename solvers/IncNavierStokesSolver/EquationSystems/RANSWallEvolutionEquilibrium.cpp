@@ -32,6 +32,20 @@ std::string RANSWallEvolutionPatch::EquilibriumSpatialChecks(const Vector &s,
     {parts.constraints=Constraints(s,0,data);parts.terms["spatial_sum"]=Residual(s,s,0,0,data,false,true);
      exact.terms["spatial_sum"]=Vector(Size());}
     auto r=parts.terms.at("spatial_sum"),ar=exact.terms.at("spatial_sum");
+    // Essential physical data are not the post-k dependent trace refresh.
+    // Test the original coefficients before masking free-row residual loads.
+    double essential=0,traceRefresh=0;Vector externalRows,externalValues;
+    const auto external=ExternalConstraints(0,data);
+    for(const auto &[row,value]:external)
+    {
+        int b=0;while(b+1<offset.size() && row>=offset[b+1])++b;
+        const double scale=b<2?us:b==K()?K0:b==Epsilon()?std::pow(us,3)/(m_parameters.model.Kappa()*H):us*us;
+        essential=std::max(essential,std::abs(s[row]-value)/scale);
+        externalRows.push_back(row);externalValues.push_back(value);
+    }
+    for(const auto &[row,value]:parts.constraints)
+        if(!external.count(row) && row>=offset[Epsilon()] && row<offset[Epsilon()]+size[Epsilon()])
+            traceRefresh=std::max(traceRefresh,std::abs(s[row]-value)/(std::pow(us,3)/(m_parameters.model.Kappa()*H)));
     const auto native=monitoring?r:Residual(s,s,0,0,data,false,true);double nativeError=0;
     std::vector<std::string> freeRows;Vector maxRow(4);
     for(int b=0;b<InnerPressure();++b)
@@ -177,6 +191,8 @@ std::string RANSWallEvolutionPatch::EquilibriumSpatialChecks(const Vector &s,
     const double divRMS=std::sqrt((error[0][13]+error[1][13])/(volume[0]+volume[1]));
     if(monitoring)return J::Object({{"version",J::Quote("WP2PerAcceptedStateV1")},
         {"state_sha256",J::Quote(RANSWallR3::Hash(s))},{"unanchored_free_block_norms",J::Numbers(norms)},
+        {"physical_essential_max_scaled",J::Number(essential)},{"dependent_epsilon_refresh_mismatch_scaled",J::Number(traceRefresh)},
+        {"physical_essential_rows",J::Numbers(externalRows)},{"physical_essential_values",J::Numbers(externalValues)},
         {"maximum_scaled_individual_row",J::Numbers(maxRow)},{"regional_errors_inner_outer",J::List(regions)},
         {"log_height_bands",J::List(bandErrors)},{"volume_covariance_inner_outer",J::Numbers(extraCovariance)},
         {"volume_minimum_k_inner_outer",J::Numbers(extraScalarMinimum)},
@@ -190,6 +206,8 @@ std::string RANSWallEvolutionPatch::EquilibriumSpatialChecks(const Vector &s,
     return J::Object({{"version",J::Quote("WP2UnforcedSpatialV1")},{"state_sha256",J::Quote(RANSWallR3::Hash(s))},{"state",J::Numbers(s)},
         {"size",J::Number(Size())},{"sizes",J::Numbers(size)},{"mesh",J::List(mesh)},{"quadrature_order",J::Number(order)},
         {"free_coefficient_rows",J::List(freeRows)},{"unanchored_free_block_norms",J::Numbers(norms)},
+        {"physical_essential_max_scaled",J::Number(essential)},{"dependent_epsilon_refresh_mismatch_scaled",J::Number(traceRefresh)},
+        {"physical_essential_rows",J::Numbers(externalRows)},{"physical_essential_values",J::Numbers(externalValues)},
         {"analytical_free_block_norms",J::Numbers(anorms)},{"maximum_scaled_individual_row",J::Numbers(maxRow)},
         {"native_decomposition_free_max_error",J::Number(nativeError)},{"metric_columns",J::Quote("velocity,W,k,epsilon,nut,grad_velocity,grad_k,grad_epsilon,pi,mechanical_pressure,shear,normal_stress,production,divergence,U_x,W_x,W_z")},
         {"regional_errors_inner_outer",J::List(regions)},{"radial_errors",J::List(panels)},

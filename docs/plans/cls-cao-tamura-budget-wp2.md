@@ -1,8 +1,9 @@
 # WP2: neutral open approach-flow qualification
 
 2026-11-16, Asia/Shanghai. Checkpoints 1 and 2 pass for both deployed regularized
-CLS and calibrated standard k–epsilon. WP2 remains **OPEN**: timestep/cost and
-physical-transit preservation qualification are next.
+CLS and calibrated standard k–epsilon. Checkpoint 3 qualifies the short timestep
+pair and measured cost. WP2 remains **OPEN** pending physical-transit preservation
+and recovery through the required duration.
 
 The physical calibration, full-height analytical inlet, local transported-K
 cutoff budget and one-sweep equations are unchanged. The new
@@ -81,6 +82,41 @@ The exact composite inlet flux is 1.050195996901104 m²/s per unit span, U_bulk 
 that duration. Both timestep/confirmation preservation runs and perturbation
 recovery remain unexecuted. H2k's hill startup remains preserved; no hill run is
 authorized here.
+
+The selected-space dt=.02/.01 s trials reach the same actual T=.04 s with 2/4
+accepted steps per model. Every equation and logical bound operation occurs once
+per accepted step; solved epsilon is retained, and correction activity/supply are
+zero. Differences use at most 3.29% (CLS) and 1.03% (standard) of the allowed
+quarter budgets. Continued native steps cost 26–28 s; cold two-step driver runs
+cost 120–123 s with peak RSS below 4 GiB. The confirmation mesh's two steps cost
+179–180 s total, continued steps about 39–40 s, peak 5.54 GiB. Early selected/finer
+differences remain within 8.41% of the quarter budgets.
+
+The final diagnostic runtime explicitly checks prescribed coefficients before
+free-row masking and reports the post-k dependent epsilon refresh lag separately.
+It changes no evolution arithmetic: both models reproduce old-runtime governing
+stage hashes, states, native histories, reference/defect and audit values bitwise
+from the same accepted checkpoint. All earlier trial prescribed rows independently
+replay with zero error. Frozen runtimes are retained, and successors name their
+exact parent checkpoints. The epsilon refresh lag is not removed by a second
+solve or Lift.
+
+Both predeclared recovery seeds pass the native admissibility checks at zero
+physical steps. A constrained consistent-mass projection adds only outer k on
+.012<z<.05, with an actual maximum 4.0492% departure, zero endpoint-K change and
+unchanged U, W, pressures, epsilon, reference, defect and boundary data. The TKE
+increments are 5.35438e-6 (CLS) and 5.59378e-6 (standard), per unit span/density.
+These are setup increments, not positivity-correction supply. Recovery is not yet
+demonstrated.
+
+Use dt=.02 and .01 to T=1.2 s, with observations at .3/.6/.9/1.2; the last .3 s
+exceeds T_req/4. Continue the same accepted trials instead of repeating them.
+Run the finer mesh to the same endpoint and the recovery legs at .01. The measured
+remaining program forecasts about 4–4.5 h with two serial native cases, including
+setup/reporting, restart/rollback and headroom, inside the original 12 h envelope.
+The [checkpoint-3 receipt](cls-cao-tamura-budget-wp2-evidence/checkpoint3.json)
+separates inclusive step costs, exclusive CPU categories, actual splitting
+defects from their algebraic identity, and declared versus executed duration.
 
 The first implementation attempt exposed an immutable-reference dispatch using
 candidate coverage assertions. That setup failure is retained on Linux; the

@@ -14,9 +14,15 @@ from run_cao_tamura_budget_h2f_startup import verify_retained_rollback
 
 
 class Run:
-    def __init__(self,root,solver,h1,preflight,output,model,level=0,order=16,projection='RadialL2V1'):
+    def __init__(self,root,solver,h1,preflight,output,model,level=0,order=16,projection='RadialL2V1',resume=False):
         self.root,self.solver,self.h1,self.pre,self.output=root,solver,h1,load(preflight),output
         self.model,self.level,self.order,self.projection=model,level,order,projection
+        if resume:
+            self.result=load(output/'progress.json')
+            require(self.result['status']=='completed_bounded_trajectory' and self.result['model']==model and
+                    self.result['solver_sha256']==sha(solver) and self.result['case_definition']==dict(level=level,order=order,projection=projection),
+                    'resume requires the same completed bounded trajectory, case and immutable runtime')
+            return
         output.mkdir(exist_ok=False);self.result=dict(version='WP2NativeProtocolV1',status='running',model=model,
             solver=str(solver),solver_sha256=sha(solver),results={},case_definition=dict(level=level,order=order,projection=projection))
         self.save()
@@ -38,7 +44,9 @@ class Run:
             p=subprocess.run(['/usr/bin/time','-f','%e %U %S %M','-o',str(xml.parent/'usage.txt'),str(self.solver),str(xml)],cwd=xml.parent,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=min(1800,remaining))
         report=xml.with_suffix('.evolution.json');d=load(report) if report.exists() else {}
         self.result['results'][label]=dict(code=p.returncode,seconds=time.monotonic()-started,xml_sha256=sha(xml),
-            report=str(report),report_sha256=sha(report) if report.exists() else None,failure=d.get('failure'),usage=(xml.parent/'usage.txt').read_text());self.save()
+            report=str(report),report_sha256=sha(report) if report.exists() else None,failure=d.get('failure'),usage=(xml.parent/'usage.txt').read_text(),
+            requested_attempt_work=steps,observed_physical_attempts=d.get('implicit_callback_count',0),
+            accepted_step_executions=max(0,d.get('steps',0)-(checkpoint(parent)['steps'] if parent else 0)));self.save()
         require(int(self.result['results'][label]['usage'].split()[-1])<=24*1024*1024,'WP2 per-process 24GiB RSS envelope exceeded')
         if mismatch:
             require(p.returncode!=0 and 'signature' in (xml.parent/'solver.log').read_text().lower(),'incompatible boundary restart was not rejected')
