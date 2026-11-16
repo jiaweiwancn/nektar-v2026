@@ -9,7 +9,7 @@ import numpy as np
 import ct_accepted8_native as n
 from ct_accepted9_controls import enable,compare_packets,maximum
 from ct_accepted9_pressure_run import sealed
-from ct_accepted14_component import ordering
+from ct_accepted14_component import ordering as baseline_ordering
 from ct_accepted14_pair import numerical_receipts
 from ct_accepted13_orderings import native_run
 from ct_accepted13_memory import equal_primitives
@@ -21,6 +21,9 @@ from ct_accepted_feasibility import write_json
 
 POLICY='ImmutableTensorV1'
 COMPONENT='CT15-ImmutableTensorV1'
+def ordering(folder):
+    baseline_ordering(folder);policy(folder)
+
 def policy(folder,value=POLICY):
     root=ET.parse(folder/'case.xml').getroot();set_info(root,'RANSWallImmutableEvaluation',value);write(root,folder/'case.xml')
 
