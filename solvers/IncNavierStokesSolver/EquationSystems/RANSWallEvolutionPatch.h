@@ -575,6 +575,9 @@ private:
     bool m_heightComparison=false,m_acceptedComparison=false;
     mutable std::map<RANSWallCoordinate,RANSWallGlobalPoint> m_kSamplingRows;
     bool m_evaluationReuse=false;
+    bool m_immutableTensor=false;
+    struct ImmutableRows;
+    mutable std::shared_ptr<ImmutableRows> m_immutableRows;
     mutable std::shared_ptr<EvaluationCache> m_evaluation;
     mutable std::map<std::pair<int,bool>,RANSWallSharedInventory<ScalarLocation>> m_reconstructionCatalog;
     mutable std::map<std::tuple<int,int,double,int,int>,std::vector<FacePoint>> m_surfaceCatalog;

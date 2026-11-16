@@ -124,6 +124,22 @@ private:
     MultiRegions::ContFieldSharedPtr m_field;
     int m_dimension;
     bool m_serialSparse=false;
+    bool m_immutableTensor=false;
+    struct NativeRow
+    {
+        std::vector<int> ids;
+        Vector signs,constant;
+        std::array<double,3> inverse{};
+    };
+    std::vector<NativeRow> m_nativeRows;
+    struct OwnerNode
+    {
+        Coordinate lower{},upper{};
+        int left=-1,right=-1,element=-1;
+    };
+    std::vector<OwnerNode> m_ownerNodes;
+    int BuildOwnerIndex(std::vector<int> elements);
+    void FindOwner(int node,const Coordinate &,int side,int &selected) const;
     std::array<int,3> m_axes{};
     std::vector<Element> m_elements;
     std::vector<std::array<std::shared_ptr<BasisData>,3>> m_elementBasis;

@@ -139,6 +139,7 @@ RANSWallGlobalField::RANSWallGlobalField(
 {
     RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
     session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",m_serialSparse,false);
+    session->MatchSolverInfo("RANSWallImmutableEvaluation","ImmutableTensorV1",m_immutableTensor,false);
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");
     auto subset=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(*full,elements,true);
@@ -207,6 +208,53 @@ RANSWallGlobalField::RANSWallGlobalField(
     if(directional)for(const auto &e:m_elements)
         Require(e.degrees==m_elements.front().degrees,
                 "directional order must be uniform in each native direction");
+    if(m_immutableTensor)
+    {
+        const auto map=m_field->GetLocalToGlobalMap();std::vector<int> owners;
+        for(int e=0;e<m_elements.size();++e)
+        {
+            owners.push_back(e);NativeRow row;
+            const auto &el=m_elements[e];const auto modes=el.Modes();
+            const int count=TensorSize(modes,m_dimension),start=m_field->GetCoeff_Offset(e);
+            for(int d=0;d<m_dimension;++d)row.inverse[d]=2/(el.upper[m_axes[d]]-el.lower[m_axes[d]]);
+            for(int j=0;j<count;++j)
+            {
+                const auto index=Indices(j,modes);const double sign=map->GetLocalToGlobalSign(start+j);
+                double constant=sign;for(int d=0;d<m_dimension;++d)if(index[d]>=2)constant=0;
+                row.ids.push_back(map->GetLocalToGlobalMap(start+j));row.signs.push_back(sign);row.constant.push_back(constant);
+            }
+            m_nativeRows.push_back(std::move(row));
+        }
+        BuildOwnerIndex(std::move(owners));
+    }
+}
+int RANSWallGlobalField::BuildOwnerIndex(std::vector<int> elements)
+{
+    OwnerNode node;node.lower.fill(std::numeric_limits<double>::infinity());
+    node.upper.fill(-std::numeric_limits<double>::infinity());
+    for(int e:elements)for(int d=0;d<3;++d)
+    {node.lower[d]=std::min(node.lower[d],m_elements[e].lower[d]);node.upper[d]=std::max(node.upper[d],m_elements[e].upper[d]);}
+    const int id=m_ownerNodes.size();m_ownerNodes.push_back(node);
+    if(elements.size()==1){m_ownerNodes[id].element=elements.front();return id;}
+    int axis=0;for(int d=1;d<m_dimension;++d)
+        if(node.upper[m_axes[d]]-node.lower[m_axes[d]]>node.upper[m_axes[axis]]-node.lower[m_axes[axis]])axis=d;
+    const int a=m_axes[axis];std::sort(elements.begin(),elements.end(),[&](int x,int y){
+        const double cx=m_elements[x].lower[a]+m_elements[x].upper[a],cy=m_elements[y].lower[a]+m_elements[y].upper[a];
+        return cx==cy?m_elements[x].geometry<m_elements[y].geometry:cx<cy;});
+    const auto middle=elements.begin()+elements.size()/2;
+    const int left=BuildOwnerIndex(std::vector<int>(elements.begin(),middle));
+    const int right=BuildOwnerIndex(std::vector<int>(middle,elements.end()));
+    m_ownerNodes[id].left=left;m_ownerNodes[id].right=right;return id;
+}
+void RANSWallGlobalField::FindOwner(int id,const Coordinate &p,int side,int &selected) const
+{
+    const auto &node=m_ownerNodes[id];
+    for(int d=0;d<m_dimension;++d)
+    {const int a=m_axes[d];if(!(p[a]>=node.lower[a] && p[a]<=node.upper[a]))return;}
+    if(node.element<0){FindOwner(node.left,p,side,selected);FindOwner(node.right,p,side,selected);return;}
+    const auto &element=m_elements[node.element];
+    if((side>0 && p[2]>=element.upper[2]) || (side<0 && p[2]<=element.lower[2]))return;
+    if(selected<0 || element.geometry<m_elements[selected].geometry)selected=node.element;
 }
 int RANSWallGlobalField::Size() const
 {
@@ -225,7 +273,7 @@ RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &co
     for(int d=0;d<m_dimension;++d)
     {
         const int a=m_axes[d];
-        inverse[d]=2/(element.upper[a]-element.lower[a]);
+        inverse[d]=m_immutableTensor?m_nativeRows[e].inverse[d]:2/(element.upper[a]-element.lower[a]);
         bool rounded=false;
         const double local=LocalCoordinate(coordinate[a],element.lower[a],element.upper[a],rawLocal[a],rounded);
         if(rounded)endpointRoundoffAxes|=1u<<a;
@@ -240,8 +288,8 @@ RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &co
     for(int j=0;j<count;++j)
     {
         const auto index=Indices(j,modes);
-        const double sign=map->GetLocalToGlobalSign(start+j);
-        result.ids.push_back(map->GetLocalToGlobalMap(start+j));
+        const double sign=m_immutableTensor?m_nativeRows[e].signs[j]:map->GetLocalToGlobalSign(start+j);
+        result.ids.push_back(m_immutableTensor?m_nativeRows[e].ids[j]:map->GetLocalToGlobalMap(start+j));
         double value=sign,constant=sign;
         for(int d=0;d<m_dimension;++d)
         {
@@ -302,6 +350,11 @@ int RANSWallGlobalField::LocateElement(const Coordinate &coordinate,int side) co
     RANSWallTiming::Scope timing("geometry.locate",true,true);
     Require(side>=-1 && side<=1,"unknown radial sampling side");
     int selected=-1;
+    if(m_immutableTensor)
+    {
+        FindOwner(0,coordinate,side,selected);
+        Require(selected>=0,"physical sample not found on requested radial side");return selected;
+    }
     for(std::size_t e=0;e<m_elements.size();++e)
     {
         const auto &element=m_elements[e];bool contains=true;

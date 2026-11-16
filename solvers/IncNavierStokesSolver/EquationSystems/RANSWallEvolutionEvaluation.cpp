@@ -75,6 +75,15 @@ struct RANSWallEvolutionPatch::EvaluationCache
     {states.clear();rows.clear();profiles.clear();reweighted.clear();coverageToken=nullptr;}
 };
 
+// Patch lifetime supplies the immutable field/geometry/map identity. There is
+// deliberately no state, profile, time, alpha, boundary or validity payload.
+// Exact physical coordinate bits and owner/side distinguish moving AWF rays.
+struct RANSWallEvolutionPatch::ImmutableRows
+{
+    static constexpr std::size_t maximumRows=65536;
+    std::unordered_map<RowKey,std::shared_ptr<const RANSWallGlobalPoint>,RowHash> rows;
+};
+
 RANSWallEvolutionPatch::EvaluationScope::EvaluationScope(const RANSWallEvolutionPatch &p,
     const RANSWallEvolutionData &data,double time):patch(p)
 {
@@ -106,7 +115,7 @@ void RANSWallEvolutionPatch::InvalidateCoverageToken() const
 int RANSWallEvolutionPatch::GeometryElement(int block,int geometry) const
 {
     RANSWallTiming::Scope timing("geometry.owner_catalog",true,true);
-    if(m_evaluationReuse)
+    if(m_evaluationReuse || m_immutableTensor)
     {
         if(m_geometryCatalog.empty())
         {
@@ -131,6 +140,17 @@ std::shared_ptr<const RANSWallGlobalPoint> RANSWallEvolutionPatch::EvaluationRow
     // A patch owns an immutable field/mesh/map generation. Both geometry and
     // native element, actual radial side and all coordinate bits enter the key.
     const RowKey key{Bits(block),Bits(el.geometry),Bits(element),Bits(side+1),Bit(coordinate[0]),Bit(coordinate[1]),Bit(coordinate[2])};
+    if(m_immutableTensor)
+    {
+        if(!m_immutableRows)m_immutableRows=std::make_shared<ImmutableRows>();
+        auto &rows=m_immutableRows->rows;const auto it=rows.find(key);
+        if(it!=rows.end()){++m_evaluationWork.rowHits;return it->second;}
+        ++m_evaluationWork.rowConstructs;
+        auto row=std::make_shared<const RANSWallGlobalPoint>(Transform(fields[block]->ElementPoint(element,coordinate)));
+        if(rows.size()>=ImmutableRows::maximumRows){rows.clear();++m_evaluationWork.rowEvictions;}
+        rows.emplace(key,row);m_evaluationWork.peakRows=std::max<std::uint64_t>(m_evaluationWork.peakRows,rows.size());
+        return row;
+    }
     if(m_evaluation)
     {
         const auto it=m_evaluation->rows.find(key);

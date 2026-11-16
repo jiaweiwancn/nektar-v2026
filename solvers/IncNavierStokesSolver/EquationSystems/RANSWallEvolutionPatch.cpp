@@ -111,7 +111,7 @@ RANSWallGlobalPoint RANSWallEvolutionPatch::Transform(RANSWallGlobalPoint q) con
     q.weight*=g.determinant;return q;
 }
 RANSWallGlobalPoint RANSWallEvolutionPatch::Point(int block,const RANSWallCoordinate &p,int side) const
-{return m_evaluation?*EvaluationRow(block,fields[block]->LocateElement(p,side),p):Transform(fields[block]->Point(p,side));}
+{return (m_evaluation || m_immutableTensor)?*EvaluationRow(block,fields[block]->LocateElement(p,side),p):Transform(fields[block]->Point(p,side));}
 std::vector<RANSWallGlobalPoint> RANSWallEvolutionPatch::Quadrature(int block,int order) const
 {
     if(!order && m_massOrder)order=m_massOrder;
@@ -125,7 +125,7 @@ std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(i
     if(!order)order=std::max(m_parameters.normalOrder,m_parameters.tangentialOrder);
     const auto key=std::make_tuple(block,axis,position,side,order);
     // Only exact native faces enter the lifetime catalog; moving surfaces do not.
-    bool fixed=false;if(m_evaluationReuse && order<=64)for(const auto &e:fields[block]->Elements())
+    bool fixed=false;if((m_evaluationReuse || m_immutableTensor) && order<=64)for(const auto &e:fields[block]->Elements())
         if(position==(side<0?e.lower[axis]:e.upper[axis])){fixed=true;break;}
     if(fixed){const auto old=m_surfaceCatalog.find(key);if(old!=m_surfaceCatalog.end() &&
         (position!=0. || old->second.empty() || std::signbit(position)==std::signbit(old->second.front().test.coordinate[axis])))
@@ -336,6 +336,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     std::string reuse;session->LoadSolverInfo("RANSWallEvaluationReuse",reuse,"Off");
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
+    std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
+    Require(immutable=="Off" || immutable=="ImmutableTensorV1","unknown immutable evaluation policy");
+    m_immutableTensor=immutable=="ImmutableTensorV1";
+    Require(!m_immutableTensor || (!m_evaluationReuse && m_dimension==2 && !Mapped() && SerialSparse() && PimpleSingleSweep()),
+        "ImmutableTensorV1 requires serial sparse flat2D one-sweep and state reuse Off");
     if(OpenBoundary())
     {
         Require(NewModels() && AcceptedAWF() && PimpleSingleSweep() && m_dimension==2 && (!Mapped() || CurvedManufactured()) && m_comm->GetSize()==1,
@@ -1847,6 +1852,7 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")text<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
+    if(m_immutableTensor)text<<":execution=CT15-ImmutableTensorV1";
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();
     if(NewModels())text<<":resolved="<<m_parameters.model.Signature();
