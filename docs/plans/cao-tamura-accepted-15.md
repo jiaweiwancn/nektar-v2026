@@ -93,3 +93,57 @@ worker ceilings. A prior CMake scratch-directory race also failed its monitor;
 the completed build is retained with an additional120-CPU-second accounting
 reserve. Compiler/interface and verification-driver failures remain in the
 same CT15 ledger. None of these attempts resets the allocation.
+
+The current native-only envelope uses nonnegative startup56.598205 CPU seconds
+and repeated-step160.839859 seconds, the maximum of the observed same-dt
+one-minus-zero, two-minus-zero divided by2, and two-minus-one differences.
+With the prospectively chosen32-step segments, fresh paired initialization,
+and25% headroom, a conditional T=.407 native-only extrapolation is
+992893.241414 CPU seconds. This is41.37 times the entire24000-second campaign
+ceiling before mandatory independent audits, replay, retention and evidence
+costs. The arithmetic zero-overhead necessary allowance remains
+3.931203931 CPU seconds per accepted step; it is a budget bound, whereas
+160.839859 seconds is an observed short-history envelope, not a mathematical
+lower bound on all future states. The complete model and held-out validation
+are pending, so this calculation cannot supply resource admission.
+
+Endpoint rounding uses decimal ceiling separately for each member. Fresh
+coarse/fine counts are1628/3256 for T=.407;16249/32498 for0.1 transit;
+162487/324974 for1 transit; and487460/974920 for3 transits, using the fixed
+40.6216378576 transit scale. Continuation from the candidate's own qualified
+T=.002 would subtract8/16 steps; it is unavailable until its fresh pair passes.
+All these horizons remain **UNADMITTED**. Physical T=.407 remains
+**UNATTEMPTED**.
+
+Reproduction uses the selected immutable runtime at
+`/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime`.
+Its tested native source is`7b722daa41d18b316f8b78dafdde39fada4d5e94`, governing
+SHA256`27c47d29972dcfbdbe92d05347c3c732b8e85b6b05a147c7508df03c2bca6ab3`.
+Later Python-controller commits do not imply a rebuilt native executable.
+All commands run from the private Linux source with the six numerical-library
+thread variables set to1. The driver sequence is:
+
+1. `ct_accepted15_baseline.py`, private build, four small controls and
+   same-dt training0/1/2; the complete receipts retain each failed attempt.
+2. `ct_accepted15_static.py` with CT12/CT13 raw evidence, the new runtime,
+   `small-v7`, unchanged CT14`capacity-v4`, and the prospective contract.
+3. `ct_accepted15_contracts.py --phase timestep`, then
+   `ct_accepted15_timestep.py` for alpha4000/8000.
+4. Push B only after affected admission passes. Bind the pair contract,
+   run`ct_accepted15_pair.py`, then`ct_accepted15_equivalence.py` against
+   complete CT14 histories.
+5. `ct_accepted15_segments.py` with the qualified fresh pair and training-v4;
+   its frozen held-out bounds precede the actual6-to8 restart/retirement test.
+6. `ct_accepted15_collect.py` compacts hashes, every engineering attempt,
+   three separate ledgers, forecast equations and all horizon decisions.
+   Close its outer resource receipt and final publication accounting before D.
+
+Each numerical/build/controller command is nested inside
+`ct_accepted3_command.py --control <new-owned-resource-directory> -- python3 -B ct_accepted15_budget.py --root <CT15-root> --control <same-directory> -- <command>`.
+Existing or interrupted experiment directories must be inspected and preserved;
+do not overwrite them or launch a duplicate family. The engineering guard
+counts all closed attempts, the120-CPU-second build-monitor exception reserve,
+live owned-family CPU, the original wall-clock allocation, and new live disk.
+It leaves240 CPU seconds and256MiB for closure/transport/publication. Sampled
+per-process `wchar` highwaters are reported separately as a lower bound on
+logical writes; they are not exact physical disk-byte accounting.
