@@ -128,7 +128,8 @@ def main():
     metrics=n.physical_metrics(ini,er['state'],c,weights,count);require(metrics=={k:v for k,v in pair['members']['0.00025']['accepted_metrics'][8].items() if k!='time'},'heldout physical decisions')
     after=resource.getrusage(resource.RUSAGE_CHILDREN);measured=dict(native=ee,whole_CPU=time.process_time()-self_cpu+after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,whole_wall=time.monotonic()-started,output_bytes=sum(f.stat().st_size for f in eight.rglob('*') if f.is_file()),budgets=budgets)
     rollback,rr,re=run('rejected-step',Path(sr['checkpoint']),2,reject=8)
-    require(re['exit_code']!=0 and 'deliberate' in rr['failure'] and rr['state']==full['accepted_states'][7] and rr['steps']==7,'selected full rejected-step rollback')
-    result.update(status='pass',held_out=measured,segment6_execution=se,rollback_execution=re,rollback_report_sha256=sha(rollback/'case.evolution.json'),live_bytes=sum(f.stat().st_size for f in a.root.rglob('*') if f.is_file()))
+    seven,sv,sve=run('rollback-predecessor7',Path(sr['checkpoint']),1)
+    require(sve['exit_code']==0 and re['exit_code']!=0 and 'deliberate' in rr['failure'] and same_history(sv,rr),'selected full rejected-step rollback')
+    result.update(status='pass',held_out=measured,segment6_execution=se,rollback_execution=re,rollback_predecessor_execution=sve,rollback_report_sha256=sha(rollback/'case.evolution.json'),live_bytes=sum(f.stat().st_size for f in a.root.rglob('*') if f.is_file()))
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return 0
 if __name__=='__main__':raise SystemExit(main())

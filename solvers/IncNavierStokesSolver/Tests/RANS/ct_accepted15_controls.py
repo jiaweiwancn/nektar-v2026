@@ -38,13 +38,16 @@ def main():
     m=RequestManifest(a.output,dict(schema='CT15ControlsV1',phase=a.phase,source=sha(Path(__file__)),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.runtime/'RANSPreservationProbe'),baseline=str(a.ct14),policy=POLICY,detailed_timing=False))
     out=dict(schema='CT15ControlsV1',status='incomplete',phase=a.phase,cases={})
     def evolve(label,c,steps,parent=None,template=None,value=POLICY,reject=0,dt=1e-6):
+        begin_cpu=time.process_time();begin_wall=time.monotonic();before_make=resource.getrusage(resource.RUSAGE_CHILDREN)
         folder=a.output/label;n.make(folder,a.runtime,c,dt,steps,parent,template);enable(folder);ordering(folder);policy(folder,value)
         root=ET.parse(folder/'case.xml').getroot();set_parameter(root,'RANSWallPimpleHardAuditRejectStep',reject);write(root,folder/'case.xml')
+        after_make=resource.getrusage(resource.RUSAGE_CHILDREN);make=dict(self_CPU=time.process_time()-begin_cpu,children_CPU=after_make.ru_utime+after_make.ru_stime-before_make.ru_utime-before_make.ru_stime,wall=time.monotonic()-begin_wall)
         os.environ['NEKTAR_RANS_SPARSE_RECEIPTS']=str(folder/'sparse-receipts.jsonl')
         if a.phase=='diagnostic':os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'timing.jsonl')
         e=native_run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log',1200,1500)
         report=folder/'case.evolution.json';q=n.read(report) if report.exists() else dict(failure=(folder/'solver.log').read_text()[-3000:])
         os.environ.pop('NEKTAR_RANS_SPARSE_RECEIPTS',None)
+        e['configuration_creation']=make;e['controller_evolve_self_CPU']=time.process_time()-begin_cpu;e['controller_evolve_wall']=time.monotonic()-begin_wall
         return folder,q,e
     if a.phase=='small':
         old=sealed(a.ct14/'component-v1');require(old['status']=='pass','baseline component not sealed')
