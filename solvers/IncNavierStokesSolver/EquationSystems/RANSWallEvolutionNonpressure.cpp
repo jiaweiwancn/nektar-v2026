@@ -275,7 +275,8 @@ struct Basis
 };
 Basis LinearBasis(const RANSWallGlobalPoint &row,const RANSWallGlobalField &field,bool hessian)
 {
-    Basis result;result.row=row;result.value=row.phi;result.gradient=row.derivative;
+    Basis result;result.row=row;result.value=row.phi;
+    for(int d=0;d<3;++d)result.gradient[d]=row.derivative[d];
     if(hessian)result.hessian=field.RadialGradientDerivative(row);
     for(auto &values:result.hessian)if(values.empty())values.assign(row.ids.size(),0.);
     const long double inverse=1.L/row.constant[0];long double sum=0;
