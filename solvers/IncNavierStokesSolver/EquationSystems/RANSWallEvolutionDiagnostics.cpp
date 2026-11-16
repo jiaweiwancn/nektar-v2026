@@ -549,7 +549,8 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
     if(SerialSparse())out<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")out<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_hashedCoverage)out<<":execution=CT16-HashedCoverageV1";
+    if(m_currentVelocityGradients)out<<":execution=CT16-CurrentVelocityGradientV1";
+    else if(m_hashedCoverage)out<<":execution=CT16-HashedCoverageV1";
     else if(m_scopedAuditResidual)out<<":execution=CT16-ScopedAuditResidualV1";
     else if(m_streamGradients)out<<":execution=CT16-StreamGradientV1";
     else if(m_rowLRU)out<<":execution=CT16-ImmutableRowLRUV1";
@@ -1042,6 +1043,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
     const bool streamGradients=m_streamGradients;Restore restoreStreamGradients{m_streamGradients,streamGradients};
     const bool auditResidual=m_scopedAuditResidual;Restore restoreAuditResidual{m_scopedAuditResidual,auditResidual};
     const bool hashedCoverage=m_hashedCoverage;Restore restoreHashedCoverage{m_hashedCoverage,hashedCoverage};
+    const bool currentGradients=m_currentVelocityGradients;Restore restoreCurrentGradients{m_currentVelocityGradients,currentGradients};
     const auto drive=[&](bool enabled)
     {
         if(immutable){m_immutableTensor=enabled;m_evaluationReuse=false;}
@@ -1050,6 +1052,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         m_streamScalarValues=stream && enabled;m_scopedScatter=scatter && enabled;
         m_scopedAuditPoints=auditPoints && enabled;m_flatMetrics=flatMetrics && enabled;m_rowLRU=rowLRU && enabled;
         m_streamGradients=streamGradients && enabled;m_scopedAuditResidual=auditResidual && enabled;m_hashedCoverage=hashedCoverage && enabled;
+        m_currentVelocityGradients=currentGradients && enabled;
         RANSWallEvolutionData input=data;
         EvaluationScope scope(*this,input,time);std::vector<std::string> values;
         const auto domain=[&](const Vector &s,double t,bool retain,bool only,const std::vector<RANSWallCoordinate> &anchors=std::vector<RANSWallCoordinate>{})
@@ -1133,13 +1136,18 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         m_evaluationWork.residualHits>0,"verification did not exercise cache hits and invalidation");
     if(flatMetrics)Require(m_evaluationWork.flatMetricQueries>0 && m_evaluationWork.profileMetricElisions>0,
         "verification did not exercise exact flat metadata and profile hits");
+    if(currentGradients)Require(m_evaluationWork.gradientHits>0 && m_evaluationWork.gradientInvalidations>0,
+        "verification did not exercise pure-gradient hits and actual-velocity invalidation");
     return J::Object({{"passed","true"},{"audit_revision",J::Quote(AuditRevision())},{"compared_queries",J::Number(off.size())},
         {"state_sha256",J::Quote(stateHash)},{"history_sha256",J::Quote(historyHash)},
         {"checks",J::Quote("exact state bytes including signed zero; time; data generation; external data; flags; ordered additional anchors; foreign data; history; alpha; residual options; coverage tripwire")},
         {"immutable_only",immutable && !scopedPoints?"true":"false"},
         {"per_call_constitutive_points",scopedPoints?"true":"false"},
         {"exact_flat_metric",flatMetrics?"true":"false"},{"additional_geometry_queries",J::Number(flatMetrics?8:0)},
-        {"no_cross_call_state_reuse",immutable?"true":"false"},{"reuse",EvaluationReuseJSON()},{"governing_solves","0"},{"physical_commits","0"}});
+        {"no_cross_call_state_reuse",immutable && !currentGradients?"true":"false"},
+        {"no_cross_call_constitutive_validity_reuse",immutable?"true":"false"},
+        {"pure_current_velocity_gradient_memo",currentGradients?"true":"false"},
+        {"reuse",EvaluationReuseJSON()},{"governing_solves","0"},{"physical_commits","0"}});
 }
 
 }

@@ -594,6 +594,17 @@ private:
     bool m_streamGradients=false;
     bool m_scopedAuditResidual=false;
     bool m_hashedCoverage=false;
+    bool m_currentVelocityGradients=false;
+    struct GradientMemo;
+    mutable std::shared_ptr<GradientMemo> m_gradientMemo;
+    class CurrentGradientScope
+    {
+        const RANSWallEvolutionPatch &patch;bool owns=false;
+    public:
+        CurrentGradientScope(const RANSWallEvolutionPatch &,const Vector &);
+        ~CurrentGradientScope();
+        CurrentGradientScope(const CurrentGradientScope&)=delete;
+    };
     struct CoordinateHash {std::size_t operator()(const RANSWallCoordinate &) const noexcept;};
     mutable std::unordered_set<RANSWallCoordinate,CoordinateHash> m_hashedCoveredK;
     mutable std::set<RANSWallCoordinate> m_coverageOracle;
@@ -624,7 +635,9 @@ private:
             constitutivePointEvictions=0,peakConstitutivePoints=0,streamScalarValues=0,
             auditPointScopes=0,auditPointComputes=0,auditPointHits=0,auditPointEvictions=0,peakAuditPoints=0,
             flatMetricQueries=0,profileMetricElisions=0,streamGradientPairs=0,
-            coverageInserts=0,coverageQueries=0,peakHashedCoverage=0,coverageSpills=0;
+            coverageInserts=0,coverageQueries=0,peakHashedCoverage=0,coverageSpills=0,
+            gradientScopes=0,gradientHits=0,gradientMisses=0,gradientInvalidations=0,
+            gradientEvictions=0,peakGradientPoints=0;
     };
     mutable EvaluationWork m_evaluationWork;
     void PrepareEvaluation(const RANSWallEvolutionData &,double) const;

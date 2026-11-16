@@ -13,6 +13,7 @@
 #include <cmath>
 #include <chrono>
 #include <cstring>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -87,6 +88,37 @@ private:
     int m_n;RANSWallAlgebra::Vector m_lu;std::vector<int> m_pivots;
 };
 }
+
+struct RANSWallEvolutionPatch::GradientMemo
+{
+    using Key=std::array<std::uint64_t,7>;
+    struct Hash {std::size_t operator()(const Key &key) const noexcept
+        {std::size_t h=1469598103934665603ULL;for(auto b:key){h^=b;h*=1099511628211ULL;}return h;}};
+    Vector velocity;
+    const Vector *active=nullptr;
+    std::unordered_map<Key,std::array<std::array<double,3>,2>,Hash> points;
+};
+RANSWallEvolutionPatch::CurrentGradientScope::CurrentGradientScope(
+    const RANSWallEvolutionPatch &p,const Vector &state):patch(p)
+{
+    if(!patch.m_currentVelocityGradients)return;
+    Require(state.size()==std::size_t(patch.Size()),"current-gradient state shape differs");
+    if(!patch.m_gradientMemo)patch.m_gradientMemo=std::make_shared<GradientMemo>();
+    auto &memo=*patch.m_gradientMemo;
+    // Nested requests for a different state fall back rather than disturbing
+    // an outer read-only context or making a pointer an essential identity.
+    if(memo.active)return;
+    const std::size_t count=patch.offset[patch.K()];
+    if(memo.velocity.size()!=count ||
+        (count && std::memcmp(memo.velocity.data(),state.data(),count*sizeof(double))!=0))
+    {
+        if(!memo.velocity.empty())++patch.m_evaluationWork.gradientInvalidations;
+        memo.points.clear();memo.velocity.assign(state.begin(),state.begin()+count);
+    }
+    memo.active=&state;owns=true;++patch.m_evaluationWork.gradientScopes;
+}
+RANSWallEvolutionPatch::CurrentGradientScope::~CurrentGradientScope()
+{if(owns)patch.m_gradientMemo->active=nullptr;}
 
 RANSWallSharedInventory<RANSWallEvolutionPatch::ScalarLocation>
 RANSWallEvolutionPatch::ReconstructionLocations(int block,bool complete) const
@@ -513,6 +545,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         if(NewModels())
         {
             RANSWallTiming::Scope part("domain.current_constitutive_inventory");
+            CurrentGradientScope currentGradients(*this,result.effectiveState);
             result.phase="current_velocity_constitutive_domain";
             // Effective and trace states have been completely formed above
             // and are read-only for this loop. This map is born/dies in this
@@ -1184,9 +1217,46 @@ RANSWallEvolutionPatch::CurrentObservation RANSWallEvolutionPatch::ObserveCurren
     CurrentObservation out;
     if(m_streamGradients)
     {
-        out.owner=ResolveObservationOwner(p);++m_evaluationWork.streamGradientPairs;
+        // Validate actual physical ownership and side before any memo lookup.
+        out.owner=ResolveObservationOwner(p);
+        const bool memo=m_currentVelocityGradients && m_gradientMemo &&
+            m_gradientMemo->active==&state && p.geometry>=0 && !p.functional;
+        const auto bit=[](double v){std::uint64_t b;std::memcpy(&b,&v,sizeof b);return b;};
+        const GradientMemo::Key key{std::uint64_t(out.owner.geometry),std::uint64_t(out.owner.element),
+            std::uint64_t(p.side+1),std::uint64_t(out.owner.radialSide+1),
+            bit(p.coordinate[0]),bit(p.coordinate[1]),bit(p.coordinate[2])};
+        if(memo)
+        {
+            const auto old=m_gradientMemo->points.find(key);
+            if(old!=m_gradientMemo->points.end())
+            {
+                ++m_evaluationWork.gradientHits;
+                static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_CURRENT_GRADIENT_CACHE");return v && std::string(v)=="1";}();
+                if(verify)
+                {
+                    const auto row=fields[0]->ElementPoint(out.owner.element,p.coordinate);
+                    for(int a=0;a<m_dimension;++a)
+                    {
+                        const auto oracle=row.Gradient(state,offset[a]);
+                        Require(std::memcmp(oracle.data(),old->second[a].data(),3*sizeof(double))==0,
+                            "current-velocity gradient memo differs from fresh native row");
+                    }
+                }
+                for(int a=0;a<m_dimension;++a)out.gradient[PhysicalAxis(a)]=old->second[a];
+                return out;
+            }
+            ++m_evaluationWork.gradientMisses;
+        }
+        ++m_evaluationWork.streamGradientPairs;
         const auto values=fields[0]->ElementGradients(out.owner.element,p.coordinate,state,{offset[0],offset[1]});
         for(int a=0;a<m_dimension;++a)out.gradient[PhysicalAxis(a)]=values[a];
+        if(memo)
+        {
+            if(m_gradientMemo->points.size()>=std::size_t(m_constitutiveMaximumPoints))
+            {m_gradientMemo->points.clear();++m_evaluationWork.gradientEvictions;}
+            m_gradientMemo->points.emplace(key,values);
+            m_evaluationWork.peakGradientPoints=std::max<std::uint64_t>(m_evaluationWork.peakGradientPoints,m_gradientMemo->points.size());
+        }
     }
     else
     {
@@ -2398,6 +2468,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         v.covariance=J::Eigenvalues(v.tensor)[0];return v;
     };
     RANSWallTiming::Scope repeatedInventory("audit.repeated_point_inventory");
+    CurrentGradientScope currentGradients(*this,domain.effectiveState);
     for(const auto &p:domain.observations)
     {
         if(p.block!=K() && !p.dependentTrace)continue;

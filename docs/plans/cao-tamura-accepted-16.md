@@ -1,114 +1,156 @@
 # CT16: separate bounded production-path engineering
 
-Status: **IN PROGRESS**. The user authorized this separate allocation after CT15
-closed **UNRESOLVED** at `5168ed5fba02a4c92a3847827be3a2dbb6ca071b`.
-CT15's ledger and archives remain closed. The original resource-admission goal
-is unmet; its fixed physics, scientific criteria and production ceilings remain.
+Status: **IN PROGRESS; resource admission remains UNRESOLVED**. The user
+explicitly authorized this separate phase after CT15 closed UNRESOLVED at
+`5168ed5fba02a4c92a3847827be3a2dbb6ca071b`. CT15's report, ledger, archives and
+failed attempts remain historical evidence. No CT16 history inherits their
+component identity.
 
-The [prospective contract](cao-tamura-accepted-16-evidence/contract.json) starts
-the new allocation at2026-11-16 13:30:25UTC (21:30:25 Asia/Shanghai), with24000
-process-CPU seconds,28800 elapsed wall seconds and16GiB new live data. The
-per-process AS cap is16GiB, with one numerical family/rank, six library-thread
-settings1, compilerjobs<=2, projectworkers<=16 and aggregateworkers<=72.
-Heavy work belongs to `/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-16-20261116`.
+The [prospective contract](cao-tamura-accepted-16-evidence/contract.json) fixes
+CT16's start at 2026-11-16 13:30:25 UTC (21:30:25 Asia/Shanghai). Its allocation
+is 24,000 process CPU seconds, 28,800 elapsed wall seconds and 16 GiB of new
+live data, with 16 GiB per-process address space. One numerical family/rank,
+six numerical-library thread settings of one, two compiler jobs, at most 16
+project workers and 72 aggregate Linux workers apply. The clock has not reset.
+The external supervisor counts closed and live work even while the shared
+worker guard suspends the owned family. Every failed attempt remains charged.
+Heavy data and private runtimes are under
+`/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-16-20261116`; shared installations,
+other jobs and historical archives are untouched.
 
-CT15 G1/G2 provide exact V4 short-trajectory equivalence and a fresh8/16-step
-physical PASS. V4's observed repeated-step envelope is160.839859 CPU seconds,
-whereas the zero-other-cost budget allowance is3.931203931. The native-only
-entry extrapolation is992893.241414 CPU seconds with25% headroom. These are
-conditional timing extrapolations,not mathematical lower bounds on all future
-implementations. Mandatory audit/replay costs also need improvement.
+All CT8 physical and CT14 numerical criteria remain fixed. In particular the
+manifest SHA256 is
+`004bc0fc82054296a68d56de77751fc1f0a41570ee16b0a174ae8087f262d296`;
+Original/Natural A95, 62,533 slots/961 elements, P4/P2, HA/128, actual current K,
+transported inner k, dependent epsilon and the full signed stress/covariance/
+radicand inventories remain. IMEX1 is one flow/epsilon/k sweep, with dt
+0.00025/0.000125 and its measured post-k epsilon lag. VectorCOLAMDV1 and the
+consistent free-mass pressure action remain. The Off oracle and ExactStepV1
+open-route guard stay in place. No physical-preservation execution beyond the
+already qualified short window has been launched.
 
-First measure the current V4 native startup/one-step hotspots with diagnostic
-clocks. Then choose bounded current-field/domain/assembly/audit remedies from
-that evidence. Clock-off matched measurements decide useful progress. G3/G4,
-complete forecasts and every requalification affected by a changed implementation
-remain required; source implementation or a local speedup cannot close them.
-
-| Gate | Current status |
+| Gate | Current status and limit |
 |---|---|
-| G1 | V4 baseline PASS; V5 small/current first2-step controls PASS,selected remainder pending |
-| G2 | V4 baseline PASS; changed candidate fresh pair UNATTEMPTED |
-| G3 | Heldout whole-workflow validation UNATTEMPTED |
-| G4 | Selected two-cycle retention/recovery UNATTEMPTED |
-| G5 | UNADMITTED; no complete affordable candidate forecast |
-| G6 | Contract/source checkpoints pushed; final reproducible closure pending |
+| G1 | V5–V10 small controls and actual selected first-two-step comparisons PASS; affected selected quadrature/alpha controls remain incomplete |
+| G2 | CT15 V4 baseline pair PASS; fresh changed-component .002 pair UNATTEMPTED |
+| G3 | Timing-off 0/1/2 native measurements available; complete workflow and frozen coarse6-to8 restart/retention heldout UNATTEMPTED |
+| G4 | Two selected native retirement/recovery cycles UNATTEMPTED |
+| G5 | UNADMITTED; all measured native-only entry extrapolations already exceed the complete CPU ceiling |
+| G6 | Source/contracts and sealed progress published; final closure/accounting still pending |
 
 Physical T=.407 remains **UNATTEMPTED**. Full-transit production and experimental
-replication remain **UNQUALIFIED**. No longer preservation run is authorized here.
+replication remain **UNQUALIFIED**. The passing short baseline, prospective
+resource admission and longer-time physical qualification are separate claims.
 
+The [sealed progress snapshot](cao-tamura-accepted-16-evidence/progress-v2/results.json)
+binds completed work through V10 and the exact trace-index experiments. It
+records 9,556.785661073 closed-family CPU seconds before its own collector;
+subsequent failed/active attempts and publication costs still count. Its
+[artifact inventory](cao-tamura-accepted-16-evidence/progress-v2/artifact-inventory.json)
+hashes 3,707 payloads kept outside Git. The
+[scientific receipts](cao-tamura-accepted-16-evidence/progress-v2/scientific-evidence.json)
+bind actual runtime bytes, configurations, numerical histories and commands.
+Only the deliberate paused-supervisor negative has an incomplete worker audit;
+it is retained explicitly and never treated as clean numerical admission.
 
-The first measured remedy is `ImmutableTensorV5` / `CT16-StreamScalarV1`:
-scalar-only native values use bounded scratch with the exact original
-constant-centred long-double accumulation, while the existing exact-point map
-is bounded to2097152 entries and expires after each scalar-domain call.
-The [prospective remedy](cao-tamura-accepted-16-evidence/attempt-1-contract.json)
-and both failed control attempts are retained. The first encountered a legacy
-probe name guard; the second rejected the changed cache capacity in the physical
-signature before continuation. Both costs remain charged. The narrow fixes keep
-component identity essential and cache capacities recorded as resource metadata.
+Timing-off native commands use the actual selected case, dt=.00025 and matching
+scientific work. Every V5–V10 accepted vector in these experiments is binary64
+identical to the corresponding CT14 vector; maximum coefficient difference is
+zero. The nonnegative envelope is
+`startup=max(0,C0)` and
+`step=max(0,C1-C0,(C2-C0)/2,C2-C1)`. Detailed timers below only diagnose costs.
 
-The corrected small suite passes all four native operators,36 exact ordered
-current/dependency queries,genuine continuation,full rejected-step rollback,
-foreign-history rejection and a continuation with BOTH row and point capacities
-reduced to1024. All native state/time/history bits remain equal; the Off update
-difference is0. These small tests do not close selected-space G1.
+| Policy/component | C0 / C1 / C2 native CPU seconds | Repeated-step envelope |
+|---|---:|---:|
+| CT15 V4 | 56.598205 / 189.308833 / 350.148692 | 160.839859 |
+| V5 StreamScalarV1 | 49.903598 / 157.136224 / 273.466898 | 116.330674 |
+| V6 ScopedScatterV1 | 53.181892 / 154.906970 / 253.475760 | 101.725078 |
+| V7 ScopedAuditPointsV1 | 46.089977 / 137.980507 / 234.472438 | 96.491931 |
+| V8 ExactFlatMetricV1 | 44.271072 / 127.618765 / 212.064898 | 84.446133 |
+| V9 ImmutableRowLRUV1 | 41.024357 / 116.387451 / 196.404393 | 80.016942 |
+| V10 StreamGradientV1 | 34.413750 / 92.753797 / 148.738315 | 58.340047 |
 
-[Timing-off scalar training](cao-tamura-accepted-16-evidence/scalar-training-progress-v1.json)
-uses the actual selected62533-slot case at dt=.00025. Zero/one/two commands use
-49.903598/157.136224/273.466898 native CPU seconds. Every accepted vector is
-binary64 identical to CT14. The nonnegative repeated-step envelope is116.330674,
-down from V4's160.839859; the complete training family uses599.801379 CPU seconds.
-The native-only conditional fresh T=.407 extrapolation remains719867.586883 CPU
-seconds with25% headroom,about29.99 times the entire production CPU ceiling.
-It omits additional independent audits,retention/replay,milestones,controllers and
-publication and has no heldout validation. It is not a mathematical lower bound
-on all future states or implementations,and it does not admit a campaign.
+V5 streams scalar FE values with the original double products and centred
+long-double summation, and bounds the per-call exact constitutive point map at
+2,097,152 entries. V6 removes repeated hash lookups while scattering the same
+chronological matrix additions through a bounded, assembly-local pointer plan.
+V7 gives the independent native audit its own current-state point calculations;
+it never borrows domain validity. V8 specializes only the validated canonical
+identity Flat map and retains all general-map fallbacks. V9 uses individual
+least-recent eviction at the unchanged 1,048,576-row limit. V10 streams both
+actual velocity gradients through bounded 3x128 scratch with the exact original
+arithmetic. No policy caches a current coefficient, factor or constitutive
+validity across states.
 
-The tested native source is the full `e1e5f94b` revision bound in that receipt.
-Governing/probe hashes are21baae762c2c077a3e715afdb1e85ebf3c9aea0af926921d2a1d9350bdbcfd72
-and d59b4f2b87b2ec2c030fa671d8419850f04791fdde8359613e4c17ccacbfca3d.
-Publication/prototype commits do not imply rebuilt governing executables.
-The private runtime is `build-capacity-identity-v1/runtime` under the CT16 root.
-Rank1,six library thread settings1,and aggregate/project maxima30/11 apply to
-this training family; its worker audits pass.
+All four small operators, current flow/K/epsilon/time/data/alpha/mask/space
+controls, Off updates, genuine continuation, full rejected-step rollback,
+foreign histories and continuation with both row/point quotas reduced to 1024
+pass. V8–V10 include 44 ordered dependency/geometry queries. Cold-row scalar,
+flat-metric, LRU and gradient verifiers compare binary64 values, metadata and
+signed zero where applicable. Each component has a new execution/history
+identity; previous histories are rejected rather than relabelled.
 
-Work continues on the separately identified
-[scoped matrix scatter](cao-tamura-accepted-16-evidence/attempt-2-contract.json),
-[independent per-audit point evaluation](cao-tamura-accepted-16-evidence/attempt-3-contract.json)
-and a bounded read-only contraction experiment. No changed candidate has a
-fresh qualified .002 pair,selected retention cycles or complete affordable
-production forecast. CT15 remains closed UNRESOLVED; all new attempts share
-CT16's original fixed clock and allocation.
+The tested V10 native source is
+`5b4e3cf40520cfb361eb0f8eb13b5bd6a561b88b`. Its private governing executable
+SHA256 is `b1fdae6a08c245b9af894dcf5fadce4463d27c81420409670f81e721b2ee803f`;
+the probe is `130718db7aa38627e616d64bc1d502bbee89d7887183ebe67c092167b35f15ec`.
+The runtime is `build-gradient-v1/runtime` under the external root. Later
+controller/publication commits do not imply rebuilt native executables.
 
+The [future ledger](cao-tamura-accepted-16-evidence/progress-v2/forecasts.json)
+reports fresh-zero and conditional own-.002 starts for .407 and 0.1/1/3 transits,
+using decimal member-wise ceiling and explicit endpoints. V10's fresh entry
+native-only extrapolation is 362,833.6509975 CPU seconds with the 25% headroom
+applied once: 15.118 times the entire 24,000-second production ceiling. It
+includes 153 length-32 segments and two separate zero initializations, but
+omits independent audits, milestones, retention/replay, controllers and
+publication. It is an unvalidated short extrapolation, not a mathematical lower
+bound for all future states or implementations. Every horizon is UNADMITTED;
+complete campaign CPU/wall and qualified retention peak remain unknown. The
+zero-other-cost 3.931203931 CPU/step allowance falls to 2.839039466 after only
+this measured startup model, before any other required workflow costs.
 
-The [contraction prototype](cao-tamura-accepted-16-evidence/primitive-contraction-v1/results.json)
-reproduces37914 actual rows/816778 coefficients for three sealed states exactly,
-but its original and packed timings overlap; no governing change is selected.
-The [flat-metric prototype](cao-tamura-accepted-16-evidence/primitive-flat_metric-v1/results.json)
-compares28288 actual native/fixed/face coordinates exactly. General two-metric
-plus identity batches use about0.430 CPU seconds versus0.002-0.003 for the
-fixed-value prototype. These are read-only primitive measurements and cannot
-establish a native or campaign speedup. The
-[opt-in flat-metric contract](cao-tamura-accepted-16-evidence/attempt-4-contract.json)
-retains general-map fallback,unchanged whole-chart validation and explicit
-current-coordinate checks. Governing qualification is pending.
+V10's broad one-step diagnostic assigns 18.336474 exclusive CPU seconds to
+21 residual evaluations, 15.402599 to current constitutive inventories, 8.416919
+to physical audits, 6.559479 to flow assembly and 5.501287 to repeated-point
+native audits. It makes 21,870,516 current scalar evaluations and 7,538,384
+paired gradient evaluations. These scopes identify further work; they are not
+acceptance speedups. Basis construction itself is only .663 CPU seconds, so a
+basis-quota sweep is not selected.
 
+The exact `CT16-ExactTraceIndexV1` independent-audit experiment preserves every
+complete observation and decision for the sealed actual initial/coarse/fine
+states. Full bundle CPU changes from 16.325126/16.964765/16.221196 to
+13.737221/13.807352/13.712643. Its 187-entry index uses 19,132 bytes, holds only
+immutable first-match H-plus addresses and preserves signed-zero membership.
+Missing/nonfinite queries, foreign packets, stale geometry and failed-scope
+cleanup pass their controls. Actual Python and mapped-library bytes are bound
+in the receipts. This still exceeds the entire per-step CPU allowance even if
+native evolution were free.
 
-The [sealed progress ledger](cao-tamura-accepted-16-evidence/progress-v1/results.json)
-binds all completed attempts through the V7 diagnostic and reports5582.954978
-closed-family CPU seconds before its own collector receipt. Its separate
-[future ledger](cao-tamura-accepted-16-evidence/progress-v1/forecasts.json)
-contains exact rounded member counts and conditional native-only CPU/wall
-extrapolations for T=.407 and0.1/1/3transits; all remain UNADMITTED. Complete
-campaign CPU/wall/retention costs remain unknown,not zero.
+The [first bounded batch experiment](cao-tamura-accepted-16-evidence/independent-batch-contract-v1.json)
+failed the unchanged gradient-extremum geometry criterion. Its cost and source
+remain recorded; it is not adopted. The
+[narrowed experiment](cao-tamura-accepted-16-evidence/independent-batch-contract-v2.json)
+keeps gradient witnesses on original PreparedRows arithmetic and batches only
+physical-value norms. The
+[within-audit residual candidate](cao-tamura-accepted-16-evidence/attempt-7-contract.json)
+reuses one caller-owned raw residual only for identical immediate audit
+consumers, with fresh original-vector bitwise controls. Its first build failed
+a namespace qualification before solver execution (96.976697 CPU seconds);
+the correction is pushed and the failure retained. The
+[coverage candidate](cao-tamura-accepted-16-evidence/attempt-8-contract.json)
+changes only exact membership representation, with a bounded hash and complete
+ordered overflow fallback. Both require their own controls and measurements.
 
-V6's0/1/2 native CPU values are53.181892/154.906970/253.475760;
-V7's are46.089977/137.980507/234.472438. Their repeated-step envelopes are
-101.725078 and96.491931 CPU seconds. Both small suites and all actual selected
-training vectors pass exactly,including cross-policy history rejection for V7.
-V7's conditional fresh entry native-only extrapolation remains598013.171799
-CPU seconds with headroom. The broad diagnostic still assigns31.58 CPU seconds
-to current constitutive inventory,20.12 to residuals,13.10 to the independent
-native repeated-point audit and9.55 to flow assembly. Diagnostic partitions
-identify further work; clock-off commands above provide the native timing data.
+Earlier retained failures include the legacy probe-name guard and the original
+cache-quota history mismatch; the fixes preserve component identity while
+keeping disposable capacities as resource metadata. The
+[packed contraction prototype](cao-tamura-accepted-16-evidence/primitive-contraction-v1/results.json)
+is bitwise exact for 37,914 rows but shows no consistent benefit and is not
+adopted. The
+[flat-metric primitive](cao-tamura-accepted-16-evidence/primitive-flat_metric-v1/results.json)
+is bitwise exact at 28,288 actual coordinates and supported the subsequently
+measured V8 specialization. Failed and insufficient attempts remain in CT16's
+single ledger. Work continues within the original finite allocation; none of
+these local results closes G1–G6 or authorizes Task 3 physical execution.

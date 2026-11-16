@@ -1,0 +1,2018 @@
+{
+  "training-audit-v1": {
+    "status": "UNVALIDATED_PARTIAL_NATIVE_EXTRAPOLATION",
+    "training": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-audit-v1",
+    "training_results_sha256": "84b7558a479af15409e786ea3a132cdec0fb1d17b80fdd7ae9d427e13a4cda87",
+    "model": {
+      "CPU": {
+        "startup": 46.089977000000005,
+        "step": 96.49193100000002,
+        "training": [
+          46.089977000000005,
+          137.980507,
+          234.472438
+        ]
+      },
+      "wall": {
+        "startup": 47.31825698597822,
+        "step": 97.87217333697481,
+        "training": [
+          47.31825698597822,
+          141.86923973198282,
+          239.74141306895763
+        ]
+      },
+      "output_all_retained": {
+        "startup": 10249154,
+        "step": 150967068,
+        "training": [
+          10249154,
+          161216222,
+          254446091
+        ]
+      }
+    },
+    "horizons": [
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1628,
+          3256
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 598013.1717987501,
+        "conditional_native_only_wall_with_headroom": 606677.5305132645,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.4684794359131854,
+        "native_only_remaining_reduction_ratio": 24.917215491614584,
+        "all_retained_native_output_bytes_with_headroom": 923639723727.5,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1620,
+          3240
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 595003.1889262502,
+        "conditional_native_only_wall_with_headroom": 603623.0696706903,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.4996365265432097,
+        "native_only_remaining_reduction_ratio": 24.791799538593757,
+        "all_retained_native_output_bytes_with_headroom": 919085088802.5,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16249,
+          32498
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 5967531.831698752,
+        "conditional_native_only_wall_with_headroom": 6053978.117272643,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.0489528566270745,
+        "native_only_remaining_reduction_ratio": 248.64715965411466,
+        "all_retained_native_output_bytes_with_headroom": 9218539841000.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16241,
+          32482
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 5964521.848826251,
+        "conditional_native_only_wall_with_headroom": 6050923.6564300675,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.0475776316729268,
+        "native_only_remaining_reduction_ratio": 248.52174370109378,
+        "all_retained_native_output_bytes_with_headroom": 9213985206075.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162487,
+          324974
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10156
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 59672850.08345377,
+        "conditional_native_only_wall_with_headroom": 60537260.563066795,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.4011928945536156,
+        "native_only_remaining_reduction_ratio": 2486.3687534772403,
+        "all_retained_native_output_bytes_with_headroom": 92183392555865.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162479,
+          324958
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10155
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 59669782.488110006,
+        "conditional_native_only_wall_with_headroom": 60534146.954403,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.400978217987145,
+        "native_only_remaining_reduction_ratio": 2486.2409370045834,
+        "all_retained_native_output_bytes_with_headroom": 92178825109497.5,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487460,
+          974920
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15234,
+          30467
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 179017900.34326378,
+        "conditional_native_only_wall_with_headroom": 181611118.92944422,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.4272967483355903,
+        "native_only_remaining_reduction_ratio": 7459.079180969324,
+        "all_retained_native_output_bytes_with_headroom": 276549547483877.5,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487452,
+          974904
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15233,
+          30466
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 179014775.13544875,
+        "conditional_native_only_wall_with_headroom": 181607946.1729592,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.4271941024777826,
+        "native_only_remaining_reduction_ratio": 7458.948963977032,
+        "all_retained_native_output_bytes_with_headroom": 276544967226067.5,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      }
+    ],
+    "measured_training_AS_bytes": 11058913280,
+    "headroom": 1.25,
+    "complete_workflow": false,
+    "heldout_validated": false,
+    "missing": [
+      "all independent per-state audits",
+      "full audit/action milestones",
+      "real retention/recovery and replay cost",
+      "controllers, collection, transfers and publication",
+      "fresh same-component scientific pair and later-state heldout validation"
+    ],
+    "interpretation": "Short 0/1/2 envelope and once-only headroom are conditional extrapolations, not mathematical lower bounds on all future implementations or states. Native-only costs do not admit a complete campaign. Own T=.002 starts require fresh qualification of this component. Physical T=.407 is UNATTEMPTED."
+  },
+  "training-gradient-v1": {
+    "status": "UNVALIDATED_PARTIAL_NATIVE_EXTRAPOLATION",
+    "training": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-gradient-v1",
+    "training_results_sha256": "148f771cc5fe38894e7763c47799bd1d18b70a48bae50a71316ea4ebed805248",
+    "model": {
+      "CPU": {
+        "startup": 34.41375,
+        "step": 58.34004699999999,
+        "training": [
+          34.41375,
+          92.75379699999999,
+          148.73831500000003
+        ]
+      },
+      "wall": {
+        "startup": 35.627671401016414,
+        "step": 60.97838561597746,
+        "training": [
+          35.627671401016414,
+          96.60605701699387,
+          153.71869736595545
+        ]
+      },
+      "output_all_retained": {
+        "startup": 10249520,
+        "step": 150967099,
+        "training": [
+          10249520,
+          161216619,
+          254446519
+        ]
+      }
+    },
+    "horizons": [
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1628,
+          3256
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 362833.65099749994,
+        "conditional_native_only_wall_with_headroom": 379175.9055194893,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.8390394656019655,
+        "native_only_remaining_reduction_ratio": 15.118068791562497,
+        "all_retained_native_output_bytes_with_headroom": 923639983895.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1620,
+          3240
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 360997.41521249997,
+        "conditional_native_only_wall_with_headroom": 377257.48477250745,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.867221450617284,
+        "native_only_remaining_reduction_ratio": 15.041558967187498,
+        "all_retained_native_output_bytes_with_headroom": 919085347125.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16249,
+          32498
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 3620522.0670112493,
+        "conditional_native_only_wall_with_headroom": 3783601.487725005,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -0.683434519047326,
+        "native_only_remaining_reduction_ratio": 150.85508612546872,
+        "all_retained_native_output_bytes_with_headroom": 9218542428091.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16241,
+          32482
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 3618685.8312262497,
+        "conditional_native_only_wall_with_headroom": 3781683.0669780234,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -0.6823585370358968,
+        "native_only_remaining_reduction_ratio": 150.77857630109375,
+        "all_retained_native_output_bytes_with_headroom": 9213987791321.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162487,
+          324974
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10156
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 36203531.93208375,
+        "conditional_native_only_wall_with_headroom": 37834260.040269844,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.036242684030107,
+        "native_only_remaining_reduction_ratio": 1508.4804971701562,
+        "all_retained_native_output_bytes_with_headroom": 92183418415448.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162479,
+          324958
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10155
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 36201652.67911124,
+        "conditional_native_only_wall_with_headroom": 37832297.08493361,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.0360819013534057,
+        "native_only_remaining_reduction_ratio": 1508.4021949629685,
+        "all_retained_native_output_bytes_with_headroom": 92178850966778.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487460,
+          974920
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15234,
+          30467
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 108610161.93513748,
+        "conditional_native_only_wall_with_headroom": 113502328.77891721,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.0623857111352726,
+        "native_only_remaining_reduction_ratio": 4525.423413964062,
+        "all_retained_native_output_bytes_with_headroom": 276549625060225.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487452,
+          974904
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15233,
+          30466
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 108608239.66497749,
+        "conditional_native_only_wall_with_headroom": 113500321.28899172,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.06230901452861,
+        "native_only_remaining_reduction_ratio": 4525.343319374062,
+        "all_retained_native_output_bytes_with_headroom": 276545044799655.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      }
+    ],
+    "measured_training_AS_bytes": 10375905280,
+    "headroom": 1.25,
+    "complete_workflow": false,
+    "heldout_validated": false,
+    "missing": [
+      "all independent per-state audits",
+      "full audit/action milestones",
+      "real retention/recovery and replay cost",
+      "controllers, collection, transfers and publication",
+      "fresh same-component scientific pair and later-state heldout validation"
+    ],
+    "interpretation": "Short 0/1/2 envelope and once-only headroom are conditional extrapolations, not mathematical lower bounds on all future implementations or states. Native-only costs do not admit a complete campaign. Own T=.002 starts require fresh qualification of this component. Physical T=.407 is UNATTEMPTED."
+  },
+  "training-lru-v1": {
+    "status": "UNVALIDATED_PARTIAL_NATIVE_EXTRAPOLATION",
+    "training": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-lru-v1",
+    "training_results_sha256": "cd4d87bf0ed1deea79705ab750f594e9a6f352bc08eba04db83f41987f9f097e",
+    "model": {
+      "CPU": {
+        "startup": 41.024357,
+        "step": 80.01694200000004,
+        "training": [
+          41.024357,
+          116.38745099999998,
+          196.40439300000003
+        ]
+      },
+      "wall": {
+        "startup": 42.27353876904817,
+        "step": 82.23673163901549,
+        "training": [
+          42.27353876904817,
+          120.05109973700019,
+          202.28783137601567
+        ]
+      },
+      "output_all_retained": {
+        "startup": 10249463,
+        "step": 150967049,
+        "training": [
+          10249463,
+          161216512,
+          254446362
+        ]
+      }
+    },
+    "horizons": [
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1628,
+          3256
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 496451.9000787503,
+        "conditional_native_only_wall_with_headroom": 510245.74479269265,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.6292433794021295,
+        "native_only_remaining_reduction_ratio": 20.685495836614596,
+        "all_retained_native_output_bytes_with_headroom": 923639667601.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1620,
+          3240
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 493948.8309262502,
+        "conditional_native_only_wall_with_headroom": 507672.95899659954,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.659109748765432,
+        "native_only_remaining_reduction_ratio": 20.581201288593757,
+        "all_retained_native_output_bytes_with_headroom": 919085032473.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16249,
+          32498
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 4953986.300570003,
+        "conditional_native_only_wall_with_headroom": 5091629.22171082,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -0.8903762032945617,
+        "native_only_remaining_reduction_ratio": 206.41609585708346,
+        "all_retained_native_output_bytes_with_headroom": 9218539272676.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16241,
+          32482
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 4951483.231417503,
+        "conditional_native_only_wall_with_headroom": 5089056.435914727,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -0.8891308020442091,
+        "native_only_remaining_reduction_ratio": 206.31180130906264,
+        "all_retained_native_output_bytes_with_headroom": 9213984637548.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162487,
+          324974
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10156
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 49537732.084392525,
+        "conditional_native_only_wall_with_headroom": 50914098.84771418,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.2428627177394707,
+        "native_only_remaining_reduction_ratio": 2064.072170183022,
+        "all_retained_native_output_bytes_with_headroom": 92183386863571.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162479,
+          324958
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10155
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 49535177.73479377,
+        "conditional_native_only_wall_with_headroom": 50911473.219994634,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.2426714225243467,
+        "native_only_remaining_reduction_ratio": 2063.96573894974,
+        "all_retained_native_output_bytes_with_headroom": 92178819416615.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487460,
+          974920
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15234,
+          30467
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 148612639.78741384,
+        "conditional_native_only_wall_with_headroom": 152741723.94578162,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.2689835664950286,
+        "native_only_remaining_reduction_ratio": 6192.193324475576,
+        "all_retained_native_output_bytes_with_headroom": 276549530405136.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487452,
+          974904
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15233,
+          30466
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 148610034.15736884,
+        "conditional_native_only_wall_with_headroom": 152739045.4761386,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.2688921784729574,
+        "native_only_remaining_reduction_ratio": 6192.084756557035,
+        "all_retained_native_output_bytes_with_headroom": 276544950146351.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      }
+    ],
+    "measured_training_AS_bytes": 11142905856,
+    "headroom": 1.25,
+    "complete_workflow": false,
+    "heldout_validated": false,
+    "missing": [
+      "all independent per-state audits",
+      "full audit/action milestones",
+      "real retention/recovery and replay cost",
+      "controllers, collection, transfers and publication",
+      "fresh same-component scientific pair and later-state heldout validation"
+    ],
+    "interpretation": "Short 0/1/2 envelope and once-only headroom are conditional extrapolations, not mathematical lower bounds on all future implementations or states. Native-only costs do not admit a complete campaign. Own T=.002 starts require fresh qualification of this component. Physical T=.407 is UNATTEMPTED."
+  },
+  "training-metric-v1": {
+    "status": "UNVALIDATED_PARTIAL_NATIVE_EXTRAPOLATION",
+    "training": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-metric-v1",
+    "training_results_sha256": "765ee4b2ffd7517934e4694993780fd161a3e2a0d83a0d735bc8461bbf7cdeb5",
+    "model": {
+      "CPU": {
+        "startup": 44.271072,
+        "step": 84.44613300000002,
+        "training": [
+          44.271072,
+          127.61876500000001,
+          212.06489800000003
+        ]
+      },
+      "wall": {
+        "startup": 45.448737125028856,
+        "step": 86.0458355169394,
+        "training": [
+          45.448737125028856,
+          131.49457264196826,
+          216.82643566699699
+        ]
+      },
+      "output_all_retained": {
+        "startup": 10249400,
+        "step": 150967079,
+        "training": [
+          10249400,
+          161216479,
+          254446360
+        ]
+      }
+    },
+    "horizons": [
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1628,
+          3256
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 524121.1621650001,
+        "conditional_native_only_wall_with_headroom": 534115.5186488894,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.5262047174447178,
+        "native_only_remaining_reduction_ratio": 21.838381756875005,
+        "all_retained_native_output_bytes_with_headroom": 923639838545.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1620,
+          3240
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 521477.10049500014,
+        "conditional_native_only_wall_with_headroom": 531420.5217405687,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.556898350617284,
+        "native_only_remaining_reduction_ratio": 21.728212520625007,
+        "all_retained_native_output_bytes_with_headroom": 919085202675.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16249,
+          32498
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 5230066.626528751,
+        "conditional_native_only_wall_with_headroom": 5329788.895996299,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -0.9920129622746012,
+        "native_only_remaining_reduction_ratio": 217.9194427720313,
+        "all_retained_native_output_bytes_with_headroom": 9218540980516.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16241,
+          32482
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 5227422.564858751,
+        "conditional_native_only_wall_with_headroom": 5327093.8990879785,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -0.9906843529339325,
+        "native_only_remaining_reduction_ratio": 217.8092735357813,
+        "all_retained_native_output_bytes_with_headroom": 9213986344646.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162487,
+          324974
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10156
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 52298388.11413126,
+        "conditional_native_only_wall_with_headroom": 53295557.48219968,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.3443415021755585,
+        "native_only_remaining_reduction_ratio": 2179.099504755469,
+        "all_retained_native_output_bytes_with_headroom": 92183403943523.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162479,
+          324958
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10155
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 52295688.713621266,
+        "conditional_native_only_wall_with_headroom": 53292805.67436994,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.344135221117806,
+        "native_only_remaining_reduction_ratio": 2178.9870297342195,
+        "all_retained_native_output_bytes_with_headroom": 92178836495903.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487460,
+          974920
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15234,
+          30467
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 156894570.97519505,
+        "conditional_native_only_wall_with_headroom": 159886065.7201088,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.3704514583186311,
+        "native_only_remaining_reduction_ratio": 6537.273790633127,
+        "all_retained_native_output_bytes_with_headroom": 276549581645275.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487452,
+          974904
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15233,
+          30466
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 156891816.23584503,
+        "conditional_native_only_wall_with_headroom": 159883257.10135767,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.3703528547959591,
+        "native_only_remaining_reduction_ratio": 6537.159009826876,
+        "all_retained_native_output_bytes_with_headroom": 276545001385905.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      }
+    ],
+    "measured_training_AS_bytes": 11060387840,
+    "headroom": 1.25,
+    "complete_workflow": false,
+    "heldout_validated": false,
+    "missing": [
+      "all independent per-state audits",
+      "full audit/action milestones",
+      "real retention/recovery and replay cost",
+      "controllers, collection, transfers and publication",
+      "fresh same-component scientific pair and later-state heldout validation"
+    ],
+    "interpretation": "Short 0/1/2 envelope and once-only headroom are conditional extrapolations, not mathematical lower bounds on all future implementations or states. Native-only costs do not admit a complete campaign. Own T=.002 starts require fresh qualification of this component. Physical T=.407 is UNATTEMPTED."
+  },
+  "training-scatter-v2": {
+    "status": "UNVALIDATED_PARTIAL_NATIVE_EXTRAPOLATION",
+    "training": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-scatter-v2",
+    "training_results_sha256": "986c0540e1af93124bb7e25f6a9fa8d515834dd62d07b9030f87e8d616523dba",
+    "model": {
+      "CPU": {
+        "startup": 53.181892000000005,
+        "step": 101.72507800000002,
+        "training": [
+          53.181892000000005,
+          154.90697000000003,
+          253.47576000000004
+        ]
+      },
+      "wall": {
+        "startup": 54.4838479970349,
+        "step": 103.85681024298538,
+        "training": [
+          54.4838479970349,
+          158.34065824002028,
+          258.39633851498365
+        ]
+      },
+      "output_all_retained": {
+        "startup": 10249025,
+        "step": 150967070,
+        "training": [
+          10249025,
+          161216095,
+          254445992
+        ]
+      }
+    },
+    "horizons": [
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1628,
+          3256
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 631335.5927650002,
+        "conditional_native_only_wall_with_headroom": 644602.0720828512,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.2434084234234235,
+        "native_only_remaining_reduction_ratio": 26.305649698541675,
+        "all_retained_native_output_bytes_with_headroom": 923639710943.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1620,
+          3240
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 628150.8856950001,
+        "conditional_native_only_wall_with_headroom": 641350.1581555691,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.276372535802469,
+        "native_only_remaining_reduction_ratio": 26.172953570625,
+        "all_retained_native_output_bytes_with_headroom": 919085076281.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16249,
+          32498
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 6299934.930572501,
+        "conditional_native_only_wall_with_headroom": 6432312.851197854,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.2709616426036474,
+        "native_only_remaining_reduction_ratio": 262.4972887738542,
+        "all_retained_native_output_bytes_with_headroom": 9218539716800.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16241,
+          32482
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 6296750.223502502,
+        "conditional_native_only_wall_with_headroom": 6429060.937270571,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.2694046632596516,
+        "native_only_remaining_reduction_ratio": 262.3645926459376,
+        "all_retained_native_output_bytes_with_headroom": 9213985082137.5,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162487,
+          324974
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10156
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 62996609.44183751,
+        "conditional_native_only_wall_with_headroom": 64320325.607423395,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.6228566111176075,
+        "native_only_remaining_reduction_ratio": 2624.8587267432295,
+        "all_retained_native_output_bytes_with_headroom": 92183391317712.5,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162479,
+          324958
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10155
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 62993358.25740252,
+        "conditional_native_only_wall_with_headroom": 64317005.58868612,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.6226092004423138,
+        "native_only_remaining_reduction_ratio": 2624.723260725105,
+        "all_retained_native_output_bytes_with_headroom": 92178823871768.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487460,
+          974920
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15234,
+          30467
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 188989114.46964502,
+        "conditional_native_only_wall_with_headroom": 192960246.83518177,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.6489366717788811,
+        "native_only_remaining_reduction_ratio": 7874.5464362352095,
+        "all_retained_native_output_bytes_with_headroom": 276549543770218.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487452,
+          974904
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15233,
+          30466
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 188985796.807845,
+        "conditional_native_only_wall_with_headroom": 192956858.71163455,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.64881826484659,
+        "native_only_remaining_reduction_ratio": 7874.408200326875,
+        "all_retained_native_output_bytes_with_headroom": 276544963512993.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      }
+    ],
+    "measured_training_AS_bytes": 10891264000,
+    "headroom": 1.25,
+    "complete_workflow": false,
+    "heldout_validated": false,
+    "missing": [
+      "all independent per-state audits",
+      "full audit/action milestones",
+      "real retention/recovery and replay cost",
+      "controllers, collection, transfers and publication",
+      "fresh same-component scientific pair and later-state heldout validation"
+    ],
+    "interpretation": "Short 0/1/2 envelope and once-only headroom are conditional extrapolations, not mathematical lower bounds on all future implementations or states. Native-only costs do not admit a complete campaign. Own T=.002 starts require fresh qualification of this component. Physical T=.407 is UNATTEMPTED."
+  },
+  "training-stream-v3": {
+    "status": "UNVALIDATED_PARTIAL_NATIVE_EXTRAPOLATION",
+    "training": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-stream-v3",
+    "training_results_sha256": "d89963712f00f0d1bdc1d8f487fc561e492f5c2acc49938b78413ad2fa51b5d0",
+    "model": {
+      "CPU": {
+        "startup": 49.903597999999995,
+        "step": 116.3306739999999,
+        "training": [
+          49.903597999999995,
+          157.136224,
+          273.4668979999999
+        ]
+      },
+      "wall": {
+        "startup": 51.13329899299424,
+        "step": 117.86674469895661,
+        "training": [
+          51.13329899299424,
+          160.4149784100009,
+          278.2817231089575
+        ]
+      },
+      "output_all_retained": {
+        "startup": 10249019,
+        "step": 150967072,
+        "training": [
+          10249019,
+          161216091,
+          254445964
+        ]
+      }
+    },
+    "horizons": [
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1628,
+          3256
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 719867.5868824995,
+        "conditional_native_only_wall_with_headroom": 729483.5530670227,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.3474492854217854,
+        "native_only_remaining_reduction_ratio": 29.994482786770813,
+        "all_retained_native_output_bytes_with_headroom": 923639721991.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1620,
+          3240
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 716252.9076674994,
+        "conditional_native_only_wall_with_headroom": 725819.7174785716,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": 2.379578087654321,
+        "native_only_remaining_reduction_ratio": 29.843871152812476,
+        "all_retained_native_output_bytes_with_headroom": 919085087283.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16249,
+          32498
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 7183655.320032494,
+        "conditional_native_only_wall_with_headroom": 7279599.522629184,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.1683363191170737,
+        "native_only_remaining_reduction_ratio": 299.3189716680206,
+        "all_retained_native_output_bytes_with_headroom": 9218539827222.5,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16241,
+          32482
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 7180040.640817494,
+        "conditional_native_only_wall_with_headroom": 7275935.687040733,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.1668633571824392,
+        "native_only_remaining_reduction_ratio": 299.16836003406223,
+        "all_retained_native_output_bytes_with_headroom": 9213985192515.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162487,
+          324974
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10156
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 71833747.37230244,
+        "conditional_native_only_wall_with_headroom": 72793135.22644418,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.5203907987059477,
+        "native_only_remaining_reduction_ratio": 2993.0728071792682,
+        "all_retained_native_output_bytes_with_headroom": 92183392422095.0,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162479,
+          324958
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          5078,
+          10155
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 71830070.31358995,
+        "conditional_native_only_wall_with_headroom": 72789407.47423199,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.5201585196322804,
+        "native_only_remaining_reduction_ratio": 2992.919596399581,
+        "all_retained_native_output_bytes_with_headroom": 92178824976113.75,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "fresh_zero",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487460,
+          974920
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15234,
+          30467
+        ],
+        "separate_zero_initializations": 2,
+        "conditional_native_only_CPU_with_headroom": 215500493.97939232,
+        "conditional_native_only_wall_with_headroom": 218378644.09592122,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.5464818579261201,
+        "native_only_remaining_reduction_ratio": 8979.187249141347,
+        "all_retained_native_output_bytes_with_headroom": 276549547083396.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "from_state": "own_T0.002_conditional",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487452,
+          974904
+        ],
+        "own_start_is_qualified": false,
+        "segment_length": 32,
+        "native_segment_hard_cap": 64,
+        "segments": [
+          15233,
+          30466
+        ],
+        "separate_zero_initializations": 0,
+        "conditional_native_only_CPU_with_headroom": 215496754.54118234,
+        "conditional_native_only_wall_with_headroom": 218374852.42708528,
+        "optimistic_native_step_CPU_allowance_if_all_other_costs_zero": -1.546370736675611,
+        "native_only_remaining_reduction_ratio": 8979.03143921593,
+        "all_retained_native_output_bytes_with_headroom": 276544966826141.25,
+        "complete_campaign_CPU_with_headroom": null,
+        "complete_campaign_wall_with_headroom": null,
+        "qualified_retention_peak_bytes": null,
+        "admitted": false,
+        "status": "UNADMITTED",
+        "physical_preservation": "UNATTEMPTED"
+      }
+    ],
+    "measured_training_AS_bytes": 10881675264,
+    "headroom": 1.25,
+    "complete_workflow": false,
+    "heldout_validated": false,
+    "missing": [
+      "all independent per-state audits",
+      "full audit/action milestones",
+      "real retention/recovery and replay cost",
+      "controllers, collection, transfers and publication",
+      "fresh same-component scientific pair and later-state heldout validation"
+    ],
+    "interpretation": "Short 0/1/2 envelope and once-only headroom are conditional extrapolations, not mathematical lower bounds on all future implementations or states. Native-only costs do not admit a complete campaign. Own T=.002 starts require fresh qualification of this component. Physical T=.407 is UNATTEMPTED."
+  }
+}
