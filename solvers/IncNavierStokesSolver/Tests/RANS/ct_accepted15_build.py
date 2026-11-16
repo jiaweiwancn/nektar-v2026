@@ -24,6 +24,7 @@ def main():
     for name in targets:shutil.copy2(build/name,rt/name)
     if a.phase=='runtime':
         e=run([rt/'CT15SharedRowChecks'],a.output,'shared-row-checks.log');executions.append(e);require(e['exit_code']==0,'shared immutable row ownership')
+        e=run([rt/'CT9SparseAlgebraChecks'],a.output,'sparse-algebra-checks.log');executions.append(e);require(e['exit_code']==0,'canonical sparse algebra and assembly controls')
     shutil.copy2(old/'RANSNewModelsProbe',rt/'RANSNewModelsProbe');os.environ['LD_LIBRARY_PATH']=str(rt/'lib')
     result=dict(schema='CT15PrivateBuildV1',status='pass',executions=executions,runtime={n:runtime_identity(rt/n) for n in targets+['RANSNewModelsProbe']},compiler=subprocess.check_output(['c++','--version'],text=True),scotch_header_sha256=sha('/usr/include/scotch/scotch.h'),scotch_library=runtime_identity(Path('/usr/lib/x86_64-linux-gnu/libscotch.so')),flags=(build/'CMakeFiles/CT13SparseOrderingProbe.dir/flags.make').read_text())
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return 0

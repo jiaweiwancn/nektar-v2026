@@ -80,7 +80,6 @@ struct RANSWallEvolutionPatch::EvaluationCache
 // Exact physical coordinate bits and owner/side distinguish moving AWF rays.
 struct RANSWallEvolutionPatch::ImmutableRows
 {
-    static constexpr std::size_t maximumRows=65536;
     std::unordered_map<RowKey,std::shared_ptr<const RANSWallGlobalPoint>,RowHash> rows;
 };
 
@@ -147,7 +146,7 @@ std::shared_ptr<const RANSWallGlobalPoint> RANSWallEvolutionPatch::EvaluationRow
         if(it!=rows.end()){++m_evaluationWork.rowHits;return it->second;}
         ++m_evaluationWork.rowConstructs;
         auto row=std::make_shared<const RANSWallGlobalPoint>(Transform(fields[block]->ElementPoint(element,coordinate)));
-        if(rows.size()>=ImmutableRows::maximumRows){rows.clear();++m_evaluationWork.rowEvictions;}
+        if(rows.size()>=std::size_t(m_immutableMaximumRows)){rows.clear();++m_evaluationWork.rowEvictions;}
         rows.emplace(key,row);m_evaluationWork.peakRows=std::max<std::uint64_t>(m_evaluationWork.peakRows,rows.size());
         return row;
     }
@@ -333,8 +332,8 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
         {"fixed_reconstruction_rows",J::Number(fixedRows)},{"fixed_surface_rows",J::Number(surfaceRows)},
         {"row_counter_scope",J::Quote("scoped point/derivative requests; fixed reconstruction and surface catalogs counted separately")},
         {"peak_states",J::Number(w.peakStates)},{"peak_rows",J::Number(w.peakRows)},{"peak_profiles",J::Number(w.peakProfiles)},
-        {"immutable_policy",J::Quote(m_immutableTensor?(m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
-        {"maximum_immutable_rows",J::Number(ImmutableRows::maximumRows)},
+        {"immutable_policy",J::Quote(m_immutableTensor?(m_hashAssembly?"ImmutableTensorV3":m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
+        {"maximum_immutable_rows",J::Number(m_immutableMaximumRows)},
         {"maximum_states",J::Number(EvaluationCache::maximumStates)},{"maximum_rows",J::Number(EvaluationCache::maximumRows)},
         {"maximum_profiles",J::Number(EvaluationCache::maximumProfiles)},
         {"lifetime",J::Quote("immutable fixed catalogs per patch; exact-state, moving-row and owned-profile caches per evaluation scope")}});

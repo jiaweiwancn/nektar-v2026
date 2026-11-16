@@ -8,6 +8,7 @@
 #include <array>
 #include <functional>
 #include <map>
+#include <string>
 #include <vector>
 
 namespace Nektar
@@ -21,6 +22,10 @@ Vector Solve(const DenseMatrix &matrix, const Vector &rhs);
 Vector Multiply(const DenseMatrix &matrix, const Vector &value);
 double Maximum(const Vector &value);
 void Require(bool valid, const std::string &message);
+// Keep the condition and failure text; avoid constructing heap-allocated
+// diagnostic strings for successful checks inside every row/entry loop.
+inline void Require(bool valid,const char *message)
+{if(!valid)Require(false,std::string(message));}
 }
 
 /** One physical evaluation row in a native continuous expansion. Derivatives

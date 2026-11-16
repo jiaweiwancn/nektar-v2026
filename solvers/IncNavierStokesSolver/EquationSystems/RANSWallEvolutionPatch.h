@@ -577,6 +577,8 @@ private:
     bool m_evaluationReuse=false;
     bool m_immutableTensor=false;
     bool m_sharedTensor=false;
+    bool m_hashAssembly=false;
+    int m_immutableMaximumRows=65536;
     struct ImmutableRows;
     mutable std::shared_ptr<ImmutableRows> m_immutableRows;
     mutable std::shared_ptr<EvaluationCache> m_evaluation;

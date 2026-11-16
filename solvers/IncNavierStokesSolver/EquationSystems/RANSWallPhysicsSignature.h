@@ -11,7 +11,8 @@ namespace Nektar
 // A changed shared numerical operator invalidates legacy CLS histories too;
 // the closure descriptor remains conceptually and bytewise separate.
 // Shared byte-for-byte native physical identity, also used for immutable
-// checkpoint replays. Only the named projection resource parameters are omitted.
+// checkpoint replays. Named projection and immutable-row resource parameters
+// are omitted; their limits remain explicit in configurations and receipts.
 // The finite-QP numerical backend is a SolverInfo execution control, recorded
 // in PimpleKBoundControls: it solves the same raw-centered mass QP. The floor,
 // inventory, metric and mathematical correction policy retain strict identity.
@@ -28,7 +29,7 @@ inline std::string RANSWallPhysicsSignature(const RANSWallEvolutionPatch &patch,
     std::string pilot;session->LoadSolverInfo("RANSWallPilotAccuracy",pilot,"Off");
     if(pilot!="Off")s<<":pilot_accuracy="<<pilot;
     for(const auto &[name,value]:session->GetParameters())
-        if(!(patch.ColumnAverageK() && name=="RANSWALLSAMPLEHEIGHT") && !RANSWallEvolutionPatch::PimpleKBoundWorkParameter(name) && name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT" && name!="RANSWALLPIMPLEREJECTSTEP" && name!="RANSWALLPIMPLEHARDAUDITREJECTSTEP" && name!="RANSWALLPIMPLEKFLOORRELATIVE" && name!="RANSWALLPIMPLEBUDGETTIME")s<<'|'<<name<<'='<<value;
+        if(!(patch.ColumnAverageK() && name=="RANSWALLSAMPLEHEIGHT") && !RANSWallEvolutionPatch::PimpleKBoundWorkParameter(name) && name!="RANSWALLIMMUTABLEMAXIMUMROWS" && name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT" && name!="RANSWALLPIMPLEREJECTSTEP" && name!="RANSWALLPIMPLEHARDAUDITREJECTSTEP" && name!="RANSWALLPIMPLEKFLOORRELATIVE" && name!="RANSWALLPIMPLEBUDGETTIME")s<<'|'<<name<<'='<<value;
     std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","InitialPerturbationInner","InitialPerturbationOuter","BoundaryValuesInner","BoundaryValuesOuter",
         "BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","ExactSolutionInner","ExactSolutionOuter"};
     if(patch.OpenBoundary())for(const std::string name:{"OutletTotalTractionInner","OutletTotalTractionOuter","OutletDiffusiveFluxInner","OutletDiffusiveFluxOuter"})names.push_back(name);

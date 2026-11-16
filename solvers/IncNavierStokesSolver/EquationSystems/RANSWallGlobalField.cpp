@@ -21,9 +21,9 @@ namespace
 using Vector = RANSWallAlgebra::Vector;
 using WallMatrix = RANSWallAlgebra::DenseMatrix;
 using Coordinate = RANSWallCoordinate;
-void Require(bool valid, const std::string &message)
+void Require(bool valid, const char *message)
 {
-    if (!valid) throw std::runtime_error("Global wall field: " + message);
+    if (!valid) throw std::runtime_error(std::string("Global wall field: ") + message);
 }
 bool Equal(double a,double b)
 {
@@ -141,8 +141,8 @@ RANSWallGlobalField::RANSWallGlobalField(
     RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
     session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",m_serialSparse,false);
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2";
-    m_sharedTensor=immutable=="ImmutableTensorV2";
+    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3";
+    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3";
     Require(!m_sharedTensor || dimension==2,"shared immutable rows require flat2D tensor fields");
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");

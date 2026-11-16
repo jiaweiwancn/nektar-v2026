@@ -37,14 +37,18 @@ double &SparseMatrix::Entry(int row,int column)
 {
     Require(!m_data && row>=0 && row<m_rows && column>=0 && column<m_columns,
             "invalid write to finalized sparse matrix");
-    return m_assembly[row][column];
+    return m_hash?m_hashAssembly[row][column]:m_assembly[row][column];
 }
 void SparseMatrix::ClearRow(int row)
-{ Require(!m_data && row>=0 && row<m_rows,"invalid sparse row replacement");m_assembly[row].clear(); }
+{ Require(!m_data && row>=0 && row<m_rows,"invalid sparse row replacement");if(m_hash)m_hashAssembly[row].clear();else m_assembly[row].clear(); }
 double SparseMatrix::Get(int row,int column) const
 {
     Require(row>=0 && row<m_rows && column>=0 && column<m_columns,"sparse coefficient index");
-    if(!m_data){const auto it=m_assembly[row].find(column);return it==m_assembly[row].end()?0.:it->second;}
+    if(!m_data)
+    {
+        if(m_hash){const auto it=m_hashAssembly[row].find(column);return it==m_hashAssembly[row].end()?0.:it->second;}
+        const auto it=m_assembly[row].find(column);return it==m_assembly[row].end()?0.:it->second;
+    }
     const auto begin=m_data->ids.begin()+m_data->ptr[row],end=m_data->ids.begin()+m_data->ptr[row+1];
     const auto it=std::lower_bound(begin,end,column);
     return it==end || *it!=column?0.:m_data->values[it-m_data->ids.begin()];
@@ -53,14 +57,29 @@ void SparseMatrix::Finalize() const
 {
     if(m_data)return;
     auto data=std::make_shared<Data>();data->ptr.push_back(0);
-    for(const auto &row:m_assembly)
+    const auto append=[&](const auto &row)
     {
         for(auto [j,value]:row)if(value!=0.)
         { Require(std::isfinite(value),"nonfinite sparse entry");data->ids.push_back(j);data->values.push_back(value); }
         Require(data->values.size()<=20000000,"sparse matrix exceeds declared20M nonzero budget");
         data->ptr.push_back(data->ids.size());
+    };
+    if(m_hash)
+    {
+        // Each Entry += contribution still occurs in the original order on
+        // the same binary64 value. Only lookup/storage differs. Sort final
+        // column IDs so the canonical CSR and every subsequent action retain
+        // exactly the original order, including explicit-zero elimination.
+        std::vector<std::pair<int,double>> ordered;
+        for(const auto &row:m_hashAssembly)
+        {
+            ordered.assign(row.begin(),row.end());
+            std::sort(ordered.begin(),ordered.end(),[](const auto &a,const auto &b){return a.first<b.first;});
+            append(ordered);
+        }
     }
-    m_data=data;m_assembly.clear();m_assembly.shrink_to_fit();
+    else for(const auto &row:m_assembly)append(row);
+    m_data=data;m_assembly.clear();m_assembly.shrink_to_fit();m_hashAssembly.clear();m_hashAssembly.shrink_to_fit();
 }
 Vector SparseMatrix::Apply(const Vector &x) const
 {

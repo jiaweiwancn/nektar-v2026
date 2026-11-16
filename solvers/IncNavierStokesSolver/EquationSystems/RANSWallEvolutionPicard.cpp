@@ -82,7 +82,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     }
     const auto n = system.rows.size();
     system.sparse=SerialSparse();
-    if(system.sparse)system.csr=SparseMatrix(n,n);else system.matrix.assign(n, Vector(n));
+    if(system.sparse)system.csr=SparseMatrix(n,n,m_hashAssembly);else system.matrix.assign(n, Vector(n));
     system.residual.assign(n, 0.);
     const auto &model = m_parameters.model.Parameters();
     const double nu   = m_parameters.geometry.molecularNu;

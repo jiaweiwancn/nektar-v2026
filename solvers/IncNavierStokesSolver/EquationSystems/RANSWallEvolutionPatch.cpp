@@ -337,8 +337,12 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2","unknown immutable evaluation policy");
-    m_immutableTensor=immutable!="Off";m_sharedTensor=immutable=="ImmutableTensorV2";
+    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3","unknown immutable evaluation policy");
+    m_immutableTensor=immutable!="Off";m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3";
+    m_hashAssembly=immutable=="ImmutableTensorV3";
+    session->LoadParameter("RANSWallImmutableMaximumRows",m_immutableMaximumRows,65536);
+    Require(m_immutableMaximumRows>=1024 && m_immutableMaximumRows<=1048576,
+        "immutable row working set outside1024..1048576 bound");
     Require(!m_immutableTensor || (!m_evaluationReuse && m_dimension==2 && !Mapped() && SerialSparse() && PimpleSingleSweep()),
         "ImmutableTensorV1 requires serial sparse flat2D one-sweep and state reuse Off");
     if(OpenBoundary())
@@ -1852,7 +1856,7 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")text<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_immutableTensor)text<<":execution=CT15-ImmutableTensorV"<<(m_sharedTensor?2:1);
+    if(m_immutableTensor)text<<":execution=CT15-ImmutableTensorV"<<(m_hashAssembly?3:m_sharedTensor?2:1);
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();
     if(NewModels())text<<":resolved="<<m_parameters.model.Signature();

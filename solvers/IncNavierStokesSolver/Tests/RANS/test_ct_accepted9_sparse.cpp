@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSerialSparse.h>
 #include <cmath>
+#include <cstring>
 #include <iostream>
 using namespace Nektar::RANSWallAlgebra;
 int main()
@@ -33,6 +34,21 @@ int main()
         bad=false;try{SparseMatrix invalid(-1,2);}catch(const std::exception&){bad=true;}Require(bad,"invalid sparse shape accepted");
         bad=false;try{SparseMatrix singular(2,2);singular.Entry(0,0)=1;singular.Finalize();SparseFactor invalid(singular);}catch(const std::exception&){bad=true;}Require(bad,"singular sparse factor accepted");
         Require(std::abs(rhs[0]/m.Get(0,0)-x[0])>.1,"mass-lumping negative control is nondiscriminating");
+        SparseMatrix ordered(17,17),hashed(17,17,true);
+        for(int i=0;i<5000;++i)
+        {
+            const int r=(i*7)%17,c=(i*13+5)%17;const double v=std::ldexp((i%3?1.:-1.)*(i+1),-(i%18));
+            ordered.Entry(r,c)+=v;hashed.Entry(r,c)+=v;
+            if(i%5==0){ordered.Entry(r,c)-=v;hashed.Entry(r,c)-=v;}
+            if(i==1250){ordered.ClearRow(0);hashed.ClearRow(0);}
+        }
+        for(int r=0;r<17;++r)for(int c=0;c<17;++c)Require(ordered.Get(r,c)==hashed.Get(r,c),"hash assembly changed chronological accumulation");
+        ordered.Finalize();hashed.Finalize();
+        Require(ordered.Pointers()==hashed.Pointers() && ordered.Indices()==hashed.Indices() &&
+            ordered.Values().size()==hashed.Values().size() && std::memcmp(ordered.Values().data(),hashed.Values().data(),ordered.Values().size()*sizeof(double))==0,
+            "hash assembly changed canonical CSR bytes");
+        bad=false;try{hashed.Entry(0,0)=1.;}catch(const std::exception &e){bad=std::string(e.what())=="EP-AWF patch: invalid write to finalized sparse matrix";}
+        Require(bad,"hash immutability/unchanged guard message");
         m.Write("ct9-algebra.csr");std::cout<<"CT9 CSR, direct mass/LU, restriction and negative controls pass\n";return 0;
     }
     catch(const std::exception &e){std::cerr<<e.what()<<'\n';return 1;}

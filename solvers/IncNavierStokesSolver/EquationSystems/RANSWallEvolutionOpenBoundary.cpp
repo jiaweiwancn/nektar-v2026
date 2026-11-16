@@ -172,6 +172,7 @@ std::string RANSAcceptedOpenBoundaryIdentity(const LibUtilities::SessionReaderSh
         else out<<":Pi_inner=0:Pi_outer=-Qzz:no-finite-depth-cap";
     }
     const std::set<std::string> work{"NUMSTEPS","TIMESTEP","TIME","IO_CHECKSTEPS","IO_INFOSTEPS","IO_TIMER_LEVEL",
+        "RANSWALLIMMUTABLEMAXIMUMROWS",
         "RANSWALLNORMALORDER","RANSWALLTANGENTIALORDER","RANSWALLMASSORDER","RANSWALLVOLUMEORDER","RANSWALLINTERFACEORDER",
         "RANSWALLPIMPLEREJECTSTEP","RANSWALLPIMPLEHARDAUDITREJECTSTEP"};
     for(const auto &[name,value]:s->GetParameters())if(!work.count(name))out<<'|'<<name<<'='<<value;

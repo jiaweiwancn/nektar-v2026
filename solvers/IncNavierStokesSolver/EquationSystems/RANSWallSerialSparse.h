@@ -7,6 +7,7 @@
 #include <LibUtilities/Communication/Comm.h>
 #include <cstdint>
 #include <memory>
+#include <unordered_map>
 
 namespace Nektar::RANSWallAlgebra
 {
@@ -18,8 +19,8 @@ class SparseMatrix
 {
 public:
     SparseMatrix()=default;
-    SparseMatrix(int rows,int columns):m_rows(rows),m_columns(columns)
-    { Require(rows>=0 && columns>=0,"negative sparse shape");m_assembly.resize(rows); }
+    SparseMatrix(int rows,int columns,bool hashAssembly=false):m_rows(rows),m_columns(columns),m_hash(hashAssembly)
+    { Require(rows>=0 && columns>=0,"negative sparse shape");if(m_hash)m_hashAssembly.resize(rows);else m_assembly.resize(rows); }
     int Rows() const { return m_rows; }
     int Columns() const { return m_columns; }
     double &Entry(int row,int column);
@@ -44,7 +45,9 @@ public:
 private:
     struct Data { std::vector<int> ptr,ids;Vector values; };
     int m_rows=0,m_columns=0;
+    bool m_hash=false;
     mutable std::vector<std::map<int,double>> m_assembly;
+    mutable std::vector<std::unordered_map<int,double>> m_hashAssembly;
     mutable std::shared_ptr<const Data> m_data;
 };
 

@@ -20,10 +20,11 @@ from run_cls_epawf_picard import set_info,set_parameter,write
 from rans_request_manifest import RequestManifest,runtime_identity,sha
 from ct_accepted_feasibility import write_json
 
-POLICY='ImmutableTensorV2'
-COMPONENT='CT15-ImmutableTensorV2'
-def ordering(folder):
+POLICY='ImmutableTensorV3'
+COMPONENT='CT15-ImmutableTensorV3'
+def ordering(folder,maximum_rows=1048576):
     baseline_ordering(folder);policy(folder)
+    root=ET.parse(folder/'case.xml').getroot();set_parameter(root,'RANSWallImmutableMaximumRows',maximum_rows);write(root,folder/'case.xml')
 
 def policy(folder,value=POLICY):
     root=ET.parse(folder/'case.xml').getroot();set_info(root,'RANSWallImmutableEvaluation',value);write(root,folder/'case.xml')
@@ -37,9 +38,9 @@ def main():
     ct9=a.ct14.parent/'ct-accepted-9-20261114'
     m=RequestManifest(a.output,dict(schema='CT15ControlsV1',phase=a.phase,source=sha(Path(__file__)),runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.runtime/'RANSPreservationProbe'),baseline=str(a.ct14),policy=POLICY,detailed_timing=False))
     out=dict(schema='CT15ControlsV1',status='incomplete',phase=a.phase,cases={})
-    def evolve(label,c,steps,parent=None,template=None,value=POLICY,reject=0,dt=1e-6):
+    def evolve(label,c,steps,parent=None,template=None,value=POLICY,reject=0,dt=1e-6,maximum_rows=1048576):
         begin_cpu=time.process_time();begin_wall=time.monotonic();before_make=resource.getrusage(resource.RUSAGE_CHILDREN)
-        folder=a.output/label;n.make(folder,a.runtime,c,dt,steps,parent,template);enable(folder);ordering(folder);policy(folder,value)
+        folder=a.output/label;n.make(folder,a.runtime,c,dt,steps,parent,template);enable(folder);ordering(folder,maximum_rows);policy(folder,value)
         root=ET.parse(folder/'case.xml').getroot();set_parameter(root,'RANSWallPimpleHardAuditRejectStep',reject);write(root,folder/'case.xml')
         after_make=resource.getrusage(resource.RUSAGE_CHILDREN);make=dict(self_CPU=time.process_time()-begin_cpu,children_CPU=after_make.ru_utime+after_make.ru_stime-before_make.ru_utime-before_make.ru_stime,wall=time.monotonic()-begin_wall)
         os.environ['NEKTAR_RANS_SPARSE_RECEIPTS']=str(folder/'sparse-receipts.jsonl')
@@ -73,8 +74,10 @@ def main():
         cont,cr,ce=evolve('continued',c,2,Path(tr['checkpoint']),template)
         rollback,rr,re=evolve('rollback',c,4,template=template,reject=3)
         oracle,orr,oe=evolve('oracle',c,4,template=template,value='Off')
+        tinycache,tcr,tce=evolve('continued-small-cache',c,2,Path(tr['checkpoint']),template,maximum_rows=1024)
         require(all(e['exit_code']==0 for e in (fe,te,ce,oe)) and all(not q['failure'] for q in (fr,tr,cr,orr)),'small native update failure')
         require(same_history(fr,cr),'genuine candidate restart histories differ')
+        require(tce['exit_code']==0 and same_history(fr,tcr),'cache contents/capacity became essential history state')
         require(re['exit_code']!=0 and 'deliberate' in rr['failure'] and same_history(tr,rr),'full rejected-step rollback differs')
         defect=maximum(np.asarray(fr['state'])-orr['state']);require(defect<=1e-8,'small complete update equivalence')
         negatives={}
@@ -83,7 +86,7 @@ def main():
             message=q.get('failure','')+(folder/'solver.log').read_text()[-3000:]
             require(e['exit_code']!=0 and ('signature' if parent else 'immutable') in message.lower(),'wrong identity rejection:'+label)
             negatives[label]=dict(status='pass',execution=e,failure=message)
-        out['histories']=dict(status='pass',full_continuation_equal=True,full_rollback_equal=True,oracle_maximum_state_difference=defect,negatives=negatives,executions=[fe,te,ce,re,oe],reports={str(f/'case.evolution.json'):sha(f/'case.evolution.json') for f in (full,two,cont,rollback,oracle)})
+        out['histories']=dict(status='pass',full_continuation_equal=True,full_rollback_equal=True,changed_cache_capacity_continuation_equal=True,oracle_maximum_state_difference=defect,negatives=negatives,executions=[fe,te,ce,re,oe,tce],reports={str(f/'case.evolution.json'):sha(f/'case.evolution.json') for f in (full,two,cont,rollback,oracle,tinycache)})
     else:
         base=sealed(a.ct14/'static-v1');c=base['case'];out['case']=c
         for steps in ((0,1,2) if a.phase=='training' else (1,)):
