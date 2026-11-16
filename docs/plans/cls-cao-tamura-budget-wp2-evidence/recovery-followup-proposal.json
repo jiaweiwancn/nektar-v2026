@@ -1,0 +1,35 @@
+{
+  "version": "WP2RecoveryFollowupProposalV1",
+  "status": "awaiting_explicit_additional_budget",
+  "reason": "Original aggregate 43200-second envelope ends 2026-11-17 02:15:47 Asia/Shanghai and must not be reset by renaming an epoch. Closure remains OPEN.",
+  "proposed_additional_wall_limit_seconds": 3600,
+  "proposed_case": "calibrated standard, unchanged 8650-slot selected mesh, model, boundary policy, reference and cutoff physics",
+  "parent": "retained standard recovery checkpoint at approximately T=3.36; verify exact state/checksum/signature/time before use",
+  "operation": "Validate explicit common-state IMEX1 initialization at original dt=.01 against ordinary restart; preserve complete state/reference/defect/boundary data and form independent histories at dt=.005. Ordinary changed-dt restart must remain rejected.",
+  "reuse": "Archived dt=.01 trajectory through accepted T=3.68 and rejected attempt T=3.69; no repeated coarse campaign",
+  "new_primary_leg": {
+    "dt_seconds": 0.005,
+    "maximum_steps": 68,
+    "elapsed_endpoint_seconds": 0.34,
+    "physical_endpoint_approximately_seconds": 3.7
+  },
+  "maximum_additional_physical_attempts": 70,
+  "maximum_additional_native_initialization_or_probe_checks": 4,
+  "forecast": "About 31 minutes for 68 native fine steps at measured 27 s/step, plus import validation, readbacks and headroom within one hour; benchmark before full leg and stop if forecast exceeds the cap.",
+  "acceptance": "All existing hard gates and project budgets unchanged; compare actual fields, complete epsilon, pressure, k-stage covariance, production/sink/transport/storage, divergence and correction supply at retained common times.",
+  "stop": "First native rejection or work cap; retain candidate, stage packet and parent hashes. No timestep matrix, retuning, extra correction, hill run or automatic long recovery continuation.",
+  "interpretation": "A late common-state local sensitivity check cannot reconstruct accumulated global error or close WP2 perturbation recovery. Further full-horizon work requires an evidence-based separate decision.",
+  "resources": {
+    "build_workers_max": 4,
+    "native_ranks": 1,
+    "numerical_library_threads": 1,
+    "aggregate_workers_max": 72
+  },
+  "exact_parent_receipt": {
+    "file": "recovery-followup-parent.json",
+    "sha256": "2c5dbebf9f49c596bacfd3abe717f484e6d9a074b5aa3c8e8779b2e2816a2e3b",
+    "actual_time": 3.3599999999999723,
+    "state_sha256": "dc5ad13b390d23c42d4a19ebf014dbfbacbbf93940247486eb7fd685ac7f0993",
+    "checkpoint_sha256": "a1fa1e67c67f69ee695a4cc9a0d607aa181f95e6deb673979416b8bd2c8d42b3"
+  }
+}

@@ -203,6 +203,21 @@ near-balanced global integrals do not imply local equilibrium or covariance.
 Diffusion, advection, storage and interface/constrained-row exchanges remain
 explicit in the native weak budgets, rather than being inferred from P-E.
 
+The saved-stage replay localizes the crossing more precisely. At the same
+native-sided witness, lambda_min is +.000533425 in the committed state and
++.000577805 after momentum/pressure; epsilon leaves that inner tensor unchanged.
+The raw k solve changes local k from .00648484380 to .00478087070 and endpoint
+K from .01995190149 to .02012447253, yielding lambda_min=-.000577381.
+The logical bound changes no coefficient. The seen GL28 volume grid likewise
+first becomes negative after k (inner minimum -.000399024). Direct application
+of the saved 2286-row frozen k matrix to its increment reproduces the linear
+equation within 4.1e-19. This separates the stage-local admissibility loss from
+a failed linear solve; it does not settle temporal or spatial accuracy.
+The [stage receipt](cls-cao-tamura-budget-wp2-evidence/failure-stage-sequence.json)
+binds every saved stage hash and the immutable packet/matrix. Its diagnostic
+point/grid replay is distinct from a complete production-inventory audit and
+performs zero governing solves.
+
 ![Executed perturbation metrics](cls-cao-tamura-budget-wp2-evidence/recovery.png)
 
 One bounded standard dt=.005 control executes 60 accepted steps to
