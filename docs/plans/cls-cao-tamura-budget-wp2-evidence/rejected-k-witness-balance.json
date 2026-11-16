@@ -1,0 +1,82 @@
+{
+  "version": "WP2FrozenKWitnessBalanceV1",
+  "physical": [
+    0.1,
+    0.0,
+    0.00037071067811865477
+  ],
+  "geometry": 71,
+  "radial_side": 0,
+  "tangential_side": 1,
+  "pre_k_value": 0.006484843800203987,
+  "raw_k_value": 0.0047808707039006795,
+  "actual_k_change": -0.0017039730963033075,
+  "signed_frozen_load_responses": {
+    "inner_momentum_stress": -0.0,
+    "outer_momentum_stress": -0.0,
+    "conservative_advection": -0.0008691860793356018,
+    "k_diffusion": 0.0017678036930690764,
+    "epsilon_diffusion": -0.0,
+    "inner_k_production": 0.00838646938167763,
+    "inner_k_destruction": -0.011288459273692862,
+    "outer_k_production": 2.1389082329208038e-06,
+    "outer_k_destruction": -1.8245360881994696e-06,
+    "epsilon_production": -0.0,
+    "epsilon_destruction": -0.0,
+    "epsilon_yap": -0.0,
+    "prescribed_scalar_source": -0.0,
+    "roughness_force": -0.0,
+    "prescribed_body": -0.0,
+    "continuity": -0.0,
+    "gauge": -0.0,
+    "external_advection": 0.000299084809833706,
+    "external_traction": -0.0,
+    "external_diffusion": -0.0,
+    "time_mass": -0.0
+  },
+  "reconstructed_change": -0.0017039730963033313,
+  "independent_native_functional_change": -0.0017039730963033096,
+  "reconstruction_absolute_defect": 2.168404344971009e-17,
+  "adjoint_backward_residual": 2.806441275348808e-18,
+  "observed_load_rounding_effect": 2.4090535573636995e-18,
+  "conservative_load_rounding_bound": 2.382100209208976e-13,
+  "native_residual_export": {
+    "command": [
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-k-balance/RANSWallResolutionProbe",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step390/case.xml",
+      "input.json",
+      "result.json"
+    ],
+    "exit_code": 0,
+    "seconds": 10.789345872006379,
+    "input_sha256": "effd50245b8289ed245f5c4a8cbbcbd00e56833093a3a01b4693875bb192fd49",
+    "log_sha256": "d004b6b4014c9ce126652228cf648a7f880f0378e0cfcbc3ff482583639fde34",
+    "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/rejected-k-witness-balance/native/result.json",
+    "output_sha256": "c1a1008516f205b55f56abb8ea5d2e262b224a0d0b381d2d4d162c355d56a954"
+  },
+  "rows_sha256": "9445db73a22ebb19dd30a98f344827f63a3df4d4e1d754df4f60833faaaf9abb",
+  "matrix_sha256": "9f7a0f2b2d1ade145e8dc0edb05679cec59bfed5e90e01e3441c11d24ad69c1c",
+  "source_report": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step390/case.evolution.json",
+    "sha256": "8c5d2c9fd308e00760b448b084f81dc99f7eab2f3d10842249a04e8cf32f2326"
+  },
+  "archived_packet": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step390/pimple-states/k-t3.6899999999999653-46a2e853e4e0.json",
+    "sha256": "feb7ca59e2df7c639f394e4dac89a90815a315d38099e31df67fdc16fbce28b6"
+  },
+  "parent_checkpoint": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step368/checkpoint.32",
+    "sha256": "af80c7c734c812400ef9576a76575ce7a4c2c3e4d59380e592624812f7aa0170"
+  },
+  "validation_probe": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-k-balance/RANSWallResolutionProbe",
+    "sha256": "dbcc9eb72c369d0f29794b971704a93c0a7eb188be0721d3bd611f0f99b0dbab"
+  },
+  "source_sha256": "5fdf9ab2ef8ec6e5cda8bf7a640c094d01700de80a04bc562aecaa120a0d0e5e",
+  "zero_governing_solves": true,
+  "zero_lift_projection": true,
+  "correction_activated": false,
+  "seconds": 12.258412636001594,
+  "peak_RSS_KiB": 231192,
+  "interpretation": "Signed responses through the exact saved frozen k matrix and native free-row loads. Includes boundary terms; constrained rows are not treated as evolution equations. Not additive error percentages, a nonlinear causality decomposition, or a separate physical trajectory."
+}

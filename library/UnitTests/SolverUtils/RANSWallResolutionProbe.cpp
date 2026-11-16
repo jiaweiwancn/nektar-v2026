@@ -603,7 +603,7 @@ int main(int argc,char **argv)
         }
         if(operation=="interface_provenance")
         {RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,0.);std::ofstream out(argv[3]);out<<patch.InterfaceProvenanceChecks()<<'\n';Require(out.good(),"interface fixture write failed");world->Finalise();return 0;}
-        const bool archivedStages=operation=="archived_stages";
+        const bool archivedStages=operation=="archived_stages" || operation=="archived_k_balance";
         Tree archived;
         if(archivedStages)
         {
@@ -640,7 +640,9 @@ int main(int argc,char **argv)
             serial->LoadParameter("RANSWallDirectionX",dx,1.);serial->LoadParameter("RANSWallDirectionY",dy,0.);
             std::string mode,coordinates;serial->LoadSolverInfo("RANSWallReference",mode,"Neutral");
             serial->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
-            Require(((mode=="Neutral" && !patch.FiniteInflowReference()) || (finiteH1 && mode==(operation=="h2c_checkpoint"?"AnalyticalNeutralInflowV1":"FiniteInflowV1"))) && eta==0,
+            const bool wp2Archived=archivedStages && patch.EquilibriumOpen() && !patch.Mapped() &&
+                patch.AnalyticalNeutralInflow() && mode=="AnalyticalNeutralInflowV1";
+            Require(((mode=="Neutral" && !patch.FiniteInflowReference()) || wp2Archived || (finiteH1 && mode==(operation=="h2c_checkpoint"?"AnalyticalNeutralInflowV1":"FiniteInflowV1"))) && eta==0,
                 "native replay requires neutral eta=0, or the explicit finite-H1 immutable operation");
             const bool neutral=mode=="Neutral";
             const auto signature=RANSWallPhysicsSignature(patch,serial,eta,neutral,us,{dx,dy},coordinates=="Chart");
@@ -1005,6 +1007,55 @@ int main(int argc,char **argv)
                 {"physical_time",J::Number(time)},{"governing_solves","0"},{"physical_commits","0"},{"native_history_advanced","false"},
                 {"metric_scope",J::Quote("affine integration split at every native interface, finite-profile knot, AWF cutoff, viscosity intercept and roughness; tangential GL8 and normal GL16/32; represented field versus finite completion; inner target is AWF no-slip U and budget k; epsilon uses raw finite completion, so matching changes remain visible; not curved polynomial exactness")}})<<'\n';
             Require(out.good(),"finite H1 readback write failed");world->Finalise();return 0;
+        }
+        if(operation=="archived_k_balance")
+        {
+            Require(archivedStages && !patch.Mapped() && patch.AcceptedAWF() &&
+                    patch.InitializationWork()==Vector({0.,0.}),
+                    "archived k balance requires immutable affine accepted-AWF replay");
+            const auto pre=Read(archived,"pre_k");
+            const auto before=RANSWallR3::Hash(pre);
+            const auto components=patch.ResidualResolutionComponents(pre,history,alpha,time,data,false);
+            std::vector<int> rows;
+            for(const auto &entry:archived.get_child("transport_rows"))
+            {
+                const int row=entry.second.get_value<int>();
+                Require(row>=patch.offset[patch.K()] && row<patch.offset[patch.Epsilon()] &&
+                        !components.constraints.count(row),"archived k balance row is not a free k row");
+                rows.push_back(row);
+            }
+            const auto expected=Read(archived,"transport_residual");
+            Require(rows.size()==expected.size(),"archived k balance residual shape differs");
+            auto names=RANSWallResolutionSpatialTerms();names.push_back("time_mass");
+            Vector total(rows.size()),native(rows.size());
+            std::vector<std::pair<std::string,std::string>> loads;
+            double scale=0.,defect=0.;
+            for(const auto &name:names)
+            {
+                Vector load(rows.size());const auto &full=components.terms.at(name);
+                for(int i=0;i<rows.size();++i){load[i]=full[rows[i]];total[i]+=load[i];scale=std::max(scale,std::abs(load[i]));}
+                loads.push_back({name,J::Numbers(load)});
+            }
+            for(int i=0;i<rows.size();++i)
+            {
+                native[i]=components.terms.at("total_constrained")[rows[i]];
+                defect=std::max(defect,std::abs(native[i]-expected[i]));
+                Require(std::abs(total[i]-native[i])<=1e-12*std::max(scale,1e-30),
+                        "archived k components do not reproduce the assembled free-row residual");
+            }
+            Require(defect<=1e-10*std::max(scale,1e-30),"archived k residual differs from frozen transport packet");
+            Require(before==RANSWallR3::Hash(pre) && patch.InitializationWork()==Vector({0.,0.}),
+                    "archived k balance changed its state or initialized a reference");
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},
+                {"native_replay_context",replayContext},{"pre_k_sha256",J::Quote(before)},
+                {"transport_rows",J::Numbers(rows)},{"components",J::Object(loads)},
+                {"sum",J::Numbers(total)},{"native",J::Numbers(native)},
+                {"packet_residual_maximum_defect",J::Number(defect)},
+                {"component_maximum_scale",J::Number(scale)},
+                {"physical_time",J::Number(time)},{"alpha",J::Number(alpha)},
+                {"governing_solves","0"},{"physical_commits","0"},
+                {"initialization_work",J::Numbers(patch.InitializationWork())}})<<'\n';
+            Require(out.good(),"archived k balance output failed");world->Finalise();return 0;
         }
         if(archivedStages || operation=="selected_original_operator")
         {

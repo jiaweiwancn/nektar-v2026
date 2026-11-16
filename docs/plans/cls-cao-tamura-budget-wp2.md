@@ -416,3 +416,50 @@ sensitivity evidence, not a measured order or a recovery pass. The replay took
 focused Linux protocol/comparison tests pass. See
 [readback receipt](cls-cao-tamura-budget-wp2-evidence/global-half-step-readback-T03.json)
 and [exact launch](cls-cao-tamura-budget-wp2-evidence/global-half-step-launch.json).
+
+
+## Signed k-load replay at the first standard rejection
+
+A separately frozen, read-only probe exports the complete native free-k-row
+components at the archived pre-k stage, with the original physical signature,
+parent checkpoint, callback history and all stage-vector hashes validated. It
+performs no Lift, projection, physical advance or governing solve. The production
+v12/v13 executables and closures remain unchanged. Changed callback-history and
+physical-signature bindings reject in focused negative tests, preserving the
+accepted parent. The probe source and runtime are indexed in the
+[k-balance artifact receipt](cls-cao-tamura-budget-wp2-evidence/k-balance-artifact-index.json).
+
+At the independently reconstructed native witness x=.1,
+z=.00037071067811865477, the saved 2286-row transport matrix gives an adjoint
+functional for the local k increment. Signed responses, in m²/s², are:
+
+| Frozen residual load | Response in local k |
+|---|---:|
+| Inner actual production | +.00838646938168 |
+| Inner prescribed cutoff dissipation | -.01128845927369 |
+| Physical k diffusion | +.00176780369307 |
+| Conservative volume advection | -.00086918607934 |
+| External advection | +.00029908480983 |
+| Outer production minus destruction | +.00000031437214 |
+| Time-mass load at pre-k | 0 |
+| Sum | -.00170397309630 |
+
+The sum reproduces the actual change .00648484380020 -> .00478087070390
+within 2.17e-17; the adjoint backward residual is 2.81e-18. No bound correction
+acts. The instantaneous time-mass residual is zero because pre-k k still equals
+the callback history; physical storage is formed by the solved increment.
+The native component sum also reproduces the frozen packet residual.
+These are signed responses through the **same frozen operator**, retaining
+cancellation; they are neither additive percentages nor independent physical
+evolution equations. They show the production/dissipation imbalance and
+advection driving this saved loss, with diffusion opposing it. They do not
+establish whether its origin is physical, temporal or spatial. The globally
+refined control remains necessary.
+
+The readback plus diagnostic adjoint takes 12.26 seconds. Reported 231192 KiB
+RSS concerns the Python analysis process; native child peak RSS was not captured
+by that receipt. Two negative probe checks add zero governing solves. Reproduce
+with audit_wp2_k_witness_balance.py followed by verify_wp2_k_balance_contract.py,
+using the isolated probe and unused output directories. Full load vectors remain
+outside Git. See [signed result](cls-cao-tamura-budget-wp2-evidence/rejected-k-witness-balance.json)
+and [negative checks](cls-cao-tamura-budget-wp2-evidence/rejected-k-witness-contracts.json).

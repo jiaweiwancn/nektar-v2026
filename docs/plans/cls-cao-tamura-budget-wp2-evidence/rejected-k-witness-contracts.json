@@ -1,0 +1,45 @@
+{
+  "version": "WP2ArchivedKBalanceContractsV1",
+  "passed": true,
+  "positive_result_sha256": "c1a1008516f205b55f56abb8ea5d2e262b224a0d0b381d2d4d162c355d56a954",
+  "probe_sha256": "dbcc9eb72c369d0f29794b971704a93c0a7eb188be0721d3bd611f0f99b0dbab",
+  "cases": {
+    "expected_history_sha256": {
+      "expected_reason": "archived callback history SHA256 differs",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-k-balance/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step390/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 1,
+        "seconds": 2.2709718720288947,
+        "input_sha256": "05488b55760d546fc3e411745e661a0ffde58cc1eed2ed7feda727be2edfb8bb",
+        "log_sha256": "59cc0bd56a87d822d9d7cd3e3c49828d20cd92681cd3f84d91378baf700db92e",
+        "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/rejected-k-witness-contracts/expected_history_sha256/result.json"
+      },
+      "parent_checkpoint_preserved": true
+    },
+    "native_signature": {
+      "expected_reason": "native replay physical signature differs from archived report",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-k-balance/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step390/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 1,
+        "seconds": 2.4711112980148755,
+        "input_sha256": "601d8def47e80a355156005d6c65b5567fc6b82d000ae659bf8d3917d6d2b2b8",
+        "log_sha256": "9bbbd2964504804d05daf630d905c71241c781c97a1e8777b186227035a13e44",
+        "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/rejected-k-witness-contracts/native_signature/result.json"
+      },
+      "parent_checkpoint_preserved": true
+    }
+  },
+  "parent_checkpoint_sha256": "af80c7c734c812400ef9576a76575ce7a4c2c3e4d59380e592624812f7aa0170",
+  "governing_solves": 0,
+  "source_sha256": "db20add157240c0cea2f5fba92eb6e55854f642b5000860ac28555d1b4f16191"
+}
