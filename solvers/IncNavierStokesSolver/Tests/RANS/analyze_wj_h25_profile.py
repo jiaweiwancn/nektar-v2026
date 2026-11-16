@@ -9,7 +9,7 @@ from wj_h15_observer import identity,atomic
 def category(name,ancestors):
     names=[name]+ancestors
     if any(n.startswith(('audit.','physical.samples'))for n in names):return 'full_scientific_audit'
-    if any(n=='monitor.observer_wait'for n in names):return 'observer_enclosing_wait'
+    if any(n in ('monitor.observer_wait','monitor.independent_wait')for n in names):return 'observer_enclosing_wait'
     if any(n.startswith('monitor.')for n in names):return 'recovery_publication_IO'
     if any(n.startswith(('domain.','k.bound','verify.','guard.','residual'))or n in ('flow.correction_validate',)for n in names):return 'guards_bounds_residual_verification'
     if name.startswith('data.'):return 'data_allocation_release'

@@ -234,7 +234,7 @@ int main(int argc,char **argv)
         if(operation=="scalar_value_checks")
         {
             patch.LoadOpenBoundaryData(serial,data);auto imported=ImportOpenState(patch,serial,us,packet,data);
-            const auto result=patch.ScalarValueChecks(imported.cp.coupledState,imported.cp.integration.time,data);
+            const auto result=patch.ScalarValueChecks(imported.cp.coupledState,imported.cp.integration.time,data,packet.get<bool>("memo",false));
             RANSWallMonitor::Atomic(argv[3],result);world->Finalise();return 0;
         }
         if(operation=="mapped_backend_checks")

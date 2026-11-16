@@ -18,10 +18,12 @@ def build(root,variant='profile'):
         source=root/'resumption-r1/source-v1';output=root/'resumption-r1/build-seed-v1';previous=root/'build-scalar-v3';previous_source=root/'source-v8';tag='seed';manifest='resumption-r1/source-manifest-v1.json'
     elif variant=='scatter':
         source=root/'resumption-r1/source-v2';output=root/'resumption-r1/build-scatter-v1';previous=root/'resumption-r1/build-seed-v1';previous_source=root/'resumption-r1/source-v1';tag='scatter';manifest='resumption-r1/source-manifest-v2.json'
+    elif variant=='memo':
+        source=root/'resumption-r1/source-v3';output=root/'resumption-r1/build-memo-v1';previous=root/'resumption-r1/build-scatter-v1';previous_source=root/'resumption-r1/source-v2';tag='memo';manifest='resumption-r1/source-manifest-v3.json'
     else:
         assert variant=='scalar'
         source=root/'source-v8';output=root/'build-scalar-v3';previous=root/'build-scalar-v2';previous_source=root/'source-v8';tag='scalar';manifest='source-manifest-v8.json'
-    resumed=variant in ('seed','scatter')
+    resumed=variant in ('seed','scatter','memo')
     started=time.monotonic();proof=(root/'resumption-r1/science' if resumed else root/'science')/(output.name+'-object-reuse.json')
     assert not output.exists()and not proof.exists(),'versioned build output/receipt already exists'
     cmake=(source/'solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt').read_text()
@@ -70,8 +72,9 @@ def build(root,variant='profile'):
     names=('IncNavierStokesSolver','RANSWallResolutionProbe','WJH25CommonMassChecks','RANSWallTimingChecks','RANSWallMonitorChecks')
     if variant=='seed':names=('RANSWallResolutionProbe',)
     if variant=='scatter':names=('IncNavierStokesSolver','RANSWallResolutionProbe','WJH25ExactScatterChecks')
+    if variant=='memo':names=('IncNavierStokesSolver','RANSWallResolutionProbe')
     if variant in ('lookup','scalar'):names+=('WJH25ExactLookupChecks',)
-    command=['cmake','--build',str(output),'--target',*names,'--parallel','4' if variant=='scatter' else '8']
+    command=['cmake','--build',str(output),'--target',*names,'--parallel','4' if variant in ('scatter','memo') else '8']
     subprocess.run(command,check=True)
     runtime=(root/'resumption-r1'/('runtime-'+tag+'-v1')) if resumed else root/('runtime-'+tag+'-v1');runtime.mkdir()
     oldrt=OLD/'runtime';executables=[]
@@ -89,7 +92,7 @@ def build(root,variant='profile'):
         compiler=subprocess.check_output(['/usr/bin/c++','--version'],text=True),configure=config,build=command,seconds=time.monotonic()-started,
         compile_commands=identity(output/'compile_commands.json'),objects=objects,executables=executables,
         link_commands=[identity(p)for p in sorted(output.glob('CMakeFiles/*/link.txt'))if p.parent.name in ('IncNavierStokesSolver.dir','RANSWallResolutionProbe.dir','WJH25CommonMassChecks.dir')],
-        private_runtime=identity(root/'science/runtime-dependencies-v1.json'),old_object_proof=identity(proof),purpose='H25R1 exact per-element assembly scatter and read-only sufficient-positivity prototype; no production guard skipped' if variant=='scatter' else 'H25R1 target initial-data producer; existing governing solver unchanged' if variant=='seed' else 'profiling-only baseline'if variant=='profile'else'opt-in exact containment/geometry lookup and scalar value rows; same governing mathematics; explicit H25 transient initial-data helper'))
+        private_runtime=identity(root/'science/runtime-dependencies-v1.json'),old_object_proof=identity(proof),purpose='H25R1 current-domain exact scalar memo; ordered observations and every physical guard retained' if variant=='memo' else 'H25R1 exact per-element assembly scatter and read-only sufficient-positivity prototype; no production guard skipped' if variant=='scatter' else 'H25R1 target initial-data producer; existing governing solver unchanged' if variant=='seed' else 'profiling-only baseline'if variant=='profile'else'opt-in exact containment/geometry lookup and scalar value rows; same governing mathematics; explicit H25 transient initial-data helper'))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--variant',choices=('profile','lookup','scalar','seed','scatter'),default='profile');a=p.parse_args();build(a.root,a.variant)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--variant',choices=('profile','lookup','scalar','seed','scatter','memo'),default='profile');a=p.parse_args();build(a.root,a.variant)

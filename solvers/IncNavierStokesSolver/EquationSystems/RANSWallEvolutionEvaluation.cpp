@@ -446,7 +446,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
     for(const auto &[key,rows]:m_surfaceCatalog){(void)key;surfaceRows+=rows.size();}
     return J::Object({{"mode",J::Quote(m_evaluationReuse?"ExactStepV1":"Off")},
         {"native_lookup",J::Quote(fields[0]->TensorLookupEnabled()?"TensorExactV1":"Off")},
-        {"scalar_value",J::Quote(m_exactScalarValues?"ValueExactV1":"Off")},
+        {"scalar_value",J::Quote(m_scalarPointMemo?"MemoExactV1":m_exactScalarValues?"ValueExactV1":"Off")},
         {"scopes",J::Number(w.scopes)},{"domain_calls",J::Number(w.domainCalls)},
         {"domain_computes",J::Number(w.domainComputes)},{"domain_hits",J::Number(w.domainHits)},
         {"prefix_hits",J::Number(w.prefixHits)},{"row_constructs",J::Number(w.rowConstructs)},{"row_hits",J::Number(w.rowHits)},
@@ -458,6 +458,8 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
         {"constraint_hits",J::Number(w.constraintHits)},{"state_evictions",J::Number(w.stateEvictions)},
         {"input_invalidations",J::Number(w.inputInvalidations)},{"profile_reuses",J::Number(w.profileReuses)},
         {"scalar_field_reuses",J::Number(w.scalarFieldReuses)},
+        {"scalar_point_memo_hits",J::Number(w.scalarPointMemoHits)},{"scalar_point_memo_misses",J::Number(w.scalarPointMemoMisses)},
+        {"scalar_point_memo_evictions",J::Number(w.scalarPointMemoEvictions)},
         {"fixed_reconstruction_rows",J::Number(fixedRows)},{"fixed_surface_rows",J::Number(surfaceRows)},
         {"row_counter_scope",J::Quote("scoped point/derivative requests; fixed reconstruction and surface catalogs counted separately")},
         {"peak_states",J::Number(w.peakStates)},{"peak_rows",J::Number(w.peakRows)},{"peak_profiles",J::Number(w.peakProfiles)},

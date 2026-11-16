@@ -17,12 +17,12 @@ def identity(p):
 
 
 def materialize(parent,revision,expected,version=1):
-    assert version in (1,2)
+    assert version in (1,2,3)
     root=parent/'resumption-r1';archive=root/('overlay-v'+str(version)+'.tar.gz')
     assert identity(archive)['sha256']==expected
     source=root/('source-v'+str(version));assert not source.exists()
-    source_base=parent/'source-v8' if version==1 else root/'source-v1'
-    base_manifest=parent/'source-manifest-v8.json' if version==1 else root/'source-manifest-v1.json'
+    source_base=parent/'source-v8' if version==1 else root/('source-v'+str(version-1))
+    base_manifest=parent/'source-manifest-v8.json' if version==1 else root/('source-manifest-v'+str(version-1)+'.json')
     started=time.monotonic();shutil.copytree(source_base,source,symlinks=True)
     with tarfile.open(archive) as a:
         members=a.getmembers()

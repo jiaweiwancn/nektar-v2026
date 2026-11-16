@@ -69,3 +69,31 @@ complete-step speedup. Integrating typed certificates into correction/minimum
 diagnostics is not accepted by this read-only prototype. Full guards remain the
 selected policy unless a later, separately qualified integration preserves all
 failure, correction, minimum and coverage semantics.
+
+## Current-domain exact scalar memo (second implementation candidate)
+
+After exact scatter, the measured ordinary mean is 35.153428 s: equations
+11.860816 s and guards 20.392937 s. The native prototype visits 1,361,360 moving
+points for the saved state. Native point row/contraction micro-work totals
+1.319014 s, whereas the previously measured enclosing moving-ray scope is about
+9.60 s per ordinary step. This motivates removing repeated row/coverage lookup,
+not returning to the slower ValueExactV1 or H17 persistent row catalog.
+
+MemoExactV1 (default Off) stores exact original row-contract values only inside
+one EvaluateScalarDomain call over its const effective lifted state. Its key is
+native element plus every coordinate bit, including signed zero. Field/geometry,
+owner, offset, state, time and data generation cannot change within that lifetime.
+At most 65536 entries exist; overflow clears this local memo. No value or PASS
+survives the call. First visits use the original EvaluationRow and contraction.
+Hits validate the same geometry and use the exact stored IEEE value while still
+executing original ordered observations, counts, margins, failure predicates,
+current-K/profile/cutoff/budget work and dependent trace checks. A duplicate
+coverage-set insertion is omitted only for an already protected identical
+current-state point. Full ordered row commitment traversals disable this memo.
+No positivity guard or constitutive/principal point is removed.
+
+Qualification compares all sixteen fresh complete scalar inventory/failure
+evaluations (A, changed k/epsilon, negative/nonfinite fields, return to A), then
+new-executable Off two-step and On four-step state/history/callback/full-audit
+replays against the retained W0 oracle. Work counters are separate from numerical
+inventory hashes. Retain only a measured gain; all physical/accuracy gates stand.

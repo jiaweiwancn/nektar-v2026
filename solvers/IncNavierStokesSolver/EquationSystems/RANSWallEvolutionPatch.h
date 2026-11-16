@@ -69,7 +69,7 @@ public:
         EvaluationScope(const EvaluationScope&)=delete;
     };
     std::string EvaluationReuseJSON() const;
-    std::string ScalarValueChecks(const Vector &,double,const RANSWallEvolutionData &);
+    std::string ScalarValueChecks(const Vector &,double,const RANSWallEvolutionData &,bool memo=false);
     std::string EvaluationReuseChecks(const Vector &,const Vector &,double,const RANSWallEvolutionData &,bool structural=false);
     std::string ImmutableRowsJSON() const;
     std::string CompleteAuditCommitment(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &) const;
@@ -548,6 +548,7 @@ private:
     bool m_evaluationReuse=false;
     bool m_immutableRowReuse=false;
     bool m_exactScalarValues=false;
+    bool m_scalarPointMemo=false;
     bool m_elementAssemblyScatter=false;
     std::size_t m_immutableRowEntries=196608;
     std::uint64_t m_immutableRowBytes=256ULL*1024*1024;
@@ -567,7 +568,8 @@ private:
             rowConstructs=0,rowHits=0,rowEvictions=0,reconstructionBuilds=0,reconstructionHits=0,
             surfaceBuilds=0,surfaceHits=0,normalizationCalls=0,normalizationComputes=0,normalizationHits=0,
             residualCalls=0,residualHits=0,constraintCalls=0,constraintHits=0,
-            stateEvictions=0,inputInvalidations=0,profileReuses=0,scalarFieldReuses=0,peakStates=0,peakRows=0,peakProfiles=0;
+            stateEvictions=0,inputInvalidations=0,profileReuses=0,scalarFieldReuses=0,peakStates=0,peakRows=0,peakProfiles=0,
+            scalarPointMemoHits=0,scalarPointMemoMisses=0,scalarPointMemoEvictions=0;
     };
     mutable EvaluationWork m_evaluationWork;
     void PrepareEvaluation(const RANSWallEvolutionData &,double) const;

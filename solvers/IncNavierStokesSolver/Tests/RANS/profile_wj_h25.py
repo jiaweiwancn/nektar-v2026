@@ -12,11 +12,11 @@ from wj_h16_observer import compatibility
 from cls_epawf_m3_cases import set_info,set_parameter,write
 
 def run(root,variant='profiling'):
-    assert variant in ('profiling','lookup-off','lookup-on','scalar-on','scatter-off','scatter-on')
-    resumed=variant.startswith('scatter');base=root/'resumption-r1' if resumed else root
-    lookup=resumed or variant in ('lookup-on','scalar-on');steps=2 if variant in ('lookup-off','scatter-off')else 4
-    tag='scatter' if resumed else 'profile'if variant=='profiling'else'scalar'if variant=='scalar-on'else'lookup'
-    label=('W1-scatter-v1' if variant=='scatter-on' else 'W0-scatter-off-v1') if resumed else 'W1-scalar-v1'if variant=='scalar-on'else'W0-profile-v1'if variant=='profiling'else ('W1-lookup-v1'if lookup else'W0-lookup-off-v1')
+    assert variant in ('profiling','lookup-off','lookup-on','scalar-on','scatter-off','scatter-on','memo-off','memo-on')
+    memo=variant.startswith('memo');resumed=memo or variant.startswith('scatter');base=root/'resumption-r1' if resumed else root
+    lookup=resumed or variant in ('lookup-on','scalar-on');steps=2 if variant in ('lookup-off','scatter-off','memo-off')else 4
+    tag='memo' if memo else 'scatter' if resumed else 'profile'if variant=='profiling'else'scalar'if variant=='scalar-on'else'lookup'
+    label=('W1-memo-v1' if variant=='memo-on' else 'W0-memo-off-v1') if memo else ('W1-scatter-v1' if variant=='scatter-on' else 'W0-scatter-off-v1') if resumed else 'W1-scalar-v1'if variant=='scalar-on'else'W0-profile-v1'if variant=='profiling'else ('W1-lookup-v1'if lookup else'W0-lookup-off-v1')
     terminal=16+steps
     here=Path(__file__).resolve().parent;inputs=load(root/'inputs/baseline.json')
     old=load(root/'science/cache-compatible-v2.json')
@@ -28,8 +28,8 @@ def run(root,variant='profiling'):
     x=ET.parse(root/'science/W0/case.xml').getroot();set_parameter(x,'NumSteps',steps);set_info(x,'RANSWallNativeLookup','TensorExactV1'if lookup else'Off')
     if variant=='scalar-on':set_info(x,'RANSWallScalarEvaluation','ValueExactV1')
     if resumed:
-        set_info(x,'RANSWallScalarEvaluation','Off')
-        set_info(x,'RANSWallAssemblyScatter','ElementExactV1' if variant=='scatter-on' else 'Off')
+        set_info(x,'RANSWallScalarEvaluation','MemoExactV1' if variant=='memo-on' else 'Off')
+        set_info(x,'RANSWallAssemblyScatter','ElementExactV1' if memo or variant=='scatter-on' else 'Off')
     for k,v in dict(RANSWallCheckpoint=str(folder/'CP'),RANSWallMonitorIntent=str(ip),RANSWallReport=str(folder/'native.json')).items():set_info(x,k,v)
     write(x,folder/'case.xml')
     intent=dict(schema='WJMonitorIntentV1',policy='CheckpointAuditV1',directory=str(d),nonce=uuid.uuid4().hex,
@@ -73,4 +73,4 @@ def run(root,variant='profiling'):
     atomic(folder/'qualification.json',dict(status='PASS',variant=variant,lookup='TensorExactV1'if lookup else'Off',scope='exact numerical state/history/callback/reference/time parity for all four evolving steps; startup/final fresh physical audits',records=records))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--variant',choices=('profiling','lookup-off','lookup-on','scalar-on','scatter-off','scatter-on'),default='profiling');a=p.parse_args();run(a.root,a.variant)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--variant',choices=('profiling','lookup-off','lookup-on','scalar-on','scatter-off','scatter-on','memo-off','memo-on'),default='profiling');a=p.parse_args();run(a.root,a.variant)

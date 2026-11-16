@@ -382,9 +382,10 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
     std::string scalarValue;session->LoadSolverInfo("RANSWallScalarEvaluation",scalarValue,"Off");
-    Require(scalarValue=="Off" || scalarValue=="ValueExactV1","unknown scalar evaluation policy");
+    Require(scalarValue=="Off" || scalarValue=="ValueExactV1" || scalarValue=="MemoExactV1","unknown scalar evaluation policy");
     m_exactScalarValues=scalarValue=="ValueExactV1";
-    Require(!m_exactScalarValues || (MappedBlock() && m_dimension==2),"ValueExactV1 requires mapped serial2D");
+    m_scalarPointMemo=scalarValue=="MemoExactV1";
+    Require((!m_exactScalarValues && !m_scalarPointMemo) || (MappedBlock() && m_dimension==2),"scalar execution policies require mapped serial2D");
     std::string scatter;session->LoadSolverInfo("RANSWallAssemblyScatter",scatter,"Off");
     Require(scatter=="Off" || scatter=="ElementExactV1","unknown element assembly scatter policy");
     m_elementAssemblyScatter=scatter=="ElementExactV1";

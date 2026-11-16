@@ -9,6 +9,8 @@
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <algorithm>
+#include <cstring>
+#include <unordered_map>
 #include <cmath>
 #include <chrono>
 #include <fstream>
@@ -320,7 +322,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
     auto check=[&](const std::string &name,const RANSWallGlobalPoint &q,int block,bool strict,
-                   const Vector &values,int side=0,bool dependent=false,double weight=0.,const double *evaluated=nullptr)
+                   const Vector &values,int side=0,bool dependent=false,double weight=0.,const double *evaluated=nullptr,bool coveredAlready=false)
     {
         // Endpoint samplers and every native interface row carry their own
         // element. Resolve radial provenance once; a zero selector must not
@@ -332,7 +334,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             side=ResolveObservation(provenance).radialSide;
         }
         const double value=evaluated?*evaluated:q.Value(values,offset[block]);
-        if(ConstitutiveKInventory() && block==K())
+        if(ConstitutiveKInventory() && block==K() && !coveredAlready)
         {if(q.columnAverage){auto a=q.coordinate;a[2]=0;m_coveredKFunctionals.insert(a);}else m_coveredKLocations.insert(q.coordinate);}
         // Outer eta is not physical normal distance. Terrain positivity uses
         // the fixed interface epsilon scale; it changes no physical operator.
@@ -378,9 +380,38 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         }
         auto &pending=result.pendingProfiles;
         result.phase="moving_ray_k_before_normalization";
+        // Fresh per-call value memo for the immutable effective lifted state.
+        // No PASS/value crosses a state, data, time, field or owner generation.
+        // Ordered audit commitments use the original complete row traversal.
+        using MemoKey=std::array<std::uint64_t,4>;
+        struct MemoHash{std::size_t operator()(const MemoKey &k)const noexcept
+            {std::size_t h=1469598103934665603ULL;for(auto v:k){h^=v;h*=1099511628211ULL;}return h;}};
+        std::unordered_map<MemoKey,double,MemoHash> pointValues;
+        constexpr std::size_t memoLimit=65536;
+        if(m_scalarPointMemo && !m_auditCommitment)pointValues.reserve(4096);
         auto checkRayPoint=[&](const std::string &name,const RANSWallCoordinate &p,double weight=0.)
         {
             const int e=fields[K()]->LocateElement(p);
+            if(m_scalarPointMemo && !m_auditCommitment)
+            {
+                MemoKey key{{std::uint64_t(e),0,0,0}};
+                for(int a=0;a<3;++a)std::memcpy(&key[a+1],&p[a],sizeof(double));
+                const auto found=pointValues.find(key);
+                if(found!=pointValues.end())
+                {
+                    ++m_evaluationWork.scalarPointMemoHits;
+                    RANSWallGlobalPoint q;q.coordinate=p;q.element=e;q.geometry=fields[K()]->Elements()[e].geometry;
+                    fields[K()]->ValidateElementPoint(e,p);q=Transform(std::move(q));
+                    // Its exact same current-state point was protected on the
+                    // first visit. Duplicate set insertion changes no coverage.
+                    return check(name,q,K(),false,result.effectiveState,0,false,weight,&found->second,true);
+                }
+                ++m_evaluationWork.scalarPointMemoMisses;
+                const auto row=EvaluationRow(K(),e,p);const double value=row->Value(result.effectiveState,offset[K()]);
+                if(pointValues.size()>=memoLimit){pointValues.clear();++m_evaluationWork.scalarPointMemoEvictions;}
+                pointValues.emplace(key,value);
+                return check(name,*row,K(),false,result.effectiveState,0,false,weight,&value);
+            }
             if(!m_exactScalarValues || m_auditCommitment)return check(name,*EvaluationRow(K(),e,p),K(),false,result.effectiveState,0,false,weight);
             // Scalar positivity consumes only the value and native provenance.
             // Preserve the exact FE contraction, map validation, observation
@@ -496,7 +527,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
     {result.failure=std::string(J::ExceptionType(error))+": "+error.what();return result;}
 }
 
-std::string RANSWallEvolutionPatch::ScalarValueChecks(const Vector &state,double time,const RANSWallEvolutionData &data)
+std::string RANSWallEvolutionPatch::ScalarValueChecks(const Vector &state,double time,const RANSWallEvolutionData &data,bool memo)
 {
     Require(Size()<=3000 && MappedBlock() && !m_evaluation,"value-only fixture is a small read-only native patch");
     const auto original=RANSWallR3::Hash(state);std::size_t contractions=0;
@@ -514,11 +545,12 @@ std::string RANSWallEvolutionPatch::ScalarValueChecks(const Vector &state,double
     auto negative=state;for(int j=offset[K()];j<offset[Epsilon()];++j)negative[j]=-1.;states.push_back(negative);
     negative=state;for(int j=offset[Epsilon()];j<offset[InnerPressure()];++j)negative[j]=-1.;states.push_back(negative);
     states.push_back(state);auto bad=state;bad[offset[K()]]=std::numeric_limits<double>::quiet_NaN();states.push_back(bad);states.push_back(state);
-    const bool saved=m_exactScalarValues;struct Reset{bool &v;bool old;~Reset(){v=old;}}reset{m_exactScalarValues,saved};
+    const bool saved=m_exactScalarValues,savedMemo=m_scalarPointMemo;
+    struct Reset{bool &v,&m;bool old,oldMemo;~Reset(){v=old;m=oldMemo;}}reset{m_exactScalarValues,m_scalarPointMemo,saved,savedMemo};
     std::vector<std::string> expected,records;
     for(bool fast:{false,true})
     {
-        m_exactScalarValues=fast;auto input=data;
+        m_exactScalarValues=memo?false:fast;m_scalarPointMemo=memo?fast:false;auto input=data;
         for(std::size_t i=0;i<states.size();++i)
         {
             // New scope per input so a prior numerical PASS cannot satisfy
@@ -536,6 +568,7 @@ std::string RANSWallEvolutionPatch::ScalarValueChecks(const Vector &state,double
     Require(original==RANSWallR3::Hash(state),"value-only fixture changed original input");
     return J::Object({{"status",J::Quote("PASS")},{"native_value_comparisons",J::Number(contractions)},
         {"actual_scalar_checks",J::List(records)},{"governing_solves","0"},{"input_state_sha256",J::Quote(original)},
+        {"tested_policy",J::Quote(memo?"MemoExactV1":"ValueExactV1")},{"evaluation_work",EvaluationReuseJSON()},
         {"scope",J::Quote("exact native values and full scalar inventories; changed k/epsilon/current cutoff; negative/nonfinite input then A; fresh data generations; no historical PASS reuse")}});
 }
 
