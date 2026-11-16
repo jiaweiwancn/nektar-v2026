@@ -984,9 +984,12 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
     Require(!m_evaluation,"reuse verification needs an independent scope");
     const bool saved=m_evaluationReuse;const auto stateHash=RANSWallR3::Hash(state),historyHash=RANSWallR3::Hash(history);
     struct Restore {bool &value;bool old;~Restore(){value=old;}} restore{m_evaluationReuse,saved};
+    const bool immutable=m_immutableTensor;Restore restoreImmutable{m_immutableTensor,immutable};
     const auto drive=[&](bool enabled)
     {
-        m_evaluationReuse=enabled;RANSWallEvolutionData input=data;
+        if(immutable){m_immutableTensor=enabled;m_evaluationReuse=false;}
+        else m_evaluationReuse=enabled;
+        RANSWallEvolutionData input=data;
         EvaluationScope scope(*this,input,time);std::vector<std::string> values;
         const auto domain=[&](const Vector &s,double t,bool retain,bool only,const std::vector<RANSWallCoordinate> &anchors=std::vector<RANSWallCoordinate>{})
         {values.push_back(ScalarDomainJSON(ScalarDomain(s,t,input,retain,only,anchors),retain));};
@@ -1041,12 +1044,15 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
     Require(off.size()==on.size(),"evaluation verification query count differs");
     for(int i=0;i<off.size();++i)Require(off[i]==on[i],"exact reuse changed query "+std::to_string(i));
     Require(stateHash==RANSWallR3::Hash(state) && historyHash==RANSWallR3::Hash(history),"evaluation verification modified inputs");
-    Require(m_evaluationWork.domainHits>0 && m_evaluationWork.prefixHits>0 && m_evaluationWork.inputInvalidations>0 &&
+    if(immutable)Require(m_evaluationWork.rowHits>0 && m_evaluationWork.domainHits==0 && m_evaluationWork.residualHits==0 &&
+        m_evaluationWork.constraintHits==0 && m_evaluationWork.scalarFieldReuses==0,
+        "immutable verification did not reuse rows or unexpectedly reused state physics");
+    else Require(m_evaluationWork.domainHits>0 && m_evaluationWork.prefixHits>0 && m_evaluationWork.inputInvalidations>0 &&
         m_evaluationWork.residualHits>0,"verification did not exercise cache hits and invalidation");
     return J::Object({{"passed","true"},{"audit_revision",J::Quote(AuditRevision())},{"compared_queries",J::Number(off.size())},
         {"state_sha256",J::Quote(stateHash)},{"history_sha256",J::Quote(historyHash)},
         {"checks",J::Quote("exact state bytes including signed zero; time; data generation; external data; flags; ordered additional anchors; foreign data; history; alpha; residual options; coverage tripwire")},
-        {"reuse",EvaluationReuseJSON()},{"governing_solves","0"},{"physical_commits","0"}});
+        {"immutable_only",immutable?"true":"false"},{"reuse",EvaluationReuseJSON()},{"governing_solves","0"},{"physical_commits","0"}});
 }
 
 }

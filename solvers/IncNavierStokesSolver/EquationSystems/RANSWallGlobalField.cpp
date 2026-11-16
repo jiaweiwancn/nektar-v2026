@@ -8,6 +8,7 @@
 #include <StdRegions/StdSegExp.h>
 #include <algorithm>
 #include <cmath>
+#include <cstdlib>
 #include <iterator>
 #include <limits>
 #include <set>
@@ -353,6 +354,22 @@ int RANSWallGlobalField::LocateElement(const Coordinate &coordinate,int side) co
     if(m_immutableTensor)
     {
         FindOwner(0,coordinate,side,selected);
+        // Optional test tripwire checks every actual query, including moving
+        // rays, against the original full scan. It is off in benchmarks.
+        static const bool verify=std::getenv("NEKTAR_RANS_VERIFY_OWNER_INDEX")!=nullptr;
+        if(verify)
+        {
+            int oracle=-1;
+            for(int e=0;e<m_elements.size();++e)
+            {
+                const auto &el=m_elements[e];bool contains=true;
+                for(int d=0;d<m_dimension;++d)
+                {const int a=m_axes[d];contains=contains && coordinate[a]>=el.lower[a] && coordinate[a]<=el.upper[a];}
+                if(!contains || (side>0 && coordinate[2]>=el.upper[2]) || (side<0 && coordinate[2]<=el.lower[2]))continue;
+                if(oracle<0 || el.geometry<m_elements[oracle].geometry)oracle=e;
+            }
+            Require(oracle==selected,"immutable owner index differs from canonical scan");
+        }
         Require(selected>=0,"physical sample not found on requested radial side");return selected;
     }
     for(std::size_t e=0;e<m_elements.size();++e)
