@@ -38,17 +38,25 @@ def stages(report):
 
 def main():
     p=argparse.ArgumentParser()
-    for key in ('ct14','static','pair','output'):p.add_argument('--'+key,type=Path,required=True)
+    for key in ('ct14','static','output'):p.add_argument('--'+key,type=Path,required=True)
+    p.add_argument('--pair',type=Path);p.add_argument('--static-proof',type=Path)
+    p.add_argument('--phase',choices=['static','full'],default='full')
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3))
-    m=RequestManifest(a.output,dict(schema='CT15CompleteOracleComparisonV1',source=sha(Path(__file__)),oracle=sha(a.ct14/'pair-v2/results.json'),candidate=sha(a.pair/'results.json'),static=sha(a.static/'results.json')))
+    require(a.phase=='static' or a.pair is not None,'full comparison needs the fresh pair')
+    m=RequestManifest(a.output,dict(schema='CT15CompleteOracleComparisonV1',phase=a.phase,source=sha(Path(__file__)),oracle=sha(a.ct14/'pair-v2/results.json'),candidate=sha(a.pair/'results.json') if a.pair else None,static=sha(a.static/'results.json'),static_proof=sha(a.static_proof/'results.json') if a.static_proof else None))
     result=dict(status='incomplete',static={},members={},criterion='binary64 numerical arrays identical, stronger than the prospective scaled tolerances; source paths/component/schema prose excluded')
-    for label in ('target','alpha2000','q48','q64'):
+    if a.static_proof:
+        from ct_accepted9_pressure_run import sealed
+        prior=sealed(a.static_proof);request=n.read(a.static_proof/'request-manifest.json')['request']
+        require(prior['status']=='pass' and request['static']==sha(a.static/'results.json') and request['oracle']==sha(a.ct14/'pair-v2/results.json'),'foreign/incomplete static comparison')
+        result['static']=prior['static']
+    for label in (() if a.static_proof else ('target','alpha2000','q48','q64')):
         old=n.read(a.ct14/'static-v1'/label/'frozen.json');new=n.read(a.static/label/'frozen.json')
         require(numerical(old['sparse_backend'])==numerical(new['sparse_backend']),'selected sparse action changed:'+label)
         if label=='target':require(old['test_basis']==new['test_basis'],'selected immutable FE rows changed')
         result['static'][label]=dict(status='pass',all_sparse_backend_numerical_data_equal=True,immutable_FE_rows_equal=label=='target',oracle_sha256=sha(a.ct14/'static-v1'/label/'frozen.json'),candidate_sha256=sha(a.static/label/'frozen.json'))
         del old,new;gc.collect()
-    for dt in ('0.00025','0.000125'):
+    for dt in (() if a.phase=='static' else ('0.00025','0.000125')):
         old=n.read(a.ct14/'pair-v2'/dt/'case.evolution.json');new=n.read(a.pair/dt/'case.evolution.json')
         require(old['audit_times']==new['audit_times'],'accepted coverage changed')
         hashes=[exact_vector_hash(s) for s in old['accepted_states']]
