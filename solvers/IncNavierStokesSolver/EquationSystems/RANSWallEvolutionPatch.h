@@ -226,6 +226,10 @@ public:
         int radialSide=0;
     };
     ObservationProvenance ResolveObservation(const ScalarObservation &point) const;
+    struct ObservationOwner {int element=-1,geometry=-1,radialSide=0;bool inner=false;};
+    struct CurrentObservation {ObservationOwner owner;SolverUtils::RANSTensor gradient{};};
+    ObservationOwner ResolveObservationOwner(const ScalarObservation &) const;
+    CurrentObservation ObserveCurrentVelocity(const ScalarObservation &,const Vector &) const;
     RANSWallGlobalPoint GeometryPoint(int block,int geometry,const RANSWallCoordinate &coordinate) const;
     std::string InterfaceProvenanceChecks() const;
     struct ScalarDomainResult
@@ -584,6 +588,7 @@ private:
     bool m_scopedAuditPoints=false;
     bool m_flatMetrics=false,m_flatMetricReady=false;
     bool m_rowLRU=false;
+    bool m_streamGradients=false;
     double m_flatMetricHeight=0,m_flatMetricScale=0;
     bool FlatMetricCoordinate(const RANSWallCoordinate &) const;
     double GeometryHeight(const RANSWallCoordinate &) const;
@@ -607,7 +612,7 @@ private:
             constitutivePointScopes=0,constitutivePointComputes=0,constitutivePointHits=0,
             constitutivePointEvictions=0,peakConstitutivePoints=0,streamScalarValues=0,
             auditPointScopes=0,auditPointComputes=0,auditPointHits=0,auditPointEvictions=0,peakAuditPoints=0,
-            flatMetricQueries=0,profileMetricElisions=0;
+            flatMetricQueries=0,profileMetricElisions=0,streamGradientPairs=0;
     };
     mutable EvaluationWork m_evaluationWork;
     void PrepareEvaluation(const RANSWallEvolutionData &,double) const;

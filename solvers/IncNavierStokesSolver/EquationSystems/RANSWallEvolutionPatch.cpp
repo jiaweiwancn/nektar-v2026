@@ -365,8 +365,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9","unknown immutable evaluation policy");
-    m_rowLRU=immutable=="ImmutableTensorV9";
+    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10","unknown immutable evaluation policy");
+    m_streamGradients=immutable=="ImmutableTensorV10";
+    m_rowLRU=immutable=="ImmutableTensorV9" || m_streamGradients;
     const bool flatMetrics=immutable=="ImmutableTensorV8" || m_rowLRU;
     Require(!flatMetrics || (m_dimension==2 && m_mapping.kind==RANSWallNormalMap::Kind::Flat &&
         m_mapping.slopeX==0 && m_mapping.slopeY==0 && m_mapping.heightSlopeX==0 &&
@@ -1917,7 +1918,8 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")text<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_rowLRU)text<<":execution=CT16-ImmutableRowLRUV1";
+    if(m_streamGradients)text<<":execution=CT16-StreamGradientV1";
+    else if(m_rowLRU)text<<":execution=CT16-ImmutableRowLRUV1";
     else if(m_flatMetrics)text<<":execution=CT16-ExactFlatMetricV1";
     else if(m_scopedAuditPoints)text<<":execution=CT16-ScopedAuditPointsV1";
     else if(m_scopedScatter)text<<":execution=CT16-ScopedScatterV1";

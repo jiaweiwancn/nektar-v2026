@@ -331,7 +331,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         {
             ScalarObservation provenance;provenance.coordinate=q.coordinate;
             provenance.block=block;provenance.geometry=q.geometry;provenance.side=side;
-            side=ResolveObservation(provenance).radialSide;
+            side=m_streamGradients?ResolveObservationOwner(provenance).radialSide:ResolveObservation(provenance).radialSide;
         }
         const double value=directValue?*directValue:q.Value(values,offset[block]);
         if(ConstitutiveKInventory() && block==K())
@@ -554,10 +554,9 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                     }
                 }
                 ++m_evaluationWork.constitutivePointComputes;
-                const auto provenance=ResolveObservation(p);
-                const auto &row=*provenance.velocity;RANSTensor g{};
-                for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=row.Gradient(result.effectiveState,offset[a]);
-                const double k=PointValue(K(),GeometryElement(K(),row.geometry),p.coordinate,result.effectiveState);
+                const auto current=ObserveCurrentVelocity(p,result.effectiveState);const auto &provenance=current.owner;
+                const auto &g=current.gradient;
+                const double k=PointValue(K(),GeometryElement(K(),provenance.geometry),p.coordinate,result.effectiveState);
                 try
                 {
                     RANSTensor covariance{};double radicand=0;bool radicandDefined=false;
@@ -568,21 +567,21 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                     }
                     else
                     {
-                        const double ep=p.dependentTrace?p.value:PointValue(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate,result.effectiveState);
+                        const double ep=p.dependentTrace?p.value:PointValue(Epsilon(),GeometryElement(Epsilon(),provenance.geometry),p.coordinate,result.effectiveState);
                         const auto law=OuterClosure(k,ep,g,p.coordinate);covariance=law.reynoldsStress;
                         radicand=law.a95Radicand;radicandDefined=law.a95RadicandDefined;
                         if(law.a95RadicandDefined && law.a95Radicand<result.minimumA95Radicand)
                         {result.minimumA95Radicand=law.a95Radicand;result.radicandMinimumPoint=p.coordinate;
-                         result.radicandSide=provenance.radialSide;result.radicandGeometry=row.geometry;}
+                         result.radicandSide=provenance.radialSide;result.radicandGeometry=provenance.geometry;}
                     }
                     const int region=provenance.inner?0:1;const double minimum=J::Eigenvalues(covariance)[0];
                     if(minimum<result.minimumCovariance[region])
                     {result.minimumCovariance[region]=minimum;result.covarianceMinimumPoints[region]=p.coordinate;
-                     result.covarianceSides[region]=provenance.radialSide;result.covarianceGeometries[region]=row.geometry;}
+                     result.covarianceSides[region]=provenance.radialSide;result.covarianceGeometries[region]=provenance.geometry;}
                     if(memo)
                     {
                         if(points.size()>=maximumPoints){points.clear();++m_evaluationWork.constitutivePointEvictions;}
-                        points.emplace(key,PointValidity{minimum,radicand,region,provenance.radialSide,row.geometry,radicandDefined});
+                        points.emplace(key,PointValidity{minimum,radicand,region,provenance.radialSide,provenance.geometry,radicandDefined});
                         m_evaluationWork.peakConstitutivePoints=std::max<std::uint64_t>(m_evaluationWork.peakConstitutivePoints,points.size());
                     }
                 }
@@ -1161,6 +1160,41 @@ RANSWallEvolutionPatch::ObservationProvenance RANSWallEvolutionPatch::ResolveObs
     const int side=atInterface?(inner?-1:1):0;
     Require(!atInterface || p.side==0 || p.side==side,"observation radial side disagrees with its native element");
     return {v,inner,side};
+}
+RANSWallEvolutionPatch::ObservationOwner RANSWallEvolutionPatch::ResolveObservationOwner(
+    const ScalarObservation &p) const
+{
+    Require(p.geometry>=0 || (p.functional && p.functional->columnAverage),
+        "point observation lost its native geometry provenance");
+    const int e=p.geometry>=0?GeometryElement(0,p.geometry):fields[0]->LocateElement(p.coordinate,p.side);
+    fields[0]->ValidateElementCoordinate(e,p.coordinate);
+    const auto &element=fields[0]->Elements().at(e);
+    for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
+        Require(p.coordinate[a]>=element.lower[a] && p.coordinate[a]<=element.upper[a],
+            "observation coordinate is outside its recorded native element");
+    const double H=m_parameters.geometry.height;const bool inner=element.upper[2]<=H;
+    Require(inner || element.lower[2]>=H,"constitutive element crosses the fitted wall interface");
+    const bool atInterface=p.coordinate[2]==H;const int side=atInterface?(inner?-1:1):0;
+    Require(!atInterface || p.side==0 || p.side==side,"observation radial side disagrees with its native element");
+    return {e,element.geometry,side,inner};
+}
+RANSWallEvolutionPatch::CurrentObservation RANSWallEvolutionPatch::ObserveCurrentVelocity(
+    const ScalarObservation &p,const Vector &state) const
+{
+    CurrentObservation out;
+    if(m_streamGradients)
+    {
+        out.owner=ResolveObservationOwner(p);++m_evaluationWork.streamGradientPairs;
+        const auto values=fields[0]->ElementGradients(out.owner.element,p.coordinate,state,{offset[0],offset[1]});
+        for(int a=0;a<m_dimension;++a)out.gradient[PhysicalAxis(a)]=values[a];
+    }
+    else
+    {
+        const auto provenance=ResolveObservation(p);const auto &row=*provenance.velocity;
+        out.owner={row.element,row.geometry,provenance.radialSide,provenance.inner};
+        for(int a=0;a<m_dimension;++a)out.gradient[PhysicalAxis(a)]=row.Gradient(state,offset[a]);
+    }
+    return out;
 }
 
 double RANSWallEvolutionPatch::OuterBound::Action(const Vector &step,int offset) const
@@ -2343,11 +2377,10 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     if(m_scopedAuditPoints)++m_evaluationWork.auditPointScopes;
     const auto computeAuditPoint=[&](const ScalarObservation &p)
     {
-        AuditPoint v;const auto provenance=ResolveObservation(p);const auto &row=*provenance.velocity;
-        v.geometry=row.geometry;v.element=row.element;v.side=provenance.radialSide;v.inner=provenance.inner;
-        for(int a=0;a<m_dimension;++a)v.gradient[PhysicalAxis(a)]=row.Gradient(domain.effectiveState,offset[a]);
-        v.k=m_scopedAuditPoints?PointValue(K(),GeometryElement(K(),row.geometry),p.coordinate,domain.effectiveState):
-            EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[K()]);
+        AuditPoint v;const auto current=ObserveCurrentVelocity(p,domain.effectiveState);const auto &owner=current.owner;
+        v.geometry=owner.geometry;v.element=owner.element;v.side=owner.radialSide;v.inner=owner.inner;v.gradient=current.gradient;
+        v.k=m_scopedAuditPoints?PointValue(K(),GeometryElement(K(),owner.geometry),p.coordinate,domain.effectiveState):
+            EvaluationRow(K(),GeometryElement(K(),owner.geometry),p.coordinate)->Value(domain.effectiveState,offset[K()]);
         if(v.inner)
         {
             const auto profile=StateProfile(domain.effectiveState,p.coordinate,time,data);
@@ -2357,8 +2390,8 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         else
         {
             v.epsilon=p.dependentTrace?p.value:m_scopedAuditPoints?
-                PointValue(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate,domain.effectiveState):
-                EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[Epsilon()]);
+                PointValue(Epsilon(),GeometryElement(Epsilon(),owner.geometry),p.coordinate,domain.effectiveState):
+                EvaluationRow(Epsilon(),GeometryElement(Epsilon(),owner.geometry),p.coordinate)->Value(domain.effectiveState,offset[Epsilon()]);
             const auto law=OuterClosure(v.k,v.epsilon,v.gradient,p.coordinate);v.tensor=law.reynoldsStress;
             v.radicand=law.a95Radicand;v.radicandDefined=law.a95RadicandDefined;
         }

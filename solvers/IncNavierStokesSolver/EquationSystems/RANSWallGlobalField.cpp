@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
+#include <cstring>
 #include <iterator>
 #include <limits>
 #include <set>
@@ -160,8 +161,8 @@ RANSWallGlobalField::RANSWallGlobalField(
     RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
     session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",m_serialSparse,false);
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9";
-    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9";
+    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10";
+    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10";
     Require(!m_sharedTensor || dimension==2,"shared immutable rows require flat2D tensor fields");
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");
@@ -373,6 +374,77 @@ double RANSWallGlobalField::ElementValue(int e,const Coordinate &coordinate,
     for(int j=0;j<count;++j)
         value+=(long double)phi[j]*(state.at(offset+native.ids[j])-centre*native.constant[j]);
     return value;
+}
+void RANSWallGlobalField::ValidateElementCoordinate(int e,const Coordinate &coordinate) const
+{
+    const auto &element=m_elements.at(e);
+    Require(std::all_of(coordinate.begin(),coordinate.end(),[](double x){return std::isfinite(x);}),
+        "nonfinite physical sample");
+    if(m_dimension==2)Require(Equal(coordinate[1],0),"2D sample has nonzero physical span coordinate");
+    for(int d=0;d<m_dimension;++d)
+    {
+        const int axis=m_axes[d];double raw;bool rounded;
+        (void)LocalCoordinate(coordinate[axis],element.lower[axis],element.upper[axis],raw,rounded);
+    }
+}
+std::array<std::array<double,3>,2> RANSWallGlobalField::ElementGradients(int e,const Coordinate &coordinate,
+    const Vector &state,const std::array<int,2> &offsets) const
+{
+    RANSWallTiming::Scope timing("geometry.stream_gradients",true,true);
+    const auto &element=m_elements.at(e);const auto modes=element.Modes();const int count=TensorSize(modes,m_dimension);
+    constexpr int maximum=128;
+    if(!m_sharedTensor || m_dimension!=2 || count>maximum)
+    {
+        const auto row=ElementPoint(e,coordinate);
+        return {row.Gradient(state,offsets[0]),row.Gradient(state,offsets[1])};
+    }
+    Require(std::all_of(coordinate.begin(),coordinate.end(),[](double x){return std::isfinite(x);}),
+        "nonfinite physical sample");
+    Require(Equal(coordinate[1],0),"2D sample has nonzero physical span coordinate");
+    std::array<std::shared_ptr<const BasisData::Values>,3> basis{};
+    for(int d=0;d<m_dimension;++d)
+    {
+        const int axis=m_axes[d];double raw;bool rounded;
+        basis[d]=m_elementBasis[e][d]->Evaluate(LocalCoordinate(
+            coordinate[axis],element.lower[axis],element.upper[axis],raw,rounded));
+    }
+    const auto &native=m_nativeRows.at(e);
+    Require(offsets[0]>=0 && offsets[1]>=0 && count>0 && native.ids.size()==std::size_t(count) &&
+        native.constant.size()==std::size_t(count) && native.constant[0]!=0,"invalid gradient row");
+    std::array<std::array<double,maximum>,3> derivative;
+    for(int j=0;j<count;++j)
+    {
+        const auto index=Indices(j,modes);std::array<double,3> row{};
+        for(int d=0;d<m_dimension;++d)
+        {
+            double entry=native.signs[j]*native.inverse[d];
+            for(int q=0;q<m_dimension;++q)
+                entry*=q==d?basis[q]->derivative[index[q]]:basis[q]->value[index[q]];
+            row[m_axes[d]]=entry;
+        }
+        for(int d=0;d<3;++d)derivative[d][j]=row[d];
+    }
+    std::array<std::array<double,3>,2> out{};
+    for(int b=0;b<2;++b)
+    {
+        const double centre=state.at(offsets[b]+native.ids[0])/native.constant[0];
+        std::array<long double,3> value{};
+        for(int d=0;d<3;++d)for(int j=0;j<count;++j)
+            value[d]+=(long double)derivative[d][j]*(state.at(offsets[b]+native.ids[j])-centre*native.constant[j]);
+        for(int d=0;d<3;++d)out[b][d]=value[d];
+    }
+    static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_GRADIENT_STREAM");return v && std::string(v)=="1";}();
+    if(verify)
+    {
+        const auto row=ElementPoint(e,coordinate);
+        for(int b=0;b<2;++b)
+        {
+            const auto oracle=row.Gradient(state,offsets[b]);
+            Require(std::memcmp(oracle.data(),out[b].data(),3*sizeof(double))==0,
+                "streamed gradient differs from cold native row");
+        }
+    }
+    return out;
 }
 std::array<RANSWallGlobalField::Vector,3> RANSWallGlobalField::RadialGradientDerivative(
     const RANSWallGlobalPoint &point) const

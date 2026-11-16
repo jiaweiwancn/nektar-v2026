@@ -90,6 +90,11 @@ public:
      * the original materialized-row implementation. */
     double ElementValue(int element,const Coordinate &coordinate,
                         const Vector &state,int offset=0) const;
+    void ValidateElementCoordinate(int element,const Coordinate &) const;
+    /** Two current-field Gradient contractions with exactly the original
+     * constant centring and long-double accumulation,without heap rows. */
+    std::array<std::array<double,3>,2> ElementGradients(int element,const Coordinate &,
+        const Vector &state,const std::array<int,2> &offsets) const;
     /** d/dz of each Cartesian basis-gradient row on the same native element.
      * Used by the opt-in R3 action when a normalization-ray point moves.
      * Contracting with a field uses the same constant-centering as Gradient.
