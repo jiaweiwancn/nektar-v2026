@@ -167,6 +167,21 @@ std::shared_ptr<const RANSWallGlobalPoint> RANSWallEvolutionPatch::EvaluationRow
     return row;
 }
 
+double RANSWallEvolutionPatch::PointValue(int block,int element,
+    const RANSWallCoordinate &coordinate,const Vector &state) const
+{
+    if(!m_streamScalarValues)return EvaluationRow(block,element,coordinate)->Value(state,offset[block]);
+    ++m_evaluationWork.streamScalarValues;
+    const double value=fields.at(block)->ElementValue(element,coordinate,state,offset.at(block));
+    static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_SCALAR_STREAM");return v && std::string(v)=="1";}();
+    if(verify)
+    {
+        const double oracle=EvaluationRow(block,element,coordinate)->Value(state,offset[block]);
+        Require(std::memcmp(&value,&oracle,sizeof value)==0,"stream scalar value differs from materialized native row");
+    }
+    return value;
+}
+
 std::shared_ptr<const RANSWallEvolutionPatch::ScalarDomainResult> RANSWallEvolutionPatch::CachedDomain(
     const Vector &s,double time,const RANSWallEvolutionData &data,bool only,
     const std::vector<RANSWallCoordinate> &anchors) const
@@ -332,13 +347,14 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
         {"fixed_reconstruction_rows",J::Number(fixedRows)},{"fixed_surface_rows",J::Number(surfaceRows)},
         {"row_counter_scope",J::Quote("scoped point/derivative requests; fixed reconstruction and surface catalogs counted separately")},
         {"peak_states",J::Number(w.peakStates)},{"peak_rows",J::Number(w.peakRows)},{"peak_profiles",J::Number(w.peakProfiles)},
-        {"immutable_policy",J::Quote(m_immutableTensor?(m_scopedConstitutivePoints?"ImmutableTensorV4":m_hashAssembly?"ImmutableTensorV3":m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
+        {"immutable_policy",J::Quote(m_streamScalarValues?"ImmutableTensorV5":m_immutableTensor?(m_scopedConstitutivePoints?"ImmutableTensorV4":m_hashAssembly?"ImmutableTensorV3":m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
+        {"stream_scalar_values",J::Number(w.streamScalarValues)},
         {"constitutive_point_scopes",J::Number(w.constitutivePointScopes)},
         {"constitutive_point_computes",J::Number(w.constitutivePointComputes)},
         {"constitutive_point_hits",J::Number(w.constitutivePointHits)},
         {"constitutive_point_evictions",J::Number(w.constitutivePointEvictions)},
         {"peak_constitutive_points",J::Number(w.peakConstitutivePoints)},
-        {"maximum_constitutive_points",J::Number(262144)},
+        {"maximum_constitutive_points",J::Number(m_constitutiveMaximumPoints)},
         {"constitutive_point_lifetime",J::Quote("one complete current effective-state domain call; never across state/stage/time/data calls")},
         {"maximum_immutable_rows",J::Number(m_immutableMaximumRows)},
         {"maximum_states",J::Number(EvaluationCache::maximumStates)},{"maximum_rows",J::Number(EvaluationCache::maximumRows)},

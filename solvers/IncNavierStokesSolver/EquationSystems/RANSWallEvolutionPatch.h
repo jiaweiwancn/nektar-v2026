@@ -579,6 +579,8 @@ private:
     bool m_sharedTensor=false;
     bool m_hashAssembly=false;
     bool m_scopedConstitutivePoints=false;
+    bool m_streamScalarValues=false;
+    int m_constitutiveMaximumPoints=262144;
     int m_immutableMaximumRows=65536;
     struct ImmutableRows;
     mutable std::shared_ptr<ImmutableRows> m_immutableRows;
@@ -594,11 +596,12 @@ private:
             residualCalls=0,residualHits=0,constraintCalls=0,constraintHits=0,
             stateEvictions=0,inputInvalidations=0,profileReuses=0,scalarFieldReuses=0,peakStates=0,peakRows=0,peakProfiles=0,
             constitutivePointScopes=0,constitutivePointComputes=0,constitutivePointHits=0,
-            constitutivePointEvictions=0,peakConstitutivePoints=0;
+            constitutivePointEvictions=0,peakConstitutivePoints=0,streamScalarValues=0;
     };
     mutable EvaluationWork m_evaluationWork;
     void PrepareEvaluation(const RANSWallEvolutionData &,double) const;
     std::shared_ptr<const RANSWallGlobalPoint> EvaluationRow(int block,int element,const RANSWallCoordinate &) const;
+    double PointValue(int block,int element,const RANSWallCoordinate &,const Vector &) const;
     int GeometryElement(int block,int geometry) const;
     std::shared_ptr<const ScalarDomainResult> CachedDomain(const Vector &,double,const RANSWallEvolutionData &,bool,
         const std::vector<RANSWallCoordinate> &) const;

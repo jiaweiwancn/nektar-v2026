@@ -321,7 +321,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
     auto check=[&](const std::string &name,const RANSWallGlobalPoint &q,int block,bool strict,
-                   const Vector &values,int side=0,bool dependent=false,double weight=0.)
+                   const Vector &values,int side=0,bool dependent=false,double weight=0.,const double *directValue=nullptr)
     {
         RANSWallTiming::Scope checkTiming("domain.check_scalar",true,true);
         // Endpoint samplers and every native interface row carry their own
@@ -333,7 +333,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             provenance.block=block;provenance.geometry=q.geometry;provenance.side=side;
             side=ResolveObservation(provenance).radialSide;
         }
-        const double value=q.Value(values,offset[block]);
+        const double value=directValue?*directValue:q.Value(values,offset[block]);
         if(ConstitutiveKInventory() && block==K())
         {if(q.columnAverage){auto a=q.coordinate;a[2]=0;m_coveredKFunctionals.insert(a);}else m_coveredKLocations.insert(q.coordinate);}
         const double scale=block==K()?K0:E0*m_parameters.geometry.height/Distance(q.coordinate);
@@ -358,6 +358,16 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             result.limitingPoint=q.coordinate;result.limitingInventory=name;result.limitingFunctional=q.columnAverage?std::make_shared<RANSWallGlobalPoint>(q):nullptr;return false;
         }
         return true;
+    };
+    auto checkAt=[&](const std::string &name,const RANSWallCoordinate &coordinate,int block,bool strict,
+                     const Vector &values,int side=0,bool dependent=false,double weight=0.)
+    {
+        const int element=fields[block]->LocateElement(coordinate,side);
+        if(!m_streamScalarValues)return check(name,*EvaluationRow(block,element,coordinate),block,strict,values,side,dependent,weight);
+        RANSWallGlobalPoint point;point.coordinate=coordinate;point.element=element;
+        point.geometry=fields[block]->Elements().at(element).geometry;
+        const double value=PointValue(block,element,coordinate,values);
+        return check(name,point,block,strict,values,side,dependent,weight,&value);
     };
     try
     {
@@ -409,14 +419,13 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             for(const auto &q:profile->Quadrature())
             {
                 auto point=p;point[2]=q.r/scale;
-                const auto row=EvaluationRow(K(),fields[K()]->LocateElement(point),point);
-                if(!check(name,*row,K(),false,result.effectiveState,0,false,
+                if(!checkAt(name,point,K(),false,result.effectiveState,0,false,
                     source?horizontalWeight*q.weight*q.jacobian:0.))return false;
             }
             if(AcceptedAWF())for(double top:{.01,.1,m_parameters.geometry.height})if(top<=m_parameters.geometry.height)
                 for(const auto &q:profile->IntegrationQuadrature(top,{.01,.1}))
                 {auto point=p;point[2]=q.r/m_mapping.At(p).scale;
-                 if(!check("constitutive_budget_reporting_source_ray",*EvaluationRow(K(),fields[K()]->LocateElement(point),point),K(),false,result.effectiveState))return false;}
+                 if(!checkAt("constitutive_budget_reporting_source_ray",point,K(),false,result.effectiveState))return false;}
             pending.push_back({p,profile,source});return true;
         };
         // Check every physical k BEFORE calling WallNormalization or a
@@ -473,8 +482,8 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                     ++result.counts["prospective_branch_"+reason];
                     if(active)for(const auto &q:active->Quadrature())
                     {auto point=p;point[2]=q.r/m_mapping.At(p).scale;
-                     if(!check("constitutive_prospective_active_normalization_ray",
-                         *EvaluationRow(K(),fields[K()]->LocateElement(point),point),K(),false,result.effectiveState))return result;}
+                     if(!checkAt("constitutive_prospective_active_normalization_ray",
+                         point,K(),false,result.effectiveState))return result;}
                 }
             }
         }
@@ -516,7 +525,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             struct PointValidity {double covariance,radicand;int region,side,geometry;bool radicandDefined;};
             std::unordered_map<PointKey,PointValidity,PointHash> points;
             const auto bit=[](double value){std::uint64_t b;std::memcpy(&b,&value,sizeof b);return b;};
-            constexpr std::size_t maximumPoints=262144;
+            const std::size_t maximumPoints=m_constitutiveMaximumPoints;
             if(m_scopedConstitutivePoints)++m_evaluationWork.constitutivePointScopes;
             // This check depends on current U, not just k/epsilon. Do not share
             // it across scalar-only cache keys. Use native element-side rows.
@@ -548,7 +557,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                 const auto provenance=ResolveObservation(p);
                 const auto &row=*provenance.velocity;RANSTensor g{};
                 for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=row.Gradient(result.effectiveState,offset[a]);
-                const double k=EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(result.effectiveState,offset[K()]);
+                const double k=PointValue(K(),GeometryElement(K(),row.geometry),p.coordinate,result.effectiveState);
                 try
                 {
                     RANSTensor covariance{};double radicand=0;bool radicandDefined=false;
@@ -559,7 +568,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                     }
                     else
                     {
-                        const double ep=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(result.effectiveState,offset[Epsilon()]);
+                        const double ep=p.dependentTrace?p.value:PointValue(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate,result.effectiveState);
                         const auto law=OuterClosure(k,ep,g,p.coordinate);covariance=law.reynoldsStress;
                         radicand=law.a95Radicand;radicandDefined=law.a95RadicandDefined;
                         if(law.a95RadicandDefined && law.a95Radicand<result.minimumA95Radicand)

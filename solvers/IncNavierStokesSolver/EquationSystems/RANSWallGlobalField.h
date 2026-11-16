@@ -83,6 +83,11 @@ public:
     RANSWallGlobalPoint Point(const Coordinate &coordinate, int side=0) const;
     int LocateElement(const Coordinate &coordinate,int side=0) const;
     RANSWallGlobalPoint ElementPoint(int element, const Coordinate &coordinate) const;
+    /** Same native constant-centred Value arithmetic, without derivative-row
+     * allocation. No state/value is retained. Unsupported tensor sizes use
+     * the original materialized-row implementation. */
+    double ElementValue(int element,const Coordinate &coordinate,
+                        const Vector &state,int offset=0) const;
     /** d/dz of each Cartesian basis-gradient row on the same native element.
      * Used by the opt-in R3 action when a normalization-ray point moves.
      * Contracting with a field uses the same constant-centering as Gradient.

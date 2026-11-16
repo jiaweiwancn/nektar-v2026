@@ -145,8 +145,8 @@ RANSWallGlobalField::RANSWallGlobalField(
     RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
     session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",m_serialSparse,false);
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4";
-    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4";
+    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5";
+    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5";
     Require(!m_sharedTensor || dimension==2,"shared immutable rows require flat2D tensor fields");
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");
@@ -320,6 +320,44 @@ RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &co
     }
     if(m_sharedTensor){result.phi.Share();result.derivative[0].Share();result.derivative[2].Share();}
     return result;
+}
+double RANSWallGlobalField::ElementValue(int e,const Coordinate &coordinate,
+    const Vector &state,int offset) const
+{
+    RANSWallTiming::Scope timing("geometry.scalar_value",true,true);
+    const auto &element=m_elements.at(e);const auto modes=element.Modes();
+    const int count=TensorSize(modes,m_dimension);
+    constexpr int maximum=128;
+    if(!m_sharedTensor || m_dimension!=2 || count>maximum)
+        return ElementPoint(e,coordinate).Value(state,offset);
+    Require(std::all_of(coordinate.begin(),coordinate.end(),[](double x){return std::isfinite(x);}),
+            "nonfinite physical sample");
+    Require(Equal(coordinate[1],0),"2D sample has nonzero physical span coordinate");
+    std::array<std::shared_ptr<const BasisData::Values>,3> basis{};
+    for(int d=0;d<m_dimension;++d)
+    {
+        const int axis=m_axes[d];double raw;bool rounded;
+        basis[d]=m_elementBasis[e][d]->Evaluate(LocalCoordinate(
+            coordinate[axis],element.lower[axis],element.upper[axis],raw,rounded));
+    }
+    const auto &native=m_nativeRows.at(e);
+    Require(offset>=0 && count>0 && native.ids.size()==std::size_t(count) &&
+        native.constant.size()==std::size_t(count) && native.constant[0]!=0,"invalid value row");
+    // Materialize precisely the old double phi products in bounded scratch.
+    // Keep centring, chronological accumulation and long-double casts exactly
+    // as RANSWallGlobalPoint::Value; this is not an uncentred tensor reduction.
+    std::array<double,maximum> phi{};
+    for(int j=0;j<count;++j)
+    {
+        const auto index=Indices(j,modes);double value=native.signs[j];
+        for(int d=0;d<m_dimension;++d)value*=basis[d]->value[index[d]];
+        phi[j]=value;
+    }
+    const double centre=state.at(offset+native.ids[0])/native.constant[0];
+    long double value=centre;
+    for(int j=0;j<count;++j)
+        value+=(long double)phi[j]*(state.at(offset+native.ids[j])-centre*native.constant[j]);
+    return value;
 }
 std::array<RANSWallGlobalField::Vector,3> RANSWallGlobalField::RadialGradientDerivative(
     const RANSWallGlobalPoint &point) const

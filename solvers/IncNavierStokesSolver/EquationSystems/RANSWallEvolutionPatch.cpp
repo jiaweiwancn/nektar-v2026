@@ -337,10 +337,14 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4","unknown immutable evaluation policy");
-    m_immutableTensor=immutable!="Off";m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4";
-    m_hashAssembly=immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4";
-    m_scopedConstitutivePoints=immutable=="ImmutableTensorV4";
+    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5","unknown immutable evaluation policy");
+    m_streamScalarValues=immutable=="ImmutableTensorV5";
+    m_immutableTensor=immutable!="Off";m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || m_streamScalarValues;
+    m_hashAssembly=immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || m_streamScalarValues;
+    m_scopedConstitutivePoints=immutable=="ImmutableTensorV4" || m_streamScalarValues;
+    session->LoadParameter("RANSWallConstitutiveMaximumPoints",m_constitutiveMaximumPoints,m_streamScalarValues?2097152:262144);
+    Require(m_constitutiveMaximumPoints>=1024 && m_constitutiveMaximumPoints<=2097152,
+        "per-call constitutive point working set outside1024..2097152 bound");
     Require(!m_scopedConstitutivePoints || (NewModels() && AcceptedAWF() && !ColumnAverageK() && !m_transitionEnabled),
         "scoped constitutive point reuse requires original accepted point-sampled new-model flat state");
     session->LoadParameter("RANSWallImmutableMaximumRows",m_immutableMaximumRows,65536);
@@ -778,7 +782,8 @@ double RANSWallEvolutionPatch::SampleK(const Vector &s,const RANSWallCoordinate 
     // distance is the local map H, rather than a fixed interior point height.
     auto p=point;p[2]=m_kSampling=="InterfaceTrace"?m_parameters.geometry.height:m_parameters.geometry.sampleHeight/m_mapping.At(point).scale;
     if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: sampled K");
-    const double k=Point(K(),p,Same(p[2],m_parameters.geometry.height)?-1:0).Value(s,offset[K()]);
+    const int side=Same(p[2],m_parameters.geometry.height)?-1:0;
+    const double k=m_streamScalarValues?PointValue(K(),fields[K()]->LocateElement(p,side),p,s):Point(K(),p,side).Value(s,offset[K()]);
     Require(k>0 && std::isfinite(k),"invalid physical sampled K");return k;
 }
 std::array<double,3> RANSWallEvolutionPatch::CartesianForcing(const Vector &s,const RANSWallCoordinate &point,double time,
@@ -1860,7 +1865,8 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")text<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_immutableTensor)text<<":execution=CT15-ImmutableTensorV"<<(m_scopedConstitutivePoints?4:m_hashAssembly?3:m_sharedTensor?2:1);
+    if(m_streamScalarValues)text<<":execution=CT16-StreamScalarV1";
+    else if(m_immutableTensor)text<<":execution=CT15-ImmutableTensorV"<<(m_scopedConstitutivePoints?4:m_hashAssembly?3:m_sharedTensor?2:1);
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();
     if(NewModels())text<<":resolved="<<m_parameters.model.Signature();
