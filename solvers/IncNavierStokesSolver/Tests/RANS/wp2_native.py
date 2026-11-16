@@ -60,6 +60,7 @@ class Run:
         require(state_hash(c['coupled'])==state_hash(d['state']),'checkpoint/report coupled bits differ')
         for k in ('reference','defect'):require(state_hash(c[k])==state_hash(d['fixed_'+k]),'checkpoint/report '+k)
         require([state_hash(v) for v in c['history']]==[state_hash(v) for v in d['native_history']] and state_hash(c['history_times'])==state_hash(d['native_history_times']),'checkpoint/report histories differ')
+        require(d['implicit_callback_count']==steps and len(d['pimple_attempts'])==steps,'reported attempt/solve inventory differs from requested native work')
         for row in d['pimple_attempts']:
             for k in ('outer_sweeps','momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls'):require(row[k]==1,'one-sweep count '+k)
             require(row['solved_epsilon_retained_bitwise'],'solved epsilon overwritten')

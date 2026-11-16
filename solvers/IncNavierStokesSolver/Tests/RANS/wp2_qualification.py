@@ -109,6 +109,9 @@ def quarter_budget_differences(a,b,us,K0,H):
             else:den=math.sqrt(float(np.dot(weights,r[:,i]**2)));budget=1e-2
             value=math.sqrt(float(np.dot(weights,d[:,i]**2)))/den
             gates[str(region)+'_'+name]=dict(value=value,limit=.25*budget,passed=value<=.25*budget)
+            point_scale=np.maximum(abs(r[:,i]),us) if name=='U' else np.full(len(r),us) if name=='W' else np.full(len(r),us*us) if name in ['pi','mechanical_pressure','total_shear','total_normal_stress'] else abs(r[:,i])
+            point=float(np.max(abs(d[:,i])/point_scale))
+            gates[str(region)+'_'+name+'_point']=dict(value=point,limit=.0025,passed=point<=.0025)
         value=math.sqrt(float(np.sum(weights[:,None]*d[:,10:14]**2)))/math.sqrt(float(np.sum(weights[:,None]*r[:,10:14]**2)))
         gates[str(region)+'_full_velocity_gradient']=dict(value=value,limit=.0025,passed=value<=.0025)
     return dict(passed=all(x['passed'] for x in gates.values()),gates=gates,reference_integration_roundoff=reference_roundoff,
@@ -137,7 +140,8 @@ def homogeneity(samples,cold,us,K0):
                 elif name in ['pi','mechanical_pressure','total_shear','total_normal_stress']:scale=np.full(sum(selected),us*us);norm=us*us*math.sqrt(measure);budget=1e-2
                 else:scale=abs(ref[selected,i]);norm=math.sqrt(float(np.dot(w[selected],scale**2)));budget=1e-2
                 value=math.sqrt(float(np.dot(w[selected],d[selected,i]**2)))/norm
-                row[name]=dict(relative_L2=value,pointwise_scaled_max=float(max(abs(d[selected,i])/scale)),budget=budget,passed=value<=budget)
+                point=float(max(abs(d[selected,i])/scale))
+                row[name]=dict(relative_L2=value,pointwise_scaled_max=point,budget=budget,passed=value<=budget and point<=.01)
             metrics[str(region)]=row
         out[label]=metrics
     out['cold_x_range']=cold_x_range;out['passed']=all(v['passed'] for key in ['inlet_to_station','horizontal_variation'] for row in out[key].values() for v in row.values())

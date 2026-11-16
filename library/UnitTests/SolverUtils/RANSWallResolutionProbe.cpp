@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstring>
+#include <cstdint>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -34,6 +35,52 @@ namespace
 {
 Vector Read(const Tree &packet,const std::string &name)
 {Vector r;for(const auto &entry:packet.get_child(name)){r.push_back(entry.second.get_value<double>());}return r;}
+// Immutable geometry rows for retrospective, all-state physical diagnostics.
+// No field, constitutive, inventory or governing-equation evaluation is made.
+std::string WP2GeometryRows(const RANSWallEvolutionPatch &patch,const Tree &packet)
+{
+    Require(patch.EquilibriumOpen() && !patch.Mapped(),"WP2 row catalog is affine only");
+    const auto knots=Read(packet,"z_partition");Require(knots.size()>1 && knots.front()==0 && std::is_sorted(knots.begin(),knots.end()),"row partition");
+    std::set<std::pair<double,double>> xs;
+    for(const auto &el:patch.fields[0]->Elements())
+    {xs.insert({el.lower[0],el.upper[0]});for(double z:{el.lower[2],el.upper[2]})Require(std::find(knots.begin(),knots.end(),z)!=knots.end(),"row partition omits native interface");}
+    const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(8,LibUtilities::eGaussGaussLegendre)];
+    struct Catalog {explicit Catalog(int n):width(n){} int width;std::vector<std::int32_t> ids;Vector phi,constant,dx,dz;};
+    Catalog v{16},e{16},p{4},h{16};Vector coordinates,weights,wallCoordinates;std::vector<std::int32_t> regions,geometry,elements;
+    auto append=[](Catalog &a,const RANSWallGlobalPoint &q,int offset)
+    {Require(q.ids.size()==a.width,"row catalog requires the qualified cubic/P1 basis");for(int j=0;j<a.width;++j)
+     {a.ids.push_back(offset+q.ids[j]);a.phi.push_back(q.phi[j]);a.constant.push_back(q.constant[j]);a.dx.push_back(q.derivative[0][j]);a.dz.push_back(q.derivative[2][j]);}};
+    for(const auto &[lo,hi]:xs)for(int ix=0;ix<8;++ix)for(int panel=1;panel<knots.size();++panel)for(int iz=0;iz<8;++iz)
+    {
+        const double x=lo+(rule->GetZ()[ix]+1)*(hi-lo)/2,z=knots[panel-1]+(rule->GetZ()[iz]+1)*(knots[panel]-knots[panel-1])/2;
+        const auto q=patch.Point(0,{x,0,z});const bool inner=z<patch.Parameters().geometry.height;
+        append(v,q,0);const int block=inner?patch.InnerPressure():patch.OuterPressure();append(p,patch.GeometryPoint(block,q.geometry,q.coordinate),patch.offset[block]);
+        if(!inner)append(e,patch.GeometryPoint(patch.Epsilon(),q.geometry,q.coordinate),patch.offset[patch.Epsilon()]);
+        else for(int j=0;j<e.width;++j){e.ids.push_back(0);e.phi.push_back(0);e.constant.push_back(j==0?1.:0.);e.dx.push_back(0);e.dz.push_back(0);}
+        coordinates.insert(coordinates.end(),q.coordinate.begin(),q.coordinate.end());regions.push_back(inner?0:1);geometry.push_back(q.geometry);elements.push_back(q.element);
+        weights.push_back(rule->GetW()[ix]*(hi-lo)/2*rule->GetW()[iz]*(knots[panel]-knots[panel-1])/2);
+    }
+    for(const auto &[lo,hi]:xs)for(int ix=0;ix<8;++ix)
+    {const double x=lo+(rule->GetZ()[ix]+1)*(hi-lo)/2;const auto row=patch.Point(patch.K(),{x,0,patch.Parameters().geometry.height},-1);
+     append(h,row,patch.offset[patch.K()]);wallCoordinates.insert(wallCoordinates.end(),row.coordinate.begin(),row.coordinate.end());}
+    const std::uint16_t byteOrder=1;Require(*reinterpret_cast<const char*>(&byteOrder)==1,"binary row export requires little endian");
+    std::vector<std::pair<std::string,std::string>> arrays;const int count=weights.size();
+    auto write=[&](const std::string &name,const auto &values,int width,const std::string &dtype)
+    {
+        const auto file="wp2-rows-"+name+".bin";std::ifstream old(file,std::ios::binary);Require(!old.good(),"row catalog output already exists");old.close();
+        std::ofstream out(file,std::ios::binary);out.write(reinterpret_cast<const char*>(values.data()),values.size()*sizeof(values[0]));out.close();Require(out.good(),"row catalog write");
+        arrays.push_back({name,J::Object({{"file",J::Quote(file)},{"dtype",J::Quote(dtype)},{"shape",J::Numbers(Vector{double(values.size()/width),double(width)})},{"sha256",J::Quote(RANSWallR3::HashFile(file))}})});
+    };
+    write("coordinates",coordinates,3,"<f8");write("weights",weights,1,"<f8");write("regions",regions,1,"<i4");write("geometry",geometry,1,"<i4");write("elements",elements,1,"<i4");write("wall_coordinates",wallCoordinates,3,"<f8");
+    for(auto [name,a]:std::vector<std::pair<std::string,Catalog*>>{{"v",&v},{"e",&e},{"p",&p},{"h",&h}})
+    {write(name+"_ids",a->ids,a->width,"<i4");write(name+"_phi",a->phi,a->width,"<f8");write(name+"_constant",a->constant,a->width,"<f8");write(name+"_dx",a->dx,a->width,"<f8");write(name+"_dz",a->dz,a->width,"<f8");}
+    return J::Object({{"version",J::Quote("WP2AffineRowsV1")},{"arrays",J::Object(arrays)},{"sizes",J::Numbers(patch.size)},{"offsets",J::Numbers(patch.offset)},
+        {"point_count",J::Number(count)},{"wall_point_count",J::Number(wallCoordinates.size()/3)},{"physical_z_partition",J::Numbers(knots)},{"geometry_identity",J::Quote(patch.GeometrySignature())},
+        {"source_XML_sha256",J::Quote(packet.get<std::string>("xml_sha256"))},{"endianness",J::Quote("little; binary64 values and signed CG constants preserved")},
+        {"sides",J::Quote("volume interior only; h rows explicitly H-minus, tangential Gauss interior; complements full native sided acceptance inventories")},
+        {"scope",J::Quote("geometry-only common-panel CG rows; epsilon rows valid only where region=1; cross-model reuse requires exact native tuple replay; no governing solves or candidate audit")}});
+}
+
 std::string Maps(const RANSWallEvolutionPatch::Diagnostic &values)
 {std::vector<std::pair<std::string,std::string>> r;for(const auto &[name,v]:values){r.push_back({name,J::Numbers(v)});}return J::Object(r);}
 std::string MappedSeedWitnesses(const RANSWallEvolutionPatch &patch,const Vector &state,
@@ -298,6 +345,11 @@ int main(int argc,char **argv)
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
+        if(operation=="wp2_geometry_rows")
+        {
+            Require(RANSWallR3::HashFile(argv[1])==packet.get<std::string>("xml_sha256"),"row XML identity");
+            std::ofstream out(argv[3]);out<<WP2GeometryRows(patch,packet)<<std::endl;Require(out.good(),"row metadata write");world->Finalise();return 0;
+        }
         if(operation=="wp2_equilibrium")
         {
             Require(patch.EquilibriumOpen() && !patch.Mapped() &&

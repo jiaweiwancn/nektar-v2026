@@ -78,10 +78,12 @@ case/runtime identities and physical gates are in
 [numerical-adaptation.json](cls-cao-tamura-budget-wp2-evidence/numerical-adaptation.json).
 
 The exact composite inlet flux is 1.050195996901104 m²/s per unit span, U_bulk is
-1.31274499612638 m/s and T_req is 1.1942387693600194 s. No WP2 run has approached
-that duration. Both timestep/confirmation preservation runs and perturbation
-recovery remain unexecuted. H2k's hill startup remains preserved; no hill run is
-authorized here.
+1.31274499612638 m/s and T_req is 1.1942387693600194 s. Both selected dt=.02 runs
+have now completed 60 accepted steps to actual T=1.2000000000000006 s, with zero
+rejection or correction supply and passing per-state native physical checks.
+The half-step, confirmation and recovery program remains in progress; complete
+dynamic closure has not yet been issued. H2k's hill startup remains preserved;
+no hill run is authorized here.
 
 The selected-space dt=.02/.01 s trials reach the same actual T=.04 s with 2/4
 accepted steps per model. Every equation and logical bound operation occurs once
@@ -111,8 +113,8 @@ demonstrated.
 
 Use dt=.02 and .01 to T=1.2 s, with observations at .3/.6/.9/1.2; the last .3 s
 exceeds T_req/4. Continue the same accepted trials instead of repeating them.
-Run the finer mesh to the same endpoint and the recovery legs at .01. The measured
-remaining program forecasts about 4–4.5 h with two serial native cases, including
+Run the finer mesh to the same endpoint and the recovery legs at .01. The checkpoint-3
+remaining-program forecast was about 4–4.5 h with two serial native cases, including
 setup/reporting, restart/rollback and headroom, inside the original 12 h envelope.
 The [checkpoint-3 receipt](cls-cao-tamura-budget-wp2-evidence/checkpoint3.json)
 separates inclusive step costs, exclusive CPU categories, actual splitting

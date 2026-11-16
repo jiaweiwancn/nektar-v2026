@@ -29,6 +29,19 @@ class PhysicalComparison(unittest.TestCase):
 
 
 class ContinuationOwnership(unittest.TestCase):
+    def test_completion_requires_observed_physical_horizon_and_pass(self):
+        from run_wp2_completion_waves import completed
+        with tempfile.TemporaryDirectory() as temp:
+            p=Path(temp)/'progress.json'
+            p.write_text(json.dumps(dict(status='terminal_stop',failure='native rejection')))
+            with self.assertRaises(Exception):completed(p)
+            p.write_text(json.dumps(dict(status='running')));self.assertFalse(completed(p))
+            d=dict(status='completed_bounded_trajectory',actual_time=.1,final_physical_budgets_passed=True)
+            p.write_text(json.dumps(d))
+            with self.assertRaises(Exception):completed(p)
+            d.update(actual_time=1.2,final_physical_budgets_passed=False);p.write_text(json.dumps(d))
+            with self.assertRaises(Exception):completed(p)
+            d['final_physical_budgets_passed']=True;p.write_text(json.dumps(d));self.assertTrue(completed(p))
     def test_changed_runtime_and_case_do_not_resume(self):
         from wp2_native import Run
         from run_cls_epawf_picard import sha
