@@ -62,6 +62,17 @@ and four MPI helper threads, plus margin. Numerical-library threads remain one.
 This strengthens the original eight-worker admission reservation; it does not
 reduce actual thread counting or change the 72-worker ceiling.
 
+Before sparse/dense restart pilots, stdout tracing is bounded prospectively:
+one 256 KiB current chunk, two previous chunks and an immutable 16 KiB first
+prefix. A streaming digest and total byte/rotation counters preserve trace
+identity without retaining every duplicate native stdout field dump. Complete
+scientific/checkpoint/failure payloads retain their separate policies. Observer
+trace must stay within 1 MiB or the pilot refuses admission. The single stdout
+pump thread fits the ten-worker reservation (rank3 + MPI helper4 + observer1 +
+coordinator1 + pump1); all numerical library threads stay one. The pre-pilot
+C-wide control's original logs are preserved. This is an output change only and
+must pass exact restart/dense-control trajectory comparison.
+
 ## Adaptive experiment reservations
 
 1. Correct h350 recipe (lookup On, scalar evaluation Off), initialize 350 cells

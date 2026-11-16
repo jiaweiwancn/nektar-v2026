@@ -12,6 +12,7 @@ from wj_h17_observer import native_load,equal
 from wj_h18_observer import due,rotate_owned
 from wj3_measure import checkpoint_payload
 from cls_epawf_m3_cases import set_info,set_parameter,write
+from bounded_wj_h25r1_log import BoundedLog
 
 H24=Path('/home/jay/build/wj-h24-flat-continuation-20261115')
 
@@ -64,16 +65,19 @@ def run(root,mode):
         substep_evidence_steps=[],flow_capture='Off',snapshot_capture='Off',preserve_qualification_artifacts=True,
         cache_compatibility=identity(d/'cache-compatible.json'),common_support=selected['common_support'])
     governor=observer=None;code=None;error=None;began=time.monotonic()
-    with(d/'native.log').open('x')as nl,(d/'observer.log').open('x')as ol:
+    log=BoundedLog(d/'native.log')
+    with(d/'observer.log').open('x')as ol:
         try:
             observer=subprocess.Popen([sys.executable,'-B',str(observer_path),'--root',str(root),'--intent',str(ip)],stdout=ol,stderr=subprocess.STDOUT)
             intent['observer_pid']=observer.pid;atomic(ip,intent)
             while not(monitor/'observer-started.json').exists():
                 assert observer.poll()is None and time.monotonic()-began<30
                 time.sleep(.025)
-            governor=subprocess.Popen([str(native),str(d/'case.xml')],stdout=nl,stderr=subprocess.STDOUT)
+            governor=subprocess.Popen([str(native),str(d/'case.xml')],stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+            log.attach(governor.stdout)
             while governor.poll()is None:
                 assert observer.poll()is None,'observer exited before native'
+                assert (d/'observer.log').stat().st_size<=1024**2,'observer trace exceeds frozen 1MiB cap'
                 time.sleep(.025)
             code=governor.returncode
         except Exception as e:error=repr(e)
@@ -83,6 +87,8 @@ def run(root,mode):
             if observer:
                 try:observer.wait(timeout=5)
                 except subprocess.TimeoutExpired:observer.terminate();observer.wait(timeout=5)
+            log_policy=log.finish()
+            assert (d/'observer.log').stat().st_size<=1024**2,'observer trace exceeds frozen 1MiB cap'
     report=d/'case.evolution.json';r=native_load(report)if report.exists()else None
     actual=int(r['implicit_callbacks'])if r else steps
     atomic(Path(os.environ['WJ_H25_OPERATION'])/'attempt-counts.json',dict(actual_attempts=actual,known=r is not None))
@@ -106,6 +112,7 @@ def run(root,mode):
         mode=mode,records=records,source_anchor=anchor,start=start,terminal=terminal,dt=.005,
         native_resource_summary={k:v for k,v in r.items()if k.startswith('resident_')},
         endpoint=identity(monitor/f'step-{terminal}.qualification-commit.json'),
+        bounded_stdout=log_policy,observer_log_cap=1024**2,
         limitation='unperturbed evolving flat control; prescribed finite perturbation failed initial quality and is not replaced by this pilot'))
     print(label,'native/physical PASS',flush=True)
 
