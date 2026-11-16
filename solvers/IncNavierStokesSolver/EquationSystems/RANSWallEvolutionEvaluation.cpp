@@ -4,6 +4,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <cstring>
 #include <cmath>
+#include <cstdlib>
 #include <list>
 #include <set>
 #include <tuple>
@@ -132,6 +133,38 @@ void RANSWallEvolutionPatch::PrepareEvaluation(const RANSWallEvolutionData &data
 }
 void RANSWallEvolutionPatch::InvalidateCoverageToken() const
 {if(m_evaluation)m_evaluation->coverageToken=nullptr;}
+
+std::size_t RANSWallEvolutionPatch::CoordinateHash::operator()(const RANSWallCoordinate &p) const noexcept
+{
+    std::size_t h=1469598103934665603ULL;
+    // std::set<double> membership equates both signed zeros. Retain that
+    // exact equality here; all other finite coordinates keep their bits.
+    for(double v:p){std::uint64_t b=0;if(v!=0)std::memcpy(&b,&v,sizeof b);h^=b;h*=1099511628211ULL;}
+    return h;
+}
+void RANSWallEvolutionPatch::CoverK(const RANSWallCoordinate &p) const
+{
+    if(!m_hashedCoverage){m_coveredKLocations.insert(p);return;}
+    static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_HASHED_COVERAGE");return v && std::string(v)=="1";}();
+    ++m_evaluationWork.coverageInserts;
+    if(verify)m_coverageOracle.insert(p);
+    const bool finite=std::all_of(p.begin(),p.end(),[](double x){return std::isfinite(x);});
+    if(finite && m_hashedCoveredK.size()<std::size_t(m_constitutiveMaximumPoints))m_hashedCoveredK.insert(p);
+    else if(!finite || !m_hashedCoveredK.count(p))
+    {m_coveredKLocations.insert(p);++m_evaluationWork.coverageSpills;}
+    m_evaluationWork.peakHashedCoverage=std::max<std::uint64_t>(m_evaluationWork.peakHashedCoverage,m_hashedCoveredK.size());
+}
+bool RANSWallEvolutionPatch::CoveredK(const RANSWallCoordinate &p) const
+{
+    if(!m_hashedCoverage)return m_coveredKLocations.count(p);
+    static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_HASHED_COVERAGE");return v && std::string(v)=="1";}();
+    ++m_evaluationWork.coverageQueries;
+    const bool found=m_hashedCoveredK.count(p) || m_coveredKLocations.count(p);
+    if(verify)Require(found==bool(m_coverageOracle.count(p)),"hashed coverage differs from original ordered membership");
+    return found;
+}
+void RANSWallEvolutionPatch::ClearCoveredK() const
+{m_coveredKLocations.clear();m_hashedCoveredK.clear();m_coverageOracle.clear();}
 
 int RANSWallEvolutionPatch::GeometryElement(int block,int geometry) const
 {
@@ -332,7 +365,7 @@ std::shared_ptr<const RANSCappedDestructionValues> RANSWallEvolutionPatch::Cache
     // is reused. The owned immutable profile identifies the complete branch,
     // quadrature, coefficients and geometry, not merely sampled K.
     if(m_assertKCoverage)for(const auto &q:profile.Quadrature())
-    {auto point=p;point[2]=q.r/m_mapping.At(p).scale;Require(m_coveredKLocations.count(point),"unprotected constitutive k evaluation: cached normalization ray");}
+    {auto point=p;point[2]=q.r/m_mapping.At(p).scale;Require(CoveredK(point),"unprotected constitutive k evaluation: cached normalization ray");}
     ++m_evaluationWork.normalizationHits;return it->second;
 }
 void RANSWallEvolutionPatch::StoreNormalization(const Vector &s,const RANSWallCoordinate &p,
@@ -409,12 +442,14 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
         {"fixed_reconstruction_rows",J::Number(fixedRows)},{"fixed_surface_rows",J::Number(surfaceRows)},
         {"row_counter_scope",J::Quote("scoped point/derivative requests; fixed reconstruction and surface catalogs counted separately")},
         {"peak_states",J::Number(w.peakStates)},{"peak_rows",J::Number(w.peakRows)},{"peak_profiles",J::Number(w.peakProfiles)},
-        {"immutable_policy",J::Quote(m_scopedAuditResidual?"ImmutableTensorV11":m_streamGradients?"ImmutableTensorV10":m_rowLRU?"ImmutableTensorV9":m_flatMetrics?"ImmutableTensorV8":m_scopedAuditPoints?"ImmutableTensorV7":m_scopedScatter?"ImmutableTensorV6":m_streamScalarValues?"ImmutableTensorV5":m_immutableTensor?(m_scopedConstitutivePoints?"ImmutableTensorV4":m_hashAssembly?"ImmutableTensorV3":m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
+        {"immutable_policy",J::Quote(m_hashedCoverage?"ImmutableTensorV12":m_scopedAuditResidual?"ImmutableTensorV11":m_streamGradients?"ImmutableTensorV10":m_rowLRU?"ImmutableTensorV9":m_flatMetrics?"ImmutableTensorV8":m_scopedAuditPoints?"ImmutableTensorV7":m_scopedScatter?"ImmutableTensorV6":m_streamScalarValues?"ImmutableTensorV5":m_immutableTensor?(m_scopedConstitutivePoints?"ImmutableTensorV4":m_hashAssembly?"ImmutableTensorV3":m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
         {"scoped_matrix_scatter",m_scopedScatter?"true":"false"},
         {"flat_metric_queries",J::Number(w.flatMetricQueries)},{"profile_metric_elisions",J::Number(w.profileMetricElisions)},
         {"audit_point_scopes",J::Number(w.auditPointScopes)},{"audit_point_computes",J::Number(w.auditPointComputes)},
         {"audit_point_hits",J::Number(w.auditPointHits)},{"audit_point_evictions",J::Number(w.auditPointEvictions)},
         {"peak_audit_points",J::Number(w.peakAuditPoints)},
+        {"coverage_inserts",J::Number(w.coverageInserts)},{"coverage_queries",J::Number(w.coverageQueries)},
+        {"peak_hashed_coverage",J::Number(w.peakHashedCoverage)},{"coverage_spills",J::Number(w.coverageSpills)},
         {"stream_scalar_values",J::Number(w.streamScalarValues)},{"stream_gradient_pairs",J::Number(w.streamGradientPairs)},
         {"constitutive_point_scopes",J::Number(w.constitutivePointScopes)},
         {"constitutive_point_computes",J::Number(w.constitutivePointComputes)},

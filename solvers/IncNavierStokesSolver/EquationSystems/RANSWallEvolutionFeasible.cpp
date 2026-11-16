@@ -335,7 +335,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         }
         const double value=directValue?*directValue:q.Value(values,offset[block]);
         if(ConstitutiveKInventory() && block==K())
-        {if(q.columnAverage){auto a=q.coordinate;a[2]=0;m_coveredKFunctionals.insert(a);}else m_coveredKLocations.insert(q.coordinate);}
+        {if(q.columnAverage){auto a=q.coordinate;a[2]=0;m_coveredKFunctionals.insert(a);}else CoverK(q.coordinate);}
         const double scale=block==K()?K0:E0*m_parameters.geometry.height/Distance(q.coordinate);
         const double margin=value/scale;++result.counts[name];
         if(block==K())
@@ -378,7 +378,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         Require(state.size()==static_cast<std::size_t>(Size()),"scalar-domain state size differs");
         for(double value:state)if(!std::isfinite(value)){result.failure="nonfinite_coefficient";return result;}
         InitialiseScalarLocations();
-        if(ConstitutiveKInventory()){InvalidateCoverageToken();m_coveredKLocations.clear();m_coveredKFunctionals.clear();}
+        if(ConstitutiveKInventory()){InvalidateCoverageToken();ClearCoveredK();m_coveredKFunctionals.clear();}
         result.effectiveState=ExternalLift(state,time,data);result.phase="fixed_fields_and_samplers";
         {
             RANSWallTiming::Scope part("domain.fixed_scalar_inventory");

@@ -18,7 +18,7 @@ from rans_request_manifest import RequestManifest,sha,canonical
 
 
 class BoundedGrid(PreparedRows):
-    policy='CT16-BoundedBatchedRowsV1'
+    policy='CT16-BoundedPhysicalValuesV2'
     maximum_plan_bytes=256*1024**2
     maximum_plan_rows=262144
     def __init__(self,initial,count):
@@ -65,7 +65,7 @@ class BoundedGrid(PreparedRows):
     def __enter__(self):
         super().__enter__()
         for module in list(sys.modules.values()):
-            if module and getattr(module,'__name__','').startswith('ct_accepted') and getattr(module,'values',None) is original_values:
+            if module and getattr(module,'__name__','').startswith('ct_accepted') and getattr(module,'__name__','')!='ct_accepted10_compare' and getattr(module,'values',None) is original_values:
                 self.saved_values.append(module);module.values=self.values
         return self
     def __exit__(self,*args):
@@ -142,6 +142,8 @@ def main():
             require(after==again,'batched repeated independent audit changed')
             new_warm=dict(CPU=time.process_time()-warm_cpu,wall=time.monotonic()-warm_wall)
         new=dict(CPU=time.process_time()-cpu-new_warm['CPU'],wall=time.monotonic()-wall-new_warm['wall'],immutable_preparation=prepared,warm_bundle=new_warm,plan_bytes=plan.plan_bytes,scalar_row_peak_bytes=plan.peak_bytes,value_calls=plan.value_calls,geometry_basis_sha256=plan.digest)
+        write_json(a.output/('original-bundle-'+str(i)+'.json'),before)
+        write_json(a.output/('candidate-bundle-'+str(i)+'.json'),after)
         same_decisions(before,after)
         for name in ('inventory','profiles','outlet'):require(before[name]==after[name],'unchanged scalar constitutive/traction inventory differs:'+name)
         for name in before['gradients']:

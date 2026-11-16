@@ -70,7 +70,7 @@ RANSClosureValues RANSWallEvolutionPatch::OuterClosure(double k,double epsilon,
     const RANSTensor &gradient,const RANSWallCoordinate &p) const
 {
     RANSWallTiming::Scope timing("constitutive.outer_law",true,true);
-    if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: outer closure");
+    if(m_assertKCoverage)Require(CoveredK(p),"unprotected constitutive k evaluation: outer closure");
     if(m_variantName=="Original")return EvaluateRANSClosure(m_parameters.model,k,epsilon,gradient,Distance(p));
     auto variant=m_robust;
     const double r=Distance(p),kap=m_parameters.model.Kappa();
@@ -99,7 +99,7 @@ RANSCappedDestructionValues RANSWallEvolutionPatch::WallNormalization(const Vect
     {
         auto point=p;point[2]=q.r/m_mapping.At(p).scale;
         const auto row=EvaluationRow(K(),fields[K()]->LocateElement(point),point);
-        if(m_assertKCoverage)Require(m_coveredKLocations.count(point),
+        if(m_assertKCoverage)Require(CoveredK(point),
             "unprotected constitutive k evaluation: normalization ray");
         const double k=row->Value(s,offset[K()]);input.k.push_back(k);
         if(m_solveInvalidContext.empty() && (!std::isfinite(k) || k<0))
@@ -130,7 +130,7 @@ AWFProfileValues RANSWallEvolutionPatch::WallSource(const Vector &s,const RANSWa
     if(!m_cappedDestruction)return values;
     RANSCappedDestructionValues local;
     if(!normalization){local=WallNormalization(s,p,profile);normalization=&local;}
-    if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: wall source");
+    if(m_assertKCoverage)Require(CoveredK(p),"unprotected constitutive k evaluation: wall source");
     const double k=Point(K(),p).Value(s,offset[K()]);
     const auto repaired=EvaluateRANSCappedDestructionPoint(k,profile.K(),values.dissipation,
         values.dissipation-values.redistribution,normalization->b,normalization->m,m_destruction);

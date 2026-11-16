@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <set>
+#include <unordered_set>
 
 namespace Nektar
 {
@@ -592,6 +593,13 @@ private:
     bool m_rowLRU=false;
     bool m_streamGradients=false;
     bool m_scopedAuditResidual=false;
+    bool m_hashedCoverage=false;
+    struct CoordinateHash {std::size_t operator()(const RANSWallCoordinate &) const noexcept;};
+    mutable std::unordered_set<RANSWallCoordinate,CoordinateHash> m_hashedCoveredK;
+    mutable std::set<RANSWallCoordinate> m_coverageOracle;
+    void CoverK(const RANSWallCoordinate &) const;
+    bool CoveredK(const RANSWallCoordinate &) const;
+    void ClearCoveredK() const;
     double m_flatMetricHeight=0,m_flatMetricScale=0;
     bool FlatMetricCoordinate(const RANSWallCoordinate &) const;
     double GeometryHeight(const RANSWallCoordinate &) const;
@@ -615,7 +623,8 @@ private:
             constitutivePointScopes=0,constitutivePointComputes=0,constitutivePointHits=0,
             constitutivePointEvictions=0,peakConstitutivePoints=0,streamScalarValues=0,
             auditPointScopes=0,auditPointComputes=0,auditPointHits=0,auditPointEvictions=0,peakAuditPoints=0,
-            flatMetricQueries=0,profileMetricElisions=0,streamGradientPairs=0;
+            flatMetricQueries=0,profileMetricElisions=0,streamGradientPairs=0,
+            coverageInserts=0,coverageQueries=0,peakHashedCoverage=0,coverageSpills=0;
     };
     mutable EvaluationWork m_evaluationWork;
     void PrepareEvaluation(const RANSWallEvolutionData &,double) const;

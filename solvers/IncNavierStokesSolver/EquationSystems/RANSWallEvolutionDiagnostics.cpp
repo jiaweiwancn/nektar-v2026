@@ -172,7 +172,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         if(!owned && m_comm->GetRank()!=0)return;
         constitutive=constitutive || constitutiveReconstruction;
         auto &r=result[name];if(r.empty())r={0,sentinel,sentinel,sentinel,sentinel,0};
-        if(m_assertKCoverage)Require(m_coveredKLocations.count(v.coordinate),"unprotected constitutive k evaluation: audit sample");
+        if(m_assertKCoverage)Require(CoveredK(v.coordinate),"unprotected constitutive k evaluation: audit sample");
         ++r[0];const double k=v.Value(s,offset[K()]);r[1]=std::min(r[1],k);
         const double epsilon=inner?(constitutive?DependentEpsilon(s,v.coordinate,time,data):sentinel):
             GeometryPoint(Epsilon(),v.geometry,v.coordinate).Value(s,offset[Epsilon()]);
@@ -549,7 +549,8 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
     if(SerialSparse())out<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")out<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_scopedAuditResidual)out<<":execution=CT16-ScopedAuditResidualV1";
+    if(m_hashedCoverage)out<<":execution=CT16-HashedCoverageV1";
+    else if(m_scopedAuditResidual)out<<":execution=CT16-ScopedAuditResidualV1";
     else if(m_streamGradients)out<<":execution=CT16-StreamGradientV1";
     else if(m_rowLRU)out<<":execution=CT16-ImmutableRowLRUV1";
     else if(m_flatMetrics)out<<":execution=CT16-ExactFlatMetricV1";
@@ -1040,6 +1041,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
     const bool rowLRU=m_rowLRU;Restore restoreRowLRU{m_rowLRU,rowLRU};
     const bool streamGradients=m_streamGradients;Restore restoreStreamGradients{m_streamGradients,streamGradients};
     const bool auditResidual=m_scopedAuditResidual;Restore restoreAuditResidual{m_scopedAuditResidual,auditResidual};
+    const bool hashedCoverage=m_hashedCoverage;Restore restoreHashedCoverage{m_hashedCoverage,hashedCoverage};
     const auto drive=[&](bool enabled)
     {
         if(immutable){m_immutableTensor=enabled;m_evaluationReuse=false;}
@@ -1047,7 +1049,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         m_scopedConstitutivePoints=scopedPoints && enabled;
         m_streamScalarValues=stream && enabled;m_scopedScatter=scatter && enabled;
         m_scopedAuditPoints=auditPoints && enabled;m_flatMetrics=flatMetrics && enabled;m_rowLRU=rowLRU && enabled;
-        m_streamGradients=streamGradients && enabled;m_scopedAuditResidual=auditResidual && enabled;
+        m_streamGradients=streamGradients && enabled;m_scopedAuditResidual=auditResidual && enabled;m_hashedCoverage=hashedCoverage && enabled;
         RANSWallEvolutionData input=data;
         EvaluationScope scope(*this,input,time);std::vector<std::string> values;
         const auto domain=[&](const Vector &s,double t,bool retain,bool only,const std::vector<RANSWallCoordinate> &anchors=std::vector<RANSWallCoordinate>{})

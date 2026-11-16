@@ -365,8 +365,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11","unknown immutable evaluation policy");
-    m_scopedAuditResidual=immutable=="ImmutableTensorV11";
+    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12","unknown immutable evaluation policy");
+    m_hashedCoverage=immutable=="ImmutableTensorV12";
+    m_scopedAuditResidual=immutable=="ImmutableTensorV11" || m_hashedCoverage;
     m_streamGradients=immutable=="ImmutableTensorV10" || m_scopedAuditResidual;
     m_rowLRU=immutable=="ImmutableTensorV9" || m_streamGradients;
     const bool flatMetrics=immutable=="ImmutableTensorV8" || m_rowLRU;
@@ -835,7 +836,7 @@ double RANSWallEvolutionPatch::SampleK(const Vector &s,const RANSWallCoordinate 
     // InterfaceTrace selects the actual native matching face. Its physical
     // distance is the local map H, rather than a fixed interior point height.
     auto p=point;p[2]=m_kSampling=="InterfaceTrace"?m_parameters.geometry.height:m_parameters.geometry.sampleHeight/GeometryScale(point);
-    if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: sampled K");
+    if(m_assertKCoverage)Require(CoveredK(p),"unprotected constitutive k evaluation: sampled K");
     const int side=Same(p[2],m_parameters.geometry.height)?-1:0;
     const double k=m_streamScalarValues?PointValue(K(),fields[K()]->LocateElement(p,side),p,s):Point(K(),p,side).Value(s,offset[K()]);
     Require(k>0 && std::isfinite(k),"invalid physical sampled K");return k;
@@ -1927,7 +1928,8 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")text<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_scopedAuditResidual)text<<":execution=CT16-ScopedAuditResidualV1";
+    if(m_hashedCoverage)text<<":execution=CT16-HashedCoverageV1";
+    else if(m_scopedAuditResidual)text<<":execution=CT16-ScopedAuditResidualV1";
     else if(m_streamGradients)text<<":execution=CT16-StreamGradientV1";
     else if(m_rowLRU)text<<":execution=CT16-ImmutableRowLRUV1";
     else if(m_flatMetrics)text<<":execution=CT16-ExactFlatMetricV1";
