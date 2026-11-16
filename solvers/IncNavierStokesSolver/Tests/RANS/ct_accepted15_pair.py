@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Fresh selected-space pilot with unchanged CT11 physical classifiers and horizon."""
-import argparse,json,math,os,resource
+import argparse,json,math,os,resource,time
 from pathlib import Path
 from functools import lru_cache
 from rans_qualification import THREADS,exact_vector_hash,audited_extrema
@@ -23,6 +23,16 @@ from ct_accepted_open import run,probe,require
 from ct_accepted_feasibility import write_json
 from rans_request_manifest import RequestManifest,runtime_identity,sha
 
+PHASES={}
+def measured(name,function):
+    def call(*args,**kwargs):
+        start=time.monotonic();cpu=time.process_time();child=resource.getrusage(resource.RUSAGE_CHILDREN)
+        try:return function(*args,**kwargs)
+        finally:
+            after=resource.getrusage(resource.RUSAGE_CHILDREN);r=PHASES.setdefault(name,dict(calls=0,self_CPU=0.,children_CPU=0.,wall=0.))
+            r['calls']+=1;r['self_CPU']+=time.process_time()-cpu;r['children_CPU']+=after.ru_utime+after.ru_stime-child.ru_utime-child.ru_stime;r['wall']+=time.monotonic()-start
+    return call
+
 def numerical_receipts(path):
     rows=[json.loads(s) for s in path.read_text().splitlines()];factors={};solves=[]
     for row in rows:
@@ -35,6 +45,12 @@ def numerical_receipts(path):
     return dict(status='pass',path=str(path),sha256=sha(path),factor_count=len(factors),solve_count=len(solves),maximum_factor_entries=max(x['factor_nnz'] for x in factors.values()),minimum_fill_margin=min(40000000-x['factor_nnz'] for x in factors.values()),maximum_matrix_nonzeros=max(x['matrix_nnz'] for x in factors.values()),maximum_refinements=max(x['refinements'] for x in solves),maximum_residual_bound_fraction=max(x['true_residual']/x['bound'] for x in solves),factors=list(factors.values()))
 
 def main():
+    global bounded_budgets,probe,profiles,inventory
+    n.physical_metrics=measured('independent_accepted_metrics',n.physical_metrics)
+    bounded_budgets=measured('complete_endpoint_scalar_controls',bounded_budgets)
+    probe=measured('endpoint_constitutive_probe',probe)
+    profiles=measured('independent_traction_profiles',profiles)
+    inventory=measured('independent_endpoint_inventory',inventory)
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','static','component','capacity','contract','output'):p.add_argument('--'+k,type=Path,required=True)
     p.add_argument('--admission',type=Path)
@@ -78,5 +94,7 @@ def main():
     comparison(out,initials,reports,c,weights,count,classifier=classify)
     common=[{round(t,12):s for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)} for r in reports.values()];out['regional_temporal_pressure']=[dict(time=t,pressure=regional_pressure(*(n.observations(ini,x[t],count)[:,4] for x in common),wt,regions,c['ustar']**2)) for t in sorted(set(common[0])&set(common[1]))]
     out['clock_off_performance']={name:dict(total_native_CPU=row['execution']['process_cpu_seconds'],total_native_wall=row['execution']['wall_seconds'],accepted_steps=round(.002/row['dt']),zero_step_startup_CPU=row['zero_step_execution']['process_cpu_seconds'],scope='actual detailed-timing-off execution including startup/mandatory checks/output; no inferred exclusive phase speedup or long-run affordability') for name,row in out['members'].items()}
+    out['workflow_phases']=PHASES
+    out['workflow_phase_scope']='outer nonoverlapping wrappers; endpoint scalar wrapper contains its own native probes; do not add its children to native executions again; no detailed inner timers'
     write_json(a.output/'results.json',out);m.seal(a.output,['results.json']);print('CT15 physical qualification',out['qualification'],flush=True);return 0 if out['qualification']['status']=='pass' else 1
 if __name__=='__main__':raise SystemExit(main())
