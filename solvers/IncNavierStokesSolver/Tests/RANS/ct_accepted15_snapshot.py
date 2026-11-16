@@ -30,13 +30,15 @@ def main():
     for folder in sorted(a.root.iterdir()):
         if not folder.is_dir() or folder.name in ('source','build'):continue
         for path in sorted(folder.iterdir()):
-            if path.is_file() and path.name in names:
+            extra=folder.name.startswith('resources-') and (path.suffix=='.jsonl' or path.name.startswith('queue-') and path.suffix=='.json')
+            if path.is_file() and (path.name in names or extra):
                 artifacts[str(path.relative_to(a.root))]=dict(bytes=path.stat().st_size,sha256=digest(path))
         if folder.name.startswith('resources-'):
             value=read(folder/'execution.json')
             if value is None:unclosed.append(folder.name)
             else:resources[folder.name]=value
-            for name in ('package-budget-watch.json','live-budget.json','worker-guard-status.json','resource-final.json','queue-deadline-watch.json','queue-cancellation.json'):
+            watch_names={'package-budget-watch.json','live-budget.json','worker-guard-status.json','resource-final.json'}|{f.name for f in folder.glob('queue-*.json')}
+            for name in sorted(watch_names):
                 q=read(folder/name)
                 if q is not None:watches[str((folder/name).relative_to(a.root))]=q
     # One walk measures actual logical live occupancy, including all attempts,
@@ -60,7 +62,7 @@ def main():
         original_allocation_start_unix=START,whole_elapsed_wall=time.time()-START,
         source_revision=revision,source_working_tree=tree,
         artifacts=artifacts,closed_resources=resources,unclosed_resources=unclosed,watches=watches,
-        directory_logical_bytes=directory_bytes,exception_reserves=read(a.root/'exception-reserves.json'),
+        directory_logical_bytes=directory_bytes,live_byte_scope='before writing this snapshot/seal; final publication reserve covers its small output and transport staging',exception_reserves=read(a.root/'exception-reserves.json'),
         historical_ledger=historical,
         helper_usage=dict(self_CPU=time.process_time()-own,reaped_children_CPU=after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,wall=time.monotonic()-start,
             accounting='inside the existing 240-CPU-second source/transport/publication reserve; do not add a second reserve'),
