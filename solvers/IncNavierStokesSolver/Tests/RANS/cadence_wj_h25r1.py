@@ -30,17 +30,23 @@ def run(root):
     dense=base/'science/C-dense-restart-v1/monitor';moving=[]
     for step in range(9,13):
         result=load(dense/f'step-{step}.result.json');assert result['status']=='PASS'
-        interface=next(v for v in result['summary']['interface_budget']['rows']if v['x']==-10.)
+        interface=next(v for v in result['summary']['interface_budget']['rows']if v['x']==0.)
         r=native_load(dense/f'step-{step}.report.json');ready=load(dense/f'step-{step}.ready.json')
-        offsets=load(verify(ready['structure']))['offsets']
-        moving.append(dict(step=step,physical_interface_x=-10.,K=interface['K'],cutoff=interface['rc'],
+        structure=load(verify(ready['structure']));offsets=structure['offsets']
+        stations=sorted({float(e[end][0])for e in structure['fields'][0]['mesh']for end in ('lower','upper')})[1:-1]
+        traces=[next(v for v in result['summary']['interface_budget']['rows']if v['x']==x)for x in stations]
+        moving.append(dict(step=step,physical_interface_x=0.,K=interface['K'],cutoff=interface['rc'],
+            fixed_interior_stations=stations,interior_K=[v['K']for v in traces],interior_cutoff=[v['rc']for v in traces],
             k_coefficients=vector_hash(r['state'][offsets[2]:offsets[3]]),
             epsilon_coefficients=vector_hash(r['state'][offsets[3]:offsets[4]])))
-    for field in ('K','cutoff','k_coefficients','epsilon_coefficients'):
+    for field in ('k_coefficients','epsilon_coefficients'):
         assert len({r[field]for r in moving})>1,'control did not change '+field
+    for field in ('interior_K','interior_cutoff'):
+        assert len({tuple(r[field])for r in moving})>1,'control did not change '+field
     out=base/'science/cadence-comparison-v1.json';assert not out.exists()
     atomic(out,dict(status='PASS_UNPERTURBED_CADENCE_AND_RESTART_ONLY',records=records,moving_fields=moving,
         scientific_strides=dict(wide=2,sparse=4,dense=1),recovery_stride=1,
+        repaired_diagnostic='v1 wrongly demanded changing K at the prescribed, fixed inlet x=-10; v2 retains the change requirement on fixed interior mesh-vertex traces, not a moving witness',
         limitation='finite prescribed seed rejected before evolution; no production cadence or full-duration admission'))
     print('exact cadence/restart/maps PASS; changing K/epsilon/cutoff verified',flush=True)
 
