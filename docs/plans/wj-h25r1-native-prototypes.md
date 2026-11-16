@@ -97,3 +97,7 @@ evaluations (A, changed k/epsilon, negative/nonfinite fields, return to A), then
 new-executable Off two-step and On four-step state/history/callback/full-audit
 replays against the retained W0 oracle. Work counters are separate from numerical
 inventory hashes. Retain only a measured gain; all physical/accuracy gates stand.
+Before its timing is read, the retention rule is mean On ordinary complete-step
+cost below .98 times BOTH the new-executable Off sample and the retained scatter
+mean, with exact component/trajectory/audit parity and >=95% cost attribution.
+This is a practical short-screen rule, not a production confidence interval.

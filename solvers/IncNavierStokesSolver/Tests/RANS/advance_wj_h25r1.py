@@ -19,6 +19,8 @@ H24=Path('/home/jay/build/wj-h24-flat-continuation-20261115')
 def run(root,mode):
     base=root/'resumption-r1';selected=load(H24/'inputs/selected.json')
     assert load(base/'science/W1-scatter-v1/qualification.json')['status']=='PASS'
+    execution=load(base/'science/implementation-selected-v1.json')
+    assert load(verify(execution['qualification']))['status']=='PASS'
     label={'wide':'C-wide-v1','sparse':'C-sparse-restart-v1','dense':'C-dense-restart-v1'}[mode]
     d=base/'science'/label;d.mkdir();monitor=d/'monitor';monitor.mkdir();ip=d/'intent.json'
     if mode=='wide':
@@ -36,19 +38,20 @@ def run(root,mode):
     cp0=selected['cp0']['C'];qh0=checkpoint_payload(verify(cp0['checkpoint']).parent,include_reference=True)
     assert cp['dt']==qh0['dt']==.005
     start=int(cp['steps']);terminal=start+steps
-    runtime_path=base/'science/runtime-build-scatter-v1.json';runtime=load(runtime_path)
+    runtime_path=verify(execution['runtime']);runtime=load(runtime_path)
     native=verify(next(e['wrapper']for e in runtime['executables']if Path(e['wrapper']['path']).name=='IncNavierStokesSolver'))
     observer_path=Path(importlib.import_module('wj_h25_observer').__file__).resolve()
     c=compatibility(root,verify(load(root/'science/cache-compatible-v2.json')['historical_manifest']),d/'cache-binding-base.json')
     c.update(new_native_identity=identity(runtime_path),permitted_difference='exact element scatter and tensor lookup; own .005 signature/history; immutable FE geometry/reference/qh0 coefficients unchanged')
     atomic(d/'cache-compatible.json',c)
+    atomic(d/'execution.json',execution)
     x=ET.parse(verify(cp0['xml'])).getroot()
     for k,v in dict(NumSteps=steps,IO_CheckSteps=1,IO_InfoSteps=1).items():set_parameter(x,k,v)
     for k,v in dict(RANSWallRestart=str(verify(anchor['checkpoint']).parent),RANSWallCheckpoint=str(d/'CP'),
         RANSWallRetention='BoundedV1',RANSWallMonitoringPolicy='CheckpointAuditV1',RANSWallMonitorIntent=str(ip),
         RANSWallMonitorFault='Off',RANSWallReport=str(d/'native.json'),RANSWallPimpleSnapshots='Off',
         RANSWallPimpleFlowVectors='Off',RANSWallPimpleArithmetic='Off',RANSWallPimpleVerify='Off',
-        RANSWallImmutableRowReuse='Off',RANSWallNativeLookup='TensorExactV1',RANSWallScalarEvaluation='Off',
+        RANSWallImmutableRowReuse='Off',RANSWallNativeLookup='TensorExactV1',RANSWallScalarEvaluation=execution['scalar_policy'],
         RANSWallAssemblyScatter='ElementExactV1').items():set_info(x,k,v)
     write(x,d/'case.xml')
     intent=dict(schema='WJMonitorIntentV1',policy='CheckpointAuditV1',directory=str(monitor),nonce=uuid.uuid4().hex,
@@ -116,7 +119,7 @@ def strict(root,label):
         completed_sidecar=q['callback'],qualified_cursor=identity(d/f'monitor/step-{terminal}.qualification-commit.json'),
         weak=True,weak_compact=True,assembly=False,reuse=False,retain_scalar_observations=False)
     atomic(out/'request.json',request)
-    runtime=load(root/'resumption-r1/science/runtime-build-scatter-v1.json')
+    runtime=load(verify(load(d/'execution.json')['runtime']))
     probe=verify(next(e['wrapper']for e in runtime['executables']if Path(e['wrapper']['path']).name=='RANSWallResolutionProbe'))
     with(out/'native.log').open('x')as f:subprocess.run([str(probe),str(d/'case.xml'),str(out/'request.json'),str(out/'native.json')],stdout=f,stderr=subprocess.STDOUT,check=True)
     r=native_load(out/'native.json')

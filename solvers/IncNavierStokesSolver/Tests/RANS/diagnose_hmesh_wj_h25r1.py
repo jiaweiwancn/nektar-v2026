@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Select a local h successor from saved failed cells, never relax a gate."""
-import argparse
+import argparse,bisect
 import os
 from pathlib import Path
 from run_wj_h4 import THREADS,load
@@ -12,17 +12,17 @@ from study_wj_h14 import stored_reference
 from wj_h19_analysis import GATE,LIMITS,principal_screen
 
 
-def run(root):
-    d=root/'resumption-r1/science/h350-r1-v1'
+def run(root,label='h350-r1-v1'):
+    d=root/'resumption-r1/science'/label
     arrays=d/'common-signed-fields.npz';a=np.load(arrays)
     design=load(d/'design.json');c=stored_reference()
     p=a['physical'];r=p[:,2]-c.d0
     # All one-sided physical owners are retained; geometry determines which
     # coarse parent interval carries a face value, not a nearest-height guess.
     coarse=load(d/'case.evolution.json');mesh={e['geometry']:e for e in coarse['fields'][0]['mesh']}
-    z=design['parent_knots'];ids=a['coarse_geometry']
+    z=design['reference_knots'][::2];ids=a['coarse_geometry']
     outer=np.asarray([mesh[int(g)]['lower'][2]>=c.H for g in ids])
-    pairs=np.asarray([z.index(mesh[int(g)]['lower'][2]) for g in ids])
+    pairs=np.asarray([bisect.bisect_right(z,(mesh[int(g)]['lower'][2]+mesh[int(g)]['upper'][2])/2)-1 for g in ids])
     gradient=c.u_tau**2/(c.nu+c.w['a']*np.maximum(r-c.w['zv'],0.))
     gradient[outer]=c.u_tau/(.3819178635467331*r[outer])
     scales=dict(U=np.ones(len(p)),k=np.full(len(p),c.K),R=np.full(len(p),c.u_tau**2),
@@ -33,9 +33,12 @@ def run(root):
         normalized=np.linalg.norm(v.reshape(len(p),-1),axis=1)/scales[name]/limit
         if name=='epsilon':normalized[~outer]=0.
         errors[name]=normalized
-    budget=.1*(a['fine_margin']-GATE)
-    quality=np.zeros(len(p));quality[outer]=abs(a['coarse_margin'][outer]-a['fine_margin'][outer])/budget[outer]
-    errors['principal_minimized']=quality
+    values=lambda name:{k:a[name+'_'+k]for k in ('k','epsilon','G','margin','angle')}
+    principal,actions=principal_screen(values('coarse'),values('fine'),outer)
+    assert principal['status']!='UNRESOLVED'
+    for name in ('minimized','fine_direction','coarse_direction'):
+        v=np.zeros(len(p));v[actions['outer_ids']]=abs(actions[name+'_signed_difference'])/actions['budget']
+        errors['principal_'+name]=v
     records=[]
     for pair in range(25):
         mask=pairs==pair
@@ -45,9 +48,14 @@ def run(root):
     # Current comparisons already demand retaining every inner interval on
     # stress/velocity/gradient grounds. Global CG projection can couple adjacent
     # intervals; this is a successor proposal requiring fresh qualification.
-    proposed=sorted(set(restored)|set(range(8)))
+    existing=set(design.get('restored_pairs',[]))
+    neighbors=set()
+    if existing:
+        for pair in restored:neighbors.update(i for i in (pair-1,pair+1) if 0<=i<25)
+    proposed=sorted(existing|set(restored)|neighbors|set(range(8)))
     assert all(np.all(np.isfinite(v)) for v in errors.values())
-    atomic(root/'resumption-r1/science/h350-diagnosis-r1-v2.json',dict(status='SUCCESSOR_PROPOSAL_NOT_ACCEPTANCE',
+    output='h350-diagnosis-r1-v2.json'if label=='h350-r1-v1'else label.replace('-r1-v1','')+'-diagnosis-r1-v1.json'
+    atomic(root/'resumption-r1/science'/output,dict(status='SUCCESSOR_PROPOSAL_NOT_ACCEPTANCE',
         source=identity(arrays),comparison=identity(d/'comparison.json'),records=records,
         restore_pairs=proposed,cells=14*(25+len(proposed)),
         rationale='restore both original children in each pair failing a frozen pointwise budget; preserve fine inner layer',
@@ -56,4 +64,5 @@ def run(root):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);run(p.parse_args().root)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--label',default='h350-r1-v1')
+    a=p.parse_args();run(a.root,a.label)

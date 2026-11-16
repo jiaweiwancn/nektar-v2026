@@ -56,7 +56,9 @@ def analyze(root,label,candidate_report=None):
     d=directory(root,label);candidate_report=candidate_report or d/'case.evolution.json';r=native_load(candidate_report)
     prior=load(root/'science/cache-compatible-v2.json')
     bound=compatibility(root,verify(prior['historical_manifest']),d/'fine-cache-compatibility-base.json')
-    bound.update(new_native_identity=identity(root/'science/runtime-build-scalar-v1.json'),
+    intent=load(d/'execution-intent.json');candidate_runtime=intent.get('runtime',intent.get('native'))
+    assert candidate_runtime is not None;verify(candidate_runtime)
+    bound.update(new_native_identity=candidate_runtime,
         permitted_difference='fine immutable reference rows only; coarse rows rebuilt independently on its new field/native map; actual numerical helper paths verified')
     atomic(d/'fine-cache-compatibility.json',bound)
     cache,_=load_compatible(d/'fine-cache-compatibility.json');c=cache.config

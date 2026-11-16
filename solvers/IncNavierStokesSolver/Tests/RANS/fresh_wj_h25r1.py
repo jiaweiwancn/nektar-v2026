@@ -16,15 +16,17 @@ from cls_epawf_m3_cases import set_info,set_parameter,write
 
 def run(root):
     base=root/'resumption-r1';d=base/'science/fresh-C-v1';d.mkdir()
+    execution=load(base/'science/implementation-selected-v1.json')
     selected=load(Path('/home/jay/build/wj-h24-flat-continuation-20261115/inputs/selected.json'))
     source=selected['cp0']['C'];x=ET.parse(verify(source['xml'])).getroot()
     for k,v in dict(NumSteps=0,Time=0,TimeStep=.005,IO_CheckSteps=1).items():set_parameter(x,k,v)
     for k,v in dict(RANSWallRestart='None',RANSWallCheckpoint=str(d/'CP'),RANSWallRetention='Off',
         RANSWallMonitoringPolicy='Off',RANSWallReport=str(d/'native.json'),RANSWallNativeLookup='TensorExactV1',
-        RANSWallScalarEvaluation='Off',RANSWallAssemblyScatter='ElementExactV1',
+        RANSWallScalarEvaluation=execution['scalar_policy'],RANSWallAssemblyScatter='ElementExactV1',
         RANSWallPimpleSnapshots='Off',RANSWallPimpleFlowVectors='Off',RANSWallPimpleArithmetic='Off',RANSWallPimpleVerify='Off').items():set_info(x,k,v)
     write(x,d/'case.xml')
-    runtime_path=base/'science/runtime-build-scatter-v1.json';runtime=load(runtime_path)
+    runtime_path=verify(execution['runtime']);runtime=load(runtime_path)
+    atomic(d/'execution.json',execution)
     native=verify(next(e['wrapper']for e in runtime['executables']if Path(e['wrapper']['path']).name=='IncNavierStokesSolver'))
     began=time.monotonic()
     with(d/'native.log').open('x')as f:code=subprocess.run([str(native),str(d/'case.xml')],stdout=f,stderr=subprocess.STDOUT).returncode
