@@ -41,13 +41,14 @@ def publish(root,tag):
     for p in sorted((base/'science').rglob('*')):
         if not p.is_file():continue
         rel=p.relative_to(base/'science');n=p.name
-        if n in compact or n in large or (len(rel.parts)==1 and n.endswith('.json')):
+        raw_build_proof=n.startswith('build-')and n.endswith('-object-reuse.json')
+        if n in compact or n in large or (len(rel.parts)==1 and n.endswith('.json')and not raw_build_proof):
             copy(p)
         elif p.parent.name in ('memo-component-v1','positive-prototype-v1')and n=='native.json':copy(p)
         elif n in ('independent.json',)and p.parent.name=='fresh-C-v1':copy(p)
-        elif p.parent.name=='monitor'and n.endswith(('.qualification-commit.json','.completion.json','.inventory.json')):copy(p)
+        elif p.parent.name=='monitor'and n.endswith(('.qualification-commit.json','.completion.json')):copy(p)
         if n=='qualification.json':scientific[str(rel.parent)]=load(p)
-        if n in ('State.bin','case.evolution.json','native.json')or p.suffix=='.npz':heavy.append(identity(p))
+        if n in ('State.bin','case.evolution.json','native.json')or p.suffix=='.npz'or raw_build_proof or n.endswith(('.inventory.json','.result.json')):heavy.append(identity(p))
     for n in ('original-account-before-close.json','continuation-account-before-close.json','closure-accounts.json','final-validation.json'):
         if(base/n).exists():copy(base/n)
     costfile=base/'science/complete-cost-v1.json'
@@ -69,5 +70,5 @@ def publish(root,tag):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--tag',choices=('r2-v1','c-v1'),required=True)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--tag',choices=('r2-v1','r2-v2','c-v1'),required=True)
     a=p.parse_args();publish(a.root,a.tag)
