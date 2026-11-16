@@ -1,0 +1,1365 @@
+{
+  "allocation": {
+    "concurrency": "One native MPI command at a time; controller shares the explicitly assigned CPU pool",
+    "cpus": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      0
+    ],
+    "external_jobs": "The caller must account for other server jobs within the same64-worker ceiling",
+    "hard_server_worker_limit": 64,
+    "npz": 16,
+    "ranks": 32,
+    "thread_environment": {
+      "BLIS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    }
+  },
+  "checks": {
+    "command": [
+      "taskset",
+      "-c",
+      "63",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "test_run_band100",
+      "test_analyze_band100"
+    ],
+    "cpus": [
+      63
+    ],
+    "exit_code": 0,
+    "source_revision": "a1eab12a381cda77da514b6fcb22ea06700f82ca",
+    "threads": 1
+  },
+  "interpretation": "Fresh DG-only preflight passed; first full recording allocated but held for existing server work; no completed control comparison or full-distance qualification",
+  "native_build_revision": "1946f8ea1d6e5a8844ce308def5004994a40557b",
+  "preflight": {
+    "boundary_projection": {
+      "csv_export_limit_per_boundary_rank_time": -1,
+      "csv_exported_points_per_rank": [
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576,
+        576
+      ],
+      "csv_exported_points_per_time": 18432,
+      "csv_exported_rows": 92160,
+      "csv_point_selection": "all native points",
+      "csv_scope": "sampled native point traces; not an exact plane-average statistic",
+      "direct_reference_limit_per_boundary_rank_time": 1,
+      "direct_reference_samples": 160,
+      "generator_modes": 6565420,
+      "identity_sha256": "34be026d60ef0c24e67d8249288685e59f29ce8e30bfbcac829544b7d4912794",
+      "modes_sha256": "26e021b1f057ed2209166e904afc7a0912cefb3e9111bfb66b16b19a2ee8c21a",
+      "native_points_per_time": 18432,
+      "nonzero_z_coeff_energy": [
+        37.31005276453686,
+        21.820160140186207,
+        35.04480625878227
+      ],
+      "points": 92160,
+      "projection_error_reference": "unprojected native boundary physical values at all sampled points",
+      "projection_error_scope": "all native inlet points at every evaluation call including repeat; not restricted to CSV selection",
+      "projection_max_error": [
+        0.06704510195988966,
+        0.03341379087132346,
+        0.07442816870326924
+      ],
+      "ranks": 32,
+      "raw_error_evaluated": true,
+      "raw_max_error": 4.0394354527961696e-12,
+      "repeat_check_performed": true,
+      "repeat_identical": true,
+      "temporal_samples": 0,
+      "time_grid": {
+        "csv_excludes_repeat_check": false,
+        "end_s": 0.00405,
+        "evaluation_calls": 5,
+        "mode": "legacy_fractions",
+        "regular_samples": 5,
+        "repeat_time_s": 0.002025,
+        "sample_dt_s": null,
+        "start_s": 0
+      }
+    },
+    "budget_gate": {
+      "forecast_duration_s": 0.6,
+      "forecast_steps": 24000,
+      "forecast_wall_seconds": 29435.68807782397,
+      "maximum_forecast_hours": 12,
+      "maximum_sampled_memory_gib": 180,
+      "one_off_wall_overhead_seconds": 103.39807782396872,
+      "passed": true,
+      "sampled_peak_tree_rss_gib": 82.45695877075195,
+      "scope": "Short mean-initial smoke; no guarantee of developed-flow runtime or peak memory",
+      "steady_chunk_rates_seconds_per_step": [
+        1.2100325,
+        1.21114375,
+        1.219995,
+        1.21145375,
+        1.22217875,
+        1.21889125,
+        1.213745,
+        1.2163925,
+        1.2179125,
+        1.217765
+      ],
+      "steady_rate_estimator": "maximum native info-chunk seconds/step in the second half of the160-step smoke",
+      "steady_seconds_per_step": 1.22217875
+    },
+    "commands": [
+      {
+        "affinity_audit": null,
+        "evaluator_methods": null,
+        "log_sha256": "ab3a3a43433afd639180bf287e7d813e9feb7f20fd3dd8d697d25220387d70f9",
+        "maximum_sampled_aggregate_workers": 62,
+        "peak_sampled_tree_rss_gib": 0.01625823974609375,
+        "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-preflight/smoke/prepare.receipt.json",
+        "receipt_sha256": "d9799f5ff2a2c54f9f262348cfe24749934a1003f0e5fedf988f9ffcea959b53",
+        "status": "COMPLETED",
+        "wall_seconds": 2.7429006890160963
+      },
+      {
+        "affinity_audit": null,
+        "evaluator_methods": null,
+        "log_sha256": "980837a20c50d9f3e1dc12010ba8506295b9abe753b51abceafea0413dabf592",
+        "maximum_sampled_aggregate_workers": 62,
+        "peak_sampled_tree_rss_gib": 0.6259078979492188,
+        "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-preflight/smoke/benchmark.receipt.json",
+        "receipt_sha256": "0755223f5d843af503863c5eede9e21c8eaffeb32aed4ec8e47d465f9848ef14",
+        "status": "COMPLETED",
+        "wall_seconds": 34.99653868400492
+      },
+      {
+        "affinity_audit": {
+          "affinity_change_witnesses": [],
+          "disappeared_thread_observations": 0,
+          "exited_process_observations": 0,
+          "expected_rank_count": 32,
+          "helper_thread_checks": 3200,
+          "main_thread_checks": 1600,
+          "native_initialization_cause": "Not established; no hwloc root-cause claim",
+          "omitted_change_witnesses": 0,
+          "policy": "CPU-pool containment in every phase; exact assigned singleton after each rank's HIT_NATIVE_READY marker",
+          "process_identity_checks": 1600,
+          "ready_ranks": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31
+          ],
+          "scope": "Sampled main/helper thread affinities; not a continuous scheduler audit",
+          "startup_mask_changes": 0,
+          "startup_nonassigned_thread_observations": 0,
+          "startup_thread_checks": 4608,
+          "strict_thread_checks": 192,
+          "strict_thread_checks_by_rank": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "thread_affinity_checks": 4800,
+          "witness_limit": 64
+        },
+        "evaluator_methods": null,
+        "log_sha256": "a9669d993ad0d322d25b40861245301e42c82c16e2011a7b673eba5d655cb54c",
+        "maximum_sampled_aggregate_workers": 62,
+        "peak_sampled_tree_rss_gib": 84.69842147827148,
+        "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-preflight/smoke/projection.receipt.json",
+        "receipt_sha256": "2a094d7c2e4e8486ac845c3daa1cffd175d94841e9b979b2aced8f2db86b05bb",
+        "status": "COMPLETED",
+        "wall_seconds": 120.94417993398383
+      },
+      {
+        "affinity_audit": {
+          "affinity_change_witnesses": [],
+          "disappeared_thread_observations": 0,
+          "exited_process_observations": 0,
+          "expected_rank_count": 32,
+          "helper_thread_checks": 8256,
+          "main_thread_checks": 4128,
+          "native_initialization_cause": "Not established; no hwloc root-cause claim",
+          "omitted_change_witnesses": 0,
+          "policy": "CPU-pool containment in every phase; exact assigned singleton after each rank's HIT_NATIVE_READY marker",
+          "process_identity_checks": 4128,
+          "ready_ranks": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31
+          ],
+          "scope": "Sampled main/helper thread affinities; not a continuous scheduler audit",
+          "startup_mask_changes": 0,
+          "startup_nonassigned_thread_observations": 0,
+          "startup_thread_checks": 672,
+          "strict_thread_checks": 11712,
+          "strict_thread_checks_by_rank": [
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366,
+            366
+          ],
+          "thread_affinity_checks": 12384,
+          "witness_limit": 64
+        },
+        "evaluator_methods": [
+          "GroupedSeparable"
+        ],
+        "log_sha256": "3d7e53e90f3d45eef160ea72d9d3a7793dcb2429c4e1e0e15a0cb49c97c1a992",
+        "maximum_sampled_aggregate_workers": 46,
+        "peak_sampled_tree_rss_gib": 82.45695877075195,
+        "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-preflight/smoke/solver.receipt.json",
+        "receipt_sha256": "bd5b6b76bab9b4975cf1bffd06caa4c582729dcfbae65e20544600f4c667aa2b",
+        "status": "COMPLETED",
+        "wall_seconds": 303.27446782396873
+      }
+    ],
+    "native_benchmark": {
+      "batch_repetitions": 20,
+      "batch_seconds": 0.061486875149999995,
+      "batch_total_seconds": 1.229737503,
+      "cache_bytes": 1555456,
+      "check_points": 4,
+      "check_times": 4,
+      "check_variance_abs_error": [
+        8.012340790841677e-14,
+        2.6575963651964685e-15,
+        4.676814491233472e-15
+      ],
+      "check_variance_batch": [
+        0.033381013708673905,
+        0.03860386693965765,
+        0.0414362930935636
+      ],
+      "check_variance_reference": [
+        0.03338101370875403,
+        0.03860386693966031,
+        0.041436293093558924
+      ],
+      "configuration_seconds": 1.991009002,
+      "constructor_seconds": 6.183958239,
+      "expected_covariance_diagonal": [
+        0.044334215875671754,
+        0.044339508999817846,
+        0.044339508999817846
+      ],
+      "expected_dissipation": 0.08602557714922963,
+      "expected_kinetic_energy": 0.06650661693765371,
+      "finite_window_expectation": {
+        "covariance_reconstruction_relative_error": [
+          2.2926751192704144e-18,
+          6.441648007769401e-17,
+          6.090146455744025e-17
+        ],
+        "ensemble_covariance": [
+          0.044334215875671754,
+          0.044339508999817846,
+          0.044339508999817846
+        ],
+        "expected_kx0_covariance": [
+          0.00024404662887439745,
+          0.00012202331443719872,
+          0.00012202331443719872
+        ],
+        "expected_kx0_covariance_fraction": [
+          0.005504701595688245,
+          0.002752022230054465,
+          0.002752022230054465
+        ],
+        "interpretation": "Continuous uniform-time single-point ensemble expectation of central variance; not the actual seeded record and not a sampling confidence interval",
+        "relative_bias_definition": "(window variance - ensemble covariance) / ensemble covariance",
+        "windows": [
+          {
+            "relative_bias": [
+              -0.04244651076667124,
+              -0.021668148046504736,
+              -0.021668148046504732
+            ],
+            "variance": [
+              0.042452383104173125,
+              0.043378753954500464,
+              0.043378753954500464
+            ],
+            "window_seconds": 0.1
+          },
+          {
+            "relative_bias": [
+              -0.028497124952167937,
+              -0.014445673301111446,
+              -0.01444567330111144
+            ],
+            "variance": [
+              0.043070818186206346,
+              0.04369899493847479,
+              0.04369899493847479
+            ],
+            "window_seconds": 0.15
+          },
+          {
+            "relative_bias": [
+              -0.01434829751911395,
+              -0.007223000081674559,
+              -0.007223000081674556
+            ],
+            "variance": [
+              0.04369809535601099,
+              0.044019244722690754,
+              0.044019244722690754
+            ],
+            "window_seconds": 0.3
+          },
+          {
+            "relative_bias": [
+              -0.012310753497355097,
+              -0.006191161056885578,
+              -0.00619116105688557
+            ],
+            "variance": [
+              0.04378842827252783,
+              0.04406499595841675,
+              0.04406499595841675
+            ],
+            "window_seconds": 0.35
+          },
+          {
+            "relative_bias": [
+              -0.010779923566770286,
+              -0.005417279095850111,
+              -0.005417279095850109
+            ],
+            "variance": [
+              0.04385629641713932,
+              0.04409930950459288,
+              0.04409930950459288
+            ],
+            "window_seconds": 0.4
+          },
+          {
+            "relative_bias": [
+              -0.006173699310735468,
+              -0.0030956115136818495,
+              -0.0030956115136818456
+            ],
+            "variance": [
+              0.04406050975767812,
+              0.04420225110524701,
+              0.04420225110524701
+            ],
+            "window_seconds": 0.7
+          },
+          {
+            "relative_bias": [
+              -0.00576325828958876,
+              -0.002889237825849552,
+              -0.0028892378258495465
+            ],
+            "variance": [
+              0.04407870633851387,
+              0.04421140161323598,
+              0.04421140161323598
+            ],
+            "window_seconds": 0.75
+          },
+          {
+            "relative_bias": [
+              -0.00557462973987284,
+              -0.002794011938755126,
+              -0.002794011938755126
+            ],
+            "variance": [
+              0.04408706903735729,
+              0.044215623882313815,
+              0.044215623882313815
+            ],
+            "window_seconds": 0.8
+          },
+          {
+            "relative_bias": [
+              -0.005542493402951945,
+              -0.0027726608328635144,
+              -0.0027726608328635088
+            ],
+            "variance": [
+              0.044088493776655795,
+              0.04421657057986565,
+              0.04421657057986565
+            ],
+            "window_seconds": 1.6
+          }
+        ]
+      },
+      "max_abs_error": 3.1672442446506466e-12,
+      "max_abs_error_by_component": [
+        3.1672442446506466e-12,
+        5.3262949606391885e-14,
+        5.972999872483342e-14
+      ],
+      "method": "GroupedTransverse",
+      "mode_bytes": 577756960,
+      "modes": 6565420,
+      "plane_constructor_seconds": 0.435199522,
+      "points": 4,
+      "points_y": 2,
+      "points_z": 2,
+      "realized_covariance_diagonal": [
+        0.04459937693748547,
+        0.04445789537082983,
+        0.044361135698445395
+      ],
+      "realized_dissipation": 0.08604353985444652,
+      "realized_kinetic_energy": 0.06670920400338035,
+      "reference_seconds_per_point": 0.45571643025,
+      "viscosity": 1.5e-05
+    },
+    "receipt_sha256": "3ee6e79a55b59b1aabab6b2dc778756ea0e1a72152dcf196c6f35e05dbb41b57",
+    "smoke_history": {
+      "complete_finite_frames": 9,
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-preflight/smoke/native.his",
+      "sha256": "cbde5bff6a6a7590f1bb96b1bb6bb4ec4ae030467bf0e19724dc3ab62dedc0a6"
+    }
+  },
+  "prelaunch_provenance": {
+    "allocation": {
+      "concurrency": "One native MPI command at a time; controller shares the explicitly assigned CPU pool",
+      "cpus": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        0
+      ],
+      "external_jobs": "The caller must account for other server jobs within the same64-worker ceiling",
+      "hard_server_worker_limit": 64,
+      "npz": 16,
+      "ranks": 32,
+      "thread_environment": {
+        "BLIS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      }
+    },
+    "bindings": {
+      "executables": {
+        "benchmark": {
+          "bytes": 617696,
+          "native_library_sha256": {
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+          },
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/bin/HITInflowBenchmark",
+          "sha256": "8a24b185510299d0a074f1a387254cd5ee42b610ee68e6eff36efe6873ba5ac3"
+        },
+        "probe": {
+          "bytes": 666824,
+          "native_library_sha256": {
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+          },
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/bin/HITBoundaryProbe",
+          "sha256": "e96344b310345a1f4155972518be39cb372efe2ad4e1c073c62b6c7521b01a87"
+        },
+        "solver": {
+          "bytes": 2784136,
+          "native_library_sha256": {
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+          },
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+          "sha256": "7f88e62de8644ab280544be1583cc8d50d37e9806503170d070043a46c347a5a"
+        }
+      },
+      "source": {
+        "branch": "codex/hit-inflow-generator",
+        "checkout": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-hit-qualification-20261116",
+        "files_sha256": {
+          "docs/plans/hit-inflow-band100-protocol.md": "8ec42cd99bee41ed9fe60c92db4ddcf5632334ed903e56fc9720ee245ba05fcd",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json": "031df95c54eb05fb5cc94c81dd5a35bb687890f4336a3f3f80bdfe42c52f3590",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_theta42_spectrum_3d.dat": "ca5551dc1872df7442cebbb6d82eac657307e394fa0726cbd7fce56939f20181",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_band100.py": "258ef120946e9b85d4cad58b64b80ad4576769172cbc1bc8332f3c51a5cd738f",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_history.py": "1bced68762eb6a859ba867f1af7162fc09cf1c83daa80da1b058561595de9d01",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_m7.py": "d81c405243fff9a3677d63dd3aadfe44269a9f79389eeae03c31f1f333842d3e",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/prepare.py": "66f0d012d11b6fae7a1e3f7f03a2a4a333241104dc80b6527e05015c446795ee",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/run_band100.py": "e51b96fad2fb211db7eb1debd26b426e077d4575fd38d7599b1f31eb766af012"
+        },
+        "revision": "596eb5703d645ff87e2e068a8509889d69c9175b"
+      }
+    },
+    "reference_analysis_and_native_history_revalidation": {
+      "base": {
+        "analysis_sha256": "ea9b806ed6961f9512754de9a41afbe6378f75e8dbb9411c7154a6e36e7511fc",
+        "history_sha256": "034fb601a2c1e735b8ece9cb29811b67de15aff7ba7d24b9015625af66651666"
+      },
+      "dt": {
+        "analysis_sha256": "6d959bb2f36af7085cd267b98d6d593e661f4604d8a5232040005febb0d523d1",
+        "history_sha256": "5946de0cd84c3dd3ca16616f0529e31f8779a93e0925e4544f182f34fab87b68"
+      },
+      "x": {
+        "analysis_sha256": "257de53fb1d81b21506566849f06ca056e01ea0ae1dc7811bd4d006933a1eb81",
+        "history_sha256": "c177d2ca087aab03dcb0c57a8208d6113c7733a1e015df01e7cd7fff20feaa85"
+      }
+    },
+    "reference_bridge": {
+      "archived_mount_prefix": "/media/jay/\u65b0\u52a0\u5377",
+      "current_storage_root": "/media/jay/\u65b0\u52a0\u53771",
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/f4b70ba/study-01/receipt.json",
+      "receipt_sha256": "daf2076b228b9fb1da393f1c1c7d982bd7d29058f06a777d597b4f93c3781d5e",
+      "scope": "Controller-only revision bridge; original archive bytes unchanged",
+      "source_revision": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+      "verified_command_receipts": 15
+    },
+    "worker_budget": {
+      "aggregate_workers_upper_bound": 45,
+      "external_processes": [
+        {
+          "name": "python3",
+          "pid": 353664,
+          "workers_upper_bound": 1
+        },
+        {
+          "name": "python3",
+          "pid": 353665,
+          "workers_upper_bound": 1
+        },
+        {
+          "name": "python3",
+          "pid": 353668,
+          "workers_upper_bound": 1
+        },
+        {
+          "name": "python3",
+          "pid": 353669,
+          "workers_upper_bound": 1
+        },
+        {
+          "name": "python3",
+          "pid": 353670,
+          "workers_upper_bound": 1
+        },
+        {
+          "name": "IncNavierStokes",
+          "pid": 353991,
+          "workers_upper_bound": 3
+        },
+        {
+          "name": "orted",
+          "pid": 353992,
+          "workers_upper_bound": 4
+        }
+      ],
+      "external_workers_upper_bound": 12,
+      "limit": 64,
+      "observed_utc": "2026-11-16T08:53:10.054415+00:00",
+      "owned_pool_workers": 33,
+      "passed": true
+    }
+  },
+  "queue_snapshot": {
+    "allocation": {
+      "concurrency": "One native MPI command at a time; controller shares the explicitly assigned CPU pool",
+      "cpus": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        0
+      ],
+      "external_jobs": "The caller must account for other server jobs within the same64-worker ceiling",
+      "hard_server_worker_limit": 64,
+      "npz": 16,
+      "ranks": 32,
+      "thread_environment": {
+        "BLIS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      }
+    },
+    "bindings": {
+      "executables": {
+        "benchmark": {
+          "bytes": 617696,
+          "native_library_sha256": {
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+          },
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/bin/HITInflowBenchmark",
+          "sha256": "8a24b185510299d0a074f1a387254cd5ee42b610ee68e6eff36efe6873ba5ac3"
+        },
+        "flow": {
+          "bytes": 464872,
+          "native_library_sha256": {
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+          },
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/bin/HITFlowDiagnostics",
+          "sha256": "e112427c7e1962072e0107b5fe419ce924a51fb27dbb189e83e76efca17ee8d5"
+        },
+        "probe": {
+          "bytes": 666824,
+          "native_library_sha256": {
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+          },
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/bin/HITBoundaryProbe",
+          "sha256": "e96344b310345a1f4155972518be39cb372efe2ad4e1c073c62b6c7521b01a87"
+        },
+        "solver": {
+          "bytes": 2784136,
+          "native_library_sha256": {
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+          },
+          "path": "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+          "sha256": "7f88e62de8644ab280544be1583cc8d50d37e9806503170d070043a46c347a5a"
+        }
+      },
+      "source": {
+        "branch": "codex/hit-inflow-generator",
+        "checkout": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-hit-qualification-20261116",
+        "files_sha256": {
+          "docs/plans/hit-inflow-band100-protocol.md": "8ec42cd99bee41ed9fe60c92db4ddcf5632334ed903e56fc9720ee245ba05fcd",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json": "031df95c54eb05fb5cc94c81dd5a35bb687890f4336a3f3f80bdfe42c52f3590",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_theta42_spectrum_3d.dat": "ca5551dc1872df7442cebbb6d82eac657307e394fa0726cbd7fce56939f20181",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_band100.py": "258ef120946e9b85d4cad58b64b80ad4576769172cbc1bc8332f3c51a5cd738f",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_history.py": "1bced68762eb6a859ba867f1af7162fc09cf1c83daa80da1b058561595de9d01",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_m7.py": "d81c405243fff9a3677d63dd3aadfe44269a9f79389eeae03c31f1f333842d3e",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/prepare.py": "66f0d012d11b6fae7a1e3f7f03a2a4a333241104dc80b6527e05015c446795ee",
+          "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/run_band100.py": "e51b96fad2fb211db7eb1debd26b426e077d4575fd38d7599b1f31eb766af012"
+        },
+        "revision": "a1eab12a381cda77da514b6fcb22ea06700f82ca"
+      }
+    },
+    "cases": [
+      "svv",
+      "z",
+      "bandwidth"
+    ],
+    "command": [
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-hit-qualification-20261116/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/queue_band100_controls.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01",
+      "--source-revision",
+      "a1eab12a381cda77da514b6fcb22ea06700f82ca",
+      "--reference-study",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/f4b70ba/study-01",
+      "--storage-root",
+      "/media/jay/\u65b0\u52a0\u53771",
+      "--ranks",
+      "32",
+      "--npz",
+      "16",
+      "--cpus",
+      "32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,0"
+    ],
+    "completed_cases": [],
+    "current": {
+      "command": [
+        "taskset",
+        "-c",
+        "32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,0",
+        "/usr/bin/python3",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-hit-qualification-20261116/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/run_band100.py",
+        "--recipe",
+        "qualification",
+        "--stage",
+        "study",
+        "--run-root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-study",
+        "--source-revision",
+        "a1eab12a381cda77da514b6fcb22ea06700f82ca",
+        "--storage-root",
+        "/media/jay/\u65b0\u52a0\u53771",
+        "--ranks",
+        "32",
+        "--npz",
+        "16",
+        "--cpus",
+        "32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,0",
+        "--preflight-case",
+        "svv",
+        "--cases",
+        "svv",
+        "--preflight",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-preflight",
+        "--reference-study",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/f4b70ba/study-01",
+        "--compatible-reference-revision",
+        "f4b70baec10016dd098005bc5a5507b87e4a57bf"
+      ],
+      "log": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-study.log",
+      "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-study",
+      "pid": 356698,
+      "stage": "svv-study",
+      "started_utc": "2026-11-16T09:03:10.151258+00:00",
+      "status": "RUNNING",
+      "timeout_seconds": 72000
+    },
+    "full_distance": "HELD; this queue has no full-distance or automatic spatial/sampling stage",
+    "pid": 354984,
+    "protocol_sha256": "087f043ed5018a32ab58b158c254df38eec82bb80a9db75b9acbf9dbef2726fc",
+    "queue_sha256": "12e9510fd6611d4ccded9aa3bbc8a9a6eae58f7b89594032151fd19009f81174",
+    "reference_bridge": {
+      "archived_mount_prefix": "/media/jay/\u65b0\u52a0\u5377",
+      "current_storage_root": "/media/jay/\u65b0\u52a0\u53771",
+      "receipt": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/f4b70ba/study-01/receipt.json",
+      "receipt_sha256": "daf2076b228b9fb1da393f1c1c7d982bd7d29058f06a777d597b4f93c3781d5e",
+      "scope": "Controller-only revision bridge; original archive bytes unchanged",
+      "source_revision": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+      "verified_command_receipts": 15
+    },
+    "reference_revision": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+    "reference_study": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/f4b70ba/study-01",
+    "schema": "NEKTAR_HIT_BAND100_CONTROL_QUEUE_V1",
+    "stages": [
+      {
+        "budget_gate": {
+          "forecast_duration_s": 0.6,
+          "forecast_steps": 24000,
+          "forecast_wall_seconds": 29435.68807782397,
+          "maximum_forecast_hours": 12,
+          "maximum_sampled_memory_gib": 180,
+          "one_off_wall_overhead_seconds": 103.39807782396872,
+          "passed": true,
+          "sampled_peak_tree_rss_gib": 82.45695877075195,
+          "scope": "Short mean-initial smoke; no guarantee of developed-flow runtime or peak memory",
+          "steady_chunk_rates_seconds_per_step": [
+            1.2100325,
+            1.21114375,
+            1.219995,
+            1.21145375,
+            1.22217875,
+            1.21889125,
+            1.213745,
+            1.2163925,
+            1.2179125,
+            1.217765
+          ],
+          "steady_rate_estimator": "maximum native info-chunk seconds/step in the second half of the160-step smoke",
+          "steady_seconds_per_step": 1.22217875
+        },
+        "command": [
+          "taskset",
+          "-c",
+          "32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,0",
+          "/usr/bin/python3",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-hit-qualification-20261116/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/run_band100.py",
+          "--recipe",
+          "qualification",
+          "--stage",
+          "preflight",
+          "--run-root",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-preflight",
+          "--source-revision",
+          "a1eab12a381cda77da514b6fcb22ea06700f82ca",
+          "--storage-root",
+          "/media/jay/\u65b0\u52a0\u53771",
+          "--ranks",
+          "32",
+          "--npz",
+          "16",
+          "--cpus",
+          "32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,0",
+          "--preflight-case",
+          "svv"
+        ],
+        "exit_code": 0,
+        "finished_utc": "2026-11-16T09:03:09.763198+00:00",
+        "log": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-preflight.log",
+        "log_sha256": "467df55214c6a10214968a2dbd22986ccce6d69b8d4fcceeb271fb07d8e3bae9",
+        "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-preflight",
+        "pid": 355040,
+        "receipt_sha256": "3ee6e79a55b59b1aabab6b2dc778756ea0e1a72152dcf196c6f35e05dbb41b57",
+        "stage": "svv-preflight",
+        "started_utc": "2026-11-16T08:55:20.792479+00:00",
+        "status": "COMPLETED",
+        "timeout_seconds": 14400,
+        "wall_seconds": 468.8914741250337
+      }
+    ],
+    "started_utc": "2026-11-16T08:55:20.098074+00:00",
+    "status": "RUNNING",
+    "storage_root": "/media/jay/\u65b0\u52a0\u53771",
+    "updated_utc": "2026-11-16T09:03:10.240986+00:00"
+  },
+  "resource_hold_helper_check": {
+    "pid_identity_fixture": "passed: live identity accepted; changed start and exited process rejected",
+    "script_sha256": "d56ec8c457247f03600c40ef007b29d787699d71c7fd7f42d457959564358856"
+  },
+  "resource_hold_helper_launch": {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/resume-band100-resources.py",
+      "--hold-file",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/resource-hold-01.json",
+      "--source-root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-hit-qualification-20261116",
+      "--max-wait-seconds",
+      "14400"
+    ],
+    "pid": 359127,
+    "proof": {
+      "pid_identity_fixture": "passed: live identity accepted; changed start and exited process rejected",
+      "script_sha256": "d56ec8c457247f03600c40ef007b29d787699d71c7fd7f42d457959564358856"
+    }
+  },
+  "resource_hold_snapshot": {
+    "active_guard_pids": [
+      353665
+    ],
+    "all_owned_processes_held": true,
+    "command": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-hit-qualification-20261116/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/run_band100.py --recipe qualification --stage study --run-root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-study --source-revision a1eab12a381cda77da514b6fcb22ea06700f82ca --storage-root /media/jay/\u65b0\u52a0\u53771 --ranks 32 --npz 16 --cpus 32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,0 --preflight-case svv --cases svv --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-preflight --reference-study /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/f4b70ba/study-01 --compatible-reference-revision f4b70baec10016dd098005bc5a5507b87e4a57bf ",
+    "elapsed_wait_seconds": 431.6097457408905,
+    "hard_wait_timeout_action": "Kill only the saved owned HIT family; retain all partial evidence",
+    "held_current": {
+      "command": "solver",
+      "directory": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-study/cases/svv/run",
+      "log": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01/svv-study/cases/svv/run/solver.log",
+      "total_steps": 24000
+    },
+    "held_processes": [
+      {
+        "name": "IncNavierStokes",
+        "pid": 357925,
+        "process_start_ticks": "28575466"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357924,
+        "process_start_ticks": "28575466"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357923,
+        "process_start_ticks": "28575466"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357922,
+        "process_start_ticks": "28575457"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357921,
+        "process_start_ticks": "28575457"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357920,
+        "process_start_ticks": "28575457"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357919,
+        "process_start_ticks": "28575457"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357918,
+        "process_start_ticks": "28575457"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357917,
+        "process_start_ticks": "28575456"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357916,
+        "process_start_ticks": "28575456"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357915,
+        "process_start_ticks": "28575456"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357914,
+        "process_start_ticks": "28575456"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357913,
+        "process_start_ticks": "28575455"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357912,
+        "process_start_ticks": "28575455"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357911,
+        "process_start_ticks": "28575455"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357910,
+        "process_start_ticks": "28575455"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357909,
+        "process_start_ticks": "28575455"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357908,
+        "process_start_ticks": "28575455"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357907,
+        "process_start_ticks": "28575453"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357906,
+        "process_start_ticks": "28575453"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357905,
+        "process_start_ticks": "28575453"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357904,
+        "process_start_ticks": "28575453"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357903,
+        "process_start_ticks": "28575453"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357902,
+        "process_start_ticks": "28575452"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357901,
+        "process_start_ticks": "28575452"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357900,
+        "process_start_ticks": "28575452"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357899,
+        "process_start_ticks": "28575452"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357898,
+        "process_start_ticks": "28575452"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357897,
+        "process_start_ticks": "28575452"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357896,
+        "process_start_ticks": "28575451"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357895,
+        "process_start_ticks": "28575450"
+      },
+      {
+        "name": "IncNavierStokes",
+        "pid": 357894,
+        "process_start_ticks": "28575450"
+      },
+      {
+        "name": "mpirun",
+        "pid": 357884,
+        "process_start_ticks": "28575403"
+      },
+      {
+        "name": "python3",
+        "pid": 356698,
+        "process_start_ticks": "28543822"
+      }
+    ],
+    "helper_pid": 359127,
+    "helper_sha256": "d56ec8c457247f03600c40ef007b29d787699d71c7fd7f42d457959564358856",
+    "helper_started_utc": "2026-11-16T09:14:08.031870+00:00",
+    "maximum_wait_seconds": 14400.0,
+    "pid": 356698,
+    "process_start_ticks": "28543822",
+    "queue_pid": 354984,
+    "queue_process_start_ticks": "28496709",
+    "reason": "Existing RANS guard counts sleeping MPI services and pauses its owned experiment; drain the160-step HIT smoke, then defer long recording until those guards exit",
+    "schema": "NEKTAR_HIT_RESOURCE_HOLD_V1",
+    "started_unix": 1794820158.1571777,
+    "started_utc": "2026-11-16T09:09:18.157151+00:00",
+    "status": "WAITING_FOR_EXISTING_GUARDS",
+    "updated_utc": "2026-11-16T09:16:29.766920+00:00",
+    "worker_budget": {
+      "aggregate_workers_upper_bound": 45,
+      "external_processes": [
+        {
+          "name": "python3",
+          "pid": 353664,
+          "workers_upper_bound": 1
+        },
+        {
+          "name": "python3",
+          "pid": 353665,
+          "workers_upper_bound": 1
+        },
+        {
+          "name": "python3",
+          "pid": 353669,
+          "workers_upper_bound": 1
+        },
+        {
+          "name": "python3",
+          "pid": 353670,
+          "workers_upper_bound": 1
+        },
+        {
+          "name": "IncNavierStokes",
+          "pid": 353991,
+          "workers_upper_bound": 3
+        },
+        {
+          "name": "orted",
+          "pid": 353992,
+          "workers_upper_bound": 4
+        },
+        {
+          "name": "python3",
+          "pid": 359127,
+          "workers_upper_bound": 1
+        }
+      ],
+      "external_workers_upper_bound": 12,
+      "limit": 64,
+      "observed_utc": "2026-11-16T09:16:29.766802+00:00",
+      "owned_pool_workers": 33,
+      "passed": true
+    }
+  },
+  "run_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/controls-01",
+  "schema": "NEKTAR_HIT_BAND100_QUALIFICATION_LAUNCH_EVIDENCE_V1",
+  "snapshot_utc": "2026-11-16T09:16:33.986011+00:00",
+  "source_revision": "a1eab12a381cda77da514b6fcb22ea06700f82ca"
+}

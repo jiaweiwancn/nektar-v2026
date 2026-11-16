@@ -14,6 +14,14 @@ from pathlib import Path
 root=Path(sys.argv[1]);queue=json.loads((root/'queue.json').read_text())
 print(datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')+' — CBC100 qualification')
 print('Queue: '+queue['status'])
+hold_path=root.parent/'resource-hold-01.json'
+if hold_path.is_file():
+    hold=json.loads(hold_path.read_text())
+    if hold.get('queue_pid')==queue.get('pid'):
+        print('Resource scheduling: '+hold['status'])
+        if hold['status']=='WAITING_FOR_EXISTING_GUARDS':
+            print('HIT processes are held; automatic resume follows completion of existing server guards.')
+        if hold.get('updated_utc'):print('Resource snapshot: '+hold['updated_utc'])
 print('Completed controls: '+(', '.join(queue.get('completed_cases',[])) or 'none'))
 current=queue.get('current')
 if current:
@@ -32,9 +40,11 @@ if current:
                     step,t=rows[-1];total=native.get('total_steps')
                     print(f'Step: {step} / {total or "?"}; simulated time: {float(t):.6f}s')
                     if total:print(f'Progress: {100*int(step)/total:.2f}%')
+                else:print('No step report yet: native initialization or first info interval.')
+        if progress.get('updated_utc'):print('Solver snapshot: '+progress['updated_utc'])
         if 'budget_gate' in progress:
             gate=progress['budget_gate'];print(f"Budget gate: {'pass' if gate['passed'] else 'reject'}; forecast {gate['forecast_wall_seconds']/3600:.2f}h, sampled RSS {gate['sampled_peak_tree_rss_gib']:.2f}GiB")
 if queue.get('error'):print('Error: '+queue['error'])
-print('Updated: '+queue['updated_utc'])
+print('Queue stage updated: '+queue['updated_utc'])
 print('Full-distance production: HELD pending qualification review')
 PY
