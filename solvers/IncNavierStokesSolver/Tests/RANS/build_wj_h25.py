@@ -16,10 +16,13 @@ def build(root,variant='profile'):
         source=root/'source-v5';output=root/'build-lookup-v1';previous=root/'build-profile-v2';previous_source=root/'source-v4';tag='lookup';manifest='source-manifest-v5.json'
     elif variant=='seed':
         source=root/'resumption-r1/source-v1';output=root/'resumption-r1/build-seed-v1';previous=root/'build-scalar-v3';previous_source=root/'source-v8';tag='seed';manifest='resumption-r1/source-manifest-v1.json'
+    elif variant=='scatter':
+        source=root/'resumption-r1/source-v2';output=root/'resumption-r1/build-scatter-v1';previous=root/'resumption-r1/build-seed-v1';previous_source=root/'resumption-r1/source-v1';tag='scatter';manifest='resumption-r1/source-manifest-v2.json'
     else:
         assert variant=='scalar'
         source=root/'source-v8';output=root/'build-scalar-v3';previous=root/'build-scalar-v2';previous_source=root/'source-v8';tag='scalar';manifest='source-manifest-v8.json'
-    started=time.monotonic();proof=(root/'resumption-r1/science' if variant=='seed' else root/'science')/(output.name+'-object-reuse.json')
+    resumed=variant in ('seed','scatter')
+    started=time.monotonic();proof=(root/'resumption-r1/science' if resumed else root/'science')/(output.name+'-object-reuse.json')
     assert not output.exists()and not proof.exists(),'versioned build output/receipt already exists'
     cmake=(source/'solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt').read_text()
     for relative in re.findall(r'\$\{RANS_SOURCE_ROOT\}/([A-Za-z0-9_./-]+\.(?:cpp|h))',cmake):
@@ -66,10 +69,11 @@ def build(root,variant='profile'):
     atomic(proof,dict(status='QUALIFIED_EXACT_DEPENDENCIES',objects=records,configure=config,cache=identity(OLD/'build/CMakeCache.txt')))
     names=('IncNavierStokesSolver','RANSWallResolutionProbe','WJH25CommonMassChecks','RANSWallTimingChecks','RANSWallMonitorChecks')
     if variant=='seed':names=('RANSWallResolutionProbe',)
+    if variant=='scatter':names=('IncNavierStokesSolver','RANSWallResolutionProbe','WJH25ExactScatterChecks')
     if variant in ('lookup','scalar'):names+=('WJH25ExactLookupChecks',)
-    command=['cmake','--build',str(output),'--target',*names,'--parallel','8']
+    command=['cmake','--build',str(output),'--target',*names,'--parallel','4' if variant=='scatter' else '8']
     subprocess.run(command,check=True)
-    runtime=(root/'resumption-r1'/('runtime-'+tag+'-v1')) if variant=='seed' else root/('runtime-'+tag+'-v1');runtime.mkdir()
+    runtime=(root/'resumption-r1'/('runtime-'+tag+'-v1')) if resumed else root/('runtime-'+tag+'-v1');runtime.mkdir()
     oldrt=OLD/'runtime';executables=[]
     for name in names:
         elf=runtime/(name+'.elf');shutil.copy2(output/name,elf)
@@ -80,12 +84,12 @@ def build(root,variant='profile'):
     for c in new:
         a=shlex.split(c['command']);obj=output/a[a.index('-o')+1]
         if obj.exists():objects.append(dict(source=identity(c['file']),command=c['command'],object=identity(obj),dependency=identity(str(obj)+'.d')if Path(str(obj)+'.d').exists()else None))
-    runtime_record=root/('resumption-r1/science/runtime-build-seed-v1.json') if variant=='seed' else root/('science/runtime-build-'+tag+'-v1.json')
+    runtime_record=root/('resumption-r1/science/runtime-build-'+tag+'-v1.json') if resumed else root/('science/runtime-build-'+tag+'-v1.json')
     atomic(runtime_record,dict(status='PASS',source_manifest=identity(root/manifest),
         compiler=subprocess.check_output(['/usr/bin/c++','--version'],text=True),configure=config,build=command,seconds=time.monotonic()-started,
         compile_commands=identity(output/'compile_commands.json'),objects=objects,executables=executables,
         link_commands=[identity(p)for p in sorted(output.glob('CMakeFiles/*/link.txt'))if p.parent.name in ('IncNavierStokesSolver.dir','RANSWallResolutionProbe.dir','WJH25CommonMassChecks.dir')],
-        private_runtime=identity(root/'science/runtime-dependencies-v1.json'),old_object_proof=identity(proof),purpose='H25R1 target initial-data producer; existing governing solver unchanged' if variant=='seed' else 'profiling-only baseline'if variant=='profile'else'opt-in exact containment/geometry lookup and scalar value rows; same governing mathematics; explicit H25 transient initial-data helper'))
+        private_runtime=identity(root/'science/runtime-dependencies-v1.json'),old_object_proof=identity(proof),purpose='H25R1 exact per-element assembly scatter and read-only sufficient-positivity prototype; no production guard skipped' if variant=='scatter' else 'H25R1 target initial-data producer; existing governing solver unchanged' if variant=='seed' else 'profiling-only baseline'if variant=='profile'else'opt-in exact containment/geometry lookup and scalar value rows; same governing mathematics; explicit H25 transient initial-data helper'))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--variant',choices=('profile','lookup','scalar','seed'),default='profile');a=p.parse_args();build(a.root,a.variant)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--variant',choices=('profile','lookup','scalar','seed','scatter'),default='profile');a=p.parse_args();build(a.root,a.variant)

@@ -548,6 +548,7 @@ private:
     bool m_evaluationReuse=false;
     bool m_immutableRowReuse=false;
     bool m_exactScalarValues=false;
+    bool m_elementAssemblyScatter=false;
     std::size_t m_immutableRowEntries=196608;
     std::uint64_t m_immutableRowBytes=256ULL*1024*1024;
     mutable std::shared_ptr<ImmutableRowStore> m_immutableRows;

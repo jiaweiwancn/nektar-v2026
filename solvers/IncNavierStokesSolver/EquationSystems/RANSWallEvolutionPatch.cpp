@@ -385,6 +385,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(scalarValue=="Off" || scalarValue=="ValueExactV1","unknown scalar evaluation policy");
     m_exactScalarValues=scalarValue=="ValueExactV1";
     Require(!m_exactScalarValues || (MappedBlock() && m_dimension==2),"ValueExactV1 requires mapped serial2D");
+    std::string scatter;session->LoadSolverInfo("RANSWallAssemblyScatter",scatter,"Off");
+    Require(scatter=="Off" || scatter=="ElementExactV1","unknown element assembly scatter policy");
+    m_elementAssemblyScatter=scatter=="ElementExactV1";
+    Require(!m_elementAssemblyScatter || (MappedBlock() && m_dimension==2 && PimpleSingleSweep()),
+        "ElementExactV1 requires mapped2D one-sweep assembly");
     ConfigureImmutableRows(session);
     Require(!m_evaluationReuse || (m_dimension==2 && (!Mapped() || OpenBoundary()) && PimpleSingleSweep()),
         "ExactStepV1 is restricted to the serial flat2D one-sweep pilot");

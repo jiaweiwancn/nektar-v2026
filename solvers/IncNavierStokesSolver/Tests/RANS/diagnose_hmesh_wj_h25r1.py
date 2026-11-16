@@ -16,11 +16,12 @@ def run(root):
     d=root/'resumption-r1/science/h350-r1-v1'
     arrays=d/'common-signed-fields.npz';a=np.load(arrays)
     design=load(d/'design.json');c=stored_reference()
-    p=a['physical'];r=p[:,2]-c.d0;outer=r>c.H
+    p=a['physical'];r=p[:,2]-c.d0
     # All one-sided physical owners are retained; geometry determines which
     # coarse parent interval carries a face value, not a nearest-height guess.
     coarse=load(d/'case.evolution.json');mesh={e['geometry']:e for e in coarse['fields'][0]['mesh']}
     z=design['parent_knots'];ids=a['coarse_geometry']
+    outer=np.asarray([mesh[int(g)]['lower'][2]>=c.H for g in ids])
     pairs=np.asarray([z.index(mesh[int(g)]['lower'][2]) for g in ids])
     gradient=c.u_tau**2/(c.nu+c.w['a']*np.maximum(r-c.w['zv'],0.))
     gradient[outer]=c.u_tau/(.3819178635467331*r[outer])
@@ -45,7 +46,8 @@ def run(root):
     # stress/velocity/gradient grounds. Global CG projection can couple adjacent
     # intervals; this is a successor proposal requiring fresh qualification.
     proposed=sorted(set(restored)|set(range(8)))
-    atomic(root/'resumption-r1/science/h350-diagnosis-r1-v1.json',dict(status='SUCCESSOR_PROPOSAL_NOT_ACCEPTANCE',
+    assert all(np.all(np.isfinite(v)) for v in errors.values())
+    atomic(root/'resumption-r1/science/h350-diagnosis-r1-v2.json',dict(status='SUCCESSOR_PROPOSAL_NOT_ACCEPTANCE',
         source=identity(arrays),comparison=identity(d/'comparison.json'),records=records,
         restore_pairs=proposed,cells=14*(25+len(proposed)),
         rationale='restore both original children in each pair failing a frozen pointwise budget; preserve fine inner layer',

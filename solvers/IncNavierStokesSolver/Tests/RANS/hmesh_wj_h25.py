@@ -42,9 +42,9 @@ def initialize(root,label):
     r=native_load(d/'case.evolution.json');assert int(r['steps'])==0 and r['time']==0 and r['failure']==''and len(r['state'])==12445
     atomic(d/'initial-source.json',dict(report=identity(d/'case.evolution.json'),checkpoint=identity(d/'CP/State.bin'),history_role='genuine native initial history, alpha0'))
 
-def analyze(root,label):
+def analyze(root,label,candidate_report=None):
     from wj_h16_observer import compatibility
-    d=directory(root,label);r=native_load(d/'case.evolution.json')
+    d=directory(root,label);candidate_report=candidate_report or d/'case.evolution.json';r=native_load(candidate_report)
     prior=load(root/'science/cache-compatible-v2.json')
     bound=compatibility(root,verify(prior['historical_manifest']),d/'fine-cache-compatibility-base.json')
     bound.update(new_native_identity=identity(root/'science/runtime-build-scalar-v1.json'),
@@ -88,13 +88,16 @@ def analyze(root,label):
         coarse_geometry=np.asarray([o['geometry']for p,o in rows.rows]),fine_geometry=np.asarray([o['geometry']for p,o in fine_rows.rows]))
     np.savez_compressed(d/'common-signed-fields.npz',**payload)
     atomic(d/'comparison.json',dict(status=status,numerical_screen=result,coarse_physical=coarse_physical,fine_reassessed_physical=fine_physical,
-        wall_stress_scaled_max=wall_error,wall_limit=1e-3,source=identity(d/'initial-source.json'),signed_fields=identity(d/'common-signed-fields.npz'),
+        wall_stress_scaled_max=wall_error,wall_limit=1e-3,source=identity(d/'initial-source.json') if (d/'initial-source.json').exists() else identity(candidate_report),signed_fields=identity(d/'common-signed-fields.npz'),
         common_inventory=dict(fixed_points=len(points),owned_rows=rows.point_count,total_rows=len(rows.rows),fine_cache=stats,
             rule='fine fixed support + all coarse5x5 and native witnesses/neighborhoods + both current cutoffs; all one-sided traces paired by positive interior overlap'),
-        distinction='new h representation; qh0 analytical representation and h discrepancy measured, no evolved mesh qualification or H24 state migration claimed'))
+        distinction='initial target mesh/quadrature representation; physical discrepancy measured, no evolved discretization qualification or H24 state migration claimed'))
     print(status,result['status'],'wall',wall_error,flush=True)
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('initialize','analyze'),required=True)
     p.add_argument('--label',default='h350-r1-v1')
-    a=p.parse_args();globals()[a.mode](a.root,a.label)
+    p.add_argument('--candidate-report',type=Path)
+    a=p.parse_args()
+    if a.mode=='initialize':initialize(a.root,a.label)
+    else:analyze(a.root,a.label,a.candidate_report)

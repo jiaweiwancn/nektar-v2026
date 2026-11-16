@@ -23,6 +23,10 @@ target_include_directories(WJH25CommonMassChecks PRIVATE ${RANS_SOURCE_ROOT}/sol
 target_link_libraries(WJH25CommonMassChecks ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 add_executable(WJH25ExactLookupChecks test_wj_h25_exact_lookup.cpp)
 target_include_directories(WJH25ExactLookupChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+add_executable(WJH25ExactScatterChecks test_wj_h25_exact_scatter.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp)
+target_include_directories(WJH25ExactScatterChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_link_libraries(WJH25ExactScatterChecks ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 target_include_directories(WJFlowVectorChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 add_test(NAME WJFlowVectorChecks COMMAND WJFlowVectorChecks ${CMAKE_CURRENT_BINARY_DIR}/flow-vector-fixture)
 target_include_directories(WJImmutableRowsChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)

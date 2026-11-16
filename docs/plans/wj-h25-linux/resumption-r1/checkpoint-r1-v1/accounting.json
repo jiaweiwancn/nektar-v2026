@@ -1,0 +1,150 @@
+{
+  "schema": "WJH25R1FiniteContinuationV1",
+  "closed": false,
+  "ceilings": {
+    "total": 21600,
+    "native": 14400,
+    "build": 2400,
+    "passive": 3600
+  },
+  "setup_seconds": 300,
+  "closure_seconds": 900,
+  "entries": {
+    "h350-init-r1-v1": {
+      "status": "PASS",
+      "phase": "native",
+      "reserved_seconds": 600.0,
+      "reserved_attempts": 0,
+      "seconds": 48.679770891030785,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 2750492672,
+      "unknown_attempts": false,
+      "log_sha256": "4eec1856e72000365c59f4da6a5ca3f7bce99eeeebe656da74c1641dfc06fcd6"
+    },
+    "h350-compare-r1-v1": {
+      "status": "PASS",
+      "phase": "passive",
+      "reserved_seconds": 300.0,
+      "reserved_attempts": 0,
+      "seconds": 93.97406793298433,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1343373312,
+      "unknown_attempts": false,
+      "log_sha256": "27cfeffa16cca04b03d886b2c8ed5a0d3cb3a28fd0ffa9f4d4726614b3a8f957"
+    },
+    "seed-build-r1-v1": {
+      "status": "PASS",
+      "phase": "build",
+      "reserved_seconds": 900.0,
+      "reserved_attempts": 0,
+      "seconds": 60.812770910037216,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 8082194432,
+      "unknown_attempts": false,
+      "log_sha256": "8d53ec6e14d11b8b93d6eaaa167f46c3d425de13da0cab19d226f9e3f3949a39"
+    },
+    "certificate-screen-r1-v1": {
+      "status": "FAIL",
+      "phase": "passive",
+      "reserved_seconds": 180.0,
+      "reserved_attempts": 0,
+      "seconds": 0.9440924030495808,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 121544704,
+      "unknown_attempts": false,
+      "log_sha256": "a6f2fd66aa3105640861cc3db69e797b7b86fd053c9b064e3f4f946aafd3ce4f"
+    },
+    "fine-seed-r1-v1": {
+      "status": "FAIL",
+      "phase": "native",
+      "reserved_seconds": 600.0,
+      "reserved_attempts": 0,
+      "seconds": 120.95915305201197,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 6066266112,
+      "unknown_attempts": false,
+      "log_sha256": "64f5e258caf963d3dde8efc149a32bab542071a99576d1d86b23eb230046de21"
+    },
+    "fine-own-dt-seed-r1-v1": {
+      "status": "PASS",
+      "phase": "native",
+      "reserved_seconds": 600.0,
+      "reserved_attempts": 0,
+      "seconds": 116.64806527696783,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 6061715456,
+      "unknown_attempts": false,
+      "log_sha256": "9d141039ad3d1ac9b38baa96407896a2eda9fc84a4b791027897e585dcc7cfad"
+    },
+    "certificate-screen-r1-v2": {
+      "status": "PASS",
+      "phase": "passive",
+      "reserved_seconds": 180.0,
+      "reserved_attempts": 0,
+      "seconds": 1.7766202909988351,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 239878144,
+      "unknown_attempts": false,
+      "log_sha256": "f445f73eab634c6a6ce1bb20b0e0b21bdf53a5353756bbd6deaa2abf20525876"
+    },
+    "target350-seed-r1-v1": {
+      "status": "FAIL",
+      "phase": "native",
+      "reserved_seconds": 600.0,
+      "reserved_attempts": 0,
+      "seconds": 70.45670721196802,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 3546574848,
+      "unknown_attempts": false,
+      "log_sha256": "470f58db126c72c546b7773d19da6838ef60d2c83ec7c5c62726fb87654504e2"
+    },
+    "h350-localize-r1-v1": {
+      "status": "FAIL",
+      "phase": "passive",
+      "reserved_seconds": 180.0,
+      "reserved_attempts": 0,
+      "seconds": 1.4899038899457082,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 181108736,
+      "unknown_attempts": false,
+      "log_sha256": "5d8aac7e4277703bbd70db1e2346834c66ffd70404d998e6a652993bde81f158"
+    },
+    "seed-contract-tests-r1-v1": {
+      "status": "PASS",
+      "phase": "passive",
+      "reserved_seconds": 30.0,
+      "reserved_attempts": 0,
+      "seconds": 0.6684865829884075,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 97538048,
+      "unknown_attempts": false,
+      "log_sha256": "8ca6d6592bded7ff770caf2dcb8947d73b2753c03829a727faa6cf2062355bc4"
+    }
+  },
+  "reserved_attempts": 0,
+  "maximum_attempts": 384,
+  "governor_blocks": 0,
+  "maximum_governor_blocks": 24,
+  "source_revision": "6b25c30cb7e902ebc0e73048fed47d9ebeded175",
+  "original_account": {
+    "path": "/home/jay/build/wj-h25-production-20261116/accounting.json",
+    "sha256": "13ef4a244a8b1aec9806f0c6a090224cd0c31cc13dcd5c226b1f1374f7218708",
+    "usage": {
+      "build": 389.50274165614974,
+      "native": 2099.6596822449355,
+      "passive": 1916.041679986054,
+      "total": 5125.204103887139
+    }
+  },
+  "scope": "prospective WJ-H25R1 allocation; original charges/ceilings preserved"
+}

@@ -54,6 +54,16 @@ public:
         Require(i>=0 && i<n && j>=0 && j<m,"wall matrix insertion outside shape");
         if(compressed){if(x!=0.)entries[i][j]+=x;}else dense[i][j]+=x;
     }
+    // Assembly-local handles only. std::map insertion preserves addresses;
+    // no handle may outlive this matrix or be used after ClearRow/Set erase.
+    // Zero entries are invisible to Each/Pattern/Nonzeros, as before.
+    double *AssemblyEntry(int i,int j)
+    {
+        Require(i>=0 && i<n && j>=0 && j<m,"wall scatter index outside shape");
+        return compressed?&entries[i][j]:&dense[i][j];
+    }
+    static void AddAssemblyEntry(double *entry,double x)
+    {if(entry && x!=0.)*entry+=x;}
     void Set(int i,int j,double x)
     {
         Require(i>=0 && i<n && j>=0 && j<m,"wall matrix insertion outside shape");

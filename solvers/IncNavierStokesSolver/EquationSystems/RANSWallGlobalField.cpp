@@ -6,6 +6,7 @@
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <StdRegions/StdSegExp.h>
 #include <algorithm>
+#include <cfenv>
 #include <cmath>
 #include <iterator>
 #include <limits>
@@ -313,6 +314,54 @@ double RANSWallGlobalField::ElementValue(int e,const Coordinate &coordinate,cons
         value+=(long double)phi*(state.at(offset+map->GetLocalToGlobalMap(start+j))-centre*constant);
     }
     return value;
+}
+RANSWallGlobalField::PositiveSummary RANSWallGlobalField::ElementPositiveSummary(int e,const Vector &state,int offset) const
+{
+    const auto &el=m_elements.at(e);Require(m_dimension==2 && el.degree==3 && offset>=0,"positive prototype requires native cubic2D");
+    const auto map=m_field->GetLocalToGlobalMap();const int start=m_field->GetCoeff_Offset(e);
+    PositiveSummary result;result.state=state.data();result.stateSize=state.size();result.coefficientMap=CoefficientMapIdentity();
+    result.element=e;result.offset=offset;result.centre=state.at(offset+map->GetLocalToGlobalMap(start))/map->GetLocalToGlobalSign(start);
+    for(int j=0;j<16;++j)
+    {
+        const double constant=(j%4<2 && j/4<2)?map->GetLocalToGlobalSign(start+j):0.;
+        const double delta=state.at(offset+map->GetLocalToGlobalMap(start+j))-result.centre*constant;
+        result.maximumDelta=std::max(result.maximumDelta,std::abs(delta));
+        if(!std::isfinite(delta))result.maximumDelta=std::numeric_limits<double>::infinity();
+    }
+    return result;
+}
+double RANSWallGlobalField::ElementPositiveLower(const PositiveSummary &summary,const Coordinate &coordinate,const Vector &state) const
+{
+    Require(summary.state==state.data() && summary.stateSize==state.size() && summary.coefficientMap==CoefficientMapIdentity(),
+        "positive prototype state/field generation differs");
+    ValidateElementPoint(summary.element,coordinate);
+    // The caller owns a const effective lifted state for this call. No summary
+    // survives the domain evaluation, owner/time/data generation or state change.
+    const double inf=std::numeric_limits<double>::infinity();
+    if(!std::numeric_limits<double>::is_iec559 || std::numeric_limits<long double>::digits<53 ||
+       std::fegetround()!=FE_TONEAREST || !std::isfinite(summary.centre) || !std::isfinite(summary.maximumDelta))return -inf;
+    auto up=[&](double x){return std::nextafter(x,inf);};
+    auto down=[&](double x){return std::nextafter(x,-inf);};
+    const auto &el=m_elements.at(summary.element);std::array<double,2> absolute{};
+    for(int d=0;d<2;++d)
+    {
+        const int axis=m_axes[d];const double inverse=2/(el.upper[axis]-el.lower[axis]);
+        const auto basis=m_elementBasis[summary.element][d]->Evaluate((coordinate[axis]-el.lower[axis])*inverse-1);
+        for(double b:basis->value)absolute[d]=up(absolute[d]+std::abs(b));
+    }
+    // Actual computed basis values are inputs to this enclosure, so it needs
+    // no unproved bound for barycentric interpolation or analytic polynomials.
+    // Each phi is one rounded product of those doubles. gamma35 covers 16
+    // long-double products/additions plus final binary64 conversion, using
+    // the larger binary64 unit roundoff. 64 denorm_min covers underflow.
+    const double u=std::numeric_limits<double>::epsilon()/2, tiny=std::numeric_limits<double>::denorm_min();
+    const double phiSum=up(up(up(absolute[0]*absolute[1])*(1+2*u))+16*tiny);
+    const double deviation=up(summary.maximumDelta*phiSum);
+    const double magnitude=up(std::abs(summary.centre)+deviation);
+    const double gamma=up(up(35*u)/(1-35*u));
+    const double error=up(up(gamma*magnitude)+64*tiny);
+    if(!std::isfinite(error) || !std::isfinite(deviation))return -inf;
+    return down(down(summary.centre-deviation)-error);
 }
 RANSWallGlobalPoint RANSWallGlobalField::Point(const Coordinate &coordinate,int side) const
 {

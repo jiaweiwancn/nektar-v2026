@@ -190,4 +190,65 @@ std::string H25Seed(RANSWallEvolutionPatch &patch,const LibUtilities::SessionRea
         {"spatial_work",J::Numbers(patch.InitializationWork())},{"initial_velocity_applications",J::Number(patch.InitialVelocityCalls())},{"governing_solves","0"},
         {"construction_scope",J::Quote(target?"strict fine source validation; target physical projection/lift/reference/defect/FlatInletTrace; compact increment/lift; one target native history":"strict fine source; compact increment/lift; one own-dt native history")}});
 }
+
+std::string H25PositiveChecks(RANSWallEvolutionPatch &patch,const LibUtilities::SessionReaderSharedPtr &serial,
+    double us,const Tree &packet,RANSWallEvolutionData &data)
+{
+    auto imported=ImportOpenState(patch,serial,us,packet,data);
+    const auto original=imported.cp.coupledState;std::vector<Vector> states{original};
+    auto changed=original;for(int j=patch.offset[patch.K()];j<patch.offset[patch.K()+1];++j)changed[j]*=1.001;
+    states.push_back(changed);changed=original;
+    for(int j=patch.offset[patch.Epsilon()];j<patch.offset[patch.Epsilon()+1];++j)changed[j]*=1.001;
+    states.push_back(changed);changed=original;
+    for(int j=patch.offset[patch.K()];j<patch.offset[patch.K()+1];++j)changed[j]=-1.;
+    states.push_back(changed);states.push_back(original);
+    std::map<int,int> geometry;
+    const auto field=patch.fields[patch.K()];
+    for(int e=0;e<field->Elements().size();++e)geometry.emplace(field->Elements()[e].geometry,e);
+    std::vector<std::string> records;
+    for(std::size_t n=0;n<states.size();++n)
+    {
+        data.Touch();RANSWallEvolutionPatch::EvaluationScope scope(patch,data,imported.cp.integration.time);
+        const auto domain=patch.ScalarDomain(states[n],imported.cp.integration.time,data,true);
+        const auto &effective=domain.effectiveState;
+        std::map<int,RANSWallGlobalField::PositiveSummary> summaries;
+        double exactSeconds=0,coveredSeconds=0,prototypeSeconds=0,minLower=1e300,minExact=1e300;
+        int points=0,positive=0,fallback=0;
+        for(const auto &p:domain.observations)
+        {
+            if(p.block!=patch.K() || p.inventory.find("ray")==std::string::npos)continue;
+            const int e=geometry.at(p.geometry);
+            if(!summaries.count(e))summaries.emplace(e,field->ElementPositiveSummary(e,effective,patch.offset[patch.K()]));
+            auto start=std::chrono::steady_clock::now();
+            // Exact fallback is deliberately run for EVERY prototype point.
+            // No production guard/observation/minimum is replaced by a bound.
+            const double actual=field->ElementPoint(e,p.coordinate).Value(effective,patch.offset[patch.K()]);
+            const double seconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
+            start=std::chrono::steady_clock::now();
+            const double lower=field->ElementPositiveLower(summaries.at(e),p.coordinate,effective);
+            prototypeSeconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
+            Require(lower<=actual,"positive native outward bound missed actual native value");
+            ++points;exactSeconds+=seconds;minLower=std::min(minLower,lower);minExact=std::min(minExact,actual);
+            if(lower>0){++positive;coveredSeconds+=seconds;}else ++fallback;
+        }
+        // Adverse domains retain the original first failure and location. A
+        // new state or generation always constructs fresh summaries above.
+        records.push_back(J::Object({{"state",J::Number(n)},{"data_generation",J::Number(data.generation)},
+            {"effective_state_sha256",J::Quote(RANSWallR3::Hash(effective))},
+            {"time_bits",J::Quote(RANSWallMonitor::Bits(imported.cp.integration.time))},
+            {"geometry_signature",J::Quote(patch.Mapping().Signature())},{"field",Field(patch,patch.K())},
+            {"domain_admissible",J::Boolean(domain.admissible)},{"first_failure",J::Quote(domain.failure)},
+            {"first_failure_point",J::Numbers(domain.limitingPoint)},{"moving_points",J::Number(points)},
+            {"sufficient_positive_points",J::Number(positive)},{"exact_fallback_points",J::Number(fallback)},
+            {"runtime_weighted_moving_point_coverage",exactSeconds>0?J::Number(coveredSeconds/exactSeconds):"null"},
+            {"exact_point_evaluation_seconds",J::Number(exactSeconds)},{"prototype_bound_seconds",J::Number(prototypeSeconds)},
+            {"certified_lower_bound",points && std::isfinite(minLower)?J::Number(minLower):"null"},
+            {"actually_evaluated_point_minimum",points?J::Number(minExact):"null"},
+            {"production_guards_skipped","0"}}));
+    }
+    return J::Object({{"schema",J::Quote("WJH25NativeSufficientPositivityPrototypeV1")},{"status",J::Quote("PASS_READ_ONLY_PROTOTYPE")},
+        {"source_checkpoint_sha256",J::Quote(imported.checkpointHash)},{"records",J::List(records)},
+        {"proof",J::Quote("actual cached binary64 native basis values; outward triangle enclosure of constant-centred contraction; gamma35 binary64 rounding and 64 denorm_min; nearest rounding required; fresh effective lifted state/field/owner/data/time binding")},
+        {"scope",J::Quote("measured moving-point evaluation cost coverage on saved states, not whole-production speedup; exact fallback and every guard always executed; typed certified minimum is separate from observed minimum")}});
+}
 #endif

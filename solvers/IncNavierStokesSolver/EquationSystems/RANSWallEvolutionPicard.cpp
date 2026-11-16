@@ -14,6 +14,7 @@
 #include <fstream>
 #include <iostream>
 #include <numeric>
+#include <tuple>
 
 namespace Nektar
 {
@@ -213,11 +214,34 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     const double nu   = m_parameters.geometry.molecularNu;
     Refresh(s, time, &data);
 
+    // Build one native-index scatter per element and block pair. Only lookup
+    // and repeated sparse-tree insertion are removed: every contribution keeps
+    // its original binary64 expression, visitation order and += operation.
+    // Handles die before exterior/constraint row erasure below. Nothing is
+    // reused across changing matrices, states, cutoffs, times or free-row maps.
+    const bool exactScatter=m_elementAssemblyScatter && !denseReference;
+    using Scatter=std::vector<double*>;
+    std::map<std::tuple<int,int,int>,Scatter> scatters;
+    auto scatterFor=[&](const RANSWallGlobalPoint &point,int a,int b)->const Scatter*
+    {
+        if(!exactScatter)return nullptr;
+        const auto key=std::make_tuple(point.geometry,a,b);
+        const auto old=scatters.find(key);if(old!=scatters.end())return &old->second;
+        const int count=point.ids.size();Scatter slots(count*count,nullptr);
+        for(int i=0;i<count;++i)for(int j=0;j<count;++j)
+        {
+            const int row=index[offset[a]+point.ids[i]],col=index[offset[b]+point.ids[j]];
+            if(row>=0 && col>=0)slots[i*count+j]=system.matrix.AssemblyEntry(row,col);
+        }
+        return &scatters.emplace(key,std::move(slots)).first->second;
+    };
+
     auto addScalar = [&](const RANSWallGlobalPoint &point,
                          const RANSVector &velocity, double weight,
                          double diffusion, double rate, double source) {
         const double value = point.Value(s, offset[block]);
         const auto grad    = point.Gradient(s, offset[block]);
+        const auto scatter=scatterFor(point,block,block);
         for (int i = 0; i < point.ids.size(); ++i)
         {
             const int row = index[offset[block] + point.ids[i]];
@@ -235,10 +259,13 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             {
                 const int col = index[offset[block] + point.ids[j]];
                 if (col >= 0)
-                    system.matrix.Add(row,col,
-                        weight * ((test * rate - adv) * point.phi[j] +
+                {
+                    const double contribution=weight * ((test * rate - adv) * point.phi[j] +
                                   diffusion * (dx * point.derivative[0][j] +
-                                               dz * point.derivative[2][j])));
+                                               dz * point.derivative[2][j]));
+                    if(scatter)BlockMatrix::AddAssemblyEntry((*scatter)[i*point.ids.size()+j],contribution);
+                    else system.matrix.Add(row,col,contribution);
+                }
             }
         }
     };
@@ -311,6 +338,9 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                                    (a == b ? 2 * k / 3 - pi : 0.);
         }
         const double divergence = grad[0][0] + grad[2][2];
+        std::array<std::array<const Scatter*,2>,2> velocityScatter{};
+        if(exactScatter)for(int a=0;a<m_dimension;++a)for(int b=0;b<m_dimension;++b)
+            velocityScatter[a][b]=scatterFor(q.v,a,b);
         for (int p = 0; p < q.p.ids.size(); ++p)
             system.residual[index[offset[pBlock] + q.p.ids[p]]] +=
                 q.weight * q.p.phi[p] * divergence;
@@ -349,7 +379,8 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                                     viscosity * (dx * q.v.derivative[0][j] +
                                                  dz * q.v.derivative[2][j]) -
                                     (dx * u[0] + dz * u[2]) * q.v.phi[j];
-                            system.matrix.Add(row,col,q.weight * value);
+                            if(exactScatter)BlockMatrix::AddAssemblyEntry((*velocityScatter[a][b])[i*q.v.ids.size()+j],q.weight * value);
+                            else system.matrix.Add(row,col,q.weight * value);
                         }
                     }
                     if (forcingPressure)
@@ -399,6 +430,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     for (const auto &q : m_outer)
         evaluate(q, nullptr, {}, nullptr);
 
+    scatters.clear(); // no handle survives any possible constraint-row erase
     ExteriorPicard(block,s,time,data,system,index);
     const auto body = flow ? OwnedBodyLoad(time, data) : Vector{};
     for (int b = flow ? 0 : block; b < (flow ? K() : block + 1); ++b)

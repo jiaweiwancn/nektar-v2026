@@ -74,6 +74,16 @@ public:
     // Identical constant-centred scalar contraction; no unused derivative or
     // owning row arrays. Geometry/point validation is still performed.
     double ElementValue(int element,const Coordinate &,const Vector &,int offset=0) const;
+    struct PositiveSummary
+    {
+        double centre=0,maximumDelta=0;
+        const double *state=nullptr;std::size_t stateSize=0;
+        const void *coefficientMap=nullptr;int element=-1,offset=0;
+    };
+    PositiveSummary ElementPositiveSummary(int element,const Vector &,int offset=0) const;
+    // Sufficient lower bound for the ACTUAL native constant-centred value.
+    // Read-only H25 prototype; does not change any production acceptance path.
+    double ElementPositiveLower(const PositiveSummary &,const Coordinate &,const Vector &) const;
     // Same cold-factory validation, also executed on every persistent hit.
     // ElementPoint's legacy body remains unchanged for policy-off comparison.
     void ValidateElementPoint(int element,const Coordinate &coordinate) const;
