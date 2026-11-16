@@ -1,0 +1,66 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h25-production-20261116/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h25.py",
+    "--root",
+    "/home/jay/build/wj-h25-production-20261116",
+    "--mode",
+    "baseline"
+  ],
+  "phase": "native",
+  "reserved_seconds": 750.0,
+  "attempts": 8,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 327365,
+        "parent": 327364,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h25-production-20261116/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label W0-700-eight-v1 --seconds 750 --phase native --attempts 8 -- /usr/bin/python3 -B /home/jay/build/wj-h25-production-20261116/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --mode baseline"
+      }
+    ]
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h25-production-20261116/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/study_wj_h25.py": {
+      "sha256": "aada7cf169a62cc0c1ea2bdac146e2bcf4be1df40695d0d0f096cf5a956faa19",
+      "bytes": 12773
+    }
+  },
+  "runner_sha256": "c005906b85260f2e2ff436305b92a54d056fafa4d2d526911c2c3d3bff8d69b6",
+  "status": "PASS",
+  "seconds": 521.7935728990124,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 6765035520,
+  "reserved_attempts": 8,
+  "unknown_attempts": false,
+  "log_sha256": "b7c2e62a38578e1c5c6325ed75acda1228ea192e9ae5d2311e1a86b46204b03f",
+  "actual_attempts": 8,
+  "known": true
+}

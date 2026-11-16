@@ -1,0 +1,315 @@
+{
+  "role": "OPEN_PUBLICATION_SNAPSHOT_NOT_FINAL_CLOSURE",
+  "accounting": {
+    "schema": "WJH25FiniteDevelopmentV1",
+    "closed": false,
+    "ceilings": {
+      "total": 14400,
+      "build": 2400,
+      "native": 7200,
+      "passive": 3600
+    },
+    "setup_seconds": 120,
+    "closure_seconds": 600,
+    "entries": {
+      "source-v1-transfer": {
+        "status": "UNKNOWN_DURATION_FULLY_CHARGED",
+        "phase": "passive",
+        "seconds": 300,
+        "reserved_seconds": 300,
+        "scope": "initial source transfer, extraction and immutable manifests",
+        "original_declared_charge": 120,
+        "reason": "transfer/extraction completed; conservatively charge full passive-operation ceiling rather than unknown wall duration"
+      },
+      "early-setup-before-source-v1": {
+        "status": "FAIL",
+        "phase": "passive",
+        "seconds": 120,
+        "reserved_seconds": 120,
+        "exit": 2,
+        "native_launches": 0,
+        "reason": "runner file absent during in-progress transfer; original invocation failed closed"
+      },
+      "setup-comparison-v2": {
+        "status": "FAIL",
+        "phase": "passive",
+        "reserved_seconds": 120.0,
+        "reserved_attempts": 0,
+        "seconds": 1.367877512006089,
+        "exit": 1,
+        "reason": null,
+        "peak_tree_rss_bytes": 119865344,
+        "unknown_attempts": false,
+        "log_sha256": "73d923811ff601d1f0eefeb19d1c7f11f015843bb3ea0a382a6262d276331bdc"
+      },
+      "source-v2-materialize": {
+        "status": "FULLY_CHARGED",
+        "phase": "passive",
+        "seconds": 60,
+        "reserved_seconds": 60
+      },
+      "geometry-controls-v2": {
+        "status": "PASS",
+        "phase": "passive",
+        "reserved_seconds": 60.0,
+        "reserved_attempts": 0,
+        "seconds": 0.6606998800416477,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 103346176,
+        "unknown_attempts": false,
+        "log_sha256": "411671cd1f143879b9492549bc3510c65c35bf42ccd7a8d54cc65fe8dc9097f2"
+      },
+      "setup-comparison-v3": {
+        "status": "PASS",
+        "phase": "passive",
+        "reserved_seconds": 120.0,
+        "reserved_attempts": 0,
+        "seconds": 1.4139294659835286,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 120705024,
+        "unknown_attempts": false,
+        "log_sha256": "c3f4bd7b1c393dbe4515e8a5395a8db8a65b45d4efba3b633ac7aa43b5441da0"
+      },
+      "stock-S0-700-v1": {
+        "status": "FAIL",
+        "phase": "native",
+        "reserved_seconds": 120.0,
+        "reserved_attempts": 0,
+        "seconds": 120.1410819219891,
+        "exit": -15,
+        "reason": "TIME_LIMIT",
+        "peak_tree_rss_bytes": 255291392,
+        "unknown_attempts": false,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "W0-700-eight-v1": {
+        "status": "PASS",
+        "phase": "native",
+        "reserved_seconds": 750.0,
+        "reserved_attempts": 8,
+        "seconds": 521.7935728990124,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 6765035520,
+        "unknown_attempts": false,
+        "log_sha256": "b7c2e62a38578e1c5c6325ed75acda1228ea192e9ae5d2311e1a86b46204b03f",
+        "actual_attempts": 8,
+        "known": true
+      },
+      "stock-startup-diagnosis-v1": {
+        "status": "PASS",
+        "phase": "native",
+        "reserved_seconds": 60.0,
+        "reserved_attempts": 0,
+        "seconds": 6.2140520960092545,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 414035968,
+        "unknown_attempts": false,
+        "log_sha256": "be9c3fdca0684188feda2ff700f99e2d152a216c0e823b52b97e58eefde1d316"
+      },
+      "stock-S0-NoCollection-v2": {
+        "status": "FAIL",
+        "phase": "native",
+        "reserved_seconds": 120.0,
+        "reserved_attempts": 0,
+        "seconds": 120.11139383900445,
+        "exit": -15,
+        "reason": "TIME_LIMIT",
+        "peak_tree_rss_bytes": 257777664,
+        "unknown_attempts": false,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stock-installed-capability-v1": {
+        "status": "FAIL",
+        "phase": "native",
+        "reserved_seconds": 60.0,
+        "reserved_attempts": 0,
+        "seconds": 5.201007616997231,
+        "exit": 1,
+        "reason": null,
+        "peak_tree_rss_bytes": 252280832,
+        "unknown_attempts": false,
+        "log_sha256": "248958c7e539bf9afd85cb715235fa934e33dd07e62a15d916256d4466d6dd2c"
+      },
+      "stock-S0-explicit-opt-v3": {
+        "status": "PASS",
+        "phase": "native",
+        "reserved_seconds": 120.0,
+        "reserved_attempts": 0,
+        "seconds": 2.435697408975102,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 294645760,
+        "unknown_attempts": false,
+        "log_sha256": "1e2ebc5ec4d9aa18a6174a4bee68eba82bb1f8ada3c496f01fd9e45e5d35ab6c"
+      },
+      "baseline-attribution-v1": {
+        "status": "PASS",
+        "phase": "passive",
+        "reserved_seconds": 60.0,
+        "reserved_attempts": 0,
+        "seconds": 0.9203023620066233,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 126595072,
+        "unknown_attempts": false,
+        "log_sha256": "a26b7f21400920cccf8d1f77c3764a48bbae3b928ab4dd243bec88c8320466d9"
+      },
+      "initial-coordination-v1": {
+        "status": "FULLY_CHARGED",
+        "phase": "passive",
+        "seconds": 300,
+        "reserved_seconds": 300,
+        "scope": "bounded SSH inspection, source/configuration transport and coordination; final transport also protected by closure"
+      },
+      "ongoing-coordination-v1": {
+        "status": "FULLY_CHARGED",
+        "phase": "passive",
+        "seconds": 300,
+        "reserved_seconds": 300,
+        "scope": "bounded SSH inspection, source/configuration transport and coordination; final transport also protected by closure"
+      },
+      "source-v3-materialize": {
+        "status": "FULLY_CHARGED",
+        "phase": "passive",
+        "seconds": 60,
+        "reserved_seconds": 60
+      },
+      "profiling-build-v1": {
+        "status": "FAIL",
+        "phase": "build",
+        "reserved_seconds": 900.0,
+        "reserved_attempts": 0,
+        "seconds": 1.9199894700432196,
+        "exit": 1,
+        "reason": null,
+        "peak_tree_rss_bytes": 172064768,
+        "unknown_attempts": false,
+        "log_sha256": "038cbc510cf3d0c6740316674e1c06ec2812bf7f19a9c791445a8c500d3f2f04"
+      },
+      "source-v4-materialize": {
+        "status": "FULLY_CHARGED",
+        "phase": "passive",
+        "seconds": 30,
+        "reserved_seconds": 30
+      },
+      "profiling-build-v2": {
+        "status": "PASS",
+        "phase": "build",
+        "reserved_seconds": 900.0,
+        "reserved_attempts": 0,
+        "seconds": 106.11629296001047,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 7761252352,
+        "unknown_attempts": false,
+        "log_sha256": "36a5980b1183fc0c20afbed56c7ff68f36470263734f4d7d6dd3b897085d1913"
+      },
+      "common-mass-v1": {
+        "status": "PASS",
+        "phase": "native",
+        "reserved_seconds": 60.0,
+        "reserved_attempts": 0,
+        "seconds": 0.5317277609719895,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 19173376,
+        "unknown_attempts": false,
+        "log_sha256": "2875d66df949e867f8be9f2ce7c9ec09096087d8a223d235594e6f1f6fcf6afb"
+      },
+      "W0-profile-four-v1": {
+        "status": "PASS",
+        "phase": "native",
+        "reserved_seconds": 600.0,
+        "reserved_attempts": 4,
+        "seconds": 355.35643897298723,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 6703505408,
+        "unknown_attempts": false,
+        "log_sha256": "cdd6be9e1d9d6107daeb40fbf059824eccdad10145ca70cae85159259d1a3a0a",
+        "actual_attempts": 4,
+        "known": true
+      },
+      "source-v5-materialize": {
+        "status": "FULLY_CHARGED",
+        "phase": "passive",
+        "seconds": 60,
+        "reserved_seconds": 60
+      },
+      "lookup-build-v1": {
+        "status": "PASS",
+        "phase": "build",
+        "reserved_seconds": 900.0,
+        "reserved_attempts": 0,
+        "seconds": 100.40807081601815,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 8101244928,
+        "unknown_attempts": false,
+        "log_sha256": "db406f9f9af3fbb4bb7d03d7562187356ed6ff30e8a0922f21db8c3ae29a0f9d"
+      },
+      "lookup-owner-component-v1": {
+        "status": "PASS",
+        "phase": "native",
+        "reserved_seconds": 60.0,
+        "reserved_attempts": 0,
+        "seconds": 0.6193664660095237,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 19058688,
+        "unknown_attempts": false,
+        "log_sha256": "b52eacd8290b727bdca756b7e09c614cc741a255e2be0d30d6534e399957e386"
+      },
+      "lookup-off-two-v1": {
+        "status": "PASS",
+        "phase": "native",
+        "reserved_seconds": 500.0,
+        "reserved_attempts": 2,
+        "seconds": 268.5934790740139,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 6629085184,
+        "unknown_attempts": false,
+        "log_sha256": "a577765c813b869c85ad550e3fff392826161d418137c97ef1ac1fade061fafc",
+        "actual_attempts": 2,
+        "known": true
+      },
+      "phase-a-analysis-v2": {
+        "status": "PASS",
+        "phase": "passive",
+        "reserved_seconds": 60.0,
+        "reserved_attempts": 0,
+        "seconds": 0.8602874780190177,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 117870592,
+        "unknown_attempts": false,
+        "log_sha256": "c66a34d91d99c962940bc9ea9ba37bc24a4599fc89100b1fafe5354de381a317"
+      },
+      "checkpoint-a-transport-v1": {
+        "status": "FULLY_CHARGED",
+        "phase": "passive",
+        "seconds": 60,
+        "reserved_seconds": 60,
+        "scope": "bounded essential checkpoint-A publication transport"
+      },
+      "checkpoint-a-transport-v2": {
+        "status": "FULLY_CHARGED",
+        "phase": "passive",
+        "seconds": 60,
+        "reserved_seconds": 60,
+        "scope": "bounded essential checkpoint-A publication transport"
+      }
+    },
+    "reserved_attempts": 14,
+    "maximum_attempts": 200,
+    "governor_blocks": 3,
+    "maximum_governor_blocks": 12,
+    "source_revision": "3b215b8d9701c8cdfacc531b963b4e0812ffa4f7",
+    "scope": "new H25 only; all earlier accounts stay CLOSED"
+  }
+}

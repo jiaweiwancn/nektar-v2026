@@ -1,0 +1,26 @@
+{
+  "command": [
+    "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h25-production-20261116/science/S0-explicit-opt/case.opt",
+    "/home/jay/build/wj-h25-production-20261116/science/S0-explicit-opt/case.xml"
+  ],
+  "case": {
+    "path": "/home/jay/build/wj-h25-production-20261116/science/S0-explicit-opt/case.xml",
+    "bytes": 131574,
+    "sha256": "3a45270d2837e46942b4eefa9353b12a78aa4e3652225698faaf27177e8cc080"
+  },
+  "opt": {
+    "path": "/home/jay/build/wj-h25-production-20261116/science/S0-explicit-opt/case.opt",
+    "bytes": 76,
+    "sha256": "e57c093ad69b97142013fb19de3a383540c25df6dc7b00c52feab5eb498a2e12"
+  },
+  "SVV": false,
+  "source_reason": "SessionReader.cpp missing-opt path sets m_updateOptFile=true; explicit --use-opt-file preserves false; ExpList.cpp otherwise invokes SetWithTimings",
+  "scientific_changes": false,
+  "previous_failures": [
+    "stock-S0-700-v1",
+    "stock-S0-NoCollection-v2",
+    "stock-installed-capability-v1"
+  ]
+}

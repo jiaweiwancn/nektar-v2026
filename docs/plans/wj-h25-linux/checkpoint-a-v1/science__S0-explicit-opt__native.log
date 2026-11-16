@@ -1,0 +1,54 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	        EquationType: UnsteadyNavierStokes
+	        Session Name: /home/jay/build/wj-h25-production-20261116/science/S0-explicit-opt/case
+	        Spatial Dim.: 2
+	  Max SEM Exp. Order: 4
+	      Expansion Dim.: 2
+	     Projection Type: Continuous Galerkin
+	 Advect. advancement: explicit
+	Diffuse. advancement: implicit
+	           Time Step: 0.0025
+	        No. of Steps: 8
+	 Checkpoints (steps): 0
+	    Integration Type: IMEX
+	    Splitting Scheme: Velocity correction (strong press. form)
+=======================================================================
+Initial Conditions:
+Steps: 1        Time: 0.0425       CPU Time: 0.377459s
+Steps: 2        Time: 0.045        CPU Time: 0.0349635s
+Steps: 3        Time: 0.0475       CPU Time: 0.0221752s
+Steps: 4        Time: 0.05         CPU Time: 0.019756s
+Steps: 5        Time: 0.0525       CPU Time: 0.0196362s
+Steps: 6        Time: 0.055        CPU Time: 0.0200552s
+Steps: 7        Time: 0.0575       CPU Time: 0.0193228s
+Steps: 8        Time: 0.06         CPU Time: 0.0190288s
+Time-integration  : 0.532396s
+Writing: "/home/jay/build/wj-h25-production-20261116/science/S0-explicit-opt/case.fld" (0.00862091s, XML)
+-------------------------------------------
+Total Computation Time = 0.62587s
+-------------------------------------------
+L 2 error (variable u) : 21.5483
+L inf error (variable u) : 1.09003
+L 2 error (variable v) : 3.16918e-05
+L inf error (variable v) : 3.60925e-05
+L 2 error (variable p) : 0.0205004
+L inf error (variable p) : 0.00563415
+-------------------------------------------
+Region                       Elapsed time Avg (s)  Min (s)       Max (s)       Count         IO Level      
+Execute                      0.639836              0.639836      0.639836      1             0             
+
+Advection Terms              0.0555665             0.0555665     0.0555665     9             0             
+Pressure BCs                 0.00943422            0.00943422    0.00943422    9             0             
+Pressure Forcing             0.0373533             0.0373533     0.0373533     8             0             
+Pressure Solve               0.104166              0.104166      0.104166      8             0             
+Viscous Forcing              0.0302784             0.0302784     0.0302784     8             0             
+Viscous Solve                0.291479              0.291479      0.291479      8             0             
+
+
+
+

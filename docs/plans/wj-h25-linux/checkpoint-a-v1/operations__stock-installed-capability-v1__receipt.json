@@ -1,0 +1,68 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h25-production-20261116/tools-v3/stock_install_wj_h25.py",
+    "--root",
+    "/home/jay/build/wj-h25-production-20261116"
+  ],
+  "phase": "native",
+  "reserved_seconds": 60.0,
+  "attempts": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 330874,
+        "parent": 330873,
+        "threads": 1,
+        "args": "python3 -c import os,sys,subprocess,hashlib,json from pathlib import Path r=Path('/home/jay/build/wj-h25-production-20261116');d=r/'tools-v3';d.mkdir();p=d/'stock_install_wj_h25.py';b=sys.stdin.buffer.read();assert hashlib.sha256(b).hexdigest()=='571ba6a22e1ea4edb9f13b988b3c8f722ccb4c8ef5534557af07782d512c0f70' with p.open('xb')as f:f.write(b) (d/'source.json').write_text(json.dumps({'revision':'bde03d96c6144c2f65ad3e275f4344bbcd54b080','path':str(p),'sha256':'571ba6a22e1ea4edb9f13b988b3c8f722ccb4c8ef5534557af07782d512c0f70'},indent=2)+'\\n') os.environ.update({k:'1'for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','NUMEXPR_NUM_THREADS','VECLIB_MAXIMUM_THREADS')}) t=r/'source-v2/solvers/IncNavierStokesSolver/Tests/RANS' subprocess.run(['/usr/bin/python3','-B',str(t/'run_wj_h25.py'),'--root',str(r),'--label','stock-installed-capability-v1','--seconds','60','--phase','native','--attempts','0','--','/usr/bin/python3','-B',str(p),'--root',str(r)],check=True)"
+      },
+      {
+        "pid": 330875,
+        "parent": 330874,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h25-production-20261116/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label stock-installed-capability-v1 --seconds 60 --phase native --attempts 0 -- /usr/bin/python3 -B /home/jay/build/wj-h25-production-20261116/tools-v3/stock_install_wj_h25.py --root /home/jay/build/wj-h25-production-20261116"
+      }
+    ]
+  },
+  "inputs": {
+    "/usr/bin/python3": {
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae",
+      "bytes": 5941864
+    },
+    "/home/jay/build/wj-h25-production-20261116/tools-v3/stock_install_wj_h25.py": {
+      "sha256": "571ba6a22e1ea4edb9f13b988b3c8f722ccb4c8ef5534557af07782d512c0f70",
+      "bytes": 1669
+    }
+  },
+  "runner_sha256": "c005906b85260f2e2ff436305b92a54d056fafa4d2d526911c2c3d3bff8d69b6",
+  "status": "FAIL",
+  "seconds": 5.201007616997231,
+  "exit": 1,
+  "reason": null,
+  "peak_tree_rss_bytes": 252280832,
+  "reserved_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "248958c7e539bf9afd85cb715235fa934e33dd07e62a15d916256d4466d6dd2c"
+}

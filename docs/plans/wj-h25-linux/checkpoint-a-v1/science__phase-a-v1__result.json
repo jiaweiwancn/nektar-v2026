@@ -1,0 +1,362 @@
+{
+  "status": "MEASURED_BASELINES_PASS",
+  "W0": {
+    "ordinary_seconds": [
+      42.479908513,
+      43.780298643,
+      43.093309274,
+      42.966130088,
+      42.718804886,
+      42.667914679,
+      43.123900441
+    ],
+    "mean": 42.97575236057143,
+    "minimum": 42.479908513,
+    "maximum": 43.780298643,
+    "two_warm_segments": [
+      [
+        42.479908513,
+        43.780298643,
+        43.093309274
+      ],
+      [
+        42.966130088,
+        42.718804886,
+        42.667914679,
+        43.123900441
+      ]
+    ],
+    "native_completion_count": 8,
+    "timing": {
+      "path": "/home/jay/build/wj-h25-production-20261116/operations/W0-700-eight-v1/timing.jsonl",
+      "bytes": 2055532,
+      "sha256": "f317811cc86a65cee71f3201a0b5eed65177fc772f4f0ef1f8b855ce7ee325ac"
+    },
+    "disjoint_scopes": [
+      {
+        "name": "domain.compute",
+        "wall_per_ordinary_step": 19.990993207142854,
+        "exclusive_per_ordinary_step": 19.942740466571426,
+        "calls": 28
+      },
+      {
+        "name": "flow.assembly",
+        "wall_per_ordinary_step": 6.415777846714285,
+        "exclusive_per_ordinary_step": 6.415346709857142,
+        "calls": 7
+      },
+      {
+        "name": "native.implicit",
+        "wall_per_ordinary_step": 42.57752047499999,
+        "exclusive_per_ordinary_step": 2.4317947761428584,
+        "calls": 7
+      },
+      {
+        "name": "residual",
+        "wall_per_ordinary_step": 2.355147647,
+        "exclusive_per_ordinary_step": 2.3365365178571436,
+        "calls": 35
+      },
+      {
+        "name": "k.bound",
+        "wall_per_ordinary_step": 10.146676885857143,
+        "exclusive_per_ordinary_step": 2.0789044362857143,
+        "calls": 7
+      },
+      {
+        "name": "pressure.build",
+        "wall_per_ordinary_step": 3.460090650142857,
+        "exclusive_per_ordinary_step": 2.076893427571428,
+        "calls": 7
+      },
+      {
+        "name": "k.assembly",
+        "wall_per_ordinary_step": 1.4685337474285716,
+        "exclusive_per_ordinary_step": 1.4680641808571429,
+        "calls": 7
+      },
+      {
+        "name": "mapped.band.solve",
+        "wall_per_ordinary_step": 1.4586856087142857,
+        "exclusive_per_ordinary_step": 1.4586856087142857,
+        "calls": 5628
+      },
+      {
+        "name": "constitutive.refresh",
+        "wall_per_ordinary_step": 1.166458283857143,
+        "exclusive_per_ordinary_step": 1.166458283857143,
+        "calls": 63
+      },
+      {
+        "name": "domain.scalar",
+        "wall_per_ordinary_step": 20.91218192614286,
+        "exclusive_per_ordinary_step": 0.921115276714286,
+        "calls": 56
+      },
+      {
+        "name": "epsilon.assembly",
+        "wall_per_ordinary_step": 2.0781340044285717,
+        "exclusive_per_ordinary_step": 0.9154610762857143,
+        "calls": 7
+      },
+      {
+        "name": "mapped.band.factor",
+        "wall_per_ordinary_step": 0.5684104332857143,
+        "exclusive_per_ordinary_step": 0.5684104332857143,
+        "calls": 28
+      },
+      {
+        "name": "monitor.checkpoint_and_publish",
+        "wall_per_ordinary_step": 0.321095497,
+        "exclusive_per_ordinary_step": 0.31236204242857146,
+        "calls": 7
+      },
+      {
+        "name": "matching.constraints",
+        "wall_per_ordinary_step": 0.20141403671428568,
+        "exclusive_per_ordinary_step": 0.20141403671428568,
+        "calls": 70
+      },
+      {
+        "name": "pimple.sweep",
+        "wall_per_ordinary_step": 40.130341535999996,
+        "exclusive_per_ordinary_step": 0.16526318057142828,
+        "calls": 7
+      },
+      {
+        "name": "flow.correction_validate",
+        "wall_per_ordinary_step": 0.9834394174285714,
+        "exclusive_per_ordinary_step": 0.15132684057142856,
+        "calls": 7
+      },
+      {
+        "name": "flow.total",
+        "wall_per_ordinary_step": 11.564696884571429,
+        "exclusive_per_ordinary_step": 0.1391684659999997,
+        "calls": 7
+      },
+      {
+        "name": "epsilon.total",
+        "wall_per_ordinary_step": 9.097020126714286,
+        "exclusive_per_ordinary_step": 0.12315260828571464,
+        "calls": 7
+      },
+      {
+        "name": "native.explicit",
+        "wall_per_ordinary_step": 0.3523175844285714,
+        "exclusive_per_ordinary_step": 0.10907845071428571,
+        "calls": 7
+      },
+      {
+        "name": "mapped.band.permutation",
+        "wall_per_ordinary_step": 0.08134592199999999,
+        "exclusive_per_ordinary_step": 0.08134592199999999,
+        "calls": 28
+      },
+      {
+        "name": "residual.mass_dual_norms",
+        "wall_per_ordinary_step": 0.11880666628571426,
+        "exclusive_per_ordinary_step": 0.07540479185714286,
+        "calls": 21
+      },
+      {
+        "name": "native.step",
+        "wall_per_ordinary_step": 43.32770406957143,
+        "exclusive_per_ordinary_step": 0.06754703285714518,
+        "calls": 7
+      },
+      {
+        "name": "k.bound_accounting",
+        "wall_per_ordinary_step": 0.03656974085714286,
+        "exclusive_per_ordinary_step": 0.03656974085714286,
+        "calls": 7
+      },
+      {
+        "name": "k.total",
+        "wall_per_ordinary_step": 11.889211924428569,
+        "exclusive_per_ordinary_step": 0.02073045971428503,
+        "calls": 7
+      },
+      {
+        "name": "momentum.solve_validate",
+        "wall_per_ordinary_step": 0.030606625714285716,
+        "exclusive_per_ordinary_step": 0.016521971857142857,
+        "calls": 7
+      },
+      {
+        "name": "dense.factorization",
+        "wall_per_ordinary_step": 0.009598940571428571,
+        "exclusive_per_ordinary_step": 0.009598940571428571,
+        "calls": 7
+      },
+      {
+        "name": "native.advance",
+        "wall_per_ordinary_step": 42.93906153971428,
+        "exclusive_per_ordinary_step": 0.009223480285712071,
+        "calls": 7
+      },
+      {
+        "name": "k.solve_validate",
+        "wall_per_ordinary_step": 0.084629802,
+        "exclusive_per_ordinary_step": 0.009034252142857148,
+        "calls": 7
+      },
+      {
+        "name": "io.checkpoint",
+        "wall_per_ordinary_step": 0.008733454571428571,
+        "exclusive_per_ordinary_step": 0.008733454571428571,
+        "calls": 7
+      },
+      {
+        "name": "epsilon.solve_validate",
+        "wall_per_ordinary_step": 0.06190126000000001,
+        "exclusive_per_ordinary_step": 0.006289597571428571,
+        "calls": 7
+      },
+      {
+        "name": "pressure.solve_validate",
+        "wall_per_ordinary_step": 0.01219469385714286,
+        "exclusive_per_ordinary_step": 0.002451556142857143,
+        "calls": 7
+      },
+      {
+        "name": "pimple.check.input",
+        "wall_per_ordinary_step": 6.643432662142857,
+        "exclusive_per_ordinary_step": 0.0003518570000000665,
+        "calls": 7
+      },
+      {
+        "name": "pimple.check.flow",
+        "wall_per_ordinary_step": 0.008744109999999998,
+        "exclusive_per_ordinary_step": 0.00034725699999999936,
+        "calls": 7
+      },
+      {
+        "name": "pimple.check.k",
+        "wall_per_ordinary_step": 0.12359696428571429,
+        "exclusive_per_ordinary_step": 0.00032961157142857655,
+        "calls": 7
+      },
+      {
+        "name": "pressure.mass_factorize",
+        "wall_per_ordinary_step": 0.08693344500000001,
+        "exclusive_per_ordinary_step": 0.00030947228571428863,
+        "calls": 7
+      },
+      {
+        "name": "pimple.check.epsilon",
+        "wall_per_ordinary_step": 6.069931811142857,
+        "exclusive_per_ordinary_step": 0.0002673454285713512,
+        "calls": 7
+      },
+      {
+        "name": "momentum.factorize",
+        "wall_per_ordinary_step": 0.4364857397142857,
+        "exclusive_per_ordinary_step": 0.00020419571428570427,
+        "calls": 7
+      },
+      {
+        "name": "dense.triangular_solve",
+        "wall_per_ordinary_step": 0.00014419714285714285,
+        "exclusive_per_ordinary_step": 0.00014419714285714285,
+        "calls": 7
+      },
+      {
+        "name": "pimple.final_refresh_diagnostics",
+        "wall_per_ordinary_step": 0.7707167575714287,
+        "exclusive_per_ordinary_step": 0.00012211371428568922,
+        "calls": 7
+      }
+    ]
+  },
+  "S0": {
+    "samples": [
+      {
+        "step": 1,
+        "time": 0.0425,
+        "seconds": 0.377459
+      },
+      {
+        "step": 2,
+        "time": 0.045,
+        "seconds": 0.0349635
+      },
+      {
+        "step": 3,
+        "time": 0.0475,
+        "seconds": 0.0221752
+      },
+      {
+        "step": 4,
+        "time": 0.05,
+        "seconds": 0.019756
+      },
+      {
+        "step": 5,
+        "time": 0.0525,
+        "seconds": 0.0196362
+      },
+      {
+        "step": 6,
+        "time": 0.055,
+        "seconds": 0.0200552
+      },
+      {
+        "step": 7,
+        "time": 0.0575,
+        "seconds": 0.0193228
+      },
+      {
+        "step": 8,
+        "time": 0.06,
+        "seconds": 0.0190288
+      }
+    ],
+    "two_warm_segments": [
+      [
+        0.0349635,
+        0.0221752,
+        0.019756
+      ],
+      [
+        0.0196362,
+        0.0200552,
+        0.0193228,
+        0.0190288
+      ]
+    ],
+    "warm_mean": 0.022133957142857142,
+    "full_process_seconds": 1.7515017419937067,
+    "result": {
+      "path": "/home/jay/build/wj-h25-production-20261116/science/S0-explicit-opt/result.json",
+      "bytes": 362719,
+      "sha256": "ab3d033807461e944f5e0ce993d74dc2ae238bb6cd00e92114c9504b71a99ba8"
+    },
+    "SVV": false
+  },
+  "comparison": {
+    "mesh": "same700 physical quads",
+    "dt": 0.0025,
+    "interval": [
+      0.04,
+      0.06
+    ],
+    "workers": 1,
+    "velocity": "Q3",
+    "pressure": "WJ regionalQ1 versus stock global continuousQ2",
+    "meaning": "elapsed difference combines physics, pressure, boundary and implementation work; not identified as pure RANS overhead"
+  },
+  "mixed_purpose_scopes": [
+    "momentum.solve_validate",
+    "pressure.solve_validate",
+    "k.solve_validate",
+    "epsilon.solve_validate",
+    "native.implicit"
+  ],
+  "attribution_status": "raw exclusive scopes retained; refine significant mixed/exclusive remainder before final95% claim",
+  "source": {
+    "path": "/home/jay/build/wj-h25-production-20261116/source-manifest-v2.json",
+    "bytes": 1053176,
+    "sha256": "9e687b4d8118e45aa6bbba72e868a53cb64aea418d4a9da653ef73c0500d166c"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h25.py",
+    "--root",
+    "/home/jay/build/wj-h25-production-20261116"
+  ],
+  "phase": "build",
+  "reserved_seconds": 900.0,
+  "attempts": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 336347,
+        "parent": 334233,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label profiling-build-v2 --seconds 900 --phase build -- python3 -B /home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h25.py --root /home/jay/build/wj-h25-production-20261116"
+      }
+    ]
+  },
+  "inputs": {
+    "/home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h25.py": {
+      "sha256": "e715e7f2c5915753c80405f6022ad79894157abd92900c627b7201a6fa73ff4c",
+      "bytes": 5830
+    }
+  },
+  "runner_sha256": "1dcf4a4987df58708f4373798eb7410ebad31b919f34c1d0edf3ed06b18d4312",
+  "status": "PASS",
+  "seconds": 106.11629296001047,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 7761252352,
+  "reserved_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "36a5980b1183fc0c20afbed56c7ff68f36470263734f4d7d6dd3b897085d1913"
+}

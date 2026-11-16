@@ -1,0 +1,54 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h25-production-20261116/runtime-profile-v1/WJH25CommonMassChecks"
+  ],
+  "phase": "native",
+  "reserved_seconds": 60.0,
+  "attempts": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 336833,
+        "parent": 334233,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label common-mass-v1 --seconds 60 --phase native -- /home/jay/build/wj-h25-production-20261116/runtime-profile-v1/WJH25CommonMassChecks"
+      }
+    ]
+  },
+  "inputs": {
+    "/home/jay/build/wj-h25-production-20261116/runtime-profile-v1/WJH25CommonMassChecks": {
+      "sha256": "3db1506648a1a3c24edc122732e90b455c7e9eec3a4895f0443c0c5492278b61",
+      "bytes": 386
+    }
+  },
+  "runner_sha256": "1dcf4a4987df58708f4373798eb7410ebad31b919f34c1d0edf3ed06b18d4312",
+  "status": "PASS",
+  "seconds": 0.5317277609719895,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 19173376,
+  "reserved_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "2875d66df949e867f8be9f2ce7c9ec09096087d8a223d235594e6f1f6fcf6afb"
+}

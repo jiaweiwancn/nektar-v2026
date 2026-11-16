@@ -1,0 +1,60 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py",
+    "--root",
+    "/home/jay/build/wj-h25-production-20261116"
+  ],
+  "phase": "native",
+  "reserved_seconds": 600.0,
+  "attempts": 4,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 336838,
+        "parent": 334233,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label W0-profile-four-v1 --seconds 600 --phase native --attempts 4 -- python3 -B /home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py --root /home/jay/build/wj-h25-production-20261116"
+      }
+    ]
+  },
+  "inputs": {
+    "/home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py": {
+      "sha256": "f38c18d6cc1cd5d25e4b362bc067fc767927a08ba70abcaa9b335619c136ece0",
+      "bytes": 5282
+    }
+  },
+  "runner_sha256": "1dcf4a4987df58708f4373798eb7410ebad31b919f34c1d0edf3ed06b18d4312",
+  "status": "PASS",
+  "seconds": 355.35643897298723,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 6703505408,
+  "reserved_attempts": 4,
+  "unknown_attempts": false,
+  "log_sha256": "cdd6be9e1d9d6107daeb40fbf059824eccdad10145ca70cae85159259d1a3a0a",
+  "actual_attempts": 4,
+  "known": true
+}

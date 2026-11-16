@@ -1,0 +1,60 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h25.py",
+    "--root",
+    "/home/jay/build/wj-h25-production-20261116",
+    "--variant",
+    "lookup"
+  ],
+  "phase": "build",
+  "reserved_seconds": 900.0,
+  "attempts": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 337112,
+        "parent": 334233,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label lookup-build-v1 --seconds 900 --phase build -- python3 -B /home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --variant lookup"
+      }
+    ]
+  },
+  "inputs": {
+    "/home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h25.py": {
+      "sha256": "1aa46aabb8e2a62da1fbe6e4caac36656a437069b081f53388d65537fe209f49",
+      "bytes": 6393
+    }
+  },
+  "runner_sha256": "1dcf4a4987df58708f4373798eb7410ebad31b919f34c1d0edf3ed06b18d4312",
+  "status": "PASS",
+  "seconds": 100.40807081601815,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 8101244928,
+  "reserved_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "db406f9f9af3fbb4bb7d03d7562187356ed6ff30e8a0922f21db8c3ae29a0f9d"
+}

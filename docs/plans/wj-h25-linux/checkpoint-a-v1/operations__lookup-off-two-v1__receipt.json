@@ -1,0 +1,62 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py",
+    "--root",
+    "/home/jay/build/wj-h25-production-20261116",
+    "--variant",
+    "lookup-off"
+  ],
+  "phase": "native",
+  "reserved_seconds": 500.0,
+  "attempts": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 337514,
+        "parent": 334233,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label lookup-off-two-v1 --seconds 500 --phase native --attempts 2 -- python3 -B /home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --variant lookup-off"
+      }
+    ]
+  },
+  "inputs": {
+    "/home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py": {
+      "sha256": "693b482810f71fe4cbd3cd27d248c78ab803f05fd912dfccfa986bf42d3cd680",
+      "bytes": 6174
+    }
+  },
+  "runner_sha256": "1dcf4a4987df58708f4373798eb7410ebad31b919f34c1d0edf3ed06b18d4312",
+  "status": "PASS",
+  "seconds": 268.5934790740139,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 6629085184,
+  "reserved_attempts": 2,
+  "unknown_attempts": false,
+  "log_sha256": "a577765c813b869c85ad550e3fff392826161d418137c97ef1ac1fade061fafc",
+  "actual_attempts": 2,
+  "known": true
+}
