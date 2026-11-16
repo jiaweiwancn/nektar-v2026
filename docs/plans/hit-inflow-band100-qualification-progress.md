@@ -1,9 +1,16 @@
 # CBC100 qualification: fresh preflight passed, sequential controls scheduled
 
-Status on2026-11-16, Asia/Shanghai: **DG-only preflight passed; control queue
-active, temporarily held for existing server work.** No completed new0.6s
-control analysis or convergence decision is available yet. Full-distance
-production remains held.
+Current status, 2026-11-16 at 20:44 China Standard Time: **TERMINATED BY USER**
+to release the ranks. All 32 HIT MPI ranks and their queue/controller exited;
+the automatic-resume helper is stopped and automatic restart is disabled.
+Existing files and the completed DG-only preflight are preserved. No new 0.6 s
+control analysis or convergence decision completed; the remaining controls,
+sampling work and full-distance production are not running.
+
+The Linux stop receipt is
+`/media/jay/新加卷1/nektar-v2026-runs/hit-inflow/band100/qualification-20261116/user-stop-20261116T124416Z.json`.
+Live queue status is`TERMINATED_BY_USER`; the resource-hold status is
+`CANCELLED_BY_USER`. The launch and scheduling account below is historical.
 
 ## Material Passport
 

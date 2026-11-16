@@ -1,11 +1,11 @@
 # CBC100 follow-up: completed pilot and review
 
-The authorized2026-11-16 qualification follow-up is now scheduled. Its DG-only
-preflight passed; the sequential control queue is temporarily held to let
-existing server work finish and has a bounded automatic resource resume. See
-the [current qualification progress](hit-inflow-band100-qualification-progress.md)
-for the live status command and pending gates. The completed pilot account below
-remains the original reference.
+The authorized2026-11-16 qualification follow-up was **terminated at the user's
+request** to release its32MPI ranks. Its completed DG-only preflight and existing
+files are preserved; the queue and automatic restart are disabled. See the
+[current qualification progress](hit-inflow-band100-qualification-progress.md)
+for the stop receipt, status command and pending gates. The completed pilot
+account below remains the original reference.
 
 Status: **STUDY COMPLETED; FULL-DISTANCE PRODUCTION HELD**, reviewed2026-11-02.
 All three records and analyses completed. The [completed review](hit-inflow-band100-review.md)
