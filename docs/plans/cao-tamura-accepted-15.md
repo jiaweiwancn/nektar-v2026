@@ -38,6 +38,21 @@ production will have separate ledgers.
 | G5 | Complete T=.407 forecast with 25% headroom <=24000 CPU s/28800 active-wall s/24 GiB output; later horizons explicit | UNATTEMPTED |
 | G6 | Pushed source and hash-bound runtime/input/history/resource reproduction | IN PROGRESS |
 
+Checkpoint B qualifies the affected candidate in
+[sealed compact evidence](cao-tamura-accepted-15-evidence/checkpoint-b.json).
+All four small operators,36 dependency queries, complete small updates,
+restart/rollback/foreign-history controls, and the changed-cache-capacity
+continuation pass. Selected initial native/alpha2000/q48/q64 sparse numerical
+data and immutable FE rows equal the complete CT14 oracle exactly. All four
+initialized scalar controls pass, as do alpha4000/8000 canonical relations,
+actual/tiny/cancelling solves and native/q48/q64 actions. Momentum reconstruction
+is9.7490090523e-15 against2e-10. Peak selected scalar address space is15940460KiB
+against16777216KiB. Full static admission used2467.110331 CPU seconds;
+changed-alpha admission1445.504679; exact static oracle comparison60.100567.
+All three worker audits pass. Closed engineering cost including the120-second
+exception reserve is12808.697313 CPU seconds. Full G1 stage/accepted-state
+comparison, G2 fresh physical pair, G3/G4 and production admission remain open.
+
 No T=.407 or meaningful-duration preservation run is authorized in CT15.
 
 The first two bounded candidates have not supplied an affordable path. The

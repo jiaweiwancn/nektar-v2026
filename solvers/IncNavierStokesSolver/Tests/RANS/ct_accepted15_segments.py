@@ -170,6 +170,22 @@ def main():
     model['complete_heldout_bounds']['CPU']+=model['external_monitor_CPU_per_wall_second']*model['complete_heldout_bounds']['wall']
     model['scope']='one normal two-step restart, fresh predecessor restoration and two-step replay, all independent state/scalar/constitutive audits, later native/q48/q64 actions, sealed publication and retirement; no heldout measurements used for fitting'
     write_json(a.output/'frozen-complete-model-before-heldout.json',model)
+    # Finish the separately required rejection/recovery controls before the
+    # additional held-out workload. Its timing is not used for the frozen fit.
+    rollback,rr,re=run('rejected-step',Path(sr['checkpoint']),2,reject=8)
+    seven,sv,sve=run('rollback-predecessor7',Path(sr['checkpoint']),1)
+    require(sve['exit_code']==0 and re['exit_code']!=0 and 'deliberate' in rr['failure'] and same_history(sv,rr),'selected full rejected-step rollback')
+    retention=dict(schema='CT15ActualRetentionControlsV1',status='pass',policy='SelectiveReplayV1',binding=binding,cycles=result['cycles'],segment4_execution=result['segment4_execution'],segment6_execution=se,rollback_execution=re,rollback_predecessor_execution=sve,rollback_report_sha256=sha(rollback/'case.evolution.json'),rollback_state_and_all_native_history_binary64_equal=True,scope='two actual cycles2/4,all current-state independent audit replay,owned retirement,fresh restore,genuine continuation,interruption recovery,negative payload controls,and full native rejected-step rollback; additional heldout cost-model workload separately gated')
+    write_json(a.output/'retention-controls.json',retention)
+    atomic(a.output/'retention-controls-seal.json',dict(request_sha256=m.payload['sha256'],files={'retention-controls.json':sha(a.output/'retention-controls.json')}))
+    spent=max((n.read(f).get('maximum_sampled_total_CPU',0.) for f in a.root.glob('resources-*/live-budget.json')),default=0.)
+    bounds=model['complete_heldout_bounds'];remaining=dict(CPU=23760-spent,wall=28560-(time.time()-1794805033),new_output_bytes=16*1024**3-256*1024**2-size(a.root))
+    admitted=remaining['CPU']>=bounds['CPU'] and remaining['wall']>=bounds['wall'] and remaining['new_output_bytes']>=bounds['peak_new_output_bytes']
+    admission=dict(status='admitted' if admitted else 'declined_before_launch',remaining=remaining,frozen_required_bounds=bounds,allocation_unchanged=True,closure_reserves_preserved=True)
+    write_json(a.output/'heldout-admission.json',admission)
+    if not admitted:
+        result.update(status='partial',retention_controls_status='pass',cost_model_validation=dict(status='unattempted_resource_reserve',admission=admission),held_out=dict(status='UNATTEMPTED'),segment6_execution=se,rollback_execution=re,rollback_predecessor_execution=sve)
+        write_json(a.output/'results.json',result);m.seal(a.output,['results.json','retention-controls.json','retention-controls-seal.json','frozen-complete-model-before-heldout.json','heldout-admission.json']);return 0
     started=time.monotonic();self_cpu=time.process_time();before=resource.getrusage(resource.RUSAGE_CHILDREN);held_external=external_cpu()
     eight,er,ee=run('held-out-6-to8',Path(sr['checkpoint']));require(ee['exit_code']==0 and not er['failure'] and same_history(full,er),'heldout later-state continuation')
     require(snapshots(er)==full_snaps[6:8],'heldout stage trajectory')
@@ -195,9 +211,6 @@ def main():
     for q in comparisons.values():q['status']='pass' if q['actual']<=q['predicted'] else 'fail'
     result['cost_model_validation']=dict(status='pass' if all(q['status']=='pass' for q in comparisons.values()) else 'fail',comparisons=comparisons,heldout_not_used_to_fit=True,frozen_model_sha256=sha(a.output/'frozen-complete-model-before-heldout.json'))
     write_json(a.output/'heldout-result.json',dict(measured=measured,validation=result['cost_model_validation']))
-    rollback,rr,re=run('rejected-step',Path(sr['checkpoint']),2,reject=8)
-    seven,sv,sve=run('rollback-predecessor7',Path(sr['checkpoint']),1)
-    require(sve['exit_code']==0 and re['exit_code']!=0 and 'deliberate' in rr['failure'] and same_history(sv,rr),'selected full rejected-step rollback')
     result.update(status='pass',held_out=measured,segment6_execution=se,rollback_execution=re,rollback_predecessor_execution=sve,rollback_report_sha256=sha(rollback/'case.evolution.json'),live_bytes=sum(f.stat().st_size for f in a.root.rglob('*') if f.is_file()))
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return 0
 if __name__=='__main__':

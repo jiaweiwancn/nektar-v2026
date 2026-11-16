@@ -1,0 +1,3611 @@
+{
+  "schema": "CT15CheckpointBQualifiedAffectedCandidateV1",
+  "status": "pass",
+  "scope": "affected operator/update/dependency/history admission; complete fresh physical pair and all closure gates remain separate",
+  "native_source": "7b722daa41d18b316f8b78dafdde39fada4d5e94",
+  "runtime": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/IncNavierStokesSolver",
+    "sha256": "27c47d29972dcfbdbe92d05347c3c732b8e85b6b05a147c7508df03c2bca6ab3",
+    "libraries": {
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+      "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+      "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+    }
+  },
+  "probe": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+    "sha256": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd",
+    "libraries": {
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+      "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+      "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+    }
+  },
+  "component": "CT15-ImmutableTensorV4",
+  "external_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116",
+  "original_sealed_receipts": {
+    "static-v1": {
+      "results.json": "4b1d4f4c4b712e433d88f6628c7e42e932cee9d6cf55c550b98afd778b6d9c6c",
+      "request-manifest.json": "5821a6e58fc18593aef54153eeda959380c2cbe5748458d023173be4bc9ced3f",
+      "completed-artifacts.json": "694a9b16366d2d158cfd3456a6549b9a807ec65659a0c11c4b29932974f67e27"
+    },
+    "timestep-v1": {
+      "results.json": "b7f10ce840abdc055bba49ba7f87f9d332d3761a76c27ba83c811f632e8ae09c",
+      "request-manifest.json": "f8122936f0d82ef3b0d1a2e5dcfe4e27fc127445c92d950be59b329bd1bb3ac6",
+      "completed-artifacts.json": "c91de188fe836687143e989c49078b096a14af913c8e13c7cf5d8da2e76cb773"
+    },
+    "equivalence-static-v1": {
+      "results.json": "258824000cd4d01ea6e7917e39f6f14863e706ac6269dfb6fb357826372c2676",
+      "request-manifest.json": "3db366a2fb3659f30007db50414b7fe0464c9dc9e1ab48c3bd51ec7544fc3562",
+      "completed-artifacts.json": "609b604d2fd6f35cc9dab0fe74cb904a39f0573197862d1088b0c12931d9aeda"
+    }
+  },
+  "small_training_receipt": "candidate-v4-progress.json",
+  "static": {
+    "status": "pass",
+    "count": {
+      "schema": "CT7NativeLayoutInventoryV1",
+      "status": "pass",
+      "read_only": true,
+      "numerical_evolution_performed": false,
+      "native_block_sizes": [
+        15625,
+        15625,
+        15625,
+        11625,
+        1071,
+        2961
+      ],
+      "stored_slots": 62533,
+      "basis_modes_by_field": [
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "elements": 961,
+      "single_dense_double_matrix_bytes": 31283008712,
+      "within_unchanged_3000_guard": false,
+      "scope": "actual serial affine native CG field maps only; no constitutive/reference admissibility, dense allocation, evolving solve or curved-map qualification"
+    },
+    "initial": {
+      "execution": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/IncNavierStokesSolver",
+          "case.xml"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 59.39947508100886,
+        "process_cpu_seconds": 58.61708599999999,
+        "peak_RSS_KiB": 4076452,
+        "actual_mapped_files": {
+          "entries": 142,
+          "canonical_sha256": "1d5aa6bc9e097fe177efbdc1083eac9833f20bd5eaadce04b2402e0a46d03719",
+          "executable_entries": {
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/IncNavierStokesSolver": "27c47d29972dcfbdbe92d05347c3c732b8e85b6b05a147c7508df03c2bca6ab3"
+          },
+          "complete_mapping_storage": "hash-bound original external execution receipt"
+        }
+      },
+      "state_sha256": "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+      "configuration_sha256": "a14b907b0b4002cdfa20ddfb94c47af06ef151b6575faf9c4e7eee804ef3481d",
+      "native_report_sha256": "151f85cb8fc8a87fd4e873fa00373c885dd4688ff1860eb757d4c2373768a683",
+      "history": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/target/checkpoint",
+      "same_CT12_actual_coefficients": true,
+      "initialization_receipt": {
+        "raw_initial_sha256": "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+        "effective_initial_sha256": "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+        "fixed_reference_sha256": "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+        "explicit_boundary_sha256": "e776d3e614c5ef9c69a74c289d321847f815bf748b1d04e18a6bac9afcc035fa",
+        "implicit_boundary_sha256": "e776d3e614c5ef9c69a74c289d321847f815bf748b1d04e18a6bac9afcc035fa",
+        "boundary_hash_format": "sorted row-as-f64,value pairs, native little endian",
+        "raw_effective_max_difference": 0,
+        "source_target_boundary_max_difference": 0,
+        "live_fixed_boundary": {
+          "length": 841,
+          "canonical_sha256": "0c2fba6ba6a67f73417717dab41b0c3c3380c2e335c1eecc2d2b9e757575b39c",
+          "storage": "hash-bound original external receipt"
+        },
+        "effective_initial": {
+          "length": 62533,
+          "canonical_sha256": "26f0eb38ec89c0e3721d152810ca020f91a566294d8d4b2248cf2be0bb6910c8",
+          "storage": "hash-bound original external receipt"
+        },
+        "open_boundary_definition": "AcceptedRichardsNorrisFlatV1:top=RichardsNorris2011V1:w=0:t_x=ustar2:g_k=0:g_epsilon=prescribed-negative:backflow=RejectV1:pressure=absolute-total-traction:unused-gauge-zero:reference=DisplacedNeutralCompositeV1:projection=ConstrainedRadialV1:coordinate=physical-floor-z;aerodynamic-zeta=z-d:wall_sink=SamePhysicalWallDisplacedAcceptedV1:fit=CT8PhysicalBelow25mmEqualIds012V1:Pi_inner=0:Pi_outer=level-Qzz:no-finite-depth-cap|E0=0.0054069941025931944|FLEXIBLEGMRES=1|K0=0.021081109428869052|KAPPA=0.40406099529852102|KINVIS=9.5238095238095241e-05|QSTAR=3.8220004260766363|RANSKAPPA=0.40406099529852102|RANSOPENDISPLACEMENT=0.087499999999999994|RANSOPENEQUILIBRIUMQ=3.8220004260766363|RANSOPENMEANINTERCEPT=0.99194498954132426|RANSOPENNATURALKAPPA=0.40406099529852102|RANSOPENREFERENCELENGTH=1|RANSOPENVELOCITYSCALE=1|RANSWALLACCEPTEDKAMPLITUDE=0|RANSWALLBASELINESTART=-2|RANSWALLCHI=0|RANSWALLCUBICBETA=1|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.074267937924412789|RANSWALLHEIGHT=0.1875|RANSWALLMAPAMPLITUDE=0.02|RANSWALLMAPLENGTHX=1|RANSWALLMAXITERATIONS=12|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLOWNERSHIPSHIFT=0|RANSWALLPICARDEPSILONRELAXATION=1|RANSWALLPICARDFLOWRELAXATION=1|RANSWALLPICARDKRELAXATION=1|RANSWALLPICARDPSEUDOALPHA=0|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.1711243515027194|RANSWALLSAMPLEHEIGHT=0.1875|RANSWALLSENSORDISTANCEA=2.5|RANSWALLSENSORDISTANCEB=3.5|RANSWALLSENSOROFF=0.10000000000000001|RANSWALLSENSORON=0.02|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=0.1875|RANSWALLTRANSITIONEND=-2.25|RANSWALLTRANSITIONSTART=-3|ROUGHM=0.45342577746810153|ROUGHX=3.7269177273324865|SLOPE=0.033321874255448025|YAPSCALE=0.22643538211115388|ZV=-0.0057256413864533867",
+        "open_traction_load_sha256": "babb1f7d13205f02edb1ae90aefc5ba600305d0d3dedbd4c50f65190bebc2982",
+        "open_diffusive_load_sha256": "7d0c170ec19099a25e32a8e65a47d3edc70d9d267a4171bd08f8276d1de2f047",
+        "open_advective_load_sha256": "cbba2c42858dad81f7972670d5668a8c5b4c84be897ab630b19f38d72d871967",
+        "open_explicit_implicit_agreement": true
+      }
+    },
+    "all_mode_momentum_reconstruction": 9.74900905231471e-15,
+    "controls": {
+      "native": {
+        "schema": "AcceptedSerialSparsePacketV1",
+        "read_only": true,
+        "alpha": 1000.0,
+        "stored_slots": 62533,
+        "masses": [
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 11625,
+            "nnz": 411985
+          },
+          {
+            "rows": 1071,
+            "nnz": 16185
+          },
+          {
+            "rows": 2961,
+            "nnz": 46065
+          }
+        ],
+        "flow_rows": 34660,
+        "flow_nnz": 2911419,
+        "velocity_rows": 30628,
+        "pressure_rows": 4032,
+        "pressure_C_nnz": 0,
+        "predictor_factor_nnz": 37266312,
+        "consistent_mass_factor_nnz": 1183848,
+        "pressure_preconditioner_factor_nnz": 1844464,
+        "pressure_iterations": 151,
+        "mass_applications": 155,
+        "predictor_residual": 2.8841471854008927e-19,
+        "predictor_rhs_maximum": 2.150308156153217e-05,
+        "pressure_rhs_maximum": 1.0672933794647838e-07,
+        "full_native_G_action_defect": 2.9116757561866574e-22,
+        "consistent_mass_correction_rhs_maximum": 1.8110359697394492e-07,
+        "consistent_mass_correction_true_residual": 1.0984958534704208e-21,
+        "true_pressure_residual": 1.888605203649148e-22,
+        "true_continuity": 1.8884967189379794e-22,
+        "splitting_identity": 2.996904956835912e-19,
+        "continuous_reference_errors": [
+          {
+            "block": 0,
+            "weighted_RMS": 7.328950775321953e-07,
+            "true_L2": 2.4307379828727216e-05,
+            "gradient_weighted_RMS": 0.00018798343563479643,
+            "maximum": 1.9098234349812504e-05,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 1,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 2,
+            "weighted_RMS": 2.163126353119811e-07,
+            "true_L2": 7.174278487428233e-06,
+            "gradient_weighted_RMS": 4.362657054823896e-05,
+            "maximum": 5.136856744136775e-06,
+            "scale": 0.021081109428869052,
+            "physical_volume": 1100
+          },
+          {
+            "block": 3,
+            "weighted_RMS": 6.1759822224462386e-09,
+            "true_L2": 2.0387173633848983e-07,
+            "gradient_weighted_RMS": 2.1353206621745365e-06,
+            "maximum": 1.8728883757410109e-07,
+            "scale": 0.010138113942362243,
+            "physical_volume": 1089.6875
+          },
+          {
+            "block": 4,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.005515726603544432,
+            "physical_volume": 1100
+          }
+        ],
+        "scope": "frozen initial-state diagnostic linear operations only; no evolution or extra governing sweep; consistent mass in action, diagonal mass only in named preconditioner; no dense Schur or M-inverse-G columns",
+        "scalars": [
+          {
+            "block": 3,
+            "rows": 11533,
+            "nnz": 403469,
+            "factor_nnz": 6231719,
+            "rhs_maximum": 5.876640136007577e-07,
+            "maximum_true_residual": 2.9100213949615514e-21
+          },
+          {
+            "block": 2,
+            "rows": 15500,
+            "nnz": 548320,
+            "factor_nnz": 9960966,
+            "rhs_maximum": 3.175882395902859e-06,
+            "maximum_true_residual": 7.011844616489505e-20
+          }
+        ],
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/target/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/target/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/target/frozen.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 155.86640537698986,
+          "process_cpu_seconds": 152.45206100000001,
+          "peak_RSS_KiB": 5758056,
+          "actual_mapped_files": {
+            "entries": 139,
+            "canonical_sha256": "9be57cd2279f88f77fe5a5f031e3bc605e9fc8cb6ee87bc3bcf6fc33d5cf7e3a",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          }
+        },
+        "pressure_change_scaled_maximum": 0.0,
+        "pressure_change_scaled_RMS": 0.0
+      },
+      "alpha2000": {
+        "schema": "AcceptedSerialSparsePacketV1",
+        "read_only": true,
+        "alpha": 2000.0,
+        "stored_slots": 62533,
+        "masses": [
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 11625,
+            "nnz": 411985
+          },
+          {
+            "rows": 1071,
+            "nnz": 16185
+          },
+          {
+            "rows": 2961,
+            "nnz": 46065
+          }
+        ],
+        "flow_rows": 34660,
+        "flow_nnz": 2911419,
+        "velocity_rows": 30628,
+        "pressure_rows": 4032,
+        "pressure_C_nnz": 0,
+        "predictor_factor_nnz": 37225528,
+        "consistent_mass_factor_nnz": 1183848,
+        "pressure_preconditioner_factor_nnz": 1844464,
+        "pressure_iterations": 152,
+        "mass_applications": 156,
+        "predictor_residual": 2.464865876510014e-19,
+        "predictor_rhs_maximum": 2.150308156153217e-05,
+        "pressure_rhs_maximum": 7.099962198013159e-08,
+        "full_native_G_action_defect": 3.2425480012078685e-22,
+        "consistent_mass_correction_rhs_maximum": 2.861608120740537e-07,
+        "consistent_mass_correction_true_residual": 1.7470054537119944e-21,
+        "true_pressure_residual": 1.380357647197865e-22,
+        "true_continuity": 1.380557137316395e-22,
+        "splitting_identity": 2.468177578795521e-19,
+        "continuous_reference_errors": [
+          {
+            "block": 0,
+            "weighted_RMS": 7.328950775321953e-07,
+            "true_L2": 2.4307379828727216e-05,
+            "gradient_weighted_RMS": 0.00018798343563479643,
+            "maximum": 1.9098234349812504e-05,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 1,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 2,
+            "weighted_RMS": 2.163126353119811e-07,
+            "true_L2": 7.174278487428233e-06,
+            "gradient_weighted_RMS": 4.362657054823896e-05,
+            "maximum": 5.136856744136775e-06,
+            "scale": 0.021081109428869052,
+            "physical_volume": 1100
+          },
+          {
+            "block": 3,
+            "weighted_RMS": 6.1759822224462386e-09,
+            "true_L2": 2.0387173633848983e-07,
+            "gradient_weighted_RMS": 2.1353206621745365e-06,
+            "maximum": 1.8728883757410109e-07,
+            "scale": 0.010138113942362243,
+            "physical_volume": 1089.6875
+          },
+          {
+            "block": 4,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.005515726603544432,
+            "physical_volume": 1100
+          }
+        ],
+        "scope": "frozen initial-state diagnostic linear operations only; no evolution or extra governing sweep; consistent mass in action, diagonal mass only in named preconditioner; no dense Schur or M-inverse-G columns",
+        "scalars": [
+          {
+            "block": 3,
+            "rows": 11533,
+            "nnz": 403469,
+            "factor_nnz": 6238013,
+            "rhs_maximum": 5.876640136007577e-07,
+            "maximum_true_residual": 2.8686623643339e-21
+          },
+          {
+            "block": 2,
+            "rows": 15500,
+            "nnz": 548320,
+            "factor_nnz": 9950421,
+            "rhs_maximum": 3.175882395902859e-06,
+            "maximum_true_residual": 5.452774597949558e-20
+          }
+        ],
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/alpha2000/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/alpha2000/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/alpha2000/frozen.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 97.84712914802367,
+          "process_cpu_seconds": 96.02009700000004,
+          "peak_RSS_KiB": 4679508,
+          "actual_mapped_files": {
+            "entries": 136,
+            "canonical_sha256": "24298ec230a65406f38973d0d11c239f1a001f718a2faf9fa362fae752b362b8",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          }
+        },
+        "pressure_change_scaled_maximum": 8.243506143380694e-06,
+        "pressure_change_scaled_RMS": 6.232193249114153e-07,
+        "packet_sha256": "071c1d5a1eb7423ec391cd6ab634f3a943861f79cc4f94e791be706b0141b293"
+      },
+      "q48": {
+        "schema": "AcceptedSerialSparsePacketV1",
+        "read_only": true,
+        "alpha": 1000.0,
+        "stored_slots": 62533,
+        "masses": [
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 11625,
+            "nnz": 411985
+          },
+          {
+            "rows": 1071,
+            "nnz": 16185
+          },
+          {
+            "rows": 2961,
+            "nnz": 46065
+          }
+        ],
+        "flow_rows": 34660,
+        "flow_nnz": 2911740,
+        "velocity_rows": 30628,
+        "pressure_rows": 4032,
+        "pressure_C_nnz": 0,
+        "predictor_factor_nnz": 37266316,
+        "consistent_mass_factor_nnz": 1183848,
+        "pressure_preconditioner_factor_nnz": 1844464,
+        "pressure_iterations": 151,
+        "mass_applications": 155,
+        "predictor_residual": 2.727446090158847e-19,
+        "predictor_rhs_maximum": 2.1503081561534423e-05,
+        "pressure_rhs_maximum": 1.0672933794650223e-07,
+        "full_native_G_action_defect": 4.963083675318166e-22,
+        "consistent_mass_correction_rhs_maximum": 1.8110359697973635e-07,
+        "consistent_mass_correction_true_residual": 9.065899513581183e-22,
+        "true_pressure_residual": 1.8886132815848176e-22,
+        "true_continuity": 1.8886966643818332e-22,
+        "splitting_identity": 2.603357883036412e-19,
+        "continuous_reference_errors": [
+          {
+            "block": 0,
+            "weighted_RMS": 7.328950775321953e-07,
+            "true_L2": 2.4307379828727216e-05,
+            "gradient_weighted_RMS": 0.00018798343563479643,
+            "maximum": 1.9098234349812504e-05,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 1,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 2,
+            "weighted_RMS": 2.163126353119811e-07,
+            "true_L2": 7.174278487428233e-06,
+            "gradient_weighted_RMS": 4.362657054823896e-05,
+            "maximum": 5.136856744136775e-06,
+            "scale": 0.021081109428869052,
+            "physical_volume": 1100
+          },
+          {
+            "block": 3,
+            "weighted_RMS": 6.1759822224462386e-09,
+            "true_L2": 2.0387173633848983e-07,
+            "gradient_weighted_RMS": 2.1353206621745365e-06,
+            "maximum": 1.8728883757410109e-07,
+            "scale": 0.010138113942362243,
+            "physical_volume": 1089.6875
+          },
+          {
+            "block": 4,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.005515726603544432,
+            "physical_volume": 1100
+          }
+        ],
+        "scope": "frozen initial-state diagnostic linear operations only; no evolution or extra governing sweep; consistent mass in action, diagonal mass only in named preconditioner; no dense Schur or M-inverse-G columns",
+        "scalars": [
+          {
+            "block": 3,
+            "rows": 11533,
+            "nnz": 403469,
+            "factor_nnz": 6231719,
+            "rhs_maximum": 5.876640136010973e-07,
+            "maximum_true_residual": 1.2176098616780567e-21
+          },
+          {
+            "block": 2,
+            "rows": 15500,
+            "nnz": 548320,
+            "factor_nnz": 9960966,
+            "rhs_maximum": 3.1758823959029517e-06,
+            "maximum_true_residual": 4.0154655655774175e-20
+          }
+        ],
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/q48/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/q48/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/q48/frozen.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 155.35225970001193,
+          "process_cpu_seconds": 153.593527,
+          "peak_RSS_KiB": 6176396,
+          "actual_mapped_files": {
+            "entries": 139,
+            "canonical_sha256": "34c40c9d1a0e7e9ce646bfd9833a051731b4d0f75ffcc58ac57a72592a1fd3a3",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          }
+        },
+        "pressure_change_scaled_maximum": 1.2838425641961363e-10,
+        "pressure_change_scaled_RMS": 9.536437865104863e-11,
+        "packet_sha256": "1301fec672240c24e968095bf428d9b90af9f74887e7c63d7f70edc1c7e3c3d5"
+      },
+      "q64": {
+        "schema": "AcceptedSerialSparsePacketV1",
+        "read_only": true,
+        "alpha": 1000.0,
+        "stored_slots": 62533,
+        "masses": [
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 11625,
+            "nnz": 411985
+          },
+          {
+            "rows": 1071,
+            "nnz": 16185
+          },
+          {
+            "rows": 2961,
+            "nnz": 46065
+          }
+        ],
+        "flow_rows": 34660,
+        "flow_nnz": 2911762,
+        "velocity_rows": 30628,
+        "pressure_rows": 4032,
+        "pressure_C_nnz": 0,
+        "predictor_factor_nnz": 37266316,
+        "consistent_mass_factor_nnz": 1183848,
+        "pressure_preconditioner_factor_nnz": 1844464,
+        "pressure_iterations": 151,
+        "mass_applications": 155,
+        "predictor_residual": 2.634272465960874e-19,
+        "predictor_rhs_maximum": 2.1503081561537442e-05,
+        "pressure_rhs_maximum": 1.0672933794622013e-07,
+        "full_native_G_action_defect": 4.9465400630671055e-22,
+        "consistent_mass_correction_rhs_maximum": 1.8110359700295485e-07,
+        "consistent_mass_correction_true_residual": 1.0654086289682996e-21,
+        "true_pressure_residual": 1.888605203649148e-22,
+        "true_continuity": 1.88864046621502e-22,
+        "splitting_identity": 2.6466163917691234e-19,
+        "continuous_reference_errors": [
+          {
+            "block": 0,
+            "weighted_RMS": 7.328950775321953e-07,
+            "true_L2": 2.4307379828727216e-05,
+            "gradient_weighted_RMS": 0.00018798343563479643,
+            "maximum": 1.9098234349812504e-05,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 1,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 2,
+            "weighted_RMS": 2.163126353119811e-07,
+            "true_L2": 7.174278487428233e-06,
+            "gradient_weighted_RMS": 4.362657054823896e-05,
+            "maximum": 5.136856744136775e-06,
+            "scale": 0.021081109428869052,
+            "physical_volume": 1100
+          },
+          {
+            "block": 3,
+            "weighted_RMS": 6.1759822224462386e-09,
+            "true_L2": 2.0387173633848983e-07,
+            "gradient_weighted_RMS": 2.1353206621745365e-06,
+            "maximum": 1.8728883757410109e-07,
+            "scale": 0.010138113942362243,
+            "physical_volume": 1089.6875
+          },
+          {
+            "block": 4,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.005515726603544432,
+            "physical_volume": 1100
+          }
+        ],
+        "scope": "frozen initial-state diagnostic linear operations only; no evolution or extra governing sweep; consistent mass in action, diagonal mass only in named preconditioner; no dense Schur or M-inverse-G columns",
+        "scalars": [
+          {
+            "block": 3,
+            "rows": 11533,
+            "nnz": 403469,
+            "factor_nnz": 6231719,
+            "rhs_maximum": 5.876640136080175e-07,
+            "maximum_true_residual": 2.236696376343387e-21
+          },
+          {
+            "block": 2,
+            "rows": 15500,
+            "nnz": 548320,
+            "factor_nnz": 9960966,
+            "rhs_maximum": 3.175882395902833e-06,
+            "maximum_true_residual": 4.8399992001702755e-20
+          }
+        ],
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/q64/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/q64/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/q64/frozen.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 260.0903084599995,
+          "process_cpu_seconds": 258.049058,
+          "peak_RSS_KiB": 8235304,
+          "actual_mapped_files": {
+            "entries": 138,
+            "canonical_sha256": "2a6a2acad07c4ec003e27efb5993e6585fb877d257f688d9cc89347d185680df",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          }
+        },
+        "pressure_change_scaled_maximum": 2.4474709375960074e-10,
+        "pressure_change_scaled_RMS": 1.8653101127972632e-10,
+        "packet_sha256": "87491c7fd079d4fde958f18cc635b45309056e60f1c08a87639efef56c480b9e"
+      }
+    },
+    "canonical_exports": {
+      "1000": {
+        "status": "pass",
+        "packet_sha256": "9c79f68c49c8bba07b6f2622688fc7e7eb3b6054ef079f85be0364b9871ce5b2",
+        "A": {
+          "file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/canonical-1000/frozen.A.csr",
+          "sha256": "8a393d8de238c5c1c1b0dec98bb94635a9e1ec69500dcd3f7c39d9d2b8c56ea1",
+          "rows": 30628,
+          "columns": 30628,
+          "nnz": 2152435,
+          "encoding": "RANSCSR1-native-little-endian"
+        },
+        "actual_history_sha256": "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+        "complete_canonical_equality": true,
+        "whole_command_sparse_factorizations": 0,
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/canonical-1000/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/canonical-1000/prefactor-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/canonical-1000/prefactor.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 28.47152796696173,
+          "process_cpu_seconds": 27.15781699999993,
+          "peak_RSS_KiB": 1851108,
+          "actual_mapped_files": {
+            "entries": 139,
+            "canonical_sha256": "1f0ade3ea98cfb99abba899be0fbaefadc8cfcfa029890fba810dcb63e6a6fa7",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          }
+        }
+      },
+      "2000": {
+        "status": "pass",
+        "packet_sha256": "8bd4793b7e838d0787e88b3050b0d1347c1c8331ed3b50963f1e1644e1a8e9d8",
+        "A": {
+          "file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/canonical-2000/frozen.A.csr",
+          "sha256": "e021b6d9726993429cab76c3ea87d882bbf2d510bc0d04d1173314a9bd5fd139",
+          "rows": 30628,
+          "columns": 30628,
+          "nnz": 2152435,
+          "encoding": "RANSCSR1-native-little-endian"
+        },
+        "actual_history_sha256": "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+        "complete_canonical_equality": true,
+        "whole_command_sparse_factorizations": 0,
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/canonical-2000/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/canonical-2000/prefactor-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/canonical-2000/prefactor.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 28.75063169398345,
+          "process_cpu_seconds": 27.383975000000035,
+          "peak_RSS_KiB": 1850856,
+          "actual_mapped_files": {
+            "entries": 136,
+            "canonical_sha256": "882c5e97f1aa45890565462a98c16b519ac764c32b6b04c2a2c4219d2aba8dad",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          }
+        }
+      }
+    },
+    "physical_scalar_controls": {
+      "native": {
+        "status": "pass",
+        "classification": {
+          "reconstruction_status": "pass",
+          "accuracy_status": "pass",
+          "equations": {
+            "inner_k": {
+              "storage_backward_difference": 0,
+              "stage_source": 9.128512468893636e-08,
+              "instantaneous_source": 9.128512468893636e-08,
+              "stage_physical_boundary_flux": -6.932337160893348e-15,
+              "instantaneous_physical_boundary_flux": -6.932337160893348e-15,
+              "volume": 10.3125000000006,
+              "frozen_stage_physical_defect": -9.12851177565992e-08,
+              "instantaneous_physical_defect": -9.12851177565992e-08,
+              "frozen_operator_splitting": -6.5529728763623185e-24,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 3.936532418648399e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "outer_k": {
+              "storage_backward_difference": 0,
+              "stage_source": -5.6417280060724955e-08,
+              "instantaneous_source": -5.641728005998734e-08,
+              "stage_physical_boundary_flux": -2.936297554899585e-15,
+              "instantaneous_physical_boundary_flux": -2.936297554899585e-15,
+              "volume": 1089.6875000000105,
+              "frozen_stage_physical_defect": 5.641728299702251e-08,
+              "instantaneous_physical_defect": 5.6417282996284896e-08,
+              "frozen_operator_splitting": -7.376133391473604e-19,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 2.43290986469462e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "outer_epsilon": {
+              "storage_backward_difference": 0,
+              "stage_source": -0.01280675447115625,
+              "instantaneous_source": -0.012806754471156248,
+              "stage_physical_boundary_flux": 0.012789148929842543,
+              "instantaneous_physical_boundary_flux": 0.012789148929842543,
+              "volume": 1089.6875000000105,
+              "frozen_stage_physical_defect": 1.7605541313706063e-05,
+              "instantaneous_physical_defect": 1.760554131370433e-05,
+              "frozen_operator_splitting": -1.734723475976807e-18,
+              "physical_scale": 11.151925336598463,
+              "scaled_frozen_defect": 1.5786997116926598e-06,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "whole_k": {
+              "storage_backward_difference": 0,
+              "stage_source": 3.486784462821141e-08,
+              "instantaneous_source": 3.4867844628949024e-08,
+              "stage_physical_boundary_flux": -8.173623850187447e-15,
+              "instantaneous_physical_boundary_flux": -8.173623850187447e-15,
+              "volume": 1100.0000000000111,
+              "frozen_stage_physical_defect": -3.486783645458756e-08,
+              "instantaneous_physical_defect": -3.4867836455325174e-08,
+              "frozen_operator_splitting": -7.376132397804687e-19,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 1.5036226270485548e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            }
+          },
+          "reconstruction": {
+            "k": {
+              "maximum_defect": 1.5265566588595902e-16,
+              "normalization": 1.0,
+              "scaled_defect": 1.5265566588595902e-16,
+              "status": "pass"
+            },
+            "outer_epsilon": {
+              "maximum_defect": 1.5178830414797062e-18,
+              "normalization": 1.0,
+              "scaled_defect": 1.5178830414797062e-18,
+              "status": "pass"
+            }
+          },
+          "interface_frozen_k_fluxes": {
+            "0": -1.1178036279563169e-15,
+            "1": -5.772072376491695e-16
+          },
+          "interface_current_k_fluxes": {
+            "0": -1.1178036279563169e-15,
+            "1": -5.772072376491695e-16
+          },
+          "face_order": 16,
+          "actual_quadrature": {
+            "wall_normal": 32,
+            "wall_tangential": 8,
+            "outer_volume": 12,
+            "mass_override": 12,
+            "mass_default": "max(8,p+3) per native field",
+            "interface": 64,
+            "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+            "inner_volume_points": 134912,
+            "outer_volume_points": 102672
+          },
+          "physical_volume": 1100.0,
+          "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching"
+        },
+        "volume_observer": {
+          "policy": "NativeOwnerVolumeStreamV1",
+          "inner_points": 134912,
+          "outer_points": 102672,
+          "physical_weights": [
+            10.3125000000006,
+            1089.6875000000105
+          ],
+          "native_rows_provenance_fnv1a64": "8511546893154749430",
+          "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+          "materialized_global_volume_rows": false
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/scalar-native/request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/scalar-native/packet.json"
+          ],
+          "pid": 345272,
+          "exit_code": 0,
+          "wall_seconds": 97.6813900389825,
+          "process_cpu_seconds": 96.84278899999993,
+          "peak_RSS_KiB": 4275532,
+          "peak_virtual_KiB": 10171760,
+          "control_wall_limit_reached": false,
+          "actual_mapped_files": {
+            "entries": 136,
+            "canonical_sha256": "8e2ac9a93668d48f93ea097e76cd3f66db738c443295dd73c4390156e4063a6b",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          }
+        },
+        "packet_sha256": "7583921b9dd02e8a49ab6c616dcee69fdefac55e52e36b935106504b9b4ff5df",
+        "configuration_sha256": "a14b907b0b4002cdfa20ddfb94c47af06ef151b6575faf9c4e7eee804ef3481d",
+        "actual_initial_sha256": "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+        "role": "InitializedFrozenV1; capacity/reconstruction,not an evolved consecutive-state budget"
+      },
+      "q48f16": {
+        "status": "pass",
+        "classification": {
+          "reconstruction_status": "pass",
+          "accuracy_status": "pass",
+          "equations": {
+            "inner_k": {
+              "storage_backward_difference": 0,
+              "stage_source": 9.12851246508475e-08,
+              "instantaneous_source": 9.12851246508475e-08,
+              "stage_physical_boundary_flux": -6.932337160893348e-15,
+              "instantaneous_physical_boundary_flux": -6.932337160893348e-15,
+              "volume": 10.31250000000055,
+              "frozen_stage_physical_defect": -9.128511771851034e-08,
+              "instantaneous_physical_defect": -9.128511771851034e-08,
+              "frozen_operator_splitting": -6.5529728763623185e-24,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 3.9365324170058745e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "outer_k": {
+              "storage_backward_difference": 0,
+              "stage_source": -5.641728003373862e-08,
+              "instantaneous_source": -5.6417280032584376e-08,
+              "stage_physical_boundary_flux": -2.936297554899585e-15,
+              "instantaneous_physical_boundary_flux": -2.936297554899585e-15,
+              "volume": 1089.6875000000357,
+              "frozen_stage_physical_defect": 5.641728297003617e-08,
+              "instantaneous_physical_defect": 5.641728296888193e-08,
+              "frozen_operator_splitting": -1.154241052633169e-18,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 2.432909863530875e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "outer_epsilon": {
+              "storage_backward_difference": 0,
+              "stage_source": -0.012806754471157023,
+              "instantaneous_source": -0.012806754471157021,
+              "stage_physical_boundary_flux": 0.012789148929842543,
+              "instantaneous_physical_boundary_flux": 0.012789148929842543,
+              "volume": 1089.6875000000357,
+              "frozen_stage_physical_defect": 1.760554131447975e-05,
+              "instantaneous_physical_defect": 1.7605541314478015e-05,
+              "frozen_operator_splitting": -1.734723475976807e-18,
+              "physical_scale": 11.151925336598463,
+              "scaled_frozen_defect": 1.578699711762037e-06,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "whole_k": {
+              "storage_backward_difference": 0,
+              "stage_source": 3.4867844617108886e-08,
+              "instantaneous_source": 3.486784461826313e-08,
+              "stage_physical_boundary_flux": -8.173623850187447e-15,
+              "instantaneous_physical_boundary_flux": -8.173623850187447e-15,
+              "volume": 1100.0000000000362,
+              "frozen_stage_physical_defect": -3.4867836443485036e-08,
+              "instantaneous_physical_defect": -3.486783644463928e-08,
+              "frozen_operator_splitting": -1.1542409532662772e-18,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 1.5036226265697754e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            }
+          },
+          "reconstruction": {
+            "k": {
+              "maximum_defect": 1.414339390711294e-16,
+              "normalization": 1.0,
+              "scaled_defect": 1.414339390711294e-16,
+              "status": "pass"
+            },
+            "outer_epsilon": {
+              "maximum_defect": 3.6724436917190276e-18,
+              "normalization": 1.0,
+              "scaled_defect": 3.6724436917190276e-18,
+              "status": "pass"
+            }
+          },
+          "interface_frozen_k_fluxes": {
+            "0": -1.1178036279563169e-15,
+            "1": -5.772072376491695e-16
+          },
+          "interface_current_k_fluxes": {
+            "0": -1.1178036279563169e-15,
+            "1": -5.772072376491695e-16
+          },
+          "face_order": 16,
+          "actual_quadrature": {
+            "wall_normal": 48,
+            "wall_tangential": 12,
+            "outer_volume": 16,
+            "mass_override": 16,
+            "mass_default": "max(8,p+3) per native field",
+            "interface": 16,
+            "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+            "inner_volume_points": 303552,
+            "outer_volume_points": 182528
+          },
+          "physical_volume": 1100.0,
+          "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching"
+        },
+        "volume_observer": {
+          "policy": "NativeOwnerVolumeStreamV1",
+          "inner_points": 303552,
+          "outer_points": 182528,
+          "physical_weights": [
+            10.31250000000055,
+            1089.6875000000357
+          ],
+          "native_rows_provenance_fnv1a64": "2877691989708266210",
+          "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+          "materialized_global_volume_rows": false
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/scalar-q48f16/request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/scalar-q48f16/packet.json"
+          ],
+          "pid": 345462,
+          "exit_code": 0,
+          "wall_seconds": 165.79444175603567,
+          "process_cpu_seconds": 164.993791,
+          "peak_RSS_KiB": 6118420,
+          "peak_virtual_KiB": 11623904,
+          "control_wall_limit_reached": false,
+          "actual_mapped_files": {
+            "entries": 136,
+            "canonical_sha256": "c3479e1972236162b0fc11a40ab0ad86dcd4010ac8e237313a3905fd8372d466",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          }
+        },
+        "packet_sha256": "fd1c87a3ff860f87f307d9273f5935a2e92a9960f95d8958ecb2af255dd9e0a6",
+        "configuration_sha256": "9db0b05d866da9195e8150cd71e7b49c4ab6132790da22ced661c8c6a7526feb",
+        "actual_initial_sha256": "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+        "role": "InitializedFrozenV1; capacity/reconstruction,not an evolved consecutive-state budget"
+      },
+      "q64f16": {
+        "status": "pass",
+        "classification": {
+          "reconstruction_status": "pass",
+          "accuracy_status": "pass",
+          "equations": {
+            "inner_k": {
+              "storage_backward_difference": 0,
+              "stage_source": 9.128512466755066e-08,
+              "instantaneous_source": 9.128512466755066e-08,
+              "stage_physical_boundary_flux": -6.932337160893348e-15,
+              "instantaneous_physical_boundary_flux": -6.932337160893348e-15,
+              "volume": 10.31250000000093,
+              "frozen_stage_physical_defect": -9.12851177352135e-08,
+              "instantaneous_physical_defect": -9.12851177352135e-08,
+              "frozen_operator_splitting": -6.5529728763623185e-24,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 3.936532417726173e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "outer_k": {
+              "storage_backward_difference": 0,
+              "stage_source": -5.641728004267999e-08,
+              "instantaneous_source": -5.6417280042992406e-08,
+              "stage_physical_boundary_flux": -2.936297554899585e-15,
+              "instantaneous_physical_boundary_flux": -2.936297554899585e-15,
+              "volume": 1089.6874999999993,
+              "frozen_stage_physical_defect": 5.6417282978977545e-08,
+              "instantaneous_physical_defect": 5.641728297928996e-08,
+              "frozen_operator_splitting": 3.124163478723533e-19,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 2.432909863916458e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "outer_epsilon": {
+              "storage_backward_difference": 0,
+              "stage_source": -0.012806754471155748,
+              "instantaneous_source": -0.012806754471155748,
+              "stage_physical_boundary_flux": 0.012789148929842543,
+              "instantaneous_physical_boundary_flux": 0.012789148929842543,
+              "volume": 1089.6874999999993,
+              "frozen_stage_physical_defect": 1.760554131320473e-05,
+              "instantaneous_physical_defect": 1.760554131320473e-05,
+              "frozen_operator_splitting": 0,
+              "physical_scale": 11.151925336598463,
+              "scaled_frozen_defect": 1.5786997116477048e-06,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "whole_k": {
+              "storage_backward_difference": 0,
+              "stage_source": 3.486784462487067e-08,
+              "instantaneous_source": 3.4867844624558256e-08,
+              "stage_physical_boundary_flux": -8.173623850187447e-15,
+              "instantaneous_physical_boundary_flux": -8.173623850187447e-15,
+              "volume": 1100.0000000000002,
+              "frozen_stage_physical_defect": -3.486783645124682e-08,
+              "instantaneous_physical_defect": -3.4867836450934406e-08,
+              "frozen_operator_splitting": 3.124164472392451e-19,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 1.5036226269044905e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            }
+          },
+          "reconstruction": {
+            "k": {
+              "maximum_defect": 2.7755575615628914e-16,
+              "normalization": 1.0,
+              "scaled_defect": 2.7755575615628914e-16,
+              "status": "pass"
+            },
+            "outer_epsilon": {
+              "maximum_defect": 4.672908716434564e-18,
+              "normalization": 1.0,
+              "scaled_defect": 4.672908716434564e-18,
+              "status": "pass"
+            }
+          },
+          "interface_frozen_k_fluxes": {
+            "0": -1.1178036279563169e-15,
+            "1": -5.772072376491695e-16
+          },
+          "interface_current_k_fluxes": {
+            "0": -1.1178036279563169e-15,
+            "1": -5.772072376491695e-16
+          },
+          "face_order": 16,
+          "actual_quadrature": {
+            "wall_normal": 64,
+            "wall_tangential": 16,
+            "outer_volume": 20,
+            "mass_override": 20,
+            "mass_default": "max(8,p+3) per native field",
+            "interface": 20,
+            "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+            "inner_volume_points": 539648,
+            "outer_volume_points": 285200
+          },
+          "physical_volume": 1100.0,
+          "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching"
+        },
+        "volume_observer": {
+          "policy": "NativeOwnerVolumeStreamV1",
+          "inner_points": 539648,
+          "outer_points": 285200,
+          "physical_weights": [
+            10.31250000000093,
+            1089.6874999999993
+          ],
+          "native_rows_provenance_fnv1a64": "10217012300162483006",
+          "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+          "materialized_global_volume_rows": false
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/scalar-q64f16/request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/scalar-q64f16/packet.json"
+          ],
+          "pid": 345790,
+          "exit_code": 0,
+          "wall_seconds": 323.78697011299664,
+          "process_cpu_seconds": 322.921573,
+          "peak_RSS_KiB": 8903308,
+          "peak_virtual_KiB": 15940460,
+          "control_wall_limit_reached": false,
+          "actual_mapped_files": {
+            "entries": 128,
+            "canonical_sha256": "d3db937d0eb2cee40b8ac1642c4070653d418cb91b2936e7258aa9728832f2c7",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          }
+        },
+        "packet_sha256": "1e9534e2c75ec82f7ebe3175137c57fc7c5b233f12107175fff4c4d63867b96f",
+        "configuration_sha256": "fa2ca2ce58e23d309d48a6fae947ae5e7c0d86a5df2cc2a083f6c88f0d24145d",
+        "actual_initial_sha256": "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+        "role": "InitializedFrozenV1; capacity/reconstruction,not an evolved consecutive-state budget"
+      },
+      "q64f32": {
+        "status": "pass",
+        "classification": {
+          "reconstruction_status": "pass",
+          "accuracy_status": "pass",
+          "equations": {
+            "inner_k": {
+              "storage_backward_difference": 0,
+              "stage_source": 9.128512466755066e-08,
+              "instantaneous_source": 9.128512466755066e-08,
+              "stage_physical_boundary_flux": -6.931307741925164e-15,
+              "instantaneous_physical_boundary_flux": -6.931307741925164e-15,
+              "volume": 10.31250000000093,
+              "frozen_stage_physical_defect": -9.128511773624292e-08,
+              "instantaneous_physical_defect": -9.128511773624292e-08,
+              "frozen_operator_splitting": -2.5575564744861797e-24,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 3.936532417770565e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "outer_k": {
+              "storage_backward_difference": 0,
+              "stage_source": -5.641728004267999e-08,
+              "instantaneous_source": -5.6417280042992406e-08,
+              "stage_physical_boundary_flux": -6.938422015478215e-16,
+              "instantaneous_physical_boundary_flux": -6.938422015478215e-16,
+              "volume": 1089.6874999999993,
+              "frozen_stage_physical_defect": 5.641728073652219e-08,
+              "instantaneous_physical_defect": 5.641728073683461e-08,
+              "frozen_operator_splitting": 3.124163478774809e-19,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 2.432909767213968e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "outer_epsilon": {
+              "storage_backward_difference": 0,
+              "stage_source": -0.012806754471155748,
+              "instantaneous_source": -0.012806754471155748,
+              "stage_physical_boundary_flux": 0.01278914892984254,
+              "instantaneous_physical_boundary_flux": 0.01278914892984254,
+              "volume": 1089.6874999999993,
+              "frozen_stage_physical_defect": 1.7605541313208198e-05,
+              "instantaneous_physical_defect": 1.7605541313208198e-05,
+              "frozen_operator_splitting": 0,
+              "physical_scale": 11.151925336598463,
+              "scaled_frozen_defect": 1.578699711648016e-06,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            },
+            "whole_k": {
+              "storage_backward_difference": 0,
+              "stage_source": 3.486784462487067e-08,
+              "instantaneous_source": 3.4867844624558256e-08,
+              "stage_physical_boundary_flux": -5.93034095725067e-15,
+              "instantaneous_physical_boundary_flux": -5.93034095725067e-15,
+              "volume": 1100.0000000000002,
+              "frozen_stage_physical_defect": -3.4867838694529714e-08,
+              "instantaneous_physical_defect": -3.48678386942173e-08,
+              "frozen_operator_splitting": 3.124148168089044e-19,
+              "physical_scale": 23.189220371755958,
+              "scaled_frozen_defect": 1.503622723642667e-09,
+              "accuracy_limit": 0.02,
+              "status": "pass"
+            }
+          },
+          "reconstruction": {
+            "k": {
+              "maximum_defect": 2.914335439641036e-16,
+              "normalization": 1.0,
+              "scaled_defect": 2.914335439641036e-16,
+              "status": "pass"
+            },
+            "outer_epsilon": {
+              "maximum_defect": 4.672908716434564e-18,
+              "normalization": 1.0,
+              "scaled_defect": 4.672908716434564e-18,
+              "status": "pass"
+            }
+          },
+          "interface_frozen_k_fluxes": {
+            "0": -1.1176017485731507e-15,
+            "1": -5.772072376491658e-16
+          },
+          "interface_current_k_fluxes": {
+            "0": -1.1176017485731507e-15,
+            "1": -5.772072376491658e-16
+          },
+          "face_order": 32,
+          "actual_quadrature": {
+            "wall_normal": 64,
+            "wall_tangential": 16,
+            "outer_volume": 20,
+            "mass_override": 20,
+            "mass_default": "max(8,p+3) per native field",
+            "interface": 20,
+            "reference_projection": "Functions: native per-field GLL FwdTrans seed, then three consistent-mass residual corrections with default Gauss max(8,p+3) per axis for nonconstant data",
+            "inner_volume_points": 539648,
+            "outer_volume_points": 285200
+          },
+          "physical_volume": 1100.0,
+          "scope": "independent physical gradient fluxes, dependent-epsilon storage retained; prescribed-row reactions not substituted; inner/outer interface flux cancels only when physically matching"
+        },
+        "volume_observer": {
+          "policy": "NativeOwnerVolumeStreamV1",
+          "inner_points": 539648,
+          "outer_points": 285200,
+          "physical_weights": [
+            10.31250000000093,
+            1089.6874999999993
+          ],
+          "native_rows_provenance_fnv1a64": "10217012300162483006",
+          "digest_definition": "ordered region,generating/native geometry,element,endpoint roundoff,weight,panel,coordinates,raw local coordinates,signed ids,values,constant coefficients,Cartesian derivatives; IEEE754/uint64 little-endian FNV1a; diagnostic identity,not a cryptographic state hash",
+          "materialized_global_volume_rows": false
+        },
+        "execution": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/scalar-q64f32/request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/scalar-q64f32/packet.json"
+          ],
+          "pid": 347334,
+          "exit_code": 0,
+          "wall_seconds": 281.0847618600237,
+          "process_cpu_seconds": 280.14381999999995,
+          "peak_RSS_KiB": 8899752,
+          "peak_virtual_KiB": 15940432,
+          "control_wall_limit_reached": false,
+          "actual_mapped_files": {
+            "entries": 139,
+            "canonical_sha256": "a1fcb97632bb61be939e6b915f629dd03da731a3cf644a53483e8b9a0add7369",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          }
+        },
+        "packet_sha256": "03b7f2a696fefa650f3a559359bfdaebb988397c7eb220d5dd8d65953a3c56d3",
+        "configuration_sha256": "fa2ca2ce58e23d309d48a6fae947ae5e7c0d86a5df2cc2a083f6c88f0d24145d",
+        "actual_initial_sha256": "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+        "role": "InitializedFrozenV1; capacity/reconstruction,not an evolved consecutive-state budget"
+      }
+    },
+    "native_packet_sha256": "5f09ff64b8c05f0da9726f9013b255f9200edf385d611507a9e7bdb905585784"
+  },
+  "changed_alpha": {
+    "schema": "CT15ChangedTimestepAdmissionV1",
+    "status": "pass",
+    "dt": [
+      0.00025,
+      0.000125
+    ],
+    "controls": {
+      "4000-native": {
+        "schema": "AcceptedSerialSparsePacketV1",
+        "read_only": true,
+        "alpha": 4000,
+        "stored_slots": 62533,
+        "masses": [
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 11625,
+            "nnz": 411985
+          },
+          {
+            "rows": 1071,
+            "nnz": 16185
+          },
+          {
+            "rows": 2961,
+            "nnz": 46065
+          }
+        ],
+        "flow_rows": 34660,
+        "flow_nnz": 2911419,
+        "velocity_rows": 30628,
+        "pressure_rows": 4032,
+        "pressure_C_nnz": 0,
+        "predictor_factor_nnz": 37199662,
+        "consistent_mass_factor_nnz": 1183848,
+        "pressure_preconditioner_factor_nnz": 1844464,
+        "pressure_iterations": 152,
+        "mass_applications": 156,
+        "predictor_residual": 2.998496633280223e-19,
+        "predictor_rhs_maximum": 2.150308156153217e-05,
+        "pressure_rhs_maximum": 4.2407210717177706e-08,
+        "full_native_G_action_defect": 4.632211430296955e-22,
+        "consistent_mass_correction_rhs_maximum": 3.9736566126296064e-07,
+        "consistent_mass_correction_true_residual": 1.760240343512843e-21,
+        "true_pressure_residual": 9.798626607176824e-23,
+        "true_continuity": 9.796458582291749e-23,
+        "splitting_identity": 3.0250692934706064e-19,
+        "continuous_reference_errors": [
+          {
+            "block": 0,
+            "weighted_RMS": 7.328950775321953e-07,
+            "true_L2": 2.4307379828727216e-05,
+            "gradient_weighted_RMS": 0.00018798343563479643,
+            "maximum": 1.9098234349812504e-05,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 1,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 2,
+            "weighted_RMS": 2.163126353119811e-07,
+            "true_L2": 7.174278487428233e-06,
+            "gradient_weighted_RMS": 4.362657054823896e-05,
+            "maximum": 5.136856744136775e-06,
+            "scale": 0.021081109428869052,
+            "physical_volume": 1100
+          },
+          {
+            "block": 3,
+            "weighted_RMS": 6.1759822224462386e-09,
+            "true_L2": 2.0387173633848983e-07,
+            "gradient_weighted_RMS": 2.1353206621745365e-06,
+            "maximum": 1.8728883757410109e-07,
+            "scale": 0.010138113942362243,
+            "physical_volume": 1089.6875
+          },
+          {
+            "block": 4,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.005515726603544432,
+            "physical_volume": 1100
+          }
+        ],
+        "scope": "frozen initial-state diagnostic linear operations only; no evolution or extra governing sweep; consistent mass in action, diagonal mass only in named preconditioner; no dense Schur or M-inverse-G columns",
+        "scalars": [
+          {
+            "block": 3,
+            "rows": 11533,
+            "nnz": 403469,
+            "factor_nnz": 6253287,
+            "rhs_maximum": 5.876640136007577e-07,
+            "maximum_true_residual": 6.33289476970598e-21
+          },
+          {
+            "block": 2,
+            "rows": 15500,
+            "nnz": 548320,
+            "factor_nnz": 9950421,
+            "rhs_maximum": 3.175882395902859e-06,
+            "maximum_true_residual": 6.500977870176755e-20
+          }
+        ],
+        "status": "pass",
+        "pressure_change_scaled_maximum": 0.0,
+        "execution": {
+          "observer_policy": "OncePerNewMappedPathV1",
+          "observer_self_CPU_seconds": 6.131241966000005,
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-native/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-native/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-native/frozen.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 94.72812934499234,
+          "process_cpu_seconds": 92.53329099999999,
+          "peak_RSS_KiB": 4684104,
+          "peak_address_space_KiB": 10720080,
+          "actual_mapped_files": {
+            "entries": 139,
+            "canonical_sha256": "9d547294a820aeceb44d1e92254e53444b9cbd8aca6f8308f68c745575e509ce",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          },
+          "CPU_soft": 600,
+          "CPU_hard": 605,
+          "wall_limit": 900,
+          "stop_reason": null
+        },
+        "packet_sha256": "60126717a3c01add4c39fb7fb9a1ffe4bdbfad06c774534abd243a30d412d33d",
+        "numerical_receipts": {
+          "status": "pass",
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-native/sparse-receipts.jsonl",
+          "sha256": "3380a792bb4f90aa489716875ac5256c6df8d6952565069074c8e2f0d68bd33d",
+          "factor_count": 14,
+          "solve_count": 326,
+          "maximum_factor_entries": 37199662,
+          "minimum_fill_margin": 2800338,
+          "maximum_matrix_nonzeros": 2152435,
+          "maximum_refinements": 0,
+          "maximum_residual_bound_fraction": 0.8430968680639606,
+          "factors": [
+            {
+              "event": "factor",
+              "id": 1,
+              "rows": 15376,
+              "matrix_nnz": 541696,
+              "factor_nnz": 601441,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 2,
+              "rows": 15252,
+              "matrix_nnz": 535072,
+              "factor_nnz": 582407,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 3,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 624041,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 4,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 5,
+              "rows": 1071,
+              "matrix_nnz": 16185,
+              "factor_nnz": 17054,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 6,
+              "rows": 2961,
+              "matrix_nnz": 46065,
+              "factor_nnz": 68650,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 7,
+              "rows": 3968,
+              "matrix_nnz": 135424,
+              "factor_nnz": 103246,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 8,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 9,
+              "rows": 124,
+              "matrix_nnz": 736,
+              "factor_nnz": 306,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 10,
+              "rows": 30628,
+              "matrix_nnz": 2152435,
+              "factor_nnz": 37199662,
+              "mass": false,
+              "ordering": "VectorCOLAMDV1"
+            },
+            {
+              "event": "factor",
+              "id": 11,
+              "rows": 30628,
+              "matrix_nnz": 1076768,
+              "factor_nnz": 1183848,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 12,
+              "rows": 4032,
+              "matrix_nnz": 251346,
+              "factor_nnz": 1844464,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 13,
+              "rows": 11533,
+              "matrix_nnz": 403469,
+              "factor_nnz": 6253287,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 14,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 9950421,
+              "mass": false,
+              "ordering": "COLAMD"
+            }
+          ]
+        }
+      },
+      "4000-q48": {
+        "schema": "AcceptedSerialSparsePacketV1",
+        "read_only": true,
+        "alpha": 4000,
+        "stored_slots": 62533,
+        "masses": [
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 11625,
+            "nnz": 411985
+          },
+          {
+            "rows": 1071,
+            "nnz": 16185
+          },
+          {
+            "rows": 2961,
+            "nnz": 46065
+          }
+        ],
+        "flow_rows": 34660,
+        "flow_nnz": 2911740,
+        "velocity_rows": 30628,
+        "pressure_rows": 4032,
+        "pressure_C_nnz": 0,
+        "predictor_factor_nnz": 37199666,
+        "consistent_mass_factor_nnz": 1183848,
+        "pressure_preconditioner_factor_nnz": 1844464,
+        "pressure_iterations": 152,
+        "mass_applications": 156,
+        "predictor_residual": 2.676624113323589e-19,
+        "predictor_rhs_maximum": 2.1503081561534423e-05,
+        "pressure_rhs_maximum": 4.2407210717170195e-08,
+        "full_native_G_action_defect": 8.271806125530277e-22,
+        "consistent_mass_correction_rhs_maximum": 3.9736566123023727e-07,
+        "consistent_mass_correction_true_residual": 2.0381730293306602e-21,
+        "true_pressure_residual": 9.798697565215249e-23,
+        "true_continuity": 9.799150973073879e-23,
+        "splitting_identity": 2.6415964858748223e-19,
+        "continuous_reference_errors": [
+          {
+            "block": 0,
+            "weighted_RMS": 7.328950775321953e-07,
+            "true_L2": 2.4307379828727216e-05,
+            "gradient_weighted_RMS": 0.00018798343563479643,
+            "maximum": 1.9098234349812504e-05,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 1,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 2,
+            "weighted_RMS": 2.163126353119811e-07,
+            "true_L2": 7.174278487428233e-06,
+            "gradient_weighted_RMS": 4.362657054823896e-05,
+            "maximum": 5.136856744136775e-06,
+            "scale": 0.021081109428869052,
+            "physical_volume": 1100
+          },
+          {
+            "block": 3,
+            "weighted_RMS": 6.1759822224462386e-09,
+            "true_L2": 2.0387173633848983e-07,
+            "gradient_weighted_RMS": 2.1353206621745365e-06,
+            "maximum": 1.8728883757410109e-07,
+            "scale": 0.010138113942362243,
+            "physical_volume": 1089.6875
+          },
+          {
+            "block": 4,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.005515726603544432,
+            "physical_volume": 1100
+          }
+        ],
+        "scope": "frozen initial-state diagnostic linear operations only; no evolution or extra governing sweep; consistent mass in action, diagonal mass only in named preconditioner; no dense Schur or M-inverse-G columns",
+        "scalars": [
+          {
+            "block": 3,
+            "rows": 11533,
+            "nnz": 403469,
+            "factor_nnz": 6253287,
+            "rhs_maximum": 5.876640136010973e-07,
+            "maximum_true_residual": 3.40963848494358e-21
+          },
+          {
+            "block": 2,
+            "rows": 15500,
+            "nnz": 548320,
+            "factor_nnz": 9950421,
+            "rhs_maximum": 3.1758823959029517e-06,
+            "maximum_true_residual": 4.1504614415460717e-20
+          }
+        ],
+        "status": "pass",
+        "pressure_change_scaled_maximum": 5.129664677586248e-10,
+        "execution": {
+          "observer_policy": "OncePerNewMappedPathV1",
+          "observer_self_CPU_seconds": 10.096180400999998,
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-q48/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-q48/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-q48/frozen.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 160.0980994499987,
+          "process_cpu_seconds": 157.791973,
+          "peak_RSS_KiB": 6082924,
+          "peak_address_space_KiB": 11962044,
+          "actual_mapped_files": {
+            "entries": 139,
+            "canonical_sha256": "eff673c3fb31548160c952f6240645014945b8cc9fcb53b6d06509b0e8726144",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          },
+          "CPU_soft": 600,
+          "CPU_hard": 605,
+          "wall_limit": 900,
+          "stop_reason": null
+        },
+        "packet_sha256": "49e0cb0663bbe4fbb4cd6cab14aeb2d046b2635584d41f3548905470713bba1c",
+        "numerical_receipts": {
+          "status": "pass",
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-q48/sparse-receipts.jsonl",
+          "sha256": "cef3aeb48f2a2289a9c24da590cf46502740416659359337b423f05b5f895b82",
+          "factor_count": 14,
+          "solve_count": 326,
+          "maximum_factor_entries": 37199666,
+          "minimum_fill_margin": 2800334,
+          "maximum_matrix_nonzeros": 2152716,
+          "maximum_refinements": 0,
+          "maximum_residual_bound_fraction": 0.8412032086024541,
+          "factors": [
+            {
+              "event": "factor",
+              "id": 1,
+              "rows": 15376,
+              "matrix_nnz": 541696,
+              "factor_nnz": 601441,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 2,
+              "rows": 15252,
+              "matrix_nnz": 535072,
+              "factor_nnz": 582407,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 3,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 624041,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 4,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 5,
+              "rows": 1071,
+              "matrix_nnz": 16185,
+              "factor_nnz": 17054,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 6,
+              "rows": 2961,
+              "matrix_nnz": 46065,
+              "factor_nnz": 68650,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 7,
+              "rows": 3968,
+              "matrix_nnz": 135424,
+              "factor_nnz": 103246,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 8,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 9,
+              "rows": 124,
+              "matrix_nnz": 736,
+              "factor_nnz": 306,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 10,
+              "rows": 30628,
+              "matrix_nnz": 2152716,
+              "factor_nnz": 37199666,
+              "mass": false,
+              "ordering": "VectorCOLAMDV1"
+            },
+            {
+              "event": "factor",
+              "id": 11,
+              "rows": 30628,
+              "matrix_nnz": 1076768,
+              "factor_nnz": 1183848,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 12,
+              "rows": 4032,
+              "matrix_nnz": 251346,
+              "factor_nnz": 1844464,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 13,
+              "rows": 11533,
+              "matrix_nnz": 403469,
+              "factor_nnz": 6253287,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 14,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 9950421,
+              "mass": false,
+              "ordering": "COLAMD"
+            }
+          ]
+        }
+      },
+      "4000-q64": {
+        "schema": "AcceptedSerialSparsePacketV1",
+        "read_only": true,
+        "alpha": 4000,
+        "stored_slots": 62533,
+        "masses": [
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 11625,
+            "nnz": 411985
+          },
+          {
+            "rows": 1071,
+            "nnz": 16185
+          },
+          {
+            "rows": 2961,
+            "nnz": 46065
+          }
+        ],
+        "flow_rows": 34660,
+        "flow_nnz": 2911762,
+        "velocity_rows": 30628,
+        "pressure_rows": 4032,
+        "pressure_C_nnz": 0,
+        "predictor_factor_nnz": 37199666,
+        "consistent_mass_factor_nnz": 1183848,
+        "pressure_preconditioner_factor_nnz": 1844464,
+        "pressure_iterations": 152,
+        "mass_applications": 156,
+        "predictor_residual": 3.2695471764015993e-19,
+        "predictor_rhs_maximum": 2.1503081561537442e-05,
+        "pressure_rhs_maximum": 4.2407210717107925e-08,
+        "full_native_G_action_defect": 6.352747104407253e-22,
+        "consistent_mass_correction_rhs_maximum": 3.973656611352005e-07,
+        "consistent_mass_correction_true_residual": 1.6543612251060553e-21,
+        "true_pressure_residual": 9.79869922182315e-23,
+        "true_continuity": 9.796087776952136e-23,
+        "splitting_identity": 3.3116344405029175e-19,
+        "continuous_reference_errors": [
+          {
+            "block": 0,
+            "weighted_RMS": 7.328950775321953e-07,
+            "true_L2": 2.4307379828727216e-05,
+            "gradient_weighted_RMS": 0.00018798343563479643,
+            "maximum": 1.9098234349812504e-05,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 1,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 2,
+            "weighted_RMS": 2.163126353119811e-07,
+            "true_L2": 7.174278487428233e-06,
+            "gradient_weighted_RMS": 4.362657054823896e-05,
+            "maximum": 5.136856744136775e-06,
+            "scale": 0.021081109428869052,
+            "physical_volume": 1100
+          },
+          {
+            "block": 3,
+            "weighted_RMS": 6.1759822224462386e-09,
+            "true_L2": 2.0387173633848983e-07,
+            "gradient_weighted_RMS": 2.1353206621745365e-06,
+            "maximum": 1.8728883757410109e-07,
+            "scale": 0.010138113942362243,
+            "physical_volume": 1089.6875
+          },
+          {
+            "block": 4,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.005515726603544432,
+            "physical_volume": 1100
+          }
+        ],
+        "scope": "frozen initial-state diagnostic linear operations only; no evolution or extra governing sweep; consistent mass in action, diagonal mass only in named preconditioner; no dense Schur or M-inverse-G columns",
+        "scalars": [
+          {
+            "block": 3,
+            "rows": 11533,
+            "nnz": 403469,
+            "factor_nnz": 6253287,
+            "rhs_maximum": 5.876640136080175e-07,
+            "maximum_true_residual": 3.015900513368339e-21
+          },
+          {
+            "block": 2,
+            "rows": 15500,
+            "nnz": 548320,
+            "factor_nnz": 9950421,
+            "rhs_maximum": 3.175882395902833e-06,
+            "maximum_true_residual": 3.7692966152816365e-20
+          }
+        ],
+        "status": "pass",
+        "pressure_change_scaled_maximum": 9.774796981767354e-10,
+        "execution": {
+          "observer_policy": "OncePerNewMappedPathV1",
+          "observer_self_CPU_seconds": 15.128160296999994,
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-q64/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-q64/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-q64/frozen.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 241.6486447759671,
+          "process_cpu_seconds": 239.22716300000002,
+          "peak_RSS_KiB": 8264948,
+          "peak_address_space_KiB": 15280368,
+          "actual_mapped_files": {
+            "entries": 139,
+            "canonical_sha256": "469f356bb99b2cb2f9960a329a6d0f911d61699d1daaf1f708bcbd0848f34d53",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          },
+          "CPU_soft": 600,
+          "CPU_hard": 605,
+          "wall_limit": 900,
+          "stop_reason": null
+        },
+        "packet_sha256": "3c4c7c1f6533d1a2e3520c4259ca3a2f868e531d3a54d24650bb6b8f547f6bbd",
+        "numerical_receipts": {
+          "status": "pass",
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-q64/sparse-receipts.jsonl",
+          "sha256": "96afa665bd44ba54235712daf358c23b5f038f49fe2a9063ed1d39462bf83a33",
+          "factor_count": 14,
+          "solve_count": 326,
+          "maximum_factor_entries": 37199666,
+          "minimum_fill_margin": 2800334,
+          "maximum_matrix_nonzeros": 2152752,
+          "maximum_refinements": 0,
+          "maximum_residual_bound_fraction": 0.7350567812227926,
+          "factors": [
+            {
+              "event": "factor",
+              "id": 1,
+              "rows": 15376,
+              "matrix_nnz": 541696,
+              "factor_nnz": 601441,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 2,
+              "rows": 15252,
+              "matrix_nnz": 535072,
+              "factor_nnz": 582407,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 3,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 624041,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 4,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 5,
+              "rows": 1071,
+              "matrix_nnz": 16185,
+              "factor_nnz": 17054,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 6,
+              "rows": 2961,
+              "matrix_nnz": 46065,
+              "factor_nnz": 68650,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 7,
+              "rows": 3968,
+              "matrix_nnz": 135424,
+              "factor_nnz": 103246,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 8,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 9,
+              "rows": 124,
+              "matrix_nnz": 736,
+              "factor_nnz": 306,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 10,
+              "rows": 30628,
+              "matrix_nnz": 2152752,
+              "factor_nnz": 37199666,
+              "mass": false,
+              "ordering": "VectorCOLAMDV1"
+            },
+            {
+              "event": "factor",
+              "id": 11,
+              "rows": 30628,
+              "matrix_nnz": 1076768,
+              "factor_nnz": 1183848,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 12,
+              "rows": 4032,
+              "matrix_nnz": 251346,
+              "factor_nnz": 1844464,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 13,
+              "rows": 11533,
+              "matrix_nnz": 403469,
+              "factor_nnz": 6253287,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 14,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 9950421,
+              "mass": false,
+              "ordering": "COLAMD"
+            }
+          ]
+        }
+      },
+      "8000-native": {
+        "schema": "AcceptedSerialSparsePacketV1",
+        "read_only": true,
+        "alpha": 8000,
+        "stored_slots": 62533,
+        "masses": [
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 11625,
+            "nnz": 411985
+          },
+          {
+            "rows": 1071,
+            "nnz": 16185
+          },
+          {
+            "rows": 2961,
+            "nnz": 46065
+          }
+        ],
+        "flow_rows": 34660,
+        "flow_nnz": 2911419,
+        "velocity_rows": 30628,
+        "pressure_rows": 4032,
+        "pressure_C_nnz": 0,
+        "predictor_factor_nnz": 37162966,
+        "consistent_mass_factor_nnz": 1183848,
+        "pressure_preconditioner_factor_nnz": 1844464,
+        "pressure_iterations": 151,
+        "mass_applications": 155,
+        "predictor_residual": 3.8539999100070665e-19,
+        "predictor_rhs_maximum": 2.150308156153217e-05,
+        "pressure_rhs_maximum": 2.35305568395506e-08,
+        "full_native_G_action_defect": 5.492479267352104e-22,
+        "consistent_mass_correction_rhs_maximum": 4.969345996850075e-07,
+        "consistent_mass_correction_true_residual": 1.760240343512843e-21,
+        "true_pressure_residual": 7.107567257395566e-23,
+        "true_continuity": 7.107624212305514e-23,
+        "splitting_identity": 3.9254165171886516e-19,
+        "continuous_reference_errors": [
+          {
+            "block": 0,
+            "weighted_RMS": 7.328950775321953e-07,
+            "true_L2": 2.4307379828727216e-05,
+            "gradient_weighted_RMS": 0.00018798343563479643,
+            "maximum": 1.9098234349812504e-05,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 1,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 2,
+            "weighted_RMS": 2.163126353119811e-07,
+            "true_L2": 7.174278487428233e-06,
+            "gradient_weighted_RMS": 4.362657054823896e-05,
+            "maximum": 5.136856744136775e-06,
+            "scale": 0.021081109428869052,
+            "physical_volume": 1100
+          },
+          {
+            "block": 3,
+            "weighted_RMS": 6.1759822224462386e-09,
+            "true_L2": 2.0387173633848983e-07,
+            "gradient_weighted_RMS": 2.1353206621745365e-06,
+            "maximum": 1.8728883757410109e-07,
+            "scale": 0.010138113942362243,
+            "physical_volume": 1089.6875
+          },
+          {
+            "block": 4,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.005515726603544432,
+            "physical_volume": 1100
+          }
+        ],
+        "scope": "frozen initial-state diagnostic linear operations only; no evolution or extra governing sweep; consistent mass in action, diagonal mass only in named preconditioner; no dense Schur or M-inverse-G columns",
+        "scalars": [
+          {
+            "block": 3,
+            "rows": 11533,
+            "nnz": 403469,
+            "factor_nnz": 6252863,
+            "rhs_maximum": 5.876640136007577e-07,
+            "maximum_true_residual": 3.805030817743927e-21
+          },
+          {
+            "block": 2,
+            "rows": 15500,
+            "nnz": 548320,
+            "factor_nnz": 9926291,
+            "rhs_maximum": 3.175882395902859e-06,
+            "maximum_true_residual": 5.505714157152952e-20
+          }
+        ],
+        "status": "pass",
+        "pressure_change_scaled_maximum": 0.0,
+        "execution": {
+          "observer_policy": "OncePerNewMappedPathV1",
+          "observer_self_CPU_seconds": 5.553530544999987,
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-native/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-native/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-native/frozen.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 94.956655321992,
+          "process_cpu_seconds": 92.85539100000005,
+          "peak_RSS_KiB": 4704492,
+          "peak_address_space_KiB": 10718576,
+          "actual_mapped_files": {
+            "entries": 139,
+            "canonical_sha256": "d8b1e95484598995125e5a64c6c9a84a1b50b26f7ee70920bc4153e2ccac9116",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          },
+          "CPU_soft": 600,
+          "CPU_hard": 605,
+          "wall_limit": 900,
+          "stop_reason": null
+        },
+        "packet_sha256": "ae8edfe7a58e8c200674b401ff12c54ae57c527658ecab55430e5e934177ede3",
+        "numerical_receipts": {
+          "status": "pass",
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-native/sparse-receipts.jsonl",
+          "sha256": "2a2d1d37eb0e939c4e0a90a38594cd6398793c0cb2428f1af8cac6c0e1fce185",
+          "factor_count": 14,
+          "solve_count": 324,
+          "maximum_factor_entries": 37162966,
+          "minimum_fill_margin": 2837034,
+          "maximum_matrix_nonzeros": 2152435,
+          "maximum_refinements": 0,
+          "maximum_residual_bound_fraction": 0.8737571642003397,
+          "factors": [
+            {
+              "event": "factor",
+              "id": 1,
+              "rows": 15376,
+              "matrix_nnz": 541696,
+              "factor_nnz": 601441,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 2,
+              "rows": 15252,
+              "matrix_nnz": 535072,
+              "factor_nnz": 582407,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 3,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 624041,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 4,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 5,
+              "rows": 1071,
+              "matrix_nnz": 16185,
+              "factor_nnz": 17054,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 6,
+              "rows": 2961,
+              "matrix_nnz": 46065,
+              "factor_nnz": 68650,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 7,
+              "rows": 3968,
+              "matrix_nnz": 135424,
+              "factor_nnz": 103246,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 8,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 9,
+              "rows": 124,
+              "matrix_nnz": 736,
+              "factor_nnz": 306,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 10,
+              "rows": 30628,
+              "matrix_nnz": 2152435,
+              "factor_nnz": 37162966,
+              "mass": false,
+              "ordering": "VectorCOLAMDV1"
+            },
+            {
+              "event": "factor",
+              "id": 11,
+              "rows": 30628,
+              "matrix_nnz": 1076768,
+              "factor_nnz": 1183848,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 12,
+              "rows": 4032,
+              "matrix_nnz": 251346,
+              "factor_nnz": 1844464,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 13,
+              "rows": 11533,
+              "matrix_nnz": 403469,
+              "factor_nnz": 6252863,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 14,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 9926291,
+              "mass": false,
+              "ordering": "COLAMD"
+            }
+          ]
+        }
+      },
+      "8000-q48": {
+        "schema": "AcceptedSerialSparsePacketV1",
+        "read_only": true,
+        "alpha": 8000,
+        "stored_slots": 62533,
+        "masses": [
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 11625,
+            "nnz": 411985
+          },
+          {
+            "rows": 1071,
+            "nnz": 16185
+          },
+          {
+            "rows": 2961,
+            "nnz": 46065
+          }
+        ],
+        "flow_rows": 34660,
+        "flow_nnz": 2911740,
+        "velocity_rows": 30628,
+        "pressure_rows": 4032,
+        "pressure_C_nnz": 0,
+        "predictor_factor_nnz": 37162970,
+        "consistent_mass_factor_nnz": 1183848,
+        "pressure_preconditioner_factor_nnz": 1844464,
+        "pressure_iterations": 151,
+        "mass_applications": 155,
+        "predictor_residual": 3.0641416866924315e-19,
+        "predictor_rhs_maximum": 2.1503081561534423e-05,
+        "pressure_rhs_maximum": 2.353055683953071e-08,
+        "full_native_G_action_defect": 9.727644003623605e-22,
+        "consistent_mass_correction_rhs_maximum": 4.969345996183695e-07,
+        "consistent_mass_correction_true_residual": 2.514629062161204e-21,
+        "true_pressure_residual": 7.107540238909563e-23,
+        "true_continuity": 7.107258000578449e-23,
+        "splitting_identity": 3.0523866100827433e-19,
+        "continuous_reference_errors": [
+          {
+            "block": 0,
+            "weighted_RMS": 7.328950775321953e-07,
+            "true_L2": 2.4307379828727216e-05,
+            "gradient_weighted_RMS": 0.00018798343563479643,
+            "maximum": 1.9098234349812504e-05,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 1,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 2,
+            "weighted_RMS": 2.163126353119811e-07,
+            "true_L2": 7.174278487428233e-06,
+            "gradient_weighted_RMS": 4.362657054823896e-05,
+            "maximum": 5.136856744136775e-06,
+            "scale": 0.021081109428869052,
+            "physical_volume": 1100
+          },
+          {
+            "block": 3,
+            "weighted_RMS": 6.1759822224462386e-09,
+            "true_L2": 2.0387173633848983e-07,
+            "gradient_weighted_RMS": 2.1353206621745365e-06,
+            "maximum": 1.8728883757410109e-07,
+            "scale": 0.010138113942362243,
+            "physical_volume": 1089.6875
+          },
+          {
+            "block": 4,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.005515726603544432,
+            "physical_volume": 1100
+          }
+        ],
+        "scope": "frozen initial-state diagnostic linear operations only; no evolution or extra governing sweep; consistent mass in action, diagonal mass only in named preconditioner; no dense Schur or M-inverse-G columns",
+        "scalars": [
+          {
+            "block": 3,
+            "rows": 11533,
+            "nnz": 403469,
+            "factor_nnz": 6252863,
+            "rhs_maximum": 5.876640136010973e-07,
+            "maximum_true_residual": 6.483441641190631e-21
+          },
+          {
+            "block": 2,
+            "rows": 15500,
+            "nnz": 548320,
+            "factor_nnz": 9926291,
+            "rhs_maximum": 3.1758823959029517e-06,
+            "maximum_true_residual": 2.9010878443459787e-20
+          }
+        ],
+        "status": "pass",
+        "pressure_change_scaled_maximum": 1.0257121865751515e-09,
+        "execution": {
+          "observer_policy": "OncePerNewMappedPathV1",
+          "observer_self_CPU_seconds": 9.736214715999992,
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-q48/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-q48/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-q48/frozen.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 163.29201372497482,
+          "process_cpu_seconds": 160.981087,
+          "peak_RSS_KiB": 6209680,
+          "peak_address_space_KiB": 11972208,
+          "actual_mapped_files": {
+            "entries": 139,
+            "canonical_sha256": "a0cce07295bbd7e4535d5d741db77a68e253e84d4e32176a2181ad85d8c8706e",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          },
+          "CPU_soft": 600,
+          "CPU_hard": 605,
+          "wall_limit": 900,
+          "stop_reason": null
+        },
+        "packet_sha256": "11aca46c52a28cea15edcd31579c14a002903c2dec70b05f9a09d3c29cec8c03",
+        "numerical_receipts": {
+          "status": "pass",
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-q48/sparse-receipts.jsonl",
+          "sha256": "c293b75a8794b6a1d2191e97f9fdd9f7b340a702dd767ca7fe34fe231f79bed4",
+          "factor_count": 14,
+          "solve_count": 324,
+          "maximum_factor_entries": 37162970,
+          "minimum_fill_margin": 2837030,
+          "maximum_matrix_nonzeros": 2152716,
+          "maximum_refinements": 1,
+          "maximum_residual_bound_fraction": 0.6456618448401904,
+          "factors": [
+            {
+              "event": "factor",
+              "id": 1,
+              "rows": 15376,
+              "matrix_nnz": 541696,
+              "factor_nnz": 601441,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 2,
+              "rows": 15252,
+              "matrix_nnz": 535072,
+              "factor_nnz": 582407,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 3,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 624041,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 4,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 5,
+              "rows": 1071,
+              "matrix_nnz": 16185,
+              "factor_nnz": 17054,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 6,
+              "rows": 2961,
+              "matrix_nnz": 46065,
+              "factor_nnz": 68650,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 7,
+              "rows": 3968,
+              "matrix_nnz": 135424,
+              "factor_nnz": 103246,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 8,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 9,
+              "rows": 124,
+              "matrix_nnz": 736,
+              "factor_nnz": 306,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 10,
+              "rows": 30628,
+              "matrix_nnz": 2152716,
+              "factor_nnz": 37162970,
+              "mass": false,
+              "ordering": "VectorCOLAMDV1"
+            },
+            {
+              "event": "factor",
+              "id": 11,
+              "rows": 30628,
+              "matrix_nnz": 1076768,
+              "factor_nnz": 1183848,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 12,
+              "rows": 4032,
+              "matrix_nnz": 251346,
+              "factor_nnz": 1844464,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 13,
+              "rows": 11533,
+              "matrix_nnz": 403469,
+              "factor_nnz": 6252863,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 14,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 9926291,
+              "mass": false,
+              "ordering": "COLAMD"
+            }
+          ]
+        }
+      },
+      "8000-q64": {
+        "schema": "AcceptedSerialSparsePacketV1",
+        "read_only": true,
+        "alpha": 8000,
+        "stored_slots": 62533,
+        "masses": [
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 15625,
+            "nnz": 555025
+          },
+          {
+            "rows": 11625,
+            "nnz": 411985
+          },
+          {
+            "rows": 1071,
+            "nnz": 16185
+          },
+          {
+            "rows": 2961,
+            "nnz": 46065
+          }
+        ],
+        "flow_rows": 34660,
+        "flow_nnz": 2911762,
+        "velocity_rows": 30628,
+        "pressure_rows": 4032,
+        "pressure_C_nnz": 0,
+        "predictor_factor_nnz": 37162970,
+        "consistent_mass_factor_nnz": 1183848,
+        "pressure_preconditioner_factor_nnz": 1844464,
+        "pressure_iterations": 151,
+        "mass_applications": 155,
+        "predictor_residual": 4.955142741437657e-19,
+        "predictor_rhs_maximum": 2.1503081561537442e-05,
+        "pressure_rhs_maximum": 2.353055683951507e-08,
+        "full_native_G_action_defect": 1.2705494208814505e-21,
+        "consistent_mass_correction_rhs_maximum": 4.969345994274816e-07,
+        "consistent_mass_correction_true_residual": 2.3425754947501744e-21,
+        "true_pressure_residual": 7.107525960527178e-23,
+        "true_continuity": 7.109044740022044e-23,
+        "splitting_identity": 4.922067383927905e-19,
+        "continuous_reference_errors": [
+          {
+            "block": 0,
+            "weighted_RMS": 7.328950775321953e-07,
+            "true_L2": 2.4307379828727216e-05,
+            "gradient_weighted_RMS": 0.00018798343563479643,
+            "maximum": 1.9098234349812504e-05,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 1,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.07426793792441279,
+            "physical_volume": 1100
+          },
+          {
+            "block": 2,
+            "weighted_RMS": 2.163126353119811e-07,
+            "true_L2": 7.174278487428233e-06,
+            "gradient_weighted_RMS": 4.362657054823896e-05,
+            "maximum": 5.136856744136775e-06,
+            "scale": 0.021081109428869052,
+            "physical_volume": 1100
+          },
+          {
+            "block": 3,
+            "weighted_RMS": 6.1759822224462386e-09,
+            "true_L2": 2.0387173633848983e-07,
+            "gradient_weighted_RMS": 2.1353206621745365e-06,
+            "maximum": 1.8728883757410109e-07,
+            "scale": 0.010138113942362243,
+            "physical_volume": 1089.6875
+          },
+          {
+            "block": 4,
+            "weighted_RMS": 0,
+            "true_L2": 0,
+            "gradient_weighted_RMS": 0,
+            "maximum": 0,
+            "scale": 0.005515726603544432,
+            "physical_volume": 1100
+          }
+        ],
+        "scope": "frozen initial-state diagnostic linear operations only; no evolution or extra governing sweep; consistent mass in action, diagonal mass only in named preconditioner; no dense Schur or M-inverse-G columns",
+        "scalars": [
+          {
+            "block": 3,
+            "rows": 11533,
+            "nnz": 403469,
+            "factor_nnz": 6252863,
+            "rhs_maximum": 5.876640136080175e-07,
+            "maximum_true_residual": 3.742165091189897e-21
+          },
+          {
+            "block": 2,
+            "rows": 15500,
+            "nnz": 548320,
+            "factor_nnz": 9926291,
+            "rhs_maximum": 3.175882395902833e-06,
+            "maximum_true_residual": 5.0610218598444445e-20
+          }
+        ],
+        "status": "pass",
+        "pressure_change_scaled_maximum": 1.9545141647322002e-09,
+        "execution": {
+          "observer_policy": "OncePerNewMappedPathV1",
+          "observer_self_CPU_seconds": 15.297154663000015,
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-q64/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-q64/frozen-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-q64/frozen.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 248.4587479819893,
+          "process_cpu_seconds": 245.93174300000015,
+          "peak_RSS_KiB": 8221628,
+          "peak_address_space_KiB": 15267112,
+          "actual_mapped_files": {
+            "entries": 141,
+            "canonical_sha256": "ff1619aae5786c3042952c4ac5dc0216f643e611ca3b1bad1b9bc7129c5f98d7",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          },
+          "CPU_soft": 600,
+          "CPU_hard": 605,
+          "wall_limit": 900,
+          "stop_reason": null
+        },
+        "packet_sha256": "9715fe7bd4222f239a17d05b080e4ad7cb372067a7dc10ec54019c0c61497063",
+        "numerical_receipts": {
+          "status": "pass",
+          "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/8000-q64/sparse-receipts.jsonl",
+          "sha256": "634ba9cf1308b376712ed2f48d685050bb586f4b90f1c33db28d8129ccc56a91",
+          "factor_count": 14,
+          "solve_count": 324,
+          "maximum_factor_entries": 37162970,
+          "minimum_fill_margin": 2837030,
+          "maximum_matrix_nonzeros": 2152752,
+          "maximum_refinements": 0,
+          "maximum_residual_bound_fraction": 0.9681387497801501,
+          "factors": [
+            {
+              "event": "factor",
+              "id": 1,
+              "rows": 15376,
+              "matrix_nnz": 541696,
+              "factor_nnz": 601441,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 2,
+              "rows": 15252,
+              "matrix_nnz": 535072,
+              "factor_nnz": 582407,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 3,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 624041,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 4,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 5,
+              "rows": 1071,
+              "matrix_nnz": 16185,
+              "factor_nnz": 17054,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 6,
+              "rows": 2961,
+              "matrix_nnz": 46065,
+              "factor_nnz": 68650,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 7,
+              "rows": 3968,
+              "matrix_nnz": 135424,
+              "factor_nnz": 103246,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 8,
+              "rows": 11408,
+              "matrix_nnz": 400384,
+              "factor_nnz": 415537,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 9,
+              "rows": 124,
+              "matrix_nnz": 736,
+              "factor_nnz": 306,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 10,
+              "rows": 30628,
+              "matrix_nnz": 2152752,
+              "factor_nnz": 37162970,
+              "mass": false,
+              "ordering": "VectorCOLAMDV1"
+            },
+            {
+              "event": "factor",
+              "id": 11,
+              "rows": 30628,
+              "matrix_nnz": 1076768,
+              "factor_nnz": 1183848,
+              "mass": true,
+              "ordering": "LDLT"
+            },
+            {
+              "event": "factor",
+              "id": 12,
+              "rows": 4032,
+              "matrix_nnz": 251346,
+              "factor_nnz": 1844464,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 13,
+              "rows": 11533,
+              "matrix_nnz": 403469,
+              "factor_nnz": 6252863,
+              "mass": false,
+              "ordering": "COLAMD"
+            },
+            {
+              "event": "factor",
+              "id": 14,
+              "rows": 15500,
+              "matrix_nnz": 548320,
+              "factor_nnz": 9926291,
+              "mass": false,
+              "ordering": "COLAMD"
+            }
+          ]
+        }
+      }
+    },
+    "canonical": {
+      "4000": {
+        "status": "pass",
+        "packet_sha256": "ee975f77f28250df1c9594d009208152eaa321b5664d7a1b70b7669bc31bc089",
+        "A": {
+          "file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-4000/frozen.A.csr",
+          "sha256": "153e78a3e15f5bafa2cb82954f6f17abc4493ae0edb0e675ae4e08a300203a38",
+          "rows": 30628,
+          "columns": 30628,
+          "nnz": 2152435,
+          "encoding": "RANSCSR1-native-little-endian"
+        },
+        "mass_relation_scaled_defect": 1.5614594723949833e-16,
+        "execution": {
+          "observer_policy": "OncePerNewMappedPathV1",
+          "observer_self_CPU_seconds": 2.3730512419999954,
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-4000/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-4000/prefactor-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-4000/prefactor.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 32.37702056299895,
+          "process_cpu_seconds": 30.903395,
+          "peak_RSS_KiB": 1851040,
+          "peak_address_space_KiB": 7177356,
+          "actual_mapped_files": {
+            "entries": 139,
+            "canonical_sha256": "8fc4c78e90ff9653dd9be5284a839096872c62012fb035f739377fe51d99a472",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          },
+          "CPU_soft": 600,
+          "CPU_hard": 605,
+          "wall_limit": 900,
+          "stop_reason": null
+        },
+        "ordering": {
+          "status": "pass",
+          "ordering": "VectorCOLAMDV1",
+          "rows": 30628,
+          "nnz": 2152435,
+          "factor_nnz": 37199662,
+          "rhs_maximum": 2.150308156153217e-05,
+          "true_residual": 2.998496633280223e-19,
+          "tiny_rhs_maximum": 2.150308156153217e-17,
+          "tiny_true_residual": 3.7594152514438844e-31,
+          "cancelling_rhs_maximum": 2.63266906628988e-10,
+          "cancelling_true_residual": 1.3974828708171268e-25
+        },
+        "ordering_execution": {
+          "observer_policy": "OncePerNewMappedPathV1",
+          "observer_self_CPU_seconds": 0.2696276349999991,
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/CT13SparseOrderingProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-4000/frozen.A.csr",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-4000/rhs",
+            "VectorCOLAMDV1",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-4000/ordering.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-4000/groups"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 2.5330566609627567,
+          "process_cpu_seconds": 2.4254469999999975,
+          "peak_RSS_KiB": 617460,
+          "peak_address_space_KiB": 1176632,
+          "actual_mapped_files": {
+            "entries": 37,
+            "canonical_sha256": "308ceecb5efbf57fb576e00713aedb90961bca5152d564336b89cb514f1b87e4",
+            "executable_entries": {},
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          },
+          "CPU_soft": 600,
+          "CPU_hard": 605,
+          "wall_limit": 900,
+          "stop_reason": null
+        },
+        "ordering_result_sha256": "2c79666f469139f2f5a5bc6567dcaedcd4a504ab9bca0f20b236e1d2841ace3a"
+      },
+      "8000": {
+        "status": "pass",
+        "packet_sha256": "e64baf16e69068dae3babd368bebb07f53df501b6e3128e896f598bd2248b1c1",
+        "A": {
+          "file": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-8000/frozen.A.csr",
+          "sha256": "9d76346441135d2722dcca7e9903e62e83578c80941843a26e4e432990e0b322",
+          "rows": 30628,
+          "columns": 30628,
+          "nnz": 2152435,
+          "encoding": "RANSCSR1-native-little-endian"
+        },
+        "mass_relation_scaled_defect": 1.3383938334814144e-16,
+        "execution": {
+          "observer_policy": "OncePerNewMappedPathV1",
+          "observer_self_CPU_seconds": 2.081976605999998,
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-8000/case.xml",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-8000/prefactor-request.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-8000/prefactor.json"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 29.286728578037582,
+          "process_cpu_seconds": 27.553194999999967,
+          "peak_RSS_KiB": 1851072,
+          "peak_address_space_KiB": 7177348,
+          "actual_mapped_files": {
+            "entries": 139,
+            "canonical_sha256": "813d84488b6b0472dea794384dd8f3038793012e8ec541a61acfe4eebbc6b4de",
+            "executable_entries": {
+              "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd"
+            },
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          },
+          "CPU_soft": 600,
+          "CPU_hard": 605,
+          "wall_limit": 900,
+          "stop_reason": null
+        },
+        "ordering": {
+          "status": "pass",
+          "ordering": "VectorCOLAMDV1",
+          "rows": 30628,
+          "nnz": 2152435,
+          "factor_nnz": 37162966,
+          "rhs_maximum": 2.150308156153217e-05,
+          "true_residual": 3.8539999100070665e-19,
+          "tiny_rhs_maximum": 2.150308156153217e-17,
+          "tiny_true_residual": 2.867709687192594e-31,
+          "cancelling_rhs_maximum": 5.265162651218532e-10,
+          "cancelling_true_residual": 2.003328046026864e-25
+        },
+        "ordering_execution": {
+          "observer_policy": "OncePerNewMappedPathV1",
+          "observer_self_CPU_seconds": 0.2697774640000006,
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/CT13SparseOrderingProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-8000/frozen.A.csr",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-8000/rhs",
+            "VectorCOLAMDV1",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-8000/ordering.json",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/canonical-8000/groups"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 2.48523335903883,
+          "process_cpu_seconds": 2.399377999999942,
+          "peak_RSS_KiB": 617076,
+          "peak_address_space_KiB": 1176632,
+          "actual_mapped_files": {
+            "entries": 37,
+            "canonical_sha256": "308ceecb5efbf57fb576e00713aedb90961bca5152d564336b89cb514f1b87e4",
+            "executable_entries": {},
+            "complete_mapping_storage": "hash-bound original external execution receipt"
+          },
+          "CPU_soft": 600,
+          "CPU_hard": 605,
+          "wall_limit": 900,
+          "stop_reason": null
+        },
+        "ordering_result_sha256": "a1626b271b26fde59eaecebcff3041642a3a3f25ab11e5a614615955158b896b"
+      }
+    },
+    "classifier_controls": {
+      "status": "pass",
+      "actual_first_pair": {
+        "status": "fail",
+        "reasons": [
+          "temporal:Pi"
+        ],
+        "scope": "actual unchanged target,pairedT=.002 stepping only"
+      },
+      "same_cohort_parity": {
+        "positive": {
+          "status": "pass",
+          "reasons": [],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        },
+        "absolute_pressure": {
+          "status": "fail",
+          "reasons": [
+            "temporal:Pi"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        },
+        "field_drift": {
+          "status": "fail",
+          "reasons": [
+            "0.001:drift:U"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        },
+        "mass": {
+          "status": "fail",
+          "reasons": [
+            "0.001:mass"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        },
+        "traction": {
+          "status": "fail",
+          "reasons": [
+            "0.001:traction:normalized_interface_traction_RMS"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        },
+        "domain": {
+          "status": "fail",
+          "reasons": [
+            "0.001:domain_or_constitutive"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        },
+        "factor": {
+          "status": "fail",
+          "reasons": [
+            "0.001:factor_fill:predictor_factor_nonzeros"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        },
+        "initial": {
+          "status": "fail",
+          "reasons": [
+            "unequal_actual_initial"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        },
+        "coverage": {
+          "status": "fail",
+          "reasons": [
+            "0.001:accepted_coverage"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        },
+        "budget": {
+          "status": "fail",
+          "reasons": [
+            "0.001:budget_coverage_or_accuracy"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        },
+        "extra_solve": {
+          "status": "fail",
+          "reasons": [
+            "0.001:correction"
+          ],
+          "scope": "actual unchanged target,pairedT=.002 stepping only"
+        }
+      },
+      "new_request_positive": "synthetic request/metrics only,not native-history qualification",
+      "foreign_old_cohort": "rejected",
+      "new_coverage_negative": "rejected",
+      "AST_edits": "exactly required-dt list and required-member set; every scientific check,scale,tolerance and T=.002 unchanged"
+    }
+  },
+  "exact_static_oracle_comparison": {
+    "status": "pass",
+    "static": {
+      "target": {
+        "status": "pass",
+        "all_sparse_backend_numerical_data_equal": true,
+        "immutable_FE_rows_equal": true,
+        "oracle_sha256": "46ccf21ce4c85924ea509bb9d2c2c2df5c9474ba49079f53c7ea113b1c3a5f28",
+        "candidate_sha256": "5f09ff64b8c05f0da9726f9013b255f9200edf385d611507a9e7bdb905585784"
+      },
+      "alpha2000": {
+        "status": "pass",
+        "all_sparse_backend_numerical_data_equal": true,
+        "immutable_FE_rows_equal": false,
+        "oracle_sha256": "9d7b37e7051c603a5b15fa1f9934f7ce78f57de300dcc58eca6b13dac65d3c16",
+        "candidate_sha256": "071c1d5a1eb7423ec391cd6ab634f3a943861f79cc4f94e791be706b0141b293"
+      },
+      "q48": {
+        "status": "pass",
+        "all_sparse_backend_numerical_data_equal": true,
+        "immutable_FE_rows_equal": false,
+        "oracle_sha256": "308c5585b409b082cb468d20110c6fb343bfe9596248b3506e2f9872560d7eef",
+        "candidate_sha256": "1301fec672240c24e968095bf428d9b90af9f74887e7c63d7f70edc1c7e3c3d5"
+      },
+      "q64": {
+        "status": "pass",
+        "all_sparse_backend_numerical_data_equal": true,
+        "immutable_FE_rows_equal": false,
+        "oracle_sha256": "01f4a30f3d508128831d2fb2da00474de3396b7d571473f477ab5290caf32737",
+        "candidate_sha256": "87491c7fd079d4fde958f18cc635b45309056e60f1c08a87639efef56c480b9e"
+      }
+    },
+    "members": {},
+    "criterion": "binary64 numerical arrays identical, stronger than the prospective scaled tolerances; source paths/component/schema prose excluded"
+  },
+  "resources": {
+    "static-v1": {
+      "command": [
+        "python3",
+        "-B",
+        "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_budget.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116",
+        "--control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-static-v1",
+        "--",
+        "python3",
+        "-B",
+        "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_static.py",
+        "--ct12",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115",
+        "--ct13",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime",
+        "--component",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/small-v7",
+        "--capacity",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/capacity-v4",
+        "--contract",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/source/docs/plans/cao-tamura-accepted-15-evidence/contract.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 342809,
+      "guard_pid": 342810,
+      "owned_family_pid": 342813,
+      "wall_seconds": 1714.3727231959929,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 2467.110331,
+      "resource": {
+        "maximum_aggregate": 28,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    },
+    "timestep-v1": {
+      "command": [
+        "python3",
+        "-B",
+        "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_budget.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116",
+        "--control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-timestep-v1",
+        "--",
+        "python3",
+        "-B",
+        "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_timestep.py",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime",
+        "--static",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1",
+        "--previous-pair",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v1",
+        "--contract",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-contract-v1.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 348590,
+      "guard_pid": 348591,
+      "owned_family_pid": 348594,
+      "wall_seconds": 1150.1833328419598,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 1445.504679,
+      "resource": {
+        "maximum_aggregate": 28,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    },
+    "equivalence-static-v1": {
+      "command": [
+        "python3",
+        "-B",
+        "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_budget.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116",
+        "--control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-equivalence-static-v1",
+        "--",
+        "python3",
+        "-B",
+        "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_equivalence.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--static",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1",
+        "--phase",
+        "static",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/equivalence-static-v1"
+      ],
+      "exit_code": 0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "control_parent_pid": 352645,
+      "guard_pid": 352646,
+      "owned_family_pid": 352649,
+      "wall_seconds": 48.78306468896335,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 60.100567,
+      "resource": {
+        "maximum_aggregate": 13,
+        "maximum_project": 5,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "process_cpu_scope": "owned family and control monitor, excludes stopped elapsed intervals"
+    }
+  },
+  "limits": {
+    "action_reconstruction": 2e-10,
+    "state_pressure_traction": 1e-08,
+    "true_residual": "<=2e-12 maxabs(rhs)+1e-25; refinements<=3",
+    "factor_entries": 40000000,
+    "AS_bytes": 17179869184
+  },
+  "engineering_closed_CPU_including_exception_reserve": 12808.697312999999,
+  "entry_campaign_resource_admission": "UNRESOLVED",
+  "physical_T0_407": "UNATTEMPTED",
+  "publication_scope": "Compact numerical decisions,counts,limits and canonical hashes. Full initial vectors,ID arrays,mappings,CSR/state/history payloads remain in original sealed Linux evidence."
+}

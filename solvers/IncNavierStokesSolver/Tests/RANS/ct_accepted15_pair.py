@@ -46,12 +46,13 @@ def numerical_receipts(path):
     return dict(status='pass',path=str(path),sha256=sha(path),factor_count=len(factors),solve_count=len(solves),maximum_factor_entries=max(x['factor_nnz'] for x in factors.values()),minimum_fill_margin=min(40000000-x['factor_nnz'] for x in factors.values()),maximum_matrix_nonzeros=max(x['matrix_nnz'] for x in factors.values()),maximum_refinements=max(x['refinements'] for x in solves),maximum_residual_bound_fraction=max(x['true_residual']/x['bound'] for x in solves),factors=list(factors.values()))
 
 def main():
-    global bounded_budgets,probe,profiles,inventory
+    global bounded_budgets,probe,profiles,inventory,comparison
     n.physical_metrics=measured('independent_accepted_metrics',n.physical_metrics)
     bounded_budgets=measured('complete_endpoint_scalar_controls',bounded_budgets)
     probe=measured('endpoint_constitutive_probe',probe)
     profiles=measured('independent_traction_profiles',profiles)
     inventory=measured('independent_endpoint_inventory',inventory)
+    comparison=measured('paired_common_state_and_endpoint_comparison',comparison)
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('runtime','static','component','capacity','contract','output'):p.add_argument('--'+k,type=Path,required=True)
     p.add_argument('--admission',type=Path)
@@ -98,7 +99,10 @@ def main():
         if e['exit_code']!=0 or r['failure'] or abs(r['time']-.002)>1e-13:
             out['qualification']=classify(out);out['first_failure']=dict(member=name,last_accepted_time=r['time'],failure=r['failure']);write_json(a.output/'results.json',out);m.seal(a.output,['results.json']);return 1
     comparison(out,initials,reports,c,weights,count,classifier=classify)
-    common=[{round(t,12):s for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)} for r in reports.values()];out['regional_temporal_pressure']=[dict(time=t,pressure=regional_pressure(*(n.observations(ini,x[t],count)[:,4] for x in common),wt,regions,c['ustar']**2)) for t in sorted(set(common[0])&set(common[1]))]
+    def regional_common():
+        common=[{round(t,12):s for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)} for r in reports.values()]
+        return [dict(time=t,pressure=regional_pressure(*(n.observations(ini,x[t],count)[:,4] for x in common),wt,regions,c['ustar']**2)) for t in sorted(set(common[0])&set(common[1]))]
+    out['regional_temporal_pressure']=measured('paired_regional_time_series',regional_common)()
     out['clock_off_performance']={name:dict(total_native_CPU=row['execution']['process_cpu_seconds'],total_native_wall=row['execution']['wall_seconds'],accepted_steps=round(.002/row['dt']),zero_step_startup_CPU=row['zero_step_execution']['process_cpu_seconds'],scope='actual detailed-timing-off execution including startup/mandatory checks/output; no inferred exclusive phase speedup or long-run affordability') for name,row in out['members'].items()}
     out['workflow_phases']=PHASES
     out['workflow_phase_scope']='outer nonoverlapping wrappers; endpoint scalar wrapper contains its own native probes; do not add its children to native executions again; no detailed inner timers'
