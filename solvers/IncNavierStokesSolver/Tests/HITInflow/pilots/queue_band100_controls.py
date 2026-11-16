@@ -107,6 +107,13 @@ class Queue:
                 except subprocess.TimeoutExpired:
                     os.killpg(process.pid, signal.SIGKILL)
                     process.wait()
+            # The inner controller gives MPI its own process session. Retain
+            # its PID/start-time/executable safeguards when an outer deadline
+            # interrupts that controller, rather than leaving orphan ranks.
+            row["owned_rank_cleanup"] = {}
+            if output.exists():
+                for directory in output.rglob("*.bindings"):
+                    row["owned_rank_cleanup"][str(directory)] = run.cleanup_owned_ranks(directory)
             raise
         finally:
             row.update(finished_utc=run.utc(), wall_seconds=time.monotonic()-start, log_sha256=run.sha(log))
@@ -133,6 +140,8 @@ class Queue:
         run.require(inputs, "field has no partitions")
         directory = self.root / "native-work" / name
         directory.mkdir(parents=True)
+        self.receipt["current"] = {"stage": "native-work-" + name, "output": str(directory)}
+        self.save()
         for source in [case / "pilot.xml", *sorted(case.glob("*.dat"))]:
             shutil.copyfile(source, directory / source.name)
             inputs[str(source)] = run.sha(source)
@@ -152,6 +161,7 @@ class Queue:
             raise
         self.receipt.setdefault("native_work", {})[name] = {
             "receipt": str(directory / "receipt.json"), "sha256": run.sha(directory / "receipt.json")}
+        self.receipt["current"] = None
         self.save()
 
     def execute(self):
@@ -185,10 +195,10 @@ class Queue:
                 self.save()
                 run.require(planning["passed"], "bandwidth memory planning rejected; reconsider ranks before800")
             preflight = self.root / (case + "-preflight")
-            self.stage(case + "-preflight", preflight, self.command(case, "preflight", preflight), 2*3600)
+            self.stage(case + "-preflight", preflight, self.command(case, "preflight", preflight), 4*3600)
             study = self.root / (case + "-study")
             ref = self.root / "z-study" if case == "bandwidth" else self.args.reference_study
-            self.stage(case + "-study", study, self.command(case, "study", study, preflight, ref), 18*3600)
+            self.stage(case + "-study", study, self.command(case, "study", study, preflight, ref), 20*3600)
             self.receipt["completed_cases"].append(case)
             self.save()
         for name, case in [("old-base", self.args.reference_study / "cases/base/run"),
