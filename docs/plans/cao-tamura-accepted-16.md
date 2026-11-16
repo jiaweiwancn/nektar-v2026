@@ -27,7 +27,7 @@ remain required; source implementation or a local speedup cannot close them.
 
 | Gate | Current status |
 |---|---|
-| G1 | V4 baseline PASS reused by exact scope; changed candidate UNATTEMPTED |
+| G1 | V4 baseline PASS; V5 small/current first2-step controls PASS,selected remainder pending |
 | G2 | V4 baseline PASS; changed candidate fresh pair UNATTEMPTED |
 | G3 | Heldout whole-workflow validation UNATTEMPTED |
 | G4 | Selected two-cycle retention/recovery UNATTEMPTED |

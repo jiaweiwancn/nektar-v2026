@@ -82,7 +82,7 @@ def main():
         require(re['exit_code']!=0 and 'deliberate' in rr['failure'] and same_history(tr,rr),'full rejected-step rollback differs')
         defect=maximum(np.asarray(fr['state'])-orr['state']);require(defect<=1e-8,'small complete update equivalence')
         negatives={}
-        for label,parent,value in [('old-to-new',Path(orr['checkpoint']),POLICY),('new-to-old',Path(tr['checkpoint']),'Off'),('unknown',None,'UnknownV1')]:
+        for label,parent,value in [('old-to-new',Path(orr['checkpoint']),POLICY),('new-to-old',Path(tr['checkpoint']),'Off'),('new-to-V6',Path(tr['checkpoint']),'ImmutableTensorV6'),('unknown',None,'UnknownV1')]:
             folder,q,e=evolve(label,c,0,parent,template,value)
             message=q.get('failure','')+(folder/'solver.log').read_text()[-3000:]
             require(e['exit_code']!=0 and ('signature' if parent else 'immutable') in message.lower(),'wrong identity rejection:'+label)
