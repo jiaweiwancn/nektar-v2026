@@ -16,8 +16,10 @@ def run(root):
     x=np.asarray([-1.,-.75,0.,.5,1.]);t=(x+1)/2
     B=np.stack(((1-t)**3,3*t*(1-t)**2,3*t*t*(1-t),t**3),axis=1)
     assert np.max(abs(B@np.asarray(T,dtype=float)/3-basis(3,x)[0]))<64*np.finfo(float).eps
-    monitor=root/'science/W0/monitor';ready=load(monitor/'step-20.ready.json')
-    report=verify(ready['report']);sp=verify(ready['structure'])
+    monitor=root/'science/W0/monitor';ready=load(monitor/'step-20.completion.json')
+    assert ready['schema']=='WJNativeCompletionV1'
+    report=verify(ready['report']);sp=monitor/'structure.json'
+    assert identity(sp)['sha256']==ready['binding']['structure_sha256']
     r=native_load(report);structure=load(sp)
     assert r['failure']=='' and int(r['steps'])==20 and len(r['state'])==24688
     baseline=load(root/'inputs/baseline.json')
@@ -47,7 +49,7 @@ def run(root):
             minimum=str(min(np.longdouble(v['heuristic_lower']) for v in cells))))
     out=root/'resumption-r1/science/certificate-feasibility-r1-v1.json'
     atomic(out,dict(status='READ_ONLY_FEASIBILITY_NOT_ACCEPTANCE',source=identity(report),
-        structure=identity(sp),ready=identity(monitor/'step-20.ready.json'),precision=precision,
+        structure=identity(sp),completion=identity(monitor/'step-20.completion.json'),precision=precision,
         basis='native Modified_A cubic to Bernstein; i fast, physical global orientation signs applied; integer transform/9 in long double',
         K_reference=K,k_floor_relative=1e-8,scope_of_floor='whole-cell positive reference floor is stronger than nonnegative moving-ray acceptance',
         reserve='heuristic 4096*binary64 epsilon*(K0+sum absolute transformed terms); NOT a proved outward enclosure',
