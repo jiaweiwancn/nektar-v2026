@@ -75,6 +75,7 @@ def main():
     for k in ('root','runtime','pair','training','static','output'):p.add_argument('--'+k,type=Path,required=True)
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');os.environ['NEKTAR_RANS_PROBE_OBSERVER']='NativeAuditReceiptV1';os.environ.pop('NEKTAR_RANS_TIMING_FILE',None);n.reference=lru_cache(None)(n.reference)
     pair=n.read(a.pair/'results.json');require(pair['qualification']['status']=='pass','fresh pair prerequisite')
+    require(pair['workflow_contract_sha256']==sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/workflow-contract-v2.json'),'foreign workflow contract')
     m=RequestManifest(a.output,dict(schema='CT15ActualSegmentRecoveryV1',runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.runtime/'RANSPreservationProbe'),pair_sha256=sha(a.pair/'results.json'),training_sha256=sha(a.training/'results.json'),contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/contract.json'),held_out='steps6-to8 fixed before training fit',source_sha256=sha(Path(__file__))))
     c=pair['case'];ini=n.read(a.static/'target/frozen.json');weights=n.inventory(c)[2];count=len(weights)
     full=n.read(a.pair/'0.00025/case.evolution.json');full_snaps=snapshots(full)
@@ -93,7 +94,7 @@ def main():
         after=resource.getrusage(resource.RUSAGE_CHILDREN)
         e['whole_segment_CPU']=time.process_time()-cpu+after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime;e['whole_segment_wall']=time.monotonic()-started
         return dest,r,e
-    binding=dict(runtime=m.payload['request']['runtime'],probe=m.payload['request']['probe'],dt=.00025,signature=full['signature'])
+    binding=dict(runtime=m.payload['request']['runtime'],probe=m.payload['request']['probe'],dt=.00025,signature=full['signature'],workflow_contract_sha256=pair['workflow_contract_sha256'])
     result=dict(schema='CT15ActualSegmentRecoveryV1',status='incomplete',policy='SelectiveReplayV1',cycles=[],model=model,workflow_contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/workflow-contract-v2.json'))
     previous=zero;current=two;current_folder=a.training/'steps-2'
     for end in (2,4):

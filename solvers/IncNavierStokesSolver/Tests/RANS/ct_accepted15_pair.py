@@ -60,6 +60,7 @@ def main():
     co_workflow_sha256=sha(workflow_contract)
     pre=sealed(a.static);component=sealed(a.component);capacity=sealed(a.capacity);require(pre['status']==component['status']==capacity['status']=='pass','pair prerequisites incomplete')
     co=n.read(a.contract);dts=co['dt'];require(tuple(dts) in COHORTS and co['T']==.002,'unadmitted short-pair contract')
+    require(co['workflow_contract_sha256']==co_workflow_sha256,'changed prospective workflow contract')
     retry=dts!=[.001,.0005];require(co['schema']==('CT15AdmittedShortPairContractV2' if retry else 'CT15AdmittedShortPairContractV1'),'foreign cohort contract')
     classify=(lambda q:cohort_pair(q,dts)) if retry else target_pair
     require(co['static_sha256']==sha(a.static/'results.json') and co['component_sha256']==sha(a.component/'results.json') and co['capacity_sha256']==sha(a.capacity/'results.json'),'stale pair prerequisites')

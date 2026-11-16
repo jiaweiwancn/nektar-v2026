@@ -13,6 +13,7 @@ def main():
     q={k:q[k] for k in ('dt','T','physical_manifest_sha256','actual_initialized_state_sha256','slots','elements','limits','classifier','admissibility','observations','quadrature','forbidden','alpha','steps')}
     from ct_accepted15_controls import COMPONENT
     q.update(schema='CT15AdmittedShortPairContractV2',static_sha256=sha(a.root/'static-v1/results.json'),component_sha256=sha(a.component/'results.json'),capacity_sha256=sha(a.ct14/'capacity-v4/results.json'),component_identity=COMPONENT,governing_sha256=sha(a.runtime/'IncNavierStokesSolver'),probe_sha256=sha(a.runtime/'RANSPreservationProbe'),oracle_complete_pair_sha256=sha(a.ct14/'pair-v2/results.json'),scope='fresh CT15 component only; unchanged CT11 scientific classifier; old capacity reused only for unchanged sparse algebra with new exact canonical matrix/mask equality')
+    q['workflow_contract_sha256']=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/workflow-contract-v2.json')
     if a.phase=='timestep':
         q['previous_pair_sha256']=sha(a.ct14/'pair-v1/results.json');q.pop('timestep_admission_sha256',None)
     else:q['timestep_admission_sha256']=sha(a.root/'timestep-v1/results.json')
