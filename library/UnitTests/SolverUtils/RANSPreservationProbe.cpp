@@ -892,6 +892,14 @@ int main(int argc,char **argv)
         if(preFactor)patch.BindFrozenExportReference(reference,data,referenceTime);
         else patch.SetReference(reference,data,referenceTime,0.);
         ProbePhase("after_set_reference");
+        if(request.get<bool>("export_immutable_checks",false))
+        {
+            Require(operation=="replay" && patch.Signature().find("CT15-ImmutableTensorV1")!=std::string::npos,
+                "immutable checks require a bound CT15 replay");
+            std::ofstream out(argv[3]);
+            out<<patch.EvaluationReuseChecks(state,Values(request,"history"),time,data)<<'\n';
+            Require(out.good(),"immutable verification write failed");world->Finalise();return 0;
+        }
         std::vector<RANSWallCoordinate> grid;
         if(auto points=request.get_child_optional("grid"))for(const auto &item:*points)
         {RANSWallCoordinate q{};int i=0;for(const auto &v:item.second){Require(i<3,"invalid verification coordinate");q[i++]=v.second.get_value<double>();}Require(i==3,"invalid verification coordinate");grid.push_back(q);}

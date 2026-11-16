@@ -56,7 +56,7 @@ def main():
             out['cases'][label]=dict(status='pass',checks=result,execution=e,oracle_sha256=sha(src/'operator.json'),packet_sha256=sha(dest/'operator.json'))
             if label=='displaced-p3':
                 request=replay(q,q['observation']['state'],0.,[],alpha=0.,history=q['observation']['state'])
-                request['operation']='evaluation_reuse_checks'
+                request['export_immutable_checks']=True
                 os.environ['NEKTAR_RANS_VERIFY_OWNER_INDEX']='1'
                 checks,execution=probe(a.runtime,dest,request,'dependencies')
                 os.environ.pop('NEKTAR_RANS_VERIFY_OWNER_INDEX',None)
