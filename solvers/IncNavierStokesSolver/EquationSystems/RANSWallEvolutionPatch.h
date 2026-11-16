@@ -595,6 +595,7 @@ private:
     bool m_scopedAuditResidual=false;
     bool m_hashedCoverage=false;
     bool m_currentVelocityGradients=false;
+    bool m_observedScalars=false;
     struct GradientMemo;
     mutable std::shared_ptr<GradientMemo> m_gradientMemo;
     class CurrentGradientScope
@@ -637,7 +638,7 @@ private:
             flatMetricQueries=0,profileMetricElisions=0,streamGradientPairs=0,
             coverageInserts=0,coverageQueries=0,peakHashedCoverage=0,coverageSpills=0,
             gradientScopes=0,gradientHits=0,gradientMisses=0,gradientInvalidations=0,
-            gradientEvictions=0,peakGradientPoints=0;
+            gradientEvictions=0,peakGradientPoints=0,observedScalarUses=0;
     };
     mutable EvaluationWork m_evaluationWork;
     void PrepareEvaluation(const RANSWallEvolutionData &,double) const;

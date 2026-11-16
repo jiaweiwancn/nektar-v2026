@@ -1,0 +1,11 @@
+{
+  "schema": "CT16MeasuredRemedyV1",
+  "execution_policy": "ImmutableTensorV14",
+  "component": "CT16-CurrentObservedScalarV1",
+  "basis": "The measured V10 domain loop recomputes current k at each of5653788 unique constitutive points even though its same-call K observations already store the exact current value. Source confirms PimpleSingleSweep forms a separate traceState later and does not modify effective K. Test eliminating only this repeated identical scalar contraction.",
+  "change": "In a current single-sweep ScalarDomain call,for a point K observation only(block==K and no functional),use its already freshly evaluated value in the subsequent current constitutive loop. Actual effective state is read-only and unchanged in K throughout those phases. Dependent epsilon/other blocks,functionals,and all non-single-sweep modes retain original fresh PointValue. Every scalar observation,inventory count,min/witness and subsequent full current signed stress/production/covariance/radicand check remains. Independent native audit still recomputes its own k; nothing is reused from another state/stage/domain call.",
+  "qualification": "Small controls enable NEKTAR_RANS_VERIFY_OBSERVED_SCALAR=1:compare every substituted value binary64 including signed zero to the original fresh K field PointValue at the same actual coordinate/native geometry/effective state. Require exercised substitutions,all previous verifiers and44dependency queries,4operators,Offupdates,restart,tiny quotas,fullrollback and V14-toV13history rejection. Then selected clock-off0/1/2 plus broad diagnostics,actual CT14 vectors equal; remaining G1-G6 unchanged.",
+  "bounds": "No new table or enlarged quota; inherit V13 exact velocity-dependency memo and preceding policies with distinct native history identity. Register V14 consistently in patch AND GlobalField; constructor now fails mismatches before work.",
+  "allocation": "Same CT16 original start1794835825/24kCPU/28.8kwall/16GiB newlive/16GiB processAS,onefamily/rank,6librarythreads1,compilerjobs2,project16/aggregate72. Preserve all previous failures,including compile/name-registry attempts and the explicit owned interrupted family. NoT>.002 or ceiling change.",
+  "interpretation": "Exact within-call value reuse hypothesis,not permission to reuse current constitutive validity or a resource-admission claim."
+}

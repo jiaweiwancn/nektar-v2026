@@ -589,7 +589,22 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                 ++m_evaluationWork.constitutivePointComputes;
                 const auto current=ObserveCurrentVelocity(p,result.effectiveState);const auto &provenance=current.owner;
                 const auto &g=current.gradient;
-                const double k=PointValue(K(),GeometryElement(K(),provenance.geometry),p.coordinate,result.effectiveState);
+                // These point K observations were freshly evaluated above from
+                // this exact effective state. In a single sweep only the trace
+                // target vector is formed later; effective K is unchanged.
+                // A functional has a different meaning and always falls back.
+                const bool observed=m_observedScalars && PimpleSingleSweep() && p.block==K() && !p.functional;
+                const double k=observed?p.value:PointValue(K(),GeometryElement(K(),provenance.geometry),p.coordinate,result.effectiveState);
+                if(observed)
+                {
+                    ++m_evaluationWork.observedScalarUses;
+                    static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_OBSERVED_SCALAR");return v && std::string(v)=="1";}();
+                    if(verify)
+                    {
+                        const double oracle=PointValue(K(),GeometryElement(K(),provenance.geometry),p.coordinate,result.effectiveState);
+                        Require(std::memcmp(&k,&oracle,sizeof k)==0,"current observed K differs from fresh native point value");
+                    }
+                }
                 try
                 {
                     RANSTensor covariance{};double radicand=0;bool radicandDefined=false;
