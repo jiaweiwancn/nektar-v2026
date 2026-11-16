@@ -16,8 +16,8 @@ double H25SplineDerivative(const std::vector<double> &t,double x)
 std::string H25Seed(RANSWallEvolutionPatch &patch,const LibUtilities::SessionReaderSharedPtr &serial,
     double us,const Tree &packet,RANSWallEvolutionData &data)
 {
-    Require(patch.Size()==24688 && patch.MappedBlock() && patch.InitialVelocityMode()=="FlatInletTraceV1",
-        "H25 seed requires the unchanged full700-cell compatible control");
+    Require((patch.Size()==24688 || patch.Size()==12445) && patch.MappedBlock() && patch.InitialVelocityMode()=="FlatInletTraceV1",
+        "H25 seed requires the qualified700/350-cell compatible control");
     double dt;serial->LoadParameter("TimeStep",dt);double sourceDt=packet.get<double>("source_dt");
     Require(dt>0 && sourceDt==.0025,"H25 seed source is the immutable original fine CP0");
     serial->SetParameter("TimeStep",sourceDt);OpenImportedState imported;
@@ -34,10 +34,12 @@ std::string H25Seed(RANSWallEvolutionPatch &patch,const LibUtilities::SessionRea
         for(const auto &e:patch.fields[0]->Elements())
         {x.insert(e.lower[0]);x.insert(e.upper[0]);z.insert(patch.Physical(e.lower)[2]);z.insert(patch.Physical(e.upper)[2]);}
         std::vector<double> xs(x.begin(),x.end()),zs(z.begin(),z.end());
-        Require(xs.size()==15 && zs.size()==51,"H25 transient knot inventory differs");
+        Require(xs.size()==15 && (zs.size()==51 || zs.size()==26),"H25 transient knot inventory differs");
         const auto h=std::find(zs.begin(),zs.end(),patch.Physical({0.,0.,.15})[2]);
         Require(h!=zs.end() && h-zs.begin()>=2 && zs.end()-h>=3,"H25 matching knot missing");
-        xt.assign(xs.begin()+4,xs.begin()+9);zt.assign(h-2,h+3);
+        xt.assign(xs.begin()+4,xs.begin()+9);const int stride=zs.size()==51?2:1;
+        Require(h-zs.begin()>=2*stride && zs.end()-h>2*stride,"H25 parent-knot neighborhood missing");
+        for(int j=-2;j<=2;++j)zt.push_back(*(h+j*stride));
         const double fn=H25Spline(xt,xt[2],0,3),gn=H25Spline(zt,*h,0,3);
         const double gd=H25SplineDerivative(zt,(zt[1]+zt[2])/2);
         Require(fn>0 && gn>0 && gd!=0,"degenerate H25 compact cubic seed");

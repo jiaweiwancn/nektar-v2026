@@ -192,7 +192,9 @@ state. The same700-cell four-step exact trajectory/full-map comparison follows.
 The separately identified H25 transient seed is constructed only from the strict
 original step/time-zero IMEX1 checkpoint. It preserves its internal reference,
 defect, pressure and model/BC data. Compact C2 cubic B-splines use stored x knots
-4..8 and the five physical normal knots centred on the matching interface.
+4..8 and the five stored PARENT physical normal knots centred on the matching interface.
+This gives the same compact function on the700- and350-cell meshes, before
+any mesh outcome is inspected.
 The streamfunction produces a divergence-free representable velocity increment,
 with U increment.001 at the declared interior normalization point; K/epsilon
 increments have1% reference scale and vanish at exterior boundaries. Native
