@@ -7,6 +7,15 @@ from wp2_qualification import common_differences,quarter_budget_differences,phys
 
 
 class PhysicalComparison(unittest.TestCase):
+    def test_adjacent_dt_signature_exclusion_is_narrow_and_checked(self):
+        from analyze_wp2_global_recovery_dt import comparison_signature
+        left=dict(signature='same|TIMESTEP=0.01|roughness=0.002',dt=.01)
+        right=dict(signature='same|TIMESTEP=0.0050000000000000001|roughness=0.002',dt=.005)
+        self.assertEqual(comparison_signature(left),comparison_signature(right))
+        wrong=dict(right,signature=right['signature'].replace('roughness=0.002','roughness=0.003'))
+        self.assertNotEqual(comparison_signature(left),comparison_signature(wrong))
+        with self.assertRaisesRegex(ValueError,'signature timestep'):
+            comparison_signature(dict(right,dt=.01))
     def test_window_envelope_detects_internal_excursion(self):
         import numpy as np
         from audit_wp2_window_envelope import range_checks

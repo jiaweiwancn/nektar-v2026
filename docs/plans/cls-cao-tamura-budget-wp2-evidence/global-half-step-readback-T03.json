@@ -1,0 +1,84 @@
+{
+  "version": "WP2GlobalHalfStepReadbackSummaryV1",
+  "capture_Asia_Shanghai": "2026-11-17T03:53:43.277360+08:00",
+  "status": "running_native_continuation; WP2 remains OPEN",
+  "accepted_frontier": {
+    "steps": 60,
+    "actual_time": 0.30000000000000016,
+    "checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-half-step-standard/step60/checkpoint.28",
+    "checkpoint_sha256": "c60c81942d969b75194c2034d867d3c5ec8e041f3afc4ad3c49b7d97c96a734c"
+  },
+  "native_target": 1.2,
+  "common_times": 31,
+  "last_common_actual_time": 0.30000000000000016,
+  "common_seed_sha256": "0f2bc1f991d814e8a2b4fcfe471ee47efc07927c48f25b162d5c161ea89927f0",
+  "fixed_reference_sha256": "a1b87e794a37b36fe5c0032aaef9c553e48b4c947b2e1ec5e8a0b8b75179eeb5",
+  "fixed_defect_sha256": "b6f66eca6cd67b3e9baff42e52f226f747de523f0d6b473ad799a49eb4664354",
+  "quarter_budget_passed": false,
+  "failed_quarter_gates": {
+    "0_pi_point": {
+      "value": 0.002745941240288433,
+      "limit": 0.0025,
+      "passed": false
+    },
+    "0_mechanical_pressure_point": {
+      "value": 0.007258039596707484,
+      "limit": 0.0025,
+      "passed": false
+    },
+    "0_total_normal_stress_point": {
+      "value": 0.0027367101777078964,
+      "limit": 0.0025,
+      "passed": false
+    },
+    "1_mechanical_pressure_point": {
+      "value": 0.0025366854220828265,
+      "limit": 0.0025,
+      "passed": false
+    }
+  },
+  "difference_fraction_of_fine_response": {
+    "U": 0.028197076049834985,
+    "W": 0.07180509896291946,
+    "k": 0.028101579922001914,
+    "epsilon": 0.07239163769840982,
+    "pi": 0.10770653032753895,
+    "mechanical_pressure": 0.047427374163157864
+  },
+  "GL28_covariance_inner_outer_coarse_fine": [
+    [
+      0.006828207226380497,
+      0.006716299370088619
+    ],
+    [
+      0.006827577476595789,
+      0.006716301394517245
+    ]
+  ],
+  "readback_seconds": 47.44256542000221,
+  "readback_peak_RSS_KiB": 914176,
+  "source_sha256": "3efa27618ba41dd6e55f135765dea9e8cfbb5d98e9037aa93282c2f16e89e57c",
+  "artifact": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/global-comparison-T03.json",
+    "sha256": "345e23d9e61b83139aecef4d157f35a04d6b10a1ea3eecbecf6263ce0cafab3c"
+  },
+  "input_bindings": {
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/global-comparison-input-T03/coarse.json": "535ab2726d0b96effeb3c996d1c8d73a9665a218b4467b06ff77f492b4bec82c",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step30/case.evolution.json": "267c791728a775539df480821c1c158177bb1b4bc6637511d8dee9d61a9fba87",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step60/case.evolution.json": "0257cbcfc3700543143646b8a2d1bd06662703fdc5c43c6721b703da3704af04",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step90/case.evolution.json": "0491e01535672cb51d4860c5be1373e4b5030d58d3297b48d071e18bcb943aa3",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step120/case.evolution.json": "0dee4a54194e3210acb3161dc7bef6aea2dba2c7782ef7f28167ffcdb9328df7",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step150/case.evolution.json": "b1c3b987a27a1664132930b1dc6eeb886b5e9bc44a05ddc6e1c9f7f7fc65196d",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step180/case.evolution.json": "9e75c044ff3c15405ea9137a05be58e5c3eaff27d28cf3c6998c5ced00d0e1ad",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step210/case.evolution.json": "86cc229b139868e235efb4c15e50278ecbb6838de8140cd358c8e5672d324433",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step240/case.evolution.json": "b9b345637bde6b09bc4983350730d42dee521ae4abc34b74304cc45e3cc0b890",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step272/case.evolution.json": "522c11656a47dc4a5945d75a74ed7683ff362c7ff05baaae50dd99911039d99b",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step304/case.evolution.json": "767a38baf7fb848d76eff9904e6104dbc65b8dd749458a9ba3057aacc5e5d469",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step336/case.evolution.json": "e174bccb75925a65ec9dae46127d662814ebc4f5cd7224f7e730cd2b60bcc896",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step368/case.evolution.json": "8bf0a8e22ad06674edda55149ffabb3f05bf7e9867f97109800a65a1e8e72035",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/global-comparison-input-T03/fine.json": "df778e1b461742637abc8a3e7983eb6a05be629b0b058cfb36d672e57701a979",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-half-step-standard/step32/case.evolution.json": "f6975a441a3530e7f3c8fa73e5ba6636c6393b256fd8ca6b72cef17ec4eaac6e",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-half-step-standard/step60/case.evolution.json": "e3fc7692e3bb89055aa4359959364e3623d3600da390be88beada144bf1cb1ed"
+  },
+  "scope": "Global adjacent-timestep differences from the original pulse; no temporal-order or future-recovery claim. Dependent inner epsilon excluded from transported epsilon norms. Zero governing solves."
+}

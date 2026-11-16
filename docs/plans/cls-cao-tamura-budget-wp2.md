@@ -398,3 +398,21 @@ for analysis. The first rejection is terminal. The experiment tests global
 early-time accumulation, which the late common-state experiment cannot assess;
 its launch does not close either model's perturbation-recovery gate.
 See [cumulative amendment](cls-cao-tamura-budget-wp2-evidence/resource-extension-16h.json).
+
+
+The new read-only global comparator replays 31 exact common times through
+T=.30000000000000016 from the original pulse (SHA256
+0f2bc1f991d814e8a2b4fcfe471ee47efc07927c48f25b162d5c161ea89927f0).
+It verifies the complete pair signatures after excluding only the independently
+checked TIMESTEP entry for this comparison; ordinary restart checks remain
+unchanged. At T=.3, dt=.01 versus .005 differences divided by the fine
+response from the original seed are U=.0281971, W=.0718051, k=.0281016,
+epsilon=.0723916, pi=.107707 and mechanical pressure=.0474274. The frozen
+quarter-budget test fails at pressure/normal-traction point measures. Both
+runs retain positive inner/outer GL28 covariance minima (coarse
+.00682821/.00671630; fine .00682758/.00671630). This is global adjacent-step
+sensitivity evidence, not a measured order or a recovery pass. The replay took
+47.44 seconds and 914176 KiB peak RSS, with zero governing solves. Thirteen
+focused Linux protocol/comparison tests pass. See
+[readback receipt](cls-cao-tamura-budget-wp2-evidence/global-half-step-readback-T03.json)
+and [exact launch](cls-cao-tamura-budget-wp2-evidence/global-half-step-launch.json).
