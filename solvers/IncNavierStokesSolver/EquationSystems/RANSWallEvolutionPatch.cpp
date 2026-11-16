@@ -709,6 +709,7 @@ std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::Profile(double k
     const AWFNormalMetric normal{metric.kappa1,metric.kappa2};
     const auto construct=[&]()
     {
+        RANSWallTiming::Scope part("profile.construct",true);
         try{return std::make_shared<EquilibriumAWFProfiles>(geometry,k,m_parameters.model,normal,options,m_wallParameters);}
         catch(const std::exception &error)
         {

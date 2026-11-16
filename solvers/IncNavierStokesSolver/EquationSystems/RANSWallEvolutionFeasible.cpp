@@ -323,6 +323,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
     auto check=[&](const std::string &name,const RANSWallGlobalPoint &q,int block,bool strict,
                    const Vector &values,int side=0,bool dependent=false,double weight=0.)
     {
+        RANSWallTiming::Scope checkTiming("domain.check_scalar",true,true);
         // Endpoint samplers and every native interface row carry their own
         // element. Resolve radial provenance once; a zero selector must not
         // turn an H-minus derivative into an outer constitutive observation.
@@ -369,13 +370,17 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         InitialiseScalarLocations();
         if(ConstitutiveKInventory()){InvalidateCoverageToken();m_coveredKLocations.clear();m_coveredKFunctionals.clear();}
         result.effectiveState=ExternalLift(state,time,data);result.phase="fixed_fields_and_samplers";
-        for(const auto &point:m_scalarLocations)
-            if(!check(point.inventory,point.row,point.block,point.strict,result.effectiveState,point.side))return result;
+        {
+            RANSWallTiming::Scope part("domain.fixed_scalar_inventory");
+            for(const auto &point:m_scalarLocations)
+                if(!check(point.inventory,point.row,point.block,point.strict,result.effectiveState,point.side))return result;
+        }
         auto &pending=result.pendingProfiles;
         result.phase="moving_ray_k_before_normalization";
         auto ray=[&](const RANSWallCoordinate &p,const std::shared_ptr<EquilibriumAWFProfiles> &profile,
                      const std::string &name,bool source,double horizontalWeight)
         {
+            RANSWallTiming::Scope part("domain.ray_inventory",true);
             result.minimumCutoff=std::min(result.minimumCutoff,profile->Reference().cutoff);
             result.maximumCutoff=std::max(result.maximumCutoff,profile->Reference().cutoff);
             result.profileBranches.push_back(AcceptedAWF()?'A':profile->Reference().weight==0?'B':profile->Reference().weight==1?'E':'M');
@@ -416,34 +421,44 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         };
         // Check every physical k BEFORE calling WallNormalization or a
         // dependent trace. Current profiles rebuild trial-specific cutoffs.
-        for(const auto &r:m_rays)
-            if(!ray(r.coordinate,StateProfile(result.effectiveState,r.coordinate,time,data),
-                    "volume_normalization_ray",true,r.weight))return result;
-        for(const auto &p:m_traceScalarAnchors)
         {
-            if(!AcceptedAWF() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"trace_baseline_normalization_ray",false,0))return result;
-            if(!ray(p,StateProfile(result.effectiveState,p,time,data),
-                    AcceptedAWF()?"trace_budget_awf_ray":"trace_current_normalization_ray",false,0))return result;
+            RANSWallTiming::Scope part("domain.volume_rays");
+            for(const auto &r:m_rays)
+                if(!ray(r.coordinate,StateProfile(result.effectiveState,r.coordinate,time,data),
+                        "volume_normalization_ray",true,r.weight))return result;
+        }
+        {
+            RANSWallTiming::Scope part("domain.trace_rays");
+            for(const auto &p:m_traceScalarAnchors)
+            {
+                if(!AcceptedAWF() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"trace_baseline_normalization_ray",false,0))return result;
+                if(!ray(p,StateProfile(result.effectiveState,p,time,data),
+                        AcceptedAWF()?"trace_budget_awf_ray":"trace_current_normalization_ray",false,0))return result;
+            }
         }
         if(ConstitutiveKInventory())
         {
             // Profile construction needs only fixed/sampled fields. Validate
             // all dynamic-anchor samplers before constructing ANY new profile.
             const auto anchors=ConstitutiveAnchors(result.effectiveState,additionalAnchors);
-            for(auto p:anchors)
             {
-                const double scale=m_mapping.At(p).scale;
-                p[2]=m_parameters.geometry.sampleHeight/scale;
-                if(!check("physical_sampled_K",SampleKRow(p),K(),true,result.effectiveState,AcceptedAWF()?-1:0))return result;
-                p[2]=m_parameters.geometry.height;
-                if(!check("constitutive_matching_K",Point(K(),p,1),K(),true,result.effectiveState,1))return result;
-                if(m_transitionEnabled)for(double r:{m_sensorA,m_sensorB})
+                RANSWallTiming::Scope part("domain.dynamic_anchor_samples");
+                for(auto p:anchors)
                 {
-                    p[2]=r/scale;
-                    if(!check("constitutive_sensor_K",Point(K(),p),K(),true,result.effectiveState) ||
-                       !check("constitutive_sensor_epsilon",Point(Epsilon(),p),Epsilon(),true,result.effectiveState))return result;
+                    const double scale=m_mapping.At(p).scale;
+                    p[2]=m_parameters.geometry.sampleHeight/scale;
+                    if(!check("physical_sampled_K",SampleKRow(p),K(),true,result.effectiveState,AcceptedAWF()?-1:0))return result;
+                    p[2]=m_parameters.geometry.height;
+                    if(!check("constitutive_matching_K",Point(K(),p,1),K(),true,result.effectiveState,1))return result;
+                    if(m_transitionEnabled)for(double r:{m_sensorA,m_sensorB})
+                    {
+                        p[2]=r/scale;
+                        if(!check("constitutive_sensor_K",Point(K(),p),K(),true,result.effectiveState) ||
+                           !check("constitutive_sensor_epsilon",Point(Epsilon(),p),Epsilon(),true,result.effectiveState))return result;
+                    }
                 }
             }
+            RANSWallTiming::Scope part("domain.dynamic_anchor_rays");
             for(const auto &p:anchors)
             {
                 if(!AcceptedAWF() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"constitutive_baseline_normalization_ray",false,0))return result;
@@ -488,6 +503,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         }
         if(NewModels())
         {
+            RANSWallTiming::Scope part("domain.current_constitutive_inventory");
             result.phase="current_velocity_constitutive_domain";
             // Effective and trace states have been completely formed above
             // and are read-only for this loop. This map is born/dies in this
