@@ -907,7 +907,8 @@ int main(int argc,char **argv)
                 signature.find(":execution=CT16-CurrentVelocityGradientV1")!=std::string::npos ||
                 signature.find(":execution=CT16-CurrentObservedScalarV1")!=std::string::npos ||
                 signature.find(":execution=CT16-HashedBasisV1")!=std::string::npos ||
-                signature.find(":execution=CT16-CurrentSamplerV1")!=std::string::npos;
+                signature.find(":execution=CT16-CurrentSamplerV1")!=std::string::npos ||
+                signature.find(":execution=CT16-ExactTensorIndexV1")!=std::string::npos;
             Require(operation=="replay" && immutable,
                 "immutable checks require a bound recognized immutable replay");
             std::ofstream out(argv[3]);

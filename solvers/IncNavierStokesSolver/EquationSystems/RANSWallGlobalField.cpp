@@ -185,9 +185,10 @@ RANSWallGlobalField::RANSWallGlobalField(
     RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
     session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",m_serialSparse,false);
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16";
-    m_hashedBasis=immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16";
-    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16";
+    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16" || immutable=="ImmutableTensorV17";
+    m_tensorIndices=immutable=="ImmutableTensorV17";
+    m_hashedBasis=immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16" || immutable=="ImmutableTensorV17";
+    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16" || immutable=="ImmutableTensorV17";
     Require(!m_sharedTensor || dimension==2,"shared immutable rows require flat2D tensor fields");
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");
@@ -268,7 +269,8 @@ RANSWallGlobalField::RANSWallGlobalField(
             for(int d=0;d<m_dimension;++d)row.inverse[d]=2/(el.upper[m_axes[d]]-el.lower[m_axes[d]]);
             for(int j=0;j<count;++j)
             {
-                const auto index=Indices(j,modes);const double sign=map->GetLocalToGlobalSign(start+j);
+                const auto index=Indices(j,modes);if(m_tensorIndices)row.indices.push_back(index);
+                const double sign=map->GetLocalToGlobalSign(start+j);
                 double constant=sign;for(int d=0;d<m_dimension;++d)if(index[d]>=2)constant=0;
                 row.ids.push_back(map->GetLocalToGlobalMap(start+j));row.signs.push_back(sign);row.constant.push_back(constant);
             }
@@ -310,6 +312,14 @@ int RANSWallGlobalField::Size() const
 {
     return m_field->GetLocalToGlobalMap()->GetNumGlobalCoeffs();
 }
+std::array<int,3> RANSWallGlobalField::TensorIndex(int e,int j,const std::array<int,3> &modes) const
+{
+    if(!m_tensorIndices)return Indices(j,modes);
+    const auto index=m_nativeRows.at(e).indices.at(j);
+    static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_TENSOR_INDEX");return v && std::string(v)=="1";}();
+    if(verify)Require(index==Indices(j,modes),"immutable tensor index differs from original integer packing");
+    return index;
+}
 RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &coordinate) const
 {
     RANSWallTiming::Scope timing("geometry.element_row",true,true);
@@ -339,7 +349,7 @@ RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &co
     for(int d=0;d<3;++d)if(!m_sharedTensor || d!=1)result.derivative[d].reserve(count);
     for(int j=0;j<count;++j)
     {
-        const auto index=Indices(j,modes);
+        const auto index=TensorIndex(e,j,modes);
         const double sign=m_immutableTensor?m_nativeRows[e].signs[j]:map->GetLocalToGlobalSign(start+j);
         if(!m_sharedTensor)result.ids.push_back(m_immutableTensor?m_nativeRows[e].ids[j]:map->GetLocalToGlobalMap(start+j));
         double value=sign,constant=sign;
@@ -390,7 +400,7 @@ double RANSWallGlobalField::ElementValue(int e,const Coordinate &coordinate,
     std::array<double,maximum> phi{};
     for(int j=0;j<count;++j)
     {
-        const auto index=Indices(j,modes);double value=native.signs[j];
+        const auto index=TensorIndex(e,j,modes);double value=native.signs[j];
         for(int d=0;d<m_dimension;++d)value*=basis[d]->value[index[d]];
         phi[j]=value;
     }
@@ -439,7 +449,7 @@ std::array<std::array<double,3>,2> RANSWallGlobalField::ElementGradients(int e,c
     std::array<std::array<double,maximum>,3> derivative;
     for(int j=0;j<count;++j)
     {
-        const auto index=Indices(j,modes);std::array<double,3> row{};
+        const auto index=TensorIndex(e,j,modes);std::array<double,3> row{};
         for(int d=0;d<m_dimension;++d)
         {
             double entry=native.signs[j]*native.inverse[d];

@@ -83,6 +83,7 @@ public:
     bool ImmutableOwnerIndex() const { return m_immutableTensor; }
     bool SharedTensorRows() const { return m_sharedTensor; }
     bool HashedBasisCache() const { return m_hashedBasis; }
+    bool CachedTensorIndices() const { return m_tensorIndices; }
     int Size() const;
     std::array<std::uint64_t,6> BasisWork() const;
     RANSWallGlobalPoint Point(const Coordinate &coordinate, int side=0) const;
@@ -143,10 +144,13 @@ private:
     bool m_immutableTensor=false;
     bool m_sharedTensor=false;
     bool m_hashedBasis=false;
+    bool m_tensorIndices=false;
+    std::array<int,3> TensorIndex(int element,int index,const std::array<int,3> &modes) const;
     struct NativeRow
     {
         RANSWallSharedVector<int> ids;
         Vector signs;
+        std::vector<std::array<int,3>> indices;
         RANSWallSharedVector<double> constant,zero;
         std::array<double,3> inverse{};
     };

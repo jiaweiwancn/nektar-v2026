@@ -1,0 +1,11 @@
+{
+  "schema": "CT16MeasuredRemedyV1",
+  "execution_policy": "ImmutableTensorV17",
+  "component": "CT16-ExactTensorIndexV1",
+  "basis": "Measured native paths performmillionsofscalar/pairedgradientevaluations. Source recomputes the same tensor packing triplet withinteger division/modulo forEVERYbasis coefficient in each point row,scalar andgradient contraction. The triplet depends only on immutable native element modes and coefficientindex.",
+  "change": "Store the EXACT original Indices(j,modes) integer triplet while building each immutable NativeRow. Use it in the existing ElementPoint,ElementValue and ElementGradients loops. Preserve every original double basis product,coefficient sign,axis/inverse,constantcentering,chronological long-double sum,physical ownership/side/range check and fallback. No current state,coordinate,value or physics is cached in this table. Old policies retain integer division.",
+  "qualification": "NEKTAR_RANS_VERIFY_TENSOR_INDEX=1 compares every selected triplet to the original integer division formula on actual small evaluations. Retain all earlier cold scalar/gradient/LRU/map/basis/sampler verifiers,44dependency queries,4operators,Offupdate/restart/tinycache/fullrollback andV17-toV16history negative. Then actualselected clock-off0/1/2 plusdiagnosis againstCT14. Patch/native-field registrationconsistency guard coversnewflag. AllG1-G6 remain.",
+  "bounds": "One immutable triplet peralreadyexisting native element coefficient; modes/IDs/field identity are fixed bythatfieldconstructor. No newcachequota,observationlimit or alteredphysics/time-map/solver guard. Sameoriginal16GiBAS/70kslots/20Mnnz/40Mfactorentries and allproductionceilings.",
+  "allocation": "SameCT16originalstart1794835825/24kCPU/28.8kwall/16GiBnewlive,onefamily/rank,6librarythreads1,compilerjobs2,project16/aggregate72;retainallfailed/insufficientattempts/publicationreserve. NoT>.002.",
+  "interpretation": "Exact immutable integer metadata hypothesis,not a promiseofspeedup/admission or a changed FE reduction order."
+}

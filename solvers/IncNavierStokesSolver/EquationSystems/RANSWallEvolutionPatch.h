@@ -598,6 +598,7 @@ private:
     bool m_observedScalars=false;
     bool m_hashedBasisCache=false;
     bool m_currentSampler=false;
+    bool m_tensorIndices=false;
     struct SamplerMemo;
     mutable std::shared_ptr<SamplerMemo> m_samplerMemo;
     class CurrentSamplerScope
