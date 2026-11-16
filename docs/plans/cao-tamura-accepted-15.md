@@ -405,13 +405,13 @@ python3 -B "$t/ct_accepted15_command.py" --control "$p/resources-reproducer-NEW"
 
 Final closure and reproduction
 
-The [sealed closure](cao-tamura-accepted-15-evidence/closure-v1/results.json),
-[accounting](cao-tamura-accepted-15-evidence/closure-v1/closed-publication-accounting.json)
+The [sealed closure](cao-tamura-accepted-15-evidence/closure-v2/results.json),
+[accounting](cao-tamura-accepted-15-evidence/closure-v2/closed-publication-accounting.json)
 and [Linux metadata snapshot](cao-tamura-accepted-15-evidence/linux-snapshot-v2/snapshot.json)
 close all33 families, with no unclosed resources. Closed CPU is21390.354157
 seconds including the120-second exception reserve; the existing240-second
 administrative reserve gives21630.354157<=24000. The whole-clock wall upper
-bound including480 remaining publication seconds is28581.814564<=28800.
+bound including the original600-second publication reserve is28701.814564<=28800.
 Observed live bytes are10960403736; with256MiB publication staging the upper
 bound is11228839192<16GiB. Sampled cumulative process wchar is23961386528
 bytes, including pipes and incomplete short-process sampling; it is not an
@@ -455,7 +455,7 @@ python3 -B "$t/ct_accepted15_publish_snapshot.py" \
   --snapshot "$e/linux-snapshot-v2/snapshot.json" \
   --forecast "$e/forecast-progress-v1.json" --pair "$e/fresh-pair-v1.json" \
   --equivalence "$e/equivalence-v1/results.json" \
-  --publication-wall-reserve 480 --output "$e/closure-v1"
+  --publication-wall-reserve 600 --output "$e/closure-v2"
 ```
 
 Existing sealed directories are preserved; these are recorded commands. A later
@@ -465,3 +465,8 @@ is the single-step command above. Full CSR/state/history payloads stay in the
 external Linux experiment root. G3/G4 and a complete affordable forecast are
 required before Task3; none of T=.407, full-transit production or experimental
 replication is admitted by this closure.
+
+The earlier closure-v1 allocated480 publication wall seconds. Git transport
+exceeded that provisional allowance, so closure-v2 charges the full600 seconds
+already reserved in checkpoint A. The original28800-second hard ceiling and
+all CPU/disk/scientific limits are unchanged; closure-v1 remains preserved.
