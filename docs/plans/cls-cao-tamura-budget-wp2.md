@@ -381,3 +381,20 @@ attributing the mode to the physical model or selecting a new mesh.
 Hill requalification remains deferred until both-model WP2 closure. Spatial
 accuracy of the selected equilibrium, transient accuracy/robustness, developed
 flow and held-out experimental validation remain separate gates.
+
+
+## Global half-step control, declared 2026-11-17
+
+The preceding terminal statement records the thirteen-hour segment. A new,
+explicit cumulative amendment retains the same original clock and all failed
+results, and caps the entire campaign at sixteen hours (57600 seconds). It
+permits only 180 additional physical attempts: ordinary same-runtime continuation
+of the existing standard dt=.005 trajectory from step60/T=.3 to step240/T=1.2.
+The pre-existing checkpoint SHA256 is c60c81942d969b75194c2034d867d3c5ec8e041f3afc4ad3c49b7d97c96a734c.
+The frozen v12 executable, original perturbation, native histories and every
+acceptance threshold remain unchanged. Measured cost is 30.94 seconds per
+accepted step; forecast native cost is 5569 seconds, with 600 seconds reserved
+for analysis. The first rejection is terminal. The experiment tests global
+early-time accumulation, which the late common-state experiment cannot assess;
+its launch does not close either model's perturbation-recovery gate.
+See [cumulative amendment](cls-cao-tamura-budget-wp2-evidence/resource-extension-16h.json).

@@ -61,6 +61,16 @@ class ContinuationOwnership(unittest.TestCase):
             amendment=dict(version='WP2CumulativeResourceAmendmentV1',original_wall_seconds=43200,cumulative_wall_seconds=46800,
                 origin_sha256=sha(root/'origin.json'),unchanged_acceptance_sha256=hashlib.sha256(json.dumps(policy['acceptance'],sort_keys=True,separators=(',',':')).encode()).hexdigest())
             (root/'resource-extension-13h.json').write_text(json.dumps(amendment));self.assertEqual(wall_limit(root),46800)
+            extension=dict(version='WP2CumulativeResourceAmendmentV2',original_wall_seconds=43200,
+                previous_cumulative_wall_seconds=46800,cumulative_wall_seconds=57600,additional_physical_attempt_limit=180,
+                predecessor_sha256=sha(root/'resource-extension-13h.json'),origin_sha256=sha(root/'origin.json'),
+                unchanged_acceptance_sha256=amendment['unchanged_acceptance_sha256'])
+            (root/'resource-extension-16h.json').write_text(json.dumps(extension));self.assertEqual(wall_limit(root),57600)
+            extension['additional_physical_attempt_limit']=181
+            (root/'resource-extension-16h.json').write_text(json.dumps(extension))
+            with self.assertRaisesRegex(ValueError,'unsupported WP2 global-control amendment'):wall_limit(root)
+            extension['additional_physical_attempt_limit']=180
+            (root/'resource-extension-16h.json').write_text(json.dumps(extension))
             (root/'origin.json').write_text('{"reset":true}')
             with self.assertRaisesRegex(ValueError,'clock origin changed'):wall_limit(root)
     def test_execution_index_includes_nested_legacy_and_deduplicates(self):
