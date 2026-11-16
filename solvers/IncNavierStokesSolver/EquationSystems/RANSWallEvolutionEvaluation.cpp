@@ -24,6 +24,18 @@ struct RowHash {std::size_t operator()(const RowKey &key) const noexcept
 Bits Bit(double x){Bits b;static_assert(sizeof b==sizeof x);std::memcpy(&b,&x,sizeof b);return b;}
 bool Exact(const Vector &a,const Vector &b)
 {return a.size()==b.size() && (a.empty() || std::memcmp(a.data(),b.data(),a.size()*sizeof(double))==0);}
+template<class T> bool ExactRowVector(const RANSWallSharedVector<T> &a,const RANSWallSharedVector<T> &b)
+{return a.size()==b.size() && (a.empty() || std::memcmp(a.data(),b.data(),a.size()*sizeof(T))==0);}
+bool ExactRow(const RANSWallGlobalPoint &a,const RANSWallGlobalPoint &b)
+{
+    if(a.geometry!=b.geometry || a.element!=b.element || a.columnAverage!=b.columnAverage ||
+        a.endpointRoundoffAxes!=b.endpointRoundoffAxes || std::memcmp(&a.weight,&b.weight,sizeof(double)) ||
+        std::memcmp(a.coordinate.data(),b.coordinate.data(),3*sizeof(double)) ||
+        std::memcmp(a.rawLocalCoordinate.data(),b.rawLocalCoordinate.data(),3*sizeof(double)) ||
+        !ExactRowVector(a.ids,b.ids) || !ExactRowVector(a.constant,b.constant) || !ExactRowVector(a.phi,b.phi))return false;
+    for(int d=0;d<3;++d)if(!ExactRowVector(a.derivative[d],b.derivative[d]))return false;
+    return true;
+}
 std::string Fixed(const RANSWallEvolutionData &data)
 {
     std::string s;
@@ -82,6 +94,15 @@ struct RANSWallEvolutionPatch::EvaluationCache
 struct RANSWallEvolutionPatch::ImmutableRows
 {
     std::unordered_map<RowKey,std::shared_ptr<const RANSWallGlobalPoint>,RowHash> rows;
+    // Node references survive unordered-map rehash. The list holds only key
+    // addresses; remove its pointer before erasing the corresponding node.
+    std::list<const RowKey*> recent;
+    struct Entry
+    {
+        std::shared_ptr<const RANSWallGlobalPoint> row;
+        std::list<const RowKey*>::iterator position;
+    };
+    std::unordered_map<RowKey,Entry,RowHash> lruRows;
 };
 
 RANSWallEvolutionPatch::EvaluationScope::EvaluationScope(const RANSWallEvolutionPatch &p,
@@ -143,6 +164,36 @@ std::shared_ptr<const RANSWallGlobalPoint> RANSWallEvolutionPatch::EvaluationRow
     if(m_immutableTensor)
     {
         if(!m_immutableRows)m_immutableRows=std::make_shared<ImmutableRows>();
+        if(m_rowLRU)
+        {
+            auto &c=*m_immutableRows;const auto it=c.lruRows.find(key);
+            if(it!=c.lruRows.end())
+            {
+                c.recent.splice(c.recent.end(),c.recent,it->second.position);++m_evaluationWork.rowHits;
+                static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_IMMUTABLE_ROW");return v && std::string(v)=="1";}();
+                if(verify)Require(ExactRow(*it->second.row,Transform(fields[block]->ElementPoint(element,coordinate))),
+                    "LRU immutable row differs from cold native materialization");
+                return it->second.row;
+            }
+            ++m_evaluationWork.rowConstructs;
+            auto row=std::make_shared<const RANSWallGlobalPoint>(Transform(fields[block]->ElementPoint(element,coordinate)));
+            if(c.lruRows.size()>=std::size_t(m_immutableMaximumRows))
+            {
+                Require(!c.recent.empty(),"empty LRU order at bounded capacity");
+                const RowKey victim=*c.recent.front();c.recent.pop_front();
+                Require(c.lruRows.erase(victim)==1,"LRU key/order mismatch");++m_evaluationWork.rowEvictions;
+            }
+            const auto inserted=c.lruRows.emplace(key,ImmutableRows::Entry{row,{}});
+            Require(inserted.second,"duplicate LRU insertion");
+            try
+            {
+                c.recent.push_back(&inserted.first->first);
+                inserted.first->second.position=std::prev(c.recent.end());
+            }
+            catch(...){c.lruRows.erase(inserted.first);throw;}
+            m_evaluationWork.peakRows=std::max<std::uint64_t>(m_evaluationWork.peakRows,c.lruRows.size());
+            return row;
+        }
         auto &rows=m_immutableRows->rows;const auto it=rows.find(key);
         if(it!=rows.end()){++m_evaluationWork.rowHits;return it->second;}
         ++m_evaluationWork.rowConstructs;
@@ -358,7 +409,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
         {"fixed_reconstruction_rows",J::Number(fixedRows)},{"fixed_surface_rows",J::Number(surfaceRows)},
         {"row_counter_scope",J::Quote("scoped point/derivative requests; fixed reconstruction and surface catalogs counted separately")},
         {"peak_states",J::Number(w.peakStates)},{"peak_rows",J::Number(w.peakRows)},{"peak_profiles",J::Number(w.peakProfiles)},
-        {"immutable_policy",J::Quote(m_flatMetrics?"ImmutableTensorV8":m_scopedAuditPoints?"ImmutableTensorV7":m_scopedScatter?"ImmutableTensorV6":m_streamScalarValues?"ImmutableTensorV5":m_immutableTensor?(m_scopedConstitutivePoints?"ImmutableTensorV4":m_hashAssembly?"ImmutableTensorV3":m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
+        {"immutable_policy",J::Quote(m_rowLRU?"ImmutableTensorV9":m_flatMetrics?"ImmutableTensorV8":m_scopedAuditPoints?"ImmutableTensorV7":m_scopedScatter?"ImmutableTensorV6":m_streamScalarValues?"ImmutableTensorV5":m_immutableTensor?(m_scopedConstitutivePoints?"ImmutableTensorV4":m_hashAssembly?"ImmutableTensorV3":m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
         {"scoped_matrix_scatter",m_scopedScatter?"true":"false"},
         {"flat_metric_queries",J::Number(w.flatMetricQueries)},{"profile_metric_elisions",J::Number(w.profileMetricElisions)},
         {"audit_point_scopes",J::Number(w.auditPointScopes)},{"audit_point_computes",J::Number(w.auditPointComputes)},
@@ -373,6 +424,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
         {"maximum_constitutive_points",J::Number(m_constitutiveMaximumPoints)},
         {"constitutive_point_lifetime",J::Quote("one complete current effective-state domain call; never across state/stage/time/data calls")},
         {"maximum_immutable_rows",J::Number(m_immutableMaximumRows)},
+        {"immutable_row_eviction_units",J::Quote(m_rowLRU?"individual least-recently-used entries":"whole-pool clears")},
         {"maximum_states",J::Number(EvaluationCache::maximumStates)},{"maximum_rows",J::Number(EvaluationCache::maximumRows)},
         {"maximum_profiles",J::Number(EvaluationCache::maximumProfiles)},
         {"lifetime",J::Quote("immutable fixed catalogs per patch; exact-state, moving-row and owned-profile caches per evaluation scope")}});

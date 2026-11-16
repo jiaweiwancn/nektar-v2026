@@ -1,0 +1,17 @@
+{
+  "schema": "CT16MeasuredRemedyV1",
+  "execution_policy": "ImmutableTensorV9",
+  "component": "CT16-ImmutableRowLRUV1",
+  "basis": "V7 selected one-step counters show6885101 native row constructions and6 full clears at the unchanged1048576-row bound. The current constitutive loop has942298 distinct point keys per call. This motivates retaining recently used immutable rows rather than clearing the entire pool. V8 startup basis counters showonly12613 basis builds/0evictions/4267largestcache versus8192bound,so no basis-quota increase is selected.",
+  "changes": [
+    "Keep the existing exact immutable FE-row key:requested field block,native geometry,element,radial side and all actual coordinate bits,with patch-owned mesh/space/map identity. Keep identical ElementPoint/Transform construction and bounded shared immutable row values. No coordinate rounding or current-state/physics reuse.",
+    "For V9 only,maintain a bounded per-patch least-recently-used table. At capacity evict one least-recently-used cache entry instead of clearing every row. Shared immutable rows already held by a caller/catalog remain valid. Never retain more than the unchanged configured row bound; no quota sweep or extra essential history.",
+    "Inherit V8 exact flat metrics,V7 independent per-audit points,V6 per-assembly scatter and V5 current scalar-only evaluation,with a new execution/native-history identity. Previous policies and the qualified Off/ExactStep guard remain.",
+    "Record eviction units explicitly:individual LRU entries for V9 versus whole-pool clears for previous policies. Bound list/map bookkeeping by the same row count and measure actual processAS/live data; no memory-admission claim from a cardinality bound."
+  ],
+  "qualification": "Small controls optionally recompute every LRU hit through the cold materialized native row and require exact geometry/element/coordinates/raw-local/roundoff/IDs/constants/phi/derivative binary64 identity. Original36dependency queries plus8geometryqueries,all4operators,Offupdate,restart/full rejected-step rollback,tiny1024row+pointcapacity continuation and V9-toV8history rejection must pass. Then selected timing-off0/1/2 and smallest targeted diagnostic; all actual states compare exactly to CT14. Full affected selected/q48/q64/alphaG1,fresh G2,complete G3/G4/G5 remain required.",
+  "lifetime": "Immutable geometry row storage only,not a state/value/validity cache. Tables are reconstructed cold after restart/rollback; contents are excluded from essential native history. Current K/epsilon/U,profiles,covariance/radicand,weights and all logical observations remain as before.",
+  "allocation": "Same CT16 fixedstart1794835825/24000CPU/28800wall/16GiB newlive,16GiB processAS,one numericalfamily/rank,librarythreads1,compilerjobs2,project16/aggregate72. Preserveallfailed/partialattempts. NoT>.002 and no production ceiling change.",
+  "success_scope": "A local speedup or cachehit improvement is partial; resource admission requires unchanged G1-G6. Physical T=.407 remains UNATTEMPTED.",
+  "basis_followup": "V8 one-step later reports470968 basis builds/55evictions,versus63225658 hits. Their actual construction cost is unresolved;add a broad diagnostic-only timer on misses in this build,without changing8192basis bound. Do not infer a useful speedup from eviction count alone."
+}

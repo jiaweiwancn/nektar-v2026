@@ -583,6 +583,7 @@ private:
     bool m_scopedScatter=false;
     bool m_scopedAuditPoints=false;
     bool m_flatMetrics=false,m_flatMetricReady=false;
+    bool m_rowLRU=false;
     double m_flatMetricHeight=0,m_flatMetricScale=0;
     bool FlatMetricCoordinate(const RANSWallCoordinate &) const;
     double GeometryHeight(const RANSWallCoordinate &) const;
