@@ -1,0 +1,84 @@
+{
+  "version": "WP2LateControlTerminalV1",
+  "status": "terminal_stop",
+  "fine_accepted_steps": 59,
+  "fine_attempted_steps": 60,
+  "physical_frontier": 3.654999999999966,
+  "rejected_attempt_time": 3.659999999999966,
+  "native_failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+  "native_covariance_inner_outer": [
+    -0.0005649986426314731,
+    0.005553131793159517
+  ],
+  "native_inner_witness": [
+    0.1,
+    0,
+    0.0004,
+    0.004898263983712284,
+    0.020129733998689576,
+    1.4084088930920512e-05,
+    0.0053389309253749516,
+    0.003265509322474856,
+    -0.0005649986426314731
+  ],
+  "native_inner_provenance": [
+    71,
+    71,
+    0,
+    2
+  ],
+  "scalar_budget_domain": [
+    1,
+    0.15647474211813958,
+    0.002876906326262564,
+    0.017544953825985067,
+    0.0011621995966985034,
+    0.017544953825985067,
+    0.13331522046372396,
+    3.034618469245588,
+    0
+  ],
+  "fine_checkpoint": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/late-standard-dt005/fine-step64/checkpoint.26",
+    "sha256": "83c37cb14ea94796d7a741d057cfacecff9c5a00eb187b5e3c8e75295bd72b49",
+    "state_sha256": "98f894ce8abf6f369af42052059e3b2f91cded23a9463d54fdcd5f346a15f3a3"
+  },
+  "parent_preserved": true,
+  "no_later_block_launched": true,
+  "phase_counts": {
+    "attempts": 62,
+    "accepted": 61
+  },
+  "combined_counts": {
+    "attempts": 1441,
+    "accepted": 1431,
+    "deliberate_rejections": 8,
+    "genuine_rejections": 2
+  },
+  "report": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/late-standard-dt005/fine-step64/case.evolution.json",
+    "sha256": "adbfae8c175c87be6ccd2f7570dd768e8fbdefabc0b0468ca25f55eb665a3509"
+  },
+  "driver_snapshot": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/late-progress-terminal-snapshot.json",
+    "sha256": "b2f075d5d131bd753ab5aaf0244114355d7da8cea91f855d5c3534208be6623d"
+  },
+  "runtime": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v13/identity.json",
+    "sha256": "ac6a4e08e96bf2e290eea9ee507f9cc38830fc9ae2bd868f3d3ced0a1d63a748"
+  },
+  "source_sha256": {
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp": "bd63508980a2578c3282aa5c6de5d753e6b621e50df4c2725e0b059ae5aa9c20",
+    "solvers/IncNavierStokesSolver/Tests/RANS/wp2_budget.py": "83c35d32141c5b55f7ca89a617d9eaa64690f68a321703a28e64806c9798e00d",
+    "solvers/IncNavierStokesSolver/Tests/RANS/wp2_native.py": "4f259917fdab5a78d341004c35e2f8840921a1742167312787d3c543ce0d5ee9",
+    "solvers/IncNavierStokesSolver/Tests/RANS/run_cao_tamura_budget_wp2.py": "e370d0d42794b3e81fe245a8a267ac94d1cf1e662b2a25659749698967f1e0ba",
+    "solvers/IncNavierStokesSolver/Tests/RANS/run_wp2_recovery_local_dt.py": "24393361f28450461d32f23dd46d305a0520e3759ba5a2e6a2a8c7506700f7ed",
+    "solvers/IncNavierStokesSolver/Tests/RANS/test_wp2_protocol.py": "4a7499d9b5c8c312afae0203a6c79bd087a90eda3694a939c97c552b205ae6a0"
+  },
+  "budget": {
+    "origin_unchanged": true,
+    "cumulative_limit": 46800,
+    "elapsed_seconds": 46799.165747880936
+  },
+  "interpretation": "Finer local leg fails approximately .03 s earlier than archived coarse rejection. This does not establish global model instability or accumulated temporal error. Full WP2 recovery remains OPEN."
+}

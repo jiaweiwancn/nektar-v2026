@@ -5,8 +5,8 @@ new boundary implementation, common deployable spatial qualification and
 unperturbed transit tests. The bounded perturbation tests fail recovery:
 regularized CLS remains admissible but misses the final accuracy budgets at
 T=4.2 s; calibrated standard loses inner covariance at attempted T=3.69 s.
-No hill run or automatic global recovery retry is launched. A separately
-recorded bounded common-state time-sensitivity control is running; it does not
+No hill run or automatic global recovery retry is launched. The bounded
+common-state time-sensitivity control also ends in rejection; it does not
 promote the failed global recovery gate.
 
 | Gate | Regularized CLS | Calibrated standard |
@@ -294,10 +294,36 @@ and defect. Ordinary changed-dt restart rejects. Twelve focused Linux protocol
 tests pass. The old v12 runtime remains frozen; v13 is separately frozen and
 used only for this qualified standard late-import control.
 
-The single new fine leg starts from the exact accepted standard T≈3.36 state,
-uses dt=.005, and stops at its first rejection or at most 68 steps/T≈3.70.
-The archived dt=.01 trajectory is reused. This is local time sensitivity, not
-accumulated error from the pulse origin and not a replacement recovery test.
+The single new fine leg starts from the exact accepted standard
+T=3.3599999999999723 state and uses dt=.005. It accepts **59 of 60 attempted
+steps**, reaching T=3.654999999999966, then rejects at T=3.659999999999966.
+Its native covariance minima are (-.0005649986426315,.005553131793160), with
+the inner witness at (x,z)=(.1,.0004). Scalar/cutoff budgets remain recorded in
+the terminal receipt. Parent bytes are preserved; the later block is never
+launched. The archived dt=.01 trajectory is reused, including its later
+T≈3.69 rejection. The smaller local timestep does not remove the failure.
+
+Thirty exact common times through T=3.649999999999966 are compared on seen
+GL28 physical panels. At the last common time, differences divided by the fine
+response from the same late seed are U=.57680, W=.33199, k=.56366,
+epsilon=.78850, pi=.74714 and mechanical pressure=.75642. Sampled covariance
+minima at that time are (.00338718,.00606569) for coarse and
+(.00089249,.00568973) for fine. These are local adjacent-step differences,
+without a temporal-order or accumulated-global-error claim. The independent
+history import removes a startup-history ambiguity; it does not remove errors
+already present in the common late state.
+
+The follow-up adds 62 physical attempts and 61 accepted executions, including
+the two one-step import checks. The combined ledger is therefore 1441 attempts,
+1431 accepted executions, eight deliberate rollback rejections and two genuine
+covariance rejections. The native legs and numerical comparison finish before
+the cumulative 46800-second boundary; terminal capture is at 46799.17 seconds.
+Final administrative archiving and Git pushes extend beyond that aggregate
+wall envelope. This is recorded as a resource overrun, not retroactively hidden
+by moving the origin or raising the cap again. No further numerical job runs.
+See [terminal result](cls-cao-tamura-budget-wp2-evidence/late-control-terminal.json),
+[common-time comparison](cls-cao-tamura-budget-wp2-evidence/late-comparison-final.json)
+and the separately frozen [v13 runtime](cls-cao-tamura-budget-wp2-evidence/late-runtime.json).
 
 Frozen experimental coordinates/weights are unchanged. At x=-.15, preserved
 T=1.2 full 15-point mean RMSE is about .0912971 Uinf for both models; shear
@@ -321,7 +347,7 @@ is committed as checkpoint 4 with an explicitly **OPEN** result.
 Production runtime-v12 executable SHA256:
 8f64823373d97b86880cc9b624b19886f9921a2e9a0d56a9def1f0528af485df.
 Its complete linked-library closure is frozen and rechecked by the closure
-collector. Native production source hashes match the final source chain;
+collector. Original v12 production source hashes match its source chain;
 the geometry-only row-export probe is separately built and identified.
 Postprocessing changes do not overwrite a historical solver or library.
 The row-probe source index is corrected to the successfully compiled c5c3be08
@@ -347,11 +373,11 @@ collect_wp2_closure.py and collect_wp2_artifacts.py. Use unused output roots;
 existing owners reject duplicate launches. Every forensic/readback operation
 performs zero governing solves.
 
-**Next package:** qualify one short common-state timestep comparison around
-the saved standard growth/rejection interval, with independently initialized
-IMEX1 histories and the same physical scalar/stress budgets. This is the
-smallest way to test the observed transient time sensitivity before assigning
-the local mode to the model or commissioning a longer recovery run.
+**Next package:** continue the already-retained global dt=.005 standard control
+from T=.3 to T=1.2 under a new finite cost declaration. This reuses its own
+valid native histories and original pulse, and tests accumulated early-time
+error that the late common-state experiment cannot resolve. Do that before
+attributing the mode to the physical model or selecting a new mesh.
 Hill requalification remains deferred until both-model WP2 closure. Spatial
 accuracy of the selected equilibrium, transient accuracy/robustness, developed
 flow and held-out experimental validation remain separate gates.
