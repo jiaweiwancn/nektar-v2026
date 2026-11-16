@@ -25,6 +25,10 @@ void Require(bool valid, const char *message)
 {
     if (!valid) throw std::runtime_error(std::string("Global wall field: ") + message);
 }
+void Require(bool valid,const std::string &message)
+{
+    if(!valid)throw std::runtime_error("Global wall field: "+message);
+}
 bool Equal(double a,double b)
 {
     return std::abs(a-b) <= 1e-11;
