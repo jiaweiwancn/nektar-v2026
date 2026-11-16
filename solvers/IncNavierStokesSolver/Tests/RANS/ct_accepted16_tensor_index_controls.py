@@ -79,7 +79,7 @@ def main():
                 os.environ['NEKTAR_RANS_VERIFY_OWNER_INDEX']='1'
                 checks,execution=probe(a.runtime,dest,request,'dependencies')
                 os.environ.pop('NEKTAR_RANS_VERIFY_OWNER_INDEX',None)
-                require(execution['exit_code']==0 and checks['passed'] and checks['no_cross_call_constitutive_validity_reuse'] and checks['no_cross_call_state_reuse'] and checks['same_call_current_sampler'] and not checks['pure_current_velocity_gradient_memo'] and checks['per_call_constitutive_points'],'complete velocity identity and fresh constitutive dependency/owner controls')
+                require(execution['exit_code']==0 and checks['passed'] and checks['no_cross_call_constitutive_validity_reuse'] and checks['no_cross_call_state_reuse'] and not checks['same_call_current_sampler'] and not checks['pure_current_velocity_gradient_memo'] and checks['per_call_constitutive_points'],'complete velocity identity and fresh constitutive dependency/owner controls')
                 out['dependencies']=dict(status='pass',checks=checks,execution=execution,packet_sha256=sha(dest/'dependencies.json'))
             write_json(a.output/'progress.json',out);print('CT16 small',label,'pass',flush=True)
         c=n.read(ct9/'controls-v4/one/construction.json');template=ct9/'controls-v4/one/case.xml'

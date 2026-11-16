@@ -367,8 +367,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
     Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16" || immutable=="ImmutableTensorV17","unknown immutable evaluation policy");
     m_tensorIndices=immutable=="ImmutableTensorV17";
-    m_currentSampler=immutable=="ImmutableTensorV16" || m_tensorIndices;
-    m_hashedBasisCache=immutable=="ImmutableTensorV15" || m_currentSampler;
+    m_currentSampler=immutable=="ImmutableTensorV16";
+    m_hashedBasisCache=immutable=="ImmutableTensorV15" || m_currentSampler || m_tensorIndices;
     m_observedScalars=immutable=="ImmutableTensorV14" || m_hashedBasisCache;
     // V13 remains available as the measured complete-velocity experiment.
     // Later candidates omit its table after its timing-off throughput loss.
