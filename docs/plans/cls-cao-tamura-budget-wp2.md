@@ -2,8 +2,9 @@
 
 2026-11-16, Asia/Shanghai. Checkpoints 1 and 2 pass for both deployed regularized
 CLS and calibrated standard k–epsilon. Checkpoint 3 qualifies the short timestep
-pair and measured cost. WP2 remains **OPEN** pending physical-transit preservation
-and recovery through the required duration.
+pair and measured cost. Both models have completed the unperturbed physical-transit,
+half-step and finer-mesh runs. WP2 remains **OPEN** pending complete perturbation
+recovery, including the final-window and trend criteria.
 
 The physical calibration, full-height analytical inlet, local transported-K
 cutoff budget and one-sweep equations are unchanged. The new
@@ -81,8 +82,10 @@ The exact composite inlet flux is 1.050195996901104 m²/s per unit span, U_bulk 
 1.31274499612638 m/s and T_req is 1.1942387693600194 s. Both selected dt=.02 runs
 have now completed 60 accepted steps to actual T=1.2000000000000006 s, with zero
 rejection or correction supply and passing per-state native physical checks.
-The half-step, confirmation and recovery program remains in progress; complete
-dynamic closure has not yet been issued. H2k's hill startup remains preserved;
+Both half-step runs completed 120 accepted steps to actual T=1.2000000000000008 s;
+both 11014-slot confirmation runs completed 60 accepted steps to
+T=1.2000000000000006 s. All 61 executed common native times pass timestep and mesh
+comparisons. Complete dynamic closure has not yet been issued. H2k's hill startup remains preserved;
 no hill run is authorized here.
 
 The selected-space dt=.02/.01 s trials reach the same actual T=.04 s with 2/4
@@ -108,12 +111,17 @@ physical steps. A constrained consistent-mass projection adds only outer k on
 .012<z<.05, with an actual maximum 4.0492% departure, zero endpoint-K change and
 unchanged U, W, pressures, epsilon, reference, defect and boundary data. The TKE
 increments are 5.35438e-6 (CLS) and 5.59378e-6 (standard), per unit span/density.
-These are setup increments, not positivity-correction supply. Recovery is not yet
-demonstrated.
+These are setup increments, not positivity-correction supply. At T=1.2 both
+recovery legs have 120 accepted steps and zero bound supply. CLS passes its
+native final profile budgets and the independent full GL28 profile check, but
+its full homogeneity/window/trend assessment still fails. Standard retains a
+6.14% native pointwise k error and pressure/W errors. The same accepted
+trajectories are being extended to T=1.8; no seed, physical parameter, dt or
+acceptance threshold is changed. Recovery is not yet demonstrated.
 
 Use dt=.02 and .01 to T=1.2 s, with observations at .3/.6/.9/1.2; the last .3 s
 exceeds T_req/4. Continue the same accepted trials instead of repeating them.
-Run the finer mesh to the same endpoint and the recovery legs at .01. The checkpoint-3
+The finer mesh has completed the same physical interval; recovery uses .01. The checkpoint-3
 remaining-program forecast was about 4–4.5 h with two serial native cases, including
 setup/reporting, restart/rollback and headroom, inside the original 12 h envelope.
 The [checkpoint-3 receipt](cls-cao-tamura-budget-wp2-evidence/checkpoint3.json)
@@ -132,3 +140,28 @@ restart/rollback fixtures. Heavy artifacts and exact command logs are under
 See the [predeclared plan](cls-cao-tamura-budget-wp2-plan.md),
 [policy](cls-cao-tamura-budget-wp2-evidence/policy.json) and
 [literature/source crosswalk](cls-cao-tamura-budget-wp2-evidence/source-crosswalk.json).
+
+The full coefficient-derived, all-state readback checks full 3x3 Reynolds and
+mean stresses, complete gradients, homogeneity, absolute pressure, source work
+and covariance at 254016 GL28 points per state on the union physical partition.
+Independent AWF ReferenceK primitives reproduce native values within 1.18e-16;
+source-grid primitive fields/gradients replay native data bitwise. Inner dependent
+epsilon and viscosity are recomputed from each actual state's endpoint K, not
+a report's terminal transient sampler. Native exact sided/interface inventories
+remain complementary to this finite volume sampling. All original raw reports
+and earlier analysis receipts are retained.
+
+The unperturbed dt/half-step comparison uses at most 20.15% (CLS) and 5.12%
+(standard) of the allowed quarter-budget limits. The maximum selected/finer
+fraction over the whole interval is 51.40%, at the initial inner sampled shear.
+Full-stress regional RMS errors reach at most .002211 (CLS) and .001525
+(standard), normalized by u_tau^2, below .01. The measured final .3 s window
+and transit-scaled least-squares trend pass every unperturbed leg.
+
+The actual preserved upstream profiles, with frozen observations and weights,
+give full 15-point mean-velocity RMSE .0912971 Uinf for both models, stress
+RMSE about .001822 Uinf^2, and streamwise-RMS RMSE .90110 (CLS) versus .77668
+(standard), in sigma_u/u_tau units. This is the selected full-height surface-layer
+idealization, without a finite-layer tail. Numerical preservation does not
+remove its experimental outer-profile discrepancy or calibrate the standard
+model's isotropic normal stresses. Fig.3d and hill observations remain held out.

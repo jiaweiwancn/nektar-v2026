@@ -129,7 +129,12 @@ class Rows:
         from wp2_common_quadrature import resample
         require(order==28,'WP2 retrospective denser grid is frozen at GL28')
         sample=dict(report['wp2_common_samples'],values=tuple_data['values'])
-        v=resample(dict(report,wp2_common_samples=sample),order)
+        # Every retained state has its own transported endpoint K.  A report
+        # contains many accepted states but its transient sampler is terminal.
+        # Reconstruct the dependent inner quantities from this exact state's
+        # endpoint functional, including during perturbation recovery.
+        v=resample(dict(report,wp2_common_samples=sample,
+                        physical_samples=dict(wall_K=tuple_data['endpoint_K'])),order)
         R=v['R'];ev=np.minimum(R[:,1,1],.5*(R[:,0,0]+R[:,2,2]-np.hypot(R[:,0,0]-R[:,2,2],2*R[:,0,2])))
         nu,H,hs=report['parameters'][:3];K0,q,kap=report['parameters'][5:8]
         inner=v['regions']==0;E=v['values'][:,3].copy()

@@ -1,0 +1,12 @@
+{
+  "version": "WP2RecoveryTimestepControlV1",
+  "declared_Asia_Shanghai": "2026-11-16T22:34:03.002201+08:00",
+  "trigger": "standard recovery at dt=.01 has growing near-wall k/W/pressure departure through T=1.5; inspect its bounded T=1.8 endpoint before spending further identical-step continuation",
+  "experiment": "one conditional dt=.005 s recovery trial to actual T=.3, same exact complete 4.0492-percent k-perturbed h0 as the archived dt=.01 recovery; own fresh native histories; no field, physics, mesh or boundary change",
+  "exact_seed_sha256": "0f2bc1f991d814e8a2b4fcfe471ee47efc07927c48f25b162d5c161ea89927f0",
+  "counters": "one additional timestep trial, 60 physical steps, plus existing shared origin/time/storage/attempt envelope; no budget reset",
+  "observations": "compare all executed common native times through .3; physical full-field, absolute pressure/stress, gradient and source/energy quantities; relative to same original reference and h0",
+  "decision": "Use measured differences and response growth to decide whether continuing the half-step trajectory to Treq is useful and affordable. A short trial cannot close recovery or temporal qualification. Do not infer physical instability from a timestep-sensitive response.",
+  "continuation": "only the same exact accepted trial checkpoint, bounded endpoints <=4*Treq and the original 12-hour envelope; never alter histories/dt of an ordinary checkpoint",
+  "preserved": "old dt=.01 trajectory and all its failed accuracy receipts remain diagnostic evidence; hard audits and one-sweep semantics unchanged"
+}

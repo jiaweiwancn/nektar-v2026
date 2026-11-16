@@ -29,6 +29,33 @@ class PhysicalComparison(unittest.TestCase):
 
 
 class ContinuationOwnership(unittest.TestCase):
+    def test_retained_state_audit_does_not_use_terminal_endpoint_cache(self):
+        import wp2_common_quadrature as quadrature
+        from wp2_all_state import Rows
+        import numpy as np
+        captured=[]
+        def stop_at_quadrature(report,order):
+            captured.append(report['physical_samples']['wall_K'])
+            raise RuntimeError('quadrature input captured')
+        rows=Rows.__new__(Rows)
+        state_K=np.array([.017,.018])
+        report=dict(wp2_common_samples={},physical_samples=dict(wall_K=[99.,99.]))
+        with patch.object(quadrature,'resample',stop_at_quadrature):
+            with self.assertRaisesRegex(RuntimeError,'quadrature input captured'):
+                rows.volume_audit(report,dict(values=np.zeros((2,14)),endpoint_K=state_K))
+        self.assertTrue(np.array_equal(captured[0],state_K))
+        self.assertEqual(report['physical_samples']['wall_K'],[99.,99.])
+    def test_terminal_recheck_rejects_unfinished_transaction_before_probe(self):
+        import run_wp2_final_checks as driver
+        with tempfile.TemporaryDirectory() as temp:
+            r=Path(temp);p=r/'transit-transaction-CLS';p.mkdir()
+            (p/'progress.json').write_text(json.dumps(dict(status='running')))
+            args=['wp2','--root',str(r),'--solver','/unused','--probe','/unused','--h1','/unused',
+                  '--preflight','/unused','--terminal-only','--record','terminal-recheck.json']
+            with patch.object(sys,'argv',args),patch.object(driver,'run_probe') as native:
+                with self.assertRaisesRegex(ValueError,'existing transaction incomplete'):driver.main()
+            native.assert_not_called()
+            self.assertEqual(json.loads((r/'terminal-recheck.json').read_text())['status'],'terminal_stop')
     def test_completion_requires_observed_physical_horizon_and_pass(self):
         from run_wp2_completion_waves import completed
         with tempfile.TemporaryDirectory() as temp:

@@ -43,7 +43,7 @@ def paths(root,model,phase,progress):
     prefix={'coarse':[f'trial-dt020-{model}/step2/case.evolution.json',f'runtime-equivalence-{model}/new/one/case.evolution.json'],
             'fine':[f'trial-dt010-{model}/step4/case.evolution.json'],
             'confirmation':[f'confirmation-trial-{model}/step2/case.evolution.json'],
-            'recovery':[f'recovery-seed-{model}/h0/case.evolution.json']}[phase]
+            'recovery':[]}[phase]
     reports=[root/p for p in prefix]
     for obs in progress['observations']:
         p=Path(obs['report'])
@@ -56,6 +56,15 @@ def assess(root,model,phase,rows,output):
     require(p['status']=='completed_bounded_trajectory','trajectory is not complete: '+str(progress_path))
     require(p['actual_time']>=TREQ,'actual physical duration too short')
     recovery=phase=='recovery';history=[];last_hash=None;last_time=-1.;sources=[];replay=[];counts={};previous_values=None
+    if recovery:
+        # A zero-step seed report omits transient endpoint-sampler output.
+        # The first evolved report includes that exact seed as accepted state
+        # zero, together with the complete native monitoring inventory.
+        seed_file=root/f'recovery-seed-{model}/h0/case.evolution.json'
+        seed=load(seed_file);first=load(paths(root,model,phase,p)[0])
+        require(first['wp2_per_state_monitoring'][0]['time']==seed['time']==0.,'recovery initial physical time differs')
+        require(state_hash(first['accepted_states'][0])==state_hash(seed['state']),'recovery initial coefficients differ from saved seed')
+        require(all(state_hash(first[k])==state_hash(seed[k]) for k in ['fixed_reference','fixed_defect']),'recovery seed reference/defect differs')
     final_start=p['actual_time']-.3;acc0=None;acc1=None;times=[];endpoint=None;start_report=None;initial_samples=None;cold_samples=None
     for file in paths(root,model,phase,p):
         d=load(file);checks=verify_report(d,US,K0[model],allow_recovery=recovery)

@@ -1,0 +1,709 @@
+{
+  "version": "WP2FinalChecksV1",
+  "status": "completed_bounded_final_checks",
+  "results": {
+    "CLS": {
+      "transaction": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/transit-transaction-CLS/progress.json",
+        "sha256": "78b95596db4cc0203a445b4bd5cd99c6eb0e21454195e00d50a27f950282ea96"
+      },
+      "terminal_seen_grid_audit": {
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-fine-CLS/step120/case.xml",
+            "input.json",
+            "result.json"
+          ],
+          "exit_code": 0,
+          "seconds": 54.895939388952684,
+          "input_sha256": "4faaba362a95d3fea3f82a7f64ea45ed193d3f080fb05d0d36fadaa13a6612f2",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/terminal-GL28-CLS/result.json",
+          "output_sha256": "b0d24e5e2fee64befcbcc6c3bab9bd8a19395ac892530b4a1523a862aff2672e"
+        },
+        "checks": {
+          "passed": true,
+          "gates": {
+            "four_unforced_block_norms": {
+              "value": 3.507269686789306e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "weak_continuity_unused_gauge": {
+              "value": 3.6160288875160476e-16,
+              "limit": 1e-09,
+              "passed": true
+            },
+            "physical_prescribed_boundary_data": {
+              "value": 0.0,
+              "limit": 1e-09,
+              "passed": true
+            },
+            "strong_divergence_RMS_over_ustar_H": {
+              "value": 1.441487073070062e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "wall_shear": {
+              "value": 4.199326572313924e-06,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_velocity": {
+              "value": 3.071403719149807e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "inner_L2_W": {
+              "value": 1.725597846713052e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "inner_L2_k": {
+              "value": 1.2537656197157303e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_nut": {
+              "value": 7.766930219057824e-07,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_full_velocity_gradient": {
+              "value": 0.00022964977315832684,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_pi": {
+              "value": 3.699859548410091e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_mechanical_pressure": {
+              "value": 4.37999752872913e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_selected_shear": {
+              "value": 0.00029741565416859336,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_normal_stress": {
+              "value": 3.674905095279147e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_point_U": {
+              "value": 2.3998189499075028e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_point_W": {
+              "value": 4.181726332438212e-06,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_point_k": {
+              "value": 5.794642810599206e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_point_nut": {
+              "value": 2.1981723349623362e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_velocity": {
+              "value": 4.71497011625762e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "outer_L2_W": {
+              "value": 2.865749038233376e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "outer_L2_k": {
+              "value": 5.731743058755693e-06,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_nut": {
+              "value": 0.0006705564234512315,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_full_velocity_gradient": {
+              "value": 0.000436558276367926,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_pi": {
+              "value": 2.406956104613358e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_mechanical_pressure": {
+              "value": 2.7340834584441807e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_selected_shear": {
+              "value": 0.0010895157333104897,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_normal_stress": {
+              "value": 0.0005213631876553724,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_point_U": {
+              "value": 1.3401572073699114e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_point_W": {
+              "value": 1.8074524114616585e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_point_k": {
+              "value": 1.5383564900818148e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_point_nut": {
+              "value": 0.003928708789555916,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_epsilon_L2": {
+              "value": 6.721898682933368e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_epsilon_point": {
+              "value": 0.0003188619666627383,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.0, 0.0065]_U": {
+              "value": 4.098405606756085e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.0, 0.0065]_k_epsilon_nut": {
+              "value": 1.0648868713605639e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.0, 0.0065]_W": {
+              "value": 1.7255978467130978e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.0065, 0.012]_U": {
+              "value": 4.780269400049312e-07,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.0065, 0.012]_k_epsilon_nut": {
+              "value": 5.837447278601585e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.0065, 0.012]_W": {
+              "value": 2.0035852879609553e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.012, 0.025]_U": {
+              "value": 3.3327580828149447e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.012, 0.025]_k_epsilon_nut": {
+              "value": 0.0004047206838087837,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.012, 0.025]_W": {
+              "value": 1.7696903667271434e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.025, 0.05]_U": {
+              "value": 3.5674375690779917e-07,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.025, 0.05]_k_epsilon_nut": {
+              "value": 8.1589714175196e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.025, 0.05]_W": {
+              "value": 1.2244846835815645e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.05, 0.1]_U": {
+              "value": 6.272393647636523e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.05, 0.1]_k_epsilon_nut": {
+              "value": 0.0007577520221302082,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.05, 0.1]_W": {
+              "value": 1.593805480551434e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.1, 0.2]_U": {
+              "value": 5.625777778296071e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.1, 0.2]_k_epsilon_nut": {
+              "value": 0.0007588735852501214,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.1, 0.2]_W": {
+              "value": 1.8854026029802986e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.2, 0.4]_U": {
+              "value": 5.0599649023921676e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.2, 0.4]_k_epsilon_nut": {
+              "value": 0.0007626065298521934,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.2, 0.4]_W": {
+              "value": 2.8121627504633026e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.4, 0.8]_U": {
+              "value": 4.517999580409228e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.4, 0.8]_k_epsilon_nut": {
+              "value": 0.0007659908769794184,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.4, 0.8]_W": {
+              "value": 3.2985675862883673e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "normalized_net_volume_flux": {
+              "value": 6.342946496838008e-16,
+              "limit": 1e-09,
+              "passed": true
+            },
+            "prescribed_top_net_flux_adjustment": {
+              "value": 0.0,
+              "limit": 0.0,
+              "passed": true
+            },
+            "interface_normal_full_RMS": {
+              "value": 0.00041335409115907795,
+              "limit": 0.01,
+              "passed": true
+            },
+            "interface_k_flux": {
+              "value": 1.0556884406007008e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "native_scalar_domain": {
+              "passed": true
+            },
+            "cutoff_relative_budget": {
+              "value": 0.0,
+              "limit": 1e-10,
+              "passed": true
+            },
+            "covariance_margin": {
+              "value": 0.006103306140619927,
+              "minimum": 1.7598891430879275e-06,
+              "passed": true
+            }
+          },
+          "scope": "complete native and independent audit"
+        },
+        "independent_eigenvalue_replay_max": 6.938893903907228e-18,
+        "source_report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-fine-CLS/step120/case.evolution.json",
+        "source_report_sha256": "2f43972b4f3dc268e4320c144971e66ce8b774de882480d4badb5debac9e28ee",
+        "state_sha256": "2417cb2f2aebdfc40e0bce170c02a6a74a252221e3e167b55d10e0747dbfa5be",
+        "base_sha256": "ebb8ba217720bc1bcd7bcc2a6144fdc01935fbbfbcb8579bf62507cf814df943"
+      }
+    },
+    "standard": {
+      "transaction": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/transit-transaction-standard/progress.json",
+        "sha256": "caf8658d5f0000c9bd0a3817b774be6fb31075dd4a74aa7353ba52fc84250ef3"
+      },
+      "terminal_seen_grid_audit": {
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-fine-standard/step120/case.xml",
+            "input.json",
+            "result.json"
+          ],
+          "exit_code": 0,
+          "seconds": 57.85547340795165,
+          "input_sha256": "1af6e51f76db5e1a4434ffc7094caaec5468e9dcb9d744177c68edda6ff99c96",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/terminal-GL28-standard/result.json",
+          "output_sha256": "c59372c90c3b09b165a10026ecac6027fd4dd1c844ebf43e87282ab86265129f"
+        },
+        "checks": {
+          "passed": true,
+          "gates": {
+            "four_unforced_block_norms": {
+              "value": 3.7817095279686322e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "weak_continuity_unused_gauge": {
+              "value": 1.9156857467637655e-16,
+              "limit": 1e-09,
+              "passed": true
+            },
+            "physical_prescribed_boundary_data": {
+              "value": 0.0,
+              "limit": 1e-09,
+              "passed": true
+            },
+            "strong_divergence_RMS_over_ustar_H": {
+              "value": 1.5433651409924305e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "wall_shear": {
+              "value": 7.0894486199105415e-06,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_velocity": {
+              "value": 3.697306148621187e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "inner_L2_W": {
+              "value": 2.548329679056033e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "inner_L2_k": {
+              "value": 1.913171407807762e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_nut": {
+              "value": 1.2949019691599917e-06,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_full_velocity_gradient": {
+              "value": 0.00022971303934891441,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_pi": {
+              "value": 6.131433076588802e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_mechanical_pressure": {
+              "value": 7.13331470998018e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_selected_shear": {
+              "value": 0.00029746001390477505,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_L2_normal_stress": {
+              "value": 6.0889020702170636e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_point_U": {
+              "value": 3.2986863334426395e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_point_W": {
+              "value": 7.3087084981844305e-06,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_point_k": {
+              "value": 0.00010244389895516463,
+              "limit": 0.01,
+              "passed": true
+            },
+            "inner_point_nut": {
+              "value": 3.586287539019194e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_velocity": {
+              "value": 4.679030872218068e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "outer_L2_W": {
+              "value": 3.200100235836468e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "outer_L2_k": {
+              "value": 4.844833441255273e-06,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_nut": {
+              "value": 0.00012721705662420253,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_full_velocity_gradient": {
+              "value": 0.0004356537666412162,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_pi": {
+              "value": 1.7647933905622936e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_mechanical_pressure": {
+              "value": 2.067335104840095e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_selected_shear": {
+              "value": 0.0009286300928940894,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_L2_normal_stress": {
+              "value": 5.4529597161851915e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_point_U": {
+              "value": 1.3871558605231996e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_point_W": {
+              "value": 3.010569571023966e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_point_k": {
+              "value": 1.3257609204357327e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_point_nut": {
+              "value": 0.0003262011221921921,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_epsilon_L2": {
+              "value": 6.762596651357209e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "outer_epsilon_point": {
+              "value": 0.00032499046297850654,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.0, 0.0065]_U": {
+              "value": 4.964974654012625e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.0, 0.0065]_k_epsilon_nut": {
+              "value": 1.5943786062194766e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.0, 0.0065]_W": {
+              "value": 2.5483296790561134e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.0065, 0.012]_U": {
+              "value": 7.02787916137526e-07,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.0065, 0.012]_k_epsilon_nut": {
+              "value": 6.281566079065919e-06,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.0065, 0.012]_W": {
+              "value": 3.294412466534778e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.012, 0.025]_U": {
+              "value": 3.33243060201115e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.012, 0.025]_k_epsilon_nut": {
+              "value": 6.782862293879797e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.012, 0.025]_W": {
+              "value": 3.0693248865048666e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.025, 0.05]_U": {
+              "value": 4.2620925645367503e-07,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.025, 0.05]_k_epsilon_nut": {
+              "value": 1.102269738834949e-05,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.025, 0.05]_W": {
+              "value": 2.1368197845364702e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.05, 0.1]_U": {
+              "value": 6.2431773738909285e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.05, 0.1]_k_epsilon_nut": {
+              "value": 0.00015395514660465777,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.05, 0.1]_W": {
+              "value": 1.5107927865912327e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.1, 0.2]_U": {
+              "value": 5.5917617988687256e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.1, 0.2]_k_epsilon_nut": {
+              "value": 0.00015336122620884473,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.1, 0.2]_W": {
+              "value": 1.91078275951837e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.2, 0.4]_U": {
+              "value": 5.019728005601273e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.2, 0.4]_k_epsilon_nut": {
+              "value": 0.00015179320098880912,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.2, 0.4]_W": {
+              "value": 3.125712924048462e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.4, 0.8]_U": {
+              "value": 4.464308796362744e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "band_[0.4, 0.8]_k_epsilon_nut": {
+              "value": 0.00014852133053606996,
+              "limit": 0.01,
+              "passed": true
+            },
+            "band_[0.4, 0.8]_W": {
+              "value": 3.6730051861249304e-06,
+              "limit": 0.001,
+              "passed": true
+            },
+            "normalized_net_volume_flux": {
+              "value": 2.1143155018611926e-16,
+              "limit": 1e-09,
+              "passed": true
+            },
+            "prescribed_top_net_flux_adjustment": {
+              "value": 0.0,
+              "limit": 0.0,
+              "passed": true
+            },
+            "interface_normal_full_RMS": {
+              "value": 0.00032672265894001604,
+              "limit": 0.01,
+              "passed": true
+            },
+            "interface_k_flux": {
+              "value": 9.471844067050696e-06,
+              "limit": 0.01,
+              "passed": true
+            },
+            "native_scalar_domain": {
+              "passed": true
+            },
+            "cutoff_relative_budget": {
+              "value": 0.0,
+              "limit": 1e-10,
+              "passed": true
+            },
+            "covariance_margin": {
+              "value": 0.006715746539696391,
+              "minimum": 1.838575534504143e-06,
+              "passed": true
+            }
+          },
+          "scope": "complete native and independent audit"
+        },
+        "independent_eigenvalue_replay_max": 1.734723475976807e-18,
+        "source_report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-fine-standard/step120/case.evolution.json",
+        "source_report_sha256": "2334b52c59d80b55c34496859e63321445e2f1013dc75f1707d402c9a3402711",
+        "state_sha256": "c5436c4290134223c5e3136c4a57af419e88a0c842ba938f30d836bae576ef00",
+        "base_sha256": "a1b87e794a37b36fe5c0032aaef9c553e48b4c947b2e1ec5e8a0b8b75179eeb5"
+      }
+    }
+  },
+  "transaction_mode": "immutable_existing"
+}

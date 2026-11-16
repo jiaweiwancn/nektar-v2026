@@ -15,16 +15,23 @@ from wp2_qualification import physical_gates
 def main():
     p=argparse.ArgumentParser()
     for n in ['root','solver','probe','h1','preflight']:p.add_argument('--'+n,type=Path,required=True)
-    a=p.parse_args();r=a.root;record=r/'final-checks.json';require(not record.exists(),'final checks already have an owner')
+    p.add_argument('--terminal-only',action='store_true',help='reuse both completed, immutable transit transactions; run only terminal read-only probes')
+    p.add_argument('--record',default='final-checks.json')
+    a=p.parse_args();r=a.root;record=r/a.record;require(not record.exists(),'final checks already have an owner')
+    require(record.parent==r,'final-check record must be directly under the run root')
     state=dict(version='WP2FinalChecksV1',status='waiting_for_completed_waves',results={});atomic(record,state)
     try:
-        while True:
+        while not a.terminal_only:
             require(time.time()-load(r/'origin.json')['started_epoch']<43200,'WP2 wall envelope')
             d=load(r/'completion-waves.json');require(d['status']!='terminal_stop','completion waves stopped: '+str(d.get('failure')))
             if d['status']=='completed_bounded_waves':break
             time.sleep(15)
         jobs=[];env=dict(os.environ,**THREADS)
         for model in ['CLS','standard']:
+            state['results'].setdefault(model,{})
+            if a.terminal_only:
+                require(load(r/f'transit-transaction-{model}/progress.json')['status']=='passed_transit_transaction','existing transaction incomplete')
+                continue
             command=['/usr/bin/python3',str(Path(__file__).with_name('verify_wp2_long_transaction.py')),
                 '--root',str(r),'--solver',str(a.solver),'--h1',str(a.h1),'--preflight',str(a.preflight),
                 '--output',str(r/f'transit-transaction-{model}'),'--model',model]
@@ -35,7 +42,8 @@ def main():
         state['status']='running_transit_transactions';atomic(record,state)
         while any(job.poll() is None for _,job in jobs):time.sleep(15)
         require(all(job.returncode==0 for _,job in jobs),'transit transaction failed')
-        for model,_ in jobs:
+        state['transaction_mode']='immutable_existing' if a.terminal_only else 'executed_here'
+        for model in ['CLS','standard']:
             transaction=r/f'transit-transaction-{model}/progress.json'
             require(load(transaction)['status']=='passed_transit_transaction','transaction incomplete')
             state['results'][model]['transaction']=dict(path=str(transaction),sha256=sha(transaction))

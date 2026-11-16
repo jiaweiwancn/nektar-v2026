@@ -20,12 +20,13 @@ def main():
     p=argparse.ArgumentParser()
     for n in ['root','solver','h1','preflight','output']:p.add_argument('--'+n,type=Path,required=True)
     p.add_argument('--model',choices=['CLS','standard'],required=True)
-    p.add_argument('--mode',choices=['trial','preserve','recover','transaction','seed'],required=True)
+    p.add_argument('--mode',choices=['trial','recovery-trial','preserve','recover','transaction','seed'],required=True)
     p.add_argument('--level',type=int,default=4);p.add_argument('--dt',type=float,required=True)
     p.add_argument('--endpoint',type=float,default=1.2);p.add_argument('--expected-seed')
     p.add_argument('--resume',action='store_true')
     p.add_argument('--parent-progress',type=Path)
     a=p.parse_args();require(a.dt>0,'positive timestep')
+    recovery=a.mode in ['recover','recovery-trial']
     x=Run(a.root,a.solver,a.h1,a.preflight,a.output,a.model,a.level,16,'RadialEnergyV1',a.resume)
     previous=[]
     require(not(a.resume and a.parent_progress),'choose same-runtime resume or an explicit successor, not both')
@@ -60,20 +61,20 @@ def main():
                 observations=[dict(time=0.,accepted=0,checkpoint=d['checkpoint'],checkpoint_sha256=sha(Path(d['checkpoint'])/'State.bin'),
                     report=x.result['results']['h0']['report'],physical_budgets_passed=False,final_physical_checks=checks[-1])])
             return
-        if a.mode=='trial':
+        if a.mode in ['trial','recovery-trial']:
             charge(a.root,'time trial '+a.model+' dt='+str(a.dt),timestep_trials=1)
             targets=[a.endpoint]
         else:
             require(a.endpoint>=TREQ,'physical preservation horizon is too short')
             targets=sorted(set([.3,.6,.9,a.endpoint-.3,a.endpoint]))
-        if a.mode=='recover':
+        if recovery:
             require(a.endpoint<=4*TREQ,'recovery cap')
         for target in targets:
             total=round(target/a.dt);require(abs(total*a.dt-target)<1e-13,'requested observation is not a native time')
             while accepted<total:
                 count=min(32,total-accepted);label='step'+str(accepted+count)
-                d=x.native(label,count,a.dt,parent,perturb=(a.mode=='recover' and parent is None))
-                checks=verify_report(d,US,K0[a.model],allow_recovery=a.mode=='recover')
+                d=x.native(label,count,a.dt,parent,perturb=(recovery and parent is None))
+                checks=verify_report(d,US,K0[a.model],allow_recovery=recovery)
                 if previous and 'prefix_essential_absolute_error' not in x.result:
                     table=d['wp2_per_state_monitoring'][0]['physical_checks'];ids=[int(i) for i in table['physical_essential_rows']];values=table['physical_essential_values']
                     error=0.
@@ -83,8 +84,8 @@ def main():
                     require(error==0,'predecessor changed immutable physical prescribed coefficients')
                     x.result['prefix_essential_absolute_error']=error
                 if parent is None:
-                    if a.expected_seed and a.mode!='recover':require(d['wp2_per_state_monitoring'][0]['physical_checks']['state_sha256']==a.expected_seed,'fresh integrator changed qualified seed')
-                    if a.mode=='recover':
+                    if a.expected_seed:require(d['wp2_per_state_monitoring'][0]['physical_checks']['state_sha256']==a.expected_seed,'fresh integrator changed qualified seed')
+                    if recovery:
                         q=d['diagnostic_ivp'];require(q['mode']=='WP2OuterKBumpV1' and q['maximum_actual_relative_k_departure']>=.02,'recovery setup did not exceed twice the field budget')
                         require(state_hash(d['fixed_reference'])==q['immutable_base_sha256'] and state_hash(d['state'])!=q['immutable_base_sha256'],'perturbation replaced the immutable reference')
                 if reports:
